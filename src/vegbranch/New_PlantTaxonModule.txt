@@ -108,7 +108,7 @@ Public Function InterpretPlName_PlConc(strPlantName As String, Optional lngParty
     ''-------------------------------------------
 'Debug.Print "InterpretPlName_PlConc >> " & strPlantName
   strNameFound = strPlantName 'default found name unless recursed into new instance of this
-Dim rstCurr As New ADODB.Recordset, cnnLoc As Connection, inttemp As Long
+Dim rstCurr As New ADODB.Recordset, cnnLoc As Connection, intTemp As Long
 Set cnnLoc = CurrentProject.Connection
 Dim intReturn As Integer ''gets type of concept that returns, ambiguous or not
   
@@ -164,7 +164,7 @@ End If
        
        If IsNull(!plantName) Then
          'error with plantNAme, which should not be null : lookup code by skipping this part
-         inttemp = -1
+         intTemp = -1
        Else
           strReturn = strReturn & IIf(strReturn <> "", "   -->   ", "") & strPlantName
           If lngIteration > 9 Then
@@ -172,18 +172,18 @@ End If
           '  DoCmd.OpenForm "error_report", acNormal, , , , , strTrailOfNames
           '  msgBox "Your species list is too iterative.  Values in plantName are looked up again in a new row of the species list, if a match is found in plantCode.  This can lead to infinite loops.  For example: plantCode=""ACRU"", plantNAme=""Acer rubrum"" ; (new row) plantCode=""Acer rubrum"", plantName=""Acer""; (new row) plantCode=""Acer"", plantName=""ACRU""" _
                & "Your list of plants that has caused this error appears in the errorBox behind this window.  Please fix this loop and try matching plants again."
-            inttemp = -3 'new code: invalid loop
+            intTemp = -3 'new code: invalid loop
             
           Else
-            inttemp = InterpretPlName_PlConc(!plantName, , strNameFound, lngIteration + 1, strReturn)
+            intTemp = InterpretPlName_PlConc(!plantName, , strNameFound, lngIteration + 1, strReturn)
           End If
        End If
      ''End If ''new concept or not
      End With
      
-     If inttemp <> -1 Then
+     If intTemp <> -1 Then
        ''got the concept from Z_USER_B's PK --> in Z_B_VBLookup
-       InterpretPlName_PlConc = inttemp
+       InterpretPlName_PlConc = intTemp
        
        Exit Function
      End If
@@ -197,11 +197,11 @@ End If
      If accessionCodeValid(strPlantName) Then
           'have name that is a valid accessionCode
           'see if it matches plantConcept record
-          inttemp = getPKfromAccessionCode(strPlantName, "plantConcept")
-          If inttemp > 0 Then
+          intTemp = getPKfromAccessionCode(strPlantName, "plantConcept")
+          If intTemp > 0 Then
             'great, we have the concept, as the name is an accessionCode!
             strReturn = "Name was accessionCode"
-            InterpretPlName_PlConc = inttemp
+            InterpretPlName_PlConc = intTemp
             Exit Function
           End If
      End If
@@ -213,9 +213,9 @@ End If
   Do Until .EOF
      'loop thru priority ordered list of plant lookups
 
-     inttemp = get_PlantConcept_ID(Get_PlantName_ID(strPlantName), Nz(!Date, Now()), Nz(!NameStatus, ""), _
+     intTemp = get_PlantConcept_ID(Get_PlantName_ID(strPlantName), Nz(!Date, Now()), Nz(!NameStatus, ""), _
          !PARTY_ID, Nz(!classSystem, ""), intReturn, False)
-     If inttemp <> -1 Then
+     If intTemp <> -1 Then
    ''     Debug.Print !party_ID & " had a concept"
         If intReturn = 2 Then
          ''ambiguous, return -2
@@ -224,7 +224,7 @@ End If
          lngParty = !PARTY_ID
         Else
          'not ambiguous, return value
-         InterpretPlName_PlConc = inttemp
+         InterpretPlName_PlConc = intTemp
          lngParty = !PARTY_ID
         End If
         Exit Function
@@ -438,6 +438,7 @@ Else
        End If
      End If
      DoCmd.RunSQL "INSERT INTO Z_B_VB_LookupNms ( plantName, plantAsConc ) SELECT " & SQLizeTxt(strOnlyOneName) & "," & intPlantAs
+    
   End If
    
    
@@ -835,7 +836,7 @@ Debug.Print "add_ALL_new_plantConcToVB >> init."
          ''addSetPlantUsages lngConc, lngParty, dtNow, !plantName, Nz(!plantNameSystem, ""), _
            Nz(!plantShortName, ""), Nz(plantShortNameSystem, ""), Nz(plantCommonName, ""), _
            Nz(plantCommonNameSystem, ""), Nz(otherPlantName, ""), Nz(otherPlantNameSystem, "")
-addSetPlantUsages lngConc, lngparty_ID, dtNow, !plantName, Nz(!plantNameSystem, ""), Nz(!plantNameStatus, "standard"), _
+addSetPlantUsages lngConc, lngparty_ID, dtNow, !plantName, Nz(!PlantNameSystem, ""), Nz(!plantNameStatus, "standard"), _
 Nz(!plantShortName, ""), Nz(!plantShortNameSystem, ""), Nz(!plantShortNameStatus, "standard"), _
 Nz(!plantCommonName, ""), Nz(!plantCommonNameSystem, ""), Nz(!plantCommonNameStatus, "standard"), _
 Nz(!otherPlantName, ""), Nz(!otherPlantNameSystem, ""), Nz(!otherPlantNameStatus, "standard"), !plantCode
@@ -979,17 +980,17 @@ dtNow = Now()
             dtNow, False, False, , , Nz(!plantPartyComments), Nz(!plantLevel), lngParentConc)
      !ArchivedStatus = 2
      ''add any plant Correlations:
-     Dim inttemp As Integer
-     For inttemp = 1 To 4
-      If Not IsNull(.Fields("plantSyn" & inttemp)) And Not IsNull(.Fields("plantSynConverg" & inttemp)) Then
+     Dim intTemp As Integer
+     For intTemp = 1 To 4
+      If Not IsNull(.Fields("plantSyn" & intTemp)) And Not IsNull(.Fields("plantSynConverg" & intTemp)) Then
         ''this set of convergence values exists!
-        If Add_PlantCorr_toVB(lngStatus, InterpretPlName_PlConc(.Fields("plantSyn" & inttemp), , , , , True), _
-           .Fields("plantSynConverg" & inttemp), dtNow, False) Then
+        If Add_PlantCorr_toVB(lngStatus, InterpretPlName_PlConc(.Fields("plantSyn" & intTemp), , , , , True), _
+           .Fields("plantSynConverg" & intTemp), dtNow, False) Then
            'successfully added Corr - update arc status:
            !ArchivedStatus = 3
         End If
       End If
-     Next inttemp
+     Next intTemp
      'update any usages here, with status_ID, too (NOV 5,2004)
      'rules: same party, same concept, null status_ID in usage, (endDate is null?)
      DoCmd.RunSQL "update plantUSage set plantStatus_ID=" & lngStatus & " WHERE plantConcept_ID=" & lngConc & " and party_ID=" _
@@ -1060,7 +1061,7 @@ Do Until .EOF
   Dim lngConc As Long
   lngConc = InterpretPlName_PlConc(!plantCode, , , , , True)
   ''append names to concept as usages for the curr party
-addSetPlantUsages lngConc, lngparty_ID, dtNow, !plantName, Nz(!plantNameSystem, ""), Nz(!plantNameStatus, "standard"), _
+addSetPlantUsages lngConc, lngparty_ID, dtNow, !plantName, Nz(!PlantNameSystem, ""), Nz(!plantNameStatus, "standard"), _
 Nz(!plantShortName, ""), Nz(!plantShortNameSystem, ""), Nz(!plantShortNameStatus, "standard"), _
 Nz(!plantCommonName, ""), Nz(!plantCommonNameSystem, ""), Nz(!plantCommonNameStatus, "standard"), _
 Nz(!otherPlantName, ""), Nz(!otherPlantNameSystem, ""), Nz(!otherPlantNameStatus, "standard"), !plantCode
@@ -1321,10 +1322,10 @@ rstRec.Open "SELECT * FROM Z_VB_Reconcile WHERE LoadVarName = " & SQLizeTxt(strV
      , CurrentProject.Connection, adOpenForwardOnly, adLockOptimistic, adCmdText
 With rstRec
 Do Until .EOF
-  Dim inttemp As Integer
-  inttemp = msgBox("You have already assigned this field value (" & strVal & ") to a VegBank value(" & IIf(blnText, !VBFieldTextVal, !VBFieldValue) & ")." & Chr(13) _
+  Dim intTemp As Integer
+  intTemp = msgBox("You have already assigned this field value (" & strVal & ") to a VegBank value(" & IIf(blnText, !VBFieldTextVal, !VBFieldValue) & ")." & Chr(13) _
           & "Do you wish to delete the old value and replace it with a new one?", vbYesNoCancel)
-  If inttemp = vbYes Then
+  If intTemp = vbYes Then
     '''delete value
     .delete
   Else
@@ -1390,15 +1391,21 @@ Function testnfadfjdasfja()
   ChangePlantName "Goofer", 215201
 End Function
 
-Public Function ChangePlantName(strNm As String, lngPK As Long) As Boolean
-  ''function changes plantNames to new plantName
+Public Function ChangePlantName(strNm As String, lngPK As Long, Optional strNoPKButName As String) As Boolean
+  ''function changes plantNames to new plantName, can take PK from PlantName table or actual name passed as strNoPKButName
   Dim strNewName As String
-  strNewName = get_plantName_fromID(lngPK)
+  If strNoPKButName <> "" Then
+    'string was passed, use it, not PK
+    strNewName = strNoPKButName
+  Else 'use PK to get name
+    strNewName = get_plantName_fromID(lngPK)
+  End If
+  
   If lngPK <> 0 And strNewName <> "" Then 'operation was cancelled
-    Dim inttemp As Integer
-    inttemp = msgBox("Are you sure you want to update the current plant name : " & strNm & Chr(13) _
+    Dim intTemp As Integer
+    intTemp = msgBox("Are you sure you want to update the current plant name : " & strNm & Chr(13) _
          & "With the new plant name: " & strNewName, vbYesNoCancel)
-    If inttemp = vbYes Then
+    If intTemp = vbYes Then
         Dim rstChkPlCodes As New ADODB.Recordset
         rstChkPlCodes.Open "SELECT * FROM Z_USER_B_SpecList WHERE plantCode = " & SQLizeTxt(strNewName, "'") & " OR plantCode = " _
           & SQLizeTxt(strNm, "'") & ";", CurrentProject.Connection, adOpenStatic, adLockReadOnly, adCmdText
@@ -1449,10 +1456,17 @@ Public Function ChangePlantName(strNm As String, lngPK As Long) As Boolean
                               & " , plantName_ID = " & lngPK & " WHERE plantName = " & SQLizeTxt(strNm, "'") & ";"
         End If
         DoCmd.RunSQL "UPDATE Z_B_VB_lookupNms SET linkedThrough = " & SQLizeTxt(strNewName) & " WHERE linkedThrough=" & SQLizeTxt(strNm)
+         'update manual matches
+        DoCmd.RunSQL "UPDATE Z_VB_reconcile SET loadVarValue = " & SQLizeTxt(strNewName) _
+          & " WHERE loadVarValue=" & SQLizeTxt(strNm) & " AND LoadVarname='PlantName';"
+              
+        
         'update lookups for old and new names
         populate_Z_B_LkNms True, strNewName
         populate_Z_B_LkNms True, strNm, True
-        'on error resume next
+
+        
+        On Error Resume Next
              Forms!Z_USER_B_VB_view.Refresh
          ChangePlantName = True
     End If

@@ -56,15 +56,15 @@ Public Function get_CommConcept_ID(lngCommNameID As Long, datDate As Date, strPl
      get_CommConcept_ID = -1 'don't return any concept
    Else
      ''return concept ID
-     get_CommConcept_ID = rstConc!commConcept_ID
+     get_CommConcept_ID = rstConc!COMMCONCEPT_ID
      ''add to collection, if to return a collection
-     If blnGetMult Then colConcepts.Add (rstConc!commConcept_ID)
+     If blnGetMult Then colConcepts.Add (rstConc!COMMCONCEPT_ID)
      rstConc.MoveNext
      intReturnAlso = 1 ''concept returned, is the only one
      Do Until rstConc.EOF
        intReturnAlso = 2 '' ambiguous concept, ID returned, but other concepts exist that also match
        If blnGetMult Then  'store list of concepts in collection to pass back
-         colConcepts.Add (rstConc!commConcept_ID)
+         colConcepts.Add (rstConc!COMMCONCEPT_ID)
        Else  ''exit function, b/c list of concepts not wanted
          Exit Function
        End If
@@ -92,7 +92,7 @@ Public Function InterpretCmName_CmConc(strCommName As String, Optional lngParty 
     ''-------------------------------------------
 'Debug.Print "InterpretCmName_CmConc >> " & strCommName
  strNameFound = strCommName 'default found name unless recursed into new instance of this
-Dim rstCurr As New ADODB.Recordset, cnnLoc As Connection, inttemp As Long
+Dim rstCurr As New ADODB.Recordset, cnnLoc As Connection, intTemp As Long
 Set cnnLoc = CurrentProject.Connection
 Dim intReturn As Integer ''gets type of concept that returns, ambiguous or not
 If blnCacheOK Then
@@ -137,7 +137,7 @@ End If
        Else
          ''did find exact concept: use it!
          If commDebugVal > 0 Then Debug.Print "InterpretCmName_CmConc>> found exact concept match, name + ref: " & strCommName
-         InterpretCmName_CmConc = rstConc!commConcept_ID
+         InterpretCmName_CmConc = rstConc!COMMCONCEPT_ID
          Exit Function
        End If
        rstConc.Close
@@ -147,14 +147,14 @@ End If
        
       If IsNull(!commName) Then
         'not assigned to a name, error, look up code
-        inttemp = -1
+        intTemp = -1
       Else
          strReturn = strReturn & IIf(strReturn <> "", "   -->   ", "") & strCommName
           If lngIteration > 9 Then
             'too many iterations : reported as different error
-            inttemp = -3 'new code: invalid loop
+            intTemp = -3 'new code: invalid loop
           Else
-            inttemp = InterpretCmName_CmConc(!commName, , strNameFound, lngIteration + 1, strReturn)
+            intTemp = InterpretCmName_CmConc(!commName, , strNameFound, lngIteration + 1, strReturn)
           End If
       '  Debug.Print strNameFound & " = namefound"
         If strNameFound <> strCommName Then
@@ -164,9 +164,9 @@ End If
      ''End If ''new concept or not
      End With
      
-     If inttemp <> -1 Then
+     If intTemp <> -1 Then
        ''got the concept from Z_USER_B's PK --> in Z_H_VBLookup
-       InterpretCmName_CmConc = inttemp
+       InterpretCmName_CmConc = intTemp
        Exit Function
      End If
   Else  ''can't find the code for this Comm name
@@ -179,11 +179,11 @@ End If
      If accessionCodeValid(strCommName) Then
           'have name that is a valid accessionCode
           'see if it matches commConcept record
-          inttemp = getPKfromAccessionCode(strCommName, "commConcept")
-          If inttemp > 0 Then
+          intTemp = getPKfromAccessionCode(strCommName, "commConcept")
+          If intTemp > 0 Then
             'great, we have the concept, as the name is an accessionCode!
             strReturn = "Name was accessionCode"
-            InterpretCmName_CmConc = inttemp
+            InterpretCmName_CmConc = intTemp
             Exit Function
           End If
      End If
@@ -195,9 +195,9 @@ End If
   Do Until .EOF
      'loop thru priority ordered list of Comm lookups
 
-     inttemp = get_CommConcept_ID(Get_CommName_ID(strCommName), Nz(!Date, Now()), Nz(!NameStatus, ""), _
+     intTemp = get_CommConcept_ID(Get_CommName_ID(strCommName), Nz(!Date, Now()), Nz(!NameStatus, ""), _
          !PARTY_ID, Nz(!classSystem, ""), intReturn, False)
-     If inttemp <> -1 Then
+     If intTemp <> -1 Then
    ''     Debug.Print !party_ID & " had a concept"
         If intReturn = 2 Then
          ''ambiguous, return -2
@@ -206,7 +206,7 @@ End If
          lngParty = !PARTY_ID
         Else
          'not ambiguous, return value
-         InterpretCmName_CmConc = inttemp
+         InterpretCmName_CmConc = intTemp
          lngParty = !PARTY_ID
         End If
         Exit Function
@@ -345,7 +345,7 @@ End If 'only one
          'confirm that it is still here and move on
          Dim lngConfirmAcc As Long
          lngConfirmAcc = getPKfromAccessionCode(!accessionCode, "commConcept")
-         If lngConfirmAcc = !commConcept_ID Then
+         If lngConfirmAcc = !COMMCONCEPT_ID Then
            'accession code still found and legit
            'keep data and move on
            GoTo AccessionCodeOK
@@ -365,14 +365,14 @@ End If 'only one
            strNotes = ""
 
            lngTempConc = InterpretCmName_CmConc(!commName, , strNameFound, , strNotes)
-           !commConcept_ID = lngTempConc
+           !COMMCONCEPT_ID = lngTempConc
            'update name that was used to find concept
            !linkedThrough = strNameFound
            !notes = strNotes
            If lngTempConc <> -1 Then
              !accessionCode = getAccessionCode("commConcept", lngTempConc)
            End If
-           If !commConcept_ID = -1 Then
+           If !COMMCONCEPT_ID = -1 Then
              'new Comm concept
            '  DoCmd.RunSQL "UPDATE Z_USER_H_CommConcept SET NewCommConcept=true WHERE CommCode = """ & !commName & """;"
            End If
@@ -383,7 +383,7 @@ End If 'only one
         ' End If
        Else
          'name not used as a concept, set to null
-           !commConcept_ID = Null
+           !COMMCONCEPT_ID = Null
            Dim lngTemp As Long
            lngTemp = getCommReferenceOfNm(!commName)
            If lngTemp <> -1 Then
@@ -637,13 +637,13 @@ Debug.Print "add_CommConc_to_VB >> Comm: " & strCommName & " ; REF: " & lngRef
      ' End If
 ''NOT DENORMALIZED!!    !CommName = strCommName  ''COMMDIFF''
        'add accessionCode
-      !accessionCode = writeNewAccCode("commConcept", !commConcept_ID)
+      !accessionCode = writeNewAccCode("commConcept", !COMMCONCEPT_ID)
       .Update
-      add_CommConc_to_VB = !commConcept_ID
+      add_CommConc_to_VB = !COMMCONCEPT_ID
     Else
       'CommConcept already exists!
       Debug.Print "Comm Concept already in CommConcept:" & strCommName & " _ref_:" & lngRef
-      add_CommConc_to_VB = !commConcept_ID
+      add_CommConc_to_VB = !COMMCONCEPT_ID
     End If
     End With
     rstChkDupl2.Close
@@ -784,7 +784,7 @@ Public Function Add_CommStatus_toVB(lngConc As Long, lngParty As Long, strStatus
      .MoveNext
   Loop
   .AddNew
-    !commConcept_ID = lngConc
+    !COMMCONCEPT_ID = lngConc
     If lngRef <> 0 Then  '!0
        !REFERENCE_ID = lngRef
     End If
@@ -854,17 +854,17 @@ dtNow = Now()
             dtNow, False, False, , , Nz(!commPartyComments), Nz(!commLevel), lngParentConc)
      !ArchivedStatus = 2
      ''add any Comm Correlations:
-     Dim inttemp As Integer
-     For inttemp = 1 To 4
-      If Not IsNull(.Fields("CommSyn" & inttemp)) And Not IsNull(.Fields("CommSynConverg" & inttemp)) Then
+     Dim intTemp As Integer
+     For intTemp = 1 To 4
+      If Not IsNull(.Fields("CommSyn" & intTemp)) And Not IsNull(.Fields("CommSynConverg" & intTemp)) Then
         ''this set of convergence values exists!
-        If Add_CommCorr_toVB(lngStatus, InterpretCmName_CmConc(.Fields("CommSyn" & inttemp), , , , , True), _
-           .Fields("CommSynConverg" & inttemp), dtNow, False) Then
+        If Add_CommCorr_toVB(lngStatus, InterpretCmName_CmConc(.Fields("CommSyn" & intTemp), , , , , True), _
+           .Fields("CommSynConverg" & intTemp), dtNow, False) Then
            'successfully added Corr - update arc status:
            !ArchivedStatus = 3
         End If
       End If
-     Next inttemp
+     Next intTemp
           'update any usages here, with status_ID, too (NOV 5,2004)
      'rules: same party, same concept, null status_ID in usage, (endDate is null?)
      DoCmd.RunSQL "update commUSage set commStatus_ID=" & lngStatus & " WHERE commConcept_ID=" & lngConc & " and party_ID=" _
@@ -890,7 +890,7 @@ Debug.Print "Add_CommCorr_toVB >> Conc: " & lngConc & " ;  Status:" & lngStatus 
      'add new record
      .AddNew
      !COMMSTATUS_ID = lngStatus
-     !commConcept_ID = lngConc
+     !COMMCONCEPT_ID = lngConc
      !CommConvergence = strConverg
      !CorrelationStart = dtStart
      'add stop date if there is one
@@ -1001,7 +1001,7 @@ Debug.Print "Add_CommUsage_toVB >> Conc: " & lngConc & " ; Party: " & lngParty &
     'add new usage:
     ''lngConc As Long, lngName As Long, strNameStatus As String, strClassSys As String, _
     lngParty As Long, dtStart As Date, blnStop As Boolean, blnOldUsg As Boolean, Optional dtStop
-    !commConcept_ID = lngConc
+    !COMMCONCEPT_ID = lngConc
     !commName_ID = lngName
     !CommNameStatus = strNameStatus
     If strClassSys <> "" Then
@@ -1169,11 +1169,11 @@ End Function
 Public Function ChangeCommConc(strConcNm As String, lngConc As Long, Optional blnSkipNegative1 As Boolean) As Boolean
   ''function add CommName data to the VB_Reconcile table --> CommConcept_ID's
   '  Debug.Print strConc & " --> " & lngCocn
-  If lngConc <> 0 Or (lngConc = -1 And Not blnSkipNegative1) Then 'if it's 0 then the operation was cancelled
+  If lngConc > 0 Or (lngConc = -1 And Not blnSkipNegative1) Then 'if it's 0 then the operation was cancelled
     ChangeCommConc = True
     addVBReconcile_Rec "CommName", strConcNm, "CommConcept", "CommConcept_ID", lngConc
     'on error resume next
-    Forms!Z_USER_H_VB_View!commConcept_ID = lngConc
+    Forms!Z_USER_H_VB_View!COMMCONCEPT_ID = lngConc
     Forms!Z_USER_H_VB_View.Refresh
     If lngConc = -1 Then
       'make sure Comm is listed as new Comm in Z_USER_B
@@ -1226,15 +1226,21 @@ Function testnfadfjdasfja()
   ChangeCommName "Goofer", 215201
 End Function
 
-Public Function ChangeCommName(strNm As String, lngPK As Long) As Boolean
-  ''function changes CommNames to new CommName
+Public Function ChangeCommName(strNm As String, lngPK As Long, Optional strNoPKButName As String) As Boolean
+  ''function changes CommNames to new CommName, can take PK from CommName or actual name
   Dim strNewName As String
-  strNewName = get_CommName_fromID(lngPK)
+  If strNoPKButName <> "" Then
+    'string was passed, use it, not PK
+    strNewName = strNoPKButName
+  Else 'use PK
+    strNewName = get_CommName_fromID(lngPK)
+  End If
+ 
   If lngPK <> 0 And strNewName <> "" Then 'operation was cancelled
-    Dim inttemp As Integer
-    inttemp = msgBox("Are you sure you want to update the current Comm name : " & strNm & Chr(13) _
+    Dim intTemp As Integer
+    intTemp = msgBox("Are you sure you want to update the current Comm name : " & strNm & Chr(13) _
          & "With the new Comm name: " & strNewName, vbYesNoCancel)
-    If inttemp = vbYes Then
+    If intTemp = vbYes Then
         Dim rstChkPlCodes As New ADODB.Recordset
         rstChkPlCodes.Open "SELECT * FROM Z_USER_H_commConcept WHERE CommCode = " & SQLizeTxt(strNewName) & " OR CommCode = " _
           & SQLizeTxt(strNm) & ";", CurrentProject.Connection, adOpenStatic, adLockReadOnly, adCmdText
@@ -1290,6 +1296,9 @@ DoCmd.RunSQL "UPDATE Z_USER_I_PlotComm SET CommName4 = " & SQLizeTxt(strNewName)
         End If
         
         DoCmd.RunSQL "UPDATE Z_H_VB_lookupNms SET linkedThrough = " & SQLizeTxt(strNewName) & " WHERE linkedThrough=" & SQLizeTxt(strNm)
+
+        'update manual matches
+        DoCmd.RunSQL "UPDATE Z_VB_reconcile SET loadVarValue = " & SQLizeTxt(strNewName) & " WHERE loadVarValue=" & SQLizeTxt(strNm) & " AND LoadVarname='CommName';"
         'update lookups for old and new names
         populate_Z_H_LkNms True, strNewName
         populate_Z_H_LkNms True, strNm, True
