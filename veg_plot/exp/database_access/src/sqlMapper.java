@@ -781,7 +781,18 @@ public class  sqlMapper
 				k1.getPlotSummaryNew(queryOutput, queryOutputNum);
 
 				//write to a summary information to the file 
-				//that can be used by the application
+				//that can be used by the application -- write two
+				//xml files using the two xml writers for testing the 
+				//performance
+				System.out.println("WRITING THE XML RESULTS FILE");
+				Vector plotIdVec = getVector(queryOutput);
+				System.out.println(" PLOT'IDS: " + plotIdVec.toString() );
+				//instantiate a new instance of the dbAccess class -- probably
+				//should be done above
+				dbAccess dbaccess = new dbAccess();
+				dbaccess.writeMultipleVegBankPlot(plotIdVec, 
+					"/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml");
+				
 				xmlWriter xw = new xmlWriter();
 				xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
 			}
@@ -790,17 +801,48 @@ public class  sqlMapper
 				System.out.println("didnt recognize the desired query");
 			}
 
-} //end try 
-catch ( Exception e )
-{
-	System.out.println("failed at: sqlMapper.developPlotQuery  "
-	+e.getMessage());
-	e.printStackTrace();
-}
+		} 
+		catch ( Exception e )
+		{
+			System.out.println("Exception:  "
+			+e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
-} //end method
 
-
+	/**
+	 * method that converts a string array into 
+	 * a vector, the reason that this is a private 
+	 * method is that the pipe delimeter from the 
+	 * string will also be removed in this method
+	 *
+	 * @param inString -- the string to be converted to the vector
+	 * @return v -- the vector
+	 */
+	 private Vector getVector(String inString[])
+	 {
+		 Vector v = new Vector();
+		 try
+		 {
+				for (int i=0;i<inString.length; i++) 
+				{
+					if ( inString[i] != null )
+					{
+						//remove the pipe delimeter -- this is why this 
+						//method is unique to this class
+						String s = inString[i].replace('|', ' ').trim();
+						v.addElement(s);
+					}
+				}		
+		 }
+		 catch (Exception e)
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(v);
+	 }
 
 
 
