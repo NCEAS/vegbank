@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-13 19:32:25 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-02-13 21:12:59 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,15 +144,23 @@ import java.sql.*;
 		 String commName = null;
 		 try
 		 {
-			 //first figure out the level in the heirarcy
-			 this.level = this.getCommunityLevel(community);
-			 System.out.println("EcoartVegCommunity > internal level: " + level); 
+			 
+			 
+			//first figure out the level in the heirarcy
+			this.level = this.getCommunityLevel(community);
+			System.out.println("EcoartVegCommunity > internal level: " + level); 
 			// Create a Statement so we can submit SQL statements to the driver
 			Statement stmt = con.createStatement();
-			//create the result set
-			ResultSet rs = stmt.executeQuery("select "
-			+" ([GnameTrans]) "
-			+" from ETC where ([Elcode]) like '"+community+"'");
+			String query = null;
+			if (level.equals("association") )
+			{
+				query = "select ([GnameTrans]) from ETC where ([Elcode]) like '"+community+"'";
+			}
+			else if (level.equals("alliance") )
+			{
+				query = "select ([AllianceNameTrans]) from Alliance where ([AllianceKey]) like '"+community+"'";
+			}
+			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) 
 			{
 				commName = rs.getString(1);
@@ -233,16 +241,28 @@ import java.sql.*;
 		 String parentCode = null;
 		 try
 		 {
-			// Create a Statement so we can submit SQL statements to the driver
-			Statement stmt = con.createStatement();
-			//create the result set
-			ResultSet rs = stmt.executeQuery("select "
-			+" ([ClassifKey]) "
-			+" from ETC where ([Elcode]) like '"+community+"'");
-			while (rs.next()) 
+			 //first figure out the level in the heirarcy
+			this.level = this.getCommunityLevel(community);
+			
+			if ( level.equals("association") )
 			{
-				parentCode = rs.getString(1);
+				System.out.println("EcoartVegCommunity > internal level: " + level); 
+				// Create a Statement so we can submit SQL statements to the driver
+				Statement stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([ClassifKey]) "
+				+" from ETC where ([Elcode]) like '"+community+"'");
+				while (rs.next()) 
+				{
+					parentCode = rs.getString(1);
+				}
 			}
+			else
+			{
+				return("formation");
+			}
+			
 		 }
 		 catch (Exception e)
 		 {
@@ -259,22 +279,34 @@ import java.sql.*;
 		*/
 		public static void main(String[] args)
 		{
-			EcoartVegCommunitySource source = new EcoartVegCommunitySource();
-			String name = source.getCommunityName("CEGL000001");
-			String level = source.getCommunityLevel("CEGL000001");
-			String commonName = source.getCommunityCommonName("CEGL000001");
-			String parentCode = source.getParentCode("CEGL000001");
-			//Vector v = source.getCommunityCodes();
-			System.out.println("EcoartVegCommunitySource > name: " + name);
-			System.out.println("EcoartVegCommunitySource > level: " + level );
-			System.out.println("EcoartVegCommunitySource > commonName: " + commonName );
-			System.out.println("EcoartVegCommunitySource > parentCode: " + parentCode );
+			try
+			{
+				EcoartVegCommunitySource source = new EcoartVegCommunitySource();
+				String ecoartCode = "A.101";
 			
-			String parentLevel = source.getCommunityLevel(parentCode);
-			String parentName = source.getCommunityName(parentCode);
+				String name = source.getCommunityName(ecoartCode);
+				String level = source.getCommunityLevel(ecoartCode);
+				String commonName = source.getCommunityCommonName(ecoartCode);
+				String parentCode = source.getParentCode(ecoartCode);
+				//Vector v = source.getCommunityCodes();
+				System.out.println("EcoartVegCommunitySource > name: " + name);
+				System.out.println("EcoartVegCommunitySource > level: " + level );
+				System.out.println("EcoartVegCommunitySource > commonName: " + commonName );
+				System.out.println("EcoartVegCommunitySource > parentCode: " + parentCode );
 			
-			System.out.println("EcoartVegCommunitySource > parentLevel: " + parentLevel);
-			System.out.println("EcoartVegCommunitySource > parentName: " + parentName);
+				String parentLevel = source.getCommunityLevel(parentCode);
+				String parentName = source.getCommunityName(parentCode);
+				String parentCommonName = source.getCommunityCommonName(parentCode);
+			
+				System.out.println("EcoartVegCommunitySource > parentLevel: " + parentLevel);
+				System.out.println("EcoartVegCommunitySource > parentName: " + parentName);
+				System.out.println("EcoartVegCommunitySource > parentCommonName: " + parentCommonName);
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
 		}
 	 
 	 
