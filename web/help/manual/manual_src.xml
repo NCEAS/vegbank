@@ -120,9 +120,9 @@ more specific instructions on each search page.
    All plots in South Dakota <br/>
       </manualHTML>
     </manualItem>
-    <manualItem refURL="@forms_url@plant-query.html" name="search-for-plants" topic="Search for Plants">
+    <manualItem refURL="@forms_url@PlantQuery.jsp" name="search-for-plants" topic="Search for Plants">
       <manualHTML>
-        <a href="@forms_url@plant-query.html">Plant Query</a>
+        <a href="@forms_url@PlantQuery.jsp">Plant Query</a>
      - search for plant concepts in VegBank, by name or some portion of a name.  
      <br/>
         <br/>See the <a href="@design_link@planttaxaoverview.html">overview</a> 
