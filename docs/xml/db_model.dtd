@@ -3,6 +3,8 @@
 <!ELEMENT archive (#PCDATA)>
 <!ELEMENT attDefinition (#PCDATA)>
 <!ELEMENT attKey (#PCDATA)>
+<!ELEMENT attForms (formPKTranslate, formAustere, formSummary, formDetail)>
+<!ELEMENT attLabel (#PCDATA)>
 <!ELEMENT attList (attListItem*)>
 <!ELEMENT attListSortOrd (#PCDATA)>
 <!ELEMENT attListType (#PCDATA)>
@@ -16,16 +18,21 @@
 <!ELEMENT attReferences (#PCDATA)>
 <!ELEMENT attRelType (#PCDATA)>
 <!ELEMENT attType (#PCDATA)>
-<!ELEMENT attribute (attName, attModel, attNulls, attType, javaType?, attKey, attRelType?, attReferences, attListType, attList, attNotes, attDefinition, archive?)>
+<!ELEMENT attribute (attName, attLabel, attModel, attNulls, attType, javaType?, attKey, attRelType?, attReferences, attListType, attList, attNotes, attDefinition, archive?, attForms?)>
 <!ELEMENT author (#PCDATA)>
 <!ELEMENT contributor (#PCDATA)>
 <!ELEMENT dataModel (title, version, versionDesc, author, institution, contributor, description, date, entity+)>
 <!ELEMENT date (#PCDATA)>
 <!ELEMENT description EMPTY>
-<!ELEMENT entity (entityName, entitySummary, entityDescription, module, archive?, attribute+)>
+<!ELEMENT entity (entityName, entityLabel, entitySummary, entityDescription, module, archive?, attribute+)>
 <!ELEMENT entityDescription (#PCDATA)>
+<!ELEMENT entityLabel (#PCDATA)>
 <!ELEMENT entityName (#PCDATA)>
 <!ELEMENT entitySummary (#PCDATA)>
+<!ELEMENT formPKTranslate (#PCDATA)>
+<!ELEMENT formAustere (#PCDATA)>
+<!ELEMENT formSummary (#PCDATA)>
+<!ELEMENT formDetail (#PCDATA)>
 <!ELEMENT institution (#PCDATA)>
 <!ELEMENT javaType (#PCDATA)>
 <!ELEMENT module (#PCDATA)>
