@@ -1,13 +1,13 @@
 <!-- 
   *   '$RCSfile: plot-query.html,v $'
-  *     Purpose: web page describing eml
+  *     Purpose: web page querying the plots stored in vegbank
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-03-21 17:12:51 $'
-  *  '$Revision: 1.8 $'
+  *      '$Date: 2002-04-09 18:25:36 $'
+  *  '$Revision: 1.9 $'
   *
   *
   -->
@@ -267,9 +267,9 @@
               </td>
               <td
                width="80%">
-                <input checked name="queryType" type="radio" value="simple"> single attribute query <br>
-                <input name="queryType" type="radio" value="compound"> multiple attribute query <br>
-                <input name="queryType" type="radio" value="extended"> extended query <br>
+                <input checked name="queryType" type="radio" value="simple"> single attribute query -- input an attribute in a single attribute below<br>
+                <input name="queryType" type="radio" value="compound"> multiple attribute query -- input a value for each attribute below<br>
+   <!-- <input name="queryType" type="radio" value="extended">extended query <br> -->
               </td>
             </tr>
           </table>
@@ -455,9 +455,15 @@
                  value=""
                  onchange="setCountry(this);">
                   <option
-                   value="">
+                   value="%">
                     - choose -
                   </option>
+									
+									<option
+                   value="%">
+                    ANY
+                  </option>
+									
                   <option
                    value="AL">
                     Alabama
@@ -983,7 +989,7 @@
 
     today = new Date()
 
-    document.write("(Accessed: " + today + ")")
+    document.write("(Server Time: " + today + ")")
 
    //-->
 
