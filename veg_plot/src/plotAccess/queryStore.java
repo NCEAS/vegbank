@@ -160,140 +160,150 @@ entireSinglePlotOutputNum=1; //and here
 	public void getPlotSummaryNew(String plotId[], int plotIdNum)
 	{
 
-	//get the database management parameter settings
-	////g.getDatabaseParameters("database", "query");
-	java.util.Date date = new java.util.Date();
-	System.out.println( date );
-	try 
-	{
+		//get the database management parameter settings
+		////g.getDatabaseParameters("database", "query");
+		java.util.Date startDate = new java.util.Date();
+		int startSeconds = startDate.getSeconds();
+		System.out.println("StartQuery: "+startDate );
+		try 
+		{
 
-	//an array to store the summary results
-	String summaryResult[] = new String[30000];
-	int summaryResultNum=0;
+			//an array to store the summary results
+			String summaryResult[] = new String[30000];
+			int summaryResultNum=0;
 
-	//iterate through the plot id numbers
-	for (int i=0;i<plotIdNum; i++) 
-	{
+			//iterate through the plot id numbers
+			for (int i=0;i<plotIdNum; i++) 
+			{
+				//hash table to store the results of each individual plot
+				Hashtable summaryResultHash = new Hashtable();
 
-//hash table to store the results of each individual plot
-Hashtable summaryResultHash = new Hashtable();
+				//Because often the output of issueStatement is used as input here,
+				//and the output values are tokenized by pipes replace all the pipes below
+				String currentPlotId=plotId[i].replace('|',' ').trim();
 
-//Because often the output of issueStatement is used as input here,
-//and the output values are tokenized by pipes replace all the pipes below
-String currentPlotId=plotId[i].replace('|',' ').trim();
+				//this code should be replaced by a method that checks to see that the plotId is
+				//a valid one
 
-//this code should be replaced by a method that checks to see that the plotId is
-//a valid one
-
-if (currentPlotId.equals("nullValue") || currentPlotId == null ) {
-	currentPlotId="0";  //change this to a more resonable value
-}
+				if (currentPlotId.equals("nullValue") || currentPlotId == null ) 
+				{
+					currentPlotId="0";  //change this to a more resonable value
+				}
 
 
-String action="select";
-String statement="select PLOT_ID, PROJECT_ID, PLOTTYPE, SAMPLINGMETHOD, "
-	+" COVERSCALE, PLOTORIGINLAT,  PLOTORIGINLONG, PLOTSHAPE, PLOTAREA, "
-	+" ALTVALUE, SLOPEASPECT, SLOPEGRADIENT, SLOPEPOSITION, HYDROLOGICREGIME, "
-	+" SOILDRAINAGE, CURRENTCOMMUNITY, XCOORD, YCOORD, COORDTYPE, OBSSTARTDATE, "
-	+" OBSSTOPDATE, EFFORTLEVEL, HARDCOPYLOCATION, SOILTYPE, SOILDEPTH, "
-	+" PERCENTROCKGRAVEL, PERCENTSOIL, PERCENTLITTER, PERCENTWOOD, PERCENTWATER, "
-	+" PERCENTSAND, PERCENTCLAY, PERCENTORGANIC, LEAFTYPE, PHYSIONOMICCLASS, "
-	+" AUTHORPLOTCODE, SURFGEO, STATE, PARENTPLOT, AUTHOROBSCODE"
-	+" from PLOTSITESUMMARY where PLOT_ID = "+currentPlotId;
+				String action="select";
+				String statement="select PLOT_ID, PROJECT_ID, PLOTTYPE, SAMPLINGMETHOD, "
+					+" COVERSCALE, PLOTORIGINLAT,  PLOTORIGINLONG, PLOTSHAPE, PLOTAREA, "
+					+" ALTVALUE, SLOPEASPECT, SLOPEGRADIENT, SLOPEPOSITION, HYDROLOGICREGIME, "
+					+" SOILDRAINAGE, CURRENTCOMMUNITY, XCOORD, YCOORD, COORDTYPE, OBSSTARTDATE, "
+					+" OBSSTOPDATE, EFFORTLEVEL, HARDCOPYLOCATION, SOILTYPE, SOILDEPTH, "
+					+" PERCENTROCKGRAVEL, PERCENTSOIL, PERCENTLITTER, PERCENTWOOD, PERCENTWATER, "
+					+" PERCENTSAND, PERCENTCLAY, PERCENTORGANIC, LEAFTYPE, PHYSIONOMICCLASS, "
+					+" AUTHORPLOTCODE, SURFGEO, STATE, PARENTPLOT, AUTHOROBSCODE"
+					+" from PLOTSITESUMMARY where PLOT_ID = "+currentPlotId;
 		
-	String returnFields[]=new String[40];
-	int returnFieldLength=40;
+				String returnFields[]=new String[40];
+				int returnFieldLength=40;
 	
-	returnFields[0]="PLOT_ID";
-	returnFields[1]="PROJECT_ID";
-	returnFields[2]="PLOTTYPE";
-	returnFields[3]="SAMPLINGMETHOD";
-	returnFields[4]="COVERSCALE";
-	returnFields[5]="PLOTORIGINLAT";
-	returnFields[6]="PLOTORIGINLONG";
-	returnFields[7]="PLOTSHAPE";
-	returnFields[8]="PLOTAREA";
-	returnFields[9]="ALTVALUE";
-	returnFields[10]="SLOPEASPECT";
-	returnFields[11]="SLOPEGRADIENT";
-	returnFields[12]="SLOPEPOSITION";
-	returnFields[13]="HYDROLOGICREGIME";
-	returnFields[14]="SOILDRAINAGE";
-	returnFields[15]="CURRENTCOMMUNITY";
-	returnFields[16]="XCOORD";
-	returnFields[17]="YCOORD";
-	returnFields[18]="COORDTYPE";
-	returnFields[19]="OBSSTARTDATE";
-	returnFields[20]="OBSSTOPDATE";
-	returnFields[21]="EFFORTLEVEL";
-	returnFields[22]="HARDCOPYLOCATION";
-	returnFields[23]="SOILTYPE";
-	returnFields[24]="SOILDEPTH";
-	returnFields[25]="PERCENTROCKGRAVEL";
-	returnFields[26]="PERCENTSOIL";
-	returnFields[27]="PERCENTLITTER";
-	returnFields[28]="PERCENTWOOD";
-	returnFields[29]="PERCENTWATER";
-	returnFields[30]="PERCENTSAND";
-	returnFields[31]="PERCENTCLAY";
-	returnFields[32]="PERCENTORGANIC";
-	returnFields[33]="LEAFTYPE";
-	returnFields[34]="PHYSIONOMICCLASS";
-	returnFields[35]="AUTHORPLOTCODE";
-	returnFields[36]="SURFGEO";
-	returnFields[37]="STATE";
-	returnFields[38]="PARENTPLOT";
-	returnFields[39]="AUTHOROBSCODE";
+				returnFields[0]="PLOT_ID";
+				returnFields[1]="PROJECT_ID";
+				returnFields[2]="PLOTTYPE";
+				returnFields[3]="SAMPLINGMETHOD";
+				returnFields[4]="COVERSCALE";
+				returnFields[5]="PLOTORIGINLAT";
+				returnFields[6]="PLOTORIGINLONG";
+				returnFields[7]="PLOTSHAPE";
+				returnFields[8]="PLOTAREA";
+				returnFields[9]="ALTVALUE";
+				returnFields[10]="SLOPEASPECT";
+				returnFields[11]="SLOPEGRADIENT";
+				returnFields[12]="SLOPEPOSITION";
+				returnFields[13]="HYDROLOGICREGIME";
+				returnFields[14]="SOILDRAINAGE";
+				returnFields[15]="CURRENTCOMMUNITY";
+				returnFields[16]="XCOORD";
+				returnFields[17]="YCOORD";
+				returnFields[18]="COORDTYPE";
+				returnFields[19]="OBSSTARTDATE";
+				returnFields[20]="OBSSTOPDATE";
+				returnFields[21]="EFFORTLEVEL";
+				returnFields[22]="HARDCOPYLOCATION";
+				returnFields[23]="SOILTYPE";
+				returnFields[24]="SOILDEPTH";
+				returnFields[25]="PERCENTROCKGRAVEL";
+				returnFields[26]="PERCENTSOIL";
+				returnFields[27]="PERCENTLITTER";
+				returnFields[28]="PERCENTWOOD";
+				returnFields[29]="PERCENTWATER";
+				returnFields[30]="PERCENTSAND";
+				returnFields[31]="PERCENTCLAY";
+				returnFields[32]="PERCENTORGANIC";
+				returnFields[33]="LEAFTYPE";
+				returnFields[34]="PHYSIONOMICCLASS";
+				returnFields[35]="AUTHORPLOTCODE";
+				returnFields[36]="SURFGEO";
+				returnFields[37]="STATE";
+				returnFields[38]="PARENTPLOT";
+				returnFields[39]="AUTHOROBSCODE";
 
-	//execute the selection request
-	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength, summaryResultHash);	
+				//execute the selection request
+				issueStatement j = new issueStatement();
+				j.issueSelect(statement, action, returnFields, returnFieldLength, 
+				summaryResultHash);	
 	
 	
-	//take the results from the issueSelect and put into the array
-	//note that the j.outReturnFieldsNum should always be = 1 in this case
-	//because we are querying by a plot ID number which should be unique
-	for (int ii=0;ii<j.outReturnFieldsNum; ii++) {
-		summaryResult[i]=j.outReturnFields[ii];
+				//take the results from the issueSelect and put into the array
+				//note that the j.outReturnFieldsNum should always be = 1 in this case
+				//because we are querying by a plot ID number which should be unique
+			for (int ii=0;ii<j.outReturnFieldsNum; ii++) 
+			{
+				summaryResult[i]=j.outReturnFields[ii];
+			}
+	
+	
+			// make a second query here to get the species specific information 
+			action="select";
+			statement="select AUTHORNAMEID, AUTHORPLOTCODE, STRATUMTYPE, PERCENTCOVER" 
+				+" from PLOTSPECIESSUM where PLOT_ID = "+currentPlotId;
+
+			int returnSpeciesFieldLength=4;
+			String returnSpeciesFields[]=new String[4];	
+	
+			returnSpeciesFields[0]="AUTHORNAMEID";
+			returnSpeciesFields[1]="AUTHORPLOTCODE";
+			returnSpeciesFields[2]="STRATUMTYPE";
+			returnSpeciesFields[3]="PERCENTCOVER";
+	
+			//issue the select statement
+			issueStatement k = new issueStatement();
+			k.issueSelect(statement, action, returnSpeciesFields, 
+			returnSpeciesFieldLength, summaryResultHash);
+	
+			//System.out.println(currentPlotId);
+
+	
+			// add the individual plots (represented as their own hash) and include in the
+			// cumulative hash table
+			cumulativeSummaryResultHash.put("plot"+i,k.outResultHash);
+			summaryResultNum=i;
+			
+		} //end for
+		summaryOutput=summaryResult;
+		summaryOutputNum=summaryResultNum;
+
+		//print the end date
+		java.util.Date stopDate = new java.util.Date();
+		int stopSeconds = stopDate.getSeconds();
+		
+		System.out.println("Stop Query: "+stopDate );
+		System.out.println("elapsed time (secs) : "+ (stopSeconds - startSeconds) );
+		
 	}
-	
-	
-// make a second query here to get the species specific information 
-action="select";
-statement="select AUTHORNAMEID, AUTHORPLOTCODE, STRATUMTYPE, PERCENTCOVER" 
-	+" from PLOTSPECIESSUM where PLOT_ID = "+currentPlotId;
-
-	int returnSpeciesFieldLength=4;
-	String returnSpeciesFields[]=new String[4];	
-	
-	returnSpeciesFields[0]="AUTHORNAMEID";
-	returnSpeciesFields[1]="AUTHORPLOTCODE";
-	returnSpeciesFields[2]="STRATUMTYPE";
-	returnSpeciesFields[3]="PERCENTCOVER";
-	
-	//issue the select statement
-	issueStatement k = new issueStatement();
-	k.issueSelect(statement, action, returnSpeciesFields, returnSpeciesFieldLength, 
-	summaryResultHash);
-	
-//System.out.println(currentPlotId);
-
-	
-// add the individual plots (represented as their own hash) and include in the
-// cumulative hash table
-cumulativeSummaryResultHash.put("plot"+i,k.outResultHash);
-summaryResultNum=i;
-//System.out.println("???????> "+cumulativeSummaryResultHash.toString());
-} //end for
-
-
-summaryOutput=summaryResult;
-summaryOutputNum=summaryResultNum;
-
-} //end try
-catch (Exception e) {System.out.println("failed in querySrore.getPlotSummaryNew"
-		+" " + e.getMessage()); e.printStackTrace();}
-		
+	catch (Exception e) 
+	{
+		System.out.println("failed in querySrore.getPlotSummaryNew"
+			+" " + e.getMessage()); e.printStackTrace();
+	}	
 }//end method
 
 
