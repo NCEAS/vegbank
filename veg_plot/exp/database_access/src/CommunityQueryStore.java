@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-08 00:04:44 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-03-12 19:15:33 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -162,6 +162,159 @@ public class  CommunityQueryStore
 	}
 	
 	
+	
+	//get a vector that contains hashtables with all the possible 
+	//correlation ( name, recognizing party, system, status, level)
+	public Vector getCorrelationTargets(String commName)
+	{
+		Vector v = new Vector();
+		try
+		{
+			Connection conn = this.getConnection();
+			
+			statement.append("select ");
+			statement.append("commName, recognizingParty, partyConceptStatus, classLevel  ");
+			statement.append("from commSummary where upper(commName) like '");
+			statement.append(commName.toUpperCase()+"'");
+			//gather the responses
+			System.out.println("CommunityQueryStore > "+ statement.toString()  );
+			PreparedStatement pstmt;
+    	pstmt = conn.prepareStatement( statement.toString()  );            
+    	pstmt.execute();
+    	ResultSet rs = pstmt.getResultSet();
+			
+			String buf = null;
+			while (rs.next()) 
+			{
+				Hashtable hash = new Hashtable();
+				System.out.println("CommunityQueryStore > record: "   );
+				
+				buf = rs.getString(1);
+				hash.put("commName", ""+buf);
+				buf = rs.getString(2);
+				hash.put("recognizingParty", ""+buf);
+				buf = rs.getString(3);
+				hash.put("conceptStatus", ""+buf);
+				buf = rs.getString(4);
+				hash.put("level", ""+buf);
+				
+				//put the hash into the vector
+				v.addElement(hash);
+				
+			}
+			
+			pstmt.close();
+			conn.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("CommunityQueryStore > exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(v);
+	}
+						
+	
+	
+	public Hashtable getNameReference(String commName)
+	{
+		Hashtable nameRef = new Hashtable();
+		try
+		{
+			Connection conn = this.getConnection();
+			
+			statement.append("select ");
+			statement.append("title, authors, pubDate, edition, seriesName, issueIdentification,  ");
+			statement.append("otherCitationDetails, page, isbn, issn  ");
+			statement.append("from commReference where commreference_id = 2");
+		
+			//gather the responses
+			System.out.println("CommunityQueryStore > "+ statement.toString()  );
+			PreparedStatement pstmt;
+    	pstmt = conn.prepareStatement( statement.toString()  );            
+    	pstmt.execute();
+    	ResultSet rs = pstmt.getResultSet();
+			
+			String buf = null;
+			while (rs.next()) 
+			{
+				System.out.println("CommunityQueryStore > new reference record "  );
+				
+				buf = rs.getString(1);
+				nameRef.put("title", ""+buf);
+				buf = rs.getString(2);
+				nameRef.put("authors", ""+buf);
+				buf = rs.getString(3);
+				nameRef.put("pubDate", ""+buf);
+				buf = rs.getString(4);
+				nameRef.put("edition", ""+buf);
+				buf = rs.getString(5);
+				nameRef.put("seriesName", ""+buf);
+				buf = rs.getString(6);
+				nameRef.put("issueId", ""+buf);
+				buf = rs.getString(7);
+				nameRef.put("otherCitationDetails", ""+buf);
+				buf = rs.getString(8);
+				nameRef.put("page", ""+buf);
+				buf = rs.getString(9);
+				nameRef.put("isbn", ""+buf);
+				buf = rs.getString(10);
+				nameRef.put("issn", ""+buf);
+			}
+			
+			pstmt.close();
+			conn.close();
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println("CommunityQueryStore > exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(nameRef);
+	}
+	
+	
+	
+	
+	public Vector getCommunityNames(String commName)
+	{
+		Vector names = new Vector();
+		try
+		{
+			Connection conn = this.getConnection();
+			
+			statement.append("select ");
+			statement.append("commName ");
+			//MAKE ALL QUERIES CASE INSENSITIVE
+			statement.append("from commSummary where upper(commName) like '");
+			statement.append(commName.toUpperCase()+"'");
+			//gather the responses
+			System.out.println("CommunityQueryStore > "+ statement.toString()  );
+			PreparedStatement pstmt;
+    	pstmt = conn.prepareStatement( statement.toString()  );            
+    	pstmt.execute();
+    	ResultSet rs = pstmt.getResultSet();
+		
+			while (rs.next()) 
+			{
+				System.out.println("CommunityQueryStore > 	new record "  );
+				String buf = rs.getString(1);
+				names.addElement( buf );
+			}
+			
+			pstmt.close();
+			conn.close();
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println("CommunityQueryStore > exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(names);
+	}
+	
 	/**
 	 * method that will return a database connection for use with the database
 	*/
@@ -172,7 +325,8 @@ public class  CommunityQueryStore
  		{
 			Class.forName("org.postgresql.Driver");
 			//the community database
-			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/communities_dev", "datauser", "");
+			System.out.println("CommunityQueryStore > connecting to db on: vegbank ");
+			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
