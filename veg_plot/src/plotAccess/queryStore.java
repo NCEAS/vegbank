@@ -126,6 +126,25 @@ entireSinglePlotOutputNum=1; //and here
 
 
 
+ /**
+  * method to overload the method below allowing for an
+	* input of a vector
+	*/
+	public void getPlotSummaryNew(Vector plotIdVec)
+	{
+		//make the array the same size as the 
+		//vector to store the vector
+		String plotId[] = new String[plotIdVec.size()];
+		for (int i=0; i<plotIdVec.size(); i++) 
+		{
+			plotId[i]=plotIdVec.elementAt(i).toString().trim();	
+		}
+		//pass this array onto the 
+		//overloaded method
+		getPlotSummaryNew(plotId,  plotIdVec.size() );
+	}
+
+
 
 
 
@@ -138,20 +157,23 @@ entireSinglePlotOutputNum=1; //and here
  * @param plotId - an array of plotId numbers
  * @param plotIdNum - the number of elements in the above array
  */
-public void getPlotSummaryNew(String plotId[], int plotIdNum)
-{
+	public void getPlotSummaryNew(String plotId[], int plotIdNum)
+	{
 
-//get the database management parameter settings
-////g.getDatabaseParameters("database", "query");
+	//get the database management parameter settings
+	////g.getDatabaseParameters("database", "query");
+	java.util.Date date = new java.util.Date();
+	System.out.println( date );
+	try 
+	{
 
-try {
+	//an array to store the summary results
+	String summaryResult[] = new String[30000];
+	int summaryResultNum=0;
 
-//an array to store the summary results
-String summaryResult[] = new String[30000];
-int summaryResultNum=0;
-
-//iterate through the plot id numbers
-for (int i=0;i<plotIdNum; i++) {
+	//iterate through the plot id numbers
+	for (int i=0;i<plotIdNum; i++) 
+	{
 
 //hash table to store the results of each individual plot
 Hashtable summaryResultHash = new Hashtable();
