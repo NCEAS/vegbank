@@ -80,9 +80,10 @@
 	<target name="dist" depends="jar">
 	<zip zipfile="${dist}/setup.zip"
        basedir="${bin}"
-       includes="jar.exe start_installer.exe cygwin1.dll **.jar"
-       excludes="**.html"
-  />
+       includes="jar.exe start_installer.exe start_installer.sh cygwin1.dll **.jar"
+       excludes="**.html">
+			<fileset dir="${lib}" includes="README"/>
+	</zip>
 	</target>
 	
 	<!-- INSTALL: this will put the installer into web accessible directory -->
