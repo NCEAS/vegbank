@@ -353,9 +353,9 @@
 			<field property="archiveType" depends="required">
 				<arg0 key="Archive type" resource="false" />
 			</field>
-			<field property="plotFile" depends="required">
+			<!--field property="plotFile" depends="required">
 				<arg0 key="Plot data file" resource="false" />
-			</field>
+			</field-->
 			<field property="updateArchivedPlot" depends="required">
 				<arg0 key="Is plot already archived" resource="false" />
 			</field>

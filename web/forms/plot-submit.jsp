@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2004-11-06 01:06:32 $'
-*  '$Revision: 1.10 $'
+*  '$Date: 2004-11-16 01:17:07 $'
+*  '$Revision: 1.11 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -53,8 +53,6 @@
 <br> 
 
 <html:form action="/UploadPlot"  enctype="multipart/form-data">
-	<html:hidden value="false" property="updateArchivedPlot"/>
-	<html:hidden value="2" property="archiveType"/>
 
 
 <table  border="0" width="800" >
