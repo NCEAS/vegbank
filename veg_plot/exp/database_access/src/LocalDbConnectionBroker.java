@@ -71,7 +71,7 @@ public class LocalDbConnectionBroker
 				pconn=myBroker.getConnection(); //get a connection that will be closed
 		
 				//pool stats -- number of connections in the pool
-				///System.out.println(myBroker.getSize()+" \n");
+				System.out.println("LocalDbConnectionBroker > connectin string: " + g.connectionString);
 		
 			}
 			catch( Exception e ) 
@@ -148,7 +148,7 @@ public class LocalDbConnectionBroker
 
 	else if (action.equals("destroy") ) 
 	{
-		System.out.println("closing the database connection pool");
+		System.out.println("LocalDbConnectionBroker > closing the connection pool");
 		try 
 		{
 			//close the open connection 
@@ -163,7 +163,6 @@ public class LocalDbConnectionBroker
 			+e.getMessage() ); 
 			e.printStackTrace();
 		}
-
 	}
 	else 
 	{ 
