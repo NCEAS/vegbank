@@ -39,10 +39,19 @@ for (int i=0;i<=plotSummaryNum; i++) {
 	 String plotType=t.nextToken();
 	 String origLat=t.nextToken();
 	 String origLong=t.nextToken();
+	 //the remaining elements are species so grab the species names and 
+	 //stick into a array
+	 String buf=null;
+	 String speciesArray[]=new String[100000];
+	 int speciesArrayNum=0;
+	 while (t.hasMoreTokens()) {
+		buf=t.nextToken();
+		//System.out.println("writer "+buf);
+		speciesArray[speciesArrayNum]=buf;
+		speciesArrayNum++;
+	 }
 	 
 //print to elements in the correct order
-
-
 out.println("<project>");
 out.println("	<projectName>"+authorPlotCode+"</projectName>");
 out.println("	<projectDescription>TNC PROJECT:</projectDescription>");
@@ -107,9 +116,6 @@ out.println("			<plotStopDate>"+nullValue+"</plotStopDate>       ");
 out.println("			<dateAccuracy>"+nullValue+"</dateAccuracy>       ");
 out.println("			<effortLevel>"+nullValue+"</effortLevel>       ");
 
-
-/*this is where to print out the species list*/
- 
 out.println("			<strata>        ");
 out.println("				<stratumType>"+nullValue+"</stratumType>       ");	
 out.println("				<stratumCover>"+nullValue+"</stratumCover>       ");
@@ -119,9 +125,16 @@ out.println("			</strata>        ");
 
 
 
+/*this is where to print out the list of different species found in the resultset
+* for now just print the unique ones*/
+utility m = new utility();
+m.getUniqueArray(speciesArray, speciesArrayNum);
 
+//print the unique species types
+for (int h=0; h<m.outArrayNum; h++) {
+	
 out.println("                   <taxonObservations>        ");
-out.println("                           <authNameId>"+nullValue+"</authNameId>       ");
+out.println("                           <authNameId>"+m.outArray[h]+"</authNameId>       ");
 out.println("                           <originalAuthority>"+nullValue+"</originalAuthority>       ");
 out.println("                           <strataComposition>        ");
 out.println("                                   <strataType>"+nullValue+"</strataType>       ");
@@ -135,7 +148,7 @@ out.println("                                   <notes>"+nullValue+"</notes>    
 out.println("                           </interptretation>        ");
 out.println("                   </taxonObservations>        ");
 
-
+}
 
 
 

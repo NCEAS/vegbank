@@ -66,14 +66,45 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 	for (int ii=0;ii<j.outReturnFieldsNum; ii++) {
 	summaryResult[i]=j.outReturnFields[ii];
 	}
-	summaryResultNum=i;
+	
 /**	
 * make a second query here to get the species specific information which will
 * be appended onto the summary results line and ultimately tokenized in the 
 * xmlWrter class - at some point this function may become its own method
 */
+	action="select";
+	statement="select AUTHORNAMEID from taxonObservation where OBS_ID in"+
+		"(select OBS_ID from PLOTOBSERVATION where PARENTPLOT in"+
+		"(select plot_ID from plot where PLOT_ID ="+currentPlotId+"))";
+
+/*		
+select AUTHORNAMEID, ORIGINALAUTHORITY from taxonObservation where OBS_ID in
+	(select OBS_ID from PLOTOBSERVATION where PARENTPLOT in 
+		(select plot_ID from plot where PLOT_ID = 2));
+*/		
+	String returnFieldsB[]=new String[1];	
+	returnFieldsB[0]="AUTHORNAMEID";
+	int returnFieldLengthB=1;
 
 
+	/*
+	* Call the issueSelect method which will return an array with the return
+	*/
+
+	issueStatement k = new issueStatement();
+	k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB);	
+
+	//take the results from this query and append to the summary line
+	//which will ultimatell be passed back to the xmlWriter to be tokenized
+	//and writen to xml - againd there should only be one line returned 
+	for (int ii=0;ii<k.outReturnFieldsNum; ii++) {
+	summaryResult[i]=summaryResult[i]+k.outReturnFields[ii];
+	}
+	
+
+
+
+summaryResultNum=i;
 } //end for
 
 summaryOutput=summaryResult;
