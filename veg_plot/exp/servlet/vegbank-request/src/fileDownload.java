@@ -66,6 +66,7 @@ public class fileDownload extends HttpServlet
 	//below are the stylesheets for the flat ascii file tarnsformation process 
 	private String asciiSitesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotsites-flatascii.xsl";
 	private String asciiSpeciesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotspecies-flatascii.xsl";
+	private String condensedAsciiSpeciesStyleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/plotspecies-condensedascii.xsl";
 	
 	
 	/**
@@ -140,11 +141,12 @@ public class fileDownload extends HttpServlet
 			//request the plots from the database  
 			dataRequester(plotRequestList, atomicResultSet, cummulativeResultSet, 
 			"entirePlot");
+			// REGISTER THE FILENAMES FOR THE REQUESTED TYPE
 			if ( fileFormatType.equals("html") )
 			{
 				downloadFile = "download.html";
 			}
-			else if ( fileFormatType.equals("flat") )
+			else if ( fileFormatType.equals("flat") || fileFormatType.equals("condensed") )
 			{
 				downloadFile = "download.txt";
 			}
@@ -171,6 +173,7 @@ public class fileDownload extends HttpServlet
 			}
 			else
 			{
+				System.out.println("fileDownload > copying file: " + cummulativeResultSet +" to: "+downloadPath+downloadFile);
 				sutil.fileCopy(cummulativeResultSet, downloadPath+downloadFile);
 				//redirect the user to the appropriate file 
 				response.sendRedirect("/downloads/"+downloadFile);
@@ -315,6 +318,19 @@ public class fileDownload extends HttpServlet
 				//copy the work file to the target file
 				sutil.fileCopy(workFile, cummulativeResultSet, "append");
 			}
+			// THIS IS FOR THE CONDENSED ASCII FORMAT -- THE FORMAT THAT IS TO BE 
+			// USED BY THE ANALYTICAL TOOLS 
+			else if ( formatType.equals("condensed") ) 
+			{
+				System.out.println("fileDownload > transforming data to condensed-ascii -- sites");
+				transformer.transformXMLDocumentToFile(plotFile, asciiSitesStyleSheet, workFile);
+				System.out.println("fileDownload > transforming data to condensed-ascii -- species");
+				transformer.transformXMLDocumentToFile(plotFile, condensedAsciiSpeciesStyleSheet, workFile2);
+				//copy the work file to the target file
+				sutil.fileCopy(workFile, cummulativeResultSet, "append");
+				sutil.fileCopy(workFile2, cummulativeResultSet, "concat");
+			}
+			
 			else
 			{
 				System.out.println("fileDownload > no transformation");
