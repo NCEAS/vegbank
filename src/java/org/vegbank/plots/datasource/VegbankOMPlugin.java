@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-01 23:11:24 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,10 +41,10 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	private Observation observation;
 	private Plot plot;
 	private Project project;
-	private CoverMethod coverMethod;
-	private StratumMethod stratumMethod;
-	private SoilTaxon soilTaxon;
-	private CommClass commClass;
+	private Covermethod coverMethod;
+	private Stratummethod stratumMethod;
+	private Soiltaxon soilTaxon;
+	private Commclass commClass;
 	
 	private Hashtable projectContibs = new Hashtable();
 	private Hashtable taxonObs = new Hashtable();
@@ -78,22 +78,22 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		plot = observation.getPLOT();
-		project = observation.getPROJECT();
-		coverMethod = observation.getCOVERMETHOD();
-		stratumMethod = observation.getSTRATUMMETHOD();
-		soilTaxon = observation.getSOILTAXON();
+		plot = observation.getPlot();
+		project = observation.getProject();
+		coverMethod = observation.getCovermethod();
+		stratumMethod = observation.getStratummethod();
+		soilTaxon = observation.getSoiltaxon();
 		
 		// Just get the first one as thats all the interface supports
-		Iterator commClasses = observation.getOBSERVATIONCommClasss().iterator();
+		Iterator commClasses = observation.getobservationcommclasss().iterator();
 		if ( commClasses.hasNext() )
 		{
-			commClass = (CommClass)commClasses.next();
+			commClass = (Commclass)commClasses.next();
 		}
 		else
 		{
 			// Create an empty commClass
-			commClass = new CommClass();
+			commClass = new Commclass();
 		}
 
   }
@@ -111,7 +111,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getAuthorLocation(String plotName)
 	{
-		return plot.getAuthorLocation();
+		return plot.getAuthorlocation();
 	}
 
 	/* (non-Javadoc)
@@ -119,7 +119,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getAuthorObsCode(String plotName)
 	{
-		return observation.getAuthorObsCode();
+		return observation.getAuthorobscode();
 	}
 
 	/* (non-Javadoc)
@@ -127,7 +127,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public boolean getAutoTaxonCover(String plantName)
 	{
-		return new Boolean(observation.getAutoTaxonCover()).booleanValue();
+		return new Boolean(observation.getAutotaxoncover()).booleanValue();
 	}
 
 	/* (non-Javadoc)
@@ -143,7 +143,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getBasalArea(String plotName)
 	{
-		return observation.getBasalArea();
+		return observation.getBasalarea();
 	}
 
 	/* (non-Javadoc)
@@ -151,7 +151,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getBryophyteQuality(String plotName)
 	{
-		return observation.getBryophyteQuality();
+		return observation.getBryophytequality();
 	}
 
 	/* (non-Javadoc)
@@ -159,7 +159,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getClassNotes(String plotName)
 	{
-		return commClass.getClassNotes();
+		return commClass.getClassnotes();
 	}
 
 	/* (non-Javadoc)
@@ -167,7 +167,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityCode(String plotName)
 	{
-		return commClass.getCommCode();
+		return commClass.getCommcode();
 	}
 
 	/* (non-Javadoc)
@@ -175,7 +175,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityExpertSystem(String plotName)
 	{
-		return commClass.getExpertSystem();
+		return commClass.getExpertsystem();
 	}
 
 	/* (non-Javadoc)
@@ -183,7 +183,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityFramework(String plotName)
 	{
-		return commClass.getCommFramework();
+		return commClass.getCommframework();
 	}
 
 	/* (non-Javadoc)
@@ -199,7 +199,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityLevel(String plotName)
 	{
-		return commClass.getCommLevel();
+		return commClass.getCommlevel();
 	}
 
 	/* (non-Javadoc)
@@ -207,7 +207,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityMultiVariateAnalysis(String plotName)
 	{
-		return commClass.getMultivariateAnalysis();
+		return commClass.getMultivariateanalysis();
 	}
 
 	/* (non-Javadoc)
@@ -215,7 +215,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityName(String plotName)
 	{
-		return commClass.getCommName();
+		return commClass.getCommname();
 	}
 
 	/* (non-Javadoc)
@@ -232,7 +232,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityStartDate(String plotName)
 	{
-		return commClass.getClassStartDate();
+		return commClass.getClassstartdate();
 	}
 
 	/* (non-Javadoc)
@@ -240,7 +240,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityStopDate(String plotName)
 	{
-		return commClass.getClassStopDate();
+		return commClass.getClassstopdate();
 	}
 
 	/* (non-Javadoc)
@@ -248,7 +248,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityTableAnalysis(String plotName)
 	{
-		return commClass.getTableAnalysis();
+		return commClass.getTableanalysis();
 	}
 
 	/* (non-Javadoc)
@@ -256,7 +256,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getConfidentialityReason(String plotName)
 	{
-		return plot.getConfidentialityReason();
+		return plot.getConfidentialityreason();
 	}
 
 	/* (non-Javadoc)
@@ -264,7 +264,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getConfidentialityStatus(String plotName)
 	{
-		return plot.getConfidentialityStatus();
+		return plot.getConfidentialitystatus();
 	}
 
 	/* (non-Javadoc)
@@ -280,7 +280,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCoverDispersion(String plotName)
 	{
-		return observation.getCoverDispersion();
+		return observation.getCoverdispersion();
 	}
 
 	/* (non-Javadoc)
@@ -297,7 +297,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getCoverMethodName(String plotName)
 	{
-		return coverMethod.getCoverType();
+		return coverMethod.getCovertype();
 	}
 
 	/* (non-Javadoc)
@@ -314,7 +314,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getDatumType(String plotName)
 	{
-		return plot.getAuthorDatum();
+		return plot.getAuthordatum();
 	}
 
 	/* (non-Javadoc)
@@ -322,7 +322,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getDominantStratum(String plotName)
 	{
-		return observation.getDominantStratum();
+		return observation.getDominantstratum();
 	}
 
 	/* (non-Javadoc)
@@ -338,7 +338,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getEffortLevel(String plotName)
 	{
-		return observation.getEffortLevel();
+		return observation.getEffortlevel();
 	}
 
 	/* (non-Javadoc)
@@ -354,7 +354,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getElevationAccuracy(String plotName)
 	{
-		return plot.getElevationAccuracy();
+		return plot.getElevationaccuracy();
 	}
 
 	/* (non-Javadoc)
@@ -362,7 +362,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getFieldCover(String plotName)
 	{
-		return observation.getFieldCover();
+		return observation.getFieldcover();
 	}
 
 	/* (non-Javadoc)
@@ -370,7 +370,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getFieldHt(String plotName)
 	{
-		return observation.getFieldHt();
+		return observation.getFieldht();
 	}
 
 	/* (non-Javadoc)
@@ -378,7 +378,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getFloatingCover(String plotName)
 	{
-		return observation.getFloatingCover();
+		return observation.getFloatingcover();
 	}
 
 	/* (non-Javadoc)
@@ -386,7 +386,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getFloristicQuality(String plotName)
 	{
-		return observation.getFloristicQuality();
+		return observation.getFloristicquality();
 	}
 
 	/* (non-Javadoc)
@@ -394,7 +394,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getGrowthform1Cover(String plotName)
 	{
-		return observation.getGrowthform1Cover();
+		return observation.getGrowthform1cover();
 	}
 
 	/* (non-Javadoc)
@@ -402,7 +402,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getGrowthform1Type(String plotName)
 	{
-		return observation.getGrowthform1Type();
+		return observation.getGrowthform1type();
 	}
 
 	/* (non-Javadoc)
@@ -410,7 +410,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getGrowthform2Cover(String plotName)
 	{
-		return observation.getGrowthform2Cover();
+		return observation.getGrowthform2cover();
 	}
 
 	/* (non-Javadoc)
@@ -418,7 +418,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getGrowthform2Type(String plotName)
 	{
-		return observation.getGrowthform2Type();
+		return observation.getGrowthform2type();
 	}
 
 	/* (non-Javadoc)
@@ -426,7 +426,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getGrowthform3Cover(String plotName)
 	{
-		return observation.getGrowthform3Cover();
+		return observation.getGrowthform3cover();
 	}
 
 	/* (non-Javadoc)
@@ -434,7 +434,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getGrowthform3Type(String plotName)
 	{
-		return observation.getGrowthform3Type();
+		return observation.getGrowthform3type();
 	}
 
 	/* (non-Javadoc)
@@ -450,7 +450,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getHydrologicRegime(String plotName)
 	{
-		return observation.getHydrologicRegime();
+		return observation.getHydrologicregime();
 	}
 
 	/* (non-Javadoc)
@@ -466,7 +466,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getLandscapeNarrative(String plotName)
 	{
-		return observation.getLandscapeNarrative();
+		return observation.getLandscapenarrative();
 	}
 
 	/* (non-Javadoc)
@@ -482,7 +482,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getLayoutNarrative(String plotName)
 	{
-		return plot.getLayoutNarative();
+		return plot.getLayoutnarative();
 	}
 
 	/* (non-Javadoc)
@@ -490,7 +490,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getLichenQuality(String plotName)
 	{
-		return observation.getLichenQuality();
+		return observation.getLichenquality();
 	}
 
 	/* (non-Javadoc)
@@ -498,7 +498,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getLocationNarrative(String plotName)
 	{
-		return plot.getLocationNarrative();
+		return plot.getLocationnarrative();
 	}
 
 	/* (non-Javadoc)
@@ -514,7 +514,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getMethodNarrative(String plotName)
 	{
-		return observation.getMethodNarrative();
+		return observation.getMethodnarrative();
 	}
 
 	/* (non-Javadoc)
@@ -522,7 +522,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getNameOther(String plotName)
 	{
-		return observation.getNameOther();
+		return observation.getNameother();
 	}
 
 	/* (non-Javadoc)
@@ -530,7 +530,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getNonvascularCover(String plotName)
 	{
-		return observation.getNonvascularCover();
+		return observation.getNonvascularcover();
 	}
 
 	/* (non-Javadoc)
@@ -538,7 +538,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getNonvascularHt(String plotName)
 	{
-		return observation.getNonvascularHt();
+		return observation.getNonvascularht();
 	}
 
 	/* (non-Javadoc)
@@ -546,7 +546,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public boolean getNotesMgt(String plotName)
 	{
-		return new Boolean( observation.getNotesMgt() ).booleanValue();
+		return new Boolean( observation.getNotesmgt() ).booleanValue();
 	}
 
 	/* (non-Javadoc)
@@ -554,7 +554,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public boolean getNotesPublic(String plotName)
 	{
-		return new Boolean( observation.getNotesPublic() ).booleanValue();
+		return new Boolean( observation.getNotespublic() ).booleanValue();
 	}
 
 	/* (non-Javadoc)
@@ -562,7 +562,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getObsDateAccuracy(String plotName)
 	{
-		return observation.getObservationNarrative();
+		return observation.getObservationnarrative();
 	}
 
 	/* (non-Javadoc)
@@ -758,7 +758,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getObservationNarrative(String plotName)
 	{
-		return observation.getObservationNarrative();
+		return observation.getObservationnarrative();
 	}
 
 	/* (non-Javadoc)
@@ -766,7 +766,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getObsStartDate(String plotName)
 	{
-		return observation.getObsStartDate();
+		return observation.getObsstartdate();
 	}
 
 	/* (non-Javadoc)
@@ -774,7 +774,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getObsStopDate(String plotName)
 	{
-		return observation.getObsStartDate();
+		return observation.getObsstartdate();
 	}
 
 	/* (non-Javadoc)
@@ -782,7 +782,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getOrganicDepth(String plotName)
 	{
-		return observation.getOrganicDepth();
+		return observation.getOrganicdepth();
 	}
 
 	/* (non-Javadoc)
@@ -790,7 +790,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getOriginalData(String plotName)
 	{
-		return observation.getOriginalData();
+		return observation.getOriginaldata();
 	}
 
 	/* (non-Javadoc)
@@ -798,7 +798,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPercentBareSoil(String plotName)
 	{
-		return observation.getPercentBareSoil();
+		return observation.getPercentbaresoil();
 	}
 
 	/* (non-Javadoc)
@@ -806,7 +806,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPercentBedRock(String plotName)
 	{
-		return observation.getPercentBedRock();
+		return observation.getPercentbedrock();
 	}
 
 	/* (non-Javadoc)
@@ -814,7 +814,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPercentLitter(String plotName)
 	{
-		return observation.getPercentLitter();
+		return observation.getPercentlitter();
 	}
 
 	/* (non-Javadoc)
@@ -822,7 +822,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPercentOther(String plotName)
 	{
-		return observation.getPercentOther();
+		return observation.getPercentother();
 	}
 
 	/* (non-Javadoc)
@@ -830,7 +830,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPercentRockGravel(String plotName)
 	{
-		return observation.getPercentRockGravel();
+		return observation.getPercentrockgravel();
 	}
 
 	/* (non-Javadoc)
@@ -838,7 +838,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPercentWater(String plotName)
 	{
-		return observation.getPercentWater();
+		return observation.getPercentwater();
 	}
 
 	/* (non-Javadoc)
@@ -846,7 +846,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPercentWood(String plotName)
 	{
-		return observation.getPercentWood();
+		return observation.getPercentwood();
 	}
 
 	/* (non-Javadoc)
@@ -854,7 +854,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPhenologicalAspect(String plotName)
 	{
-		return observation.getPhenologicAspect();
+		return observation.getPhenologicaspect();
 	}
 
 	/* (non-Javadoc)
@@ -862,8 +862,8 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPlaceCode(String placeName)
 	{
-		NamedPlace namedPlace = (NamedPlace) placeNames.get(placeName);
-		return namedPlace.getPlaceCode();
+		Namedplace namedPlace = (Namedplace) placeNames.get(placeName);
+		return namedPlace.getPlacecode();
 	}
 
 	/* (non-Javadoc)
@@ -871,8 +871,8 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPlaceDescription(String placeName)
 	{
-		NamedPlace namedPlace = (NamedPlace) placeNames.get(placeName);
-		return namedPlace.getPlaceDescription();
+		Namedplace namedPlace = (Namedplace) placeNames.get(placeName);
+		return namedPlace.getPlacedescription();
 	}
 
 	/* (non-Javadoc)
@@ -881,12 +881,12 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public Vector getPlaceNames(String plotName)
 	{
 		Vector placeNameList = new Vector();
-		Iterator places = plot.getPLOTPlaces().iterator();
+		Iterator places = plot.getplotplaces().iterator();
 		while ( places.hasNext() )
 		{
 			Place place = (Place) places.next();
-			NamedPlace namedPlace = (NamedPlace) place.getNAMEDPLACE();
-			String key = namedPlace.getPlaceName();
+			Namedplace namedPlace = (Namedplace) place.getNamedplace();
+			String key = namedPlace.getPlacename();
 
 			placeNames.put(key, place);
 			placeNameList.add(key);
@@ -900,7 +900,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPlaceOwner(String placeName)
 	{
-		NamedPlace namedPlace = (NamedPlace) placeNames.get(placeName);
+		Namedplace namedPlace = (Namedplace) placeNames.get(placeName);
 		return namedPlace.getOwner();
 	}
 
@@ -909,8 +909,8 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPlaceSystem(String placeName)
 	{
-		NamedPlace namedPlace = (NamedPlace) placeNames.get(placeName);
-		return namedPlace.getPlaceSystem();
+		Namedplace namedPlace = (Namedplace) placeNames.get(placeName);
+		return namedPlace.getPlacesystem();
 	}
 
 	/* (non-Javadoc)
@@ -920,17 +920,17 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	{
 		Vector nameList = new Vector();
 		// TODO: Need to go through the plantusage, plantconcept and plantusage to get the Sci name
-		Iterator taxonObservations = observation.getOBSERVATIONTaxonObservations().iterator();
+		Iterator taxonObservations = observation.getobservationtaxonobservations().iterator();
 		while ( taxonObservations.hasNext() )
 		{
-			TaxonObservation to = (TaxonObservation) taxonObservations.next();
+			Taxonobservation to = (Taxonobservation) taxonObservations.next();
 			String key = "";
 			//PlantName plantName = (PlantName) to.getPLANTNAME();
-			Iterator taxonInterpritations = to.getTAXONOBSERVATIONTaxonInterpretations().iterator();
+			Iterator taxonInterpritations = to.gettaxonobservationtaxoninterpretations().iterator();
 			if ( taxonInterpritations.hasNext() )
 			{
-				TaxonInterpretation ti =  (TaxonInterpretation) taxonInterpritations.next();
-				key = ti.getPLANTCONCEPT().getPlantname();
+				Taxoninterpretation ti =  (Taxoninterpretation) taxonInterpritations.next();
+				key = ti.getPlantconcept().getPlantname();
 			}
 			taxonObs.put(key, to);
 			nameList.add(key);
@@ -943,8 +943,8 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPlantTaxonCode(String plantName)
 	{
-		TaxonObservation to = (TaxonObservation) taxonObs.get(plantName);
-		return to.getPLANTNAME().getPlantName();
+		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
+		return to.getPlantname().getPlantname();
 	}
 
 	/* (non-Javadoc)
@@ -952,8 +952,8 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPlantTaxonCover(String plantName, String plotName)
 	{
-		TaxonObservation to = (TaxonObservation) taxonObs.get(plantName);
-		return to.getTaxonCover();
+		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
+		return to.getTaxoncover();
 	}
 
 	/* (non-Javadoc)
@@ -969,7 +969,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPlotCode(String plotName)
 	{
-		return plot.getAuthorPlotCode();
+		return plot.getAuthorplotcode();
 	}
 
 	/* (non-Javadoc)
@@ -1002,7 +1002,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPlotValidationLevel(String plotName)
 	{
-		return observation.getPlotValidationLevel();
+		return observation.getPlotvalidationlevel();
 	}
 
 	/* (non-Javadoc)
@@ -1014,7 +1014,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			addressStartDate = ( (Address) party.getpartyAddresss().get(0)).getAddressStartDate();
+			addressStartDate = ( (Address) party.getpartyaddresss().get(0)).getAddressstartdate();
 		}
 		catch (RuntimeException e)
 		{
@@ -1033,7 +1033,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			administrativeArea = ( (Address) party.getpartyAddresss().get(0)).getAdministrativeArea();
+			administrativeArea = ( (Address) party.getpartyaddresss().get(0)).getAdministrativearea();
 		}
 		catch (RuntimeException e)
 		{
@@ -1060,7 +1060,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			city = ( (Address) party.getpartyAddresss().get(0)).getCity();
+			city = ( (Address) party.getpartyaddresss().get(0)).getCity();
 		}
 		catch (RuntimeException e)
 		{
@@ -1075,7 +1075,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getProjectContributorContactInstructions(String contributorWholeName)
 	{
 		Party party = (Party) projectContibs.get(contributorWholeName);
-		return party.getContactInstructions();
+		return party.getContactinstructions();
 	}
 
 	/* (non-Javadoc)
@@ -1087,7 +1087,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			country = ( (Address) party.getpartyAddresss().get(0)).getCountry();
+			country = ( (Address) party.getpartyaddresss().get(0)).getCountry();
 		}
 		catch (RuntimeException e)
 		{
@@ -1105,7 +1105,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			currentFlag = ( (Address) party.getpartyAddresss().get(0)).getCurrentFlag();
+			currentFlag = ( (Address) party.getpartyaddresss().get(0)).getCurrentflag();
 		}
 		catch (RuntimeException e)
 		{
@@ -1123,7 +1123,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			deliveryPoint = ( (Address) party.getpartyAddresss().get(0)).getDeliveryPoint();
+			deliveryPoint = ( (Address) party.getpartyaddresss().get(0)).getDeliverypoint();
 		}
 		catch (RuntimeException e)
 		{
@@ -1147,14 +1147,14 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getProjectContributorFaxPhoneNumber(String contributorWholeName)
 	{
 		Party party = (Party) projectContibs.get(contributorWholeName);
-		List telephones = party.getPARTYTelephones();
+		List telephones = party.getpartytelephones();
 		Iterator telIter = telephones.iterator();
 		while ( telIter.hasNext() )
 		{
 			Telephone tel =  (Telephone)telIter.next();
-			if ( tel.getPhoneType().equalsIgnoreCase("Fax") )
+			if ( tel.getPhonetype().equalsIgnoreCase("Fax") )
 			{
-				return tel.getPhoneNumber();
+				return tel.getPhonenumber();
 			}
 		}
 		return null;
@@ -1166,7 +1166,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getProjectContributorGivenName(String contributorWholeName)
 	{
 		Party party = (Party) projectContibs.get(contributorWholeName);
-		return party.getGivenName();
+		return party.getGivenname();
 	}
 
 	/* (non-Javadoc)
@@ -1175,7 +1175,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getProjectContributorMiddleName(String contributorWholeName)
 	{
 		Party party = (Party) projectContibs.get(contributorWholeName);
-		return party.getMiddleName();
+		return party.getMiddlename();
 	}
 
 	/* (non-Javadoc)
@@ -1184,7 +1184,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getProjectContributorOrganizationName(String contributorWholeName)
 	{
 		Party party = (Party) projectContibs.get(contributorWholeName);
-		return party.getOrganizationName();
+		return party.getOrganizationname();
 	}
 
 	/* (non-Javadoc)
@@ -1203,14 +1203,14 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getProjectContributorPhoneNumber(String contributorWholeName)
 	{
 		Party party = (Party) projectContibs.get(contributorWholeName);
-		List telephones = party.getPARTYTelephones();
+		List telephones = party.getpartytelephones();
 		Iterator telIter = telephones.iterator();
 		while ( telIter.hasNext() )
 		{
 			Telephone tel =  (Telephone)telIter.next();
-			if ( tel.getPhoneType().equalsIgnoreCase("Work") )
+			if ( tel.getPhonetype().equalsIgnoreCase("Work") )
 			{
-				return tel.getPhoneNumber();
+				return tel.getPhonenumber();
 			}
 		}
 		return null;
@@ -1225,7 +1225,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Party party = (Party) projectContibs.get(contributorWholeName);
 		try
 		{
-			postalCode = ( (Address) party.getpartyAddresss().get(0)).getPostalCode();
+			postalCode = ( (Address) party.getpartyaddresss().get(0)).getPostalcode();
 		}
 		catch (RuntimeException e)
 		{
@@ -1240,13 +1240,13 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public Vector getProjectContributors(String plotName)
 	{
 		Vector nameList = new Vector();
-		List projectContributors = project.getPROJECTProjectContributors();
+		List projectContributors = project.getprojectprojectcontributors();
 		Iterator pcIterator = projectContributors.iterator();
 		while ( pcIterator.hasNext() )
 		{
-			ProjectContributor  pc = (ProjectContributor) pcIterator.next();
-			Party party = pc.getPARTY();
-			String key = party.getGivenName() + " " + party.getSurName();
+			Projectcontributor  pc = (Projectcontributor) pcIterator.next();
+			Party party = pc.getParty();
+			String key = party.getGivenname() + " " + party.getSurname();
 			projectContibs.put(key, party);
 			nameList.add(key);
 		}
@@ -1269,7 +1269,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getProjectContributorSurName(String contributorWholeName)
 	{
 		Party party = (Party) projectContibs.get(contributorWholeName);
-		return party.getSurName();
+		return party.getSurname();
 	}
 
 	/* (non-Javadoc)
@@ -1277,7 +1277,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getProjectDescription(String plotName)
 	{
-		return project.getProjectDescription();
+		return project.getProjectdescription();
 	}
 
 	/* (non-Javadoc)
@@ -1289,7 +1289,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
     {
       this.init(new Integer(plotName).intValue() );
     }
-		return project.getProjectName();
+		return project.getProjectname();
 	}
 
 	/* (non-Javadoc)
@@ -1297,7 +1297,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getProjectStartDate(String plotName)
 	{
-		return project.getStartDate();
+		return project.getStartdate();
 	}
 
 	/* (non-Javadoc)
@@ -1305,7 +1305,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getProjectStopDate(String plotName)
 	{
-		return project.getStopDate();
+		return project.getStopdate();
 	}
 
 	/* (non-Javadoc)
@@ -1329,7 +1329,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getRockType(String plotName)
 	{
-		return plot.getRockType();
+		return plot.getRocktype();
 	}
 
 	/* (non-Javadoc)
@@ -1337,7 +1337,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getShoreDistance(String plotName)
 	{
-		return observation.getShoreDistance();
+		return observation.getShoredistance();
 	}
 
 	/* (non-Javadoc)
@@ -1345,7 +1345,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getShrubCover(String plotName)
 	{
-		return observation.getShrubCover();
+		return observation.getShrubcover();
 	}
 
 	/* (non-Javadoc)
@@ -1353,7 +1353,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getShrubHt(String plotName)
 	{
-		return observation.getShrubHt();
+		return observation.getShrubht();
 	}
 
 	/* (non-Javadoc)
@@ -1361,7 +1361,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSlopeAspect(String plotName)
 	{
-		return plot.getSlopeAspect();
+		return plot.getSlopeaspect();
 	}
 
 	/* (non-Javadoc)
@@ -1369,7 +1369,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSlopeGradient(String plotName)
 	{
-		return plot.getSlopeGradient();
+		return plot.getSlopegradient();
 	}
 
 	/* (non-Javadoc)
@@ -1377,7 +1377,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSoilDepth(String plotName)
 	{
-		return observation.getSoilDepth();
+		return observation.getSoildepth();
 	}
 
 	/* (non-Javadoc)
@@ -1385,7 +1385,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSoilDrainage(String plotName)
 	{
-		return observation.getSoilDrainage();
+		return observation.getSoildrainage();
 	}
 
 	/* (non-Javadoc)
@@ -1393,7 +1393,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSoilMoistureRegime(String plotName)
 	{
-		return observation.getSoilMoistureRegime();
+		return observation.getSoilmoistureregime();
 	}
 
 	/* (non-Javadoc)
@@ -1401,7 +1401,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSoilTaxon(String plotName)
 	{
-		return soilTaxon.getSoilName();
+		return soilTaxon.getSoilname();
 	}
 
 	/* (non-Javadoc)
@@ -1409,7 +1409,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSoilTaxonSource(String plotName)
 	{
-		return observation.getSoilTaxonSrc();
+		return observation.getSoiltaxonsrc();
 	}
 
 	/* (non-Javadoc)
@@ -1417,7 +1417,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getStandMaturity(String plotName)
 	{
-		return observation.getStandMaturity();
+		return observation.getStandmaturity();
 	}
 
 	/* (non-Javadoc)
@@ -1425,7 +1425,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getStandSize(String plotName)
 	{
-		return plot.getStandSize();
+		return plot.getStandsize();
 	}
 
 	/* (non-Javadoc)
@@ -1441,7 +1441,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getStemObservationArea(String plotName)
 	{
-		return observation.getStemObservationArea();
+		return observation.getStemobservationarea();
 	}
 
 	/* (non-Javadoc)
@@ -1449,7 +1449,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getStemSampleMethod(String plotName)
 	{
-		return observation.getStemSampleMethod();
+		return observation.getStemsamplemethod();
 	}
 
 	/* (non-Javadoc)
@@ -1457,7 +1457,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getStemSizeLimit(String plotName)
 	{
-		return observation.getStemSizeLimit();
+		return observation.getStemsizelimit();
 	}
 
 	/* (non-Javadoc)
@@ -1466,7 +1466,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getStrataBase(String plotName, String stratumName)
 	{
 		Stratum stratum = (Stratum) strataNames.get(stratumName);
-		return stratum.getStratumBase();
+		return stratum.getStratumbase();
 	}
 
 	/* (non-Javadoc)
@@ -1475,7 +1475,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getStrataCover(String plotName, String stratumName)
 	{
 		Stratum stratum = (Stratum) strataNames.get(stratumName);
-		return stratum.getStratumCover();
+		return stratum.getStratumcover();
 	}
 
 	/* (non-Javadoc)
@@ -1484,7 +1484,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getStrataHeight(String plotName, String stratumName)
 	{
 		Stratum stratum = (Stratum) strataNames.get(stratumName);
-		return stratum.getStratumHeight();
+		return stratum.getStratumheight();
 	}
 
 	/* (non-Javadoc)
@@ -1501,7 +1501,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getStratumMethodName(String plotName)
 	{
-		return stratumMethod.getStratumMethodName();
+		return stratumMethod.getStratummethodname();
 	}
 
 	/* (non-Javadoc)
@@ -1509,7 +1509,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSubmergedCover(String plotName)
 	{
-		return observation.getSubmergedCover();
+		return observation.getSubmergedcover();
 	}
 
 	/* (non-Javadoc)
@@ -1517,7 +1517,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSubmergedHt(String plotName)
 	{
-		return observation.getSubmergedHt();
+		return observation.getSubmergedht();
 	}
 
 	/* (non-Javadoc)
@@ -1525,7 +1525,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSuccessionalStatus(String plotName)
 	{
-		return observation.getSuccessionalStatus();
+		return observation.getSuccessionalstatus();
 	}
 
 	/* (non-Javadoc)
@@ -1541,7 +1541,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getSurficialDeposits(String plotName)
 	{
-		return plot.getSurficialDeposits();
+		return plot.getSurficialdeposits();
 	}
 
 	/* (non-Javadoc)
@@ -1552,8 +1552,8 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		String plotCode,
 		String stratumName)
 	{
-		StratumComposition sc = (StratumComposition)  stratumComposition.get(stratumName);
-		return sc.getTaxonStratumCover();
+		Stratumcomposition sc = (Stratumcomposition)  stratumComposition.get(stratumName);
+		return sc.getTaxonstratumcover();
 	}
 
 	/* (non-Javadoc)
@@ -1562,13 +1562,13 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public Vector getTaxaStrataExistence(String plantName, String plotName)
 	{
 		Vector strataList = new Vector();
-		TaxonObservation to = (TaxonObservation) taxonObs.get(plantName);
-		List scList = to.getTAXONOBSERVATIONStratumCompositions();
+		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
+		List scList = to.gettaxonobservationstratumcompositions();
 		Iterator startumCompsitions = scList.iterator();
 		while ( startumCompsitions.hasNext() )
 		{
-			StratumComposition sc = (StratumComposition) startumCompsitions.next();
-			String stratumName = sc.getSTRATUM().getStratumName();
+			Stratumcomposition sc = (Stratumcomposition) startumCompsitions.next();
+			String stratumName = sc.getStratum().getStratumname();
 			strataList.add(stratumName);
 			stratumComposition.put(stratumName, sc);
 		}
@@ -1580,7 +1580,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getTaxonObservationArea(String plotName)
 	{
-		return observation.getTaxonObservationArea();
+		return observation.getTaxonobservationarea();
 	}
 
 	/* (non-Javadoc)
@@ -1588,7 +1588,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getTopoPosition(String plotName)
 	{
-		return plot.getTopoPosition();
+		return plot.getTopoposition();
 	}
 
 	/* (non-Javadoc)
@@ -1596,7 +1596,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getTreeCover(String plotName)
 	{
-		return observation.getTreeCover();
+		return observation.getTreecover();
 	}
 
 	/* (non-Javadoc)
@@ -1604,7 +1604,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getTreeHt(String plotName)
 	{
-		return observation.getTreeHt();
+		return observation.getTreeht();
 	}
 
 	/* (non-Javadoc)
@@ -1613,11 +1613,11 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public Vector getUniqueStrataNames(String plotName)
 	{
 		Vector uniqueStrataNames = new Vector();
-		Iterator strata = observation.getOBSERVATIONStratums().iterator();
+		Iterator strata = observation.getobservationstratums().iterator();
 		while ( strata.hasNext())
 		{
 			Stratum stratum = (Stratum) strata.next();
-			String statumName = stratum.getStratumName();
+			String statumName = stratum.getStratumname();
 			uniqueStrataNames.add(statumName);
 			strataNames.put(statumName, stratum);
 		}
@@ -1630,7 +1630,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getUTMZone(String plotName)
 	{
 		// TODO: Confirm
-		return plot.getAuthorZone();
+		return plot.getAuthorzone();
 	}
 
 	/* (non-Javadoc)
@@ -1638,7 +1638,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getWaterDepth(String plotName)
 	{
-		return observation.getWaterDepth();
+		return observation.getWaterdepth();
 	}
 
 	/* (non-Javadoc)
@@ -1646,7 +1646,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getWaterSalinity(String plotName)
 	{
-		return observation.getWaterSalinity();
+		return observation.getWatersalinity();
 	}
 
 	/* (non-Javadoc)
@@ -1654,7 +1654,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getXCoord(String plotName)
 	{
-		return plot.getAuthorE();
+		return plot.getAuthore();
 	}
 
 	/* (non-Javadoc)
@@ -1662,7 +1662,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getYCoord(String plotName)
 	{
-		return plot.getAuthorN();
+		return plot.getAuthore();
 	}
 
 	/* (non-Javadoc)

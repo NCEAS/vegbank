@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $' 
- *	'$Date: 2003-05-29 00:24:54 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.vegbank.common.model.StratumMethod;
-import org.vegbank.common.model.StratumType;
+import org.vegbank.common.model.Stratummethod;
+import org.vegbank.common.model.Stratumtype;
 import org.vegbank.common.utility.ObjectToDB;
 import org.vegbank.common.utility.Utility;
 
@@ -60,7 +60,7 @@ public class AddStratumMethodAction extends Action
 		// Get the form
 		AddStratumMethodForm stratumForm = (AddStratumMethodForm) form;
 		
-		StratumMethod sm = stratumForm.getStratumMethod();
+		Stratummethod sm = stratumForm.getStratumMethod();
 				
 		
 		// handle the StratumType sub form
@@ -75,13 +75,13 @@ public class AddStratumMethodAction extends Action
 			String[] stringstoCheck = {stratumIndex[i], stratumName[i]};
 			if ( ! Utility.isAnyStringNullorEmpty( stringstoCheck ) )
 			{			
-				StratumType st =  new StratumType();
+				Stratumtype st =  new Stratumtype();
 				
-				st.setStratumDescription(stratumDescription[i]);
-				st.setStratumIndex(stratumIndex[i]);
-				st.setStratumName(stratumName[i]);
+				st.setStratumdescription(stratumDescription[i]);
+				st.setStratumindex(stratumIndex[i]);
+				st.setStratumname(stratumName[i]);
 				
-				sm.addSTRATUMMETHODStratumType(st);
+				sm.addstratummethodstratumtype(st);
 			}
       else 
       {

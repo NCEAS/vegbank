@@ -1,7 +1,5 @@
-./vegclass/veg_plot/exp/servlet/build.xml
-#./vegclass/veg_plot/exp/servlet/lib/frameworkservlet-config.xml
+Upon a fresh checkout the following files need to be customized for the new
+system to work correctly.
+
 ./vegclass/veg_plot/build.properties
-./vegclass/veg_plot/exp/servlet/vegbank-request/build.xml
-./vegclass/veg_plot/exp/rmidatasource/lib/rmidatasource.properties
-./vegclass/veg_plot/exp/data-translators/lib/plugin.properties
 

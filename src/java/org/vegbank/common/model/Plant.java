@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 21:24:38 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-07-21 17:52:12 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ public class Plant implements Constants, Comparable
 	private String conceptReferenceId = null;	
 	private String plantDescription = null;
 	
-	private PlantParty plantParty = null;
+	private Plantparty plantParty = null;
 	private String plantPartyId = null;
 	private String statusPartyComments = null;
 	private String statusReferenceId = null;	
@@ -103,10 +103,10 @@ public class Plant implements Constants, Comparable
 	public void setCode(String code)
 	{
 		this.code = code;
-		PlantUsage pu = new PlantUsage();
-		pu.setPlantName(code);
-		pu.setPlantNameStatus(USAGE_NAME_STATUS_STANDARD);
-		pu.setClassSystem(USAGE_NAME_CODE);	
+		Plantusage pu = new Plantusage();
+		pu.setPlantname(code);
+		pu.setPlantnamestatus(USAGE_NAME_STATUS_STANDARD);
+		pu.setClasssystem(USAGE_NAME_CODE);	
 		this.addPlantUsage(pu);
 	}
 
@@ -117,10 +117,10 @@ public class Plant implements Constants, Comparable
 	public void setScientificName(String scientificName)
 	{
 		this.scientificName = scientificName;
-		PlantUsage pu = new PlantUsage();
-		pu.setPlantName(scientificName);
-		pu.setPlantNameStatus(USAGE_NAME_STATUS_STANDARD);
-		pu.setClassSystem(USAGE_NAME_SCIENTIFIC);	
+		Plantusage pu = new Plantusage();
+		pu.setPlantname(scientificName);
+		pu.setPlantnamestatus(USAGE_NAME_STATUS_STANDARD);
+		pu.setClasssystem(USAGE_NAME_SCIENTIFIC);	
 		this.addPlantUsage(pu);
 	}
 
@@ -131,10 +131,10 @@ public class Plant implements Constants, Comparable
 	public void setScientificNameNoAuthors(String scientificNameNoAuthors)
 	{
 		this.scientificNameNoAuthors = scientificNameNoAuthors;
-		PlantUsage pu = new PlantUsage();
-		pu.setPlantName(scientificNameNoAuthors);
-		pu.setPlantNameStatus(USAGE_NAME_STATUS_STANDARD);
-		pu.setClassSystem(USAGE_NAME_SCIENTIFIC_NOAUTHORS);	
+		Plantusage pu = new Plantusage();
+		pu.setPlantname(scientificNameNoAuthors);
+		pu.setPlantnamestatus(USAGE_NAME_STATUS_STANDARD);
+		pu.setClasssystem(USAGE_NAME_SCIENTIFIC_NOAUTHORS);	
 		this.addPlantUsage(pu);
 	}
 
@@ -273,14 +273,14 @@ public class Plant implements Constants, Comparable
 	{
 		this.commonName = commonName;
 
-		PlantName pn = new PlantName();
-		pn.setPlantName(commonName);
+		Plantname pn = new Plantname();
+		pn.setPlantname(commonName);
 		this.addPlantName(pn);
 
-		PlantUsage pu = new PlantUsage();
-		pu.setPlantName(commonName);
-		pu.setPlantNameStatus(USAGE_NAME_STATUS_STANDARD);
-		pu.setClassSystem(USAGE_NAME_COMMON);
+		Plantusage pu = new Plantusage();
+		pu.setPlantname(commonName);
+		pu.setPlantnamestatus(USAGE_NAME_STATUS_STANDARD);
+		pu.setClasssystem(USAGE_NAME_COMMON);
 		this.addPlantUsage(pu);
 		
 
@@ -309,7 +309,7 @@ public class Plant implements Constants, Comparable
 	 * Adds a plantUsage to the  plantUsages array.
 	 * @param plantUsages The plantUsages to set
 	 */
-	public void addPlantUsage(PlantUsage plantUsage)
+	public void addPlantUsage(Plantusage plantUsage)
 	{
 		//System.out.println("Adding a new plantUsage, now have "+this.plantUsages.size() );
 		this.plantUsages.add(plantUsage);
@@ -444,7 +444,7 @@ public class Plant implements Constants, Comparable
 	/**
 	 * @return Party
 	 */
-	public PlantParty getPlantParty()
+	public Plantparty getPlantParty()
 	{
 		return plantParty;
 	}
@@ -453,7 +453,7 @@ public class Plant implements Constants, Comparable
 	 * Sets the party.
 	 * @param party The party to set
 	 */
-	public void setPlantParty(PlantParty plantParty)
+	public void setPlantParty(Plantparty plantParty)
 	{
 		this.plantParty = plantParty;
 	}
@@ -586,7 +586,7 @@ public class Plant implements Constants, Comparable
 		plantNames = (Vector) plantNameList;
 	}
 	
-	public void addPlantName(PlantName plantName)
+	public void addPlantName(Plantname plantName)
 	{
 		plantNames.add(plantName);
 	}

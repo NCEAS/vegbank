@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 23:14:05 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ import javax.servlet.http.HttpSession;
 import org.vegbank.common.Constants;
 import org.vegbank.common.command.QueryReferences;
 import org.vegbank.common.model.Plant;
-import org.vegbank.common.model.PlantParty;
+import org.vegbank.common.model.Plantparty;
 import org.vegbank.common.model.Reference;
 import org.vegbank.common.model.ReferenceSummary;
 import org.vegbank.databaseAccess.TaxonomyQueryStore;
@@ -120,11 +120,11 @@ public class AddPlant implements Constants
 
 				System.out.println("DataSubmitServlet > init plantTaxa");
 
-				PlantParty party = new PlantParty();
+				Plantparty party = new Plantparty();
 
-				party.setGivenName((String) userAtts.get("givenName"));
-				party.setSurName((String) userAtts.get("surName"));
-				party.setOrganizationName((String) userAtts.get("institution"));
+				party.setGivenname((String) userAtts.get("givenName"));
+				party.setSurname((String) userAtts.get("surName"));
+				party.setOrganizationname((String) userAtts.get("institution"));
 
 				plant.setPlantParty(party);
 

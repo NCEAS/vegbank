@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-20 21:56:53 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: farrell $'
- *     '$Date: 2003-05-20 21:56:53 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2003-07-21 17:52:13 $'
+ *     '$Revision: 1.4 $'
  */
 
 
@@ -372,21 +372,21 @@ public class UserDatabaseAccess
 				Address partyAddress = new Address();
 				Telephone telephone = new Telephone();
 
-				partyAddress.setDeliveryPoint(address);
+				partyAddress.setDeliverypoint(address);
 				partyAddress.setCity(city);
-				partyAddress.setAdministrativeArea(state);
+				partyAddress.setAdministrativearea(state);
 				partyAddress.setCountry(country); 
-				partyAddress.setPostalCode(zip);
+				partyAddress.setPostalcode(zip);
 				
-				telephone.setPhoneNumber(phone);
-				telephone.setPhoneType("work");
+				telephone.setPhonenumber(phone);
+				telephone.setPhonetype("work");
 								
 				party.setEmail(emailAddress);
-				party.setGivenName(givenName);
-				party.setSurName(surName);
-				party.setOrganizationName(inst);
-				party.addPARTYTelephone(telephone);
-				party.addpartyAddress( partyAddress );
+				party.setGivenname(givenName);
+				party.setSurname(surName);
+				party.setOrganizationname(inst);
+				party.addpartytelephone(telephone);
+				party.addpartyaddress( partyAddress );
 
 				// Write to database
 				ObjectToDB party2db = new ObjectToDB(party);

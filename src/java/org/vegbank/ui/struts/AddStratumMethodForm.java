@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import java.util.Collection;
 
 import org.apache.struts.validator.ValidatorForm;
 import org.vegbank.common.command.QueryReferences;
-import org.vegbank.common.model.StratumMethod;
+import org.vegbank.common.model.Stratummethod;
 
 /**
  * @author farrell
@@ -37,7 +37,7 @@ import org.vegbank.common.model.StratumMethod;
 public class AddStratumMethodForm extends ValidatorForm
 {
 	
-	private StratumMethod stratumMethod = new StratumMethod();
+	private Stratummethod stratumMethod = new Stratummethod();
 	
 	private Collection references;
 	
@@ -81,7 +81,7 @@ public class AddStratumMethodForm extends ValidatorForm
 	/**
 	 * @return
 	 */
-	public StratumMethod getStratumMethod()
+	public Stratummethod getStratumMethod()
 	{
 		return stratumMethod;
 	}
@@ -89,7 +89,7 @@ public class AddStratumMethodForm extends ValidatorForm
 	/**
 	 * @param method
 	 */
-	public void setStratumMethod(StratumMethod method)
+	public void setStratumMethod(Stratummethod method)
 	{
 		stratumMethod = method;
 	}

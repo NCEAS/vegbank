@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-07-15 17:19:34 $'
-  *     '$Revision: 1.12 $'
+  *     '$Date: 2003-07-21 17:52:12 $'
+  *     '$Revision: 1.13 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
@@ -92,6 +92,11 @@
           depends="prepare"
           description="==> Generate htmls from generated reports and distributes to web">
 
+    <ant dir="common" target="dist-testreport" inheritAll="false"/>
+    <!--<ant dir="veg_plot" target="run-tests" inheritAll="false"/>-->
+    <ant dir="veg_community" target="clean" inheritAll="false"/>
+    <ant dir="veg_taxa" target="test" inheritAll="false"/>
+ 
 		<!-- Create a report from the junit output -->
 		<junitreport todir="${build.reports.test.dir}">
 	  		<fileset dir="${build.reports.test.dir}">

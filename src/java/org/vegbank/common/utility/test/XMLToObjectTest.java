@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-06-30 20:03:00 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,8 +30,8 @@ import java.util.AbstractList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.vegbank.common.model.PlantConcept;
-import org.vegbank.common.model.PlantName;
+import org.vegbank.common.model.Plantconcept;
+import org.vegbank.common.model.Plantname;
 import org.xml.sax.SAXException;
 
 import junit.framework.TestCase;
@@ -43,7 +43,7 @@ import junit.framework.TestCase;
 public class XMLToObjectTest extends TestCase
 {
 	XMLToObject x2o;
-	PlantConcept pc;
+	Plantconcept pc;
 	String fileContents;
 	
 	/**
@@ -63,7 +63,7 @@ public class XMLToObjectTest extends TestCase
 		
 		x2o = new XMLToObject(fileName);
 		AbstractList generatedObjects = x2o.getGeneratedObjects();
-		pc = (PlantConcept) generatedObjects.get(0);
+		pc = (Plantconcept) generatedObjects.get(0);
 	}
 	
 	public void  testExistsInObjectModel()
@@ -79,12 +79,9 @@ public class XMLToObjectTest extends TestCase
 	}
 	
 	public void testGetGeneratedObjects()
-	{
-
-		PlantName pn = pc.getPLANTNAME();
-		
-		assertEquals(pc.getPlantDescription(), "this is a description");
-		assertEquals(pn.getPlantName(), "this is my name");
+	{	
+		assertEquals(pc.getPlantdescription(), "this is a description");
+		assertEquals(pc.getPlantname(), "this is my name");
 	}
 	
 	public void testXML2XML()

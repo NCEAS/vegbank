@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-30 21:44:41 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-07-21 17:52:12 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,23 +63,23 @@ public class DBPartyWriter
 			try
 			{
 
-				if ( !this.partyExists( party.getOrganizationName() ))
+				if ( !this.partyExists( party.getOrganizationname() ))
 				{
 					// FIXME: the ids bellow 
 					partyId =
 						this.insertParty(
-							party.getGivenName(),
-							party.getSurName(),
+							party.getGivenname(),
+							party.getSurname(),
 							party.getSalutation(),
-							party.getMiddleName(),
-							new Integer(party.getCurrentName_ID() ).toString(),
-							party.getOrganizationName(),
-							party.getContactInstructions(),
-							new Integer(party.getOwner_ID()).toString() );
+							party.getMiddlename(),
+							new Integer(party.getCurrentname_id() ).toString(),
+							party.getOrganizationname(),
+							party.getContactinstructions(),
+							new Integer(party.getOwner_id()).toString() );
 				}
 				else
 				{
-					partyId = this.getPartyId( party.getOrganizationName() );
+					partyId = this.getPartyId( party.getOrganizationname() );
 				}
 
 			}

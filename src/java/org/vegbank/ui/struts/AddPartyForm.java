@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 02:48:34 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -124,7 +124,7 @@ public class AddPartyForm extends ValidatorForm
      {
        // Need to create this object
        Telephone tel = new Telephone();
-       phoneTypes = tel.getPhoneTypePickList();
+       phoneTypes = tel.getPhonetypePickList();
      }
      return phoneTypes;
    }

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 21:24:39 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2003-07-21 17:52:14 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		// Initialize the Reference
 		ref = new Reference();
 		ref.setEdition(edition);
-		ref.setPubDate(pubdate);
+		ref.setPubdate(pubdate);
 		ref.setTitle(title);
 
 		// Write the reference into the database
@@ -101,11 +101,11 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		}
 	}
 	
-	private static ReferenceParty rp = new ReferenceParty();
+	private static Referenceparty rp = new Referenceparty();
 	private static int refPartyId;
 	{
 		// Initailize ReferenceParty
-		rp.setOrganizationName(organization);
+		rp.setOrganizationname(organization);
 		// Write the ReferenceParty into the database
 		ObjectToDB refp2db = new ObjectToDB(rp);
 		try 
@@ -119,11 +119,11 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		}
 	}
 
-	private static ReferenceContributor rc = new ReferenceContributor();
+	private static Referencecontributor rc = new Referencecontributor();
 	{
 		// Initailize ReferenceContributor
-		rc.setReference_ID( new Integer(refId).intValue() );	
-		rc.setReferenceParty_ID(refPartyId);
+		rc.setReference_id(new Integer(refId).intValue() );	
+		rc.setReferenceparty_id(refPartyId);
 		rc.setPosition("0");
 		
 		// Write the ReferenceContributor into the database
@@ -138,12 +138,12 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		}
 	}
 	
-	private static PlantParty plantParty=new PlantParty();
+	private static Plantparty plantParty=new Plantparty();
 	private static int plantPartyId;
 	{
 		// Initialize the PlantParty
-		plantParty.setOrganizationName(organization);
-		plantParty.setContactInstructions(contactInstructions);
+		plantParty.setOrganizationname(organization);
+		plantParty.setContactinstructions(contactInstructions);
 		
 		// Write the PlantParty into the database
 		ObjectToDB pp2db = new ObjectToDB(plantParty);

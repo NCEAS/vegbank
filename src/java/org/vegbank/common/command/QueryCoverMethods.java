@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-09 18:11:46 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-21 17:52:12 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,9 +65,9 @@ public class QueryCoverMethods  implements VegbankCommand
 		Collection col = new Vector();
 		while ( rs.next())
 		{
-			CoverMethod cm = new CoverMethod();
-			cm.setReference_ID(rs.getInt(1));
-			cm.setCoverType(rs.getString(2));
+			Covermethod cm = new Covermethod();
+			cm.setReference_id(rs.getInt(1));
+			cm.setCovertype(rs.getString(2));
 			col.add(cm);
 		}
 		return col;

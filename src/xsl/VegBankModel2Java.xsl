@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-07-01 23:11:24 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-07-21 17:52:13 $'
+ *  '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@
   -->
   <!-- ***************************************************************************** -->
 
-  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/>
   <xsl:output method="text" indent="no"/>
 
   <xsl:param name="outdir"/>
@@ -52,10 +51,9 @@
   <xsl:template match="entity">
    <xsl:variable name="entityName" select="entityName"/>
    <xsl:variable name="CappedEntityName">
-     <xsl:call-template name="str:to-upper">
-       <xsl:with-param name="text" select="substring($entityName, 1, 1)"/>
+     <xsl:call-template name="UpperFirstLetter">
+       <xsl:with-param name="text" select="$entityName"/>
      </xsl:call-template>
-     <xsl:value-of select="substring(entityName, 2)"/>
    </xsl:variable>
    <xsl:variable name="aFile" select="concat($outdir, $CappedEntityName, '.java')"/>
 
@@ -105,13 +103,17 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
       <xsl:variable name="javaType">
         <xsl:call-template name="UpperFirstLetter">
           <xsl:with-param name="text">
-            <xsl:value-of select="../entityName"/>                
+            <xsl:value-of select="../entityName"/>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:variable>
 
       <xsl:variable name="variableName">
-        <xsl:value-of select="substring-before(attName, '_ID')"/><xsl:value-of select="$javaType"/>
+        <xsl:call-template name="to-lower">
+          <xsl:with-param name="text">
+            <xsl:value-of select="substring-before(attName, '_ID')"/><xsl:value-of select="$javaType"/>
+          </xsl:with-param>
+        </xsl:call-template>
       </xsl:variable>
 
     private List <xsl:value-of select="$variableName"/>s = new ArrayList();
@@ -130,6 +132,7 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
     {
       this.<xsl:value-of select="$variableName"/>s.add( <xsl:value-of select="$variableName"/> );
     }
+    
     
     </xsl:for-each>
 
@@ -152,9 +155,13 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
    </xsl:variable>
 
    <xsl:variable name="memberName">
-     <xsl:value-of select="substring-before(attName, '_ID')"/>
+     <xsl:call-template name="to-lower">
+       <xsl:with-param name="text">
+        <xsl:value-of select="substring-before(attName, '_ID')"/>
+       </xsl:with-param>
+     </xsl:call-template>
    </xsl:variable>
-   private <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="$memberName"/>; 
+  private <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="$memberName"/>; 
  </xsl:template>
 
  <xsl:template match="attribute" mode="declareAttrib">
@@ -254,7 +261,11 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
    </xsl:variable>
 
    <xsl:variable name="uncappedVariableName">
-     <xsl:value-of select="substring-before(attName, '_ID')"/>
+     <xsl:call-template name="to-lower">
+       <xsl:with-param name="text">
+        <xsl:value-of select="substring-before(attName, '_ID')"/>
+       </xsl:with-param>
+     </xsl:call-template>
    </xsl:variable>
 
    <xsl:call-template name="GenerateGetSet">
@@ -295,14 +306,15 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
  <!-- Set Complex Attributes , not used yet -->
  <xsl:template match="attribute" mode="get-setComplexAttrib">
    <xsl:variable name="CappedAttName">
-     <xsl:call-template name="str:to-upper">
-       <xsl:with-param name="text" select="substring(attName, 1, 1)"/>
+     <xsl:call-template name="UpperFirstLetter">
+       <xsl:with-param name="text" select="attName"/>
      </xsl:call-template>
-     <xsl:value-of select="substring(attName, 2)"/>
    </xsl:variable>
 
    <xsl:variable name="javaType">
-     <xsl:value-of select="substring-before(attReferences, '.')"/>
+     <xsl:call-template name="UpperFirstLetter">
+      <xsl:with-param name="text" select="substring-before(attReferences, '.')"/>
+     </xsl:call-template>
    </xsl:variable>
 
   /**
@@ -336,14 +348,34 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
 
  <xsl:template name="UpperFirstLetter">
    <xsl:param name="text"/>
-   
-   <xsl:call-template name="str:to-upper">
+   <xsl:call-template name="to-upper">
      <xsl:with-param name="text">
        <xsl:value-of select="substring($text,1,1)"/>
      </xsl:with-param>
    </xsl:call-template>
-   <xsl:value-of select="substring($text,2)"/>
+   <xsl:call-template name="to-lower">
+    <xsl:with-param name="text">
+      <xsl:value-of select="substring($text,2)"/>
+    </xsl:with-param>
+  </xsl:call-template>
  </xsl:template>
+
+  <xsl:template name="to-upper">
+    <xsl:param name="text"/>
+    <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
+    <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
+
+    <xsl:value-of select="translate($text,$lcletters,$ucletters)"/>
+  </xsl:template>
+
+  <xsl:template name="to-lower">
+    <xsl:param name="text"/>
+    <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
+    <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
+
+    <xsl:value-of select="translate($text,$ucletters,$lcletters)"/>
+  </xsl:template>
+
 
  <xsl:template name="GenerateGetSet">
    <xsl:param name="javaType"/>

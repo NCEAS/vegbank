@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 19:34:16 $'p
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-21 17:52:12 $'p
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,12 +57,12 @@ public class DBReferenceWriter
 		try
 		{
 
-			if ( !this.referenceExists( ref.getTitle(), ref.getPubDate() ))
+			if ( !this.referenceExists( ref.getTitle(), ref.getPubdate() ))
 			{
 				referenceId =
 					this.insertReference(
 						ref.getTitle(),
-						ref.getPubDate(),
+						ref.getPubdate(),
 						ref.getEdition(),
 						null,
 						null,
@@ -72,7 +72,7 @@ public class DBReferenceWriter
 			}
 			else
 			{
-				referenceId = this.getReferenceId( ref.getTitle(), ref.getPubDate() );
+				referenceId = this.getReferenceId( ref.getTitle(), ref.getPubdate() );
 			}
 
 		}

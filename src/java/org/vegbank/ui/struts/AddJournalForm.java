@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 package org.vegbank.ui.struts;
 
 import org.apache.struts.validator.ValidatorForm;
-import org.vegbank.common.model.ReferenceJournal;
+import org.vegbank.common.model.Referencejournal;
 
 /**
  * @author farrell
@@ -33,12 +33,12 @@ import org.vegbank.common.model.ReferenceJournal;
 
 public class AddJournalForm extends ValidatorForm
 {
-	private ReferenceJournal referenceJournal= new ReferenceJournal();
+	private Referencejournal referenceJournal= new Referencejournal();
 
 	/**
 	 * @return
 	 */
-	public ReferenceJournal getReferenceJournal()
+	public Referencejournal getReferenceJournal()
 	{
 		return referenceJournal;
 	}
@@ -46,7 +46,7 @@ public class AddJournalForm extends ValidatorForm
 	/**
 	 * @param journal
 	 */
-	public void setReferenceJournal(ReferenceJournal journal)
+	public void setReferenceJournal(Referencejournal journal)
 	{
 		referenceJournal = journal;
 	}

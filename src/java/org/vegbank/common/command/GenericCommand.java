@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 01:41:14 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-21 17:52:12 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -222,12 +222,12 @@ public class GenericCommand implements VegbankCommand
 				if ( indexOfComma == -1 )
 				{
 					// no comma so let in whole token
-					results.add(propertyName);
+					results.add(propertyName.toLowerCase());
 				}
 				else
 				{
 					// remove the comma
-					results.add(propertyName.substring(0, indexOfComma ));
+					results.add(propertyName.substring(0, indexOfComma ).toLowerCase());
 				}
 			}
 		}	

@@ -1,7 +1,7 @@
-<PlantConcept>
+<Plantconcept>
   <plantdescription>this is a description</plantdescription>
-  <PlantName>
-  	<plantName>this is my name</plantName>
+  <Plantname>
+  	<plantname>this is my name</plantname>
   	<dateentered>2/3/45</dateentered>
-  </PlantName>
-</PlantConcept>
+  </Plantname>
+</Plantconcept>

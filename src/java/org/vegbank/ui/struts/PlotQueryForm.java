@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-15 17:19:35 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,11 +30,11 @@ import java.util.Vector;
 
 import org.apache.struts.action.ActionForm;
 import org.vegbank.common.command.GenericCommand;
-import org.vegbank.common.model.CoverMethod;
+import org.vegbank.common.model.Covermethod;
 import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Plot;
 import org.vegbank.common.model.Project;
-import org.vegbank.common.model.StratumMethod;
+import org.vegbank.common.model.Stratummethod;
 
 /**
  * @author farrell
@@ -423,7 +423,7 @@ public class PlotQueryForm extends ActionForm
       {
 				// Need to create this object
 				Plot plot = new Plot();
-				rockTypes = plot.getRockTypePickList();
+				rockTypes = plot.getRocktypePickList();
       }
     return rockTypes;
   }
@@ -437,7 +437,7 @@ public class PlotQueryForm extends ActionForm
       {
 	// Need to create this object
 	Observation obs = new Observation();
-	hydrologicRegimes = obs.getHydrologicRegimePickList();
+	hydrologicRegimes = obs.getHydrologicregimePickList();
       }
     return hydrologicRegimes;
   }
@@ -451,7 +451,7 @@ public class PlotQueryForm extends ActionForm
       {
 				// Need to create this object
 				Plot plot = new Plot();
-				surficialDeposits = plot.getSurficialDepositsPickList();
+				surficialDeposits = plot.getSurficialdepositsPickList();
       }
     return surficialDeposits;
   }
@@ -465,7 +465,7 @@ public class PlotQueryForm extends ActionForm
       {
 				// Need to create this object
 				Plot plot = new Plot();
-				topoPositions = plot.getTopoPositionPickList();
+				topoPositions = plot.getTopopositionPickList();
       }
     return topoPositions;
   }
@@ -906,7 +906,7 @@ public class PlotQueryForm extends ActionForm
 				while ( projectsIter.hasNext() )
 				{
 					Project project = (Project) projectsIter.next();
-					projectNames.add( project.getProjectName() );
+					projectNames.add( project.getProjectname() );
 				}
 			}
 			catch (Exception e)
@@ -938,8 +938,8 @@ public class PlotQueryForm extends ActionForm
 				Iterator cmIter = cms.iterator();
 				while ( cmIter.hasNext() )
 				{
-					CoverMethod cm = (CoverMethod) cmIter.next();
-					coverMethodNames.add( cm.getCoverType() );
+					Covermethod cm = (Covermethod) cmIter.next();
+					coverMethodNames.add( cm.getCovertype() );
 				}
 			}
 			catch (Exception e)
@@ -971,8 +971,8 @@ public class PlotQueryForm extends ActionForm
 				Iterator stratummethodsIter = stratummethods.iterator();
 				while ( stratummethodsIter.hasNext() )
 				{
-					StratumMethod sm = (StratumMethod) stratummethodsIter.next();
-					stratumMethodNames.add( sm.getStratumMethodName() );
+					Stratummethod sm = (Stratummethod) stratummethodsIter.next();
+					stratumMethodNames.add( sm.getStratummethodname() );
 				}
 			}
 			catch (Exception e)

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import java.util.Collection;
 
 import org.apache.struts.validator.ValidatorForm;
 import org.vegbank.common.command.QueryReferences;
-import org.vegbank.common.model.CoverMethod;
+import org.vegbank.common.model.Covermethod;
 
 /**
  * @author farrell
@@ -37,7 +37,7 @@ import org.vegbank.common.model.CoverMethod;
 public class AddCoverMethodForm extends ValidatorForm
 {
 	
-	private CoverMethod coverMethod = new CoverMethod();
+	private Covermethod coverMethod = new Covermethod();
 	
 	private Collection references;
 	
@@ -51,7 +51,7 @@ public class AddCoverMethodForm extends ValidatorForm
 	/**
 	 * @return
 	 */
-	public CoverMethod getCoverMethod()
+	public Covermethod getCoverMethod()
 	{
 		return coverMethod;
 	}
@@ -59,7 +59,7 @@ public class AddCoverMethodForm extends ValidatorForm
 	/**
 	 * @param method
 	 */
-	public void setCoverMethod(CoverMethod method)
+	public void setCoverMethod(Covermethod method)
 	{
 		coverMethod = method;
 	}

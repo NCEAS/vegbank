@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-06-30 20:02:59 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -258,6 +258,8 @@ public class XMLToObject
 
 			Object[] params = { newObject };
 
+			System.out.println("--> method: " + setMethod.getName() + " objectName: " 
+				+ objectWithSetMethod.getClass().getName() + " parameters:" +  params[0].toString() );
 			setMethod.invoke(objectWithSetMethod, params);
 		}
 		// If Method takes a string argument

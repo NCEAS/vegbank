@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 02:48:34 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 import org.vegbank.common.command.QueryJournals;
 import org.vegbank.common.model.Reference;
-import org.vegbank.common.model.ReferenceContributor;
+import org.vegbank.common.model.Referencecontributor;
 
 /**
  * @author farrell
@@ -187,8 +187,8 @@ public class AddReferenceForm extends ValidatorForm
 		if ( roleTypes == null )
 		{
 			// Need to create this object
-      ReferenceContributor rc = new ReferenceContributor();
-	    roleTypes = rc.getRoleTypePickList();	
+      Referencecontributor rc = new Referencecontributor();
+	    roleTypes = rc.getRoletypePickList();	
 		}
 		return roleTypes;
 	}

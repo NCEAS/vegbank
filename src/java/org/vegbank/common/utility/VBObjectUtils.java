@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-06-30 20:08:17 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -194,6 +194,6 @@ public class VBObjectUtils
 	 */
 	public static String getKeyName( String fieldName )
 	{
-		return fieldName + "_ID";
+		return fieldName + "_id";
 	}
 }

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-06-30 20:02:59 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,7 +111,7 @@ public class ObjectToDB extends VegBankObjectWriter
 	
 	public String getPrimaryKeyFieldName() 
 	{
-		return className + "_ID";
+		return className + "_id";
 	}
 	
 	private void prepareObjectForWriting() throws IllegalArgumentException, ClassNotFoundException, IllegalAccessException, InvocationTargetException
@@ -359,6 +359,7 @@ public class ObjectToDB extends VegBankObjectWriter
 	/**
 	 * Searches for an identical record in the db.
 	 * 
+	 * @param uniqueFields -- 
 	 * @return int - primaryKey ( returns 0 if no record )
 	 */
 	public int isObjectInDatabase( Vector uniqueFields) throws Exception

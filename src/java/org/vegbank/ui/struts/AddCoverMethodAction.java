@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 00:24:54 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.vegbank.common.model.CoverIndex;
-import org.vegbank.common.model.CoverMethod;
+import org.vegbank.common.model.Coverindex;
+import org.vegbank.common.model.Covermethod;
 import org.vegbank.common.utility.ObjectToDB;
 import org.vegbank.common.utility.Utility;
 
@@ -61,7 +61,7 @@ public class AddCoverMethodAction extends Action
 		// Get the form
 		AddCoverMethodForm coverForm = (AddCoverMethodForm) form;
 		
-		CoverMethod cm = coverForm.getCoverMethod();
+		Covermethod cm = coverForm.getCoverMethod();
 		
 	
 		
@@ -78,16 +78,16 @@ public class AddCoverMethodAction extends Action
 			String[] stringstoCheck = {coverCode[i], coverPercent[i]};
 			if ( ! Utility.isAnyStringNullorEmpty( stringstoCheck ) )
 			{			
-				CoverIndex ci =  new CoverIndex();
+				Coverindex ci =  new Coverindex();
 				
 				System.out.println(coverCode[i] + " and " + coverPercent[i] );
 				
-				ci.setCoverCode(coverCode[i]);
-				ci.setCoverPercent(coverPercent[i]);
-				ci.setLowerLimit(lowerLimit[i]);
-				ci.setUpperLimit(upperLimit[i]);
-				ci.setIndexDescription(indexDescription[i]);
-			  cm.addCOVERMETHODCoverIndex(ci);
+				ci.setCovercode(coverCode[i]);
+				ci.setCoverpercent(coverPercent[i]);
+				ci.setLowerlimit(lowerLimit[i]);
+				ci.setUpperlimit(upperLimit[i]);
+				ci.setIndexdescription(indexDescription[i]);
+			  cm.addcovermethodcoverindex(ci);
 			}
       else
       {

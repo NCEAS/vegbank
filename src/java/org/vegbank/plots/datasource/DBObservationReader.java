@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-01 23:11:24 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,15 +34,12 @@ import java.util.Vector;
 
 import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Party;
-import org.vegbank.common.model.Plant;
-import org.vegbank.common.model.PlantConcept;
-import org.vegbank.common.model.PlantName;
-import org.vegbank.common.model.PlantUsage;
+import org.vegbank.common.model.Plantname;
 import org.vegbank.common.model.Plot;
 import org.vegbank.common.model.Project;
-import org.vegbank.common.model.ProjectContributor;
+import org.vegbank.common.model.Projectcontributor;
 import org.vegbank.common.model.Stratum;
-import org.vegbank.common.model.TaxonObservation;
+import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
@@ -78,29 +75,29 @@ public class DBObservationReader
 		
 		// Need to fill out some more Objects 
 		// Project 
-		Project project = obs.getPROJECT();
+		Project project = obs.getProject();
 		ignoreObjects.add("Observation");
-		getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Project"), project.getPROJECT_ID(), project, ignoreObjects );
+		getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Project"), project.getProject_id(), project, ignoreObjects );
 		
 		// ProjectContributors
-		Iterator projectContributors =project.getPROJECTProjectContributors().iterator();
+		Iterator projectContributors =project.getprojectprojectcontributors().iterator();
 		while ( projectContributors.hasNext() )
 		{
-			ProjectContributor projectContributor = (ProjectContributor)  projectContributors.next();
-			Party party = (Party) projectContributor.getPARTY();
+			Projectcontributor projectContributor = (Projectcontributor)  projectContributors.next();
+			Party party = (Party) projectContributor.getParty();
 			//System.out.println("###########################################################");
-			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Party"), party.getPARTY_ID(), party, ignoreObjects );
+			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Party"), party.getParty_id(), party, ignoreObjects );
 			//System.out.println("###########################################################");
 		}
 		
 		// TaxonObservations
-		Iterator taxonObservations = obs.getOBSERVATIONTaxonObservations().iterator();
+		Iterator taxonObservations = obs.getobservationtaxonobservations().iterator();
 		while ( taxonObservations.hasNext() )
 		{
-			TaxonObservation taxonObservation = (TaxonObservation)  taxonObservations.next();
-			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("TaxonObservation"), taxonObservation.getTAXONOBSERVATION_ID(), taxonObservation, ignoreObjects );
+			Taxonobservation taxonObservation = (Taxonobservation)  taxonObservations.next();
+			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("TaxonObservation"), taxonObservation.getTaxonobservation_id(), taxonObservation, ignoreObjects );
 			
-			PlantName plantName = taxonObservation.getPLANTNAME();
+			Plantname plantName = taxonObservation.getPlantname();
 //			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("PlantName"), plantName.getPLANTNAME_ID(), plantName, ignoreObjects );
 //			Iterator plantNames = plantName.getPLANTNAMEPlantUsages().iterator();
 //			while ( plantNames.hasNext())
@@ -114,17 +111,17 @@ public class DBObservationReader
 		}
 		
 		// Strata
-		Iterator strata = obs.getOBSERVATIONStratums().iterator();
+		Iterator strata = obs.getobservationstratums().iterator();
 		while ( strata.hasNext())
 		{
 			Stratum stratum = (Stratum) strata.next();
-			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Stratum"), stratum.getSTRATUM_ID(), stratum, ignoreObjects );
+			getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Stratum"), stratum.getStratum_id(), stratum, ignoreObjects );
 
 		}
 		
 		// Plot
-		Plot plot = obs.getPLOT();
-		getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Plot"), plot.getPLOT_ID(), plot, ignoreObjects );
+		Plot plot = obs.getPlot();
+		getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Plot"), plot.getPlot_id(), plot, ignoreObjects );
 		
 		
 		//Project project = obs.getPROJECT();

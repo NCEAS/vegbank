@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 00:24:54 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 package org.vegbank.common.utility;
 
 import org.vegbank.common.model.Community;
-import org.vegbank.common.model.PlantParty;
+import org.vegbank.common.model.Plantparty;
 
 import junit.framework.TestCase;
 
@@ -61,7 +61,7 @@ public class ObjectToDBTest extends TestCase
 		{
 			String sqlString = o2db.getPreparedStatementString();
 			System.out.println(sqlString);
-			assertEquals("insert into PlantParty ( GivenName, SurName, Email, PlantParty_id ) values ( ?,?,?, ? )", sqlString );	
+			assertEquals("insert into Plantparty ( givenname, surname, email, Plantparty_id ) values ( ?,?,?, ? )", sqlString );	
 		}
 		catch (Exception e)
 		{
@@ -87,7 +87,7 @@ public class ObjectToDBTest extends TestCase
 	{
 		try
 		{
-			o2db.isObjectInDatabase();
+			o2db.isObjectInDatabase(null);
 		}
 		catch (Exception e)
 		{
@@ -101,10 +101,10 @@ public class ObjectToDBTest extends TestCase
 	 */
 	protected void setUp() throws Exception
 	{
-		PlantParty pp = new PlantParty();
+		Plantparty pp = new Plantparty();
 		pp.setEmail("test@test.com");
-		pp.setGivenName("Gabriel");
-		pp.setSurName("Farrell");	
+		pp.setGivenname("Gabriel");
+		pp.setSurname("Farrell");	
 		o2db = new ObjectToDB(pp);
 		super.setUp();
 	}

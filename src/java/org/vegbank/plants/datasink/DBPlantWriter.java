@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 21:24:39 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2003-07-21 17:52:14 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import java.util.Iterator;
 import org.vegbank.common.Constants;
 import org.vegbank.common.command.Query;
 import org.vegbank.common.model.Plant;
-import org.vegbank.common.model.PlantParty;
-import org.vegbank.common.model.PlantUsage;
+import org.vegbank.common.model.Plantparty;
+import org.vegbank.common.model.Plantusage;
 import org.vegbank.common.utility.ObjectToDB;
 import org.vegbank.common.utility.Utility;
 
@@ -87,7 +87,7 @@ public class DBPlantWriter implements Constants
 			int snNoAutRefId =  this.getIntFromString(plant.getScientificNameNoAuthorsReferenceId());
 										
 			// Need to get the partyId
-			PlantParty party = plant.getPlantParty();
+			Plantparty party = plant.getPlantParty();
 			int partyId;
 			if (party == null)
 			{
@@ -108,10 +108,10 @@ public class DBPlantWriter implements Constants
 			Iterator i = plantUsages.iterator();
 			while(i.hasNext())
 			{
-				PlantUsage pu = (PlantUsage) i.next();
+				Plantusage pu = (Plantusage) i.next();
 				//System.out.println( " My Name >>> " + pu.getPlantName() + "and classsystem is " + pu.getClassSystem() );
 				
-				if (pu.getPlantName() == null || pu.getPlantName().trim().equals(""))
+				if (pu.getPlantname() == null || pu.getPlantname().trim().equals(""))
 				{
 					// No need to load this
 				}
@@ -120,19 +120,19 @@ public class DBPlantWriter implements Constants
 					// Get the correct ReferenceId
 					int refId = 0;
 					
-					if (pu.getClassSystem().equals( USAGE_NAME_CODE) )
+					if (pu.getClasssystem().equals( USAGE_NAME_CODE) )
 					{
 						refId = codeRefId;
 					}
-					else if ( pu.getClassSystem().equals( USAGE_NAME_COMMON) )
+					else if ( pu.getClasssystem().equals( USAGE_NAME_COMMON) )
 					{
 						refId = commonRefId;
 					}
-					else if ( pu.getClassSystem().equals( USAGE_NAME_SCIENTIFIC) )
+					else if ( pu.getClasssystem().equals( USAGE_NAME_SCIENTIFIC) )
 					{
 						refId = snRefId;
 					}
-					else if ( pu.getClassSystem().equals( USAGE_NAME_SCIENTIFIC_NOAUTHORS) )
+					else if ( pu.getClasssystem().equals( USAGE_NAME_SCIENTIFIC_NOAUTHORS) )
 					{
 						refId = snNoAutRefId;
 					}
@@ -142,16 +142,16 @@ public class DBPlantWriter implements Constants
 					}
 					
 					// Does it have this kind  of  name
-					if ( pu.getPlantName() != null )
+					if ( pu.getPlantname() != null )
 					{
 						int plantNameId =
 							this.insertPlantName(
 								refId,
-								pu.getPlantName(),
+								pu.getPlantname(),
 								Utility.dbAdapter.getDateTimeFunction() );
 						
-						System.out.println("===" + pu.getClassSystem() + " AND " +plantNameId);
-						plantNameIds.put(pu.getClassSystem(), new Integer(plantNameId) );
+						System.out.println("===" + pu.getClasssystem() + " AND " +plantNameId);
+						plantNameIds.put(pu.getClasssystem(), new Integer(plantNameId) );
 					}
 				}
 			}
@@ -229,9 +229,9 @@ public class DBPlantWriter implements Constants
 			Iterator it = plantUsages.iterator();
 			while( it.hasNext()) 
 			{
-				PlantUsage pu = (PlantUsage) it.next();
+				Plantusage pu = (Plantusage) it.next();
 				//System.out.println("'" + pu.getPlantName() + "'" + "  is a " + pu.getClassSystem());
-				if ( pu.getPlantName().trim().equals("") || pu.getPlantName() == null )
+				if ( pu.getPlantname().trim().equals("") || pu.getPlantname() == null )
 				{
 					//System.out.println("NOT LOADING");
 				}
@@ -240,14 +240,14 @@ public class DBPlantWriter implements Constants
 					//System.out.println("LOADING");
 					int usageId = 
 						this.insertPlantUsage(
-							( (Integer) plantNameIds.get(pu.getClassSystem())).intValue(),
+							( (Integer) plantNameIds.get(pu.getClasssystem())).intValue(),
 							conceptId,
-							pu.getPlantName(),
+							pu.getPlantname(),
 							partyId,				
 							plant.getStatusStartDate(),
 							plant.getSynonymName(),
-							pu.getPlantNameStatus(),
-							pu.getClassSystem()
+							pu.getPlantnamestatus(),
+							pu.getClasssystem()
 					);
 
 				}

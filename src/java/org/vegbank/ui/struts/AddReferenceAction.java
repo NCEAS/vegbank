@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 00:24:54 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,9 +38,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.vegbank.common.model.Reference;
-import org.vegbank.common.model.ReferenceAltIdent;
-import org.vegbank.common.model.ReferenceContributor;
-import org.vegbank.common.model.ReferenceParty;
+import org.vegbank.common.model.Referenceparty;
+import org.vegbank.common.model.Referencealtident;
+import org.vegbank.common.model.Referencecontributor;
 import org.vegbank.common.utility.ObjectToDB;
 import org.vegbank.common.utility.Utility;
 
@@ -86,9 +86,9 @@ public class AddReferenceAction extends Action
 			// Write the RefernceParty to Database and finish populating the ReferenceContributor
 			for (int i = 0; i < refContribs.size(); i++)
 			{
-				ReferenceParty rp = (ReferenceParty) refParties.elementAt(i);
-				ReferenceContributor rc =
-					(ReferenceContributor) refContribs.elementAt(i);
+				Referenceparty rp = (Referenceparty) refParties.elementAt(i);
+				Referencecontributor rc =
+					(Referencecontributor) refContribs.elementAt(i);
 
 				// Must add rp to database to get pk
 				ObjectToDB rp2db = new ObjectToDB(rp);
@@ -109,10 +109,10 @@ public class AddReferenceAction extends Action
 
 				int partyId = rp2db.getPrimaryKey();
 
-				rc.setReferenceParty_ID(partyId);
+				rc.setReferenceparty_id(partyId);
 
 				// Add to the reference Object
-				ref.addreferenceReferenceContributor(rc);
+				ref.addreferencereferencecontributor(rc);
 			}
 		}
 
@@ -165,12 +165,12 @@ public class AddReferenceAction extends Action
 				refParties.add(this.getReferenceParty(party));
 		
 				// Now I can fill in the linking object
-				ReferenceContributor rc = new ReferenceContributor();
+				Referencecontributor rc = new Referencecontributor();
 		
 				// ignore the default -1
 				if (!roleType.equals("-1"))
 				{
-					rc.setRoleType(roleType);
+					rc.setRoletype(roleType);
 				}
 		
 				rc.setPosition(new Integer(i).toString());
@@ -209,11 +209,11 @@ public class AddReferenceAction extends Action
 			if (!Utility.isStringNullOrEmpty(system)
 				&& !Utility.isStringNullOrEmpty(identifier))
 			{
-				ReferenceAltIdent refAlt = new ReferenceAltIdent();
+				Referencealtident refAlt = new Referencealtident();
 				refAlt.setIdentifier(identifier);
 				refAlt.setSystem(system);
 		
-				ref.addreferenceReferenceAltIdent(refAlt);
+				ref.addreferencereferencealtident(refAlt);
 			}
 			else // enforce validation
 				{
@@ -248,9 +248,9 @@ public class AddReferenceAction extends Action
 	 * @param party
 	 * @return
 	 */
-	private ReferenceParty getReferenceParty(String party)
+	private Referenceparty getReferenceParty(String party)
 	{
-		ReferenceParty rp = new ReferenceParty();
+		Referenceparty rp = new Referenceparty();
 		String surName = "";
 		String givenName = "";
 
@@ -265,7 +265,7 @@ public class AddReferenceAction extends Action
 		}
 
 		rp.setSurname(surName);
-		rp.setGivenName(givenName);
+		rp.setGivenname(givenName);
 
 		return rp;
 	}

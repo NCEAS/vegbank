@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 00:24:54 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-07-21 17:52:13 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.vegbank.common.model.ReferenceJournal;
+import org.vegbank.common.model.Referencejournal;
 import org.vegbank.common.utility.ObjectToDB;
 
 /**
@@ -55,7 +55,7 @@ public class AddJournalAction extends Action
 		// Get the form
 		AddJournalForm journalForm = (AddJournalForm) form;
 		
-		ReferenceJournal jRef = journalForm.getReferenceJournal();
+		Referencejournal jRef = journalForm.getReferenceJournal();
 
 		// Write this sucker to the database
 		ObjectToDB jRef2db = new ObjectToDB(jRef);
