@@ -9,8 +9,8 @@
   *  	For Details: http://www.nceas.ucsb.edu/
   *   Created: 2002 May
 	*  '$Author: harris $'
-	*  '$Date: 2002-07-23 15:11:14 $'
-	*  '$Revision: 1.4 $'		 
+	*  '$Date: 2002-07-26 01:28:57 $'
+	*  '$Revision: 1.5 $'		 
 	-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
@@ -25,14 +25,14 @@
 <xsl:for-each select="project">
 		<xsl:for-each select="plot/observation">
 	 		<xsl:value-of select="../../plot/plotId"/> <xsl:text>,</xsl:text>
-	 		<xsl:value-of select="../../plot/plotAccessionNumber"/> <xsl:text>,</xsl:text>
-	 		<xsl:value-of select="../../plot/observation/communityClassification/className"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/authorPlotCode"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/observation/communityClassification/classCode"/> <xsl:text>,</xsl:text>
 	 		<xsl:value-of select="obsStartDate"/> <xsl:text>,</xsl:text>
 	 		<xsl:value-of select="../../plot/latitude"/> <xsl:text>,</xsl:text>
 	 		<xsl:value-of select="../../plot/longitude"/> <xsl:text>,</xsl:text>
 	 		<xsl:value-of select="../../plot/elevation"/> <xsl:text>,</xsl:text>
-	 		<xsl:value-of select="../../plot/slopeAspect"/> <xsl:text>,</xsl:text>
-	 		<xsl:value-of select="../../plot/slopeGradient"/> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="normalize-space(../../plot/slopeAspect)" /> <xsl:text>,</xsl:text>
+	 		<xsl:value-of select="../../plot/slopeGradient"/> <xsl:text> </xsl:text>
 			<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 		</xsl:for-each>
 </xsl:for-each>
