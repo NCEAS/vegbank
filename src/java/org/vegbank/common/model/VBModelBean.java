@@ -7,9 +7,9 @@ import java.util.LinkedHashMap;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-03-07 17:55:28 $'
- *	'$Revision: 1.4 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-02-11 00:52:24 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,5 +112,9 @@ public abstract class VBModelBean
 //	  str = str.replaceAll("'","&apos;");
 //	  return str;
 	}
+
+    public String getAccessioncode() {
+        return "";
+    }
 
 }
