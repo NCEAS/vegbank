@@ -1,6 +1,6 @@
 '$Author: farrell $'
-'$Date: 2003-08-22 18:50:28 $'
-'$Revision: 1.13 $'
+'$Date: 2003-08-22 19:45:25 $'
+'$Revision: 1.14 $'
 THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
 
 Vegbank requires
@@ -50,7 +50,7 @@ PROPERTIES FILES:
 DATABASE SETUP:
 ---------------
 
-Vegclass has three separate database parts for Plots, Plant Taxonomy and Plant 
+Vegbank has a single database for Plots, Plant Taxonomy and Plant 
 Community. There is also a Framework database for shared resources like users.
 
 
@@ -64,9 +64,15 @@ initdb databasefile
 # Start database ( with debuging output )
 postmaster -d2 -i -D databasefile 
 
-# Create the database user 'datauser' as follows:
-> createuser  datauser
+# Create the database user as follows:
+Log into an account that is allowed to create users
+> createuser  datauser 
+> createuser [your unix username]
+> createuser qa
 
+# Create the databases
+> creatdb vegbank
+> createdb framework
 
 # Build the databases
 Some of the sql is auto generated using an ant task.
@@ -77,13 +83,6 @@ There are finer grained tasks also see ant -projecthelp
 
 # Create framework database
 > psql framework < ./veg_plot/sql/create_veguser_tables.sql
-> psql framework < ./veg_plot/sql/create_file_accesssion_tables.sql
-
-# Denormalization of the databases
-> psql vegbank < veg_plot/sql/makePlotSummaryTables_postgres.sql
-> psql vegbank < veg_community/sql/createCommunitySummary_pg.sql  
-> psql vegbank < veg_community/sql/createEcoartTables_pg.sql   
-> psql vegbank < veg_taxa/sql/denormPlantTaxonDb_pg.sql
 
 # Edit the pg_hba.conf file so that connections may be made to the database 
 # add the following:
