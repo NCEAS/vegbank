@@ -5809,6 +5809,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN autoTaxonCover=true THEN 'true' ELSE 'false' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>default = FALSE</attNotes>
@@ -7991,7 +7992,6 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="Austere">819</formShow>
         <formShow name="Summary">820</formShow>
-
         <formShow name="Detail">821</formShow>
       </attForms>
       <update>1.0.2</update>
@@ -14923,6 +14923,9 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Database generated unique key for each record in this table.</attDefinition>
+      <attForms>
+        <formShow name="Detail">1</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -14938,6 +14941,9 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign key pointing to the user about which this certification request applies.</attDefinition>
+      <attForms>
+        <formShow name="Detail">2</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -14968,6 +14974,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Level of certification the user is requesting in this record.</attDefinition>
+      <attForms>
+        <formShow name="Summary">4</formShow>
+        <formShow name="Detail">4</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -14983,6 +14993,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Highest degree attained by the user, thus far.</attDefinition>
+      <attForms>
+        <formShow name="Summary">5</formShow>
+        <formShow name="Detail">5</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -14998,6 +15012,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Year of highest Degree.</attDefinition>
+      <attForms>
+        <formShow name="Summary">6</formShow>
+        <formShow name="Detail">6</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15013,6 +15031,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Institution granting Highest Degree</attDefinition>
+      <attForms>
+        <formShow name="Summary">7</formShow>
+        <formShow name="Detail">7</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15028,6 +15050,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Current Organization the user works with or for.</attDefinition>
+      <attForms>
+        <formShow name="Summary">8</formShow>
+        <formShow name="Detail">8</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15043,6 +15069,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Position within the Current Institution of the user.</attDefinition>
+      <attForms>
+        <formShow name="Summary">9</formShow>
+        <formShow name="Detail">9</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15058,6 +15088,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>User is a certified ESA ecologist?</attDefinition>
+      <attForms>
+        <formShow name="Summary">10</formShow>
+        <formShow name="Detail">10</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15073,6 +15107,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Users documentation of their professional experience.</attDefinition>
+      <attForms>
+        <formShow name="Summary">11</formShow>
+        <formShow name="Detail">11</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15088,6 +15126,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>publications showing experience or expertise in fields relating to VegBank.</attDefinition>
+      <attForms>
+        <formShow name="Summary">12</formShow>
+        <formShow name="Detail">12</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15103,6 +15145,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>background and expertise in vegetation sampling</attDefinition>
+      <attForms>
+        <formShow name="Summary">13</formShow>
+        <formShow name="Detail">13</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15118,6 +15164,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>background and expertise with vegetation analysis, description and classification</attDefinition>
+      <attForms>
+        <formShow name="Summary">14</formShow>
+        <formShow name="Detail">14</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15133,6 +15183,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>prior experience with the US National Vegetation Classification, if any</attDefinition>
+      <attForms>
+        <formShow name="Summary">15</formShow>
+        <formShow name="Detail">15</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15148,6 +15202,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>prior experience with the VegBank archive, if any</attDefinition>
+      <attForms>
+        <formShow name="Summary">16</formShow>
+        <formShow name="Detail">16</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15163,6 +15221,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>what uses do you anticipate making the VegBank archive?</attDefinition>
+      <attForms>
+        <formShow name="Summary">17</formShow>
+        <formShow name="Detail">17</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15178,6 +15240,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>prior experience with other vegetation plot database and/or analytical tools</attDefinition>
+      <attForms>
+        <formShow name="Summary">18</formShow>
+        <formShow name="Detail">18</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15193,6 +15259,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>First ESA sponsor's name</attDefinition>
+      <attForms>
+        <formShow name="Summary">19</formShow>
+        <formShow name="Detail">19</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15208,6 +15278,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>First ESA sponsor's email.</attDefinition>
+      <attForms>
+        <formShow name="Summary">20</formShow>
+        <formShow name="Detail">20</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15223,6 +15297,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Second ESA sponsor's name.</attDefinition>
+      <attForms>
+        <formShow name="Summary">21</formShow>
+        <formShow name="Detail">21</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15238,6 +15316,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Second ESA sponsor's email.</attDefinition>
+      <attForms>
+        <formShow name="Summary">22</formShow>
+        <formShow name="Detail">22</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15253,6 +15335,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>User would like to participate in the peer review process.</attDefinition>
+      <attForms>
+        <formShow name="Summary">23</formShow>
+        <formShow name="Detail">23</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15268,6 +15354,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Anything else the user would like to say about his/her certification request.</attDefinition>
+      <attForms>
+        <formShow name="Summary">24</formShow>
+        <formShow name="Detail">24</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15349,6 +15439,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">27</formShow>
+        <formShow name="Detail">27</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15364,6 +15458,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">28</formShow>
+        <formShow name="Detail">28</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15379,6 +15477,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">29</formShow>
+        <formShow name="Detail">29</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15394,6 +15496,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">30</formShow>
+        <formShow name="Detail">30</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15409,6 +15515,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">31</formShow>
+        <formShow name="Detail">31</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15424,6 +15534,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">32</formShow>
+        <formShow name="Detail">32</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15439,6 +15553,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">33</formShow>
+        <formShow name="Detail">33</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15454,6 +15572,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">34</formShow>
+        <formShow name="Detail">34</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15469,6 +15591,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">35</formShow>
+        <formShow name="Detail">35</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15484,6 +15610,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">36</formShow>
+        <formShow name="Detail">36</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15499,6 +15629,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">37</formShow>
+        <formShow name="Detail">37</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -15514,6 +15648,10 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Geographical region of expertise.</attDefinition>
+      <attForms>
+        <formShow name="Summary">38</formShow>
+        <formShow name="Detail">38</formShow>
+      </attForms>
       <update>1.0.2</update>
     </attribute>
   </entity>
