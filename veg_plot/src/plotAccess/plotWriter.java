@@ -23,9 +23,11 @@ public class plotWriter {
 
 public void insertPlot (String[] transformedString, int transformedStringNum) {
 
+
 /**
-* the ordering of events is critical in this method and will be in the following order:  validate if project exists,
-*  update project, validate if plot exists, update plots
+*  The ordering of events is critical in this method and will be in the following 
+*  order:  validate if project exists, update project, validate if plot exists, 
+*  update plots
 */
 	
 //call the setAttributeAddress method to separate the database address from the data
@@ -38,11 +40,7 @@ String dataString[]=a.attributeData;  // the returened data string
 int addressNum=a.dbAddressNum; //the number of addresses and attributes in the returned set
 	
 	
-//Define the variable that will be reused in this method
-Connection conn=null;
-Statement query = null;
-ResultSet results = null;
-	
+//Define the variable that will be reused in this method	
 String projectId=null;  //this is the global variable b/c it will be needed for inserting the plots etc.
 String plotId=null;  //this is the global variable b/c it will be needed for inserting the plot observations etc.
 String plotObservationId=null; //this is the global variable b/c it will be needed for inserting taxon observations etc.
@@ -50,22 +48,37 @@ int strataId=0; //this is the global variable b/c it will be needed for insertin
 int taxonObservationId=0;
 int namedPlaceId=0;
 int graphicId=0;
-	
-	
-	
-//get a database connection
-	
-try {
-dbConnect m = new dbConnect();
-m.makeConnection(conn, query);
-conn=m.outConn;
-query=m.outStmt;	
-} catch (Exception e) {System.out.println("failed calling dbConnect.makeConnection call" + e.getMessage());}
 
+
+/**
+* Grab a pool of database connections that can be accessed from any where in
+* the remainder of the method
+*/
+//replace this with the connection pooling option
+Connection conn=null;  //this is a connection opend from within the dbConnect class
+Connection pconn=null; //this is a connection that is opened from within the pool
+Connection pconn1=null; //this is a connection that is opened from within the pool
+Statement query = null;
+ResultSet results = null;
 	
-	
-	
-PreparedStatement pstmt=null;
+DbConnectionBroker myBroker;
+try {
+//initial settings that worked well: 2, 10
+myBroker = new DbConnectionBroker("oracle.jdbc.driver.OracleDriver",
+                                         "jdbc:oracle:thin:@dev.nceas.ucsb.edu:1521:exp",
+                                         "harris","use4dev",8,20,
+                                         "DCB_Example1.log",1.0);
+// Get a DB connection from the Broker
+int thisConnection;
+pconn= myBroker.getConnection();
+pconn1=myBroker.getConnection();
+thisConnection = myBroker.idOfConnection(conn);
+
+//This is an attempt to devise a sceame to see how many times
+// a database connection is used if more than like 70 times 
+//check it back into the pool and grab a new one
+int connectionUses=0;
+
 for (int ii=0; ii<addressNum; ii++) 
 {
 		
@@ -74,10 +87,13 @@ for (int ii=0; ii<addressNum; ii++)
 	System.out.println("XMLfile PROJECTNAME: "+dataString[ii]);	
 		
 	plotWriter g =new plotWriter();  
-	g.putProject(dataString[ii], dataString[ii]);
+	g.putProject(dataString[ii], dataString[ii], pconn);
 	projectId=g.outProjectId;
+	//increment the connection uses
+	connectionUses++;
 	}//end if
-		
+
+
 //insert the plot data
 	if (address[ii] != null && address[ii].startsWith("plot.authorPlotCode")) {
 	System.out.println("XMLfile AUTHORPLOTNAME: "+dataString[ii]);	
@@ -94,20 +110,29 @@ for (int ii=0; ii<addressNum; ii++)
 	String altValue=dataString[ii+10];
 	plotWriter g =new plotWriter();  
 	g.putPlot(projectId, authorPlotCode, parentPlot, plotType, samplingMethod, coverScale, latitude,
-	longitude, plotShape, plotSize, plotSizeAcc, altValue);
-	plotId=g.outPlotId;		
+	longitude, plotShape, plotSize, plotSizeAcc, altValue, pconn);
+	plotId=g.outPlotId;
+
+	//increment the connection uses - couple times for its entire use
+	connectionUses= connectionUses+4;
+		
 	}//end if
-				
+
+	
 //insert the plotObservationData
 	if (address[ii] != null && address[ii].startsWith("plotObservation.previousObs")) {
 	System.out.println("XMLfile OBSERVATIONCODE: "+dataString[ii+1]);	
 	String previousObservation=dataString[ii+1];
 	String plotObservationCode=dataString[ii+1];	
-	
 	plotWriter g =new plotWriter();  
-	g.putPlotObservation(plotId, previousObservation, plotObservationCode);		
+	g.putPlotObservation(plotId, previousObservation, plotObservationCode, pconn);		
 	plotObservationId=g.outPlotObservationId;
+	
+	//increment the connection uses - couple times for its entire use
+	connectionUses= connectionUses+4;
+	
 	}//end if
+
 		
 //insert the strata
 	if (address[ii] != null && address[ii].startsWith("strata.stratumType")) {
@@ -117,7 +142,10 @@ for (int ii=0; ii<addressNum; ii++)
 	String stratumHeight=dataString[ii+2];
 	
 	plotWriter g =new plotWriter();  
-	g.putStrata(plotObservationId, stratumType, stratumCover, stratumHeight);				
+	g.putStrata(plotObservationId, stratumType, stratumCover, stratumHeight, pconn);				
+	
+	//increment the connection uses - couple times for its entire use
+	connectionUses= connectionUses+4;
 	}//end if
 			
 		
@@ -130,30 +158,56 @@ for (int ii=0; ii<addressNum; ii++)
 	String percentCover=dataString[ii+3];
 	
 	plotWriter g =new plotWriter();  
-	g.putTaxonObservation(plotObservationId, authorNameId, originalAuthority);
+	g.putTaxonObservation(plotObservationId, authorNameId, originalAuthority, 
+		pconn);
 	String taxonObservation=g.outTaxonObservationId;
+
 	
 //insert the strataComposition too  -- from the same if statement
 	
 	//get the strataId and strataCompositionId needed for this insertion
 	//by calling the method below
+
 	
 	int buf=Float.valueOf(plotObservationId).intValue();  //convert the string to and int
 	plotWriter gs=new plotWriter();  
-	gs.getStrataComposition(buf,  stratumType);
+	gs.getStrataComposition(buf,  stratumType, pconn);
 			
 	int returnStrataId=gs.outStrataId;
 	int strataCompositionId=gs.outStrataCompositionId;
 
 	plotWriter h =new plotWriter();  
-	h.putStrataComposition(returnStrataId, strataCompositionId, taxonObservation, stratumType, percentCover);
+	h.putStrataComposition(returnStrataId, strataCompositionId, taxonObservation, 
+		stratumType, percentCover, pconn);
 	
 	//(int strataId, int strataCompositionId, String taxonObservationId, 
 	//String stratumType, String percentCover) {
 	
 	
+	//increment the connection uses - couple times for its entire use
+	//check to see if more than 50 then check it in -- this is the failure
+	//that I have been getting: using connection 49 times
+	//java.sql.SQLException: ORA-01000: maximum open cursors exceeded
+	connectionUses= connectionUses+2;
+	System.out.println("number of times the connection has been used: "
+	+connectionUses);
+	
+	if (connectionUses>70) {
+		try {
+		pconn.close(); //close it - it is no good anymore
+		myBroker.freeConnection(pconn); //not sure if this should be 
+						//commented b/c not sure of the 
+						//meaning of 'recycle' in the
+						//broker
+		pconn=myBroker.getConnection();
+		connectionUses=0;
+		} catch (Exception e) {System.out.println("failed calling "
+		+" dbConnect.makeConnection call" + e.getMessage());}
+	}
+		
 	
 	}//end if
+
 
 //insert the named place information	
 	if (address[ii] != null && address[ii].startsWith("namedPlace.placeName")) {
@@ -163,12 +217,12 @@ for (int ii=0; ii<addressNum; ii++)
 	String placeDesc=dataString[ii+1];
 	
 	plotWriter g =new plotWriter();  
-	g.putNamedPlace(placeName, placeDesc);	
+	g.putNamedPlace(placeName, placeDesc, pconn1);	
 	
 
 }//end if
 
-
+/**
 //insert the grahical information		
 		
 		
@@ -202,14 +256,30 @@ for (int ii=0; ii<addressNum; ii++)
 		
 		}//end if
 		
-		
+*/		
 		
 		
 		
 		
 	//remember to close the connection here
 	}  //end for
-	}
+	
+// The connection is returned to the Broker
+//myBroker.freeConnection(conn);
+myBroker.freeConnection(pconn);
+myBroker.freeConnection(pconn1);
+myBroker.destroy();	
+}//end try -- connection pooling
+catch (IOException e5)  {System.out.println("connection pooling failed: "+e5.getMessage());}
+
+} //end method
+	
+	
+	
+	
+	
+	
+	
 
 /**
 *  Method that takes as input the attributes in the project table and insert/
@@ -217,7 +287,7 @@ for (int ii=0; ii<addressNum; ii++)
 * in the table
 */
 
-private void putProject (String projectName, String projectDescription) {
+private void putProject (String projectName, String projectDescription, Connection conn) {
 int projectId=0;
 try {
 		
@@ -240,7 +310,7 @@ try {
 	*/
 
 	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
+	j.issueSelect(statement, action, returnFields, returnFieldLength, conn);
 	
 	
 	//if redundancies	
@@ -268,7 +338,7 @@ try {
 		
 		//grab the next project ID number
 		plotWriter g =new plotWriter();  
-		g.getNextId("test", "project");
+		g.getNextId("test", "project", conn);
 		projectId=g.outNextId;  //assign the projectID
 		outProjectId=""+projectId;
 		outProjectId=outProjectId.replace('|', ' ').trim();
@@ -288,7 +358,7 @@ try {
 		String valueString = k.outValueString;
 		//issue the above statement
 		issueStatement l = new issueStatement();
-		l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);
+		l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue, conn);
 	
 	}
 			
@@ -311,7 +381,8 @@ public String outProjectId=null;
 
 private void putPlot (String projectId, String authorPlotCode, String parentPlot, 
 String plotType, String samplingMethod, String coverScale, String latitude, 
-String longitude, String plotShape, String plotSize, String plotSizeAcc, String altValue) {
+String longitude, String plotShape, String plotSize, String plotSizeAcc, String altValue, 
+Connection conn) {
 int plotId=0;
 try {
 
@@ -320,7 +391,7 @@ try {
 	
 //grab the next value in the plot table
 plotWriter g =new plotWriter();  
-g.getNextId("test", "plot");
+g.getNextId("test", "plot", conn);
 			
 plotId=g.outNextId;  //grab the returned value		
 outPlotId=""+plotId; //pass to public
@@ -363,7 +434,7 @@ k.getValueString(inputValueNum);
 String valueString = k.outValueString;
 //issue the above statement
 issueStatement l = new issueStatement();
-l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue, conn);	
 
 }
 catch (Exception e) {System.out.println("failed in plotWriter.putPlot " + 
@@ -380,14 +451,15 @@ public String outPlotId=null;
 * redundancy in the table
 */
 
-private void putPlotObservation (String plotId, String previousObservation, String plotObservationCode) {
+private void putPlotObservation (String plotId, String previousObservation, 
+String plotObservationCode, Connection conn) {
 int plotObservationId=0;
 try {
 
 //grab the next value in the plotObservation table
 plotWriter g =new plotWriter(); 
-g.getNextId("test", "plotObservation");
-				
+
+g.getNextId("test", "plotObservation", conn);				
 plotObservationId=g.outNextId;  //grab the returned value
 outPlotObservationId=""+plotObservationId; //pass to public
 		
@@ -406,9 +478,9 @@ k.getValueString(inputValueNum);
 String valueString = k.outValueString;
 //issue the above statement
 issueStatement l = new issueStatement();
-l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue,
+	conn);	
 	
-
 }
 catch (Exception e) {System.out.println("failed in plotWriter.putPlotObservation " + 
 	e.getMessage());}	
@@ -421,13 +493,14 @@ public String outPlotObservationId=null;
 *  Method that takes as input the attributes in the strata related tables and 
 * insert/update the table with the input data
 */
-private void putStrata (String plotObservationId, String stratumType, String stratumCover, String stratumHeight) {
+private void putStrata (String plotObservationId, String stratumType, String 
+stratumCover, String stratumHeight, Connection conn) {
 int strataId=0;
 try {
 
 //grab the next value in the strata table
 plotWriter g =new plotWriter();  
-g.getNextId("test", "strata");
+g.getNextId("test", "strata", conn);
 				
 strataId=g.outNextId;  //grab the returned value
 		
@@ -448,9 +521,9 @@ k.getValueString(inputValueNum);
 String valueString = k.outValueString;
 //issue the above statement
 issueStatement l = new issueStatement();
-l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
+	inputValue, conn);	
 				
-
 }
 catch (Exception e) {System.out.println("failed in plotWriter.putStrata " + 
 	e.getMessage());}
@@ -463,13 +536,13 @@ catch (Exception e) {System.out.println("failed in plotWriter.putStrata " +
 * inserts/updates the table with the input data
 */
 
-private void putTaxonObservation (String plotObservationId, String authorNameId, String originalAuthority) {
+private void putTaxonObservation (String plotObservationId, String authorNameId, 
+	String originalAuthority, Connection conn) {
 int taxonObservationId=0;
 try {
-
 	//grab the next value in the strata table
 	plotWriter g =new plotWriter();  
-	g.getNextId("test", "taxonObservation");
+	g.getNextId("test", "taxonObservation", conn);
 				
 	taxonObservationId=g.outNextId;  //grab the returned value
 	outTaxonObservationId=""+taxonObservationId;
@@ -492,7 +565,8 @@ try {
 	String valueString = k.outValueString;
 	//issue the above statement
 	issueStatement l = new issueStatement();
-	l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+	l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
+		inputValue, conn);	
 				
 
 }
@@ -506,11 +580,10 @@ public String outTaxonObservationId=null;
 *  Method that takes as input the attributes from the strataComposition tables and 
 * inserts/updates the table with the input data
 */
-private void putStrataComposition (int strataId, int strataCompositionId, String taxonObservationId, 
-				String stratumType, String percentCover) {
+private void putStrataComposition (int strataId, int strataCompositionId, 
+	String taxonObservationId, String stratumType, String percentCover, Connection conn) {
 
 try {
-
 String insertString="INSERT INTO STRATACOMPOSITION";
 String attributeString="STRATACOMPOSITION_ID, TAXONOBSERVATION_ID, STRATA_ID, CHEATSTRATUMTYPE, PERCENTCOVER";
 int inputValueNum=5;
@@ -527,9 +600,7 @@ k.getValueString(inputValueNum);
 String valueString = k.outValueString;
 //issue the above statement
 issueStatement l = new issueStatement();
-l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
-
-
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue, conn);	
 
 }
 catch (Exception e) {System.out.println("failed in plotWriter.putStrataComposition " + 
@@ -541,13 +612,13 @@ catch (Exception e) {System.out.println("failed in plotWriter.putStrataCompositi
 *  Method that takes as input the attributes associated with the namedPlace table 
 * inserts/updates the table with the input data
 */
-private void putNamedPlace (String placeName, String placeDesc) {
+private void putNamedPlace (String placeName, String placeDesc, Connection conn) {
 int namedPlaceId=0;
 try {
 
 //grab the next value in the namedPlace table
 plotWriter g =new plotWriter();  
-g.getNextId("test", "namedPlace");
+g.getNextId("test", "namedPlace", conn);
 				
 namedPlaceId=g.outNextId;  //grab the returned value
 System.out.println("******** "+namedPlaceId);
@@ -567,7 +638,8 @@ k.getValueString(inputValueNum);
 String valueString = k.outValueString;
 //issue the above statement
 issueStatement l = new issueStatement();
-l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
+l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
+	inputValue, conn);	
 	
 }
 catch (Exception e) {System.out.println("failed in plotWriter.putNamedPlace " + 
@@ -596,8 +668,9 @@ catch (Exception e) {System.out.println("failed in plotWriter.putNamedPlace " +
 
 	
 /**
-* general method to tokenize a string of type: col1|col2 into two seperate strings called dbAddress and 
-* attributeData.  There is a bug here: there are some strings included in the output that have nulls and have to be stripped 
+* general method to tokenize a string of type: col1|col2 into two seperate 
+* strings called dbAddress and attributeData.  There is a bug here: there are 
+* some strings included in the output that have nulls and have to be stripped 
 * in the above method - I can not figure out what is the problem
 */
 	
@@ -639,13 +712,11 @@ private void setAttributeAddress (String[] combinedString, int combinedStringNum
 	}  //end method
 	
 	
-	/**
-	* method to return the next integer for an index from a table
-	* in future versions this should be lumped with a switch that 
-	* will warn if there is a repetative value
-	*/
-	
-	
+/**
+* method to return the next integer for an index from a table
+* in future versions this should be lumped with a switch that 
+* will warn if there is a repetative value
+*/
 private void getNextId (String projectName, String tableName) {
 	
 	try {
@@ -655,7 +726,6 @@ private void getNextId (String projectName, String tableName) {
 	ResultSet results = null;
 	
 	//get a database connection
-	
 	try {
 	dbConnect m = new dbConnect();
 	m.makeConnection(conn, query);
@@ -664,9 +734,8 @@ private void getNextId (String projectName, String tableName) {
 	}//end try 
 	catch (Exception e) {System.out.println("failed calling dbConnect.makeConnection call" + e.getMessage());}
 
-	
-	
-	
+
+
 	//this is a skeleton, the method just returns the next id value but in a future 
 	//revision will look to see if the project exists and will return some warning
 	
@@ -693,21 +762,72 @@ private void getNextId (String projectName, String tableName) {
 		
 	} //end try
 	catch ( Exception e ){System.out.println("failed at: plotWriter.getProjectId  "+e.getMessage());}
-		
-
-
 }  //end method
-		
 
-		
+
+
+
 /**
-* a method to get the required information for the strataComposition table which is an intersection between
-* that strata and the taxonObservation. 1] take as input the observationId, and stratumType to gain 2]
-* the output containing strataCompositionId, strataId - this table should be denormalized to include stratum type
+*  This is and overloaded version of the above method where a connection may be
+*  passed directly into the method inorder to figure out the number of rows in
+*  a table - use this one if possible because it does not have the potential to
+*  fail from the inability to get a db connection for the connection comes from
+*  the pool being managed, presumedly, in the calling class
+*/
+private void getNextId (String projectName, String tableName, Connection pconn) {
+
+//Connection conn=null;
+Statement query = null;
+ResultSet results = null;
+
+
+/**
+* transfer the database connection
+*/
+try {
+	//conn=pconn;
+	query = pconn.createStatement ();;	
+} catch (Exception e)  {System.out.println("failed at plotWriter.getNextId "
+	+"transfering db connections"
+	+ e.getMessage());e.printStackTrace();}
+	
+try {	
+//results =query.executeQuery("SELECT project_id from  project where projectName like '%"+projectName+"%'");
+	ResultSet lastValue=query.executeQuery("SELECT count(*) from "+tableName+"");
+			
+		int lastNum=0;
+                        while (lastValue.next()) {
+				lastNum = lastValue.getInt(1);
+				}
+		lastNum++;
+                outNextId=lastNum;
+		/*don't close this connection because it is intended for re-use*/	
+		//pconn.close();
+		query.close();
+		lastValue.close();
+			
+
+} //end try
+catch (Exception e) {System.out.println("failed in plotWriter.getNextId trying "
+	+"to query the next id value in a table data: " + e.getMessage());}
+
+
+
+} //end method
+
+
+
+
+/**
+* a method to get the required information for the strataComposition table which 
+* is an intersection between that strata and the taxonObservation. 1] take as 
+* input the observationId, and stratumType to gain 2] the output containing 
+* strataCompositionId, strataId - this table should be denormalized to include 
+* stratum type
 */
 
 		
-private void getStrataComposition (int observationId, String stratumType) {
+private void getStrataComposition (int observationId, String stratumType ) {
 	
 	
 	try {
@@ -738,9 +858,7 @@ private void getStrataComposition (int observationId, String stratumType) {
 				strataId = strataIdResult.getInt(1);
 				}
                         
-                        
-			System.out.println("returned startaId: "+strataId);
-			
+			System.out.println("returned startaId: "+strataId);		
 			outStrataId=strataId;  
 			
 			//now get the last index/integer in the strataComposition table
@@ -754,22 +872,86 @@ private void getStrataComposition (int observationId, String stratumType) {
 			System.out.println("strataCompositionId: "+outStrataCompositionId);
 		
 			
-			
-			conn.close();
+			//conn.close();
 			query.close();
 			
 
 	} //end try
 	catch (Exception e) {System.out.println("failed in plotWriter.insertPlot trying to query the next id value in a table data: " + e.getMessage());}
-	
-		
 		
 	} //end try
 	catch ( Exception e ){System.out.println("failed at: plotWriter.getProjectId  "+e.getMessage());}
 		
-	
-	
 }//end method	
+	
+	
+	
+/**
+* a method to get the required information for the strataComposition table which 
+* is an intersection between that strata and the taxonObservation. 1] take as 
+* input the observationId, and stratumType to gain 2] the output containing 
+* strataCompositionId, strataId - this table should be denormalized to include 
+* stratum type -- this is an overloaded version of the above method
+*/
+
+
+private void getStrataComposition (int observationId, String stratumType, 
+	Connection pconn) {
+	
+try {
+//Define the variable that will be reused in this method
+Connection conn=null;
+Statement query = null;
+ResultSet results = null;
+	
+/**
+* transfer the database connection
+*/
+try {
+	conn=pconn;
+	query = conn.createStatement ();	
+} catch (Exception e)  {System.out.println("failed at plotWriter.getStrataComposition "
+	+"transfering db connections"
+	+ e.getMessage());e.printStackTrace();}
+
+//query the starta table to get the strata_id
+try {	
+	int strataId=0;
+	System.out.println("passed values: "+observationId+" "+stratumType);
+	ResultSet strataIdResult=query.executeQuery("SELECT strata_id from strata where OBS_ID = "+observationId+
+	"and stratumType like '%"+stratumType+"%'");
+			
+			
+	while (strataIdResult.next()) {
+		strataId = strataIdResult.getInt(1);
+	}
+                        
+	System.out.println("returned startaId: "+strataId);		
+	outStrataId=strataId;  
+			
+	//now get the last index/integer in the strataComposition table
+		
+	plotWriter g =new plotWriter();  
+	g.getNextId("strataComposition", "strataComposition", conn);
+	
+			
+			
+	outStrataCompositionId=g.outNextId;  //grab the returned value
+	System.out.println("strataCompositionId: "+outStrataCompositionId);
+		
+	/*dont close the connection, it is needed elsewhere*/	
+	//conn.close();
+	query.close();
+			
+
+} //end try
+catch (Exception e) {System.out.println("failed in plotWriter.getStrataComposition " + e.getMessage());}
+		
+} //end try
+catch ( Exception e ){System.out.println("failed at: plotWriter.getStrataComposition  "+e.getMessage());}
+		
+}//end method
+	
 	
 	
 	
