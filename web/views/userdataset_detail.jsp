@@ -1,5 +1,7 @@
-@stdvegbankget_jspdeclarations@
-<!-- $Id: userdataset_detail.jsp,v 1.9 2005-03-15 06:39:47 anderson Exp $ -->
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<!-- $Id: userdataset_detail.jsp,v 1.10 2005-03-15 06:57:08 mlee Exp $ -->
 <!-- purpose : show user's datasets, either all of them (mode=all in URL) or only certain ones:
 
   mode=ac is to show accessioncodes
@@ -7,15 +9,15 @@
  BOTH of the above are comma separated, and currently accessionCodes need to be surrounded by single quotes -->
  
 
-<HEAD   >
-@defaultHeadToken@
+
+
  
 <TITLE>View Your VegBank Datasets</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<body>  
- @vegbank_header_html_normal@ 
+
+
+
+  
+ @webpage_masthead_html@ 
   @possibly_center@  <h2>View Your VegBank Datasets</h2>
 <!-- get user ID -->
 <%@ include file="includeviews/sub_getwebuserid.jsp" %>

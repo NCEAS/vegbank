@@ -1,16 +1,11 @@
 
-@stdvegbankget_jspdeclarations@
-
-<html>
-<HEAD>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-@defaultHeadToken@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
  
 <TITLE>Browse VegBank Data by Party</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css" />
-</HEAD>
-<body>  
- @vegbank_header_html_normal@ 
+ 
+ @webpage_masthead_html@ 
   @possibly_center@  
 <h2>Browse Plots By Party</h2>
 
@@ -26,5 +21,5 @@
 
 <br />
 <vegbank:pager />
-</html>
+
           @webpage_footer_html@

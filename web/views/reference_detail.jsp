@@ -1,14 +1,10 @@
-@stdvegbankget_jspdeclarations@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 
-<html>
-<HEAD>
-
-@defaultHeadToken@
- 
 <TITLE>View VegBank Data: references - Detail</TITLE>
-<link type="text/css" href="@stylesheet@" rel="stylesheet"/>
-</HEAD>
-<body>@vegbank_header_html_normal@  @possibly_center@
+
+@webpage_masthead_html@  @possibly_center@
 <h2>View VegBank References</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
@@ -57,6 +53,6 @@
 <br/>
 <vegbank:pager/>
 
-</html>
+
           @webpage_footer_html@
  

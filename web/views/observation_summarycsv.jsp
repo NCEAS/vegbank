@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <?xml-stylesheet type="text/xsl" href="@xml_link@util/htmltable2csv.xsl"?>
-@stdvegbankget_jspdeclarations@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 <!-- declare how many communities to get -->
 <% int commnum = 4 ; %>
 

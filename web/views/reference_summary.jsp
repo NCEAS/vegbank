@@ -1,14 +1,10 @@
-@stdvegbankget_jspdeclarations@
-
-<html>
-<HEAD>
-
-@defaultHeadToken@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
  
 <TITLE>View VegBank Data: references - Summary</TITLE>
-<link type="text/css" href="@stylesheet@" rel="stylesheet"/>
-</HEAD>
-<body>@vegbank_header_html_normal@  
+
+@webpage_masthead_html@  
 @possibly_center@
 <h2>View VegBank References</h2>
 <!--Get standard declaration of rowClass as string: -->
@@ -45,7 +41,7 @@
 <br/>
 <vegbank:pager/>
 
-</html>
+
           @webpage_footer_html@
 <!-- ____________________________@END:  reference _______________________________________ 
 

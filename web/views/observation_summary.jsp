@@ -1,12 +1,10 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/vegbank.tld" prefix="vegbank" %>
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
-<html>
+
+
         
 <!-- 
 *  '$RCSfile: observation_summary.jsp,v $'
@@ -14,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2005-03-15 06:39:47 $'
-*  '$Revision: 1.24 $'
+*  '$Author: mlee $'
+*  '$Date: 2005-03-15 06:57:08 $'
+*  '$Revision: 1.25 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -40,17 +38,15 @@
                        String rowClass = "evenrow";
     %>
 
-<head>@defaultHeadToken@
+
 <title>Plot Observation Summary View</title>
-<link REL=STYLESHEET HREF="@stylesheet@" TYPE="text/css">
-</head>
 
 
-<body>  
 
- 
 
-@vegbank_header_html_normal@
+  
+
+@webpage_masthead_html@
  @possibly_center@  
   <h2>View Plot-Observations</h2>
   <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
@@ -195,4 +191,4 @@
 <br>
 @webpage_footer_html@
 
-</html>
+

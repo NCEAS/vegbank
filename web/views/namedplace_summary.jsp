@@ -1,15 +1,17 @@
-@stdvegbankget_jspdeclarations@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 
-<html>
-<HEAD>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-@defaultHeadToken@
+
+
+
+
  
 <TITLE>View VegBank Data: Named Places - Summary</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css" />
-</HEAD>
-<body>  
- @vegbank_header_html_normal@ 
+
+
+  
+ @webpage_masthead_html@ 
   @possibly_center@  
 <h2>View VegBank Named Places</h2>
 <!--Get standard declaration of rowClass as string: -->
@@ -48,5 +50,5 @@
 </logic:notEmpty>
 <br />
 <vegbank:pager />
-</html>
+
           @webpage_footer_html@

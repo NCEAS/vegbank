@@ -1,14 +1,16 @@
-@stdvegbankget_jspdeclarations@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 <% String rowClass = "evenrow"; %>
-<HEAD>@defaultHeadToken@
+
  
 <TITLE>VegBank Data</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css" />
+
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=" />
-</HEAD>
-<body>@vegbank_header_html_normal@
+
+@webpage_masthead_html@
  
 
   <vegbank:get id="namedplace" select="place_summ" beanName="map" 
@@ -100,4 +102,3 @@
 
 
 </body>
-</html>

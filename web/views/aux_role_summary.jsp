@@ -1,21 +1,18 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/vegbank.tld" prefix="vegbank" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
-<HEAD>@defaultHeadToken@
+
  
 <TITLE>View Roles</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
 
 
-<meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<body>  
- @vegbank_header_html_normal@ 
+
+
+
+  
+ @webpage_masthead_html@ 
   @possibly_center@
 
 <h2>VegBank Roles</h2>
@@ -83,4 +80,4 @@
 
 @webpage_footer_html@
 
-</html>
+

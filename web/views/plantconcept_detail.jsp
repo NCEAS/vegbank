@@ -1,16 +1,10 @@
-@stdvegbankget_jspdeclarations@
-
-
-<HEAD>
-<META http-equiv="Content-Type" content="text/html; charset=">
-@defaultHeadToken@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
  
 <TITLE>View VegBank Plant Concepts</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<body>  
- @vegbank_header_html_normal@ 
+
+ @webpage_masthead_html@ 
   @possibly_center@ 
 
 <h2>View Plant Concepts</h2>

@@ -1,12 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/vegbank.tld" prefix="vegbank" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>   <%     String rowClass = "evenrow";  %>
-<head>@defaultHeadToken@<title>VegBank Comprehensive Plot-Observation View</title><link REL=STYLESHEET HREF="@stylesheet@" TYPE="text/css"></head>
-<body>  @vegbank_header_html_normal@   @possibly_center@  
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+
+   <%     String rowClass = "evenrow";  %>
+<title>VegBank Comprehensive Plot-Observation View</title>
+
+  @webpage_masthead_html@   @possibly_center@  
   <h2>Comprehesive View of a Plot-Observation</h2>
   <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>

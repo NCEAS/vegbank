@@ -1,16 +1,18 @@
-@stdvegbankget_jspdeclarations@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
 
 
-<HEAD>
-<META http-equiv="Content-Type" content="text/html; charset=">
-@defaultHeadToken@
+
+
+
  
 <TITLE>View VegBank Community Concepts - Detail</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<body>  
- @vegbank_header_html_normal@ 
+
+
+
+  
+ @webpage_masthead_html@ 
   @possibly_center@ 
 
 <h2>View Community Concepts - Detail</h2>
