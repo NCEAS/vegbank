@@ -93,8 +93,9 @@
 	 boolean toggle = true;
 	 String rowClass, marginBgColor;
 	 %>
-	
-	 <logic:iterate id="row" name="PlotsResults" >
+	 <% int countPlots = 0; %>
+	 <logic:iterate id="row" name="PlotsResults" length="500">
+	 <% countPlots ++ ; %>
 	 <%
 	 //**************************************************************************************
 	 //  Set up alternating row colors
@@ -189,6 +190,12 @@
 	  </tr>
   
 	</logic:iterate>
+	<% if ( countPlots == 500 )  {  %>
+	  <tr><td colspan="20"><p class="error">The Plot Query only shows the first 500 plot results.  
+	  We are improving the download screens soon to accommodate more plots.  
+	  We apologize for the incovenience.</p></td></tr>
+	  
+	<% }  %>
 	 <tr bgcolor="#333333" align="center">
 	   <td colspan="20" class="whitetext" nowrap align="left">
 	   	&nbsp;&nbsp;select +<a class="whitetext" href="javascript:checkAll('selectedPlots')">all</a>
