@@ -48,9 +48,10 @@
 	<copydir src="${src}" 
                dest="${build}" 
                filtering="yes"
-               includes="xmlWriter.java queryStore.java dbConnect.java plotWriter.java 
-	       dbAccess.java utility.java transformXML.java sqlMapper.java 
-	       issueStatement.java DbConnectionBroker.java "
+               includes="CommunityQueryStore.java  xmlWriter.java queryStore.java 
+			   	PlotDBWriter.java dbConnect.java plotWriter.java 
+	       		dbAccess.java utility.java transformXML.java sqlMapper.java 
+	       		issueStatement.java DbConnectionBroker.java "
                excludes="**/CVS* "/>
 
         <copydir src="${xmlFiles}" 
@@ -79,22 +80,24 @@
 <target name="dist" depends="compile">
 	<mkdir dir="${dist}/lib" />
 	<deltree dir="${dist}" />
-	
+
+<!-- make a jar file that one can run anywhere w/o worrying about oracle drivers 
+	or XML resources -->
+<jar jarfile ="${build}/dbAccess.jar"
+		basedir="${build}"
+		manifest="${build}/manifest"
+		includes="${build}/ **"
+/>
+
+
+<!--Query for all plots with a taxon containing the string: "Carya" -->
 <!--
-<java classname="dbAccess" 
+<java classname="dbAccess"
+args="${build}/exampleCompoundQuery.xml ${build}/querySpec.xsl compoundQuery"
 classpath="${cpath}"
-args="${build}/outfile7.xml  ${build}/plot2DBaddress.xsl insert"
 fork="yes"
 />
 -->
-
-<!--Query for all plots with a taxon containing the string: "Carya" -->
-	<java classname="dbAccess"
-	args="${build}/exampleCompoundQuery.xml ${build}/querySpec.xsl compoundQuery"
-	classpath="${cpath}"
-	fork="yes"
-	/>
-
 </target>		
 
 
