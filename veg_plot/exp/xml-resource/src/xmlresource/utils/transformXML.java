@@ -8,8 +8,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:12:42 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2003-02-24 19:50:04 $'
+ * '$Revision: 1.7 $'
  */
 //package vegclient.framework;
 package xmlresource.utils; 
@@ -17,38 +17,35 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Hashtable;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.xalan.xslt.XSLTInputSource;
-import org.apache.xalan.xslt.XSLTProcessor;
-import org.apache.xalan.xslt.XSLTProcessorFactory;
-import org.apache.xalan.xslt.XSLTResultTarget;
-import org.apache.xerces.parsers.DOMParser;
-import org.xml.sax.InputSource;
+import org.w3c.dom.Document;
 
 
 public class  transformXML
-{
+{	
+	private Hashtable templates = new Hashtable();
+	private TransformerFactory tFactory = TransformerFactory.newInstance( );
+	
+	// FIXME: This should be set via properties
+	private String CACHE_XSL = "true";
 
 
-	// these variables can be accessed from the calling program
-	public StringWriter outTransformedData=null;
 
 	/*variable to make available to the calling class -- the string containg the db location (table.attribute) and the data*/
 	//outTransformedData = null;
         
 
-
-	public transformXML()
-	{
-	
-	}
-	
-	
  /**
 	*
 	* This is a method that will transform an xml document with an xsl style sheet
@@ -57,35 +54,67 @@ public class  transformXML
 	* @param inputXSL -- the file name of the input xsl style sheet
 	*
 	*/
-	public void getTransformed(String inputXML, String inputXSL)
-	throws java.io.IOException,
-		java.net.MalformedURLException,
-		org.xml.sax.SAXException
+//	public void getTransformed(String inputXML, String inputXSL)
+//	{
+//			XMLparse xp = new XMLparse();
+//			Document doc = xp.getDocument(inputXML);
+//			this.getTransformed(doc, inputXSL, outTransformedData);
+//	}
+	
+	public void getTransformed(String inputXML, String inputXSL, Writer out)
+	{
+		XMLparse xp = new XMLparse();
+		Document doc = xp.getDocument(inputXML);
+		this.getTransformed(doc, inputXSL, out);
+	}
+	
+	private void getTransformed(Document doc, String inputXSL, Writer output)
 	{
 		try
 		{
-			//System.out.println("transforming xml file: '"+inputXML+"'");
-			
-			StringWriter out =new StringWriter();
-			// Have the XSLTProcessorFactory obtain a interface to a
-			// new XSLTProcessor object.
-			XSLTProcessor processor = XSLTProcessorFactory.getProcessor();
-
-			// Have the XSLTProcessor processor object transform inputXML  to
-			// StringWriter, using the XSLT instructions found in "*.xsl".
-			processor.process(new XSLTInputSource(inputXML), 
-			new XSLTInputSource(inputXSL),
-			new XSLTResultTarget(out));
-
-			out.toString();
-			outTransformedData=out;
+			Source xmlSource = new DOMSource(doc);
+			Transformer trans = this.getTransformer(inputXSL);
+			trans.transform(xmlSource, new StreamResult(output));
 		}
-		catch( Exception e ) 
+		catch (TransformerException e)
 		{
-			System.out.println(" Exception: "	+ e.getMessage() );
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	private Transformer getTransformer(String xsltFileName )
+		throws Exception {
+		// Check Cache
+		Transformer trans = (Transformer) templates.get(xsltFileName);
+
+		if ( trans == null ) {
+			// Ok need to create a new transformer
+
+			if ( xsltFileName != null ) {
+				StreamSource xslSource = new StreamSource(xsltFileName);
+				Templates stylesheet = tFactory.newTemplates( xslSource );
+				trans = stylesheet.newTransformer();
+
+				// Cache
+				if (CACHE_XSL.equals("true")) {
+					templates.put(xsltFileName, trans);
+					// TODO: Shoud be printing to logfile
+					System.out.println("Caching .. " + xsltFileName);
+				}
+
+			} else {
+				System.out.println("Cannot find xsl file " + xsltFileName);
+			}
+		}
+		return trans;
+	}
+
 	
 
 	/**
@@ -97,36 +126,39 @@ public class  transformXML
 	* @param inputXSL -- the file name of the input xsl style sheet
 	*
 	*/
-	public String getTransformedFromString(String inXml, String inputXSL)
-	throws java.io.IOException,
-		java.net.MalformedURLException,
-		org.xml.sax.SAXException
+	public void getTransformedFromString(String inXml, String inputXSL, Writer output)
+		throws java.io.IOException,
+									java.net.MalformedURLException,
+									org.xml.sax.SAXException
 	{
 		StringWriter out = new StringWriter();
 		try
 		{
 			System.out.println("transformXML > input xml string: \n '"+inXml+"'");
-			StringReader sr = new StringReader(inXml);
-			InputSource in = new InputSource(sr);
-			//out =new StringWriter();
-			// Have the XSLTProcessorFactory obtain a interface to a
-			// new XSLTProcessor object.
-			XSLTProcessor processor = XSLTProcessorFactory.getProcessor();
-
-			// Have the XSLTProcessor processor object transform inputXML  to
-			// StringWriter, using the XSLT instructions found in "*.xsl".
-			processor.process(new XSLTInputSource(in), 
-			new XSLTInputSource(inputXSL),
-			new XSLTResultTarget(out));
-			out.toString();
-			outTransformedData=out;
+			XMLparse xp = new XMLparse();
+			Document doc = xp.getDocumentFromString(inXml);
+			this.getTransformed(doc, inputXSL, output);			
 		}
 		catch( Exception e ) 
 		{
 			System.out.println(" Exception: "	+ e.getMessage() );
 			e.printStackTrace();
 		}
-		return( out.toString() );
+	}
+	
+	public String getTransformedFromString(String inXml, String inputXSL)
+	{
+		StringWriter output = new StringWriter();
+		try
+		{
+			getTransformedFromString(inXml, inputXSL, output);
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return output.toString();
 	}
 
 	
@@ -135,6 +167,7 @@ public class  transformXML
 	/**
 	 * method that does the same as the above method, but 
 	 * does not crate errors
+	 * @deprecated
 	 */
 	public String getTransformedNoErrors(String inputXML, String inputXSL)
 	{
@@ -175,13 +208,14 @@ public class  transformXML
 		 try
 		{
 			
-			//the file to write to
-			//the printWriter
 			PrintWriter out = new PrintWriter(new FileWriter(fileName));
-			transformXML trans = new transformXML();
-			trans.getTransformed( inputXML, inputXSL);
-			out.println( trans.outTransformedData.toString() );
-		 	out.close();	
+			XMLparse xp = new XMLparse();
+			Document doc = xp.getDocumentFromString(inputXML);
+			this.getTransformed(doc, inputXSL, out);
+//			transformXML trans = new transformXML();
+//			trans.getTransformed( inputXML, inputXSL);
+//			out.println( trans.outTransformedData.toString() );
+//		 	out.close();	
 		}
 		catch( Exception e ) 
 		{
@@ -189,42 +223,6 @@ public class  transformXML
 			e.printStackTrace();
 		}
 	 }
-	 
-	 
-	 
-	
-	public void transformXMLDocument(String xml, String xsl)
-	{
-		try
-		{
-		//XSLStylesheet style = new XSLStylesheet();
-		DOMParser dp = new DOMParser();
-		//dp.setValidation(false);
-		//dp.parse(xml);
-		//	doc = dp.getDocument();
-		//dp.parse( (Reader) (new StringReader(xml)) );
-		  dp.setFeature("http://xml.org/sax/features/validation", false);
-			dp.parse(xml);
-			
-			//new XSLTProcessor().processXSL(xsl, dp.getDocument(), outTransformedData);
-			
-		//	XSLProcessor processor = new XSLProcessor();
-			
-			StringWriter out =new StringWriter();
-			
-			// Have the XSLTProcessor processor object transform inputXML  to
-			// StringWriter, using the XSLT instructions found in "*.xsl".
-	//		processor.process(new XSLTInputSource(xml),
-	//		new XSLTInputSource(xsl),
-	//		new XSLTResultTarget(out));
-			
-		}
-		catch (Exception e) 
-		{
-			System.out.println("\nError: " + e.getMessage());
-		}
-	}
-	
 		
 	/**
 	 * main method for testing and for use in standalone patransforming    
@@ -234,7 +232,7 @@ public class  transformXML
 		transformXML trans = new transformXML();
 		if (args.length < 2)
 		{
-			System.out.println("Usage: \n java XMLparse xmlFile xslt or \n"
+			System.out.println("Usage: \n java XMLparse xmlFile xslt\n"
 			+" ");
 		}
 		else
@@ -243,13 +241,13 @@ public class  transformXML
 			String xsl = args[1];
 			try
 			{
-				trans.getTransformed( xml, xsl);
-				System.out.println( trans.outTransformedData.toString() );
+				StringWriter out = new StringWriter();
+				trans.getTransformed( xml, xsl, out);
+				System.out.println( out.toString() );
 			}
 			catch( Exception e ) 
 		{
-			System.out.println(" caught exception: "
-			+e.getMessage() );
+			System.out.println(" caught exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		}
