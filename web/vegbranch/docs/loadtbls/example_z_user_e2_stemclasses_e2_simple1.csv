@@ -4,6 +4,6 @@
 "","plot1","RHODMAX","herb","","","15","","","","",""
 "","plot1","RHODMAX","understory","","","2","8","3","","",""
 "","plot2","ACRU","s","","","2","9","","","",""
-"","plot2","Liriodendron Tulipifera","","","","","1","49","57","63",""
+"","plot2","Liriodendron Tulipifera","","","","","1","","","63,49,57",""
 "minDBH","","","","","","0","1","2.5","5","","this record defines the minimum DBH for this size class.  You can also provide this info in the stem-classes form by double clicking the header"
 "maxDBH","","","","","","1","2.5","5","15","","this record defines the minimum DBH for this size class.  You can also provide this info in the stem-classes form by double clicking the header"
