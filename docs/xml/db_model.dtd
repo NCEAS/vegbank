@@ -17,7 +17,7 @@
 <!ELEMENT attribute (attName, attModel, attNulls, attType, attKey, attReferences, attListType, attList, attNotes, attDefinition)>
 <!ELEMENT author (#PCDATA)>
 <!ELEMENT contributor (#PCDATA)>
-<!ELEMENT dataModel (title, version, author, institution, contributor, description, date, entity+)>
+<!ELEMENT dataModel (title, version, versionDesc, author, institution, contributor, description, date, entity+)>
 <!ELEMENT date (#PCDATA)>
 <!ELEMENT description EMPTY>
 <!ELEMENT entity (entityName, entitySummary, entityDescription, module, attribute+)>
@@ -28,3 +28,4 @@
 <!ELEMENT module (#PCDATA)>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT version (#PCDATA)>
+<!ELEMENT versionDesc (#PCDATA)>
