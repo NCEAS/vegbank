@@ -99,10 +99,10 @@ CREATE TABLE commClass
     classPublication_ID integer,
     classNotes  text,
 		--below are denormalized by JHH
-		commName varchar(200), -- the name as used in the plots db
-		commCode varchar(200), -- the code if it exists
-		commFramework varchar(200), --nvc, provisional, etc
-		commLevel varchar(200), -- the level in the heiracry
+		commName varchar (200), -- the name as used in the plots db
+		commCode varchar (200), -- the code if it exists
+		commFramework varchar (200), --nvc, provisional, etc
+		commLevel varchar (200), -- the level in the heiracry
     PRIMARY KEY(COMMCLASS_ID)
 );
 
@@ -119,8 +119,8 @@ CREATE TABLE commInterpretation
     COMMCONCEPT_ID integer,
 		--next two added by JHH
 		commcode varchar (34),
-		commname varchar(200),
-    classFit varchar (15),
+		commname varchar (200),
+    classFit varchar (50),
     classConfidence varchar (15),
     commAuthority_ID integer,
     notes text,
@@ -138,7 +138,7 @@ CREATE TABLE coverIndex
 (
     COVERINDEX_ID serial,
     COVERMETHOD_ID integer NOT NULL,
-    coverCode varchar (12) NOT NULL,
+    coverCode varchar (10) NOT NULL,
     upperLimit float,
     lowerLimit float,
     coverPercent float NOT NULL,
@@ -170,7 +170,7 @@ CREATE TABLE definedValue
 (
     DEFINEDVALUE_ID serial,
     USERDEFINED_ID integer NOT NULL,
-    value varchar (10) NOT NULL,
+    value varchar (255) NOT NULL,
     tableRecord_ID integer NOT NULL,
     PRIMARY KEY(DEFINEDVALUE_ID)
 );
@@ -314,27 +314,26 @@ CREATE TABLE observation
     obsStartDate timestamp,
     obsEndDate timestamp,
     dateAccuracy varchar (30),
-    SAMPLEMETHOD_ID integer,
     COVERMETHOD_ID integer NOT NULL,
     STRATUMMETHOD_ID integer NOT NULL,
     stemSizeLimit float,
     methodNarrative text,
     taxonObservationArea float NOT NULL,
     coverDispersion varchar (30) NOT NULL,
-    autoTaxonCover varchar (10) NOT NULL,
+    autoTaxonCover boolean NOT NULL,
     stemObservationArea float,
     stemSampleMethod varchar (30),
     originalData text,
     effortLevel varchar (30),
-    plotValidationLevel varchar (30),
+    plotValidationLevel varchar (60),
     floristicQuality varchar (30),
     bryophyteQuality varchar (30),
     lichenQuality varchar (30),
     observationNarrative text,
     landscapeNarrative text,
-    homogeneity varchar (30),
+    homogeneity varchar (50),
     phenologicAspect varchar (30),
-    representativeness varchar (30),
+    representativeness varchar (100),
     basalArea float,
     hydrologicRegime varchar (30),
     soilMoistureRegime varchar (30),
@@ -352,8 +351,8 @@ CREATE TABLE observation
     percentWater float,
     percentOther float,
     nameOther varchar (30),
-    standMaturity float,
-    successionalStatus varchar (200),
+    standMaturity varchar (50),
+    successionalStatus text,
     treeHt float,
     shrubHt float,
     fieldHt float,
@@ -372,6 +371,8 @@ CREATE TABLE observation
     growthform1Cover float,
     growthform2Cover float,
     growthform3Cover float,
+    SOILTAXON_ID integer,
+    soilTaxonSrc varchar (200),
     notesPublic boolean,
     notesMgt boolean,
     revisions boolean,
@@ -391,7 +392,7 @@ CREATE TABLE party
     givenName varchar (50),
     middleName varchar (50),
     surName varchar (50),
-    organizationName varchar (120),
+    organizationName varchar (100),
     currentName integer,
     contactInstructions varchar (1000),
     owner integer ,
@@ -427,12 +428,11 @@ CREATE TABLE plot
 		PROJECT_ID integer, -- denormalized this so that code will still work JHH 20020122
     CITATION_ID integer,
     PARENT_ID integer,
-    SAMPLEMETHOD_ID integer,
     -- Removed the 'not null' from all lats and longs JHH 20020122
 		realLatitude float,
     realLongitude float,
     locationAccuracy float,
-    confidentialityStatus varchar (20) NOT NULL,
+    confidentialityStatus integer NOT NULL,
     confidentialityReason varchar (200) NOT NULL,
     Latitude float,
     Longitude float,
@@ -441,15 +441,15 @@ CREATE TABLE plot
     authorZone varchar (20),
     authorDatum varchar (20),
     authorLocation varchar (200),
-    locationNarrative varchar (200),
+    locationNarrative text,
     azimuth float,
-    dsgpoly varchar (400),
+    dsgpoly varchar (2000),
     shape varchar (50),
     area float NOT NULL,
-    standSize varchar (10),
-    placementMethod varchar (400),
-    permanence varchar (10),
-    layoutNarative varchar (200),
+    standSize varchar (50),
+    placementMethod varchar (50),
+    permanence boolean,
+    layoutNarative text,
     elevation float,
     elevationAccuracy float,
     elevationRange float,
@@ -462,11 +462,9 @@ CREATE TABLE plot
     topoPosition varchar (50),
     landform varchar (50),
     geology varchar (50),
-    soilTaxon varchar (50),
-    soilTaxonSource varchar (20),
-    notesPublic varchar (10),
-    notesMgt varchar (10),
-    revisions varchar (10),
+    notesPublic boolean,
+    notesMgt boolean,
+    revisions boolean,
 		-- These are added by JHH 20020122
 		state varchar (55),
 		country varchar (100),
@@ -490,8 +488,8 @@ CREATE TABLE projectContributor
     PROJECT_ID integer NOT NULL,
     PARTY_ID integer NOT NULL,
     ROLE_ID integer ,
-		surname varchar(50),
-		role varchar(50),
+		surname varchar (50),
+		role varchar (50),
     PRIMARY KEY(PROJECTCONTRIBUTOR_ID)
 );
 
@@ -531,33 +529,6 @@ CREATE TABLE revision
 );
 
 -----------------------------------------------------------------------------
--- sampleMethod
------------------------------------------------------------------------------
-drop sequence sampleMethod_SAMPLEMETHOD_ID_seq;
-drop table sampleMethod;
-
-CREATE TABLE sampleMethod
-(
-    SAMPLEMETHOD_ID serial,
-    sampleMethodName varchar (22) NOT NULL,
-    sampleMethodDescription varchar (200),
-    CITATION_ID integer,
-    shape varchar (22),
-    area float,
-    areaAccuracy integer,
-    dsgpoly varchar (200),
-    permanent varchar (10),
-    taxonInferenceArea float,
-    stemInferenceArea float,
-    subplotDispersion varchar (22),
-    COVERMETHOD_ID integer,
-    STRATUMMETHOD_ID integer,
-    autoTaxonCover varchar (10) NOT NULL,
-    stemSampleMethod varchar (22),
-    PRIMARY KEY(SAMPLEMETHOD_ID)
-);
-
------------------------------------------------------------------------------
 -- soilObs
 -----------------------------------------------------------------------------
 drop sequence soilObs_SOILOBS_ID_seq;
@@ -585,12 +556,29 @@ CREATE TABLE soilObs
 );
 
 -----------------------------------------------------------------------------
--- stemSize
+----this table added to SQL 6/18/02 by MTL
+-- soilTaxon
 -----------------------------------------------------------------------------
-drop sequence stemSize_STEMCOUNT_ID_seq;
-drop table stemSize;
+drop sequence soilTaxon_SOILTAXON_ID_seq;
+drop table soilTaxon;
+CREATE TABLE soilTaxon
+(
+    SOILTAXON_ID serial,
+    soilCode varchar (15),
+    soilName varchar (100),
+    soilLevel Integer,
+    SOILPARENT_ID Integer,
+    soilFramework varchar (33),
+    PRIMARY KEY(SOILTAXON_ID)
+);
 
-CREATE TABLE stemSize
+-----------------------------------------------------------------------------
+-- stemCount
+-----------------------------------------------------------------------------
+drop sequence stemCount_STEMCOUNT_ID_seq;
+drop table stemCount;
+
+CREATE TABLE stemCount
 (
     STEMCOUNT_ID serial,
     TAXONOBSERVATION_ID integer NOT NULL,
@@ -631,8 +619,8 @@ CREATE TABLE stratumComposition
     STRATUM_ID integer NOT NULL,
     taxonStratumCover float NOT NULL,
 			--added these next 2 to make the DB readable JHH 20020122
-		cheatstratumname varchar(200),
-		cheatplantname varchar(200),
+		cheatstratumname varchar (200),
+		cheatplantname varchar (200),
     PRIMARY KEY(STRATUMCOMPOSITION_ID)
 );
 
@@ -652,6 +640,22 @@ CREATE TABLE stratumMethod
 );
 
 -----------------------------------------------------------------------------
+-- stratumType
+-----------------------------------------------------------------------------
+drop sequence stratum_STRATUMTYPE_ID_seq;
+drop table stratumType;
+
+CREATE TABLE stratumType
+(
+	STRATUMTYPE_ID serial,
+	STRATUMMETHOD_ID integer NOT NULL,
+	stratumIndex varchar (10),
+	stratumName  varchar (30),
+	stratumDescription text,
+	PRIMARY KEY(STRATUMTYPE_ID)
+);
+
+-----------------------------------------------------------------------------
 -- stratum
 -----------------------------------------------------------------------------
 drop sequence stratum_STRATUM_ID_seq;
@@ -661,12 +665,13 @@ CREATE TABLE stratum
 (
     STRATUM_ID serial,
     OBSERVATION_ID integer NOT NULL,
+    STRATUMTYPE_ID integer NOT NULL,
     STRATUMMETHOD_ID integer,
     stratumName varchar (30),
     stratumHeight float,
     stratumBase float,
     stratumCover float,
-    stratumMethodDescription varchar (200),
+    stratumDescription varchar (200),
     PRIMARY KEY(STRATUM_ID)
 );
 
@@ -714,7 +719,7 @@ CREATE TABLE taxonObservation
     taxonBasalArea float,
     taxonInferenceArea float,
 		--added this tom make the DB readable JHH 20020122
-		cheatplantname varchar(200),
+		cheatplantname varchar (200),
     PRIMARY KEY(TAXONOBSERVATION_ID)
 );
 
@@ -934,16 +939,17 @@ ALTER TABLE observation
     REFERENCES project (PROJECT_ID);
 
 ALTER TABLE observation
-    ADD CONSTRAINT SAMPLEMETHOD_ID FOREIGN KEY (SAMPLEMETHOD_ID)
-    REFERENCES sampleMethod (SAMPLEMETHOD_ID);
-
-ALTER TABLE observation
     ADD CONSTRAINT COVERMETHOD_ID FOREIGN KEY (COVERMETHOD_ID)
     REFERENCES coverMethod (COVERMETHOD_ID);
 
 ALTER TABLE observation
     ADD CONSTRAINT STRATUMMETHOD_ID FOREIGN KEY (STRATUMMETHOD_ID)
     REFERENCES stratumMethod (STRATUMMETHOD_ID);
+
+----this constraint added to SQL 6/18/02 by MTL
+ALTER TABLE observation
+    ADD CONSTRAINT SOILTAXON_ID FOREIGN KEY (SOILTAXON_ID)
+    REFERENCES soilTaxon (SOILTAXON_ID);
 
 ----------------------------------------------------------------------------
 -- observation
@@ -981,14 +987,6 @@ ALTER TABLE plot
     ADD CONSTRAINT PARENT_ID FOREIGN KEY (PARENT_ID)
     REFERENCES plot (PLOT_ID);
 
-ALTER TABLE plot
-    ADD CONSTRAINT SAMPLEMETHOD_ID FOREIGN KEY (SAMPLEMETHOD_ID)
-    REFERENCES sampleMethod (SAMPLEMETHOD_ID);
-
---ALTER TABLE plot
---    ADD CONSTRAINT soilTaxon FOREIGN KEY (soilTaxon)
---    REFERENCES n/a (null);
-
 ----------------------------------------------------------------------------
 -- plot
 ----------------------------------------------------------------------------
@@ -1021,22 +1019,6 @@ ALTER TABLE revision
 -- revision
 ----------------------------------------------------------------------------
 
-ALTER TABLE sampleMethod
-    ADD CONSTRAINT CITATION_ID FOREIGN KEY (CITATION_ID)
-    REFERENCES citation (CITATION_ID);
-
-ALTER TABLE sampleMethod
-    ADD CONSTRAINT COVERMETHOD_ID FOREIGN KEY (COVERMETHOD_ID)
-    REFERENCES coverMethod (COVERMETHOD_ID);
-
-ALTER TABLE sampleMethod
-    ADD CONSTRAINT STRATUMMETHOD_ID FOREIGN KEY (STRATUMMETHOD_ID)
-    REFERENCES stratumMethod (STRATUMMETHOD_ID);
-
-----------------------------------------------------------------------------
--- sampleMethod
-----------------------------------------------------------------------------
-
 ALTER TABLE soilObs
     ADD CONSTRAINT OBSERVATION_ID FOREIGN KEY (OBSERVATION_ID)
     REFERENCES observation (OBSERVATION_ID);
@@ -1045,17 +1027,26 @@ ALTER TABLE soilObs
 -- soilObs
 ----------------------------------------------------------------------------
 
-ALTER TABLE stemSize
+----this constraint added to SQL 6/18/02 by MTL
+ALTER TABLE soilTaxon
+    ADD CONSTRAINT SOILPARENT_ID FOREIGN KEY (SOILPARENT_ID)
+    REFERENCES soilTaxon (SOILTAXON_ID);
+
+----------------------------------------------------------------------------
+-- observation
+----------------------------------------------------------------------------
+
+ALTER TABLE stemCount
     ADD CONSTRAINT TAXONOBSERVATION_ID FOREIGN KEY (TAXONOBSERVATION_ID)
     REFERENCES taxonObservation (TAXONOBSERVATION_ID);
 
 ----------------------------------------------------------------------------
--- stemSize
+-- stemCount
 ----------------------------------------------------------------------------
 
 ALTER TABLE stemLocation
     ADD CONSTRAINT STEMCOUNT_ID FOREIGN KEY (STEMCOUNT_ID)
-    REFERENCES stemSize (STEMSIZE_ID);
+    REFERENCES stemCount (STEMCOUNT_ID);
 
 ----------------------------------------------------------------------------
 -- stemLocation
@@ -1081,6 +1072,14 @@ ALTER TABLE stratumMethod
 -- stratumMethod
 ----------------------------------------------------------------------------
 
+ALTER TABLE stratumType
+    ADD CONSTRAINT STRATUMMETHOD_ID FOREIGN KEY (STRATUMMETHOD_ID)
+    REFERENCES stratumMethod (STRATUMMETHOD_ID);
+
+----------------------------------------------------------------------------
+-- stratumType
+----------------------------------------------------------------------------
+
 ALTER TABLE stratum
     ADD CONSTRAINT OBSERVATION_ID FOREIGN KEY (OBSERVATION_ID)
     REFERENCES observation (OBSERVATION_ID);
@@ -1089,6 +1088,10 @@ ALTER TABLE stratum
     ADD CONSTRAINT STRATUMMETHOD_ID FOREIGN KEY (STRATUMMETHOD_ID)
     REFERENCES stratumMethod (STRATUMMETHOD_ID);
 
+ALTER TABLE stratum
+    ADD CONSTRAINT STRATUMTYPE_ID FOREIGN KEY (STRATUMTYPE_ID)
+    REFERENCES stratumType (STRATUMTYPE_ID);
+    
 ----------------------------------------------------------------------------
 -- stratum
 ----------------------------------------------------------------------------

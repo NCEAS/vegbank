@@ -14,9 +14,9 @@ CREATE TABLE commUsage
     ceglCode varchar (200),
     usageStart timestamp ,
     usageStop timestamp,
-    commNameStatus varchar (22) ,
+    commNameStatus varchar (20) ,
     COMMPARTY_ID integer ,
-    classSystem varchar (22),
+    classSystem varchar (20),
     PRIMARY KEY(COMMUSAGE_ID)
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE commStatus
     COMMSTATUS_ID serial,
     COMMCONCEPT_ID integer NOT NULL,
     COMMREFERENCE_ID integer,
-    commConceptStatus varchar (22) NOT NULL,
+    commConceptStatus varchar (20) NOT NULL,
     commParent integer, -- the concept id for the parent
     startDate timestamp NOT NULL,
     stopDate timestamp,
@@ -60,7 +60,7 @@ CREATE TABLE commReference
     tableCited varchar (20),
     ISBN varchar (20),
     ISSN varchar (20),
-    commDescription varchar (1000),
+    commDescription text,
     PRIMARY KEY(COMMREFERENCE_ID)
 );
 
@@ -74,7 +74,7 @@ CREATE TABLE commName
 (
     COMMNAME_ID serial,
     commName varchar (500) NOT NULL,
-    COMMREFERENCE_ID integer NOT NULL,
+    COMMREFERENCE_ID integer,
     dateEntered timestamp,
     PRIMARY KEY(COMMNAME_ID)
 );
@@ -104,7 +104,7 @@ CREATE TABLE commCorrelation
     COMMCORRELATION_ID serial,
     COMMSTATUS_ID integer,
     COMMCONCEPT_ID integer,
-    commConvergence varchar (22),
+    commConvergence varchar (20),
     correlationStart timestamp,
     correlationStop timestamp,
     PRIMARY KEY(COMMCORRELATION_ID)
@@ -121,8 +121,8 @@ CREATE TABLE commConcept
     COMMCONCEPT_ID serial,
     COMMNAME_ID integer NOT NULL,
     COMMREFERENCE_ID integer,
-    ceglCode varchar (200),
-    commLevel varchar (22),
+    ceglCode varchar (20),
+    commLevel varchar (50),
     commParent integer,
 		conceptDescription varchar (500),
     PRIMARY KEY(COMMCONCEPT_ID)
