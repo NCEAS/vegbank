@@ -138,14 +138,14 @@ blnDOESNOTHING As Boolean, strFromTable As String)
   'delete any criteria in frame-table before adding new
       DoCmd.RunSQL "Delete * from W_Convert_CSVColNames WHERE formatName = """ _
            & strFormat & """ and tableName = """ & strToTable & """;"
- Dim strFlds As String, inttemp As Integer
+ Dim strFlds As String, intTemp As Integer
  strFlds = getFldsFromTblQry(strFromTable, strDBPath)
  Dim colFlds As New Collection
  Set colFlds = csv_parseCSVstring(strFlds, ",")
- Dim strerr As String
- strerr = "Sorry, couldn't get table headers from database:" & strDBPath & " and table/query:" & strFromTable
+ Dim strErr As String
+ strErr = "Sorry, couldn't get table headers from database:" & strDBPath & " and table/query:" & strFromTable
  If strFlds = "" Then
-   msgBox strerr
+   msgBox strErr
    GoTo exitGetTblHdrs
  End If
  'call function that matches automatically if matched
@@ -170,7 +170,7 @@ blnDOESNOTHING As Boolean, strFromTable As String)
 exitGetTblHdrs:
   Exit Function
 errGettingtableHdrs:
-  msgBox strerr & Chr(13) & Err.Description
+  msgBox strErr & Chr(13) & Err.Description
   Resume exitGetTblHdrs
 End Function
 
@@ -179,20 +179,20 @@ Public Function attemptAutoMatchFieldsToTbl(strFormat As String, strToTable As S
   'reports TRUE if succeeds, false if error
   'blnSkipNoMatch is TRUE if fields shouldn't be written to file if they aren't matched exactly (simpleImport) and false (regular import)
  On Error GoTo errThis
-  Dim inttemp As Integer
-   For inttemp = 1 To colFlds.Count
+  Dim intTemp As Integer
+   For intTemp = 1 To colFlds.Count
     'send this to table for user to specify new name:
       'try to see if this one matches:
              Dim blnInsertVBFieldMatch As Boolean
              blnInsertVBFieldMatch = False 'default
-             If fieldExistOnTbl(colFlds(inttemp), strToTable) Then
+             If fieldExistOnTbl(colFlds(intTemp), strToTable) Then
                blnInsertVBFieldMatch = True
              End If
              If blnInsertVBFieldMatch Or Not blnSkipNoMatch Then 'only write if matches or not told to skip
                DoCmd.RunSQL "INSERT INTO W_Convert_CSVColNames (formatName, tableName, UserFieldName, VegBankFieldName, RowForFormatTbl) " _
-                & " SELECT """ & strFormat & """,""" & strToTable & """,""" & colFlds(inttemp) & """," & IIf(blnInsertVBFieldMatch, """" & colFlds(inttemp) & """", "null") & "," & 1 & ";"
+                & " SELECT """ & strFormat & """,""" & strToTable & """,""" & colFlds(intTemp) & """," & IIf(blnInsertVBFieldMatch, """" & colFlds(intTemp) & """", "null") & "," & 1 & ";"
              End If
-  Next inttemp
+  Next intTemp
 attemptAutoMatchFieldsToTbl = True
 exitthis:
 Exit Function
@@ -515,7 +515,7 @@ Public Function validateFldToFld(strToTbl As String, strToFld As String, strFrom
   Dim lngType As Long, lngSize As Long, strTemp As String, strRet As String
   lngType = getFieldTypeSize(strToTbl, strToFld, lngSize)
   strRet = ""
-  Dim strSQL As String, strerr As String
+  Dim strSQL As String, strErr As String
   If strConstant <> "" Then
     'change SQL to use
     strSQL = """" & strConstant & """"
@@ -529,33 +529,33 @@ Public Function validateFldToFld(strToTbl As String, strToFld As String, strFrom
   End If
   
   Dim strCrit As String
-  strerr = "This concerns data that you are trying to add to field: " & strToFld & vbCR_2()
+  strErr = "This concerns data that you are trying to add to field: " & strToFld & vbCR_2()
   Select Case lngType
               Case 1
                 strTemp = "Yes/No"
                 'check to make sure true or false
                 strCrit = " not (isboolean(" & strFromFld & "))"
-                strerr = strerr & "Boolean fields should be 'yes' or 'no', 'true' or 'false', '-1' (true), or '0' (false)"
+                strErr = strErr & "Boolean fields should be 'yes' or 'no', 'true' or 'false', '-1' (true), or '0' (false)"
               Case 4
                 strTemp = "Long Integer"
                 strCrit = "  not (islongInt(" & strFromFld & "))"
-                strerr = strerr & "Long Integer fields should be numeric, but not fractional and between -2,147,483,648 and 2,147,483,647.  Fractional values will be rounded if you continue."
+                strErr = strErr & "Long Integer fields should be numeric, but not fractional and between -2,147,483,648 and 2,147,483,647.  Fractional values will be rounded if you continue."
               Case 7
                 strTemp = "Double"
                 strCrit = " not (isdbl(" & strFromFld & "))"
-                strerr = strerr & "Double (type) fields should be numeric and : from -1.79769313486231E308 to -4.94065645841247E-324 for negative values and from 4.94065645841247E-324 to 1.79769313486232E308 for positive values. "
+                strErr = strErr & "Double (type) fields should be numeric and : from -1.79769313486231E308 to -4.94065645841247E-324 for negative values and from 4.94065645841247E-324 to 1.79769313486232E308 for positive values. "
               Case 8
                 strTemp = "Date/Time"
                 strCrit = " (not (isdate(" & strFromFld & "))) and (" & strFromFld & " is not null) "
-                strerr = strerr & "Date/Time fields should have month, day, and year.  If only day is omitted, 1 is assumed.  If only year is omitted, this year is assumed.  Settings depend on your system settings.  Generally DD-MMM-YYYY will work, ie 30-MAR-1981.  Time is also allowed, like this: 18-OCT-2003 14:31:03"
+                strErr = strErr & "Date/Time fields should have month, day, and year.  If only day is omitted, 1 is assumed.  If only year is omitted, this year is assumed.  Settings depend on your system settings.  Generally DD-MMM-YYYY will work, ie 30-MAR-1981.  Time is also allowed, like this: 18-OCT-2003 14:31:03"
               Case 10
                 strTemp = "Text"
                 strCrit = "  (len(" & strFromFld & ")>" & lngSize & ")"
-                strerr = strerr & "Text fields have limits on the length of the string allowed.  This field is limited to : " & lngSize & " characters.  The values here are longer than that.  The values will be truncated if you continue to import."
+                strErr = strErr & "Text fields have limits on the length of the string allowed.  This field is limited to : " & lngSize & " characters.  The values here are longer than that.  The values will be truncated if you continue to import."
               Case 11
                 strTemp = "OLE Object"
                 strCrit = "  not (isobject(" & strFromFld & "))"
-                strerr = strerr & "OLE object is the data type, which must be an object.  Sorry, but this has not been tested."
+                strErr = strErr & "OLE object is the data type, which must be an object.  Sorry, but this has not been tested."
               Case 12
                 strTemp = "Memo"
                 'always ok
@@ -564,7 +564,7 @@ Public Function validateFldToFld(strToTbl As String, strToFld As String, strFrom
               Case Else
                 msgBox "Cannot validate this field, not prepared for data type number:" & lngType
                 validateFldToFld = ""
-                strerr = strerr & "the data type : " & lngType & " was not expected.  Please contact vegbank help : help@vegbank.org."
+                strErr = strErr & "the data type : " & lngType & " was not expected.  Please contact vegbank help : help@vegbank.org."
                 Exit Function
   End Select
  ' strSQL = strSQL & " HAVING " & strCrit
@@ -578,7 +578,7 @@ If strConstant <> "" Then
       blnErrors = True
       strRet = "----------------Error Report-----checked at: " & Now() & "----------" & vbCR_2() _
     & "    Data read from constant value you specified:    " & strFromFld & vbCR_2() & "    Error description: " _
-    & strerr & vbCR_2()
+    & strErr & vbCR_2()
       
     End If
   Else 'regular from field
@@ -589,7 +589,7 @@ If strConstant <> "" Then
   blnErrors = True
   strRet = "----------------Error Report-----checked at: " & Now() & "----------" & vbCR_2() _
     & "    Data read from field:" & strFromFld & " in table:" & strFromTbl & vbCR_2() & "    Error description: " _
-    & strerr & vbCR_2() & "----the following values had errors:-------------"
+    & strErr & vbCR_2() & "----the following values had errors:-------------"
   End If
   Do Until .EOF
     strRet = strRet & vbCR_2() & .Fields(0).Value
@@ -954,7 +954,7 @@ End Function
 
 
 
-Public Function reportErr(strerr As String, strErrFile As String)
+Public Function reportErr(strErr As String, strErrFile As String)
   'function opens a text file report and dumps error message into it so that user can copy message or stare at it for a while
   'On Error Resume Next
       Dim fs2 As Object
@@ -966,7 +966,7 @@ Public Function reportErr(strerr As String, strErrFile As String)
   objErrFile.writeLine
   objErrFile.writeLine "Error Log : " & Now()
   objErrFile.writeLine "---------------------------------------------------------------"
-  objErrFile.writeLine strerr
+  objErrFile.writeLine strErr
   Debug.Print "ERRORS written to file"
  ' MsgBox "Errors written to file: " & strErrFile, vbInformation
   
@@ -1260,6 +1260,12 @@ End Function
 Public Function smartImportFile(strFile As String, strToTbl As String, strFromTbl As String)
   'commit any changes to currform
   rereshCurrForm
+  'check that file exists
+  If Dir(strFile) = "" Or Right(strFile, 1) = "\" Then
+    'file doesn't exist
+    msgBox "The file:" & strFile & " does not exist or is invalid.  Please check the file name and try again"
+    GoTo exitthisNoImport
+  End If
   'confirm that they do want to add more data if there is already data in this table:
   Dim strRecs As String
   strRecs = getvalFrmSQL("select count(1) from [" & strToTbl & "]")
@@ -1308,17 +1314,17 @@ Public Function seeIfFileFieldMatch(strTable As String, strFile As String, strMD
      Dim colHdrs As New Collection
      Set colHdrs = getColHdrs(strFile, strMDBFromTable)
      'have headers, see if they match fields in table.
-     Dim inttemp As Integer, blnRep As Boolean
+     Dim intTemp As Integer, blnRep As Boolean
      blnRep = True 'assume true until one is not found
-     For inttemp = 1 To colHdrs.Count
-       If fieldExistOnTbl(colHdrs(inttemp), strTable) Then
+     For intTemp = 1 To colHdrs.Count
+       If fieldExistOnTbl(colHdrs(intTemp), strTable) Then
          'this one is found, continue
        Else
          'not found, blnRep is false
          blnRep = False
          Exit For
        End If
-     Next inttemp
+     Next intTemp
      seeIfFileFieldMatch = blnRep
 
 End Function
@@ -1426,13 +1432,13 @@ Public Function getLastToChar(strTxt As String, strChar As String, intComp As In
   'function takes end of word up to last character and returns all, not including character
   'ie getLastToChar("thisthat.theother",".")="theother"
   'useful for getting extensions, filenames from paths, etc.
-  Dim inttemp As Long
-  For inttemp = 0 To Len(strTxt) - 1
-    If StrComp(Mid(strTxt, Len(strTxt) - inttemp, 1), strChar, intComp) = 0 Then
+  Dim intTemp As Long
+  For intTemp = 0 To Len(strTxt) - 1
+    If StrComp(Mid(strTxt, Len(strTxt) - intTemp, 1), strChar, intComp) = 0 Then
       'stop processing and return what we have:
-      getLastToChar = Right(strTxt, inttemp)
+      getLastToChar = Right(strTxt, intTemp)
       Exit For
     End If
-  Next inttemp
+  Next intTemp
 
 End Function
