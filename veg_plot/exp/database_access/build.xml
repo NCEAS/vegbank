@@ -55,7 +55,11 @@
 	<property name="xmlp" value="${lib}/xalan_1_2_2.jar:${lib}/xerces_1_3_1.jar:" />
 	<property name="jdbc" value="" />
 	<property name="xmlresource" value="./lib/xmlresource.jar" />
-	<property name="cpath" value="${xmlresource}:${xmlp}:${jdbc}:${build}:./"/>
+	<property name="datatranslator" value="./lib/datatranslator.jar" />
+	
+	<property name="cpath" value="${datatranslator}:${xmlresource}:${xmlp}:${jdbc}:${build}:./"/>
+
+	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
 
 </target>
 
@@ -115,6 +119,23 @@
 			basedir="${build}"
 			includes="${build}/ ** "
 		/>
+	</target>
+	
+	<!-- 
+		DISTWEB - this puts the jar file in the correct location for the 
+		servlets to use
+	-->
+	<target name="dist-web" depends="dist">
+		 <echo>
+			copying jar to web server: ${servlet_lib}
+		</echo>
+
+
+		<copyfile src="${lib}/database_access.jar" 
+			filtering="no" 
+			dest="${servlet_lib}/database_access.jar" 
+		/>
+	
 	</target>
 	
 
