@@ -23,6 +23,7 @@
 	<tstamp/>
 	
 	<property name="current" value="./" />
+	<property name="db_prop_file" value="./database.properties" />
 	<property name="build" value="build" />
 	<property name="build_bin" value="${build}/bin" />
 	<property name="build_lib" value="${build}/lib" />
@@ -33,7 +34,8 @@
 	<property name="data" value="./taxaData"/>
 	<property name="src" value="./src"/>
 	<property name="bin" value="./bin"/>
-	<property name="xmlFiles" value="../xmlFiles"/>
+	<property name="sql" value="./sql"/>
+	<property name="xmlFiles" value="./xmlfiles"/>
 	<filter token="dist" value="dist"/>
 	<property name="toolsdir" value="/usr/local/devtools" />
 	<property name="localToolsDir" value="/home/computer/harris/tools" />	
@@ -53,28 +55,49 @@
 	<mkdir dir="${build_src}" />
 	<mkdir dir="${build_lib}" />
 	<mkdir dir="${build_data}" />
+
+
 	<copydir src="${src}" 
 		dest="${build_src}" 
 		filtering="yes"
-		includes="**.java"
+		includes="**.java "
 		excludes="**/CVS*"
 	/>
+	<copydir src="${xmlFiles}"
+	  dest="${build_src}"
+		filtering="yes"
+		includes="**.dtd **.xsl "
+		excludes="**/CVS*"
+	/>
+										
+	<copy file="${db_prop_file}" 
+		todir="${build_src}"/>
+	
+	
 	<copydir src="${bin}"
 		dest="${build_bin}"
 		filtering="yes"
 		includes="**"	
 	/>
 	<chmod dir="${build_bin}"
-	perm="a+x"
-	includes="**/*.sh"
+		perm="a+x"
+		includes="**/*.sh"
 	/>
 						
 	<copydir src="${data}"
 		dest="${build_data}"
 		filtering="yes"
-		includes="plantlst1996.bin"
+		includes="plantlst1996.bin plantlst2000.bin "
 	/>
-	
+
+<copydir src="${sql}"
+	dest="${build_lib}"
+	filtering="yes"
+	includes="createPlantNameDBed.sql denormalize.sql"
+/>
+							
+
+
 </target>	
 
 
@@ -83,12 +106,10 @@
 <target name="compile" depends="prepare">
 	<javac srcdir="${build_src}" 
 		classpath="${cpath}"
-		includes="USDAPlantsToXml.java" 
+		includes="USDAPlantsToXml.java USDAPlantsLoader.java USDAPlantsLoader2000.java" 
 		destdir="${build_src}"
 	/>
 </target>	
-
-
 
 	
 <target name="dist" depends="compile">
@@ -100,7 +121,7 @@
 
 	<jar jarfile ="${build_lib}/PlantTaxonomy.jar"
 		basedir="${build_src}"
-		includes="${build_src}/ **.class "
+		includes="${build_src}/ **.class **.dtd **.xsl  **.properties"
 	/>
 </target>		
 
