@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: anderson $'
-  *     '$Date: 2004-06-29 07:17:11 $'
-  *     '$Revision: 1.47 $'
+  *     '$Date: 2004-07-23 01:05:11 $'
+  *     '$Revision: 1.48 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -47,7 +47,8 @@
 
     <property name="model.generated.flag" value="${build.java.src.dir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG" />
     <property name="vegbankVersion" value="1.0.2" />
-    <property name="vegbankSchemaName" value="vegbank-data-ver${vegbankVersion}.xsd" />
+
+
   </target>
 	
   <!-- ================================================================= -->
@@ -67,9 +68,14 @@
       <not><equals arg1="${build.context}" arg2="vegbank"/></not>
     </condition>
 
-    <property file="${build.props.file}"/>
     <echo>Loading props file: ${build.props.file}</echo>
+    <property file="${build.props.file}"/>
     <!-- End conditional logic for picking up correct properties file -->
+
+ 	<condition property="vegbankSchemaName" value="vegbank-data-ver${vegbankVersion}.xsd">
+      <not> <isset property="vegbankSchemaName"/> </not>
+    </condition>
+
 
     <echo>init webapp '${build.context}'</echo>
     <property name="web.context" location="${env.TOMCAT_HOME}/webapps/${build.context}" />
@@ -77,6 +83,12 @@
     <property name="web.lib.dir" location="${web.inf}/lib" /> 
     <property name="web.classes.dir" location="${web.inf}/classes" /> 
    
+    <!-- set the apache doc root -->
+    <condition property="apache.document.root" value="/usr/www/${build.context}/htdocs">
+      <not>
+        <isset property="apache.document.root"/>
+      </not>
+    </condition>
 
     <!--
       * The following filters expect the database connection properties
@@ -92,11 +104,11 @@
     <filter token="databaseDriverClass" value="${databaseDriverClass}" />
     <filter token="databaseConnectString" value="${databaseConnectString}"/>
     <filter token="databaseName" value="${databaseName}" />
-    <filter token="vegbankSchemaName" value="${vegbankSchemaName}" />
     <filter token="vegbankVersion" value="${vegbankVersion}" />
     <filter token="vegbank.home.dir" value="${vegbank.home.dir}/" />
     <filter token="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
-    <filter token="schemaLocation" value="${vegbank.home.dir}/lib"/>
+	<filter token="schemaLocation" value="${apache.document.root}/vegdocs/xml/"/>
+    <filter token="vegbankSchemaName" value="${vegbankSchemaName}" />
     <!-- End filters created from build.${context}.properties -->
 
     <!-- Copied these straight from the veg_plot build.xml, are they relevant ? -->
@@ -488,7 +500,16 @@
 	<include name="**/*xsl"/>
       </fileset>
     </copy>
+
     <!-- Copy files that need filtering -->
+	<!-- First clean out the props -->
+	<delete>
+      <fileset dir="${build.java.src.dir}">
+		<include name="**/*properties"/>
+      </fileset>
+	</delete>
+
+    <echo>Copying .properties to ${build.java.src.dir} - Schema name: ${vegbankSchemaName}</echo>
     <copy todir="${build.java.src.dir}" filtering="true">
       <fileset dir="${java.src.dir}">
 	<include name="**/*properties"/>
