@@ -28,8 +28,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2004-02-29 22:34:55 $'
- * '$Revision: 1.29 $'
+ * '$Date: 2004-03-05 22:35:46 $'
+ * '$Revision: 1.30 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -595,7 +595,7 @@ public class Utility
 	{
 		HashMap parsedAC = new HashMap();
 		// method
-		LogUtility.log("Utility: accessionCode = " + accessionCode, LogUtility.TRACE);
+		LogUtility.log("Utility: accessionCode = " + accessionCode, LogUtility.DEBUG);
 		Pattern pattern = Pattern.compile("([^\\.]*)\\.([^\\.]*)\\.([^\\.]*)\\.{0,1}([^\\.]*)");
 		Matcher m = pattern.matcher(accessionCode);
 		if ( m.find() )
