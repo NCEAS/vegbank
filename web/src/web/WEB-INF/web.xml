@@ -32,6 +32,17 @@
               <!-- <load-on-startup>5</load-on-startup> -->
             </servlet>
             
+            <servlet>
+              <servlet-name>ImageServlet</servlet-name>
+              <description>Returns image content</description>
+              <servlet-class>org.vegbank.servlet.util.ImageServlet</servlet-class>
+			  <init-param>
+			  	<param-name>base_img_dir</param-name>
+				<param-value>/images/random</param-value>
+			  </init-param>
+              <!-- <load-on-startup>5</load-on-startup> -->
+            </servlet>
+            
 
             <servlet>
               <servlet-name>viewData</servlet-name>
@@ -111,6 +122,11 @@
             <servlet-mapping>
               <servlet-name>DataSubmitServlet</servlet-name>
               <url-pattern>/servlet/DataSubmitServlet</url-pattern>
+            </servlet-mapping>  
+            
+            <servlet-mapping>
+              <servlet-name>ImageServlet</servlet-name>
+              <url-pattern>/servlet/img</url-pattern>
             </servlet-mapping>  
             
             <servlet-mapping>
