@@ -4,7 +4,7 @@
     If you dont want to limit the xml this way, then target=allfields-->
   <target name="init">
     <echo>
-  	Targets: {init} allfields logical implementation clean-local-html clean-dest-html  dist-closedlist-tokenfile  dist-dataxml **dictionary2html **distdatadic **dd-index **dd-guide
+  	Targets: {init} allfields logical implementation clean-local-html clean-dest-html  dist-closedlist-tokenfile  dist-dataxml **dictionary2html  **dd-index **dd-guide
   	  ** indicates targets that are referenced automatically by selected one of the first three targets
   </echo>
     <condition property="webapp" value="vegbank">
@@ -26,7 +26,7 @@
     <property name="guide-data" value="dd-guide.xml"/>
     <!-- db dic web server -->
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
-    <property name="dictionary_server" value="${tomcat.home.dir}/webapps/${webapp}/dbdictionary/"/>
+
     <property name="style_server" value="${tomcat.home.dir}/webapps/${webapp}/includes/"/>
     <property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
     <property name="vegdocs.dir" value="/vegdocs"/>
@@ -84,16 +84,12 @@
     <style out="${htmlPrefix}-guide.html" in="${guide-data}" extension=".html" style="${style-guide}" force="true">
       <param name="htmlPrefix" expression="${htmlPrefix}"/>
     </style>
-    <antcall target="distdatadic"/>
+    
   </target>
   <!-- distributes html -->
   <target name="distdatadic" depends="init">
     <echo>Copying new files to server, filtering tokens</echo>
-    <copy todir="${dictionary_server}" filtering="yes">
-      <fileset dir=".">
-        <include name="${htmlPrefix}*.html"/>
-      </fileset>
-    </copy>
+    <ant dir="../../web" target="dist-dictionary" />
   </target>
   <target name="clean-local-html" depends="init">
     <delete>
@@ -103,11 +99,7 @@
     </delete>
   </target>
   <target name="clean-dest-html" depends="init">
-    <delete>
-      <fileset dir="${dictionary_server}">
-        <include name="${htmlPrefix}*.html"/>
-      </fileset>
-    </delete>
+    
   </target>
   <target name="dist-closedlist-tokenfile" depends="init">
     <style out="${style_server}/closedlist-tokens.properties" in="${origData}" extension=".properties" style="closedList_forms_options.xsl" force="true"/>

@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-03-15 23:48:29 $'
-* '$Revision: 1.152 $'
+* '$Date: 2005-03-16 01:34:52 $'
+* '$Revision: 1.153 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -96,7 +96,7 @@
     <property name="email_templates_src" value="./email_templates"/>
     <property name="general_src" value="./general"/>
     <property name="design_src" value="./design"/>
-    <property name="dictionary_src" value="./dbdictionary"/>
+    <property name="dictionary_src" value="../docs/xml/"/>
     <property name="news_src" value="./news"/>
     <property name="help_src" value="./help"/>
     <property name="manual_src" value="./help/manual"/>
@@ -460,10 +460,20 @@
   <!--
 	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
 -->
-  <target name="dictionary" depends="tokenfiles,getContextName" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
+  <target name="dictionary" depends="init" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
     <!-- calls ant to run a different ant target which creates the vegbank dictionary based on logical fields only -->
     <echo>calling ../docs/xml with webapp '${webapp}'</echo>
+   <!-- prepare the files to distribute -->
     <ant dir="../docs/xml" target="logical"/>
+       <!-- distribute the files -->
+       <antcall target="dist-dictionary" />
+       </target>
+<target name="dist-dictionary" depends="tokenfiles,getContextName">
+      <copy todir="${dictionary_server}" filtering="yes">
+      <fileset dir="${dictionary_src}">
+        <include name="dd*.html"/>
+      </fileset>
+    </copy>
     
   </target>
   <target name="dataxml" depends="tokenfiles" description="=&gt; Dist. the documentation files and xml files in ../docs/xml/dataxml to server ">
