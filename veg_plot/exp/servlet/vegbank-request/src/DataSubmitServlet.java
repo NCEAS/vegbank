@@ -160,15 +160,18 @@ public class DataSubmitServlet extends HttpServlet
 			{
 				//take the file that was just deposited via the data exchange servlet
 				//and pass it onto the winnt machine
+				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 				boolean sendResults = rmiClient.putMDBFile(plotsArchiveFile, plotsArchiveType);
 				System.out.println("DataSubmitServlet > RMI file send results: " + sendResults);
 				
 				//validate that the plot archive is real
+				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 				boolean fileValidityResults = rmiClient.isMDBFileValid();
 				System.out.println("DataSubmitServlet > file validity at RMI server: " + fileValidityResults);
 				
 				// get the name of the plots and update the selection form and redircet
 				// the browser there
+				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 				Vector plots = rmiClient.getPlotNames();
 				// prepare the plots element
 				StringBuffer sb2 = new StringBuffer();
