@@ -8,8 +8,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2001-11-01 17:44:42 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2001-11-02 19:14:53 $'
+ *     '$Revision: 1.2 $'
  *
  *
  */
@@ -273,7 +273,7 @@ try {
 	}
 	if ( plotObservationParams.get("stratumName") != null)
 	{
-		stratumCoverElements=(Vector)plotObservationParams.get("stratumName"); 
+		stratumCoverElements=(Vector)plotObservationParams.get("stratumCover"); 
 	}
 
 	//the species specific attributes -- into vectors
