@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-14 09:44:06 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2004-12-13 06:42:59 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -149,8 +149,8 @@ public class GenericDispatcherAction extends Action
 					}
 					request.setAttribute("jsp", jsp);
 
-					log.debug("SQL, BeanName, WHERE, wparam, jsp: " +
-							entity + ", " + beanName + ", " + whereKey + ", (" + params + "), " + jsp);
+					//log.debug("SQL, BeanName, WHERE, wparam, jsp: " +
+					//		entity + ", " + beanName + ", " + whereKey + ", (" + params + "), " + jsp);
 
 
 				} else if (view.equals("dd")) {
@@ -212,9 +212,8 @@ public class GenericDispatcherAction extends Action
 
 					if (!Utility.isStringNullOrEmpty(params)) {
 						if (params.indexOf(";") == -1) {
-							//
-							// add the comma separated list as one wparam
-							//
+							// not an aggregate
+							// add the delimited list as one wparam
 							String wparamList = "";
 
 							boolean first = true;
@@ -228,6 +227,7 @@ public class GenericDispatcherAction extends Action
 								wparamList += wparam[i];
 							}
 							urlParams.put("wparam", wparamList);
+							log.debug("PMAPMAPMA: wparam is being set to: " + wparamList);
 
 						} else {
 							// add the whole array
@@ -386,46 +386,29 @@ public class GenericDispatcherAction extends Action
 			return null;
 		}
 
-		StringTokenizer st = new StringTokenizer(delimitedParams, ",;");
-		String[] arr = new String[st.countTokens()];
+		StringTokenizer st = new StringTokenizer(delimitedParams, ";");
 		String param;
-		boolean first = true;
-		boolean numeric = true;
 		int i=0;
+		int numTokens = st.countTokens();
+		String[] arr = new String[numTokens];
 
-		while (st.hasMoreTokens()) { 
+		while (st.hasMoreTokens()) {
 			param = st.nextToken(); 
-
-			if (first) {
-				first = false;
-				numeric = Utility.isNumeric(param);
-				if (!numeric) { 
-					// add the initial '
-					//arr[i] = "'"; 
-				}
-
-			} else {
-				//log.debug("Adding comma at iteration #" + i);
-				//arr[i] = ",";
-			}
-
-
-			if (numeric) {
-				// a numeric key
-				arr[i] = param;
-
-			} else {
-				// an accession code
-				if (param.indexOf(";") == -1) {
-					arr[i] = "'" + param.toLowerCase() + "'";
-				}
-			}
-
-			i++;
+			arr[i++] = param.toLowerCase();
 		}
-		
-		// add the final '
-		//if (!numeric && i>0) { arr[i-1] += "'"; }
+
+		/*
+		if (numTokens > 1) {
+			while (st.hasMoreTokens()) {
+				param = st.nextToken(); 
+				//arr[i] = "'" + param.toLowerCase() + "'";
+				arr[i] = param.toLowerCase();
+				i++;
+			}
+		} else {
+			arr[0] = delimitedParams.toLowerCase();
+		}
+		*/
 
 		return arr;
 	}
