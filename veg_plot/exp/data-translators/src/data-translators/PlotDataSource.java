@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-02-03 18:58:29 $'
- * 	'$Revision: 1.8 $'
+ *  '$Date: 2002-02-03 19:24:31 $'
+ * 	'$Revision: 1.9 $'
  */
 public class PlotDataSource 
 {
@@ -209,8 +209,22 @@ public class PlotDataSource
 		v  = ((PlotDataSourceInterface)pluginObj).getUniqueStrataNames(plotName);
 		return(v);
 	}
-	
-	
+
+	/**
+	 * method that will return a vector containg the unique plant names
+	 * stored in a plot data source associated with a given plot
+	 * 
+	 * @param plot -- the identifier of the plot
+	 * @return plantNameVector --the vector containg the names of the distinct 
+	 *  plant names
+	 */
+	public Vector getPlantNames(String plotName)
+	{
+		Vector v = new Vector();	
+		v  = ((PlotDataSourceInterface)pluginObj).getPlantTaxaNames(plotName);
+		return(v);
+	}
+
 	//retuns the person's salutation based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorSalutation(String contributorWholeName)
