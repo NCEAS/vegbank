@@ -23,8 +23,8 @@ import servlet.authentication.UserDatabaseAccess;
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-09-12 00:51:28 $'
- *  '$Revision: 1.11 $'
+ *  '$Date: 2002-11-26 22:34:10 $'
+ *  '$Revision: 1.12 $'
  *
  *  @version
  *  @author
@@ -130,7 +130,7 @@ public class AuthenticationServlet extends HttpServlet
 						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
 						response.addCookie(m.registeredCookie);
 						//send the user to the correct page
-						Thread.currentThread().sleep(100);
+						Thread.currentThread().sleep(1100);
 						String redirect = "http://"+this.serverUrl+"/framework/servlet/usermanagement?action=options";
 						System.out.println("AuthentictionServlet > redirecting to: " + redirect);
 						response.sendRedirect(redirect);
@@ -555,6 +555,7 @@ public class AuthenticationServlet extends HttpServlet
 			cookie = new Cookie(cookieName, cookieValue);
 			cookie.setMaxAge(3600);  //set cookie for an hour
 			registeredCookie=cookie;
+		  System.out.println("AuthenticationServlet > using cookie name : " + cookieName + " val: " + cookieValue );
 		}
 		else
 		{

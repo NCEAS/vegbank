@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-06-24 15:32:35 $'
- * '$Revision: 1.11 $'
+ *     '$Date: 2002-11-26 22:34:10 $'
+ * '$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import servlet.authentication.UserDatabaseAccess;
 
 public class UserManagementServlet extends HttpServlet 
 {
-	
+	private String vegBankAdmin="peet@unc.edu";
 	private UserDatabaseAccess userdb;
 	private ServletUtility util = new ServletUtility();
   private GetURL gurl = new GetURL();
@@ -94,7 +94,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 				System.out.println("UserManagementServlet > in params: " + params  );
 				
 				//the cookie value is the same as the user name and email addy
-				cookieValue = getCookieValue(req);
+				cookieValue = this.getCookieValue(req);
 				String action = getAction( params );
 				if (action == null)
 				{
@@ -112,10 +112,19 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						//String outFile ="/tmp/actions_dev.html";
 						String token = "user";
 						String value = cookieValue;
-						util.filterTokenFile(actionFile, outFile, token, value);
-						//print the outfile to the browser
-						String s = util.fileToString(outFile);
-						out.println(s);
+						//util.filterTokenFile(actionFile, outFile, token, value);
+						// if the value or token are null then send an error
+            if ( value == null || token == null )
+            {
+              System.out.println("UserManagementServlet > error the cookie value or token : " +token+" "+value);
+            }
+            else
+            {
+						  util.filterTokenFile(actionFile, outFile, token, value);
+              //print the outfile to the browser
+						  String s = util.fileToString(outFile);
+						  out.println(s);
+            }
 					}
 					//SHOW USER FILES 
 					else if ( action.equals("showfiles") )
@@ -148,6 +157,12 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 					{
 						this.handleSettingsModification(req, res);
 					}
+					// GET THE USER'S PERMISSION LEVEL
+					else if ( action.equals("getpermissionlevel") )
+					{
+						this.handlePermissionLevelRequest(req, res);
+					}
+					
 					else
 					{
 						System.out.println("UserManagementServlet > unrecognized action: " + action);
@@ -161,6 +176,38 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 			}
 		}
 	
+	/**
+	 * method that returns the integer value between 1-5 of the user's 
+	 * permission level based on the name that is passed 
+	 *
+	 * 
+	 * @param req -- the http request object
+	 * @param res -- the http response object
+	 */
+	 private void handlePermissionLevelRequest(HttpServletRequest req, HttpServletResponse res)
+	 {
+		 try
+		 {
+			 PrintWriter out = res.getWriter();
+			 Hashtable params = util.parameterHash(req);
+			 if ( params.containsKey("user") )
+			 {
+				 String email = (String)params.get("user");
+				 System.out.println("UserManagementServlet > looking up the permission level for: " + email);
+				 userdb = new UserDatabaseAccess();
+				 int level = userdb.getUserPermissionLevel(email);
+				 out.println(level);
+				 out.close();
+			 } 
+		 }
+		 catch(Exception e)
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+	 }
+	 
+	 
 	/**
 	 * method that handles the modification settings there are two 
 	 * sub-proccesses enveloped in this method:
@@ -283,9 +330,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 				 System.out.println("UserManagementServlet > missing require attributes");
 				 // assume that they are not logged in and send them there
 				res.sendRedirect("/forms/redirection_template.html");
-
 			 }
-			 
 		 }
 		 catch(Exception e)
 		 {
@@ -361,6 +406,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 			 String vegAnalysisDoc = (String)params.get("vegAnalysisDoc");
 			 String usnvcExpDoc = (String)params.get("usnvcExpDoc");
 			 String vegbankExpDoc = (String)params.get("vegbankExpDoc");
+			 String useVegbank = (String)params.get("useVegbank");
 			 String plotdbDoc = (String)params.get("plotdbDoc");
 			 String nvcExpRegionA = (String)params.get("nvcExpRegionA");
 			 String nvcExpVegA = (String)params.get("nvcExpVegA");
@@ -378,8 +424,10 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 			 {
 			 	// check that the required paramteres are upto snuff
 				if ( surName.length() > 2 && givenName.length() > 2 && phoneNumber.length() > 2  && currentCertLevel.length() > 0 
-					&& degreeInst.length() > 2  && currentInst.length() > 2  && esaPos.length() > 2  && vegSamplingDoc.length() > 2 
-					&&  vegAnalysisDoc.length() > 2  && submittedEmail.length() > 2  )
+					&& degreeInst.length() > 2  && currentInst.length() > 2  && esaPos.length() > 0  && vegSamplingDoc.length() > 2 
+					&&  vegAnalysisDoc.length() > 2  && submittedEmail.length() > 2 
+					&& vegSamplingDoc.length() > 2 && vegAnalysisDoc.length() > 2  && usnvcExpDoc.length() >2 
+					&&  vegbankExpDoc.length() > 2 &&  useVegbank.length() > 2 && plotdbDoc.length() > 2)
 					{
 						System.out.println("surName: '"+surName+"'");
 			 			userdb = new UserDatabaseAccess();
@@ -400,20 +448,23 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						
 						replaceHash.put("messages",  sb.toString());
 						util.filterTokenFile(genericForm, certificationValidation, replaceHash);
-						//res.sendRedirect("/forms/valid.html");	
+						
 						//print the outfile to the browser
 						PrintWriter out = res.getWriter();
 						String s = util.fileToString(certificationValidation);
 						out.println(s);
 						
-						// send email message 
+						// send email message to the user 
 						String mailHost = "nceas.ucsb.edu";
 						String from = "vegbank";
 						String to = emailAddress;
 						String cc = "vegbank@nceas.ucsb.edu";
 						String subject = "VEGBANK CERTIFICATION RECEIPT";
-						String body = emailAddress + ": Please consider this as your receipt for VegBank certification";
+						String body = emailAddress + ": Please consider this as your receipt for VegBank certification request";
 						util.sendEmail(mailHost, from, to, cc, subject, body);
+						
+						// send the data to the vegbank administrator 
+						this.sendAdminCertRequest(params);
 						
 						// delete the form
 						Thread.sleep(1000);
@@ -423,13 +474,13 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 					else
 					{
 						System.out.println("UserManagementServlet > missing required attributes ");
-						// send them a note to go back
+						// send them a note to go back and fill in the correct required attributes
 						
 						Hashtable replaceHash = new Hashtable();
 						replaceHash.put("messages", "You are missing a required attribute to submit this form");
 						replaceHash.put("surName", ""+surName);
 						replaceHash.put("givenName", ""+givenName);
-						replaceHash.put("submittedEmail", submittedEmail);
+						//replaceHash.put("submittedEmail", submittedEmail);
 						replaceHash.put("registeredEmail", emailAddress);
 						replaceHash.put("phoneNumber", phoneNumber);
 						replaceHash.put("currentCertLevel", currentCertLevel);
@@ -438,6 +489,11 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						replaceHash.put("esaPos", esaPos);
 						replaceHash.put("vegSamplingDoc", vegSamplingDoc);
 						replaceHash.put("vegAnalysisDoc", vegAnalysisDoc);
+						replaceHash.put("usnvcExpDoc", usnvcExpDoc); // start
+						replaceHash.put("vegbankExpDoc", vegbankExpDoc);
+						replaceHash.put("useVegbank", useVegbank);
+						replaceHash.put("plotdbDoc", plotdbDoc);
+						
 						
 						
 						util.filterTokenFile(certificationTemplate, certificationValidation, replaceHash);
@@ -465,6 +521,125 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 			 e.printStackTrace();
 		 }
 	 }
+	 
+	 /**
+	  * this method takes the input parameters to become a vegbank certified user 
+		* and sends them to the vegbank system administrator(s)
+		* @param params -- the input parameters 
+		*/
+		private void sendAdminCertRequest(Hashtable params)
+		{
+			StringBuffer messageBody = new StringBuffer();
+			try
+			{
+			 
+			 String submittedEmail = (String)params.get("email");
+			 String surName = (String)params.get("surName");
+			 String givenName  = (String)params.get("givenName");
+			 String phoneNumber = (String)params.get("phoneNumber");
+			 String phoneType = (String)params.get("phoneType");
+			 String currentCertLevel = (String)params.get("currentCertLevel");
+			 String certReq = (String)params.get("certReq");
+			 String highestDegree = (String)params.get("highestDegree");
+			 String degreeYear = (String)params.get("degreeYear");
+			 String currentInst = (String)params.get("currentInst");
+			 String degreeInst = (String)params.get("degreeInst");
+			 String currentPos = (String)params.get("currentPos");
+			 String esaPos = (String)params.get("esaPos");
+			 String profExperienceDoc = (String)params.get("profExperienceDoc");
+			 String relevantPubs = (String)params.get("relevantPubs");
+			 String vegSamplingDoc = (String)params.get("vegSamplingDoc");
+			 String vegAnalysisDoc = (String)params.get("vegAnalysisDoc");
+			 String usnvcExpDoc = (String)params.get("usnvcExpDoc");
+			 String vegbankExpDoc = (String)params.get("vegbankExpDoc");
+			 String useVegbank = (String)params.get("useVegbank");
+			 String plotdbDoc = (String)params.get("plotdbDoc");
+			 String nvcExpRegionA = (String)params.get("nvcExpRegionA");
+			 String nvcExpVegA = (String)params.get("nvcExpVegA");
+			 String nvcExpFloristicsA = (String)params.get("nvcExpFloristicsA");
+			 String nvcExpNVCA = (String)params.get("nvcExpNVCA");
+			 
+			 String nvcExpRegionB = (String)params.get("nvcExpRegionB");
+			 String nvcExpVegB = (String)params.get("nvcExpVegB");
+			 String nvcExpFloristicsB = (String)params.get("nvcExpFloristicsB");
+			 String nvcExpNVCB = (String)params.get("nvcExpNVCB");
+			 
+			 String nvcExpRegionC = (String)params.get("nvcExpRegionC");
+			 String nvcExpVegC = (String)params.get("nvcExpVegC");
+			 String nvcExpFloristicsC = (String)params.get("nvcExpFloristicsC");
+			 String nvcExpNVCC = (String)params.get("nvcExpNVCC");
+			 
+			 
+			 String esaSponsorNameA  = (String)params.get("esaSponsorNameA");
+			 String esaSponsorEmailA = (String)params.get("esaSponsorEmailA");
+			 String esaSponsorNameB = (String)params.get("esaSponsorNameB");
+			 String esaSponsorEmailB = (String)params.get("esaSponsorEmailB");
+			 String peerReview = (String)params.get("peerReview");
+			 String additionalStatements = (String)params.get("additionalStatements");
+			 
+			 messageBody.append("VegBank Administrator: \n");
+			 messageBody.append(" The following user has requested a certification change with the following details: \n");
+			 messageBody.append(" Email: "+submittedEmail+" \n");
+			 messageBody.append(" Sur Name: "+surName +" \n");
+			 messageBody.append(" Given Name: "+givenName+" \n");
+			 messageBody.append(" Phone Number: "+phoneNumber+" \n");
+			 messageBody.append(" Phone Type: "+phoneType+" \n");
+			 messageBody.append(" Current Cert Level: "+currentCertLevel+" \n");
+			 messageBody.append(" Requested Cert Level: " + certReq +" \n");
+			 messageBody.append(" Highest Degree: "+highestDegree+" \n");
+			 messageBody.append(" Degree Year: "+degreeYear+" \n");
+			 messageBody.append(" Degree Isnt: "+degreeInst+" \n");
+			 messageBody.append(" Current Inst: "+currentInst+" \n");
+			 messageBody.append(" Current Position: "+currentPos+" \n");
+			 messageBody.append(" ESA Memeber: "+esaPos+" \n");
+			 messageBody.append(" Prof. Experience: "+profExperienceDoc+" \n");
+			 messageBody.append(" Relevant Pubs: "+relevantPubs+" \n");
+			 messageBody.append(" Veg Sampling Exp: "+vegSamplingDoc+" \n");
+			 messageBody.append(" Veg Analaysis Exp: "+vegAnalysisDoc+" \n");
+			 messageBody.append(" USNVC Exp: "+usnvcExpDoc+" \n");
+			 messageBody.append(" VegBank Experience: "+vegbankExpDoc+" \n");
+			 messageBody.append(" Intended VB Use: "+useVegbank+" \n");
+			 messageBody.append(" Plot DB/Tools Exp: "+ plotdbDoc+" \n");
+			 messageBody.append(" nvcExpRegionA: "+nvcExpRegionA+" \n");
+			 messageBody.append(" nvcExpVegA: "+nvcExpVegA+" \n");
+			 messageBody.append(" nvcExpFloristicsA: "+nvcExpFloristicsA+" \n");
+			 messageBody.append(" nvcExpNVCA: "+nvcExpNVCA+" \n");
+			 messageBody.append(" esaSponsorNameA: "+esaSponsorNameA+" \n");
+			 messageBody.append(" esaSponsorEmailA: "+esaSponsorEmailA+" \n");
+			 messageBody.append(" esaSponsorNameB: "+esaSponsorNameB+" \n");
+			 messageBody.append(" esaSponsorEmailB: "+esaSponsorEmailB+" \n");
+			 messageBody.append(" nvcExpRegionB: "+nvcExpRegionB+" \n");
+			 messageBody.append(" nvcExpVegB: "+nvcExpVegB+" \n");
+			 messageBody.append(" nvcExpFloristicsB: "+nvcExpFloristicsB+" \n");
+			 messageBody.append(" nvcExpNVCB: "+nvcExpNVCB+" \n");
+			 
+			 messageBody.append(" nvcExpRegionC: "+nvcExpRegionC+" \n");
+			 messageBody.append(" nvcExpVegC: "+nvcExpVegC+" \n");
+			 messageBody.append(" nvcExpFloristicsC: "+nvcExpFloristicsC+" \n");
+			 messageBody.append(" nvcExpNVCC: "+nvcExpNVCC+" \n");
+			 
+			 messageBody.append(" peerReview: "+peerReview+" \n");
+			 messageBody.append(" additionalStatements: "+additionalStatements+" \n");
+			 
+			 System.out.println( messageBody.toString() );
+			 //email this to the vegbank admin
+			 // send email message to the user 
+			 String mailHost = "nceas.ucsb.edu";
+			 String from = "vegbank";
+			 String to = this.vegBankAdmin;
+			 String cc = "vegbank@nceas.ucsb.edu";
+			 String subject = "VEGBANK CERTIFICATION REQUEST";
+			 String body = messageBody.toString();
+			 util.sendEmail(mailHost, from, to, cc, subject, body);
+			
+			
+			}
+			catch(Exception e)
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		}
 		
 	/**
 	 * method that handles the download action.  The idea behind the addition
@@ -1002,26 +1177,30 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 	/**
 	 * method that returns the cookie value associated with the 
 	 * current browser
+   * @param req - the servlet request object 
+   * @return cookieValue -- the value of the cookie 
 	 */
 	private String getCookieValue(HttpServletRequest req)
 	{
-		//get the cookies - if there are any
+		System.out.println("UserManagementServlet > getCookieValue called ");
+    
+    
+		System.out.println("UserManagementServlet > request header names: " +req.getHeaderNames().toString() );
+    //get the cookies - if there are any
 		String cookieName = null;
 		String cookieValue = null;
-
+    
 		Cookie[] cookies = req.getCookies();
+		System.out.println("UserManagementServlet > number of cookies found: " + cookies.length);
 		//determine if the requested page should be shown
     if (cookies.length > 0) 
 		{
 			for (int i = 0; i < cookies.length; i++) 
 			{
       	Cookie cookie = cookies[i];
-				//out.print("Cookie Name: " +cookie.getName()  + "<br>");
         cookieName=cookie.getName();
-				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
 				cookieValue=cookie.getValue();
-				System.out.println("UserManagementServlet > client passing the cookie: "+cookieName+" value: "
-					+cookieValue);
+				System.out.println("UserManagementServlet > client's cookie: "+cookieName+" value: "+cookieValue);
 			}
   	}
 		return(cookieValue);
