@@ -17,8 +17,8 @@ import java.util.Vector;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2003-03-20 20:50:15 $' <br>
- * '$Revision: 1.1 $' <br>
+ * '$Date: 2003-05-06 23:25:31 $' <br>
+ * '$Revision: 1.2 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -174,8 +174,21 @@ public interface PlotDataSourceInterface
 	/**
 	 * returns the surficial geology
 	 * @param plotName -- the plot
+	 * @deprecated
 	 */
 	String getSurfGeo(String plotName);
+	
+	/**
+	 * returns the rockType
+	 * @param plotName -- the plot
+	 */
+	String getRockType(String plotName);
+	
+	/**
+	 * returns the surficial surficial Deposits
+	 * @param plotName -- the plot
+	 */
+	String getSurficialDeposits(String plotName);
 	
 	/**
 	 * retuns the country

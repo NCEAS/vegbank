@@ -13,8 +13,8 @@ import java.util.*;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-03-20 20:50:15 $' <br>
- *  '$Revision: 1.1 $' <br>
+ *  '$Date: 2003-05-06 23:25:31 $' <br>
+ *  '$Revision: 1.2 $' <br>
  */
 
  
@@ -53,6 +53,7 @@ public class PlotXmlWriterV2
 		catch (Exception e) 
 		{
 			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
 	}
 	
@@ -72,33 +73,20 @@ public class PlotXmlWriterV2
 			this.plotCode = plotName;
 			//the printWriter
 			PrintWriter out = new PrintWriter(new FileWriter(fileName));
-			//String buffer to store the plot
-			StringBuffer sb = new StringBuffer();
-			//load the public variables in the data source class with those 
-			//from the plotName
-			datasrc.getPlot(plotName);
-			sb.append( getPlotHeader() );
-			sb.append( getPlotProjectContent() );
-			sb.append( getPlotSiteContent() );
-			//this is a child of the site content
-			sb.append( getPlotPlaceContent() );
-			sb.append( getPlotObservationContent() );
-			//end tags
-			sb.append( getPlotObservationEndTag() );
-			sb.append( getPlotSiteEndTag() );
-			sb.append( getPlotProjectEndTag() );
-			sb.append( getPlotFooter() );
-			out.println( sb.toString() );
+
+			out.print( this.getSinglePlotXMLString(plotName) );
+			
 			out.close();
 			//System.out.println("datasrc: " + datasrc.state);
 		}
 		catch (Exception e) 
 		{
 			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
 	}
-	
-	/**
+
+  /**
 	 * overloaded method of the same name above
 	 *
 	 * @param plotNameVec -- a vector containg the names 
@@ -106,16 +94,12 @@ public class PlotXmlWriterV2
 	 * @param fileName -- the output fully qualified filename with absolute path
 	 *
 	 */
-	 public void writeMultiplePlot(Vector plotNameVec, String fileName)
+	 public String getMultiplePlotXMLString(Vector plotNameVec)
 	 {
+
+		StringBuffer sb = new StringBuffer();
 		try
 		{
-			//initialize the class variable, plotCode, with this plot name
-			//this.plotCode = plotName;
-			//the printWriter
-			PrintWriter out = new PrintWriter(new FileWriter(fileName));
-			//String buffer to store the plot
-			StringBuffer sb = new StringBuffer();
 			//load the public variables in the data source class with those 
 			//from the plotName
 			
@@ -144,8 +128,32 @@ public class PlotXmlWriterV2
 				
 			}
 			sb.append( getPlotFooter() );
+		}
+		catch (Exception e) 
+		{
+			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+    System.out.println("here I am " + sb);
+    return sb.toString();
+	}
+
+	/**
+	 * overloaded method of the same name above
+	 *
+	 * @param plotNameVec -- a vector containg the names 
+	 *	(or in some cases) the ids of a plot
+	 * @param fileName -- the output fully qualified filename with absolute path
+	 *
+	 */
+	 public void writeMultiplePlot(Vector plotNameVec, String fileName)
+	 {
+		try
+		{
+			//the printWriter
+			PrintWriter out = new PrintWriter(new FileWriter(fileName));
 			
-			out.println( sb.toString() );
+			out.println( this.getMultiplePlotXMLString(plotNameVec) );
 			out.close();
 			//System.out.println("datasrc: " + datasrc.state);
 		
@@ -153,6 +161,7 @@ public class PlotXmlWriterV2
 		catch (Exception e) 
 		{
 			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
 	}
 	
@@ -173,40 +182,46 @@ public class PlotXmlWriterV2
 		try
 		{
 			PrintWriter out = new PrintWriter(new FileWriter(fileName));
-			//String buffer to store the plot
-			StringBuffer sb = new StringBuffer();
+			out.println( getMultiplePlotIdentificationXMLString(plotNameVec) );
 
-			sb.append( getPlotHeader() );			
-			//get each of the plots in the vector
-			for (int i=0; i< plotNameVec.size(); i++)
-			{
-				String plotName = plotNameVec.elementAt(i).toString();
-				//initialize the instance variable, plotCode, with this plot name
-				this.plotCode = plotName;
-				datasrc.getPlot(plotName);
-				// get the plotid which is the unique ID for a plot as used by the RDBMS
-				String plotId = datasrc.getPlotId(plotCode);
-				// get the accession number associtated with this 
-				String accession = datasrc.getAccessionValue(plotId);
-				sb.append(" <plot> \n");
-				sb.append("		<plotId>"+plotId+"</plotId> \n");
-				sb.append("		<plotAccessionNumber>"+accession+"</plotAccessionNumber> \n");
-				sb.append("		<authorPlotCode>"+datasrc.plotCode+"</authorPlotCode> \n");
-				sb.append("		<state>"+datasrc.state+"</state> \n");
-				sb.append("		<latitude>"+datasrc.latitude+"</latitude> \n");
-				sb.append("		<longitude>"+datasrc.longitude+"</longitude> \n");
-				sb.append(" </plot> \n");
-				
-			}
-			sb.append( getPlotFooter() );
-			out.println( sb.toString() );
 			out.close();
 			//System.out.println("datasrc: " + datasrc.state);
 		}
 		catch (Exception e) 
 		{
 			System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+			e.printStackTrace();		
 		}
+	}
+	
+	public String getMultiplePlotIdentificationXMLString(Vector plotNameVec)
+	{
+		//String buffer to store the plot
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append( getPlotHeader() );			
+		//get each of the plots in the vector
+		for (int i=0; i< plotNameVec.size(); i++)
+		{
+			String plotName = plotNameVec.elementAt(i).toString();
+			//initialize the instance variable, plotCode, with this plot name
+			this.plotCode = plotName;
+			datasrc.getPlot(plotName);
+			// get the plotid which is the unique ID for a plot as used by the RDBMS
+			String plotId = datasrc.getPlotId(plotCode);
+			// get the accession number associtated with this 
+			String accession = datasrc.getAccessionValue(plotId);
+			sb.append(" <plot> \n");
+			sb.append("		<plotId>"+plotId+"</plotId> \n");
+			sb.append("		<authorPlotCode>"+datasrc.plotCode+"</authorPlotCode> \n");
+			sb.append("		<state>"+datasrc.state+"</state> \n");
+			sb.append("		<latitude>"+datasrc.latitude+"</latitude> \n");
+			sb.append("		<longitude>"+datasrc.longitude+"</longitude> \n");
+			sb.append(" </plot> \n");
+			
+		}
+		sb.append( getPlotFooter() );
+		return sb.toString();
 	}
 	
 	
@@ -241,6 +256,7 @@ public class PlotXmlWriterV2
 			 catch (Exception e)
 			 {
 				 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+				e.printStackTrace();
 			 }
 		 return( sb.toString() );
 	 } 
@@ -320,6 +336,7 @@ public class PlotXmlWriterV2
 		 catch (Exception e)
 		 {
 			 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+			e.printStackTrace();
 		 }
 		 return( sb.toString() );
 	 }
@@ -377,6 +394,7 @@ public class PlotXmlWriterV2
 		 catch (Exception e)
 		 {
 			 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+			e.printStackTrace();
 		 }
 		 return( sb.toString() );
 	 }
@@ -429,6 +447,7 @@ public class PlotXmlWriterV2
 		 catch (Exception e)
 		 {
 			 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+			e.printStackTrace();
 		 }
 		 return( sb.toString() );
 	 }
@@ -598,11 +617,16 @@ public class PlotXmlWriterV2
 			//write the taxon observation data to the string buffer
 			for (int i=0; i< datasrc.uniquePlantTaxaNumber; i++)
 			{	
-				String plantName = datasrc.plantTaxaNames.elementAt(i).toString();
-				//sb.append( plantName );
-				//Vector strataPresence = datasrc.getSpeciesStrataExistence();
-				sb.append( getTaxonObservation(plantName, plotCode ) );
-				//System.out.println(">> " + datasrc.plotCode);
+				//System.out.println( "--->>> "  + datasrc.uniquePlantTaxaNumber );
+				//System.out.println( "--->>> "  + datasrc.plantTaxaNames.elementAt(i) );
+
+				Object plant = datasrc.plantTaxaNames.elementAt(i);
+				
+				if (plant != null )
+				{
+					String plantName = plant.toString();
+					sb.append( getTaxonObservation(plantName, plotCode ) );
+				}
 			}
 			//sb.append("	</observation> \n");
 		 
@@ -610,6 +634,7 @@ public class PlotXmlWriterV2
 		 catch (Exception e)
 		 {
 			 System.out.println("PlotXmlWriterV2 > Exception: " + e.getMessage() );
+			e.printStackTrace();
 		 }
 		 return( sb.toString() );
 	  }
@@ -768,6 +793,31 @@ public class PlotXmlWriterV2
 			writer.writeMultiplePlot(plotIdVec, "test.xml");
 			writer.writeMultiplePlotIdentifcation(plotIdVec, "plot-identification.xml");
 		}
+	}
+
+	/**
+	 * @param plotId
+	 * @return
+	 */
+	public String getSinglePlotXMLString(String plotId)
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		datasrc.getPlot(plotId);
+		sb.append( getPlotHeader() );
+		sb.append( getPlotProjectContent() );
+		sb.append( getPlotSiteContent() );
+		//this is a child of the site content
+		sb.append( getPlotPlaceContent() );
+		sb.append( getPlotObservationContent() );
+		//end tags
+		sb.append( getPlotObservationEndTag() );
+		sb.append( getPlotSiteEndTag() );
+		sb.append( getPlotProjectEndTag() );
+		sb.append( getPlotFooter() );
+
+		//System.out.println("The xmlString " + sb);
+		return sb.toString();
 	}
 	
 }

@@ -1,5 +1,5 @@
 package org.vegbank.plots.datasource;
-import java.lang.*;
+
 import java.util.*;
 import java.sql.*;
 
@@ -11,8 +11,8 @@ import java.sql.*;
  *  Release: @release@
  *	
  * 	'$Author: farrell $'  
- * 	'$Date: 2003-03-20 20:50:16 $' 
- * 	'$Revision: 1.1 $'
+ * 	'$Date: 2003-05-06 23:25:31 $' 
+ * 	'$Revision: 1.2 $'
  */
  
 //public class VBAccessDataSourcePlugin

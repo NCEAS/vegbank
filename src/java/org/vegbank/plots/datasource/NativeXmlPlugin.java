@@ -3,7 +3,6 @@ import org.apache.xerces.parsers.DOMParser;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import java.io.*;
 import java.util.Vector;
@@ -15,8 +14,8 @@ import xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 20:50:14 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-06 23:25:31 $'
+ *	'$Revision: 1.2 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -62,11 +61,11 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	 * @param plotName -- the name of the plot
 	 * @param plotArchiveFile -- the name of the xml file to use
 	 */ 
-	public void init(String plotName, String plotArchiveFile )
-	{
-		this.plotArchiveFile = plotArchiveFile;
-		this.init(plotName);
-	}
+//	public void init(String plotName, String plotArchiveFile )
+//	{
+//		this.plotArchiveFile = plotArchiveFile;
+//		init(plotName);
+//	}
 
 	/**
 	 * this is the method that is called to check and see that the XML document 
@@ -152,7 +151,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	}
 	public Vector getProjectContributors(String plotName)
 	{
-		this.init(plotName);
 		String path = "/project/projectContributor/wholeName";
 		Vector pathContent = parse.getValuesForPath(doc, path);
 		return(pathContent);
@@ -220,7 +218,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
   
 	public String getProjectContributorCountry(String contributorWholeName)
 	{
-		//this.init(plotName);
 		String s = null;
 		String path = "/project/projectContributor/address/country";
 		Vector pathContent = parse.getValuesForPath(doc, path);
@@ -243,19 +240,16 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
   
 	public String getProjectStartDate(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "startDate") );
 	}
   
 	public String getProjectStopDate(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "stopDate") );
 	}
   
 	public String getProjectDescription(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "projectDescription") );
 	}
 		
@@ -280,7 +274,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	private String getPlotAttribute(String plotName, String elementName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		elementValue = parse.getNodeValue(doc, elementName);
 		return(elementValue);
 	}
@@ -419,66 +412,55 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	}
 	public String getXCoord(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorE") );
 	}
 	public String getYCoord(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorN") );
 	}
 	public String getLatitude(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "latitude") );
 	}
 	
 	public String getLongitude(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "longitude") );
 	}
 	
 	public String getUTMZone(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorZone") );
 	}
 	
 	public String getDatumType(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorDatum") );
 	}
 	
 	public String getPlotShape(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "shape") );
 	}
 	
 	public String getPlotArea(String plotName)	
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "area") );
 	}
 	
 	public String getState(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "state") );
 	}
 	
 	public String getTopoPosition(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "topoPosition") );
 	}
 	
 	//must me a numeric value	
 	public String getSlopeAspect(String plotName)
 	{
-		this.init(plotName);
 		String s = this.getPlotAttribute(plotName, "slopeAspect");
 		if ( (s != null) && (! s.trim().equals("null")) )
 		{
@@ -493,7 +475,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	//must be numeric
 	public String getSlopeGradient(String plotName)
 	{
-		this.init(plotName);
 		String s = this.getPlotAttribute(plotName, "slopeGradient");
 		if ( (s != null) && (! s.trim().equals("null")) )
 		{
@@ -507,64 +488,54 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	
 	public String getAzimuth(String plotName) 
 	{
-		this.init(plotName);
 		return this.getPlotAttribute(plotName, "azimuth");
 	}	
  
 	public String getDSGPoly(String plotName)
 	{
-		this.init(plotName);
 		return this.getPlotAttribute(plotName, "dsgPoly");
 
 	}
 	
 	public String getLocationNarrative(String plotName)
 	{
-		this.init(plotName);
 		return this.getPlotAttribute(plotName, "locationNarrative");
 	}
 	
 	public String getLayoutNarrative( String plotName )
 	{
-		this.init(plotName);
 		// NOTE: Thris is misspelled in the XML
 		return this.getPlotAttribute(plotName, "layoutNarative");
 	}
 	
 	public String getSurfGeo(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "geology") );
 	}
 
 	public String getCountry(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "country") );
 	}
 	
 	public String getStandSize(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "standSize") );
 	}
 	
 	public String getAuthorLocation(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorLocation") );
 	}
 	
 	public String getLandForm(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "landform") );
 	}
 	
 	// this has cannot be null and should be numeric
 	public String getElevation(String plotName)
 	{
-		this.init(plotName);
 		String s = "";
 		s =  this.getPlotAttribute(plotName, "elevation");
 		if ( s != null )
@@ -580,7 +551,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	// this has cannot be null and should be numeric
 	public String getElevationAccuracy(String plotName)
 	{
-		this.init(plotName);
 		String s = "";
 		s =  this.getPlotAttribute(plotName, "elevationAccuracy");
 		if ( s != null )
@@ -597,7 +567,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	//this method must return a not-null value
 	public String	getConfidentialityReason(String plotName)
 	{
-		this.init(plotName);
 		String s = this.getPlotAttribute(plotName, "confidentialityReason");
 		if ( s != null)
 		{
@@ -612,7 +581,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	//this method must return a not-null value
 	public String getConfidentialityStatus(String plotName)
 	{
-		this.init(plotName);
 		String s = this.getPlotAttribute(plotName, "confidentialityStatus");
 		if ( s != null)
 		{
@@ -645,7 +613,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	 **/
 	public String getCommunityName(String plotName)
 	{
-		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "className") );
 	}
 	
@@ -806,7 +773,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
   public String  getLichenQuality(String plotName)
   {
 	  String elementValue = null;
-	  this.init(plotName);
 	  try
 	  {
 		  elementValue = parse.getNodeValue(doc, "lichenQuality");
@@ -821,7 +787,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
   public String  getObservationNarrative(String plotName)
   {
 	  String elementValue = null;
-	  this.init(plotName);
 	  try
 	  {
 		  elementValue = parse.getNodeValue(doc, "observationNarrative");
@@ -836,7 +801,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
   public String  getHomogeneity(String plotName)
   {
 	  String elementValue = null;
-	  this.init(plotName);
 	  try
 	  {
 		  elementValue = parse.getNodeValue(doc, "homogeneity");
@@ -851,7 +815,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
   public String  getRepresentativeness(String plotName)
   {
 	  String elementValue = null;
-	  this.init(plotName);
 	  try
 	  {
 		  elementValue = parse.getNodeValue(doc, "representativeness");
@@ -866,7 +829,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getBasalArea(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "basalArea");
@@ -881,7 +843,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getSoilMoistureRegime(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "soilMoistureRegime");
@@ -896,7 +857,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getWaterSalinity(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		elementValue = parse.getNodeValue(doc, "waterSalinity");
 		return(elementValue);
 	}
@@ -909,7 +869,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getOrganicDepth(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "organicDepth");
@@ -924,7 +883,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getPercentBedRock(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "percentBedrock");
@@ -939,7 +897,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getPercentRockGravel(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "percentRockGravel");
@@ -954,7 +911,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getPercentWood(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "percentWood");
@@ -968,7 +924,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getPercentLitter(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "percentLitter");
@@ -983,7 +938,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getPercentBareSoil(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "percentBareSoil");
@@ -998,7 +952,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getPercentWater(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "percentWater");
@@ -1013,7 +966,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getPercentOther(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "percentOther");
@@ -1028,7 +980,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getNameOther(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "nameOther");
@@ -1043,7 +994,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getStandMaturity(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "standMaturity");
@@ -1059,7 +1009,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getLandscapeNarrative(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "landscapeNarrative");
@@ -1074,7 +1023,6 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getPhenologicalAspect(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "phenologicalAspect");
@@ -1089,7 +1037,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getWaterDepth(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "waterDepth");
@@ -1104,7 +1052,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getFieldHt(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "fieldHt");
@@ -1119,7 +1067,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getSubmergedHt(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "submergedHt");
@@ -1134,7 +1082,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getTreeCover(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "treeCover");
@@ -1149,7 +1097,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getShrubCover(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "shrubCover");
@@ -1164,7 +1112,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getFieldCover(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "fieldCover");
@@ -1179,7 +1127,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getNonvascularCover(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "nonvascularCover");
@@ -1195,7 +1143,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getSuccessionalStatus(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "successionalStatus");
@@ -1210,7 +1158,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getTreeHt(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "treeHt");
@@ -1225,7 +1173,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getShrubHt(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "shrubHt");
@@ -1240,7 +1188,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getNonvascularHt(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "nonvascularHt");
@@ -1255,7 +1203,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getFloatingCover(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "floatingCover");
@@ -1270,7 +1218,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getSubmergedCover(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "submergedCover");
@@ -1285,7 +1233,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getDominantStratum(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "dominantStratum");
@@ -1300,7 +1248,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getGrowthform1Type(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "growthform1type");
@@ -1315,7 +1263,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getGrowthform2Type(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "growthform2type");
@@ -1330,7 +1278,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getGrowthform3Type(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "growthform3type");
@@ -1345,7 +1293,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getGrowthform1Cover(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "growthform1cover");
@@ -1360,7 +1308,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getGrowthform2Cover(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "growthform2cover");
@@ -1375,7 +1323,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String  getGrowthform3Cover(String plotName)
 	{
 		String elementValue = null;
-		this.init(plotName);
+		
 		try
 		{
 			elementValue = parse.getNodeValue(doc, "growthform3cover");
@@ -1554,7 +1502,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
   
 	public Vector getUniqueStrataNames(String plotName)
 	{
-		this.init(plotName); //FIXME: The doc value needs to be made availible
+		 //FIXME: The doc value needs to be made availible
 		String path = "/project/plot/observation/stratum/stratumName";
 		Vector pathContent = parse.getValuesForPath(doc, path);
 		return(pathContent);
@@ -1562,7 +1510,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	
 	public String getStrataCover(String plotName, String stratumType)
 	{
-		this.init(plotName);
+		
 		String cover = null;
 		Hashtable h = util.getStratum(doc, stratumType);
 		cover = (String)h.get("stratumCover");
@@ -1571,7 +1519,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	
 	public String getStrataBase(String plotName, String strataName)
 	{
-		this.init(plotName);
+		
 		String cover = null;
 		Hashtable h = util.getStratum(doc, strataName);
 		cover = (String)h.get("stratumBase");
@@ -1579,7 +1527,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	}
 	public String getStrataHeight(String plotName, String strataName)
 	{
-		this.init(plotName);
+		
 		String cover = null;
 		Hashtable h = util.getStratum(doc, strataName);
 		cover = (String)h.get("stratumHeight");
@@ -1794,6 +1742,22 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String getCommunityTableAnalysis(String plotName)
 	{
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getRockType(java.lang.String)
+	 */
+	public String getRockType(String plotName)
+	{
+		return this.getPlotAttribute(plotName, "rockType") ;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getSurficialDeposits(java.lang.String)
+	 */
+	public String getSurficialDeposits(String plotName)
+	{
+		return this.getPlotAttribute(plotName, "surficialDeposits") ;
 	}
 
 }

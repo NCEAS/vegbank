@@ -13,8 +13,8 @@ import java.util.*;
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2003-03-20 20:50:14 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-05-06 23:25:31 $'
+ *  '$Revision: 1.2 $'
  */
 public class PlotDataSource 
 {
@@ -1179,9 +1179,7 @@ public class PlotDataSource
    * plugins.
    */
   private static Object createObject(String className) 
-	throws InstantiationException, 
-		IllegalAccessException,
-		ClassNotFoundException
+		throws InstantiationException, IllegalAccessException, ClassNotFoundException
   	{
     	Object object = null;
    	 try 
@@ -1771,6 +1769,28 @@ public class PlotDataSource
 			source.printDBVariables("VegBankDataSourcePlugin" , "1");
 		}
 	}
+
+
+/**
+ * @param plotName
+ * @return
+ */
+public String getRockType(String plotName)
+{
+	// TODO Auto-generated method stub
+	return null;
+}
+
+
+/**
+ * @param plotName
+ * @return
+ */
+public String getSurficialDeposits(String plotName)
+{
+	// TODO Auto-generated method stub
+	return null;
+}
 	
 }
 	

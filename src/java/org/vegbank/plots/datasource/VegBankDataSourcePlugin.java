@@ -9,20 +9,23 @@ import java.sql.*;
  *
  *	
  *	'$Author: farrell $' <br>
- *	'$Date: 2003-03-20 20:50:16 $' <br>
- *	'$Revision: 1.1 $' <br>
+ *	'$Date: 2003-05-06 23:25:31 $' <br>
+ *	'$Revision: 1.2 $' <br>
  */
  
 public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 {
 	
+
+
 	// THE PLUGIN PROPERTIES FILE
 	private ResourceBundle rb;
 
 	//variables below are for VEGBANK on postgresql
-	private String driver = "org.postgresql.Driver";
-	private String dbUrl = "jdbc:postgresql://vegbank/plots_dev";
-	private String dbUser = "datauser";
+	private String dbUrl = "";
+	private String dbUser = "";
+	private String dbPassword;
+	private String dbDriverClass = "";
 	public Connection con = null;
 	
 	/**
@@ -51,11 +54,14 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		{
 			// 	GET THE PARAMETERS FROM THE PROPERTIES FILE
 			rb = ResourceBundle.getBundle("plugin");
-			this.dbUrl =rb.getString("vegbankdburl");
+			this.dbDriverClass =rb.getString("databaseDriverClass");
+			this.dbUrl =rb.getString("databaseConnectString");
+			this.dbUser  =rb.getString("databaseUser");
+			this.dbPassword =rb.getString("databaseUserPassword");
 			System.out.println("VegBankDataSource init > dbUrl: " + this.dbUrl );
 			if (databaseType.equals("msaccess"))
 			{
-				driver = "sun.jdbc.odbc.JdbcOdbcDriver";
+				dbDriverClass = "sun.jdbc.odbc.JdbcOdbcDriver";
 				dbUrl = "jdbc:odbc:vegbank_access";
 			}
 			//else use the default database settings
@@ -89,9 +95,9 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		Connection c = null;
 		try 
  		{
-			Class.forName(this.driver);
+			Class.forName(dbDriverClass);
 			//the vegbank database
-			c = DriverManager.getConnection(this.dbUrl, this.dbUser, "");
+			c = DriverManager.getConnection(this.dbUrl, this.dbUser, this.dbPassword);
 		}
 		catch ( Exception e )
 		{
@@ -251,7 +257,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		try 
 		{
 			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select  accession_number "
+			ResultSet rs = stmt.executeQuery("select  obsaccessionnumber "
 			+" from OBSERVATION where PLOT_ID = " + plotId );
 			while (rs.next()) 
 			{
@@ -2074,29 +2080,7 @@ public boolean  getRevisions(String plotName)
 	 */
 	public String getSurfGeo(String plotName)
 	{
-		String s = null;
-		Statement stmt = null;
-		try 
-		{
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select  GEOLOGY "
-			+" from PLOT where PLOT_ID = " + plotName );
-			while (rs.next()) 
-			{
-				//remove the apersand so that the xml can be parsed
-				 String buf  = rs.getString(1);
-				 if ( buf != null)
-				 {
-				 	s = buf.replace('&', 'a');
-				 }
-			}
-		}
-		catch (java.lang.Exception ex) 
-		{   
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
-			ex.printStackTrace();
-		}
-		return(s);
+		return null;
 	}
 	
 	//returns the country
@@ -2366,7 +2350,7 @@ public boolean  getRevisions(String plotName)
 				{
 					this.handleSQLException( ex );
 				}
-				catch (java.lang.Exception ex) 
+				catch (Exception ex) 
 				{   
 					// All other types of exceptions
 					System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
@@ -2675,6 +2659,24 @@ public boolean  getRevisions(String plotName)
 	public String getCommunityTableAnalysis(String plotName)
 	{
 		return this.getCommunityElement(plotName, "tableanalysis");
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getRockType(java.lang.String)
+	 */
+	public String getRockType(String plotName)
+	{
+		String s = this.getPlotElement(plotName, "rocktype");
+		return(s);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getSurficialDeposits(java.lang.String)
+	 */
+	public String getSurficialDeposits(String plotName)
+	{
+		String s = this.getPlotElement(plotName, "surficialdeposits");
+		return(s);
 	}
 
 }

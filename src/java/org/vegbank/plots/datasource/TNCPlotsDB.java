@@ -20,8 +20,8 @@ import java.util.Vector;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-03-20 20:50:15 $' <br>
- * 	'$Revision: 1.1 $' <br>
+ *  '$Date: 2003-05-06 23:25:31 $' <br>
+ * 	'$Revision: 1.2 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -2297,28 +2297,7 @@ public boolean  getRevisions(String plotName)
 	// see the interface for method descriptions
 	public String getSurfGeo(String plotName)
 	{
-		 Statement stmt = null;
-		try 
-		{
-			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select "
-			+" ([Surficial Geology]) "
-			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
-			//there should only be one
-			while (rs.next()) 
-			{
-				this.surfGeo = rs.getString(1);
-			}
-			rs.close();
-			stmt.close();
-		}
-		catch( Exception e)
-		{
-			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
-			e.printStackTrace();
-		}
-		 return(this.surfGeo);
+		return this.getRockType(plotName);
 	}
 	
 	// see the interface for method descriptions
@@ -3549,6 +3528,45 @@ public static void main(String[] args)
 	 */
 	public String getCommunityTableAnalysis(String plotName)
 	{
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getRockType(java.lang.String)
+	 */
+	public String getRockType(String plotName)
+	{
+		Statement stmt = null;
+		String rockType = null;
+		try 
+		{
+			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Surficial Geology]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				rockType = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(rockType);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.vegbank.plots.datasource.PlotDataSourceInterface#getSurficialDeposits(java.lang.String)
+	 */
+	public String getSurficialDeposits(String plotName)
+	{
+		// TODO Auto-generated method stub
 		return null;
 	}
 
