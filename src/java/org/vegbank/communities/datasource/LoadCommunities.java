@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-21 22:26:38 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-03-22 01:31:08 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,6 +66,7 @@ public class LoadCommunities
 			LoadCommunities lc = new LoadCommunities();
 			EcoArtCommunityReader cr = new EcoArtCommunityReader(lc.getConnection());
 			AbstractList communityList = cr.getAllCommunities();
+			System.out.println( "Number of Communities => " + communityList.size() );
 			Iterator i = communityList.iterator();
 			while( i.hasNext() ) 
 			{ 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-21 22:26:37 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-03-22 01:31:08 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,11 +59,7 @@ public class DBCommunityWriter
 		// This is going to know about the Data Model the database has 
 		try
 		{
-			if (conn == null)
-			{
-				conn = this.getConnection();
-				this.conn = conn;
-			}
+			this.conn = conn;
 			conn.setAutoCommit(false);
 
 			// Need to get the referenceId;
@@ -166,7 +162,6 @@ public class DBCommunityWriter
 				System.out.println("DBPlantWriter >  not commiting transaction");
 				conn.rollback();
 			}
-			conn.close();
 		}
 		catch (SQLException e)
 		{
@@ -315,19 +310,6 @@ public class DBCommunityWriter
 				pstmt.close();
 			}
 			return (nameId);
-		}
-
-		/**
-		 * method that will return a database connection for use with the database
-		 *
-		 * @return conn -- an active connection
-		 */
-		private Connection getConnection()
-		{
-			Utility u = new Utility();
-			// FIXME: Hard Coded references
-			Connection c = u.getConnection("communities_dev", "beta.nceas.ucsb.edu");
-			return c;
 		}
 
 		private int insertCommConcept(

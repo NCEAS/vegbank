@@ -12,8 +12,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-03-20 19:34:17 $'
- * '$Revision: 1.6 $'
+ * '$Date: 2003-03-22 01:31:07 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,7 +108,10 @@ public class Utility
 			System.out.println("Exception:  " + e.getMessage());
 			e.printStackTrace();
 		}
-			return(c);
+		
+		System.out.println("Connection is :" + c);
+		
+		return(c);
 	}
 	
 	/*

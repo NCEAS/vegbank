@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 19:57:38 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-03-22 01:31:08 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ public class EcoArtCommunityReader implements Constants
 			this.readSubgroupTable();
 			this.readFormationTable();
 			this.readAllianceTable();
-			//this.readAssociationTables();
+			this.readAssociationTables();
 
 			
 		}

@@ -3,8 +3,8 @@
  * Purpose: An adapter class for PostgreSQL RDBMS.
  *
  * '$Author: farrell $'     
- * '$Date: 2003-03-20 19:34:14 $' 
- * '$Revision: 1.3 $'
+ * '$Date: 2003-03-22 01:31:07 $' 
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,8 +60,7 @@ public class PostgresqlAdapter extends AbstractDatabase
 		throws SQLException
 	{
 		long uniqueid = 0;
-		Statement stmt = null;
-		stmt = conn.createStatement();
+		Statement stmt = conn.createStatement();
 		// constructing the name of the seq to call...
 		stmt.execute(
 			"SELECT nextval('" + getSequenceColumnName(primaryKeyName) + "')");
