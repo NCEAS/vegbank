@@ -8,8 +8,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-11 22:41:15 $'
-  *  '$Revision: 1.15 $'
+  *      '$Date: 2004-11-19 21:30:05 $'
+  *  '$Revision: 1.16 $'
   *
   *
   -->
@@ -29,7 +29,6 @@
 
 <BODY>
 @vegbank_header_html_normal@
-
 
 
 <!-- SECOND TABLE -->
@@ -56,11 +55,9 @@
 	
 		<td align="left">
 			<table border="0" cellspacing=5 cellpadding=5>
-			<form action="@datarequestservlet@" method="get">
-			<input type="hidden" name="requestDataType" value="vegCommunity">
-			<input type="hidden" name="requestDataFormatType" value="html">
-			<input type="hidden" name="clientType" value="browser">
-			<tr valign=top>
+			<form action="@views_link@commconcept_query.jsp" method="get">
+			
+	<!--		<tr valign=top>
 			<td  align=left valign=middle colspan=2>
 			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
 				<b>Enter the taxon name below and toggle the correct type and level of the taxon. </b>
@@ -69,10 +66,10 @@
 			NOTE: All Queries are Case Insensitive
 			<p>
 			<small>
-			<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+			<IN PUT TYPE="submit" VALUE="search">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
 			</small>
 			</td>
-			</tr>
+			</tr> -->
 		</td>
 	</tr>
 	
@@ -84,7 +81,7 @@
 		</td>
 		<!-- 	PLANT TAXON INPUT-->
 		<td  align="left" valign="middle">
-			<input size="55" name="communityName">
+			<input size="55" name="wparam">
 			<b>
 			<font face="Helvetica,Arial,Verdana" size=1>
 			</font>
@@ -104,7 +101,7 @@
 	</tr>
 		
 	<!-- TAXON LEVEL -->
-	<tr>
+<!--	<tr>
 		<td width="25%" align=left valign=top>
 			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
 			<b>Community level:</b>
@@ -118,7 +115,7 @@
 			</font>
 		</td>
 	</tr>
-		
+		 -->
 	<tr>
 		<td  align=left valign=middle colspan=2>
 			<small>
