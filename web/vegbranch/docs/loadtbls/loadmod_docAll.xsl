@@ -92,7 +92,7 @@
     <xsl:if test="$jumpMenu!='yes'">_simple</xsl:if>
   </xsl:variable>
   <xsl:variable name="fileName">
-     <xsl:value-of select="$currtbl" /><xsl:if test="$currtbl!='index'">~<xsl:value-of select="$showFlds" /></xsl:if><xsl:value-of select="$suffix"/>.html</xsl:variable>
+     <xsl:value-of select="translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" /><xsl:if test="$currtbl!='index'">~<xsl:value-of select="$showFlds" /></xsl:if><xsl:value-of select="$suffix"/>.html</xsl:variable>
 <!--@undo@--><redirect:write file="{$fileName}"><!--@undoEnd@--><xsl:comment><xsl:value-of select="$fileName" /></xsl:comment>
   <html>
     <head>
@@ -104,6 +104,7 @@
           td.color2 {background-color: FFCC99}
           td.color3 {background-color: FFFF99}
           td.color4 {background-color: 99FFCC}
+          
         </style>
       <xsl:if test="$jumpMenu='yes'">
         <script type="text/javascript">
@@ -137,7 +138,7 @@ including a definition.<br/>
       </xsl:if>
       <p class="sansserif">
         <xsl:for-each select="../table">
-          <a href="{TableName}~{$showFlds}{$suffix}.html">
+          <a href="{translate(TableName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~{$showFlds}{$suffix}.html">
             <xsl:value-of select="tableNickName"/>
           </a>
           <xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;&amp;nbsp;</xsl:text>
@@ -158,34 +159,34 @@ including a definition.<br/>
               <xsl:when test="$jumpMenu='yes'">
                 <select name="pickFields" onChange="MM_jumpMenu('document',this,0)">
                   <option value="" selected="selected">--Select which fields to show--</option>
-                  <option value="{$currtbl}~1.html">
+                  <option value="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~1.html">
                     <xsl:value-of select="translate(translate(number($showFlds='1'),'1','*'),'0',' ')"/>Required Fields Only</option>
-                  <option value="{$currtbl}~2.html">
+                  <option value="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~2.html">
                     <xsl:value-of select="translate(translate(number($showFlds='2'),'1','*'),'0',' ')"/>add commonly used fields</option>
-                  <option value="{$currtbl}~3.html">
+                  <option value="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~3.html">
                     <xsl:value-of select="translate(translate(number($showFlds='3'),'1','*'),'0',' ')"/>add sometimes used fields</option>
-                  <option value="{$currtbl}~4.html">
+                  <option value="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~4.html">
                     <xsl:value-of select="translate(translate(number($showFlds='4'),'1','*'),'0',' ')"/>add advanced fields</option>
-                  <option value="{$currtbl}~9.html">
+                  <option value="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~9.html">
                     <xsl:value-of select="translate(translate(number($showFlds='9'),'1','*'),'0',' ')"/>all fields</option>
                 </select>
   A* appears before the current setting of how many fields are shown in this picklist.
   </xsl:when>
               <xsl:otherwise><xsl:comment>current level: <xsl:value-of select="$showFlds" /></xsl:comment>
                 <br/>
-                <a href="{$currtbl}~1{$suffix}.html">
+                <a href="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~1{$suffix}.html">
                   <xsl:value-of select="translate(translate(number($showFlds=1),'1','*'),'0',' ')"/>Required Fields Only</a>
                 <br/>
-                <a href="{$currtbl}~2{$suffix}.html">
+                <a href="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~2{$suffix}.html">
                   <xsl:value-of select="translate(translate(number($showFlds=2),'1','*'),'0',' ')"/>add commonly used fields</a>
                 <br/>
-                <a href="{$currtbl}~3{$suffix}.html">
+                <a href="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~3{$suffix}.html">
                   <xsl:value-of select="translate(translate(number($showFlds=3),'1','*'),'0',' ')"/>add sometimes used fields</a>
                 <br/>
-                <a href="{$currtbl}~4{$suffix}.html">
+                <a href="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~4{$suffix}.html">
                   <xsl:value-of select="translate(translate(number($showFlds=4),'1','*'),'0',' ')"/>add advanced fields</a>
                 <br/>
-                <a href="{$currtbl}~9{$suffix}.html">
+                <a href="{translate($currtbl,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~9{$suffix}.html">
                   <xsl:value-of select="translate(translate(number($showFlds=9),'1','*'),'0',' ')"/>all fields</a>
                 <br/>
   A* appears before the current setting of how many fields are shown in this picklist.
@@ -377,6 +378,12 @@ Color Key:
 </xsl:template>
 
 <xsl:template name="indexInfo">
+<!-- link to simpler guide -->
+<h4>A simpler guide to tables is also available:</h4>
+<!-- begin paste from access generated files -->
+<p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  <a href='overview-b.html'>Species List</a>  |  <a href='overview-c.html'>Plot Data</a>  |  <a href='overview-c2.html'>Plot Normalized</a>  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  <a href='overview-e.html'>Stem Data</a>  |  <a href='overview-f.html'>Soil Data</a>  |  <a href='overview-g.html'>Disturbance Data</a>  |  <a href='overview-h.html'>Community Concept</a>  |  <a href='overview-i.html'>Plot Communities</a>  |  <a href='overview-j.html'>User Defined Metadata</a> </p>
+
+<!-- end paste from VegBranch generated files -->
     <h4>How to read this guide to the Loading Tables of VegBranch:</h4>
       <p> <b><font size="+1">Example Table</font></b> [Loading table name]<br />
   <b>Description: </b>[description of this loading table] This table allows users to add information about ... and ...<br />
