@@ -32,9 +32,9 @@ import com.Ostermiller.util.LineEnds;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-19 17:45:52 $'
- *	'$Revision: 1.6 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-02-24 01:33:45 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,8 +104,24 @@ public class DownLoadAction extends Action
 					String XML = XMLUtil.getVBXML(plotObservations);
 					
 					// Place into file for download
-					this.initResponseForFileDownLoad( response, "VegbankDownload.xml", DOWNLOAD_CONTENT_TYPE);
-					this.sendFileToBrowser(XML, response);
+					//this.initResponseForFileDownLoad( response, "VegbankDownload.xml", DOWNLOAD_CONTENT_TYPE);
+					//this.sendFileToBrowser(XML, response);
+
+					/////////////////
+					// ZIP the XML doc
+					/////////////////
+					this.initResponseForFileDownLoad(response, "VegbankDownload.zip", ZIP_CONTENT_TYPE);
+					
+					Hashtable nameContent = new Hashtable();
+					nameContent.put("plotObservations.xml", XML);
+					OutputStream responseOutputStream = response.getOutputStream();
+					responseOutputStream.flush();
+					
+					// TODO: Get the OS of user if possible and return a native file	
+					// For now use DOS style, cause those idiots would freak with anything else ;)					
+					ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
+					/////////////////
+						
 				}
 				else
 				{
@@ -247,7 +263,7 @@ public class DownLoadAction extends Action
 	
 	private void sendFileToBrowser( String fileContents, HttpServletResponse response ) throws IOException
 	{
-		LogUtility.log(fileContents);
+		//LogUtility.log(fileContents);
 		response.getWriter().write(fileContents);
 	}
 }
