@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-12-07 06:29:19 $'
-* '$Revision: 1.137 $'
+* '$Date: 2004-12-15 00:25:25 $'
+* '$Revision: 1.138 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -64,6 +64,7 @@
         <isset property="machine_url"/>
       </not>
     </condition>
+
     <condition property="eighty_eighty" value="">
       <not>
         <isset property="eighty_eighty"/>
@@ -74,7 +75,10 @@
         <isset property="headerImageMachine"/>
       </not>
     </condition>
+    <filter token="machine_url" value="${machine_url}" />
+    <filter token="eighty_eighty" value="${eighty_eighty}" />
     <filter token="headerImageMachine" value="${headerImageMachine}"/>
+
     <echo>BASE URL:  ${machine_url}(${eighty_eighty})
     </echo>
     <!-- set the apache doc root -->
@@ -367,8 +371,10 @@
 	* SERVLETS IN THE APPROPRIATE LOCATION
 -->
   <target name="forms" depends="images" description="=&gt; dist the forms to server ">
+    <!-- style business rules to create .jsp -->
+    <style  in="${forms}/businessrules.xml" style="${forms}/businessrules.xsl" out="${forms}/businessrules.jsp" force="yes" />
     <copy overwrite="true" todir="${forms_server}" filtering="yes">
-      <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* "/>
+      <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* *.xsl *.xsd businessrules.xml "/>
     </copy>
     <copy overwrite="true" todir="${tiles_server}" filtering="yes">
       <fileset dir="${tiles}" includes="**/*jsp **/*html" excludes="**/CVS* "/>
@@ -529,10 +535,10 @@
   </target>
   <!-- images -->
   <target name="vegbranch-dist-updatelists" depends="vegbranch-init" description="dist vegbranch update closed/open lists file">
-    <ant dir="../docs/xml" target="vegbranch-update-lists" />
-    <copy todir="${vegbranch_server}"  filtering="no" overwrite="yes" >
+    <ant dir="../docs/xml" target="vegbranch-update-lists"/>
+    <copy todir="${vegbranch_server}" filtering="no" overwrite="yes">
       <fileset dir="${vegbranch_src}">
-        <include name="current-closed-list.zip" />
+        <include name="current-closed-list.zip"/>
       </fileset>
     </copy>
   </target>
@@ -605,7 +611,7 @@
     <antcall target="vegbranch-dist-docs"/>
     <antcall target="vegbranch-dist-help"/>
     <antcall target="vegbranch-dist-demomedia"/>
-    <antcall target="vegbranch-dist-updatelists" />
+    <antcall target="vegbranch-dist-updatelists"/>
   </target>
   <!-- ________________________ end of VEGBRANCH TARGETS _____________________________________ -->
   <!--
