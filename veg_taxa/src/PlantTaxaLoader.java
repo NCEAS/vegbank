@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-07-10 17:11:50 $'
- * '$Revision: 1.13 $'
+ *     '$Date: 2002-08-01 23:21:35 $'
+ * '$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -354,15 +354,17 @@ public class PlantTaxaLoader
 				//LOAD THE CONCEPT -- USE THE REFERENCE ASSOCIATED WITH THE CONCEPT
 				int conceptId;
 				int statusId;
-				if (plantConceptExists(longNameId, conceptRefId, taxonDescription) == false)
+				if (plantConceptExists(longNameId, conceptRefId, conceptDescription) == false)
 				{
-					conceptId = loadPlantConceptInstance(longNameId, conceptRefId, taxonDescription, 
-					code, rank, longName );
+					System.out.println("PlantTaxaLoader > concept does not exist -- adding it");
+					conceptId = loadPlantConceptInstance(longNameId, conceptRefId, conceptDescription, 
+					code, taxonLevel, longName );
 				}
 				else
 				{
-					conceptId = getPlantConceptId(longNameId, conceptRefId, taxonDescription, 
-					code, rank, longName );
+					System.out.println("PlantTaxaLoader > concept previously exists");
+					conceptId = getPlantConceptId(longNameId, conceptRefId, conceptDescription, 
+					code, taxonLevel, longName );
 				}
 				System.out.println("PlantTaxaLoader > conceptId: " + conceptId);
 				
@@ -1133,16 +1135,28 @@ public class PlantTaxaLoader
 
 
 	/**
- 	* method that loads a new instance of a 
- 	* plant concept then returns to the calling
- 	* method the primary key for that concept
+ 	* method that loads a new instance of a plant concept 
+	* then returns to the calling method the primary key for 
+	* that concept
+	* @param plantNameId
+	* @param plantReferenceId
+	* @param plantDescription
+	* @param plantCode
+	* @param rank
+	* @param plantName
+	* @return plantConceptId -- the PK value for this table
  	*/	
 	private int loadPlantConceptInstance(int plantNameId, int plantReferenceId, 
 	String plantDescription, String plantCode, String rank, String plantName)
 	{
-		int plantConceptId = -999;
+		int plantConceptId = 0;
 		try
 		{
+			// MAKE SURE THAT THE CONCEPTDESCRIPTION IS NOT NULL
+			if ( plantDescription == null || plantDescription.trim().equals("null") )
+			{
+				plantDescription = "";
+			}
 			String s = "insert into PLANTCONCEPT (PLANTNAME_ID, PLANTDESCRIPTION, "
 			+" PLANTREFERENCE_ID, PLANTCODE, PLANTLEVEL, PLANTNAME) values(?,?,?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
@@ -1157,10 +1171,17 @@ public class PlantTaxaLoader
 			pstmt.close();	
 		
 			//now get the associated primary key value -- fix this to use a set method
-			String s1 = "select plantconcept_id from plantconcept where plantDescription = '"
-			+plantDescription+"'";
+			StringBuffer sb = new StringBuffer();
+			sb.append("select PLANTCONCEPT_ID from PLANTCONCEPT where ");
+			sb.append("PLANTDESCRIPTION like '"+plantDescription+"' and ");
+			sb.append("PLANTNAME like '"+plantName+"'");
+		
 			
-			PreparedStatement pstmt1 = conn.prepareStatement(s1);
+			//String s1 = "select plantconcept_id from plantconcept where plantDescription = '"
+			//+plantDescription+"'";
+			PreparedStatement pstmt1 = conn.prepareStatement( sb.toString() );
+			System.out.println("PlantTaxaLoader > sql to get conceptid: " + sb.toString() );
+			
 			ResultSet rs = pstmt1.executeQuery();
 			int cnt = 0;
 			while	( rs.next() )
@@ -1170,7 +1191,9 @@ public class PlantTaxaLoader
 				//System.out.println("USDAPlantsLoader >>> plantconcept_id: " + plantConceptId);
 			}
 			if (cnt > 1)
-			throw new Exception("multiple plantconceptID's found");
+			{
+				throw new Exception("multiple plantconceptID's found");
+			}
 			pstmt1.close();
 		}
 		catch(Exception e)
@@ -1659,8 +1682,8 @@ public class PlantTaxaLoader
 		try 
  		{
 			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/tmp2", "datauser", "");
-			//c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/plants_dev", "datauser", "");
+			//c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/tmp2", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/plants_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -1723,9 +1746,9 @@ public class PlantTaxaLoader
 	 		String surName = "harris";
 	 
 	 		String	institution = "nceas";
-	 		String	longName = "Pinus pondering";
-	 		String	shortName = "pondering pine";
-	 		String	code = "PPP";
+	 		String	longName = "Pinus ponderinguou";
+	 		String	shortName = "pondering pineuou";
+	 		String	code = "PPPuou";
 	 
 	 		String	longNameRefAuthors = "John Harris, Robert Peet";
 	 		String	longNameRefTitle = "Big Trees in California by the sea";
@@ -1760,7 +1783,7 @@ public class PlantTaxaLoader
 	 		String	codeRefISBN = "";
 	 		String	codeRefOtherCitDetails = "";
 	 
-	 		String	conceptDescription = "kinda like a ponderosa pining";
+	 		String	conceptDescription = "";
 	 		String	conceptRefAuthors = "Bob Peet, John Harris";
 	 		String	conceptRefTitle = "Big Trees in the State of California by the coast";
 	 		String	conceptRefDate = "24-Jan-2002";
