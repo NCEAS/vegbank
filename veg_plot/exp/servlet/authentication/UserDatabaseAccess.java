@@ -8,8 +8,8 @@ package servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: harris $'
- *     '$Date: 2002-06-13 13:05:35 $'
- *     '$Revision: 1.4 $'
+ *     '$Date: 2002-06-18 18:13:50 $'
+ *     '$Revision: 1.5 $'
  */
 
 
@@ -77,7 +77,7 @@ public class UserDatabaseAccess
 			Connection conn = getConnection();
 			Statement query = conn.createStatement();
 			sb.append("select CERTIFICATION_ID from USER_CERTIFICATION ");
-			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase());
+			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"'");
 			//System.out.println("sql: " + sb.toString() );
 			
 			//issue the query
@@ -183,39 +183,40 @@ public class UserDatabaseAccess
 				 sb.append(" current_position, esa_certified, prof_experience_doc, relevant_pubs, veg_sampling_doc, ");
 				 sb.append(" veg_analysis_doc, usnvc_experience_doc, vegbank_experience_doc, plotdb_experience_doc, ");
 				 sb.append(" nvc_exp_region_a, nvc_exp_vegetation_a, nvc_exp_floristics_a, nvc_exp_usnvc_a, ");
-				 sb.append(" esa_sponsor_name_a,  esa_sponsor_name_a, esa_sponsor_email_a, ");
+				 sb.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ");
 				 sb.append("  peer_review, additional_statements ) ");
 				 sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
 				 // create the statement
 				 PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 				 // Bind the values to the query and execute it
 				 pstmt.setString(1, emailAddress);
-				 pstmt.setString(2, givenName);
-				 pstmt.setString(3, phoneNumber);
-				 pstmt.setString(4, phoneType);
-				 pstmt.setString(5, currentCertLevel);
-				 pstmt.setString(6, cvDoc);
-				 pstmt.setString(7, highestDegree);
-				 pstmt.setString(8, degreeYear);
-				 pstmt.setString(9, degreeInst);
-				 pstmt.setString(10, currentInst);
-				 pstmt.setString(11, currentPos);
-				 pstmt.setString(12, esaPos);
-				 pstmt.setString(13, profExperienceDoc);
-				 pstmt.setString(14, relevantPubs);
-				 pstmt.setString(15, vegSamplingDoc);
-				 pstmt.setString(16, vegAnalysisDoc);
-				 pstmt.setString(17, usnvcExpDoc);
-				 pstmt.setString(18, vegbankExpDoc);
-				 pstmt.setString(19, plotdbDoc);
-				 pstmt.setString(20, nvcExpRegionA);
-				 pstmt.setString(21, nvcExpVegA);
-				 pstmt.setString(22, nvcExpFloristicsA);
-				 pstmt.setString(23, nvcExpNVCA);
-				 pstmt.setString(24, esaSponsorNameA);
-				 pstmt.setString(25, esaSponsorEmailA);
-				 pstmt.setString(26, peerReview);
-				 pstmt.setString(27,additionalStatements);
+				 pstmt.setString(2, surName);
+				 pstmt.setString(3, givenName);
+				 pstmt.setString(4, phoneNumber);
+				 pstmt.setString(5, phoneType);
+				 pstmt.setString(6, currentCertLevel);
+				 pstmt.setString(7, cvDoc);
+				 pstmt.setString(8, highestDegree);
+				 pstmt.setString(9, degreeYear);
+				 pstmt.setString(10, degreeInst);
+				 pstmt.setString(11, currentInst);
+				 pstmt.setString(12, currentPos);
+				 pstmt.setString(13, esaPos);
+				 pstmt.setString(14, profExperienceDoc);
+				 pstmt.setString(15, relevantPubs);
+				 pstmt.setString(16, vegSamplingDoc);
+				 pstmt.setString(17, vegAnalysisDoc);
+				 pstmt.setString(18, usnvcExpDoc);
+				 pstmt.setString(19, vegbankExpDoc);
+				 pstmt.setString(20, plotdbDoc);
+				 pstmt.setString(21, nvcExpRegionA);
+				 pstmt.setString(22, nvcExpVegA);
+				 pstmt.setString(23, nvcExpFloristicsA);
+				 pstmt.setString(24, nvcExpNVCA);
+				 pstmt.setString(25, esaSponsorNameA);
+				 pstmt.setString(26, esaSponsorEmailA);
+				 pstmt.setString(27, peerReview);
+				 pstmt.setString(28, additionalStatements);
 				
 				 
 				 // execute the insert
@@ -591,6 +592,175 @@ public class UserDatabaseAccess
 			e.printStackTrace();
 		}
 		return(conn);
+	}
+	
+	/**
+	 * method to return the user info for a user in the user database.  The
+	 * user data will be returned in a hashtable with the following keys <br> <br>
+	 *
+	 * "emailAddress"
+	 * "password"
+	 * "surName"
+	 * "givenName"
+	 * "permissionType"
+	 * "institution"
+	 * "ticketCount"
+	 * "address"
+	 * "city"
+	 * "state"
+	 * "country"
+	 * "zipCode"
+	 * "dayPhone"
+	 * 
+	 * @param user -- the email address of the user
+	 */
+	 public Hashtable getUserInfo(String emailAddress )
+	 {
+		 Hashtable h = new Hashtable();
+		 try 
+		 {
+			 //get the connections etc
+			 Connection conn = getConnection();
+			 Statement query = conn.createStatement ();
+			 ResultSet results= null;
+			 StringBuffer sb = new StringBuffer();
+				sb.append("SELECT EMAIL_ADDRESS, PASSWORD, SUR_NAME, 	GIVEN_NAME, ");
+				sb.append(" PERMISSION_TYPE, INSTITUTION, TICKET_COUNT, ADDRESS, CITY, STATE, COUNTRY, ZIP_CODE, PHONE_NUMBER,");
+				sb.append(" PHONE_TYPE FROM USER_INFO ");
+				sb.append(" WHERE 	EMAIL_ADDRESS like '"+emailAddress+"'");
+		
+			//issue the query
+			results = query.executeQuery(sb.toString());
+			
+			//get the results
+			while (results.next()) 
+			{
+				String DBEmailAddress = results.getString(1); 
+				String DBPassWord = results.getString(2);
+				String surName = results.getString(3);
+				String givenName = results.getString(4);
+				String permissionType = results.getString(5);
+				String institution = results.getString(6);
+				String ticketCount = results.getString(7);
+				
+				String address = results.getString(8);
+				String city = results.getString(9);
+				String state = results.getString(10);
+				String country = results.getString(11);
+				String zipCode = results.getString(12);
+				String dayPhone = results.getString(13);
+				 
+				h.put("emailAddress", DBEmailAddress);
+				h.put("password", DBPassWord);
+				h.put("surName", surName);
+				h.put("givenName", givenName);
+				h.put("permissionType", ""+permissionType);
+				h.put("institution", ""+institution);
+				h.put("ticketCount", ""+ticketCount);
+				h.put("address", ""+address);
+				h.put("city", ""+city);
+				h.put("state", ""+state);
+				h.put("country", ""+country);
+				h.put("zipCode", ""+zipCode);
+				h.put("dayPhone", ""+dayPhone);
+			}
+			conn.close();
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return( h);
+	 }
+	 
+	/**
+	 * method that updates the user info database.  The input to 
+	 * this method is a hashatble with the following parameters: <br> <br>
+	 *
+	 * "emailAddress"
+	 * "password"
+	 * "surName"
+	 * "givenName"
+	 * "permissionType"
+	 * "institution"
+	 * "ticketCount"
+	 * "address"
+	 * "city"
+	 * "state"
+	 * "country"
+	 * "zipCode"
+	 * "dayPhone"
+	 *
+	 */
+	 public boolean updateUserInfo(Hashtable h )
+	 {
+		 try 
+		 {
+			 
+			 String surName = (String)h.get("surName");
+			 String givenName = (String)h.get("givenName");
+			 String emailAddress = (String)h.get("emailAddress");
+			 
+			 String institution = (String)h.get("institution");
+			 String address = (String)h.get("address");
+			 String city  = (String)h.get("city");
+			 String state = (String)h.get("state");
+			 String country = (String)h.get("country");
+			 String phoneNumber  = (String)h.get("phoneNumber");
+			 String zipCode = (String)h.get("zipCode");
+			 
+			 
+			 if (  (! emailAddress.trim().equals("null") ) && (emailAddress != null) && (emailAddress.length() > 2)  )
+			 {
+				 StringBuffer sb = new StringBuffer();
+				 //get the connections etc
+				 Connection conn = getConnection();
+				 conn.setAutoCommit(false);
+				 
+				 //int userid = this.getUserId( emailAddress );
+				 sb.append("UPDATE USER_INFO set SUR_NAME =  '"+surName +"', ");
+				 sb.append("GIVEN_NAME = '"+givenName+"', ");
+				 
+				 sb.append("INSTITUTION = '"+institution+"', ");
+				 sb.append("ADDRESS= '"+address+"', ");
+				 sb.append("CITY= '"+city+"', ");
+				 sb.append("STATE= '"+state+"', ");
+				 sb.append("COUNTRY= '"+country+"', ");
+				 sb.append("ZIP_CODE= '"+zipCode+"', ");
+				 sb.append("PHONE_NUMBER = '"+phoneNumber+"' ");
+				 
+				 sb.append("WHERE EMAIL_ADDRESS like '"+emailAddress+"' ");
+				 System.out.println("sql: " + sb.toString() );
+				 // create the statement
+				 PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+				 // execute the insert
+				 pstmt.execute();
+				 
+				 conn.commit();
+				 conn.close();
+			 }
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	 }
+	
+	/**
+	 * main method for testing 
+	 */
+	public static void main(String[] args) 
+	{
+		UserDatabaseAccess udb = new UserDatabaseAccess();
+		Hashtable h = udb.getUserInfo("harris02@hotmail.com");
+		System.out.println("UserDatabaseAccess > user info: " + h.toString() );
+		h.put("surName", "Harris");
+		h.put("givenName", "John");
+		udb.updateUserInfo(h);
 	}
 
 }

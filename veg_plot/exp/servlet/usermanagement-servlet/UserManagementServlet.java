@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-06-14 18:22:57 $'
- * '$Revision: 1.9 $'
+ *     '$Date: 2002-06-18 18:13:50 $'
+ * '$Revision: 1.10 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,8 @@ public class UserManagementServlet extends HttpServlet
 	private String certificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/certification_valid.html";
 	private String certificationValidation = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
 	private String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
-	
+	private String userUpdateValidation = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
+	private String userUpdateTemplate =  "/usr/local/devtools/jakarta-tomcat/webapps/forms/user_update_form.html";
 	//constructor
 	public UserManagementServlet()
 	{
@@ -142,7 +143,11 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 					{
 						this.handleCertification(req, res);
 					}
-					
+					// CHANGE USER SETTINGS 
+					else if ( action.equals("changeusersettings") )
+					{
+						this.handleSettingsModification(req, res);
+					}
 					else
 					{
 						System.out.println("UserManagementServlet > unrecognized action: " + action);
@@ -155,6 +160,140 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 				e.printStackTrace();
 			}
 		}
+	
+	/**
+	 * method that handles the modification settings there are two 
+	 * sub-proccesses enveloped in this method:
+	 * 1] initiate the process - to display to the user the current 
+	 * 	attributes stored in the database,
+	 * 2] take the input parameters and make the changes in the database
+	 * 
+	 * @param req -- the http request object
+	 * @param res -- the http response object
+	 */
+	 private void handleSettingsModification(HttpServletRequest req, HttpServletResponse res )
+	 {
+		 try
+		 {
+			 System.out.println("UserManagementServlet > performing user settings modification");
+			 String emailAddress = this.cookieValue;
+			 if ( emailAddress != null && emailAddress.length() > 2)
+			 {
+				 // FIGURE OUT WHETHER TO SEND THE UPDATE FORM OR GET THE PARAMETRS
+				 Hashtable params = util.parameterHash(req);
+				 if ( params.containsKey("surName") )
+				 {
+					 System.out.println("UserManagementServlet > reading the update parameters");
+					 
+					 //get the input paramters
+					 String surName = (String)params.get("surName");
+					 String givenName = (String)params.get("givenName");
+					 String password = (String)params.get("password");
+					 String permissionType = (String)params.get("permissionType");
+					 String institution = (String)params.get("institution");
+					 String ticketCount = (String)params.get("ticketCount");
+					 String address = (String)params.get("address");
+					 String city = (String)params.get("city");
+					 String state = (String)params.get("state");
+					 String country = (String)params.get("country");
+					 String zipCode = (String)params.get("zipCode");
+					 String phoneNumber = (String)params.get("phoneNumber");
+					 
+					 //put into a hashtable
+					 Hashtable h = new Hashtable();
+					 h.put("emailAddress", emailAddress);
+					 h.put("password", ""+password);
+					 h.put("surName", ""+surName);
+					 h.put("givenName", ""+givenName);
+					 h.put("permissionType", ""+permissionType);
+					 h.put("institution", ""+institution);
+					 h.put("ticketCount", ""+ticketCount);
+					 h.put("address", ""+address);
+					 h.put("city", ""+city);
+					 h.put("state", ""+state);
+					 h.put("country", ""+country);
+					 h.put("zipCode", ""+zipCode);
+					 h.put("phoneNumber", ""+phoneNumber);
+					 
+					 // instantiate the database
+					 userdb = new UserDatabaseAccess();
+					 userdb.updateUserInfo(h);
+					 
+					 // send a success message
+					 Hashtable replaceHash = new Hashtable();
+					 StringBuffer sb = new StringBuffer();
+					 sb.append("Thank you "+givenName+" "+surName+"! <br> ");
+					 sb.append("Your VegBank profile has been updated. <br>");
+					 replaceHash.put("messages",  sb.toString());
+					 util.filterTokenFile(genericForm, certificationValidation, replaceHash);
+						//print the outfile to the browser
+						PrintWriter out = res.getWriter();
+						String s = util.fileToString(certificationValidation);
+						out.println(s);
+					 //res.sendRedirect("/forms/valid.html");
+				 }
+				 else
+				 {
+					 System.out.println("UserManagementServlet > sending the current parametrs");
+					 userdb = new UserDatabaseAccess();
+					 Hashtable h = userdb.getUserInfo(emailAddress);
+					 
+					 String surName = (String)h.get("surName");
+					 String givenName = (String)h.get("givenName");
+					 String password = (String)h.get("password");
+					 String address = (String)h.get("address");
+					 String city = (String)h.get("city");
+					 String state = (String)h.get("state");
+					 String country = (String)h.get("country");
+					 String zipCode = (String)h.get("zipCode");
+					 String dayPhone = (String)h.get("dayPhone");
+					 String ticketCount =  (String)h.get("ticketCount");
+					 String permissionType = (String)h.get("permissionType");
+					 String institution = (String)h.get("institution");
+					 
+					 Hashtable replaceHash = new Hashtable();
+					 replaceHash.put("messages", " ");
+					 replaceHash.put("surName", ""+surName);
+					 replaceHash.put("givenName", ""+givenName);
+					 replaceHash.put("password", ""+password);
+					 replaceHash.put("address", ""+address );
+					 replaceHash.put("city", ""+city );
+					 replaceHash.put("state", ""+state );
+					 replaceHash.put("country", ""+country);
+					 replaceHash.put("zipCode", ""+zipCode );
+					 replaceHash.put("phoneNumber", ""+dayPhone );
+					 replaceHash.put("institution", ""+institution );
+					 replaceHash.put("ticketCount", ""+ticketCount );
+					 replaceHash.put("permissionType", ""+permissionType );
+					 replaceHash.put("emailAddress", emailAddress );
+					 
+					 util.filterTokenFile(userUpdateTemplate, userUpdateValidation, replaceHash);
+						//print the outfile to the browser
+						PrintWriter out = res.getWriter();
+						String s = util.fileToString(userUpdateValidation);
+						out.println(s);
+					 //res.sendRedirect("/forms/valid.html");
+					 // delete the form 
+					 Thread.sleep(10000);
+					 util.flushFile(userUpdateValidation);
+				 }
+			 }
+			 else
+			 {
+				 System.out.println("UserManagementServlet > missing require attributes");
+				 // assume that they are not logged in and send them there
+				res.sendRedirect("/forms/redirection_template.html");
+
+			 }
+			 
+		 }
+		 catch(Exception e)
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 
+	 }
 		
 	/**
 	 * method that hendles the insertion of certification-request data in to the 
@@ -261,7 +400,12 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						
 						replaceHash.put("messages",  sb.toString());
 						util.filterTokenFile(genericForm, certificationValidation, replaceHash);
-						res.sendRedirect("/forms/valid.html");	
+						//res.sendRedirect("/forms/valid.html");	
+						//print the outfile to the browser
+						PrintWriter out = res.getWriter();
+						String s = util.fileToString(certificationValidation);
+						out.println(s);
+						
 						// send email message 
 						String mailHost = "nceas.ucsb.edu";
 						String from = "vegbank";
@@ -297,7 +441,11 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 						
 						
 						util.filterTokenFile(certificationTemplate, certificationValidation, replaceHash);
-						res.sendRedirect("/forms/valid.html");
+						//print the outfile to the browser
+						PrintWriter out = res.getWriter();
+						String s = util.fileToString(certificationValidation);
+						out.println(s);
+						//res.sendRedirect("/forms/valid.html");
 						// delete the form 
 						Thread.sleep(10000);
 						util.flushFile(certificationValidation);
