@@ -7,7 +7,7 @@ function toggle(e) {
 }
 
 function checkAll(checkboxName) {
-	var form = document.listform;
+	var form = document.DownLoadManagerForm;
 	var len = form.elements.length;
 	for (var i = 0; i < len; i++) {
 		var e = form.elements[i];
@@ -18,7 +18,7 @@ function checkAll(checkboxName) {
 }
 
 function clearAll(checkboxName) {
-	var form = document.listform;
+	var form = document.DownLoadManagerForm;
 	var len = form.elements.length;
 	for (var i = 0; i < len; i++) {
 		var e = form.elements[i];
@@ -73,7 +73,7 @@ function clear(e) {
 }
 
 function refreshHighlight(checkboxName) {
-	var form = document.listform;
+	var form = document.DownLoadManagerForm;
 	var len = form.elements.length;
 	for (var i = 0; i < len; i++) {
 		var e = form.elements[i];

@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-10-29 18:27:44 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-11-03 03:49:47 $'
+ *  '$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,12 +27,14 @@ package org.vegbank.common.utility;
  */
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
@@ -70,33 +72,77 @@ public class ServletUtility
 	 * @param outFile -- the name of the zip file
 	 *
 	 */
-	public void setZippedFile(Vector fileVec, String outFile)
+	public static void setZippedFile(Vector fileVec, String outFile) throws IOException
 	{
-		try 
+		String outFilename = outFile;
+		setZippedFile(fileVec, new FileOutputStream(new File(outFilename)) );
+	}
+	
+	/**
+	 * method that takes a vector containing a number of file names
+	 * and a string that represents the output file and creates a 
+	 * zip file with the specified name containing the specified 
+	 * files
+	 *
+	 * @param fileVec -- the vector containing the files
+	 * @param outFile -- File -- The zip file
+	 *
+	 */
+	public static void  setZippedFile(Vector fileVec, OutputStream outStream) throws IOException
+	{
+		ZipOutputStream out = new ZipOutputStream(outStream);
+		for (int i =0; i < fileVec.size(); i++)
 		{
-		 	String outFilename = outFile;
-     		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
-			for (int i =0; i < fileVec.size(); i++)
+			String inFilename = (String)fileVec.elementAt(i);
+			FileInputStream in = new FileInputStream(inFilename);
+			out.putNextEntry(new ZipEntry(inFilename));
+			byte[] buf = new byte[1024];
+			int len;
+			while ((len = in.read(buf)) > 0) 
 			{
-				String inFilename = (String)fileVec.elementAt(i);
-     		FileInputStream in = new FileInputStream(inFilename);
-     		out.putNextEntry(new ZipEntry(inFilename));
-     		byte[] buf = new byte[1024];
-     		int len;
-      	while ((len = in.read(buf)) > 0) 
-				{
-         	out.write(buf, 0, len);
-       	}
-     		out.closeEntry();
-				in.close();
-     	}
-			out.close();
+				out.write(buf, 0, len);
+			}
+			out.closeEntry();
+			in.close();
 		}
-		catch (Exception e)
+		out.close();
+	}
+	
+	static final int BUFFER = 2048; 
+	
+	/**
+	 * method that takes a Hashtable containing a InputStreams / desired fileName 
+	 * and an Outputstrean that represents the created  zip file 
+	 *
+	 * @param fileVec -- the vector containing the files
+	 * @param outFile -- File -- The zip file
+	 *
+	 */
+	public static void  putZippedFileInOutputStream(Hashtable nameContent, OutputStream outStream) throws IOException
+	{
+		ZipOutputStream zipstream = new ZipOutputStream(outStream);
+		
+		Enumeration names = nameContent.keys();
+		while ( names.hasMoreElements() )
 		{
-			System.out.println("Exception: "+ e.getMessage() );
-			e.printStackTrace();
+			String fileName = (String) names.nextElement();
+			String fileContent = (String) nameContent.get(fileName);
+		
+			ZipEntry zipentry = new ZipEntry(fileName);
+			zipstream.putNextEntry(zipentry);
+			
+			int count;
+			byte data[] = new byte[BUFFER];
+			
+			ByteArrayInputStream origin = new ByteArrayInputStream(fileContent.getBytes());
+			while( (count = origin.read(data, 0, BUFFER)) != -1) 
+			{
+				zipstream.write(data, 0, count);
+			} 
+			//zipstream.closeEntry();
+			origin.close();	
 		}
+		zipstream.close();
 	}
 	
 	public void sendHTMLEmail(

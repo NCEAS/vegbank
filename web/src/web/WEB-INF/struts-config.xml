@@ -55,6 +55,24 @@
 		<form-property name="resultType" type="java.lang.String"/>
     </form-bean>
 
+    <form-bean  name="DownLoadForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="dataType" type="java.lang.String" initial="all"/>
+		<form-property name="formatType" type="java.lang.String" initial="xml"/>
+    </form-bean>
+
+    <form-bean  name="DownLoadManagerForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="plotsToDownLoad" type="java.lang.String[]"/>
+    </form-bean>
+
+    <form-bean  name="DisplayQueryResultsForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="plotsToDownLoad" type="java.lang.String[]"/>
+    </form-bean>
+
+
+
   </form-beans>
 
 
@@ -76,7 +94,14 @@
     <forward   name="authenticationException" path="/forms/authenticationException.jsp"/>
     <forward   name="DisplayUploadPlotAction" path="/forms/plot-submit.jsp"/>
     <forward   name="DropPlotAction" path="/forms/plot-drop.jsp"/>
-    <!--<forward   name="DisplayPlot" path="/DisplayPlot.do" contextRelative="true"  redirect="true"/>-->
+    <forward   name="DownLoad"	path="/forms/DownLoad.jsp"/>
+    <forward   name="DownLoadManager"	path="/DownLoadManager.do"/>
+
+    <!-- These are the nested requests mike uses for generating displays, this is dangerous stuff -->
+    <forward   name="ReferencePKTranslateViewData.jsp"	path="/forms/ReferencePKTranslateViewData.jsp"/>
+    <forward   name="CoverMethodDetailViewData.jsp"	path="/forms/CoverMethodDetailViewData.jsp"/>
+    <forward   name="CoverIndexAustereViewData.jsp"	path="/forms/CoverIndexAustereViewData.jsp"/>
+
   </global-forwards>
 
 
@@ -163,6 +188,26 @@
         validate="true"
 	input="failure">
     </action>
+
+    <!-- Manage file download -->
+    <action path="/DownLoadManager"
+        type="org.vegbank.ui.struts.DownLoadManagerAction"
+        name="DownLoadManagerForm"
+        scope="request"
+        validate="true"
+	input="DisplayResults">
+      <forward name="success" path="/forms/DownLoad.jsp"/>
+    </action>
+
+    <!-- Download a file -->
+    <action path="/DownLoad"
+        type="org.vegbank.ui.struts.DownLoadAction"
+        name="DownLoadForm"
+        scope="request"
+        validate="true"
+	input="DownLoad">
+    </action>
+
 
 
     <action path="/EntityName"

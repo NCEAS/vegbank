@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.4 2003-10-24 19:26:40 farrell Exp $
+    $Id: validation.xml,v 1.5 2003-11-03 03:49:47 farrell Exp $
 -->
 
 <form-validation>
@@ -98,6 +98,15 @@
 	    <field property="plotId"
 		depends="required">
               <arg0   key="The primary key of the plot" resource="false"/>
+            </field>
+	</form>
+
+	<form name="DownLoadForm">
+	    <field property="dataType" depends="required">
+              <arg0   key="The desired type" resource="false"/>
+            </field>
+	    <field property="formatType" depends="required">
+              <arg0   key="The desired data format" resource="false"/>
             </field>
 	</form>
 

@@ -5,9 +5,9 @@
  *               National Center for Ecological Analysis and Synthesis
  *   Authors: @author@
  *
- *  '$Author: mlee $'
- *  '$Date: 2003-10-14 00:53:35 $'
- *  '$Revision: 1.3 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-11-03 03:49:47 $'
+ *  '$Revision: 1.4 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -142,8 +142,7 @@
             </td>
             <td align="Left" valign="Top" width="229"> 
               <input  name="formatType" type="radio" value="xml" checked>xml<br>
-        <input name="formatType" type="radio" value="flat">flat-ascii<br>
-        <input name="formatType" type="radio" value="html">html<br>
+              <input name="formatType" type="radio" value="flat">flat-ascii<br>
             
 	    <!-- THIS IS THE CONDENSED ASCII-FORMAT THAT CAN BE IMPORTED INTO THE ANALYTICAL TOOLS -->
 	  <!--  <input name="formatType" type="radio" value="condensed">condensed-ascii -->

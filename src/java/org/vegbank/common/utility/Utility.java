@@ -1,6 +1,9 @@
 package org.vegbank.common.utility;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -22,8 +25,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-10-31 01:48:41 $'
- * '$Revision: 1.19 $'
+ * '$Date: 2003-11-03 03:49:47 $'
+ * '$Revision: 1.20 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -531,5 +534,30 @@ public class Utility
 		}
 		
 		return accessionPrefix;
+	}
+	
+	/**
+	 * Convert an inputstream to a String. Not sure how the handle encoding 
+	 * so using System default for now.
+	 * 
+	 * @param is
+	 * @return
+	 * @throws IOException
+	 */
+	public static String getStringFromInputStream(InputStream is) throws IOException
+	{
+		InputStreamReader reader = new InputStreamReader(is);
+		char[] buffer = new char[4096];
+		
+		StringWriter writer = new StringWriter();
+		
+		int bytes_read;
+		while ((bytes_read = reader.read(buffer)) != -1)
+		{
+			writer.write(buffer, 0, bytes_read);
+		}
+		
+		String result = writer.toString();
+		return result;
 	}
 }

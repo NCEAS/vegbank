@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-10 23:37:14 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-11-03 03:49:47 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package org.vegbank.ui.struts;
-
-import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 

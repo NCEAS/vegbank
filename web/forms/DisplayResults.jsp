@@ -12,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2003-10-28 01:05:35 $'
-*  '$Revision: 1.10 $'
+*    '$Author: farrell $'
+*      '$Date: 2003-11-03 03:49:47 $'
+*  '$Revision: 1.11 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -39,10 +39,20 @@
   </head>
 
   <body>
-  @vegbank_header_html_normal@
-
 
   <script src="/vegbank/includes/utils.js"></script>
+
+  @vegbank_header_html_normal@
+
+  <br/>
+  <logic:messagesPresent message="false">
+    <ul>
+      <html:messages id="error" message="false">
+        <li><bean:write name="error"/></li>
+      </html:messages> 
+    </ul>
+  </logic:messagesPresent>
+
 
   <!-- format the word plot to be plural if not 1 plot -->
 
@@ -54,10 +64,11 @@
   </logic:equal>
   <logic:notEqual name="PlotsResultsSize" value="1">
 
-    <span class="category"><font color="red">
-      
+    <span class="category">
+      <font color="red">
 	<bean:write name="PlotResultsSize"/> plot<logic:notEqual name="PlotResultsSize" value="1">s</logic:notEqual> matched your search criteria<br/>
-    </font></span>
+      </font>
+    </span>
   
       <!-- SOME NOTES ABOUT THE USE OF ICONS-->
       <br/>
@@ -68,18 +79,18 @@
         <img src="/vegbank/images/xml_icon.gif"></img>=Raw XML
       </span>
 
-      <!-- set up the form which is required by netscape 4.x browsers -->
-      <form name="listform" action="@viewdataservlet@" method="post">
+      <html:form action="/DownLoadManager">
 
 	 <span class="item">Choose plots to download from the search results below.</span>
-	<br/>
-       <input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
-	<br/>&nbsp;
-       <!-- set up a table -->
-    <table cellspacing="0" cellpadding="1">
-	<tr><td>&nbsp; &nbsp; &nbsp; &nbsp; </td>
-	<td bgcolor="#000000">
-    <table width="650" cellspacing="0" cellpadding="0">
+	 <br/>
+         <input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
+	   <br/>&nbsp;
+           <!-- set up a table -->
+           <table cellspacing="0" cellpadding="1">
+	     <tr><td>&nbsp; &nbsp; &nbsp; &nbsp; </td>
+	       <td bgcolor="#000000">
+
+       <table width="650" cellspacing="0" cellpadding="0">
 
 
 	 <tr bgcolor="#336633" align="left" valign="top">
@@ -92,9 +103,9 @@
 
 	 <tr bgcolor="#333333" align="center">
 	   <td class="whitetext" nowrap>
-	   	select +<a class="whitetext" href="javascript:checkAll('plotName')">all</a>
+	   	select +<a class="whitetext" href="javascript:checkAll('plotsToDownLoad')">all</a>
 		&nbsp; 
-		-<a class="whitetext" href="javascript:clearAll('plotName')">none</a>
+		-<a class="whitetext" href="javascript:clearAll('plotsToDownLoad')">none</a>
 	   </td>
 	   <td colspan="20"> &nbsp; </td>
 	 </tr>
@@ -148,9 +159,9 @@
                 <img align="center" border="0" src="/vegbank/images/xml_icon.gif" alt="Raw XML view"></img>
               </html:link>
 
-		<!-- Checkbox for download -->
-		<br/>
-              <input name="plotName" type="checkbox" value='<bean:write property="plotId" name="row"/>' 
+	      <!-- Checkbox for download -->
+	      <br/>
+              <input name="plotsToDownLoad" type="checkbox" value='<bean:write property="plotId" name="row"/>' 
 			  	 onclick="toggle(this)" id='<bean:write property="plotId" name="row"/>'>
                 <span class="itemlabel" style="cursor:hand">
 					<label for='<bean:write property="plotId" name="row"/>'>download</label></span>
@@ -187,9 +198,9 @@
 
 	 <tr bgcolor="#333333" align="center">
 	   <td class="whitetext" nowrap>
-	   	select +<a class="whitetext" href="javascript:checkAll('plotName')">all</a>
+	   	select +<a class="whitetext" href="javascript:checkAll('plotsToDownLoad')">all</a>
 		&nbsp; 
-		-<a class="whitetext" href="javascript:clearAll('plotName')">none</a><a name="bottom"></a>
+		-<a class="whitetext" href="javascript:clearAll('plotsToDownLoad')">none</a><a name="bottom"></a>
 	   </td>
 	   <td colspan="20"> &nbsp; </td>
 	 </tr>
@@ -205,9 +216,10 @@
 	<br/>
 	 <span class="item">Choose plots to download from the search results above.</span>
 	<br/>
-       <input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
+	<html:submit value="Continue to Download Wizard" /> 
 	<br/>&nbsp;
-      
+
+     </html:form>      
   </logic:notEqual>
   
   </font>

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-19 22:27:48 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2003-11-03 03:49:47 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -220,8 +220,8 @@ public class PlotQueryAction extends Action
 			getPlantResultSets(pqForm, resultSets);
 			getCommunitiesResultSets(pqForm, resultSets);
 			
-			// Save the Collection of Summaries into the request
-			request.setAttribute("PlotsResults", getPlotSummaries(conjunction, resultSets));
+			// Save the Collection of Summaries into the session
+			request.getSession().setAttribute("PlotsResults", getPlotSummaries(conjunction, resultSets));
 		}
 		catch (SQLException e1)
 		{

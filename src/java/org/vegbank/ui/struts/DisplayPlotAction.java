@@ -5,8 +5,8 @@ package org.vegbank.ui.struts;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-27 20:04:29 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-11-03 03:49:47 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.DynaActionForm;
-import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Plot;
 import org.vegbank.common.utility.StopWatchUtil;
 import org.vegbank.common.utility.Utility;
