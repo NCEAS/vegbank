@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-21 21:28:51 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-02-21 21:40:42 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ public class VegCommunityLoader
 			int commNameId = insertCommunityName(commName, refId, dateEntered);
 			System.out.println("VegCommunityLoader > commNameId: " + commNameId);
 			int commConceptId = insertCommunityConcept(conceptCode, commNameId, 
-			conceptLevel, parentCommunity);
+			conceptLevel, parentCommunity, commName);
 			System.out.println("VegCommunityLoader > commConceptId: " + commConceptId);
 			//if the class variable 'commit' is still true then commit
 			//otherwise rollback the connection
@@ -169,7 +169,7 @@ public class VegCommunityLoader
 	  * method to insert data into the commname table
 		*/
 		private int insertCommunityConcept(String commConceptCode, int commNameId, 
-		String conceptLevel, String parentCommunity )
+		String conceptLevel, String parentCommunity, String conceptDescription )
 	  {
 		 int commConceptId = 0; 
 		 try
@@ -177,8 +177,9 @@ public class VegCommunityLoader
 			StringBuffer sb = new StringBuffer();
 				
 			//insert the strata values
-			sb.append("INSERT into COMMCONCEPT (commname_id, ceglcode, commlevel) "
-			+" values(?, ?, ?)");
+			sb.append("INSERT into COMMCONCEPT (commname_id, ceglcode, commlevel, "
+			+" conceptDescription) "
+			+" values(?, ?, ?, ?)");
 				
 			
 			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
@@ -186,6 +187,7 @@ public class VegCommunityLoader
   		pstmt.setInt(1, commNameId);
 			pstmt.setString(2, commConceptCode);
 			pstmt.setString(3, conceptLevel);
+			pstmt.setString(4, conceptDescription);
 				
 			//execute the p statement
   		pstmt.execute();

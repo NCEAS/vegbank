@@ -121,6 +121,7 @@ CREATE TABLE commConcept
     ceglCode varchar (22),
     commLevel varchar (22),
     commParent integer,
+		conceptDescription varchar (200),
     PRIMARY KEY(COMMCONCEPT_ID)
 );
 
