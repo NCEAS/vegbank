@@ -2,13 +2,18 @@
  * vegPlotDB.sql -- Creates the veg plots database 
  */
 
+
 CREATE TABLE project (
 project_id INT NOT NULL PRIMARY KEY,
-projectName varchar(20),
+projectName varchar(20),  --with prototype data from TNC this is
 purpose varchar(20),
 samplingMethod varchar(20),
 coverScale INT);
 
+/*
+* Some attributes are missing from this table - in order to capture just the data fields 
+* represented by the prototype TNC data
+*/
 
 CREATE TABLE plotMaster (
 plot_id INT NOT NULL PRIMARY KEY,
@@ -42,15 +47,26 @@ surfGeo VARCHAR(100),
 FOREIGN KEY (project_id) REFERENCES project
 );
 
+
+/*
+* Both the speciesTaxon and strataComposition tables from the ERD are lumped into this table
+* they may be separated at a later time - probably when the ecologists figure out the 'dominance' issue
+*/
+
+
 CREATE TABLE speciesTaxon (
 taxon_id INT NOT NULL PRIMARY KEY,
 plot_id INT NOT NULL,
-originalTaxonName VARCHAR(32),
+originalTaxonName VARCHAR(120),
+originalTaxonSymbol VARCHAR(10),
 authority VARCHAR(32),
 currentTaxonUnit VARCHAR(32),
 cumStrataCoverage NUMBER(4,6),
+stratumType VARCHAR (10),
+percentCover NUMBER(8),
 FOREIGN KEY (plot_id) REFERENCES plotMaster
 );
+
 
 CREATE TABLE party (
 party_id INT,
@@ -62,21 +78,21 @@ positionName varchar(20),
 hoursOfService INT,
 contactInstructions varchar(20));
 
+/*
+* this view was created to consolidate the 'key' fields of the database into a single manageable view
+*/
+
+
 CREATE VIEW salientPlotMaster 
 AS SELECT plot_id, 
 project_id, 
 authorPlotNum, 
-plotDate, 
 plotOriginLat, 
 plotOriginLong,
-plotShape,
-plotSize,
 altValue,
-slopeAspect,
 slopeGradient,
 slopePosition,
 hydrologicRegime,
-soilDrainage,
 surfGeo
 FROM plotMaster;
 
