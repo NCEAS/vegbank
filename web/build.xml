@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-04-24 06:52:09 $'
-* '$Revision: 1.38 $'
+* '$Date: 2003-05-01 07:47:20 $'
+* '$Revision: 1.39 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -20,7 +20,7 @@
 * usage: ant forms, images
 -->
 <project name="vegbank_web" default="init" basedir=".">
-  <target name="init">
+  <target name="init" description="=&gt; sets variables and displays targets">
     <tstamp/>
     <!-- LET THE USER KNOW THE TARGETS -->
     <echo message="############ ${ant.project.name} ##############"/>
@@ -88,26 +88,27 @@
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
-  <target name="hdrftr" depends="init">
-    <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
-    <!-- set the newly created properties file as a filtersfile to distribute headers and footers -->
+  <target name="hdrftr" depends="init" description="=&gt; sets tokens to be replaced by those in hdrfooter file and other files">
+    <!-- set the properties file that replaces tokens with closed list values in picklists -->
+    <filter filtersfile="${style_server}/closedlist-tokens.properties"/>
+    <!-- set the properties file as a filtersfile to distribute headers and footers -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
   </target>
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
-  <target name="includes" depends="init">
+  <target name="includes" depends="init" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
     <copy todir="${style_server}" filtering="no">
       <fileset dir="${style_src}">
         <include name="**.css"/>
       </fileset>
     </copy>
   </target>
-  <target name="index" depends="hdrftr" description="target to dist. the index.html file">
+  <target name="index" depends="hdrftr" description="=&gt; target to dist. the index.html file">
     <copy tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/vegbank/index.html -->
     <copy todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
   </target>
   <!-- DISTRIBUTE THE IMAGES -->
-  <target name="images" depends="init">
+  <target name="images" depends="init" description="=&gt; dist. the images to server">
     <copy todir="${image_server}" filtering="no">
       <fileset dir="${image_src}">
         <include name="**"/>
@@ -118,7 +119,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-  <target name="news" depends="hdrftr">
+  <target name="news" depends="hdrftr" description="=&gt; dist the news to server">
     <copy todir="${news_server}" filtering="yes">
       <fileset dir="${news_src}"/>
     </copy>
@@ -127,7 +128,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-  <target name="panel" depends="hdrftr">
+  <target name="panel" depends="hdrftr" description="=&gt; dist the panel pages to server">
     <copy todir="${panel_server}" filtering="yes">
       <fileset dir="${panel_src}">
         <include name="*.html"/>
@@ -141,7 +142,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-  <target name="history" depends="hdrftr">
+  <target name="history" depends="hdrftr" description="=&gt; dist the history pages to server ">
     <copy todir="${history_server}" filtering="yes">
       <fileset dir="${history_src}">
         <exclude name="**/**.gif"/>
@@ -157,7 +158,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 -->
-  <target name="pubs" depends="init">
+  <target name="pubs" depends="init" description="=&gt; dist the pubs pages to server">
     <copy todir="${pubs_server}" filtering="no">
       <fileset dir="${pubs_src}"/>
     </copy>
@@ -166,7 +167,7 @@
 	* TARGET TO PUT THE FORMS FOR INTERACTING WITH THE
 	* SERVLETS IN THE APPROPRIATE LOCATION
 -->
-  <target name="forms" depends="hdrftr">
+  <target name="forms" depends="hdrftr" description="=&gt; dist the (specific list of) forms to server ">
     <copy todir="${forms_server}" filtering="yes">
       <fileset dir="${forms}" includes="*jsp
       nested-plot-query.html
@@ -214,13 +215,13 @@
   <!--
 	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
 -->
-  <target name="general" depends="hdrftr">
+  <target name="general" depends="hdrftr" description="=&gt; dist the general dir to server">
     <copydir src="${general_src}" dest="${general_server}" filtering="yes" includes="**.html" excludes="**/CVS*   vbsummary.html   get_vb_stats_temp.html"/>
   </target>
   <!--
 	* TARGET TO PUT THE DESIGN HTML DOCS INTO THE CORRECT PLACE
 -->
-  <target name="design" depends="hdrftr">
+  <target name="design" depends="hdrftr" description="=&gt; dist the design (info) files to server">
     <copy todir="${design_server}" filtering="yes">
       <fileset dir="${design_src}">
         <include name="**/**.html"/>
@@ -228,15 +229,15 @@
     </copy>
     <!-- non-html files -->
     <copy todir="${design_server}" filtering="no">
-          <fileset dir="${design_src}">
-            <exclude name="**/**.html"/>
-          </fileset>
+      <fileset dir="${design_src}">
+        <exclude name="**/**.html"/>
+      </fileset>
     </copy>
   </target>
   <!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
-  <target name="xsl" depends="hdrftr">
+  <target name="xsl" depends="hdrftr" description="=&gt; dist the xsl dir to server">
     <copy todir="${framwork.lib.dir}" filtering="yes">
       <fileset dir="${xsl.src.dir}"/>
     </copy>
@@ -244,7 +245,7 @@
   <!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
-  <target name="web" depends="hdrftr">
+  <target name="web" depends="hdrftr" description="=&gt; more xsl? ">
     <copy todir="${vegbank_server}" filtering="yes">
       <fileset dir="${web.src.dir}"/>
     </copy>
@@ -252,12 +253,16 @@
   <!--
 	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
 -->
-  <target name="dictionary" depends="init">
-    <copy todir="${dictionary_server}" filtering="no">
-      <fileset dir="${dictionary_src}"/>
-    </copy>
+  <target name="dictionary" depends="init" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
+    <!-- calls ant to run a different ant target which creates the vegbank dictionary based on logical fields only -->
+    <ant dir="../../../docs/xml" target="logical"/>
   </target>
-  <target name="vbsummary" depends="hdrftr">
+  <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
+    <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
+    <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
+    <ant dir="../../../docs/xml" target="dist-closedlist-tokenfile"/>
+  </target>
+  <target name="vbsummary" depends="hdrftr" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
     <exec dir="./general" executable="psql">
       <arg line="plots_dev qa -f get_vb_stats_cmds.txt"/>
@@ -273,7 +278,8 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="dist" depends=" index, 
+  <target name="dist" depends="tokenfiles, 
+                                index, 
                               design, 
                               forms, 
                               general, 
@@ -286,5 +292,5 @@
                               panel, 
                               pubs,
                               xsl" description="=> Distribute all web files"/>
-  <!-- FIXME dictionary, images target expects files not in cvs -->
+  <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
 </project>
