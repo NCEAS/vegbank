@@ -110,6 +110,8 @@ see also:
 <td align=center>
 <table border=0 cellspacing=5 cellpadding=5>
 <FORM ACTION="http://@server@@servlet-path@DataRequestServlet" METHOD="GET">
+<input type="hidden" name="requestDataFormatType" value="html">
+<input type="hidden" name="clientType" value="browser">
 
 <!--variables that are used by the servlet to figure out which query(s) to issue -->
 <input type="hidden" name="requestDataType" value="vegPlot">
