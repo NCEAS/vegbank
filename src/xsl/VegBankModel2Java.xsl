@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-25 01:48:41 $'
- *  '$Revision: 1.10 $'
+ *  '$Date: 2003-10-26 06:25:12 $'
+ *  '$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@
  */
 
 package org.vegbank.common.model;
-
+ 
 import java.util.Vector;
 import java.util.Collection;
 import java.util.AbstractList;
@@ -71,7 +71,7 @@ import java.util.List;
 import java.io.Serializable;
 import java.util.Iterator;
 
-public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
+public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean implements Serializable
 {
    
    <xsl:choose>
@@ -141,17 +141,26 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
     
     
     </xsl:for-each>
+    
+ <!-- ***************************************************************************** -->
+ <!-- Generate isRootElement() method  -->
+ <!-- ***************************************************************************** -->
+     public boolean isRootElement()
+     {
+   <xsl:choose>
+     <xsl:when test="attribute[attKey='PK' and attRelType/@type ='root']">
+       return true; 
+     </xsl:when>
+     <xsl:otherwise>
+       return false; 
+     </xsl:otherwise>
+   </xsl:choose>
+     }
 
  <!-- ***************************************************************************** -->
  <!-- Generate toXML() method  -->
  <!-- ***************************************************************************** -->
-    public String toXML(int indent)
-    {
-      this.indent = indent; 
-      return this.toXML();
-    }   
  
-    private int indent = 0;
     
     public String toXML()
     {
@@ -256,33 +265,6 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
 
       xml.append(getIdent( indent -1 ) +"&lt;/<xsl:value-of select="$entityName"/>&gt;\n");
       return xml.toString();
-    }
-    
-    ////////////////////////////////////////////////////////////////////////////////
-    // These should  be of in a Utility class, need to sort out build order first
-    ////////////////////////////////////////////////////////////////////////////////
-        
-    // this should only exist once, but need to set classpath of compile to do that
-    // org.vegbank.commom.utility.Utility has this method also
-    private static String getIdent(int indent)
-    {
-      StringBuffer sb = new StringBuffer();
-      for ( int i=0; i&lt;indent; i++)
-      {
-        sb.append("\t");
-      }
-      return sb.toString();
-    }
-    
-    // The insanity ... having to escape the escapes .. see above
-    private static String escapeXML(String str)
-    {
-      str = str.replaceAll("&amp;","&amp;amp;");
-      str = str.replaceAll("&lt;","&amp;lt;");
-      str = str.replaceAll("&gt;","&amp;gt;");
-      str = str.replaceAll("\&quot;","&amp;quot;");
-      str = str.replaceAll("&apos;","&amp;apos;");
-      return str;
     }
 }
     </redirect:write>
