@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-05-30 02:50:19 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-05-30 20:56:47 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ public class PlantTaxaLoader
 	private String usageStopDate;
 	private String rank;
 	private boolean commit;	
+	private Vector usageVec = new Vector();
 	
 	
 	/**
@@ -141,26 +142,32 @@ public class PlantTaxaLoader
 				usageStopDate, email, partyId, "", refId);
 			}
 			
-			
-			if ( plantUsageExists(shortName, shortNameId, conceptId, "STANDARD", 
-				dateEntered, usageStopDate,  "SHORTNAME", partyId) == false )
+			//check to see if there are already usage id's in the database
+			if ( plantUsageExists(longName, longNameId, conceptId, "STANDARD", 
+				dateEntered, usageStopDate,  "LONGNAME", partyId) == false )
 			{
-				loadPlantUsageInstance(longName, longNameId, conceptId, "STANDARD", 
+				int uid = loadPlantUsageInstance(longName, longNameId, conceptId, "STANDARD", 
 				dateEntered, usageStopDate,  "LONGNAME", partyId);
+				System.out.println("uid: " + uid);
+				usageVec.addElement(""+uid);
 			}
 			
 			if (plantUsageExists(shortName, shortNameId, conceptId, "STANDARD", 
 				dateEntered, usageStopDate,  "SHORTNAME", partyId) == false )
 			{
-				loadPlantUsageInstance(shortName, shortNameId, conceptId, "STANDARD", 
+				int uid = 	loadPlantUsageInstance(shortName, shortNameId, conceptId, "STANDARD", 
 				dateEntered, usageStopDate,  "SHORTNAME", partyId);
+				System.out.println("uid: " + uid);
+				usageVec.addElement(""+uid);
 			}
 
 			if  (plantUsageExists(code, codeId, conceptId, "STANDARD", 
 				dateEntered, usageStopDate,  "CODE", partyId) == false )
 			{
-				loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
+				int uid = loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
 				dateEntered, usageStopDate,  "CODE", partyId);
+				System.out.println("uid: " + uid);
+				usageVec.addElement(""+uid);
 			}
 
 			// last thing to do is to denormalize the database for querying
@@ -221,7 +228,17 @@ public class PlantTaxaLoader
 			  usageId = rs.getInt(1);
 			}
 			System.out.println("usages in usage table: " + usageId);
+		
+			//get the usageId's to be used for updating the summary table 
+			// from the usageVec vector
+
+			System.out.println("updating summary with usage Ids: " + usageVec.toString() );
+		 	if ( usageVec.size() > 0 )
+			{
 			
+				int minUsageId  = Integer.parseInt( usageVec.elementAt(0).toString() );
+				System.out.println("min usage id: " + minUsageId );
+
 			//insert the data into the summary table
 			sb = new StringBuffer();
 			sb.append("INSERT INTO veg_taxa_summary ");
@@ -229,7 +246,7 @@ public class PlantTaxaLoader
 			sb.append(" plantnamestatus, startdate, stopDate, acceptedSynonym) ");
 			sb.append(" SELECT plantusage_id, plantname_id, plantconcept_id, plantname, ");
 			sb.append(" classsystem, plantnamestatus, usagestart, usagestop, acceptedSynonym ");
-			sb.append(" from plantusage where plantusage_id > " +( usageId-10) );
+			sb.append(" from plantusage where plantusage_id >= " + minUsageId );
 			pstmt = conn.prepareStatement( sb.toString() );
 			pstmt.execute();
 			pstmt.close();	
@@ -239,7 +256,7 @@ public class PlantTaxaLoader
 			sb.append(" update  veg_taxa_summary ");
 			sb.append(" set plantDescription = ");
 			sb.append("  (select plantDescription from plantConcept where veg_taxa_summary.plantconcept_id ");
-			sb.append("  = plantconcept.plantconcept_id ) where  plantusage_id > " + usageId );
+			sb.append("  = plantconcept.plantconcept_id ) where  plantusage_id >= " + minUsageId );
 			pstmt = conn.prepareStatement( sb.toString() );
 			pstmt.execute();
 			pstmt.close();	
@@ -248,7 +265,7 @@ public class PlantTaxaLoader
 			sb.append(" update  veg_taxa_summary ");
 			sb.append(" set plantlevel = ");
 			sb.append("  (select plantlevel from plantconcept where veg_taxa_summary.plantconcept_id ");
-			sb.append("  = plantconcept.plantconcept_id  ) where  plantusage_id > " + usageId );
+			sb.append("  = plantconcept.plantconcept_id  ) where  plantusage_id >= " + minUsageId );
 			pstmt = conn.prepareStatement( sb.toString() );
 			pstmt.execute();
 			pstmt.close();	
@@ -257,11 +274,11 @@ public class PlantTaxaLoader
 			sb.append(" update  veg_taxa_summary ");
 			sb.append("  set parentName =");
 			sb.append("  (select plantparentname from plantstatus where veg_taxa_summary.plantconcept_id ");
-			sb.append("  = plantstatus.plantconcept_id ) where  plantusage_id > " + usageId );
+			sb.append("  = plantstatus.plantconcept_id ) where  plantusage_id >= " + minUsageId );
 			pstmt = conn.prepareStatement( sb.toString() );
 			pstmt.execute();
 			pstmt.close();	
-
+			}
 
 		}
 		catch ( Exception e )
@@ -342,6 +359,7 @@ public class PlantTaxaLoader
 	int concept_id, String usage, String startDate, String stopDate, 
 	String classSystem, int partyId)
 	{
+		int usageId = 0;
 		try
 		{
 			String s = "insert into PLANTUSAGE (plantName, plantName_id, plantConcept_id, "+
@@ -367,6 +385,20 @@ public class PlantTaxaLoader
 			boolean results = true;
 			results = pstmt.execute();
 			pstmt.close();	
+			
+			// lest
+			// now get the usage ID for the inserted plant and return it to 
+			// the calling method so that it can be used at the end of the
+			// transaction for updating the summary/query tables 
+			StringBuffer sb = new StringBuffer();
+			sb.append("select max( PLANTUSAGE_ID ) from plantusage ");
+			pstmt = conn.prepareStatement( sb.toString() );
+			ResultSet rs = pstmt.executeQuery();
+			while	( rs.next() )
+			{	
+				usageId = rs.getInt(1);
+			}
+			
 		}
 		catch(Exception e)
 		{
@@ -377,7 +409,7 @@ public class PlantTaxaLoader
 			e.printStackTrace();
 			//System.exit(0);
 		}
-		return(0);	
+		return(usageId);	
 	}
 	
 /**
@@ -1101,8 +1133,8 @@ public class PlantTaxaLoader
 		try 
  		{
 			Class.forName("org.postgresql.Driver");
-			//c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/plants_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
+			//c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/plants_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -1117,26 +1149,66 @@ public class PlantTaxaLoader
 	/**
 	 * Main method -- for testing 
 	 */
-	public static void main(String[] args) 
+	public static void main(String argv[]) 
 	{
-		PlantTaxaLoader loader = new PlantTaxaLoader();
-		Hashtable h = new Hashtable();
-		h.put("longName", "Green Bark");
-		h.put("shortName", "GRN BRK");
-		h.put("code", "GRBRK");
-		h.put("taxonDescription", "GREEN plant");
-		h.put("salutation", "Mr.");
-		h.put("givenName", "John");
-		h.put("middleName", "H.");
-		h.put("surName", "Harris");
-		h.put("orgName", "NCEAS");
-		h.put("email", "harris02@hotmail.com");
-		h.put("citationDetails", "VB20020529");
-		h.put("dateEntered", "2002-MAY-29");
-		h.put("usageStopDate", "2005-MAY-29");
-		h.put("rank", "SPECIES");
-		// load this plant
-		loader.loadGenericPlantTaxa(h);
+		if (argv.length != 0) 
+		{
+			System.out.println("Usage: java PlantTaxaLoader \n "
+			+"[longName] ");
+				
+			PlantTaxaLoader loader = new PlantTaxaLoader();
+			Hashtable h = new Hashtable();
+			h.put("longName", argv[0]);
+			h.put("shortName", argv[1]);
+			h.put("code", argv[2]);
+			h.put("taxonDescription", argv[3]);
+			h.put("salutation", argv[4]);
+			h.put("givenName", argv[5]);
+			h.put("surName", argv[6]);
+			h.put("orgName", argv[7]);
+			h.put("email", argv[8]);
+			h.put("citationDetails", argv[9]);
+			h.put("dateEntered", argv[10]);
+			h.put("usageStopDate", argv[11]);
+			h.put("rank", argv[12]);
+			
+			System.out.println("long name: " + argv[0] );
+			System.out.println("short name: " + argv[1]  );
+			System.out.println("code: " + argv[2] );
+			System.out.println("taxon desc.: " + argv[3]);
+			System.out.println("salutation: " +argv[4]  );
+			System.out.println("given name: " +argv[5]  );
+			System.out.println("sur name: " +argv[6]  );
+			System.out.println("org name: " +argv[7]  );
+			System.out.println("email: " + argv[8] );
+			System.out.println("cit. details: " +argv[9]  );
+			System.out.println("date entered: " +argv[10]  );
+			System.out.println("usage stopdate: " + argv[11] );
+			System.out.println("rank: " + argv[12] );
+			loader.loadGenericPlantTaxa(h);
+			
+		}
+		else
+		{
+			PlantTaxaLoader loader = new PlantTaxaLoader();
+			Hashtable h = new Hashtable();
+			h.put("longName", "Green Bark");
+			h.put("shortName", "GRN BRK");
+			h.put("code", "GRBRK");
+			h.put("taxonDescription", "GREEN plant");
+			h.put("salutation", "Mr.");
+			h.put("givenName", "John");
+			h.put("middleName", "H.");
+			h.put("surName", "Harris");
+			h.put("orgName", "NCEAS");
+			h.put("email", "harris02@hotmail.com");
+			h.put("citationDetails", "VB20020529");
+			h.put("dateEntered", "2002-MAY-29");
+			h.put("usageStopDate", "2005-MAY-29");
+			h.put("rank", "SPECIES");
+			// load this plant
+			loader.loadGenericPlantTaxa(h);
+		}
 	}
 
 
