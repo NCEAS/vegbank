@@ -22,6 +22,13 @@ MM_preloadImages(
 		'@image_server@btn_login_on.jpg');
 
 
+function preSubmit() {
+	if (document.metasearch_form.xwhereParams.value == null ||
+		document.metasearch_form.xwhereParams.value == "") {
+		document.metasearch_form.xwhereParams.value="vb";
+		document.metasearch_form.clearSearch.value="1";
+	}
+}
 // -->
 </script>
 </head>
@@ -122,8 +129,9 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 			</span>  
 
 			<br>
+			 <input type="hidden" name="clearSearch" value="">
 			 <input type="text" name="xwhereParams" size="30" value=""/>
-		 	 <html:submit value="search"/>
+		 	 <html:submit value="search" onclick="javascript:preSubmit()"/>
 		</td>
 		</tr>
 		<tr><td></td><td align="right">
