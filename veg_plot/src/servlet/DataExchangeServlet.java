@@ -10,6 +10,7 @@ import java.math.*;
 import java.net.URL;
 
 import multipart.*;
+import DataFileServer;
 
 
 
@@ -28,11 +29,16 @@ import multipart.*;
  *
  * <p>Valid parameters are:<br><br>
  * 
- * exchangeType - type of data exchange, either upload or download<br>
+ * REQUIRED PARAMETERS:
+ * @param exchangeType - type of data exchange, either upload or download<br>
+ * @param user - the user name of the priveledged user
+ * @param pass - the password of the priveledged user
+ * @param clienttype - the type of client {browser application}
+ * 
  * <br>
  * 
- * @version Feb. 09 2001
- * @author John Harris
+ * @version 
+ * @author 
  * 
  */
 
@@ -42,9 +48,11 @@ public class DataExchangeServlet extends HttpServlet
 
 	private String exchangeType = null;
 	private String submitter = null;
+	private String username = null; // the user name that must be authenticated
 	private String password = null;
 	private String uploadDir = rb.getString("uploadDir");
-
+	private servletUtility util = new servletUtility();
+  private MultipartRequest multi;
 	
 	/** Handle "GET" method requests from HTTP clients */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,11 +67,106 @@ public class DataExchangeServlet extends HttpServlet
 		{
 			res.setContentType("text/html");
 			PrintWriter out = res.getWriter();
+			//for now all the authentication of users for data transfer is going to
+			//be handled using the username and password, so if they do not exist let
+			//the user know it
+			try 
+			{
+				
+				//determine if the client is using multipart encoding
+				if (req.getContentType().startsWith("multipart")) 
+				{
+					//then get the user name and password
+					 multi=new MultipartRequest(req, uploadDir, 5 * 1024 * 1024);
+						//MultipartRequest multi=new MultipartRequest();
+						//get the un-encoded parameter names back from the MultipartRequest class
+					Enumeration enum = multi.getParameterNames();
+					username = multi.getParameter("username");
+					password = multi.getParameter("password");
+
+				}
+				//no encoding
+				else
+				{
+					Enumeration enum =req.getParameterNames();
+					Hashtable params = util.parameterHash(req);
+				
+					username=req.getParameter("username");
+					password=req.getParameter("password");
+				}
+				
+					System.out.println( username + " " + password +" " );
+					//System.out.println("Request Content Type: "+req.getContentType());
+					///System.out.println( req.toString() );
+				
+				
+				if ( username == null || password == null  || (username.length() < 1) )
+				{
+					System.out.println("no password or login -- send parameters");
+				}
+				else
+				{
+					if (authenticateUser(username, password) ==  true)
+					{
+						//copy the request
+						HttpServletRequest reqCopy = req;
+						//do the exchange
+						out.println( handleExchangeRequest(reqCopy, res) );
+					}
+					else
+					{
+						System.out.println("go home you perp");
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: e.getMessage(); ");
+			}
+		}
+	
+		/**
+		 * methosd that authenticates the user by using the http utility
+		 * in the servlet utility -- currently this method requies as input
+		 * the user's username and password, but will be extended to use a
+		 * cookie in the near future
+		 *
+		 * @param username -- the user name 
+		 * @param password -- the user's password
+		 */
+		private boolean authenticateUser(String userName, String passWord)
+		{
+			String xmlResponse = util.httpAuthenticationHandler(userName, passWord
+			, "uploadfile");
+			
+			System.out.println( xmlResponse );
+			//if the authentication returns a true response it will look like
+			//<authentivation>true</authentication>
+			if ( xmlResponse.trim().indexOf("true") > 0)
+				return(true);
+			else if (xmlResponse.trim().indexOf("false") < 0)
+				return(false);
+			else
+				return(false);
+		}
+
+		
+		/**
+		 * method that acts as the top level exchange request broker -- where
+		 * by the exchange type is determined and the exchange is carried out
+		 * this method will return a message regarding the summary of the 
+		 * exchange results
+		 */
+		 private String handleExchangeRequest( HttpServletRequest req, 
+		 HttpServletResponse res)
+		 {
+			 //this is the response to be sent back to the browser
+			StringBuffer sb = new StringBuffer();
     	try 
 			{
 				Enumeration enum =req.getParameterNames();
 				Hashtable params = new Hashtable();
-				System.out.println("***"+req.getContentType());
+				System.out.println("Request Content Type: "+req.getContentType());
 
 				// determine if the request is encoded and if so pass to the MultipartRequest
 				// assuming that the user wants to upload a file and if not multipart encoded
@@ -72,8 +175,9 @@ public class DataExchangeServlet extends HttpServlet
 
 				if (req.getContentType().startsWith("multipart")) 
 				{
-					System.out.println("request type: multipart");
-					uploadMultipartDataFile(req, res, out);
+					System.out.println("request type: multipart encoded");
+					String s = uploadMultipartDataFile(req, res);
+					sb.append(" \n" + s + " \n" );
 				}
 				else if ( req.getContentType().startsWith("application") ) 
 				{ 
@@ -82,11 +186,12 @@ public class DataExchangeServlet extends HttpServlet
 					if (req.getParameter("exchangeType") != null ) 
 					{
 						exchangeType=req.getParameter("exchangeType");
-						handleRawDataExchange(req, res, out);
+						String s = handleRawDataExchange(req, res);
+						sb.append(" \n" + s + " \n" );
 					}
 					else 
 					{
-						out.println("unrecognized parameters");
+						System.out.println("unrecognized parameters");
 					}
 				}
 			}
@@ -95,9 +200,9 @@ public class DataExchangeServlet extends HttpServlet
 				System.out.println("** failed in: DataExchangeServlet.main "
 				+e.getMessage());
 			}
-		}
-
-
+			 return( sb.toString() );
+		 }
+		
 
  	/**
  	 * This method handles the file upload for a file and associated parameters that
@@ -106,13 +211,13 @@ public class DataExchangeServlet extends HttpServlet
  	 *
  	 * @param params - the Hashtable of parameters that should be included in the
  	 * 	query
- 	 * @param out - the output stream to the client
  	 * @param response - the response object linked to the client 
  	 *
  	 */
-	private void  uploadMultipartDataFile (HttpServletRequest request,  
-	HttpServletResponse response, PrintWriter out) 
+	private String uploadMultipartDataFile (HttpServletRequest request,  
+	HttpServletResponse response) 
 	{
+		StringBuffer sb = new StringBuffer();
 		try 
 		{
 		
@@ -120,20 +225,21 @@ public class DataExchangeServlet extends HttpServlet
 			// Pass in the request, a directory to saves files to, and the
 			// maximum POST size we should attempt to handle.
 			// Here we (rudely) write to the server root and impose 5 Meg limit.
-			MultipartRequest multi=new MultipartRequest(request, uploadDir, 5 * 1024 * 1024);
+			//MultipartRequest multi=new MultipartRequest(request, uploadDir, 5 * 1024 * 1024);
 
 			//get the un-encoded parameter names back from the MultipartRequest class
 			Enumeration params = multi.getParameterNames();
       while (params.hasMoreElements()) 
 			{
+				
         String name = (String)params.nextElement();
         String value = multi.getParameter(name);
-        out.println(name + " = " + value);
+        sb.append(name + " = " + value);
 			}
 
 			// Show which files we received
-			out.println("<H3>Files:</H3>");
-			out.println("<PRE>");
+			//out.println("<H3>Files:</H3>");
+			//out.println("<PRE>");
 			Enumeration files = multi.getFileNames();
 			while (files.hasMoreElements()) 
 			{
@@ -141,23 +247,24 @@ public class DataExchangeServlet extends HttpServlet
 				String filename = multi.getFilesystemName(name);
 				String type = multi.getContentType(name);
 				File f = multi.getFile(name);
-				out.println("name: " + name);
-				out.println("filename: " + filename);
-				out.println("type: " + type);
+				sb.append("name: " + name);
+				sb.append("filename: " + filename);
+				sb.append("type: " + type);
 	
 				if (f != null) 
 				{
-					out.println("length: " + f.length());
-					out.println();
+					sb.append("length: " + f.length());
 				}
-				out.println("</PRE>");
+				sb.append("</PRE>");
 			}
 		}
  		catch (Exception e) 
 		{ 
-			out.println("<PRE>"); e.printStackTrace(out);
-      out.println("</PRE>");  
+			sb.append("<PRE>"); 
+			e.printStackTrace();
+      sb.append("</PRE>");  
 		}
+		return(sb.toString());
 	}
 
 
@@ -172,13 +279,13 @@ public class DataExchangeServlet extends HttpServlet
   *
   * @param params - the Hashtable of parameters that should be included in the
   * 	query
-  * @param out - the output stream to the client
   * @param response - the response object linked to the client 
   *
   */
-	private void handleRawDataExchange (HttpServletRequest request,  
-	HttpServletResponse response, PrintWriter out) 
+	private String handleRawDataExchange (HttpServletRequest request,  
+	HttpServletResponse response) 
 	{
+		StringBuffer sb = new StringBuffer();
 		try 
 		{
 			Enumeration enum =request.getParameterNames();
@@ -201,7 +308,7 @@ public class DataExchangeServlet extends HttpServlet
 			if ( (String)params.get("exchangeType") != null )
 			{
  				exchangeType = ((String)params.get("exchangeType")).trim();
-				//out.println("exchangeType: "+exchangeType);
+				sb.append("exchangeType: "+exchangeType);
 	
 				if (exchangeType.equals("upload")) 
 				{
@@ -212,11 +319,11 @@ public class DataExchangeServlet extends HttpServlet
 					password=((String)params.get("password")).trim();
 	
 					//later check this information in the authenticate method
-					handleRawDataUpload (request, response, out);
+					handleRawDataUpload (request, response);
 				}
 				if (exchangeType.equals("download")) 
 				{
-					out.println("comming soon -- now use the fileDownload class");
+					sb.append("comming soon -- now use the fileDownload class");
 				}
 			}
 		}
@@ -225,6 +332,7 @@ public class DataExchangeServlet extends HttpServlet
 			System.out.println("** failed in: DataExchangeServlet.handleRawDataExchange "
 			+e.getMessage());
 		}
+		return(sb.toString());
 	}
 
 
@@ -236,12 +344,11 @@ public class DataExchangeServlet extends HttpServlet
  	 *
  	 * @param params - the Hashtable of parameters that should be included in the
  	 * 	query
- 	 * @param out - the output stream to the client
  	 * @param response - the response object linked to the client 
  	 *
  	 */
  private void handleRawDataUpload (HttpServletRequest request,  
-	HttpServletResponse response, PrintWriter out) 
+	HttpServletResponse response) 
 	{
 		try 
 		{
@@ -258,13 +365,13 @@ public class DataExchangeServlet extends HttpServlet
 				//System.out.println("next port used: " + port);
 			}
 			//pass the port back to the client
-			out.println("port|"+port);
+			///out.println("port|"+port);
 
 			//make a cookie (random number between 0-999) and send it back to the browser
 			Random s = new Random();
 			int c = r.nextInt(999);
 			String cookie=""+c;
-			out.println("|cookie|"+cookie);
+			///out.println("|cookie|"+cookie);
 			System.out.println("cookie: " + cookie);
 
 			//assign the user name of the client to authorize for connection
