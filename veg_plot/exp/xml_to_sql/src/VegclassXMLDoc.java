@@ -5,8 +5,8 @@
  *  of the Turbine project )
  *
  *     '$Author: harris $'
- *     '$Date: 2001-12-06 02:38:51 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2002-06-15 00:12:36 $'
+ *     '$Revision: 1.3 $'
  *	
  *
  *
@@ -518,16 +518,24 @@ public class VegclassXMLDoc
 		if (attType.startsWith("INT"))
 			return(" type=\"INTEGER\" ");
 		else if (attType.startsWith("VARCHAR"))
-			return(" type=\"VARCHAR\" size=\"22\" ");
+		{
+			StringTokenizer t = new StringTokenizer( attType, "(");
+			String buf = t.nextToken();
+			buf = t.nextToken().replace(')', ' ').trim();
+			System.out.println("VegclassXMLDoc > varchar: " + buf );
+			return(" type=\"VARCHAR\" size=\""+buf+"\" ");
+		}
 		else if (attType.startsWith("TEX"))
 			return(" type=\"VARCHAR\" size=\"200\" ");
 		else if (attType.startsWith("DAT"))
 			return(" type=\"TIMESTAMP\"  ");
 		else if (attType.startsWith("NUMER"))
-			return(" type=\"FLOAT\"  "); 
+			return(" type=\"FLOAT\"  ");
+		else if (attType.startsWith("BOOLEAN"))
+			return(" type=\"BOOLEANCHAR\"  ");
 		else
 		{
-			System.out.println("unknown type");
+			System.out.println("VegclassXMLDoc > unknown type: " + attType);
 			return(" type=\"VARCHAR\" size=\"10\" ");
 		}
 	}
