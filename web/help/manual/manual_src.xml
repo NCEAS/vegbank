@@ -171,9 +171,9 @@ the user must own the plot data or have permission to share this data online.
 Plots may be submitted in several different
 formats (click links for more information on each).  See the next few screens for details on each method, or <a href="@DisplayUploadPlotAction@">Click here </a>to start loading plots.
 </manualHTML>
-      <manualItem refURL="/vegbranch/vegbranch.html" name="vegbranch" topic="VegBranch">
+      <manualItem refURL="@vegbranch_link@vegbranch.html" name="vegbranch" topic="VegBranch">
         <manualHTML>
-          <a href="/vegbranch/vegbranch.html">VegBranch</a>
+          <a href="@vegbranch_link@vegbranch.html">VegBranch</a>
           <font color="red" size="-1">
             <b> (recommended)</b>
           </font> - VegBank's client database,
