@@ -1,0 +1,182 @@
+<?xml-stylesheet type="text/xsl" href="C:\vegbank\sandbox\vegbank\web\general\faq.xsl"?>
+<faq>
+  <category name="general" label="General Questions">
+    <question>
+      <qname>whatisvegbank</qname>
+      <qtxt>What is VegBank?</qtxt>
+      <atxt>VegBank is the vegetation plot database of the Ecological Society of America's Panel on Vegetation Classification.  VegBank stores data about vegetation plots and necessary supplemental data, such as a plant taxon database and community type database.  VegBank's purpose is to allow plant Ecologists to submit and share data to allow permanent documentation of plot data, which will provide a permanent record of plots which define communities.</atxt>
+    </question>
+    <question>
+      <qname>whoruns</qname>
+      <qtxt>Who runs VegBank?</qtxt>
+      <atxt> VegBank is operated by the Ecological 
+            Society of America's <a href="@panel_link@panel.html">Vegetation Panel</a> in cooperation with the <a href="http://www.nceas.ucsb.edu/">National 
+            Center for Ecological Analysis and Synthesis</a>.  The development team for VegBank is listed on the <a href="@general_link@contact.html">contact</a> page.  Further participants can be found on the <a href="@general_link@../history/development.html#particpants">development history</a> page.</atxt>
+    </question>
+    <question>
+      <qname>whatisplot</qname>
+      <qtxt>What is a plot?</qtxt>
+      <atxt>The purpose of plots is to record the vegetation and its environmental context.  A plot may be contained by a single bounded area, such as a 50m x 20m rectangle.  It could also consist of smaller subplots which sample vegetation over a large range.  While we encourage plots to have boundaries and definite size, VegBank also accepts relevés that have no bounds as valid plots.  An observation is a one-time record of vegetation present in a plot.  So multiple observations of a plot could be made at different times, producing different values for both vegetation present (both in which taxa are present and its abundance as well as environmental variables, such as soil characteristics).</atxt>
+    </question>
+    <question>
+      <qname>howsearch</qname>
+      <qtxt>How do I find plots in VegBank?</qtxt>
+      <atxt>You can search for plots with two different forms in VegBank.  <br/>
+        <br/> 1) <a href="@forms_link@plot-query-simple.jsp"> a very simple search</a>, where you can specify one or more of the following: plant found on the plot, community to which the plot is interpreted, state/province in which the plot is located.  <br/>
+        <br/> 2) <a href="/vegbank/LoadPlotQuery.do"> a more complex query</a> with many options for searching, allowing multiple plants, places, and communities to be specified.  It also allows you to search by other fields, like elevation.</atxt>
+    </question>
+    <question>
+      <qname>whyregister</qname>
+      <qtxt>Why do I need to register?  Why do I need to log in?</qtxt>
+      <atxt>You don't need to register to use most of VegBank's features.  Registration is only required when you want to use features that apply to just one user.  For example, if you want to compile a dataset and have VegBank remember it when you come back, you'll need to register (this feature is coming soon).  If you want to add data to the archive, or to annotate data, you'll also need to register and be certified.</atxt>
+    </question>
+    <question>
+      <qname>analysis</qname>
+      <qtxt>What features does VegBank offer for analysis of plot data?</qtxt>
+      <atxt>VegBank does not have analysis tools.  Other groups have done a good job making tools for analysis, and we encourage users to find data in VegBank, then export into a format of your choice, then work on analysis with a program like PC-Ord.</atxt>
+    </question>
+    <question>
+      <qname>bestpractice</qname>
+      <qtxt>What are the best practices or standards of VegBank?</qtxt>
+      <atxt>VegBank has a very flexible structure that allows legacy data to be added, as well as data that do not conform to our best practices.  We do encourage users to conform to the best practices standards as described in the standards document, <a href="@panel_link@standards.html">
+          <i>Guidelines for Describing Associations and Alliances of the U.S. National Vegetation Classification</i>
+        </a>.  This document will help you understand the best practices of plot collection in VegBank for purposes of classification.</atxt>
+    </question>
+    <question>
+      <qname>whycertification</qname>
+      <qtxt>What is certification?  When do I need to be certified?</qtxt>
+      <atxt>Certification is required for VegBank features that allow you to add data to the database.  You can become a certified user by <a href="@forms_link@RegisterNewUser.jsp">registering </a> to be a VegBank user, then filling out a <a href="@forms_link@certification.html">certification application</a>.  This means that your user profile will be public, as well as some of your certification questions (the application tells you what will be made public).  This helps users understand who you are and what credentials are behind your opinions and plots in VegBank.</atxt>
+    </question>
+    <question>
+      <qname>whatcommunity</qname>
+      <qtxt>What is a community?</qtxt>
+      <atxt>In overly simplified terms, a community is a set of plant taxa that live adjacent to one another within a set of physical conditions.  This community of co-occurring plants may be seen to repeat itself in a predictable pattern.  One may observe a plot and classify it as belonging to a certain community type.  <br/>The <a href="@panel_link@NVC_guidelines_v3.pdf">Guidelines of the NVC (National Vegetation Classification) Standards document (version 3)</a> provides more full definitions for two different levels of communities: association and alliance.  It defines an association "as the basic unit of vegetation: A vegetation classification unit defined on the bases of a characteristic range of species composition, diagnostic species occurrence, habitat conditions and physiognomy."  (pg. 21)<br/>The broader alliance it defines as "A vegetation classification unit containing one or more associations, and defined by a characteristic range of species composition, habitat conditions, physiognomy, and diagnostic species, typically at least one of which is found in the uppermost or dominant stratum of the vegetation." (pg.23)</atxt>
+    </question>
+    <question>
+      <qname>whatconcept</qname>
+      <qtxt>What is a plant concept? What is a community concept?</qtxt>
+      <atxt>Generally, people use only a plant name to refer to a particular plant taxon.  However, names may mean different things to different people or at different times. When users view a plant in VegBank, they need to know what is meant by a plant name, hence only a name is not enough.  A reference, or context, must be provided which gives the name meaning and defines what the taxon encompasses.  When we mention a "plant concept" in VegBank, we mean this unique combination of name and reference.  For example, one might mention "Carya ovata" according to (reference) "Radford, 1968." Each plant concept and community concept in VegBank has an Accession Code which provides unique identification for the plant concept. For more information, please see the <a href="@design_link@planttaxaoverview.html">VegBank Plant Taxonomy Overview</a>.<br/>Community Concepts function in exactly the same way, except that Community Concepts describe a community type, not a plant taxon.</atxt>
+    </question>
+    <question>
+      <qname>standardtaxa</qname>
+      <qtxt>What is your standard list of species/communities?</qtxt>
+      <atxt>VegBank does not have a standard list of taxa or communities.  In VegBank, plants and communities have a Party Perspective which defines whether a plant or community is standard or not and what names may be used to describe it.  VegBank has no Party Perspective of its own.  However, USDA PLANTS 2002 data and NatureServe communities were initially loaded into the database and users are strongly encouraged to map any new plants or communities onto USDA's or NatureServe's standards.  This allows other users, who may know nothing of your own views, to view information according to the USDA or NatureServe standards.</atxt>
+    </question>
+    <question>
+      <qname>metadata</qname>
+      <qtxt>What is metadata?</qtxt>
+      <atxt>Metadata is plot data that defines not what was measured, but how it was measured.  Cover Method and Stratum Method are examples of metadata.  Plot size and stem sampling method might also be considered metadata.  These data are often considered secondary in importance, but are essential when many different techniques are used to collect plots, as is the case with VegBank data.</atxt>
+    </question>
+    <question>
+      <qname>soilvariables</qname>
+      <qtxt>Why are there so few soil variables in the soilObs table?</qtxt>
+      <atxt>Soil analysis techniques vary widely and thus make it difficult to define standard soil variables.  We do recognize some standards, such as pH, percent clay, percent silt, percent sand.  But other variables, such as Nitrogen ppm could be measured with different techniques, yielding different values for the same soil.  We encourage users to input their soil values in user-defined fields where they can describe what techniques were used to analyze their soils.</atxt>
+    </question>
+    <question>
+      <qname>annotate</qname>
+      <qtxt>What is annotation?</qtxt>
+      <atxt>Annotation is when users add their own opinions to plots that are already in the VegBank archive.  This is a bit different from a plot author, who provides information about his or her own plot.  Annotation can be grouped into three categories: 1) plant interpretation, 2) plot interpretation, and 3) notes. <br/>
+        <br/>
+Plant Interpretation means that you say which plant concept you think a particular plant on a plot actually is.  This does not replace the author's view or interpretation, but simply adds it to the database. <br/>
+        <br/>Plot Interpretation means that you say which community concept you think a particular observation (of a plot) actually is.  Similarly, this does not replace anyone else's interpretation of the plot, but adds your opinion to the database. <br/>
+        <br/>
+Notes are comments that you might have on a particular field value.  These can be added to any field in the database, and are useful if you have some insight into an error or incomplete piece of data.  For example, you could add a note to the elevation value of a plot saying that you do not think the elevation was as high as is claimed.
+</atxt>
+    </question>
+    <question>
+      <qname>accessioncode</qname>
+      <qtxt>What is an Accession Code?</qtxt>
+      <atxt>An Accession Code is a unique combination of letters, numbers, and some periods which uniquely identify something in VegBank.  Accession Codes are used to identify plots and observations, as well as methods, plant taxa, and community types.  This allows communication about these elements to take place so that each party knows that they are mentioning the same thing. Accession Codes are important when VegBranch and VegBank communicate, because this helps the two databases align the different types of data, rather than repeating redundant information. <br/>
+        <br/>For those who want to know how a VegBank Accession Code works (this is not necessary!), it is broken into several alphanumerical parts, each divided by a period (.).  An example Accession Code is that of Quercus alba, with reference of USDA 2002 : VB.PC.48413.QUERCUSALBAL <br/>
+        <br/> The first part is the database identifier (i.e. VB for VegBank), then a table identifier (i.e. PC for Plant Concept), then a record number (i.e. the primary key, 48413).  Next, there is a confirmation code, which is a set of letters and numbers derived from something that is likely to make sense to a person.  This means that we can see this code and may generally know that it is Quercus alba of some sort.  The confirmation code also ensures that the accession code has not suffered from a typo, which could result in the mismatching of data without anyone's awareness.  For example, if there was no confirmation code and you mistyped the 'PC' as 'Py', then the database would think you meant Party #48413.  Worse, you could mistype the number as 48418 and a different plant would be referenced.  <br/>
+        <br/> Finally, there may be a fifth segment of the accessionCode which identifies the time and date the record was accessed from the database mentioned in the first part of the accession code.</atxt>
+    </question>
+    <question>
+      <qname>donate</qname>
+      <qtxt>How is VegBank financed?  How can I help VegBank operate financially?</qtxt>
+      <atxt>We are currently funded by the <b>US National Science Foundation (NSF)</b>.
+We gratefully acknowledge the financial support of NSF. This project would not have been possible without the support provided by NSF grant DBI-9905838. <br/>
+        <br/>We are also funded through the <b>
+
+US Geological Survey (USGS)</b>.  We gratefully acknowledge the continuing financial support of the USGS Gap Analysis Program, as well as the encouragement of the US National Biological Information Infrastructure (NBII).  <br/>
+        <br/>
+      Eventually, we'd like to have a web feature that allows you to donate to our efforts.  Until then, if you have a funding source for VegBank, please contact us at help@vegbank.org.  We'd be more than happy to hear about it.</atxt>
+    </question>
+  </category>
+  <category name="learnmore" label="Learning More about VegBank">
+    <question>
+      <qname>tutorial</qname>
+      <qtxt>How can I get help with VegBank?  Is there a tutorial?</qtxt>
+      <atxt>Yes!  There is currently a set of instructions that walks the user through the main forms in VegBank.  See  <a href="@general_link@instructions.html"> the instructions page</a>  to start this.</atxt>
+    </question>
+    <question>
+      <qname>training</qname>
+      <qtxt>When can I sign up for a training workshop?</qtxt>
+      <atxt>We do offer training in VegBank and VegBranch.  Training information can be found on the <a href="@panel_link@training.html"> Professional Training</a> page. We present workshops at the ESA annual meeting and periodically with groups who request special training.  VegBank presents information about the <a href="@workshop_link@index.html"> next VegBank workshop here</a>.  You can sign up for a workshop from that page, if there is one in the near future, or you can request a training session by sending email to help@vegbank.org.  We will try to offer special training session, but are limited in both time and funds for such purposes.</atxt>
+    </question>
+  </category>
+  <category name="contact" label="Contacting VegBank Developers">
+    <question>
+      <qname>bug</qname>
+      <qtxt>What if I find something not working in VegBank?</qtxt>
+      <atxt>You should tell us about what wasn't working.  Just send an email to help@vegbank.org and explain what it is that isn't working.  Please be as specific as possible, i.e. what the URL was when the error occurred, what the search criteria were if you were searching for something, the time and date the error occurred, etc.  Users who report errors help us improve the VegBank experience for everyone.  Thank you!</atxt>
+    </question>
+    <question>
+      <qname>mailinglist</qname>
+      <qtxt>What are the VegBank Mailing Lists?  How do I sign up?</qtxt>
+      <atxt>There are two VegBank mailing lists.  The Users list is for VegBank users to post questions and comments to each other.  The VegBranch list is similar, but covers topics related to VegBranch.  The development team is also on these lists and can answer questions.  The advantage to using this list is that an archive of questions and answers is being built that users can search.  These lists are described in detail in the <a href="@general_link@contact.html">contact</a> page.  If you have a question or comment for the development team that you do not want posted to a public archive, please email us at help@vegbank.org.</atxt>
+    </question>
+  </category>
+  <category name="loading" label="Loading Data into VegBank">
+    <question>
+      <qname>howload</qname>
+      <qtxt>How do I load plots into VegBank?</qtxt>
+      <atxt>Plots can be loaded into VegBank with the desktop tool called VegBranch.  VegBranch can then create an XML document (a particular format of text file) that can be sent to VegBank.  One could also create an XML document and load this without using VegBranch.  This is for advanced users with much experience with our data model only.  See the VegBranch topic in this FAQ for more information about VegBranch and loading plots.</atxt>
+    </question>
+    <question>
+      <qname>vegbranch</qname>
+      <qtxt>What is VegBranch?</qtxt>
+      <atxt>VegBranch is an MS-Access (2000 or higher) database that allows users to import or enter data manually for import into the central VegBank database.  It also allows users to add new plants and communities, enter new methods, projects, references, and parties.  Furthermore, one can download plots from VegBank and read them into VegBranch.  For more information on VegBranch, please see the  <a href="@vegbranch_link@vbr-overview.html">overview of VegBranch</a>.
+      </atxt>
+    </question>
+    <question>
+      <qname>intellectualproperty</qname>
+      <qtxt>How can I protect my plots in VegBank?</qtxt>
+      <atxt>There are several different ways that one can protect plot data in VegBank.  The first option is to scramble the latitude and longitude so that the exact location of the plot is not known.  This allows full access to the other data about the plot.  This is generally sufficient for protecting endangered species.  You can set the confidentiality status to a distance (i.e. 1km, 10km, 100km) in VegBranch for each plot, or in the Metadata form for all plots.  The field in question is <a href="@dbdictionary_link@dd~table~plot~field~confidentialitystatus~type~fieldview.html">plot.confidentialityStatus</a> (Plot Data Loading table, confidentialityStatus in VegBranch).
+      <br/> <br/>  You can also specify confidentiality and allow certain users to access your plots who have requested permission from you.  To do so, you should select a confidentiality status of "Location embargo" (no place fields are viewable) or "Public embargo" (nothing about the plot is viewable).  Then users may request permission from you to view what isn't normally viewable.  As of July 22, 2004, the latter feature IS NOT implemented on VegBank, meaning that plots cannot be embargoed from users, except with location "fuzzing."  If you need to protect plots in this way, please wait until we implement this feature later in the summer of 2004. <br/><br/>
+Note that if you make plots confidential, you must also provide a reason for the confidentiality in the plot.confidentialityReason field.  This is not a publicly viewable field (as of the implementation of the embargo system).</atxt>
+    </question>
+    <question>
+      <qname>geographicscope</qname>
+      <qtxt>Is data from other countries allowed into VegBank?</qtxt>
+      <atxt>Yes, we do accept data from countries outside of North America, but consider VegBank's primary function to serve plots in North America.  Eventually we hope to have several different VegBank systems which can be maintained and funded separately for different countries and regions.  If you wish to submit plots from outside North America, there will be some challenges for you, especially in dealing with plant taxa, as we have only loaded plant concepts into VegBank that are found in North America.</atxt>
+    </question>
+    <question>
+      <qname>howmanyplotsperuser</qname>
+      <qtxt>How many plots can I add?</qtxt>
+      <atxt>Currently, we ask users to limit the number of plots that they provide to not more than 1000 plots without speaking to us directly about the plots.  Some features of databases work well with a smaller amount of data and only very weakly with large amounts of data.  We want to increase the size of VegBank somewhat gradually to help alleviate such technological issues.</atxt>
+    </question>
+    <question>
+      <qname>addplant</qname>
+      <qtxt>What if my plant species are not found in your list of taxa?</qtxt>
+      <atxt>If you have a plant taxon that isn't in the list of VegBank plants, you can add a new plant in VegBranch.  The Species List loading table can be used to import data from a file that defines new plant concepts.  Or, you can use a form for the Species List to fill in the different fields of this table.  Please map your new concept onto the USDA list of plants if possible.</atxt>
+    </question>
+    <question>
+      <qname>addcomm</qname>
+      <qtxt>What if my community is not found in your list of community types?</qtxt>
+      <atxt>If you have a community that is not already in VegBank, you can add the community with VegBranch.  VegBranch has a loading table called "Community Concept" that allows you to define a new community.  It would be appreciated if you would correlate this community to any extant community concepts already in VegBank, preferable in the set of NatureServe communities so that other users might know how your new community maps onto the set of commonly accepted communities.</atxt>
+    </question>
+  </category>
+  <category name="advanced" label="Advanced Questions">
+    <question>
+      <qname>datamodel</qname>
+      <qtxt>What is your data model?</qtxt>
+      <atxt>Our data model is a complex set of tables that comprise our relational database.  More information about these can be seen with our <a href="@dbdictionary_link@dd-index.html">data-dictionary</a> and our <a href="@design_link@erd/vegbank_erd.pdf">ERD</a> (Entity Relationship Diagram).  The data dictionary provides information about each field and table in our database, such as data type, definition, if it is a required field, and what other field it may reference (foreign key).  The ERD is a way of visualizing the tables and fields of our database.  This information will only be useful to users who have some previous database experience.</atxt>
+    </question>
+    <question>
+      <qname>distributedvegbank</qname>
+      <qtxt>Is there more than one VegBank? Can I run my own VegBank to serve data from another Country?</qtxt>
+      <atxt>Currently, there is only one VegBank.  We have plans to allow other groups to use our software to create their own versions of VegBank, with the set of VegBank databases and website communicating to each other.  This way, you could query for plots with a particular species in it and get results from plots in different databases.  This will allow different organizations to maintain and fund their own plot archives, while still keeping the ability to share and compile plot datasets for users.</atxt>
+    </question>
+  </category>
+</faq>
