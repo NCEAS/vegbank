@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:33:24 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-02-18 01:07:40 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,9 @@ package org.vegbank.plots.datasource;
 
 import java.util.List;
 
-import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Commclass;
 import org.vegbank.common.model.Covermethod;
 import org.vegbank.common.model.Observation;
-import org.vegbank.common.model.Observationcontributor;
 import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Plot;
 import org.vegbank.common.model.Project;
@@ -60,17 +58,17 @@ public class DBObservationReaderTest extends TestCase
 	
 	public void testGetObservation()
 	{
-		Plot plot = null;
+		Observation obs = null;
 		try
 		{
-			plot = obsReader.getPlotObservationBeanTree( 93);
+			obs = obsReader.getObservationBeanTree( 93);
 		}
 		catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Observation obs = (Observation) plot.getplot_observations().get(0);
+		Plot plot = obs.getPlotobject();
 		Project project = obs.getProjectobject();
 		Covermethod coverMethod = obs.getCovermethodobject();
 		List commClasses = obs.getobservation_commclasss();

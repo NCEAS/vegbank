@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-01-18 20:47:47 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2004-02-18 01:07:40 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +42,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import org.vegbank.common.Constants;
 import org.vegbank.common.model.*;
-import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.LogUtility;
@@ -101,10 +99,6 @@ public class DBModelBeanReader
 		// Get the PK name for this table
 		String fieldName = Utility.getPKNameFromTableName(entityName);
 
-		// Get the accessionCode name for this table
-		String accessionCodeName = 
-			Utility.getAccessionCodeAttributeName(entityName);
-
 		if ( fieldName == null )
 		{
 			throw new Exception(entityName + " has no accessionCode or similar  field");
@@ -117,7 +111,7 @@ public class DBModelBeanReader
 				+ " from "
 				+ entityName
 				+ " where "
-				+ accessionCodeName
+				+ Constants.ACCESSIONCODENAME
 				+ "= '"
 				+ accessionCode
 				+ "'";
@@ -135,7 +129,7 @@ public class DBModelBeanReader
 				"Could not find a row in '"
 					+ entityName
 					+ "' with '"
-					+ accessionCodeName
+					+ Constants.ACCESSIONCODENAME
 					+ "' = "
 					+ accessionCode);
 		}
@@ -170,7 +164,7 @@ public class DBModelBeanReader
 		}
 		else if ( entityCode.equalsIgnoreCase("Ob") )
 		{
-			result = this.getPlotObservationBeanTree(accessionCode);
+			result = this.getObservationBeanTree(accessionCode);
 		}
 		return result;
 	}
@@ -191,27 +185,27 @@ public class DBModelBeanReader
 		return pc;
 	}
 	
-	public Plot getPlotObservationBeanTree(String observationAccessionCode) throws Exception
+	public Observation getObservationBeanTree(String observationAccessionCode) throws Exception
 	{	
 		//TODO: Am I allowed to search cache --- revisions !!!
 		// Search cache first
-		Plot plot = 
-			(Plot) mbCache.getBeanFromCache(observationAccessionCode);
-		if ( plot != null )
+		Observation obs = 
+			(Observation) mbCache.getBeanFromCache(observationAccessionCode);
+		if ( obs != null )
 		{
-			return plot;
+			return obs;
 		}
 		
 		long pK = this.getPKFromAccessionCode( "observation", observationAccessionCode, Observation.PKNAME );
-		plot = this.getPlotObservationBeanTree(pK);	
+		obs = this.getObservationBeanTree(pK);	
 		
 		// Add to cache
-		mbCache.addToCache(plot, observationAccessionCode);
+		mbCache.addToCache(obs, observationAccessionCode);
 		
-		return plot;
+		return obs;
 	}
 	
-	public Plot getPlotObservationBeanTree(long observationId) throws Exception
+	public Observation getObservationBeanTree(long observationId) throws Exception
 	{
 		// Get the observation
 		Observation obs = new Observation();
@@ -278,9 +272,10 @@ public class DBModelBeanReader
 		getObjectFromDB(plot, Plot.PKNAME, plotId);
 		getRelatedObjectsFromDB(Plot.PKNAME, plotId, plot);
 
-		// Add the observation to the Plot bean
-		plot.addplot_observation( obs );
-		return plot;
+		//		Add the Plot  to the  observation bean
+		obs.setPlotobject(plot);
+
+		return obs;
 	}
 	
 	// TODO: Reference, Party, Commconcept

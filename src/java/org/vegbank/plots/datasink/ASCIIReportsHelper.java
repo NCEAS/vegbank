@@ -15,9 +15,9 @@ import org.vegbank.common.utility.Utility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-01-08 23:46:14 $'
- *	'$Revision: 1.4 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-02-18 01:07:40 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,11 +48,11 @@ public class ASCIIReportsHelper
 	 * @param plotObservations
 	 * @return String -- The ASCII report
 	 */
-	public static String getEnvironmentalData ( Plot plotObservation )
+	public static String getEnvironmentalData ( Observation observation )
 	{
-		Collection plotObservations = new ArrayList();
-		plotObservations.add(plotObservation);
-		return ASCIIReportsHelper.getEnvironmentalData( plotObservations );
+		Collection observations = new ArrayList();
+		observations.add(observation);
+		return ASCIIReportsHelper.getEnvironmentalData( observations );
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class ASCIIReportsHelper
 	 * @param plotObservations
 	 * @return String -- The ASCII report
 	 */	
-	public static String getEnvironmentalData( Collection plotObservations)
+	public static String getEnvironmentalData( Collection observations)
 	{
 		// Do enviromental data
 		StringBuffer environmentalData = new StringBuffer();
@@ -72,12 +72,13 @@ public class ASCIIReportsHelper
 			"PLOT ID, ACCESSION_NUMBER, COMMUNITY NAME, COLLECTION DATE, LATITUDE, LONGITUDE, ELEVATION, SLOPE ASPECT, SLOPE GRADIENT\n");
 
 		// process plot observations
-		Iterator pos = plotObservations.iterator();
-		while (pos.hasNext())
+		Iterator obss = observations.iterator();
+		while (obss.hasNext())
 		{
-			LogUtility.log("ASCIIReportsHelper: getting next plot");
+			LogUtility.log("ASCIIReportsHelper: getting next observation");
 			
-			Plot plot = (Plot) pos.next();
+			Observation obs = (Observation) obss.next();
+			Plot plot = obs.getPlotobject();
 			
 
 			// Get the values of interest
@@ -91,25 +92,21 @@ public class ASCIIReportsHelper
 			String slopeAspect = plot.getSlopeaspect();
 			String slopeGradient = plot.getSlopegradient();
 							
-			List observations = plot.getplot_observations();
-			if ( ! observations.isEmpty() )
+
+								
+			plotObservationId = obs.getObservation_id();
+			accNumber = obs.getAccessioncode();
+			collectionDate = obs.getObsenddate();
+							
+			// Get commName
+			List commclasses = obs.getobservation_commclasss();
+			if ( ! commclasses.isEmpty() )
 			{
-				//Get the observation ( should just be one ) 
-				Observation obs = (Observation) observations.get(0);
-								
-				plotObservationId = obs.getObservation_id();
-				accNumber = obs.getAccessioncode();
-				collectionDate = obs.getObsenddate();
-								
-				// Get commName
-				List commclasses = obs.getobservation_commclasss();
-				if ( ! commclasses.isEmpty() )
-				{
-					// Just get the first one FIXME: Can be more than one
-					Commclass commclass = (Commclass) commclasses.get(0);
-					commName = commclass.getCommname();
-				}
+				// Just get the first one FIXME: Can be more than one
+				Commclass commclass = (Commclass) commclasses.get(0);
+				commName = commclass.getCommname();
 			}
+		
 
 			LogUtility.log("ASCIIReportsHelper: appending values");
 	
@@ -144,11 +141,11 @@ public class ASCIIReportsHelper
 	 * @param plotObservations
 	 * @return String -- The ASCII report
 	 */
-	public static String getSpeciesData ( Plot plotObservation )
+	public static String getSpeciesData ( Observation observation )
 	{
-		Collection plotObservations = new ArrayList();
-		plotObservations.add(plotObservation);
-		return ASCIIReportsHelper.getSpeciesData( plotObservations );
+		Collection observations = new ArrayList();
+		observations.add(observation);
+		return ASCIIReportsHelper.getSpeciesData( observations );
 	}
 	
 	/**
@@ -158,7 +155,7 @@ public class ASCIIReportsHelper
 	 * @param plotObservations
 	 * @return String -- The ASCII report
 	 */
-	public static String getSpeciesData ( Collection plotObservations )
+	public static String getSpeciesData ( Collection observations )
 	{
 		// Do species
 		StringBuffer speciesData = new StringBuffer();
@@ -168,10 +165,10 @@ public class ASCIIReportsHelper
 			"PLOT ID, PLANT NAME, STRATUMCOVER, STRATUMNAME, TAXONCOVER\n");
 
 		// process plot observations
-		Iterator pos = plotObservations.iterator();
-		while (pos.hasNext())
+		Iterator obss = observations.iterator();
+		while (obss.hasNext())
 		{
-			Plot plot = (Plot) pos.next();
+			Observation obs = (Observation) obss.next();
 
 			// Get the values of interest
 			long plotObservationId = 0;
@@ -180,59 +177,53 @@ public class ASCIIReportsHelper
 			String stratumName = null;
 			String taxonCover = null;
 
-			List observations = plot.getplot_observations();
-			if ( ! observations.isEmpty() )
+								
+			plotObservationId = obs.getObservation_id();
+							
+			// Get taxonObservations
+			List taxonobservations = obs.getobservation_taxonobservations();
+			Iterator taxonIter = taxonobservations.iterator();
+			while ( taxonIter.hasNext() )
 			{
-				//Get the observation ( should just be one ) 
-				Observation obs = (Observation) observations.get(0);
-								
-				plotObservationId = obs.getObservation_id();
-								
-				// Get taxonObservations
-				List taxonobservations = obs.getobservation_taxonobservations();
-				Iterator taxonIter = taxonobservations.iterator();
-				while ( taxonIter.hasNext() )
-				{
-					Taxonobservation taxonObservation = (Taxonobservation) taxonIter.next();
+				Taxonobservation taxonObservation = (Taxonobservation) taxonIter.next();
 
-					plantName = MBReadHelper.getPlantName(taxonObservation);												
-					
-					// FIXME: Confirm this is wanted value
-					taxonCover = MBReadHelper.getTotalTaxonCover(taxonObservation);				
-									
-					//Get taxonImportances
-					List taxonImportances = taxonObservation.gettaxonobservation_taxonimportances();
-					Iterator taxonImpIter = taxonImportances.iterator();
-					while ( taxonImpIter.hasNext() ) 
-					{
-						Taxonimportance taxonImportance = (Taxonimportance) taxonImpIter.next();						
-									
-						// Get the stratum name
-						Stratum stratum = taxonImportance.getStratumobject();
-						if ( stratum != null )
-						{							
-							Stratumtype stratumType = stratum.getStratumtypeobject();
-							if ( stratumType != null )
-							{
-								stratumCover = taxonImportance.getCover();
-								stratumName = stratumType.getStratumname();
+				plantName = MBReadHelper.getPlantName(taxonObservation);												
+				
+				// FIXME: Confirm this is wanted value
+				taxonCover = MBReadHelper.getTotalTaxonCover(taxonObservation);				
 								
-								// Put them in the StringBuffer
+				//Get taxonImportances
+				List taxonImportances = taxonObservation.gettaxonobservation_taxonimportances();
+				Iterator taxonImpIter = taxonImportances.iterator();
+				while ( taxonImpIter.hasNext() ) 
+				{
+					Taxonimportance taxonImportance = (Taxonimportance) taxonImpIter.next();						
 								
-								speciesData.append(
-										+ plotObservationId
-										+ ",\""
-										+ escapeString(plantName)
-										+ "\","
-										+ stratumCover
-										+ ",\""
-										+ escapeString(stratumName)
-										+ "\","
-										+ taxonCover
-										+ "\n");
-							}
-						}	
-					}
+					// Get the stratum name
+					Stratum stratum = taxonImportance.getStratumobject();
+					if ( stratum != null )
+					{							
+						Stratumtype stratumType = stratum.getStratumtypeobject();
+						if ( stratumType != null )
+						{
+							stratumCover = taxonImportance.getCover();
+							stratumName = stratumType.getStratumname();
+							
+							// Put them in the StringBuffer
+							
+							speciesData.append(
+									+ plotObservationId
+									+ ",\""
+									+ escapeString(plantName)
+									+ "\","
+									+ stratumCover
+									+ ",\""
+									+ escapeString(stratumName)
+									+ "\","
+									+ taxonCover
+									+ "\n");
+						}
+					}	
 				}
 			}
 		}
