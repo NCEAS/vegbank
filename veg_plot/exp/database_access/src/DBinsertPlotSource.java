@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-16 23:18:54 $'
- * 	'$Revision: 1.26 $'
+ *  '$Date: 2002-07-22 23:28:41 $'
+ * 	'$Revision: 1.27 $'
  */
 package databaseAccess;
 
@@ -998,21 +998,20 @@ public class DBinsertPlotSource
 	 * method that returns false if the community cannot be stored in the 
 	 * database this method uses the webservice lookup to get the community 
 	 * info based on either a code, or name
-	 * 
+	 * @return -- returns false if the code is not found in the community database
+	 * @see -- getCommunityData -- this is the method that contacts the web servlet
+	 *  to retrieve data from the community database
 	 */
 	private boolean insertCommunities()
 	{
 		try 
 		{
 				StringBuffer sb = new StringBuffer();
-				
 				String name = source.getCommunityName(plotName);
 				String code =  source.getCommunityCode(plotName);
 				String framework = source.getCommunityFramework(plotName);
 				String level = source.getCommunityLevel(plotName);
 				String conceptId = "";
-				
-			
 				// get the appropriate codes for this community via the web service
 				// store the data in a hashtable
 				Hashtable h = new Hashtable();
@@ -1022,7 +1021,7 @@ public class DBinsertPlotSource
 				}
 				else if ( name != null )
 				{
-					h = getCommunityData( name );
+					h = getCommunityData(name);
 				}
 				
 				// if the hashtable has a sible key then it will have 
@@ -1034,13 +1033,11 @@ public class DBinsertPlotSource
 					conceptId = (String)h.get("conceptId");
 					name = (String)h.get("name");
 				}
-				
 				debug.append("<communityName>"+name+"</communityName> \n");
 				debug.append("<communityCode>"+code+"</communityCode> \n");
 				debug.append("<communityLevel>"+level+"</communityLevel> \n");
 				debug.append("<communityFramework>"+framework+"</communityFramework> \n");
 				debug.append("<communityConceptId>"+conceptId+"</communityConceptId> \n");
-				
 				//insert the values
 				sb.append("INSERT into commclass (observation_id, commName, " 
 				+" commCode, commFramework, commLevel) "
@@ -1519,6 +1516,7 @@ public class DBinsertPlotSource
 	 * related attributes from the vegbank community archive
 	 * 
 	 * @param code -- the community code used to lookup the concept id
+	 * @return hastable -- a hashtable containing the community data
 	 */
 	private Hashtable getCommunityData(String code)
 	{
@@ -1537,9 +1535,9 @@ public class DBinsertPlotSource
 			parameters.setProperty("clientType", "clientApplication");
 			parameters.setProperty("communityName", code);
 			parameters.setProperty("communityLevel","%" );
-			s = gurl.requestURL(servlet, protocol, host, 
-		 	parameters);
+			s = gurl.requestURL(servlet, protocol, host, parameters);
 			System.out.println("DBinsertPlotSource > XML string from web app: \n'"+s+"'");
+			
 			
 			if ( s.length() > 3 && s != null )
 			{
@@ -1550,7 +1548,8 @@ public class DBinsertPlotSource
 				Vector levelVec = parser.getValuesForPath(doc, "/vegCommunity/community/classLevel");
 				Vector codeVec = parser.getValuesForPath(doc, "/vegCommunity/community/classCode");
 				Vector conceptIdVec = parser.getValuesForPath(doc, "/vegCommunity/community/commConceptId");
-				Vector nameVec = parser.getValuesForPath(doc, "/vegCommunity/community/commName");
+				// THIS IS A HACK TO GET AT THE COMMUNITY NAME
+				Vector nameVec = parser.getValuesForPath(doc, "/vegCommunity/community/commDesc");
 				String lev = (String)levelVec.elementAt(0);
 				String c = (String)codeVec.elementAt(0);
 				String conceptId = (String)conceptIdVec.elementAt(0);
