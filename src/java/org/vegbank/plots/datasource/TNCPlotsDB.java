@@ -20,8 +20,8 @@ import java.util.Vector;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-06-03 21:41:33 $' <br>
- * 	'$Revision: 1.4 $' <br>
+ *  '$Date: 2003-06-03 22:50:07 $' <br>
+ * 	'$Revision: 1.5 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -214,28 +214,43 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	{
 		String s = null;
 		Statement stmt = null;
-			try 
+		try
+		{
+			// Create a Statement so we can submit SQL statements to the driver
+			stmt = con.createStatement();
+			//create the result set
+			ResultSet rs =
+				stmt.executeQuery(
+					"select  ([Location Code]) from plots where ([Plot Code]) like '"+plotName+"'"
+				);
+			while (rs.next())
 			{
-				// Create a Statement so we can submit SQL statements to the driver
-				stmt = con.createStatement();
-				//create the result set
-				ResultSet rs = stmt.executeQuery("select "
-				+" ([Location Code]) "
-				+" from plots where ([Plot Code]) like '"+plotName+"'");
-				while (rs.next()) 
-				{
-					s = rs.getString(1);
-					s = s.trim()+" Vegetation Mapping Project -- NATURESERVE";
-				}
-				rs.close();
+				s = rs.getString(1);
+			}
+			
+			if ( s == null || s.equals("") )
+			{
+				// Try the sublocation table
+				ResultSet rs2 =
+					stmt.executeQuery(
+						"select  ([Location Code]) from plots where ([Plot Code]) like '"+plotName+"'"
+					);
+					while ( rs.next() )
+					{
+						s = rs.getString(1);
+					}
+			}
+			
+			rs.close();
 			stmt.close();
-			}
-			catch (Exception x) 
-			{
-				System.out.println("TNCPlotsDB > Exception: " + x.getMessage() );
-			}
-		return(s);
-		
+		}
+		catch (Exception x)
+		{
+			System.out.println("TNCPlotsDB > Exception: " + x.getMessage());
+		}
+		s = s.trim() + " Vegetation Mapping Project -- NATURESERVE";
+		return (s);
+
 	}
 	
 	/**
