@@ -14,6 +14,7 @@ import java.sql.*;
 
 import org.apache.tools.mail.MailMessage;
 import servlet.util.ServletUtility;
+import xmlresource.utils.transformXML;
 
 
 /**
@@ -29,6 +30,8 @@ public class StyleSheetGenerator extends HttpServlet
 	private String fileName = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
 	private ServletUtility util = new ServletUtility();
 	private String userEmail = null;
+	private transformXML transformer = new transformXML();
+	
 	
 	/**
 	 * constructor method
@@ -61,7 +64,7 @@ public class StyleSheetGenerator extends HttpServlet
 				
 				//first get the cookie value etc
 				this.userEmail = this.getCookieValue(request);
-				System.out.println("user: " + this.userEmail );
+				System.out.println("StyleSheetGenerator > user: " + this.userEmail );
 				
 				
 			//enumeration is needed for the attributes
@@ -71,16 +74,20 @@ public class StyleSheetGenerator extends HttpServlet
 				//the temp file name
 				StringBuffer fileContents = new StringBuffer();
 				
-				//print the xslt file
+				//print the xslt file in order from left to right
 				fileContents.append( getHeader().toString() );
+				fileContents.append( this.getIdentificationAttributes(params).toString()  );
 				fileContents.append( getBody(params).toString() );
 				fileContents.append( getFooter().toString() );
 				printFile( fileContents );
 				
 				//register the document
-				this.registerDocument(this.fileName, this.userEmail, "stylesheet");
+///#				this.registerDocument(this.fileName, this.userEmail, "stylesheet");
 				
-				//sendResponse();
+				
+				//SHOE THE USER THE STYLE SHEET THAT THE GENERATED 
+				out.println( this.showTransformedDataSet() );
+
 			}
 		catch( Exception e ) 
 		{
@@ -96,7 +103,7 @@ public class StyleSheetGenerator extends HttpServlet
 	 */
 	 private boolean deleteSavedStyleSheets()
 	 {
-		 
+		 return(true);
 	 }
 	
 	
@@ -147,7 +154,7 @@ public class StyleSheetGenerator extends HttpServlet
        	 cookieName=cookie.getName();
 					//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
 					cookieValue=cookie.getValue();
-					System.out.println("cleint passing the cookie name: "+cookieName+" value: "
+					System.out.println("StyleSheetGenerator > cleint passing the cookie name: "+cookieName+" value: "
 					+cookieValue);
 				}
   		}
@@ -171,29 +178,30 @@ public class StyleSheetGenerator extends HttpServlet
 		sb.append("<?xml version=\"1.0\"?> \n");
 		sb.append("<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"> \n");
 		sb.append("<xsl:output method=\"html\"/> \n");
-		sb.append("<xsl:template match=\"/vegPlot\"> \n");
+		sb.append("<xsl:template match=\"/vegPlotPackage\"> \n");
 
 		sb.append("<html> \n");
 		sb.append("<head> \n");
+		sb.append("		<title> default style for "+ this.userEmail +"</title> \n");
 		sb.append("</head> \n");
 		sb.append("<body bgcolor=\"FFFFFF\"> \n");
 
 		sb.append("<br></br> \n");
-		sb.append("<xsl:number value=\"count(project/plot)\" /> DOCUMENTS FOUND \n");
+		sb.append("<xsl:number value=\"count(project/plot)\" /> PLOTS IN RESULT SET \n");
 	
-		sb.append("<!-- THE PROJECT LEVEL INFORMATION --> \n");
-		sb.append("<br></br><a> <b> Project name: </b> <xsl:value-of select=\"project/projectName\"/> <br></br> \n");
-		sb.append("<b> Project description: </b> <xsl:value-of select=\"project/projectDescription\"/> </a> \n");
+		// set up the form which is required by netscape 4.x browsers 
+		sb.append("<form name=\"myform\" action=\"viewData\" method=\"post\">");
 
 
 		sb.append("<!-- set up a table --> \n");
 		sb.append("<table width=\"100%\"> \n");
 
-		//correct the widths for the 3 collumns
+		//correct the widths for the 4 collumns of data
     sb.append("       <tr colspan=\"1\" bgcolor=\"CCCCFF\" align=\"left\" valign=\"top\"> \n");
-    sb.append("         <th width=\"25%\" class=\"tablehead\">Site Data</th> \n");
-    sb.append("         <th width=\"25%\" class=\"tablehead\">Observation Data</th> \n");
-    sb.append("         <th width=\"50%\" class=\"tablehead\">Vegetation Data</th> \n");
+    sb.append("      		<th class=\"tablehead\">Identification</th>   \n");
+    sb.append("      		<th class=\"tablehead\">Site</th>  \n");
+    sb.append("      		<th class=\"tablehead\">Observation</th>   \n");
+		sb.append("      		<th class=\"tablehead\">Taxa</th>    \n");
     sb.append("       </tr> \n");
 
 		sb.append("<!-- Header and row colors --> \n");
@@ -205,7 +213,7 @@ public class StyleSheetGenerator extends HttpServlet
 		sb.append("	<xsl:sort select=\"authorPlotCode\"/> \n");
 	
 		sb.append("	<tr valign=\"top\"> \n");
-
+		
 		return(sb);
 	}
 	
@@ -302,12 +310,52 @@ public class StyleSheetGenerator extends HttpServlet
 	}
 	
 	
+	/**
+	 * this method generated the site attributes collumn of the stylesheet
+	 */
+	private StringBuffer getIdentificationAttributes( Hashtable params )
+	{
+		StringBuffer sb = new StringBuffer();
+		
+		System.out.println("StyleSheetGenerator > site params: "+params.toString() );
+		//get all the keys
+	 	Enumeration paramlist = params.keys();
+ 
+		//START THE COLUMN
+		sb.append("<!--if even row --> \n");
+		sb.append("<xsl:if test=\"position() mod 2 = 1\"> \n");
+		sb.append("<td colspan=\"1\" bgcolor=\"{$evenRowColor}\" align=\"left\" valign=\"top\"> \n ");
+		sb.append(" Plot Code: ");
+		sb.append(" <xsl:value-of select=\"authorPlotCode\"/> <br> </br> \n");
+		sb.append(" Project Name: ");
+		sb.append("<xsl:value-of select=\"../projectName\"/> <br> </br>  \n");
+		
+ 		while (paramlist.hasMoreElements()) 
+ 		{
+			String element = (String)paramlist.nextElement();
+   		String value  = (String)params.get(element);
+			sb.append(" <a><b>"+element+":</b> <br></br> <font color=\"FF0066\"> <xsl:value-of select=\""+value+"\"/> </font> <br></br> </a> \n");
+		}
+		
+		
+		//END THE COLUMN
+		sb.append("	</td> \n");
+		sb.append("	</xsl:if> \n");
+		return(sb);
+	}
 	
+	
+	
+	
+	
+	/**
+	 * this method generated the site attributes collumn of the stylesheet
+	 */
 	private StringBuffer getSiteAttributes( Hashtable params )
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		System.out.println("site params: "+params.toString() );
+		System.out.println("StyleSheetGenerator > site params: "+params.toString() );
 		//get all the keys
 	 	Enumeration paramlist = params.keys();
  
@@ -334,7 +382,8 @@ public class StyleSheetGenerator extends HttpServlet
 		StringBuffer sb = new StringBuffer();
 		sb.append("	</tr>  \n "); 
 		sb.append("</xsl:for-each> \n ");  
-		sb.append("</table> \n"); 
+		sb.append("</table> \n");
+		sb.append("</form> \n"); 
 		sb.append("</body> \n"); 
 		sb.append("</html> \n"); 
 		sb.append("</xsl:template> \n"); 
@@ -355,7 +404,7 @@ public class StyleSheetGenerator extends HttpServlet
       PrintWriter out = new PrintWriter(new FileWriter(this.fileName));
      		out.println(sb.toString() );
      		out.close(); 
-				System.out.println("done printing to the file system");
+				System.out.println("StyleSheetGenerator > done printing to the file system");
 		 }
      catch(Exception e)
      {
@@ -397,4 +446,30 @@ public class StyleSheetGenerator extends HttpServlet
 		}
 		return(params);
 	}
+	
+	/**
+	 * method that shows the user what the data transformed with the stylesheet
+	 * will look like -- this is also for testing that the generated stylesheet
+	 * is valid and that it does not throw any exceptions
+	 */
+	 	private String showTransformedDataSet()
+		{
+			String s = null;
+			try
+			{
+				
+				String teststyle = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
+				transformer.getTransformed("/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test-summary.xml", teststyle);
+				StringWriter transformedData= transformer.outTransformedData;
+				
+				s= transformedData.toString();
+				
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+			}
+			return(s);
+		}
+	
 }
