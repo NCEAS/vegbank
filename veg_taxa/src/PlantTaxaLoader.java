@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-07-08 22:08:22 $'
- * '$Revision: 1.11 $'
+ *     '$Date: 2002-07-08 23:35:17 $'
+ * '$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,6 +47,59 @@ public class PlantTaxaLoader
 	private String rank;
 	private boolean commit;	
 	private Vector usageVec = new Vector();
+	private String	longNameRefAuthors = "";
+	private String	longNameRefTitle = "";
+	private String	longNameRefDate  = "";
+	private String	longNameRefEdition = "";
+	private String	longNameRefSeriesName = "";
+	private String	longNameRefVolume = "";
+	private String	longNameRefPage = "";
+	private String	longNameRefISSN = "";
+	private String	longNameRefISBN = "";
+	private String	longNameRefOtherCitDetails = "";
+	 		
+	private String	shortNameRefAuthors = "";
+	private String	shortNameRefTitle = "";
+	private String	shortNameRefDate = "";
+	private String	shortNameRefEdition = "";
+	private String	shortNameRefSeriesName = "";
+	private String	shortNameRefVolume = "";
+	private String	shortNameRefPage = "";
+	private String	shortNameRefISSN  = "";
+	private String	shortNameRefISBN  = "";
+	private String	shortNameRefOtherCitDetails = "";
+	 		
+	private String	codeRefAuthors = "";
+	private String	codeRefTitle = "";
+	private String	codeRefDate = "";
+	private String	codeRefEdition = "";
+	private String	codeRefSeriesName = "";
+	private String	codeRefVolume = "";
+	private String	codeRefPage = "";
+	private String	codeRefISSN = "";
+	private String	codeRefISBN = "";
+	private String	codeRefOtherCitDetails = "";
+	 
+	private String	conceptDescription = "";
+	private String	conceptRefAuthors = "";
+	private String	conceptRefTitle = "";
+	private String	conceptRefDate = "";
+	private String	conceptRefEdition = "";
+	private String	conceptRefSeriesName = "";
+	private String	conceptRefVolume = "";
+	private String	conceptRefPage = "";
+	private String	conceptRefISSN = "";
+	private String	conceptRefISBN = "";
+	private String	conceptRefOtherCitDetails = "";
+	 	
+	private String	conceptStatus = "";
+	private String	statusStartDate = "";
+	private String	statusStopDate = "";
+	private String	statusDescription = "";
+	private String	taxonLevel =  "";
+	private String	plantParentName = "";
+	private String	plantParentRefTitle =  "";
+	private String	plantParentRefAuthors = "";
 	
 	
 	/**
@@ -140,38 +193,103 @@ public class PlantTaxaLoader
 			// DETERMINE IF THE INPUT HASHTABLE HAS THE CORRECT ELEMENTS
 			if ( this.isValidPlantHash(plantTaxon) == true )
 			{
+				//set the commit boolean to true, which can be changed by any of the 
+				// methods called from this one if an exception is thrown
+				commit = true;
+				//get the connection
+				conn = this.getConnection();
+				conn.setAutoCommit(false);
+				
 				//get the parameters from the hashtable
 				salutation = (String)plantTaxon.get("salutation");
 				givenName = (String)plantTaxon.get("givenName");
 				surName = (String)plantTaxon.get("surName");
-				orgName = (String)plantTaxon.get("orgName");
 				email = (String)plantTaxon.get("email");
 				longName = (String)plantTaxon.get("longName");
 				shortName = (String)plantTaxon.get("shortName");
 				code = (String)plantTaxon.get("code");
+				
+				longNameRefAuthors = (String)plantTaxon.get("longNameRefAuthors");
+	 			longNameRefTitle = (String)plantTaxon.get("longNameRefTitle");
+	 			longNameRefDate  =  (String)plantTaxon.get("longNameRefDate");
+	 			longNameRefEdition =  (String)plantTaxon.get("longNameRefEdition");
+	 			longNameRefSeriesName =  (String)plantTaxon.get("longNameRefSeriesName");
+	 			longNameRefVolume =  (String)plantTaxon.get("longNameRefVolume");
+	 			longNameRefPage =  (String)plantTaxon.get("longNameRefPage");
+	 			longNameRefISSN =  (String)plantTaxon.get("longNameRefISSN");
+	 			longNameRefISBN =  (String)plantTaxon.get("longNameRefISBN");
+	 			longNameRefOtherCitDetails =  (String)plantTaxon.get("longNameRefOtherCitDetails");
+	 		
+	 			shortNameRefAuthors =  (String)plantTaxon.get("shortNameRefAuthors");
+	 			shortNameRefTitle =  (String)plantTaxon.get("shortNameRefTitle");
+	 			shortNameRefDate =  (String)plantTaxon.get("shortNameRefDate");
+	 			shortNameRefEdition =  (String)plantTaxon.get("shortNameRefEdition");
+	 			shortNameRefSeriesName =  (String)plantTaxon.get("shortNameRefSeriesName");
+	 			shortNameRefVolume =  (String)plantTaxon.get("shortNameRefVolume");
+	 			shortNameRefPage =  (String)plantTaxon.get("shortNameRefPage");
+	 			shortNameRefISSN  =  (String)plantTaxon.get("shortNameRefISSN");
+	 			shortNameRefISBN  =  (String)plantTaxon.get("shortNameRefISBN");
+	 			shortNameRefOtherCitDetails =  (String)plantTaxon.get("shortNameRefOtherCitDetails");
+	 		
+	 			codeRefAuthors =  (String)plantTaxon.get("codeRefAuthors");
+	 			codeRefTitle =  (String)plantTaxon.get("codeRefTitle");
+	 			codeRefDate =  (String)plantTaxon.get("codeRefDate");
+	 			codeRefEdition =  (String)plantTaxon.get("codeRefEdition");
+	 			codeRefSeriesName =  (String)plantTaxon.get("codeRefSeriesName");
+	 			codeRefVolume =  (String)plantTaxon.get("codeRefVolume");
+	 			codeRefPage =  (String)plantTaxon.get("codeRefPage");
+	 			codeRefISSN =  (String)plantTaxon.get("codeRefISSN");
+	 			codeRefISBN =  (String)plantTaxon.get("codeRefISBN");
+	 			codeRefOtherCitDetails =  (String)plantTaxon.get("codeRefOtherCitDetails");
+	 
+	 			conceptDescription =  (String)plantTaxon.get("conceptDescription");
+	 			conceptRefAuthors =  (String)plantTaxon.get("conceptRefAuthors");
+	 			conceptRefTitle =  (String)plantTaxon.get("conceptRefTitle");
+	 			conceptRefDate =  (String)plantTaxon.get("conceptRefDate");
+	 			conceptRefEdition =  (String)plantTaxon.get("conceptRefEdition");
+	 			conceptRefSeriesName =  (String)plantTaxon.get("conceptRefSeriesName");
+	 			conceptRefVolume =  (String)plantTaxon.get("conceptRefVolume");
+	 			conceptRefPage =  (String)plantTaxon.get("conceptRefPage");
+	 			conceptRefISSN =  (String)plantTaxon.get("conceptRefISSN");
+	 			conceptRefISBN =  (String)plantTaxon.get("conceptRefISBN");
+	 			conceptRefOtherCitDetails =  (String)plantTaxon.get("conceptRefOtherCitDetails");
+	 	
+	 			conceptStatus =  (String)plantTaxon.get("conceptStatus");
+	 			statusStartDate =  (String)plantTaxon.get("statusStartDate");
+	 			statusStopDate =  (String)plantTaxon.get("statusStopDate");
+	 			statusDescription =  (String)plantTaxon.get("statusDescription");
+	 			taxonLevel =  (String)plantTaxon.get("taxonLevel");
+	 			plantParentName =  (String)plantTaxon.get("plantParentName");
+	 			plantParentRefTitle =  (String)plantTaxon.get("plantParentRefTitle");
+	 			plantParentRefAuthors =  (String)plantTaxon.get("plantParentRefAuthors");	
+				
+				// REMOVE THESE OLD ATTRIBUTES 
+				orgName = (String)plantTaxon.get("orgName");
 				taxonDescription = (String)plantTaxon.get("taxonDescription");
 				citationDetails = (String)plantTaxon.get("citationDetails");
 				dateEntered = (String)plantTaxon.get("dateEntered");
 				usageStopDate = (String)plantTaxon.get("usageStopDate");
 				rank = (String)plantTaxon.get("rank");
-				//set the commit boolean to true, which can be changed by any of the 
-				// methods called from this one if an exception is thrown
-				commit = true;
+				
 			
-				//get the connection stuff
-				conn = this.getConnection();
-				conn.setAutoCommit(false);
-			
-				//insert the plant reference information and the plant party
-				int refId = this.insertPlantReference(email, citationDetails);
+				// INSERT THE PLANT REFERENCES AND THE PARTY INFORMATION
+				int refId = this.insertPlantReference(longNameRefAuthors, longNameRefTitle, longNameRefDate, 
+					longNameRefEdition, longNameRefSeriesName, longNameRefOtherCitDetails, longNameRefPage, 
+					longNameRefISBN, longNameRefISSN, conceptDescription);
+				int shortNameRefId = this.insertPlantReference(shortNameRefAuthors, shortNameRefTitle, shortNameRefDate, 
+					shortNameRefEdition, shortNameRefSeriesName, shortNameRefOtherCitDetails, shortNameRefPage, 
+					shortNameRefISBN, shortNameRefISSN, conceptDescription);
+				int codeRefId = this.insertPlantReference(codeRefAuthors, codeRefTitle, codeRefDate, 
+					codeRefEdition, codeRefSeriesName, codeRefOtherCitDetails, codeRefPage, 
+					codeRefISBN, codeRefISSN, conceptDescription);
+					
 				int partyId = this.insertPlantPartyInstance(salutation, givenName, surName, orgName, email);
 			
-				// check to see if the names exists in the database after 
-				// checking that the attributes have valid names
+				// INSERT THE PLANT NAME ATTRIBUTES
 				boolean longNameExist;
 				boolean shortNameExist;
 				boolean codeExist;
-			
+				// THE LONG NAME
 				if ( longName.length() < 1 )
 				{
 					System.out.println("long name is short");
@@ -190,7 +308,7 @@ public class PlantTaxaLoader
 						longNameId = loadPlantNameInstance(refId, longName, "", dateEntered);
 					}
 				}
-			
+				// THE SHORT NAME
 				if ( shortName.length() < 1 )
 				{
 					System.out.println("short name is short");
@@ -206,10 +324,10 @@ public class PlantTaxaLoader
 					}
 					else
 					{
-						shortNameId = loadPlantNameInstance(refId, shortName, "", dateEntered);
+						shortNameId = loadPlantNameInstance(shortNameRefId, shortName, "", dateEntered);
 					}
 				}
-			
+				// THE CODE NAME
 				if ( code.length() < 1 )
 				{
 					System.out.println("code name is short");
@@ -225,12 +343,12 @@ public class PlantTaxaLoader
 					}
 					else
 					{
-						codeId = loadPlantNameInstance(refId, code, "", dateEntered);
+						codeId = loadPlantNameInstance(codeRefId, code, "", dateEntered);
 					}
 				}
-	
-			
-				//update the concept table with the long name and then
+				
+				
+				//LOAD THE CONCEPT(S)
 				int conceptId;
 				int statusId;
 				if (plantConceptExists(longNameId, refId, taxonDescription) == false)
@@ -244,6 +362,8 @@ public class PlantTaxaLoader
 					code, rank, longName );
 				}
 				System.out.println("PlantTaxaLoader > conceptId: " + conceptId);
+				
+				// LOAD THE STATUS TABLE
 				//fix the date end date here and do a check here to make sure that it does not exist
 				if ( plantStatusExists(conceptId, "accepted", dateEntered, "2005-May-29", 
 					email, partyId, "", refId) == false )
@@ -252,6 +372,7 @@ public class PlantTaxaLoader
 					usageStopDate, email, partyId, "", refId);
 				}
 				
+				// LOAD THE USAGE TABLES
 				//check to see if there are already usage id's in the database
 				if ( plantUsageExists(longName, longNameId, conceptId, "STANDARD", 
 					dateEntered, usageStopDate,  "LONGNAME", partyId) == false )
@@ -288,6 +409,8 @@ public class PlantTaxaLoader
 						usageVec.addElement(""+uid);
 					}
 				}
+				
+				
 				// last thing to do is to denormalize the database for querying
 				// but dont mess with the lengthy stuff if we have failed already
 				if (commit == true )
@@ -1298,38 +1421,42 @@ public class PlantTaxaLoader
 	 /** 
 	  * method that inserts the reference data 
 		*/
-		private boolean plantReferenceExists(String authors, String otherCitationDetails)
+		private boolean plantReferenceExists(String authors, String title, String date)
 	  {
-		boolean exists = false;
-		 try
-		 {
-		 	StringBuffer sb = new StringBuffer();
-			sb = new StringBuffer();
-			sb.append("SELECT plantreference_id from PLANTREFERENCE where othercitationdetails");
-			sb.append(" like '"+otherCitationDetails+"' ");
-			sb.append(" and authors like '");
-			sb.append(authors+"'");
-			
-			Statement query = conn.createStatement();
-			ResultSet rs = query.executeQuery( sb.toString() );
-			int cnt = 0;
-			while ( rs.next() ) 
+			boolean exists = false;
+			StringBuffer sb = new StringBuffer();
+			try
 			{
-				cnt++;
+				sb = new StringBuffer();
+				sb.append("SELECT plantreference_id from PLANTREFERENCE where authors");
+				sb.append(" like '"+authors+"' ");
+				sb.append(" and title like '" + title + "'");
+				// IF THE DATE IS A VALID DATE THEN QUERY BY IT TOO
+				if ( date.length() > 4 )
+				{
+					sb.append(" and PUBDATE = '" + date + "'");
+				}
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					cnt++;
+				}
+				if (cnt > 0)
+				{
+					exists = true;
+				}
+				else
+				{
+					exists = false;
+				}
 			}
-			if (cnt > 0)
-			{
-				exists = true;
-			}
-			else
-			{
-				exists = false;
-			}
-		 }
 			catch (Exception e)
 		 {
-			commit = false;
+			 commit = false;
 			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 System.out.println("sql: " + sb.toString() );
 			 e.printStackTrace();
 		 }
 		 return(exists);
@@ -1339,15 +1466,20 @@ public class PlantTaxaLoader
 	  * method that grabs and retuns the plantReferenceId based on the 
 	  * authors' name and the otherCitationDetails
 	  */
-		private int getPlantReferenceId(String authors, String otherCitationDetails)
+		private int getPlantReferenceId(String authors, String title, String date)
 	  {
+			StringBuffer sb = new StringBuffer();
 		 	int refId = 0; 
 			try
 			{
-		 		StringBuffer sb = new StringBuffer();
-				sb.append("SELECT plantreference_id from PLANTREFERENCE where othercitationdetails");
-				sb.append(" like '"+otherCitationDetails+"' and authors like '");
-				sb.append(authors+"'");
+				sb.append("SELECT plantreference_id from PLANTREFERENCE where title");
+				sb.append(" like '"+title+"' and authors like '"+authors+"'" );
+				// IF THE DATE IS VALID USE IT ELSE DONT
+				if ( date.length() > 4 )
+				{
+					sb.append(" and pubdate = '" + date +"'");
+				}
+				//System.out.println("getPlantReferenceId sql: " + sb.toString() );
 				Statement query = conn.createStatement();
 				ResultSet rs = query.executeQuery( sb.toString() );
 				int cnt = 0;
@@ -1359,8 +1491,9 @@ public class PlantTaxaLoader
 			}
 			catch (Exception e)
 		 {
-			commit = false;
+			 commit = false;
 			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 System.out.println("sql: " + sb.toString() );
 			 e.printStackTrace();
 		 }
 		 return(refId);
@@ -1372,33 +1505,48 @@ public class PlantTaxaLoader
 	* table, if it does not already exist and it it does it returns the 
 	* referenece id
 	*/
-	private int insertPlantReference(String authors, String otherCitationDetails )
+	private int insertPlantReference(String authors, String title, String date, 
+	String edition, String seriesName, String	otherCitationDetails, String page, 
+	String isbn, String issn, String conceptDescription)
   {
 		int refId = 0; 
 	 	StringBuffer sb = new StringBuffer();
+		PreparedStatement pstmt;
 		try
 	 	{
 			//first see if the reference already exists
-			boolean refExists = plantReferenceExists(authors, otherCitationDetails);
+			boolean refExists = plantReferenceExists(authors, title, date);
 			System.out.println("PlantTaxaLoader > ref exists: " + refExists);
 			if (refExists == true)
 			{
-				refId = getPlantReferenceId(authors, otherCitationDetails);
+				refId = getPlantReferenceId(authors, title, date);
 			}
 			else
 			{
-				//insert the strata values
-				sb.append("INSERT into PLANTREFERENCE (authors, othercitationdetails) ");
-				sb.append(" values(?,?)");
-				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-				// Bind the values to the query and execute it
- 				pstmt.setString(1, authors);
- 				pstmt.setString(2, otherCitationDetails);
-				//execute the p statement
- 				pstmt.execute();
+				// IF THE DATE IS VALID THEN USE ONE QUERY ELSE USE ANOTHER
+				if ( date.length() > 4 )
+				{	
+					sb.append("INSERT into PLANTREFERENCE (AUTHORS, TITLE, PUBDATE) ");
+					sb.append(" values(?,?,?)");
+					pstmt = conn.prepareStatement( sb.toString() );
+					// Bind the values to the query and execute it
+					pstmt.setString(1, authors);
+					pstmt.setString(2, title);
+					pstmt.setString(3, date);
+ 				}
+				else
+				{
+					sb.append("INSERT into PLANTREFERENCE (AUTHORS, TITLE) ");
+					sb.append(" values(?,?)");
+					pstmt = conn.prepareStatement( sb.toString() );
+					// Bind the values to the query and execute it
+					pstmt.setString(1, authors);
+					pstmt.setString(2, title);
+				}
+				pstmt.execute();
 
 				//now get the reference id to return
-				refId = getPlantReferenceId(authors, otherCitationDetails);
+				refId = getPlantReferenceId(authors, title, date);
 				System.out.println("PlantTaxaLoader > new refId: " + refId);	
 		}
 	 }
