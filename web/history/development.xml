@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="normalhtml.xsl"?>
-<HTML>
-  <HEAD>@defaultHeadToken@
+<root>
+
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+<TITLE>Development Process</TITLE>
+
+
+
+
+
     <!-- style for Meeting Participants at bottom -->
     <style type="text/css">
     table.smallertbl {font-size:80% ; text-align : center}
@@ -13,13 +22,8 @@
     td.row2col1 {background-color: #DDDDBB}
     
   </style>
-    <TITLE>Development Process</TITLE>
-    <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
-    <meta http-equiv="Content-Type" content="text/html; charset="/>
-  </HEAD>
-  <BODY>
     
-@vegbank_header_html_normal@
+  @webpage_masthead_html@
     <h2 style="text-align:center">
       
 The Vegetation Plot Archive Project
@@ -2067,6 +2071,5 @@ Design
     </tableToStyle>
     <br/>
 
-@vegbank_footer_html_tworow@
-  </BODY>
-</HTML>
+@webpage_footer_html@
+</root>
