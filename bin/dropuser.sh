@@ -3,8 +3,8 @@
 # This script will delete a user from the vegbank 
 # user profile database 
 #	 '$Author: farrell $'
-#  '$Date: 2003-07-15 17:19:34 $'
-#  '$Revision: 1.1 $'
+#  '$Date: 2003-07-15 20:22:44 $'
+#  '$Revision: 1.2 $'
 
 
 if [ "$#" -ne 2 ]
@@ -20,7 +20,7 @@ ACTION='dropuser'
 EMAIL=$1
 HOST=$2
 
-source ./includes/setupCLASSPATH
+source .//usr/vegbank/bin/includes/setupCLASSPATH
 
 java  -cp $CLASSPATH org.vegbank.common.utility.DatabaseUtility $ACTION $EMAIL $HOST
  

@@ -3,8 +3,8 @@
 # This script will delete a plot from the plots 
 # database 
 #	 '$Author: farrell $'
-#  '$Date: 2003-07-15 17:19:34 $'
-#  '$Revision: 1.1 $'
+#  '$Date: 2003-07-15 20:22:44 $'
+#  '$Revision: 1.2 $'
 
 if [ "$#" -ne 2 ]
 then
@@ -19,7 +19,7 @@ fi
 ACTION='dropplot'
 PLOT=$1
 HOST=$2
-source includes/setupCLASSPATH
+source /usr/vegbank/bin/includes/setupCLASSPATH
 
 
 java  -cp $CLASSPATH org.vegbank.common.utility.DatabaseUtility $ACTION $PLOT $HOST 

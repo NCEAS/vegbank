@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source includes/setupCLASSPATH
+source /usr/vegbank/bin/includes/setupCLASSPATH
 
 echo $CLASSPATH
 

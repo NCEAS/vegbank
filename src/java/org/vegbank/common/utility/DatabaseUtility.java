@@ -1,14 +1,12 @@
 /**
  *  '$RCSfile: DatabaseUtility.java,v $'
- *    Purpose: A utility class for the VegBank database access module
+ *  Purpose: A utility class for the VegBank database access module
  *  Copyright: 2002 Regents of the University of California and the
  *             National Center for Ecological Analysis and Synthesis
- *    Authors: John Jarris
- *    Release: @release@
  *
- *   '$Author: farrell $'
- *     '$Date: 2003-05-16 03:00:34 $'
- * '$Revision: 1.1 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-07-15 20:22:44 $'
+ *	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,7 +92,7 @@ public class DatabaseUtility
 	 */
 	 public boolean testVegBankConnections()
 	 {
-		 System.out.println("utility > testing the VegBank network connections");
+		 System.out.println("DatabaseUtility > testing the VegBank network connections");
 		 boolean result = true;
 		 
 		 try
@@ -103,21 +101,21 @@ public class DatabaseUtility
 			 Class.forName("org.postgresql.Driver");
 			 DriverManager.setLoginTimeout(2);
 			 int timeout = DriverManager.getLoginTimeout();
-			 System.out.println("utility > database connection timeout: " + timeout);
+			 System.out.println("DatabaseUtility > database connection timeout: " + timeout);
 			 String plotConnectString = defaultPropFile.getString("connectString");
-			 System.out.println("utility > plotConnectString: " + plotConnectString);
+			 System.out.println("DatabaseUtility > plotConnectString: " + plotConnectString);
 			 String plantConnectString = defaultPropFile.getString("plantdbconnectstring");
-			 System.out.println("utility > plantConnectString: " + plantConnectString);
+			 System.out.println("DatabaseUtility > plantConnectString: " + plantConnectString);
 			 String communityConnectString = defaultPropFile.getString("communitydbconnectstring");
-			 System.out.println("utility > communityConnectString: " + communityConnectString);
-			 System.out.println("utility > testing the plots database connection");
+			 System.out.println("DatabaseUtility > communityConnectString: " + communityConnectString);
+			 System.out.println("DatabaseUtility > testing the plots database connection");
 			 
 			 try { Connection testC = DriverManager.getConnection(plotConnectString, "datauser", ""); }
 			 catch(Exception e) { e.printStackTrace(); result = false;}
-			 System.out.println("utility > testing the plants database connection");
+			 System.out.println("DatabaseUtility > testing the plants database connection");
 			 try { Connection testC = DriverManager.getConnection(plantConnectString, "datauser", ""); }
 			 catch(Exception e) { e.printStackTrace(); result = false;}
-			 System.out.println("utility > testing the community database connection");
+			 System.out.println("DatabaseUtility > testing the community database connection");
 			 try{Connection testC = DriverManager.getConnection(communityConnectString, "datauser", ""); }
 			 catch(Exception e) { e.printStackTrace(); result = false;}
 			 
@@ -137,13 +135,13 @@ public class DatabaseUtility
 			 for (int ii = 0; ii < testUrls.size(); ii++) 
 			 {
 				 String url = (String)testUrls.elementAt(ii);
-				 System.out.println("utility > testing url: " + url);
+				 System.out.println("DatabaseUtility > testing url: " + url);
 				 URL u;
 				 URLConnection uc;
 				 u = new URL(url);
 				 uc = u.openConnection();
 				 String header = uc.getHeaderField("date");
-				 System.out.println("utility date: > " + header);
+				 System.out.println("DatabaseUtility date: > " + header);
 				 HttpURLConnection hcon = (HttpURLConnection) u.openConnection();
 				 int resCode = 0;
 				 String resMessage = null;
@@ -153,8 +151,8 @@ public class DatabaseUtility
 					 resMessage = hcon.getResponseMessage();
 				 }
 				 catch(Exception e) { e.printStackTrace(); result = false;}
-				 System.out.println("utility http status code: > " + resCode);
-				 System.out.println("utility http status message : > " + resMessage);
+				 System.out.println("DatabaseUtility http status code: > " + resCode);
+				 System.out.println("DatabaseUtility http status message : > " + resMessage);
 			 }
 			 
 	
@@ -215,7 +213,7 @@ public class DatabaseUtility
 		 }
 		 catch (MissingResourceException e) 
 		 {
-			 System.out.println("utility > failed in getDatabaseParameters " +e.getMessage());
+			 System.out.println("DatabaseUtility > failed in getDatabaseParameters " +e.getMessage());
        e.printStackTrace();
 		 }
 	}
@@ -255,7 +253,7 @@ public class DatabaseUtility
 		} //end try
 		catch( Exception e ) 
 		{
-			System.out.println(" failed in: utility "+e.getMessage());
+			System.out.println(" failed in: DatabaseUtility "+e.getMessage());
 		}
 	}//end method
 
@@ -320,7 +318,7 @@ public class DatabaseUtility
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in utility" + 
+			System.out.println("failed in DatabaseUtility" + 
 			e.getMessage());
 		}
 	}
@@ -382,7 +380,7 @@ public class DatabaseUtility
 		 } //end try
 		 catch( Exception e ) 
 		 {
-			 System.out.println(" failed in: utility.getUniqueArray: "+e.getMessage());
+			 System.out.println(" failed in: DatabaseUtility.getUniqueArray: "+e.getMessage());
 		 	e.printStackTrace();
 		 }
 	 } //end method
@@ -415,7 +413,7 @@ public class DatabaseUtility
 		}
 		catch ( Exception e )
 		{
-			System.out.println("utility > Exception: " + e.getMessage());
+			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(c);
@@ -455,11 +453,11 @@ public class DatabaseUtility
        // if the res -- number of plots is 0 then alert 
        if ( res == 0 )
        {
-        System.out.println("utility > This plot does not exist in the database and will not be removed: " + res);
+        System.out.println("DatabaseUtility > This plot does not exist in the database and will not be removed: " + res);
        }
        else
        {
-        System.out.println("utility > This plot exists in the database and will be removed: " + res);
+        System.out.println("DatabaseUtility > This plot exists in the database and will be removed: " + res);
         // do the deletion 
         sb = new StringBuffer();
 			  sb.append("delete from stratumcomposition where taxonobservation_id in ( ");
@@ -474,11 +472,46 @@ public class DatabaseUtility
 			  else
 			  {
 			  	 results = pstmt.execute();
-			  	 System.out.println("utility  > dropped stratumcomposition: " );
+			  	 System.out.println("DatabaseUtility  > dropped stratumcomposition: " );
 			  }
 			 
-			   sb = new StringBuffer();
-			   sb.append("delete from commclass where observation_id = ( ");
+			 // Delete the commclass, comminterpretation and classcontributor
+			 
+			 sb = new StringBuffer();
+			 sb.append("delete from comminterpretation where commclass_id = ( ");
+			 sb.append("select commclass_id from commclass where observation_id = ");
+			 sb.append("( select observation_id from observation where plot_id =  "+plotId+" ))");
+			 pstmt = conn.prepareStatement( sb.toString() );
+			 warning = pstmt.getWarnings();
+			 if ( warning != null )
+			 {
+					System.out.println("WARNINGS > " + warning.toString());
+			 }
+			 else
+			 {
+					results = pstmt.execute();
+					System.out.println("DatabaseUtility  > dropped comminterpretation: " );
+			 }
+
+			 sb = new StringBuffer();
+			 sb.append("delete from classcontributor where  commclass_id = ( "); 
+			 sb.append("select commclass_id from commclass where observation_id = ");		 
+			 sb.append("( select observation_id from observation where plot_id =  "+plotId+" ))");
+			 pstmt = conn.prepareStatement( sb.toString() );
+			 warning = pstmt.getWarnings();
+			 if ( warning != null )
+			 {
+					System.out.println("WARNINGS > " + warning.toString());
+			 }
+			 else
+			 {
+					results = pstmt.execute();
+					System.out.println("DatabaseUtility  > dropped classcontributor: " );
+			 }			 
+			 
+			 
+			  sb = new StringBuffer();
+			  sb.append("delete from commclass where observation_id = ( ");
 			  sb.append("select observation_id from observation where plot_id = "+plotId+" )");
 			  pstmt = conn.prepareStatement( sb.toString() );
 			  warning = pstmt.getWarnings();
@@ -489,8 +522,9 @@ public class DatabaseUtility
 			  else
 			  {
 			  	 results = pstmt.execute();
-			  	 System.out.println("Utility  > dropped commclass: " );
+			  	 System.out.println("DatabaseUtility  > dropped commclass: " );
 			  }
+			  
 			  sb = new StringBuffer();
 			  sb.append("delete from stratum where observation_id = (  ");
 			  sb.append(" select observation_id from observation where plot_id = ("+plotId+" ))");
@@ -503,7 +537,7 @@ public class DatabaseUtility
 			  else
 			  {
 				   results = pstmt.execute();
-				  System.out.println("Utility  > dropped stratum: " );
+				  System.out.println("DatabaseUtility  > dropped stratum: " );
 			  }
 			 
 			  sb = new StringBuffer();
@@ -518,7 +552,7 @@ public class DatabaseUtility
 			  else
 			  {
 			 	 results = pstmt.execute();
-				 System.out.println("Utility  > dropped taxonobservation: ");
+				 System.out.println("DatabaseUtility  > dropped taxonobservation: ");
 			  }
         sb = new StringBuffer();
 			  sb.append(" delete from observation where plot_id = "+plotId );
@@ -531,7 +565,7 @@ public class DatabaseUtility
 			  else
 			  {
 			  	 results = pstmt.execute();
-			  	 System.out.println("Utility  > dropped observation: " );
+			  	 System.out.println("DatabaseUtility  > dropped observation: " );
 			  }
 			   
 			  sb = new StringBuffer();
@@ -545,7 +579,7 @@ public class DatabaseUtility
 			  else
 			  {
 				   results = pstmt.execute();
-			  	 System.out.println("Utility  > dropped plot: " );
+			  	 System.out.println("DatabaseUtility  > dropped plot: " );
 			  }
 			 
 			  // DROP ALSO FROM THE SUMMARY TABLES
@@ -561,7 +595,7 @@ public class DatabaseUtility
 			  else
 			  {
 			  	 results = pstmt.execute();
-			  	 System.out.println("Utility  > dropped plotsitesummary: " );
+			  	 System.out.println("DatabaseUtility  > dropped plotsitesummary: " );
 			  }
 			  pstmt.close();
 			 }
@@ -570,7 +604,7 @@ public class DatabaseUtility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("Utility > Exception: " + e.getMessage());
+			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	 }
@@ -593,7 +627,7 @@ public class DatabaseUtility
 		}
 		catch ( Exception e )
 		{
-			System.out.println("Utility > Exception: " + e.getMessage());
+			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(c);
@@ -616,7 +650,7 @@ public class DatabaseUtility
 			 sb = new StringBuffer();
 			 this.conn = this.getUserDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("Utility > dropping user profile for: " + email );
+			 System.out.println("DatabaseUtility > dropping user profile for: " + email );
 			 sb.append("delete from user_info where email_address like '"+email+"';");
 			 sb.append("delete from user_certification where email_address like '"+email+"'");
 			 pstmt = conn.prepareStatement( sb.toString() );
@@ -628,7 +662,7 @@ public class DatabaseUtility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("Utility > Exception: " + e.getMessage());
+			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -656,7 +690,7 @@ public class DatabaseUtility
 			 sb = new StringBuffer();
 			 this.conn = this.getUserDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("Utility > updating user: " + email +" to permission type: " + level );
+			 System.out.println("DatabaseUtility > updating user: " + email +" to permission type: " + level );
 			 sb.append("update  user_info set permission_type = '"+level+"' where email_address like '"+email+"';");
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
@@ -667,7 +701,7 @@ public class DatabaseUtility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("Utility > Exception: " + e.getMessage());
+			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -689,7 +723,7 @@ public class DatabaseUtility
 			 sb = new StringBuffer();
 			 this.conn = this.getUserDBConnection(dbHost);
 			 this.conn.setAutoCommit(false);
-			 System.out.println("Utility > updating user's : " + email +" password to  : " + password );
+			 System.out.println("DatabaseUtility > updating user's : " + email +" password to  : " + password );
 			 sb.append("update user_info set password = '"+password+"' where email_address like '"+email+"';");
 			 pstmt = conn.prepareStatement( sb.toString() );
 			 
@@ -700,7 +734,7 @@ public class DatabaseUtility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("Utility > Exception: " + e.getMessage());
+			System.out.println("DatabaseUtility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -713,8 +747,6 @@ public class DatabaseUtility
 	 */
 	public static void main(String[] args)
 	{
-		//Utility u = new Utility();
-		//u.testVegBankConnections();
 		if (args.length >= 1)
 		{
 			//get the plugin named
