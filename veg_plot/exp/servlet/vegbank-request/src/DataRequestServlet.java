@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-07-03 22:06:30 $'
- *  '$Revision: 1.18 $'
+ *  '$Date: 2002-07-22 18:22:44 $'
+ *  '$Revision: 1.19 $'
  * 
  */
 
@@ -323,7 +323,8 @@ public class DataRequestServlet extends HttpServlet
 	 * client
 	 * 
 	 * @param out -- PrintWriter back to the client
-	 * @param clientType -- the type of client {browser, clientApplication}
+	 * @param clientType -- the type of client {browser, 'clientApplication' or 'app' where
+	 * app and clientApplication are synonomous}
 	 * @param requestDataFormatType -- the data format type that the client has 
 	 *		requested {tsxt, html, xml}
 	 * @param response -- the servlet response to the client 
@@ -336,7 +337,8 @@ public class DataRequestServlet extends HttpServlet
 		try 
 		{
 			System.out.println("DataRequstServlet > result sets: "+queryOutputNum+" to: "+clientType);
-			if ( clientType.trim().equals("clientApplication") )
+			// THIS STATEMENT IS CARRIED OUT IF THE CLIENT IS AN APPLICATION
+			if ( clientType.trim().equals("clientApplication")  || clientType.trim().equals("app") )
 			{
 				//does the client want xml or html?
 				if ( requestDataFormatType.trim().equals("xml") )
@@ -413,13 +415,16 @@ public class DataRequestServlet extends HttpServlet
 	
 	
 	/**
-	 * method for showing a full view of a plot
+	 * method for showing a full view of a plot by transforming the 
+	 * xml document containing the plot by the stylesheet to display 
+	 * the full plot view
 	 */
 	 private String getPlotFullView()
 	 {
 		 StringBuffer sb = new StringBuffer();
 		 try
 		 {
+			 System.out.println("DataRequestServlet > getPlotFullView ");
 			 String xmlDoc = servletDir + "atomicResult";
 			 String styleSheet = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/transformFullPlot.xsl";
 			 System.out.println("DataRequestServlet > xml document: '" + xmlDoc +"'" );
@@ -427,7 +432,7 @@ public class DataRequestServlet extends HttpServlet
 			 transformer.getTransformed(xmlDoc, styleSheet);
 			 StringWriter transformedData = transformer.outTransformedData;
 			 Vector contents = this.convertStringWriter(transformedData);
-			 for (int ii=0;ii< contents.size() ; ii++) 
+			 for (int ii=0;ii< contents.size(); ii++) 
 			 {
 					String buf =  (String)contents.elementAt(ii) ;
 					sb.append( buf + "\n");
@@ -440,6 +445,9 @@ public class DataRequestServlet extends HttpServlet
 		 }
 		return( sb.toString() );
 	 }
+	 
+	 
+	 
 	/**
 	 * method that returns the identity page containing all the plots that 
 	 * were in the result set ( or a range of plots )
