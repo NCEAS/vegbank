@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-14 13:20:04 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2002-05-20 20:03:52 $'
+ * 	'$Revision: 1.3 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -62,7 +62,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 	 */
 	public String getPlantTaxonCode(String plantName)
 	{
-	 	return("code");
+	 	return("");
 	}
 																																																																																																												
 	
@@ -148,7 +148,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
  	 */
  	public String getSoilDepth(String plotName) 
  	{
- 		return("");
+ 		return super.getSoilDepth(plotName);
  	}
 
 
@@ -182,12 +182,38 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
  	}
 
 
-
-	//returns all the plots stored in the access file
+	/**
+	 * this method returns the plotid's of all the plots stored 
+	 * in the VegBank MDB file.  The name of this class seems
+	 * strange because one would expect that the name would be 
+	 * the name of the plot that the author used to describe the 
+	 * plot, but this gives the 'unique' names from the perspective 
+	 * of the database
+	 */
 	public Vector getPlotNames()
 	{
 		Vector v = new Vector();
-		v.addElement("test-plot");
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select distinct PLOT_ID from PLOT");
+			while (rs.next()) 
+			{
+				String s = rs.getString(1);
+				v.addElement(s);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
 		return(v);
 	}
 	
@@ -1010,7 +1036,12 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 	 
 	 /**
 	 * method that returns the strata cover for a given plant, strata, and 
-	 * plot
+	 * plot.  Notice that the inputs into this method include the plantName, plotName
+	 * (the plotid in this case) and the stratum(name).  The MS Access version allows
+	 * a stratum with the same name to be used multiple times in the database which 
+	 * causes a problem with this method.  The current fix is to edit the mdb file 
+	 * and increment any stratum whose name has already been used; there should be 
+	 * a method that can fix this so that the user does not have to do it by hand.
 	 */
 	 public String getTaxaStrataCover(String plantName, String plotName, String stratum)
 	 {
@@ -1029,7 +1060,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 				sb.append(" STRATUM_ID in ( select STRATUM_ID from STRATUM where STRATUMTYPE_ID = ( ");
 				sb.append(" select STRATUMTYPE_ID from STRATUMTYPE WHERE STRATUMNAME like '"+stratum+"') and OBSERVATION_ID = ");
 				sb.append(" (select observation_id from OBSERVATION where PLOT_ID = " + plotName+" ) )");
-				System.out.println("VBAccessDataSourcePlugin > query " + sb.toString() );
+				//System.out.println("VBAccessDataSourcePlugin > query " + sb.toString() );
 				ResultSet rs = stmt.executeQuery( sb.toString() );
 				while (rs.next()) 
 				{
