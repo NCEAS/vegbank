@@ -14,9 +14,8 @@
     <li><a href="@forms_link@plot-query-simple.jsp">Simple search</a></li>
     <li><a href="@plotquery_page@">Advanced plot search</a></li>
     </ul>
-
-    <bean:include id="smallmap" href="@forms_link@plot-map-northamerica-sml.jsp" />
-    <bean:write name="smallmap" filter="false" />
+     <%@ include file="includes/plot-map-northamerica-home.jsp" %>
+     <%@ include file="includes/plot-map-northamerica-key.jsp" %>
     </fieldset>
 
     </div>
