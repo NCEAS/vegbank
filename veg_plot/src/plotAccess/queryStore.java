@@ -18,6 +18,14 @@ import java.sql.*;
 public class  queryStore
  {
 
+public String summaryOutput[] = new String[10000]; 
+public int summaryOutputNum; 
+public int outConnectionUses;
+
+//hash table to store the cummulative summary results for all the plots
+public Hashtable cumulativeSummaryResultHash = new Hashtable();
+
+
 
 utility g =new utility(); 
 //g.getDatabaseParameters("database", "query");
@@ -118,6 +126,193 @@ entireSinglePlotOutputNum=1; //and here
 }//end method
 public String entireSinglePlotOutput[] = new String[10000];  //should always = 1
 public int entireSinglePlotOutputNum; 
+
+
+
+
+
+
+/**
+ * Method to query the database by using a plot id number to obtain a summary of 
+ * that plot including 1] author plot code, 2] surfaceGeology
+ * The input to the method is a string array containing plot id numbers and
+ * an integer representing the number of elements in the array
+ *
+ * @param plotId - an array of plotId numbers
+ * @param plotIdNum - the number of elements in the above array
+ * @param conn - a database connection -- get rid of this and put the conn
+ * management here in this class
+ */
+public void getPlotSummaryNew(String plotId[], int plotIdNum, Connection conn)
+{
+
+//get the database management parameter settings
+g.getDatabaseParameters("database", "query");
+
+try {
+
+myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
+	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile+"QueryStore",1.0);
+conn=myBroker.getConnection(); //grab one connection from pool
+
+//this is the number of uses that an input connection has had
+int connectionUses=1;
+
+
+//this array will hold all the results before passing it back to the 
+//calling class
+String summaryResult[] = new String[10000];
+int summaryResultNum=0;
+
+//iterate through the plot id numbers
+for (int i=0;i<plotIdNum; i++) {
+
+//hash table to store the results of each individual plot
+Hashtable summaryResultHash = new Hashtable();
+
+//Because often the output of issueStatement is used as input here,
+//and the output values are tokenized by pipes replace all the pipes below
+String currentPlotId=plotId[i].replace('|',' ').trim();
+
+String action="select";
+String statement="select PLOT_ID, PROJECT_ID, PLOTTYPE, SAMPLINGMETHOD, "
+	+" COVERSCALE, PLOTORIGINLAT,  PLOTORIGINLONG, PLOTSHAPE, PLOTAREA, "
+	+" ALTVALUE, SLOPEASPECT, SLOPEGRADIENT, SLOPEPOSITION, HYDROLOGICREGIME, "
+	+" SOILDRAINAGE, CURRENTCOMMUNITY, XCOORD, YCOORD, COORDTYPE, OBSSTARTDATE, "
+	+" OBSSTOPDATE, EFFORTLEVEL, HARDCOPYLOCATION, SOILTYPE, SOILDEPTH, "
+	+" PERCENTROCKGRAVEL, PERCENTSOIL, PERCENTLITTER, PERCENTWOOD, PERCENTWATER, "
+	+" PERCENTSAND, PERCENTCLAY, PERCENTORGANIC, LEAFTYPE, PHYSIONOMICCLASS, "
+	+" AUTHORPLOTCODE, SURFGEO, STATE, PARENTPLOT, AUTHOROBSCODE"
+	+" from PLOTSITESUMMARY where PLOT_ID = "+currentPlotId;
+		
+	String returnFields[]=new String[40];
+	int returnFieldLength=40;
+	
+	returnFields[0]="PLOT_ID";
+	returnFields[1]="PROJECT_ID";
+	returnFields[2]="PLOTTYPE";
+	returnFields[3]="SAMPLINGMETHOD";
+	returnFields[4]="COVERSCALE";
+	returnFields[5]="PLOTORIGINLAT";
+	returnFields[6]="PLOTORIGINLONG";
+	returnFields[7]="PLOTSHAPE";
+	returnFields[8]="PLOTAREA";
+	returnFields[9]="ALTVALUE";
+	returnFields[10]="SLOPEASPECT";
+	returnFields[11]="SLOPEGRADIENT";
+	returnFields[12]="SLOPEPOSITION";
+	returnFields[13]="HYDROLOGICREGIME";
+	returnFields[14]="SOILDRAINAGE";
+	returnFields[15]="CURRENTCOMMUNITY";
+	returnFields[16]="XCOORD";
+	returnFields[17]="YCOORD";
+	returnFields[18]="COORDTYPE";
+	returnFields[19]="OBSSTARTDATE";
+	returnFields[20]="OBSSTOPDATE";
+	returnFields[21]="EFFORTLEVEL";
+	returnFields[22]="HARDCOPYLOCATION";
+	returnFields[23]="SOILTYPE";
+	returnFields[24]="SOILDEPTH";
+	returnFields[25]="PERCENTROCKGRAVEL";
+	returnFields[26]="PERCENTSOIL";
+	returnFields[27]="PERCENTLITTER";
+	returnFields[28]="PERCENTWOOD";
+	returnFields[29]="PERCENTWATER";
+	returnFields[30]="PERCENTSAND";
+	returnFields[31]="PERCENTCLAY";
+	returnFields[32]="PERCENTORGANIC";
+	returnFields[33]="LEAFTYPE";
+	returnFields[34]="PHYSIONOMICCLASS";
+	returnFields[35]="AUTHORPLOTCODE";
+	returnFields[36]="SURFGEO";
+	returnFields[37]="STATE";
+	returnFields[38]="PARENTPLOT";
+	returnFields[39]="AUTHOROBSCODE";
+
+	
+	/*
+	* Call the issueSelect method which will return an array with the return
+	*/
+
+	issueStatement j = new issueStatement();
+	j.issueSelect(statement, action, returnFields, returnFieldLength, 
+	summaryResultHash, conn);	
+	
+	//iterate the connection use counter
+	connectionUses++;
+	
+	//take the results from the issueSelect and put into the array
+	//note that the j.outReturnFieldsNum should always be = 1 in this case
+	//because we are querying by a plot ID number which should be unique
+	for (int ii=0;ii<j.outReturnFieldsNum; ii++) {
+		summaryResult[i]=j.outReturnFields[ii];
+	}
+	
+///System.out.println(">>>: "+j.outResultHash.toString());
+	
+// make a second query here to get the species specific information 
+
+action="select";
+statement="select AUTHORNAMEID, AUTHORPLOTCODE, STRATUMTYPE, PERCENTCOVER" 
+	+" from PLOTSPECIESSUM where PLOT_ID = "+currentPlotId;
+
+	int returnSpeciesFieldLength=4;
+	String returnSpeciesFields[]=new String[4];	
+	
+	returnSpeciesFields[0]="AUTHORNAMEID";
+	returnSpeciesFields[1]="AUTHORPLOTCODE";
+	returnSpeciesFields[2]="STRATUMTYPE";
+	returnSpeciesFields[3]="PERCENTCOVER";
+	
+	//issue the select statement
+	issueStatement k = new issueStatement();
+	k.issueSelect(statement, action, returnSpeciesFields, returnSpeciesFieldLength, 
+	summaryResultHash, conn);
+	
+//	System.out.println("<<<K: "+k.outResultHash.toString());
+
+//iterate the connection use counter
+	connectionUses++;
+	System.out.println("queryStore.getPlotSummaryNew - connection uses:"
+		+connectionUses);
+	//if the connection has been used more than some arbitrary times renew conn
+	if (connectionUses > 90) {
+		conn.close(); 
+		myBroker.freeConnection(conn); 
+		conn=myBroker.getConnection();
+		connectionUses=0;
+	}
+	
+	
+	//take the results from this query and append to the summary line
+	//which will ultimately be passed back to the xmlWriter to be tokenized
+	//and writen to xml - againd there should only be one line returned 
+///	for (int ii=0;ii<k.outReturnFieldsNum; ii++) {
+///		summaryResult[i]=summaryResult[i]+k.outReturnFields[ii];
+///	}
+
+// add the individual plots (represented as their own hash) and include in the
+// cumulative hash table
+cumulativeSummaryResultHash.put("plot"+i,k.outResultHash);
+	
+summaryResultNum=i;
+} //end for
+
+//at the end add to the hash the number of plots
+//System.out.println("???????> "+cumulativeSummaryResultHash.toString());
+
+
+summaryOutput=summaryResult;
+summaryOutputNum=summaryResultNum;
+outConnectionUses=connectionUses;
+
+} //end try
+catch (Exception e) {System.out.println("failed in querySrore.getPlotSummaryNew"
+		+" " + e.getMessage()); e.printStackTrace();}
+		
+}//end method
+
+
 
 
 
@@ -270,9 +465,8 @@ catch (Exception e) {System.out.println("failed in querySrore.getPlotSummary"
 		+" " + e.getMessage());}
 		
 }//end method
-public String summaryOutput[] = new String[10000]; 
-public int summaryOutputNum; 
-public int outConnectionUses; 
+
+
 
 
 

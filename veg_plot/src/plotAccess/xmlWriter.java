@@ -19,6 +19,254 @@ public class  xmlWriter
 
 private StringBuffer printString = new StringBuffer(); //this is the print string
 
+
+
+/**
+ *  This is an overloaded method that accepts a hashtable containg plot summary
+ * data
+ *
+ */
+
+public void writePlotSummary(Hashtable cumulativeSummaryResultHash, String outFile)
+{
+try {
+	
+//set up the output query file called query.xml	using append mode 
+PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
+Hashtable singlePlotSummary = new Hashtable();
+Hashtable multiPlotComprehensive = new Hashtable();
+
+
+//get the number of plots stored in hash
+System.out.println("hash size: "+cumulativeSummaryResultHash.size());
+
+//write one plot at a time
+for (int i=0; i< cumulativeSummaryResultHash.size(); i++) {
+	
+	//get a single plot and stick into a temporary hash
+	String plotRecord = "plot"+i;
+	singlePlotSummary = (Hashtable)cumulativeSummaryResultHash.get(plotRecord);
+
+	//pass this hash table containing a single plot to the method that will map the 
+	//elements that can be passed directly to the 'PlotXmlWriterClass'	
+	Hashtable singleFormatPlot = mapSummaryElements(singlePlotSummary);
+	
+	//take the single plot that is returned and put it in a hash with all the
+	// other plots in the result set
+	 multiPlotComprehensive.put("plot"+i,singleFormatPlot);
+}
+
+
+//take the returned hash table and pass it to the xml writer class
+//put a try here b/c this class has been sensitive
+try {
+		PlotXmlWriter pxw = new PlotXmlWriter();
+		pxw.writeMultiplePlot(multiPlotComprehensive, outFile);
+	}
+catch (Exception e) {System.out.println("failed in xmlWriter.writePlotSummary "
+	+"(using a hash table as input ) -- trying to write xml output" + 
+	e.getMessage()); e.printStackTrace();}
+
+
+}
+catch (Exception e) {System.out.println("failed in xmlWriter.writePlotSummary "
+	+"(using a hash table as input )" + 
+	e.getMessage());}
+
+}
+
+
+
+
+
+/**
+ * Method to map the plot summary elements being passed to this class in a hash
+ * table into the 'PlotDataMapper' class which prepares the data for printing in
+ * the 'PlotXmlWriter' class 
+ *
+ * @param singlePlotSummary - is a hash table that contains all the summary
+ * elements for a given plot
+ */
+//private void mapSummaryElements (Hashtable singlePlotSummary)
+private Hashtable mapSummaryElements (Hashtable singlePlotSummary)
+{
+
+
+//pass the elements to the plotDatamapper class
+PlotDataMapper pdm = new PlotDataMapper();
+
+String authorPlotCode = "nullValue";
+String plotShape = "nullValue";
+String slopeGradient = "nullValue";
+String slopeAspect = "nullValue";
+String surfGeo = "nullValue";
+String hydrologicRegime = "nullValue";
+String topoPosition = "nullValue";
+String soilDrainage = "nullValue";
+String elevationValue = "nullValue";
+String state = "nullValue";
+String xCoord = "nullValue";
+String yCoord = "nullValue";
+String coordType = "nullValue";
+String soilType = "nullValue";
+String percentSoil = "nullValue";
+String percentSand = "nullValue";
+String percentLitter = "nullValue";
+String percentWood = "nullValue";
+String soilDepth = "nullValue";
+String leafType = "nullValue";
+String currentCommunity = "nullValue";
+String physionomicClass = "nullValue";
+String authorObservationCode = "nullValue";
+
+
+try {
+//first get the elements  - then next map them using the 'PlotDataMapper' class
+if (singlePlotSummary.containsKey("AUTHORPLOTCODE"))
+	authorPlotCode = (String)singlePlotSummary.get("AUTHORPLOTCODE");
+if (singlePlotSummary.containsKey("PLOTSHAPE"))
+	plotShape = (String)singlePlotSummary.get("PLOTSHAPE");
+if (singlePlotSummary.containsKey("SLOPEGRADIENT"))
+	slopeGradient = (String)singlePlotSummary.get("SLOPEGRADIENT");
+if (singlePlotSummary.containsKey("SLOPEASPECT"))
+	slopeAspect = (String)singlePlotSummary.get("SLOPEASPECT");
+if (singlePlotSummary.containsKey("SURFGEO"))
+	surfGeo = (String)singlePlotSummary.get("SURFGEO");
+if (singlePlotSummary.containsKey("HYDROLOGICREGIME"))
+	hydrologicRegime = (String)singlePlotSummary.get("HYDROLOGICREGIME");
+if (singlePlotSummary.containsKey("SLOPEPOSITION"))
+	topoPosition = (String)singlePlotSummary.get("SLOPEPOSITION");
+if (singlePlotSummary.containsKey("SOILDRAINAGE"))
+	soilDrainage = (String)singlePlotSummary.get("SOILDRAINAGE");
+if (singlePlotSummary.containsKey("ALTVALUE"))
+	elevationValue = (String)singlePlotSummary.get("ALTVALUE");
+if (singlePlotSummary.containsKey("STATE"))
+	state = (String)singlePlotSummary.get("STATE");
+if (singlePlotSummary.containsKey("XCOORD"))
+	xCoord = (String)singlePlotSummary.get("XCOORD");
+if (singlePlotSummary.containsKey("YCOORD"))
+	yCoord = (String)singlePlotSummary.get("YCOORD");
+if (singlePlotSummary.containsKey("COORDTYPE"))
+	coordType = (String)singlePlotSummary.get("COORDTYPE");
+if (singlePlotSummary.containsKey("SOILTYPE"))
+	soilType = (String)singlePlotSummary.get("SOILTYPE");
+if (singlePlotSummary.containsKey("PERCENTSOIL"))
+	percentSoil = (String)singlePlotSummary.get("PERCENTSOIL");
+if (singlePlotSummary.containsKey("PERCENTSAND"))
+	percentSand = (String)singlePlotSummary.get("PERCENTSAND");
+if (singlePlotSummary.containsKey("PERCENTLITTER"))
+	percentLitter = (String)singlePlotSummary.get("PERCENTLITTER");
+if (singlePlotSummary.containsKey("PERCENTWOOD"))
+	percentWood = (String)singlePlotSummary.get("PERCENTWOOD");
+if (singlePlotSummary.containsKey("SOILDEPTH"))
+	soilDepth = (String)singlePlotSummary.get("SOILDEPTH");
+if (singlePlotSummary.containsKey("LEAFTYPE"))
+	leafType = (String)singlePlotSummary.get("LEAFTYPE");
+if (singlePlotSummary.containsKey("CURRENTCOMMUNITY"))
+	currentCommunity = (String)singlePlotSummary.get("CURRENTCOMMUNITY");
+if (singlePlotSummary.containsKey("PHYSIONOMICCLASS"))
+	physionomicClass = (String)singlePlotSummary.get("PHYSIONOMICCLASS");
+if (singlePlotSummary.containsKey("AUTHOROBSCODE"))
+	authorObservationCode = (String)singlePlotSummary.get("AUTHOROBSCODE");
+
+
+}
+
+catch (Exception e) {System.out.println("failed in xmlWriter.mapSummaryElements "
+		+" - extracting summary elements from hash table" + e.getMessage()); 
+		e.printStackTrace();}
+
+try {
+
+		
+		
+//project info
+pdm.plotElementMapper("national veg plots database entry", "projectName", "project");
+
+
+//site info
+pdm.plotElementMapper(authorPlotCode, "authorCode", "site");
+pdm.plotElementMapper(plotShape, "shape", "site");
+pdm.plotElementMapper(slopeGradient, "slopeGradient", "site");
+pdm.plotElementMapper(slopeAspect,"slopeAspect", "site");
+pdm.plotElementMapper(surfGeo,"surfGeo", "site");
+pdm.plotElementMapper(hydrologicRegime,"hydrologicRegime", "site");
+pdm.plotElementMapper(topoPosition,"topoPosition", "site");
+pdm.plotElementMapper(soilDrainage,"soilDrainage", "site");
+pdm.plotElementMapper(elevationValue,"elevationValue", "site");
+pdm.plotElementMapper(state,"state", "site");
+pdm.plotElementMapper(xCoord,"xCoord", "site");
+pdm.plotElementMapper(yCoord,"yCoord", "site");
+pdm.plotElementMapper(coordType,"coordType", "site");
+
+
+//observational info
+pdm.plotElementMapper(soilType, "soilType", "observation");
+pdm.plotElementMapper(soilDepth, "soilDepth", "observation");
+pdm.plotElementMapper(authorObservationCode, "authorObsCode", "observation");
+pdm.plotElementMapper(percentSand, "perSand", "observation");
+pdm.plotElementMapper(percentLitter, "perLitter", "observation");
+pdm.plotElementMapper(percentWood, "perWood", "observation");
+pdm.plotElementMapper(leafType, "leafType", "observation");
+pdm.plotElementMapper(physionomicClass, "phisioClass", "observation");	
+
+//strata info
+pdm.plotElementMapper("t1", "stratumName", "observation");
+pdm.plotElementMapper("t1Ht", "stratumHeight", "observation");
+pdm.plotElementMapper("t1Cover", "stratumCover", "observation");
+
+//community info
+	pdm.plotElementMapper(currentCommunity, "communityName", "community");
+	pdm.plotElementMapper("tnc code", "CEGLCode", "community");
+
+
+//System.out.println(">>>state<<< "+ ((String)singlePlotSummary.get("STATE")) );
+////System.out.println(singlePlotSummary.toString() );
+
+
+//cycle thru the single plot and retrieve all the species info -- making the
+// number of iterations = 900 is a hack to keep going and will be fixed
+
+for (int i=0; i<900; i++) {
+
+	String currentAuthorNameId = (String)singlePlotSummary.get("AUTHORNAMEID."+i);
+	String currentStratum = (String)singlePlotSummary.get("STRATUMTYPE."+i);
+	String currentPercentCover = (String)singlePlotSummary.get("PERCENTCOVER."+i);
+	//make sure that no nulls are being passed
+	if (currentAuthorNameId != null ) {
+
+		pdm.plotElementMapper(currentAuthorNameId, "taxonName", "species");
+		pdm.plotElementMapper(currentStratum, "stratum", "species");
+		pdm.plotElementMapper(currentPercentCover, "cover", "species");
+
+	}
+
+}
+
+
+
+
+
+//now pass the categories to the consolidator -- to make a single plot
+pdm.plotElementConsolidator(pdm.plotProjectParams, pdm.plotSiteParams, 
+	pdm.plotObservationParams, pdm.plotCommunityParams,	pdm.plotSpeciesParams);
+
+
+
+} 
+catch (Exception e) {System.out.println("failed in xmlWriter.mapSummaryElements "
+		+" - passing elements to mapping class" + e.getMessage()); e.printStackTrace();}
+		
+return pdm.comprehensivePlot;
+}
+
+
+
+
+
+
+
+
 /**
  * Method to print the summary information returned about one or a group of
  * vegetation communities.  Currently this method is to take as input a vector
@@ -112,8 +360,15 @@ catch (Exception e) {System.out.println("failed in xmlWriter.writePlotSummary" +
 }
 
 
-	
-	
+
+ /**
+ *  This is an old method that was used to print plot summary information and
+ * used as input an array of Strings that were tokenized into variables an then
+ * printed out.  The newer method that uses the same class as the data
+ * formatting/loading classes is above and uses a hash table that is passed to
+ * it instead of the array with strings.
+ */
+
 public void writePlotSummary(String plotSummary[], int plotSummaryNum, String outFile)
 {
 try {

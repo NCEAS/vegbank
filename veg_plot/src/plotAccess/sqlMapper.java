@@ -149,8 +149,8 @@ if (elevationMin != null && elevationMax != null && resultType != null && outFil
 
 
 //retrieve the summary info
-queryStore k = new queryStore();
-k.getPlotSummary(queryOutput, queryOutputNum, pconn);
+///queryStore k = new queryStore();
+///k.getPlotSummary(queryOutput, queryOutputNum, pconn);
 
 // manage the database connections -- this doesn't really work here but keep it
 // for later
@@ -170,9 +170,18 @@ if (connectionUses>12) {
 }
 
 
-//write to a summary file
-xmlWriter l = new xmlWriter();
-l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);
+//write to a summary file -- this is an old method
+///xmlWriter l = new xmlWriter();
+///l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);
+
+//just test the new method
+queryStore k1 = new queryStore();
+k1.getPlotSummaryNew(queryOutput, queryOutputNum, pconn);
+
+//write to a summary file - again this is a test
+xmlWriter xw = new xmlWriter();
+xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile+".xml");
+
 
 
 // The connection is returned to the Broker
