@@ -33,7 +33,7 @@ if (xwhereParams == null) {
 <bean:define id="regexOp" value="<%= xwhereGlue %>"/>
 <bean:define id="search" value="<%= xwhereParams %>"/>
 <vegbank:get id="meta" select="keywords_count" where="where_keywords_grouped"
-		xwhereKey="xwhere_kw_match" xwhereEnable="true" xwhereSearch="true"/>
+		xwhereKey="xwhere_kw_match" xwhereEnable="true" xwhereSearch="true" perPage="-1"/>
 
 
 <logic:empty name="meta-BEANLIST">
