@@ -31,7 +31,7 @@
     <property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
     <property name="vegdocs.dir" value="/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}${vegdocs.dir}"/>
-    <property name="static_xmlserver" value="${vegdocs_server}/dataxml"/>
+    <property name="static_xmlserver" value="${vegdocs_server}/xml"/>
     <property name="local.web.dir" value="../../web" />
     <property name="local.vegbranch.dir" value="${local.web.dir}/vegbranch" />
     <!-- filters -->
