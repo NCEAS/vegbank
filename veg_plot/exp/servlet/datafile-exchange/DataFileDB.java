@@ -391,11 +391,11 @@ public class DataFileDB  {
 	 //server
 	public String getUserFileSummary(String userName)
 	{
+		System.out.println("DataFileDB > looking up the files stored for: " + userName);
 		String s = null;
 		StringBuffer sb = new StringBuffer();
 		try 
 		{
-			
 			//conn = getConnection();
       PreparedStatement pstmt;
       pstmt = conn.prepareStatement(
