@@ -12,7 +12,7 @@ import org.apache.tools.ant.*;
 
 
 import servlet.util.*;
-
+import servlet.util.GetURL;
 
 /**
  * Class that acts as a utility to the plotQuery servlet
@@ -143,6 +143,7 @@ public class ServletUtility
 		}
 		return(params);
 	}
+	
 	
 	
 	
@@ -309,7 +310,7 @@ public void getViewOption(String summaryViewType)
 	//+"<html> \n"
 	//+"<body> \n"
 	//+"<head> \n"
-	+"<form action=\"http://vegbank.nceas.ucsb.edu:8080/framework/servlet/viewData\" method=\"GET\"> \n"
+	+"<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/viewData\" method=\"GET\"> \n"
 	+"<input type=\"hidden\" name=\"resultType\" value=\"summary\" > \n"
 	+"<input type=\"hidden\" name=\"summaryViewType\" value=\""+summaryViewType+"\"> \n"
 	+"<input type=\"submit\" name=\"submitButton\" value=\"view data\" > \n"
@@ -319,7 +320,51 @@ public void getViewOption(String summaryViewType)
 	outString=response;	
 }
 
-
+/**
+ *
+ * utility method to return the name of the browser type that 
+ * a client is using given as input an http request
+ * @param request -- the http request
+ */
+ public String getBrowserType(HttpServletRequest request)
+ {
+	 String s = "";
+	 try
+	 {
+		 Enumeration headerNames = request.getHeaderNames();
+		 while(headerNames.hasMoreElements()) 
+		{
+      String headerName = (String)headerNames.nextElement();
+      String value = request.getHeader(headerName);
+			//System.out.println("ServletUtility > headerName: " + headerName+ " value: " + value);
+      if ( headerName.toUpperCase().startsWith("USER") )
+			{
+				String ua = headerName.toUpperCase();
+				System.out.println("ServletUtility > UA: "+ value );
+				if ( value.toUpperCase().indexOf("MSIE") >= 1 )
+				{
+					s = "msie";
+				}
+				else if ( value.toUpperCase().indexOf("NETSCAPE") >= 1 )
+				{
+					 s = "netscape";
+				}
+				else 
+				{
+					s = "unknown";
+				}
+			}
+    }
+		System.out.println("ServletUtility > browserType: " + s); 
+	 }
+	 catch(Exception e) 
+	{
+		System.out.println("Exception: " + e.getMessage() );
+		e.printStackTrace();
+	}
+	
+	 return(s);
+ }
 
 	
 /**
