@@ -2524,7 +2524,7 @@ return "Check All"; }
           </form>
         </table>
 	<!-- VEGBANK FOOTER -->
-	@vegbank_footer_html_tworow@
+	@vegbank_footer_html_tworow_nojs@
 	<!-- END OF FOOTER -->
 
       </body>
