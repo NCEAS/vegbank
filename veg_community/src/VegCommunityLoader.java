@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-08 21:26:41 $'
- * '$Revision: 1.14 $'
+ *     '$Date: 2002-03-13 00:20:09 $'
+ * '$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public class VegCommunityLoader
  		{
 			Class.forName("org.postgresql.Driver");
 			//the framework database
-			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/communities_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -157,22 +157,136 @@ public class VegCommunityLoader
 	 }
 	 
 	 
-	 
-	/**
+	 /**
+	 * HINT: METHOD TO INSERT THE COMMUNITY NAME AND CONCEPT FROM WEB SITE
+	 *
 	 * method that inserts a community -- this is the method that is for loading
 	 * generic communities into the database ie, those enetered through the 
 	 * web site.  It is imaginned that the form on the website is to have 
 	 * a name for the plant, a description, level, code, and the name of the 
 	 * person / party that recognises this community.  All the other attributes 
-	 * either have to be simulated or looked up in the database.
+	 * either have to be simulated or looked up in the database.  This particular
+	 * method is used in the case where the plant name does not exist and for that 
+	 * reason the reference to both the name and the concept will be equal to vegbank
+	 *
+	 * @param conceptCode -- the code associated with a new concept
+	 *
+	 *
 	 *
 	 */
-	 private void insertGenericCommunity(String conceptCode, String conceptLevel, 
+	 public StringBuffer insertGenericCommunity(String partySalutation, String
+	 partyGivenName, String partySurName, String partyMiddleName, String orgName,
+	 String contactInstructions,
+	 
+	 String conceptReferenceTitle, String conceptReferenceAuthor,
+	 String conceptReferenceDate,
+	 
+	 String nameReferenceTitle, String nameReferenceAuthor,
+	 String nameReferenceDate,
+	
+	 String conceptCode, String conceptLevel, 
+	 String commName, String dateEntered, String parentCommunity, 
+	 String otherName  )
+	 {
+	 	StringBuffer sb = new StringBuffer();
+		 try
+		 {
+		 	
+			//turn off autocommit
+			conn.setAutoCommit(false);
+			int partyId = insertCommunityPartyIndividual(partySalutation, 
+			partyGivenName, partySurName, partyMiddleName, orgName
+			, contactInstructions
+			);
+			System.out.println("VegCommunityLoader > party id: " + partyId);
+			if (partyId == 0) this.commit = false;
+			
+			//GET THE NAME AND CONCEPT REFERENCE
+			int conceptRefId = insertCommunityReference(conceptReferenceAuthor, 
+			conceptReferenceTitle, conceptReferenceDate,  conceptReferenceAuthor);
+			System.out.println("VegCommunityLoader >  concept ref id: " + conceptRefId);
+			
+			int nameRefId = insertCommunityReference(nameReferenceAuthor, 
+			nameReferenceTitle, nameReferenceDate,  nameReferenceAuthor);
+			System.out.println("VegCommunityLoader > name ref id: " + nameRefId);
+			if (conceptRefId == 0 || nameRefId == 0  ) this.commit = false;
+			
+			// INSERT THE NAMES
+			int commNameId = insertCommunityName(commName, nameRefId, dateEntered);
+			System.out.println("VegCommunityLoader > name id: " + commNameId);
+			if (commNameId == 0  ) this.commit = false;
+
+			//FORGET THE CODE NAMES FOR NOW
+			
+			// INSERT THE CONCEPT
+			int commConceptId = insertCommunityConcept(conceptCode, commNameId, 
+			conceptLevel, parentCommunity, commName, conceptRefId );
+			System.out.println("VegCommunityLoader > concept id: " + commConceptId);
+			if (commConceptId == 0  ) this.commit = false;
+			
+			// THE STATUS -- there may be a proble with the date entered
+			int commStatusId = insertCommunityStatus(commConceptId, "accepted", 
+			dateEntered, partyId, conceptRefId, parentCommunity );
+			System.out.println("VegCommunityLoader > status id: " + commStatusId);
+			if (commStatusId == 0  ) this.commit = false;
+						
+			//UPDATE THE USAGE FOR THE NAMES 
+			// - the name
+			insertCommunityUsage( commNameId, commConceptId, partyId, "standard"
+			, dateEntered, "VEGBANK", commName, conceptCode);
+			System.out.println("VegCommunityLoader > usage id: " );
+			//if (commStatusId == 0  ) this.commit = false;
+			
+			// DO THE TRANSACTION -- ROLLBACK ALL FOR TESTING
+			if (this.commit == true)
+			{
+				conn.commit();
+				sb.append("<commit>true</commit>");
+			}
+			else
+			{
+				conn.rollback();
+				sb.append("<commit>false</commit>");
+				//debugInstanceFailure( commName, conceptCode, allianceTransName);
+				//System.exit(0);
+			}
+		 }
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(sb);
+	 }
+	 
+	 
+	/**
+	 * HINT: METHOD TO INSERT THE COMMUNITY NAME AND CONCEPT FROM WEB SITE
+	 *
+	 * method that inserts a community -- this is the method that is for loading
+	 * generic communities into the database ie, those enetered through the 
+	 * web site.  It is imaginned that the form on the website is to have 
+	 * a name for the plant, a description, level, code, and the name of the 
+	 * person / party that recognises this community.  All the other attributes 
+	 * either have to be simulated or looked up in the database.  This particular
+	 * method is used in the case where the plant name does not exist and for that 
+	 * reason the reference to both the name and the concept will be equal to vegbank
+	 *
+	 * @param conceptCode -- the code associated with a new concept
+	 *
+	 *
+	 *
+	 */
+	 public StringBuffer insertGenericCommunity(String conceptCode, String conceptLevel, 
 	 String commName, String dateEntered, String parentCommunity, 
 	 String allianceTransName, String partyName )
 	 {
+	 	StringBuffer sb = new StringBuffer();
 		 try
 		 {
+		 	//this is kinda a hack but will work for now
+			sb.append("<commName>" +commName+"</commName>");
+			sb.append("<partyName>" +partyName+"</partyName>");
 			//do a quick validation on the input parameters
 			if ( conceptCode == null ||  conceptCode.length() < 2 )
 			{
@@ -180,9 +294,14 @@ public class VegCommunityLoader
 				//create a concept code that is the term vegbank and the date
 				String timeBit = getDBTime().replace('-', ' ');
 				conceptCode = "vegbank"+getDBTime();
+				sb.append("<commCode>"+conceptCode+"</commCode>");
 				System.out.println("VegCommunityLoader > created code: " + conceptCode);
 			}
-			
+			//fix the date if it is messed up
+			if ( dateEntered == null ||  dateEntered.length() < 2 )
+			{
+				dateEntered = getDBTime();
+			}
 			
 			//turn off autocommit
 			conn.setAutoCommit(false);
@@ -220,13 +339,15 @@ public class VegCommunityLoader
 			if (this.commit == true)
 			{
 				conn.commit();
+				sb.append("<commit>true</commit>");
 			}
 			else
 			{
 				conn.rollback();
 				debugInstanceFailure( commName, conceptCode, allianceTransName);
 				//fail
-				System.exit(0);
+				sb.append("<commit>false</commit>");
+				//System.exit(0);
 			}
 		 }
 			catch (Exception e)
@@ -234,6 +355,7 @@ public class VegCommunityLoader
 			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
+		 return(sb);
 	 }
 	 
 	 /**
@@ -370,14 +492,17 @@ public class VegCommunityLoader
 	 
 	 
 	  /**
-	  * method to insert data into the commname table
+	  * method to insert data into the commname table where the only data taken as
+		* input is the organizationName, so this is generally to be used when
+		* entering an organization rather than a person
+		*
+		* @param partyOrgName
 		*/
 		private int insertCommunityParty(String partyOrgName)
 	  {
 		 int partyId = 0; 
 		 try
 		 {
-
 			 boolean partyExists = communityPartyExists(partyOrgName);
 			//System.out.println("VegCommunityLoader > party Exists " ); 
 			
@@ -421,6 +546,81 @@ public class VegCommunityLoader
 		 }
 		 return(partyId);
 	 }
+	 
+	 
+	 
+	  /**
+	  * this is the method that is to be used when entering a party that is
+		* specific to a given individual.  When a web form is used to fill out 
+		* information related to a new community the party will be the person
+		* filling out the form and this is the method to be used 
+		* @see insertCommunityParty
+		*
+		* @param partyOrgName
+		*/
+		private int insertCommunityPartyIndividual(String partySalutation, 
+		String partyGivenName, String partySurName, String partyMiddleName, 
+		String orgName, String contactInstructions)
+	  {
+		 int partyId = 0; 
+		 try
+		 {
+			 boolean partyExists = communityPartyExists( partySalutation, 
+				partyGivenName, partySurName, partyMiddleName, 
+				orgName, contactInstructions);
+			
+			if (partyExists == true)
+			{
+				System.out.println("VegCommunityLoader > party exists" );
+				partyId = getCommunityPartyId(partySalutation, partyGivenName, 
+				partySurName, partyMiddleName, orgName, contactInstructions);
+			}
+			
+			else
+			{
+				StringBuffer sb = new StringBuffer();
+				//insert the VALS
+				sb.append("INSERT into COMMPARTY ( salutation, givenName, surName, ");
+				sb.append(" middleName, organizationName, contactInstructions ) ");
+				sb.append(" values(?,?,?,?,?,?)");
+				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+  			// Bind the values to the query and execute it
+  			pstmt.setString(1, partySalutation );
+				pstmt.setString(2, partyGivenName);
+				pstmt.setString(3, partySurName);
+				pstmt.setString(4, partyMiddleName);
+				pstmt.setString(5, partyOrgName);
+				pstmt.setString(6, contactInstructions);
+				
+				//execute the p statement
+  			pstmt.execute();
+  			// pstmt.close();
+				//get the refId
+				sb = new StringBuffer();
+				sb.append("SELECT commparty_id from COMMPARTY where givenName "
+				+" like '"+partyGivenName+"' and surName like'"+partySurName+"'");
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					partyId = rs.getInt(1);
+					cnt++;
+				}
+			}
+		 }
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(partyId);
+	 }
+	 
+	 
+	 
+	 
+	 
 	 
 	 
 	 /**
@@ -688,6 +888,43 @@ public class VegCommunityLoader
 	 
 	 
 	  /** 
+	  * overloaded method of above, this method is intended for use with 
+		* parties consisteng of individuals
+		* 
+		* partySalutation, partyGivenName, 
+		*		partySurName, partyMiddleName, orgName, contactInstructions
+		*/
+		private int getCommunityPartyId(String salutation, String givenName, 
+				String surName, String middleName, String orgName, 
+				String contactInstructions)
+	  {
+		 	int commPartyId = 0; 
+			try
+			{
+		 		StringBuffer sb = new StringBuffer();
+
+				sb.append("SELECT commparty_id from COMMPARTY where salutation "
+				+" like '"+salutation+"' and givenName like '"+givenName+"' and surname like'"
+				+surName+"'");	
+				
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					commPartyId = rs.getInt(1);
+					cnt++;
+				}
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(commPartyId);
+	 }
+	 
+	  /** 
 	  * method that returns the concept id based on an org name 
 		*/
 		private int getCommunityConceptId(String conceptDescription)
@@ -742,7 +979,7 @@ public class VegCommunityLoader
 			}
 			if (cnt > 0)
 			{
-				//System.out.println("VegCommunityLoader > matching reference:  " + cnt  );
+				System.out.println("VegCommunityLoader > matching reference  "  );
 				exists = true;
 			}
 			else
@@ -798,6 +1035,58 @@ public class VegCommunityLoader
 		 }
 		 return(exists);
 	 }
+	 
+	 /**
+	  * overloaded method of above but intended for use with an individual 
+		* reather than an organization
+		* @see communityPartyExists
+		* @param  partySalutation, 
+		*	@param partyGivenName
+		*	@param  partySurName, 
+		*	@param  partyMiddleName, 
+		*	@param orgName, 
+		*	@param contactInstructions)
+		*/
+		private boolean communityPartyExists( String salutation, String givenName, 
+		String surName, String middleName, String orgName, String contactInstructions)
+	  {
+			boolean exists = false;
+		 	try
+		 	{
+		 		StringBuffer sb = new StringBuffer();
+				//get the refId
+				sb = new StringBuffer();
+				sb.append("SELECT commparty_id from COMMPARTY where salutation "
+				+" like '"+salutation+"' and givenName like '"+givenName+"' and surname like'"
+				+surName+"'");
+			
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+			
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					cnt++;
+				}
+				if (cnt > 0)
+				{
+					//System.out.println("VegCommunityLoader > matching partyId:  " + cnt  );
+					exists = true;
+				}
+				else
+				{
+					exists = false;
+				}
+		 	}
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(exists);
+	 }
+	 
+	 
 	 
 	 
 	 private boolean communityNameExists(String commName)
