@@ -6,15 +6,15 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2002-09-10 21:33:38 $'
-  *  '$Revision: 1.6 $'
+  *      '$Date: 2002-09-10 23:42:59 $'
+  *  '$Revision: 1.7 $'
   *
   *
   -->
 <HTML>
 <HEAD>
 <!-- #BeginEditable "doctitle" --> 
-<TITLE>VEGBANK PLANT NAME SUBMITTAL FORM</TITLE>
+<TITLE>New Plant Concept - Enter Plant Name References</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <!-- #EndEditable --> 
 <meta http-equiv="Content-Type" content="text/html; charset=">
@@ -44,8 +44,22 @@
   </tr>
 </table>
 
-<br>
-<br>
+
+<!-- WHERE YOU ARE indicates to user what step in the process she or he is in-->
+<font size="2" face="Helvetica,Arial,Verdana">
+<p>	Where you are in the loading process:<br>
+	Enter Names--Match Names--<font color="336633" size="3"><b><i>Name References</i></b></font>--Concept 
+Reference--Status--Check and Submit</p>
+
+<font face="Helvetica,Arial,Verdana" size="2" color="336633">
+				<b>Enter the new Plant Name References in the fields provided below. </b>
+			</font>	
+
+ <p>Note that these references are for your new plant names (ie the source from which the names come). <br>
+    You will be able to select a reference for the new plant concept on the next screen.</p>
+
+</font>
+
 
 <form action="@datasubmitservlet@" method="get">
 <input type="hidden" name="submitDataType" value="plantTaxa">
@@ -53,7 +67,8 @@
 <small>
 <INPUT TYPE="submit" VALUE="continue loading plant">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
 </small>
-
+<br>
+&nbsp;
 <!-- PARTY DATA TABLE WITH DESCRIPTIONS-->
 <table border="0" width="100%" bgcolor="#DFE5FA">
 	<tr>
@@ -171,6 +186,7 @@
 
 
 </form>
+
 
 <!-- VEGBANK FOOTER -->
 <table cellspacing="0" cellpadding="0" border="0">
