@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-17 01:48:58 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2002-05-14 13:20:04 $'
+ * 	'$Revision: 1.2 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -1020,7 +1020,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 			{
 				stmt = con.createStatement();
 				StringBuffer sb = new StringBuffer();
-				//System.out.println("VBAccessDataSourcePlugin > querying cover for: " + plantName+" "+plotName+" "+stratum );
+				System.out.println("VBAccessDataSourcePlugin > querying cover for: " + plantName+" "+plotName+" "+stratum );
 				
 				sb.append("select TAXONSTRATUMCOVER from STRATUMCOMPOSITION where TAXONOBSERVATION_ID in ( ");
 				sb.append(" select TAXONOBSERVATION_ID from TAXONOBSERVATION where PLANTNAME_ID = ( ");
@@ -1029,7 +1029,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 				sb.append(" STRATUM_ID in ( select STRATUM_ID from STRATUM where STRATUMTYPE_ID = ( ");
 				sb.append(" select STRATUMTYPE_ID from STRATUMTYPE WHERE STRATUMNAME like '"+stratum+"') and OBSERVATION_ID = ");
 				sb.append(" (select observation_id from OBSERVATION where PLOT_ID = " + plotName+" ) )");
-				//System.out.println("query " + sb.toString() );
+				System.out.println("VBAccessDataSourcePlugin > query " + sb.toString() );
 				ResultSet rs = stmt.executeQuery( sb.toString() );
 				while (rs.next()) 
 				{
