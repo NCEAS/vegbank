@@ -6,9 +6,9 @@
  *    Authors: John Jarris
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2002-12-03 22:28:16 $'
- * '$Revision: 1.2 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2002-12-28 00:30:40 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -302,7 +302,7 @@ public class utility
 		}
 		catch ( Exception e )
 		{
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(c);
@@ -438,7 +438,7 @@ public class utility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	 }
@@ -461,7 +461,7 @@ public class utility
 		}
 		catch ( Exception e )
 		{
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(c);
@@ -496,7 +496,7 @@ public class utility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -535,7 +535,7 @@ public class utility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }
@@ -568,7 +568,7 @@ public class utility
 		 }
 		 catch ( Exception e )
 		 {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("utility > Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 	 }

@@ -18,7 +18,7 @@ import PlotXmlWriterV2;
  
 
 /**
- * This class will take an xml file containg either query attributes
+ * Takes an xml file containg either query attributes
  * or plot data and depending on the document type, either
  * insert, update or query the database - see the diagram 
  * "plotAccessArchitecture.vsd" to better understand the 
@@ -43,8 +43,8 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2002-11-27 22:11:27 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2002-12-28 00:30:39 $'
+ * 	'$Revision: 1.2 $'
  */
 
 
@@ -91,7 +91,7 @@ public class dbAccess
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("dbAccess > Exception: " + e.getMessage() );
 			e.printStackTrace();
 			return(false);
 		}
@@ -121,7 +121,7 @@ public class dbAccess
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("dbAccess > Exception: " + e.getMessage() );
 			e.printStackTrace();
 			return(false);
 		}
@@ -150,7 +150,7 @@ public class dbAccess
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("dbAccess > Exception: " + e.getMessage() );
 			e.printStackTrace();
 			return(false);
 		}
@@ -161,7 +161,7 @@ public class dbAccess
 
 
 /**
- *  Public interface for running the plotAccess module, this is how the
+ * Public interface for running the plotAccess module, this is how the
  * interfaces and servlets will load and query the database
  * input: xml file, may be datafile or query file, xsl sheet to
  * transform the document and action, either insert or query
@@ -311,18 +311,25 @@ public void accessDatabase(String inputXml, String inputXSL, String action)
 			 System.out.println("descriptions of input parameters to come soon!");
 			 System.exit(0);
 		 }
-		 //input xml file for loading to the database
-		 String inputXml=args[0];
-		 String inputXSL=args[1];
 		 String action=args[2];
 
 		 //call the public method
 		 dbAccess g =new dbAccess();  
-		 g.accessDatabase(inputXml, inputXSL, action);
+
+     if ( action.equals("writeSingleVegBankPlot") )
+     {
+      String plotId=args[0];
+      String outFile=args[1];
+      g.writeSingleVegBankPlot(plotId, outFile);
+     } 
+     else 
+     {
+		  //input xml file for loading to the database
+      String inputXml=args[0];
+		  String inputXSL=args[1];
+		  g.accessDatabase(inputXml, inputXSL, action);
+     }
 	 }
-
-
-
 }
 
 

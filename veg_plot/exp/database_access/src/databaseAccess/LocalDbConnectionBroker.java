@@ -135,7 +135,7 @@ public class LocalDbConnectionBroker
 		} 
 		catch( Exception e ) 
 		{
-			System.out.println("Exception: manageLocalDbConnectionBroker realease "
+			System.out.println("LocalDbConnectionBroker > Exception: manageLocalDbConnectionBroker realease "
 			+e.getMessage() ); e.printStackTrace();
 		}
 	}

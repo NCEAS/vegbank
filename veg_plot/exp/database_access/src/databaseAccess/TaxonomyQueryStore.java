@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2002-11-27 22:11:27 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-12-28 00:30:39 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ import databaseAccess.*;
 		}
 		catch ( Exception e )
 		{
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("TaxonomyQueryStore > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(c);
@@ -337,7 +337,7 @@ import databaseAccess.*;
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception " + e.getMessage());
+				System.out.println("TaxonomyQueryStore > Exception " + e.getMessage());
 				e.printStackTrace();
 			}
 			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
@@ -475,7 +475,7 @@ import databaseAccess.*;
 			}
 			catch (Exception e) 
 			{
-				System.out.println("Exception " + e.getMessage());
+				System.out.println("TaxonomyQueryStore > Exception " + e.getMessage());
 				e.printStackTrace();
 			}
 			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
@@ -503,7 +503,7 @@ import databaseAccess.*;
 			 }
 			 catch (Exception e) 
 			 {
-				 System.out.println("Exception " + e.getMessage());
+				 System.out.println("TaxonomyQueryStore > Exception " + e.getMessage());
 				 e.printStackTrace();
 			 }
 			 return(outString);
@@ -541,7 +541,7 @@ import databaseAccess.*;
 			 }
 			 catch (Exception e) 
 			 {
-				System.out.println("Exception " + e.getMessage());
+				System.out.println("TaxonomyQueryStore > Exception " + e.getMessage());
 				e.printStackTrace();
 			 }
 			 return( commonName );
@@ -580,7 +580,7 @@ import databaseAccess.*;
 			 }
 			 catch (Exception e) 
 			 {
-				System.out.println("Exception " + e.getMessage());
+				System.out.println("TaxonomyQueryStore > Exception " + e.getMessage());
 				e.printStackTrace();
 			 }
 			 return( sciName );
@@ -615,7 +615,7 @@ import databaseAccess.*;
 			 }
 			 catch (Exception e) 
 			 {
-				System.out.println("Exception " + e.getMessage());
+				System.out.println("TaxonomyQueryStore > Exception " + e.getMessage());
 				e.printStackTrace();
 			 }
 			 return( code );
@@ -740,7 +740,7 @@ import databaseAccess.*;
 			 }
 			 catch(Exception e)
 			 {
-				 System.out.println("Exception : " + e.getMessage());
+				 System.out.println("TaxonomyQueryStore > Exception : " + e.getMessage());
 				 e.printStackTrace();
 			 }
 			 return( returnHash );
@@ -801,7 +801,7 @@ import databaseAccess.*;
 			 }
 			 catch(Exception e)
 			 {
-				 System.out.println("Exception : " + e.getMessage());
+				 System.out.println("TaxonomyQueryStore > Exception : " + e.getMessage());
 				 e.printStackTrace();
 			 }
 			 return( returnHash );

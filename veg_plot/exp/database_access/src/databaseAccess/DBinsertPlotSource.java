@@ -1,14 +1,14 @@
 /**
-*  '$RCSfile: DBinsertPlotSource.java,v $'
-*    Purpose: A Class that loads plot data to the vegbank database system
-*  Copyright: 2000 Regents of the University of California and the
-*             National Center for Ecological Analysis and Synthesis
-*    Authors: John Harris
-*    Release: @release@
+* '$RCSfile: DBinsertPlotSource.java,v $'
+* Purpose: A Class that loads plot data to the vegbank database system
+* Copyright: 2000 Regents of the University of California and the
+*            National Center for Ecological Analysis and Synthesis
+* Authors: John Harris
+* Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2002-12-10 23:16:28 $'
-*    '$Revision: 1.5 $'
+*   '$Date: 2002-12-28 00:30:39 $'
+*   '$Revision: 1.6 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 import java.sql.*;
+import java.text.DateFormat;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import databaseAccess.*;
@@ -188,7 +189,7 @@ public class DBinsertPlotSource {
 		try {
 			v = source.getPlotNames();
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return (v);
@@ -396,7 +397,7 @@ public class DBinsertPlotSource {
 			//System.out.println("DBinsertPlotSource > destroying the conn. pool");
 			//connectionBroker.manageLocalDbConnectionBroker("destroy");
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -452,7 +453,7 @@ public class DBinsertPlotSource {
 				db.createSummaryTables();
 			}
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -678,7 +679,7 @@ public class DBinsertPlotSource {
 				}
 				connectionBroker.manageLocalDbConnectionBroker("destroy");
 			} catch (Exception e) {
-				System.out.println("Exception: " + e.getMessage());
+				System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 				debug.append(
 					"<exceptionMessage>"
 						+ e.getMessage()
@@ -711,13 +712,13 @@ public class DBinsertPlotSource {
 				privilegeLevel = Integer.parseInt(s.trim());
 			} catch (Exception e1) {
 				System.out.println(
-					"Exception: couldn't parse privilegeLevel: '"
+					"DBinsertPlotSource > Exception: couldn't parse privilegeLevel: '"
 						+ s
 						+ "' "
 						+ e1.getMessage());
 			}
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return (privilegeLevel);
@@ -794,7 +795,7 @@ public class DBinsertPlotSource {
 			insertStatement.executeUpdate(sb.toString());
 			insertStatement.close();
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -873,7 +874,7 @@ public class DBinsertPlotSource {
       //+ "; observationId=" + observationId + "; roleId=" + roleId); 
       
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}	
@@ -909,7 +910,7 @@ public class DBinsertPlotSource {
 		} 
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			System.out.println("sql: " + sb.toString());
 			e.printStackTrace();
 		}
@@ -973,7 +974,7 @@ public class DBinsertPlotSource {
 			pstmt.execute();
 			pstmt.close();
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			System.out.println("sql: " + sb.toString());
 			e.printStackTrace();
 		}
@@ -1127,7 +1128,7 @@ public class DBinsertPlotSource {
 
 
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return (partyId);
@@ -1782,7 +1783,6 @@ public class DBinsertPlotSource {
 			String observationNarrative =
 				source.getObservationNarrative(plotName);
 			String homogeneity = source.getHomogeneity(plotName);
-			String phenologicAspect = source.getPhenologicAspect(plotName);
 			String representativeness = source.getRepresentativeness(plotName);
 			String basalArea = source.getBasalArea(plotName);
 			String soilMoistureRegime = source.getSoilMoistureRegime(plotName);
@@ -1805,7 +1805,19 @@ public class DBinsertPlotSource {
 			String shrubHt = source.getShrubHt(plotName);
 			String nonvascularHt = source.getNonvascularHt(plotName);
 			String floatingCover = source.getFloatingCover(plotName);
-			String submergedCover = source.getSubmergedCover(plotName);
+      
+			String stemSizeLimit = source.getStemSizeLimit(plotName);
+			String landscapeNarrative = source.getLandscapeNarrative(plotName);
+			String phenologicalAspect = source.getPhenologicalAspect(plotName);
+			String waterDepth = source.getWaterDepth(plotName);
+			String fieldHt = source.getFieldHt(plotName);
+			String submergedHt = source.getSubmergedHt(plotName);
+			String treeCover = source.getTreeCover(plotName);
+			String shrubCover = source.getShrubCover(plotName);
+			String fieldCover = source.getFieldCover(plotName);
+			String nonvascularCover = source.getNonvascularCover(plotName);
+			
+      String submergedCover = source.getSubmergedCover(plotName);
 			String dominantStratum = source.getDominantStratum(plotName);
 			String growthform1Type = source.getGrowthform1Type(plotName);
 			String growthform2Type = source.getGrowthform2Type(plotName);
@@ -1853,13 +1865,16 @@ public class DBinsertPlotSource {
 				" growthform2Type, growthform3Type, growthform1Cover, growthform2Cover, ");
 			sb.append(
 				" growthform3Cover, notesPublic, notesMgt, revisions, methodnarrative, ");
-			sb.append(" accession_number, vbsequence )");
+			sb.append("stemsizelimit, landscapenarrative, ");
+      sb.append("waterdepth, fieldht, submergedht, treecover, shrubcover, ");
+			sb.append(" fieldcover, nonvascularCover, accession_number, vbsequence )");
 
-			//55 total
-			sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,");
-			sb.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?");
-			sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-			//56
+			//68 total
+			sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,");  //15
+			sb.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?"); //20
+			sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?");  //19
+      sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?)");         //14
+			//68
 
 			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 			// Bind the values to the query and execute it
@@ -1886,7 +1901,7 @@ public class DBinsertPlotSource {
 			pstmt.setString(20, lichenQuality);
 			pstmt.setString(21, observationNarrative);
 			pstmt.setString(22, homogeneity);
-			pstmt.setString(23, phenologicAspect);
+			pstmt.setString(23, phenologicalAspect);
 			pstmt.setString(24, representativeness);
 			pstmt.setString(25, basalArea); //12
 			pstmt.setString(26, soilMoistureRegime);
@@ -1921,8 +1936,17 @@ public class DBinsertPlotSource {
 			pstmt.setBoolean(55, notesMgt);
 			pstmt.setBoolean(56, revisions);
 			pstmt.setString(57, methodNarrative);
-			pstmt.setString(58, obsAccession);
-			pstmt.setInt(59, plotObservationId);
+			pstmt.setString(58, stemSizeLimit);
+			pstmt.setString(59, landscapeNarrative);
+			pstmt.setString(60, waterDepth);
+			pstmt.setString(61, fieldHt);
+			pstmt.setString(62, submergedHt);
+			pstmt.setString(63, treeCover);
+			pstmt.setString(64, shrubCover);
+			pstmt.setString(65, fieldCover);
+			pstmt.setString(66, nonvascularCover);
+			pstmt.setString(67, obsAccession);
+			pstmt.setInt(68, plotObservationId);
 
 			pstmt.execute();
 			Thread.sleep(2000);
@@ -1990,7 +2014,8 @@ public class DBinsertPlotSource {
 			String surfGeo = source.surfGeo;
 			String parentPlot = "9";
 			String plotArea = source.plotArea;
-			String altValue = source.elevation;
+			String elevation = source.elevation;
+      		String elevationAccuracy = source.elevationAccuracy;
 			String slopeAspect = source.slopeAspect;
 			String slopeGradient = source.slopeGradient;
 			String topoPosition = source.topoPosition;
@@ -2000,7 +2025,9 @@ public class DBinsertPlotSource {
 			//not null
 			String confidentialityReason = source.confidentialityReason;
 			//not null
-			String xCoord = source.xCoord;
+			String azimuth = source.azimuth;
+     	 	String dsgPoly = source.dsgPoly;
+      		String xCoord = source.xCoord;
 			String yCoord = source.yCoord;
 			String zone = source.getUTMZone(plotName);
 			// if the plot data source has geocoordinates (latitude, logitude )
@@ -2017,7 +2044,10 @@ public class DBinsertPlotSource {
 			String country = source.country;
 			String authorLocation = source.authorLocation;
 			boolean permanence = source.isPlotPermanent(plotName);
+      		String layoutNarrative = source.layoutNarrative;
+      		String locationNarrative = source.locationNarrative;
 			String landForm = source.getLandForm(plotName);
+      		String standSize = source.standSize;
 
 			//make a temporary accession number for each unique plot
 			String accessionNumber =
@@ -2026,19 +2056,20 @@ public class DBinsertPlotSource {
 				"DBinsertPlotSource > accession number: " + accessionNumber);
 
 			//print the variables to the screen for debugging
+      		// Does this deal with all variables? need a method of class for this
+      		// stuff
 			debug.append(
 				"<authorPlotCode>" + authorPlotCode + "</authorPlotCode>\n");
 			debug.append("<geology>" + surfGeo + "</geology>\n");
 			debug.append("<plotArea>" + plotArea + "</plotArea>\n");
-			debug.append("<altValue>" + altValue + "</altValue>\n");
+			debug.append(
+        		"<elevationAccuracy>" + elevationAccuracy + "</elevationAccuracy>\n");
 			debug.append("<slopeAspect>" + slopeAspect + "</slopeAspect>\n");
 			debug.append(
 				"<slopeGradient>" + slopeGradient + "</slopeGradient>\n");
 			debug.append("<topoPosition>" + topoPosition + "</topoPosition>\n");
 			debug.append(
-				"<hydrologicRegime>"
-					+ hydrologicRegime
-					+ "</hydrologicRegime>\n");
+				"<hydrologicRegime>" + hydrologicRegime + "</hydrologicRegime>\n");
 			debug.append("<plotShape>" + plotShape + "</plotShape>\n");
 			debug.append("<xCoord>" + xCoord + "</xCoord>\n");
 			debug.append("<yCoord>" + yCoord + "</yCoord>\n");
@@ -2052,10 +2083,12 @@ public class DBinsertPlotSource {
 			debug.append(
 				"<authorLocation>" + authorLocation + "</authorLocation>\n");
 			debug.append("<permanence>" + permanence + "</permanence>\n");
-
-			//this is the postgresql date function
+			debug.append("<standsize>" + standSize + "</standsize>\n");
+			
+      		//this is the postgresql date function
 			String sysdate = "now()";
 
+      		// The mother of all inserts ;)
 			sb.append(
 				"INSERT into PLOT (project_id, authorPlotCode, plot_id, "
 					+ "geology, latitude, longitude, area, elevation,"
@@ -2063,8 +2096,10 @@ public class DBinsertPlotSource {
 					+ "shape, confidentialityStatus, confidentialityReason, "
 					+ "authore, authorn, state, country, authorLocation, accession_number, "
 					+ "dateEntered, submitter_surname, submitter_givenname, submitter_email, "
-					+ "authorzone, permanence, landform) "
-					+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+					+ "authorzone, permanence, landform, layoutnarative, locationnarrative, "
+          + "azimuth, elevationaccuracy, dsgpoly, standsize ) "
+					+
+          "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 
@@ -2076,7 +2111,7 @@ public class DBinsertPlotSource {
 			pstmt.setString(5, latitude);
 			pstmt.setString(6, longitude);
 			pstmt.setString(7, plotArea);
-			pstmt.setString(8, altValue);
+			pstmt.setString(8, elevationAccuracy);
 			pstmt.setString(9, slopeAspect);
 			pstmt.setString(10, slopeGradient);
 			pstmt.setString(11, topoPosition);
@@ -2096,6 +2131,13 @@ public class DBinsertPlotSource {
 			pstmt.setString(25, zone);
 			pstmt.setBoolean(26, permanence);
 			pstmt.setString(27, landForm);
+			pstmt.setString(28, layoutNarrative);
+			pstmt.setString(29, locationNarrative);
+			pstmt.setString(30, azimuth);
+			pstmt.setString(31, elevationAccuracy);
+			pstmt.setString(32, dsgPoly);
+			pstmt.setString(33, standSize);
+      
 			pstmt.getWarnings();
 			pstmt.execute();
 			pstmt.close();
@@ -2161,7 +2203,7 @@ public class DBinsertPlotSource {
 			sb.append(".");
 			sb.append(startDate);
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return (sb.toString());
@@ -2224,7 +2266,7 @@ public class DBinsertPlotSource {
 
 			Thread.sleep(4000);
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return (sb.toString());
@@ -2266,7 +2308,7 @@ public class DBinsertPlotSource {
 			h.put("latitude", latitude);
 			h.put("longitude", longitude);
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return (h);
@@ -2351,7 +2393,7 @@ public class DBinsertPlotSource {
 					"DBinsertPlotSource > no results from web app");
 			}
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return (h);
@@ -2451,7 +2493,7 @@ public class DBinsertPlotSource {
 						+ nameType);
 			}
 		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("DBinsertPlotSource > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return (h);
@@ -2543,6 +2585,8 @@ public class DBinsertPlotSource {
 				sb.append("SELECT max(plot_id)+1 from plot");
 			} else if (tableName.toUpperCase().equals("STRATUM")) {
 				sb.append("SELECT max(stratum_id)+1 from stratum");
+			} else if (tableName.toUpperCase().equals("PROJECT")) {
+				sb.append("SELECT max(project_id)+1 from project");
 			} else if (tableName.toUpperCase().equals("OBSERVATION")) {
 				sb.append("SELECT max(observation_id)+1 from observation");
 			} else {
@@ -2567,39 +2611,59 @@ public class DBinsertPlotSource {
 	}
 
 	/**
-	 * method that will insert the project data into the project table
+	 * method that will insert the project data into the project table.
+   * The validator should insure that the date string is ok for insertion 
+   * into the database!!
+   *
 	 * @param projectName -- the name of the project
 	 * @param projectDescription -- the description of the project
-	 * @param projectStartDate -- the start date of the project must be like 
-	 * 	'01-JAN-2002'
-	 * @param projectStopDate -- the stop date of the project must be like 
-	 * 	'01-JAN-2002'
+	 * @param projectStartDate -- the start date of the project
+	 * @param projectStopDate -- the stop date of the project
 	 */
 	public void insertProject(
 		String projectName,
 		String projectDescription,
 		String projectStartDate,
-		String projectStopDate) {
+		String projectStopDate) 
+  {
 		StringBuffer sb = new StringBuffer();
-		try {
+		try 
+    {
 			int projectId = getNextId("project");
+
+      //java.util.Date startDate = this.parseDateString(projectStartDate);
+      //java.util.Date stopDate = this.parseDateString(projectStopDate);
+      //java.sql.Date sqlDate = new java.sql.Date( stopDate.toString() );
+      //String startDate = this.parseDateString(projectStartDate).toString();
+      //String stopDate = this.parseDateString(projectStartDate).toString();
 			// DETERMINE IF THE DATE FORMAT IS CORRECT AND QUERY ACCORDINGLY
-			if ((projectStartDate.indexOf("-") > 0)
-				&& (projectStopDate.indexOf("-") > 0)) {
+		/*
+    if ((projectStartDate.indexOf("-") > 0)
+				&& (projectStopDate.indexOf("-") > 0)) 
+      {
+    */
 				sb.append(
 					"INSERT into PROJECT (project_id, projectName, projectdescription,  ");
 				sb.append(" startdate, stopdate) ");
-				sb.append(
-					" values("
-						+ projectId
-						+ ", '"
-						+ projectName
-						+ "', '"
-						+ projectDescription
-						+ "', ");
-				sb.append(
-					"'" + projectStartDate + "', '" + projectStopDate + "') ");
-			} else {
+			  sb.append(" values (?,?,?,?,?)");
+
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setInt(1, projectId);
+			pstmt.setString(2, projectName);
+			pstmt.setString(3, projectDescription);
+			//pstmt.setDate(4, startDate);
+			//pstmt.setDate(5, stopDate);
+      pstmt.setString(4, projectStartDate);
+      pstmt.setString(5, projectStopDate);
+
+      pstmt.execute();
+      pstmt.close();
+
+      // DEBUG
+      /*
+      } 
+      else 
+      {
 				sb.append(
 					"INSERT into PROJECT (project_id, projectName, projectdescription) ");
 				sb.append(
@@ -2613,8 +2677,12 @@ public class DBinsertPlotSource {
 			}
 			Statement insertStatement = conn.createStatement();
 			insertStatement.executeUpdate(sb.toString());
+      */
+      
 			System.out.println("DBinsertPlotSource > inserted PROJECT");
-		} catch (Exception e) {
+		} 
+    catch (Exception e) 
+    {
 			System.out.println("Caught Exception: " + e.getMessage());
 			System.out.println("sql: " + sb.toString());
 			e.printStackTrace();
@@ -2656,5 +2724,27 @@ public class DBinsertPlotSource {
     {
       se.printStackTrace();
     }   
+  }
+
+  /**
+  * Get a string that can put into a database date field form a string input
+  **/
+  private java.util.Date parseDateString (String dateToParse)
+  {
+    java.util.Date parsedDate;
+    try
+    {
+      DateFormat df = DateFormat.getDateInstance();
+      parsedDate = df.parse(dateToParse);
+    }
+    catch (ParseException pe)
+    {
+      System.out.println("DBinsertPlotSource > Exeception parsing a date: " 
+                          + dateToParse + " " + pe.getMessage() );
+      pe.printStackTrace();
+      
+      return null;
+    }
+    return parsedDate;
   }
 }

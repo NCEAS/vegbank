@@ -7,8 +7,8 @@
  *    Authors: John Harris
  *
  *		 '$Author: farrell $'
- *     '$Date: 2002-11-27 22:11:27 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2002-12-28 00:30:39 $'
+ *     '$Revision: 1.2 $'
  *
  */
 package databaseAccess;
@@ -163,7 +163,7 @@ public void writePlot (Hashtable comprehensivePlot, String outFile)
 		}
 		catch (Exception ex) 
 		{
-			System.out.println("Exception: "
+			System.out.println("PlotXmlWriter > Exception: "
 			+ex.getMessage() ); 
 			ex.printStackTrace();
 		}
@@ -220,7 +220,7 @@ public void writeMultiplePlot(Hashtable multiPlotComprehensive, String outFile)
 	}
 	catch (Exception ex) 
 	{
-		System.out.println("Exception: "
+		System.out.println("PlotXmlWriter > Exception: "
 		+ex.getMessage() ); 
 		ex.printStackTrace();
 	}
@@ -493,7 +493,7 @@ try {
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage()   );
+			System.out.println("PlotXmlWriter > Exception: " + e.getMessage()   );
 			e.printStackTrace();
 		}
 	}
@@ -529,7 +529,7 @@ private void writeStrataData()
 	}
 	catch (Exception e) 
 	{
-		System.out.println("Exception: " + e.getMessage()   );
+		System.out.println("PlotXmlWriter > Exception: " + e.getMessage()   );
 		e.printStackTrace();
 	}
 }
@@ -592,7 +592,7 @@ private void writeSpeciesData (
 	}
 	catch (Exception e )
 	{
-		System.out.println("Exception: " + e.getMessage() );
+		System.out.println("PlotXmlWriter > Exception: " + e.getMessage() );
 		e.printStackTrace();
 	}
 }
@@ -615,7 +615,7 @@ private void writeCommunityData ()
 	}
 	catch (Exception e) 
 	{
-			System.out.println("Exception: " + e.getMessage()   );
+			System.out.println("PlotXmlWriter > Exception: " + e.getMessage()   );
 			e.printStackTrace();
 	}
 

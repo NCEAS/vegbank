@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2002-11-27 22:11:27 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-12-28 00:30:40 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -377,7 +377,7 @@ public class  xmlWriter
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception " + 
+			System.out.println("xmlWriter > Exception " + 
 			e.getMessage());
 			e.printStackTrace();
 		}

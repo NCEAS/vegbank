@@ -80,7 +80,7 @@ public class VegProject
     } 
 		catch(Exception e1) 
 		{
-			System.out.println("Exception: "+e1.getMessage() );
+			System.out.println("VegProject > Exception: "+e1.getMessage() );
     }
     doc = parser.getDocument();
     root = doc.getDocumentElement();

@@ -72,7 +72,7 @@ public void transformXML()
 	}
 	catch( Exception e ) 
 	{
-		System.out.println("Exception: "
+		System.out.println("transformXML > Exception: "
 		+e.getMessage() );
 		e.printStackTrace();
 	}

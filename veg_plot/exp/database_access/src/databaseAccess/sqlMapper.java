@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *    '$Date: 2002-11-27 22:11:27 $'
- * 	'$Revision: 1.1 $'
+ *    '$Date: 2002-12-28 00:30:40 $'
+ * 	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -157,7 +157,7 @@ public class  sqlMapper
 		}
 		catch ( Exception e )
 		{
-			System.out.println("Exception :   " + e.getMessage());
+			System.out.println("sqlMapper > Exception :   " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -203,7 +203,7 @@ public class  sqlMapper
 		}
 		catch ( Exception e )
 		{
-			System.out.println("Exception :  " + e.getMessage());
+			System.out.println("sqlMapper > Exception :  " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(sb.toString() );
@@ -288,7 +288,7 @@ public class  sqlMapper
 		}
 		catch ( Exception e )
 		{
-			System.out.println("Exception :   " + e.getMessage());
+			System.out.println("sqlMapper > Exception :   " + e.getMessage());
 			System.out.println("sql: " + sb.toString() );
 			e.printStackTrace();
 		}
@@ -450,7 +450,7 @@ public class  sqlMapper
 			}
 			catch ( Exception e )
 			{
-				System.out.println("Exception " + e.getMessage());
+				System.out.println("sqlMapper > Exception " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -482,7 +482,7 @@ public class  sqlMapper
 		}
 			catch ( Exception e )
 		{
-			System.out.println("Exception: " +e.getMessage());
+			System.out.println("sqlMapper > Exception: " +e.getMessage());
 			e.printStackTrace();
 		}
 		return(valueString);
@@ -515,7 +515,7 @@ public class  sqlMapper
 		}
 			catch ( Exception e )
 		{
-			System.out.println("Exception: " + e.getMessage());
+			System.out.println("sqlMapper > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(criteria);
@@ -875,7 +875,7 @@ public class  sqlMapper
 		} 
 		catch ( Exception e )
 		{
-			System.out.println("Exception:  "
+			System.out.println("sqlMapper > Exception:  "
 			+e.getMessage());
 			e.printStackTrace();
 		}
@@ -909,7 +909,7 @@ public class  sqlMapper
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("Exception: " + e.getMessage() );
+			 System.out.println("sqlMapper > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
 		 return(v);
@@ -1006,7 +1006,7 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 	}
 	catch ( Exception e )
 	{
-		System.out.println("Exception: sqlMapper.developPlotQuery " +e.getMessage());
+		System.out.println("sqlMapper > Exception: sqlMapper.developPlotQuery " +e.getMessage());
 		e.printStackTrace();
 	}
 } 
@@ -1063,7 +1063,7 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 		}
 		catch ( Exception e )
 		{	
-			System.out.println("Exception :  " + e.getMessage());
+			System.out.println("sqlMapper > Exception :  " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -1185,7 +1185,7 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 		} //end try
 		catch ( Exception e )
 		{
-			System.out.println("Exception: sqlMapper.setAttributeAddress  "
+			System.out.println("sqlMapper > Exception: sqlMapper.setAttributeAddress  "
 			+e.getMessage());
 			e.printStackTrace();
 		}

@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2002-11-27 22:11:27 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2002-12-28 00:30:39 $'
+ * 	'$Revision: 1.2 $'
  *
  *
  */
@@ -522,7 +522,7 @@ public void getPlotId(String queryElement, String queryElementType)
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("queryStore > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 	}
@@ -612,7 +612,7 @@ public void getPlotId(String queryElement, String queryElementType)
 		}
 		catch(Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("queryStore > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 	}

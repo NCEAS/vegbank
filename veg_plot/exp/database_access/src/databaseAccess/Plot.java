@@ -80,7 +80,7 @@ public class Plot
     } 
 		catch(Exception e1) 
 		{
-			System.out.println("Exception: "+e1.getMessage() );
+			System.out.println("Plot > Exception: "+e1.getMessage() );
     }
     doc = parser.getDocument();
     root = doc.getDocumentElement();
