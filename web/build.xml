@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-05-12 00:49:46 $'
-* '$Revision: 1.103 $'
+* '$Date: 2004-05-12 22:35:11 $'
+* '$Revision: 1.104 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -431,15 +431,16 @@
       vegbranch-dist-docs | vegbranch-dist-images | vegbranch-dist-docs-loadtbls (before vegbranch-dist-docs)</echo>
     <!-- RELEVANT DIRECTORIES -->
     <property name="vegbr_dir" value="./vegbranch"/>
+    <filter filtersfile="${vegbr_dir}/vegbranch.properties" /> <!-- get version  -->
     <!-- RELEVANT FILES TO COPY / DELETE -->
     <!-- client files: -->
-    <property name="vegbr_client_include" value="vegbank-module102-small-example.zip  vegbank-module102-full-plots.zip  vegbank-module102-full-noplots.zip  vegbranch-v1.2.zip   vegbranch_normalizer.zip "/>
+    <property name="vegbr_client_include" value="vegbank-module*.zip  vegbranch-v*.zip   vegbranch_normalizer.zip "/>
     <!-- docs files: -->
     <property name="vegbr_docs_include" value=" **/*.html "/>
     <!-- images files: -->
     <property name="vegbr_img_include" value="*.jpg *.gif "/>
     <property name="vegbr_examples_include" value=" vegbranch-samplecsv1-b.4.0.zip  vegbranch-samplecsv2-b.4.0.zip normalizer_examples.zip"/>
-    <property name="vegbr_htmlfile" value="vegbranch.html"/>
+    <property name="vegbr_htmlfile" value="vegbranch.html vbr*.html"/> <!-- include these as html files in root of vegbranhc dir -->
     <!--tokens particular to vegbranch html files.-->
     <filter token="vbr_imageserver" value="${vegdocs.dir}/vegbranch/images/"/>
     <filter token="vbr_examplesserver" value="${vegdocs.dir}/vegbranch/examples/"/>
@@ -513,21 +514,21 @@
     </copy>
   </target>
   <target name="vegbranch-dist-help" depends="vegbranch-init" description="dist help files and screenshots to server">
-     <style in="${vegbr_dir}/help/branchhelp.xml" style="${vegbr_dir}/help/branch2html.xsl" out="${vegbr_dir}/help/BOGUS_vbr_hlp"/>
-     <!-- copy files to server -->
-     <copy todir="${vegbranch_server}/help" filtering="yes">
-        <fileset dir="${vegbr_dir}/help">
-          <exclude name="BOGUS*" />
-          <exclude name="*.xsl" />
-          <exclude name="*.xml" />
-        </fileset>
-     </copy>
-     <!-- copy screenshots -->
-     <copy todir="${vegbranch_server}/help" filtering="no">
-       <fileset dir="${lrg_binary_src}/help">
-         <include name="**/*.png" />
-       </fileset>
-     </copy>
+    <style in="${vegbr_dir}/help/branchhelp.xml" style="${vegbr_dir}/help/branch2html.xsl" out="${vegbr_dir}/help/BOGUS_vbr_hlp"/>
+    <!-- copy files to server -->
+    <copy todir="${vegbranch_server}/help" filtering="yes">
+      <fileset dir="${vegbr_dir}/help">
+        <exclude name="BOGUS*"/>
+        <exclude name="*.xsl"/>
+        <exclude name="*.xml"/>
+      </fileset>
+    </copy>
+    <!-- copy screenshots -->
+    <copy todir="${vegbranch_server}/help" filtering="no">
+      <fileset dir="${lrg_binary_src}/help">
+        <include name="**/*.png"/>
+      </fileset>
+    </copy>
   </target>
   <target name="vegbranch-dist-all" depends="vegbranch-init" description="dist all vegbranch files to server">
     <antcall target="vegbranch-dist-client"/>
