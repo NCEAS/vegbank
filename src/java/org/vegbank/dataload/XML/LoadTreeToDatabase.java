@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-03-11 01:52:10 $'
- *	'$Revision: 1.19 $'
+ *	'$Date: 2005-03-17 22:16:32 $'
+ *	'$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2270,8 +2270,6 @@ public class LoadTreeToDatabase
             String dbName = Utility.dbPropFile.getString("databaseName");
             String vbHomeDir = Utility.VB_HOME_DIR;
             String sqlScriptName = "denorm-nullsonly.sql";
-
-            if (!psqlPath.endsWith(File.separator)) { psqlPath += File.separator; }
 
             if (!vbHomeDir.endsWith(File.separator)) { vbHomeDir += File.separator; }
 
