@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2004-04-29 17:11:50 $'
-* '$Revision: 1.100 $'
+* '$Author: anderson $'
+* '$Date: 2004-04-29 17:24:34 $'
+* '$Revision: 1.101 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -59,6 +59,12 @@
     </condition>
     <echo>(web/) Loading main props file: ../build${build.props.name}.properties</echo>
     <property file="../build${build.props.name}.properties"/>
+	<!-- set the apache doc root -->
+    <condition property="apache.document.root" value="/usr/www/${webapp}/htdocs">
+      <not>
+        <isset property="apache.document.root"/>
+      </not>
+    </condition>
     <!-- The webapp that contains copy, images and other
 		resources is defined by web.context_uri and
 		makes the first part of the URI. -->
