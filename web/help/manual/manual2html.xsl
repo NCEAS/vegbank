@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: mlee $'
- *  '$Date: 2005-03-15 05:17:31 $'
- *  '$Revision: 1.9 $'
+ *  '$Date: 2005-03-15 17:47:05 $'
+ *  '$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@
     <redirect:write file="{$directory}{$menu_url}">
       
 <html><head>
-  @stylesheets_declaration@
+  @webpage_stylesheets_declaration@
 
   <title>VegBank  -- tutorial</title>
 </head><body>
