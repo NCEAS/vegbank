@@ -15,7 +15,7 @@
 	<!-- INITIATE -->
 	<target name="init">
 		<tstamp/>
-		<!-- RELAVANT DIRECTORIES -->
+		<!-- RELAVANT Properties-->
 		<property name="current_dir" value="./" />
 		<property name="src" value="./src" />
 		<property name="build" value="./build" />
@@ -83,6 +83,15 @@
        includes="jar.exe start_installer.exe cygwin1.dll **.jar"
        excludes="**.html"
   />
+	</target>
+	
+	<!-- INSTALL: this will put the installer into web accessible directory -->
+	<target name="install" depends="dist">
+	<copy todir="/home/harris/jakarta-tomcat/webapps/vegclass/software/installer/" filtering="no" >
+			<fileset dir="${dist}" >
+  	    <include name="setup.zip"/>
+  	  </fileset>
+  </copy>
 	</target>
 	
 	<!-- CLEAN -->
