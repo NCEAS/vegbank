@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-07-22 01:15:59 $'
-* '$Revision: 1.48 $'
+* '$Author: farrell $'
+* '$Date: 2003-07-23 22:25:30 $'
+* '$Revision: 1.49 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -48,6 +48,7 @@
     <property name="hostname" value="vegbank"/>
     <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
+    <property name="apache.document.root" value="/var/www/html"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
     <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
     <filter token="dist" value="dist"/>
@@ -243,6 +244,13 @@
       <fileset dir="${web.src.dir}"/>
     </copy>
   </target>
+
+  <target name="robot" depends="init" description="==> Distribute robots.txt">
+    <copy overwrite="true" 
+          todir="${apache.document.root}"
+          file="./robots.txt"/>
+  </target>
+  
   <!--
 	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
 -->
