@@ -8,8 +8,8 @@ import org.vegbank.common.utility.LogUtility;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 07:10:07 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-02-07 06:45:56 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ import org.vegbank.common.utility.LogUtility;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
  */
 /**
- * Hold details about the current users as a convience for web code.
+ * Hold details about the current users as a convenience for web code.
  * 
  * @author farrell
  */
@@ -46,9 +46,9 @@ public class WebUser
 	private String city = "";
 	private String state = "";
 	private String country = "";
-	private String zipcode = "";
+	private String postalcode = "";
 	private String dayphone = "";
-	private int userid = 0;
+	private long userid = 0;
 	private int partyid = 0;
 	private boolean guestUser = false;
 
@@ -270,7 +270,7 @@ public class WebUser
 	/**
 	 * @return
 	 */
-	public int getUserid()
+	public long getUserid()
 	{
 		return userid;
 	}
@@ -278,9 +278,17 @@ public class WebUser
 	/**
 	 * @return
 	 */
-	public String getZipcode()
+	public Long getUseridLong()
 	{
-		return zipcode;
+		return new Long(userid);
+	}
+
+	/**
+	 * @return
+	 */
+	public String getPostalcode()
+	{
+		return postalcode;
 	}
 
 	/**
@@ -342,17 +350,17 @@ public class WebUser
 	/**
 	 * @param i
 	 */
-	public void setUserid(int i)
+	public void setUserid(long l)
 	{
-		userid = i;
+		userid = l;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setZipcode(String string)
+	public void setPostalcode(String string)
 	{
-		zipcode = string;
+		postalcode = string;
 	}
 
 	/**
