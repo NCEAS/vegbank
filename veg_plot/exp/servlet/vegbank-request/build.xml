@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: harris $'
-  *     '$Date: 2002-07-30 22:18:29 $'
-  * '$Revision: 1.8 $'
+  *     '$Date: 2002-08-29 16:51:05 $'
+  * '$Revision: 1.9 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -80,7 +80,7 @@
 	<javac srcdir="${build}" 
 		classpath="${cpath}"
 		debug="on"
-		includes="DataSubmitServlet.java fileDownload.java  QueryBuilderServlet.java DataRequestServlet.java viewData.java " 
+		includes="PlantTaxon.java DataSubmitServlet.java fileDownload.java  QueryBuilderServlet.java DataRequestServlet.java viewData.java " 
 		destdir="${build}"
 	/>
 	

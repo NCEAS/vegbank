@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-08-02 14:29:51 $'
- *  '$Revision: 1.25 $'
+ *  '$Date: 2002-08-29 16:51:05 $'
+ *  '$Revision: 1.26 $'
  * 
  */
 
@@ -1101,6 +1101,7 @@ public class DataRequestServlet extends HttpServlet
  */
 	private void composePlantTaxonomyQuery (Hashtable params) 
 	{
+		StringBuffer query = new StringBuffer();
  		try 
 		{
 			System.out.println("DataRequstServlet > printing from composePlantTaxonomyQuery: "+
@@ -1113,32 +1114,87 @@ public class DataRequestServlet extends HttpServlet
 			String taxonName = (String)params.get("taxonName");
 			String taxonNameType = (String)params.get("taxonNameType");
 			String taxonLevel = (String)params.get("taxonLevel");
+			String party = (String)params.get("party");
+			String startDate = (String)params.get("startDate");
+			String stopDate = (String)params.get("stopDate");
+			String targetDate = (String)params.get("targetDate");
 		
 
-			System.out.println("DataRequstServlet > printing from composePlantTaxonomyQuery: "+
+			System.out.println("DataRequstServlet > printing composePlantTaxonomyQuery: "+
 			"taxonName: "+taxonName);
-
- 			//print the query instructions in the xml document
- 			queryOutFile.println("<?xml version=\"1.0\"?> \n"+       
- 				"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
- 				"	<dbQuery> \n"+
- 				"		<query> \n"+
- 				"			<queryElement>taxonName</queryElement> \n"+
- 				"			<elementString>"+taxonName+"</elementString> \n"+
- 				"		</query> \n"+
-				"		<query> \n"+
- 				"			<queryElement>taxonNameType</queryElement> \n"+
- 				"			<elementString>"+taxonNameType+"</elementString> \n"+
- 				"		</query> \n"+
-				"		<query> \n"+
- 				"			<queryElement>taxonLevel</queryElement> \n"+
- 				"			<elementString>"+taxonLevel+"</elementString> \n"+
- 				"		</query> \n"+
- 				"		<requestDataType>"+requestDataType+"</requestDataType> \n"+
- 				"		<resultType>"+resultType+"</resultType> \n"+
- 				"		<outFile>"+servletDir+"summary.xml</outFile> \n"+
- 				"</dbQuery>"
- 			);
+			
+			
+			// if the target date was passed instead of the start and stop compose a 
+			// slightly different query 
+			if ( targetDate != null )
+			{
+				query.append("<?xml version=\"1.0\"?> \n");       
+ 				query.append(	"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n");
+				query.append(	"	<dbQuery> \n");
+				query.append(	"		<query> \n");
+				query.append(	"			<queryElement>taxonName</queryElement> \n");
+				query.append(	"			<elementString>"+taxonName+"</elementString> \n");
+				query.append(	"		</query> \n");
+				query.append(	"		<query> \n");
+				query.append(	"			<queryElement>taxonNameType</queryElement> \n");
+				query.append(	"			<elementString>"+taxonNameType+"</elementString> \n");
+				query.append(	"		</query> \n");
+				query.append(	"		<query> \n");
+				query.append(	"			<queryElement>taxonLevel</queryElement> \n");
+				query.append(	"			<elementString>"+taxonLevel+"</elementString> \n");
+				query.append(	"		</query> \n");
+				query.append(	"		<query> \n");
+				query.append(	"			<queryElement>party</queryElement> \n");
+				query.append(	"			<elementString>"+party+"</elementString> \n");
+				query.append(	"		</query> \n");
+				query.append(	"		<query> \n");
+				query.append(	"			<queryElement>targetDate</queryElement> \n");
+				query.append(	"			<elementString>"+targetDate+"</elementString> \n");
+				query.append(	"		</query> \n");
+				
+				query.append(	"		<requestDataType>"+requestDataType+"</requestDataType> \n");
+				query.append(	"		<resultType>"+resultType+"</resultType> \n");
+				query.append(	"		<outFile>"+servletDir+"summary.xml</outFile> \n");
+				query.append(	"</dbQuery>");
+				queryOutFile.println( query.toString() );
+			}
+			else
+			{
+				//print the query instructions in the xml document
+				queryOutFile.println("<?xml version=\"1.0\"?> \n"+       
+ 					"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
+					"	<dbQuery> \n"+
+					"		<query> \n"+
+					"			<queryElement>taxonName</queryElement> \n"+
+					"			<elementString>"+taxonName+"</elementString> \n"+
+					"		</query> \n"+
+					"		<query> \n"+
+					"			<queryElement>taxonNameType</queryElement> \n"+
+					"			<elementString>"+taxonNameType+"</elementString> \n"+
+					"		</query> \n"+
+					"		<query> \n"+
+					"			<queryElement>taxonLevel</queryElement> \n"+
+					"			<elementString>"+taxonLevel+"</elementString> \n"+
+					"		</query> \n"+
+					"		<query> \n"+
+					"			<queryElement>party</queryElement> \n"+
+					"			<elementString>"+party+"</elementString> \n"+
+					"		</query> \n"+
+					"		<query> \n"+
+					"			<queryElement>startDate</queryElement> \n"+
+					"			<elementString>"+startDate+"</elementString> \n"+
+					"		</query> \n"+
+					"		<query> \n"+
+					"			<queryElement>stopDate</queryElement> \n"+
+					"			<elementString>"+stopDate+"</elementString> \n"+
+					"		</query> \n"+
+					"		<requestDataType>"+requestDataType+"</requestDataType> \n"+
+					"		<resultType>"+resultType+"</resultType> \n"+
+					"		<outFile>"+servletDir+"summary.xml</outFile> \n"+
+					"</dbQuery>"
+					);
+			}
+			queryOutFile.close();
  		}
 		catch (Exception e) 
 		{

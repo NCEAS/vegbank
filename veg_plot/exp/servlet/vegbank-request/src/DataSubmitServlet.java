@@ -30,8 +30,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-08-13 15:45:27 $'
- *  '$Revision: 1.42 $'
+ *  '$Date: 2002-08-29 16:51:05 $'
+ *  '$Revision: 1.43 $'
  */
 
 
@@ -62,6 +62,8 @@ public class DataSubmitServlet extends HttpServlet
 	private String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit-select.html";
 	private String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot_select.html";
 	
+	private String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
+	
 	private String browserType = "";
 	// THESE VARIBLES ARE USED BY THE VARIOUS SUBMITTAL ROUTINES
 	private String user = ""; //the email addy of the user as stored in the framwork cookie
@@ -69,6 +71,7 @@ public class DataSubmitServlet extends HttpServlet
 	private String givenName = "";
 	private String surName = "";
 	private String institution ="";
+	private String permissionType ="";
 	
 	private String longName = "";
 	private String shortName = "";
@@ -122,6 +125,9 @@ public class DataSubmitServlet extends HttpServlet
 	private String conceptStatus = "";
 	private String statusStartDate = "";
 	private String statusStopDate = "";
+	private String usageStartDate = "";
+	private String usageStopDate = "";
+	
 	private String statusDescription = "";
 	private String taxonLevel = "";
 	private String plantParentName = "";
@@ -142,6 +148,8 @@ public class DataSubmitServlet extends HttpServlet
 	private String plotSubmittalInitTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-submit.html";
 	//this is the file that has the updated tokens and should be shown to the client
 	private String plotSubmittalInitForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/plot-valid.html";
+	
+	private PlantTaxon plantTaxon;
 	
 	/**
 	 * constructor method
@@ -194,56 +202,74 @@ public class DataSubmitServlet extends HttpServlet
 			this.surName = (String)userAtts.get("surName");
 			this.givenName = (String)userAtts.get("givenName");
 			this.institution = (String)userAtts.get("institution");
-			
-			
-			System.out.println("DataSubmitServlet > current user email: " + user   );
+			this.permissionType = (String)userAtts.get("permissionType");
+			int permissionLevel = 0;
+			try
+			{
+				permissionLevel = Integer.parseInt(this.permissionType);
+			}
+			catch ( Exception e1 )
+			{
+				System.out.println("Exception: could not parse the permission level: " + e1.getMessage() );
+			}
+			System.out.println("DataSubmitServlet > current user email: " + user);
 			System.out.println("DataSubmitServlet > current user salutation: " + salutation);
-			System.out.println("DataSubmitServlet > current user surName: " + surName   );
-			System.out.println("DataSubmitServlet > current user givenName: " + givenName   );
-			System.out.println("DataSubmitServlet > current user institution: " + institution   );
-			
-			Hashtable params = new Hashtable();
-			params = su.parameterHash(request);
-			// there will be cases where there will be multiple parameters 
-			// with the same name and they all need to be accessed so 
-			// capture an ennumeration here
-			Enumeration enum = request.getParameterNames();
-			
-			//get the browser type 
-			this.browserType = su.getBrowserType(request); 
-			
-			System.out.println("DataSubmitServlet > IN PARAMETERS: "+params.toString() );
-			submitDataType = (String)params.get("submitDataType");
-			System.out.println("DataSubmitServlet > submit data type: "
-			+ submitDataType);
-			
-			
-			// FIGURE OUT WHAT TO DO WITH THE REQUEST
-			if ( submitDataType.trim().equals("vegCommunity") )
+			System.out.println("DataSubmitServlet > current user surName: " + surName);
+			System.out.println("DataSubmitServlet > current user givenName: " + givenName);
+			System.out.println("DataSubmitServlet > current user institution: " + institution);
+			System.out.println("DataSubmitServlet > current user permission lev: " + permissionLevel);
+			if ( permissionLevel <= 1)
 			{
-				StringBuffer sb = handleVegCommunitySubmittal(params, response);
-				out.println( sb.toString() );
-			}
-			else if ( submitDataType.trim().equals("vegCommunityCorrelation")  )
-			{
-				submitDataType.trim().equals("vegCommunityCorrelation");
-				StringBuffer sb = handleVegCommunityCorrelation(params, response);
-				out.println( sb.toString() );
-			}
-			else if ( submitDataType.trim().equals("vegPlot")  )
-			{
-				//out.println("DataSubmitServlet > action unknown!");
-				StringBuffer sb = handleVegPlotSubmittal(enum, params, request, response);
-				out.println( sb.toString() );
-			}
-			else if ( submitDataType.trim().toUpperCase().equals("PLANTTAXA")  )
-			{
-				StringBuffer sb = handlePlantTaxaSubmittal(params, response);
-				out.println( sb.toString() );
+				// don't let the user any further into the loading process
+				System.out.println("DataSubmitServlet > ## this user does not have the appropriate permissions");
+				this.handleInvalidPermissions(response);
 			}
 			else
 			{
-				out.println("DataSubmitServlet > action unknown!");
+			
+				Hashtable params = new Hashtable();
+				params = su.parameterHash(request);
+				// there will be cases where there will be multiple parameters 
+				// with the same name and they all need to be accessed so 
+				// capture an ennumeration here
+				Enumeration enum = request.getParameterNames();
+			
+				//get the browser type 
+				this.browserType = su.getBrowserType(request); 
+			
+				System.out.println("DataSubmitServlet > IN PARAMETERS: "+params.toString() );
+				submitDataType = (String)params.get("submitDataType");
+				System.out.println("DataSubmitServlet > submit data type: "
+				+ submitDataType);
+			
+			
+				// FIGURE OUT WHAT TO DO WITH THE REQUEST
+				if ( submitDataType.trim().equals("vegCommunity") )
+				{
+					StringBuffer sb = handleVegCommunitySubmittal(params, response);
+					out.println( sb.toString() );
+				}
+				else if ( submitDataType.trim().equals("vegCommunityCorrelation")  )
+				{
+					submitDataType.trim().equals("vegCommunityCorrelation");
+					StringBuffer sb = handleVegCommunityCorrelation(params, response);
+					out.println( sb.toString() );
+				}
+				else if ( submitDataType.trim().equals("vegPlot")  )
+				{
+					//out.println("DataSubmitServlet > action unknown!");
+					StringBuffer sb = handleVegPlotSubmittal(enum, params, request, response);
+					out.println( sb.toString() );
+				}
+				else if ( submitDataType.trim().toUpperCase().equals("PLANTTAXA")  )
+				{
+					StringBuffer sb = handlePlantTaxaSubmittal(params, response);
+					out.println( sb.toString() );
+				}
+				else
+				{
+					out.println("DataSubmitServlet > action unknown!");
+				}
 			}
 		}
 		catch( Exception e ) 
@@ -252,7 +278,44 @@ public class DataSubmitServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
-		
+	
+	
+	/**
+	 * method that retuns a page to the browser that explains to the user 
+	 * that he/she does not have the appropritate priveleges to load data 
+	 * to the system and that they should fill in the certification page
+	 * and submit that 
+	 * 
+	 * @param response -- the http response object
+	 */
+	 private void handleInvalidPermissions(HttpServletResponse response)
+	 {
+		 StringBuffer message = new StringBuffer();
+		 try
+		 {
+			  message.append("<span class=\"category\"> INVALID PERMISSIONS ERROR </span> <br> <br> \n");
+				message.append("<span class=\"item\"> User: "+this.user+" Does Not Have Permission to Load Data To Vegbank <br> \n");
+				message.append("In order to attain this privilege, please fill out the certification form at: \n");
+				message.append("<a href=\"/forms/certification.html\">Certification Form");
+				message.append("</span>");
+				
+				Hashtable replaceHash = new Hashtable();
+				// party-related attributes
+				replaceHash.put("messages", message.toString() );
+				
+				su.filterTokenFile(genericTemplate, "/tmp/vbtmp.html", replaceHash);
+				String contents = su.fileToString( "/tmp/vbtmp.html" );
+				PrintWriter out = response.getWriter();
+				out.println(contents);
+			
+		 }
+		 catch( Exception e ) 
+		 {
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		 }
+	 }
+	
 	/**
 	 * method to handle the submittal of a new plant into the plant taxonomy 
 	 * database.  The proccesses here very closely mimic those in the submittal
@@ -270,9 +333,6 @@ public class DataSubmitServlet extends HttpServlet
 		StringBuffer sb = new StringBuffer();
 		try
 		{
-			//String longName = "";
-			//String shortName = "";
-			//String code = "";
 			String taxonDescription= "";
 			String salutation= "";
 			String firstName = "";
@@ -286,12 +346,16 @@ public class DataSubmitServlet extends HttpServlet
 			// sent to the client
 			if ( action.equals("init") )
 			{
-				System.out.println("DataSubmitServlet > init plantTaxa");
-			//	salutation = (String)params.get("salutation");;
-			//	firstName =  (String)params.get("firstName");
-			//	lastName =  (String)params.get("lastName");
-			//	emailAddress =  (String)params.get("emailAddress");
-			//	orgName =  (String)params.get("orgName");
+				
+				System.out.println("DataSubmitServlet > init plantTaxa for " );
+				// CONSTRUCT A NEW INSTANCE OF A PLANTAXON 
+				this.plantTaxon = new PlantTaxon();
+				plantTaxon.setEmailAddress(emailAddress);
+				plantTaxon.setInserterGivenName(givenName);
+				plantTaxon.setInserterSurName(surName);
+				plantTaxon.setInserterInstitution(institution);
+				
+				
 				
 				// the next 3 attributes refer to the plant name that the 
 				// user is trying to insert into the database
@@ -329,7 +393,6 @@ public class DataSubmitServlet extends HttpServlet
 				Vector codeNearMatches = tqs.getNameNearMatches(code);
 				//System.out.println("DataSubmitServlet > longName match: " + lv.toString() );
 				
-				
 				//update the validation page that is returned to the user
 				updatePlantRectificationPage(emailAddress,  longName, shortName,  code, 
 				longNameMessage,  shortNameMessage, codeMessage, longNameNearMatches, 
@@ -354,6 +417,14 @@ public class DataSubmitServlet extends HttpServlet
 				this.shortName = shortNameMatch;
 				this.code = codeMatch;
 				
+				
+				// UPDATE THE DATA CLASS
+				plantTaxon.setScientificName(longNameMatch);
+				plantTaxon.setCommonName(shortNameMatch);
+				plantTaxon.setCode(codeMatch);
+				plantTaxon.isValid();
+				
+				
 				System.out.println("longName: " + longName + " match: " +  longNameMatch );
 				Hashtable longNameRef = tqs.getPlantNameReference(longNameMatch);
 				System.out.println("longNameRef: " + longNameRef.toString() );
@@ -370,7 +441,9 @@ public class DataSubmitServlet extends HttpServlet
 			// AND WHERE THOSE ATTRIBUTES SHOULD BE STORED
 			else if ( action.equals("namereference") )
 			{
+				plantTaxon.isValid();
 				System.out.println("DataSubmitServlet > getting the name reference ");
+				
 				// LOAD THE NAME REFERENCE ATTRIBUTES 
 				this.longNameRefAuthors = (String)params.get("longNameRefAuthors");
 				this.longNameRefTitle = (String)params.get("longNameRefTitle");
@@ -404,8 +477,42 @@ public class DataSubmitServlet extends HttpServlet
 				this.codeRefISSN = (String)params.get("codeRefISSN");
 				this.codeRefISBN = (String)params.get("codeRefISBN");
 				this.codeRefOtherCitDetails = (String)params.get("codeRefOtherCitDetails");
-
-			 System.out.println("## long name auth: " + longNameRefAuthors);
+				
+				plantTaxon.setScientificNameRefAuthors(longNameRefAuthors);
+				plantTaxon.setScientificNameRefTitle(longNameRefTitle);
+				plantTaxon.setScientificNameRefDate(longNameRefDate);
+				plantTaxon.setScientificNameRefEdition(longNameRefEdition);
+				plantTaxon.setScientificNameRefSeriesName(longNameRefSeriesName);
+				plantTaxon.setScientificNameRefVolume(longNameRefVolume);
+				plantTaxon.setScientificNameRefPage(longNameRefPage);
+				plantTaxon.setScientificNameRefISSN(longNameRefISBN);
+				plantTaxon.setScientificNameRefISBN(longNameRefISSN);
+				plantTaxon.setScientificNameRefOtherCitDetails(longNameRefOtherCitDetails);
+				
+				plantTaxon.setCommonNameRefAuthors(shortNameRefAuthors);
+				plantTaxon.setCommonNameRefTitle(shortNameRefTitle);
+				plantTaxon.setCommonNameRefDate(shortNameRefDate);
+				plantTaxon.setCommonNameRefEdition(shortNameRefEdition);
+				plantTaxon.setCommonNameRefSeriesName(shortNameRefSeriesName);
+				plantTaxon.setCommonNameRefVolume(shortNameRefVolume);
+				plantTaxon.setCommonNameRefPage(shortNameRefPage);
+				plantTaxon.setCommonNameRefISSN(shortNameRefISBN);
+				plantTaxon.setCommonNameRefISBN(shortNameRefISSN);
+				plantTaxon.setCommonNameRefOtherCitDetails(shortNameRefOtherCitDetails);
+				
+				plantTaxon.setCodeRefAuthors(codeRefAuthors);
+				plantTaxon.setCodeRefTitle(codeRefTitle);
+				plantTaxon.setCodeRefDate(codeRefDate);
+				plantTaxon.setCodeRefEdition(codeRefEdition);
+				plantTaxon.setCodeRefSeriesName(codeRefSeriesName);
+				plantTaxon.setCodeRefVolume(codeRefVolume);
+				plantTaxon.setCodeRefPage(codeRefPage);
+				plantTaxon.setCodeRefISSN(codeRefISBN);
+				plantTaxon.setCodeRefISBN(codeRefISSN);
+				plantTaxon.setCodeRefOtherCitDetails(codeRefOtherCitDetails);
+				
+				plantTaxon.isValid();
+				System.out.println("## long name auth: " + longNameRefAuthors);
 				updatePlantConceptPage(emailAddress, longName, shortName, code);
 				response.sendRedirect("/forms/plant-valid.html");
 			}
@@ -428,6 +535,20 @@ public class DataSubmitServlet extends HttpServlet
 				plantParentRefTitle =(String)params.get("plantParentRefTitle");
 				plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
 				
+				plantTaxon.setConceptDescription(conceptDescription);
+				plantTaxon.setConceptRefAuthors(conceptRefAuthors);
+				plantTaxon.setConceptRefTitle(conceptRefTitle);
+				plantTaxon.setConceptRefDate(conceptRefDate);
+				plantTaxon.setConceptRefEdition(conceptRefEdition);
+				plantTaxon.setConceptRefSeriesName(conceptRefSeriesName);
+				plantTaxon.setConceptRefVolume(conceptRefVolume);
+				plantTaxon.setConceptRefPage(conceptRefPage);
+				plantTaxon.setConceptRefISSN(conceptRefISSN);
+				plantTaxon.setConceptRefISBN(conceptRefISBN);
+				plantTaxon.setConceptRefOtherCitDetails(conceptRefOtherCitDetails);
+				
+				plantTaxon.isValid();
+				
 				// send the user the attributes related to the plant status/usage
 				// this is where the instance variables (surName,givenName etc..) are updated
 				updatePlantStatusUsagePage(emailAddress, longName, shortName, code);
@@ -441,11 +562,28 @@ public class DataSubmitServlet extends HttpServlet
 				conceptStatus = (String)params.get("conceptStatus");
 				statusStartDate = (String)params.get("statusStartDate");
 				statusStopDate = (String)params.get("statusStopDate");
+				// ASSUME THAT THE ABOVE DATES ARE THE SAME FOR THE USAGE
+				usageStartDate = (String)params.get("statusStartDate");
+				usageStopDate = (String)params.get("statusStopDate");
 				statusDescription = (String)params.get("statusDescription");
 				taxonLevel = (String)params.get("taxonLevel");
 				plantParentName = (String)params.get("plantParentName");
 				plantParentRefAuthors = (String)params.get("plantParentRefAuthors");
 				plantParentRefTitle = (String)params.get("plantParentRefTitle");
+				
+				
+				plantTaxon.setConceptStatus(conceptStatus);
+				plantTaxon.setStatusStartDate(statusStartDate);
+				plantTaxon.setStatusStopDate(statusStopDate);
+				plantTaxon.setUsageStartDate(usageStartDate);
+				plantTaxon.setUsageStopDate(usageStopDate);
+				plantTaxon.setStatusDescription(statusDescription);
+				plantTaxon.setTaxonLevel(taxonLevel);
+				plantTaxon.setPlantParentName(plantParentName);
+				plantTaxon.setPlantParentRefTitle(plantParentRefTitle);
+				plantTaxon.setPlantParentRefAuthors(plantParentRefAuthors);
+				plantTaxon.isValid();
+				
 				
 				updatePlantSubmittalRecipt(emailAddress);
 				response.sendRedirect("/forms/plant-valid.html");
@@ -455,10 +593,9 @@ public class DataSubmitServlet extends HttpServlet
 			{
 				System.out.println("submittal to the database taking place ");
 				//init the plant loader
-				PlantTaxaLoader plantLoader = new PlantTaxaLoader();
 				
+				PlantTaxaLoader plantLoader = new PlantTaxaLoader();
 				Hashtable h = new Hashtable();
-			
 				//new elements
 				h.put("longNameRefAuthors", longNameRefAuthors);
 				h.put("longNameRefTitle",longNameRefTitle );
@@ -470,7 +607,7 @@ public class DataSubmitServlet extends HttpServlet
 				h.put("longNameRefISSN", longNameRefISSN );
 				h.put("longNameRefISBN", longNameRefISBN );
 				h.put("longNameRefOtherCitDetails", longNameRefOtherCitDetails );
-				System.out.println("1");
+				
 				h.put("shortNameRefAuthors", shortNameRefAuthors );
 				h.put("shortNameRefTitle", shortNameRefTitle );
 				h.put("shortNameRefDate", shortNameRefDate );
@@ -481,7 +618,7 @@ public class DataSubmitServlet extends HttpServlet
 				h.put("shortNameRefISSN", shortNameRefISSN );
 				h.put("shortNameRefISBN", shortNameRefISBN );
 				h.put("shortNameRefOtherCitDetails", shortNameRefOtherCitDetails );
-				System.out.println("2");
+			
 				h.put("codeRefAuthors", codeRefAuthors);
 				h.put("codeRefTitle", codeRefTitle );
 				h.put("codeRefDate", codeRefDate );
@@ -522,6 +659,8 @@ public class DataSubmitServlet extends HttpServlet
 				h.put("conceptStatus", conceptStatus );
 				h.put("statusStartDate", statusStartDate);
 				h.put("statusStopDate", statusStopDate );
+				h.put("usageStartDate", usageStartDate);
+				h.put("usageStopDate", usageStopDate );
 				h.put("statusDescription",statusDescription );
 				h.put("taxonLevel", taxonLevel );
 				h.put("plantParentName", plantParentName );
@@ -537,13 +676,16 @@ public class DataSubmitServlet extends HttpServlet
 				h.put("surName", ""+surName);
 				h.put("orgName", ""+institution);
 				h.put("email", ""+emailAddress);
-				
+
+				// get the planttaxon hash from the plant taxon class
+				Hashtable plantHash = plantTaxon.getPlantTaxonHash();				
 				boolean results = plantLoader.loadGenericPlantTaxa(h);
-				
+///					boolean results = true;
 				// WRITE THE RESULTS BACK TO THE BROWSER
+				String receipt = this.getPlantInsertionReceipt(plantHash, results);
 				PrintWriter out = response.getWriter();
-				String receipt = this.getPlantInsertionReceipt(h, results);
 				out.println(receipt);
+				
 			}
 			else
 			{
@@ -557,6 +699,8 @@ public class DataSubmitServlet extends HttpServlet
 		}
 		return(sb);
 	}
+	
+	
 	/**
 	 * method that composes the plant-insert receipt from the hashtable 
 	 * which is passed to the plant taxonomy loader
@@ -570,55 +714,52 @@ public class DataSubmitServlet extends HttpServlet
 	 */
 	 private String getPlantInsertionReceipt(Hashtable plantAtts, boolean results)
 	 {
+		 String contents = "";
 		 StringBuffer sb = new StringBuffer();
 		 try
 		 {
-			 sb.append("<html> \n ");
-			 sb.append("<head> \n	");
-			 sb.append("<link href=\"http://numericsolutions.com/includes/default.css\" type=\"text/css\" rel=\"stylesheet\"> ");
-			 sb.append("<title> Plant Submittal Receipt </title>");
-			 sb.append("</head> \n");
-			 // THE RESULTS 
-			 sb.append("<span class=\"category\"> Plant loading results: " + results +" </span> <br> \n ");
-			 // THE CONTENTS -- 
-			 sb.append("<br>");
-			 sb.append("<table> ");
-			 sb.append("<span class=\"item\">");
-			 sb.append("<tr> <td> First Name: </td> <td> "+ plantAtts.get("givenName") +" </td> </tr> \n");
-			 sb.append("<tr> <td> Last Name: </td> <td> "+ plantAtts.get("surName") +" </td> </tr> \n");
-			 sb.append("<tr> <td> Organization Name: </td> <td> "+ plantAtts.get("institution") +" </td> </tr> \n");
-			 sb.append("</span>");
-			 sb.append("</table>");
-			 sb.append("<br>");
-			 sb.append("<table> ");
-			 sb.append("<span class=\"item\">");
-			 sb.append("<tr> <td> Scientific Name: </td> <td> "+ plantAtts.get("longName") +" </td> </tr> \n");
-			 sb.append("<tr> <td> Common Name: </td> <td> "+ plantAtts.get("shortName") +" </td> </tr> \n");
-			 sb.append("<tr> <td> Code: </td> <td> "+ plantAtts.get("code") +" </td> </tr> \n");
-			 sb.append("</span>");
-			 sb.append("</table>");
-			 sb.append("<br>");
-			 sb.append("<table> ");
-			 sb.append("<span class=\"item\">");
-			 sb.append("<tr> <td> Concept Description: </td> <td> "+ plantAtts.get("conceptDescription") +" </td> </tr> \n");
-			 sb.append("<tr> <td> Rank: </td> <td> "+ plantAtts.get("taxonLevel") +" </td> </tr> \n");
-			 sb.append("<tr> <td> Staus: </td> <td> "+ plantAtts.get("conceptStatus") +" </td> </tr> \n");
-			 sb.append("</span>");
-			 sb.append("</table>");
-		
 			 
-			 //sb.append("contents: " + plantAtts.toString() );
+			 //get the required elements from the planttaxonobject
+			 String email = plantTaxon.getEmailAddress();
+			 String name = plantTaxon.getInserterGivenName() + " "+ plantTaxon.getInserterSurName();
+			 institution = plantTaxon.getInserterInstitution();
+			 String sciName  = plantTaxon.getScientificName();
+			 String commonName = plantTaxon.getCommonName();
+			 String codeName = plantTaxon.getCode();
+			 conceptDescription = plantTaxon.getConceptDescription();
+			 usageStartDate = plantTaxon.getUsageStartDate();
+			 usageStopDate = plantTaxon.getUsageStopDate();
+			 String status = plantTaxon.getConceptStatus();
+			 String level = plantTaxon.getTaxonLevel();
 			 
-			 sb.append("");
+			 // create a table to be put into the generic form 
+			 sb.append("<span class=\"itemsmall\">");
+			 sb.append("Insertion Results: " + results + "<br> \n");
+			 sb.append("Email: " + email+ "<br> \n");
+			 sb.append("Name: " + name + "<br> \n");
+			 sb.append("Institution: " + institution + "<br> \n");
+			 sb.append("Scientific Name: " + sciName + "<br> \n");
+			 sb.append("Common Name: " + commonName + "<br> \n");
+			 sb.append("Code: " + code + "<br> \n");
+			 sb.append("Concept Description: " +  conceptDescription + "<br> \n");
+			 sb.append("Usage Start: " +  usageStartDate + "<br> \n");
+			 sb.append("Usage Stop: " + usageStopDate  + "<br> \n");
+			 sb.append("Status: " + status  + "<br> \n");
+			 sb.append("Taxonomic Level: " + level  + "<br> \n");
 			 
-			 sb.append("<br>");
-			 sb.append("</html>");
+			 sb.append("</span>");
+			 // set up the filter tokens
+			 Hashtable replaceHash = new Hashtable();
+			 replaceHash.put("messages", sb.toString() );
+			 su.filterTokenFile(genericTemplate, "/tmp/vbtmp.html", replaceHash);
+			 contents = su.fileToString( "/tmp/vbtmp.html" );
+			
 		 }
 		 catch (Exception e )
 		 {
 			 System.out.println("Exception > " + e.getMessage() );
 		 }
-		 return(sb.toString() );
+		 return( contents );
 	 }
 	 
 	
@@ -771,7 +912,8 @@ public class DataSubmitServlet extends HttpServlet
 			replaceHash.put("plantPartySurName", ""+surName);
 			replaceHash.put("plantPartyInstitution", ""+institution );
 			replaceHash.put("plantPartyEmailAddress", ""+emailAddress );
-			// UPDATE THE DATES B/C THEY ARE REQUIRED
+
+			// UPDATE THE DATES B/C THEY ARE REQUIRED BY THE LOADER
 			String curDate = this.getCurrentDate();
 			replaceHash.put("statusStartDate", curDate);
 			replaceHash.put("statusStopDate", curDate);
