@@ -13,9 +13,9 @@
 	* embedded database(s) etc.  Before building this check the 
 	* dependencies
 	*
-	* 		'$Author: harris $'
- 	*     '$Date: 2002-12-04 17:02:24 $'
- 	*     '$Revision: 1.12 $'
+	* 		'$Author: farrell $'
+ 	*     '$Date: 2002-12-06 00:29:46 $'
+ 	*     '$Revision: 1.13 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -156,7 +156,10 @@
 		</exec>
 	</target>
 	
-	
+	<!-- CLEAN UP -->
+	<target name="clean" description="Delete Generated Files" depends="init">
+		<delete dir="${build}" />
+	</target>
 	
 	
 
