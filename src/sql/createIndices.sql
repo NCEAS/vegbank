@@ -255,12 +255,15 @@ CREATE INDEX commusage_commname_id_x ON commusage (commname_id);
 CREATE INDEX commusage_commconcept_id_x ON commusage (commconcept_id);
 CREATE INDEX commusage_party_id_x ON commusage (party_id);
 CREATE INDEX commusage_commstatus_id_x ON commusage (commstatus_id);
+CREATE INDEX commusage_commname_x on commusage ( commname ); -- t
+CREATE INDEX commusage_classsystem_x on commusage ( classsystem ); -- t
 
 -- commstatus 
 CREATE INDEX commstatus_commconcept_id_x ON commstatus (commconcept_id);
 CREATE INDEX commstatus_reference_id_x ON commstatus (reference_id);
 CREATE INDEX commstatus_commparent_id_x ON commstatus (commparent_id);
 CREATE INDEX commstatus_party_id_x ON commstatus (party_id);
+CREATE INDEX commstatus_commlevel_x ON commstatus (commlevel); -- t
 
 -- plantcorrelation 
 CREATE INDEX plantcorrelation_plantstatus_id_x ON plantcorrelation (plantstatus_id);
