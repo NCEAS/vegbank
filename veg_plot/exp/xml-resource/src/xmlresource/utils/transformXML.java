@@ -8,8 +8,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2001-11-01 17:44:42 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-01-28 20:08:28 $'
+ * '$Revision: 1.2 $'
  */
 //package vegclient.framework;
 package xmlresource.utils; 
@@ -26,6 +26,14 @@ import org.apache.xalan.xslt.XSLTProcessor;
 import org.w3c.dom.*;                         // DOM interface
 import org.apache.xerces.parsers.DOMParser;   // Parser (to DOM)
 import org.apache.xerces.*; //
+
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import xmlresource.utils.*;
 
@@ -58,8 +66,8 @@ public class  transformXML
 	*/
 	public void getTransformed(String inputXML, String inputXSL)
 	throws java.io.IOException,
-	java.net.MalformedURLException,
-	org.xml.sax.SAXException
+		java.net.MalformedURLException,
+		org.xml.sax.SAXException
 	{
 	
 		try
@@ -82,11 +90,42 @@ public class  transformXML
 		}
 		catch( Exception e ) 
 		{
-			System.out.println(" failed in: dbAccess.accessDatabase "
-			+e.getMessage() );
+			System.out.println(" Exception: "	+ e.getMessage() );
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * method that does the same as the above method, but 
+	 * does not crate errors
+	 */
+	public String  getTransformedNoErrors(String inputXML, String inputXSL)
+	{
+	
+		String s = null;
+		try
+		{
+			StringWriter out =new StringWriter();
+			
+			TransformerFactory tFac = TransformerFactory.newInstance();
+			Transformer transformer = tFac.newTransformer(
+				new StreamSource( inputXSL ));
+			transformer.transform( new StreamSource( new StringReader(inputXML) ),
+														new StreamResult(out) );
+			
+			s = out.toString();
+	
+	
+		}
+		catch( Exception e ) 
+		{
+			System.out.println(" Exception: "	+ e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+	}
+	
+	
 	
 	/**
 	 * method that will transform an xml document with a stylesheet and write the
@@ -118,6 +157,9 @@ public class  transformXML
 			e.printStackTrace();
 		}
 	 }
+	 
+	 
+	 
 	
 	public void transformXMLDocument(String xml, String xsl)
 	{
