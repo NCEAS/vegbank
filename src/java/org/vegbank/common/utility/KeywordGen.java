@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-26 23:44:51 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-10-27 03:45:29 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -298,7 +298,6 @@ public class KeywordGen {
 		} else {
 		 	pstmt = getInsertPreparedStatement(kwTable, entityName);
 		}
-		System.out.println("Got modification SQL: " + pstmt.toString());
 
 		if (doDelete) {
 			System.out.println("deleting entity's current keywords");
@@ -348,8 +347,10 @@ public class KeywordGen {
 						// insert a new row for each keyword
 						try {
 							insertRow(pstmt, lTmpId, entityName, tmpValue);
-						} catch (SQLException sex) {
+						} catch (Exception ex) {
 							// oh well.  we tried
+							System.err.println("Problem while trying to insert keyword for id: " +
+									lTmpId + ": " + tmpValue);
 						}
 					} else {
 						// compile all keywords into one value
