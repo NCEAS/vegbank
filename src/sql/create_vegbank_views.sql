@@ -87,3 +87,30 @@ DROP VIEW view_notemb_taxonInterpretation;
 
 DROP VIEW view_notemb_taxonAlt;
  CREATE VIEW view_notEmb_taxonAlt AS SELECT * FROM taxonAlt where emb_taxonAlt<6;
+ 
+ DROP VIEW view_plantConcept_ordered;
+ create view view_plantConcept_ordered AS select * from plantConcept order by upper(plantName);
+ 
+ -- note these are NOT time specific!! --
+ DROP VIEW view_plantConcept_hierarchy;
+ DROP VIEW view_plantConcept_hierarchy_pre;
+
+CREATE VIEW view_plantConcept_hierarchy_pre AS 
+  SELECT plantStatus.PLANTSTATUS_ID, plantStatus.PLANTCONCEPT_ID AS childconcept_id, plantStatus_1.PLANTCONCEPT_ID AS concept_id, 
+    plantconcept_child.plantname AS childName, plantconcept.plantname AS conceptname, plantStatus_1.PARTY_ID
+  FROM (plantStatus AS plantStatus_1 
+    LEFT JOIN (plantConcept AS plantconcept_child 
+      RIGHT JOIN plantStatus 
+      ON plantconcept_child.PLANTCONCEPT_ID = plantStatus.PLANTCONCEPT_ID) 
+    ON (plantStatus_1.PARTY_ID = plantStatus.PARTY_ID) AND (plantStatus_1.PLANTCONCEPT_ID = plantStatus.plantParent_ID)) 
+  LEFT JOIN plantconcept 
+  ON plantStatus_1.PLANTCONCEPT_ID = plantconcept.PLANTCONCEPT_ID
+  WHERE (((plantStatus_1.plantConceptStatus)='accepted'));
+
+  CREATE VIEW view_plantConcept_hierarchy AS SELECT view_plantConcept_hierarchy_pre.*, plantStatus.plantParent_ID AS parentconcept_id, 
+     plantConcept.plantname AS parentname
+     FROM view_plantConcept_hierarchy_pre 
+       LEFT JOIN (plantConcept 
+         RIGHT JOIN plantStatus 
+         ON plantConcept.PLANTCONCEPT_ID = plantStatus.plantParent_ID) 
+       ON (view_plantConcept_hierarchy_pre.PARTY_ID = plantStatus.PARTY_ID) AND (view_plantConcept_hierarchy_pre.concept_id = plantStatus.PLANTCONCEPT_ID);
