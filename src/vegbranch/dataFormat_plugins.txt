@@ -123,19 +123,19 @@ Public Function custNPS_interpLatLong(varTude As Variant) As Variant
      If IsNumeric(varTude) Then
        custNPS_interpLatLong = varTude
      Else ' nonnumeric
-       Dim colNew As New Collection, inttemp As Integer, dblDecTude As Double, intNeg As Integer, blnOK As Boolean
+       Dim colNew As New Collection, intTemp As Integer, dblDecTude As Double, intNeg As Integer, blnOK As Boolean
        blnOK = True ' defulat
        intNeg = 1 'dfeault
        Set colNew = interp_multiUnitField(varTude)
-       For inttemp = 1 To colNew.Count
+       For intTemp = 1 To colNew.Count
          Dim dblNumeric As Double, strUnits As String
          strUnits = "" ' defulat
-         dblNumeric = interpStrWithUnits(colNew(inttemp), strUnits)
+         dblNumeric = interpStrWithUnits(colNew(intTemp), strUnits)
       '  Debug.Print dblNumeric & "|" & strUnits & "!"
         'interpret units
         If strUnits = " " Or strUnits = "" Then
           'deal with this by position
-          Select Case inttemp
+          Select Case intTemp
             Case 1
               strUnits = "deg"
             Case 2
@@ -164,7 +164,7 @@ Public Function custNPS_interpLatLong(varTude As Variant) As Variant
             Debug.Print "custNPS_interpLatLong> didn't understand unit:" & strUnits
             blnOK = False
         End Select
-       Next inttemp
+       Next intTemp
        'composite answer
        If blnOK Then
          custNPS_interpLatLong = dblDecTude * intNeg
@@ -189,10 +189,10 @@ Public Function interp_multiUnitField(varTude As Variant) As Collection
       colParts.Add (varTude)
     Else
       'non numeric aspects of this: break into pieces
-      Dim inttemp As Integer, strMap As String, strMapPiece As String, strTemp As String
+      Dim intTemp As Integer, strMap As String, strMapPiece As String, strTemp As String
       
-      For inttemp = 1 To Len(varTude)
-        strTemp = Mid(varTude, inttemp, 1)
+      For intTemp = 1 To Len(varTude)
+        strTemp = Mid(varTude, intTemp, 1)
         strMapPiece = "a" 'assume char unless not
         If IsNumeric(strTemp) Then
           strMapPiece = "#"
@@ -200,9 +200,9 @@ Public Function interp_multiUnitField(varTude As Variant) As Collection
           'not numeric, but could be part of numeric list
           If strTemp = "." Or strTemp = "-" Then
             'potentially part of number, if next is numeric, if there is a next
-            If inttemp <> Len(varTude) Then
+            If intTemp <> Len(varTude) Then
               'see if next is numierc
-              If IsNumeric(Mid(varTude, inttemp + 1, 1)) Then
+              If IsNumeric(Mid(varTude, intTemp + 1, 1)) Then
                 strMapPiece = "#"
               End If
             End If
@@ -210,15 +210,15 @@ Public Function interp_multiUnitField(varTude As Variant) As Collection
         End If
       'add piece to map
       strMap = strMap & strMapPiece
-      Next inttemp
+      Next intTemp
       
      Dim intLast As Integer 'last thing taken
      
-     For inttemp = 1 To Len(strMap) - 1
+     For intTemp = 1 To Len(strMap) - 1
         'add pieces of real var to collection
-        If Mid(strMap, inttemp, 1) = "a" And Mid(strMap, inttemp + 1, 1) = "#" Then
-          colParts.Add (Mid(varTude, intLast + 1, inttemp - intLast))
-          intLast = inttemp
+        If Mid(strMap, intTemp, 1) = "a" And Mid(strMap, intTemp + 1, 1) = "#" Then
+          colParts.Add (Mid(varTude, intLast + 1, intTemp - intLast))
+          intLast = intTemp
         End If
      Next
      'get last thing:
@@ -490,7 +490,7 @@ Public Function custNPS_sendContribToC2()
   rstTemp.Open "select * from cust_NPS_plots where [surveyors] is not null;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
   With rstTemp
     Do Until .EOF
-      Dim colSurvs As New Collection, inttemp As Integer, strTemp As String
+      Dim colSurvs As New Collection, intTemp As Integer, strTemp As String
       strTemp = !surveyors
       'first break apart by ;
       Set colSurvs = csv_parseCSVstring(strTemp, ";")
@@ -502,12 +502,12 @@ Public Function custNPS_sendContribToC2()
         Set colSurvs = csv_parseCSVstring(strTemp, ",", False)
       End If
       
-      For inttemp = 1 To colSurvs.Count
-         If Trim(colSurvs(inttemp)) <> "" Then
+      For intTemp = 1 To colSurvs.Count
+         If Trim(colSurvs(intTemp)) <> "" Then
           DoCmd.RunSQL "INSERT INTO Z_USER_C2_plotNorm (authorPlotCode, contrib, role) SELECT " & SQLizeTxt(Nz(.Fields("plot code"))) _
-            & " , " & SQLizeTxt(Trim(colSurvs(inttemp))) & " , 'unknown' ;"
+            & " , " & SQLizeTxt(Trim(colSurvs(intTemp))) & " , 'unknown' ;"
          End If
-      Next inttemp
+      Next intTemp
     .MoveNext
     Loop
   End With
@@ -527,34 +527,38 @@ Public Function custNPS_sendDBHtoE(Optional blnDeleteEData As Boolean, Optional 
     End If
   End If
   
+  'run SQL to send to E2, but different fields in blnIgnoreStemTExtb4Colon
+  DoCmd.RunSQL "INSERT INTO Z_USER_E2_StemClasses (authorPlotCode, plantCode, stratumIndex, list1) SELECT " _
+    & " authorPlotCode, plantCode, stratumIndex, " & IIf(blnIgnoreStemTextb4Colon, "dbhAfterColon", "dbh") & " FROM cust_NPS_toE2_pre;"
   
-  'ALWAYS delete current errors:
-  DoCmd.RunSQL "delete * from cust_NPS_stemerr; "
-  If blnDeleteEData = True Then
-    DoCmd.RunSQL "delete * from Z_USER_E_stemdata;"
-  End If
+  'ALWAYS delete current errors: 'not needed now that E2 exists
+  'DoCmd.RunSQL "delete * from cust_NPS_stemerr; "
+  'If blnDeleteEData = True Then
+  '  DoCmd.RunSQL "delete * from Z_USER_E_stemdata;"
+  'End If
   
-  Dim rstTemp As New ADODB.Recordset
-  rstTemp.Open "select * from [cust_NPS_toD2] where [DBH] is not null;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
-  With rstTemp
-    Do Until .EOF
-      Dim colSurvs As New Collection, inttemp As Integer, strTemp As String
-      strTemp = !DBH
-    '  strTEmp = substTextForText(strTEmp, " & ", ",")
-     ' strTEmp = substTextForText(strTEmp, " and ", ",")
-      Set colSurvs = csv_parseCSVstring(strTemp, ",", False, True, True)
-      For inttemp = 1 To colSurvs.Count
-         Dim strDBH As String, blnOKDBH As Boolean
-         strDBH = colSurvs(inttemp)
-         blnOKDBH = False
-         If blnIgnoreStemTextb4Colon And InStr(strDBH, ":") > 0 Then
-           'special case: ignore "text: ##" stuff before colon in strDBH
-           strDBH = Trim(Right(strDBH, Len(strDBH) - InStr(strDBH, ":")))
+  'also not needed since E2 exists:
+  'Dim rstTemp As New ADODB.Recordset
+  'rstTemp.Open "select * from [cust_NPS_toD2] where [DBH] is not null;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  'With rstTemp
+  '  Do Until .EOF
+  '    Dim colSurvs As New Collection, intTemp As Integer, strTemp As String
+  '    strTemp = !DBH
+  '  '  strTEmp = substTextForText(strTEmp, " & ", ",")
+  '   ' strTEmp = substTextForText(strTEmp, " and ", ",")
+  '    Set colSurvs = csv_parseCSVstring(strTemp, ",", False, True, True)
+  '    For intTemp = 1 To colSurvs.Count
+  '       Dim strDBH As String, blnOKDBH As Boolean
+  '       strDBH = colSurvs(intTemp)
+  '       blnOKDBH = False
+  '       If blnIgnoreStemTextb4Colon And InStr(strDBH, ":") > 0 Then
+  '         'special case: ignore "text: ##" stuff before colon in strDBH
+  '         strDBH = Trim(Right(strDBH, Len(strDBH) - InStr(strDBH, ":")))
+  '
+  '       End If
          
-         End If
          
-         
-         If IsNumeric(strDBH) Then blnOKDBH = True
+  '       If IsNumeric(strDBH) Then blnOKDBH = True
          'special case, deal with XX cm entries
         ' If Len(strDBH) > 2 Then
         '   If (IsNumeric(Trim(Left(strDBH, Len(strDBH) - 2))) And Right(strDBH, 2) = "cm") Then
@@ -564,45 +568,45 @@ Public Function custNPS_sendDBHtoE(Optional blnDeleteEData As Boolean, Optional 
            
         ' End If
          'try other units, too
-         If Not IsNumeric(strDBH) And Len(strDBH) > 0 Then
-            Dim strTryWithUnits As String, strUnits As String
-            strTryWithUnits = strDBH
-            strTryWithUnits = Nz(interpNumbWithUnitsToM(strTryWithUnits, strUnits), "")
-            If IsNumeric(strTryWithUnits) And Len(strTryWithUnits) > 0 Then
-              'was ok, found units and converted to M --> cm
-              Dim dblConvert As Double
-              dblConvert = strTryWithUnits * 100
-              Debug.Print "custNPS_sendDBHtoE>> converted " & strDBH & "  to " & dblConvert
-              strDBH = dblConvert
-              blnOKDBH = True
-            End If
-         End If
-         
-         If blnOKDBH Then
-          DoCmd.RunSQL "INSERT INTO Z_USER_E_stemData (authorPlotCode, plantCode, stratumIndex, stemDiameter, stemCount) SELECT " _
-            & SQLizeTxt(Nz(!authorplotcode)) & " , " & SQLizeTxt(Nz(!plantCode)) & " , " & SQLizeTxt(Nz(!stratumIndex, "--")) _
-            & " , " & SQLizeTxt(Trim(strDBH)) & " , 1 ;"
-         Else
-           'report errors
-           If Trim(strDBH) <> "" And Trim(strDBH) <> "." Then
-             'show errors in new table
-             DoCmd.RunSQL "INSERT INTO cust_NPS_stemerr (authorPlotCode, plantCode, stratumIndex, stemDiameter) SELECT " _
-            & SQLizeTxt(Nz(!authorplotcode)) & " , " & SQLizeTxt(Nz(!plantCode)) & " , " & SQLizeTxt(Nz(!stratumIndex, "--")) _
-            & " , " & SQLizeTxt(Trim(strDBH)) & " ;"
-           End If
-         End If
-      Next inttemp
-    .MoveNext
-    Loop
-  End With
-  rstTemp.Close
+  '       If Not IsNumeric(strDBH) And Len(strDBH) > 0 Then
+  '          Dim strTryWithUnits As String, strUnits As String
+  '          strTryWithUnits = strDBH
+  '          strTryWithUnits = Nz(interpNumbWithUnitsToM(strTryWithUnits, strUnits), "")
+  '          If IsNumeric(strTryWithUnits) And Len(strTryWithUnits) > 0 Then
+  '            'was ok, found units and converted to M --> cm
+  '            Dim dblConvert As Double
+  '            dblConvert = strTryWithUnits * 100
+  '            Debug.Print "custNPS_sendDBHtoE>> converted " & strDBH & "  to " & dblConvert
+  '            strDBH = dblConvert
+  '            blnOKDBH = True
+  '          End If
+  '       End If
+  '
+  '       If blnOKDBH Then
+  '        DoCmd.RunSQL "INSERT INTO Z_USER_E_stemData (authorPlotCode, plantCode, stratumIndex, stemDiameter, stemCount) SELECT " _
+  '          & SQLizeTxt(Nz(!authorplotcode)) & " , " & SQLizeTxt(Nz(!plantCode)) & " , " & SQLizeTxt(Nz(!stratumIndex, "--")) _
+  '          & " , " & SQLizeTxt(Trim(strDBH)) & " , 1 ;"
+  '       Else
+  '         'report errors
+  '         If Trim(strDBH) <> "" And Trim(strDBH) <> "." Then
+  '           'show errors in new table
+  '           DoCmd.RunSQL "INSERT INTO cust_NPS_stemerr (authorPlotCode, plantCode, stratumIndex, stemDiameter) SELECT " _
+  '          & SQLizeTxt(Nz(!authorplotcode)) & " , " & SQLizeTxt(Nz(!plantCode)) & " , " & SQLizeTxt(Nz(!stratumIndex, "--")) _
+  '          & " , " & SQLizeTxt(Trim(strDBH)) & " ;"
+  '         End If
+  '       End If
+  '    Next intTemp
+  '  .MoveNext
+  '  Loop
+  'End With
+  'rstTemp.Close
   'check to see if errors occured in migration:
-  If getvalFrmSQL("select count(1) from cust_NPS_stemerr") <> "0" Then
+  'If getvalFrmSQL("select count(1) from cust_NPS_stemerr") <> "0" Then
     'have errors
-    msgBox "Errors occurred in parsing the DBH's in your data to actual stem data in VegBranch.  A form will now appear which will help you resolve these errors."
-    DoCmd.OpenForm "cust_NPS_stemErrResolve"
-    Forms!cust_nps_stemErrResolve!ignoreColonText = blnIgnoreStemTextb4Colon
-  End If
+  '  msgBox "Errors occurred in parsing the DBH's in your data to actual stem data in VegBranch.  A form will now appear which will help you resolve these errors."
+  '  DoCmd.OpenForm "cust_NPS_stemErrResolve"
+  '  Forms!cust_nps_stemErrResolve!ignoreColonText = blnIgnoreStemTextb4Colon
+  'End If
   
 End Function
 
@@ -698,19 +702,19 @@ Public Function interpNumbWithUnitsToM(ByVal strNumber As String, ByRef strUnitc
   'm, metre, meter, cm, mm, centimeter, centimetre, millimetre, millimeter, in, in., ", inches, inch, ', ft., ft, feet, foot
   'check to see if numeric followed by non-numeric
   strNumber = Trim(strNumber)
-  Dim inttemp As Integer, intLastNum As Integer
+  Dim intTemp As Integer, intLastNum As Integer
 If IsNumeric(strNumber) Then
   'dont need this assume units ok
   interpNumbWithUnitsToM = strNumber
  ' Debug.Print "numeric!"
   Exit Function
 Else
-  For inttemp = 1 To Len(strNumber) - 1
-    If IsNumeric(Left(strNumber, Len(strNumber) - inttemp)) Then
-      intLastNum = Len(strNumber) - inttemp
+  For intTemp = 1 To Len(strNumber) - 1
+    If IsNumeric(Left(strNumber, Len(strNumber) - intTemp)) Then
+      intLastNum = Len(strNumber) - intTemp
       Exit For
     End If
-  Next inttemp
+  Next intTemp
 End If
   'so the first intLastNum are numeric, after that not so: get the last part
 If intLastNum = 0 Then
@@ -743,19 +747,19 @@ Public Function interpStrWithUnits(ByVal varNumber As Variant, ByRef strRetUnits
  strRetUnits = "" 'default
  If Not IsNull(varNumber) Then
   varNumber = Trim(varNumber)
-  Dim inttemp As Integer, intLastNum As Integer
+  Dim intTemp As Integer, intLastNum As Integer
 If IsNumeric(varNumber) Then
   'dont need this assume units ok
   interpStrWithUnits = varNumber
  ' Debug.Print "numeric!"
   Exit Function
 Else
-  For inttemp = 1 To Len(varNumber) - 1
-    If IsNumeric(Left(varNumber, Len(varNumber) - inttemp)) Then
-      intLastNum = Len(varNumber) - inttemp
+  For intTemp = 1 To Len(varNumber) - 1
+    If IsNumeric(Left(varNumber, Len(varNumber) - intTemp)) Then
+      intLastNum = Len(varNumber) - intTemp
       Exit For
     End If
-  Next inttemp
+  Next intTemp
 End If
   'so the first intLastNum are numeric, after that not so: get the last part
 If intLastNum = 0 Then
