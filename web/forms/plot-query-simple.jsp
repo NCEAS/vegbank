@@ -1,7 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+@stdvegbankget_jspdeclarations@
 <html>
 <head>@defaultHeadToken@
 <title>VegBank Simple Query</title>
@@ -166,8 +163,22 @@ function validateName(value, label) {
 	&nbsp; 
 	<select name="state" size="1">
 <option value="ANY">--ANY--</option>  
- <%@ include file="../includes/StatesList.jsp" %>
-
+ <!-- %@ include file="../includes/StatesList.jsp" % -->
+   <vegbank:get id="plotstatelist" select="plotstatelist" 
+ 		  beanName="map" pager="false" where="empty" 
+ 		  wparam="" perPage="-1" />
+ 		<logic:empty name="plotstatelist-BEANLIST">
+ 		  <option value="No states found">Error: no states found</option>
+ 		</logic:empty>
+ 		<logic:notEmpty name="plotstatelist-BEANLIST">
+ 		  <logic:iterate id="onerowofplotstatelist" name="plotstatelist-BEANLIST">
+ 		     <option value='<bean:write name="onerowofplotstatelist" property="stateprovince" />' >  
+    <bean:write name="onerowofplotstatelist" property="stateprovince" />
+    (<bean:write name="onerowofplotstatelist" property="countstate" />)
+ 		      
+ 		     </option>
+ 		  </logic:iterate>
+         </logic:notEmpty>
 </select></td>
     <td bgcolor="#CCCCCC"></td>
     <td></td>
