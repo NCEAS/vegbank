@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-20 23:18:46 $'
- * '$Revision: 1.9 $'
+ *     '$Date: 2002-02-21 02:23:52 $'
+ * '$Revision: 1.10 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,6 +71,8 @@ public class USDAPlantsLoader
 	//stored codes
 	private Hashtable loadedPlantCodeHash = new Hashtable();
 	
+	private String dateEntered = "20-FEB-2002";
+	
 	
 	
 	//constructor method
@@ -100,8 +102,10 @@ public class USDAPlantsLoader
 			//load new plant instances -- EXCLUDING THOSE WITH SYNONOMYS
 			loadPlantInstances(plantsHash);
 		
-			//load the plant INSTANCES WITH SYNONOMYS
-			loadPlantSynonym(plantsHash);
+			//load the plant INSTANCES WITH SYNONOMYS 
+			//GOT RID OF THIS BECAUSE IT WILL BE DONE IN THE CORRELATION
+			//TABLE 
+			//	loadPlantSynonym(plantsHash);
 			
 		}
 		catch ( Exception e )
@@ -227,10 +231,8 @@ public static void main(String[] args)
 		if (singlePlantInstance.get("synonymousName").toString() != null )
 		{
 			System.out.println("USDAPlantsLoader > loading a synonym: " + sName);
-			String concatenatedName
-			= singlePlantInstance.get("concatenatedName").toString();
-			String synonymousName
-			= singlePlantInstance.get("synonymousName").toString();
+			String concatenatedName	= singlePlantInstance.get("concatenatedName").toString();
+			String synonymousName	= singlePlantInstance.get("synonymousName").toString();
 		
 			//check that the plant name exists
 			if ( plantNameExists(concatenatedName) == true  && 
@@ -330,42 +332,45 @@ private int plantNameKey(String plantName)
  * method that returns the primary key value
  * from the plant concept key based on the 
  * input parameters
+ * 
+ * @param plantDescription -- the plantDescription
  */
-private int plantConceptKey(String plantName)
-{
-	int plantConceptId = -999;
-	try
+	private int plantConceptKey(String plantDescription)
 	{
-		//now get the associated primary key value
-		String s1 = " select plantconcept_id from plantconcept where plantname = '"
-		+plantName+"'";
+		int plantConceptId = -999;
+		try
+		{
+			//now get the associated primary key value
+			String s1 = " select plantconcept_id from plantconcept where plantDescription = '"
+			+plantDescription+"'";
 			
-		PreparedStatement pstmt1 = conn.prepareStatement(s1);
-		ResultSet rs = pstmt1.executeQuery();
-		int cnt = 0;
-		while	( rs.next() )
-		{	
-			plantConceptId = rs.getInt(1);
-			cnt++;
+			PreparedStatement pstmt1 = conn.prepareStatement(s1);
+			ResultSet rs = pstmt1.executeQuery();
+			int cnt = 0;
+			while	( rs.next() )
+			{	
+				plantConceptId = rs.getInt(1);
+				cnt++;
+			}
+			if ( cnt > 1 )
+			{
+				System.out.println("USDAPlantsLoader > plantConceptKey violation:  more than one"
+				+" keys returned");
+			}
+			//if there are no returned results
+			else if ( cnt == 0 )
+			{
+				System.out.println("USDAPlantsLoader > no  "+plantDescription+" found in the concept table");
+			}
 		}
-		if ( cnt > 1 )
+		catch(Exception e)
 		{
-			System.out.println("USDAPlantsLoader > plantConceptKey violation:  more than one"
-			+" keys returned");
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+			System.exit(0);
 		}
-		//if there are no returned results
-		else if ( cnt == 0 )
-		{
-			System.out.println("USDAPlantsLoader > no  "+plantName+" found in the concept table");
-		}
+		return(plantConceptId);
 	}
-	catch(Exception e)
-	{
-		System.out.println("Exception: " + e.getMessage() );
-		e.printStackTrace();
-	}
-	return(plantConceptId);
-}
 
 
 /**
@@ -499,13 +504,13 @@ private int plantUsageKey(String plantName)
  	*/	
 	private void loadSinglePlantInstance(Hashtable singlePlantInstance, String plantLevel)
 	{
-		int nameId = 0;
+		int sciNameId = 0;
+		int commonNameId = 0;
+		int codeNameId = 0;
 		int conceptId = 0;
 		int statusId = 0;
 		if ( singlePlantInstance.toString() != null )
 		{
-			
-			
 			String concatenatedName=singlePlantInstance.get("concatenatedName").toString();
 			String tsnValue=singlePlantInstance.get("tsnValue").toString();
 			String rank=singlePlantInstance.get("rank").toString();
@@ -519,6 +524,9 @@ private int plantUsageKey(String plantName)
 			String commonName=singlePlantInstance.get("commonName").toString();
 			String familyName=singlePlantInstance.get("familyName").toString();
 			String plantCode=singlePlantInstance.get("plantCode").toString();
+			//create a concept description based on all the names and the date
+			String conceptDescription = plantCode+"|"+concatenatedName+"|"+commonName
+			+"|"+plantConceptStatus+"PLANTS1996";
 			
 			//if the rank is the same as that specified as a input parameter 
 			//to this method then try to load the plant
@@ -540,13 +548,26 @@ private int plantUsageKey(String plantName)
 					int partyId = this.insertPlantPartyInstance(this.partyName, this.partyContractInstructions);
 					//System.out.println("USDAPlantsLoader > party id: " + partyId);
 
-					//if the plantname is not there then load it
+					//if the scientific plantname is not there then load it
 					if (plantNameExists(concatenatedName)==false)
 					{
-						//System.out.println("USDAPlantsLoader > first instance of plant name: "
-						//	+ concatenatedName );
-						nameId = loadPlantNameInstance(refId, concatenatedName, commonName, plantCode);
+						//sciNameId = loadPlantNameInstance(refId, concatenatedName, commonName, plantCode);
+						sciNameId = loadPlantNameInstance(refId, concatenatedName, "", dateEntered);
 					}
+					//same with the common name 
+					if (plantNameExists(commonName)==false)
+					{
+						//commonNameId = loadPlantNameInstance(refId, commonName, commonName, plantCode);
+						commonNameId = loadPlantNameInstance(refId, commonName, "", dateEntered);
+					}
+					//same with the codes
+					if (plantNameExists(plantCode)==false)
+					{
+						//codeNameId = loadPlantNameInstance(refId, plantCode, commonName, plantCode);
+						codeNameId = loadPlantNameInstance(refId, plantCode, "", dateEntered);
+					}
+					
+					
 
 					//if the plant concept does not exist create an entry 
 					// and create a status entry for that plant instance - if 
@@ -554,42 +575,47 @@ private int plantUsageKey(String plantName)
 					//concatenated value does not have a concept
 					if (plantConceptExists(concatenatedName, tsnValue) == false)
 					{
-							//upadte the concept 
-							conceptId = loadPlantConceptInstance(nameId, refId, concatenatedName, 
+							//update the concept 
+							conceptId = loadPlantConceptInstance(sciNameId, refId, concatenatedName, 
 							plantCode, rank );
 							
 							//update the status add the plant parent here and also
 							statusId = loadPlantStatusInstance(conceptId, plantConceptStatus, "30-JUN-96", 
 							"01-JAN-01", "PLANTS96", partyId);
+							
+							//first and always load the usage for the code no matter if it is standard or not
+							loadPlantUsageInstanceNew(plantCode, codeNameId, conceptId, "STANDARD", 
+							"30-JUN-96", "30-JUN-2001",  "CODE", partyId);
 					}
 			
-			
-					//THIS IS EXPERIMENTAL AS OF WED
-					//if no synonomies then add the accepted 
-					//usage to the usage table -- CHANGES THIS TO LOOK WHETHER IT IS 
-					//ACCEPTED OR NOT 
-			
-					//get rid of reference and add classSystem and get rid of plantConcept
-					//status and replace with the plantnamStatus and create a common name and 
-					//code do every usad code as standard but for sci names and common names
-					//look first to see if acceepted
-		
+					
+					//chect to see that these plants are accepted or wait till the 
+					//last loading step
 					if ( synonymousName.equals("nullToken") )
 					{
+						//requst the concpt id or else all will be zeros
+						
 						//System.out.println("USDAPlantsLoader > loading usage instance plantNameId: " + nameId);
-						System.out.println("USDAPlantsLoader > updating usage for: "+ concatenatedName);
-						System.out.println("USDAPlantsLoader > plantNameStatus: "+ plantConceptStatus);
-						if (nameId > 0)
+						//System.out.println("USDAPlantsLoader > updating usage for: "+ concatenatedName);
+						//System.out.println("USDAPlantsLoader > plantNameStatus: "+ plantConceptStatus);
+						if ( sciNameId > 0 && commonNameId > 0)
 						{
-							loadPlantUsageInstance(concatenatedName, nameId, conceptId, 
-							"standard", "30-JUN-1996", stopDate, reference);
+							//loadPlantUsageInstance(concatenatedName, sciNameId, conceptId, 
+							//"standard", "30-JUN-1996", stopDate, reference);
+							loadPlantUsageInstanceNew(concatenatedName, sciNameId, conceptId, "STANDARD", 
+							"30-JUN-96", "30-JUN-2001",  "SCIENTIFICNAME", partyId);
+							
+							loadPlantUsageInstanceNew(commonName, commonNameId, conceptId, "STANDARD", 
+							"30-JUN-96", "30-JUN-2001",  "COMMONNAME", partyId);
 						}
-				
+			
 						else 
 						{
 							System.out.println("USDAPlantsLaoder > FAILURE LOADING THE USAGE INSTANCE FOR A PLANT");
+							System.out.println("USDAPlantsLaoder > CONCEPT IDENTIFIER: " + conceptId );
 						}
 					}
+					
 			
 				}
 				else
@@ -622,6 +648,7 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 		String plantCode = "";
 		String commonName = "";
 		
+		
 		//see if we already loaded this plant
 		if (! this.loadedPlantCodeHash.contains(familyName) )
 		{
@@ -640,9 +667,7 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 			//if the plantname is not there then load it
 			if (plantNameExists(familyName)==false)
 			{
-				//System.out.println("USDAPlantsLoader > first instance of plant name: "
-				//	+ concatenatedName );
-				nameId = loadPlantNameInstance(refId, familyName, commonName, plantCode);
+				nameId = loadPlantNameInstance(refId, familyName, "", dateEntered);
 			}
 
 			//if the plant concept does not exist create an entry 
@@ -661,8 +686,12 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 			//load the plant usage 
 			//load the relevant data to the usage table
 			///fix the reference
-			loadPlantUsageInstance(familyName, nameId, conceptId, 
-			"STANDARD", "30-JUN-96", "01-JAN-01", "reference");
+			
+			//loadPlantUsageInstance(familyName, nameId, conceptId, 
+			//"STANDARD", "30-JUN-96", "01-JAN-01", "reference");
+			
+			loadPlantUsageInstanceNew(familyName, nameId, conceptId, "STANDARD", 
+			"30-JUN-96", "30-JUN-2001",  "SCIENTIFIC NAME", partyId);
 		}
 	}
 }
@@ -1034,6 +1063,56 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 		}
 		return(0);	
 	}
+	
+	
+	
+	/**
+ 	* method that loads a new instance of a 
+ 	* plant concept - name usage returns to 
+ 	* the calling method the primary key for 
+ 	* that concept - name usage
+	* 
+	* @param concatenatedName
+	* @param name_id
+	* @param concept_id
+	* @param plantNameStatus -- standard or non standard
+	* @param usageStart
+	* @param usageStop
+	* @param classSystem -- common name or code or scientific name
+ 	*/	
+	private int loadPlantUsageInstanceNew(String concatenatedName, int name_id, 
+	int concept_id, String usage, String startDate, String stopDate, 
+	String classSystem, int partyId)
+	{
+		try
+		{
+			String s = "insert into PLANTUSAGE (plantName, plantName_id, plantConcept_id, "+
+				" plantNameStatus, usageStart, usageStop, classSystem, plantParty_id) "
+				+" values(?,?,?,?,?,?,?,?) ";
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			//bind the values
+			pstmt.setString(1, concatenatedName);
+			pstmt.setInt(2, name_id);
+			pstmt.setInt(3, concept_id);
+			pstmt.setString(4, usage);
+			pstmt.setString(5, startDate);
+			pstmt.setString(6, stopDate);
+			pstmt.setString(7, classSystem);
+			pstmt.setInt(8, partyId);
+			boolean results = true;
+			results = pstmt.execute();
+			pstmt.close();	
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("plantNameId: " + name_id );
+			System.out.println("plantConceptId: " + concept_id );
+			e.printStackTrace();
+			System.exit(0);
+		}
+		return(0);	
+	}
 
 
 
@@ -1043,17 +1122,17 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
  	* method the primary key for that concept
  	*/	
 	private int loadPlantConceptInstance(int plantNameId, int plantReferenceId, 
-	String plantName, String plantCode, String rank)
+	String plantDescription, String plantCode, String rank)
 	{
 		int plantConceptId = -999;
 		try
 		{
-			String s = "insert into PLANTCONCEPT (plantname_id, plantName, "
+			String s = "insert into PLANTCONCEPT (plantname_id, plantDescription, "
 			+" plantreference_id, plantCode, plantLevel ) values(?,?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			//bind the values
 			pstmt.setInt(1, plantNameId);
-			pstmt.setString(2, plantName);
+			pstmt.setString(2, plantDescription);
 			pstmt.setInt(3, plantReferenceId);
 			pstmt.setString(4, plantCode);
 			pstmt.setString(5, rank);
@@ -1061,8 +1140,8 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 			pstmt.close();	
 		
 			//now get the associated primary key value
-			String s1 = "select plantconcept_id from plantconcept where plantname = '"
-			+plantName+"'";
+			String s1 = "select plantconcept_id from plantconcept where plantDescription = '"
+			+plantDescription+"'";
 			
 			PreparedStatement pstmt1 = conn.prepareStatement(s1);
 			ResultSet rs = pstmt1.executeQuery();
@@ -1079,8 +1158,11 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 		}
 		catch(Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("Exception: " + e.getMessage() 
+			+ "\n conceptId: " +  plantConceptId 
+			+"\n plantDescription: " + plantDescription);
 			e.printStackTrace();
+			System.exit(0);
 		}
 		return(plantConceptId);
 	}
@@ -1094,18 +1176,18 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
  	* method that returns true if an instance of a plant
  	* concept exists that is identical to the input critreria
 	*
-	* @param concatenatedName -- the concatenated name
+	* @param plantDescription -- the concatenated name
 	* @param tsnValue -- the concept code
 	* @return exists -- boolean 
  	*/	
-	private boolean plantConceptExists(String concatenatedName, String tsnValue)
+	private boolean plantConceptExists(String plantDescription, String tsnValue)
 	{
 		boolean result = false;
 		try
 		{
 			//now get the associated primary key value
-			String s1 = " select plantConcept_id from plantConcept where plantName = '"
-			+concatenatedName+"'";
+			String s1 = " select plantConcept_id from plantConcept where plantDescription = '"
+			+plantDescription+"'";
 			
 			PreparedStatement pstmt1 = conn.prepareStatement(s1);
 			ResultSet rs = pstmt1.executeQuery();
@@ -1139,26 +1221,34 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
  	* plant name and then returns the primary
  	* key value of that plant name to the calling
  	* method
+	*
+	* @param refId -- the reference Id
+	* @param plantName -- the plantname (w/o the author bit)
+	* @param plantNameWithAuthor
+	* @param dateEntered -- the data thate the plant name is to be entered
+	* @return plantNameId -- the plant name Id assocaited with this plant
+	*
  	*/	
-	private int loadPlantNameInstance(int refId, String concatenatedName, 
-	String commonName, String plantCode)
+	private int loadPlantNameInstance(int refId, String plantName, 
+	String plantNameWithAuthor, String dateEntered)
 	{
 		int plantNameId = -999;
 		try
 		{
-			String s = "insert into PLANTNAME (plantreference_id, plantName, plantCommonName, plantSymbol) "
+			String s = "insert into PLANTNAME (plantreference_id, plantName, "
+			+"plantNameWithAuthor, dateEntered) "
 			+" values(?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			//bind the values
 			pstmt.setInt(1, refId);
-			pstmt.setString(2, concatenatedName);
-			pstmt.setString(3, commonName);
-			pstmt.setString(4, plantCode);
+			pstmt.setString(2, plantName);
+			pstmt.setString(3, plantNameWithAuthor);
+			pstmt.setString(4, dateEntered);
 			pstmt.execute();
 			pstmt.close();	
 		
 			//now get the associated primary key value
-			String s1 = "select plantname_id from PLANTNAME where plantname = '"+ concatenatedName+ "' ";
+			String s1 = "select plantname_id from PLANTNAME where plantname = '"+ plantName+ "' ";
 			PreparedStatement pstmt1 = conn.prepareStatement(s1);
 			ResultSet rs = pstmt1.executeQuery();
 			int cnt = 0;
@@ -1179,7 +1269,6 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 		}
 		return(plantNameId);
 	}
-
 
 
 
