@@ -21,7 +21,7 @@
    <xsl:variable name="fieldhtmlpart"><xsl:if test="string-length($CurrentField)&gt;0">~field~<xsl:value-of select="translate($CurrentField,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" /></xsl:if></xsl:variable>
   <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}{$fieldhtmlpart}~type~tableview.html"> 
 @webpage_top_html@
-  @stdvegbankget_jspdeclarations@
+
   @webpage_head_html@
    <title>VegBank Data Dictionary - table view: <xsl:value-of select="../entityName" /></title>
      @webpage_masthead_html@

@@ -5,7 +5,7 @@
  
 
 @webpage_top_html@
-  @stdvegbankget_jspdeclarations@
+
   @webpage_head_html@
 <TITLE>View VegBank Business Rules</TITLE>
   @webpage_masthead_html@

@@ -4,7 +4,7 @@
   <xsl:output method="xml" omit-xml-declaration="no" encoding="UTF-8"/>
   <xsl:template match="/dataModel">
 @webpage_top_html@
-  @stdvegbankget_jspdeclarations@
+
   @webpage_head_html@
   <title>VegBank Data Dictionary Index</title>
   @webpage_masthead_html@

@@ -3,7 +3,6 @@
   <xsl:output method="html"/>
 <xsl:template match="/faq">
 @webpage_top_html@
-  @stdvegbankget_jspdeclarations@
   @webpage_head_html@
  <style type="text/css">
  .local_yellow {background-color : #FFFFCC }	

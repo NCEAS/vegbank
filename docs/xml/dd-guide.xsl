@@ -4,7 +4,6 @@
   <xsl:output method="html"/>
   <xsl:template match="/dataDictionaryKey">
 @webpage_top_html@
-  @stdvegbankget_jspdeclarations@
   @webpage_head_html@
   <title>VegBank Data Dictionary Key</title>
   @webpage_masthead_html@ 
