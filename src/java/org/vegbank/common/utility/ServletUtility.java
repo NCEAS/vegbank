@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-13 22:38:16 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2003-11-25 19:28:20 $'
+ *  '$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +53,7 @@ import org.apache.tools.ant.filters.ReplaceTokens;
 import com.Ostermiller.util.LineEnds;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.*;
@@ -101,51 +102,99 @@ public class ServletUtility
 		zipstream.close();
 	}
 	
-	public void sendHTMLEmail(
+	/**
+	 * Send a HTML email message.
+	 * 
+	 * @param smtpServer
+	 * @param from
+	 * @param to
+	 * @param cc
+	 * @param subject
+	 * @param body
+	 * @throws MessagingException
+	 */
+	public static void sendHTMLEmail(
 		String smtpServer,
 		String from,
 		String to,
 		String cc,
 		String subject,
-		String body)
+		String body) throws MessagingException
 	{
-		try
+		Message msg = getEmailMessage(smtpServer, from, to, cc, subject);
+
+		// Set the body content
+		msg.setContent(body, "text/html");
+		// -- Send the message --
+		Transport.send(msg);
+	}
+
+	/**
+	 * Send a plain text email.
+	 * 
+	 * @param smtpServer
+	 * @param from
+	 * @param to
+	 * @param cc
+	 * @param subject
+	 * @param body
+	 * @throws AddressException
+	 * @throws MessagingException
+	 */
+	public static void sendPlainTextEmail(
+		String smtpServer,
+		String from,
+		String to,
+		String cc,
+		String subject,
+		String body) throws AddressException, MessagingException
+	{
+		Message msg = getEmailMessage(smtpServer, from, to, cc, subject);
+
+		// Set the body text
+		msg.setText(body);
+		// -- Send the message --
+		Transport.send(msg);
+	}
+
+
+	private static Message getEmailMessage(
+		String smtpServer,
+		String from,
+		String to,
+		String cc,
+		String subject) throws AddressException, MessagingException
+	{
+		// Get default SMTP_SERVER if none given
+		if ( Utility.isStringNullOrEmpty(smtpServer) )
 		{
-			Properties props =new Properties();
-			props.put("mail.smtp.host", smtpServer);
-			Session session = Session.getDefaultInstance(props, null);
-			
-			//	-- Create a new message --
-			Message msg = new MimeMessage(session);
-			
-			// -- Set the FROM and TO fields --
-			msg.setFrom(new InternetAddress(from));
-			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
-			
-			// -- Include CC recipients too --
-		 	if (cc != null)
-		 	{
-				msg.setRecipients(Message.RecipientType.CC ,InternetAddress.parse(cc, false));
-		 	}
-
-			// -- Set the subject and body text --
-			msg.setSubject(subject);
-			//msg.setText(body);
-			msg.setContent(body, "text/html");
-
-			// -- Set some other header information --
-			msg.setSentDate(new Date());
-
-			// -- Send the message --
-			Transport.send(msg);
-
-			System.out.println("Message sent OK.");
+			smtpServer = Utility.SMTP_SERVER;
 		}
-		catch ( Exception e)
+		
+		Properties props =new Properties();
+		props.put("mail.smtp.host", smtpServer);
+		Session session = Session.getDefaultInstance(props, null);
+		
+		//	-- Create a new message --
+		Message msg = new MimeMessage(session);
+		
+		// -- Set the FROM and TO fields --
+		msg.setFrom(new InternetAddress(from));
+		msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
+		
+		// -- Include CC recipients too --
+		if (cc != null)
 		{
-			System.out.println("ServletUtility > Problem sending mail message");
-			e.printStackTrace();
+			msg.setRecipients(Message.RecipientType.CC ,InternetAddress.parse(cc, false));
 		}
+
+		// -- Set the subject and body text --
+		msg.setSubject(subject);
+		
+		// -- Set some other header information --
+		msg.setSentDate(new Date());
+		
+		return msg;
 	}
 	
 	/**
