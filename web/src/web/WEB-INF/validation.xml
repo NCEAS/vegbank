@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.13 2004-01-31 01:25:56 anderson Exp $
+    $Id: validation.xml,v 1.14 2004-02-07 06:43:19 anderson Exp $
 -->
 
 <form-validation>
@@ -144,15 +144,8 @@
 
         <!-- Rules for registering a new user -->
         <form name="RegisterNewUserForm">
-            <field property="user.email_address" depends="required,email">
+            <field property="usr.email_address" depends="required,email">
                 <arg0   key="Email address" resource="false"/>
-            </field>
-            <field property="termsaccept" depends="required,mask">
-                <arg0   key="Acceptance of terms" resource="false"/>
-                <var>
-                  <var-name>mask</var-name>
-                  <var-value>accept</var-value>
-                </var>
             </field>
             <field property="password1" depends="required,minlength,maxlength">
                 <arg0   key="Password" resource="false"/>
@@ -184,12 +177,19 @@
                     <var-value>3</var-value>
                 </var>
             </field>
+            <field property="termsaccept" depends="required,mask">
+                <arg0 key="Acceptance of terms" resource="false"/>
+                <var>
+                  <var-name>mask</var-name>
+                  <var-value>accept</var-value>
+                </var>
+            </field>
             <field property="party.givenname" depends="required">
-                <arg0   key="First name" resource="false"/>
-            </field>
+				<arg0 key="First name" resource="false"/>
+			</field>
             <field property="party.surname" depends="required">
-                <arg0   key="Last name" resource="false"/>
-            </field>
+				<arg0 key="Last name" resource="false"/>
+			</field>
         </form>
 
         <!-- Rules for certification form -->

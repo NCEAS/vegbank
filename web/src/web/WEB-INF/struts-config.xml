@@ -94,18 +94,6 @@
 		<form-property name="email" type="java.lang.String"/>
     </form-bean>
 	
-    <!-- Register new user form bean -->
-    <form-bean  name="RegisterNewUserForm"
-                type="org.apache.struts.validator.DynaValidatorForm">
-		<form-property name="user" type="org.vegbank.common.model.Usr"/>
-		<form-property name="party" type="org.vegbank.common.model.Party"/>
-		<form-property name="address" type="org.vegbank.common.model.Address"/>
-		<form-property name="telephone" type="org.vegbank.common.model.Telephone"/>
-		<form-property name="termsaccept" type="java.lang.String" initial="decline"/>
-		<form-property name="password1" type="java.lang.String"/>
-		<form-property name="password2" type="java.lang.String"/>
-    </form-bean>
-
     <!-- Query Plants form bean -->
     <form-bean  name="PlantQueryForm"
                 type="org.apache.struts.validator.DynaValidatorForm">
@@ -114,6 +102,37 @@
 		<form-property name="taxonLevel" type="java.lang.String"/>
 		<form-property name="nameExistsBeforeDate" type="java.lang.String"/>
 		<form-property name="accordingToParty" type="java.lang.String"/>
+    </form-bean>
+	
+    <!-- Register new user form bean -->
+    <form-bean  name="RegisterNewUserForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="usr" type="org.vegbank.common.model.Usr"/>
+		<form-property name="party" type="org.vegbank.common.model.Party"/>
+		<form-property name="termsaccept" type="java.lang.String" initial="decline"/>
+		<form-property name="password1" type="java.lang.String"/>
+		<form-property name="password2" type="java.lang.String"/>
+    </form-bean>
+
+    <!-- User Profile form bean -->
+    <form-bean  name="UserProfileForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="action" type="java.lang.String"/>
+		<form-property name="usr" type="org.vegbank.common.model.Usr"/>
+		<form-property name="address" type="org.vegbank.common.model.Address"/>
+		<form-property name="organizationname" type="java.lang.String"/>
+		<!--
+		<form-property name="email" type="java.lang.String"/>
+		<form-property name="givenname" type="java.lang.String"/>
+		<form-property name="surname" type="java.lang.String"/>
+		<form-property name="institution" type="java.lang.String"/>
+		<form-property name="deliverypoint" type="java.lang.String"/>
+		<form-property name="city" type="java.lang.String"/>
+		<form-property name="administrativearea" type="java.lang.String"/>
+		<form-property name="country" type="java.lang.String"/>
+		<form-property name="postalcode" type="java.lang.String"/>
+		<form-property name="phonenumber" type="java.lang.String"/>
+		-->
     </form-bean>
 	
 
@@ -127,7 +146,7 @@
     <forward   name="MainMenu"	path="/forms/MainMenu.jsp"/>
     <forward   name="success"	path="/forms/success.html"/>
     <forward   name="failure"	path="/forms/failure.jsp"/>
-    <forward   name="vberror"	path="/forms/vberror.jsp"/>
+    <forward   name="vberror"	path="/general/vberror.jsp"/>
     <forward   name="AddReference"	path="/forms/AddReference.jsp"/>
     <forward   name="AddJournal"	path="/forms/AddJournal.jsp"/>
     <forward   name="AddCoverMethod"	path="/forms/AddCoverMethod.jsp"/>
@@ -159,7 +178,7 @@
             name="LogonForm"
             validate="true"
             input="Logon">
-      <forward name="success" path="/forms/MainMenu.jsp"/>
+      <forward name="success" path="/forms/MainMenu.jsp" redirect="true"/>
     </action>
 
     <!-- Process a user logoff -->
@@ -355,7 +374,21 @@
             scope="request"
             validate="true"
             input="RegisterNewUser">
-      <forward name="success" path="/index.jsp"/>
+      <forward name="success" path="/DisplayMainMenu.do" redirect="true"/>
+    </action>
+
+    <!-- User profile actions -->
+    <action path="/UserProfileAction"
+            type="org.vegbank.ui.struts.UserProfileAction"
+            name="UserProfileForm"
+            scope="request"
+            validate="true"
+            input="UserProfileAction">
+      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+      <set-property property="reqRoles" value="reg" />
+      <forward name="view_user" path="/forms/view_user.jsp"/>
+      <forward name="edit_user" path="/forms/edit_user.jsp"/>
+      <forward name="change_pwd" path="/forms/change_pwd.jsp"/>
     </action>
 
   </action-mappings>

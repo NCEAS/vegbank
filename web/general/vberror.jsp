@@ -11,8 +11,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-01-31 01:25:56 $'
-  *  '$Revision: 1.1 $'
+  *      '$Date: 2004-02-07 06:43:19 $'
+  *  '$Revision: 1.2 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -44,13 +44,15 @@
 <blockquote>
 <h3><font color="red">Oops! You found a VegBank bug.</font></h3>
 <span class="vegbank_large">Sorry, but the last thing you tried to do did not work.</span><br/>
+<br/>
 <span class="vegbank_small">
-Please try again right now, then try again later if it is still broken.<br/>
+Please try again right now by reloading/refreshing this page or going back.
+If it is still broken, please try again later and keep your fingers crossed.<br/>
 This problem has been reported to the developers.<br/></span>
 
 	<br/> 
 	<span class="vegbank_normal">
-		Thank you for your patience<br/>
+		Thank you for your patience.<br/>
 		<a href="mailto:help@vegbank.org">help@vegbank.org</a>
 	</span>	
 

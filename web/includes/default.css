@@ -32,10 +32,11 @@ a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
 a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 
 
-.vegbank		{ font-family: Georgia, Times New Roman, Times, serif; color : #531100; }
-.vegbank_small	{ font-family: Georgia, Times New Roman, Times, serif; color : #531100; font-size: 10pt}
-.vegbank_normal	{ font-family: Georgia, Times New Roman, Times, serif; color : #531100; font-size: 12pt}
-.vegbank_large	{ font-family: Georgia, Times New Roman, Times, serif; color : #531100; font-size: 14pt}
+.vegbank		{ font-family: Verdana, Arial, Helvetica, serif; color : #531100; }
+.vegbank_tiny	{ font-family: Verdana, Arial, Helvetica, serif; color : #531100; font-size: 8pt}
+.vegbank_small	{ font-family: Verdana, Arial, Helvetica, serif; color : #531100; font-size: 10pt}
+.vegbank_normal	{ font-family: Verdana, Arial, Helvetica, serif; color : #531100; font-size: 12pt}
+.vegbank_large	{ font-family: Verdana, Arial, Helvetica, serif; color : #531100; font-size: 14pt}
 .sansserif		{ font-family: Verdana, Arial, Helvetica, sans-serif ; color : #531100}
 
 UL.constsize,LI.constsize {  font: 10pt Verdana, Arial, Helvetica, Geneva, sans-serif; }						
@@ -62,7 +63,13 @@ UL.constsize,LI.constsize {  font: 10pt Verdana, Arial, Helvetica, Geneva, sans-
 				
 P, .normal		{
 					font-family: Verdana, Arial, Helvetica, sans-serif;
-					font-size: .83em;
+					font-size: 10pt;
+					color: #000000
+				}
+
+.psmall	        {
+					font-family: Verdana, Arial, Helvetica, sans-serif;
+					font-size: 8pt;
 					color: #000000
 				}
 

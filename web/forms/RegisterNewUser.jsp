@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-02-04 01:19:07 $'
-*  '$Revision: 1.5 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-02-07 06:43:19 $'
+*  '$Revision: 1.6 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,7 @@
 
 <HEAD>
  
-<TITLE>Register as a VegBank User</TITLE>
+<TITLE>VegBank Registration</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
  
 <meta http-equiv="Content-Type" content="text/html; charset=">
@@ -44,159 +44,169 @@
 @vegbank_header_html_normal@
 
   <br/>
-
-  <html:errors/>
-
 <!-- table that limits width of text -->
-<table cellspacing="0" cellpadding="0" border="0" width="799">
+<table cellspacing="2" cellpadding="0" border="0" width="725">
 <tr>
-<h2 align="center">Register as a VegBank User</h2>
+ <td colspan="8">
+		<h2 align="center">VegBank Registration</h2>
+		&nbsp;
+ </td>
+</tr>
 
-<p>VegBank may be freely used without registration.  If you wish to log in as a guest,
-please click <a href="/vegbank/Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">here</a>.  The following features of VegBank require registration:</p>
+
+<!-- FORM -->
+ <html:form action="RegisterNewUser.do" onsubmit="return validateRegisterNewUserForm(this)">
+
+<tr>
+<td valign="top">
+<span class="vegbank_large">Register here.</h3>
+  <br/>
+  <br/>
+  <span class="vegbank_small">
+  <html:errors/>
+  </span>
+
+  <TABLE width="315" border="0">
+    <TR> 
+      <TD>
+	  	<b><span class="vegbank_normal">Login Information</span></b>
+	  </TD>
+    </TR>
+
+    <TR> 
+      <TD>
+	  	<font color="#FF0000">*</font>
+	  	<span class="vegbank_small">e-Mail Address (login name): 
+		<br/>
+	  	<html:text property="usr.email_address" size="30"/>
+      </TD>
+    </TR>
+
+    <TR> 
+      <TD>
+		<font color="#FF0000">*</font>
+		<span class="vegbank_small">Password:</span>
+		<br/>
+		<html:password property="password1" size="30" redisplay="true"/>
+      </TD>
+      </TD>
+    </TR>
+
+    <TR> 
+      <TD>
+	 	 	<font color="#FF0000">*</font>
+            <span class="vegbank_small">Confirm Password: </span>
+			<br/>
+        	<html:password property="password2" size="30" redisplay="true"/>
+      </TD>
+    </TR>
+
+    <TR>
+      <TD>&nbsp;</TD>
+    </TR>
+
+    <TR>
+      <TD> 
+         <b><span class="vegbank_normal">Personal Information</span></b>
+      </TD>
+    </TR>
+
+    <!-- first name-->
+    <TR> 
+      <TD>
+	 	  <font color="#FF0000">*</font>
+          <span class="vegbank_small">First Name: </span>
+		  <br/>
+		  <html:text property="party.givenname" size="30"/>
+      </TD>
+    </TR>
+
+    <!-- last name -->
+    <TR> 
+      <TD>
+	 	  <font color="#FF0000">*</font>
+          <span class="vegbank_small">Last Name:</span>
+		  <br/>
+		  <html:text property="party.surname" size="30"/>
+      </TD>
+    </TR>
+  </TABLE>
+  &nbsp;
+
+<!-- TERMS -->
+<table bgcolor="#EEEEEE" cellpadding="5" border="0" width="90%">
+<tr>
+	<td>
+		<span class="psmall">Acceptance of the  
+		<a href="@general_link@terms.html">VegBank terms of use</a>
+		is required.
+		</span>
+  </td>
+</tr>
+</table>
+
+  <table cellspacing="2" cellpadding="2" width="90%" border="1">
+    <tr> 
+      <td>
+          <font color="red">*</font> 
+          <html:radio value="accept" property="termsaccept"/> 
+          <span class="vegbank_small">I accept the terms of use</span>
+      </td>
+      <td>
+           <html:radio value="decline" property="termsaccept"/> 
+           <span class="vegbank_small">I decline</span>
+      </td>
+    </tr>
+
+  </table>
+
+
+          <p><b><font color="red">*</font> 
+		  <span class="vegbank_small">denotes required field</span>
+		  </b></p>
+
+		<html:submit property="submit" value="Register Now" />
+
+	</td>
+</html:form>
+
+<!-- SPACER -->
+<td bgcolor="#AAAAAA" width="1"><img src="@image_server@pix_clear" width="1" height="1"></td>
+<td bgcolor="#DDDDDD" width="1"><img src="@image_server@pix_clear" width="1" height="1"></td>
+<td width="1"><img src="@image_server@pix_clear" width="8" height="1"></td>
+
+<!-- TEXT -->
+<td valign="top">
+<span class="vegbank_large">Learn more here.</h3>
+  <br/>
+<p>Although you may 
+<html:link action="Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">login as a guest</html:link>
+to use VegBank without registration, registered users are able to...</p>
+
 <ul>
-  <li>Adding data to the archive and annotating extant data (these also require certification). </li>
-  <li>Building personal datasets and queries, requesting special permission to view data [not yet implemented], </li>
-  
+  <li class="vegbank_small">add your data and annotate extant data (certification required)</li>
+  <li class="vegbank_small">build personal datasets and queries (coming soon)
+  <li class="vegbank_small">request permission to view non-public data (coming soon)</li>
 </ul>
-<p>Visitors to vegbank.org 
-  are guaranteed privacy. Information collected on users and their activities 
-  at vegbank.org is kept private and never shared with other organizations 
-  or persons. However any data, comments, interpretations, or the like that you 
+
+<p>Visitors to vegbank.org are <b>guaranteed privacy</b>. 
+  Information collected on users and their activities 
+  at vegbank.org is kept private and <b>never shared</b> with other organizations 
+  or persons.</p>
+  
+  <p>Any data, comments, interpretations, or the like that you 
   submit or affix to a record in the VegBank database will be considered public 
   except where confidentiality has been formally requested to protect endangered 
   species or rights of private land owners.</p>
-Permission to use certain 
-advanced features requires certification.<br>
 
-<h3><br>
-  Please fill in the information below to create an account. 
-  <!-- access servlet here -->
-</h3>
+<p>Permission to use certain advanced features requires 
+registration and <html:link action="LoadCertification.do">certification</html:link>.
+</p>
+	</td>
 </tr>
 </table>
 
- <html:form action="/RegisterNewUser.do" onsubmit="return validateRegisterNewUserForm(this)">
-
-<!-- table that limits width of text -->
-<table cellspacing="0" cellpadding="0" border="0" width="799">
-<tr>
-  &nbsp;&nbsp;<b>To become 
-  a Vegbank user, you must read and agree to the <a href="@general_link@terms.html">VegBank 
-  terms of use</a>. Please read the terms and click on the button below to indicate 
-  that you understand and accept those terms.</b> 
-</tr>
-</table>
-  <table width="45%" border="1">
-    <tr> 
-      <td width="56%"> 
-         
-           <html:radio value="decline" property="termsaccept"/> 
-           <b>I do not accept</b>
-         
-      </td>
-      <td width="44%"> 
-         
-          <html:radio value="accept" property="termsaccept"/> 
-          <b>I accept</b>
-        
-      </td>
-    </tr>
-  </table>
-  <br>
-  <TABLE>
-    <TR> 
-      <TD colspan="2"><b>Login Information</b></TD>
-      <TD align=right width=1>&nbsp;</TD>
-    </TR>
-    <TR> 
-      <TD width=158> 
-          <b>Required fields = <font color="#FF0000">*</font></b>
-      </TD>
-      <TD width=309>&nbsp;</TD>
-      <TD align=right width=1>&nbsp;</TD>
-    </TR>
-    <TBODY> 
-    <TR> 
-      <TD width=158> 
-        <DIV align=left>
-            <B>Email Address = username: <font color="#FF0000">*</font> </B>
-        </DIV>
-      </TD>
-      <TD width="309"> 
-        <html:text property="user.email_address" size="40"/>
-      </TD>
-      <TD align=right width=1>&nbsp;</TD>
-    </TR>
-    <TR> 
-      <TD width=158> 
-        <DIV align=left>
-            <B>Password:<font color="#FF0000"> * </font></B>
-          </FONT>
-        </DIV>
-      </TD>
-      <TD width=309> 
-        <html:password property="password1" size="40" redisplay="false"/>
-      </TD>
-      <TD align=right width=1>&nbsp;</TD>
-    </TR>
-    <TR> 
-      <TD width=158> 
-        <DIV align=left>
-            <B>Re-type Password: </B>
-        </DIV>
-      </TD>
-      <TD width=309> 
-        <html:password property="password2" size="40" redisplay="false"/>
-      </TD>
-      <TD align=right width=1>&nbsp;</TD>
-    </TR>
-    <TR vAlign=top> 
-      <TD align=left colSpan=2>&nbsp;</TD>
-    </TR>
-    <TR vAlign=top> 
-      <TD align=left colSpan=2> 
-        <h4>
-            <B>Optional Information</B>
-        </h4>
-      </TD>
-    </TR>
-    <!-- first name-->
-    <TR> 
-      <TD width="158">
-          <B>First Name: <font color="#FF0000">*</font> </B>
-      </TD>
-      <TD width="309"> 
-      	<html:text property="party.givenname" size="40"/>
-      </TD>
-      <TD align=right width=1>&nbsp;</TD>
-    </TR>
-    <!-- last name -->
-    <TR> 
-      <TD width="158">
-          <B>Last Name:<font color="#FF0000">* </font></B>
-      </TD>
-      <TD width="309"> 
-        <html:text property="party.surname" size="40"/>
-      </TD>
-      <TD width=1> 
-        <DIV align=right></DIV>
-      </TD>
-    </TR>
-    </TBODY> 
-  </TABLE>
-  <TABLE cellSpacing=0 cellPadding=0 width=472 border=0>
-    <TBODY> 
-    <TR> 
-      <TD vAlign=top colSpan=4> 
-        <html:submit property="submit" value="Register" />
-        &nbsp;&nbsp; 
-        <html:submit property="reset" value="reset" />
-    </TR>
-    </TBODY> 
-  </TABLE>
-</html:form>
-<h3><br>
+<br>
 <br>
 @vegbank_footer_html_onerow@
 </BODY>

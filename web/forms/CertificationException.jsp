@@ -10,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-12-05 22:49:35 $'
-*  '$Revision: 1.1 $'
+*    '$Author: anderson $'
+*      '$Date: 2004-02-07 06:43:19 $'
+*  '$Revision: 1.2 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -33,18 +33,35 @@
 <html:html locale="true">
 <head>
 <meta http-equiv="expires" content="0">
-<title>Vegbank Certification Exeception</title>
+<title>Certification Required</title>
 </head>
 <body>
 @vegbank_header_html_normal@
 
-<p>
-	An Certification Exception was thrown. This happened, because you tried to access
-	an action that you are not allowed to access with your current certification level.
+<blockquote>
+<p class="vegbank_large">
+	<br/>
+	<span class="vegbank_small">The page you tried to access requires a higher level of certification.
+	<br/>
+	Please use the <html:link action="LoadCertification.do">certification form</html:link> 
+	to increase your ability to use VegBank more effectively.<br/>
+	</span>
+	<br/>
+	<br/>
+	<span class="vegbank_normal">
+		Thank you<br/>
+		<a href="mailto:help@vegbank.org">help@vegbank.org</a>
+	</span>	
 </p>
-<p>
-	NEED TO ADD LINK TO CERTIFICATION PAGE HERE.
-</p>
+</blockquote>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 
 <!-- VEGBANK FOOTER -->
 @vegbank_footer_html_tworow@

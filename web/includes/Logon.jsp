@@ -19,7 +19,7 @@
   <tr>
     <td align="left">
       <font face="Georgia, Times New Roman, Times, serif" color="#531100">
-        Email:
+        e-Mail:
       </font>
     </td>
     <td align="left">
@@ -42,24 +42,22 @@
 
   <!-- Form Buttons -->
   <tr>
-    <td align="right">
-      <html:submit value="Submit"/>
-    </td>
-    <td align="left">
-      <html:reset/>
+    <td>&nbsp;</td>
+    <td>
+      <html:submit value="Login"/>
     </td>
   </tr>
   <tr>
     <td></td>
     <!-- Some usefull links -->
     <td>
-      <font face="Georgia, Times New Roman, Times, serif" color="red" size="1">
-        <a href="@forms_link@EmailPassword.jsp">Lost your password?</a>
+		<p>
+        &raquo; <a href="@forms_link@RegisterNewUser.jsp">Not yet a user? <b>Register</b> here.</a>
         <br/>
-        <a href="@forms_link@RegisterNewUser.jsp">Not yet a user? Register here.</a>
+        &raquo; <a href="/vegbank/Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">Use vegbank as a guest? Login here.</a>
         <br/>
-        <a href="/vegbank/Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">Use vegbank as a guest? Logon  here.</a>
-      </font>
+        &raquo; <a href="@forms_link@EmailPassword.jsp">Lost your password?</a>
+      </p>
     </td>
   </tr>
 

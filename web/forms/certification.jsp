@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-01-31 01:25:56 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2004-02-07 06:43:19 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
@@ -74,7 +74,7 @@
 					<bean:write name="reqAttribBean" property="phoneNumber"/>
 				</logic:notEqual>
 				<br/>
-				&nbsp;&raquo; <a href="/LoadUser.do">update info</a>
+				&nbsp;&raquo; <a href="/UserProfileAction.do">update info</a>
 			  </td>
 			</tr>
 			</table>

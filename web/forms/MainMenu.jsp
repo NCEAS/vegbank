@@ -12,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: farrell $'
-*  '$Date: 2003-11-12 22:14:43 $'
-*  '$Revision: 1.1 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-02-07 06:43:19 $'
+*  '$Revision: 1.2 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
 
 <HEAD>
  
-<TITLE>VegBank Actions <bean:write name="USER" scope="session" property="fullname"/></TITLE>
+<TITLE>VegBank Actions</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
  
 <meta http-equiv="Content-Type" content="text/html; charset=">
@@ -45,7 +45,7 @@
  
 <blockquote> 
   <h2 align="center"><font face="Georgia, Times New Roman, Times, serif"><br>
-    <span class="VegBank">Welcome to Vegbank  <bean:write name="USER" scope="session" property="fullname"/></span></font></h2>
+    <span class="VegBank">Welcome to Vegbank</span></font></h2>
   <h4 class="VegBank"><font face="Georgia, Times New Roman, Times, serif">Do you 
     wish to:</font></h4>
   <ul>
