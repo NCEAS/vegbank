@@ -311,7 +311,7 @@ Public Function frm_tagControls(blnOverwriteTags As Boolean, Optional blnDetailO
     frmCurr.FormHeader.Tag = putTagValue(frmCurr.FormHeader.Tag, "height", frmCurr.FormHeader.Height + 25, blnOverwriteTags)
   End If
   
-  Dim ctlCurr As Control, inttemp As Integer, strPropVal As String
+  Dim ctlCurr As Control, intTemp As Integer, strPropVal As String
   'get all controls
   
   Dim ctlsToGet
@@ -323,11 +323,11 @@ Public Function frm_tagControls(blnOverwriteTags As Boolean, Optional blnDetailO
   For Each ctlCurr In ctlsToGet
      Dim strCurrTag As String, strOneTag As String, strOldVal As String
      strCurrTag = ctlCurr.Tag
-     For inttemp = 1 To colPropsToRec.Count
+     For intTemp = 1 To colPropsToRec.Count
        'loop through props to record
-       strPropVal = frm_getCtlProp(ctlCurr, colPropsToRec(inttemp))
-       If strPropVal <> "" Then strCurrTag = putTagValue(strCurrTag, colPropsToRec(inttemp), strPropVal, blnOverwriteTags)
-     Next inttemp
+       strPropVal = frm_getCtlProp(ctlCurr, colPropsToRec(intTemp))
+       If strPropVal <> "" Then strCurrTag = putTagValue(strCurrTag, colPropsToRec(intTemp), strPropVal, blnOverwriteTags)
+     Next intTemp
   '  Debug.Print ctlCurr.Name & " TAG=" & strCurrTag
     ctlCurr.Tag = strCurrTag
   Next ctlCurr
@@ -336,26 +336,26 @@ exitTagControls:
 End Function
 
 Public Function frm_restoreObjFromTag(objCurr As Object)
-  Dim strCurrTag As String, strName As String, strVal As String, inttemp As Integer, strPropVal As String, colTags As New Collection
+  Dim strCurrTag As String, strName As String, strVal As String, intTemp As Integer, strPropVal As String, colTags As New Collection
      strCurrTag = objCurr.Tag
      'parse tag
      Set colTags = csv_parseCSVstring(strCurrTag, ",", False)
-     For inttemp = 1 To colTags.Count
+     For intTemp = 1 To colTags.Count
        'loop through props to write
        'skip empties
-       If colTags(inttemp) <> "" Then
-         If InStr(colTags(inttemp), ":") > 0 Then
+       If colTags(intTemp) <> "" Then
+         If InStr(colTags(intTemp), ":") > 0 Then
            'have :
-           strName = Left(colTags(inttemp), InStr(colTags(inttemp), ":") - 1)
-           strVal = Right(colTags(inttemp), Len(colTags(inttemp)) - InStr(colTags(inttemp), ":"))
+           strName = Left(colTags(intTemp), InStr(colTags(intTemp), ":") - 1)
+           strVal = Right(colTags(intTemp), Len(colTags(intTemp)) - InStr(colTags(intTemp), ":"))
            'set the property
      '      Debug.Print "would set: " & strName & "=" & strVal
            Call frm_SETCtlProp(objCurr, strName, strVal)
          Else ' no :
-           If debugVal > 0 Then Debug.Print "frm_restoreObjFromTag>> tag not right: " & colTags(inttemp)
+           If debugVal > 0 Then Debug.Print "frm_restoreObjFromTag>> tag not right: " & colTags(intTemp)
          End If 'yes/no :
        End If ' empty
-     Next inttemp
+     Next intTemp
       
    
 End Function
@@ -540,16 +540,16 @@ End Function
 
 Public Function dealWithUDefOnForms(strFormName As String, intNumShow As Integer, intMAx As Integer)
   'function shows or hides user defined fields and labels and interpretations on forms
-  Dim inttemp As Integer, strShow As String, strHide As String
+  Dim intTemp As Integer, strShow As String, strHide As String
   strShow = ""
   strHide = ""
-  For inttemp = 1 To intNumShow
-     strShow = strShow & "UserDef_interp" & inttemp & ",UserDef" & inttemp & ",Lbl_UserDef" & inttemp & ","
-  Next inttemp
-  For inttemp = intNumShow + 1 To intMAx
+  For intTemp = 1 To intNumShow
+     strShow = strShow & "UserDef_interp" & intTemp & ",UserDef" & intTemp & ",Lbl_UserDef" & intTemp & ","
+  Next intTemp
+  For intTemp = intNumShow + 1 To intMAx
   'these are to be hidden
-     strHide = strHide & "UserDef_interp" & inttemp & ",UserDef" & inttemp & ",Lbl_UserDef" & inttemp & ","
-  Next inttemp
+     strHide = strHide & "UserDef_interp" & intTemp & ",UserDef" & intTemp & ",Lbl_UserDef" & intTemp & ","
+  Next intTemp
   'trim , from end
   If strShow <> "" Then
      strShow = Left(strShow, Len(strShow) - 1)
@@ -674,7 +674,7 @@ Public Function ShowTheControls(strCtls As String, Optional blnShow As Integer, 
   Dim colCtls As New Collection
   
   Set colCtls = csv_parseCSVstring(strCtls, ",")
-  Dim inttemp As Integer, lngTemp As Long
+  Dim intTemp As Integer, lngTemp As Long
     Dim strDetHt As String
     'set max ht for detail
     strDetHt = getTagValue(frmCurr.Detail.Tag, "maxHt", True)
@@ -686,10 +686,10 @@ Public Function ShowTheControls(strCtls As String, Optional blnShow As Integer, 
       End If
     End If
 
-  For inttemp = 1 To colCtls.Count
+  For intTemp = 1 To colCtls.Count
 '-----------------have one control
     Dim ctlThisOne As Control
-    Set ctlThisOne = frmCurr.Controls(colCtls(inttemp))
+    Set ctlThisOne = frmCurr.Controls(colCtls(intTemp))
     If debugVal > 0 Then Debug.Print "showTheControls>> working with Ctl:" & ctlThisOne.Name & "  |Tag:" & ctlThisOne.Tag
     
     
@@ -769,7 +769,7 @@ Public Function ShowTheControls(strCtls As String, Optional blnShow As Integer, 
     End If
     If Not blnDontChngVis And blnShow <> -2 Then .Visible = blnShow
     End With
-  Next inttemp
+  Next intTemp
     
     'set detail ht to minimum allowed
    ' If IsNumeric(strDetHt) And strDetHt <> "" Then
@@ -867,6 +867,18 @@ End Function
 Public Function CloseMeAndOpen(strForm As String, Optional strWHERE As String)
   DoCmd.Close acForm, Screen.ActiveForm.Name
   DoCmd.OpenForm strForm, , , strWHERE
+End Function
+
+Public Function closeMeAfterRefresh(Optional strForm As String)
+  On Error GoTo errClose
+  If strForm = "" Then strForm = Screen.ActiveForm.Name
+  Forms(strForm).Refresh
+  DoCmd.Close acForm, strForm, acSavePrompt
+exitthis:
+  Exit Function
+errClose:
+  msgBox "error in closing this form:" & Chr(13) & Err.Description
+  Resume exitthis
 End Function
 
 Public Function copyControl(ctlBase As Control) As Control
@@ -1379,15 +1391,15 @@ End Function
 
 Public Function frm_height2Zero(strCtls As String, blnShow As Boolean, Optional strFrmName As String)
   'function shrinks all controls passed to 0 height and invisible, or if blnShow, back to origHt and Top
-  Dim colCtls As New Collection, inttemp As Integer, strHt As String, strTop As String, frmCurr As Form
+  Dim colCtls As New Collection, intTemp As Integer, strHt As String, strTop As String, frmCurr As Form
   If strFrmName = "" Then
     Set frmCurr = Screen.ActiveForm
   Else
     Set frmCurr = Forms(strFrmName)
   End If
   Set colCtls = csv_parseCSVstring(strCtls)
-  For inttemp = 1 To colCtls.Count
-    With frmCurr.Controls(colCtls(inttemp))
+  For intTemp = 1 To colCtls.Count
+    With frmCurr.Controls(colCtls(intTemp))
     strHt = getTagValue(Nz(.Tag), "Height", True)
     strTop = getTagValue(Nz(.Tag), "Top", True)
     If blnShow Then
@@ -1411,7 +1423,7 @@ Public Function frm_height2Zero(strCtls As String, blnShow As Boolean, Optional 
       .Visible = False
     End If 'blnShow
     End With
-  Next inttemp
+  Next intTemp
 End Function
 
 Public Function frm_passFilterOpenArgs(strField As String, Optional ByVal strFormName As String, Optional blnNoFilt As Boolean)

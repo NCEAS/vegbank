@@ -28,6 +28,10 @@ On Error GoTo Delete_Z_USER_ALL_Err
     'delete C2
     DoCmd.RunSQL "delete * from Z_USER_C2_plotNorm;"
     
+    
+    'delete e2
+    DoCmd.RunSQL "DELETE * FROM Z_USER_e2_StemClasses;"
+    
     'delete B
     DoCmd.RunSQL "DELETE * FROM Z_USER_B_SpecList;"
     'delete H
