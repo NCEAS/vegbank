@@ -47,7 +47,7 @@ VT=VegTest = vegtest database on vegtest.vegbank.org
 GYVB=vegbank database on gyro.nceas.ucsb.edu
 GYVT=vegtest database on gyro.nceas.ucsb.edu
 TKVB=vegbank database on tekka.nceas.ucsb.edu
-TKVB=vegtest database on tekka.nceas.ucsb.edu
+TKVT=vegtest database on tekka.nceas.ucsb.edu
 VegBr=VegBranch database, non-unique code as VegBranch exists locally on a user's computer- perhaps VegBranch versions could be registered, probably not useful.
 
 Additionally, table abbreviations must be registered and monitored to ensure uniqueness and they are as follows (case desired, but not sensitive):
@@ -69,7 +69,7 @@ taxonObservation	TO
 commClass		Cl
 referenceParty		RP
 
-PK# is self-explanatory, ranging from 1 to 999999999999999999999999999999999999999999999999999999999999999999999 or so
+PK# is self-explanatory, ranging from 1 to 2147483647
 
 Confirm is derived from data in tables, as follows [ALWAYS RULES: only alpha numeric (other chars deleted) shouldn't be too long, not longer than 15 chars initially]:
 plot			authorPlotCode
