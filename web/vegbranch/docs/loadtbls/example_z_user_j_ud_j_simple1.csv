@@ -1,0 +1,3 @@
+"UTbl","UNum","UserDefinedName","UserDefinedMetaData","UserDefinedCategory","UserDefinedType","TableName"
+"F","1","Mg_ppm","Magnesium parts per million as analyzed in Brookmont Labs in Minneaplis, MN","Soil, chemical attributes","Double","soilObs"
+"F","2","K_ppm","Potassium parts per million as analyzed in Brookmont Labs in Minneaplis, MN","Soil, chemical attributes","Double","soilObs"

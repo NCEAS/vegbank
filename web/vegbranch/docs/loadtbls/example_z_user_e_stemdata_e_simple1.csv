@@ -1,0 +1,5 @@
+"AuthorPlotCode","PLANTCode","stemDiameter","stemDiameterAccuracy","stemHeight","stemHeightAccuracy","StemTaxonArea","stemCount","StemCode","stemXPosition","stemYPosition","stemHealth"
+"plt1","QUAL","12.5","0.5","","","","1","RT-142","43.2","82.3",""
+"plt1","QUAL","7.5","0.5","","","","4","","","",""
+"plt1","ACRU","3.2","0.1","5.1","0.5","","1","AC-431","","","dead"
+"plt2","CATO","12.5","2.5","","","45","17","","","",""

@@ -1,0 +1,6 @@
+"plantCode","originalName","plantName","groupType","plantSyn1","plantSyn2","plantPartyComments"
+"ACRU","","Acer L. rubrum","","","","NOT real data, just comments on this example!  case1, normal: a code translates to a species name.  OriginalName not needed, as author's name is same as name used to lookup concept (plantName)"
+"QUAL","","Quercus alba","","","","NOT real data, just comments on this example!  case1, normal: a code translates to a species name"
+"CATO","","Carya tomentosa","","Carya alba","","NOT real data, just comments on this example!  case2, Synonym, updated taxonomy: Carya tomentosa is the author's name, which has been since updated to Carya alba, found in plantSyn1 field"
+"POTECS","Potentilla canadensis/simplex complex","Potentilla","union","Potentilla canadensis","Potentilla simplex","NOT real data, just comments on this example!  case3, Irregular taxa: 2 Potentilla species are combined for this taxon, they are listed in plantSyn1 and plantSyn2 and groupType is set, author's original name kept in originalName field"
+"CAREX","Carex sp.","Carex","","","","NOT real data, just comments on this example!  case3, Irregular taxa: carex sp. Matched to Carex (genus), originalName retained as Carex sp."
