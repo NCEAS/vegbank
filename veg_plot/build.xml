@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-05-07 02:38:25 $'
-  *     '$Revision: 1.21 $'
+  *     '$Date: 2003-05-16 03:36:53 $'
+  *     '$Revision: 1.22 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -383,15 +383,11 @@
           description="=> Remove all generated files">
     <delete dir="${build.dir}"/>
   
-		<ant dir="exp/client_installer" target="clean"/>
 		<ant dir="exp/database_access" target="clean"/>
 		<ant dir="exp/data-translators" target="clean"/>
 		<ant dir="exp/rmidatasource" target="clean"/> 
 		<ant dir="exp/services" target="clean"/>
-		<ant dir="exp/servlet" target="clean"/>
-		<ant dir="exp/vegclient" target="clean"/>
 		<ant dir="exp/xml-resource" target="clean"/>
-		<ant dir="exp/xml_to_sql" target="clean"/>
 	</target>
   
   <!-- ================================================================ -->
