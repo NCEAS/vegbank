@@ -7,8 +7,8 @@
 *    Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2002-12-03 22:43:16 $'
-*    '$Revision: 1.3 $'
+*   '$Date: 2002-12-03 23:21:32 $'
+*    '$Revision: 1.4 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -699,6 +699,7 @@ public class DBinsertPlotSource {
 			//THIS USES THE REQUESTURL METHOD
 			String protocol = "http://";
 			String host = this.getHostname();
+			System.out.println("DBinsertPlotSource > requiesting permission level from: " + host);
 			String s = null;
 			//THIS USES THE OTHER REQUEST URL METHOD
 			String servlet = "/framework/servlet/usermanagement";
@@ -2397,18 +2398,19 @@ public class DBinsertPlotSource {
 	}
 	
   /*
-   * method that returns the hostname that should be used for 
+   * method that returns the hostname that should be used for
+   * servlet communication such as getting the permission levels 
    */
 	private String getHostname() 
   {
-		try
+	try
     {
       if  ( !hostname.equals("localhost") ) 
       {
 		  	String propFile = "database";
 		  	ResourceBundle rb = ResourceBundle.getBundle(propFile);
 		  	hostname=rb.getString("hostname");
-		  }
+	}
     }
     catch (Exception e)
     {
