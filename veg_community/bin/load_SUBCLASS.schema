@@ -1,0 +1,13 @@
+input
+{
+file "SUBCLASS.txt";
+table "subclass";
+delimeter "|";
+string SubClassKey;
+string SubClassCode;
+string SubClassName;
+string SubClassDesc;
+string UpdateDate;
+string ClassKey;
+}
+

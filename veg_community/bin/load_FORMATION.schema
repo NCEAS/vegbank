@@ -1,0 +1,17 @@
+input {
+file "../data/ecoart/tables/FORMATION.txt";
+table "FORMATION";
+delimeter "|";
+string FormationKey;
+string FormationCode;
+string FormationName;
+string UpdateDate;
+string SubGroupKey;
+string Wetland;
+string Leaderesp;
+string Edition;
+string Edauthor;
+string AlliancesDef;
+}
+
+
