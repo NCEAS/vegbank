@@ -21,9 +21,9 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 20:04:16 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-01-07 21:44:24 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ public class EmailPasswordAction extends Action
 			
 				StringBuffer sb = new StringBuffer();
 				sb.append("Dear VegBank user,\n");
-				sb.append("Your password is: '"+passwd+"' \n\n");
+				sb.append("Your password is: "+passwd+"\n\n");
 				sb.append("VegBank Support Team\n\n");
 				sb.append("Email: help@vegbank.org\n");
 				sb.append("Website: http://vegbank.org\n");
