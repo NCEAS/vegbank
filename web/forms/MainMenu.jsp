@@ -12,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-08-27 19:30:27 $'
-*  '$Revision: 1.8 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-10-27 03:43:29 $'
+*  '$Revision: 1.9 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@
 
 
   <h1 align="center">
-    Welcome to Vegbank</h1>
-  <span class="headequiv sizelarge">Here are your options:</span>	
+    Welcome to VegBank</h1>
+  <span class="headequiv sizelarge"></span>	
 	         
            
 	<TABLE  cellpadding="0" cellspacing="0" border="0">
@@ -59,12 +59,14 @@
 	   
 	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@magnglas.png" /> </TD><TD>	       
   <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
-  
-     
+
       <span class="headequiv sizelarger">Search for <a href="@general_link@plots.html">Plots</a></span>
-      </td><td valign="middle"> 
-        <p>&raquo; <a href="@forms_link@plot-query-simple.jsp">Simple 3-in-1 query</a>  &raquo; 
-        <a href="@plotquery_page@">Advanced query</a> </p>
+        <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+		&raquo; <a href="@forms_link@metasearch.jsp">Metasearch</a>
+        <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+		&raquo; <a href="@plotquery_page@">Advanced query</a>
+        <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+		&raquo; <a href="@forms_link@plot-query-simple.jsp">Simple 3-in-1 search</a>
       </td>
 	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
@@ -91,6 +93,8 @@
     </td> <td valign="middle"> <p>e.g. Methods, People, Projects, References</p></td></tr>
 	  </table>
 	  </TD></TR>
+	<TR valign="middle"><TD align="center" valign="middle">&nbsp;</TD><TD></TD>
+
 	 <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
 		  	   <TR><TD colspan="1" bgcolor="#CCCCCC" align="center"><span class="greytext">My Preferences</span></TD><td/></TR>
 	 <TR valign="middle"><TD align="center"><img src="@images_link@users.png" /></TD><TD>
@@ -115,6 +119,8 @@
 		</td> </tr>
 	  </table>
 	      </TD></TR>
+	<TR valign="middle"><TD align="center" valign="middle">&nbsp;</TD><TD></TD>
+
 	        <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
 	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Info</span></TD><td/></TR>
 	   
@@ -145,6 +151,8 @@
       </td> </tr>
 	  </table>
 	  </TD></TR>
+	<TR valign="middle"><TD align="center" valign="middle">&nbsp;</TD><TD></TD>
+
 	  	<TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
 		 <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Add Data</span></TD><td/></TR>
  
