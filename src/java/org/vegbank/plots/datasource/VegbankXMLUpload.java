@@ -6,8 +6,8 @@ package org.vegbank.plots.datasource;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-04 06:06:18 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2003-11-04 10:33:50 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ public class VegbankXMLUpload
 	}
 
 
-	public void processXMLFile( File pFile ) throws IOException, SAXException
+	public void processXMLFile( String xmlFileName ) throws IOException, SAXException
 	{
 		LogUtility.log( "VegbankXMLUpload: Validation on: " + this.validate);
 		LogUtility.log( "VegbankXMLUpload: Rectification on: " + this.rectify);
@@ -92,18 +92,19 @@ public class VegbankXMLUpload
 		SAXValidationErrorHandler errorHandler = new SAXValidationErrorHandler(errors);
 		SAX2DBContentHandler contentHandler = new SAX2DBContentHandler(errors);
 		
+		File xmlFile = new File(xmlFileName);
+		
 		if ( validate )
-		{
-			
+		{	
 			xr.setErrorHandler( errorHandler );
-			xr.parse( this.getInputSource(pFile) );
+			xr.parse( this.getInputSource(xmlFile) );
 			LogUtility.log( "This file is valid: " + errorHandler.isValid() );
 		}
 		
 		if ( load && errorHandler.isValid() )
 		{
 			xr.setContentHandler( contentHandler );
-			xr.parse( this.getInputSource(pFile));
+			xr.parse( this.getInputSource(xmlFile));
 		}
 		else 
 		{
@@ -172,7 +173,7 @@ public class VegbankXMLUpload
 		}
 		else
 		{
-			vbUpload.processXMLFile(new File(fileName));
+			vbUpload.processXMLFile(fileName);
 			
 			System.out.println("REPORT:\n");
 			System.out.println(vbUpload.getErrors().getSummaryMessage());
@@ -677,6 +678,13 @@ public class VegbankXMLUpload
 		}
 	}
 	
+	/**
+	 * 
+	 * @author farrell
+	 *
+	 * Takes a Hashtable representation of the XML to be loaded 
+	 * and writes it to the database.
+	 */
 	public class LoadTreeToDatabase
 	{
 
@@ -806,7 +814,9 @@ public class VegbankXMLUpload
 					"SELECT " + getPKName(tableName) +" from "+tableName+" where " 
 					+ Utility.joinArray(fieldEqualsValue.toArray(), " and ")
 				);
-
+				
+				sb.append(this.getSQLNullValues(tableName, fieldValueHash));
+				
 				Statement query = dbConn.createStatement();
 				ResultSet rs = query.executeQuery(sb.toString());
 				while (rs.next()) 
@@ -817,11 +827,12 @@ public class VegbankXMLUpload
 			catch ( SQLException se ) 
 			{      
 				LogUtility.log("LoadTreeToDatabase: Caught SQL Exception: " + se.getMessage());
+				LogUtility.log("LoadTreeToDatabase:  SQL : " + sb.toString() );
 				se.printStackTrace();
 				commit = false;
 				errors.AddError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
 			}
-			LogUtility.log("LoadTreeToDatabase:  Query: " + sb.toString());
+			//LogUtility.log("LoadTreeToDatabase:  Query: " + sb.toString());
 			return PK;
 		}
 		
@@ -911,7 +922,7 @@ public class VegbankXMLUpload
 			while( tables.hasMoreElements()  )
 			{
 				Hashtable table = (Hashtable) tables.nextElement();
-				LogUtility.log("LoadTreeToDatabase: " + tableName + " : " + table);
+				//LogUtility.log("LoadTreeToDatabase: " + tableName + " : " + table);
 				addForeignKey(table, fKName, fKValue);
 				insertTable(tableName, table);
 			}
@@ -934,7 +945,7 @@ public class VegbankXMLUpload
 		 */
 		private int insertTable( String tableName, Hashtable fieldValueHash )
 		{	
-			LogUtility.log("LoadTreeToDatabase : insert: " + tableName);
+			//LogUtility.log("LoadTreeToDatabase : insert: " + tableName);
 			
 			int PK = 0;
 
@@ -954,10 +965,12 @@ public class VegbankXMLUpload
 			addForeignKey(fieldValueHash, "reference_ID", referenceId);
 			
 			// Check if this already exists in the database
-			// TODO: This is unlikely to be valid ... need per table rules for identicalness
-
+			if ( this.tableExists( tableName, fieldValueHash) )
+			{
+				return this.getTablePK(tableName, fieldValueHash);
+			}
 			
-			LogUtility.log("LoadTreeToDatabase: INSERT: " + tableName);
+			//LogUtility.log("LoadTreeToDatabase: INSERT: " + tableName);
 			PK = this.getNextId(tableName);
 			
 			// Some tables have accessionCodes that need contructing

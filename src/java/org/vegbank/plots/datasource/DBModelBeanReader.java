@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-31 01:48:41 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-11-04 10:33:50 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,7 +138,7 @@ public class DBModelBeanReader
 		while ( strata.hasNext())
 		{
 			Stratum stratum = (Stratum) strata.next();
-			System.out.println(">> Ignore when searching through Stratum " + ignoreObjects);
+			//System.out.println(">> Ignore when searching through Stratum " + ignoreObjects);
 			getRelatedObjectsFromDB(Stratum.PKNAME, stratum.getStratum_id(), stratum );
 
 		}
@@ -344,7 +344,7 @@ public class DBModelBeanReader
 		while ( strata.hasNext())
 		{
 			Stratum stratum = (Stratum) strata.next();
-			System.out.println(">> Ignore when searching through Stratum " + ignoreObjects);
+			//System.out.println(">> Ignore when searching through Stratum " + ignoreObjects);
 			getRelatedObjectsFromDB(Stratum.PKNAME, stratum.getStratum_id(), stratum );
 
 		}
@@ -385,7 +385,7 @@ public class DBModelBeanReader
 			try
 			{
 				String keytoUse = this.getFKNameInTable(key, tableName);
-				System.out.println("getObjectsFromDataBase(" + tableName + " , " + keytoUse + " , " + keyValue + ")");
+				//System.out.println("getObjectsFromDataBase(" + tableName + " , " + keytoUse + " , " + keyValue + ")");
 				List objectsToAdd =  getObjectsFromDataBase(tableName, keytoUse, keyValue);
 				Object[] parameters = {objectsToAdd};
 				method.invoke(bean, parameters);
@@ -439,7 +439,7 @@ public class DBModelBeanReader
 		String SQLQuery = 
 			"SELECT " + PKName + " FROM " + table + " WHERE " + FKName + " = " + FKValue;
 		
-		System.out.println("]]] "  + SQLQuery);
+		//System.out.println("]]] "  + SQLQuery);
 		
 		Statement selectStatement = con.createStatement();
 		ResultSet rs = selectStatement.executeQuery(SQLQuery);
@@ -483,7 +483,7 @@ public class DBModelBeanReader
 		{
 			result = Plot.PARENT_ID;
 		}
-		System.out.println(tableName + " X " + FKName + "  = ???? " + result);
+		//System.out.println(tableName + " X " + FKName + "  = ???? " + result);
 		return result;
 	}
 
@@ -569,7 +569,7 @@ public class DBModelBeanReader
 					String value = (String) hmap.get(fieldName);
 					
 					// DO NOT GET OBJECTS WITH INVERTED RELATIONSHIP
-					System.out.println("Checking inverted "  + propertyName);
+					//System.out.println("Checking inverted "  + propertyName);
 					if ( ! bean.isInvertedRelationship( propertyName ) )
 					{	
 						// Need to create an object for each Set Object Method

@@ -25,8 +25,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-11-03 18:45:54 $'
- * '$Revision: 1.21 $'
+ * '$Date: 2003-11-04 10:33:50 $'
+ * '$Revision: 1.22 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -559,5 +559,19 @@ public class Utility
 		
 		String result = writer.toString();
 		return result;
+	}
+	
+	/**
+	 * Convience method to Uppercase first char of a String and lower case
+	 * the rest 
+	 * @param stringToCapitalize
+	 * @return
+	 */
+	public static String upperCaseFirstChar(String stringToCapitalize )
+	{
+		StringBuffer result = new StringBuffer();
+		result.append( stringToCapitalize.substring(0,1).toUpperCase() );
+		result.append( stringToCapitalize.substring(1).toLowerCase() );
+		return result.toString();
 	}
 }

@@ -30,8 +30,8 @@ import org.vegbank.plots.datasource.VegbankXMLUpload.LoadingErrors;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-19 22:27:48 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-11-04 10:33:50 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ public class UploadPlotAction extends Action
 	private LoadingErrors uploadVegbankXML(String savedFileName) throws Exception
 	{
 		VegbankXMLUpload xmlUpload = new VegbankXMLUpload();
-		xmlUpload.processXMLFile(new File(savedFileName));
+		xmlUpload.processXMLFile(savedFileName);
 		return xmlUpload.getErrors();
 	}
 
