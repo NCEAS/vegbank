@@ -6,6 +6,7 @@ import javax.servlet.http.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
+import java.util.Date;
 import java.math.*;
 import java.net.URL;
 import org.w3c.dom.Node;
@@ -29,8 +30,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-08-02 14:29:51 $'
- *  '$Revision: 1.40 $'
+ *  '$Date: 2002-08-09 19:43:23 $'
+ *  '$Revision: 1.41 $'
  */
 
 
@@ -692,6 +693,10 @@ public class DataSubmitServlet extends HttpServlet
 	
 	/**
 	 * method that updates the plant usage / status page 
+	 * @param emailAddress -- the email of the vegbank user
+	 * @param longName -- the log, or scientific name of the plant
+	 * @param shortName -- the short or common name of the plant
+	 * @param code -- the code of the plant
 	 */
 	 private void updatePlantStatusUsagePage(String emailAddress, String longName, 
 	 String shortName, String code)
@@ -726,9 +731,12 @@ public class DataSubmitServlet extends HttpServlet
 			replaceHash.put("plantPartySurName", ""+surName);
 			replaceHash.put("plantPartyInstitution", ""+institution );
 			replaceHash.put("plantPartyEmailAddress", ""+emailAddress );
+			// UPDATE THE DATES B/C THEY ARE REQUIRED
+			String curDate = this.getCurrentDate();
+			replaceHash.put("statusStartDate", curDate);
+			replaceHash.put("statusStopDate", curDate);
 			
 			
-			//replaceHash.put("", );
 			su.filterTokenFile(plantStatusUsageTemplate, plantValidationForm, replaceHash);
 			// the calling method will redirect the browser
 		}
@@ -738,6 +746,28 @@ public class DataSubmitServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	 }
+
+	/*
+	 * method that retuns the date in a format that can be accepted 
+	 * by the RDBMS and that is like: Aug 9, 2002
+	 */
+	 private String getCurrentDate()
+	 {
+	 	String s = "";
+		 try
+		 {
+			Date now = new Date();  //Set Date variable now to the current date and time
+			DateFormat med = DateFormat.getDateInstance (DateFormat.MEDIUM);
+			s = med.format(now);
+			//System.out.println ("MEDIUM: " + s);
+		 }
+			catch(Exception e )
+			{
+			  e.printStackTrace();
+			}
+			return(s);
+	 }
+	 
 	
 	/**
 	 * method that handles the updating of the plant concept page
