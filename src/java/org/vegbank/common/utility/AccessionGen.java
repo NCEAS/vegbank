@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-10-30 23:35:46 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-10-31 01:43:37 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -186,7 +186,7 @@ public class AccessionGen {
 	/**
 	 * Generates an accession code. ex:  VB.TC.126.AKMP
 	 * @param db - database code
-	 * @param table - full name of the table to be abbreviated
+	 * @param table - full name of the table to be abbreviated  
 	 * @param pk - primary key
 	 * @param decoded - common name to be encoded
 	 */
@@ -197,8 +197,8 @@ public class AccessionGen {
 		// database
 		accCode.append(db.toUpperCase()).append(".");
 
-		// table
-		String tableCode = (String)tableCodes.get(table);
+		// table -- do case insensitive lookup
+		String tableCode = (String)tableCodes.get( table.toLowerCase() );
 		if (tableCode == null) {
 			tableCode = "??";
 		}
