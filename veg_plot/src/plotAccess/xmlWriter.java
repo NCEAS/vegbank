@@ -286,6 +286,9 @@ public class  xmlWriter
 				sb.append("		<concatenatedName>"+currentTaxonHash.get("concatenatedName")+"</concatenatedName> \n");
 				sb.append("		<status>"+currentTaxonHash.get("status")+"</status> \n");
 				sb.append("		<acceptedSynonym>"+currentTaxonHash.get("acceptedSynonym")+"</acceptedSynonym> \n");
+				sb.append("		<commonName>"+currentTaxonHash.get("commonName")+"</commonName> \n");
+				sb.append("		<startDate>"+currentTaxonHash.get("startDate")+"</startDate> \n");
+				sb.append("		<stopDate>"+currentTaxonHash.get("stopDate")+"</stopDate> \n");
 				sb.append("	</name> \n");
 				sb.append("</taxon> \n");
 				//System.out.println( taxaResults.elementAt(i) );
