@@ -121,6 +121,13 @@
         <include name="*.xsl"/>
       </fileset>
     </copy>
+    <mkdir dir="${static_xmlserver}/util"/>
+    <copy todir="${static_xmlserver}/util">
+      <fileset dir="./">
+        <include name="csvtools.xsl" />
+        <include name="htmltable2csv.xsl" />
+      </fileset>
+    </copy>
     <copy todir="${static_xmlserver}" flatten="true" filtering="yes">
       <fileset dir="./dataxml">
         <include name="*.html"/>
