@@ -10,6 +10,8 @@ import java.util.*;
 import java.math.*;
 import java.net.URL;
 
+import xmlresource.utils.transformXML;
+
 
 /**
  * This class allows the user to view the summary of the resultset produced by
@@ -40,7 +42,9 @@ private String resultType=null;
 private String servletDir= null; //like: /opt/jakarta/harris/servlet
 private String servletPath=null; //like: /harris/servlet
 
-
+//access the method to transfor the xml document and retrieve the string writer
+transformXML m = new transformXML();
+			
 /** Handle "POST" method requests from HTTP clients */
 public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException 
@@ -176,23 +180,18 @@ else
 			}
 
 			//access the method to transfor the xml document and retrieve the string writer
-			transformXML m = new transformXML();
-			m.getTransformed(servletDir+"summary.xml", 
-			styleSheet);
+			m.getTransformed(servletDir+"summary.xml", styleSheet);
 			StringWriter transformedData=m.outTransformedData;
 
-			//pass the String writer to the utility class to convert the StringWriter to an array
-			utility u =new utility();
-			u.convertStringWriter(transformedData);
-			String transformedString[]=u.outString;  
-			int transformedStringNum=u.outStringNum; 
-			//print the list of plots to the browser as a summary and then
-			//read the further requests such as expanded species, or download
-			for (int ii=0;ii<u.outStringNum; ii++) 
+			Vector contents = this.convertStringWriter(transformedData);
+	
+			for (int ii=0;ii< contents.size() ; ii++) 
 			{
-				out.println(u.outString[ii]+"");
+				out.println( (String)contents.elementAt(ii) );
+				///out.println(u.outString[ii]+"");
 			}
-		}  //end try
+	
+		} 
 		catch( Exception e ) 
 		{
 				System.out.println("servlet failed in: "
@@ -200,5 +199,45 @@ else
 			+e.getMessage());
 		}
 	}
+	
+	
+	/**
+	 *  this method will take, as input a StringWriter object and 
+	 *  return a Vector containing the contents of the StringWriter
+	 * @param inputStringWriter -- the input StringWriter (in this cas probably
+	 * from an xslt transform
+	 * @return v -- a vector with each line segment as an element
+	 */
 
-}
+	public Vector convertStringWriter(StringWriter inputStringWriter)
+	{
+		Vector v = new Vector();
+		try 
+		{
+			// a string inwhich to convert the String Writer to
+			String transformedString=null;  
+			//do the conversion to the string
+			transformedString  = inputStringWriter.toString().trim();  
+			//the buffered reader
+			BufferedReader br = new BufferedReader(new StringReader(transformedString)); //speed up the string parsing with a buffered reader
+
+			//read each line
+			String line; // temporary string to contain the lines from the transformedData 
+			int lineCnt=0; //running line counter
+			while ((line = br.readLine()) !=null ) 
+			{
+				v.addElement( line.trim() );
+				lineCnt++;  //increment the line
+			}
+			//System.out.println("###### number of lines transformed: "+lineCnt);
+
+		} 
+		catch( Exception e ) 
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return(v);
+	}
+
+	}
