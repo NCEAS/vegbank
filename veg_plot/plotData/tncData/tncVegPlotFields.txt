@@ -1,0 +1,104 @@
+#these are the fields in the vegetation plots database
+
+#Table: PLOTS
+Plot Code
+SubPlot
+SubPlot Parent Code
+Air Photo Number
+Polygon Code
+Provisional Community Name
+Classified Community Name
+TNC Elcode
+TNC EONum Suffix
+Location Code
+Sublocation
+Quad Name
+Quad Code
+Coord System
+GPS File
+GPS Techniques
+Field UTM X
+Field UTM Y
+Corrected UTM X
+Corrected UTM Y
+UTM Zone
+Field Lat
+Field Long
+Corrected Lat
+Corrected Long
+Survey Date
+Surveyors
+Plot Directions
+X Dimension
+Y Dimension
+Plot Shape
+Photos
+Roll Number
+Frame Number
+Permanent
+Representativeness
+Elevation
+Elevation Units
+Slope
+Aspect
+Topo Position
+Landform
+Surficial Geology
+Cowardin System
+Hydro Regime
+Salinity/Halinity
+Hydrology Evidence
+Environmental Comments
+Landscape Comments
+Soil Taxon/Description
+Soil Texture
+Soil Depth
+Soil Depth Units
+Soil Drainage
+% Bedrock
+% Large Rocks
+% Small Rocks
+% Sand
+% Litter, Duff
+% Wood
+% Water
+% Bare Soil
+% Other
+% Other Description
+Leaf Phenology
+Leaf Type
+Physio Class
+T1 Hgt
+T1 Cover
+T2 Hgt
+T2 Cover
+T3 Hgt
+T3 Cover
+S1 Hgt
+S1 Cover
+S2 Hgt
+S2 Cover
+S3 Hgt
+S3 Cover
+H Hgt
+H Cover
+N Hgt
+N Cover
+V Hgt
+V Cover
+E Hgt
+E Cover
+Other Measure1 Defined
+Other Measure2 Defined
+Animal Use Evidence
+Disturbance Comments
+Other Comments
+Update
+User
+Species Counter
+Optional Fields Defined
+Opt1
+Opt2
+Opt3
+Opt4
+Opt5
