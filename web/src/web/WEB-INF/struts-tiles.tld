@@ -10,7 +10,7 @@
 <taglib>
 <tlibversion>1.0</tlibversion>
 <jspversion>1.1</jspversion>
-<shortname>Tiles Tag Library</shortname>
+<shortname>tiles</shortname>
 <uri>http://jakarta.apache.org/struts/tags-tiles</uri>
 <tag>
 <name>insert</name>

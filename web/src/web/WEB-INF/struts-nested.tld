@@ -49,7 +49,7 @@
 <tag>
 <name>define</name>
 <tagclass>org.apache.struts.taglib.nested.bean.NestedDefineTag</tagclass>
-<teiclass>org.apache.struts.taglib.bean.DefineTei</teiclass>
+<teiclass>org.apache.struts.taglib.nested.bean.NestedDefineTei</teiclass>
 <bodycontent>empty</bodycontent>
 <attribute>
 <name>id</name>
