@@ -29,7 +29,7 @@
  </head>
  <!--access to the fileDownload servlet-->
  <body bgcolor="#ffffcc">
-  <form action="/framework/servlet/fileDownload" method="post">
+  <form action="/framework/servlet/fileDownload" method="GET">
    <br>
     
    <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -227,27 +227,31 @@
             
           </td>
          </tr>
-         <tr>
+         
+				 <tr>
           <td height="20" valign="Top" width="5" align="Right">
-           <input name="aggregationType" type="checkbox" value=
-           "singleCompress"> 
-          </td>
-          <td valign="center" width="200">
-           <img alt="Single compressed file" hspace="2" src=
-           "@image_server@icon_cat09.gif" title="Personal"> single compressed file
-          </td>
-         </tr>
-         <tr>
-          <td height="20" valign="Top" width="5" align="Right">
-           <input name="aggregationType" type="checkbox" value=
-           "multipleZipped"> 
+           <input name="aggregationType" type="radio" value="nocompression"> 
           </td>
           <td valign="center" width="200">
            <img alt="multiple zipped files" hspace="2" src=
-           "@image_server@icon_cat03.gif" title="Business"> multiple zipped files
+           "@image_server@icon_cat03.gif" > No Compression
           </td>
          </tr>
-         <tr>
+         
+				 
+				 <tr>
+          <td height="20" valign="Top" width="5" align="Right">
+           <input name="aggregationType" type="radio" value="compress"> 
+          </td>
+          <td valign="center" width="200">
+           <img alt="Single compressed file" hspace="2" src=
+           "@image_server@icon_cat09.gif"> Compress File
+          </td>
+         </tr>
+         
+				
+				 <!--
+				 <tr>
           <td height="20" valign="Top" width="5" align="Right">
            <input name="aggregationType" type="checkbox" value="both"> 
           </td>
@@ -256,6 +260,8 @@
            src="@image_server@icon_cat31.gif" title="Important"> both
           </td>
          </tr>
+				 -->
+				 
         </tbody>
        </table>
       </td>
