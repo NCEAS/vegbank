@@ -43,7 +43,7 @@
 <logic:notEmpty name="observation-BEAN">
 <bean:write name="observation-BEAN" property="count_observations" />
 <logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-<a href="@get_link@std/observation/<bean:write name='covermethod_pk' />?where=where_covermethod_pk">View observations</a>
+<a href="@get_link@simple/observation/<bean:write name='covermethod_pk' />?where=where_covermethod_pk">View observations</a>
 </logic:notEqual>
 </logic:notEmpty>
 

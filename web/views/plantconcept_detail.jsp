@@ -47,7 +47,7 @@
 <logic:notEmpty name="observation-BEAN">
 <bean:write name="observation-BEAN" property="count_observations" />
 <logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-<a href="@get_link@summary/observation/<bean:write name='concId' />?where=where_plantconcept_observation_complex">View 
+<a href="@get_link@simple/observation/<bean:write name='concId' />?where=where_plantconcept_observation_complex">View 
   observation(s)</a>
 </logic:notEqual>
 </logic:notEmpty>

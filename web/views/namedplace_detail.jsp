@@ -44,7 +44,7 @@
 <logic:notEmpty name="plot-BEAN">
 <bean:write name="plot-BEAN" property="count_places" />
 <logic:notEqual name="plot-BEAN" property="count_places" value="0">
-<a href="@get_link@summary/observation/<bean:write name='namedplace_pk' />?where=where_place_complex">View observations</a>
+<a href="@get_link@simple/observation/<bean:write name='namedplace_pk' />?where=where_place_complex">View observations</a>
 </logic:notEqual>
 </logic:notEmpty>
 </td></tr>
