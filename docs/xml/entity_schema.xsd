@@ -177,7 +177,16 @@
   <xs:element name="attUnits" type="xs:string"/>
   <xs:element name="NS_column" type="xs:string"/>
   <xs:element name="VB_column" type="xs:string"/>
-  <xs:element name="attFKTranslationSQL" type="xs:string"/>
+  <xs:element name="attFKTranslationSQL">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="addLink" type="xs:boolean"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
   <!-- document author  -->
   <xs:element name="entity">
     <xs:complexType>
@@ -207,7 +216,7 @@
       <xs:simpleContent>
         <xs:extension base="xs:decimal">
           <xs:attribute name="name" type="xs:string"/>
-          <xs:attribute name="useClass" type="xs:string" />
+          <xs:attribute name="useClass" type="xs:string"/>
           <xs:attribute name="suffix" type="xs:string"/>
           <xs:attribute name="prefix" type="xs:string"/>
         </xs:extension>
