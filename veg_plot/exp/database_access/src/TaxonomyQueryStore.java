@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-28 15:23:20 $'
- * '$Revision: 1.8 $'
+ *     '$Date: 2002-03-01 02:20:24 $'
+ * '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -155,7 +155,7 @@ import databaseAccess.*;
 						stopDate);	
 						
 					returnVector.addElement(h);
-					System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
+					//System.out.println("TaxonomyQueryStore > hash: " + h.toString()   );
 				}
 			
 				//remember to close the connections etc..
