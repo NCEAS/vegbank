@@ -25,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-03 21:34:13 $'
- *  '$Revision: 1.19 $'
+ *  '$Date: 2002-04-04 00:08:29 $'
+ *  '$Revision: 1.20 $'
  */
 
 
@@ -88,6 +88,12 @@ public class DataSubmitServlet extends HttpServlet
 		PrintWriter out = response.getWriter();
 		try 
 		{
+			//handle the cookies -- the cookies should start with the user name
+			//which will be used to register the query and results documents 
+			//with the dataexcahnge servlet
+			userName = getCookieValue(request);
+			System.out.println("DataSubmitServlet > current user: " +  userName   );
+			
 			Hashtable params = new Hashtable();
 			params = su.parameterHash(request);
 			// there will be cases where there will be multiple parameters 
@@ -220,15 +226,15 @@ public class DataSubmitServlet extends HttpServlet
 						String values[] = request.getParameterValues(name);
 						if (values != null) 
 						{
-							for (int i=0; i<values.length; i++) 
+							for (int i=0; i < values.length; i++) 
 							{
 								String thisPlot = values[i];
 								System.out.println("DataSubmitServlet > requesting an rmi plot insert: '"+values[i]+"'" );
 								//insert the plot over the rmi system
 								String result = rmiClient.insertPlot(thisPlot);
-								String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i);
+								String receipt = getPlotInsertionReceipt(thisPlot, result, receiptType, i, values.length);
 								sb.append( receipt );
-								
+								System.out.println("DataSubmitServlet > requesting a receipt: '"+i+"' out of: " + values.length );
 							}
 						}
 					}
@@ -271,82 +277,72 @@ public class DataSubmitServlet extends HttpServlet
 	 * @param results -- the string results that have been returnd by the loader
 	 *		which is the rmi client -- this is strictly an XML document
 	 * @param receiptType -- 'minimal' or 'extensive'
-	 * @param plotNumber -- the current number of the plots that to be inserted
+	 * @param curPlotNumber -- the current number of the plots that to be inserted
 	 * 	- if this is the first then the xml 1.0 header will be attached here
+	 * 		this pllt should start at zero
+	 * @param totalPlotNumber -- the total number of plots for which a receipt
+	 *  will be requested for
 	 */
 	 private String getPlotInsertionReceipt(String plot, String results, 
-	 String receiptType, int plotNumber)
+	 String receiptType, int curPlotNumber, int totalPlotNumber)
 	 {
-	 	StringBuffer sb = new StringBuffer();
+	 		StringBuffer sb = new StringBuffer();
+			System.out.println("DataSubmitServlet > currentPlot: " + curPlotNumber +" total number: "+ totalPlotNumber );
 	 		try
 			{
-				parser = new XMLparse();	
-				Document doc = parser.getDocumentFromString(results);
-				Vector accessionNumber = parser.getValuesForPath(doc, "/plotInsertion/accessionNumber");
-				Vector latitude = parser.getValuesForPath(doc, "/plotInsertion/latitude");
-				Vector longitude = parser.getValuesForPath(doc, "/plotInsertion/longitude");
-				
-				String plotName = rmiClient.getAuthorPlotCode(plot);
-				String state = rmiClient.getState(plot);
-				String community= rmiClient.getCommunityName(plot);
-				
-				if ( this.browserType.equals("msie") )
+				if (receiptType.equals("extensive") ) 
 				{
-					if ( plotNumber == 0 )
+					if ( this.browserType.equals("msie") )
 					{
-						sb.append("<?xml version=\"1.0\"?>");
+						//if there is only one plot for which a receipt will be prepared
+						if ( curPlotNumber == 0 && (totalPlotNumber == 1) )
+						{
+							sb.append("<?xml version=\"1.0\"?> \n");
+							sb.append("<plotInsertionReceipt> \n");
+							sb.append(results);
+							sb.append("</plotInsertionReceipt>");
+						}
+						else if ( curPlotNumber == 0 && (totalPlotNumber > 1)  )
+						{
+							sb.append("<?xml version=\"1.0\"?> \n");
+							sb.append("<plotInsertionReceipt> \n");
+							sb.append(results);
+						}
+						else if ( (curPlotNumber+1) == (totalPlotNumber) )
+						{
+							System.out.println("DataSubmitServlet > closing the receipt tags");
+							sb.append(results);
+							sb.append("</plotInsertionReceipt>");
+						}
+						else
+						{
+							sb.append( results );
+						}
 					}
-					sb.append(results);
+					else
+					{
+						//the loading results 
+						// first transform the xml that is returned as the results string
+						// into an html body
+						transformXML trans  = new transformXML();
+						String tr = trans.getTransformedFromString(results, "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl");
+						sb.append("<table> \n");
+						sb.append(" <tr> \n");	
+						sb.append(" 	<td> Loading Results </td> \n");	
+						sb.append(" </tr> \n");	
+						sb.append("</table> \n");
+						sb.append(tr);
+						sb.append("<br>");
+					}
 				}
-				
+				else if (receiptType.equals("minimal") ) 
+				{
+					String s = getMinimalInsertionReceipt(plot, results);
+					sb.append( s );
+				}
 				else
 				{
-					sb.append("<table> \n");
-					sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
-					sb.append(" 	<td> Plot Name: </td> \n");	
-					sb.append(" 	<td> "+plotName+" </td> \n");
-					sb.append(" </tr> \n");
-				
-					//accession number
-					sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
-					sb.append(" 	<td> VegBank Identifier: </td> \n");	
-					sb.append(" 	<td> "+accessionNumber.toString()+" </td> \n");
-					sb.append(" </tr> \n");
-				
-					//the state
-					sb.append(" <tr> \n");	
-					sb.append(" 	<td> State </td> \n");	
-					sb.append(" 	<td> "+state+" </td> \n");	
-					sb.append(" </tr> \n");	
-			
-					//the locations
-					sb.append(" <tr> \n");	
-					sb.append(" 	<td> Latitude:  </td> \n");	
-					sb.append(" 	<td> "+latitude+" </td> \n");	
-					sb.append(" </tr> \n");	
-					sb.append(" <tr> \n");	
-					sb.append(" 	<td> Longitude:  </td> \n");	
-					sb.append(" 	<td> "+longitude+" </td> \n");	
-					sb.append(" </tr> \n");	
-			
-					//the community
-					sb.append(" <tr> \n");	
-					sb.append(" 	<td> Commmunity: </td> \n");	
-					sb.append(" 	<td> "+community+" </td> \n");	
-					sb.append(" </tr> \n");	
-
-					//the loading results 
-					// first transform the xml that is returned as the results string
-					// into an html body
-					transformXML trans  = new transformXML();
-					String tr = trans.getTransformedFromString(results, "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl");
-					sb.append(" <tr> \n");	
-					sb.append(" 	<td> Loading Results </td> \n");	
-					//sb.append(" 	<td> "++" </td> \n");	
-					sb.append(" </tr> \n");	
-					sb.append("</table> \n");
-					sb.append(tr);
-					sb.append("<br>");
+					System.out.println("DataSubmitServlet > unrecognized receipt type: " + receiptType );
 				}
 			}
 			catch( Exception e ) 
@@ -357,6 +353,75 @@ public class DataSubmitServlet extends HttpServlet
 			return( sb.toString() );
 	 }
 	 
+	 /**
+	  * method that returns the most salient attributes of a plot that were
+		* loaded to the database as an html table -- this method will be called when
+		* the user request a 'minimal' receipt for the plots that they are attempting
+		* to load to the vegbank
+		* @param plot  -- the string name of the plot as it used in the users archive
+	  * @param results -- the string results that have been returnd by the loader
+	  *		which is the rmi client -- this is strictly an XML document
+		*
+		*/
+		private String getMinimalInsertionReceipt(String plot, String results)
+		{
+			StringBuffer sb = new StringBuffer();
+			try
+			{
+				parser = new XMLparse();	
+				Document doc = parser.getDocumentFromString(results);
+				Vector accessionNumber = parser.getValuesForPath(doc, "/plotInsertion/accessionNumber");
+				Vector latitude = parser.getValuesForPath(doc, "/plotInsertion/latitude");
+				Vector longitude = parser.getValuesForPath(doc, "/plotInsertion/longitude");
+				Vector state =  parser.getValuesForPath(doc, "/plotInsertion/state");
+				
+			//	String plotName = rmiClient.getAuthorPlotCode(plot);
+			//	String state = rmiClient.getState(plot);
+			//	String community= rmiClient.getCommunityName(plot);
+				
+				//plot name
+				sb.append("<table> \n");
+			//	sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
+			//	sb.append(" 	<td> Plot Name: </td> \n");	
+			//	sb.append(" 	<td> "+plotName+" </td> \n");
+			//	sb.append(" </tr> \n");
+				
+				//accession number
+				sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
+				sb.append(" 	<td> VegBank Identifier: </td> \n");	
+				sb.append(" 	<td> "+accessionNumber.toString()+" </td> \n");
+				sb.append(" </tr> \n");
+				
+				//the state
+				sb.append(" <tr> \n");	
+				sb.append(" 	<td> State </td> \n");	
+				sb.append(" 	<td> "+state+" </td> \n");	
+				sb.append(" </tr> \n");	
+			
+				//the locations
+				sb.append(" <tr> \n");	
+				sb.append(" 	<td> Latitude:  </td> \n");	
+				sb.append(" 	<td> "+latitude+" </td> \n");	
+				sb.append(" </tr> \n");	
+				sb.append(" <tr> \n");	
+				sb.append(" 	<td> Longitude:  </td> \n");	
+				sb.append(" 	<td> "+longitude+" </td> \n");	
+				sb.append(" </tr> \n");	
+			
+				//the community
+			//	sb.append(" <tr> \n");	
+			//	sb.append(" 	<td> Commmunity: </td> \n");	
+			//	sb.append(" 	<td> "+community+" </td> \n");	
+			//	sb.append(" </tr> \n");
+				sb.append("</table> \n");
+			}
+			catch( Exception e ) 
+			{
+				System.out.println("Exception:  " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return( sb.toString() );
+		}
 	
 	
 	/**
