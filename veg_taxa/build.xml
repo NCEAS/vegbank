@@ -177,28 +177,23 @@
 		includes="${build_src}/ **.class **.dtd **.xsl  **.properties"
 	/>
 	<!-- COPY THE JAR ARCHIVE BACK TO THE LIB DIRECTORY -->
-	<copydir src="${build_lib}"
-  	dest="${lib}"
-		includes="planttaxonomy.jar"
-	/>
-	
+	<copy todir="${lib}"> 
+    <fileset dir="${build_lib}"/>
+  </copy>	
+  
 </target>		
 
 
-<!-- DISTXML  -->	
-<target name="dist-xml" depends="init" description="==> copies the xml resources (dtd'd and stylesheets to the webdirectory" >
-	<echo>
-			copying xml resources from ${xml_dir} to web server: ${servlet_lib}
-	</echo>
-	<copyfile src="${xml_dir}/showPlantTaxaSummary.xsl" 
-			filtering="no" 
-			dest="${servlet_lib}/showPlantTaxaSummary.xsl" 
-	/>
-</target>		
+  <!-- DISTXML  -->	
+  <target name="dist-xml" depends="init" description="==> copies the xml resources (dtd'd and stylesheets to the webdirectory" >
+	  <echo>copying xml resources from ${xml_dir} to web server: ${servlet_lib}</echo>
+	  <copy file="${xml_dir}/showPlantTaxaSummary.xsl" filtering="no" todir="${servlet_lib}"/>
+  </target>		
 
-<target name="deploy" depends="jar, dist-xml"
-        description="==> deploys all the project resources">
-</target>
+  <target name="deploy" depends="jar, dist-xml"
+          description="==> deploys all the project resources">
+    <copy file="${build_lib}/planttaxonomy.jar" todir="${servlet_lib}"/>
+  </target>
 
   <target name="clean" depends="init" description="==> Remove all generated files">
       <delete dir="${build.dir}"/>

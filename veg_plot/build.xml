@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-04 00:39:41 $'
-  *     '$Revision: 1.13 $'
+  *     '$Date: 2003-02-04 21:41:21 $'
+  *     '$Revision: 1.14 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -185,7 +185,12 @@
 	<target name="deploy" depends="jar, deploy-resources"
           description="=> Deploys jars in veg_plot module to servlet container">
 		<echo message="Distr all of jars in ${ant.project.name}"/>
-		<ant dir="exp/database_access" target="dist-web" inheritAll="false"/> 
+
+    <copy todir="${servlet_lib}">
+      <fileset dir="${build.lib.dir}" includes="*jar"/>
+    </copy> 
+    
+		<!--<ant dir="exp/database_access" target="dist-web" inheritAll="false"/>-->
 		<ant dir="exp/data-translators" target="dist" inheritAll="false"/>
 		<ant dir="exp/rmidatasource" target="dist" inheritAll="false"/> 
 		<!-- <ant dir="exp/services" target="jar"/> No dist target -->

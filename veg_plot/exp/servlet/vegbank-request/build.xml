@@ -7,8 +7,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *     '$Date: 2003-02-03 21:22:57 $'
-  * '$Revision: 1.13 $'
+  *   '$Date: 2003-02-04 21:41:25 $'
+  *   '$Revision: 1.14 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -54,7 +54,7 @@
     	<property name="authentication" value="../lib/authservletmodule.jar" />
     	<property name="utilities" value="../lib/utilities.jar" />
     	<property name="cpath" value="${utilities}:${authentication}:${planttaxonomy}:${rmisystem}:${vegcommunity}:${xml_resource}:${framework}:${servlet-api}:${database_access}:${xerces}:${xalan}:${jdbc}:${build}:./"/>
-      	<property name="rmiserver" value="128.111.220.59"/>	
+     	<property name="rmiserver" value="192.168.0.2"/>	
            
 		<!-- Filters -->  	
     	<filter token="servlet-path" value="${servlet-path}" />
@@ -128,11 +128,11 @@
     	sourcefiles="src/DataSubmitServlet.java,src/DataRequestServlet.java,src/fileDownload.java,src/viewData.java,src/QueryBuilderServlet.java"
     	sourcepath="src"				
     	destdir="doc/api"
-      	author="true"
-      	version="true"
+    	author="true"
+     	version="true"
     	private="true"
-      	use="true"
-      	windowtitle="VEGBANK SPECIFIC SERVLET">
+     	use="true"
+     	windowtitle="VEGBANK SPECIFIC SERVLET">
     </javadoc>
 </target>      
 

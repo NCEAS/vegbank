@@ -36,10 +36,10 @@
     	<filter token="user" value="datauser" />
     	<filter token="password" value="pass" />
     	<filter token="port" value="1521" />
-    	<filter token="hostname" value="beta.nceas.ucsb.edu"/>
+    	<filter token="hostname" value="192.168.0.3"/>
     	<filter token="driverType" value="thin" />
     	<filter token="driverClass" value="org.postgresql.Driver" />
-    	<filter token="connectString" value="jdbc:postgresql://beta.nceas.ucsb.edu/plots_dev" />
+    	<filter token="connectString" value="jdbc:postgresql://192.168.0.3/plots_dev" />
     	<filter token="databaseName" value="nvc" />
     	<filter token="insert.minConnections" value="1" />
     	<filter token="insert.maxConnections" value="3" />
