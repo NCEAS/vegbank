@@ -29,8 +29,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-20 20:58:06 $'
- *  '$Revision: 1.34 $'
+ *  '$Date: 2002-06-20 22:07:00 $'
+ *  '$Revision: 1.35 $'
  */
 
 
@@ -455,15 +455,31 @@ public class DataSubmitServlet extends HttpServlet
 	 * codeName <br>
 	 * @return s - the string with the fields top fill out for submitting 
 	 * 	an entry in the plantReference table that looks like:
+	 * Title: <input type=text size=25 name=shortNameRefTitle> <br> 
+	 * Date: <input type=text size=25 name=shortNameRefDate> <br> 
+	 * Edition: <input type=text size=25 name=shortNameRefEdition> <br> 
+	 * Series name: <input type=text size=25 name=shortNameRefSeriesName> <br> 
+	 * Volume: <input type=text size=25 name=shortNameRefVolume> <br> 
+	 * Page: <input type=text size=25 name=shortNameRefPage> <br> 
+	 * ISSN: <input type=text size=25 name=shortNameRefISSN> <br> 
+	 * ISBN: <input type=text size=25 name=shortNameRefISBN> <br> 
+	 * Other details: <input type=text size=25 name=shortNameRefOtherCitationDetails> <br> 
 	 * 
 	 */
 	private String getReferenceForm(String plantNameType)
 	{
 		StringBuffer sb = new StringBuffer();
-		sb.append("author: <input type=text size=25 name="+plantNameType+"RefAuthor> <br>");
-		sb.append("title: <input type=text size=25 name="+plantNameType+"RefTitle> <br>");
-		sb.append("publication date: <input type=text size=25 name="+plantNameType+"RefPubDate> <br>");
-		sb.append("series name: <input type=text size=25 name="+plantNameType+"RefSeriesName> <br>");
+		sb.append("Author: <input type=text size=25 name="+plantNameType+"RefAuthor> <br> \n");
+		sb.append("Title: <input type=text size=25 name="+plantNameType+"RefTitle> <br> \n");
+		sb.append("Date: <input type=text size=25 name="+plantNameType+"RefDate> <br> \n");
+		sb.append("Edition: <input type=text size=25 name="+plantNameType+"RefEdition> <br> \n");
+		sb.append("Series name: <input type=text size=25 name="+plantNameType+"RefSeriesName> <br> \n");
+		sb.append("Volume: <input type=text size=25 name="+plantNameType+"RefVolume> <br> \n");
+		sb.append("Page: <input type=text size=25 name="+plantNameType+"RefPage> <br> \n");
+		sb.append("ISSN: <input type=text size=25 name="+plantNameType+"RefISSN> <br> \n");
+		sb.append("ISBN: <input type=text size=25 name="+plantNameType+"RefISBN> <br> \n");
+		sb.append("Other details: <input type=text size=25 name="+plantNameType+"RefOtherCitationDetails> <br> \n");
+		
 		return( sb.toString() );
 	}
 		
