@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-14 00:00:54 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-03-28 16:28:22 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,8 @@ import java.net.URL;
 public class SqlFile 
 {
 	private String sqlFile = null;
-
+	//private String rdbmsType = "access"; //ms access database
+	private String rdbmsType = "postgresql"; //postgres database
 
 	/**
 	 * Generic method to make a connection to a postgresql database
@@ -47,14 +48,30 @@ public class SqlFile
 		Connection c = null;
 		try 
  		{
-			Class.forName("org.postgresql.Driver");
-			//the community database
-			System.out.println("CommunityQueryStore > connecting to db on: vegbank ");
-			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev", "datauser", "");
+			if ( this.rdbmsType.equals("postgresql") )
+			{
+				Class.forName("org.postgresql.Driver");
+				//the community database
+				System.out.println("SqlFile> connecting to db on: vegbank ");
+				c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev", "datauser", "");
+			}
+			else if ( this.rdbmsType.equals("access") )
+			{
+				// specific settings for the access vers. of vegbank
+				String dbUrl = "jdbc:odbc:vegbank_access"; 	
+ 				// Load the sun jdbc-odbc bridge driver
+        Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+				// connect to the jdbc-odbc bridge driver
+				c = DriverManager.getConnection(dbUrl, "user", "pass");																																 
+			}
+			else
+			{
+				System.out.println("SqlFile> unrecognized RDBMS Type " + rdbmsType);
+			}
 		}
 		catch ( Exception e )
 		{
-			System.out.println("CommunityQueryStore > exception: "
+			System.out.println("SqlFile> exception: "
 			+"dbConnect.makeConnection: "+e.getMessage());
 			e.printStackTrace();
 		}
@@ -62,7 +79,11 @@ public class SqlFile
 	}
 	
 	/**
-	 * long method to do the nust and bolts
+	 *
+	 * long method to do the nuts and bolts of running the 
+	 * sqlfile against the rdbms
+	 * @param filename -- the name of the sql file -- with path
+	 *
 	 */
 	public StringBuffer issueSqlFile( String fileName)
 	{
@@ -77,14 +98,14 @@ public class SqlFile
 			// Get the DatabaseMetaData object and display
 			// some information about the connection
 			DatabaseMetaData dma = conn.getMetaData();
-			System.out.println("AccessVegBank> Connected to " + dma.getURL() );
-			System.out.println("AccessVegBank> Driver       " + dma.getDriverName() );
-			System.out.println("AccessVegBank> Version      " + dma.getDriverVersion() );
-			System.out.println("AccessVegBank> Catalog      " + conn.getCatalog() );
+			System.out.println("SqlFile> Connected to " + dma.getURL() );
+			System.out.println("SqlFile> Driver       " + dma.getDriverName() );
+			System.out.println("SqlFile> Version      " + dma.getDriverVersion() );
+			System.out.println("SqlFile> Catalog      " + conn.getCatalog() );
 		} 
 		catch (Exception e) 
 		{
-			System.out.println("AccessVegBank> " + e.getMessage());
+			System.out.println("SqlFile> " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -117,7 +138,7 @@ public class SqlFile
 						}
 						catch (Exception x) 
 						{
-							System.out.println("AccessVegBank> Exception: " + x.getMessage() );
+							System.out.println("SqlFile> Exception: " + x.getMessage() );
 							x.printStackTrace();
 							//System.exit(0);
 						}
@@ -133,7 +154,7 @@ public class SqlFile
 	}
 	catch (Exception ex) 
 	{
- 	 System.out.println("AccessVegBank> Exception "+ex.getMessage() );
+ 	 System.out.println("SqlFile> Exception "+ex.getMessage() );
  		ex.printStackTrace(); 
 		//System.exit(0);
 	}
@@ -147,13 +168,20 @@ public class SqlFile
 	{
 		try
 		{
-			SqlFile sql = new SqlFile();
-			String file = args[0];
-			sql.issueSqlFile( file );
+			if ( args.length != 1 )
+			{
+				System.out.println("Usage SqlFile [filename]");
+			}
+			else
+			{
+				SqlFile sql = new SqlFile();
+				String file = args[0];
+				sql.issueSqlFile( file );
+			}
 		}
 		catch (Exception ex) 
 		{
-  		System.out.println("AccessVegBank> Exception "+ex.getMessage() );
+  		System.out.println("SqlFile> Exception "+ex.getMessage() );
  			ex.printStackTrace(); 
 			//System.exit(0);
 		}
