@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-18 18:45:15 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-02-27 19:10:32 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: farrell $'
- *     '$Date: 2004-02-18 18:45:15 $'
- *     '$Revision: 1.7 $'
+ *     '$Date: 2004-02-27 19:10:32 $'
+ *     '$Revision: 1.8 $'
  */
 
 import java.sql.PreparedStatement;
@@ -101,7 +101,7 @@ public class UserDatabaseAccess
 			{
      		s = rs.getString(1);
     	}
-			conn.close();
+			DBConnectionPool.returnDBConnection(conn);
 		}
 		catch (Exception e) 
 		{
@@ -508,7 +508,7 @@ public class UserDatabaseAccess
 			Statement query = conn.createStatement();
 			query.execute("UPDATE usr set password='" + password + 
 					"' WHERE email_address='"+emailAddress+"' ");	
-			conn.close();
+			DBConnectionPool.returnDBConnection(conn);
 		}
 		catch (SQLException e)
 		{
@@ -608,7 +608,7 @@ public class UserDatabaseAccess
 					LogUtility.log("UserDatabaseAccess > User not known in database");
 				}
 			}
-			conn.close();
+			DBConnectionPool.returnDBConnection(conn);
 		}
 		catch (Exception e) 
 		{
@@ -684,11 +684,11 @@ public class UserDatabaseAccess
 		}
 		else
 		{
-			conn.close();
+			DBConnectionPool.returnDBConnection(conn);
 			return null;	
 		}
 		
-		conn.close();
+		DBConnectionPool.returnDBConnection(conn);
 		
 		Iterator it = h.keySet().iterator();
 		while ( it.hasNext() )

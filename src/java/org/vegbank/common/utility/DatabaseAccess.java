@@ -5,8 +5,8 @@
  *             			National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-12-05 22:24:20 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-02-27 19:10:32 $'
+ *	'$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ public class DatabaseAccess
 		finally
 		{
 			//Return dbconnection too pool
-			DBConnectionPool.returnDBConnection(dbConn, serialNumber);
+			DBConnectionPool.returnDBConnection(dbConn);
 		}
 		return results;
 	} //end method
@@ -99,7 +99,7 @@ public class DatabaseAccess
 		finally
 		{
 			//Return dbconnection too pool
-			DBConnectionPool.returnDBConnection(dbConn, serialNumber);
+			DBConnectionPool.returnDBConnection(dbConn);
 		}
 		return results;
 	} //end method

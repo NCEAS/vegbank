@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-18 01:07:40 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2004-02-27 19:10:32 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,19 +63,44 @@ import org.apache.commons.beanutils.BeanUtils;
 
 public class DBModelBeanReader
 {
-
-	/**
-	 * Uses to run SQL statements agains db
-	 */
 	private DBConnection con = null;
+	private boolean connectionCheckedOut = false;
 	private Vector ignoreObjects = new Vector();
 	private ModelBeanCache mbCache = null;
 
 	
 	public DBModelBeanReader() throws SQLException
 	{
-		con = DBConnectionPool.getInstance().getDBConnection("Needed for reading observation");
+		con = DBConnectionPool.getInstance().getDBConnection("Needed for reading VBModelBean");
+		con.setReadOnly(true);
 		mbCache = ModelBeanCache.instance();
+	}
+	
+	protected void finalize () throws Throwable
+	{
+		if ( this.connectionCheckedOut )
+		{
+			try
+			{
+				this.releaseConnection();
+			}
+			finally
+			{
+				super.finalize();
+			}
+		}
+		connectionCheckedOut = true;
+	}
+	
+	/**
+	 * Release connection back into ConnectionPool
+	 *
+	 */
+	public void releaseConnection() throws SQLException
+	{
+		// May be used for writing in future
+		con.setReadOnly(false);
+		DBConnectionPool.returnDBConnection(con);
 	}
 	
 	/**
@@ -134,6 +159,7 @@ public class DBModelBeanReader
 					+ accessionCode);
 		}
 
+		rs.close();
 		return pk;
 	}
 	
@@ -147,11 +173,21 @@ public class DBModelBeanReader
 	 */ 
 	public VBModelBean getVBModelBean(String accessionCode) throws Exception
 	{
-		VBModelBean result = null;
+		LogUtility.log("DBModelBeanReader: Got request for: '" + accessionCode + "'");
+		//TODO: Am I allowed to search cache --- revisions !!!
+		// Search cache first
+		VBModelBean bean = 
+			(VBModelBean) mbCache.getBeanFromCache(accessionCode);
+		if ( bean != null )
+		{
+			return bean;
+		}		
+		
+		// Need to get from db
 		HashMap parsedAC = Utility.parseAccessionCode(accessionCode);
 		String entityCode = (String) parsedAC.get("ENTITYCODE");
 		
-		LogUtility.log("Got an entity code of " + entityCode + " from " + accessionCode);
+		LogUtility.log("Got an entity code of " + entityCode + " from " + accessionCode, LogUtility.TRACE);
 		
 		// TODO: Get the entity name from AccessionGen & co when stable
 		//AccessionGen ag = new AccessionGen();
@@ -160,23 +196,27 @@ public class DBModelBeanReader
 		// TODO: Depending upon entity go get it
 		if ( entityCode.equalsIgnoreCase( "PC" ) )
 		{
-			result = this.getPlantconceptBeanTree(accessionCode);
+			bean = this.getPlantconceptBeanTree(accessionCode);
 		}
 		else if ( entityCode.equalsIgnoreCase("Ob") )
 		{
-			result = this.getObservationBeanTree(accessionCode);
+			bean = this.getObservationBeanTree(accessionCode);
 		}
-		return result;
+		
+		// Add to cache
+		mbCache.addToCache(bean, accessionCode);
+		
+		return bean;
 	}
 
-	public Plantconcept getPlantconceptBeanTree(String accessionCode) throws Exception
+	private Plantconcept getPlantconceptBeanTree(String accessionCode) throws Exception
 	{	
 		long pK = 0; 
 		pK = this.getPKFromAccessionCode( "plantConcept", accessionCode, Plantconcept.PKNAME );
 		return this.getPlantconceptBeanTree(pK);	
 	}
 	
-	public Plantconcept getPlantconceptBeanTree(long pkValue) throws Exception
+	private Plantconcept getPlantconceptBeanTree(long pkValue) throws Exception
 	{
 		Plantconcept pc = new Plantconcept();
 		getObjectFromDB(pc, Plantconcept.PKNAME, pkValue);
@@ -185,27 +225,14 @@ public class DBModelBeanReader
 		return pc;
 	}
 	
-	public Observation getObservationBeanTree(String observationAccessionCode) throws Exception
-	{	
-		//TODO: Am I allowed to search cache --- revisions !!!
-		// Search cache first
-		Observation obs = 
-			(Observation) mbCache.getBeanFromCache(observationAccessionCode);
-		if ( obs != null )
-		{
-			return obs;
-		}
-		
+	private Observation getObservationBeanTree(String observationAccessionCode) throws Exception
+	{			
 		long pK = this.getPKFromAccessionCode( "observation", observationAccessionCode, Observation.PKNAME );
-		obs = this.getObservationBeanTree(pK);	
-		
-		// Add to cache
-		mbCache.addToCache(obs, observationAccessionCode);
-		
+		Observation obs = this.getObservationBeanTree(pK);	
 		return obs;
 	}
 	
-	public Observation getObservationBeanTree(long observationId) throws Exception
+	private Observation getObservationBeanTree(long observationId) throws Exception
 	{
 		// Get the observation
 		Observation obs = new Observation();
@@ -279,54 +306,6 @@ public class DBModelBeanReader
 	}
 	
 	// TODO: Reference, Party, Commconcept
-	
-		
-	public VBModelBean LgetVBModelBean(String BeanName, long pkValue) throws Exception
-	{
-		Observation obs = new Observation();
-		getObjectFromDB(obs, Observation.PKNAME, pkValue);
-		getRelatedObjectsFromDB(Observation.PKNAME, pkValue, obs);
-		
-		// Need to fill out some more Objects 
-		// Project 
-		Project project = obs.getProjectobject();
-		ignoreObjects.add("Observation");
-		getRelatedObjectsFromDB(Project.PKNAME, project.getProject_id(), project );
-		
-		// ProjectContributors
-		Iterator projectContributors =project.getproject_projectcontributors().iterator();
-		while ( projectContributors.hasNext() )
-		{
-			Projectcontributor projectContributor = (Projectcontributor)  projectContributors.next();
-			Party party = (Party) projectContributor.getPartyobject();
-			getRelatedObjectsFromDB(Party.PKNAME, party.getParty_id(), party );
-		}
-		
-		// TaxonObservations
-		Iterator taxonObservations = obs.getobservation_taxonobservations().iterator();
-		while ( taxonObservations.hasNext() )
-		{
-			Taxonobservation taxonObservation = (Taxonobservation)  taxonObservations.next();
-			getRelatedObjectsFromDB(Taxonobservation.PKNAME, taxonObservation.getTaxonobservation_id(), taxonObservation );
-		}
-		
-		// Strata
-		Iterator strata = obs.getobservation_stratums().iterator();
-		while ( strata.hasNext())
-		{
-			Stratum stratum = (Stratum) strata.next();
-			//System.out.println(">> Ignore when searching through Stratum " + ignoreObjects);
-			getRelatedObjectsFromDB(Stratum.PKNAME, stratum.getStratum_id(), stratum );
-
-		}
-		
-		// Plot
-		//Plot plot = obs.getPlotobject();
-		//System.out.println("Ignore when searching through Plot " + ignoreObjects);
-		//getRelatedObjectsFromDB(VBObjectUtils.getKeyName("Plot"), plot.getPlot_id(), plot, ignoreObjects );
-		
-		return obs;
-	}
 
 	private void getRelatedObjectsFromDB(String key, long keyValue, VBModelBean bean)
 	{
@@ -355,11 +334,16 @@ public class DBModelBeanReader
 			
 			try
 			{
-				String keytoUse = this.getFKNameInTable(key, tableName);
+				Collection keysToUse = this.getFKNameInTable(key, tableName);
 				//System.out.println("getObjectsFromDataBase(" + tableName + " , " + keytoUse + " , " + keyValue + ")");
-				List objectsToAdd =  getObjectsFromDataBase(tableName, keytoUse, keyValue);
-				Object[] parameters = {objectsToAdd};
-				method.invoke(bean, parameters);
+				Iterator it = keysToUse.iterator();
+				while ( it.hasNext() )
+				{
+					String keyName = (String) it.next();
+					List objectsToAdd =  getObjectsFromDataBase(tableName, keyName, keyValue);
+					Object[] parameters = {objectsToAdd};
+					method.invoke(bean, parameters);
+				}
 			}
 			catch (Exception e)
 			{
@@ -400,8 +384,6 @@ public class DBModelBeanReader
 	{
 		Vector retrivedObjects = new Vector();
 		
-		FKName = this.getFKNameInTable(FKName, table);
-		
 		// Get all the PK associated with this object
 		Vector keys = new Vector();
 		
@@ -411,12 +393,20 @@ public class DBModelBeanReader
 		
 		//System.out.println("]]] "  + SQLQuery);
 		
-		Statement selectStatement = con.createStatement();
-		ResultSet rs = selectStatement.executeQuery(SQLQuery);
-		
-		while ( rs.next() )
+		Statement selectStatement = con.createStatement();	
+		try
 		{
-			keys.add( new Integer ( rs.getInt(1) ) );	
+			ResultSet rs = selectStatement.executeQuery(SQLQuery);
+			while ( rs.next() )
+			{
+				keys.add( new Integer ( rs.getInt(1) ) );	
+			}
+			rs.close();
+		} 
+		catch (SQLException e)
+		{
+			LogUtility.log("SQL causing error: '" + SQLQuery + "'", LogUtility.ERROR);
+			throw e;
 		}
 		
 		Iterator keysIterator = keys.iterator();
@@ -440,24 +430,33 @@ public class DBModelBeanReader
 	 * @param table
 	 * @return 
 	 */
-	private String getFKNameInTable(String FKName, String tableName)
+	private Collection getFKNameInTable(String PKNameInForeignTable, String tableName)
 	{
-		String result = FKName;
+		String result = PKNameInForeignTable;
+		Vector keysToUse = new Vector();
 		
-		if ( tableName.equalsIgnoreCase("observationsynonym") && FKName.equalsIgnoreCase(Observation.PKNAME) )
+		if ( tableName.equalsIgnoreCase("observationsynonym") && PKNameInForeignTable.equalsIgnoreCase(Observation.PKNAME) )
 		{
-			result = Observationsynonym.PRIMARYOBSERVATION_ID;
+			keysToUse.add(Observationsynonym.PRIMARYOBSERVATION_ID);
 		}
-		
-		if ( tableName.equalsIgnoreCase("plot") && FKName.equals(Plot.PKNAME))
+		else if ( tableName.equalsIgnoreCase("plot") && PKNameInForeignTable.equals(Plot.PKNAME))
 		{
-			result = Plot.PARENT_ID;
+			keysToUse.add(Plot.PARENT_ID);
 		}
-		//System.out.println(tableName + " X " + FKName + "  = ???? " + result);
-		return result;
+		else if ( tableName.equalsIgnoreCase("partymember") && PKNameInForeignTable.equals(Party.PKNAME) )
+		{
+			keysToUse.add(Partymember.CHILDPARTY_ID);
+			keysToUse.add(Partymember.PARENTPARTY_ID);
+		}
+		else 
+		{
+			// Normally the FK in this table is the same as PK in the foreign table
+			keysToUse.add(PKNameInForeignTable);
+		}
+		return keysToUse;
 	}
 
-	private void getObjectFromDB(VBModelBean bean, String PKName, long PKValue)
+	private void getObjectFromDB(VBModelBean bean, String PKName, long PKValue) throws SQLException
 	{
 		HashMap objectSetMethods = new HashMap();
 		
@@ -503,7 +502,7 @@ public class DBModelBeanReader
 		}
 		
 		String sqlStatement = this.getSQLSelectStatement(fieldNames, className, PKName, PKValue);
-		LogUtility.log("BDModelBeanReader: " + sqlStatement);
+		LogUtility.log("BDModelBeanReader: " + sqlStatement, LogUtility.TRACE);
 		
 		try
 		{
@@ -546,11 +545,11 @@ public class DBModelBeanReader
 						VBModelBean newObject = (VBModelBean) Utility.createObject(fullyQualifiedClassName);
 						try
 						{
-							LogUtility.log("DBModelBeanReader: Getting "  + propertyName + " for " + className);
+							LogUtility.log("DBModelBeanReader: Getting "  + propertyName + " for " + className, LogUtility.TRACE);
 							
 							fieldName = Utility.getPKNameFromFKName(fieldName);
 							
-							//LogUtility.log("]]]" + hmap);
+							//LogUtility.log("]]]" + hmap, LogUtility.TRACE);
 							//	Fill out this object  --- RECURSIVE carefull
 							//LogUtility.log("this.getObjectFromDB( " + newObject + "," + fieldName+ ", " +  new Integer(value).intValue() + ")" );
 							this.getObjectFromDB(newObject, fieldName, new Integer(value).intValue() );
@@ -586,8 +585,9 @@ public class DBModelBeanReader
 			else
 			{
 				// No observation found
-				LogUtility.log("DBModelBeanReader: Did not find any results for " + PKName  + " = " + PKValue);
+				LogUtility.log("DBModelBeanReader: Did not find any results for " + PKName  + " = " + PKValue, LogUtility.TRACE);
 			}
+			rs.close();
 	
 		}
 		catch (Exception e)
@@ -759,7 +759,7 @@ public class DBModelBeanReader
 		{
 			if (null == instance)
 			{
-				LogUtility.log("ModelBeanCache: Creating Instance");
+				LogUtility.log("ModelBeanCache: Creating Instance" , LogUtility.TRACE);
 				instance = new ModelBeanCache();
 			}
 			return instance;
@@ -773,7 +773,7 @@ public class DBModelBeanReader
 		{	
 			if ( CACHE_DIR == null )
 			{
-				LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR);
+				LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR, LogUtility.ERROR);
 			}
 			else
 			{
@@ -789,13 +789,13 @@ public class DBModelBeanReader
 						String  fileName = cachedFiles[i].getName();
 						if ( fileName.startsWith( Utility.getAccessionPrefix() + ".") )
 						{
-							LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName);
+							LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName, LogUtility.TRACE);
 							// Add all the names to diskCacheKeys
 							diskCacheKeys.add( fileName );
 						}
 						else 
 						{
-							LogUtility.log("ModelBeanCache: Not adding to Disk Cache: " + fileName);
+							LogUtility.log("ModelBeanCache: Not adding to Disk Cache: " + fileName, LogUtility.TRACE);
 						}
 					}
 				}
@@ -814,18 +814,18 @@ public class DBModelBeanReader
 			{
 				LogUtility.log(
 					"ModelBeanCache: Memory Cache Full: "
-						+ MAX_DISK_CACHE_SIZE
-						+ " files.");
+						+ MAX_MEM_CACHE_SIZE
+						+ " files.", LogUtility.INFO);
 				
 				// Remove item from memory cache
 				memoryCache.removeElementAt(0);
-				LogUtility.log("ModelBeanCache: Removed oldest bean from cache Memory Cache");
+				LogUtility.log("ModelBeanCache: Removed oldest bean from cache Memory Cache", LogUtility.TRACE);
 			}
 			Vector newElement = new Vector ();
 			newElement.add(accessionCode);
 			newElement.add(bean);
 			memoryCache.add( newElement );
-			LogUtility.log("ModelBeanCache: Added to Memory Cache: " + accessionCode);
+			LogUtility.log("ModelBeanCache: Added to Memory Cache: " + accessionCode, LogUtility.TRACE);
 			
 			// Also add to diskCache
 			addToDiskCache(accessionCode, bean);
@@ -844,7 +844,7 @@ public class DBModelBeanReader
 		{
 			if ( CACHE_DIR == null )
 			{
-				LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR);
+				LogUtility.log("ModelBeanCache: Disk cache dir is absent, " + CACHE_DIR, LogUtility.ERROR);
 			}
 			else
 			{
@@ -855,16 +855,16 @@ public class DBModelBeanReader
 						LogUtility.log(
 							"ModelBeanCache: Disk Cache Full: "
 								+ MAX_DISK_CACHE_SIZE
-								+ " files.");
+								+ " files.", LogUtility.WARN);
 							
 						// Need to remove first Object from disk
 						String fileNameToAxe = (String) diskCacheKeys.firstElement();
 						File fileToAxe = new File(CACHE_DIR, fileNameToAxe);
 						fileToAxe.delete();
-						LogUtility.log("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe);
+						LogUtility.log("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe, LogUtility.TRACE);
 					}
 					saveToDisk(beanToSave, fileName);			
-					LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName);
+					LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName, LogUtility.TRACE);
 				
 					// Put the fileName is the diskCache
 					diskCacheKeys.add(fileName);
@@ -888,10 +888,10 @@ public class DBModelBeanReader
 			for ( int i=0 ; i < memoryCache.size() ; i++)
 			{
 				Vector currentElement = (Vector) memoryCache.elementAt(i);
-				LogUtility.log( "ModelBeanCache: accessionCode" + currentElement.elementAt(0) + " = " + currentElement.elementAt(1));
+				LogUtility.log( "ModelBeanCache: accessionCode" + currentElement.elementAt(0) + " = " + currentElement.elementAt(1), LogUtility.TRACE);
 				if ( accessionCode.equalsIgnoreCase( (String) currentElement.elementAt(0) ) )
 				{
-					LogUtility.log("ModelBeanCache: Retrived from memory Cache: " + accessionCode);
+					LogUtility.log("ModelBeanCache: Retrived from memory Cache: " + accessionCode, LogUtility.INFO);
 					return (VBModelBean) currentElement.elementAt(1);
 				}
 			}
@@ -906,7 +906,7 @@ public class DBModelBeanReader
 					try
 					{
 						bean = (VBModelBean) readBeanFromDisk(fileName);
-						LogUtility.log("ModelBeanCache: Retrived from disk Cache: " + fileName);
+						LogUtility.log("ModelBeanCache: Retrived from disk Cache: " + fileName, LogUtility.INFO);
 						return bean;
 					}
 					catch (Exception e)

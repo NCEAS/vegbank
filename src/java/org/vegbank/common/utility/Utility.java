@@ -28,8 +28,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2004-02-19 17:37:47 $'
- * '$Revision: 1.27 $'
+ * '$Date: 2004-02-27 19:10:32 $'
+ * '$Revision: 1.28 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,8 +52,7 @@ public class Utility
 	public static AbstractDatabase dbAdapter;
 	// FIXME: Read from properties
 	public static  final String DB_ADAPTER_NAME = "org.vegbank.common.dbAdapter.PostgresqlAdapter";
-//	FIXME: Read from properties
-	public static  final String VB_HOME_DIR = "/usr/vegbank";
+
 	
 	public static final String DATABASE_NAME = ResourceBundle.getBundle("database").getString("databaseName");
 	
@@ -63,7 +62,8 @@ public class Utility
 	public static final String VEGBANK_SCHEMA_NAME = vegbankPropFile.getString("vegbankSchemaName");	
 	public static final String VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
 	public static final String VEGBANK_XML_SCHEMA= VEGBANK_SCHEMA_LOACATION + "/" + VEGBANK_SCHEMA_NAME;
-
+	public static final String VB_HOME_DIR = vegbankPropFile.getString("vegbank.home.dir");
+	public static final String MODELBEAN_CACHING = vegbankPropFile.getString("modelbean.caching");
 
 	
 	/** 
@@ -591,7 +591,7 @@ public class Utility
 	{
 		HashMap parsedAC = new HashMap();
 		// method
-		LogUtility.log("accessionCode = " + accessionCode);
+		LogUtility.log("Utility: accessionCode = " + accessionCode, LogUtility.TRACE);
 		Pattern pattern = Pattern.compile("([^\\.]*)\\.([^\\.]*)\\.([^\\.]*)\\.{0,1}([^\\.]*)");
 		Matcher m = pattern.matcher(accessionCode);
 		if ( m.find() )
