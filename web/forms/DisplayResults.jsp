@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2004-07-27 19:59:28 $'
-*  '$Revision: 1.24 $'
+*      '$Date: 2004-07-27 20:09:37 $'
+*  '$Revision: 1.25 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -199,12 +199,6 @@
          </td>		 
 	    <td align="center" valign="middle" colspan="2"> <!-- colspan 2 b/c top black bars as separators are cells -->
 	        <span class="item">
-	          <logic:equal name="row" property="latitude" value="0">
-	          	<logic:equal name="row" property="longitude" value="0">
-			  		n/a
-	          	</logic:equal>
-	          </logic:equal>
-
 	          <logic:notEqual name="row" property="latitude" value="0">
 	          	<logic:notEqual name="row" property="longitude" value="0">
 				  <bean:write name="row" property="latitude" format="#.#"/> 
@@ -212,6 +206,7 @@
 				  <bean:write name="row" property="longitude" format="#.#"/>   
 	          	</logic:notEqual>
 	          </logic:notEqual>
+
 
 	        </span>
          </td>		
