@@ -534,8 +534,7 @@ public class DataExchangeServlet extends HttpServlet
  	 * @param response - the response object linked to the client 
  	 *
  	 */
-	private String uploadMultipartDataFile (HttpServletRequest request,  
-	HttpServletResponse response) 
+	private String uploadMultipartDataFile(HttpServletRequest request, HttpServletResponse response) 
 	{
 		StringBuffer sb = new StringBuffer();
 		try 
@@ -544,11 +543,10 @@ public class DataExchangeServlet extends HttpServlet
 			// Pass in the request, a directory to saves files to, and the
 			// maximum POST size we should attempt to handle.
 			// Here we (rudely) write to the server root and impose 5 Meg limit.
-			//MultipartRequest multi=new MultipartRequest(request, uploadDir, 5 * 1024 * 1024);
+			// MultipartRequest multi=new MultipartRequest(request, uploadDir, 5 * 1024 * 1024);
 
-			
       sb.append("<html>");  
-      sb.append("<body>");  
+      sb.append(" <body>");  
 			//get the un-encoded parameter names back from the MultipartRequest class
 			Enumeration params = multi.getParameterNames();
       while (params.hasMoreElements()) 
@@ -626,8 +624,7 @@ public class DataExchangeServlet extends HttpServlet
 						util.fileCopy(uploadDir+filename, uploadDir+uploadFileName);
 						//delete the file
 						util.flushFile(uploadDir+filename);
-					}
-					
+					}	
 				}
 				else
 				{
@@ -642,7 +639,9 @@ public class DataExchangeServlet extends HttpServlet
 				sb.append("<br> </br> \n");
 				sb.append(" <a href="+h.get("referUrl").toString()+"> "+ 
 				h.get("referPage").toString() + "</a> </br> \n");
-				sb.append("</PRE> \n");
+				sb.append("</html> \n");
+        // because this method returns html set the http response to text/html
+        response.setContentType("text/html");
 			}
 		}
  		catch (Exception e) 
