@@ -51,7 +51,7 @@ import servlet.util.ServletUtility;
 public class DataRequestServlet extends HttpServlet 
 {
 
-	ResourceBundle rb = ResourceBundle.getBundle("veg_servlet");
+	ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	public ServletUtility suy = new ServletUtility();
 
 	public String queryOutput[] = new String[10000];  //the output from query
@@ -73,12 +73,24 @@ public class DataRequestServlet extends HttpServlet
 	private String remoteHost = null;
 	private String requestDataType = null;
 	private String servletDir = null; // the absolute path to the servlet
+	private String userName = null; // this is the user of the servlet
 
 	// community related attributes
 	// commmunity name already defined above
 	private String communityLevel = null;
 	public ServletUtility su = new ServletUtility();
-	public dbAccess dba =new dbAccess(); 
+	public dbAccess dba =new dbAccess();
+	
+	
+	/**
+	 * constructor method
+	 */
+	public DataRequestServlet()
+	{
+		System.out.println("DataRequestServlet Loaded...");
+	}
+	
+	
 
 	/** Handle "POST" method requests from HTTP clients */
 	public void doPost(HttpServletRequest request,
@@ -96,8 +108,16 @@ public class DataRequestServlet extends HttpServlet
 		{
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
+			
+			
 			try 
 			{
+			//handle the cookies -- the cookies should start with the user name
+			//which will be used to register the query and results documents 
+			//with the dataexcahnge servlet
+			userName = getCookieValue(request);
+			System.out.println("current user: " +  userName   );
+				
 			//enumeration is needed for those
 			//cases where there are multiple values 
 			// for a given parameter
@@ -171,6 +191,7 @@ public class DataRequestServlet extends HttpServlet
 			+" first try - reading parameters "
 			+e.getMessage());
 		}
+		
 	}
 
 
@@ -332,9 +353,9 @@ public class DataRequestServlet extends HttpServlet
 				//the number of plots in the result set\
 				out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 				//this passes the browser an html form to view the summary data
- 				ServletUtility l =new ServletUtility();  
- 				l.getViewOption(requestDataType);
- 				out.println(l.outString);
+ 				//ServletUtility l =new ServletUtility();  
+ 				su.getViewOption(requestDataType);
+ 				out.println(su.outString);
 			}
 		}
 		catch( Exception e ) 
@@ -1071,16 +1092,12 @@ private void updateClentLog (String clientLog, String remoteHost)
  */
 	private void issueQuery (String queryType) 
 	{
-		//the database access module
-		//dbAccess g =new dbAccess(); 
 		if (queryType.equals("simpleQuery")) 
 		{ 
+			System.out.println("## QUERY TYPE ## " + queryType);
+			registerQueryDocument();
 			//call the plot access module
-			dba.accessDatabase(servletDir+"query.xml", servletDir+"querySpec.xsl", "query");	
-			//dba.accessDatabase("query.xml", "querySpec.xsl", "query");	
-//			dba.accessDatabase("/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", "/jakarta-tomcat/webapps/examples/WEB-INF/lib/querySpec.xsl", "query");
-			
-			//grab the result set from the dbAccess class
+			dba.accessDatabase(servletDir+"query.xml", servletDir+"querySpec.xsl", "query");
 			queryOutput=dba.queryOutput;
 			queryOutputNum=dba.queryOutputNum;
 		}
@@ -1128,4 +1145,53 @@ private void updateClentLog (String clientLog, String remoteHost)
 		}
 	}
 	
+	/**
+	 * method that returns the name and value of a valid cookie
+	 *
+	 */
+	 private String getCookieValue( HttpServletRequest req)
+	 {
+		String s = null;
+	 //get the cookies - if there are any
+		String cookieName = null;
+		String cookieValue = null;
+
+		Cookie[] cookies = req.getCookies();
+	//	System.out.println("cookie dump: " + cookies.toString() );
+	//	Cookie cook = cookies[0];
+	//	String name =cook.getName();
+	//	System.out.println("cookie name > : " + name );
+		
+		//determine if the requested page should be shown
+    if (cookies.length >= 0) 
+		{
+			for (int i = 0; i < cookies.length; i++) 
+			{
+      	Cookie cookie = cookies[i];
+				//out.print("Cookie Name: " +cookie.getName()  + "<br>");
+        cookieName=cookie.getName();
+				System.out.println("cookie name: " + cookieName);
+				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
+				cookieValue=cookie.getValue();
+				s = cookieValue.trim(); 
+			}
+  	} 
+		else 
+		{
+			System.out.println("No valid cookies found");
+		}
+	return(s);
+	}
+	
+	
+		
+	/**
+	 * method that registers a query document with the datafile database
+	 */
+	 private void registerQueryDocument()
+	 {
+		 System.out.println("### registering the query document ###");
+		 suy.uploadFileDataExcahgeServlet(servletDir+"query.xml", userName);
+		 
+	 }
 }
