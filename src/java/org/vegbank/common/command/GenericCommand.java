@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-01 03:01:40 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2004-09-17 01:01:56 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ public class GenericCommand
 	private static ResourceBundle sqlResources = 
 			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 
-	private static final int DEFAULT_PER_PAGE = 15;   // -1 is all results
+	public static final int DEFAULT_PER_PAGE = 15;   // -1 is all results
 	private static final String BEANLIST_KEY = "BEANLIST";
 	private static final String BEAN_KEY = "BEAN";
 	private static final String MAP_KEY = "MAP";
@@ -204,7 +204,8 @@ public class GenericCommand
 		////////////////////////////////////////////////////
 		sqlMainQuery += buildLimitClause();
 
-		log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlMainQuery + "\n=======================================");
+		log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlMainQuery 
+				+ "\n=======================================");
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( sqlMainQuery );
 		
