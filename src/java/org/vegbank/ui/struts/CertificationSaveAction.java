@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 07:09:02 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-01-16 19:28:56 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,18 +126,18 @@ public class CertificationSaveAction extends VegbankAction {
 				.append(" Plot DB/Tools Exp: "+ form.getToolsExp()+" \n\n")
 
 				.append(" Self assessment of knowledge (1=least, 5=most)\n")
-				.append(" Region 1: "+form.getNvcExpRegionA()+" \n")
-				.append("   Vegetation : "+form.getNvcExpVegA()+" \n")
-				.append("   Floristics : "+form.getNvcExpFloristicsA()+" \n")
-				.append("   US-NVC/IVC : "+form.getNvcExpNVCA()+" \n")
-				.append(" Region 2: "+form.getNvcExpRegionB()+" \n")
-				.append("   Vegetation : "+form.getNvcExpVegB()+" \n")
-				.append("   Floristics : "+form.getNvcExpFloristicsB()+" \n")
-				.append("   US-NVC/IVC : "+form.getNvcExpNVCB()+" \n")
-				.append(" Region 3: "+form.getNvcExpRegionC()+" \n")
-				.append("   Vegetation : "+form.getNvcExpVegC()+" \n")
-				.append("   Floristics : "+form.getNvcExpFloristicsC()+" \n")
-				.append("   US-NVC/IVC : "+form.getNvcExpNVCC()+" \n\n")
+				.append(" Region 1: "+form.getExpRegionA()+" \n")
+				.append("   Vegetation : "+form.getExpRegionAVeg()+" \n")
+				.append("   Floristics : "+form.getExpRegionAFlor()+" \n")
+				.append("   US-NVC/IVC : "+form.getExpRegionANVC()+" \n")
+				.append(" Region 2: "+form.getExpRegionB()+" \n")
+				.append("   Vegetation : "+form.getExpRegionBVeg()+" \n")
+				.append("   Floristics : "+form.getExpRegionBFlor()+" \n")
+				.append("   US-NVC/IVC : "+form.getExpRegionBNVC()+" \n")
+				.append(" Region 3: "+form.getExpRegionC()+" \n")
+				.append("   Vegetation : "+form.getExpRegionCVeg()+" \n")
+				.append("   Floristics : "+form.getExpRegionCFlor()+" \n")
+				.append("   US-NVC/IVC : "+form.getExpRegionCNVC()+" \n\n")
 
 				.append(" ESA Sponsor #1 \n")
 				.append("   Name : "+form.getEsaSponsorNameA()+" \n")

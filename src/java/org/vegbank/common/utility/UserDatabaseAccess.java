@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 07:09:01 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-01-16 19:28:55 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-01-16 07:09:01 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2004-01-16 19:28:55 $'
+ *     '$Revision: 1.4 $'
  */
 
 import java.sql.PreparedStatement;
@@ -219,18 +219,18 @@ public class UserDatabaseAccess
 				pstmt.setString(14, form.getVbExp());
 				pstmt.setString(15, form.getToolsExp());
 				pstmt.setString(16, form.getVbIntention());
-				pstmt.setString(17, form.getNvcExpRegionA());
-				pstmt.setString(18, form.getNvcExpVegA());
-				pstmt.setString(19, form.getNvcExpFloristicsA());
-				pstmt.setString(20, form.getNvcExpNVCA());
-				pstmt.setString(21, form.getNvcExpRegionB());
-				pstmt.setString(22, form.getNvcExpVegB());
-				pstmt.setString(23, form.getNvcExpFloristicsB());
-				pstmt.setString(24, form.getNvcExpNVCB());
-				pstmt.setString(25, form.getNvcExpRegionC());
-				pstmt.setString(26, form.getNvcExpVegC());
-				pstmt.setString(27, form.getNvcExpFloristicsC());
-				pstmt.setString(28, form.getNvcExpNVCC());
+				pstmt.setString(17, form.getExpRegionA());
+				pstmt.setString(18, form.getExpRegionAVeg());
+				pstmt.setString(19, form.getExpRegionAFlor());
+				pstmt.setString(20, form.getExpRegionANVC());
+				pstmt.setString(21, form.getExpRegionB());
+				pstmt.setString(22, form.getExpRegionBVeg());
+				pstmt.setString(23, form.getExpRegionBFlor());
+				pstmt.setString(24, form.getExpRegionBNVC());
+				pstmt.setString(25, form.getExpRegionC());
+				pstmt.setString(26, form.getExpRegionCVeg());
+				pstmt.setString(27, form.getExpRegionCFlor());
+				pstmt.setString(28, form.getExpRegionCNVC());
 				pstmt.setString(29, form.getEsaSponsorNameA());
 				pstmt.setString(30, form.getEsaSponsorEmailA());
 				pstmt.setString(31, form.getEsaSponsorNameB());

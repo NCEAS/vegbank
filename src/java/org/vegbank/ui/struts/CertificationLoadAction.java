@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 02:11:21 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-01-16 19:28:56 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,8 +129,8 @@ public class CertificationLoadAction extends VegbankAction {
 						phoneNumber, phoneType, currentCertLevel, cvDoc, highestDegree,
 						degreeYear, degreeInst, currentInst, currentPos, esaPos,
 						profExperienceDoc, relevantPubs, vegSamplingDoc,  vegAnalysisDoc, usnvcExpDoc, 
-						vegbankExpDoc, plotdbDoc, nvcExpRegionA, nvcExpVegA, nvcExpFloristicsA, 
-						nvcExpNVCA, esaSponsorNameA, esaSponsorEmailA, esaSponsorNameB, esaSponsorEmailB, 
+						vegbankExpDoc, plotdbDoc, expRegionA, expRegionAVeg, expRegionAFlor, 
+						expRegionANVC, esaSponsorNameA, esaSponsorEmailA, esaSponsorNameB, esaSponsorEmailB, 
 						peerReview, additionalStatements);
 						
 						// send a success message
@@ -248,22 +248,22 @@ public class CertificationLoadAction extends VegbankAction {
 			messageBody.append(" VegBank Experience: "+vegbankExpDoc+" <br>\n");
 			messageBody.append(" Intended VB Use: "+useVegbank+" <br>\n");
 			messageBody.append(" Plot DB/Tools Exp: "+ plotdbDoc+" <br>\n");
-			messageBody.append(" nvcExpRegionA: "+nvcExpRegionA+" <br>\n");
-			messageBody.append(" nvcExpVegA: "+nvcExpVegA+" <br>\n");
-			messageBody.append(" nvcExpFloristicsA: "+nvcExpFloristicsA+" <br>\n");
-			messageBody.append(" nvcExpNVCA: "+nvcExpNVCA+" <br>\n");
+			messageBody.append(" expRegionA: "+expRegionA+" <br>\n");
+			messageBody.append(" expRegionAVeg: "+expRegionAVeg+" <br>\n");
+			messageBody.append(" expRegionAFlor: "+expRegionAFlor+" <br>\n");
+			messageBody.append(" expRegionANVC: "+expRegionANVC+" <br>\n");
 			messageBody.append(" esaSponsorNameA: "+esaSponsorNameA+" <br>\n");
 			messageBody.append(" esaSponsorEmailA: "+esaSponsorEmailA+" <br>\n");
 			messageBody.append(" esaSponsorNameB: "+esaSponsorNameB+" <br>\n");
 			messageBody.append(" esaSponsorEmailB: "+esaSponsorEmailB+" <br>\n");
-			messageBody.append(" nvcExpRegionB: "+nvcExpRegionB+" <br>\n");
-			messageBody.append(" nvcExpVegB: "+nvcExpVegB+" <br>\n");
-			messageBody.append(" nvcExpFloristicsB: "+nvcExpFloristicsB+" <br>\n");
-			messageBody.append(" nvcExpNVCB: "+nvcExpNVCB+" <br>\n");
-			messageBody.append(" nvcExpRegionC: "+nvcExpRegionC+" <br>\n");
-			messageBody.append(" nvcExpVegC: "+nvcExpVegC+" <br>\n");
-			messageBody.append(" nvcExpFloristicsC: "+nvcExpFloristicsC+" <br>\n");
-			messageBody.append(" nvcExpNVCC: "+nvcExpNVCC+" <br>\n");
+			messageBody.append(" expRegionB: "+expRegionB+" <br>\n");
+			messageBody.append(" expRegionBVeg: "+expRegionBVeg+" <br>\n");
+			messageBody.append(" expRegionBFlor: "+expRegionBFlor+" <br>\n");
+			messageBody.append(" expRegionBNVC: "+expRegionBNVC+" <br>\n");
+			messageBody.append(" expRegionC: "+expRegionC+" <br>\n");
+			messageBody.append(" expRegionCVeg: "+expRegionCVeg+" <br>\n");
+			messageBody.append(" expRegionCFlor: "+expRegionCFlor+" <br>\n");
+			messageBody.append(" expRegionCNVC: "+expRegionCNVC+" <br>\n");
 			messageBody.append(" peerReview: "+peerReview+" <br>\n");
 			messageBody.append(" additionalStatements: "+additionalStatements+" <br>\n");
 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 02:14:58 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-01-16 19:28:56 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,18 +62,18 @@ public class CertificationForm extends ValidatorForm
 	private String vbIntention;
 	private String toolsExp;
 
-	private String nvcExpRegionA;
-	private String nvcExpVegA;
-	private String nvcExpFloristicsA;
-	private String nvcExpNVCA;
-	private String nvcExpRegionB;
-	private String nvcExpVegB;
-	private String nvcExpFloristicsB;
-	private String nvcExpNVCB;
-	private String nvcExpRegionC;
-	private String nvcExpVegC;
-	private String nvcExpFloristicsC;
-	private String nvcExpNVCC;
+	private String expRegionA;
+	private String expRegionAVeg;
+	private String expRegionAFlor;
+	private String expRegionANVC;
+	private String expRegionB;
+	private String expRegionBVeg;
+	private String expRegionBFlor;
+	private String expRegionBNVC;
+	private String expRegionC;
+	private String expRegionCVeg;
+	private String expRegionCFlor;
+	private String expRegionCNVC;
 	private String esaSponsorNameA;
 	private String esaSponsorEmailA;
 	private String esaSponsorNameB;
@@ -386,169 +386,169 @@ public class CertificationForm extends ValidatorForm
 	/**
 	 * @return
 	 */
-	public String getNvcExpRegionA() {
-		return nvcExpRegionA;
+	public String getExpRegionA() {
+		return expRegionA;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setNvcExpRegionA(String nvcExpRegionA) {
-		this.nvcExpRegionA = nvcExpRegionA;
+	public void setExpRegionA(String expRegionA) {
+		this.expRegionA = expRegionA;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getNvcExpVegA() {
-		return nvcExpVegA;
+	public String getExpRegionAVeg() {
+		return expRegionAVeg;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setNvcExpVegA(String nvcExpVegA) {
-		this.nvcExpVegA = nvcExpVegA;
+	public void setExpRegionAVeg(String expRegionAVeg) {
+		this.expRegionAVeg = expRegionAVeg;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getNvcExpFloristicsA() {
-		return nvcExpFloristicsA;
+	public String getExpRegionAFlor() {
+		return expRegionAFlor;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setNvcExpFloristicsA(String nvcExpFloristicsA) {
-		this.nvcExpFloristicsA = nvcExpFloristicsA;
+	public void setExpRegionAFlor(String expRegionAFlor) {
+		this.expRegionAFlor = expRegionAFlor;
 	}
 
 	/**
 	 * @return
 	 */
-	public String getNvcExpNVCA() {
-		return nvcExpNVCA;
+	public String getExpRegionANVC() {
+		return expRegionANVC;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setNvcExpNVCA(String nvcExpNVCA) {
-		this.nvcExpNVCA = nvcExpNVCA;
+	public void setExpRegionANVC(String expRegionANVC) {
+		this.expRegionANVC = expRegionANVC;
 	}
 
 	/**
-	 * Get value of 'nvcExpRegionB' property.
+	 * Get value of 'expRegionB' property.
 	 */
-	public String getNvcExpRegionB() {
-		return this.nvcExpRegionB;
+	public String getExpRegionB() {
+		return this.expRegionB;
 	}
 
 	/**
-	 * Set the 'nvcExpRegionB' property.
+	 * Set the 'expRegionB' property.
 	 */
-	public void setNvcExpRegionB(String nvcExpRegionB) {
-		this.nvcExpRegionB = nvcExpRegionB;
+	public void setExpRegionB(String expRegionB) {
+		this.expRegionB = expRegionB;
 	}
 
 	/**
-	 * Get value of 'nvcExpVegB' property.
+	 * Get value of 'expRegionBVeg' property.
 	 */
-	public String getNvcExpVegB() {
-		return this.nvcExpVegB;
+	public String getExpRegionBVeg() {
+		return this.expRegionBVeg;
 	}
 
 	/**
-	 * Set the 'nvcExpVegB' property.
+	 * Set the 'expRegionBVeg' property.
 	 */
-	public void setNvcExpVegB(String nvcExpVegB) {
-		this.nvcExpVegB = nvcExpVegB;
+	public void setExpRegionBVeg(String expRegionBVeg) {
+		this.expRegionBVeg = expRegionBVeg;
 	}
 
 	/**
-	 * Get value of 'nvcExpFloristicsB' property.
+	 * Get value of 'expRegionBFlor' property.
 	 */
-	public String getNvcExpFloristicsB() {
-		return this.nvcExpFloristicsB;
+	public String getExpRegionBFlor() {
+		return this.expRegionBFlor;
 	}
 
 	/**
-	 * Set the 'nvcExpFloristicsB' property.
+	 * Set the 'expRegionBFlor' property.
 	 */
-	public void setNvcExpFloristicsB(String nvcExpFloristicsB) {
-		this.nvcExpFloristicsB = nvcExpFloristicsB;
+	public void setExpRegionBFlor(String expRegionBFlor) {
+		this.expRegionBFlor = expRegionBFlor;
 	}
 
 	/**
-	 * Get value of 'nvcExpNVCB' property.
+	 * Get value of 'expRegionBNVC' property.
 	 */
-	public String getNvcExpNVCB() {
-		return this.nvcExpNVCB;
+	public String getExpRegionBNVC() {
+		return this.expRegionBNVC;
 	}
 
 	/**
-	 * Set the 'nvcExpNVCB' property.
+	 * Set the 'expRegionBNVC' property.
 	 */
-	public void setNvcExpNVCB(String nvcExpNVCB) {
-		this.nvcExpNVCB = nvcExpNVCB;
+	public void setExpRegionBNVC(String expRegionBNVC) {
+		this.expRegionBNVC = expRegionBNVC;
 	}
 
 	/**
-	 * Get value of 'nvcExpRegionC' property.
+	 * Get value of 'expRegionC' property.
 	 */
-	public String getNvcExpRegionC() {
-		return this.nvcExpRegionC;
+	public String getExpRegionC() {
+		return this.expRegionC;
 	}
 
 	/**
-	 * Set the 'nvcExpRegionC' property.
+	 * Set the 'expRegionC' property.
 	 */
-	public void setNvcExpRegionC(String nvcExpRegionC) {
-		this.nvcExpRegionC = nvcExpRegionC;
+	public void setExpRegionC(String expRegionC) {
+		this.expRegionC = expRegionC;
 	}
 
 	/**
-	 * Get value of 'nvcExpVegC' property.
+	 * Get value of 'expRegionCVeg' property.
 	 */
-	public String getNvcExpVegC() {
-		return this.nvcExpVegC;
+	public String getExpRegionCVeg() {
+		return this.expRegionCVeg;
 	}
 
 	/**
-	 * Set the 'nvcExpVegC' property.
+	 * Set the 'expRegionCVeg' property.
 	 */
-	public void setNvcExpVegC(String nvcExpVegC) {
-		this.nvcExpVegC = nvcExpVegC;
+	public void setExpRegionCVeg(String expRegionCVeg) {
+		this.expRegionCVeg = expRegionCVeg;
 	}
 
 	/**
-	 * Get value of 'nvcExpFloristicsC' property.
+	 * Get value of 'expRegionCFlor' property.
 	 */
-	public String getNvcExpFloristicsC() {
-		return this.nvcExpFloristicsC;
+	public String getExpRegionCFlor() {
+		return this.expRegionCFlor;
 	}
 
 	/**
-	 * Set the 'nvcExpFloristicsC' property.
+	 * Set the 'expRegionCFlor' property.
 	 */
-	public void setNvcExpFloristicsC(String nvcExpFloristicsC) {
-		this.nvcExpFloristicsC = nvcExpFloristicsC;
+	public void setExpRegionCFlor(String expRegionCFlor) {
+		this.expRegionCFlor = expRegionCFlor;
 	}
 
 	/**
-	 * Get value of 'nvcExpNVCC' property.
+	 * Get value of 'expRegionCNVC' property.
 	 */
-	public String getNvcExpNVCC() {
-		return this.nvcExpNVCC;
+	public String getExpRegionCNVC() {
+		return this.expRegionCNVC;
 	}
 
 	/**
-	 * Set the 'nvcExpNVCC' property.
+	 * Set the 'expRegionCNVC' property.
 	 */
-	public void setNvcExpNVCC(String nvcExpNVCC) {
-		this.nvcExpNVCC = nvcExpNVCC;
+	public void setExpRegionCNVC(String expRegionCNVC) {
+		this.expRegionCNVC = expRegionCNVC;
 	}
 
 	/**

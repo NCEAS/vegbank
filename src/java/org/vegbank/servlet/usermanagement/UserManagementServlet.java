@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: anderson $'
- *   '$Date: 2003-12-02 02:11:05 $'
- *   '$Revision: 1.18 $'
+ *   '$Date: 2004-01-16 19:28:56 $'
+ *   '$Revision: 1.19 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -413,10 +413,10 @@ public class UserManagementServlet extends HttpServlet
 	 * param usnvcExpDoc
 	 * param vegbankExpDoc
 	 * param plotdbDoc
-	 * param nvcExpRegionA
+	 * param expRegionA
 	 * param nvcExpExpVegA
-	 * param nvcExpFloristicsA
-	 * param nvcExpNVCA
+	 * param expRegionAFlor
+	 * param expRegionANVC
 	 * param esaSponsorNameA
 	 * param esaSponsorEmailA
 	 * param esaSponsorNameB
@@ -458,10 +458,10 @@ public class UserManagementServlet extends HttpServlet
 			 String vegbankExpDoc = (String)params.get("vegbankExpDoc");
 			 String useVegbank = (String)params.get("useVegbank");
 			 String plotdbDoc = (String)params.get("plotdbDoc");
-			 String nvcExpRegionA = (String)params.get("nvcExpRegionA");
-			 String nvcExpVegA = (String)params.get("nvcExpVegA");
-			 String nvcExpFloristicsA = (String)params.get("nvcExpFloristicsA");
-			 String nvcExpNVCA = (String)params.get("nvcExpNVCA");
+			 String expRegionA = (String)params.get("expRegionA");
+			 String expRegionAVeg = (String)params.get("expRegionAVeg");
+			 String expRegionAFlor = (String)params.get("expRegionAFlor");
+			 String expRegionANVC = (String)params.get("expRegionANVC");
 			 String esaSponsorNameA  = (String)params.get("esaSponsorNameA");
 			 String esaSponsorEmailA = (String)params.get("esaSponsorEmailA");
 			 String esaSponsorNameB = (String)params.get("esaSponsorNameB");
@@ -486,8 +486,8 @@ public class UserManagementServlet extends HttpServlet
 						phoneNumber, phoneType, currentCertLevel, cvDoc, highestDegree,
 			 			degreeYear, degreeInst, currentInst, currentPos, esaPos,
 			 			profExperienceDoc, relevantPubs, vegSamplingDoc,  vegAnalysisDoc, usnvcExpDoc, 
-			 			vegbankExpDoc, plotdbDoc, nvcExpRegionA, nvcExpVegA, nvcExpFloristicsA, 
-			 			nvcExpNVCA, esaSponsorNameA, esaSponsorEmailA, esaSponsorNameB, esaSponsorEmailB, 
+			 			vegbankExpDoc, plotdbDoc, expRegionA, expRegionAVeg, expRegionAFlor, 
+			 			expRegionANVC, esaSponsorNameA, esaSponsorEmailA, esaSponsorNameB, esaSponsorEmailB, 
 			 			peerReview, additionalStatements);
 						
 						// send a success message
@@ -605,20 +605,20 @@ public class UserManagementServlet extends HttpServlet
 			 String vegbankExpDoc = (String)params.get("vegbankExpDoc");
 			 String useVegbank = (String)params.get("useVegbank");
 			 String plotdbDoc = (String)params.get("plotdbDoc");
-			 String nvcExpRegionA = (String)params.get("nvcExpRegionA");
-			 String nvcExpVegA = (String)params.get("nvcExpVegA");
-			 String nvcExpFloristicsA = (String)params.get("nvcExpFloristicsA");
-			 String nvcExpNVCA = (String)params.get("nvcExpNVCA");
+			 String expRegionA = (String)params.get("expRegionA");
+			 String expRegionAVeg = (String)params.get("expRegionAVeg");
+			 String expRegionAFlor = (String)params.get("expRegionAFlor");
+			 String expRegionANVC = (String)params.get("expRegionANVC");
 			 
-			 String nvcExpRegionB = (String)params.get("nvcExpRegionB");
-			 String nvcExpVegB = (String)params.get("nvcExpVegB");
-			 String nvcExpFloristicsB = (String)params.get("nvcExpFloristicsB");
-			 String nvcExpNVCB = (String)params.get("nvcExpNVCB");
+			 String expRegionB = (String)params.get("expRegionB");
+			 String expRegionBVeg = (String)params.get("expRegionBVeg");
+			 String expRegionBFlor = (String)params.get("expRegionBFlor");
+			 String expRegionBNVC = (String)params.get("expRegionBNVC");
 			 
-			 String nvcExpRegionC = (String)params.get("nvcExpRegionC");
-			 String nvcExpVegC = (String)params.get("nvcExpVegC");
-			 String nvcExpFloristicsC = (String)params.get("nvcExpFloristicsC");
-			 String nvcExpNVCC = (String)params.get("nvcExpNVCC");
+			 String expRegionC = (String)params.get("expRegionC");
+			 String expRegionCVeg = (String)params.get("expRegionCVeg");
+			 String expRegionCFlor = (String)params.get("expRegionCFlor");
+			 String expRegionCNVC = (String)params.get("expRegionCNVC");
 			 
 			 
 			 String esaSponsorNameA  = (String)params.get("esaSponsorNameA");
@@ -651,23 +651,23 @@ public class UserManagementServlet extends HttpServlet
 			 messageBody.append(" VegBank Experience: "+vegbankExpDoc+" <br>\n");
 			 messageBody.append(" Intended VB Use: "+useVegbank+" <br>\n");
 			 messageBody.append(" Plot DB/Tools Exp: "+ plotdbDoc+" <br>\n");
-			 messageBody.append(" nvcExpRegionA: "+nvcExpRegionA+" <br>\n");
-			 messageBody.append(" nvcExpVegA: "+nvcExpVegA+" <br>\n");
-			 messageBody.append(" nvcExpFloristicsA: "+nvcExpFloristicsA+" <br>\n");
-			 messageBody.append(" nvcExpNVCA: "+nvcExpNVCA+" <br>\n");
+			 messageBody.append(" expRegionA: "+expRegionA+" <br>\n");
+			 messageBody.append(" expRegionAVeg: "+expRegionAVeg+" <br>\n");
+			 messageBody.append(" expRegionAFlor: "+expRegionAFlor+" <br>\n");
+			 messageBody.append(" expRegionANVC: "+expRegionANVC+" <br>\n");
 			 messageBody.append(" esaSponsorNameA: "+esaSponsorNameA+" <br>\n");
 			 messageBody.append(" esaSponsorEmailA: "+esaSponsorEmailA+" <br>\n");
 			 messageBody.append(" esaSponsorNameB: "+esaSponsorNameB+" <br>\n");
 			 messageBody.append(" esaSponsorEmailB: "+esaSponsorEmailB+" <br>\n");
-			 messageBody.append(" nvcExpRegionB: "+nvcExpRegionB+" <br>\n");
-			 messageBody.append(" nvcExpVegB: "+nvcExpVegB+" <br>\n");
-			 messageBody.append(" nvcExpFloristicsB: "+nvcExpFloristicsB+" <br>\n");
-			 messageBody.append(" nvcExpNVCB: "+nvcExpNVCB+" <br>\n");
+			 messageBody.append(" expRegionB: "+expRegionB+" <br>\n");
+			 messageBody.append(" expRegionBVeg: "+expRegionBVeg+" <br>\n");
+			 messageBody.append(" expRegionBFlor: "+expRegionBFlor+" <br>\n");
+			 messageBody.append(" expRegionBNVC: "+expRegionBNVC+" <br>\n");
 			 
-			 messageBody.append(" nvcExpRegionC: "+nvcExpRegionC+" <br>\n");
-			 messageBody.append(" nvcExpVegC: "+nvcExpVegC+" <br>\n");
-			 messageBody.append(" nvcExpFloristicsC: "+nvcExpFloristicsC+" <br>\n");
-			 messageBody.append(" nvcExpNVCC: "+nvcExpNVCC+" <br>\n");
+			 messageBody.append(" expRegionC: "+expRegionC+" <br>\n");
+			 messageBody.append(" expRegionCVeg: "+expRegionCVeg+" <br>\n");
+			 messageBody.append(" expRegionCFlor: "+expRegionCFlor+" <br>\n");
+			 messageBody.append(" expRegionCNVC: "+expRegionCNVC+" <br>\n");
 			 messageBody.append(" peerReview: "+peerReview+" <br>\n");
 			 messageBody.append(" additionalStatements: "+additionalStatements+" <br>\n");
 			 
