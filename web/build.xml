@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-11-20 18:29:04 $'
-* '$Revision: 1.74 $'
+* '$Author: farrell $'
+* '$Date: 2003-11-25 19:57:17 $'
+* '$Revision: 1.75 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -99,6 +99,7 @@
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="/${web.context_uri}/forms/"/>
     <filter token="dbdictionary_link" value="/${web.context_uri}/dbdictionary/"/>
+    <filter token="includes_link" value="/${web.context_uri}/includes/"/>
     <!-- add link for page name that links to help frame jsp -->
     <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
     <!-- location and filename of xml index page -->
