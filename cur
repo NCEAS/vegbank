@@ -1,7 +1,11 @@
 vim \
 src/java/org/vegbank/dataload/XML/*.java \
+src/java/org/vegbank/plots/datasource/NativeXMLReader.java \
 web/forms/plot-submit.jsp \
+web/forms/plot-upload-summary.jsp \
 src/java/org/vegbank/ui/struts/UploadPlotAction.java \
 src/java/org/vegbank/ui/struts/UploadPlotForm.java \
-src/java/org/vegbank/ui/struts/PleaseWaitAction.java 
+src/java/org/vegbank/ui/struts/PleaseWaitAction.java \
+web/src/web/WEB-INF/struts-config.xml \
+src/java/log4j.properties
 
