@@ -64,7 +64,7 @@
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
 <attribute>
-	<name>whereSubquery</name>
+	<name>wparamSearch</name>
 	<required>false</required>
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
