@@ -14,42 +14,42 @@
 <!-- The root element -->
 
 
-<!ELEMENT plantTaxa (name, reference, circumscription,party,correlation)>
-<!ELEMENT name (symbol,genus,species,startDate+)>
+<!ELEMENT plantTaxa (name,circumscription,party,status,correlation)>
+
+<!ELEMENT name (symbol,taxon,commonName,family,entryDate,nameReference+)>
 	<!ELEMENT symbol (#PCDATA)>
-	<!ELEMENT genus (#PCDATA)>
-	<!ELEMENT species (#PCDATA)>
-	<!ELEMENT startDate (#PCDATA)>
-	<!--the stop date will probably not be known by the user and will have to be calculated
-		what is the method for doing this?-->
-	
-<!ELEMENT reference (author, dateEntered, citation)>
-	<!ELEMENT author (#PCDATA)>
-	<!ELEMENT dateEntered (#PCDATA)>
-	<!ELEMENT citation (#PCDATA)>
-	
-<!ELEMENT circumscription (type,date)>
+	<!ELEMENT taxon (#PCDATA)>
+	<!ELEMENT commonName (#PCDATA)>
+	<!ELEMENT family (#PCDATA)>
+	<!ELEMENT entryDate (#PCDATA)>
+	<!ELEMENT nameReference (author,dateEntered,citation,label)>
+		<!ELEMENT author (#PCDATA)>
+		<!ELEMENT dateEntered (#PCDATA)>
+		<!ELEMENT citation (#PCDATA)>
+		<!ELEMENT label (#PCDATA)>
+		
+<!ELEMENT circumscription (type,circumReference)>
 	<!ELEMENT type (#PCDATA)>
-	<!ELEMENT startDate (#PCDATA)>
-	<!ELEMENT stopDate (#PCDATA)>
-	
-<!ELEMENT party (orgName, status)>
+	<!ELEMENT circumReference (author,dateEntered,citation,label)>	
+
+<!ELEMENT party (orgName)>
 	<!ELEMENT orgName (#PCDATA)>
-	<!ELEMENT status (#PCDATA)>
 	
+<!ELEMENT status (currentStatus,statusParty,startDate,stopDate+)>
+	<!ELEMENT currentStatus (#PCDATA)>
+	<!ELEMENT statusParty (#PCDATA)>
+	<!ELEMENT startDate (#PCDATA)>
+	<!ELEMENT stopDate (#PCDATA)>	
 	
-<!ELEMENT correlation (correlationParty, correlationReference, correlationName, congruence)>
+<!ELEMENT correlation (correlationParty, correlationReference, congruence)>
 	<!ELEMENT correlationParty (#PCDATA)>
 	
-	<!ELEMENT correlationReference (correlationAuthor, correlationDateEntered, correlationCitation)>
+	<!ELEMENT correlationReference (correlationAuthor, correlationDateEntered, correlationCitation,label)>
 		<!ELEMENT correlationAuthor (#PCDATA)>
 		<!ELEMENT correlationDateEntered (#PCDATA)>
 		<!ELEMENT correlationCitation (#PCDATA)>
 	
-	<!ELEMENT correlationName (correlationSymbol,correlationGenus,correlationSpecies+)>
-		<!ELEMENT correlationSymbol (#PCDATA)>
-		<!ELEMENT correlationGenus (#PCDATA)>
-		<!ELEMENT correlationSpecies (#PCDATA)>
+	
 	<!ELEMENT congruence (#PCDATA)>	
 <!-- EOF -->
 
