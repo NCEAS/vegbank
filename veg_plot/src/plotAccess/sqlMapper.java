@@ -40,6 +40,8 @@ public class  sqlMapper
 	
 	//the class that handles the sql requests
 	issueStatement is = new issueStatement();
+	//class that stores the 'canned' sql queries
+	queryStore qs = new queryStore();
 	
 	
 	
@@ -95,7 +97,8 @@ public class  sqlMapper
 			queryStore k1 = new queryStore();
 			k1.getPlotSummaryNew(  plotIdVec  );
 
-			//write to a summary information to the file that can be used by the application
+			//write to a summary information to the file 
+			//that can be used by the application
 			xmlWriter xw = new xmlWriter();
 			xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
 			
@@ -381,7 +384,8 @@ public class  sqlMapper
  * @param transformedSringNum integer defining number of query elements
  */
 
-	public void developPlotQuery(String[] transformedString, int transformedStringNum)
+	public void developPlotQuery(String[] transformedString, 
+		int transformedStringNum)
 	{
 		try 
 		{
@@ -392,80 +396,95 @@ public class  sqlMapper
  			String resultType = (String)metaQueryHash.get("resultType");
  			String outFile = (String)metaQueryHash.get("outFile");
 
-
-			// the first if statement is taggetinng those queries requesting an entire plot
-			// via the plotID number, in this case the query element: 'resultType' full is
-			// passed to the method
-			if ( resultType.equals("full") ) 
+			// there are two over-arching criteria for
+			// developing the queries -- either the user
+			// wants to develop a query to get the entire
+			// plot record or a 'summary' of the plot(s)
+			
+			if ( resultType.equals("full") )
 			{
+				if ( (String)queryElementHash.get("plotId") != null ) 
+				{
 		
-				//assume that the user has passed the plotId
-				String plotId = (String)queryElementHash.get("plotId");
-		
-				System.out.println("sqlMapper.developPlotQuery - "
-				+" calling queryStore.getEntireSinglePlot");
-				queryStore b = new queryStore();
-				b.getEntireSinglePlot(plotId);
-		
-				xmlWriter l = new xmlWriter();
-				l.writePlotSummary(b.entireSinglePlotOutput, 
-				b.entireSinglePlotOutputNum, outFile);
+					//assume that the user has passed the plotId
+					//so retrieve the entire plot corresponding 
+					// to that plot id
+					String plotId = (String)queryElementHash.get("plotId");
+					
+					System.out.println("sqlMapper.developPlotQuery - "
+					+" calling queryStore.getEntireSinglePlot");
+				
+					qs.getEntireSinglePlot(  plotId  );
+
+					//write to a summary information to the file that can be used by the application
+					xmlWriter xw = new xmlWriter();
+					xw.writePlotSummary(qs.cumulativeSummaryResultHash, outFile);
+				}
+				else
+				{
+					System.out.println("didnt recognize the desired query");
+				}
 			}
-
-
-			// this if targets those queries requesting summary information for plots using
-			// a specific query element lime taxonName, communityName, state etc
-			else if ( resultType.equals("summary") && (queryElementHash.size() == 1) ) 
+			
+			else if ( resultType.equals("summary") )
 			{
+				// this if targets those queries requesting summary information for plots using
+				// a specific query element lime taxonName, communityName, state etc
+				if ( resultType.equals("summary") && (queryElementHash.size() == 1) ) 
+				{
 		
-				//grab the queryElementType from the hash
-				String queryElementType	= (String)queryElementHash.keys().nextElement().toString();
-				//grab the queryElementValue from the hash
-				String queryElementValue = (String)queryElementHash.get(queryElementType);
+					//grab the queryElementType from the hash
+					String queryElementType	= (String)queryElementHash.keys().nextElement().toString();
+					//grab the queryElementValue from the hash
+					String queryElementValue = (String)queryElementHash.get(queryElementType);
 		
-				System.out.println("> the query element key: "+queryElementType);
-				System.out.println("> the query element value: "+queryElementValue);
+					System.out.println("> the query element key: "+queryElementType);
+					System.out.println("> the query element value: "+queryElementValue);
 		
-				System.out.println("sqlMapper.developPlotQuery - "
-				+" calling queryStore.getPlotId (single query element)");
-				queryStore j = new queryStore();
-				j.getPlotId(queryElementValue, queryElementType);
-				queryOutput=j.outPlotId;
-				queryOutputNum=j.outPlotIdNum;
+					System.out.println("sqlMapper.developPlotQuery - "
+					+" calling queryStore.getPlotId (single query element)");
+					queryStore j = new queryStore();
+					j.getPlotId(queryElementValue, queryElementType);
+					queryOutput=j.outPlotId;
+					queryOutputNum=j.outPlotIdNum;
+				}
+
+				// this if targets thosequeries requesting summary information for plots having
+				// some minimum and maximum value for a specific attribute like elevation or
+				// latitude
+
+				else if ( resultType.equals("summary") && (queryElementHash.size() == 2) ) 
+				{
+
+					//assume for now that the query elements being targetd here are
+					//elevation and grab the results
+					String elevationMin = (String)queryElementHash.get("elevationMin");
+					String elevationMax = (String)queryElementHash.get("elevationMax");
+		
+		
+					System.out.println("sqlMapper.developPlotQuery - "
+					+" calling queryStore.getPlotId (elevation option)");
+					queryStore j = new queryStore();
+					j.getPlotId(elevationMin, elevationMax, "elevation");
+
+					queryOutput=j.outPlotId;
+					queryOutputNum=j.outPlotIdNum;
+				}
+
+				//retrieve the plot summary information, using as input 
+				//the plotId numbers retrieved in the provios query 
+				queryStore k1 = new queryStore();
+				k1.getPlotSummaryNew(queryOutput, queryOutputNum);
+
+				//write to a summary information to the file 
+				//that can be used by the application
+				xmlWriter xw = new xmlWriter();
+				xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
 			}
-
-			// this if targets thosequeries requesting summary information for plots having
-			// some minimum and maximum value for a specific attribute like elevation or
-			// latitude
-
-			else if ( resultType.equals("summary") && (queryElementHash.size() == 2) ) 
+			else
 			{
-
-				//assume for now that the query elements being targetd here are
-				//elevation and grab the results
-				String elevationMin = (String)queryElementHash.get("elevationMin");
-				String elevationMax = (String)queryElementHash.get("elevationMax");
-		
-		
-				System.out.println("sqlMapper.developPlotQuery - "
-				+" calling queryStore.getPlotId (elevation option)");
-				queryStore j = new queryStore();
-				j.getPlotId(elevationMin, elevationMax, "elevation");
-
-				queryOutput=j.outPlotId;
-				queryOutputNum=j.outPlotIdNum;
+				System.out.println("didnt recognize the desired query");
 			}
-
-
-			//retrieve the plot summary information, using as input the plotId numbers 
-			//retrieved in the provios query 
-			queryStore k1 = new queryStore();
-			k1.getPlotSummaryNew(queryOutput, queryOutputNum);
-
-			//write to a summary information to the file that can be used by the application
-			xmlWriter xw = new xmlWriter();
-			xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
-
 
 } //end try 
 catch ( Exception e )
