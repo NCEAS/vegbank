@@ -113,7 +113,7 @@ WRITING TO:<xsl:value-of select="concat($vers,'Help.',$pathSoFar,'.',name,$htmls
   <xsl:template name="writehtmlhead">
     <head>
       <title>VegBranch help</title>
-      <link rel="stylesheet" type="text/css" href="http://vegbank.org/vegbank/includes/default.css" />
+      <link rel="stylesheet" type="text/css" href="@stylesheet@" />
     </head>
   </xsl:template>
   
@@ -124,7 +124,7 @@ WRITING TO:<xsl:value-of select="concat($vers,'Help.',$pathSoFar,'.',name,$htmls
   <table border="0" cellpadding="0" cellspacing="0"><tr><td><xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;nbsp;&amp;nbsp;</xsl:text></td><td><p>
   <xsl:for-each select="control">
     <!-- write help for each control, min: links -->
-      <a href="{$pathSoFar}.{name}{$htmlsuffix}" target="lowerframe"><img border="0" src="http://vegbank.org@images_link@question.gif" alt="help?" /></a> <xsl:call-template name="getCtlRep"><xsl:with-param name="ctlType" select="ctlType" /><xsl:with-param name="caption" select="caption" /></xsl:call-template><xsl:call-template name="tempNAme" /><br/>
+      <a href="{$pathSoFar}.{name}{$htmlsuffix}" target="lowerframe"><img border="0" src="@images_link@question.gif" alt="help?" /></a> <xsl:call-template name="getCtlRep"><xsl:with-param name="ctlType" select="ctlType" /><xsl:with-param name="caption" select="caption" /></xsl:call-template><xsl:call-template name="tempNAme" /><br/>
         <xsl:call-template name="getCtls"><xsl:with-param name="pathSoFar"><xsl:value-of select="$pathSoFar"/>.<xsl:value-of select="name" /></xsl:with-param></xsl:call-template>
  </xsl:for-each>
 </p></td></tr></table> 
