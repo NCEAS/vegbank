@@ -9,8 +9,8 @@ import org.vegbank.common.utility.Utility;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-01 01:04:49 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-03-24 17:12:37 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -193,6 +193,9 @@ public class WebUser
 		password = string;
 	}
 	
+	/**
+	 * Alias for getEmail().
+	 */
 	public String getUsername()
 	{
 		return this.getEmail();
@@ -401,6 +404,15 @@ public class WebUser
 	public void setUserid(long l)
 	{
 		userid = l;
+	}
+
+	/**
+	 * Alias for setEmail().
+	 * @param string
+	 */
+	public void setUsername(String string)
+	{
+		this.setEmail(string);
 	}
 
 	/**
