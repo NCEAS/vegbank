@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-05-31 03:55:55 $'
- * '$Revision: 1.16 $'
+ *     '$Date: 2002-06-28 20:52:20 $'
+ * '$Revision: 1.17 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -500,6 +500,7 @@ private int plantUsageKey(String plantName)
  	*
  	* @param singlePlantInstance -- a hash table with all the attributes 
  	*	of a sigle plant instance
+	* @param plantLevel -- the level of the plant in the usda heirarchy
  	* @return void
  	*
  	*/	
@@ -513,6 +514,7 @@ private int plantUsageKey(String plantName)
 		if ( singlePlantInstance.toString() != null )
 		{
 			String concatenatedName=singlePlantInstance.get("concatenatedName").toString();
+			String concatenatedLongName = singlePlantInstance.get("concatenatedLongName").toString();
 			String tsnValue=singlePlantInstance.get("tsnValue").toString();
 			String rank=singlePlantInstance.get("rank").toString();
 			String initialDate=singlePlantInstance.get("initialDate").toString();
@@ -552,7 +554,7 @@ private int plantUsageKey(String plantName)
 					if (plantNameExists(concatenatedName)==false)
 					{
 						//sciNameId = loadPlantNameInstance(refId, concatenatedName, commonName, plantCode);
-						sciNameId = loadPlantNameInstance(refId, concatenatedName, "", dateEntered);
+						sciNameId = loadPlantNameInstance(refId, concatenatedName, concatenatedLongName, dateEntered);
 					}
 					//same with the common name 
 					if (plantNameExists(commonName)==false)
@@ -729,14 +731,19 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 
 	
 	/**
-	 * method that loads a party occurence into the party table
+	 * method that loads a party occurence into the party table.  First the method
+	 * determines if the party already exists and if not then it is loaded
+	 * @param partyName -- the party name should always be, for this class:
+	 * 'USDA-PLANTS'
+	 * @param partyContactInstructions -- the url for the usda plants
+	 * @return plantpartyid -- the primary key value for the plant party
 	 */
 	private int insertPlantPartyInstance(String partyName, String partyContractInstructions)
 	{
 	 int partyId = 0; 
+	 StringBuffer sb = new StringBuffer();
 	 try
 	 {
-	 	StringBuffer sb = new StringBuffer();
 		//first see if the reference already exists
 		boolean partyExists = plantPartyExists(partyName);
 		//System.out.println("USDAPlantsLoader > partyExists: " + partyExists); 
@@ -749,12 +756,14 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 		else
 		{
 			//insert the strata values
-			sb.append("INSERT into PLANTPARTY (organizationName, contactInstructions) "
-			+" values(?,?)");
+			sb.append("INSERT into PLANTPARTY (organizationName, contactInstructions, email) "
+			+" values(?,?,?)");
 			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 			// Bind the values to the query and execute it
  			pstmt.setString(1, partyName);
 			pstmt.setString(2, partyContractInstructions);
+			pstmt.setString(3, "plants@plants.usda.gov");
+			
 			//execute the p statement
  			pstmt.execute();
  			// pstmt.close();
@@ -777,6 +786,7 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 	 {
 		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
 		 e.printStackTrace();
+		 System.out.println("sql: " + sb.toString() );
 		 //System.exit(0);
 	 }
 	 return(partyId);
@@ -1213,9 +1223,10 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 	int concept_id, String usage, String startDate, String stopDate, 
 	String classSystem, int partyId)
 	{
+		String s = null;
 		try
 		{
-			String s = "insert into PLANTUSAGE (plantName, plantName_id, plantConcept_id, "+
+			s = "insert into PLANTUSAGE (plantName, plantName_id, plantConcept_id, "+
 				" plantNameStatus, usageStart, usageStop, classSystem, plantParty_id) "
 				+" values(?,?,?,?,?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
@@ -1235,8 +1246,16 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 		catch(Exception e)
 		{
 			System.out.println("Exception: " + e.getMessage() );
-			System.out.println("plantNameId: " + name_id );
+			System.out.println("sql: " + s);
+				System.out.println("plantNameId: " + name_id );
 			System.out.println("plantConceptId: " + concept_id );
+			System.out.println("usage: " + usage );
+			System.out.println("startDate" + startDate  );
+			System.out.println("stopDate" + stopDate  );
+			System.out.println("classSystem" + classSystem  );
+			System.out.println("partyId" + partyId  );
+			//System.out.println("acceptedSynonym " + acceptedSynonym  );
+			
 			e.printStackTrace();
 			//System.exit(0);
 		}
@@ -1264,9 +1283,10 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 	int concept_id, String usage, String startDate, String stopDate, 
 	String classSystem, int partyId, String acceptedSynonym)
 	{
+		String s = null;
 		try
 		{
-			String s = "insert into PLANTUSAGE (plantName, plantName_id, plantConcept_id, "+
+			s = "insert into PLANTUSAGE (plantName, plantName_id, plantConcept_id, "+
 				" plantNameStatus, usageStart, usageStop, classSystem, plantParty_id, "
 				+"acceptedSynonym) "
 				+" values(?,?,?,?,?,?,?,?,?) ";
@@ -1288,8 +1308,15 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 		catch(Exception e)
 		{
 			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("sql: " + s);
 			System.out.println("plantNameId: " + name_id );
 			System.out.println("plantConceptId: " + concept_id );
+			System.out.println("usage: " + usage );
+			System.out.println("startDate" + startDate  );
+			System.out.println("stopDate" + stopDate  );
+			System.out.println("classSystem" + classSystem  );
+			System.out.println("partyId" + partyId  );
+			System.out.println("acceptedSynonym " + acceptedSynonym  );
 			e.printStackTrace();
 			//System.exit(0);
 		}
@@ -1583,6 +1610,11 @@ public Hashtable plantInstance(Vector fileVector, int startLevel)
 		else if ( fileVector.elementAt(i).toString().startsWith("concatenatedName") )
 		{
 			plantInstance.put("concatenatedName", 
+				pipeStringTokenizer(fileVector.elementAt(i).toString(), 2) );
+		}
+		else if ( fileVector.elementAt(i).toString().startsWith("concatenatediLongName") )
+		{
+			plantInstance.put("concatenatedLongName", 
 				pipeStringTokenizer(fileVector.elementAt(i).toString(), 2) );
 		}
 		else if ( fileVector.elementAt(i).toString().startsWith("rank") )

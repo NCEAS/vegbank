@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-05-31 22:23:13 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2002-06-28 20:52:21 $'
+ * '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -902,7 +902,16 @@ public class PlantTaxaLoader
 	
 	
 	/**
-	 * method that loads a party occurence into the party table
+	 * method that loads a party occurence into the party table.  First the method
+	 * determines if the party already exits in the database, and if it does not 
+	 * then it is loaded.
+	 *
+	 * @param salutation
+	 * @param givenName
+	 * @param surName
+	 * @param orgName
+	 * @param email
+	 * @return partyid -- the primary key value for the party
 	 */
 	private int insertPlantPartyInstance(String salutation, String givenName, String surName,
 	String orgName, String email)
