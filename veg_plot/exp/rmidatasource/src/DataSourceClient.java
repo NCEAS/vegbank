@@ -18,6 +18,14 @@ import java.rmi.*;
  * serever running the vegbank databases and this tool will allow for an
  * alternative to HTTP for accessing that data
  *
+ *  Authors: @author@
+ *  Release: @release@
+ *	
+ *  '$Author: harris $'
+ *  '$Date: 2002-03-29 16:22:23 $'
+ * 	'$Revision: 1.14 $'
+ *
+ *
  */
 public class DataSourceClient
 {
@@ -813,6 +821,7 @@ public class DataSourceClient
 	/**
 	 * method that will insert a plot on the windows machine based on the name
 	 * of that plot
+	 * @param plot -- the plot that should be loaded 
 	 */
 	 public String insertPlot(String plot)
 	 {
@@ -877,14 +886,33 @@ public class DataSourceClient
 				if (argv.length == 3)
 				{
 					testPlot =  argv[2];
+					//if the all flag is passed
+					if ( testPlot.equals("-all") )
+					{
+						String insertResults = "";
+						System.out.println("DataSourceCleint > inserting all the plots in the archive " );
+						for (int c = 0; c < v.size(); c++)
+						{
+							 insertResults = insertResults+ " \n" +client.insertPlot( v.elementAt(c).toString() );
+						}
+						System.out.println("DataSourceCleint > insertion results: \n" + insertResults );
+					}
+					//just load the sible plot identified on the command line
+					else
+					{
+						System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
+						String insertResults = client.insertPlot(testPlot);
+						System.out.println("DataSourceCleint > insertion results: \n" + insertResults );
+					}
 				}
+				//else load the first plot only
 				else
 				{
 					testPlot =  v.elementAt(0).toString();
+					System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
+					String insertResults = client.insertPlot(testPlot);
+					System.out.println("DataSourceCleint > insertion results: \n" + insertResults );	
 				}
-				System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
-				String insertResults = client.insertPlot(testPlot);
-				System.out.println("DataSourceCleint > insertion results: \n" + insertResults );	
 			} 
 			catch(Exception e) 
 			{
