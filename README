@@ -1,6 +1,6 @@
-'$Author: harris $'
-'$Date: 2002-11-26 23:07:11 $'
-'$Revision: 1.4 $'
+'$Author: farrell $'
+'$Date: 2002-11-27 19:47:45 $'
+'$Revision: 1.5 $'
 THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
 
 REQUIRED JAR FILES
@@ -56,24 +56,29 @@ postmaster -d2 -i -D databasefile
 # Create databases for "plots_dev, plants_dev, framework and community_dev"
 createdb "name of database" #repeat for each 
 
-# Create user ( e.g. datauser )
-createuser "User Name"
+# Create the database user 'datauser' as follows:
+> createuser  datauser
 
 # Run create table scripts for each database ( in each modules sql directory)
-psql plots_dev < ../../veg_plot/sql/create-vegbank-plots2002.sql  
+>psql plots_dev < ../../veg_plot/sql/create-vegbank-plots2002.sql  
 
-psql plants_dev < ../../veg_taxa/sql/createPlantTaxonDb_pg.sql  
+>psql plants_dev < veg_taxa/sql/createPlantTaxonDb_pg.sql  
 
-psql community_dev < community_implementation.sql  
-psql community_dev < createCommunitySummary_pg.sql  
-psql community_dev < createEcoartTables_pg.sql   
-psql framework < ./veg_plot/sql/create_veguser_tables.sql
+>psql community_dev < veg_community/sql/community_implementation.sql  
+>psql community_dev < veg_community/sql/createCommunitySummary_pg.sql  
+>psql community_dev < veg_community/sql/ createEcoartTables_pg.sql   
+
+>psql framework < ./veg_plot/sql/create_veguser_tables.sql
+
+# Run the deNormalization scripts
+>psql plants_dev < veg_taxa/sql/denormPlantTaxonDb_pg.sql
 
 # Edit the pg_hba.conf file so that connections may be made to the database 
-add the following:
+# add the following:
 local      all                                          trust
 host       all         127.0.0.1     255.255.255.255    trust
 
-# Create the database user 'datauser' as follows:
-> createuser  datauser
+
+
+
  
