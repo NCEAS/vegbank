@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-13 01:04:50 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-08-27 23:26:32 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,10 +56,10 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.1 $ $Date: 2004-08-13 01:04:50 $
+ * @version $Revision: 1.2 $ $Date: 2004-08-27 23:26:32 $
  */
 
-public class VegbankGetTag extends TagSupport {
+public class VegbankGetTag extends VegbankTag {
 
 	private static final Log log = LogFactory.getLog(VegbankGetTag.class);
 
@@ -77,7 +77,6 @@ public class VegbankGetTag extends TagSupport {
 			beanName = "map";
 		}
 
-
 		// Set up genericBean in the request scope with a list of Taxoninterpretation objects
 		// execute() PARAMS:
 		//   1: the HTTP request
@@ -86,19 +85,26 @@ public class VegbankGetTag extends TagSupport {
 		//   4: the name of the model bean to generate
 		//   5: any SQL where parameters; can be an array too
 		try {
-			GenericCommand.execute(
+			GenericCommand gc = new GenericCommand();
+
+			gc.setId(getId());
+			gc.setNumItems((String)findAttribute("numItems"));
+			gc.setPageNumber(getPageNumber());
+			gc.setPerPage(getPerPage());
+
+			gc.execute(
 					(HttpServletRequest)pageContext.getRequest(), 
-					select, 
-					where, 
-					beanName, 
-					wparam);
+					getSelect(), 
+					getWhere(), 
+					getBeanName(),
+					getWparam());
 
 		} catch (Exception ex) { 
 			log.error("Problem running GenericCommand", ex);
 		}
 		
         // Continue processing this page
-        return (SKIP_BODY);
+        return SKIP_BODY;
     }
 
     /**
@@ -107,7 +113,11 @@ public class VegbankGetTag extends TagSupport {
 	protected String select;
 
     public String getSelect() {
-        return (this.select);
+		if (Utility.isStringNullOrEmpty(this.select)) {
+        	return (String)findAttribute("select");
+		} else {
+        	return this.select;
+		}
     }
 
     public void setSelect(String s) {
@@ -120,7 +130,11 @@ public class VegbankGetTag extends TagSupport {
 	protected String where;
 
     public String getWhere() {
-        return (this.where);
+		if (Utility.isStringNullOrEmpty(this.where)) {
+        	return (String)findAttribute("where");
+		} else {
+        	return this.where;
+		}
     }
 
     public void setWhere(String s) {
@@ -132,12 +146,58 @@ public class VegbankGetTag extends TagSupport {
      */
 	protected String beanName;
 
+	/**
+	 * Returns pageNumber that has been set,
+	 * or finds pageNumber attribute in any scope.
+	 */
     public String getBeanName() {
-        return (this.beanName);
+		if (Utility.isStringNullOrEmpty(this.beanName)) {
+        	return (String)findAttribute("beanName");
+		} else {
+        	return this.beanName;
+		}
     }
 
     public void setBeanName(String s) {
         this.beanName = s;
+    }
+
+    /**
+     * 
+     */
+	protected String pageNumber;
+
+	/**
+	 * Returns pageNumber that has been set,
+	 * or finds pageNumber attribute in any scope.
+	 */
+    public String getPageNumber() {
+		if (Utility.isStringNullOrEmpty(this.pageNumber)) {
+        	return (String)findAttribute("pageNumber");
+		} else {
+        	return this.pageNumber;
+		}
+    }
+
+    public void setPageNumber(String s) {
+        this.pageNumber = s;
+    }
+
+    /**
+     * 
+     */
+	protected String perPage;
+
+    public String getPerPage() {
+		if (Utility.isStringNullOrEmpty(perPage)) {
+			return (String)findAttribute("perPage");
+		} else {
+        	return this.perPage;
+		}
+    }
+
+    public void setPerPage(String s) {
+        this.perPage = s;
     }
 
     /**
@@ -146,34 +206,35 @@ public class VegbankGetTag extends TagSupport {
 	protected String wparam;
 
     public String getWparam() {
-        return (this.wparam);
-    }
-
-    public void setWparam(String s) {
-        Object param ;
-		try {
-			// look in the request
-        	param = pageContext.getRequest().getParameter(s);
-			if (param == null) {
-				
-				// find in other scopes
-				param = (String)RequestUtils.lookup(pageContext, s, null);
-			}
-
-			if (param == null) {
-				// just set it to the given value
-				this.wparam = s;
-
-			} else {
-				this.wparam = (String)param;
-			}
-
-
-		} catch (JspException jspex) {
-			this.wparam = s;
+		if (Utility.isStringNullOrEmpty(this.wparam)) {
+			return (String)findAttribute("wparam");
+		} else {
+        	return this.wparam;
 		}
     }
 
+    public void setWparam(String s) {
+		this.wparam = s;
+	}
+
+    /**
+     * 
+     */
+	protected String id;
+
+    public String getId() {
+		if (Utility.isStringNullOrEmpty(id)) {
+			log.debug("setId: finding...");
+			return (String)findAttribute("id");
+		} else {
+			log.debug("setId: returning");
+        	return this.id;
+		}
+    }
+
+    public void setId(String s) {
+        this.id = s;
+    }
 
 
 }
