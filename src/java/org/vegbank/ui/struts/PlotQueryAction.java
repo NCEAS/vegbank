@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-08-28 22:38:35 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2003-09-02 21:57:43 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ public class PlotQueryAction extends Action
 				conjunction));
 
 		// SlopeGradient
-		query.append(
+		dynamicQuery.append(
 			this.handleMaxMinNull(
 				pqForm.getMaxSlopeGradient(),
 				pqForm.getMinSlopeGradient(),
@@ -157,7 +157,7 @@ public class PlotQueryAction extends Action
 				conjunction));
 
 		// Plot Area
-		query.append(
+		dynamicQuery.append(
 			this.handleMaxMinNull(
 				pqForm.getMaxPlotArea(),
 				pqForm.getMinPlotArea(),
