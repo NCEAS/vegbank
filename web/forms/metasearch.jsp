@@ -185,9 +185,11 @@ You searched for
 <logic:equal name="regexOp" value="or">any word in</logic:equal>
 '<i><%= searchString %></i>'
 <br>
-<% } %>
 
 Click here to <a href="javascript:viewAllMetadata()">view all metadata</a>
+<% } else { %>
+Showing all metadata</a>
+<% } %>
 </span>
 </center>
 </logic:notEmpty>
