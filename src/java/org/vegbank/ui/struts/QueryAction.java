@@ -4,8 +4,8 @@
  *  Authors: @author@ Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2004-03-25 06:42:06 $' 
- * '$Revision: 1.2 $'
+ * '$Date: 2005-03-16 22:58:04 $' 
+ * '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -76,7 +76,7 @@ public class QueryAction extends Action
 
 		if ( query != null )
 		{
-			log.debug("SQL: "+ query.toString());
+			log.info("SQL: "+ query.toString());
 			try
 			{
 				DatabaseAccess da = new DatabaseAccess();

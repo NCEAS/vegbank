@@ -4,8 +4,8 @@
  *  Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2005-01-24 18:29:33 $' 
- * '$Revision: 1.6 $'
+ * '$Date: 2005-03-16 22:58:04 $' 
+ * '$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -111,13 +111,15 @@ public class QueryHelper
 		// AND date is
 		String stopdateField = "commstatus.stopdate";
 		String startdateField = "commstatus.startdate";
-		if (Utility.isStringNullOrEmpty(nameExistsBeforeDate))
-		{
-			// Use todays date
+        /*
+		if (Utility.isStringNullOrEmpty(nameExistsBeforeDate)) {
+			// Use today's date
 			nameExistsBeforeDate = Utility.dbAdapter.getDateTimeFunction();
 		}
-		query.append(isDateInRange(nameExistsBeforeDate, startdateField,
-				stopdateField));
+        */
+		if (!Utility.isStringNullOrEmpty(nameExistsBeforeDate)) {
+		    query.append(isDateInRange(nameExistsBeforeDate, startdateField, stopdateField));
+        }
 
 		// Wire up the Party
 		if (!Utility.isStringNullOrEmpty(acordingToParty))
@@ -170,7 +172,13 @@ public class QueryHelper
 			String[] nameType)
 	{
 		// Get sci name, code and common name for this plant
-		String sharedGetNameType = " ( SELECT plantname.plantname FROM plantusage NATURAL JOIN plantname where plantusage.plantconcept_id = plantconcept.plantconcept_id AND plantusage.classsystem =";
+
+		//////////
+        //////////String sharedGetNameType = " ( SELECT plantname.plantname FROM plantusage NATURAL JOIN plantname where plantusage.plantconcept_id = plantconcept.plantconcept_id AND plantusage.classsystem =";
+		//////////
+		String sharedGetNameType = " (SELECT plantusage.plantname FROM plantusage where plantusage.plantstatus_id = plantstatus.plantstatus_id AND plantusage.classsystem =";
+
+
 		String selectCodeName = sharedGetNameType + "'Code' ) AS Code";
 		String selectCommonName = sharedGetNameType
 				+ "'English Common' ) AS \"English Common Name\"";
@@ -184,8 +192,19 @@ public class QueryHelper
 
 		// Query Construct
 		StringBuffer query = new StringBuffer();
-		query
-				.append(" SELECT DISTINCT(plantconcept.accessioncode) , "
+		query.append(" SELECT DISTINCT(plantconcept.accessioncode) , "
+						+ selectCodeName
+						+ ","
+						+ selectCommonName
+						+ ","
+						+ selectSciName
+						+ " FROM (plantconcept "
+                        + " JOIN plantusage ON plantusage.plantconcept_id = plantconcept.plantconcept_id ) "
+                        + " JOIN plantstatus ON plantstatus.plantconcept_id = plantconcept.plantconcept_id "
+						+ " WHERE UPPER(plantname.plantname) like '"
+						+ plantname.toUpperCase() + "'");
+        /*
+		query.append(" SELECT DISTINCT(plantconcept.accessioncode) , "
 						+ selectCodeName
 						+ ","
 						+ selectCommonName
@@ -201,6 +220,7 @@ public class QueryHelper
 						+ "    ON plantstatus.plantconcept_id = plantconcept.plantconcept_id "
 						+ " WHERE UPPER(plantname.plantname) like '"
 						+ plantname.toUpperCase() + "'");
+       */
 
 		// AND classsytem is
 		query.append(DatabaseUtility.handleValueList(nameType,
@@ -213,13 +233,17 @@ public class QueryHelper
 		// AND date is
 		String stopdateField = "plantstatus.stopdate";
 		String startdateField = "plantstatus.startdate";
-		if (Utility.isStringNullOrEmpty(nameExistsBeforeDate))
-		{
-			// Use todays date
+        /*
+		if (Utility.isStringNullOrEmpty(nameExistsBeforeDate)) {
+			// Use today's date
 			nameExistsBeforeDate = Utility.dbAdapter.getDateTimeFunction();
 		}
-		query.append(isDateInRange(nameExistsBeforeDate, startdateField,
-				stopdateField));
+		query.append(isDateInRange(nameExistsBeforeDate, startdateField, stopdateField));
+        */
+		if (!Utility.isStringNullOrEmpty(nameExistsBeforeDate)) {
+            // don't say anything about date if not specified
+		    query.append(isDateInRange(nameExistsBeforeDate, startdateField, stopdateField));
+        }
 
 		// Wire up the Party
 		if (!Utility.isStringNullOrEmpty(acordingToParty))
