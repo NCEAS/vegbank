@@ -6242,6 +6242,7 @@ conditions may change between resampling events.
     <entitySummary>Party contributing to collection or interpretation of a plot;  may be either an individual or an organization.</entitySummary>
     <entityDescription/>
     <module>plot</module>
+    <archive>true</archive>
     <attribute>
       <attName>PARTY_ID</attName>
       <attModel>logical</attModel>
@@ -6251,6 +6252,7 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
+      <archive>true</archive>
       <attNotes>Primary key for the party table.</attNotes>
       <attDefinition>Database generated identifier assigned to each unique party.</attDefinition>
     </attribute>
@@ -6279,6 +6281,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>One's first name.</attDefinition>
+      <archive>true</archive>
     </attribute>
     <attribute>
       <attName>middleName</attName>
@@ -6292,6 +6295,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>One's middle name or initial, if any.</attDefinition>
+      <archive>true</archive>
     </attribute>
     <attribute>
       <attName>surName</attName>
@@ -6305,6 +6309,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Name shared in common to identify the members of a family, as distinguished from each member's given name.</attDefinition>
+      <archive>true</archive>
     </attribute>
     <attribute>
       <attName>organizationName</attName>
@@ -6318,6 +6323,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Name of an organization.</attDefinition>
+      <archive>true</archive>
     </attribute>
     <attribute>
       <attName>currentName_ID</attName>
@@ -6344,6 +6350,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Instructions for contacting a party.</attDefinition>
+      <archive>true</archive>
     </attribute>
     <attribute>
       <attName>owner_ID</attName>
@@ -6370,6 +6377,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes/>
       <attDefinition/>
+      <archive>true</archive>
     </attribute>
   </entity>
   <entity>

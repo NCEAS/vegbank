@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-04-01 19:52:19 $'
-  *     '$Revision: 1.8 $'
+  *     '$Date: 2003-05-30 21:44:41 $'
+  *     '$Revision: 1.9 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
@@ -19,10 +19,13 @@
     <property name="build.sql.src.dir" value="${build.src.dir}/sql"/>
     <property name="build.java.src.dir" value="${build.src.dir}/java"/>   
     <property name="build.javadatamodel.src.dir" value="${build.java.src.dir}/org/vegbank/common/model"/>  
-   	<property name="build.classes.dir" value="${build.dir}/classes"/>   
+    <property name="build.classes.dir" value="${build.dir}/classes"/>   
     <property name="build.reports.dir" value="${build.dir}/reports"/>
     <property name="build.reports.test.dir" value="${build.reports.dir}/testreports"/>
+    <property name="lib.dir" value="${basedir}/lib"/>
     <property name="docs.dir" value="${basedir}/docs"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="rmi.dist.dir" value="${distdir}/RMIServer"/>
     <property name="bin.dir" value="${basedir}/bin"/>
     <property name="src.dir" value="${basedir}/src"/>
     <property name="xsl.src.dir" value="${src.dir}/xsl"/>
@@ -39,6 +42,8 @@
     <mkdir dir="${build.classes.dir}"/>
     <mkdir dir="${build.java.src.dir}"/>  
     <mkdir dir="${build.javadatamodel.src.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+    <mkdir dir="${rmi.dist.dir}"/>
   </target>
     
   <target name="jar" depends="compile"
@@ -103,7 +108,7 @@
           
 	    <xslt in="${docs.dir}/xml/db_model_vegbank.xml" 
 	          style="${xsl.src.dir}/VegBankModel2Java.xsl"
-	          out="BOGUS">
+	          out="${build.java.src.dir}/BOGUS">
 	   		<param name="outdir"  
 	   					expression="${build.javadatamodel.src.dir}/"/>
 	    </xslt>
@@ -127,8 +132,18 @@
           depends="prepare">
           
 	    <xslt in="${docs.dir}/xml/db_model_vegbank.xml" 
-	          out="${build.sql.dir}/vegbank.sql" 
+	          out="${build.sql.src.dir}/vegbank.sql" 
 	          style="${xsl.src.dir}/VegBankModel2SQL.xsl">
+	    </xslt>
+  </target>
+
+  <target name="db_generate_archive_triggersql"
+          description="==> Generate the archive trigger sql scripts"
+          depends="prepare">
+          
+	    <xslt in="${docs.dir}/xml/db_model_vegbank.xml" 
+	          out="${build.sql.src.dir}/trigger.sql" 
+	          style="${xsl.src.dir}/VegbankModel2RevisionTriggersSQL.xsl">
 	    </xslt>
   </target>
 
@@ -139,7 +154,9 @@
     <!-- DROP and CREATE Database -->
     <exec executable="${bin.dir}/rebuilddb.sh">
       <arg value="${db.name}"/>
-      <arg value="${build.sql.dir}/vegbank.sql"/>
+      <arg value="${build.sql.src.dir}/vegbank.sql"/>
+      <arg value="veg_plot/sql/makePlotSummaryTables_postgres.sql"/>
+      <arg value="${sql.src.dir}/insert_preload_ANSI.sql"/>
     </exec>
     
     
