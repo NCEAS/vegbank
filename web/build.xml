@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: farrell $'
-  * '$Date: 2002-12-21 01:42:00 $'
-  * '$Revision: 1.26 $'
+  * '$Date: 2002-12-27 18:14:15 $'
+  * '$Revision: 1.27 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -47,38 +47,39 @@
 	<filter token="version" value="development"/>
 	
 	<!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
-	<property name="forms_server" value="/usr/local/devtools/jakarta-tomcat/webapps/forms"/>
-	<property name="image_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/images"/>
-	<property name="general_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/"/>
-	<property name="design_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/design/"/>
-	<property name="dictionary_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/dbdictionary/"/>
-	<property name="news_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/news/"/>
-	<property name="panel_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/panel/"/>
-	<property name="history_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/history/"/>
-	<property name="pubs_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/pubs/"/>
-	<property name="style_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/includes/"/>
-  <property name="vegbank_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/"/>
-	<property name="server_root" value="/usr/local/devtools/jakarta-tomcat/webapps/ROOT/"/>
+	<property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
+	<property name="forms_server" value="${tomcat.home.dir}/webapps/forms"/>
+	<property name="image_server" value="${tomcat.home.dir}/webapps/vegbank/images"/>
+	<property name="general_server" value="${tomcat.home.dir}/webapps/vegbank/general/"/>
+	<property name="design_server" value="${tomcat.home.dir}/webapps/vegbank/design/"/>
+	<property name="dictionary_server" value="${tomcat.home.dir}/webapps/vegbank/dbdictionary/"/>
+	<property name="news_server" value="${tomcat.home.dir}/webapps/vegbank/news/"/>
+	<property name="panel_server" value="${tomcat.home.dir}/webapps/vegbank/panel/"/>
+	<property name="history_server" value="${tomcat.home.dir}/webapps/vegbank/history/"/>
+	<property name="pubs_server" value="${tomcat.home.dir}/webapps/vegbank/pubs/"/>
+	<property name="style_server" value="${tomcat.home.dir}/webapps/vegbank/includes/"/>
+  <property name="vegbank_server" value="${tomcat.home.dir}/webapps/vegbank/"/>
+	<property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
 	
 	<!-- WEB SERVER LOCATIONS -->
-	<filter token="base_url" value="http://beta.nceas.ucsb.edu"/>
-	<filter token="image_server" value="http://beta.nceas.ucsb.edu/vegbank/images/"/>
-	<filter token="stylesheet" value="http://beta.nceas.ucsb.edu/vegbank/includes/default.css"/>
-	<filter token="plotquery_page" value="http://beta.nceas.ucsb.edu/forms/plot-query.html"/>
-	<filter token="nestedplotquery_page" value="http://beta.nceas.ucsb.edu/forms/nested-plot-query.html"/>
-	<filter token="uploaddata_page" value="http://beta.nceas.ucsb.edu/forms/uploadFile.html"/>
-	<filter token="stylesheet_generator" value="http://beta.nceas.ucsb.edu/forms/stylesheet-generator.html"/>
-	<filter token="general_link" value="http://beta.nceas.ucsb.edu/vegbank/general/"/>
-	<filter token="panel_link" value="http://beta.nceas.ucsb.edu/vegbank/panel/"/>
+	<filter token="base_url" value=""/>
+	<filter token="image_server" value="/vegbank/images/"/>
+	<filter token="stylesheet" value="/vegbank/includes/default.css"/>
+	<filter token="plotquery_page" value="/forms/plot-query.html"/>
+	<filter token="nestedplotquery_page" value="/forms/nested-plot-query.html"/>
+	<filter token="uploaddata_page" value="/forms/uploadFile.html"/>
+	<filter token="stylesheet_generator" value="/forms/stylesheet-generator.html"/>
+	<filter token="general_link" value="/vegbank/general/"/>
+	<filter token="panel_link" value="/vegbank/panel/"/>
 	
 	
 	<!-- SERVLETS -->
-	<filter token="stylesheet_generator_servlet" value="http://beta.nceas.ucsb.edu/framework/servlet/stylesheetgenerator"/>
-	<filter token="usermanagement_servlet" value="http://beta.nceas.ucsb.edu/framework/servlet/usermanagement"/>
-	<filter token="datarequestservlet" value="http://beta.nceas.ucsb.edu/framework/servlet/DataRequestServlet" />
-	<filter token="datasubmitservlet" value="http://beta.nceas.ucsb.edu/framework/servlet/DataSubmitServlet" />
-	<filter token="nestedquerybuilder" value="http://beta.nceas.ucsb.edu/framework/servlet/QueryBuilderServlet" />
-	<filter token="authenticationservlet" value="http://beta.nceas.ucsb.edu/framework/servlet/authenticate" />
+	<filter token="stylesheet_generator_servlet" value="/framework/servlet/stylesheetgenerator"/>
+	<filter token="usermanagement_servlet" value="/framework/servlet/usermanagement"/>
+	<filter token="datarequestservlet" value="/framework/servlet/DataRequestServlet" />
+	<filter token="datasubmitservlet" value="/framework/servlet/DataSubmitServlet" />
+	<filter token="nestedquerybuilder" value="/framework/servlet/QueryBuilderServlet" />
+	<filter token="authenticationservlet" value="/framework/servlet/authenticate" />
 	
 </target>
 
