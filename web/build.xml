@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-10-27 19:58:18 $'
-* '$Revision: 1.57 $'
+* '$Date: 2003-10-27 23:42:35 $'
+* '$Revision: 1.58 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -302,27 +302,19 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="dist" description="=&gt; Distribute all web files">
+  <target name="deploy" description="=&gt; All files that dynamic code depends on">
     <antcall target="tokenfiles"/>
     <antcall target="includes"/>
-    <antcall target="help"/>
     <antcall target="index"/>
-    <antcall target="design"/>
     <antcall target="forms"/>
     <antcall target="general"/>
     <antcall target="images"/>
-    <antcall target="vbsummary"/>
-    <antcall target="history"/>
     <antcall target="init"/>
-    <antcall target="news"/>
-    <antcall target="panel"/>
-    <antcall target="pubs"/>
     <antcall target="xsl"/>
     <antcall target="web"/>
     <antcall target="robot"/>
-    <antcall target="workshop"/>
   </target>
   <target name="dist-bins" depends="init, panel-big-bin " description="=&gt; dist. all targets that require access to big binary storage "/>
-  <target name="dist-everything" depends="dist, dist-bins, dictionary" description="=&gt; dist all targets in the dist target and dist-bins target : DIST EVERYTHING! "/>
+  <target name="dist" depends="deploy, help, design, news, panel, vbsummary, history, pubs, workshop, dictionary, dist-bins" description="=&gt; dist all targets : DIST EVERYTHING! "/>
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
 </project>

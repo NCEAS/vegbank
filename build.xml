@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-10-27 18:16:59 $'
-  *     '$Revision: 1.24 $'
+  *     '$Date: 2003-10-27 23:42:35 $'
+  *     '$Revision: 1.25 $'
 --> 
 <project name="vegclass" default="jar" basedir=".">
 
@@ -106,6 +106,11 @@
     <ant dir="veg_taxa" target="clean" inheritAll="false"/>
   </target>
 
+
+  <target name="dist" depends="deploy">
+    <ant dir="veg_plot/exp/vegbank_web" target="dist" inheritAll="false"/>
+  </target>
+  
   <target name="dist-reports" 
           depends="prepare"
           description="==> Generate htmls from generated reports and distributes to web">

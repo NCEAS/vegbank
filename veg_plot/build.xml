@@ -5,9 +5,9 @@
   * Global build script for veg_plot. This simply allows running all the sub 
   * scripts from one place 
   *
-  *     '$Author: mlee $'
-  *     '$Date: 2003-10-24 18:47:25 $'
-  *     '$Revision: 1.38 $'
+  *     '$Author: farrell $'
+  *     '$Date: 2003-10-27 23:42:35 $'
+  *     '$Revision: 1.39 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -136,11 +136,9 @@
           description="=> Compiles all code in veg_plot module">
 		<echo message="Compiling all of ${ant.project.name}"/>
 
-    <!-- FIXME: temporary hack to move code up into single tree -->
     <copy todir="${build.java.src.dir}">
       <fileset dir="${java.src.dir}">
         <include name="org/**/*java"/>
-        <include name="edu/**/*java"/>
       </fileset>
     </copy>
    
@@ -314,7 +312,7 @@
 	
     <echo message="Distr all of jars in ${ant.project.name}"/>
     
-		<ant dir="exp/vegbank_web" target="dist-everything" inheritAll="false">
+		<ant dir="exp/vegbank_web" target="deploy" inheritAll="false">
       <property name="hostname" value="${hostname}"/>
     </ant>
 
