@@ -5,15 +5,15 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: mlee $'
-  * '$Date: 2002-10-07 20:04:22 $'
-  * '$Revision: 1.23 $'
+  * '$Author: farrell $'
+  * '$Date: 2002-11-26 22:15:24 $'
+  * '$Revision: 1.24 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
   *							National Center for Ecological Analysis and Synthesis
   *  Build file for the Ant cross-platform build system for bulding the 
-	*	 web content for vegbank.org
+	*	 web content for beta.org
 	*
   *  See http://jakarta.apache.org for details on Ant  
   *  
@@ -60,24 +60,24 @@
 	<property name="server_root" value="/usr/local/devtools/jakarta-tomcat/webapps/ROOT/"/>
 	
 	<!-- WEB SERVER LOCATIONS -->
-	<filter token="base_url" value="http://vegbank.nceas.ucsb.edu"/>
-	<filter token="image_server" value="http://vegbank.nceas.ucsb.edu/vegbank/images/"/>
-	<filter token="stylesheet" value="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css"/>
-	<filter token="plotquery_page" value="http://vegbank.nceas.ucsb.edu/forms/plot-query.html"/>
-	<filter token="nestedplotquery_page" value="http://vegbank.nceas.ucsb.edu/forms/nested-plot-query.html"/>
-	<filter token="uploaddata_page" value="http://vegbank.nceas.ucsb.edu/forms/uploadFile.html"/>
-	<filter token="stylesheet_generator" value="http://vegbank.nceas.ucsb.edu/forms/stylesheet-generator.html"/>
-	<filter token="general_link" value="http://vegbank.nceas.ucsb.edu/vegbank/general/"/>
-	<filter token="panel_link" value="http://vegbank.nceas.ucsb.edu/vegbank/panel/"/>
+	<filter token="base_url" value="http://beta.nceas.ucsb.edu"/>
+	<filter token="image_server" value="http://beta.nceas.ucsb.edu/vegbank/images/"/>
+	<filter token="stylesheet" value="http://beta.nceas.ucsb.edu/vegbank/includes/default.css"/>
+	<filter token="plotquery_page" value="http://beta.nceas.ucsb.edu/forms/plot-query.html"/>
+	<filter token="nestedplotquery_page" value="http://beta.nceas.ucsb.edu/forms/nested-plot-query.html"/>
+	<filter token="uploaddata_page" value="http://beta.nceas.ucsb.edu/forms/uploadFile.html"/>
+	<filter token="stylesheet_generator" value="http://beta.nceas.ucsb.edu/forms/stylesheet-generator.html"/>
+	<filter token="general_link" value="http://beta.nceas.ucsb.edu/vegbank/general/"/>
+	<filter token="panel_link" value="http://beta.nceas.ucsb.edu/vegbank/panel/"/>
 	
 	
 	<!-- SERVLETS -->
-	<filter token="stylesheet_generator_servlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/stylesheetgenerator"/>
-	<filter token="usermanagement_servlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement"/>
-	<filter token="datarequestservlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet" />
-	<filter token="datasubmitservlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/DataSubmitServlet" />
-	<filter token="nestedquerybuilder" value="http://vegbank.nceas.ucsb.edu/framework/servlet/QueryBuilderServlet" />
-	<filter token="authenticationservlet" value="http://vegbank.nceas.ucsb.edu/framework/servlet/authenticate" />
+	<filter token="stylesheet_generator_servlet" value="http://beta.nceas.ucsb.edu/framework/servlet/stylesheetgenerator"/>
+	<filter token="usermanagement_servlet" value="http://beta.nceas.ucsb.edu/framework/servlet/usermanagement"/>
+	<filter token="datarequestservlet" value="http://beta.nceas.ucsb.edu/framework/servlet/DataRequestServlet" />
+	<filter token="datasubmitservlet" value="http://beta.nceas.ucsb.edu/framework/servlet/DataSubmitServlet" />
+	<filter token="nestedquerybuilder" value="http://beta.nceas.ucsb.edu/framework/servlet/QueryBuilderServlet" />
+	<filter token="authenticationservlet" value="http://beta.nceas.ucsb.edu/framework/servlet/authenticate" />
 	
 </target>
 
@@ -262,6 +262,15 @@
   	</fileset>
 	</copy>
 </target>
+
+<!-- 
+	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS  
+	INTO THE CORRECT PLACE
+-->
+<target name="dist" depends="	index, design, forms, general, 
+													history, includes, init, news, panel, pubs"/>
+<!-- FIXME dictionary, images target expects files not in cvs -->
+
 
 
 </project>
