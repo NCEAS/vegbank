@@ -21,23 +21,24 @@ import java.net.URL;
  * REQUIRED PARAMETERS
  * @param queryType -- includes: simple, compound and extended
  * @param requestDataType -- includes: vegPlot, plantTaxon, vegCommunity
- *
- * taxonName - name of a taxon occuring in a plot <br>
- * communityName - name of a vegetaion community <br>
- * minElevation - minimum elavation in an elevation range <br>
- * maxElevation - maximum elevation in an elevation range <br>
- * state - state in which a plot exists <br>
- * surfGeo - surface geology type <br>
- * multipleObs - multiple observations <br>
- * compoundQuery - descriptor of the query type, which may include simple
- * 	- where only one criteria is used or compound where multiple criteria
- * 	may be used the flag for siple is '0' and the flag for compound is '1'<br>
- * plotId - database plot identification number <br> 
- * resultType - type of results expected by the user may include summary, where
- * 	a summary of the plot is returned and full where all plot attributes 
- *	are returned 
- * requestDataType 
- * resultFormatType - mak be either xml or html depending on the client tools<br>
+ * @param requestDataFormatType -- includes: html, xml, text
+ * @param clientType -- includes: browser, clientApplication
+ * @param resultType -- includes: summary, full
+ * 
+ * 
+ * ADDITIONAL PARAMETERS
+ * @param taxonName - name of a taxon occuring in a plot <br>
+ * @param communityName - name of a vegetaion community <br>
+ * @param minElevation - minimum elavation in an elevation range <br>
+ * @param maxElevation - maximum elevation in an elevation range <br>
+ * @param state - state in which a plot exists <br>
+ * @param surfGeo - surface geology type <br>
+ * @param multipleObs - multiple observations <br>
+ * @param compoundQuery - descriptor of the query type, which may include simple
+ * @param - where only one criteria is used or compound where multiple criteria
+ * 		may be used the flag for siple is '0' and the flag for compound is '1'<br>
+ * @param plotId - database plot identification number <br> 
+ * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  * @version Feb. 09 2001
  * @author John Harris
@@ -48,6 +49,8 @@ public class DataRequestServlet extends HttpServlet
 {
 
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+public servletUtility suy = new servletUtility();
+
 public String queryOutput[] = new String[10000];  //the output from query
 public int queryOutputNum; //the number of output rows from the query
 
@@ -99,6 +102,8 @@ public void doGet(HttpServletRequest request,
 			Enumeration enum =request.getParameterNames();
 			Hashtable params = new Hashtable();
 			params = su.parameterHash(request);
+			
+			System.out.println("IN PARAMETERS: "+params.toString() );
  
  			//how much data is being requested -- summary set, full data set etc
  			if ( (String)params.get("resultType") != null )
@@ -179,7 +184,6 @@ public void doGet(HttpServletRequest request,
  * 2] compound -- same as simple but that there are multiple query elements
  * 3] extended -- the user gets the option to view or reduce selection
  */
- 
 	private String determineQueryType (Hashtable params) 
 	{
 		String queryType = null;
@@ -210,6 +214,10 @@ public void doGet(HttpServletRequest request,
 		Hashtable extendedParamsHash = new Hashtable();
 		try
 		{
+			//figure out what type of client that is accessing the servlet
+			//the results that are returned depend on this parameter
+			String clientType = param.get("clientType").toString();
+			
 			//validate that there are the correct type and number
 			//of parameters being passed to thie method
 			if ( (param.containsKey("criteria") == false ) 
@@ -249,13 +257,23 @@ public void doGet(HttpServletRequest request,
 				//the number of plots in the result set\
 				out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 				
-				
-				if (queryOutputNum>=1) 
+				//if the query had results respond accordingly to various clients
+				if (queryOutputNum>=1)
 				{
-					System.out.println("result sets: "+queryOutputNum);
- 					servletUtility l =new servletUtility();  
- 					l.getViewOption(requestDataType);
- 					out.println(l.outString);
+					System.out.println("result sets: "+queryOutputNum+" to: "+clientType);
+					if ( clientType.trim().equals("clientApplication") )
+					{
+						out.println("sending xml");
+						suy.fileVectorizer(servletDir+"summary.xml");
+						out.println(suy.outVector); 
+					}
+					else  //the browser
+					{
+						//this passes the browser an html form to view the summary data
+ 						servletUtility l =new servletUtility();  
+ 						l.getViewOption(requestDataType);
+ 						out.println(l.outString);
+					}
 				}
 				else 
 				{ 
