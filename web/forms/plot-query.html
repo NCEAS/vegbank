@@ -6,186 +6,252 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-03-06 18:35:32 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2002-03-19 15:05:48 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
 	
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- saved from url=(0072)http://dev.nceas.ucsb.edu/harris/servlet/pageDirector?pageType=plotQuery -->
-<HTML><HEAD><TITLE>Plots Database</TITLE>
-<META content="text/html; charset=windows-1252" http-equiv=Content-Type>
-<META content="MSHTML 5.00.3103.1000" name=GENERATOR></HEAD>
-<BODY bgColor=#ffffff><!-- colors: 
-silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
-<TABLE align=center border=0 cellPadding=0 cellSpacing=0 width="90%"><!-- logo (optional) on lt. blue background -->
-  <TBODY>
-  <TR>
-    <TD bgColor=#dfe5fa><IMG align=center alt="Vegetation plots logo" border=0 
-      height=144 src="/vegbank/images/owlogoBev.jpg"> <!-- title of page -->
-    <TD align=left vAlign=bottom>
-      <TABLE border=0 cellPadding=5>
-        <TBODY>
-        <TR>
-          <TD align=left vAlign=bottom><FONT color=#23238e 
-            face=Helvetica,Arial,Verdana size=6>PlotQuery 
-            </FONT><BR>&nbsp;&nbsp; <FONT color=#000000 
-            face=Helvetica,Arial,Verdana size=2><B>Web-based Vegetation Science 
-            Information</B> </FONT></TD></TR></TBODY></TABLE></TD></TR><!-- cool blue horizontal bar bar -->
-  <TR>
-    <TD align=middle bgColor=#9999cc colSpan=2 vAlign=center><!--&nbsp;<br>
+<HTML>
+<HEAD>
+<link REL=STYLESHEET HREF="http://numericsolutions.com/includes/default.css" TYPE="text/css">
+<TITLE>VEGBANK - Plots Database Query</TITLE>
+</HEAD>
 
-< SIDEBAR ANNOUNCEMENTS HERE >
-
-</td>
-
-<td colspan=1 bgcolor=23238E align=left valign=center>
+<BODY bgColor=#ffffff>
 
 
+<table cellspacing="0" cellpadding="0" border="0" width="80%">
+  <tr> 
+    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
+    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
+      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
+    </td>
+    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
+    <td width="119" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="@general_link@info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="@general_link@help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+    </td>
+  </tr>
+</table>
 
-< SPECIAL ANNOUNCEMENTS HERE -->&nbsp;<BR>&nbsp; 
-      &nbsp; <BR></TD></TR><!-- left side lt. blue bar with links -->
-  <TR>
-    <TD align=middle bgColor=#dfe5fa vAlign=top width="15%">
-      <TABLE border=0 cellSpacing=5>
-        <TBODY>
-        <TR>
-          <TD align=middle bgColor=#ffffff><A 
-            href="http://dev.nceas.ucsb.edu/harris/servlet/index.html"><FONT 
-            color=#23238e face=Verdana,Arial,Helvetica size=2><B>Overview 
-            </B></FONT></A></TD></TR>
-        <TR>
-          <TD align=middle bgColor=#ffffff><A 
-            href="http://dev.nceas.ucsb.edu/harris/servlet/index.html"><FONT 
-            color=#23238e face=Verdana,Arial,Helvetica size=2><B>Underlying 
-            Databases </B></FONT></A></TD></TR></TBODY></TABLE>
-      <HR SIZE=.5 width="50%">
-      <FONT color=#23238e face=Helvetica,Arial,Verdana size=3>see also: </FONT>
-      <P><FONT face=Helvetica,Arial,Verdana size=1><A 
-      href="http://dev.nceas.ucsb.edu/harris/servlet/about_plot.html">about 
-      Plots Data</A> 
-      <P><A 
-      href="http://dev.nceas.ucsb.edu/harris/servlet/about_plant.html">about 
-      Plant Data</A> 
-      <P><A href="http://dev.nceas.ucsb.edu/harris/servlet/news.html">what's 
-      new?</A><BR>
-      <P><A href="http://dev.nceas.ucsb.edu/harris/servlet/faq.html">frequently 
-      asked questions</A> 
-      <P><A 
-      href="http://dev.nceas.ucsb.edu/harris/servlet/references.html">references</A> 
 
-      <P><A 
-      href="http://dev.nceas.ucsb.edu/harris/servlet/people.html">staff</A> 
-      <P><A 
-      href="http://dev.nceas.ucsb.edu/harris/servlet/collab.html">collaborators</A> 
-      </FONT></P></TD><!-- main menu -->
-    <TD align=middle>
-      <TABLE border=0 cellPadding=5 cellSpacing=5>
-        <FORM action="@datarequestservlet@" method=get>
+<!-- SECOND TABLE -->
+<table align=left border="2" width=90% cellspacing=0 cellpadding=0>
+	<tr>
+		<td bgcolor="white">
+			<img align=center border=0 height=144 src="/vegbank/images/owlogoBev.jpg" alt = "Veg plots logo		">
+			<td align=left valign=middle>
+    			<table border=0 cellpadding=5>
+    				<tr>
+    					<td align=left valign=bottom>
+    					<font face="Helvetica,Arial,Verdana" size=6 color=23238E>
+							Plot Query Form
+    					</font><br>
+    					</td>
+   				</tr>
+			</table>
+			</td>
+		</td>
+	</tr>
+	<tr>
+		<!-- LEFT MARGIN -->
+		<td width="15%"  bgcolor="white" align="left" valign="top">
+		</td>
+		<td align="left">
+			<table border="2" cellspacing=5 cellpadding=5>
+		</td>
+	</tr>
+</table>
+
+
+
+
+<TABLE border="0" align="center">
+	<FORM action="@datarequestservlet@" method=get>
+	<INPUT name=requestDataFormatType type=hidden value=html> 
+	<INPUT name=clientType type=hidden value=browser> <!--variables that are used by the servlet to figure out which query(s) to issue --><INPUT 
+	name=requestDataType type=hidden value=vegPlot> <INPUT name=resultType 
+	type=hidden value=summary> 
+	<TBODY>
+	<TR vAlign=top>
+	<TD align=left colSpan=2 vAlign=center>
+	<FONT color=#209020 face=Helvetica,Arial,Verdana size=2>
+	<B>This form can be used to construct and issue simple queries against <br>
+	the VegBank plots database. Currently there are ~1200 plots stored in <br>
+	the archive.  These plots were collected by the Nature Conservancy <br>
+	from the following National Parks: <br> </b> <br>
+	Yosemite National Park -- California<br> 
+	Wind Cave National Park -- South Dakota <br>
+	Zion National Park -- Utah <br>
+	Theodore Roosevelt National Park -- North Dakota
+	</B>
+	</FONT>
+	</td>
+	</tr>
+</table>
 				
-				<INPUT name=requestDataFormatType type=hidden value=html> 
-        <INPUT name=clientType type=hidden value=browser> <!--variables that are used by the servlet to figure out which query(s) to issue --><INPUT 
-        name=requestDataType type=hidden value=vegPlot> <INPUT name=resultType 
-        type=hidden value=summary> 
-        <TBODY>
-        <TR vAlign=top>
-          <TD align=left colSpan=2 vAlign=center><!-- <font face="Helvetica,Arial,Verdana" size=2 color=2F4F2F> --><FONT 
-            color=#209020 face=Helvetica,Arial,Verdana size=2><B>To query the 
-            National Plots database, containing ~700 plots, complete the form 
-            below and then click on the "search" button. <!--put instructions here later --></B></FONT>
-            <P><SMALL><INPUT type=submit value=search>&nbsp;&nbsp;<INPUT type=reset value=reset> 
-            </SMALL>&nbsp; &nbsp; &nbsp; &nbsp; 
-            <P><!-- to choose the compound query option--><!--
-<small>
-	<font face="Helvetica,Arial,Verdana">
-		<input type="checkbox" name="compoundQuery" value="1"> Multi-component query.
-	</font>
-</small>
---></P>
-        <TR>
-          <TD align=left vAlign=top><!-- to choose the compound query option--><SMALL><FONT 
-            color=#000000 face=Helvetica,Arial,Verdana></FONT></SMALL>
-          <TD align=left vAlign=top><INPUT CHECKED name=queryType type=radio 
-            value=simple> single attribute query<BR><INPUT name=queryType 
-            type=radio value=compound> multiple attribute query<BR><INPUT 
-            name=queryType type=radio value=extended> extended 
-            query<BR></FONT></SMALL></TD></TR>
-        <TR>
-          <TD align=left colSpan=2 vAlign=center>
+&nbsp;
+<!-- BUTTONS -->
+<table border="0">
+	<tr>
+		<td>
+		<INPUT type=submit value="search for plots">
+		</td>
+		<td>
+		<INPUT type=reset value=reset>
+		</td>
+	</tr>
+</table>
 
-            <HR SIZE=.5>
-						
-          </TD></TR>
-        <TR>
-          <TD align=right vAlign=top><FONT color=#23238e 
-            face=Helvetica,Arial,Verdana size=3><B>plant taxon</B> </FONT></TD>
-          <TD align=left vAlign=top>
-					
-					<INPUT 
-            name=taxon size=35> <B><FONT face=Helvetica,Arial,Verdana 
-            size=1><BR>type all or part of a name into the box above, or choose 
-            a name from a list: 
-            <P><B>index of taxon names - by scientific name:</B> <BR><A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=A">A</A><B>·</B> 
+
+<!-- QUERY TYPE-->
+<table border="0" width="100%" bgcolor="#DFE5FA">
+	<tr>
+		<td  align=left valign=top  width="5%" >
+			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+			<b>Query Type:</b>
+		</td>
+		</font>
+	</tr>
+	
+	<tr>
+		<td align="center" width="5%">
+			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+		</td>
+		<td class="item">
+		Please choose the type of query based on the number of attributes you would
+		like to use for the database selection.
+		
+		</td>
+	</tr>
+</table>
+
+<table border="0">
+	<TR>
+		<td width="12%">
+		</td>			
+		<TD width="80%">
+		<INPUT CHECKED name=queryType type=radio value=simple> single attribute query <br>
+		<INPUT name=queryType type=radio value=compound> multiple attribute query <br>
+		<INPUT name=queryType type=radio value=extended> extended query <br>
+		</TD>
+	</TR>
+</table>
+
+
+<HR SIZE=.5>
+
+<!-- PLANT TAXON -->
+<table border="0" width="100%" bgcolor="#DFE5FA">
+	<tr>
+		<td  align=left valign=top  width="5%" >
+			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
+			<b>Plant Taxon:</b>
+		</td>
+		</font>
+	</tr>
+	
+	<tr>
+		<td align="center" width="5%">
+			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
+		</td>
+		<td class="item">
+		Please enter the scientific plant name in the field below
+		
+		</td>
+	</tr>
+</table>
+
+<table border="0">
+	<TR>
+		<TD width="12%">
+		</TD>
+
+		<TD width="80%">			
+		<INPUT name=taxon size="45"> 
+		</td>
+	</tr>
+
+<tr>
+<td>
+</td>
+<td>
+<B>index of taxon names currently in the DB - by scientific name:</B> 
+<BR>
+<A href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=A">A</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=B">B</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=B">B</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=D">D</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=D">D</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=E">E</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=E">E</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=F">F</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=F">F</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=G">G</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=G">G</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=H">H</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=H">H</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=I">I</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=I">I</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=J">J</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=J">J</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=K">K</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=K">K</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=L">L</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=L">L</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=M">M</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=M">M</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=N">N</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=N">N</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=O">O</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=O">O</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=P">P</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=P">P</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=Q">Q</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=Q">Q</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=R">R</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=R">R</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=S">S</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=S">S</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=T">T</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=T">T</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=U">U</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=U">U</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=V">V</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=V">V</A><B>·</B> 
             <A 
-            href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=W">W</A><B>·</B> 
+            href="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=W">W</A><B>·</B> 
             <A 
             href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=Y">Y</A><B>·</B> 
             <A href="http://vegbank.nceas.ucsb.edu:8080/framework/servlet/framework?action=plantlookup&returnformattype=html&namesegment=Z">Z</A> 
             
-						
-						<BR><BR></FONT></SMALL></FONT></P></B>
-        <TR>
-          <TD align=left colSpan=2 vAlign=center>
-            <HR SIZE=.5>
-
-        <TR>
-				<TD align=right vAlign=top><FONT color=#23238e 
-            face=Helvetica,Arial,Verdana size=3><B>State</B> </FONT></TD>
-          	<TD align=left vAlign=top>
-						
-          <select name="state"  size="1" value="" onChange="setCountry(this);">
+			
+		</table>
+		
+		
+		<HR SIZE=.5>
+		<table border="1">
+			<TR>
+			<td width="12%">
+			</td>
+				<TD>
+					<FONT color=#23238e face=Helvetica,Arial,Verdana size=3><B>State</B> </FONT>
+					</TD>
+        <TD>
+				 <select name="state"  size="1" value="" onChange="setCountry(this);">
 					<OPTION value=""> - choose - </OPTION>
 					<option value="AL">Alabama</option>
 					<option value="AK">Alaska</option>
@@ -264,38 +330,19 @@ silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
 					<option value="WY">Wyoming</option>
 					<option value="YT">Yukon Territory</option>
 			</select>
+			<BR clear=left
+			<P></P>
+		</TD>
 
-
-					<BR clear=left
-
-            <P></P>
-						</TD>
-						
-					<!--
-					<TD align=right vAlign=top><FONT color=#23238e 
-            face=Helvetica,Arial,Verdana size=3><B>State</B> </FONT></TD>
-          	<TD align=left vAlign=top><SELECT multiple name=state size=5> 
-              <OPTION value=%>any</OPTION> 
-              <OPTION>Minnesota
-							<OPTION>Alaska
-							<OPTION>North Carolina
-							<OPTION>California
-							</OPTION>
-							</SELECT>
-						<BR clear=left
-
-            <P></P>
-						</TD>-->
-        <TR>
-				
-				
-				
-          <TD align=left colSpan=2 vAlign=center>
-            <HR SIZE=.5>
-          </TD>
-        <TR>
-          <TD align=right vAlign=top><FONT color=#23238e 
-            face=Helvetica,Arial,Verdana size=3><B>elevation</B> </FONT></TD>
+	</tr>
+	
+</table>
+ <HR SIZE=.5>
+<table>					
+    <TR>
+    <TD>
+					<FONT color=#23238e face=Helvetica,Arial,Verdana size=3><B>Elevation</B> </FONT>
+		</TD>
           <TD align=left vAlign=top><FONT face=Helvetica,Arial,Verdana 
             size=2>occurs between:<BR><!--
 
