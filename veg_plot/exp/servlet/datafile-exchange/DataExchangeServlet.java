@@ -72,7 +72,7 @@ public class DataExchangeServlet extends HttpServlet
 	//if the upload process succeeds
 	private String referPage = "validate input data for interpolation: ";
 	private String referUrl = "http://30.8.11.21:8080/forms/validate.html";
-	private int fileMaxSize = 50000000;
+	private int fileMaxSize = 200000000;
 	
 	
 	/**

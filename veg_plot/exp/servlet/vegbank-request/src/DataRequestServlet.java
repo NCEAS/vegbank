@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-07-22 18:22:44 $'
- *  '$Revision: 1.19 $'
+ *  '$Date: 2002-07-26 01:28:00 $'
+ *  '$Revision: 1.20 $'
  * 
  */
 
@@ -315,6 +315,8 @@ public class DataRequestServlet extends HttpServlet
 		}
 	}
 
+	
+	
 	/**
 	 * this method is to be used for passing the results from the 
 	 * servlet to the client that has accessed the client.  Depending 
@@ -707,7 +709,6 @@ public class DataRequestServlet extends HttpServlet
 			//+"containing plots with a surface geology like: "+surfGeo+" <br>");
 			composeQuery("surfGeo", surfGeo, resultType);
 			issueQuery("simpleQuery");
-			out.println("Number of results returned: "+queryOutputNum+"<br><br>");
 		}
 		// if there are results returned to the servlet from the database in the form 
 		// of a file returned then grab the summary viewer then let the user know
@@ -718,6 +719,7 @@ public class DataRequestServlet extends HttpServlet
 		}
 		else 
 		{ 
+			// FIX THIS SO THAT A MORE MEANINGFUL PAGE IS PASSED
 			out.println("<br> <b> Please try another query </b> <br>"); 
 			out.println("<a href = \"http://vegbank.nceas.ucsb.edu/forms/plot-query.html\">"
 			+"return to query page</a><b>&#183;</b>"); //put in rb
@@ -846,10 +848,10 @@ public class DataRequestServlet extends HttpServlet
  * @param out - the output stream to the client
  * @param response - the response object linked to the client 
  */
-	private void handleCompoundQuery (Hashtable params, PrintWriter out, 
+	private void handleCompoundQuery(Hashtable params, PrintWriter out, 
 		HttpServletResponse response) 
 	{
-		/* Get all possible parameters from the hash */	
+		// Get all possible parameters from the hash
  		taxonName = (String)params.get("taxon");
  		communityName = (String)params.get("community");
  		taxonOperation = (String)params.get("taxonOperation");
@@ -862,16 +864,29 @@ public class DataRequestServlet extends HttpServlet
  		compoundQuery = (String)params.get("compoundQuery");
  		plotId = (String)params.get("plotId");
  		resultType = (String)params.get("resultType");
- 
- 		out.println("<br>DataRequestServlet.handleCompoundQuery - returning a summary data set ");
-		
- 		composeQuery(taxonName, communityName, taxonOperation, commOperation, minElevation,
+		clientType = (String)params.get("clientType");
+		// COMPOSE THE QUERY
+ 		this.composeQuery(taxonName, communityName, taxonOperation, commOperation, minElevation,
 			maxElevation, state, surfGeo, multipleObs, compoundQuery);
- 		issueQuery("compoundQuery");
- 
- 		out.println("Number of results returned: "+queryOutputNum);
  		
-		out.println( this.getResultsSetOptions() );
+		// ISSUE THE QUERY
+		this.issueQuery("compoundQuery");
+		
+		// if there are results returned to the servlet from the database in the form 
+		// of a file returned then grab the summary viewer then let the user know
+		if (queryOutputNum>=1) 
+		{
+			handleQueryResultsResponse(clientType, resultType, out, 
+			response, params, resultType);
+		}
+ 		// IF NO RESULTS THEN PROMPT THE USER FOR ANOTHER QUERY	
+		else 
+		{ 
+			// FIX THIS SO THAT A MORE MEANINGFUL PAGE IS PASSED
+			out.println("<br> <b> Please try another query </b> <br>"); 
+			out.println("<a href = \"http://vegbank.nceas.ucsb.edu/forms/plot-query.html\">"
+			+"return to query page</a><b>&#183;</b>"); //put in rb
+		}
 		
 	}
 
@@ -1278,7 +1293,6 @@ private void updateClientLog (String clientLog, String remoteHost)
  * @param multipleObs - multiple Observations
  * @param compoundQuery - compound Query
  */
-
 	private void composeQuery (String taxonName, String communityName, 
 		String taxonOperation, String commOperation, 
 		String minElevation, String maxElevation, String state, 
@@ -1287,9 +1301,11 @@ private void updateClientLog (String clientLog, String remoteHost)
 		try 
 		{
 			//set up the output query file called query.xml	using append mode to build  
- 			PrintStream outFile  = new PrintStream(
-			new FileOutputStream(servletDir+"query.xml", false)); 
-
+ 			PrintStream outFile  = new PrintStream(new FileOutputStream(servletDir+"query.xml", false)); 
+			// SET THE RESULT TYPE TO IDENTITY SO THAT THE RESULTS ARE RETURNED
+			// QUICKLY, THIS CAN BE IDENTITY OR SUMMARY
+			resultType = "identity";
+			
 			//print the query instructions in the xml document
  			outFile.println("<?xml version=\"1.0\"?> \n"+       
 			"<!DOCTYPE dbQuery SYSTEM \"plotQuery.dtd\"> \n"+     
@@ -1322,7 +1338,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 			"<queryElement>community</queryElement> \n"+
 			"<elementString>"+communityName+"</elementString> \n"+
 			"</query> \n"+
-			"<resultType>summary</resultType> \n"+
+			"<resultType>"+resultType+"</resultType> \n"+
 			"<outFile>"+servletDir+"summary.xml</outFile> \n"+
 			"</dbQuery>"
 		);
