@@ -1,0 +1,191 @@
+<html>
+<head>
+ <title>
+	 Plots Database Database Query Extension
+ </title>
+</head>
+
+<body bgcolor=#FFFFFF>
+<!-- colors: 
+silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
+<table align=center border=0 width=90% cellspacing=0 cellpadding=0>
+<!-- logo (optional) on lt. blue background -->
+
+<tr>
+<td bgcolor=DFE5FA>
+<img align=center border=0 height=144 
+src="/harris/images/owlogoBev.jpg" alt = "Vegetation plots logo">
+<!-- title of page -->
+<td align=left valign=bottom>
+ <table border=0 cellpadding=5>
+  <tr>
+   <td align=left valign=bottom>
+    <font face="Helvetica,Arial,Verdana" size=6 color=23238E> PlotQuery --
+		Extension</font><br>
+    &nbsp;&nbsp;
+    <font face="Helvetica,Arial,Verdana" size=2 color=000000>
+    <b>Web-based Vegetation Science Information</b>
+    </font>
+  </td>
+ </table>
+</td>
+</tr>
+
+
+
+<!-- cool blue horizontal bar bar -->
+<tr>
+ <td colspan=2 bgcolor=9999CC align=center valign=center>
+  &nbsp;<br>
+  &nbsp;
+  &nbsp;
+  <br>
+ </td>
+</tr>
+
+<!-- left side lt. blue bar with links -->
+
+<tr>
+<td width=10%  bgcolor=DFE5FA align=left valign=top>
+<table border=0 cellspacing=2>
+</table>
+</td>
+
+
+
+
+
+<!-- main menu -->
+<td align=left>
+<table border=0 cellspacing=3 cellpadding=1>
+<FORM ACTION="http://dev.nceas.ucsb.edu/harris/servlet/QueryBuilderServlet" METHOD="GET">
+<!--variables that are used by the servlet to figure out which query(s) to issue -->
+<input type="hidden" name="requestDataType" value="vegPlot">
+<input type="hidden" name="resultType" value="summary">
+<tr valign=top>
+<td  align=left valign=middle colspan=2>
+<p>
+<small>
+<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+</small>
+</td>
+</tr>
+
+
+<tr>
+<td  align=right valign=top>
+<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+<b>Criteria</b>
+</td>
+<!-- Select the Criteria -->
+<td  align=left valign=top>
+<select name="criteria" multiple size=5>        
+<!--
+<option selected>"*"
+-->
+	<option value="%">any</option>
+	<option value="authorPlotCode">authorPlotCode</option>
+	<option value="state">State</option>
+	<option value="elevation">Elevation</option>
+	<option value="plantTaxa">Plant Taxa</option>
+</select><br clear=left>
+
+<!-- operator -->
+<td  align=right valign=top>
+<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+<b>Operator</b>
+</td>
+<td  align=left valign=top>
+	<select name="operator" multiple size=5>        
+<!--
+<option selected>"*"
+-->
+	<option value="%">any</option>
+	<option value="=">is equal to</option>
+	<option value="beginsWith">begins with</option>
+	<option value="endsWith">ends with</option>
+	<option value="contains">contains</option>
+	<option value=">">is greater than</option>
+	<option value="<">is less than</option>
+</select><br clear=left>
+</td>
+<!-- Value -->
+ <td  align=right valign=top>
+  <font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+  <b>Value</b>
+ </td>
+ <td  align=left valign=top>
+	 <input size=35 name=value>
+ </td>
+</tr>
+
+<td align=left valign=middle colspan=2>
+</td>
+</tr>
+<tr>
+<td  align=left valign=middle colspan=2>
+<small>
+<INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;
+<INPUT TYPE="reset" VALUE="reset">
+
+<!-- SSI -->
+<SERVLET CODE=QueryBuilderServlet CODEBASE=http://dev.nceas.ucsb.edu/harris/servlet>
+<PARAM NAME=currentQuery Value=current>
+</SERVLET>
+
+</small>
+</tr>
+</table>
+		
+<!-- bottom section -->
+<tr>
+<td colspan=2 bgcolor=DFE5FA>
+    <table cellpadding=15 width=100%>
+    <tr>
+ <td>
+ <font face="Helvetica,Arial,Verdana" size=2>
+ <script language=JavaScript alt="JavaScript not enabled!">
+   <!-- 
+    today = new Date()
+    document.write("(Accessed: " + today + ")")
+   //-->
+ </script>
+</dd></dt></dl-->
+<table border=0 cellpadding=5 cellspacing=5 align=left><tr><td bgcolor=FFFFFF>
+</td></tr<tr><td bgcolor=FFFFFF>
+ 
+ 
+</td></tr></table>
+</font>
+    </td>
+    </tr>
+    </table>
+</td></tr><tr><td align=center bgcolor=#FFFFFF colspan=2>
+ <P align=center>
+<font face="Helvetica,Arial,Verdana">
+<small>The National Plots Database website is hosted by 
+ <a href=http://www.nceas.ucsb.edu target="_new">
+ <img src=http://www.nceas.ucsb.edu/logo.gif border=0 align=middle></a>
+</small>
+</font>
+</p>
+</td>
+</tr>
+</table>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
