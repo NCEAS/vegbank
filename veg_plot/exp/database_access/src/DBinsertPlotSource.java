@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-16 19:41:23 $'
- * 	'$Revision: 1.24 $'
+ *  '$Date: 2002-07-16 20:54:17 $'
+ * 	'$Revision: 1.25 $'
  */
 package databaseAccess;
 
@@ -207,10 +207,11 @@ public class DBinsertPlotSource
 				if (args.length == 2)
 				{
 					String plot = args[1];
-					String emailAddress = "";
+					String emailAddress = "harris02@hotmail.com";
 					System.out.println("loading single plot: "+plot+"\n");
 					DBinsertPlotSource db = new DBinsertPlotSource(plugin, plot);
-					db.insertPlot(plot, emailAddress);
+					String s = 	db.insertPlot(plot, 2, emailAddress);
+					System.out.println("RECEIPT: " + 	s);
 				}
 			}
 			//load all the plots in the package
@@ -296,7 +297,6 @@ public class DBinsertPlotSource
 	{
 		try
 		{
-			
 			if (debugLevel == 0)
 			{
 				debug.append("<plotInsertion> \n");
@@ -501,7 +501,6 @@ public class DBinsertPlotSource
 				//System.out.println("query > " + sb.toString() );
 				Statement insertStatement = conn.createStatement();
 				insertStatement.executeUpdate(sb.toString());	
-			 
 		 }
 		 catch( Exception e)
 		 {
@@ -768,23 +767,19 @@ public class DBinsertPlotSource
 	 */
 	 private boolean insertStratumMethod()
 	 {
-		 		
+		 StringBuffer sb = new StringBuffer();
 			try
 			{
-				StringBuffer sb = new StringBuffer();
 				//get the strataId number
 				stratumMethodId = getNextId("stratummethod");
 				String stratumMethodName = "replace this";
 				//insert the strata values
 				sb.append("INSERT into STRATUMMETHOD (stratummethod_id, stratummethodname) ");
 				sb.append("values(?,?)");
-				
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-				
 				// Bind the values to the query and execute it
   	  	pstmt.setInt(1, stratumMethodId);
   	  	pstmt.setString(2, stratumMethodName);
-				
 				//execute the p statement
   		  pstmt.execute();
   		 // pstmt.close();
@@ -792,6 +787,7 @@ public class DBinsertPlotSource
 			catch (Exception e)
 			{
 				System.out.println("Caught Exception: "+e.getMessage() ); 
+				System.out.println("sql: " + sb.toString() );
 				e.printStackTrace();
 				//return false so that the calling method knows to roll-back
 				return(false);
@@ -1071,30 +1067,31 @@ public class DBinsertPlotSource
 	
 	
 	
-	
-	
 	/**
 	 * method that returns false if the strataElements cannot be loaded to the
 	 * database
 	 *
+	 * @return b -- either a success or failure boolean 
+	 * @see this.insertStratumType -- this method calls this one
 	 */
 	private boolean insertStrata()
 	{
+		StringBuffer sb = new StringBuffer();
 		try 
 		{
 			//get the names of the recognized strata
 			Vector strataTypes = source.uniqueStrataNames;
 			for (int i =0; i < strataTypes.size(); i++)
 			{
-				StringBuffer sb = new StringBuffer();
+				// CREATE A NEW STRING BUFFER FOR EACH STRATUM
+				sb = new StringBuffer();
 				//get the strataId number
 				strataId = getNextId("stratum");
-				
 				String sName = strataTypes.elementAt(i).toString();
-				
 				String cover = source.getStrataCover(plotName, sName);
 				String base =  source.getStrataBase(plotName, sName);
 				String height = source.getStrataHeight(plotName, sName);
+				String description = "";
 				
 				if ( height != null && height.length() >= 1 )
 				{
@@ -1103,11 +1100,17 @@ public class DBinsertPlotSource
 					debug.append("<base>"+base+"</base>\n");
 					debug.append("<height>"+height+"</height> \n");
 					debug.append("</stratum> \n");
-				
+					
+					// USING THE STRATUM METHOD ASSIGNED DURING THE INSERTION INTO
+					// THE 'OBSERVATION' TABLE INSERT INTO THE 'STRATUMTYPE' TABLE THEN
+					// INTO THE STRATUM TABLE
+					
+					int stratumTypeId = this.insertStratumType( this.stratumMethodId, sName, sName, description );
+					
 					//insert the strata values
 					sb.append("INSERT into STRATUM (stratum_id, observation_id, stratumName, " 
-					+" stratumCover, stratumBase ,stratumHeight) "
-					+" values(?,?,?,?,?,?)");
+					+" stratumCover, stratumBase ,stratumHeight, STRATUMTYPE_ID) "
+					+" values(?,?,?,?,?,?,?)");
 				
 					PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
   		  	// Bind the values to the query and execute it
@@ -1117,6 +1120,7 @@ public class DBinsertPlotSource
   		  	pstmt.setString(4, cover);
 					pstmt.setString(5, base);
 					pstmt.setString(6, height);
+					pstmt.setInt(7, stratumTypeId);
 					//execute the p statement
   		  	pstmt.execute();
 			 }
@@ -1124,7 +1128,8 @@ public class DBinsertPlotSource
 		}
 		catch (Exception e)
 		{
-			System.out.println("Caught Exception: "+e.getMessage() ); 
+			System.out.println("Caught Exception: "+e.getMessage() );
+			System.out.println("sql: " + sb.toString() );
 			e.printStackTrace();
 			//System.exit(0);
 			return(false);
@@ -1132,6 +1137,50 @@ public class DBinsertPlotSource
 		return(true);
 	}
 	
+	/**
+	 * method that inserts data to the stratum type table and returns the primary key value
+	 * @return stratumTypeId -- the PK value associated with this insert
+	 */
+	private int insertStratumType( int stratumMethodId,  String stratumName,  String stratumIndex,
+	String stratumDescription )
+	{
+		int stratumTypeId = 0;
+		StringBuffer sb = new StringBuffer();
+		try 
+		{
+				sb.append("INSERT into STRATUMTYPE (STRATUMMETHOD_ID, STRATUMNAME, " 
+				+" STRATUMINDEX, STRATUMDESCRIPTION) "
+				+" values(?,?,?,?)");
+				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+  		  // Bind the values to the query and execute it
+  		  pstmt.setInt(1, stratumMethodId);
+				pstmt.setString(2, stratumName);
+  		  pstmt.setString(3, stratumIndex);
+				pstmt.setString(4, stratumDescription);
+				//execute the p statement
+  		  pstmt.execute();
+				
+				// MAKE THIS ITS OWN METHOD
+				sb = new StringBuffer();
+				sb.append("SELECT STRATUMTYPE_ID from STRATUMTYPE where ");
+				sb.append(" STRATUMNAME like '"+stratumName+"' and STRATUMINDEX like '");
+				sb.append(stratumIndex+"' and STRATUMDESCRIPTION like '"+stratumDescription+"'" );
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				while ( rs.next() ) 
+				{
+					stratumTypeId = rs.getInt(1);
+				}
+				
+		}
+		catch (Exception e)
+		{
+			System.out.println("Caught Exception: "+e.getMessage() );
+			System.out.println("sql: " + sb.toString() );
+			e.printStackTrace();
+		}
+		return(stratumTypeId );
+	}
 	
 	
 		/**
@@ -1182,17 +1231,19 @@ public class DBinsertPlotSource
 				pstmt.setString(6, stopDate);
 				pstmt.setInt(7, stratumMethodId);
 				pstmt.setString(8, taxonObservationArea);
-				pstmt.setString(9, autoTaxonCover);
+				//pstmt.setString(9, autoTaxonCover);
+				pstmt.setString(9, "true");
 				pstmt.setString(10, coverDispersion);
-				
   		  pstmt.execute();
 			}
 			catch (Exception e)
 			{
-				System.out.println("Caught Exception: "+e.getMessage() ); 
+				System.out.println("Caught Exception: "+e.getMessage() );
+				System.out.println("sql: "+sb.toString() );
 				e.printStackTrace();
 				debug.append("<exceptionMessage>"+e.getMessage()+"</exceptionMessage>\n");
 				return(false);
+				//System.exit(0);
 			}
 		return(true);
 	}
