@@ -9,7 +9,7 @@
  <%
 
    String strMainPg = request.getParameter("mainPage");
-   strMainPg = strMainPg!=null?strMainPg:"/vegbank/index.html";
+   strMainPg = strMainPg!=null?strMainPg:"@web_context@";
    
   %>
  <%
