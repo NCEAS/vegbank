@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:12 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-12-05 23:15:29 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,38 +66,6 @@ public class GenericCommand implements VegbankCommand
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( SQLStatement );
 		
-//		Collection collection = new Vector();
-//		while ( rs.next())
-//		{
-//			GenericVegbankObject gvo = new GenericVegbankObject();
-//			try
-//			{
-//				gvo.setFieldOne(rs.getString(1));
-//				gvo.setFieldTwo(rs.getString(2));
-//				gvo.setFieldThree(rs.getString(3));
-//				gvo.setFieldFour(rs.getString(4));
-//				gvo.setFieldFive(rs.getString(5));
-//				gvo.setFieldSix(rs.getString(6));
-//				gvo.setFieldSeven(rs.getString(7));
-//				gvo.setFieldEight(rs.getString(8));
-//				gvo.setFieldNine(rs.getString(9));
-//				gvo.setFieldTen(rs.getString(10));
-//			}
-//			catch (SQLException e)
-//			{
-//				if ( e.getMessage().equals("The column index is out of range.") )
-//				{
-//					// This is ok
-//				}
-//				else
-//				{
-//					throw e;
-//				}
-//			}
-//
-//			collection.add(gvo);
-//		}
-
 		Vector propNames = this.getPropertyNames(SQLStatement);
 		String beanName = request.getParameter("BeanName");
 		Collection collection = this.getBeanCollection(beanName, rs, propNames);

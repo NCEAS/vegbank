@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-11-26 00:46:40 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2003-12-05 23:15:29 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,11 +46,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import org.vegbank.common.command.GenericCommand;
+import org.vegbank.common.command.RetrieveVBModelBean;
+import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.Utility;
 
 public class GenericDispatcherAction extends Action
 {
-	
+	// TODO: Make these properties
 	private static final String genericCommandName = "GenericCommand";
 	private static final String commandLocation = "org.vegbank.common.command.";
 	private static final String jspLocation = "/forms/";  
@@ -64,15 +66,22 @@ public class GenericDispatcherAction extends Action
 		ActionErrors errors = new ActionErrors();
 		String command = request.getParameter("command");
 		String jsp = request.getParameter("jsp");
+		String entityName = request.getParameter("entityName");
 		
 		try
 		{
 			System.out.println( "GD: command == " + command );
 			if ( command.equals(genericCommandName)) 
 			{
-				System.out.println( "GD: executing new gen cmd" );
+				LogUtility.log( "GD: executing new gen cmd" );
 				new GenericCommand().execute(request, response);
-				System.out.println( "GD: done executing GC" );
+				LogUtility.log( "GD: done executing GC" );
+			}
+			else if ( command.equals("RetrieveVBModelBean")) 
+			{
+				LogUtility.log( "GD: executing new RetriveVBModelBean cmd" );
+				new RetrieveVBModelBean().execute(request, response);
+				LogUtility.log( "GD: done executing RetriveVBModelBean" );
 			}
 			else
 			{
@@ -89,9 +98,9 @@ public class GenericDispatcherAction extends Action
 			}
 			
 			// Forward to a jsp
-			System.out.println( "GD: fwd to" + jspLocation + jsp );
+			LogUtility.log( "GD: fwd to" + jspLocation + jsp );
 			RequestDispatcher dispatcher = request.getRequestDispatcher(jspLocation + jsp);
-			System.out.println( "GD: got dispatcher");
+			LogUtility.log( "GD: got dispatcher");
 			dispatcher.forward(request, response);
 		}
 		catch (Exception e)
@@ -99,8 +108,7 @@ public class GenericDispatcherAction extends Action
 			errors.add(
 				ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.resource.not.found", e.getMessage()));
-			System.out.println( e.getMessage() );
-			e.printStackTrace();
+			LogUtility.log( e.getMessage(),e );
 		}
 		
 		// Report any errors we have discovered to failure page

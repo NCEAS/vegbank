@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:33:24 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2003-12-05 23:15:29 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,8 +42,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.vegbank.common.model.*;
+import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.LogUtility;
@@ -132,7 +135,7 @@ public class DBModelBeanReader
 				"Could not find a row in '"
 					+ entityName
 					+ "' with '"
-					+ fieldName
+					+ accessionCodeName
 					+ "' = "
 					+ accessionCode);
 		}
@@ -140,10 +143,42 @@ public class DBModelBeanReader
 		return pk;
 	}
 	
+
+	/**
+	 * Uses accessionCode to unmarshall the corresponding model bean 
+	 * from the database.
+	 *   
+	 * @param accessionCode
+	 * @return VBModelBean
+	 */ 
+	public VBModelBean getVBModelBean(String accessionCode) throws Exception
+	{
+		VBModelBean result = null;
+		HashMap parsedAC = Utility.parseAccessionCode(accessionCode);
+		String entityCode = (String) parsedAC.get("ENTITYCODE");
+		
+		LogUtility.log("Got an entity code of " + entityCode + " from " + accessionCode);
+		
+		// TODO: Get the entity name from AccessionGen & co when stable
+		//AccessionGen ag = new AccessionGen();
+		//String entityName = ag.getTableName(entityCode);
+		
+		// TODO: Depending upon entity go get it
+		if ( entityCode.equalsIgnoreCase( "PC" ) )
+		{
+			result = this.getPlantconceptBeanTree(accessionCode);
+		}
+		else if ( entityCode.equalsIgnoreCase("Ob") )
+		{
+			result = this.getPlotObservationBeanTree(accessionCode);
+		}
+		return result;
+	}
+
 	public Plantconcept getPlantconceptBeanTree(String accessionCode) throws Exception
 	{	
 		long pK = 0; 
-		this.getPKFromAccessionCode( "plantConcept", accessionCode, Plantconcept.PKNAME );
+		pK = this.getPKFromAccessionCode( "plantConcept", accessionCode, Plantconcept.PKNAME );
 		return this.getPlantconceptBeanTree(pK);	
 	}
 	
@@ -251,7 +286,7 @@ public class DBModelBeanReader
 	// TODO: Reference, Party, Commconcept
 	
 		
-	public VBModelBean getVBModelBean(String BeanName, long pkValue) throws Exception
+	public VBModelBean LgetVBModelBean(String BeanName, long pkValue) throws Exception
 	{
 		Observation obs = new Observation();
 		getObjectFromDB(obs, Observation.PKNAME, pkValue);
@@ -333,8 +368,7 @@ public class DBModelBeanReader
 			}
 			catch (Exception e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LogUtility.log("BDModelBeanReader: Error > " + e.getMessage(), e);
 			}
 		}
 	}
@@ -409,7 +443,7 @@ public class DBModelBeanReader
 	 * 
 	 * @param FKName
 	 * @param table
-	 * @return
+	 * @return 
 	 */
 	private String getFKNameInTable(String FKName, String tableName)
 	{
@@ -451,7 +485,7 @@ public class DBModelBeanReader
 				// get the name of the field 
 				fieldNames.add(fieldName);
 			}
-			else if ( VBObjectUtils.isGetMethod(method, "int") )
+			else if ( VBObjectUtils.isGetMethod(method, "long") )
 			{
 				fieldNames.add(fieldName);
 			}
@@ -534,8 +568,7 @@ public class DBModelBeanReader
 							// Not a real integer, assumming its a null.
 							if (value != null)
 							{
-								System.out.println("Not an Integer: " + value);
-								e1.printStackTrace();
+								LogUtility.log("DBModelBeanReader: Not an Integer: " + value, e1 );
 							}
 						}
 					}
@@ -558,13 +591,13 @@ public class DBModelBeanReader
 			else
 			{
 				// No observation found
-				System.out.println("Did not find any results for " + PKName  + " = " + PKValue);
+				LogUtility.log("DBModelBeanReader: Did not find any results for " + PKName  + " = " + PKValue);
 			}
 	
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			LogUtility.log("DBModelBeanReader: Error reading object from DB: " + e.getMessage(), e);
 		}
 	}
 	
@@ -750,20 +783,26 @@ public class DBModelBeanReader
 			else
 			{
 				File[]  cachedFiles = CACHE_DIR.listFiles();
-				for ( int i=0; i<cachedFiles.length ; i++ )
+				if ( cachedFiles == null )
 				{
-					String  fileName = cachedFiles[i].getName();
-					if ( fileName.startsWith( Utility.getAccessionPrefix() + ".") )
+					// Nothing to read
+				}
+				else
+				{
+					for ( int i=0; i<cachedFiles.length ; i++ )
 					{
-						LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName);
-						// Add all the names to diskCacheKeys
-						diskCacheKeys.add( fileName );
+						String  fileName = cachedFiles[i].getName();
+						if ( fileName.startsWith( Utility.getAccessionPrefix() + ".") )
+						{
+							LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName);
+							// Add all the names to diskCacheKeys
+							diskCacheKeys.add( fileName );
+						}
+						else 
+						{
+							LogUtility.log("ModelBeanCache: Not adding to Disk Cache: " + fileName);
+						}
 					}
-					else 
-					{
-						LogUtility.log("ModelBeanCache: Not adding to Disk Cache: " + fileName);
-					}
-
 				}
 			}
 		}
