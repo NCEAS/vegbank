@@ -6,8 +6,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-06-26 16:51:01 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2002-06-28 17:19:32 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -133,7 +133,7 @@ Common Name Ref. Other Details: <input type="text" readonly  size="25" maxlength
 Code Name Ref. Author: <input type="text" readonly  size="25" maxlength="50"  name="codeRefAuthors" value="@codeRefAuthors@"> <br>
 Code Name Ref. Title: <input type="text" readonly  size="25" maxlength="50"  name="codeRefTitle" value="@codeRefTitle@"> <br>
 Code Name Ref. Date: <input type="text" readonly  size="25" maxlength="50"  name="codeRefDate" value="@codeRefDate@"> <br>
-Code Name Ref. Edition: <input type="text" readonly  size="25" maxlength="50"  name="codeRefEdition" value="@odeRefEdition@"> <br>
+Code Name Ref. Edition: <input type="text" readonly  size="25" maxlength="50"  name="codeRefEdition" value="@codeRefEdition@"> <br>
 Code Name Ref. Series Name: <input type="text" readonly  size="25" maxlength="50"  name="codeRefSeriesName" value="@codeRefSeriesName@"> <br>
 Code Name Ref. Volume: <input type="text" readonly  size="25" maxlength="50"  name="codeRefVolume" value="@codeRefVolume@"> <br>
 Code Name Ref. Page: <input type="text" readonly  size="25" maxlength="50"  name="codeRefPage" value="@codeRefPage@"> <br>
@@ -158,16 +158,16 @@ Code Name Ref. Other Details: <input type="text" readonly  size="25" maxlength="
 &nbsp;
 &nbsp;
 <span class="itemsmall">
-Concept Description: <input type="text" readonly  size="25" maxlength="50"  name="conceptDescription" value="@@"> <br>
-Title: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefTitle" value="@@"> <br>
-Authors: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefAuthors" value="@@"> <br>
-Pub. Date: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefDate" value="@@"> <br>
-Edition: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefEdition" value="@@"> <br>
-SeriesName: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefSeriesName" value="@@"> <br>
-Volume: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefVolume" value="@@"> <br>
-Page: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefPage" value="@@"> <br>
-ISBN: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefISBN" value="@@"> <br>
-Other Citation Details: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefPubOtherCitDetails" value="@@"> <br>
+Concept Description: <input type="text" readonly  size="25" maxlength="50"  name="conceptDescription" value="@conceptDescription@"> <br>
+Title: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefTitle" value="@conceptRefTitle@"> <br>
+Authors: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefAuthors" value="@conceptRefAuthors@"> <br>
+Pub. Date: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefDate" value="@conceptRefDate@"> <br>
+Edition: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefEdition" value="@conceptRefEdition@"> <br>
+SeriesName: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefSeriesName" value="@conceptRefSeriesName@"> <br>
+Volume: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefVolume" value="@conceptRefVolume@"> <br>
+Page: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefPage" value="@conceptRefPage@"> <br>
+ISBN: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefISBN" value="@conceptRefISBN@"> <br>
+Other Citation Details: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefOtherCitDetails" value="@conceptRefOtherCitDetails@"> <br>
 </span>
 
 <!-- PLANT STATUS -->
@@ -183,12 +183,14 @@ Other Citation Details: <input type="text" readonly  size="25" maxlength="50"  n
 &nbsp;
 &nbsp;
 <span class="itemsmall">
-Status: <input type="text" readonly  size="25" maxlength="50"  name="" value="@@"> <br>
-Status Start Date: <input type="text" readonly  size="25" maxlength="50"  name="" value="@@"> <br>
-Status Stop Date: <input type="text" readonly  size="25" maxlength="50"  name="" value="@@"> <br>
-Status Description: <input type="text" readonly  size="25" maxlength="50"  name="" value="@@"> <br>
-Plant Level: <input type="text" readonly  size="25" maxlength="50"  name="" value="@@"> <br>
-Plant Parent Name: <input type="text" readonly  size="25" maxlength="50"  name="" value="@@"> <br>
+Status: <input type="text" readonly  size="25" maxlength="50"  name="" value="@conceptStatus@"> <br>
+Status Start Date: <input type="text" readonly  size="25" maxlength="50"  name="" value="@statusStartDate@"> <br>
+Status Stop Date: <input type="text" readonly  size="25" maxlength="50"  name="" value="@statusStopDate@"> <br>
+Status Description: <input type="text" readonly  size="25" maxlength="50"  name="" value="@statusDescription@"> <br>
+Plant Level: <input type="text" readonly  size="25" maxlength="50"  name="" value="@taxonLevel@"> <br>
+Plant Parent Name: <input type="text" readonly  size="25" maxlength="50"  name="" value="@plantParentName@"> <br>
+Parent Ref Title : <input type="text" readonly  size="25" maxlength="50"  name="" value="@plantParentRefTitle@"> <br>
+Parent Ref Authors: <input type="text" readonly  size="25" maxlength="50"  name="" value="@plantParentRefAuthors@"> <br>
 </span>
 
 </form>
