@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-12-15 20:21:31 $'
-* '$Revision: 1.140 $'
+* '$Date: 2004-12-16 01:44:40 $'
+* '$Revision: 1.141 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -263,6 +263,20 @@
     <copy overwrite="true" todir="${apache.document.root}/upload" filtering="yes">
       <fileset dir="upload"/>
     </copy>
+  </target>
+  <target name="searchplugins" depends="stuff" description="=&gt; dist search plugin info to website" >
+    <mkdir dir="${vegdocs_server}/searchplugins" />
+    <copy overwrite="true" todir="${vegdocs_server}/searchplugins" filtering="yes">
+      <fileset dir="searchplugins" >
+        <include name="*.html" />
+      </fileset>
+    </copy>
+    <copy overwrite="true" todir="${vegdocs_server}/searchplugins" filtering="no">
+      <fileset dir="searchplugins" >
+        <exclude name="*.html" /><!-- everything else dist without filtering -->
+      </fileset>
+    </copy>
+
   </target>
   <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
@@ -621,7 +635,7 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="deploy" depends="stuff" description="=&gt; All files that dynamic code depends on">
+  <target name="deploy" depends="searchplugins" description="=&gt; All files that dynamic code depends on">
     <!-- Deployment uses a dependency chain:
 		init
 		tokenfiles
@@ -643,7 +657,9 @@
 		design
 		email_templates
 		vbsummary
+		searchplugins
 		stuff   {news, upload}
+		
 
 MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
