@@ -20,7 +20,16 @@ ALLOW TCP/IP CONNECTIONS
 1) Uncomment and edit the following lines in postgresql.conf
 
   #tcpip_socket = false -> tcpip_socket = true
-  
+
+PREFORMANCE
+
+There are many confusing options for postgres config, here are a few I changed 
+after we had connections max out at Nov 2003 workshop.
+
+Postgresql defaults are supper conservative, aiming for small systems.
+
+max_connections = 64  # from default of 32
+shared_buffers = 500  # from default of 64  -- this is memory allowed to use type setting
 
 BACKUP DATABASE
 
