@@ -1,8 +1,6 @@
 /*
- * Drop all datbase objects in proper order
- */
-
-set echo off
+* Drop all datbase objects in proper order
+*/
 drop table citationContributor;
 drop table citation;
 drop table graphic;
