@@ -58,11 +58,11 @@ No Class Contributors.</td></tr>
 <logic:notEmpty name="classcontributor-BEANLIST">
 
 <tr>
-<%@ include file="../autogen/classcontributor_summary_head.jsp" %>
+<!-- self explanatory this not needed: % @ include file="../autogen/classcontributor_summary_head.jsp" % -->
 </tr>
 <logic:iterate id="onerowofclasscontributor" name="classcontributor-BEANLIST">
 <tr class="@nextcolorclass@">
-<%@ include file="../autogen/classcontributor_summary_head.jsp" %>
+<%@ include file="../autogen/classcontributor_summary_data.jsp" %>
 </tr>
 </logic:iterate>
 
