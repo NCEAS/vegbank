@@ -87,3 +87,6 @@ UPDATE observation set topTaxon1Name =
 
 update party set partypublic=false;
 update party set partypublic=true where party_ID in (select party_ID from view_party_public);
+
+update taxonImportance set stratumHeight=(select stratumHeight from stratum where taxonImportance.stratum_ID=stratum.stratum_ID) where taxonImportance.stratum_ID is not null ;
+update taxonImportance set stratumBase=(select stratumBase from stratum where taxonImportance.stratum_ID=stratum.stratum_ID) where taxonImportance.stratum_ID is not null;

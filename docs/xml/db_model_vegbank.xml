@@ -13909,6 +13909,46 @@ conditions may change between resampling events.
       </attForms>
       <update>1.0.2</update>
     </attribute>
+    <attribute>
+      <attName>stratumBase</attName>
+      <attLabel>Stratum Base Ht</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Base of the Stratum in meters.</attDefinition>
+      <attUnits>m</attUnits>
+      <attForms>
+        <formShow name="Summary">1299.4</formShow>
+        <formShow name="SummaryOnlyStrata">1300.4</formShow>
+      </attForms>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>stratumHeight</attName>
+      <attLabel>Stratum Max Ht</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Tallest part of the Stratum in meters.</attDefinition>
+      <attUnits>m</attUnits>
+      <attForms>
+        <formShow name="Summary">1299.8</formShow>
+        <formShow name="SummaryOnlyStrata">1300.8</formShow>
+      </attForms>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>taxonInterpretation</entityName>
