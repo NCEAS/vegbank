@@ -4,9 +4,9 @@ package org.vegbank.ui.struts;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-13 22:35:17 $'
- *	'$Revision: 1.6 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-01-08 23:44:39 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ import org.vegbank.common.model.Plot;
 import org.vegbank.common.utility.StopWatchUtil;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.XMLUtil;
+import org.vegbank.common.utility.LogUtility;
 import org.vegbank.plots.datasink.ASCIIReportsHelper;
 import org.vegbank.plots.datasource.DBModelBeanReader;
  
@@ -56,16 +57,25 @@ public class DisplayPlotAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		System.out.println(" In DisplayPlotAction ");
+		LogUtility.log("DisplayPlotAction: begin");
 		ActionErrors errors = new ActionErrors();
 		String fwd = "success";
 
 		// Get the form
+		LogUtility.log("DisplayPlotAction: getting DynaActionForm");
 		DynaActionForm thisForm = (DynaActionForm) form;
 		
-		String vegbankAccessionNumber = (String ) thisForm.get("vegbankAccessionNumber");
+		LogUtility.log("DisplayPlotAction: getting accessionCode");
+		String accessionCode = (String) thisForm.get("accessionCode");
+		if (accessionCode == null) {
+			// bacward compatibility
+			accessionCode = (String) 
+					thisForm.get("vegbankAccessionNumber");
+		}
+		
+		LogUtility.log("DisplayPlotAction: accessionCode="+accessionCode);
 		String resultType = (String) thisForm.get("resultType");
-		//String accessionCode = (String)dpform.get("plotId")
+		LogUtility.log("DisplayPlotAction: Displaying as " + resultType);
 		
 		
 		// Only support XML view for now
@@ -79,6 +89,7 @@ public class DisplayPlotAction extends Action
 		// Got a resultType
 		else 
 		{
+			resultType = resultType.toLowerCase();
 			try
 			{
 				StopWatchUtil sw =
@@ -87,13 +98,13 @@ public class DisplayPlotAction extends Action
 				
 				DBModelBeanReader mbReader = new DBModelBeanReader();
 				Plot plot =
-					mbReader.getPlotObservationBeanTree(vegbankAccessionNumber);
+					mbReader.getPlotObservationBeanTree(accessionCode);
 						
 				sw.stopWatch();
 				sw.printTimeElapsed();
 
 				// rawXML			
-				if ( resultType.equalsIgnoreCase("rawXML"))
+				if ( resultType.equals("rawxml"))
 				{
 					response.setContentType("text/xml");
 					response.getWriter().write( XMLUtil.getVBXML(plot) );
@@ -101,15 +112,16 @@ public class DisplayPlotAction extends Action
 					fwd = null;
 				}
 				// ascii Species Report
-				else if (resultType.equalsIgnoreCase("ASCIISpecies"))
+				else if (resultType.equals("asciispecies"))
 				{
+					LogUtility.log("DisplayPlotAction: getting asciispecies data");
 					response.setContentType("text/plain");
 					response.getWriter().write( ASCIIReportsHelper.getSpeciesData(plot) );
 					// This is to prevent struts from grabbing the response away
 					fwd = null;
 				}
 				// ascii Enviroment Report
-				else if (resultType.equalsIgnoreCase("ASCIIEvironment"))
+				else if (resultType.equals("asciienvironment"))
 				{
 					response.setContentType("text/plain");
 					response.getWriter().write( ASCIIReportsHelper.getEnvironmentalData(plot) );

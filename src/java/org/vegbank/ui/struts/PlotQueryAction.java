@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-12-05 23:14:22 $'
- *	'$Revision: 1.14 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-01-08 23:44:39 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -284,7 +284,7 @@ public class PlotQueryAction extends Action
 				{
 					if ( isFirstResultSet )	// if empty dump all into collection
 					{
-						LogUtility.log("#Adding " + plotsum + " has " + plotsum.getAccessionCode());
+						//LogUtility.log("#Adding " + plotsum + " has " + plotsum.getAccessionCode());
 						workspace.put(plotsum.getAccessionCode(), plotsum);
 					}
 					else //Only add element if in oldWorkspace
@@ -295,12 +295,12 @@ public class PlotQueryAction extends Action
 						// Did this object exist in the previous results
 						if ( validKeys.contains(plotsum.getAccessionCode()))
 						{
-							//LogUtility.log("Adding " + plotsum.getVegbankAccessionNumber());
+							//LogUtility.log("Adding " + plotsum.getAccessionCode());
 							workspace.put(plotsum.getAccessionCode(), plotsum);
 						}
 						else
 						{
-							//LogUtility.log("Not Adding " + plotsum.getVegbankAccessionNumber());
+							//LogUtility.log("Not Adding " + plotsum.getAccessionCode());
 							// Don't add this object
 						}
 					}
@@ -309,14 +309,14 @@ public class PlotQueryAction extends Action
 				{
 					if ( workspace.contains(plotsum.getAccessionCode()))
 					{
-						//LogUtility.log("No need to ADD " + plotsum.getVegbankAccessionNumber());
+						//LogUtility.log("No need to ADD " + plotsum.getAccessionCode());
 						// No need to add
 					}
 					else
 					{
 						// Add this new object
 						workspace.put(plotsum.getAccessionCode(), plotsum);
-						//LogUtility.log("ADD " + plotsum.getVegbankAccessionNumber());
+						//LogUtility.log("ADD " + plotsum.getAccessionCode());
 					}
 				}
 			}

@@ -12,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-11-06 17:31:11 $'
-*  '$Revision: 1.16 $'
+*    '$Author: anderson $'
+*      '$Date: 2004-01-08 23:44:39 $'
+*  '$Revision: 1.17 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -145,11 +145,11 @@
 	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap>
 	      
 	      <!-- THE LINK TO THE SUMMARY-->
-             <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="vegbankAccessionNumber" name="row"/>" title="summary report"><img align="center" border="0" 
+             <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="accessionCode" name="row"/>" title="summary report"><img align="center" border="0" 
 	     	src="@image_server@report_sm.gif" alt="Summary view"></img></a>
 
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-	      <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="vegbankAccessionNumber" name="row"/>" title="comprehensive report"><img align="center" border="0" 
+	      <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="accessionCode" name="row"/>" title="comprehensive report"><img align="center" border="0" 
 	      	src="@image_server@comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
@@ -162,35 +162,35 @@
 		  -->
 	      
 	      <!-- THE LINK TO THE RAW XML-->
-              <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="vegbankAccessionNumber" paramName="row" paramProperty="vegbankAccessionNumber" title="view raw XML">
+              <html:link page="/DisplayPlot.do?resultType=rawXML" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="view raw XML">
                 <img align="center" border="0" src="@image_server@xml_icon.gif" alt="Raw XML view"></img>
               </html:link>
 		      
 	      <!-- THE LINK TO THE Environmental Data ASCII report -->
-              <html:link page="/DisplayPlot.do?resultType=ASCIIEvironment" paramId="vegbankAccessionNumber" paramName="row" paramProperty="vegbankAccessionNumber" title="Environmental ASCII Report">
+              <html:link page="/DisplayPlot.do?resultType=ASCIIEnvironment" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="Environmental ASCII Report">
                 <img align="center" border="0" src="@image_server@environmental_text.gif" alt="Environmental ASCII Report"></img>
               </html:link>
 
       
 	      <!-- THE LINK TO THE Species Data ASCII report -->
-              <html:link page="/DisplayPlot.do?resultType=ASCIISpecies" paramId="vegbankAccessionNumber" paramName="row" paramProperty="vegbankAccessionNumber" title="Species ASCII Report">
+              <html:link page="/DisplayPlot.do?resultType=ASCIISpecies" paramId="accessionCode" paramName="row" paramProperty="accessionCode" title="Species ASCII Report">
                 <img align="center" border="0" src="@image_server@species_text.gif" alt="Species ASCII Report"></img>
               </html:link>
 
 
 	      <!-- Checkbox for download -->
 	      <br/>
-              <input name="plotsToDownLoad" type="checkbox" value='<bean:write property="vegbankAccessionNumber" name="row"/>' 
-			  	 onclick="toggle(this)" id='<bean:write property="vegbankAccessionNumber" name="row"/>'>
+              <input name="plotsToDownLoad" type="checkbox" value='<bean:write property="accessionCode" name="row"/>' 
+			  	 onclick="toggle(this)" id='<bean:write property="accessionCode" name="row"/>'>
                 <span class="itemlabel" style="cursor:hand">
-					<label for='<bean:write property="vegbankAccessionNumber" name="row"/>'>download</label></span>
+					<label for='<bean:write property="accessionCode" name="row"/>'>download</label></span>
               </input>
 
 	    </td>
 
 	    <td align="center" valign="middle">
 	        <span class="category">
-	          <bean:write name="row" property="vegbankAccessionNumber"/>   
+	          <bean:write name="row" property="accessionCode"/>   
 	        </span>
          </td>		 
 	    <td align="center" valign="middle">
