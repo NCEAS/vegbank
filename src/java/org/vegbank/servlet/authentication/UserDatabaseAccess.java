@@ -1,15 +1,40 @@
+/*
+ *	'$RCSfile: UserDatabaseAccess.java,v $'
+ *	Authors: @author@
+ *	Release: @release@
+ *
+ *	'$Author: farrell $'
+ *	'$Date: 2003-05-20 21:56:53 $'
+ *	'$Revision: 1.3 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package org.vegbank.servlet.authentication;
+
 /**
  * 
- *    Purpose: To write plot data as xml documents that can then be loaded into
- * 				the plots database 
+ *    Purpose: Work with the user tables 
+ * 
  *    Copyright: 2000 Regents of the University of California and the
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
  *		 '$Author: farrell $'
- *     '$Date: 2003-03-25 20:17:45 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2003-05-20 21:56:53 $'
+ *     '$Revision: 1.3 $'
  */
 
 
@@ -21,10 +46,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Hashtable;
 
-
+import org.vegbank.common.model.Address;
+import org.vegbank.common.model.Party;
+import org.vegbank.common.model.Telephone;
+import org.vegbank.common.utility.ObjectToDB;
 
 public class UserDatabaseAccess 
 {
+	
+	private static final String FRAMEWORK_DATABASE = "framework";
+	private static final String VEGBANK_DATABASE = "vegbank";	
 	
 	/**
 	 * method that, for an email address, will get the user's priveledge level
@@ -66,7 +97,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection();
+			Connection conn = getConnection(FRAMEWORK_DATABASE);
 			Statement query = conn.createStatement();
 			StringBuffer sb = new StringBuffer();
 			sb.append("select password from USER_INFO ");
@@ -102,7 +133,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection();
+			Connection conn = getConnection(FRAMEWORK_DATABASE);
 			Statement query = conn.createStatement();
 			sb.append("select CERTIFICATION_ID from USER_CERTIFICATION ");
 			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"'");
@@ -179,20 +210,44 @@ public class UserDatabaseAccess
 	 * @param additionalStatements
 	 *
 	 */
-	 public boolean insertUserCertificationInfo( String emailAddress, String surName, String givenName,
-	  String phoneNumber, String phoneType, String currentCertLevel, String cvDoc, String highestDegree,
-		String degreeYear, String degreeInst, String  currentInst, String currentPos, String esaPos,
-	  String profExperienceDoc, String relevantPubs, String vegSamplingDoc, String vegAnalysisDoc, 
-		String usnvcExpDoc, String vegbankExpDoc, String plotdbDoc, String nvcExpRegionA, String nvcExpVegA,
-	  String nvcExpFloristicsA, String nvcExpNVCA, String esaSponsorNameA, String esaSponsorEmailA, 
-		String esaSponsorNameB, String esaSponsorEmailB, String peerReview, String additionalStatements)
+	public boolean insertUserCertificationInfo(
+		String emailAddress,
+		String surName,
+		String givenName,
+		String phoneNumber,
+		String phoneType,
+		String currentCertLevel,
+		String cvDoc,
+		String highestDegree,
+		String degreeYear,
+		String degreeInst,
+		String currentInst,
+		String currentPos,
+		String esaPos,
+		String profExperienceDoc,
+		String relevantPubs,
+		String vegSamplingDoc,
+		String vegAnalysisDoc,
+		String usnvcExpDoc,
+		String vegbankExpDoc,
+		String plotdbDoc,
+		String nvcExpRegionA,
+		String nvcExpVegA,
+		String nvcExpFloristicsA,
+		String nvcExpNVCA,
+		String esaSponsorNameA,
+		String esaSponsorEmailA,
+		String esaSponsorNameB,
+		String esaSponsorEmailB,
+		String peerReview,
+		String additionalStatements)
 	 {
 		 StringBuffer sb = new StringBuffer();
 		 try
 		 {	
 			 System.out.println("UserDatabaseAccess > inserting user cert info");
 			 //get the connections etc
-			 Connection conn = getConnection();
+			 Connection conn = getConnection(FRAMEWORK_DATABASE);
 			 //see if this user has an entry in this table and ifso then update it
 			 if ( this.userCertificationExists(emailAddress) == true )
 			 {
@@ -261,48 +316,6 @@ public class UserDatabaseAccess
 		 }
 	 }
 	 
-	 
-	 
-	 
-	 
-	
-	
-	/**
-	 * method to create a new user in the vegetation user 
-	 * database.  This is used to create the intial instance 
-	 * of a user.  This method is the minimal data that are 
-	 * collected for a new user and probably should not be 
-	 * used when the overloaded method can be used.
-	 * @deprecated
-	 * @param emailAddress
-	 * @param passWord
-	 * @param givenName
-	 * @param surName 
-	 * @param remoteAddress
-	 */
-	public void createUser(String emailAddress, String passWord, String givenName, 
-		String surName, String remoteAddress)
-	{
-		try 
-		{
-			//get the connections etc
-			Connection conn = getConnection();
-			Statement query = conn.createStatement ();
-			StringBuffer sb = new StringBuffer();
-			sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT) ");
-			sb.append("VALUES ('"+emailAddress+"', '"+passWord+"', '"+givenName+"', '"+surName+"', '"+remoteAddress+"', "+"1 )");
-			
-			//issue the query
-			query.executeUpdate(sb.toString());
-		}
-		catch (Exception e) 
-		{
-			System.out.println("Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
- 
-
 	/**
 	 * method to create a new user in the vegetation user 
 	 * database.  This is used to create the intial instance 
@@ -321,9 +334,19 @@ public class UserDatabaseAccess
 	 * @param zip
 	 * @return b -- true or false result realted to the success of the user creation
 	 */
-	public boolean createUser(String emailAddress, String passWord, String givenName, 
-		String surName, String remoteAddress, String inst, String address, String city, 
-		String state, String country, String phone, String zip)
+	public boolean createUser(
+		String emailAddress,
+		String passWord,
+		String givenName,
+		String surName,
+		String remoteAddress,
+		String inst,
+		String address,
+		String city,
+		String state,
+		String country,
+		String phone,
+		String zip)
 	{
 		StringBuffer sb = new StringBuffer();
 		boolean success = true;
@@ -335,7 +358,7 @@ public class UserDatabaseAccess
 			if (i == 0)
 			{
 				//get the connections etc
-				Connection conn = getConnection();
+				Connection conn = getConnection(FRAMEWORK_DATABASE);
 				Statement query = conn.createStatement();
 				sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT, ");
 				sb.append("INSTITUTION, ADDRESS, CITY, STATE, COUNTRY, PHONE_NUMBER, ZIP_CODE, permission_type) ");
@@ -343,6 +366,31 @@ public class UserDatabaseAccess
 				sb.append(", '"+inst+"', '"+address+"', '"+city+"', '"+state+"','"+country+"','"+phone+"','"+zip+"',1)" );
 				//issue the query
 				query.executeUpdate(sb.toString());
+				
+				// ALSO NEED TO WRITE TO THE PARTY TABLE !!!!
+				Party party = new Party();
+				Address partyAddress = new Address();
+				Telephone telephone = new Telephone();
+
+				partyAddress.setDeliveryPoint(address);
+				partyAddress.setCity(city);
+				partyAddress.setAdministrativeArea(state);
+				partyAddress.setCountry(country); 
+				partyAddress.setPostalCode(zip);
+				
+				telephone.setPhoneNumber(phone);
+				telephone.setPhoneType("work");
+								
+				party.setEmail(emailAddress);
+				party.setGivenName(givenName);
+				party.setSurName(surName);
+				party.setOrganizationName(inst);
+				party.addPARTYTelephone(telephone);
+				party.addpartyAddress( partyAddress );
+
+				// Write to database
+				ObjectToDB party2db = new ObjectToDB(party);
+				party2db.insert();	
 			}
 			else
 			{
@@ -374,7 +422,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection();
+			Connection conn = getConnection(FRAMEWORK_DATABASE);
 			Statement query = conn.createStatement();
 			StringBuffer sb = new StringBuffer();
 			sb.append("select user_id from USER_INFO ");
@@ -412,7 +460,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection();
+			Connection conn = getConnection(FRAMEWORK_DATABASE);
 			Statement query = conn.createStatement();
 			sb.append("select user_id from USER_DOWNLOADS ");
 			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"' AND ");
@@ -467,7 +515,7 @@ public class UserDatabaseAccess
 		try
 		{	
 			//get the connections etc
-			Connection conn = getConnection();
+			Connection conn = getConnection(FRAMEWORK_DATABASE);
 			//get the userId of the user 
 			int userid = this.getUserId( emailAddress );
 			// now make the entry in the download table
@@ -505,7 +553,7 @@ public class UserDatabaseAccess
 		{	
 			System.out.println("UserDatabaseAccess > inserting download info");
 			//get the connections etc
-			Connection conn = getConnection();
+			Connection conn = getConnection(FRAMEWORK_DATABASE);
 			// update the ticket count
 			this.updateTicketCount(emailAddress);
 			
@@ -552,7 +600,7 @@ public class UserDatabaseAccess
 	{
 		try
 		{
-			Connection conn = getConnection();
+			Connection conn = getConnection(FRAMEWORK_DATABASE);
 			Statement query = conn.createStatement();
 			query.execute("UPDATE USER_INFO set PASSWORD =  '" 
 				+ password + "' WHERE EMAIL_ADDRESS = '"+emailAddress+"' ");	
@@ -577,7 +625,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection();
+			Connection conn = getConnection(FRAMEWORK_DATABASE);
 			Statement query = conn.createStatement ();
 			StringBuffer sb = new StringBuffer();
 			
@@ -618,7 +666,7 @@ public class UserDatabaseAccess
 		{
 		
 			//get the connections etc
-			Connection conn = getConnection();
+			Connection conn = getConnection(FRAMEWORK_DATABASE);
 			Statement query = conn.createStatement ();
 			ResultSet results= null;
 			StringBuffer sb = new StringBuffer();
@@ -682,14 +730,14 @@ public class UserDatabaseAccess
 	 * 'framework' database, a database that will contain the 
 	 * database authentication tables etc
 	 */
-	private Connection getConnection()
+	private Connection getConnection(String databaseName)
 	{
 
 		Connection conn = null;
  		try 
  		{
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/framework", "datauser", "");
+			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/" + databaseName, "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -726,14 +774,14 @@ public class UserDatabaseAccess
 		 try 
 		 {
 			 //get the connections etc
-			 Connection conn = getConnection();
+			 Connection conn = getConnection(FRAMEWORK_DATABASE);
 			 Statement query = conn.createStatement ();
 			 ResultSet results= null;
 			 StringBuffer sb = new StringBuffer();
 				sb.append("SELECT EMAIL_ADDRESS, PASSWORD, SUR_NAME, 	GIVEN_NAME, ");
 				sb.append(" PERMISSION_TYPE, INSTITUTION, TICKET_COUNT, ADDRESS, CITY, STATE, COUNTRY, ZIP_CODE, PHONE_NUMBER,");
-				sb.append(" PHONE_TYPE FROM USER_INFO ");
-				sb.append(" WHERE 	EMAIL_ADDRESS like '"+emailAddress+"'");
+				sb.append("USER_ID FROM USER_INFO ");
+				sb.append(" WHERE 	EMAIL_ADDRESS = '"+emailAddress+"'");
 		
 			//issue the query
 			results = query.executeQuery(sb.toString());
@@ -755,6 +803,7 @@ public class UserDatabaseAccess
 				String country = results.getString(11);
 				String zipCode = results.getString(12);
 				String dayPhone = results.getString(13);
+				String userId = new Integer( results.getInt(14) ).toString();
 				 
 				h.put("emailAddress", DBEmailAddress);
 				h.put("password", DBPassWord);
@@ -769,8 +818,30 @@ public class UserDatabaseAccess
 				h.put("country", ""+country);
 				h.put("zipCode", ""+zipCode);
 				h.put("dayPhone", ""+dayPhone);
+				h.put("userId",  "" + userId);
+				
+				System.out.println(">>>> " + userId + "  " + dayPhone);
 			}
 			conn.close();
+			
+			// Get the PK form the vegbank.party table
+			Connection vbConn = getConnection(VEGBANK_DATABASE);
+			Statement vbQuery = vbConn.createStatement ();
+			ResultSet vbResults= null;
+			StringBuffer vbSb = new StringBuffer();
+			vbSb.append("SELECT  PARTY_ID FROM PARTY ");
+			vbSb.append(" WHERE 	EMAIL = '"+emailAddress+"'");
+			
+			//issue the query
+			vbResults = vbQuery.executeQuery(vbSb.toString());
+			
+			//get the results
+			while (vbResults.next()) 
+			{		
+				String partyId = vbResults.getString(1);
+				h.put("partyId", partyId);	
+			}
+			vbConn.close();
 		}
 		catch (Exception e) 
 		{
@@ -799,61 +870,122 @@ public class UserDatabaseAccess
 	 * "dayPhone"
 	 *
 	 */
-	 public boolean updateUserInfo(Hashtable h )
-	 {
-		 try 
-		 {
-			 
-			 String surName = (String)h.get("surName");
-			 String givenName = (String)h.get("givenName");
-			 String emailAddress = (String)h.get("emailAddress");	 
-			 String institution = (String)h.get("institution");
-			 String address = (String)h.get("address");
-			 String city  = (String)h.get("city");
-			 String state = (String)h.get("state");
-			 String country = (String)h.get("country");
-			 String phoneNumber  = (String)h.get("phoneNumber");
-			 String zipCode = (String)h.get("zipCode");
-			 
-			 
-			 if (  (! emailAddress.trim().equals("null") ) && (emailAddress != null) && (emailAddress.length() > 2)  )
-			 {
-				 StringBuffer sb = new StringBuffer();
-				 //get the connections etc
-				 Connection conn = getConnection();
-				 conn.setAutoCommit(false);
-				 
-				 //int userid = this.getUserId( emailAddress );
-				 sb.append("UPDATE USER_INFO set SUR_NAME =  '"+surName +"', ");
-				 sb.append("GIVEN_NAME = '"+givenName+"', ");
-				 
-				 sb.append("INSTITUTION = '"+institution+"', ");
-				 sb.append("ADDRESS= '"+address+"', ");
-				 sb.append("CITY= '"+city+"', ");
-				 sb.append("STATE= '"+state+"', ");
-				 sb.append("COUNTRY= '"+country+"', ");
-				 sb.append("ZIP_CODE= '"+zipCode+"', ");	 
-				 sb.append("PHONE_NUMBER = '"+phoneNumber+"' ");
-				 
-				 sb.append("WHERE EMAIL_ADDRESS = '"+emailAddress+"' ");
-				 System.out.println("sql: " + sb.toString() );
-				 // create the statement
-				 PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-				 // execute the insert
-				 pstmt.execute();
-				 
-				 conn.commit();
-				 conn.close();
-			 }
+	public boolean updateUserInfo(Hashtable h)
+	{
+		try
+		{
+			System.out.println("Attempting to update Profile");
+
+			String surName = (String) h.get("surName");
+			String givenName = (String) h.get("givenName");
+			String emailAddress = (String) h.get("emailAddress");
+			String institution = (String) h.get("institution");
+			String address = (String) h.get("address");
+			String city = (String) h.get("city");
+			String state = (String) h.get("state");
+			String country = (String) h.get("country");
+			String phoneNumber = (String) h.get("phoneNumber");
+			String zipCode = (String) h.get("zipCode");
+			String userId = (String) h.get("userId");
+			String partyId = (String) h.get("partyId");
+						
+			if ((!emailAddress.trim().equals("null"))
+				&& (emailAddress != null)
+				&& (emailAddress.length() > 2))
+			{
+				StringBuffer sb = new StringBuffer();
+				//get the connections etc
+				Connection conn = getConnection(FRAMEWORK_DATABASE);
+				conn.setAutoCommit(false);
+
+				//int userid = this.getUserId( emailAddress );
+				sb.append("UPDATE USER_INFO set SUR_NAME =  '" + surName + "', ");
+				sb.append("GIVEN_NAME = '" + givenName + "', ");
+
+				sb.append("INSTITUTION = '" + institution + "', ");
+				sb.append("ADDRESS= '" + address + "', ");
+				sb.append("CITY= '" + city + "', ");
+				sb.append("STATE= '" + state + "', ");
+				sb.append("COUNTRY= '" + country + "', ");
+				sb.append("ZIP_CODE= '" + zipCode + "', ");
+				sb.append("PHONE_NUMBER = '" + phoneNumber + "', ");
+				sb.append("EMAIL_ADDRESS = '" + emailAddress + "' ");
+
+				sb.append("WHERE USER_ID = '" + userId + "' ");
+				
+				System.out.println("sql: " + sb.toString());
+				// create the statement
+				PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+				// execute the insert
+				pstmt.execute();
+
+				// Also update the Party and related tables
+				Connection vbconn = getConnection(VEGBANK_DATABASE);
+				vbconn.setAutoCommit(false);
+
+				String partyIdSubselect = "party_id = '" +  partyId + "' ";
+				String partyUpdateSQL =
+					"update party set givenname=?, surname=?, organizationname=?,"
+						+ "email=? where "+ partyIdSubselect;
+				String telephoneUpdateSQL =
+					"update telephone set phonenumber =? where " + partyIdSubselect;
+				String addressUpdateSQL =
+					"update address set deliverypoint =?, city=?, administrativearea=?, "
+						+ " country=?, postalcode=? where " + partyIdSubselect;
+
+				PreparedStatement partyUpdate = vbconn.prepareStatement(partyUpdateSQL);
+				PreparedStatement telephoneUpdate = vbconn.prepareStatement(telephoneUpdateSQL);
+				PreparedStatement addressUpdate = vbconn.prepareStatement(addressUpdateSQL);
+				
+				partyUpdate.setString(1, givenName );
+				partyUpdate.setString(2, surName );
+				partyUpdate.setString(3, institution );
+				partyUpdate.setString(4, emailAddress );
+				partyUpdate.execute();
+
+				telephoneUpdate.setString(1, phoneNumber );
+				telephoneUpdate.execute();
+				
+				addressUpdate.setString(1, address );
+				addressUpdate.setString(2, city );
+				addressUpdate.setString(3, state );
+				addressUpdate.setString(4, country );
+				addressUpdate.setString(5, zipCode );
+				addressUpdate.execute();
+
+				conn.commit();
+				vbconn.commit();
+				
+				System.out.println("Updated Profile");
+			}
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
-			return(false);
+			return (false);
 		}
-		return(true);
-	 }
+		return (true);
+	}
+	
+	public boolean isEmailUnique(String emailAddress, String userId) throws SQLException
+	{
+		boolean result = true;
+		// Get connection, query
+		Connection conn = this.getConnection(FRAMEWORK_DATABASE);
+		Statement query = conn.createStatement();
+		
+		// Create query
+		ResultSet rs = query.executeQuery("SELECT user_id from user_info where email_address = '" + emailAddress + "' and user_id != '" + "'");
+		
+		// If any results returned then email address is not unique
+		if (rs.next())
+		{
+			result = false;
+		}
+		
+		return result;
+	}
 	
 	/**
 	 * main method for testing 

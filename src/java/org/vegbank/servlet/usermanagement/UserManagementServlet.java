@@ -1,13 +1,11 @@
-package org.vegbank.servlet.usermanagement; 
-
-/**
+/*
  *    '$RCSfile: UserManagementServlet.java,v $'
  *    Authors: @authors@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *   '$Date: 2003-05-07 01:37:28 $'
- *   '$Revision: 1.6 $'
+ *   '$Date: 2003-05-20 21:56:54 $'
+ *   '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +21,8 @@ package org.vegbank.servlet.usermanagement;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+package org.vegbank.servlet.usermanagement; 
+ 
  
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -65,12 +65,12 @@ public class UserManagementServlet extends HttpServlet
 	private static final String  actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
 
 	// these are the forms for the certification input:
-	private static final String certificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/certification_valid.html";
-	private static final String certificationValidation = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
-	private static final String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
-	private static final String userUpdateValidation = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
-	private static final String userUpdateTemplate =  "/usr/local/devtools/jakarta-tomcat/webapps/forms/user_update_form.html";
-	private static final String userPasswordUpdateTemplate =  "/usr/local/devtools/jakarta-tomcat/webapps/forms/user_update_password_form.html";
+	private static final String certificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/certification_valid.html";
+	private static final String certificationValidation = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/valid.html";
+	private static final String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/generic_form.html";
+	private static final String userUpdateValidation = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/valid.html";
+	private static final String userUpdateTemplate =  "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/user_update_form.html";
+	private static final String userPasswordUpdateTemplate =  "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/user_update_password_form.html";
 	
 	//constructor
 	public UserManagementServlet()
@@ -306,6 +306,7 @@ public class UserManagementServlet extends HttpServlet
 					 System.out.println("UserManagementServlet > reading the update parameters");
 					 
 					 //get the input paramters
+						String newEmailAddress = (String)params.get("emailAddress");
 					 String surName = (String)params.get("surName");
 					 String givenName = (String)params.get("givenName");		 
 					 String permissionType = (String)params.get("permissionType");
@@ -317,10 +318,12 @@ public class UserManagementServlet extends HttpServlet
 					 String country = (String)params.get("country");
 					 String zipCode = (String)params.get("zipCode");
 					 String phoneNumber = (String)params.get("phoneNumber");
-					 
+					String userId = (String)params.get("userId");
+					String partyId = (String)params.get("partyId");
+					
 					 //put into a hashtable
 					 Hashtable h = new Hashtable();
-					 h.put("emailAddress", emailAddress);
+					 h.put("emailAddress", newEmailAddress);
 					 h.put("surName", ""+surName);
 					 h.put("givenName", ""+givenName);
 					 h.put("permissionType", ""+permissionType);
@@ -332,22 +335,35 @@ public class UserManagementServlet extends HttpServlet
 					 h.put("country", ""+country);
 					 h.put("zipCode", ""+zipCode);
 					 h.put("phoneNumber", ""+phoneNumber);
-					 
+					h.put("userId", ""+userId);
+					h.put("partyId", ""+partyId);
 
 					// instantiate the database
 					UserDatabaseAccess userdb = new UserDatabaseAccess();
-					userdb.updateUserInfo(h);
-				 
-					// send a success message
+					
+					StringWriter output = new StringWriter();
 					Hashtable replaceHash = new Hashtable();
 					StringBuffer sb = new StringBuffer();
-					sb.append("Thank you "+givenName+" "+surName+"! <br> ");
-					sb.append("Your VegBank profile has been updated. <br>");
-					replaceHash.put("messages",  sb.toString());
-					 StringWriter output = new StringWriter();
-					util.filterTokenFile(genericForm, output, replaceHash);
 					
-					 //print the outfile to the browser
+					if ( userdb.isEmailUnique(newEmailAddress, userId) )
+					{
+						userdb.updateUserInfo(h);
+						
+						// send a success message
+						sb.append("Thank you "+givenName+" "+surName+"! <br> ");
+						sb.append("Your VegBank profile has been updated. <br>");
+						
+						req.getSession().setAttribute("emailAddress", newEmailAddress );// = newEmailAddress;
+					}
+					else 
+					{
+						// Send an error message
+						sb.append("Please choose an unique email address");
+					}
+					
+					replaceHash.put("messages",  sb.toString());
+					util.filterTokenFile(genericForm, output, replaceHash);
+					 //print the output to the browser
 					 PrintWriter out = res.getWriter();
 					 out.print( output.toString() );
 
@@ -370,6 +386,10 @@ public class UserManagementServlet extends HttpServlet
 					 String ticketCount =  (String)h.get("ticketCount");
 					 String permissionType = (String)h.get("permissionType");
 					 String institution = (String)h.get("institution");
+					 String userId = (String) h.get("userId");
+					 String partyId = (String) h.get("partyId");
+					 
+					 System.out.println("-----> "  + partyId);
 					 
 					 Hashtable replaceHash = new Hashtable();
 					 replaceHash.put("messages", " ");
@@ -386,6 +406,8 @@ public class UserManagementServlet extends HttpServlet
 					 replaceHash.put("ticketCount", ""+ticketCount );
 					 replaceHash.put("permissionType", ""+permissionType );
 					 replaceHash.put("emailAddress", emailAddress );
+					 replaceHash.put("userId", userId );
+					 replaceHash.put("partyId", partyId );
 					replaceHash.put("errormessage", errorMessage );
 					 
 					StringWriter output = new StringWriter();
@@ -399,7 +421,7 @@ public class UserManagementServlet extends HttpServlet
 			 {
 				 System.out.println("UserManagementServlet > missing require attributes");
 				 // assume that they are not logged in and send them there
-				res.sendRedirect("/forms/redirection_template.html");
+				res.sendRedirect("/vegbank//forms/redirection_template.html");
 			 }
 		 }
 		 catch(Exception e)
@@ -581,7 +603,7 @@ public class UserManagementServlet extends HttpServlet
 			 {
 			 	System.out.println("UserManagementServlet > not a valid email to commit certification");
 				// redirect to the page that redirects to the login
-				res.sendRedirect("/forms/redirection_template.html");
+				res.sendRedirect("/vegbank/forms/redirection_template.html");
 			 }
 		 }
 		 catch(Exception e)
@@ -742,7 +764,7 @@ public class UserManagementServlet extends HttpServlet
 					//the cookie is not valid
 					System.out.println("UserManagementServlet > not logged in");
 					// redirect to the page that redirects to the login
-					res.sendRedirect("/forms/redirection_template.html");
+					res.sendRedirect("/vegbank/forms/redirection_template.html");
 				}
 				// else figure out what the client wants, update the database and let them 
 				// have it
