@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.1 2005-03-15 08:16:07 anderson Exp $
+ * $Id: vegbank2005.css,v 1.2 2005-03-15 12:19:12 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -24,8 +24,11 @@ MAINCONTENT
     display: block;
 }
 #centercontent {
+    margin-top: -48px;
     padding: 0 18px 0 18px;
+    text-align: left;
 }
+
 #maincontent > #centercontent {
     padding: 0 18px 0 18px;
 }
@@ -96,11 +99,11 @@ body>#wrapper {
   padding: 10px 0 2px 4px;
   display: inline;
 }
-                                                                                                                                                            
+
 #content-3col-a table {
   display: inline;
 }
-                                                                                                                                                            
+
 
 
 
@@ -113,10 +116,10 @@ CEILING
     height: 63px;
     width: 752px;
     /*
-    border-bottom: 1px solid #999; 
+    border-bottom: 1px solid #999;
      */
-    border-left: 1px solid #999; 
-    border-right: 1px solid #999; 
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;
 }
 #wrapper > #ceiling {
     width: 750px;
@@ -166,7 +169,7 @@ CEILING
 }
 
 /* #permanav a.carticon:hover { */
-a.nobg:hover { 
+a.nobg:hover {
 	background: none;
 }
 
@@ -174,13 +177,14 @@ a.nobg:hover {
 HEADER
 -------------------------------------------------*/
 #header {
-    float: left;
     position: relative;
+    /*
     left: 68px;
+    */
     width: 650px;
     height: 74px;
     padding: 0;
-    margin: -8px 0 20px 0px;
+    margin: -8px 0 0 68px;
     text-align: left;
     background: url(@images_link@header_bg650.gif) top left no-repeat;
     font-size: 15px;
@@ -189,7 +193,7 @@ HEADER
     font-weight: bold;
     /*
     background-color: #fff;
-    background-color: #cccc8f; 
+    background-color: #cccc8f;
     background-color: #808059;
     border: 3px solid #E6E6CF;
     border-width: 1px 1px 2px 1px;
@@ -281,7 +285,7 @@ html>body #header-right {
 html>body #header-right ul li a {
     width: auto;
 }
-#header-right a:hover { 
+#header-right a:hover {
     background-color: #08c;
     color: #fff;
     border-bottom: 1px solid #08c;
@@ -366,7 +370,7 @@ DATACART
   overflow: visible;
   background: url(@images_link@cart1.jpg) #fff top right no-repeat;
 
-  -moz-border-radius: 8px;  
+  -moz-border-radius: 8px;
 }
 
 #datacart a {text-decoration: none; padding: 1px; }
@@ -432,20 +436,20 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit
 /* rounded edges */
 .rounded {
     max-width: 620px;
-    background: url(@images_link@rs-right.png) right repeat-y 
+    background: url(@images_link@rs-right.png) right repeat-y
 }
 
 .rounded:before {
     display: block;
     line-height: 0;
     background: url(@images_link@rs-topright.png) top right no-repeat;
-    content: url(@images_link@rs-topleft.png) 
+    content: url(@images_link@rs-topleft.png)
 }
 
 .rounded:after {
     display: block;
     line-height: 0;
     background: url(@images_link@rs-bottomright.png) bottom right no-repeat;
-    content: url(rs-bottomleft.png) 
+    content: url(rs-bottomleft.png)
 }
 
