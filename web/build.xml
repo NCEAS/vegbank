@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2004-09-28 18:02:22 $'
-* '$Revision: 1.121 $'
+* '$Author: mlee $'
+* '$Date: 2004-10-01 20:38:02 $'
+* '$Revision: 1.122 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -370,7 +370,14 @@
     </copy>
     <antcall target="views"/>
   </target>
+  <target name="views-autogen" depends="init" description="&gt; create files from db_model.xml, using another build.xml file">
+    <ant dir="${views}" target="writeviews" />
+  </target>
   <target name="views" depends="tokenfiles" description="&gt; dist the views to server (outside chain, but included in forms)">
+    <!-- first overwrite any autogen views with any custom ones-->
+    <copy overwrite="true" todir="${views}/autogen" filtering="no">
+      <fileset dir="${views}/custom" includes="*jsp" excludes="**/CVS* "/>
+    </copy>
     <copy overwrite="true" todir="${views_server}" filtering="yes">
       <fileset dir="${views}" includes="**/*jsp **/*html" excludes="**/CVS* "/>
     </copy>
@@ -597,7 +604,7 @@
 MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
   </target>
-  <target name="deploy-all" depends="deploy, dictionary, dist-bins, manual, vegbranch-dist-all" description="=&gt; all in deploy plus slow rarely updated stuff"/>
+  <target name="deploy-all" depends="views-autogen, deploy, dictionary, dist-bins, manual, vegbranch-dist-all" description="=&gt; all in deploy plus slow rarely updated stuff"/>
   <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
     <property name="webapp" value="vegtest"/>
     <antcall target="deploy"/>
