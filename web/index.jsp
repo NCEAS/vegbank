@@ -114,17 +114,21 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 	<tr>
 		<td></td>
 		<td>
-		<html:form action="/PlotQuery" method="get">
-		 <!-- <html:select property="state" size="1" multiple="true">
-						<%@ include file="../includes/StatesList.jsp" %>
-			  </html:select> -->
+		<form action="@web_context@forms/metasearch.jsp" method="get">
 			<span class="greytext">
-			&nbsp; Find <b>plots</b> by <b>plant name</b>:
-			
-			<!--  <br/>
-			&nbsp; (% is wildcard) example: Acer spic% --><br /></span>  
-			 <input type="text" name="plantName" size="30" value=""/>
-			 <html:submit value="search"/>
+			&nbsp; Find anything in VegBank:
+			</span>  
+
+			<br>
+			 <input type="hidden" name="kwType" value="detailed"/>
+			 <input type="text" name="wparam" size="30" value=""/>
+		 	 <html:submit value="search"/>
+		</td>
+		</tr>
+		<tr><td></td><td align="right">
+			 <input type="hidden" name="where" value="where_keywords_detailed"/>
+			 <input type="checkbox" name="where" size="30" value="where_keywords_brief"/>Quick search?
+
 			
 			
 			
@@ -137,7 +141,7 @@ src="@image_server@dot_tall.jpg"><a href="@general_link@login.jsp"
 		<td></td>
 		<td><img src="@image_server@lwrt3.gif"/></td>
 	</tr>
-	</html:form> 
+	<form> 
 	</table>
 
 	<p class="vegbank"> 

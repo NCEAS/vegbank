@@ -38,10 +38,11 @@
 			<td align="right">
 
 			<bean:define id="getName" name="onerow" property="entity"/>
+			<bean:define id="getView" value="std"/>
 
 <% 
-String wparamList = "wparam[0]=" + getName + "&wparam[1]=" + 
-		request.getParameter("kwType") + "&wparam[2]=" + request.getParameter("wparam");
+String wparamList = "wparam=" + getName + ";" + request.getParameter("kwType") + 
+		";" + request.getParameter("wparam");
 %>
 
 			<logic:equal name="onerow" property="entity" value="community">
@@ -50,11 +51,15 @@ String wparamList = "wparam[0]=" + getName + "&wparam[1]=" +
 			<logic:equal name="onerow" property="entity" value="plant">
 				<bean:define id="getName" value="plantconcept"/>
 			</logic:equal>
+			<logic:equal name="onerow" property="entity" value="plot">
+				<bean:define id="getName" value="observation"/>
+				<bean:define id="getView" value="simple"/>
+			</logic:equal>
 				
 
 <% String where = "where_" + getName + "_pk"; %>
 
-				<a href="@get_link@std/<bean:write name="getName"/>?where=<%=where%>&whereSubquery=keywords_id&<%=wparamList%>"><bean:write name="onerow" property="entity"/></a>
+				<a href="@get_link@<bean:write name="getView"/>/<bean:write name="getName"/>?where=<%=where%>&whereSubquery=keywords_id&<%=wparamList%>"><bean:write name="onerow" property="entity"/></a>
 			</td>
 			<td>
 				<bean:write name="onerow" property="count"/>

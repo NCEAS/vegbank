@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-12 01:00:33 $'
- *	'$Revision: 1.21 $'
+ *	'$Date: 2004-10-12 17:50:11 $'
+ *	'$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -343,12 +343,43 @@ public class GenericCommand
 	 */
 	private String buildFormattedWhereClause(String whereClause, String[] whereParams, String selectClause) {
 
+		/*
+		whereParams = new String[3];
+		whereParams[0] = "party";
+		whereParams[1] = "detailed";
+		whereParams[2] = "gill";
+		*/
+
 		this.whereClauseFormatted = "";
 		boolean hasWhereClause = !Utility.isStringNullOrEmpty(whereClause);
 		boolean hasParams = (whereParams != null && whereParams.length > 0);
+		MessageFormat format;
 
 		log.debug("hasWhereClause: " + hasWhereClause);
 		log.debug("hasParams: " + hasParams);
+
+
+		if (!Utility.isStringNullOrEmpty(this.whereSubquery)) {
+			// swap whereSubquery into {0} of whereClause
+			String sqlWhereSubquery = sqlResources.getString(this.whereSubquery);
+			log.debug("hasWhereSubquery: " + sqlWhereSubquery);
+			format = new MessageFormat(whereClause);
+			String[] subquerySwap = { sqlWhereSubquery };
+
+			log.debug("old whereClause: " + whereClause);
+			whereClause = format.format(subquerySwap);
+			log.debug("new whereClause: " + whereClause);
+
+
+			log.debug("Expanding wparams");
+			StringTokenizer st = new StringTokenizer(whereParams[0], ";");
+			whereParams = new String[st.countTokens()];
+			int j=0;
+			while (st.hasMoreTokens()) {
+				whereParams[j++] = st.nextToken();
+			}
+			this.whereSubquery = null;
+		}
 
 		// format the where clause
 		if (hasWhereClause && hasParams) {
@@ -360,7 +391,7 @@ public class GenericCommand
 
 				// MessageFormat allows the substitution of '{x}' with Strings from 
 				// a String[] where x is the array index
-				MessageFormat format = new MessageFormat(whereClause);
+				format = new MessageFormat(whereClause);
 				whereClause = format.format(whereParams);
 			}
 
@@ -684,6 +715,21 @@ public class GenericCommand
     public void setPager(boolean b) {
         this.pager = b;
     }
+
+
+    /**
+     * 
+     */
+	protected String whereSubquery;
+
+    public String getWhereSubquery() {
+        return this.whereSubquery;
+    }
+
+    public void setWhereSubquery(String s) {
+        this.whereSubquery = s;
+    }
+
 
 
 	
