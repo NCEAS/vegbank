@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-24 00:42:14 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-09-23 03:56:53 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -246,14 +246,10 @@ select (subquery stuff goes here as stuff) as somename from...
 		// Sometimes the SELECT statement must have a WHERE, e.g for privacy 
 		// reasons for eample i.e. some records are not public
 		// if so the where clause is appended using an AND
-		if ( whereClause != null  && ! whereClause.equals("") )
-		{
-			if ( selectClause.indexOf("WHERE") > 0 )
-			{
+		if (!Utility.isStringNullOrEmpty(whereClause)) {
+			if ( selectClause.indexOf("WHERE") > 0 ) {
 				SQLStatement.append(" AND " +  format.format(whereParams));
-			}
-			else 
-			{
+			} else {
 				SQLStatement.append(" WHERE " +  format.format(whereParams));
 			}
 		}
@@ -368,12 +364,11 @@ select (subquery stuff goes here as stuff) as somename from...
 				// Add this token with any trailing ',' removed
 				
 				// Check for a named field
-				log.debug("property name:  " + propertyName);
 				indexOfAs = propertyName.indexOf(" as ");
-				log.debug("as?  " + indexOfAs);
 				if ( indexOfAs != -1 ) {
 					propertyName = propertyName.substring(indexOfAs + 4 );
 				}
+				log.debug("property name:  " + propertyName);
 
 				indexOfComma = propertyName.indexOf(',');
 				if ( indexOfComma == -1 )

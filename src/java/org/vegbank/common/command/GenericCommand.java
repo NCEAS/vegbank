@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-17 05:37:19 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2004-09-23 03:56:53 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -196,7 +196,11 @@ public class GenericCommand
 		} else if (numItems == 1) {
 			//setPerPage("1");
 			setPageNumber("0");
-			pp = Float.parseFloat(tmp);
+			if (Utility.isStringNullOrEmpty(tmp)) {
+				pp = DEFAULT_PER_PAGE;
+			} else {
+				pp = Float.parseFloat(tmp);
+			}
 		} 
 
 		// page number
