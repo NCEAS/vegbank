@@ -31,9 +31,16 @@ else
 	echo "issuing a database insert -- plot insertion"
 	STYLESHEET=../xml/vegPlot2001DBTrans.xsl
 else
+  if  test $ACTION = verify
+	then
+ 	echo "issuing a database insert -- plot insertion"
+	STYLESHEET=../xml/vegPlot2001DBTrans.xsl			
+else
 	echo "unrecognized command"
 fi
 fi
+fi
+
 
 ACCESSRESOURCE=../lib/dbAccess.jar
 ACCESSMODULE=../lib/dbAccess.jar
