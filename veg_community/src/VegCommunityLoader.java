@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-07 18:25:38 $'
- * '$Revision: 1.9 $'
+ *     '$Date: 2002-03-07 20:44:00 $'
+ * '$Revision: 1.10 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -706,7 +706,8 @@ public class VegCommunityLoader
 					//this variable should be moved from here
 					String allianceTransName = "";
 					String level = "association";
-					String dateEntered = "11-FEB-2002";
+					//String dateEntered = "11-FEB-2002";
+					String dateEntered = source.getDateEntered(communityCode, level);
 					String parentCommunity = source.getParentCode(communityCode);
 					if (commName != null)
 					{
