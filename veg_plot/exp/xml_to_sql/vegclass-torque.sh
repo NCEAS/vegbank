@@ -5,8 +5,8 @@
 # SPECIFIC SQL
 #
 #     '$Author: harris $'
-#     '$Date: 2001-10-17 18:34:30 $'
-#     '$Revision: 1.4 $'
+#     '$Date: 2001-10-17 20:42:39 $'
+#     '$Revision: 1.5 $'
 
 
 # the directory that contains the documentation for the vegplot database
@@ -31,6 +31,12 @@ else
 	then
 	TARGETPACKAGE=$TAXONOMYDOCDIR
 	echo  $TARGETPACKAGE
+else
+	if  test $ACTION = plant-taxonomy
+	then
+	TARGETPACKAGE=$TAXONOMYDOCDIR
+	echo  $TARGETPACKAGE
+fi
 fi
 fi
 
@@ -41,10 +47,10 @@ java -classpath ./lib/xalan_1_2_2.jar:./lib/xerces_1_4.jar:./lib/xmltosql.jar \
 VegclassXMLDoc  $TARGETPACKAGE $ACTION
 
 # copy the output to he torque directory
-###cp test_fix.xml ./torque/schema/project-schema.xml
+cp test_fix.xml ./torque/schema/project-schema.xml
 
 # move into the torque directory and execute ant -- to handle the transformation 
 # to sql
-###cd torque
-###ant
-###cp src/sql/project-schema.sql ../output.sql 
+cd torque
+ant
+cp src/sql/project-schema.sql ../output.sql 
