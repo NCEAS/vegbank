@@ -320,7 +320,7 @@ CREATE TABLE observation
     methodNarrative text,
     taxonObservationArea float NOT NULL,
     coverDispersion varchar (30) NOT NULL,
-    autoTaxonCover boolean NOT NULL,
+    autoTaxonCover boolean ,
     stemObservationArea float,
     stemSampleMethod varchar (30),
     originalData text,
