@@ -25,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-04 00:08:29 $'
- *  '$Revision: 1.20 $'
+ *  '$Date: 2002-04-04 03:31:02 $'
+ *  '$Revision: 1.21 $'
  */
 
 
@@ -91,7 +91,7 @@ public class DataSubmitServlet extends HttpServlet
 			//handle the cookies -- the cookies should start with the user name
 			//which will be used to register the query and results documents 
 			//with the dataexcahnge servlet
-			userName = getCookieValue(request);
+			String userName = su.getCookieValue(request);
 			System.out.println("DataSubmitServlet > current user: " +  userName   );
 			
 			Hashtable params = new Hashtable();
