@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2004-06-29 06:53:26 $'
-*  '$Revision: 1.22 $'
+*      '$Date: 2004-07-22 17:22:18 $'
+*  '$Revision: 1.23 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -68,7 +68,6 @@
       There was one match to your search criteria:<br/>
     </font></span>
   </logic:equal>
-  <logic:notEqual name="PlotsResultsSize" value="1">
 
     <span class="category">
       <font color="red">
@@ -78,6 +77,7 @@
   
       <!-- SOME NOTES ABOUT THE USE OF ICONS-->
       <br/>
+	<logic:notEmpty name="PlotsResults">
       <span class="intro">Available Reports:</span>
 		&nbsp; &nbsp; &nbsp; &nbsp;
       <span class="item">
@@ -92,35 +92,37 @@
 	 <span class="item">Choose plots from the search results below, then...</span>
 	 <br/>
 		<input type="button" value="Download Selected Plots" onClick="postAction('DownLoadManager.do')"/> 
+		<!--
 		&nbsp; &nbsp; &nbsp; 
 		<input type="button" value="Request Access from Plot Owner" onClick="postAction('LoadPlotQuery.do')"/> 
 		&nbsp; &nbsp; &nbsp; 
 		<input type="button" value="Add Selected Plots to Dataset" onClick="postAction('DatasetAppend.do')"/> 
+		-->
 	   <br/>&nbsp;
 
            <!-- set up a table -->
            <table cellspacing="0" cellpadding="1">
 	     <tr><td>&nbsp; &nbsp; &nbsp; &nbsp; </td>
 	       <td bgcolor="#000000">
-
        <table width="700" cellspacing="0" cellpadding="0">
 
 
 	 <tr bgcolor="#336633" align="left" valign="middle">
-	   <th align="center" nowrap> SEARCH<br>RESULTS </th>
-	   <th align="center" valign="center" nowrap> Accession Code </th>
-	   <th align="center" valign="center" nowrap> Author's<br>Plot Name </th>
-	   <th align="center" valign="center" nowrap> Latitude  </th>
-	   <th align="center" valign="center" nowrap> Longitude  </th>
+	   <th align="center" nowrap> SEARCH<br>RESULTS </th> <!-- black dividing bar --><td bgcolor="#000000" width="1px"></td>
+	   
+	   <th align="center" valign="middle" nowrap> Author's Plot Name <br /> &amp; Accession Code</th><!-- black dividing bar --><td bgcolor="#000000" width="1px"></td>
+	   <th align="center" valign="middle" nowrap> Latitude &amp; <br/> Longitude</th><!-- black dividing bar --><td bgcolor="#000000" width="1px"></td>
+	   <th width="8px">&nbsp;<!-- a little space before dominant species --></th>
+	   <th align="left" valign="middle" nowrap>  Dominant Taxa (with % cover)  </th>
 	 </tr>
 
 	 <tr bgcolor="#333333" align="center">
-	   <td class="whitetext" nowrap>
-	   	select +<a class="whitetext" href="javascript:checkAll('selectedPlots')">all</a>
+	   <td class="whitetext" nowrap colspan="20" align="left">
+	   	&nbsp;&nbsp;select +<a class="whitetext" href="javascript:checkAll('selectedPlots')">all</a>
 		&nbsp; 
 		-<a class="whitetext" href="javascript:clearAll('selectedPlots')">none</a>
 	   </td>
-	   <td colspan="20"> &nbsp; </td>
+	  
 	 </tr>
 
 
@@ -153,7 +155,7 @@
      <tr class="<%= rowClass %>" valign="top">
 
 	    <!-- First Cell-->
-	    <th width="20%" class="<%= rowClass %>" align="center" nowrap>
+	    <th  class="<%= rowClass %>" align="center" valign="middle" nowrap colspan="2">
 	     
 	      <!-- THE LINK TO THE SUMMARY-->
              <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;accessionCode=<bean:write property="accessionCode" name="row"/>" title="summary report"><img align="center" border="0" 
@@ -185,25 +187,43 @@
 
 	    </th>
 
-	    <td align="left" valign="middle">
-	        <span class="category">
-			 	&nbsp; &nbsp;
-	          <bean:write name="row" property="accessionCode"/>   
-	        </span>
-         </td>		 
-	    <td align="left" valign="middle">
+ 
+	    <td align="center" valign="middle" colspan="2"> <!-- colspan 2 b/c top black bars as separators are cells -->
 	        <span class="item">
 	          <bean:write name="row" property="authorObservationCode"/>   
 	        </span>
-         </td>		 
-	    <td align="center" valign="middle">
-	        <span class="item">
-	          <bean:write name="row" property="latitude" format="#.0"/>   
+			<br/>
+			<span class="vegbank_tiny">
+				<bean:write name="row" property="accessionCode"/>
 	        </span>
          </td>		 
-	    <td align="center" valign="middle">
+	    <td align="center" valign="middle" colspan="2"> <!-- colspan 2 b/c top black bars as separators are cells -->
 	        <span class="item">
-	          <bean:write name="row" property="longitude" format="#.0"/>   
+	          <bean:write name="row" property="latitude" format="#.0"/> <br/><bean:write name="row" property="longitude" format="#.0"/>   
+	        </span>
+         </td>		
+		 <td>&nbsp;<!-- a little space before dominant species --></td> 
+	    <td align="left" valign="middle" colspan="2"> <!-- colspan 2 b/c top black bars as separators are cells -->
+	        <span class="vegbank_tiny">
+	    <!-- no top species returned -->      
+	    <logic:empty name="row" property="topspp1"> 
+			    None available <br/>
+				Species may just be listed by stratum without overall cover values
+			  </logic:empty>
+
+	          <logic:notEmpty name="row" property="topspp1"> 
+			    <bean:write name="row" property="topspp1" />
+			    <br/><bean:write name="row" property="topspp2" /> 
+			    <br/><bean:write name="row" property="topspp3" />
+			    <br/><bean:write name="row" property="topspp4" /> 
+			    <br/><bean:write name="row" property="topspp5" /> 
+
+			  </logic:notEmpty>
+			<!--    First Dominant Species will be written here (with cover %)
+			    <br/>2nd Dominant Species will be written here (with cover %) 
+			    <br/>3rd Dominant Species will be written here (with cover %)
+			    <br/>4th Dominant Species will be written here (with cover %)
+			    <br/>5th Dominant Species will be written here (with cover %) -->
 	        </span>
          </td>		 
 	  </tr>
@@ -214,12 +234,12 @@
 	</logic:iterate>
 
 	 <tr bgcolor="#333333" align="center">
-	   <td class="whitetext" nowrap>
-	   	select +<a class="whitetext" href="javascript:checkAll('selectedPlots')">all</a>
+	   <td colspan="20" class="whitetext" nowrap align="left">
+	   	&nbsp;&nbsp;select +<a class="whitetext" href="javascript:checkAll('selectedPlots')">all</a>
 		&nbsp; 
 		-<a class="whitetext" href="javascript:clearAll('selectedPlots')">none</a><a name="bottom"></a>
 	   </td>
-	   <td colspan="20"> &nbsp; </td>
+	   
 	 </tr>
 
 
@@ -234,17 +254,20 @@
 	 <span class="item">Choose plots from the search results above, then...</span>
 	<br/>
 	<input type="button" value="Download Selected Plots" onClick="postAction('DownLoadManager.do')"/>
+	<!--
 		&nbsp; &nbsp; &nbsp; 
 	<input type="button" value="Request Access from Plot Owner" onClick="postAction('LoadPlotQuery.do')"/> 
 		&nbsp; &nbsp; &nbsp; 
 	<input type="button" value="Add Selected Plots to Dataset" onClick="postAction('DatasetAppend.do')"/> 
+		-->
 	<br/>&nbsp;
 
      </form>      
-  </logic:notEqual>
   
   </font>
   </span>
+
+	</logic:notEmpty>
   
   <script language="javascript">refreshHighlight('plotName');</script>
   <!-- VEGBANK FOOTER -->
