@@ -28,10 +28,12 @@
 
 
 <table width="799"><tr><td>
-<h1 align="center">VegBank FAQ</h1>
-    <h4 align="center">Frequently Asked Questions about the VegBank database and website</h4>
- <a name="topoffaq"><h3>Menu of Questions</h3></a>
- <p>Please select from the following questions, or browse through this file: <br/>
+ <a name="topoffaq"></a>
+<h1>VegBank FAQ</h1>
+
+    <p>Frequently Asked Questions about the VegBank database and website.</p>
+
+ <p class="instructions">Please select from the following questions, or browse through this file: <br/>
  (<a href="#" onclick="unHighlightALL()">clear highlighting on this page</a>.)</p>
  
   <xsl:for-each select="category">
