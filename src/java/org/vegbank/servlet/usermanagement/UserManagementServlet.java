@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: anderson $'
- *   '$Date: 2003-11-24 18:51:49 $'
- *   '$Revision: 1.16 $'
+ *   '$Author: farrell $'
+ *   '$Date: 2003-11-25 19:48:27 $'
+ *   '$Revision: 1.17 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -307,7 +307,7 @@ public class UserManagementServlet extends HttpServlet
 				Hashtable replaceHash = new Hashtable();
 				StringBuffer sb = new StringBuffer();
 
-				if (userdb.isEmailUnique(newEmailAddress, userId))
+				if (userdb.isEmailUnique(newEmailAddress))
 				{
 					userdb.updateUserInfo(h);
 
