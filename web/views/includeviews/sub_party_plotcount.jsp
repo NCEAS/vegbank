@@ -1,4 +1,5 @@
 <!--Where statement removed from preceding: -->
+<!-- can ask for only total plots -->
 <logic:empty name="browseparty-BEANLIST">
 <p>  Sorry, no parties found (error!)</p>
 </logic:empty>
@@ -10,10 +11,13 @@
 <th>Party</th>
 </logic:notEqual>
           <th>Total Plots</th>
+
+<logic:notEqual name="onlytotalplots" value="yes">
+
           <th>Observation Contribution Plots</th>
           <th>Classified Plots</th>
           <th>Project Contribution Plots</th>
-                
+</logic:notEqual>                
                   
  </tr>
 
@@ -34,6 +38,10 @@
     0
   </logic:empty>
 </td>
+
+
+<logic:notEqual name="onlytotalplots" value="yes">
+         
 
 <td class="numeric">
   <logic:notEmpty name="onerowofbrowseparty" property="countobscontrib">
@@ -61,6 +69,8 @@
     0
   </logic:empty>
 </td>
+
+</logic:notEqual>  <!-- only total -->
 
 
 </logic:iterate>
