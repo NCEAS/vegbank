@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-07-09 18:26:36 $'
- *	'$Revision: 1.4 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2003-11-26 00:46:40 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,9 +67,12 @@ public class GenericDispatcherAction extends Action
 		
 		try
 		{
+			System.out.println( "GD: command == " + command );
 			if ( command.equals(genericCommandName)) 
 			{
+				System.out.println( "GD: executing new gen cmd" );
 				new GenericCommand().execute(request, response);
+				System.out.println( "GD: done executing GC" );
 			}
 			else
 			{
@@ -86,7 +89,9 @@ public class GenericDispatcherAction extends Action
 			}
 			
 			// Forward to a jsp
+			System.out.println( "GD: fwd to" + jspLocation + jsp );
 			RequestDispatcher dispatcher = request.getRequestDispatcher(jspLocation + jsp);
+			System.out.println( "GD: got dispatcher");
 			dispatcher.forward(request, response);
 		}
 		catch (Exception e)
