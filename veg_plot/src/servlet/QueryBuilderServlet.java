@@ -28,6 +28,8 @@ public class QueryBuilderServlet extends HttpServlet
 
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 public DataRequestServlet drs = new DataRequestServlet();
+public servletUtility su = new servletUtility();
+static Vector queryVector = new Vector();
 
 
 /** Handle "POST" method requests from HTTP clients */
@@ -53,16 +55,25 @@ public void doGet(HttpServletRequest request,
 			//parameters to the servlet
 			if ( parameterHash(request).containsKey("queryParameterType") == true )
 			{
-				System.out.println("queryParameterType> "+parameterHash(request).get("queryParameterType").toString() );
+				System.out.println("queryParameterType> "
+					+parameterHash(request).get("queryParameterType").toString() 
+				);
 				//if the client requests to append , via queryParameterType 
 				//the the input query elements to the current standing query
 				if ( parameterHash(request).get("queryParameterType").toString().equals("append") )
 				{
 					System.out.println("appendingParameters to current query");
+					out.println( appendQueryAttributes( parameterHash(request)) );
+					System.out.println("query vector: "+queryVector.toString() );
+					//reprint the client html with the updated aggregate query
+					// in the text area
+					out.println( updateQueryClient(queryVector) );
 				}
 				//else run the query
-				else
+				else if (parameterHash(request).get("queryParameterType").toString().equals("commit"))
 				{
+					//make a new occurence of the queryVector
+					queryVector = new Vector();
 					System.out.println("issueing the query to the DataRequestServlet");
 				}
 			}
@@ -70,7 +81,6 @@ public void doGet(HttpServletRequest request,
 			{
 				System.out.println("didn't pass the parameter type");
 			}
-			
 			out.println(parameterHash(request).toString());
 		}
 		catch( Exception e ) 
@@ -80,6 +90,45 @@ public void doGet(HttpServletRequest request,
 			+e.getMessage());
 		}
 	}
+	
+		
+	/**
+	 * method to re-stream the client html
+	 * with the textarea showing the aggregated
+	 * query updated
+	 */
+	private String updateQueryClient (Vector aggregateQuery) 
+	{
+		String clientHtml = null;
+		StringBuffer sb = new StringBuffer();
+		try 
+		{
+			su.fileVectorizer("../../html/plotQueryBuilder.html");
+			for (int i=0; i<su.outVector.size(); i++) 
+			{
+				//check for the line(s) for
+				//updating
+				if ( su.outVector.elementAt(i).toString().indexOf("replaceAggregateQuery") >0 )
+				{
+					sb.append( queryVector.toString() );
+				}
+				else
+				{
+					sb.append( su.outVector.elementAt(i) );
+				}
+			}
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("** failed :  "
+			+e.getMessage());
+		}
+		return(sb.toString() );
+	}
+	
+	
+	
+	
 	
 	/**
 	 * method to stick the parameters from the client 
@@ -115,5 +164,25 @@ public void doGet(HttpServletRequest request,
 		return(params);
 	}
 		
-	 
+	/**
+	 * method to build the aggregate of 
+	 * queries that should be issued to the 
+	 * DataRequestServlet
+	 */
+	private String appendQueryAttributes(Hashtable attributeParameters) 
+	{
+		String queryAggregate=null;
+		try 
+		{
+			queryAggregate=attributeParameters.toString();
+			queryVector.addElement( queryAggregate.toString() );
+		}
+		catch( Exception e ) 
+		{
+			System.out.println("** failed in:  "
+			+e.getMessage());
+		}
+		return(queryAggregate);
+	}
+
 }
