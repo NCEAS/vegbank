@@ -27,59 +27,29 @@ response.setContentType("text/html");
 PrintWriter out = response.getWriter();
 String title =("plotQuery - Interface to the Plots Database");
 
-//compose a very simple html page
-out.println("<html>");
-out.println("<body>");
-out.println("<head>");
-out.println("<title>" + title + "</title>");
-out.println("</head>");
-out.println("<body bgcolor=\"white\">");
-out.println("<h3>" + title + "</h3>");
-out.println("<p>");
-out.println("<img alt=\"this is not the final image\" src=\"/harris/owlogo.jpg\" border=\"0\">");
-out.println("<p>");
-out.println(rb.getString("requestparams.params-in-req") + "<br>");
-out.println("<br><i>");
-out.println(rb.getString("requestparams.protoDescription")+"<br>");
-out.println("<br></i>");
-out.println("<A HREF=\"http://www.nceas.ucsb.edu/collab/2180/docs/diagrams/prototypeERD.pdf\"><B><FONT SIZE=\"-1\" FACE=\"arial\">Current Plots Data Model</FONT></B></A>");
-out.println("<br></i>");
-out.println("<P>");
-out.print("<form action=\"");
-out.print("plotQuery\" ");
-out.println("method=POST>");
 
-//set up the taxon specification
-out.println("Enter taxon");  //set up text field for taxon name
-out.println("<input type=text size=28 name=taxon>");
-out.println("<input type=\"radio\" NAME=\"taxonOperation\" Value=\"required\" CHECKED> required");
-out.println("<input type=\"radio\" NAME=\"taxonOperation\" Value=\"optional\" > optional");
+//call the utility class which write the html telling the user that s/he
+//is using the servlet to query the database
+servletUtility k =new servletUtility();  
+k.htmlStore();
+out.println(k.outString);
 
 
-out.println("<br>");
-out.println("<br>");
-
-
-//set up the community specification
-out.println("Enter community name");  //set up text field for community name
-out.println("<input type=text size=20 name=community>");
-out.println("<input type=\"radio\" NAME=\"commOperation\" Value=\"required\" CHECKED> required");
-out.println("<input type=\"radio\" NAME=\"commOperation\" Value=\"optional\" > optional");
-
-out.println("<br><br> \n");
-out.println("<input type=submit>");
-out.println("</form>");
-out.println("</body>");
-out.println("</html>");
-
-
-//determine the criteria for the query
+//determine the criteria for the query - these parameters must map to the
+//utlity class
 int i=0;
 String taxonName = request.getParameter("taxon");
 String communityName = request.getParameter("community");
 String taxonOperation=request.getParameter("taxonOperation");
 String commOperation=request.getParameter("commOperation");
 
+//print to the servlet page the query parameters
+	out.println(rb.getString("requestparams.taxonName"));
+	out.println(" " + taxonName +"<br>");
+	out.println(rb.getString("requestparams.communityName"));
+	out.println(" " + communityName + "<br><br>");
+	
+	
 //broad check for entries
 if (taxonName != null || communityName != null) {
 	
@@ -88,15 +58,28 @@ if (taxonName != null || communityName != null) {
 	plotQuery g =new plotQuery();  
 	g.composeQuery("taxonName", taxonName);
 	
+	
 	//now using the xml query file created in composeQuery
-	//issue the query using the plotAccess module
+	//method, issue the query using the plotAccess module
 	plotQuery h =new plotQuery();  
 	h.issueQuery();
+
+
+	//pass to the the browser the number of results sets which includes
+	//just plot identifiers
+	out.println("<B> Number of plots in the Result set: "+h.queryOutputNum
+		+"</B><br>");
+
+
+	//if there are query results
+	if (h.queryOutputNum>0) {
 	
-	out.println(rb.getString("requestparams.taxonName"));
-	out.println(" = " + taxonName + " "+taxonOperation+"<br>");
-	out.println(rb.getString("requestparams.communityName"));
-	out.println(" = " + communityName+ " "+commOperation+"<br>");
+	//call the utility class which will allow the user 
+	//to view the result set in various ways
+	servletUtility l =new servletUtility();  
+	l.getViewOption();
+	out.println(l.outString);
+	}//end if
 
 } //end if
 
@@ -110,16 +93,19 @@ public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
         doGet(request, response);
 } //end method
-    
- 
+
+
+
+
 
 /**
-*  Method to compose and print out a query based
-*  on the query options chosen by the user
+*  Method to compose and print to a file an xml document that can be passed to
+*  the dbAccess class to perform the query and print the results to a file
+*  that is currently hard-wired as summary.xml
 */
 private void composeQuery (String queryElement, String elementString) {
 try {
-//set up the output query file called query.xml	using append mode 
+//set up the output query file called query.xml	using append mode to build  
 PrintStream outFile  = new PrintStream(new FileOutputStream("/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", false)); 
 
 //print the query instructions in the xml document
@@ -130,12 +116,18 @@ outFile.println("<?xml version=\"1.0\"?> \n"+
 	"<queryElement>"+queryElement+"</queryElement> \n"+
 	"<elementString>"+elementString+"</elementString> \n"+
 	"</query> \n"+
-	"</dbQuery>");
+	"<resultType>summary</resultType> \n"+
+	"<outFile>/jakarta-tomcat/webapps/examples/WEB-INF/lib/summary.xml</outFile> \n"+
+	"</dbQuery>"
+);
 	
 }
 catch (Exception e) {System.out.println("failed in plotQuery.composeQuery" + 
 	e.getMessage());}
 } //end method
+
+
+
 
 
 /**
@@ -149,10 +141,14 @@ dbAccess g =new dbAccess();
 g.accessDatabase("/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", 
 "/jakarta-tomcat/webapps/examples/WEB-INF/lib/querySpec.xsl", "query");	
 
+//grab the result set from the dbAccess class
+queryOutput=g.queryOutput;
+queryOutputNum=g.queryOutputNum;
+
 }
 
-
-
+public String queryOutput[] = new String[10000];  //the output from query
+int queryOutputNum; //the number of output rows from the query
 
 
 }
