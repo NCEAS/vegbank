@@ -92,11 +92,12 @@ MM_reloadPage(true);
     <td colspan="2" height="122" valign="top"></td>
     <td rowspan="2" height="149" valign="top"></td>
     <td width="336" height="149" colspan="6" rowspan="2" valign="top"> 
+	<form name="login" method="get" action="http://vegbank.nceas.ucsb.edu/framework/servlet/authenticate">
       <table width="100%" border="0" cellspacing="0" cellpadding="0" height="135">
         <tr> 
           <td colspan="2"> 
             <div align="left"><br>
-              <input type="hidden" name="authType2" value="loginUser">
+              <input type="hidden" name="authType" value="loginUser">
               <font face="Georgia, Times New Roman, Times, serif" color="#531100" size="4"> 
               <b> Login to VegBank</b></font> <a href="http://vegbank.nceas.ucsb.edu/forms/hints.html#loginname"> 
               <img border="0" src="http://vegbank.nceas.ucsb.edu/vegbank/images/question.gif"></a></div>
@@ -106,7 +107,7 @@ MM_reloadPage(true);
           <td width="30%"><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b>Email</b> 
             </font> &nbsp;&nbsp;</td>
           <td width="70%"> 
-            <input type="text" name="userName2">
+            <input type="text" name="userName">
           </td>
         </tr>
         <tr> 
@@ -114,14 +115,15 @@ MM_reloadPage(true);
             <br>
             </font></td>
           <td width="70%"><font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
-            <input type="password" name="password2">
+            <input type="password" name="password">
             </font> 
-            <input type="submit" name="Submit2" value="Submit">
+            <input type="submit" name="Submit" value="Submit">
             <br>
             <a href="http://vegbank.nceas.ucsb.edu/forms/fetch-password.html" ><font face="Georgia, Times New Roman, Times, serif" color="red" size="1">Lost 
             your password?</font> </a> </td>
         </tr>
       </table>
+			</form>
     </td>
     <td rowspan="2" height="149" valign="top"></td>
     <td colspan="3" height="149" valign="top" rowspan="2"></td>
