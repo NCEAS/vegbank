@@ -15,8 +15,8 @@
   * of the vegetation plot
   *
   *  '$Author: harris $'
-  *  '$Date: 2002-05-21 22:07:17 $'
-  *  '$Revision: 1.6 $'
+  *  '$Date: 2002-05-22 14:30:36 $'
+  *  '$Revision: 1.7 $'
   *
 -->
 
@@ -421,8 +421,8 @@
 	plantNameId*,
 	plantReferenceId*,
 	authorNameId*,
-	authorCode* <!-- This is the plant code  -->,
-	codeFramework* <!-- This is the code framework like USDA 1996  -->,
+	authorCode*, 
+	codeFramework*,
 	cheatPlantName*,
 	taxonCollection*,
 	taxonCover*,
