@@ -169,8 +169,4 @@ public class LocalDbConnectionBroker
 		System.out.println("LocalDbConnectionBroker.manageLocalDbConnectionBroker: unrecognized action"
 		+action);
 	}
-	return pconn;
-}
-
-}
-
+	return 

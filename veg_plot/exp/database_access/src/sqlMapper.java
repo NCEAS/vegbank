@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-26 18:31:09 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-04-05 01:29:40 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1157,4 +1157,4 @@ for (int i=0;i<pipeDelimitStringNum; i++)
 
 
 
-} //end class
+} //en

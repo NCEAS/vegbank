@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-03-26 18:31:09 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2002-04-05 01:29:40 $'
+ * 	'$Revision: 1.4 $'
  *
  *
  */
@@ -554,3 +554,4 @@ public void getPlotId(String taxonName, String state, String elevationMin,
 
 
 }
+                      
