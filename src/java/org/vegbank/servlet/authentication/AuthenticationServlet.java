@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.LogUtility;
 
 
 
@@ -32,9 +33,9 @@ import org.vegbank.common.utility.ServletUtility;
  * @param authType -- the authentication type {loginUser, uploadFile}
  *
  *
- *  '$Author: farrell $'
- *  '$Date: 2003-10-11 21:20:10 $'
- *  '$Revision: 1.9 $'
+ *  '$Author: anderson $'
+ *  '$Date: 2003-10-30 00:41:02 $'
+ *  '$Revision: 1.10 $'
  *
  *  @version
  *  @author
@@ -71,18 +72,18 @@ public class AuthenticationServlet extends HttpServlet
 	{
 		try
 		{
-			System.out.println("AuthenticationServlet > init");
+			LogUtility.log("AuthenticationServlet > init");
 			ResourceBundle rb = ResourceBundle.getBundle("authentication");
 			this.mailHost = rb.getString("mailHost");
 			this.cc = rb.getString("systemEmail");		
 			this.genericForm =  rb.getString("genericForm");
 			this.genericTemplate = 	 rb.getString("genericTemplate");
 				
-			System.out.println("AuthenticationServlet > init" );
+			LogUtility.log("AuthenticationServlet > init" );
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage() );
+			LogUtility.log("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 	}
@@ -105,7 +106,7 @@ public class AuthenticationServlet extends HttpServlet
 	{
 
 		//clientLogFile=rb.getString("requestparams.clientLog");
-		//System.out.println("the client info log file is: "+clientLogFile);
+		//LogUtility.log("the client info log file is: "+clientLogFile);
 
 		//first block will look for the userName and password as well as valid cookie
 		try
@@ -118,11 +119,11 @@ public class AuthenticationServlet extends HttpServlet
 			//get the request - parameters using the
 			//servlet Utility class
 			Hashtable requestParams = su.parameterHash(request);
-			System.out.println("AuthenticationServlet > " + requestParams.toString() );
+			LogUtility.log("AuthenticationServlet > " + requestParams.toString() );
 			//grab the remote host information
 			String remoteHost=request.getRemoteHost();
 			String remoteAddress = request.getRemoteAddr();
-			System.out.println("AuthenticationServlet > remoteHost: "+remoteHost+" Address: "+remoteAddress);
+			LogUtility.log("AuthenticationServlet > remoteHost: "+remoteHost+" Address: "+remoteAddress);
 
 
 			//determine what the client wants to do
@@ -142,7 +143,7 @@ public class AuthenticationServlet extends HttpServlet
 				//LOGIN THE USER
 				else if ( requestParams.get("authType").toString().equals("loginUser")  )
 				{
-					System.out.println("AuthenticationServlet > user login attempt");
+					LogUtility.log("AuthenticationServlet > user login attempt");
 					if ( authenticateUser(requestParams, remoteAddress) == true)
 					{
 						//log the login in the clientLogger
@@ -157,19 +158,19 @@ public class AuthenticationServlet extends HttpServlet
 						//send the user to the correct page
 						Thread.sleep(1100);
 						String redirect = "/vegbank/servlet/usermanagement?action=options";
-						System.out.println("AuthentictionServlet > redirecting to: " + redirect);
+						LogUtility.log("AuthentictionServlet > redirecting to: " + redirect);
 						response.sendRedirect(redirect);
 					}
 					else
 					{
-						System.out.println("AuthenticationServlet > user login failed");
+						LogUtility.log("AuthenticationServlet > user login failed");
 						out.println( getErrorRedirection() );
 					}
 				}
 				//AUTHENTICATE THE USER TO UPLOAD A FILE OR SOMETHING SIMILAR
 				else if ( requestParams.get("authType").toString().equals("uploadfile")  )
 				{
-					System.out.println("AuthenticationServlet > authenticating for file upload");
+					LogUtility.log("AuthenticationServlet > authenticating for file upload");
 					if ( authenticateUser(requestParams, remoteAddress) == true)
 					{
 						out.println("<authentication>true</authentication>");
@@ -189,12 +190,12 @@ public class AuthenticationServlet extends HttpServlet
 				// CREATE A NEW USER
 				else if ( requestParams.get("authType").toString().equals("createUser")  )
 				{
-					System.out.println("AuthenticationServlet > creating a new user");
+					LogUtility.log("AuthenticationServlet > creating a new user");
 					
 					Vector errors = new Vector();
 					if (createNewUser(requestParams, remoteAddress, errors) == true )
 					{
-						System.out.println("AuthenticationServlet > created a new user");
+						LogUtility.log("AuthenticationServlet > created a new user");
 						Thread.sleep(100);
 
 						//this response was throwing an exception b/c the user did not yet
@@ -213,13 +214,13 @@ public class AuthenticationServlet extends HttpServlet
 
 				else
 				{
-					System.out.println("AuthenticationServlet > incorect input paramaters to authenticate");
+					LogUtility.log("AuthenticationServlet > incorect input paramaters to authenticate");
 				}
 			}
 		}
 		catch( Exception e )
 		{
-			System.out.println("Exception: " + e.getMessage());
+			LogUtility.log("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -235,65 +236,44 @@ public class AuthenticationServlet extends HttpServlet
 		 StringBuffer msg = new StringBuffer();
 		 try
 		 {
-
 			 	String email = (String)requestParams.get("userLogin");
 				String passwd = uda.getPassword(email);
-				System.out.println("AuthenticationServlet > emailing password to: " + email );
+				LogUtility.log("AuthenticationServlet > emailing password to: " + email );
 
-				boolean validUser = false;
-				String givenName = "";
-				String surName = "";
-				String body = "";
-				String from = "vegbank";
-				String to = email;
+				String body;
+				String from = "help@vegbank.org";
 				String subject = "Recovered VegBank Password";
 
+				if (passwd != null && !passwd.equals("")) { 
+					StringBuffer sb = new StringBuffer();
+					sb.append("Dear VegBank user,<br>\n");
+					sb.append("Your password is: <b>"+passwd+"</b><BR><BR>");
+					sb.append("VegBank Support Team<BR>");
+					sb.append("<a href='mailto:help@vegbank.org'>help@vegbank.org</a><BR>");
+					sb.append("<a href='http://vegbank.org'>http://vegbank.org</a><BR><BR>");
+					body = sb.toString();
 
-				// if there is a name use it
-				if ( (requestParams.containsKey("firstName") == true ) &&
-				(requestParams.containsKey("lastName") == true  ))
-				{
-					givenName = (String)requestParams.get("firstName");
-					surName = (String)requestParams.get("lastName");
-					System.out.println("AuthenticationServlet > surName: " + surName
-					+ " givenName: " + givenName );
-					if ( surName.length() > 1 )
-					{
-						String wholename = givenName+ " "+surName;
-						StringBuffer sb = new StringBuffer();
-						sb.append("Dear "+wholename+", \n");
-						sb.append("\t Your VegBank password is: "+passwd);
-						body = sb.toString();
-					}
-				}
-					// else a generic string
-				else
-				{
-					body = "\n  Your Vegbank Password is: " + passwd;
-				}
+					su.sendHTMLEmail( mailHost, from, email, cc, subject, body);
 
-				//if a password is retreived then send it to the user
-				if ( passwd != null && passwd.length() > 1 )
-				{
-					su.sendHTMLEmail( mailHost, from, to, cc, subject, body);
-					validUser = true;
-				}
+					// sent email: create the response page
+					msg.append("<passwordRequest> \n");
+					msg.append("<message>Your password has been sent to: </message>\n");
+					msg.append("<user> \n");
+					msg.append(" <email>"+email+"</email>\n");
+					msg.append("</user> \n");
+					msg.append("</passwordRequest> \n");
 
-				//create the message
-				msg.append("<passwordRequest> \n");
-				msg.append("<message> password sent to: </message>\n");
-				msg.append("<user> \n");
-				msg.append(" <email>"+email+"</email>\n");
-				msg.append(" <surName>"+surName+"</surName>\n");
-				msg.append(" <givenName>"+givenName+"</givenName>\n");
-				msg.append(" <validUser>"+validUser+"</validUser>\n");
-				msg.append("</user> \n");
-				msg.append("</passwordRequest> \n");
+				} else {
+
+					// no account: create the response page
+					msg.append("<passwordRequest> \n");
+					msg.append("<message>There is no account for this email address (username).</message>\n");
+					msg.append("</passwordRequest> \n");
+				}
 		 }
 		catch( Exception e )
 		{
-			System.out.println("Exception: " + e.getMessage());
-			e.printStackTrace();
+			LogUtility.log("AuthenticationServlet: ", e);
 		}
 		return( msg.toString() );
 	 }
@@ -372,7 +352,7 @@ public class AuthenticationServlet extends HttpServlet
 	 private String getErrorRedirection()
 	 {
 		 String errorPage = "/vegbank/general/login.html";
-		 System.out.println("AuthenticationServlet > compiling error rediection to:  " + errorPage );
+		 LogUtility.log("AuthenticationServlet > compiling error rediection to:  " + errorPage );
 		 StringBuffer sb = new StringBuffer();
 		 sb.append("<html> \n");
 		 sb.append("<head> \n");
@@ -434,7 +414,7 @@ public class AuthenticationServlet extends HttpServlet
 		 	//grab thee user name and password
 			String userName=requestParams.get("userName").toString();
 			String passWord=requestParams.get("password").toString();
-			System.out.println("AuthenticationServlet > name password/pair: "+userName+" "+passWord);
+			LogUtility.log("AuthenticationServlet > name password/pair: "+userName+" "+passWord);
 
 			//access the class in the dbAccess class to validate the
 			//login and password with that stored in the database
@@ -457,9 +437,9 @@ public class AuthenticationServlet extends HttpServlet
 	 {
 		 try
 		 {
-			System.out.println("AuthenticationServlet > REQUEST PARAMS: "+requestParams.toString() );
+			LogUtility.log("AuthenticationServlet > REQUEST PARAMS: "+requestParams.toString() );
 		 	boolean b = validateNewUserAttributes(requestParams, errors);
-			System.out.println("AuthenticationServlet > valid new user attributes: "+ b );
+			LogUtility.log("AuthenticationServlet > valid new user attributes: "+ b );
 			if ( b == true )
 			{
 				//get the key variables that are required
@@ -467,8 +447,8 @@ public class AuthenticationServlet extends HttpServlet
 		 		String passWord =  requestParams.get("password").toString();
 				String givenName= requestParams.get("givenname").toString();
 				String surName =  requestParams.get("surname").toString();
-				System.out.println("AuthenticationServlet > given name: "+givenName);
-		 		System.out.println("AuthenticationServlet > sur name: "+surName);
+				LogUtility.log("AuthenticationServlet > given name: "+givenName);
+		 		LogUtility.log("AuthenticationServlet > sur name: "+surName);
 
 				// GET THE OTHER NOT REQUIRED ATTS
 				String inst = requestParams.get("affilInst").toString();
@@ -480,13 +460,13 @@ public class AuthenticationServlet extends HttpServlet
 				String acode = requestParams.get("areaCode").toString();
 				String number = requestParams.get("phoneNumber").toString();
 				String phone = acode+" "+number;
-				System.out.println("AuthenticationServlet > institution: "+inst);
-				System.out.println("AuthenticationServlet > address: "+address);
-				System.out.println("AuthenticationServlet > city: "+city);
-				System.out.println("AuthenticationServlet > state: "+state);
-				System.out.println("AuthenticationServlet > country: "+country);
-				System.out.println("AuthenticationServlet > zip: "+zip);
-				System.out.println("AuthenticationServlet > phone: "+phone);
+				LogUtility.log("AuthenticationServlet > institution: "+inst);
+				LogUtility.log("AuthenticationServlet > address: "+address);
+				LogUtility.log("AuthenticationServlet > city: "+city);
+				LogUtility.log("AuthenticationServlet > state: "+state);
+				LogUtility.log("AuthenticationServlet > country: "+country);
+				LogUtility.log("AuthenticationServlet > zip: "+zip);
+				LogUtility.log("AuthenticationServlet > phone: "+phone);
 
 				// USE THE DB CLASS TO CREATE THE USER
 				//uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
@@ -509,13 +489,13 @@ public class AuthenticationServlet extends HttpServlet
 			}
 			else
 			{
-				System.out.println("AuthenticationServlet > form invalid: " + errors);
+				LogUtility.log("AuthenticationServlet > form invalid: " + errors);
 				return(false);
 			}
 		 }
 		 catch(Exception e)
 		 {
-			 System.out.println("Exception: " + e.getMessage() );
+			 LogUtility.log("Exception: " + e.getMessage() );
 			 e.printStackTrace();
 			 return(false);
 		 }
@@ -531,7 +511,7 @@ public class AuthenticationServlet extends HttpServlet
 	 {
 	 	boolean valid = true;
 	 	
-	 	System.out.println("Validating Form");
+	 	LogUtility.log("Validating Form");
 	 	
 	 	// Check each required field
 	 	if ( ! h.containsKey("emailAddress") || h.get("emailAddress").equals("") )
@@ -568,7 +548,7 @@ public class AuthenticationServlet extends HttpServlet
 		}
 		
 		String email = (String)h.get("emailAddress");
-		System.out.println(">>>> " + email  + " >>> " + email.indexOf("@"));
+		LogUtility.log(">>>> " + email  + " >>> " + email.indexOf("@"));
 		if ( email.indexOf("@") <= 0 )
 		{
 			valid = false;
@@ -581,7 +561,7 @@ public class AuthenticationServlet extends HttpServlet
 			errors.add("You must accept our conditions to become a user");
 		}		
 	 	
-	 	System.out.println("success: " + valid + " and errors: " + errors);
+	 	LogUtility.log("success: " + valid + " and errors: " + errors);
 		return(valid);
 	 }
 
@@ -612,7 +592,7 @@ public class AuthenticationServlet extends HttpServlet
 		//String clientLogFile = rbun.getString("requestparams.clientLog");
 
 		//get the cookie value form the user database class
-		System.out.println("AuthenticationServlet > USER NAME: " + userName );
+		LogUtility.log("AuthenticationServlet > USER NAME: " + userName );
 		String cookieValue = uda.getUserCookieValue(userName);
 		String cookieName = "framework";
 		
@@ -625,11 +605,11 @@ public class AuthenticationServlet extends HttpServlet
 			cookie.setMaxAge(3600);  //set cookie for an hour
       cookie.setPath("/");  // cookie applies to all contexts
 			registeredCookie=cookie;
-		  System.out.println("AuthenticationServlet > using cookie name : " + cookieName + " val: " + cookieValue );
+		  LogUtility.log("AuthenticationServlet > using cookie name : " + cookieName + " val: " + cookieValue );
 		}
 		else
 		{
-			System.out.println("AuthenticationServlet > ERROR null user name");
+			LogUtility.log("AuthenticationServlet > ERROR null user name");
 		}
 		return registeredCookie;
 	}
