@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--    * build_client.xml   *   *  Authors: John Harris, Michael Lee   * Copyright: 2000 Regents of the University of California and the   *           National Center for Ecological Analysis and Synthesis   *  Build file for the Ant cross-platform build system for metacat   *  See http://jakarta.apache.org for details on Ant     *     * this build file copies VegBranch files from the vegbank machine (home/lee/VegBranchReleases) to vegbank webspace.  They are separated into two classes: docs and client
+      '$Author: mlee $'    *     '$Date: 2003-04-15 00:34:00 $'   *     '$Revision: 1.1 $' -->
+<project name="vegbranch" default="init" basedir=".">
+  <!-- INITIATION -->
+  <target name="init">
+    <echo>Targets:  {init} clean-all | dist-all | dist-client | dist-examples | 
+      dist-docs | dist-images | dist-docs-loadtbls (before dist-docs)</echo>
+    <!-- RELEVANT DIRECTORIES -->
+    <property name="current_dir" value="./"/>
+    <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
+    <property name="build" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbranch"/>
+    <!-- property name="build" value="/home/lee/temp"/ -->
+    <!-- RELEVANT FILES TO COPY / DELETE -->
+    <!-- client files: -->
+    <property name="client_include" value="vegbranch-ver-b.4.1.zip   vegbank-module-full-beta2.zip  vegbank-module-light-beta2.zip vegbranch_normalizer.zip "/>
+    <!-- docs files: -->
+    <property name="docs_include" value=" **/*.html "/>
+    <!-- images files: -->
+    <property name="img_include" value="confirmation-dialog.jpg connect-dialog.jpg rtarrow.gif "/>
+    <property name="examples_include" value=" vegbranch-samplecsv1-b.4.0.zip  vegbranch-samplecsv2-b.4.0.zip normalizer_examples.zip"/>
+    <property name="htmlfile" value="vegbranch.html"/>
+    <!-- WEB SERVER LOCATIONS -->
+    <!-- !FIX! SHOULD BE READ FROM A SHARED PROPERTIES FILE : -->
+    <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
+    <property name="style_server" value="${tomcat.home.dir}/webapps/vegbank/includes/"/>
+    <filter token="stylesheet" value="/vegbank/includes/default.css"/>
+    <filter token="general_link" value="/vegbank/general/"/>
+    <filter filtersfile="${style_server}/filters_detokened.properties"/>
+    <filter token="vbr_imageserver" value="/vegbranch/images/"/>
+    <filter token="vbr_examplesserver" value="/vegbranch/examples/"/>
+    <filter token="vbr_clientserver" value="/vegbranch/client/"/>
+    <!-- make certain that dir structure is there -->
+    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch"/>
+    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch/images"/>
+    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch/docs"/>
+    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch/client"/>
+    <mkdir dir="${tomcat.home.dir}/webapps/vegbranch/examples"/>
+  </target>
+  <target name="clean-all" depends="init">
+    <delete>
+      <!-- del client -->
+      <fileset dir="${build}/client" includes="*.*"/>
+    </delete>
+    <delete>
+      <!-- del images  -->
+      <fileset dir="${build}/images" includes="*.*"/>
+    </delete>
+    <delete>
+      <!-- del docs -->
+      <fileset dir="${build}/docs" includes="*.*"/>
+    </delete>
+    <delete>
+      <!-- del examples  -->
+      <fileset dir="${build}/examples" includes="*.*"/>
+    </delete>
+  </target>
+  <target name="dist-client" depends="init">
+    <!-- <copy file vegbranch database tofile="${build}/file" /> -->
+    <copy todir="${build}/client" filtering="no">
+      <fileset dir="${lrg_binary_src}" includes="${client_include}"/>
+    </copy>
+  </target>
+  <!-- images -->
+  <target name="dist-images" depends="init">
+    <copy todir="${build}/images" filtering="no">
+      <fileset dir="${current_dir}/images" includes="${img_include}"/>
+    </copy>
+  </target>
+  <!-- docs -->
+  <target name="dist-docs" depends="init">
+    <copy todir="${build}/docs" filtering="yes">
+      <fileset dir="${current_dir}/docs" includes="${docs_include}"/>
+    </copy>
+    <copy todir="${build}" filtering="yes">
+      <fileset dir="${current_dir}" includes="${htmlfile}"/>
+    </copy>
+  </target>
+  <!-- dist the loading table documentation, similar to data dictionary -->
+  <target name="dist-docs-loadtbls" depends="init">
+    <ant antfile="loadbuild.xml" dir="./docs/loadtbls/" target="dist-loaddoc"/>
+  </target>
+  <!-- examples -->
+  <target name="dist-examples" depends="init">
+    <copy todir="${build}/examples" filtering="yes">
+      <fileset dir="${lrg_binary_src}" includes="${examples_include}"/>
+    </copy>
+  </target>
+  <target name="dist-all" depends="init">
+    <antcall target="dist-client"/>
+    <antcall target="dist-images"/>
+    <antcall target="dist-examples"/>
+    <antcall target="dist-docs-loadtbls"/>
+    <antcall target="dist-docs"/>
+  </target>
+</project>
