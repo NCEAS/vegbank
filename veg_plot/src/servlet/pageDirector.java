@@ -89,8 +89,8 @@ public class pageDirector extends HttpServlet
 			if ( req.getParameter("pageType").equals("createUser") )
 			{
 			//	ViewFile.returnFile(createUserPage, out);
-				res.sendRedirect("/examples/html/create_user.html");
-				System.out.println("OK >");
+				res.sendRedirect("/harris/html/create_user.html");
+				System.out.println(" redirected to a form to create a new account");
 			}
 			else 
 			{
@@ -169,21 +169,13 @@ public class pageDirector extends HttpServlet
 	public void pageTranslator (String pageType) 
 	{
 		if (pageType.equals("createUser")) pageFileName=createUserPage;
-	
 		if (pageType.equals("plotQuery")) pageFileName=plotQueryPage;
-	
 		if (pageType.equals("communityQuery")) pageFileName=communityQueryPage;
-	
 		if (pageType.equals("plantQuery")) pageFileName=plantQueryPage;
-	
 		if (pageType.equals("login")) pageFileName=loginPage;
-	
 		if (pageType.equals("loggedin")) pageFileName=loggedinPage;
-	
 		if (pageType.equals("download")) pageFileName=downloadPage;
-	
 		if (pageType.equals("upload")) pageFileName=uploadPage;
-	
 	}
 	  
 }
