@@ -27,8 +27,13 @@ print `dropdb -U $username ProductionTemp`;
 print `createdb  -U $username -E UNICODE ProductionTemp`;
 
 print "\n######################################################################\n";
+print "# Convert the file to UTF-8\n"; 
+print `iconv  -f ISO-8859-1 -t UTF-8 oldProduction_1.0.1.bak -o oldProduction_1.0.1-UTF-8.bak `;
+
+
+print "\n######################################################################\n";
 print "# Restore old 1.0.1 into ProductionTemp \n"; 
-print `psql -U $username -d ProductionTemp < oldProduction_1.0.1.bak`;
+print `psql -U $username  ProductionTemp < oldProduction_1.0.1-UTF-8.bak`;
 
 print "\n######################################################################\n";
 print "# Modify ProductionTemp to fit new schema\n"; 
@@ -37,6 +42,10 @@ print `psql  -U $username ProductionTemp < src/sql/vegbank-changes-1.0.1to1.0.2_
 print "\n######################################################################\n";
 print "# Dump ProductionTemp \n"; 
 print `pg_dump -aD --disable-triggers ProductionTemp > vegbank101_102.sql`;
+
+print "\n######################################################################\n";
+print "# Convert the file to UTF-8\n"; 
+print `iconv  -f ISO-8859-1 -t UTF-8 vegbank101_102.sql  -o vegbank101_102-UTF-8.sql `;
 
 print "\n######################################################################\n";
 print "# Drop $dbName\n"; 
@@ -52,23 +61,19 @@ print `echo vegbank | ant  db_generate_sql`;
 
 print "\n######################################################################\n";
 print "# Create empty $dbName using freshly generate SQL\n";
-print `psql -U $username -d $dbName < build/src/sql/vegbank-ML.sql`;
+print `psql -U $username $dbName < build/src/sql/vegbank-GF.sql`;
 
 print "\n######################################################################\n";
 print "# Create temp fields to drop latter\n"; 
 print `psql -U $username $dbName < src/sql/vegbank-changes-1.0.1to1.0.2_pg_createfields2drop.sql`;
 
 print "\n######################################################################\n";
-print "# Populate with modified 1.0.1 to 1.0.2 data\n"; 
-print `psql  -U $username -d $dbName < vegbank101_102.sql`;
+print "# Attempt to load modified (1.0.2) production (1.0.1)  dump into $dbName.\n"; 
+print `psql  -U $username $dbName < vegbank101_102-UTF-8.sql`;
 
 print "\n######################################################################\n";
 print "# Drop temp fields\n"; 
-print `psql -U $username -d $dbName < src/sql/vegbank-changes-1.0.1to1.0.2_pg_drop.sql`;
-
-print "\n######################################################################\n";
-print "# Attempt to load modified (1.0.2) production (1.0.1)  dump into $dbName.\n"; 
-print `psql  -U $username $dbName < vegbank101_102.sql`;
+print `psql -U $username $dbName < src/sql/vegbank-changes-1.0.1to1.0.2_pg_drop.sql`;
 
 # Need to run post processing
 # Run Framework to Vegbank
@@ -77,7 +82,7 @@ print `psql  -U $username $dbName < vegbank101_102.sql`;
 
 print "\n######################################################################\n";
 print "#CLEAN UP\n";
-print `dropdb -U $username ProductionTemp`;
+#print `dropdb -U $username ProductionTemp`;
 
 print "\n######################################################################\n";
 print "\n\nThe process finishing running. Some temp files are left behind, \n";
