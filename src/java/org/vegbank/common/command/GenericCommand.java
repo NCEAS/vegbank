@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-16 20:59:15 $'
- *	'$Revision: 1.26 $'
+ *	'$Date: 2005-02-17 22:22:55 $'
+ *	'$Revision: 1.27 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -513,7 +513,7 @@ public class GenericCommand
 				{
 					String propName = (String) propNames.get(i);
 					String value = rs.getString(i+1);
-					log.debug("Mapping property " + propName + " = " + value);
+					//log.debug("Mapping property " + propName + " = " + value);
 					map.put(propName, value);	
 				}
 		  		beanList.add(map);
@@ -524,7 +524,7 @@ public class GenericCommand
 				{
 					String propName = (String) propNames.get(i);
 					String value = rs.getString(i+1);
-					log.debug("Setting bean property " + propName + " = " + value);
+					//log.debug("Setting bean property " + propName + " = " + value);
 					BeanUtils.copyProperty(bean, propName, value);	
 				}
 		  		beanList.add(bean);
@@ -582,7 +582,7 @@ public class GenericCommand
 				// Add this token with any trailing ',' removed
 				
 				// Check for a named field
-				log.debug("property name:  '" + propertyName + "'");
+				//log.debug("property name:  '" + propertyName + "'");
 				indexOfAs = propertyName.indexOf(" as ");
 				if ( indexOfAs != -1 ) {
 					propertyName = propertyName.substring(indexOfAs + 4 );
@@ -608,9 +608,9 @@ public class GenericCommand
 			}
 		}	
 
-		log.debug("---------------------------------");
-		log.debug("attrib list: " + results.toString());
-		log.debug("---------------------------------");
+		//log.debug("---------------------------------");
+		//log.debug("attrib list: " + results.toString());
+		//log.debug("---------------------------------");
 		return results;
 	}
 
@@ -623,25 +623,25 @@ public class GenericCommand
 		selectClause = selectClause.toLowerCase();
 		Matcher m;
 
-		log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
-		log.debug("========== ORIGINAL QUERY: " + selectClause);
+		//log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
+		//log.debug("========== ORIGINAL QUERY: " + selectClause);
 		
 		m = subqueryPattern.matcher(selectClause);
 		selectClause = m.replaceAll("");
-		log.debug("========== REGEX 1: " + subqueryPattern.pattern());
-		log.debug("========== MODIFIED QUERY 1: " + selectClause);
+		//log.debug("========== REGEX 1: " + subqueryPattern.pattern());
+		//log.debug("========== MODIFIED QUERY 1: " + selectClause);
 
 		m = attribAsPattern.matcher(selectClause);
 		selectClause = m.replaceAll("");
-		log.debug("========== REGEX 2: " + attribAsPattern.pattern());
-		log.debug("========== MODIFIED 2: " + selectClause);
+		//log.debug("========== REGEX 2: " + attribAsPattern.pattern());
+		//log.debug("========== MODIFIED 2: " + selectClause);
 
 		//m = afterFromPattern.matcher(selectClause);
 		//selectClause = m.replaceAll("");
 		//log.debug("========== REGEX 3: " + afterFromPattern.pattern());
 		//log.debug("========== MODIFIED 3: " + selectClause);
 
-		log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
+		//log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
 
 		return selectClause;
 	}
@@ -661,11 +661,11 @@ public class GenericCommand
 		selectClause = m.replaceAll("");
 
 		m = afterFromPattern.matcher(selectClause);
-		log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
-		log.debug("REGEX: " + afterFromPattern.pattern());
-		log.debug("BEFORE: " + selectClause);
+		//log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
+		//log.debug("REGEX: " + afterFromPattern.pattern());
+		//log.debug("BEFORE: " + selectClause);
 		selectClause = m.replaceAll("");
-		log.debug("MODIFIED: " + selectClause);
+		//log.debug("MODIFIED: " + selectClause);
 
 		return selectClause;
 	}
@@ -716,7 +716,6 @@ public class GenericCommand
     }
 
     public void setId(String s) {
-		log.debug("GC: setId: " + s);
         this.id = s;
     }
 
@@ -731,7 +730,6 @@ public class GenericCommand
     }
 
     public void setNumItems(String s) {
-		log.debug("GC: setNumItems: " + s);
         this.numItems = s;
     }
 
