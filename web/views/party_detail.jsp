@@ -9,7 +9,7 @@
 <TITLE>View VegBank Data: Parties - Detail</TITLE>
 <link type="text/css" href="@stylesheet@" rel="stylesheet"/>
 </HEAD>
-<body>@vegbank_header_html_normal@
+<body class="center">@vegbank_header_html_normal@
 <h2>View VegBank Parties</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>

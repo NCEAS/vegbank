@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-10-04 18:07:54 $'
-*  '$Revision: 1.16 $'
+*  '$Date: 2004-10-06 00:07:41 $'
+*  '$Revision: 1.17 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@
 </head>
 
 
-<BODY>
+<body class="center">
 
 @vegbank_header_html_normal@
 

@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
-<body>@vegbank_header_html_normal@ 
+<body class="center">@vegbank_header_html_normal@ 
 
 <h2>View Plant Concepts</h2>
   <vegbank:get id="concept" select="plantconcept" beanName="map" where="where_plantconcept_pk" pager="true"/>

@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
-<body>
+<body class="center">
 @vegbank_header_html_normal@
    <%
 		       //**************************************************************************************

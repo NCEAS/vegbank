@@ -14,7 +14,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
-<BODY >@vegbank_header_html_normal@
+<body class="center">@vegbank_header_html_normal@
 
 <h2>VegBank Roles</h2>
 <p>You can view roles for: <!-- this gets the current URL and appends proper where and wparam parameters to get requested info -->

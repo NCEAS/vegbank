@@ -8,7 +8,7 @@
 <TITLE>View VegBank Data: Cover Methods - Detail</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css" />
 </HEAD>
-<body>@vegbank_header_html_normal@ 
+<body class="center">@vegbank_header_html_normal@ 
 <h2>View VegBank Cover Methods</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
