@@ -8,12 +8,14 @@ A:Link			{
 A:Visited		{
 					color: #6699CC;
 				}
-A.blk { color:#000000 }				
+A.blk { color:#000000 }
+A.brightyellow { color:#FFFF80 }
 
 H1, H2, H3, H4, H5, H6	{
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
 						}
+th.grey, td.grey, tr.grey {background-color : #DDDDDD}						
 
 .vegbank 		{ font-family: Georgia, Times New Roman, Times, serif; color : #531100}
 .sansserif          { font-family: Verdana, Arial, Helvetica, sans-serif ; color : #531100}
