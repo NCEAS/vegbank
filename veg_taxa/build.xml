@@ -17,19 +17,22 @@
   *
   * usage: ant [compile|jar|install|jdoc]
 --> 
-<project name="plotLoader" default="dist" basedir=".">
+<project name="plants_dev" default="jar" basedir=".">
+
+
+	<property file="build.properties" />
 
 <target name="init">
 	<tstamp/>
 	
 	<property name="current" value="./" />
 	<property name="db_prop_file" value="./lib/database.properties" />
-	<property name="build" value="${basedir}/build" />
-	<property name="build_bin" value="${build}/bin" />
-	<property name="build_sql" value="${build}/sql" />
-	<property name="build_lib" value="${build}/lib" />
-	<property name="build_src" value="${build}/src" />
-	<property name="build_data" value="${build}/data" />
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="build_bin" value="${build.dir}/bin" />
+	<property name="build_sql" value="${build.dir}/sql" />
+	<property name="build_lib" value="${build.dir}/lib" />
+	<property name="build_src" value="${build.dir}/src" />
+	<property name="build_data" value="${build.dir}/data" />
 	<property name="release" value="development"/>
 	
 	<property name="data" value="./taxaData"/>
@@ -43,13 +46,20 @@
 	
 	<property name="toolsdir" value="/usr/local/devtools" />
 	<property name="localToolsDir" value="./lib/" />	
-	<property name="xmlp" value="${localToolsDir}xalan_1_2_2.jar:${localToolsDir}xerces_1_3_1.jar:" />
+	
+  <!-- FIXME: Move into higher level -->
+  <property name="torque.home" value="../common/datamodel/torque-3.0" />	
+  <property name="torque.contextProperties" value="${build.dir}/torque-build.properties"/>
+  
+  <property name="xmlp" value="${localToolsDir}xalan_1_2_2.jar:${localToolsDir}xerces_1_3_1.jar:" />
 	<property name="jdbc" value="${oracle_home}/jdbc/lib/classes111.zip" />
 	<property name="multipart" value="./servlet/multipart" />
-	<property name="cpath" value="${xmlp}:${jdbc}:${build}:${localToolsDir}:./"/>			
+	<property name="cpath" value="${xmlp}:${jdbc}:${build.dir}:${localToolsDir}:./"/>			
 
 	<filter token="version" value="development"/>
 	<filter token="dist" value="dist"/>
+	<filter token="ant.project.name" value="${ant.project.name}"/>
+	<filter token="database.hostname" value="${hostname}"/>
 		
 	
 </target>
@@ -58,7 +68,7 @@
 
 
 <target name="prepare" depends="init" description="==> prepares the build system">
-	<mkdir dir="${build}" />
+	<mkdir dir="${build.dir}" />
 	<mkdir dir="${build_bin}" />
 	<mkdir dir="${build_sql}" />
 	<mkdir dir="${build_src}" />
@@ -160,17 +170,12 @@
 </target>	
 
 	
-<target name="dist" depends="compile" description="==> creates a jar file and sticks it in the lib directory">
+<target name="jar" depends="compile" description="==> creates a jar file and sticks it in the lib directory">
 
 	<jar jarfile ="${build_lib}/planttaxonomy.jar"
 		basedir="${build_src}"
 		includes="${build_src}/ **.class **.dtd **.xsl  **.properties"
 	/>
-  <!-- PLACE JAR IN THE VEG_PLOT LIB DIR -->
-  <copy file="${lib}/planttaxonomy.jar"
-        filtering="no"
-        todir="../veg_plots/build/lib/"/>
-	
 	<!-- COPY THE JAR ARCHIVE BACK TO THE LIB DIRECTORY -->
 	<copydir src="${build_lib}"
   	dest="${lib}"
@@ -191,12 +196,50 @@
 	/>
 </target>		
 
-<target name="deploy" depends="dist, dist-xml"
+<target name="deploy" depends="jar, dist-xml"
         description="==> deploys all the project resources">
 </target>
 
-  <target name="clean" depends="init" description="Remove all generated files">
-      <delete dir="${build}"/>
+  <target name="clean" depends="init" description="==> Remove all generated files">
+      <delete dir="${build.dir}"/>
   </target>
+
+  <!-- TORQUE TASKS -->
+
+  <target name="torque-prepare" depends="init">
+    <copy file="${lib}/torque-build.properties" todir="${build.dir}"
+          filtering="true"/>
+  </target>
+  
+  <target name="torque-jdbc" depends="torque-prepare" if="torque.home" 
+          description="==> Generate datamodel schema from existing database">
+    <ant antfile="${torque.home}/build-torque.xml" target="jdbc">
+      <property name="torque.lib.dir" location="${torque.home}/lib"/>
+    </ant>
+  </target>
+  
+  <target name="torque-doc" depends="torque-prepare" if="torque.home" 
+          description="==> Generate datamodel documentation from existing database">
+    <ant antfile="${torque.home}/build-torque.xml" target="doc">
+      <property name="torque.lib.dir" location="${torque.home}/lib"/>
+    </ant>
+  </target>
+
+  <target name="torque-sql" depends="torque-prepare" if="torque.home" 
+          description="==> Generate sql from datamodel schema">
+    <ant antfile="${torque.home}/build-torque.xml" target="sql">
+      <property name="torque.lib.dir" location="${torque.home}/lib"/>
+    </ant>
+  </target>
+
+
+  <target name="torque-datasql" depends="torque-prepare" if="torque.home" 
+          description="==> Generates sql from an xml data file">
+    <ant antfile="${torque.home}/build-torque.xml" target="datasql">
+      <property name="torque.lib.dir" location="${torque.home}/lib"/>
+    </ant>
+  </target>
+
+
 
 </project>

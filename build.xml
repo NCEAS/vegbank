@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-01-13 17:37:34 $'
-  *     '$Revision: 1.1 $'
+  *     '$Date: 2003-02-03 19:43:24 $'
+  *     '$Revision: 1.2 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
@@ -26,7 +26,7 @@
     
     <ant dir="veg_plot" target="jar" inheritAll="false"/>
     <ant dir="veg_community" target="jar" inheritAll="false"/>
-    <ant dir="veg_taxa" target="dist" inheritAll="false"/>
+    <ant dir="veg_taxa" target="jar" inheritAll="false"/>
     
   </target>
 
