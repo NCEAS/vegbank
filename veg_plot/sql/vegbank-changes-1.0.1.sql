@@ -1,4 +1,4 @@
---FROM db_schema_changes.xml, changes for 1.0.1, Draft 1, Michael Lee
+
 ALTER TABLE taxonInterpretation   ADD COLUMN stemLocation_ID integer ;
 
 ALTER TABLE taxonInterpretation
@@ -9,7 +9,7 @@ ALTER TABLE stemLocation   ADD COLUMN stemHealth varchar (50) ;
 
 ALTER TABLE observation   ADD COLUMN dateEntered Date ;
 
-ALTER TABLE taxonInterpretation   ADD COLUMN collector_ID integer ;
+ALTER TABLE taxonInterpretation   ADD COLUMN collector_ID Integer ;
 
 ALTER TABLE taxonInterpretation
   ADD CONSTRAINT collector_ID FOREIGN KEY (collector_ID)
@@ -19,7 +19,7 @@ ALTER TABLE taxonInterpretation   ADD COLUMN collectionNumber varchar (100) ;
 
 ALTER TABLE taxonInterpretation   ADD COLUMN collectionDate Date ;
 
-ALTER TABLE taxonInterpretation   ADD COLUMN museum_ID integer ;
+ALTER TABLE taxonInterpretation   ADD COLUMN museum_ID Integer ;
 
 ALTER TABLE taxonInterpretation
   ADD CONSTRAINT museum_ID FOREIGN KEY (museum_ID)
@@ -27,21 +27,26 @@ ALTER TABLE taxonInterpretation
 
 ALTER TABLE taxonInterpretation   ADD COLUMN museumAccessionNumber varchar (100) ;
 
-CREATE TABLE taxonGroup ( taxonGroup_ID serial ,
-    PRIMARY KEY (taxonGroup_ID) );
+CREATE TABLE taxonAlt ( taxonAlt_ID serial ,  taxonInterpretation_ID Integer NOT NULL, plantConcept_ID Integer  NOT NULL, 
+    PRIMARY KEY (taxonAlt_ID) );
     
   
-ALTER TABLE taxonGroup   ADD COLUMN taxonInterpretation_ID Integer ;
 
-ALTER TABLE taxonGroup
+
+ALTER TABLE taxonAlt
   ADD CONSTRAINT taxonInterpretation_ID FOREIGN KEY (taxonInterpretation_ID)
   REFERENCES taxonInterpretation (taxonInterpretation_ID );
 
-ALTER TABLE taxonGroup   ADD COLUMN plantConcept_ID Integer ;
 
-ALTER TABLE taxonGroup
+ALTER TABLE taxonAlt
   ADD CONSTRAINT plantConcept_ID FOREIGN KEY (plantConcept_ID)
   REFERENCES plantConcept (plantConcept_ID );
+
+ALTER TABLE taxonAlt   ADD COLUMN taxonAltFit varchar (50) ;
+
+ALTER TABLE taxonAlt   ADD COLUMN taxonAltConfidence varchar (50) ;
+
+ALTER TABLE taxonAlt   ADD COLUMN taxonAltNotes text ;
 
 ALTER TABLE taxonObservation   ADD COLUMN plantName varchar (255) ;
 
@@ -58,3 +63,5 @@ ALTER TABLE commConcept   ADD COLUMN accessionCode varchar (100) ;
 ALTER TABLE party   ADD COLUMN accessionCode varchar (100) ;
 
 ALTER TABLE reference   ADD COLUMN accessionCode varchar (100) ;
+
+ALTER TABLE reference   ADD COLUMN fulltext text ;
