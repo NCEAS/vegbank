@@ -6,9 +6,9 @@
 *    Authors: John Harris
 *    Release: @release@
 *
-*   '$Author: farrell $'
-*   '$Date: 2002-11-27 22:11:26 $'
-*    '$Revision: 1.1 $'
+*   '$Author: harris $'
+*   '$Date: 2002-12-03 22:28:16 $'
+*    '$Revision: 1.2 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ public class DBinsertPlotSource {
 	int coverMethodId;
 	int stratumMethodId;
 
-	private String loaderEmail = "vegbank@" + this.getHostname();
+	//private String loaderEmail = "vegbank@" + this.getHostname();
 	//the email of the loader
 	// the name of the plots project xml file containing the plot information
 	// to be stored in the database
@@ -2396,12 +2396,24 @@ public class DBinsertPlotSource {
 		}
 	}
 	
-	private String getHostname() {
-		if  ( !hostname.equals("localhost") ) {
-			String propFile = "database";
-			ResourceBundle rb = ResourceBundle.getBundle(propFile);
-			hostname=rb.getString("hostname");
-		}
+  /*
+   * method that returns the hostname that should be used for 
+   */
+	private String getHostname() 
+  {
+		try
+    {
+      if  ( !hostname.equals("localhost") ) 
+      {
+		  	String propFile = "database";
+		  	ResourceBundle rb = ResourceBundle.getBundle(propFile);
+		  	hostname=rb.getString("hostname");
+		  }
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
 		return hostname;
 	}
 	

@@ -6,9 +6,9 @@
  *    Authors: John Jarris
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *     '$Date: 2002-11-27 22:11:27 $'
- * '$Revision: 1.1 $'
+ *   '$Author: harris $'
+ *     '$Date: 2002-12-03 22:28:16 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,8 @@ public class utility
 		 }
 		 catch (MissingResourceException e) 
 		 {
-			 System.out.println("failed in utility.getDatabaseParameters " +e.getMessage());
+			 System.out.println("utility > failed in getDatabaseParameters " +e.getMessage());
+       e.printStackTrace();
 		 }
 	}
 
