@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-20 20:02:24 $'
- * 	'$Revision: 1.16 $'
+ *  '$Date: 2002-05-20 23:02:28 $'
+ * 	'$Revision: 1.17 $'
  */
 public class PlotDataSource 
 {
@@ -669,15 +669,16 @@ public class PlotDataSource
 		return(s);
 	}
 	
-	//returns the latitude
-	String getLatitude(String plotName)
+	//returns the atitude
+	public String getLatitude(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getLatitude(plotName);
+		System.out.println("PlotDataSource > latitude: " + s);
 		return(s);
 	}
 	
 	//returns the longitude
-	String getLongitude(String plotName)
+	public String getLongitude(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getLongitude(plotName);
 		return(s);
@@ -878,7 +879,7 @@ public class PlotDataSource
 			
 			System.out.println(" \n ----------------------plot site info-----------------------------");
 			System.out.println("authorplotcode: " + source.plotCode );
-			System.out.println("latitude: " + source.latitude );
+			System.out.println("latitude: " + source.getLatitude(plotName) );
 			System.out.println("longitude: " + source.longitude );
 			System.out.println("x coord: " + source.xCoord );
 			System.out.println("y coord: " + source.yCoord );
