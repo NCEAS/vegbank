@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-24 01:39:38 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-09-28 18:35:20 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ import org.vegbank.common.utility.ServletUtility;
  * to look up in SQLStore.properties.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.1 $ $Date: 2004-09-24 01:39:38 $
+ * @version $Revision: 1.2 $ $Date: 2004-09-28 18:35:20 $
  */
 
 public class VegbankWhereTag extends VegbankTag {
@@ -83,6 +83,13 @@ public class VegbankWhereTag extends VegbankTag {
 			String where = request.getParameter("where");
 			if (Utility.isStringNullOrEmpty(where)) {
 				String params = request.getParameter("params");
+				if (Utility.isStringNullOrEmpty(params)) {
+					// this doesn't need to happen if /get/VIEW/ENTITY is used
+					// but it supports direct calls to the jsp
+					params = request.getParameter("wparam");
+				}
+
+				log.debug("Checking numerocity of params: " + params);
 				if (Utility.isNumericList(params)) {
 					// use a PK
 					where = getNumeric();
