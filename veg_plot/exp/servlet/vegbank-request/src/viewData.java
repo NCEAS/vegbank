@@ -252,7 +252,7 @@ public class viewData extends HttpServlet
 				// access the method to transfor the xml document and 
 				// retrieve the string writer
 				String teststyle = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
-				m.getTransformed(servletDir+"test-summary.xml", teststyle);
+				m.getTransformed(servletDir+"test-summary.xml", styleSheet);
 				StringWriter transformedData=m.outTransformedData;
 				
 				

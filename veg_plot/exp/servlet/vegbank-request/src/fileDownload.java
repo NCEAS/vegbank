@@ -57,7 +57,15 @@ public class fileDownload extends HttpServlet
 	int debugLevel=0;
 
 
-
+	
+	/**
+	 * constructor method -- just to show status on startup
+	 *
+	 */
+	 public fileDownload()
+	 {
+		 System.out.println("init: fileDownload");
+	 }
 
 	/** Handle "POST" method requests from HTTP clients */
 	public void doPost(HttpServletRequest request,
@@ -244,10 +252,10 @@ catch( Exception e )
 					//clientType=app&requestDataFormatType=xml
 					int port=80;
 					String requestType="POST";
-					GetURL b =new GetURL();  
+					GetURL b = new GetURL();  
 					b.getPost(uri, port, requestType);
 
-					/** Concatenate the resulting file so that it isnt overwritten */
+					// Concatenate the resulting file so that it isnt overwritten
 					ServletUtility d =new ServletUtility();  
 					d.fileCopy(atomicResultSet, cummulativeResultSet, "concat");
 				}
