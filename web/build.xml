@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2003-05-30 18:00:16 $'
-* '$Revision: 1.44 $'
+* '$Author: mlee $'
+* '$Date: 2003-06-03 02:11:42 $'
+* '$Revision: 1.45 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -78,6 +78,7 @@
     <filter token="uploaddata_page" value="/vegbank/forms/uploadFile.html"/>
     <filter token="stylesheet_generator" value="/vegbank/forms/stylesheet-generator.html"/>
     <filter token="general_link" value="/vegbank/general/"/>
+    <filter token="forms_url" value="/vegbank/forms/"/>
     <filter token="panel_link" value="/vegbank/panel/"/>
     <!-- SERVLETS -->
     <filter token="framework_servlet" value="/vegbank/servlet/framework"/>
