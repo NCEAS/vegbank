@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2004-03-02 22:09:12 $'
-* '$Revision: 1.91 $'
+* '$Date: 2004-03-02 23:55:01 $'
+* '$Revision: 1.92 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -32,7 +32,7 @@
 		* Below are the basic propoerties and tokens for
 		* building the vegbank web site
 	-->
-    <condition property="webapp" value="vegbank">
+    <condition property="webapp" value="vegtest">
       <not>
         <isset property="webapp"/>
       </not>
@@ -359,8 +359,9 @@
   <!--
 	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
 -->
-  <target name="dictionary" depends="init" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
+  <target name="dictionary" depends="init,getContextName" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
     <!-- calls ant to run a different ant target which creates the vegbank dictionary based on logical fields only -->
+   	<echo>calling ../docs/xml with webapp '${webapp}'</echo>
     <ant dir="../docs/xml" target="logical"/>
   </target>
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
@@ -523,4 +524,33 @@ MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
   <target name="dist-bins" depends="init, panel-big-bin , workshop-big-bin" description="=&gt; dist. all targets that require access to big binary storage "/>
   <target name="dist" depends="deploy, help, manual, design, news, panel, vbsummary, history, pubs, workshop, dictionary, dist-bins" description="=&gt; dist all targets : DIST EVERYTHING! "/>
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
+
+  <target name="getContextName">
+    <!-- prompt -->
+    <input message="Please enter the context you are acting on (e.g. vegbank, vegtest ) : " addproperty="webapp" />
+  
+    <condition property="noContextName">
+      <equals arg1="" arg2="${webapp}"/>
+    </condition>
+
+    <condition property="invalidContextName">
+      <and>
+        <not><equals arg1="vegbank" arg2="${webapp}"/></not>
+        <not><equals arg1="vegtest" arg2="${webapp}"/></not>
+      </and>
+    </condition>
+
+    <fail if="noContextName">
+*******************************************************************************
+ERROR: You did not enter a context name.
+*******************************************************************************
+    </fail>
+    <fail if="invalidContextName">
+*******************************************************************************
+ERROR: An invalid context name entered: '${webapp}' 
+	Only vegbank and vegtest contexts currently supported.
+*******************************************************************************
+    </fail>
+  </target>
+
 </project>
