@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-17 01:58:46 $'
- * '$Revision: 1.8 $'
+ *     '$Date: 2002-05-20 23:04:20 $'
+ * '$Revision: 1.9 $'
  *
  *
  */
@@ -26,8 +26,8 @@ public interface PlotDataSourceInterface
 	
 	
 	//this method retrives all the attributes for a gine plotname
-  void getPlotData(String plotName)
-		throws Exception;
+	void getPlotData(String plotName)
+	throws Exception;
 		
 		
 		
@@ -115,10 +115,23 @@ public interface PlotDataSourceInterface
 	String getState(String plotName);
 	//returns the topo position
 	String getTopoPosition(String plotName);
-	//returns the slope aspect
+	/**
+	 * returns the slope aspect in degrees between 
+	 * 0 - 360.  Becase this value is 'numeric' in 
+	 * the database, this method should never return 
+	 * a 'null' or non-numeric value
+	 * @param plotName -- the plot 
+	 */
 	String getSlopeAspect(String plotName);
-	//returns yje slope gradient
+	
+	/**
+	 * returns the gradient of the slope inb degrees
+	 * and if the inclination of the slope is too 
+	 * irregular then the method should return a '-1.0'
+	 * @param plotName -- the plot 
+	 */
 	String getSlopeGradient(String plotName);
+	
 	//returns the surficial geology
 	String getSurfGeo(String plotName);
 	//retuns the country
@@ -129,24 +142,53 @@ public interface PlotDataSourceInterface
 	String getAuthorLocation(String plotName);
 	//returns the landForm
 	String getLandForm(String plotName);
-	//retuns the elevation
+	/**
+	 * retuns the elevation and must be either a numeric 
+	 * value or an empty string and cannot be 'null'
+	 * @param plotName -- the plot
+	 */
 	String getElevation(String plotName);
-	//returns the elevation accuracy
+	/**
+	 * returns the elevation accuracy and must be either a numeric
+	 * value or an empty string and cannot be 'null'. The value
+	 * must be a percentage of the elevation
+	 * @param plotName -- the plot
+	 */
 	String getElevationAccuracy(String plotName);
-	//return the confidentiality reason -- not null
+ /**
+	* return the confidentiality reason -- not null
+	* @param plotName -- the plot
+	*/
 	String	getConfidentialityReason(String plotName);
-	//return the confidentiality status -- not null 0-6
+	
+	/**
+	 * return the confidentiality status -- not null 0-6
+	 * Acceptable values to be returned from this function are: <br> <br>
+	 * 0 = no confidentaility <br>
+	 * 1 = 1km radius <br>
+	 * 2=10km radius <br>
+	 * 3=100km radius <br>
+	 * 4 = location embargo <br> 
+	 * 5 = public embargo on all plot data <br> 
+	 * 6 = full embargo on all plot data <br>
+	 * <br> <br>
+	 * @param plotName -- the plot
+	 */
 	String getConfidentialityStatus(String plotName);
+	
+	
 	/**
 	 * returns true if the plot is a permanent plot or false if not
 	 * @param plotName -- the plot
 	 */
 	 boolean isPlotPermanent(String plotName);
+	 
  /**
 	* returns the soil taxon for the plot -- this is the USDA class
 	* heirarchy (eg., Order, Group, Family, Series etc..)
 	* @param plotName -- the plot
 	*/
+	
 	String getSoilTaxon(String plotName);
 	/**
 	 * returns how the soil taxon was determined (eg., field observation
