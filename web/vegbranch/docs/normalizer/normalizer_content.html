@@ -1,0 +1,299 @@
+<html>
+<head>
+
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
+<style type="text/css">
+
+td.empty {background-color:#CCCCCC}
+td.Tdata {background-color:#99FFFF}
+td.Ldata {background-color:#FFFFCC}
+td.Hdr3  {background-color:#009900}
+td.LLbl  {background-color:#FFFF00}
+td.TLbl  {background-color:#6699FF}
+td.highlite {background-color:#FF9933}
+</style>
+
+</head>
+
+<body>
+@vegbank_header_html_normal@
+<h2>Normalizer</h2>
+<p><a href="#howitworks">How it works</a>  <a href="#examples">Examples</a>
+  <a href="@vbr_clientserver@vegbranch_normalizer.zip">Download it</a></p>
+<p>The Normalizer is included in vegbranch in versions beta 4.1 and higher.  You can download it as a stand-alone
+MS-Access database with the above link.</p>
+<p>The <b>Normalizer</b> takes a denormalized .csv file and normalizes 
+it.  You can specify criteria for this normalization, or let it AutoDetect them.
+In order to understand this, you must first understand what denormalized and normalized 
+data are.</p>
+<p><b>Normalized</b> data have only one field (column) for each data field.  The same data field 
+does not appear in multiple columns.  This is "standard" database architecture, but often 
+users have application which require denormalized data, which is often more compact and perhaps more
+useful in specific situations.</p>
+<p><b>Denormalized</b> data have multiple fields (columns) that describe the same data field,
+each listed under a different column value for a separate field.  For example, if you have many columns with 
+species names and the cover value listed below each, that is a denormalized table 
+(see <a href="#example1">example 1</a> below). The normalized table would have 
+only species name in the one column, and cover value in the next column.</p>
+<p>
+The method of labelling the denormalized ID rows to the left, ID rows above, and data cells themselves are my convention.
+Columns are labelled above, Rows are labelled to the left, and where all three collide, a single cell 
+represents all three labels by using a pipe symbol, | , to separate column label, row label, and data cell label, respectively.
+</p>
+<h2><a name="howitworks">How normalization works:</a></h2>
+<table>
+<tr><td colspan="4">
+Combination of first plot and first species : row 1</td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
+<table border="1" cellspacing="0">
+<tr><td>&nbsp;</td><td class="highlite">Species A</td><td>Species B</td></tr>
+<tr><td class="highlite">Plot 1</td><td class="highlite">45%</td><td>&nbsp;</td></tr>
+<tr><td>Plot 2</td><td>33%</td><td>18%</td></tr>
+</table>
+</td><td><img src="@vbr_imageserver@rtarrow.gif" alt="produces:"/></td><td>
+<table border="1" cellspacing="0">
+<tr><td class="highlite">Plot 1</td><td class="highlite">Species A</td><td class="highlite">45%</td></tr>
+</table>
+</tr>
+
+
+<tr><td colspan="4">
+Combination of first plot and second species : row 2</td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<td>
+<table border="1" cellspacing="0">
+<tr><td>&nbsp;</td><td>Species A</td><td class="highlite">Species B</td></tr>
+<tr><td class="highlite">Plot 1</td><td>45%</td><td class="highlite">&nbsp;</td></tr>
+<tr><td>Plot 2</td><td>33%</td><td>18%</td></tr>
+</table>
+</td><td><img src="@vbr_imageserver@rtarrow.gif" alt="produces:"/></td><td>
+<table border="1" cellspacing="0">
+<tr><td>Plot 1</td><td>Species A</td><td>45%</td></tr>
+<tr><td class="highlite">Plot 1</td><td class="highlite">Species B</td><td class="highlite">&nbsp;</td></tr>
+</table>
+</tr>
+
+
+<tr><td colspan="4">
+Combination of second plot and first species : row 3</td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
+<table border="1" cellspacing="0">
+<tr><td>&nbsp;</td><td class="highlite">Species A</td><td>Species B</td></tr>
+<tr><td>Plot 1</td><td>45%</td><td>&nbsp;</td></tr>
+<tr><td class="highlite">Plot 2</td><td class="highlite">33%</td><td>18%</td></tr>
+</table>
+</td><td><img src="@vbr_imageserver@rtarrow.gif" alt="produces:"/></td><td>
+<table border="1" cellspacing="0">
+<tr><td>Plot 1</td><td>Species A</td><td>45%</td></tr>
+<tr><td>Plot 1</td><td>Species B</td><td>&nbsp;</td></tr>
+<tr><td class="highlite">Plot 2</td><td class="highlite">Species A</td><td class="highlite">33%</td></tr>
+</table>
+</tr>
+
+
+<tr><td colspan="4">
+Combination of second plot and second species : row 4</td></tr>
+<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>
+<table border="1" cellspacing="0">
+<tr><td>&nbsp;</td><td>Species A</td><td class="highlite">Species B</td></tr>
+<tr><td>Plot 1</td><td>45%</td><td>&nbsp;</td></tr>
+<tr><td class="highlite">Plot 2</td><td>33%</td><td class="highlite">18%</td></tr>
+</table>
+</td><td><img src="@vbr_imageserver@rtarrow.gif" alt="produces:"/></td><td>
+<table border="1" cellspacing="0">
+<tr><td>Plot 1</td><td>Species A</td><td>45%</td></tr>
+<tr><td>Plot 1</td><td>Species B</td><td>&nbsp;</td></tr>
+<tr><td>Plot 2</td><td>Species A</td><td>33%</td></tr>
+<tr><td class="highlite">Plot 2</td><td class="highlite">Species B</td><td class="highlite">18%</td></tr>
+</table>
+</tr>
+
+</table>
+<!-- 
+
+
+
+</table>
+-->
+<h2><a name="examples">Examples</a></h2>
+<p>Download the following examples as .csv files, plus a stems example <a href="@vbr_examplesserver@normalizer_examples.zip">here</a>.</p>
+<p><a name="example1">Example 1</a>: Simple example, plots by species with cover values:</p>
+
+<blockquote>
+(1 ID row, 1 ID column, no labels)
+<table border="1" cellspacing="0">
+<tr><td class="empty">&nbsp;</td><td class="Tdata">Species A</td><td class="Tdata">Species B</td><td class="Tdata">Species C</td><td class="Tdata">Species D</td></tr>
+<tr><td class="Ldata">Plot 1</td><td>45%</td><td>&nbsp;</td><td>2%</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 2</td><td>33%</td><td>18%</td><td>&nbsp;</td><td>44%</td></tr>
+<tr><td class="Ldata">Plot 3</td><td>&nbsp;</td><td>7%</td><td>&nbsp;</td><td>41%</td></tr>
+<tr><td class="Ldata">Plot 4</td><td>2%</td><td>&nbsp;</td><td>87%</td><td>8%</td></tr>
+</table><a href="#colorkey">Key to colors</a><br/>
+<p>NORMALIZED output:</p>
+<table border="1" cellspacing="0">
+<tr><td class="empty">unknownLeftLabel1</td><td class="empty">unknownTopLabel1</td><td class="empty">unknownCellDataLabel</td></tr>
+<tr><td class="Ldata">Plot 1</td><td class="Tdata">Species A</td><td>45%</td></tr>
+<tr><td class="Ldata">Plot 1</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 1</td><td class="Tdata">Species C</td><td>2%</td></tr>
+<tr><td class="Ldata">Plot 1</td><td class="Tdata">Species D</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 2</td><td class="Tdata">Species A</td><td>33%</td></tr>
+<tr><td class="Ldata">Plot 2</td><td class="Tdata">Species B</td><td>18%</td></tr>
+<tr><td class="Ldata">Plot 2</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 2</td><td class="Tdata">Species D</td><td>44%</td></tr>
+<tr><td class="Ldata">Plot 3</td><td class="Tdata">Species A</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 3</td><td class="Tdata">Species B</td><td>7%</td></tr>
+<tr><td class="Ldata">Plot 3</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 3</td><td class="Tdata">Species D</td><td>41%</td></tr>
+<tr><td class="Ldata">Plot 4</td><td class="Tdata">Species A</td><td>2%</td></tr>
+<tr><td class="Ldata">Plot 4</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 4</td><td class="Tdata">Species C</td><td>87%</td></tr>
+<tr><td class="Ldata">Plot 4</td><td class="Tdata">Species D</td><td>8%</td></tr>
+</table>
+</blockquote>
+<p>Example 2: same as example 1, except includes a complex label for field names:</p>
+<table border="1" cellspacing="0"><tr><td class="Hdr3">Plot|Spec|CoverPercent</td></tr></table> <br/>
+<p>The complex label consists of three parts: 1) the label for the data that appears in the left column, 2) the label for data in the first row, above the cover data, and 3) the label for the intersection cells, here cover percent. <br />
+These are divided with a | in the .csv file.  This essentially combines three cells into one. <br />
+The three cells in which the complex label could be divided could be colored like this:</p>
+<table border="1" cellspacing="0"><tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td class="LLbl">Plot</td><td>|</td><td class="TLbl">Spec</td><td>|</td><td>CoverPercent</td></tr></table></td></tr></table>
+<blockquote>
+(1 ID row, 1 ID column, labels)
+<table border="1" cellspacing="0">
+<tr><td class="Hdr3">Plot|Spec|CoverPercent</td><td class="Tdata">Species A</td><td class="Tdata">Species B</td><td class="Tdata">Species C</td><td class="Tdata">Species D</td></tr>
+<tr><td class="Ldata">Plot 1</td><td>45%</td><td>&nbsp;</td><td>2%</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 2</td><td>33%</td><td>18%</td><td>&nbsp;</td><td>44%</td></tr>
+<tr><td class="Ldata">Plot 3</td><td>&nbsp;</td><td>7%</td><td>&nbsp;</td><td>41%</td></tr>
+<tr><td class="Ldata">Plot 4</td><td>2%</td><td>&nbsp;</td><td>87%</td><td>8%</td></tr>
+</table>
+<a href="#colorkey">Key to colors</a><p>NORMALIZED output:</p>
+<table border="1" cellspacing="0">
+<tr><td class="Hdr3">Plot</td><td class="Hdr3">Spec</td><td class="Hdr3">CoverPercent</td></tr>
+<tr><td class="Ldata">Plot 1</td><td class="Tdata">Species A</td><td>45%</td></tr>
+<tr><td class="Ldata">Plot 1</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 1</td><td class="Tdata">Species C</td><td>2%</td></tr>
+<tr><td class="Ldata">Plot 1</td><td class="Tdata">Species D</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 2</td><td class="Tdata">Species A</td><td>33%</td></tr>
+<tr><td class="Ldata">Plot 2</td><td class="Tdata">Species B</td><td>18%</td></tr>
+<tr><td class="Ldata">Plot 2</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 2</td><td class="Tdata">Species D</td><td>44%</td></tr>
+<tr><td class="Ldata">Plot 3</td><td class="Tdata">Species A</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 3</td><td class="Tdata">Species B</td><td>7%</td></tr>
+<tr><td class="Ldata">Plot 3</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 3</td><td class="Tdata">Species D</td><td>41%</td></tr>
+<tr><td class="Ldata">Plot 4</td><td class="Tdata">Species A</td><td>2%</td></tr>
+<tr><td class="Ldata">Plot 4</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">Plot 4</td><td class="Tdata">Species C</td><td>87%</td></tr>
+<tr><td class="Ldata">Plot 4</td><td class="Tdata">Species D</td><td>8%</td></tr>
+</table>
+</blockquote>
+<p>Example 3: A bit more complex.  Two data fields above and to the left of the cover data, no field labels:</p>
+<blockquote>
+(2 ID rows, 2 ID columns, no labels)
+<table border="1" cellspacing="0">
+<tr><td class="empty">&nbsp;</td><td class="empty">&nbsp;</td><td class="Tdata">fern</td><td class="Tdata">tree</td><td class="Tdata">tree</td><td class="Tdata">shrub</td></tr>
+<tr><td class="empty">&nbsp;</td><td class="empty">&nbsp;</td><td class="Tdata">Species A</td><td class="Tdata">Species B</td><td class="Tdata">Species C</td><td class="Tdata">Species D</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td>45%</td><td>&nbsp;</td><td>2%</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td>33%</td><td>18%</td><td>&nbsp;</td><td>44%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td>&nbsp;</td><td>7%</td><td>&nbsp;</td><td>41%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td>2%</td><td>&nbsp;</td><td>87%</td><td>8%</td></tr>
+</table>
+<a href="#colorkey">Key to colors</a><p>NORMALIZED output:</p>
+<table border="1" cellspacing="0">
+<tr><td class="empty">unknownLeftLabel1</td><td class="empty">unknownLeftLabel2</td><td class="empty">unknownTopLabel1</td><td class="empty">unknownTopLabel2</td><td class="empty">unknownCellDataLabel</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>45%</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>2%</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>33%</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>18%</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>44%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>7%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>41%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>2%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>87%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>8%</td></tr>
+</table>
+</blockquote>
+<p>Example 4: Same as example 3, but added field labels:</p>
+<blockquote>
+(2 ID rows, 2 ID columns, labels)
+<table border="1" cellspacing="0">
+<tr><td class="empty">&nbsp;</td><td class="TLbl">SpeciesType</td><td class="Tdata">fern</td><td class="Tdata">tree</td><td class="Tdata">tree</td><td class="Tdata">shrub</td></tr>
+<tr><td class="LLbl">PlotSlope</td><td class="Hdr3">PlotID|Species|Cover</td><td class="Tdata">Species A</td><td class="Tdata">Species B</td><td class="Tdata">Species C</td><td class="Tdata">Species D</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td>45%</td><td>&nbsp;</td><td>2%</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td>33%</td><td>18%</td><td>&nbsp;</td><td>44%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td>&nbsp;</td><td>7%</td><td>&nbsp;</td><td>41%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td>2%</td><td>&nbsp;</td><td>87%</td><td>8%</td></tr>
+</table><a href="#colorkey">Key to colors</a><p>NORMALIZED output:</p><table border="1" cellspacing="0">
+<tr><td class="LLbl">PlotSlope</td><td class="Hdr3">PlotID</td><td class="TLbl">SpeciesType</td><td class="Hdr3">Species</td><td class="Hdr3">Cover</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>45%</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>2%</td></tr>
+<tr><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>33%</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>18%</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>44%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>7%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>41%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>2%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>87%</td></tr>
+<tr><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>8%</td></tr>
+</table>
+</blockquote>
+<p>Example 5: more complicated example (differing number of left and top fields, includes labels):</p>
+<blockquote>
+(4 ID rows, 3 ID columns, labels)
+<table border="1" cellspacing="0">
+<tr><td class="empty">&nbsp;</td><td class="empty">&nbsp;</td><td class="TLbl">SpecSynonym</td><td class="Tdata">&nbsp;</td><td class="Tdata">&nbsp;</td><td class="Tdata">&nbsp;</td><td class="Tdata">Species RR</td></tr>
+<tr><td class="empty">&nbsp;</td><td class="empty">&nbsp;</td><td class="TLbl">SpeciesCode</td><td class="Tdata">ACE1</td><td class="Tdata">RGE3</td><td class="Tdata">EDGR</td><td class="Tdata">SHe2</td></tr>
+<tr><td class="empty">&nbsp;</td><td class="empty">&nbsp;</td><td class="TLbl">SpeciesType</td><td class="Tdata">fern</td><td class="Tdata">tree</td><td class="Tdata">tree</td><td class="Tdata">shrub</td></tr>
+<tr><td class="LLbl">PlotSize</td><td class="LLbl">PlotSlope</td><td class="Hdr3">PlotID|Species|Cover</td><td class="Tdata">Species A</td><td class="Tdata">Species B</td><td class="Tdata">Species C</td><td class="Tdata">Species D</td></tr>
+<tr><td class="Ldata">44</td><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td>45%</td><td>&nbsp;</td><td>2%</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">50</td><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td>33%</td><td>18%</td><td>&nbsp;</td><td>44%</td></tr>
+<tr><td class="Ldata">80</td><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td>&nbsp;</td><td>7%</td><td>&nbsp;</td><td>41%</td></tr>
+<tr><td class="Ldata">100</td><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td>2%</td><td>&nbsp;</td><td>87%</td><td>8%</td></tr>
+</table>
+<a href="#colorkey">Key to colors</a><br/>
+<p>NORMALIZED output:</p>
+<table border="1" cellspacing="0">
+<tr><td class="LLbl">PlotSize</td><td class="LLbl">PlotSlope</td><td class="Hdr3">PlotID</td><td class="TLbl">SpecSynonym</td><td class="TLbl">SpeciesCode</td><td class="TLbl">SpeciesType</td><td class="Hdr3">Species</td><td class="Hdr3">Cover</td></tr>
+<tr><td class="Ldata">44</td><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">&nbsp;</td><td class="Tdata">ACE1</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>45%</td></tr>
+<tr><td class="Ldata">44</td><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">&nbsp;</td><td class="Tdata">RGE3</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">44</td><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">&nbsp;</td><td class="Tdata">EDGR</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>2%</td></tr>
+<tr><td class="Ldata">44</td><td class="Ldata">steep</td><td class="Ldata">Plot 1</td><td class="Tdata">Species RR</td><td class="Tdata">SHe2</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">50</td><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">&nbsp;</td><td class="Tdata">ACE1</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>33%</td></tr>
+<tr><td class="Ldata">50</td><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">&nbsp;</td><td class="Tdata">RGE3</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>18%</td></tr>
+<tr><td class="Ldata">50</td><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">&nbsp;</td><td class="Tdata">EDGR</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">50</td><td class="Ldata">very steep</td><td class="Ldata">Plot 2</td><td class="Tdata">Species RR</td><td class="Tdata">SHe2</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>44%</td></tr>
+<tr><td class="Ldata">80</td><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">&nbsp;</td><td class="Tdata">ACE1</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">80</td><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">&nbsp;</td><td class="Tdata">RGE3</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>7%</td></tr>
+<tr><td class="Ldata">80</td><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">&nbsp;</td><td class="Tdata">EDGR</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">80</td><td class="Ldata">flat</td><td class="Ldata">Plot 3</td><td class="Tdata">Species RR</td><td class="Tdata">SHe2</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>41%</td></tr>
+<tr><td class="Ldata">100</td><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">&nbsp;</td><td class="Tdata">ACE1</td><td class="Tdata">fern</td><td class="Tdata">Species A</td><td>2%</td></tr>
+<tr><td class="Ldata">100</td><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">&nbsp;</td><td class="Tdata">RGE3</td><td class="Tdata">tree</td><td class="Tdata">Species B</td><td>&nbsp;</td></tr>
+<tr><td class="Ldata">100</td><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">&nbsp;</td><td class="Tdata">EDGR</td><td class="Tdata">tree</td><td class="Tdata">Species C</td><td>87%</td></tr>
+<tr><td class="Ldata">100</td><td class="Ldata">flat</td><td class="Ldata">Plot 4</td><td class="Tdata">Species RR</td><td class="Tdata">SHe2</td><td class="Tdata">shrub</td><td class="Tdata">Species D</td><td>8%</td></tr>
+</table>
+</blockquote>
+<p><a name="colorkey">Color Key:</a> <a href="javascript:history.back()">(back)</a></p>
+<table border="1" cellspacing="0">
+<tr><th>color and name</th><th>explanation</th></tr>
+<tr><td class="empty"><b>empty cell</b></td><td> or unknown column label derived from an empty cell in normalized table.</td></tr>
+<tr><td class="LLbl"><b>Left Label</b></td><td>labels the "left data" column that appears below it.</td></tr>
+<tr><td class="TLbl"><b>Top Label</b></td><td>labels the "top data" row that appears to its right.</td></tr>
+<tr><td class="Hdr3"><b>Complex label</b></td><td>consists first of the last "left label", then "|", then the last "top label", then "|", then "cell data" label.</td></tr>
+<tr><td class="LData"><b>Left Data <br/>(ID columns)</b></td><td>data that applies to all "cell data" in the same row.</td></tr>
+<tr><td class="TData"><b>Top Data <br/>(ID rows)</b></td><td>data that applies to all "cell data" in the same column.</td></tr>
+<tr><td><b>Cell data</b></td><td>linked to the "top data" in same column and "left data" in same row.</td></tr>
+<tr><td class="highlite"><b>Highlighted cell</b></td><td>illustrates something.</td></tr>
+</table>
+@vegbank_footer_html_onerow@
+</body>
+</html>
