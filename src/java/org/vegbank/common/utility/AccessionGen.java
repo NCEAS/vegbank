@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-24 00:51:38 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2005-01-24 23:05:37 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,18 +130,18 @@ public class AccessionGen {
 		// get the confirm type
 		String confirmType = res.getString("confirm.type." + table).toUpperCase();
 		// This is either WHERE or AND depending on if where is used in the SQL already
-		String conjugator = "";
+		String conjunction = "";
 		if (confirmType.equals("JOIN") )
 		{
-			conjugator = " AND ";
+			conjunction = " AND ";
 		}
 		else
 		{
-			conjugator = " WHERE ";
+			conjunction = " WHERE ";
 		}
 				
-		query += conjugator + Utility.getPKNameFromTableName(table) + " =" + pk;
-		//log.debug("===> " + query);
+		query += conjunction + Utility.getPKNameFromTableName(table) + " =" + pk;
+		log.debug("confirmation query ===> " + query);
 		ResultSet rs = conn.createStatement().executeQuery(query);
 
 		if (rs.next()) {
