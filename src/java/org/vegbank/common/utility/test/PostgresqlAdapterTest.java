@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: anderson $'
- *  '$Date: 2003-12-09 18:25:28 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-12-10 19:37:40 $'
+ *  '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
  
 package org.vegbank.common.utility.test;
 
+import org.vegbank.common.dbAdapter.*;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

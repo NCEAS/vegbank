@@ -5,8 +5,8 @@ package org.vegbank.common.utility.test;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-09 18:25:28 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-12-10 19:37:40 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Hashtable;
 
+import org.vegbank.common.utility.*;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

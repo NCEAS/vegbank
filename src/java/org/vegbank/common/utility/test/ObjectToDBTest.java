@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-09 18:25:28 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-12-10 19:37:40 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,10 +24,8 @@
  
 package org.vegbank.common.utility.test; 
 
-import org.vegbank.common.model.Address;
-import org.vegbank.common.model.Community;
-import org.vegbank.common.model.Party;
-
+import org.vegbank.common.model.*;
+import org.vegbank.common.utility.*;
 import junit.framework.TestCase;
 
 /**

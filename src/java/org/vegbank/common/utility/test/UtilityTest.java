@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: anderson $'
- *  '$Date: 2003-12-09 18:25:28 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2003-12-10 19:37:40 $'
+ *  '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 package org.vegbank.common.utility.test; 
 
 import java.util.HashMap;
+
+import org.vegbank.common.utility.Utility;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -87,24 +89,24 @@ public class UtilityTest extends TestCase
   public void testEscapeCharacter() {
   	
   	String inputA = "this and ' $that";
-		String expectedResultA = "this and \\' \\$that";
-		String resultA = Utility.encodeForDB(inputA); 
-		assertEquals(expectedResultA, resultA);
-				
-		String inputB = "aa'aa^^";
-		String expectedResultB = "aa\\'aa\\^\\^";
-		String resultB = Utility.encodeForDB(inputB);
-		assertEquals(expectedResultB, resultB);   
-				
-		String inputC = "$aaa'aa'aa''a^";
-		String expectedResultC = "\\$aaa\\'aa\\'aa\\'\\'a\\^";
-		String resultC = Utility.encodeForDB(inputC);
-		assertEquals(expectedResultC, resultC);  
-		
-		String inputD = null;
-		String expectedResultD = null;
-		String resultD = Utility.encodeForDB(inputD);
-		assertEquals(expectedResultD, resultD);  
+	String expectedResultA = "this and \\' \\$that";
+	String resultA = Utility.encodeForDB(inputA); 
+	assertEquals(expectedResultA, resultA);
+			
+	String inputB = "aa'aa^^";
+	String expectedResultB = "aa\\'aa\\^\\^";
+	String resultB = Utility.encodeForDB(inputB);
+	assertEquals(expectedResultB, resultB);   
+			
+	String inputC = "$aaa'aa'aa''a^";
+	String expectedResultC = "\\$aaa\\'aa\\'aa\\'\\'a\\^";
+	String resultC = Utility.encodeForDB(inputC);
+	assertEquals(expectedResultC, resultC);  
+	
+	String inputD = null;
+	String expectedResultD = null;
+	String resultD = Utility.encodeForDB(inputD);
+	assertEquals(expectedResultD, resultD);  
 
   }
   
