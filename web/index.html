@@ -21,7 +21,7 @@ MM_reloadPage(true);
   <tr> 
     <td width="14" height="72" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
     <td width="241" height="72" colspan="4" rowspan="2" valign="top" bgcolor="#336633"> 
-      <div align="center"> <font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF">VegBank</font></b></font></div>
+      <div align="center"> <font face="Georgia, Times New Roman, Times, serif" size="7" color="#FFFFFF"><b>VegBank</b></font></div>
     </td>
     <td width="558" height="48" colspan="18" valign="top" bgcolor="#336633"> 
       <form action="http://vegbank.nceas.ucsb.edu/services/servlet/ExchangeServlet" method="get" target="_blank">
@@ -54,8 +54,8 @@ MM_reloadPage(true);
   <tr> 
     <td colspan="2" height="211" valign="top"></td>
     <td width="417" height="211" colspan="8" valign="top"> 
-      <p><font face="Georgia, Times New Roman, Times, serif" size="+2"><b><font color="#531100">VegBank 
-        </font></b></font><font color="#531100" face="Georgia, Times New Roman, Times, serif">is 
+      <p><font face="Georgia, Times New Roman, Times, serif" size="+2" color="#531100"><b>VegBank 
+        </b></font><font color="#531100" face="Georgia, Times New Roman, Times, serif">is 
         the vegetation plot database of the Ecological Society of America. VegBank 
         consists of three linked databases: VegPlots contains the actual plot 
         records, VegTypes contains the U.S. National Vegetation Classification 
@@ -68,7 +68,7 @@ MM_reloadPage(true);
     <td colspan="3" height="211" valign="top"></td>
     <td width="343" height="333" colspan="10" rowspan="2" valign="top"> 
       <p><font face="Georgia, Times New Roman, Times, serif" size="+2"><b><font color="#531100"> 
-        </font><font face="Georgia, Times New Roman, Times, serif" size="+2"><b><font color="#531100">&nbsp;</font></b></font><font color="#531100">&nbsp;</font><font color="#531100">&nbsp;</font><font color="#531100">&nbsp;</font><font color="#531100">News</font></b></font></p>
+        </font><font face="Georgia, Times New Roman, Times, serif" size="+2" color="#531100">&nbsp;</font><font color="#531100">&nbsp;</font><font color="#531100">&nbsp;</font><font color="#531100">&nbsp;</font><font color="#531100">News</font></b></font></p>
       <ul>
         <li><font face="Georgia, Times New Roman, Times, serif" color="#531100"><a href="http://vegbank.nceas.ucsb.edu/vegbank/news/beta_schedule.html">VegBank 
           release beta 1.0</a> scheduled for<br>
@@ -92,24 +92,36 @@ MM_reloadPage(true);
     <td colspan="2" height="122" valign="top"></td>
     <td rowspan="2" height="149" valign="top"></td>
     <td width="336" height="149" colspan="6" rowspan="2" valign="top"> 
-      <form name="login" method="get" action="http://vegbank.nceas.ucsb.edu/framework/servlet/authenticate">
-        <br>
-        <input type="hidden" name="authType" value="loginUser">
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> <b> 
-        Login to VegBank</b></font> <a href="http://vegbank.nceas.ucsb.edu/forms/hints.html#loginname"> 
-        <img border="0" src="http://vegbank.nceas.ucsb.edu/vegbank/images/question.gif"></a><br>
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> Email 
-        </font> &nbsp;&nbsp;&nbsp;&nbsp; 
-        <input type="text" name="userName">
-        <br>
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> Password 
-        <input type="password" name="password">
-        </font> 
-        <input type="submit" name="Submit" value="Submit">
-        <br>
-        <a href="http://vegbank.nceas.ucsb.edu/forms/fetch-password.html" ><font size="1" color="red">Lost 
-        your password?</font></a> 
-      </form>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" height="135">
+        <tr> 
+          <td colspan="2"> 
+            <div align="left"><br>
+              <input type="hidden" name="authType2" value="loginUser">
+              <font face="Georgia, Times New Roman, Times, serif" color="#531100" size="4"> 
+              <b> Login to VegBank</b></font> <a href="http://vegbank.nceas.ucsb.edu/forms/hints.html#loginname"> 
+              <img border="0" src="http://vegbank.nceas.ucsb.edu/vegbank/images/question.gif"></a></div>
+          </td>
+        </tr>
+        <tr> 
+          <td width="30%"><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b>Email</b> 
+            </font> &nbsp;&nbsp;</td>
+          <td width="70%"> 
+            <input type="text" name="userName2">
+          </td>
+        </tr>
+        <tr> 
+          <td width="30%"><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b>Password</b><br>
+            <br>
+            </font></td>
+          <td width="70%"><font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
+            <input type="password" name="password2">
+            </font> 
+            <input type="submit" name="Submit2" value="Submit">
+            <br>
+            <a href="http://vegbank.nceas.ucsb.edu/forms/fetch-password.html" ><font face="Georgia, Times New Roman, Times, serif" color="red" size="1">Lost 
+            your password?</font> </a> </td>
+        </tr>
+      </table>
     </td>
     <td rowspan="2" height="149" valign="top"></td>
     <td colspan="3" height="149" valign="top" rowspan="2"></td>
