@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 05:46:24 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-06-30 20:13:57 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.vegbank.common.command.QueryReferences;
-import org.vegbank.common.command.QueryReferences.ReferenceSummary;
+import org.vegbank.common.model.ReferenceSummary;
 
 /**
  * @author farrell
