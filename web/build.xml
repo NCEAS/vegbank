@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2004-10-28 00:41:29 $'
-* '$Revision: 1.123 $'
+* '$Date: 2004-10-28 17:42:45 $'
+* '$Revision: 1.124 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -191,6 +191,8 @@
     <mkdir dir="${manual_server}"/>
     <mkdir dir="${vegbranch_server}"/>
     <mkdir dir="${manual_src_temp}"/>
+    <mkdir dir="${lrg_binary_src}"/>
+
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
