@@ -1,11 +1,11 @@
 /*
- *	'$Id: PlotQueryLoadAction.java,v 1.1 2004-03-25 06:46:46 anderson Exp $'
+ *	'$Id: PlotQueryLoadAction.java,v 1.2 2004-06-14 22:16:51 anderson Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-25 06:46:46 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-06-14 22:16:51 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,8 +37,7 @@ import org.vegbank.ui.struts.PlotQueryForm;
 
 
 /**
- * Prepopulates a certification form with the logged in user's profile and 
- * optionally a saved usercertification record by passing cert_id via URI.
+ * Prepopulates the plot query form with data hints and constraints.
  *
  * @author anderson
  */

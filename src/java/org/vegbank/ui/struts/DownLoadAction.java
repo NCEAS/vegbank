@@ -32,8 +32,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-10 21:42:25 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-06-14 22:16:51 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,9 +94,9 @@ public class DownLoadAction extends Action
 		
 		String dataType = (String ) thisForm.get("dataType");
 		String formatType = (String) thisForm.get("formatType");
-		String[] plotsToDownLoad = (String[]) thisForm.get("plotsToDownLoad");
+		String[] selectedPlots = (String[]) thisForm.get("selectedPlots");
 		
-		log.debug("dataType = " + dataType + ", formatType = " + formatType +", plotsToDownLoad = " + plotsToDownLoad);
+		log.debug("dataType = " + dataType + ", formatType = " + formatType +", selectedPlots = " + selectedPlots);
 		
 		try
 		{
@@ -104,7 +104,7 @@ public class DownLoadAction extends Action
 			if ( formatType.equalsIgnoreCase( XML_FORMAT_TYPE) )
 			{
 				// Store the returned ModelBean Trees
-				Collection plotObservations = this.getPlotObservations(plotsToDownLoad);
+				Collection plotObservations = this.getPlotObservations(selectedPlots);
 		
 				// wrap in XML
 				String xml = XMLUtil.getVBXML(plotObservations);
@@ -149,7 +149,7 @@ public class DownLoadAction extends Action
 					String speciesData = null;
 					
 					// Get plotObservation Collection
-					Collection plotObservations = this.getPlotObservations(plotsToDownLoad);
+					Collection plotObservations = this.getPlotObservations(selectedPlots);
 
 					if (dataType.equalsIgnoreCase(ENVIRONMENTAL_DATA_TYPE)
 						|| dataType.equalsIgnoreCase(ALL_DATA_TYPE))
@@ -199,7 +199,7 @@ public class DownLoadAction extends Action
 			else if ( formatType.equalsIgnoreCase( VEGBRANCH_FORMAT_TYPE) )
 			{
 				// Store the returned ModelBean Trees
-				Collection plotObservations = this.getPlotObservations(plotsToDownLoad);
+				Collection plotObservations = this.getPlotObservations(selectedPlots);
 		
 				// wrap in XML
 				String xml = XMLUtil.getVBXML(plotObservations);
@@ -279,9 +279,9 @@ public class DownLoadAction extends Action
 		if ( ! errors.isEmpty() )
 		{
 			saveErrors(request, errors);
-			// Need to put plotsToDownLoad into the request 
+			// Need to put selectedPlots into the request 
 			//TODO: use the form bean instead 
-			request.setAttribute("plotsToDownLoad", plotsToDownLoad);
+			request.setAttribute("selectedPlots", selectedPlots);
 			return (mapping.getInputForward());	
 		}
 		
@@ -289,19 +289,19 @@ public class DownLoadAction extends Action
 	}
 	
 	/**
-	 * @param plotsToDownLoad
+	 * @param selectedPlots
 	 * @return
 	 */
-	private Collection getPlotObservations(String[] plotsToDownLoad) throws NumberFormatException, Exception
+	private Collection getPlotObservations(String[] selectedPlots) throws NumberFormatException, Exception
 	{
 		Collection plotObsersevations = new ArrayList();
 		DBModelBeanReader dbmbReader = new DBModelBeanReader();
 		
 		// Get the plots
-		for ( int i = 0; i < plotsToDownLoad.length ; i++ )
+		for ( int i = 0; i < selectedPlots.length ; i++ )
 		{
-			log.debug("DownLoadAction : DownLoading " + plotsToDownLoad[i]);
-			Observation observation = (Observation) dbmbReader.getVBModelBean( plotsToDownLoad[i]  );
+			log.debug("DownLoadAction : DownLoading " + selectedPlots[i]);
+			Observation observation = (Observation) dbmbReader.getVBModelBean( selectedPlots[i]  );
 			plotObsersevations.add(observation);
 		}
 		dbmbReader.releaseConnection();

@@ -11,8 +11,8 @@
  *   Authors: @author@
  *
  *  '$Author: anderson $'
- *  '$Date: 2004-06-09 22:40:23 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2004-06-14 22:16:51 $'
+ *  '$Revision: 1.8 $'
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -79,12 +79,12 @@
 
 <!-- Need to pass the list of plots choosen in the previous screen -->
 <%  	
-	String[] plotsToDownLoad = (String[]) request.getAttribute("plotsToDownLoad"); 
-	for(int i=0; i < plotsToDownLoad.length; i++)
+	String[] selectedPlots = (String[]) request.getAttribute("selectedPlots"); 
+	for(int i=0; i < selectedPlots.length; i++)
 	{
 		// print out the hidden attribute
 %>
- 		<input type="hidden" name="plotsToDownLoad" value="<%= plotsToDownLoad[i] %>"/>
+ 		<input type="hidden" name="selectedPlots" value="<%= selectedPlots[i] %>"/>
 <%  	
 	}   
 %>  

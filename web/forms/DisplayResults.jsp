@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2004-04-20 21:46:28 $'
-*  '$Revision: 1.20 $'
+*      '$Date: 2004-06-14 22:16:51 $'
+*  '$Revision: 1.21 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -37,10 +37,16 @@
   VEGBANK - Display Plots Summary
   </title>
   </head>
-
-  <body onLoad="refreshHighlight('plotsToDownLoad')">
-
   <script src="/vegbank/includes/utils.js"></script>
+  <script language="javascript">
+  function postAction(actionName) {
+	  document.theform.action = actionName;
+	  document.theform.submit();
+  }
+  </script>
+
+
+  <body onLoad="refreshHighlight('selectedPlots')">
 
   @vegbank_header_html_normal@
 
@@ -83,12 +89,17 @@
       </span>
 	  <br/> &nbsp;
 
-      <html:form action="/DownLoadManager">
+      <form name="theform" action="" method="post">
 
-	 <span class="item">Choose plots to download from the search results below.</span>
+	 <span class="item">Choose plots from the search results below, then...</span>
 	 <br/>
-         <input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
+		<input type="button" value="Download Selected Plots" onClick="postAction('DownLoadManager.do')"/> 
+		&nbsp; &nbsp; &nbsp; 
+		<!--
+		<input type="button" value="Request Access from Plot Owner" onClick="postAction('LoadPlotQuery.do')"/> 
+		-->
 	   <br/>&nbsp;
+
            <!-- set up a table -->
            <table cellspacing="0" cellpadding="1">
 	     <tr><td>&nbsp; &nbsp; &nbsp; &nbsp; </td>
@@ -107,9 +118,9 @@
 
 	 <tr bgcolor="#333333" align="center">
 	   <td class="whitetext" nowrap>
-	   	select +<a class="whitetext" href="javascript:checkAll('plotsToDownLoad')">all</a>
+	   	select +<a class="whitetext" href="javascript:checkAll('selectedPlots')">all</a>
 		&nbsp; 
-		-<a class="whitetext" href="javascript:clearAll('plotsToDownLoad')">none</a>
+		-<a class="whitetext" href="javascript:clearAll('selectedPlots')">none</a>
 	   </td>
 	   <td colspan="20"> &nbsp; </td>
 	 </tr>
@@ -188,22 +199,22 @@
               </html:link>
 
 
-	      <!-- Checkbox for download -->
+	      <!-- Checkbox for action selection -->
 	      <br/>
-              <input name="plotsToDownLoad" type="checkbox" value='<bean:write property="accessionCode" name="row"/>' 
-			  	 onclick="toggle(this)" id='<bean:write property="accessionCode" name="row"/>'>
+			<input name="selectedPlots" type="checkbox" value='<bean:write property="accessionCode" name="row"/>' 
+			onclick="toggle(this)" id='<bean:write property="accessionCode" name="row"/>'/>
                 <span class="itemlabel" style="cursor:hand">
-					<label for='<bean:write property="accessionCode" name="row"/>'>download</label></span>
-              </input>
+					<label for='<bean:write property="accessionCode" name="row"/>'>select</label></span>
 
 	    </th>
 
-	    <td align="center" valign="middle">
+	    <td align="left" valign="middle">
 	        <span class="category">
+			 	&nbsp; &nbsp;
 	          <bean:write name="row" property="accessionCode"/>   
 	        </span>
          </td>		 
-	    <td align="center" valign="middle">
+	    <td align="left" valign="middle">
 	        <span class="item">
 	          <bean:write name="row" property="authorObservationCode"/>   
 	        </span>
@@ -227,9 +238,9 @@
 
 	 <tr bgcolor="#333333" align="center">
 	   <td class="whitetext" nowrap>
-	   	select +<a class="whitetext" href="javascript:checkAll('plotsToDownLoad')">all</a>
+	   	select +<a class="whitetext" href="javascript:checkAll('selectedPlots')">all</a>
 		&nbsp; 
-		-<a class="whitetext" href="javascript:clearAll('plotsToDownLoad')">none</a><a name="bottom"></a>
+		-<a class="whitetext" href="javascript:clearAll('selectedPlots')">none</a><a name="bottom"></a>
 	   </td>
 	   <td colspan="20"> &nbsp; </td>
 	 </tr>
@@ -243,12 +254,15 @@
       </table>
 
 	<br/>
-	 <span class="item">Choose plots to download from the search results above.</span>
+	 <span class="item">Choose plots from the search results above, then...</span>
 	<br/>
-	<html:submit value="Continue to Download Wizard" /> 
+	<input type="button" value="Download Selected Plots" onClick="postAction('DownLoadManager.do')"/> &nbsp; &nbsp; &nbsp; 
+		<!--
+		<input type="button" value="Request Access from Plot Owner" onClick="postAction('LoadPlotQuery.do')"/> 
+		-->
 	<br/>&nbsp;
 
-     </html:form>      
+     </form>      
   </logic:notEqual>
   
   </font>

@@ -4,9 +4,9 @@ package org.vegbank.ui.struts;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-05 18:43:29 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-06-14 22:16:51 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public class DownLoadManagerAction extends Action
 		
 		// Get the form
 		DynaActionForm thisForm = (DynaActionForm) form;
-		String[] observationAccessions = (String[]) thisForm.get("plotsToDownLoad");
+		String[] observationAccessions = (String[]) thisForm.get("selectedPlots");
 		for ( int i = 0 ; i < observationAccessions.length ; i++)
 		{
 			LogUtility.log("DownLoadManagerAction: " + observationAccessions[i]);
@@ -76,7 +76,7 @@ public class DownLoadManagerAction extends Action
 		else
 		{
 			// Save this array to request for use latter
-			request.setAttribute("plotsToDownLoad", observationAccessions );
+			request.setAttribute("selectedPlots", observationAccessions );
 		}
 		
 		if (! errors.isEmpty())

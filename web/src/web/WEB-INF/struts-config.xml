@@ -47,7 +47,7 @@
 		</form-bean>
 		<form-bean name="DisplayQueryResultsForm"
 		           type="org.apache.struts.validator.DynaValidatorForm">
-			<form-property name="plotsToDownLoad"
+			<form-property name="selectedPlots"
 			               type="java.lang.String[]"/>
 		</form-bean>
 		<form-bean name="DownLoadForm"
@@ -58,12 +58,12 @@
 			<form-property name="formatType"
 			               type="java.lang.String"
 			               initial="xml"/>
-			<form-property name="plotsToDownLoad"
+			<form-property name="selectedPlots"
 			               type="java.lang.String[]"/>
 		</form-bean>
 		<form-bean name="DownLoadManagerForm"
 		           type="org.apache.struts.validator.DynaValidatorForm">
-			<form-property name="plotsToDownLoad"
+			<form-property name="selectedPlots"
 			               type="java.lang.String[]"/>
 		</form-bean>
 		<form-bean name="DropPlotForm"
