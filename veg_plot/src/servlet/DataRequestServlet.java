@@ -403,7 +403,8 @@ public void doGet(HttpServletRequest request,
 			out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");
 			
 			servletUtility l =new servletUtility();  
- 			l.getViewOption(requestDataType);
+ 			//the requestDataType 'plantTaxon' specifies the style sheet
+			l.getViewOption(requestDataType); 
  			out.println(l.outString);
 		}
 	}
@@ -422,6 +423,12 @@ public void doGet(HttpServletRequest request,
 			composeCommunityQuery(params);
 			issueQuery("simpleCommunityQuery");
 			out.println("Number of communities returned: "+queryOutputNum+"<br><br>");
+			
+			servletUtility l =new servletUtility();  
+ 			//the requestDataType 'plantTaxon' specifies the style sheet
+			l.getViewOption(requestDataType); 
+ 			out.println(l.outString);
+			
 		}
 	}
 	
@@ -540,6 +547,7 @@ public void doGet(HttpServletRequest request,
 			
 			//grab the relevent query attributes out of the hash
 			String taxonName = (String)params.get("taxonName");
+			String taxonNameType = (String)params.get("taxonNameType");
 		
 
 			System.out.println("printing from DataRequestServlet.composePlantTaxonomyQuery: "+
@@ -552,6 +560,10 @@ public void doGet(HttpServletRequest request,
  				"		<query> \n"+
  				"			<queryElement>taxonName</queryElement> \n"+
  				"			<elementString>"+taxonName+"</elementString> \n"+
+ 				"		</query> \n"+
+				"		<query> \n"+
+ 				"			<queryElement>taxonNameType</queryElement> \n"+
+ 				"			<elementString>"+taxonNameType+"</elementString> \n"+
  				"		</query> \n"+
  				"		<requestDataType>"+requestDataType+"</requestDataType> \n"+
  				"		<resultType>"+resultType+"</resultType> \n"+
