@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: anderson $'
-  *     '$Date: 2003-10-28 04:38:19 $'
-  *     '$Revision: 1.26 $'
+  *     '$Date: 2003-10-28 17:42:46 $'
+  *     '$Revision: 1.27 $'
 --> 
 <project name="vegclass" default="jar" basedir=".">
 
@@ -113,7 +113,7 @@
     <ant dir="veg_plot" target="deploy-vegtest" inheritAll="false"/>
   </target>
 
-  <target name="deploy-prepare">
+  <target name="deploy-prepare" depends="prepare">
     <mkdir dir="${web.context}"/>
     <mkdir dir="${web.inf}"/>
     <mkdir dir="${web.lib.dir}"/>
