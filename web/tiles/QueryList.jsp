@@ -91,8 +91,8 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
   
 	    <!-- First Cell-->
 	    <th width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap rowspan="2">
-	      <html:link page="/GenericDispatcher.do?command=RetrieveVBModelBean&jsp=GenericDisplay.jsp&rootEntity=PlantConcept" title="summary report" paramId="accessionCode" paramName="row" paramId="accessionCode" paramProperty="accessioncode">
-                <img align="center" src="@image_server@report_sm.gif" alt="Summary view"></img>
+	      <html:link href="@get_link@detail/plantconcept/?where=where_accessioncode" title="summary report" paramId="wparam" paramName="row" paramProperty="accessioncode">
+                <img align="center" src="@image_server@report_sm.gif" alt="Detail view" border="0"></img>
               </html:link>
               <html:link page="/DisplayEntity.do?resultType=rawXML" paramId="accessionCode" paramName="row" paramProperty="accessioncode" title="view raw XML">
                 <img align="center" border="0" src="@image_server@xml_icon.gif" alt="Raw XML view"></img>
