@@ -107,7 +107,6 @@ if (action.equals("compoundQuery")) {
 	
 	//pass the array to the sql mapping class - compound queries
 	sqlMapper w =new sqlMapper();
-	//w.developPlotQuery(transformedString, transformedStringNum, 2);
 	w.developCompoundPlotQuery(transformedString, transformedStringNum);
 	
 	
@@ -139,6 +138,29 @@ if (action.equals("verify")) {
 	}
 
 }
+
+//simple community query action
+if (action.equals("simpleCommunityQuery")) {
+
+	{
+		sqlMapper w =new sqlMapper();
+		w.developSimpleCommunityQuery(transformedString, 
+		transformedStringNum);
+		
+		//grab the results from the sqlMapper class
+		queryOutput=w.queryOutput;
+		queryOutputNum=w.queryOutputNum;
+		
+	
+	}
+
+}
+
+
+//if unknown action
+else {System.out.println("dbAccess.accessDatabase: unrecognized action: "
+	+action);}
+	
 } //end try
 catch( Exception e ) {System.out.println(" failed in: dbAccess.main  "+e.getMessage());}
 }
