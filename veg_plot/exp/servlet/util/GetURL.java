@@ -5,9 +5,9 @@ package servlet.util;
  *    with servlet. Based on code given in the book
  *		"Java Servlet Programming" by Hunter & crawford and
  *
- *     '$Author: harris $'
- *     '$Date: 2002-04-15 16:03:38 $'
- *     '$Revision: 1.4 $'
+ *     '$Author: farrell $'
+ *     '$Date: 2002-12-23 19:23:27 $'
+ *     '$Revision: 1.5 $'
  *
  */
 
@@ -32,7 +32,7 @@ public class GetURL
 	if (args.length == 0) 
 	{
 		//THIS USES THE GET POST METHOD
-		String urlString="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=coordinateTransform&returnformattype=html&x=4555&y=23553&zone=12";
+		String urlString="/framework/servlet/framework?action=coordinateTransform&returnformattype=html&x=4555&y=23553&zone=12";
 		int port = 80;
 		String requestType = "GET";
 		g.getPost(urlString, port, requestType);

@@ -21,9 +21,9 @@ import servlet.util.GetURL;
  * 		figuring the the type of client browser
  *    etc.. 
  *
- *	'$Author: harris $'
- *  '$Date: 2002-08-02 14:29:51 $'
- *  '$Revision: 1.16 $'
+ *	'$Author: farrell $'
+ *  '$Date: 2002-12-23 19:23:27 $'
+ *  '$Revision: 1.17 $'
  *
  */
 
@@ -219,7 +219,7 @@ public class ServletUtility
       sb.append("?userName="+userName+"&password="+passWord+"&authType="+authType);
 			
       //connect to the authentication servlet
-			String uri = "http://vegbank.nceas.ucsb.edu/framework/servlet/authenticate"+sb.toString().trim();
+			String uri = "/framework/servlet/authenticate"+sb.toString().trim();
 			System.out.println("OUT PARAMETERS: "+uri);
       int port=80;
       String requestType="POST";
@@ -459,7 +459,7 @@ public void getViewOption(String summaryViewType)
 	//+"<html> \n"
 	//+"<body> \n"
 	//+"<head> \n"
-	+"<form action=\"http://vegbank.nceas.ucsb.edu/framework/servlet/viewData\" method=\"GET\"> \n"
+	+"<form action=\"/framework/servlet/viewData\" method=\"GET\"> \n"
 	+"<input type=\"hidden\" name=\"resultType\" value=\"summary\" > \n"
 	+"<input type=\"hidden\" name=\"summaryViewType\" value=\""+summaryViewType+"\"> \n"
 	+"<input type=\"submit\" name=\"submitButton\" value=\"view data\" > \n"
