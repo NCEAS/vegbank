@@ -7,8 +7,8 @@
 * Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-02-03 18:41:08 $'
-*   '$Revision: 1.12 $'
+*   '$Date: 2003-02-24 20:01:44 $'
+*   '$Revision: 1.13 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -1659,8 +1659,8 @@ public class DBinsertPlotSource {
 			pstmt.setString(8, classTableAnalysis);
 			pstmt.setString(9, classMultiVariateAnalysis);
 			pstmt.setString(10, classExpertSystem);
-			this.insertDateField(classStartDate, pstmt, 11);
-			this.insertDateField(classStopDate, pstmt, 12);
+			Utility.insertDateField(classStartDate, pstmt, 11);
+			Utility.insertDateField(classStopDate, pstmt, 12);
 			//pstmt.setString(11, classStartDate);
 			//pstmt.setString(12, classStopDate);
 						
@@ -1979,8 +1979,8 @@ public class DBinsertPlotSource {
 			pstmt.setInt(2, coverMethodId);
 			pstmt.setInt(3, plotId);
 			pstmt.setString(4, observationCode);
-			this.insertDateField(startDate, pstmt, 5);
-			this.insertDateField(startDate, pstmt, 6);		
+			Utility.insertDateField(startDate, pstmt, 5);  
+			Utility.insertDateField(startDate, pstmt, 6);		
 			//pstmt.setString(5, startDate);
 			//pstmt.setString(6, stopDate);
 			pstmt.setInt(7, stratumMethodId);
@@ -2567,7 +2567,7 @@ public class DBinsertPlotSource {
 	 * @param psmnt
 	 * @param i
 	 * @throws SQLException
-	 */
+	 *
 	private void insertDateField ( String date, PreparedStatement psmnt, int i)
 		throws SQLException
 	{
@@ -2582,6 +2582,7 @@ public class DBinsertPlotSource {
 			psmnt.setString(i, date);
 		}
 	}
+	**/
 
 	/**
 	 * method that returns true if the project with this name exists in the 
@@ -2742,8 +2743,8 @@ public class DBinsertPlotSource {
 			pstmt.setInt(1, projectId);
 			pstmt.setString(2, projectName);
 			pstmt.setString(3, projectDescription);
-			this.insertDateField(projectStartDate, pstmt, 4);
-			this.insertDateField(projectStopDate, pstmt, 5);			
+			Utility.insertDateField(projectStartDate, pstmt, 4);
+			Utility.insertDateField(projectStopDate, pstmt, 5);			
       //pstmt.setString(4, projectStartDate);
       //pstmt.setString(5, projectStopDate);
 

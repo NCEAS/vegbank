@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *    '$Date: 2003-01-14 01:12:40 $'
- * 	'$Revision: 1.3 $'
+ *    '$Date: 2003-02-24 20:01:45 $'
+ * 	'$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1014,8 +1014,10 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 	 * @param transformedString - the string object containing the query elements
 	 * @param transformedStringNum -- the number of elements
 	 */
-	public void developSimplePlantTaxonomyQuery(String[] transformedString, 
-	int transformedStringNum)
+	public void developSimplePlantTaxonomyQuery(
+																																										String[] transformedString, 
+																																										int transformedStringNum
+																																										)
 	{
 		try 
 		{
@@ -1043,12 +1045,23 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 			{
 				startDate = (String)queryElementHash.get("startDate");
 				stopDate = (String)queryElementHash.get("stopDate");
-				taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType, taxonLevel, party, startDate, stopDate);
+				taxaResults = tqs.getPlantTaxonSummary(
+																																								taxonName, 
+																																								taxonNameType, 
+																																								taxonLevel, party, 
+																																								startDate, 
+																																								stopDate
+																																							);
 			}
 			else if ( queryElementHash.containsKey("targetDate") )
 			{
 				targetDate = (String)queryElementHash.get("targetDate");
-				taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType, taxonLevel, party, targetDate);
+				taxaResults = tqs.getPlantTaxonSummary(
+																																								taxonName, 
+																																								taxonNameType, 
+																																								taxonLevel, party, 
+																																								targetDate
+																																							);
 			}
 			queryOutputNum=taxaResults.size();
 			//print the results by passing the summary vector to the xml writer class

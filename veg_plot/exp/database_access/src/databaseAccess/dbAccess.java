@@ -31,8 +31,8 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-01-14 01:23:51 $'
- * 	'$Revision: 1.5 $'
+ *  '$Date: 2003-02-24 20:01:44 $'
+ * 	'$Revision: 1.6 $'
  */
 
 public class dbAccess {
@@ -140,21 +140,22 @@ public class dbAccess {
 	 * @param action - database action
 	 *
 	 */
-	public void accessDatabase(
-		String inputXml,
-		String inputXSL,
-		String action) {
-		try {
+	public void accessDatabase( String inputXml, String inputXSL, String action) 
+	{
+		try 
+		{
 
 			//first initiate the local database pooling class so that connections may be
 			// used by the classes that are going to be subsequently called
 			LocalDbConnectionBroker.manageLocalDbConnectionBroker("initiate");
 
-			//call the method to transform the data xml document and pass back a string writer  
-			transformXML m = new transformXML();
-			m.getTransformed(inputXml, inputXSL);
 			//the stringwriter containg all the transformed data
-			StringWriter transformedData = m.outTransformedData;
+			StringWriter transformedData = new StringWriter();
+			
+			//call the method to transform the data xml document 
+			transformXML m = new transformXML();
+			m.getTransformed(inputXml, inputXSL, transformedData);
+			
 			//pass to the utility class to convert the StringWriter to an array
 			Utility u = new Utility();
 			u.convertStringWriter(transformedData);

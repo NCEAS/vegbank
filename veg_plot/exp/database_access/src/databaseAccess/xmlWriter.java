@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:23:51 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2003-02-24 20:01:45 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ package databaseAccess;
 
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -51,7 +52,8 @@ public class  xmlWriter
  	 *  data and prints it to file in an xml format
    *
    */
-	public void writePlotSummary(Hashtable cumulativeSummaryResultHash, 
+	public void writePlotSummary(
+		Hashtable cumulativeSummaryResultHash,
 		String outFile)
 	{
 		try 
@@ -294,8 +296,13 @@ public class  xmlWriter
 	 *	@param taxonNameType -- the type of name used for the query (eg. code, commonname, scientificname)
 	 *	@param taxonNameLevel -- the level of the concept (eg, variety, species)
  	 */
-	public void writePlantTaxonomySummary(Vector taxaResults, String outFile, String taxonName, 
-	String taxonNameType, String taxonNameLevel)
+	public void writePlantTaxonomySummary(
+		Vector taxaResults, 
+		String outFile, 
+		String taxonName, 
+		String taxonNameType, 
+		String taxonNameLevel
+		)
 	{
 		try 
 		{
@@ -326,49 +333,13 @@ public class  xmlWriter
 				//the current hashtable used to store the plant instance attributes
 				Hashtable currentTaxonHash = (Hashtable)taxaResults.elementAt(i);
 				
-				String plantNameId = (String)currentTaxonHash.get("plantNameId");
-				String plantConceptId = (String)currentTaxonHash.get("plantConceptId");
-			 	String plantName = (String)currentTaxonHash.get("plantName");
-				String status = (String)currentTaxonHash.get("status");
-			 	String classSystem = (String)currentTaxonHash.get("classSystem");
-			 	String plantLevel = (String)currentTaxonHash.get("plantLevel");
-			 	String parentName = (String)currentTaxonHash.get("parentName");
-			 	String acceptedSynonym = (String)currentTaxonHash.get("acceptedSynonym");
-			 	String startDate = (String)currentTaxonHash.get("startDate");
-			 	String stopDate = (String)currentTaxonHash.get("stopDate");
-				String plantDescription = (String)currentTaxonHash.get("plantDescription");
-				String plantNameAlias = (String)currentTaxonHash.get("plantNameAlias");
-				String plantCode = (String)currentTaxonHash.get("code");
-				String commonName = (String)currentTaxonHash.get("commonName");
-				String plantConceptRefAuthor = (String)currentTaxonHash.get("plantConceptRefAuthor");
-				String plantConceptRefDate = (String)currentTaxonHash.get("plantConceptRefDate");
-				String plantUsagePartyOrgName = (String)currentTaxonHash.get("plantUsagePartyOrgName");
-				String scientificName = (String)currentTaxonHash.get("scientificName");
-				
 				sb.append("<taxon> \n");
 				sb.append("	<name> \n");
-				sb.append("		<plantNameId>"+plantNameId+"</plantNameId> \n");
-				sb.append("		<plantConceptId>"+plantConceptId+"</plantConceptId> \n");
-				sb.append("		<plantName>"+plantName+"</plantName> \n");
-				sb.append("		<plantNameAlias>"+plantNameAlias+"</plantNameAlias> \n");
-				sb.append("		<status>"+status+"</status> \n");
-				sb.append("		<classSystem>"+classSystem+"</classSystem> \n");
-				sb.append("		<plantLevel>"+plantLevel+"</plantLevel> \n");
-				sb.append("		<parentName>"+parentName+"</parentName> \n");
-				sb.append("		<acceptedSynonym>"+acceptedSynonym+"</acceptedSynonym> \n");
-				sb.append("		<startDate>"+startDate+"</startDate> \n");
-				sb.append("		<stopDate>"+stopDate+"</stopDate> \n");
-				sb.append("		<plantDescription>"+plantDescription+"</plantDescription> \n");
-				sb.append("		<plantCode>"+plantCode+"</plantCode> \n");
-				sb.append("		<commonName>"+commonName+"</commonName> \n");
-				sb.append("		<plantConceptRefAuthor>"+plantConceptRefAuthor+"</plantConceptRefAuthor> \n");
-				sb.append("		<plantConceptRefDate>"+plantConceptRefDate+"</plantConceptRefDate> \n");
-				sb.append("		<plantUsagePartyOrgName>"+plantUsagePartyOrgName+"</plantUsagePartyOrgName> \n");
-				sb.append("		<scientificName>"+scientificName+"</scientificName> \n");
 				
+				this.hashTable2XML(sb, currentTaxonHash);
+
 				sb.append("	</name> \n");
 				sb.append("</taxon> \n");
-
 			}
 			sb.append("</plantTaxa> \n");
 			out.println(sb.toString() );
@@ -382,6 +353,19 @@ public class  xmlWriter
 		
 	}
 
+	private void hashTable2XML ( StringBuffer sb, Hashtable hash)
+	{
+		//System.out.println("------> " + hash.toString() );
+		Enumeration enum = hash.keys();			
+
+		while ( enum.hasMoreElements() )
+		{
+			String key = (String) enum.nextElement();
+			// append <key>value</key> for each key value
+			sb.append("<"+key+">" + hash.get(key) + "</"+key+">\n");			
+			//System.out.println("------> " + key +" and " + currentTaxonHash.get(key) );
+		}	
+	}
 			
 			
 			
@@ -478,244 +462,10 @@ public class  xmlWriter
 			//print to the output file
 			out.println( printString.toString() );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
-			 System.out.println("xmlWriter > Exception: " + 
-			e.getMessage());
+			System.out.println("xmlWriter > Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
-
-
-
- /**
- *  This is an old method that was used to print plot summary information and
- * used as input an array of Strings that were tokenized into variables an then
- * printed out.  The newer method that uses the same class as the data
- * formatting/loading classes is above and uses a hash table that is passed to
- * it instead of the array with strings.
- */
-
-public void writePlotSummary(String plotSummary[], int plotSummaryNum, String outFile)
-{
-try {
-String nullValue="nullValue";
-	
-//set up the output query file called query.xml	using append mode 
-PrintStream out  = new PrintStream(new FileOutputStream(outFile, false)); 	
-	
-//print the header stuff
-out.println("<?xml version=\"1.0\"?>       ");
-out.println("<!DOCTYPE vegPlot SYSTEM \"vegPlot.dtd\">     ");
-out.println("<vegPlot>");
-	
-//tokenize the incomming string array into respective elements
-//make the token map and put into cvs
-for (int i=0;i<=plotSummaryNum; i++) {	
-	 StringTokenizer t = new StringTokenizer(plotSummary[i], "|");
-	 String plotId=t.nextToken().trim();
-	 String authorPlotCode=t.nextToken();
-	 String project_id=t.nextToken();
-	 String surfGeo=t.nextToken();
-	 String plotType=t.nextToken();
-	 String origLat=t.nextToken();
-	 String origLong=t.nextToken();
-	 
-	String plotShape=t.nextToken();
-	String plotSize=t.nextToken();
-	String plotSizeAcc=t.nextToken();
-	String altValue=t.nextToken();
-	String altPosAcc=t.nextToken();
-	String slopeAspect=t.nextToken();
-	String slopeGradient=t.nextToken();
-	String slopePosition=t.nextToken();
-	String hydrologicRegime=t.nextToken();
-	String soilDrainage=t.nextToken();
-	String state=t.nextToken();
-	String currentCommunity=t.nextToken();
-	
-	 
-	 //the remaining elements are species so grab the species names and 
-	 //stick into a array
-	 String buf=null;
-	 String speciesArray[]=new String[100000];
-	 int speciesArrayNum=0;
-	 while (t.hasMoreTokens()) {
-		buf=t.nextToken();
-		//System.out.println("writer "+buf);
-		speciesArray[speciesArrayNum]=buf;
-		speciesArrayNum++;
-	 }
-	 
-//print to elements in the correct order
-out.println("<project>");
-out.println("	<projectName>"+authorPlotCode+"</projectName>");
-out.println("	<projectDescription>TNC PROJECT:</projectDescription>");
-out.println("	<projectContributor>");
-out.println("		<role>"+nullValue+"</role>");
-out.println("		<party>");
-out.println("			<salutation>"+nullValue+" </salutation>");
-out.println("			<givenName>"+nullValue+"  </givenName>");
-out.println("			<surName>"+nullValue+" </surName>");
-out.println("			<organizationName>"+nullValue+" </organizationName>");
-out.println("			<positionName>"+nullValue+" </positionName>");
-out.println("			<hoursOfService>"+nullValue+" </hoursOfService>");
-out.println("			<contactInstructions>"+nullValue+" </contactInstructions>");
-out.println("			<onlineResource>        ");
-out.println("				<linkage>"+nullValue+"</linkage>       ");
-out.println("				<protocol>"+nullValue+"</protocol>       ");
-out.println("				<name>"+nullValue+"</name>       ");
-out.println("				<applicationProfile>"+nullValue+"</applicationProfile>       ");
-out.println("				<description>"+nullValue+"</description>       ");
-out.println("			</onlineResource>        ");
-out.println("			<telephone>        ");
-out.println("				<phoneNumber>nullValue</phoneNumber>        ");
-out.println("				<phoneType>"+nullValue+"</phoneType>       ");
-out.println("			</telephone>        ");
-out.println("			<email>        ");
-out.println("				<emailAddress>"+nullValue+"</emailAddress>       ");
-out.println("			</email>        ");
-out.println("			<address>        ");
-out.println("				<deliveryPoint>"+nullValue+"</deliveryPoint>       ");
-out.println("				<city>"+nullValue+"</city>       ");
-out.println("				<administrativeArea>"+nullValue+"</administrativeArea>       ");
-out.println("				<postalCode>"+nullValue+"</postalCode>       ");
-out.println("				<country>"+nullValue+"</country>       ");
-out.println("				<currentFlag>"+nullValue+"</currentFlag>       ");
-out.println("			</address>        ");
-out.println("		</party>");
-out.println("	</projectContributor>        ");
-out.println("	<plot>        ");
-out.println("		<plotId>"+ plotId +"</plotId>       ");
-out.println("		<authorPlotCode>"+ authorPlotCode+"</authorPlotCode>       ");
-out.println("		<parentPlot>"+nullValue+"</parentPlot>       ");
-out.println("		<plotType>"+plotType+"</plotType>       ");
-out.println("		<samplingMethod>"+nullValue+"</samplingMethod>       ");
-out.println("		<coverScale>"+nullValue+"</coverScale>       ");
-out.println("		<plotOriginLat>"+origLat+" </plotOriginLat>       ");
-out.println("		<plotOriginLong>"+origLong+"</plotOriginLong>       ");
-out.println("		<plotShape>"+plotShape+" </plotShape>       ");
-out.println("		<plotSize>"+plotSize+"</plotSize>       ");
-out.println("		<plotSizeAcc>"+plotSizeAcc+"</plotSizeAcc>       ");
-out.println("		<altValue>"+altValue+" </altValue>       ");
-out.println("		<altPosAcc>"+altPosAcc+"</altPosAcc>       ");
-out.println("		<slopeAspect>"+slopeAspect+"</slopeAspect>       ");
-out.println("		<slopeGradient>"+slopeGradient+"</slopeGradient>       ");
-out.println("		<slopePosition>"+slopePosition+" </slopePosition>       ");
-out.println("		<hydrologicRegime>"+hydrologicRegime+" </hydrologicRegime>       ");
-out.println("		<soilDrainage>"+soilDrainage+" </soilDrainage>       ");
-out.println("		<surfGeo>"+surfGeo+" </surfGeo>       ");
-out.println("		<state>"+state+" </state>       ");
-out.println("		<currentCommunity>"+currentCommunity+" </currentCommunity>       ");
-
-
-out.println("		<plotObservation>        ");
-out.println("			<previousPlot>"+nullValue+"</previousPlot>       ");
-out.println("			<plotStartDate>"+nullValue+" </plotStartDate>       ");
-out.println("			<plotStopDate>"+nullValue+"</plotStopDate>       ");
-out.println("			<dateAccuracy>"+nullValue+"</dateAccuracy>       ");
-out.println("			<effortLevel>"+nullValue+"</effortLevel>       ");
-
-out.println("			<strata>        ");
-out.println("				<stratumType>"+nullValue+"</stratumType>       ");	
-out.println("				<stratumCover>"+nullValue+"</stratumCover>       ");
-out.println("				<stratumHeight>"+nullValue+"</stratumHeight>       ");
-out.println("			</strata>        ");
-
-
-
-
-/*this is where to print out the list of different species found in the resultset
-* for now just print the unique ones*/
-Utility m = new Utility();
-m.getUniqueArray(speciesArray, speciesArrayNum);
-
-//print the unique species types
-for (int h=0; h<m.outArrayNum; h++) {
-if (h>5) {}
-else 
-{	
-	out.println("                   <taxonObservations>        ");
-	out.println("                           <authNameId>"+m.outArray[h]+"</authNameId>       ");
-	out.println("                           <originalAuthority>"+nullValue+"</originalAuthority>       ");
-	out.println("                           <strataComposition>        ");
-	out.println("                                   <strataType>"+nullValue+"</strataType>       ");
-	out.println("                                   <percentCover>"+nullValue+"</percentCover>       ");
-	out.println("                           </strataComposition>        ");
-	out.println("                           <interptretation>        ");
-	out.println("                                   <circum_id>"+nullValue+"</circum_id>       ");
-	out.println("                                   <role>"+nullValue+"</role>       ");
-	out.println("                                   <date>"+nullValue+"</date>       ");
-	out.println("                                   <notes>"+nullValue+"</notes>       ");
-	out.println("                           </interptretation>        ");
-	out.println("                   </taxonObservations>        ");
-}
-}
-
-
-
-out.println("			<communityType>        ");
-out.println("				<classAssociation>"+nullValue+"</classAssociation>       ");
-out.println("				<classQuality>"+nullValue+"</classQuality>       ");
-out.println("				<startDate>"+nullValue+"</startDate>       ");
-out.println("				<stopDate>"+nullValue+"</stopDate>       ");
-out.println("			</communityType>        ");
-
-out.println("			<citation>        ");
-out.println("				<title>"+nullValue+"</title>       ");
-out.println("				<altTitle>"+nullValue+"</altTitle>       ");
-out.println("				<pubDate>"+nullValue+"</pubDate>       ");
-out.println("				<edition>"+nullValue+"</edition>       ");
-out.println("				<editionDate>"+nullValue+"</editionDate>       ");
-out.println("				<seriesName>"+nullValue+"</seriesName>       ");
-out.println("				<issueIdentification>"+nullValue+"</issueIdentification>       ");
-out.println("				<otherCredentials>"+nullValue+"</otherCredentials>       ");
-out.println("				<page>"+nullValue+"</page>       ");
-out.println("				<isbn>"+nullValue+"</isbn>       ");
-out.println("				<issn>"+nullValue+"</issn>       ");
-
-out.println("				<citationContributor>        ");
-out.println("				</citationContributor>        ");
-
-out.println("			</citation>        ");
-out.println("		</plotObservation>        ");
-
-out.println("		<namedPlace>        ");
-out.println("			<placeName>"+nullValue+"</placeName>       ");
-out.println("			<placeDescription>"+nullValue+"</placeDescription>       ");
-out.println("			<gazeteerRef>"+nullValue+"</gazeteerRef>       ");
-out.println("		</namedPlace>        ");
-
-out.println("		<stand>        ");
-out.println("			<standSize>"+nullValue+"</standSize>       ");
-out.println("			<standDescription>"+nullValue+"</standDescription>       ");
-out.println("			<standName>"+nullValue+"</standName>       ");
-out.println("		</stand>        ");
-
-out.println("		<graphic>        ");
-out.println("			<browseName>"+nullValue+"</browseName>       ");
-out.println("			<browseDescription>"+nullValue+"</browseDescription>       ");
-out.println("			<browseType>"+nullValue+"</browseType>       ");
-out.println("			<browseData>"+nullValue+"</browseData>       ");
-out.println("		</graphic>        ");
-
-out.println("		<plotContributor>        ");
-out.println("			<role>"+nullValue+"</role>       ");
-out.println("			<party>"+nullValue+"</party>       ");
-out.println("		</plotContributor>        ");
-out.println("	</plot>");
-out.println("</project>");
-
-
-}
-//print the end of the file
-out.println("</vegPlot>");
-	
-	
-}
-catch (Exception e) {System.out.println("failed in xmlWriter.writePlotSummary" + 
-	e.getMessage());}
-
-}	
-	
 }
