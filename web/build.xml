@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-02-28 05:42:27 $'
-* '$Revision: 1.35 $'
+* '$Author: farrell $'
+* '$Date: 2003-03-25 20:17:44 $'
+* '$Revision: 1.36 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -195,7 +195,8 @@
 <target name="forms" depends="hdrftr">
 	<copy todir="${forms_server}" filtering="yes">
     <fileset dir="${forms}"
-      includes="nested-plot-query.html
+      includes="*jsp
+      nested-plot-query.html
 			resultset-download.html
 			plot-query.html
 			plant-query.html
@@ -220,6 +221,7 @@
 			certification_valid.html
 			generic_form.html
 			user_update_form.html
+			user_update_password_form.html
 			submit-plantname-init.html
 			submit-plantname-rectification.html
 			submit-plantname-reference.html

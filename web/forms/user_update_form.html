@@ -1,17 +1,18 @@
 <html>
 <!-- 
-  *   '$RCSfile: user_update_form.html,v $'
-  *     Purpose: 
-  *   Copyright: 2000 Regents of the University of California and the
+  * '$RCSfile: user_update_form.html,v $'
+  * Purpose: 
+  * Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
-  *     Authors: @author@
+  * Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2003-02-01 18:21:52 $'
-  *  '$Revision: 1.6 $'
+  * '$Author: farrell $'
+  * '$Date: 2003-03-25 20:17:44 $'
+  * '$Revision: 1.7 $'
   *
   *
   -->
+  
 <HEAD>
 <!-- #BeginEditable "doctitle" --> 
 <TITLE>VegBank User Update</TITLE>
@@ -35,22 +36,11 @@
         <input type="submit" name="Submit" value="Submit">
       </td>
     </tr>
-		
+	
 		<tr> 
       <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">Email address: </font></span></td>
       <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2">  
         <input type="text" class="iform"  disabled name="emailAddress" size="20" maxlength="20" value="@emailAddress@">
-        </font>
-			</td>
-    </tr>
-		
-		<tr> 
-      <td colspan="2"><span class="VegBank"><font face="Georgia, Times New Roman, Times, serif" size="2">Password: </font></span></td>
-      <td colspan="3"><font face="Georgia, Times New Roman, Times, serif" size="2">  
-        <input type="password"  class="iform" disabled  name="password" size="20" maxlength="20" value="@password@">
-<!--        re-type: 
-        <input type="password" name="password2" size="25" maxlength="25"  >
--->
         </font>
 			</td>
     </tr>
@@ -151,6 +141,12 @@
     </tr>
 		
 		</table>
+    <!-- Modify your password -->
+    <h3 class="VegBank">
+      <font face="Georgia, Times New Roman, Times, serif">
+        <a href="/framework/servlet/usermanagement?action=changeuserpassword&task=display">Click here to change your password</a>
+      </font>
+    </h3>
 
 @vegbank_footer_html_tworow@
 </BODY>

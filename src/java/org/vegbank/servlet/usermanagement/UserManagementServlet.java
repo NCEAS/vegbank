@@ -1,13 +1,13 @@
 package org.vegbank.servlet.usermanagement; 
 
 /**
- *  '$RCSfile: UserManagementServlet.java,v $'
+ *    '$RCSfile: UserManagementServlet.java,v $'
  *    Authors: @authors@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-03-20 20:50:17 $'
- * '$Revision: 1.3 $'
+ *   '$Date: 2003-03-25 20:17:45 $'
+ *   '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,8 +48,8 @@ import org.vegbank.servlet.util.ServletUtility;
 
 public class UserManagementServlet extends HttpServlet 
 {
-	private String vegBankAdmin="peet@unc.edu";
-	private UserDatabaseAccess userdb;
+	private static final  String vegBankAdmin="peet@unc.edu";
+	//private UserDatabaseAccess userdb;
 	private ServletUtility util = new ServletUtility();
   private GetURL gurl = new GetURL();
 	
@@ -58,18 +58,22 @@ public class UserManagementServlet extends HttpServlet
 	//private String cookieValue;
 	ServletUtility su = new ServletUtility();
 	
+	
+	//TODO: Move into properties file
 	//this is the html paget that will get edited by this servlet so that is
 	//appers to be a custom page for the correponding client
-	private String actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
+	private static final String  actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
 	//this is the modified page that is to be sent back to the client
 	//private String outFile ="/tmp/actions_dev.html";
 
 	// these are the forms for the certification input:
-	private String certificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/certification_valid.html";
-	private String certificationValidation = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
-	private String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
-	private String userUpdateValidation = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
-	private String userUpdateTemplate =  "/usr/local/devtools/jakarta-tomcat/webapps/forms/user_update_form.html";
+	private static final String certificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/certification_valid.html";
+	private static final String certificationValidation = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
+	private static final String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
+	private static final String userUpdateValidation = "/usr/local/devtools/jakarta-tomcat/webapps/forms/valid.html";
+	private static final String userUpdateTemplate =  "/usr/local/devtools/jakarta-tomcat/webapps/forms/user_update_form.html";
+	private static final String userPasswordUpdateTemplate =  "/usr/local/devtools/jakarta-tomcat/webapps/forms/user_update_password_form.html";
+	
 	//constructor
 	public UserManagementServlet()
 	{
@@ -80,111 +84,176 @@ public class UserManagementServlet extends HttpServlet
 	}
 	
 	/** Handle "GET" method requests from HTTP clients */
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
   	throws IOException, ServletException 	
+	{
+		try 
 		{
-    	doPost(request, response);
+			//get the parameters
+			Hashtable params = util.parameterHash(req);
+			System.out.println("UserManagementServlet > in params: " + params  );
+	
+			//the cookie value is the same as the user name and email address
+			String cookieValue = su.getCookieValue(req);
+	
+			String action = getAction( params );
+			if (action == null)
+			{
+				System.out.println("UserManagementServlet > action parameter required: ");
+			}
+			else
+			{
+				//SHOW THE USER'S CUSTOMIZED OPTIONS PAGE
+				if ( action.equals("options") )
+				{
+					res.setContentType("text/html");
+					PrintWriter out = res.getWriter();
+					//copy the actions file and then displat to the browser
+					//String actionFile = "/usr/local/devtools/jakarta-tomcat_dev/webapps/vegbank/general/actions.html";
+					//String outFile ="/tmp/actions_dev.html";
+					String token = "user";
+					String value = cookieValue;
+					//util.filterTokenFile(actionFile, outFile, token, value);
+					// if the value or token are null then send an error
+					if ( value == null || token == null )
+					{
+						System.out.println("UserManagementServlet > error the cookie value or token : " +token+" "+value);
+					}
+					else
+					{
+						FileReader inFile = new FileReader(actionFile);
+						util.filterTokenFile(inFile, out, token, value);
+					}
+				}
+				// LOGOUT USER 
+				else if ( action.equals("logout") )
+				{
+					res.setContentType("text/html");
+					PrintWriter out = res.getWriter();
+					this.handleLogout(req, res, out);
+				}
+				// APPLY FOR A CERTIFICATION LEVEL
+				else if ( action.equals("certification") )
+				{
+					res.setContentType("text/html");
+					this.handleCertification(req, res);
+				}
+				// CHANGE USER SETTINGS 
+				else if ( action.equals("changeusersettings") )
+				{
+					res.setContentType("text/html");
+					this.handleSettingsModification(req, res);
+				}
+				// GET THE USER'S PERMISSION LEVEL
+				else if ( action.equals("getpermissionlevel") )
+				{
+					this.handlePermissionLevelRequest(req, res);
+				}
+				else if  ( action.equals("changeuserpassword") )
+				{
+					this.handlePasswordModification(req, res);
+				}
+				else
+				{
+					System.out.println("UserManagementServlet > unrecognized action: " + action);
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+ e.getMessage() );
+			e.printStackTrace();
+		}
 		}
 
 	/** Handle "POST" method requests from HTTP clients */
 	public void doPost(HttpServletRequest req, HttpServletResponse res)
   	throws ServletException, IOException 
 	{
-///			res.setContentType("text/html");
-///			PrintWriter out = res.getWriter();
-			try 
-			{
-				//get the parameters
-				Hashtable params = util.parameterHash(req);
-				System.out.println("UserManagementServlet > in params: " + params  );
-				
-				//the cookie value is the same as the user name and email address
-				String cookieValue = su.getCookieValue(req);
-				
-				String action = getAction( params );
-				if (action == null)
-				{
-					System.out.println("UserManagementServlet > action parameter required: ");
-				}
-				else
-				{
-					//SHOW THE USER'S CUSTOMIZED OPTIONS PAGE
-					if ( action.equals("options") )
-					{
-						res.setContentType("text/html");
-						PrintWriter out = res.getWriter();
-						//copy the actions file and then displat to the browser
-						//String actionFile = "/usr/local/devtools/jakarta-tomcat_dev/webapps/vegbank/general/actions.html";
-						//String outFile ="/tmp/actions_dev.html";
-						String token = "user";
-						String value = cookieValue;
-						//util.filterTokenFile(actionFile, outFile, token, value);
-						// if the value or token are null then send an error
-            if ( value == null || token == null )
-            {
-              System.out.println("UserManagementServlet > error the cookie value or token : " +token+" "+value);
-            }
-            else
-            {
-            	FileReader inFile = new FileReader(actionFile);
-						  util.filterTokenFile(inFile, out, token, value);
-              //print the outfile to the browser
-						  //String s = util.fileToString(outFile);
-						  //out.println(s);
-            }
-					}
-					//SHOW USER FILES 
-//					else if ( action.equals("showfiles") )
-//					{
-//						res.setContentType("text/html");
-//						PrintWriter out = res.getWriter();
-//						this.showUserFiles(req, res, out);
-//					}
-					// LOGOUT USER 
-					else if ( action.equals("logout") )
-					{
-						res.setContentType("text/html");
-						PrintWriter out = res.getWriter();
-						this.handleLogout(req, res, out);
-					}
-					// DOWN LOAD THE CLIENT
-					else if ( action.equals("download") )
-					{
-						//res.setContentType("text/html");
-						//PrintWriter out = res.getWriter();
-						this.handleDownload(req, res);
-					}
-					// APPLY FOR A CERTIFICATION LEVEL
-					else if ( action.equals("certification") )
-					{
-						res.setContentType("text/html");
-						this.handleCertification(req, res);
-					}
-					// CHANGE USER SETTINGS 
-					else if ( action.equals("changeusersettings") )
-					{
-						res.setContentType("text/html");
-						this.handleSettingsModification(req, res);
-					}
-					// GET THE USER'S PERMISSION LEVEL
-					else if ( action.equals("getpermissionlevel") )
-					{
-						this.handlePermissionLevelRequest(req, res);
-					}
-					
-					else
-					{
-						System.out.println("UserManagementServlet > unrecognized action: " + action);
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				System.out.println("Exception: "+ e.getMessage() );
-				e.printStackTrace();
-			}
-		}
+		this.doGet(req, res);
+	}
 	
+	/**
+	 * Handle password modification 
+	 * 
+	 * @param req
+	 * @param res
+	 */
+	private void handlePasswordModification(HttpServletRequest req, HttpServletResponse res)
+	{
+		StringWriter output = new StringWriter();
+		String errorMessage = "";
+		boolean success = true;
+		UserDatabaseAccess userdb = new UserDatabaseAccess();
+		
+		System.out.println("UserManagementServlet > performing user password  modification");
+		
+		String currentpassword = req.getParameter("currentpassword");
+		String newpassword1 = req.getParameter("newpassword1");
+	 	String newpassword2 = req.getParameter("newpassword2");		
+		String emailAddress = (String) req.getSession().getAttribute("emailAddress");
+		String task = req.getParameter("task");
+
+
+		
+		System.out.println("UserManagementServlet > passwords " + newpassword1 + " "+ newpassword2 + " " + currentpassword  + " " + emailAddress);
+		// just requesting form display
+		if ( task != null && task.equals("display") )
+		{
+			success =false;
+			errorMessage = ""; // No error to display		
+		}
+		// Autenticate the user
+		else if (! userdb.authenticateUser(emailAddress, currentpassword) )
+		{
+			success = false;
+			errorMessage = "<b class=\"error\">Please enter correct current password</b>";
+		}
+		// Disallow empty passwords
+		else if (newpassword1.length() < 1 )
+		{
+			success = false;
+			errorMessage = "<b class=\"error\">Empty password not allowed</b>";				
+		}
+		// Check that the new passwords are identical
+		else if (! newpassword1.equals(newpassword2) )
+		{
+			success = false;
+			errorMessage = "<b class=\"error\">Please enter identical passwords</b>";
+		}
+			
+		if (success)
+		{
+			userdb.updatePassword(newpassword1, emailAddress);		 
+			// send a success message
+			Hashtable replaceHash = new Hashtable();
+			String message = "Your VegBank password has been updated. <br>";
+			replaceHash.put("messages",  message);
+			util.filterTokenFile(genericForm, output, replaceHash);		
+		}
+		else
+		{
+			// Return user to the form
+			Hashtable h = new Hashtable();
+			h.put("errormessage", errorMessage );
+			// Back to the form
+			util.filterTokenFile(userPasswordUpdateTemplate, output, h);
+		}
+		
+		//print the outfile to the browse
+		try
+		{
+			res.setContentType("text/html");
+			PrintWriter out = res.getWriter();
+			out.print( output.toString() );	
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}	
+
+	}
+
 	/**
 	 * method that returns the integer value between 1-5 of the user's 
 	 * permission level based on the name that is passed 
@@ -203,7 +272,7 @@ public class UserManagementServlet extends HttpServlet
 			 {
 				 String email = (String)params.get("user");
 				 System.out.println("UserManagementServlet > looking up the permission level for: " + email);
-				 userdb = new UserDatabaseAccess();
+				UserDatabaseAccess userdb = new UserDatabaseAccess();
 				 int level = userdb.getUserPermissionLevel(email);
 				 out.println(level);
 				 out.close();
@@ -229,6 +298,7 @@ public class UserManagementServlet extends HttpServlet
 	 */
 	 private void handleSettingsModification(HttpServletRequest req, HttpServletResponse res )
 	 {
+		String errorMessage ="";
 		 try
 		 {
 			 System.out.println("UserManagementServlet > performing user settings modification");
@@ -243,8 +313,7 @@ public class UserManagementServlet extends HttpServlet
 					 
 					 //get the input paramters
 					 String surName = (String)params.get("surName");
-					 String givenName = (String)params.get("givenName");
-					 String password = (String)params.get("password");
+					 String givenName = (String)params.get("givenName");		 
 					 String permissionType = (String)params.get("permissionType");
 					 String institution = (String)params.get("institution");
 					 String ticketCount = (String)params.get("ticketCount");
@@ -258,7 +327,6 @@ public class UserManagementServlet extends HttpServlet
 					 //put into a hashtable
 					 Hashtable h = new Hashtable();
 					 h.put("emailAddress", emailAddress);
-					 h.put("password", ""+password);
 					 h.put("surName", ""+surName);
 					 h.put("givenName", ""+givenName);
 					 h.put("permissionType", ""+permissionType);
@@ -271,28 +339,29 @@ public class UserManagementServlet extends HttpServlet
 					 h.put("zipCode", ""+zipCode);
 					 h.put("phoneNumber", ""+phoneNumber);
 					 
-					 // instantiate the database
-					 userdb = new UserDatabaseAccess();
-					 userdb.updateUserInfo(h);
-					 
-					 // send a success message
-					 Hashtable replaceHash = new Hashtable();
-					 StringBuffer sb = new StringBuffer();
-					 sb.append("Thank you "+givenName+" "+surName+"! <br> ");
-					 sb.append("Your VegBank profile has been updated. <br>");
-					 replaceHash.put("messages",  sb.toString());
-						StringWriter output = new StringWriter();
-					 util.filterTokenFile(genericForm, output, replaceHash);
-						//print the outfile to the browser
-						PrintWriter out = res.getWriter();
 
-						out.print( output.toString() );
-					 //res.sendRedirect("/forms/valid.html");
+					// instantiate the database
+					UserDatabaseAccess userdb = new UserDatabaseAccess();
+					userdb.updateUserInfo(h);
+				 
+					// send a success message
+					Hashtable replaceHash = new Hashtable();
+					StringBuffer sb = new StringBuffer();
+					sb.append("Thank you "+givenName+" "+surName+"! <br> ");
+					sb.append("Your VegBank profile has been updated. <br>");
+					replaceHash.put("messages",  sb.toString());
+					 StringWriter output = new StringWriter();
+					util.filterTokenFile(genericForm, output, replaceHash);
+					
+					 //print the outfile to the browser
+					 PrintWriter out = res.getWriter();
+					 out.print( output.toString() );
+
 				 }
 				 else
 				 {
 					 System.out.println("UserManagementServlet > sending the current parametrs");
-					 userdb = new UserDatabaseAccess();
+						UserDatabaseAccess userdb = new UserDatabaseAccess();
 					 Hashtable h = userdb.getUserInfo(emailAddress);
 					 
 					 String surName = (String)h.get("surName");
@@ -323,17 +392,13 @@ public class UserManagementServlet extends HttpServlet
 					 replaceHash.put("ticketCount", ""+ticketCount );
 					 replaceHash.put("permissionType", ""+permissionType );
 					 replaceHash.put("emailAddress", emailAddress );
+					replaceHash.put("errormessage", errorMessage );
 					 
 					StringWriter output = new StringWriter();
 					 util.filterTokenFile(userUpdateTemplate, output, replaceHash);
 						//print the outfile to the browser
 						PrintWriter out = res.getWriter();
-
 						out.println( output.toString() );
-					 //res.sendRedirect("/forms/valid.html");
-					 // delete the form 
-					 Thread.sleep(1000);
-					 util.flushFile(userUpdateValidation);
 				 }
 			 }
 			 else
@@ -441,7 +506,7 @@ public class UserManagementServlet extends HttpServlet
 					&&  vegbankExpDoc.length() > 1 &&  useVegbank.length() > 1 && plotdbDoc.length() > 1)
 					{
 						System.out.println("surName: '"+surName+"'");
-			 			userdb = new UserDatabaseAccess();
+						UserDatabaseAccess userdb = new UserDatabaseAccess();
 						userdb.insertUserCertificationInfo(emailAddress, surName, givenName,
 						phoneNumber, phoneType, currentCertLevel, cvDoc, highestDegree,
 			 			degreeYear, degreeInst, currentInst, currentPos, esaPos,
@@ -636,7 +701,7 @@ public class UserManagementServlet extends HttpServlet
 			 // send email message to the user 
 			 String mailHost = "nceas.ucsb.edu";
 			 String from = "vegbank";
-			 String to = this.vegBankAdmin;
+			 String to = vegBankAdmin;
 			 String cc = "vegbank@nceas.ucsb.edu";
 			 String subject = "VEGBANK CERTIFICATION REQUEST";
 			 String body = messageBody.toString();
@@ -698,7 +763,7 @@ public class UserManagementServlet extends HttpServlet
 					{
 						System.out.println("UserManagementServlet > proccessing download: ");
 						// update the database
-						userdb = new UserDatabaseAccess();
+						UserDatabaseAccess userdb = new UserDatabaseAccess();
 						userdb.insertDownloadInfo(cookieVal, downloadType); // the users email addy
 						// create the archive
 						Vector fileVec = new Vector();

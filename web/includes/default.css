@@ -165,5 +165,6 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .iform { color: #000000; font-family: Arial; background: #cccc99; font-weight: normal; font-size: 11px; }
 .irform { color: #000000; background: #cccc99; font-weight: normal; font-size: 8pt; }
 
+.error { font-weight: bold; color: red;}
 
 

@@ -11,6 +11,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.vegbank.servlet.util.ServletUtility;
 
@@ -30,8 +31,8 @@ import org.vegbank.servlet.util.ServletUtility;
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-02-26 19:16:27 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2003-03-25 20:17:45 $'
+ *  '$Revision: 1.2 $'
  *
  *  @version
  *  @author
@@ -138,6 +139,8 @@ public class AuthenticationServlet extends HttpServlet
 						AuthenticationServlet m =new AuthenticationServlet();
 						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
 						response.addCookie(m.registeredCookie);
+						HttpSession session = request.getSession();
+						session.setAttribute("emailAddress", request.getParameter("userName") );
 						//send the user to the correct page
 						Thread.sleep(1100);
 						String redirect = "/framework/servlet/usermanagement?action=options";

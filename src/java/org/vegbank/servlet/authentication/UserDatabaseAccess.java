@@ -8,8 +8,8 @@ package org.vegbank.servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: farrell $'
- *     '$Date: 2003-02-26 19:16:28 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2003-03-25 20:17:45 $'
+ *     '$Revision: 1.2 $'
  */
 
 
@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Hashtable;
 
@@ -547,6 +548,22 @@ public class UserDatabaseAccess
 		
 	}
  
+	public void updatePassword(String password, String emailAddress)
+	{
+		try
+		{
+			Connection conn = getConnection();
+			Statement query = conn.createStatement();
+			query.execute("UPDATE USER_INFO set PASSWORD =  '" 
+				+ password + "' WHERE EMAIL_ADDRESS = '"+emailAddress+"' ");	
+			conn.close();
+		}
+		catch (SQLException e)
+		{
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
  
  
 	/**
@@ -789,8 +806,7 @@ public class UserDatabaseAccess
 			 
 			 String surName = (String)h.get("surName");
 			 String givenName = (String)h.get("givenName");
-			 String emailAddress = (String)h.get("emailAddress");
-			 
+			 String emailAddress = (String)h.get("emailAddress");	 
 			 String institution = (String)h.get("institution");
 			 String address = (String)h.get("address");
 			 String city  = (String)h.get("city");
@@ -816,10 +832,10 @@ public class UserDatabaseAccess
 				 sb.append("CITY= '"+city+"', ");
 				 sb.append("STATE= '"+state+"', ");
 				 sb.append("COUNTRY= '"+country+"', ");
-				 sb.append("ZIP_CODE= '"+zipCode+"', ");
+				 sb.append("ZIP_CODE= '"+zipCode+"', ");	 
 				 sb.append("PHONE_NUMBER = '"+phoneNumber+"' ");
 				 
-				 sb.append("WHERE EMAIL_ADDRESS like '"+emailAddress+"' ");
+				 sb.append("WHERE EMAIL_ADDRESS = '"+emailAddress+"' ");
 				 System.out.println("sql: " + sb.toString() );
 				 // create the statement
 				 PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
