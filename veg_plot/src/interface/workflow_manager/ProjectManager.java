@@ -19,8 +19,8 @@ import java.io.*;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-08-18 00:46:16 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-08-21 23:13:30 $'
+ * 	'$Revision: 1.2 $'
  */
 public class ProjectManager extends JFrame 
 {
@@ -39,6 +39,10 @@ public class ProjectManager extends JFrame
 		System.out.println("status maneger running: "+statusManagerRunning);
 		if (statusManagerRunning == false)
 		{
+			//call the method that displays the appropriate tools on the 
+			//progress manager
+			
+			
 			new ProcessProgressDisplay().show();
 			statusManagerRunning = true;
 		}
@@ -80,9 +84,11 @@ public class ProjectManager extends JFrame
 	 * method to print the xml file that will be used thruout the 
 	 * workflow process using the configuration settings selected
 	 * by the user on the process inititation GUI
-	 
+	 * 
+	 * @param params -- a hash table containing the elements required for the
+	 * creation of the workflow 'process' xml file
 	 */
-	public void  intitateProcessXML(Hashtable params)
+	public void  initiateProcessXML(Hashtable params)
 	{
 		 try
      {
@@ -109,6 +115,48 @@ public class ProjectManager extends JFrame
 			 System.out.println("failed: "+e.getMessage() );
 		 }
 	}
+	
+	/**
+	 * method that initiates the project xml file using as input a
+	 * hashtable containing the basic information for a project
+	 * sush as the name and description of the project
+	 *
+	 * @param params -- a hash table with the top-level basic information for a
+	 *  project including projectName, and projectDescription
+	 *
+	 */
+	public void  initiateProjectXML(Hashtable params)
+	{
+		 try
+     {
+      PrintWriter out = new PrintWriter(new FileWriter("project.xml"));
+     	out.println("<?xml version=\"1.0\"?>");
+			out.println("<project>");
+			//just print the hashtable as an xml file -- a hack for now
+			
+     	for (Enumeration e = params.keys() ; e.hasMoreElements() ;) 
+			{
+				StringBuffer sb = new StringBuffer();
+				String currentTag = e.nextElement().toString();
+				sb.append( getStartTag( currentTag) );
+				sb.append( params.get(currentTag) );
+				sb.append( getEndTag(currentTag) );
+         out.println( sb.toString() );
+				 //System.out.println( sb.toString() );
+     	}		
+			// now print the veg project node
+			out.println("</project>");
+			out.close();
+		 }
+     catch(Exception e)
+     {
+			 System.out.println("failed: "+e.getMessage() );
+		 }
+	}
+	
+	
+	
+	
 	
 	/**
 	 * method that returns the start tag for a tagname
