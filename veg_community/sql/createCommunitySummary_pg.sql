@@ -30,57 +30,32 @@ parentCommDescription  VARCHAR(4000),
 CONSTRAINT commSummary_pk PRIMARY KEY (COMMSUMMARY_ID)
 );  
 
---CREATE SEQUENCE commSummary_id_seq;
---CREATE TRIGGER commSummary_before_insert
---BEFORE INSERT ON commSummary FOR EACH ROW
---BEGIN
---  SELECT commSummary_id_seq.nextval
---    INTO :new.COMMSUMMARY_ID
---    FROM dual;
---END;
---/
-
-/*
- * Load the summary table
- */
-
+-- LOAD THE SUMMARY TABLE WITH APPROXIMATES
 insert into commSummary (commName, dateEntered, abiCode, classCode, classLevel,
-commDescription, conceptOriginDate, conceptUpdateDate, parentAbiCode, commConcept_id)
-	select commName.commName, commName.dateEntered, commName.abiCode, commConcept.classCode, 
-	commConcept.classLevel, commConcept.commDescription,
-	commConcept.originDate, commConcept.updatedate,
-	commConcept.parentAbiCode, commConcept.commConcept_id
+	commDescription, conceptOriginDate, conceptUpdateDate, parentAbiCode, commConcept_id)
+	select commName.commName, commName.dateEntered, 'null', commConcept.ceglCode, 
+	commConcept.commLevel, commConcept.conceptDescription,
+	'01-JAN-2001', '01-JAN-2001',
+	commConcept.commParent, commConcept.commConcept_id
 	from commName, commConcept
-	where commName.abiCode = commConcept.abiCode;
-	commit;
+	where commName.commname_id = commConcept.commname_id;
 
 
 --CREATE INDEXES
 create index commSummary_commconcept_id on commSummary  (commconcept_id);
 create index commPartyConcept_commconcept_id on commSummary  (commconcept_id);
-create index commSummary_parentAbiCode_id on commSummary  (partentAbiCode);
+--create index commSummary_parentAbiCode_id on commSummary  (partentAbiCode);
 
-/*
- * update the summary table -- added the not null statement to get it to work
- * on postgres where it was not working beforehand
- */
+--UPDATE THE STATUS FOR THE CONCEPT
 update commSummary
 set  partyConceptStatus =
-(select partyConceptStatus from commPartyConcept
-where commPartyConcept.commconcept_id = commSummary.commconcept_id 
-and commPartyConcept.partyConceptStatus != null);
-commit;
+(select commconceptstatus from commstatus
+where commStatus.commconcept_id = commSummary.commconcept_id);
 
-
---	update commSummary
---	set  partyConceptStatus = 
---	(select partyConceptStatus from commPartyConcept 
---	where commPartyConcept.commconcept_id = commSummary.commconcept_id);
---	commit;
-
+--UPDATE THE PARENT CONCEPT
 update commSummary
-set  parentCommName = 
-(select commConceptName from commConcept 
-where commConcept.abiCode = commSummary.parentAbiCode);
-commit;
+	set  parentCommName = 
+	(select commParent from commConcept 
+	where commConcept.commconcept_id = commSummary.commconcept_id);
+
 
