@@ -1,0 +1,93 @@
+Accession Code Instructions
+---------------------------
+
+by Michael Lee 10-Nov-2003
+
+We will have Accession Codes stored in VegBank to uniquely identify elements in the database
+which can otherwise not be accessed by globally unique codes.  Primary keys fail because they
+cannot be guaranteed as unique between separate VegBank databases (i.e. on tekka, VegTest, VegBranch, etc.).
+
+The following tables will have the field 'accessionCode' :
+
+plot
+observation (the primary accessionCode for our database)
+plantConcept
+commConcept
+party
+reference
+referenceJournal
+stratumMethod
+coverMethod
+namedPlace
+project
+soilTaxon
+userDefined
+-------[the following may rarely be used]----------
+taxonObservation
+commClass
+referenceParty
+
+
+Each Accession Code is comprised of several parts, separated by periods (.):
+DB.Tbl.PK#.Confirm.Date
+
+where:
+DB=Database
+Tbl = Table
+PK# = primary key number for table in question
+Confirm = alpha-numberic confirmation code to assure that the PK# hasn't changed and that this is the entity desired
+Date = Date of last view from database *** there is some debate with regards to what date indicates.  It could indicate last
+revision, but this would have to include any change in the database that could affect the view of an entity.  As such, perhaps
+it is best to leave date as date accessed and perhaps change to last revision if this is shown to be practical.
+
+For Databases, we must register and monitor which databases have what names to make sure the database code is unique.  Thus far, we have:
+
+VB=VegBank = vegbank database on vegbank.org
+VT=VegTest = vegtest database on vegtest.vegbank.org
+GYVB=vegbank database on gyro.nceas.ucsb.edu
+GYVT=vegtest database on gyro.nceas.ucsb.edu
+TKVB=vegbank database on tekka.nceas.ucsb.edu
+TKVB=vegtest database on tekka.nceas.ucsb.edu
+VegBr=VegBranch database, non-unique code as VegBranch exists locally on a user's computer- perhaps VegBranch versions could be registered, probably not useful.
+
+Additionally, table abbreviations must be registered and monitored to ensure uniqueness and they are as follows (case desired, but not sensitive):
+
+plot			Pl
+observation		Ob
+plantConcept		PC
+commConcept		CC
+party			Py
+reference		Rf
+referenceJournal	RJ
+stratumMethod		SM
+coverMethod		CM
+namedPlace		NP
+project			Pj
+soilTaxon		ST
+userDefined		UD
+taxonObservation	TO
+commClass		Cl
+referenceParty		RP
+
+PK# is self-explanatory, ranging from 1 to 999999999999999999999999999999999999999999999999999999999999999999999 or so
+
+Confirm is derived from data in tables, as follows [ALWAYS RULES: only alpha numeric (other chars deleted) shouldn't be too long, not longer than 15 chars initially]:
+plot			authorPlotCode
+observation		authorObsCode
+plantConcept		if scientific name without authors system exists for this concept, use the first two letters of the first word there and first 2 letters of the second word (ie ACRU for Acer rubrum), else metaphonetic code for plantName.plantName corresponding to plantConcept.plantName_ID 
+commConcept		if commConcept.commName_ID -> commName.commName if like 'CEGL%' then 'C' + everything after 'CEGL' in name; if like 'A.%' then 'A' + everything after 'A.', If like '[IV]+\.[A-Z]\.[0-9]+\.[A-Z]\.[a-z]+' ('+'= one or more of what was in previous [], '\.' is literal period) then commName with '.' removed (ie : IVA3Na), else metaphonetic code for commName.commName
+party			surname, unless null, then organizationname
+reference		shortName, unless null, then title
+referenceJournal	abbreviation, unless null, then journal
+stratumMethod		stratumMethodName
+coverMethod		coverType
+namedPlace		placeName
+project			projectName
+soilTaxon		soilName
+userDefined		userDefinedName
+taxonObservation	authorPlantName
+commClass		obsevation_ID
+referenceParty		surname, unless null, then organizationname
+
+Date may be added to any accesionCode at time of download, but need not be added when time isn't critical for entity.
+Rule: observation should always have date added to it when viewed (perhaps we should make a view of observation which automatically appends date to accessionCode so we don't have to worry about this - similarly we could hide sensitive fields (plot.reallatitude))
