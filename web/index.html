@@ -43,14 +43,14 @@ MM_reloadPage(true);
 		</form>
 		</td>
 		
-		<td width="88" height="24" colspan="5" valign="center" bgcolor="#336633"> 
+		<td width="88" height="24" colspan="5" valign="middle" bgcolor="#336633"> 
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="http://vegbank.nceas.ucsb.edu/vegbank/general/register.html" style="text-decoration:none; color:#FFFF80">Register</a></b></font></div>
     </td>
-    <td width="91" height="24" valign="center" bgcolor="#336633"> 
+    <td width="91" height="24" valign="middle" bgcolor="#336633"> 
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="http://vegbank.nceas.ucsb.edu/vegbank/general/login.html" style="text-decoration:none; color:#FFFF80"> 
         &nbsp;&nbsp;Login</a></b></font></div>
     </td>
-    <td width="133" height="24" valign="center" bgcolor="#336633"> 
+    <td width="133" height="24" valign="middle" bgcolor="#336633"> 
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="http://vegbank.nceas.ucsb.edu/vegbank/general/info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
     </td>
 		
@@ -114,46 +114,52 @@ MM_reloadPage(true);
 	
 	
   <tr> 
-    <td width="14" height="19" valign="top"></td>
-    <td width="14" height="19" valign="top"></td>
-    <td width="264" height="148" colspan="2" rowspan="2" valign="top"> 
-      <form name="login" method="get" action="http://vegbank.nceas.ucsb.edu/framework/servlet/authenticate">
-        <br>
-        <input type="hidden" name="authType" value="loginUser">
-				
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> <b> Login to VegBank</b> </font> 
-				<a href="http://vegbank.nceas.ucsb.edu/forms/hints.html#loginname">
-				<img border="0" src="http://vegbank.nceas.ucsb.edu/vegbank/images/question.gif"></a><br>
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> Email &nbsp; &nbsp; &nbsp; </font><font face="Georgia, Times New Roman, Times, serif" size="+2"><b></b></font><font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100">  </font>
-        <input type="text" name="userName"> 
-        <br>
-        Password&nbsp; <font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
-        </font></font><font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
-        <input type="password" name="password">
-        </font><font color="#531100"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b> 
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> <b></b></font> 
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> <b>&nbsp;</b></font></b></font></b></font></b></font></b></font></b></font><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b><font face="Georgia, Times New Roman, Times, serif" color="#531100"><b> 
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> <b></b></font> 
-        <font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
-				<b>&nbsp;</b></font></b></font></b></font></b></font></b></font></b></font><font color="#531100">&nbsp;&nbsp; 
-        <input type="submit" name="Submit" value="Submit"> <br>
-        </font>
-				<a href="http://vegbank.nceas.ucsb.edu/forms/fetch-password.html" ><font size="1" color="red">Lost your password?</font></a>
-      </form>
-    </td>
-    <td colspan="3" height="19" valign="top"></td>
-    <td width="25" height="19" valign="top"></td>
+    <td width="14" height="17" valign="top"></td>
+    <td width="14" height="17" valign="top"></td>
+    <td width="264" height="148" colspan="2" rowspan="2" valign="top">
+	<form name="login" method="get" action="http://vegbank.nceas.ucsb.edu/framework/servlet/authenticate">
+	    <table width="95%" height="132" border="0" cellpadding="0" cellspacing="0">
+          <tr> 
+            <td colspan="2"> <input type="hidden" name="authType" value="loginUser"> 
+              <font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
+              <b> Login to VegBank</b> </font> <a href="http://vegbank.nceas.ucsb.edu/forms/hints.html#loginname"> 
+              <img border="0" src="http://vegbank.nceas.ucsb.edu/vegbank/images/question.gif"></a></td>
+          </tr>
+          <tr> 
+            <td width="150"><font color="#531100" size="2" face="Georgia, Times New Roman, Times, serif">Email</font></td>
+            <td width="150"><font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
+              <input type="text" name="userName" size="20">
+              </font></td>
+          </tr>
+          <tr> 
+            <td><font color="#531100" size="2" face="Georgia, Times New Roman, Times, serif">Password</font></td>
+            <td><font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
+              <input type="password" name="password" size="20">
+              </font></td>
+          </tr>
+          <tr> 
+            <td height="45"><a href="http://vegbank.nceas.ucsb.edu/forms/fetch-password.html" ><font size="1" color="red">Lost 
+              your password?</font></a> </td>
+            <td><font color="#531100"> 
+              <input type="submit" name="Submit" value="Submit">
+              </font><font face="Georgia, Times New Roman, Times, serif" color="#531100">&nbsp; 
+              </font></td>
+          </tr>
+        </table>
+      </form></td>
+    <td colspan="3" height="17" valign="top"></td>
+    <td width="25" height="17" valign="top"></td>
   </tr>
   <tr> 
-    <td width="14" height="129" valign="top"></td>
-    <td width="14" height="129" valign="top"></td>
-    <td width="203" height="129" colspan="6" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="2" color="#531100">VegBank 
-      is operated by the <a href="http://vegbank.nceas.ucsb.edu/vegbank/panel/panel.html">Panel on Vegetation Classification</a> 
-      of the Ecological Society of America in cooperation with the <a href="http://www.nceas.ucsb.edu">National 
-      Center for Ecological Analysis and Synthesis</a> </font></td>
-    <td width="13" height="129" valign="top"></td>
-    <td width="284" height="129" colspan="5" valign="top"> 
+    <td width="14" height="112" valign="top"></td>
+    <td width="14" height="112" valign="top"></td>
+    <td width="203" height="112" colspan="6" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="2" color="#531100">VegBank 
+      is operated by the <a href="http://vegbank.nceas.ucsb.edu/vegbank/panel/panel.html">Panel 
+      on Vegetation Classification</a> of the Ecological Society of America in 
+      cooperation with the <a href="http://www.nceas.ucsb.edu">National Center 
+      for Ecological Analysis and Synthesis</a> </font></td>
+    <td width="13" height="112" valign="top"></td>
+    <td width="284" height="112" colspan="5" valign="top"> 
       <p><font size="-2" face="Georgia, Times New Roman, Times, serif" color="#531100"><i>It 
         is interesting to contemplate a tangled bank, clothed with many plants 
         of many kinds, with birds singing on the bushes, with various insects 
@@ -203,5 +209,9 @@ MM_reloadPage(true);
     <td width="133" height="1" valign="top"><img width="133" height="1" src="images/transparent.gif"></td>
   </tr>
 </table>
+<p><br>
+  <font face="Georgia, Times New Roman, Times, serif" color="#531100"> &nbsp; 
+  &nbsp; &nbsp; </font><font face="Georgia, Times New Roman, Times, serif" size="+2"><b></b></font><font face="Georgia, Times New Roman, Times, serif" color="#531100"> 
+  <font face="Georgia, Times New Roman, Times, serif" color="#531100"> </font>
 </body>
 </html>
