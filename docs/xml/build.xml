@@ -27,6 +27,7 @@
     <property name="static_xmlserver" value="/var/www/html/xml"/>
     <!-- filters -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
+        <filter filtersfile="${style_server}/manual_filters.properties"/>
     <filter token="stylesheet" value="/vegbank/includes/default.css"/>
   </target>
   <target name="logical" depends="init">
@@ -115,10 +116,8 @@
     </copy>
     <copy todir="${static_xmlserver}" flatten="true" filtering="yes">
       <fileset dir="./dataxml">
-      <include name="*.html"/>
+        <include name="*.html"/>
       </fileset>
     </copy>
-
-
   </target>
 </project>
