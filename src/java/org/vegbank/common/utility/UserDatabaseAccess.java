@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-02-07 06:44:37 $'
- *	'$Revision: 1.6 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-02-18 18:45:15 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ package org.vegbank.common.utility;
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		'$Author: anderson $'
- *     '$Date: 2004-02-07 06:44:37 $'
- *     '$Revision: 1.6 $'
+ *		'$Author: farrell $'
+ *     '$Date: 2004-02-18 18:45:15 $'
+ *     '$Revision: 1.7 $'
  */
 
 import java.sql.PreparedStatement;
@@ -51,7 +51,6 @@ import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Telephone;
 import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.PermComparison;
-import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.ui.struts.CertificationForm;
 
 public class UserDatabaseAccess 

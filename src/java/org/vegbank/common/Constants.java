@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-01-31 01:31:13 $'
- *	'$Revision: 1.8 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-02-18 18:45:15 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,4 +64,7 @@ public interface Constants
 	public static final String STATELISTBEAN_KEY = "statelistbean"; 
 	public static final String COUNTRYLISTBEAN_KEY = "countrylistbean";
 	public static final String REGIONLISTBEAN_KEY = "regionlistbean";
+
+	// Common Field Names
+	public static final String ACCESSIONCODENAME = "accessionCode";
 }
