@@ -18,7 +18,7 @@
 
 <h3>View Roles in VegBank </h3>
 
-<vegbank:get id="MY_ROLES" select="aux_role" beanName="map" where="where_aux_role_pk"/>
+<vegbank:get id="MY_ROLES" select="aux_role" beanName="map" where="where_aux_role_pk" pager="true"/>
 
         <p>
         <br>
