@@ -8,8 +8,8 @@ package servlet.authentication;
  *    Authors: John Harris
  * 		
  *		 '$Author: harris $'
- *     '$Date: 2002-06-21 16:14:41 $'
- *     '$Revision: 1.6 $'
+ *     '$Date: 2002-06-24 17:01:26 $'
+ *     '$Revision: 1.7 $'
  */
 
 
@@ -284,38 +284,52 @@ public class UserDatabaseAccess
 	 * @param givenName
 	 * @param surName 
 	 * @param remoteAddress
-	 * @aparam inst
+	 * @param inst
 	 * @param address
 	 * @param city
 	 * @param state
 	 * @param country
 	 * @param phone
 	 * @param zip
+	 * @return b -- true or false result realted to the success of the user creation
 	 */
-	public void createUser(String emailAddress, String passWord, String givenName, 
+	public boolean createUser(String emailAddress, String passWord, String givenName, 
 		String surName, String remoteAddress, String inst, String address, String city, 
 		String state, String country, String phone, String zip)
 	{
 		StringBuffer sb = new StringBuffer();
+		boolean success = true;
 		try 
 		{
-			//get the connections etc
-			Connection conn = getConnection();
-			Statement query = conn.createStatement ();
-			sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT, ");
-			sb.append("INSTITUTION, ADDRESS, CITY, STATE, COUNTRY, PHONE_NUMBER, ZIP_CODE) ");
-			sb.append("VALUES ('"+emailAddress+"', '"+passWord+"', '"+givenName+"', '"+surName+"', '"+remoteAddress+"', "+"1");
-			sb.append(", '"+inst+"', '"+address+"', '"+city+"', '"+state+"','"+country+"','"+phone+"','"+zip+"')" );
-			
-			//issue the query
-			query.executeUpdate(sb.toString());
+			// FIGURE OUT IF THE USER HAS AN ACCOUNT
+			int i = this.getUserId(emailAddress);
+			//System.out.println("userid: " + i);
+			if (i == 0)
+			{
+				//get the connections etc
+				Connection conn = getConnection();
+				Statement query = conn.createStatement();
+				sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT, ");
+				sb.append("INSTITUTION, ADDRESS, CITY, STATE, COUNTRY, PHONE_NUMBER, ZIP_CODE) ");
+				sb.append("VALUES ('"+emailAddress+"', '"+passWord+"', '"+givenName+"', '"+surName+"', '"+remoteAddress+"', "+"1");
+				sb.append(", '"+inst+"', '"+address+"', '"+city+"', '"+state+"','"+country+"','"+phone+"','"+zip+"')" );
+				//issue the query
+				query.executeUpdate(sb.toString());
+			}
+			else
+			{
+				//System.out.println("success: " + false);
+				success = false;
+			}
 		}
 		catch (Exception e) 
 		{
 			System.out.println("Exception: " + e.getMessage());
-			System.out.println("sql: " + sb.toString() ); 
+			System.out.println("sql: " + sb.toString() );
 			e.printStackTrace();
+			success = false;
 		}
+		return(success);
 	}
  
 

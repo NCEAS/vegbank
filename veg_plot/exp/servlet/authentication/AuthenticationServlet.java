@@ -24,8 +24,8 @@ import servlet.authentication.UserDatabaseAccess;
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-06-21 16:14:41 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2002-06-24 17:01:26 $'
+ *  '$Revision: 1.9 $'
  *		 
  *  @version 
  *  @author 
@@ -42,6 +42,8 @@ public class AuthenticationServlet extends HttpServlet
 	
 	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 	//public String clientLogFile = null; //the file to log the client usage
+	private String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
+	private String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/tmp.html";
 	
 	//constructor
 	public AuthenticationServlet()
@@ -158,11 +160,13 @@ public class AuthenticationServlet extends HttpServlet
 						//have a cookie associated with the browser, so as a fix create a 
 						//small statement and allow the oportunity to login
 						//response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
-						out.println( getUserCreationResponse() );	
+						String cresponse = getUserCreationResponse(true);
+						out.println( cresponse );	
 					}
 					else
 					{
-						out.println("unsuccessful user creation -- please try again");
+						String cresponse = getUserCreationResponse(false);
+						out.println( cresponse );
 					}
 				}
 				
@@ -257,10 +261,33 @@ public class AuthenticationServlet extends HttpServlet
 	
 	/**
 	 * method that provides a response to a user who has attempeted to 
-	 * make a new user account
+	 * make a new user account.  The input may either be true / false and the 
+	 * response will be modified accordingly
+	 * @param createResult -- true or false
 	 */
-	 private String getUserCreationResponse()
+	 private String getUserCreationResponse(boolean createResult)
 	 {
+		 StringBuffer sb = new StringBuffer();
+		 Hashtable replaceHash = new Hashtable();
+		 if ( createResult == true )
+		 {
+			 sb.append("Thank you <br> ");
+			 sb.append("Your VegBank account has been created. <br>");
+		 }
+		 else
+		 {
+			 sb.append("<b> USER CREATION ERROR! </b> <br> ");
+			 sb.append("Please review the user-related attributes that you submitted<br>");
+			 sb.append("and resubmit.  If you get this error again, please contact the <br>");
+			 
+			 sb.append("<a href=\"mailto:vegbank@nceas.ucsb.edu\" > ");
+			 sb.append(" VegBank Administrator </a>");
+		 }
+		 replaceHash.put("messages",  sb.toString());
+		 su.filterTokenFile(genericForm, genericTemplate, replaceHash);
+		 String s = su.fileToString(genericTemplate);
+		 return(s);
+		 /*
 		 StringBuffer sb = new StringBuffer();
 		 sb.append("<html> \n");
 		 sb.append("<head> \n");
@@ -277,6 +304,7 @@ public class AuthenticationServlet extends HttpServlet
 		 sb.append("</body> \n");
 		 sb.append("</html> \n");
 		 return(sb.toString() );
+		 */
 	 }
 	 
 	
@@ -398,14 +426,12 @@ public class AuthenticationServlet extends HttpServlet
 				System.out.println("AuthenticationServlet > country: "+country);
 				System.out.println("AuthenticationServlet > zip: "+zip);
 				System.out.println("AuthenticationServlet > phone: "+phone);
-								
-				
 				
 				// USE THE DB CLASS TO CREATE THE USER
 				//uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
-				uda.createUser(emailAddress, passWord, givenName,surName, remoteAddress, 
+				boolean b2 = uda.createUser(emailAddress, passWord, givenName,surName, remoteAddress, 
 				inst, address, city, state, country, phone, zip);
-				return(true);
+				return( b2 );
 			}
 			else
 			{
