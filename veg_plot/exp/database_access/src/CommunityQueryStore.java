@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-05 23:07:55 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2002-03-08 00:04:44 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,8 +80,9 @@ public class  CommunityQueryStore
 			statement.append("parentcommconceptcode, ");
 			statement.append("parentcommname, ");
 			statement.append("parentcommdescription ");
-			statement.append("from commSummary where commName like '");
-			statement.append(communityName+"'");
+			//MAKE ALL QUERIES CASE INSENSITIVE
+			statement.append("from commSummary where upper(commName) like '");
+			statement.append(communityName.toUpperCase()+"'");
 			statement.append("and classLevel like '"+communityLevel+"'");
 
 			String returnFields[]=new String[14];
@@ -171,7 +172,7 @@ public class  CommunityQueryStore
  		{
 			Class.forName("org.postgresql.Driver");
 			//the community database
-			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/communities_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
