@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2004-07-22 17:22:18 $'
-*  '$Revision: 1.23 $'
+*      '$Date: 2004-07-27 19:59:28 $'
+*  '$Revision: 1.24 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -199,7 +199,20 @@
          </td>		 
 	    <td align="center" valign="middle" colspan="2"> <!-- colspan 2 b/c top black bars as separators are cells -->
 	        <span class="item">
-	          <bean:write name="row" property="latitude" format="#.0"/> <br/><bean:write name="row" property="longitude" format="#.0"/>   
+	          <logic:equal name="row" property="latitude" value="0">
+	          	<logic:equal name="row" property="longitude" value="0">
+			  		n/a
+	          	</logic:equal>
+	          </logic:equal>
+
+	          <logic:notEqual name="row" property="latitude" value="0">
+	          	<logic:notEqual name="row" property="longitude" value="0">
+				  <bean:write name="row" property="latitude" format="#.#"/> 
+				  <br/>
+				  <bean:write name="row" property="longitude" format="#.#"/>   
+	          	</logic:notEqual>
+	          </logic:notEqual>
+
 	        </span>
          </td>		
 		 <td>&nbsp;<!-- a little space before dominant species --></td> 
