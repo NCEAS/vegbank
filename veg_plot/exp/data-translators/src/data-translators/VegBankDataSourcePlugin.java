@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-17 01:57:22 $'
- * 	'$Revision: 1.10 $'
+ *  '$Date: 2002-05-20 20:05:31 $'
+ * 	'$Revision: 1.11 $'
  */
  
 //public class VegBankDataSourcePlugin
@@ -142,7 +142,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getPlantTaxonCode(String plantName)
 	{
-	 	return("code");
+	 	return("");
 	}
 																																																																																																												
 	
@@ -300,7 +300,29 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 */
  	public String getSoilDepth(String plotName) 
  	{
- 		return("");
+ 		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select soilDepth "
+			+" from OBSERVATION where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+		// All other types of exceptions
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
  	}
 
 
