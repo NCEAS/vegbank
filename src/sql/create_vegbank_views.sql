@@ -87,7 +87,27 @@ DROP VIEW view_notemb_taxonInterpretation;
 
 DROP VIEW view_notemb_taxonAlt;
  CREATE VIEW view_notEmb_taxonAlt AS SELECT * FROM taxonAlt where emb_taxonAlt<6;
+
+------------------
+-- END EMBARGO VIEWS 
+-------------------
  
  DROP VIEW view_plantConcept_ordered;
  create view view_plantConcept_ordered AS select * from plantConcept order by upper(plantName);
  
+ DROP VIEW  view_reference_transl ;
+ CREATE VIEW view_reference_transl AS 
+   SELECT CASE WHEN shortName IS NULL 
+               THEN CASE WHEN title IS NULL 
+                    THEN CASE WHEN fulltext IS NULL 
+                         THEN '[poorly documented reference]' 
+                         ELSE CASE WHEN length(fulltext)>35
+                              THEN substr(fulltext,1,32) || '...'
+                              ELSE fulltext
+                              END
+                         END 
+                    ELSE title 
+                    END 
+               ELSE shortName 
+               END 
+             AS reference_id_transl, reference_id from reference;
