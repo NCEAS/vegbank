@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-10-30 15:04:20 $'
-* '$Revision: 1.66 $'
+* '$Date: 2003-10-30 16:17:16 $'
+* '$Revision: 1.67 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -100,7 +100,7 @@
     <filter token="forms_link" value="/${web.context_uri}/forms/"/>
     <!-- add link for page name that links to help frame jsp -->
     <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
-   <!-- location and filename of xml index page -->
+    <!-- location and filename of xml index page -->
     <filter token="NativeXMLIndexPage" value="/xml/vegbank-xml-index.html"/>
     <filter token="design_link" value="/${web.context_uri}/design/"/>
     <filter token="panel_link" value="/${web.context_uri}/panel/"/>
@@ -134,6 +134,7 @@
     <!-- set the properties file as a filtersfile to distribute headers and footers -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
     <filter filtersfile="${style_server}/url2get_data.properties"/>
+    <filter filtersfile="${style_server}/manual_filters.properties"/>
   </target>
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="init" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
@@ -327,6 +328,10 @@
     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
     <copy file="${sharedhtml_src}/url2get_data.properties" tofile="${style_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
     <ant dir="../../../docs/xml" target="dist-closedlist-tokenfile"/>
+    <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
+    <copy file="${manual_src}/manual_filters.properties" tofile="${style_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
+
+  
   </target>
   <target name="vbsummary" depends="hdrftr" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
