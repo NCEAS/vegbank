@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-05 02:12:24 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2004-12-13 06:39:30 $'
+ *	'$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1035,24 +1035,58 @@ public class DatabaseUtility
 	
 
 	/**
+	 * 
+	 */
+	public static String removeSemicolons(String unsafe) {
+		return unsafe.replaceAll(";", "");
+	}
+
+
+	/**
 	 * Duplicates apostophes, removes semicolons.
+	 * Does not wrap the given string in single quotes. 
+	 * @param unsafe The given unsafe SQL string
 	 */
 	public static String makeSQLSafe(String unsafe) {
-		if (unsafe == null) {
-			return null;
+		return makeSQLSafe(unsafe, false);
+	}
+
+	/**
+	 * Duplicates apostophes, removes semicolons.
+	 * If given "null" then the string "null" is returned in all cases
+	 * If given a (parenthesized) string, it is not wrapped
+	 * @param unsafe The given unsafe SQL string
+	 * @param wrap If true, given string is wrapped in single quotes
+	 */
+	public static String makeSQLSafe(String unsafe, boolean wrap) {
+		if (unsafe == null) { return null; }
+
+		if (unsafe.equalsIgnoreCase("null") || unsafe.equals("''")) {
+			return unsafe;
 		}
 
-		log.debug("making SQL safe: " + unsafe);
-		if (unsafe.indexOf(";") != -1) {
-			log.debug(";;;;;;;;;;;;;;;;;;;;;; removing ;");
-			unsafe = unsafe.replaceAll(";", "");
+		unsafe = removeSemicolons(unsafe);
+		int len = unsafe.length();
+		char firstChar = unsafe.charAt(0);
+		char lastChar = unsafe.charAt(len-1);
+		boolean wasWrapped = false;
+
+		if (len > 2 && (firstChar == '\'' && lastChar == '\'')) {
+			// remove wrapping quotes temporarily
+			wasWrapped = true;
+			unsafe = unsafe.substring(1, len-1);
 		}
 
 		if (unsafe.indexOf("'") != -1) {
-			log.debug("fixing single quotes");
 			unsafe = unsafe.replaceAll("\'", "\'\'");
 		}
-		return unsafe;
+
+		if (wasWrapped || (wrap && (firstChar != '(' && lastChar != ')'))) {
+			// (parenthesized) strings don't count
+			return "'" + unsafe + "'";
+		} else {
+			return unsafe;
+		}
 	}
 
 	/**
