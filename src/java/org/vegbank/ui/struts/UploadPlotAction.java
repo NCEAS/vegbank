@@ -20,6 +20,7 @@ import org.apache.struts.upload.FormFile;
 import org.vegbank.common.utility.FileWrapper;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.datafileexchange.DataFileDB;
 import org.vegbank.dataload.XML.*;
 
@@ -29,8 +30,8 @@ import org.vegbank.dataload.XML.*;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 04:43:33 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-03-01 23:33:27 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +54,7 @@ import org.vegbank.dataload.XML.*;
  */
 public class UploadPlotAction extends Action
 {
-	private String originalDataStore = "/usr/vegbank/originalDataStore";
+	private String originalDataStore = Utility.VB_HOME_DIR + "/originalDataStore";
 	private ServletUtility util = new ServletUtility();
 	
 	// ResourceBundle properties

@@ -3,6 +3,8 @@ package org.vegbank.common.utility;
 import java.util.Iterator;
 import java.util.List;
 
+import org.vegbank.common.model.Stratum;
+import org.vegbank.common.model.Stratumtype;
 import org.vegbank.common.model.Taxonimportance;
 import org.vegbank.common.model.Taxoninterpretation;
 import org.vegbank.common.model.Taxonobservation;
@@ -13,8 +15,8 @@ import org.vegbank.common.model.Taxonobservation;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:27:01 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-03-01 23:33:27 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +65,7 @@ public class MBReadHelper
 			//LogUtility.log("Is this the current interpritation ?" + ti.getCurrentinterpretation() );
 			if ( Utility.isTrue(ti.getCurrentinterpretation()) )
 			{
-				plantName = ti.getPlantconceptobject().getPlantnameobject().getPlantname();
+				plantName = ti.getPlantconceptobject().getPlantname();
 				//LogUtility.log("The Plantname is  ?" +plantName );
 			}
 			
@@ -78,15 +80,48 @@ public class MBReadHelper
 		}
 		return plantName;
 	}
-	
+
 	/**
-	 * Convience method for looking up the total  cover from a 
+	 * Convience method for looking up the plantcodename from 
 	 * taxonobservation bean.
 	 * 
 	 * @param to
 	 * @return String -- plantName
 	 */
-	public static String getTotalTaxonCover(Taxonobservation to)
+	public static String getPlantCode(Taxonobservation to)
+	{
+		String plantCode = "";
+		Iterator taxonInterpritations = to.gettaxonobservation_taxoninterpretations().iterator();
+		while( taxonInterpritations.hasNext() )
+		{
+			Taxoninterpretation ti =  (Taxoninterpretation) taxonInterpritations.next();
+			
+			// Converting a String to boolean ... risky
+			//LogUtility.log("Is this the current interpritation ?" + ti.getCurrentinterpretation() );
+			if ( Utility.isTrue(ti.getCurrentinterpretation()) )
+			{
+				plantCode = ti.getPlantconceptobject().getPlantcode();
+				//LogUtility.log("The Plantname is  ?" +plantName );
+			}
+			
+			if (  Utility.isStringNullOrEmpty(plantCode) )
+			{
+				// No valid taxonInterpritation found use the authors name for the plant
+				// *** to indicate on the ui that this is not accepted yet .
+				plantCode = "*** None Found ***";
+			}
+		}
+		return plantCode;
+	}
+
+	/**
+	 * Convience method for looking up the strata cover from a 
+	 * taxonobservation bean.
+	 * 
+	 * @param to
+	 * @return String -- cover
+	 */
+	public static String getStrataTaxonCover(Taxonobservation to, String strata)
 	{
 		String taxonCover = "";
 		List taxonImportanceList = to.gettaxonobservation_taxonimportances();
@@ -95,16 +130,35 @@ public class MBReadHelper
 		{
 			Taxonimportance ti = (Taxonimportance) it.next();
 
-			Object object = ti.getStratumobject();
-			if (object == null)
+			Stratum stratum = ti.getStratumobject();
+			if (stratum != null)
 			{
-				// FIXME: Bussiness rule/ Usage Rule
-				// This is the one we want, otherwise its just for a strata
-				taxonCover = ti.getCover();
+				Stratumtype st = stratum.getStratumtypeobject();
+				String currentStratumName = "";
+				if ( st != null )
+				{
+					currentStratumName = st.getStratumname();
+				}
+
+				// Return the cover of matching record
+				if ( strata != null && currentStratumName != null )
+				{
+					if ( strata.equalsIgnoreCase( stratum.getStratumname()) )
+					{
+						taxonCover = ti.getCover();
+					}
+				}
+			}
+			else
+			{
+				// Return the total cover
+				if (strata == null) 
+				{
+					taxonCover = ti.getCover();
+				}
+				
 			}
 		}
 		return taxonCover;
 	}
-
-
 }
