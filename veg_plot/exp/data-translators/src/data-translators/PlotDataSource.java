@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-17 01:53:21 $'
- * 	'$Revision: 1.15 $'
+ *  '$Date: 2002-05-20 20:02:24 $'
+ * 	'$Revision: 1.16 $'
  */
 public class PlotDataSource 
 {
@@ -820,7 +820,7 @@ public class PlotDataSource
 		System.out.println("PlotDataSource > getting info for: " + plotName );
 		try
 		{
-			//rectify tis damn variable -- use a consistent name
+			//rectify this variable -- use a consistent name
 			plotCode = plotName;
 			
 			//define the plugin
@@ -898,11 +898,18 @@ public class PlotDataSource
 			System.out.println("stand size: " + source.standSize );
 			System.out.println("slope gradient: " + source.slopeGradient);
 			System.out.println("slope aspect: " + source.slopeAspect);
-			System.out.println("community name: " + source.communityName);
 			System.out.println("number of named places: " + source.namedPlaces.size() );
 			System.out.println("confidentialityStatus: " + source.getConfidentialityStatus(plotName) );
 			System.out.println("confidentialityReason: " + source.getConfidentialityReason(plotName) );
 			System.out.println("permanence: " + source.isPlotPermanent(plotName) );
+			
+			System.out.println(" \n ----------------------plot site-observational info-----------------------------");
+			System.out.println("soilDepth: " + source.getSoilDepth(plotName) );
+			System.out.println("obsStartDate: " + source.getObsStartDate(plotName) );
+			System.out.println("obsStopDate: " + source.getObsStopDate(plotName) );
+			System.out.println("community name: " + source.getCommunityName(plotName));
+			System.out.println("\n " );
+			
 			
 			for (int i=0; i<source.namedPlaces.size(); i++)
 			{
@@ -958,11 +965,10 @@ public class PlotDataSource
 	}
 	
 	
-	
 /**
  * main method for testing that the plugin classes work and work well
- * @param pluginClass
- * @param plotName
+ * @param pluginClass -- the name of the plugin class
+ * @param plotName -- the name of the plot
  */
 	public static void main(String[] args)
 	{
@@ -974,6 +980,8 @@ public class PlotDataSource
 			//should make sure that the plugin exists
 			PlotDataSource source = new PlotDataSource(pluginClass);
 			source.printDBVariables(pluginClass, plotName);
+//			System.out.println("slope: " + source.getSlopeAspect(plotName) );
+//			System.out.println("state: " + source.getState(plotName) );
 		}
 		else
 		{
