@@ -1,56 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-
-<HTML>
-<!--
-*   '$RCSfile: AddParty.jsp,v $'
-*   Purpose: Add a new reference to vegbank
-*   Copyright: 2000 Regents of the University of California and the
-*               National Center for Ecological Analysis and Synthesis
-*   Authors: @author@
-*
-*  '$Author: mlee $'
-*  '$Date: 2004-04-08 05:44:28 $'
-*  '$Revision: 1.6 $'
-*
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
--->
-
-<head>@defaultHeadToken@
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
 
 <title>Add A Party Form</title>
-<!--xxx  -->
-<link rel="stylesheet" href="/vegbank/includes/default.css" type="text/css">
-  <!-- xxx-->
+<style type="text/css">
+.headerrow  {background-color : #DDDDDD }
+</style>
 
-  <style type="text/css">
-  .oddrow { background-color : #FFFFCC }
-  .evenrow {background-color : #FFFFFF }
-  .headerrow  {background-color : #DDDDDD }
-  </style>  
-  <meta http-equiv="Content-Type" content="text/html; charset=">
-  </head>
-
-  <body>
-
-  <!--xxx -->
-  @vegbank_header_html_normal@
-  <!--xxx -->
+  @webpage_masthead_html@
 
   <br/>
 
@@ -177,7 +134,7 @@
 	      <html:select property='<%= "phoneType[" + i + "]" %>'>
 		      <option value="-1" selected="yes">--choose type--</option>
           <html:options property="phoneTypes"/>
-	      </html:select>
+	      
 	    </td>
 	  </tr>
 	  <%
@@ -312,12 +269,12 @@
 
   <html:submit property="submit" value="--add this party to VegBank--" />
 
-</html:form>
+
 
 <!-- VEGBANK FOOTER -->
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 <!-- END FOOTER -->
 
 
-</body>
-</html>
+
+

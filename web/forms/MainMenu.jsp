@@ -1,48 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
-<!--
-*  '$RCSfile: MainMenu.jsp,v $'
-*   Purpose: web form tosubmit community data to vegbank system
-*   Copyright: 2000 Regents of the University of California and the
-*              National Center for Ecological Analysis and Synthesis
-*   Authors: @author@
-*
-*  '$Author: anderson $'
-*  '$Date: 2005-02-10 21:20:00 $'
-*  '$Revision: 1.16 $'
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
--->
-
-<HTML>
-
-<HEAD>@defaultHeadToken@
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
  
 <TITLE>VegBank Main Menu</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
- 
-<meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<BODY>
-<div align="center"> 
-@vegbank_header_html_normal@
+@webpage_masthead_html@
  
 
 
@@ -118,7 +79,7 @@
 <!--
      
       <span class=" sizelarge">
-          Edit your VegBank <html:link action="LoadUser.do">Profile</html:link>
+          Edit your VegBank <html:link action="LoadUser.do">Profile
         
       </span> 
 -->			
@@ -160,7 +121,7 @@
   <!--  
       <span class=" sizelarge">
         
-          Apply to become a <html:link action="LoadCertification.do">Certified VegBank User</html:link>
+          Apply to become a <html:link action="LoadCertification.do">Certified VegBank User
 	<a href="@help-for-certification-href@"><img border="0" src="@image_server@question.gif"></a>
       </span>
      -->
@@ -267,7 +228,7 @@
       <span class=" sizelarge">ADMINISTRATION</span>
 	  
 		<span class=" sizelarge">Go to the 
-			<html:link action="AdminMenu.do">Admin Menu</html:link></span>
+			<html:link action="AdminMenu.do">Admin Menu
 		<br/><br/>
 		<span class="sizelarge">See the current <a href="@forms_link@system-status.jsp">System Status</a></span>
 	    <br/><br/>
@@ -291,7 +252,7 @@
 
 
 <br/>
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 </div>
-</BODY>
-</HTML>
+
+

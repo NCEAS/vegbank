@@ -1,38 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.*" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-
-<!-- 
-  *   '$RCSfile: plot-upload-summary.jsp,v $'
-  *     Purpose: to inform the user that changes they made to vegbank were successful
-  *   Copyright: 2000 Regents of the University of California and the
-  *               National Center for Ecological Analysis and Synthesis
-  *     Authors: @author@
-  *
-  *    '$Author: anderson $'
-  *      '$Date: 2005-02-17 22:31:59 $'
-  *  '$Revision: 1.3 $'
-  *
-  *
-  -->
-
-
-<HEAD>@defaultHeadToken@
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
  
 <TITLE>Upload Received</TITLE>
-
-<link rel="stylesheet" href="@stylesheet@" type="text/css"/>
-
- 
-<meta http-equiv="Content-Type" content="text/html; charset="/>
-</HEAD>
-<BODY>
-
-@vegbank_header_html_normal@
+@webpage_masthead_html@
  
 
   
@@ -58,7 +29,7 @@ An email will be sent to <bean:write name="email"/> containing load results.
 	<!--html:submit property="submit" value="Yes, load data now"/-->
 <!--/html:form-->
 
-<p>&raquo; <html:link action="/DisplayUploadPlotAction.do">Back to upload page</html:link>
+<p>&raquo; <html:link action="/DisplayUploadPlotAction.do">Back to upload page
 
 <blockquote>
 
@@ -106,7 +77,7 @@ while (kit.hasNext()) {
 <br>
 <br>
 <br>
-@vegbank_footer_html_tworow@
-</BODY>
-</HTML>
+@webpage_footer_html@
+
+
 

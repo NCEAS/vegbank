@@ -29,11 +29,11 @@
 </frameset>
 <noframes><body>
 Sorry, but your browser doesn't support frames.  <a href="<%= strHelpPg %>">Try this link</a> 
-</body></noframes>
-</html>
+
+
 
 
 
 <I></I>
-	</body>
-</html>
+	
+

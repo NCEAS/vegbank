@@ -1,25 +1,8 @@
-<html>
-	<!-- 
-  *   '$RCSfile: stylesheet-generator.html,v $'
-  *     Purpose: web page describing eml
-  *   Copyright: 2000 Regents of the University of California and the
-  *               National Center for Ecological Analysis and Synthesis
-  *     Authors: @author@
-  *
-  *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 07:41:14 $'
-  *  '$Revision: 1.9 $'
-  *
-  *
-  -->
-	<head>@defaultHeadToken@
-		<title> Stylesheet Generator </title>
-<link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
-	</head>
-	
-	<body>
-<p>
-@vegbank_header_html_normal@</p>
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
+		<title>Stylesheet Generator</title>
+@webpage_masthead_html@</p>
 
 
 <p> Choose the attributes that you would like to have displayed when <br>
@@ -80,8 +63,8 @@ viewing a result set returned by a query to the plots database<br>
 	</table>
 </FORM>
 <p>
-@vegbank_footer_html_tworow@</p>
+@webpage_footer_html@
 
-	</body>
+	
 
-</html>
+

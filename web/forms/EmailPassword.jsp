@@ -1,39 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-
-<!DOCTYPE HTML PUBLIC "-//w3c//dtd html 4.0 transitional//en">
-
-<html:html locale="true">
-
-	
-<!-- 
-  *   '$RCSfile: EmailPassword.jsp,v $'
-  *     Purpose: Jsp form to allow users to retrive lost passwords from the
-  *              system over email. 
-  *   Copyright: 2000 Regents of the University of California and the
-  *               National Center for Ecological Analysis and Synthesis
-  *     Authors: @author@
-  *
-  *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 07:41:14 $'
-  *  '$Revision: 1.5 $'
-  *
-  *
-  -->
-  
-
-
-<head>@defaultHeadToken@
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
 		<title>VegBank Retrieve your lost password</title>
-		<link REL=STYLESHEET HREF="@stylesheet@" TYPE="text/css">
- 
-
-	</head>
-
-
-<body>
-@vegbank_header_html_normal@
+@webpage_masthead_html@
 
 
 <html:errors/>
@@ -142,9 +111,9 @@
 <tr><td>&nbsp;</td></tr>
 <tr><td colspan="2">
 <!-- VEGBANK FOOTER -->
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 </td></tr>
 </table>
 
-</body>
+
 </html:html>

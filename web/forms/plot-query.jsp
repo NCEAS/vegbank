@@ -1,47 +1,9 @@
+@webpage_top_html@
 @stdvegbankget_jspdeclarations@
+@webpage_head_html@
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
-<html>
-<!-- 
-*   '$RCSfile: plot-query.jsp,v $'
-*     Purpose: web page querying the plots stored in vegbank
-*   Copyright: 2000 Regents of the University of California and the
-*               National Center for Ecological Analysis and Synthesis
-*     Authors: @author@
-*
-*    '$Author: mlee $'
-*      '$Date: 2005-03-11 06:41:27 $'
-*  '$Revision: 1.33 $'
-*
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
--->
-
-<head>@defaultHeadToken@
-<meta name="generator" content="HTML Tidy, see www.w3.org"/>
-<link rel="STYLESHEET" href="@stylesheet@" type="text/css" />
-
-<title>
-VegBank - Advanced Plot Query
-</title>
-
-</head>
-
-<body>
-@vegbank_header_html_normal@
+<title>VegBank - Advanced Plot Query</title>
+@webpage_masthead_html@
 
   
 
@@ -71,7 +33,7 @@ VegBank - Advanced Plot Query
       
       <td align="left">
 	<table border="0" width="550">
-	  <tbody>
+	  
 	  <tr valign="top">
 	    <td align="left" colspan="2" valign="center" class="instructions">
 		   This form can be used to find plots in VegBank. 
@@ -165,7 +127,7 @@ VegBank - Advanced Plot Query
 		      <option value="IS NULL">--NULL--</option> -->
 		      
 		      
-	      </html:select>
+	      
 	    </td>	 
 
 	    <td class="itemsmall">
@@ -192,7 +154,7 @@ VegBank - Advanced Plot Query
 
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      </html:select>
+	      
 	    </td>
      
 	  </tr>
@@ -372,7 +334,7 @@ VegBank - Advanced Plot Query
 		<html:options property="rockTypes"/>
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      </html:select>
+	      
 	    </td>
 	    
 	    <td align="left" valign="top">
@@ -382,7 +344,7 @@ VegBank - Advanced Plot Query
 		 <html:options property="surficialDeposits"/>
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      </html:select> 
+	      
 	    </td>
 
 	    <td align="left" valign="top">
@@ -392,7 +354,7 @@ VegBank - Advanced Plot Query
 		<html:options property="hydrologicRegimes"/>
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      </html:select> 
+	      
 	    </td>
 
 	    
@@ -409,7 +371,7 @@ VegBank - Advanced Plot Query
 		<html:options property="topoPositions"/>
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      </html:select> 
+	      
 	    </td>
 	    <!-- This is an open list i.e. not supported yet -->
 	    <td align="left" valign="top">Landform<br />
@@ -420,7 +382,7 @@ VegBank - Advanced Plot Query
 
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
-	      </html:select> 
+	      
 	    </td>
 	
 	    
@@ -592,7 +554,7 @@ VegBank - Advanced Plot Query
 		        <html:options property="coverMethodNames"/>
 		        <option value="IS NOT NULL">--NOT NULL--</option>
 		        <option value="IS NULL">--NULL--</option>
-	        </html:select>
+	        
 	    </td>
 	    </tr>
 	    <tr>
@@ -604,7 +566,7 @@ VegBank - Advanced Plot Query
 		        <html:options property="stratumMethodNames"/>
 		        <option value="IS NOT NULL">--NOT NULL--</option>
 		        <option value="IS NULL">--NULL--</option>
-	        </html:select>
+	        
 	      </td>
 	    </tr>
 	    
@@ -639,7 +601,7 @@ VegBank - Advanced Plot Query
 		        
 		        <option value="IS NOT NULL">--NOT NULL--</option>
 		        <option value="IS NULL">--NULL--</option>
-	        </html:select>
+	        
 	
         </td>
 	    </tr>
@@ -1124,10 +1086,10 @@ VegBank - Advanced Plot Query
 	<td colspan="3">
 	  <!-- VEGBANK FOOTER -->
 <br /><br />
-	  @vegbank_footer_html_tworow@
+	  @webpage_footer_html@
 	</td>
       </tr>
     </table>
-    </html:form>    
-    </body>
-  </html>
+    
+    
+  

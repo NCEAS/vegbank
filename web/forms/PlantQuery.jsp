@@ -1,26 +1,8 @@
+@webpage_top_html@
 @stdvegbankget_jspdeclarations@
-
-
-<html>
-<!-- 
-  *   '$RCSfile: PlantQuery.jsp,v $'
-  *     Purpose: web form to query the plant taxonomy portion of vegbank
-  *   Copyright: 2000 Regents of the University of California and the
-  *               National Center for Ecological Analysis and Synthesis
-  *     Authors: @author@
-  *
-  *    '$Author: anderson $'
-  *      '$Date: 2005-02-16 21:31:11 $'
-  *  '$Revision: 1.11 $'
-  *
-  *
-  -->
-
-<head>@defaultHeadToken@
+@webpage_head_html@
 
   <title>PLANT CONCEPT LOOKUP</title>
-  <link rel="stylesheet" href="@stylesheet@" type="text/css">
-
   <style type="text/css">
   body {
   background-color: #FFFFFF;
@@ -76,11 +58,8 @@ function setNameMatchType() {
 }
 
 </script>
+  @webpage_masthead_html@
 
-</head>
-
-<body>
-  @vegbank_header_html_normal@ <!-- SECOND TABLE -->
 
   <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
     <tr>
@@ -327,11 +306,11 @@ function setNameMatchType() {
         <table border="0" cellspacing="5" cellpadding="5">
           <tr>
             <td colspan="2"><!-- VEGBANK FOOTER -->
-            @vegbank_footer_html_tworow@</td>
+            @webpage_footer_html@
           </tr>
         </table>
       </td>
     </tr>
   </table>
-</body>
-</html>
+
+

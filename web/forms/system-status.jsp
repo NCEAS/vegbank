@@ -1,23 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
-
-<HTML>
-
-<HEAD>@defaultHeadToken@
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
  
 <TITLE>VegBank System Status</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
- 
-<meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<BODY>
-
-@vegbank_header_html_normal@
+@webpage_masthead_html@
  
 
 
@@ -67,7 +53,7 @@
 %>
 
 <br/>
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 </div>
-</BODY>
-</HTML>
+
+

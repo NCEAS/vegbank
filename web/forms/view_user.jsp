@@ -1,34 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-
-<html>
-<!-- 
-  * '$Id :  $'
-  * Purpose: Display a user's profile read-only
-  * Copyright: 2000 Regents of the University of California and the
-  *               National Center for Ecological Analysis and Synthesis
-  * Authors: @author@
-  *
-  * '$Author: mlee $'
-  * '$Date: 2004-11-16 06:19:24 $'
-  * '$Revision: 1.3 $'
-  *
-  *
-  -->
-  
-<HEAD>@defaultHeadToken@
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
 <!-- #BeginEditable "doctitle" --> 
 <TITLE>Edit Your Profile</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-<!-- #EndEditable --> 
-<meta http-equiv="Content-Type" content="text/html; charset=">
-
-
-</HEAD>
-<BODY>
-@vegbank_header_html_normal@
+@webpage_masthead_html@
 
 <br>
 <br>
@@ -138,7 +113,7 @@
 	</table>
     <!-- Modify your password -->
 
-@vegbank_footer_html_tworow@
-</BODY>
-</HTML>
+@webpage_footer_html@
+
+
 

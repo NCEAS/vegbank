@@ -1,47 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-
-<HTML>
-<!--
-*   '$RCSfile: RegisterNewUser.jsp,v $'
-*   Purpose: Add a new reference to vegbank
-*   Copyright: 2000 Regents of the University of California and the
-*               National Center for Ecological Analysis and Synthesis
-*   Authors: @author@
-*
-*  '$Author: mlee $'
-*  '$Date: 2004-11-16 06:43:45 $'
-*  '$Revision: 1.12 $'
-*
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
--->
-
-<HEAD>@defaultHeadToken@
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
  
 <TITLE>VegBank Registration</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
- 
-<meta http-equiv="Content-Type" content="text/html; charset=">
-
-</HEAD>
-<BODY>
-
-@vegbank_header_html_normal@
+@webpage_masthead_html@
 
   <br/>
 <!-- table that limits width of text -->
@@ -168,7 +130,7 @@
 		<html:submit property="submit" value="Register Now" />
 
 	</td>
-</html:form>
+
 
 <!-- SPACER -->
 <td bgcolor="#AAAAAA" width="1"><img src="@image_server@pix_clear" width="1" height="1"></td>
@@ -199,7 +161,7 @@
   species or rights of private land owners.</p>
 
 <p>Permission to use certain advanced features requires 
-registration and <html:link action="LoadCertification.do">certification</html:link>.
+registration and <html:link action="LoadCertification.do">certification
 </p>
 	</td>
 </tr>
@@ -207,6 +169,6 @@ registration and <html:link action="LoadCertification.do">certification</html:li
 
 <br>
 <br>
-@vegbank_footer_html_tworow@
-</BODY>
-</HTML>
+@webpage_footer_html@
+
+

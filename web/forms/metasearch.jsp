@@ -1,9 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/vegbank.tld" prefix="vegbank" %>
-<html>
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
+
+<title>VegBank Metasearch: <%= searchString %></title>
 <script language="javascript">
 function viewAllMetadata() {
 	document.metasearch_form.xwhereParams.value="vb";
@@ -19,8 +18,6 @@ function preSubmit() {
 	}
 }
 </script>
-<head>@defaultHeadToken@
-
 <%
 String xwhereMatchAny = request.getParameter("xwhereMatchAny");
 if (xwhereMatchAny == null) {
@@ -46,14 +43,8 @@ if (searchString ==  null || searchString.equals("")) {
 }
 %>
 
-<title>VegBank Metasearch: <%= searchString %></title>
+@webpage_masthead_html@
 
-<link type="text/css" href="@stylesheet@" rel="stylesheet">
-
-</head>
-
-<body>
-@vegbank_header_html_normal@
 <h2 class='center'>VegBank Metasearch</h2>
 
 <center>
@@ -212,6 +203,6 @@ Showing all metadata</a>
 document.metasearch_form.xwhereParams.focus();
 </script>
 </center>
-@vegbank_footer_html_tworow@
-</body>
-</html>
+@webpage_footer_html@
+
+

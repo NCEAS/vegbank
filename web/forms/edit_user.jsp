@@ -1,35 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
 <jsp:useBean id="bean" class="org.vegbank.ui.struts.UserProfileForm"/>
-
-<html>
-<!-- 
-  * '$RCSfile: edit_user.jsp,v $'
-  * Purpose: 
-  * Copyright: 2000 Regents of the University of California and the
-  *               National Center for Ecological Analysis and Synthesis
-  * Authors: @author@
-  *
-  * '$Author: mlee $'
-  * '$Date: 2004-11-16 06:19:24 $'
-  * '$Revision: 1.4 $'
-  *
-  *
-  -->
-  
-<HEAD>@defaultHeadToken@
-<!-- #BeginEditable "doctitle" --> 
 <TITLE>Edit Your Profile</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
-<!-- #EndEditable --> 
-<meta http-equiv="Content-Type" content="text/html; charset=">
-
-
-</HEAD>
-<BODY>
-@vegbank_header_html_normal@
+@webpage_masthead_html@
 
 <br>
 <br>
@@ -69,7 +43,7 @@
 			</table>
 
 			<p class="sizenormal">
-				The following fields are all required for <html:link action="LoadCertification.do">certification</html:link>.
+				The following fields are all required for <html:link action="LoadCertification.do">certification
 				<br/>
 			</p> 
 
@@ -84,7 +58,7 @@
 		&nbsp;&nbsp;&nbsp;
         &raquo; Click here to 
 		<html:link forward="ChangePassword" paramId="usrId" paramName="beanUsrId">change 
-				password</html:link>.
+				password
 	  </td>
     </tr>
 	<!--
@@ -136,7 +110,7 @@
         <html:select name="upform" property="webuser.state"> 
           <option value="">-- select one --</option>
           <html:optionsCollection name="statelistbean" property="allStatesNames"/>
-        </html:select>
+        
 		</td>
     </tr>
 		
@@ -146,7 +120,7 @@
         <html:select name="upform" property="webuser.country">
           <option value="">-- select one --</option>
           <html:optionsCollection name="countrylistbean" property="allCountriesNames"/>
-        </html:select>
+        
 		</td>
     </tr>
 		
@@ -161,16 +135,16 @@
       <td>
 	  <br/>
         <html:submit value="Update profile"/>
-		&nbsp; &nbsp; &nbsp; <html:link forward="MainMenu">Cancel</html:link>
+		&nbsp; &nbsp; &nbsp; <html:link forward="MainMenu">Cancel
 	  <br/>&nbsp;
       </td>
     </tr>
 		
 	</table>
-	</html:form>
+	
     <!-- Modify your password -->
 
-@vegbank_footer_html_tworow@
-</BODY>
-</HTML>
+@webpage_footer_html@
+
+
 

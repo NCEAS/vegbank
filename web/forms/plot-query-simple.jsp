@@ -1,10 +1,7 @@
+@webpage_top_html@
 @stdvegbankget_jspdeclarations@
-<html>
-<head>@defaultHeadToken@
+@webpage_head_html@
 <title>VegBank Simple Query</title>
-
-<link type="text/css" href="@stylesheet@" rel="stylesheet">
-
 <script type="text/javascript">
 <!--
 /*
@@ -62,11 +59,10 @@ function validateName(value, label) {
 
 -->
 </script>
+@webpage_masthead_html@
 
-</head>
 
-<body>
-@vegbank_header_html_normal@
+
 <h3>VegBank Simple Query</h3>
 <blockquote>
 <p><span class="category">Three-in-one plot/plant/community search.</span></p>
@@ -213,6 +209,6 @@ function validateName(value, label) {
 <br/>
 <p>&nbsp;
 
-@vegbank_footer_html_tworow@
-</body>
-</html>
+@webpage_footer_html@
+
+

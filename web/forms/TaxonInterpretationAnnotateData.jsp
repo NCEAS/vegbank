@@ -1,36 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+@webpage_top_html@
+@stdvegbankget_jspdeclarations@
+@webpage_head_html@
+@defaultHeadToken@
 
-<HTML>
-<!-- 
-*   '$RCSfile: TaxonInterpretationAnnotateData.jsp,v $'
-*   Purpose: Edit a taxon interpretation record.
-*   Copyright: 2000 Regents of the University of California and the
-*               National Center for Ecological Analysis and Synthesis
-*   Authors: @author@
-*
-*  '$Author: anderson $'
-*  '$Date: 2004-12-13 06:38:15 $'
-*  '$Revision: 1.7 $'
-*
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
--->
-<head>
+<title>Interpret Plant Taxon</title>
 <script language="javascript">
 function doLookup(ac) {
 	window.open('@get_link@std/plantconcept/' + ac, '', 'width=700,height=400,location,status,scrollbars,toolbar,resizable');
@@ -43,18 +16,7 @@ function popupPlantQuery() {
 	window.open('@web_context@forms/PlantQuery.jsp', '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
 }
 </script>
-@defaultHeadToken@
-
-<title>Interpret Plant Taxon</title>
-<link rel="stylesheet" href="@stylesheet@" type="text/css"/> 
-  <meta http-equiv="Content-Type" content="text/html; charset=">
-  </head>
-
-  <body>
-
-  <!--xxx -->
-  @vegbank_header_html_normal@ 
-  <!--xxx -->
+  @webpage_masthead_html@ 
   
   <br/>
 
@@ -66,7 +28,7 @@ function popupPlantQuery() {
 	<ul>
 	<html:messages id="error" message="false">
 		<li><bean:write name="error"/></li>
-	</html:messages>
+	
 	</ul>
 	<hr noshade>
 </td></tr></table>
@@ -78,7 +40,7 @@ function popupPlantQuery() {
 	<ul>
 	<html:messages id="msg" property="saved" message="true">
 		<li><bean:write name="msg"/></li>
-	</html:messages>
+	
 	</ul>
 	<hr noshade>
 </td></tr></table>
@@ -152,24 +114,24 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 	<td class="listhead">Fit of your concept to the plant of the plot</td>
 	<td>
 	    <html:select name="formBean" property="taxonfit" size="1">
-			<html:option value="">choose...</html:option>
-			<html:option value="Absolutely wrong">Absolutely wrong</html:option>
-			<html:option value="Understandable but wrong">Understandable but wrong</html:option>
-			<html:option value="Reasonable or acceptable answer">Reasonable or acceptable answer</html:option>
-			<html:option value="Good answer">Good answer</html:option>
-			<html:option value="Absolutely correct">Absolutely correct</html:option>
-		</html:select>
+			<html:option value="">choose...
+			<html:option value="Absolutely wrong">Absolutely wrong
+			<html:option value="Understandable but wrong">Understandable but wrong
+			<html:option value="Reasonable or acceptable answer">Reasonable or acceptable answer
+			<html:option value="Good answer">Good answer
+			<html:option value="Absolutely correct">Absolutely correct
+		
 	</td>
 	</tr>
 	<tr>
 		<td class="listhead">Confidence you have in what you've entered here</td>
 		<td> 
 	    	<html:select name="formBean" property="taxonconfidence" size="1">
-				<html:option value="">choose...</html:option>
-				<html:option value="High">High</html:option>
-				<html:option value="Medium">Medium</html:option>
-				<html:option value="Low">Low</html:option>
-			</html:select>
+				<html:option value="">choose...
+				<html:option value="High">High
+				<html:option value="Medium">Medium
+				<html:option value="Low">Low
+			
 		</td>
 	</tr>
 	<tr>
@@ -250,7 +212,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 	&nbsp; &nbsp; &nbsp; &nbsp;
   <html:cancel/>
 
-  </html:form>
+  
 
 
 
@@ -370,8 +332,8 @@ org.vegbank.common.command.GenericCommandStatic.execute(request, "party_simple",
 
 
   <!-- VEGBANK FOOTER -->
-  @vegbank_footer_html_tworow@
+  @webpage_footer_html@
   <!-- END FOOTER -->
 
-  </body>
-  </html>
+  
+  

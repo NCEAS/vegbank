@@ -1,16 +1,9 @@
+@webpage_top_html@
 @stdvegbankget_jspdeclarations@
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
-<HEAD>@defaultHeadToken@
+@webpage_head_html@
  
 <TITLE>Summary of Data in VegBank</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css" />
-
-
-<meta http-equiv="Content-Type" content="text/html; charset=" />
-</HEAD>
-<body>@vegbank_header_html_normal@
+<body>@webpage_masthead_html@
 
 <h1>Data Currently in VegBank </h1>
 <div align="center">
@@ -80,6 +73,6 @@
 
 </div>
 
-@vegbank_footer_html_tworow@
-</BODY>
-</html>
+@webpage_footer_html@
+
+

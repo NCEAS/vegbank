@@ -1,8 +1,8 @@
 <!--
   *   '$RCSfile: multiple_file_upload.jsp,v $'
-  *   '$Author: mlee $'
-  *   '$Date: 2004-11-17 21:39:10 $'
-  *   '$Revision: 1.4 $'
+  *   '$Author: anderson $'
+  *   '$Date: 2005-03-15 08:25:11 $'
+  *   '$Revision: 1.5 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -81,7 +81,7 @@
 	name="countform" method="post" onchange="return doSubmit(this)">
 <input type="hidden" name="action" value="generateForm"/>
 <table>
-<tbody>
+
 <tr>
 	<td>1. Select the number of files you want to upload:</td>
 	<td>
@@ -125,5 +125,5 @@
 
 
 
-</body>
-</html>
+
+
