@@ -1,207 +1,245 @@
-/*
- * Creates the tables for the 
- * plant names database on an 
- * postgresql  RDBMS
- *
- */
 
+-----------------------------------------------------------------------------
+-- plantUsage
+-----------------------------------------------------------------------------
+drop sequence plantUsage_PLANTUSAGE_ID_seq;
+drop table plantUsage;
 
-DROP TABLE plantCitation;
-DROP TABLE plantName;
-DROP TABLE plantUsage;
-DROP TABLE plantCorrelation;
-DROP TABLE plantConcept;
-DROP TABLE plantLineage;
-DROP TABLE plantConceptStatus;
-
-DROP SEQUENCE plantname_id_seq;
-DROP SEQUENCE plantconcept_id_seq;
-DROP SEQUENCE plantusage_id_seq;
-DROP SEQUENCE plantcorrelation_id_seq;
-DROP SEQUENCE plantconstatus_id_seq;
-
-
-/*
- * citations table
- */
-CREATE TABLE plantCitation (
-plantcitation_id INT NOT NULL PRIMARY KEY,
-citation varchar(400)
+CREATE TABLE plantUsage
+(
+    PLANTUSAGE_ID serial,
+    PLANTNAME_ID integer NOT NULL,
+    PLANTCONCEPT_ID integer NOT NULL,
+    usageStart timestamp ,
+    usageStop timestamp,
+    plantNameStatus varchar (22) ,
+    plantName varchar (220),
+    PLANTPARTY_ID integer ,
+    classSystem varchar (22),
+    PRIMARY KEY(PLANTUSAGE_ID)
 );
 
+-----------------------------------------------------------------------------
+-- plantStatus
+-----------------------------------------------------------------------------
+drop sequence plantStatus_PLANTSTATUS_ID_seq;
+drop table plantStatus;
 
-
-/*
- * plant conceptstatus table
- */
-
-CREATE SEQUENCE plantconstatus_id_seq;
- 
-CREATE TABLE plantConceptStatus (
-plantconceptstatus_id INT default nextval('plantconstatus_id_seq'),
-plantconcept_id INT ,
-status varchar(70),
-startDate date,
-partyName varchar(20),
-stopDate date,
-event varchar(20)
---FOREIGN KEY (ref_id) REFERENCES reference
+CREATE TABLE plantStatus
+(
+    PLANTSTATUS_ID serial,
+    PLANTCONCEPT_ID integer NOT NULL,
+    PLANTREFERENCE_ID integer,
+    plantConceptStatus varchar (22) NOT NULL,
+    startDate timestamp NOT NULL,
+    stopDate timestamp,
+    plantPartyComments varchar (22),
+    PLANTPARTY_ID integer NOT NULL,
+    PRIMARY KEY(PLANTSTATUS_ID)
 );
 
---CREATE SEQUENCE plantconstatus_id_seq;
---CREATE TRIGGER plantconstatus_before_insert
---BEFORE INSERT ON plantconceptstatus FOR EACH ROW
---BEGIN
---  SELECT plantconstatus_id_seq.nextval
---    INTO :new.plantconceptstatus_id
---    FROM dual;
---END;
---/
+-----------------------------------------------------------------------------
+-- plantReference
+-----------------------------------------------------------------------------
+drop sequence plantReference_PLANTREFERENCE_ID_seq;
+drop table plantReference;
 
-
-
-
-
-/*
- * plant names table
- */
-CREATE SEQUENCE plantname_id_seq;
-
-CREATE TABLE plantName (
-plantname_id INT default nextval('plantname_id_seq'),
-plantSymbol varchar(70),
-plantName varchar(200),
-plantCommonName varchar(200),
-plantcitation_id INT,
-date_entered date
---FOREIGN KEY (ref_id) REFERENCES reference
+CREATE TABLE plantReference
+(
+    PLANTREFERENCE_ID serial,
+    authors varchar (22),
+    title varchar (22),
+    pubDate timestamp,
+    edition varchar (22),
+    seriesName varchar (22),
+    issueIdentification varchar (22),
+    otherCitationDetails varchar (22),
+    page varchar (22),
+    tableCited varchar (22),
+    ISBN varchar (22),
+    ISSN varchar (22),
+    plantDescription varchar (200),
+    PRIMARY KEY(PLANTREFERENCE_ID)
 );
 
---CREATE SEQUENCE plantname_id_seq;
---CREATE TRIGGER plantname_before_insert
---BEFORE INSERT ON plantname FOR EACH ROW
---BEGIN
---  SELECT plantname_id_seq.nextval
---    INTO :new.plantname_id
---    FROM dual;
---END;
---/
+-----------------------------------------------------------------------------
+-- plantName
+-----------------------------------------------------------------------------
+drop sequence plantName_PLANTNAME_ID_seq;
+drop table plantName;
 
-
-/*
- * plant name - concept usage table
- */
-CREATE SEQUENCE plantusage_id_seq;
-
-CREATE TABLE plantUsage (
-plantusage_Id INT NOT NULL PRIMARY KEY default nextval('plantusage_id_seq'),
-plantname_id INT,
-plantconcept_id INT,
-partyName varchar(70),
-partyUsageStatus varchar(70),
-startdate date,
-stopdate date,
-tsnCode varchar(70), --denormalized from the concept table
-plantName varchar(300) --denormalized from the name table
---FOREIGN KEY (plantname_id) REFERENCES plantName,
---FOREIGN KEY (plantconcept_id) REFERENCES plantConcept,
+CREATE TABLE plantName
+(
+    PLANTNAME_ID serial,
+    plantName varchar (220) NOT NULL,
+    plantNameWithAuthor varchar (222),
+    PLANTREFERENCE_ID integer NOT NULL,
+    dateEntered timestamp,
+    PRIMARY KEY(PLANTNAME_ID)
 );
 
---CREATE SEQUENCE plantusage_id_seq;
---CREATE TRIGGER plantusage_before_insert
---BEFORE INSERT ON plantusage FOR EACH ROW
---BEGIN
---  SELECT plantusage_id_seq.nextval
---    INTO :new.plantusage_id
---    FROM dual;
---END;
---/
+-----------------------------------------------------------------------------
+-- plantLineation
+-----------------------------------------------------------------------------
+drop sequence plantLineation_PLANTLINEAGE_ID_seq;
+drop table plantLineation;
 
-
-
-
-/*
- * correlation table
- */
-CREATE SEQUENCE plantcorrelation_id_seq;
-
-CREATE TABLE plantCorrelation (
-plantcorrelation_id INT NOT NULL PRIMARY KEY default nextval('plantcorrelation_id_seq'),
-plantName varchar(200),
-plantConceptStatus_id INT,
-plantConcept_id INT,
-convergence varchar(20),
-startDate date,
-stopDate date
---FOREIGN KEY (plantUsage1_id) REFERENCES plantUsage,
---FOREIGN KEY (plantUsage2_id) REFERENCES plantUsage
-);
---CREATE SEQUENCE plantcorrelation_id_seq;
---CREATE TRIGGER plantcorrelation_before_insert
---BEFORE INSERT ON plantcorrelation FOR EACH ROW
---BEGIN
---  SELECT plantcorrelation_id_seq.nextval
---    INTO :new.plantcorrelation_id
---    FROM dual;
---END;
---/
-
-
-
-/*
- * plant concept table
- */
-CREATE SEQUENCE plantconcept_id_seq;
-
-CREATE TABLE plantConcept (
-plantconcept_id INT NOT NULL PRIMARY KEY default nextval('plantconcept_id_seq'),
-plantcitation_id INT,
-parentConcept_id INT,
-partyName varchar(25),
-classCode varchar(20), -- general code for reference (tsnCode for itis etc)
-classRank varchar(20), -- ie. kingdom, class etc
-conceptRef varchar(26), -- the reference src for the concept (like PLANTS-1996) 
-partyConceptStatus varchar(20),
-startDate date,
-stopDate date,
-plantName varchar(120) -- cheat column to refer to the first instance of a name
-	--that is associated with this concept
---FOREIGN KEY (plantUsage1_id) REFERENCES plantUsage,
---FOREIGN KEY (plantUsage2_id) REFERENCES plantUsage
+CREATE TABLE plantLineation
+(
+    PLANTLINEAGE_ID serial,
+    PLANTSTATUS1_ID integer,
+    PLANTSTATUS2_ID integer,
+    PRIMARY KEY(PLANTLINEAGE_ID)
 );
 
---CREATE SEQUENCE plantconcept_id_seq;
---CREATE TRIGGER plantconcept_before_insert
---BEFORE INSERT ON plantconcept FOR EACH ROW
---BEGIN
---  SELECT plantconcept_id_seq.nextval
---    INTO :new.plantconcept_id
---    FROM dual;
---END;
---/
+-----------------------------------------------------------------------------
+-- plantCorrelation
+-----------------------------------------------------------------------------
+drop sequence plantCorrelation_PLANTCORRELATION_ID_seq;
+drop table plantCorrelation;
 
-
-
-
-
-/*
- * lineage table
- */
-CREATE TABLE plantLineage (
-plantlineage_id INT NOT NULL PRIMARY KEY,
-plantUsage1_id INT,
-plantUsage2_id INT
---FOREIGN KEY (plantUsage1_id) REFERENCES plantUsage,
---FOREIGN KEY (plantUsage2_id) REFERENCES plantUsage
+CREATE TABLE plantCorrelation
+(
+    PLANTCORRELATION_ID serial,
+    PLANTSTATUS_ID integer NOT NULL,
+    PLANTCONCEPT_ID integer NOT NULL,
+    plantConvergence varchar (22) NOT NULL,
+    correlationStart timestamp NOT NULL,
+    correlationStop timestamp NOT NULL,
+    PRIMARY KEY(PLANTCORRELATION_ID)
 );
 
+-----------------------------------------------------------------------------
+-- plantConcept
+-----------------------------------------------------------------------------
+drop sequence plantConcept_PLANTCONCEPT_ID_seq;
+drop table plantConcept;
 
+CREATE TABLE plantConcept
+(
+    PLANTCONCEPT_ID serial,
+    PLANTNAME_ID integer NOT NULL,
+    PLANTREFERENCE_ID integer NOT NULL,
+	plantname varchar(200),
+	plantCode varchar(23),
+	plantDescription varchar(600),
+    plantLevel varchar (22),
+    plantParent integer,
+    PRIMARY KEY(PLANTCONCEPT_ID)
+);
 
-/*
-INSERT into party (party_id, org_name)  VALUES (001, 'NFA');
-INSERT into party (party_id, org_name)  VALUES (002, 'PLANTS');
-INSERT into party (party_id, org_name)  VALUES (003, 'USDA');
-*/
+-----------------------------------------------------------------------------
+-- plantParty
+-----------------------------------------------------------------------------
+drop sequence plantParty_PLANTPARTY_ID_seq;
+drop table plantParty;
 
+CREATE TABLE plantParty
+(
+    PLANTPARTY_ID serial,
+    salutation varchar (22),
+    givenName varchar (22),
+    middleName varchar (22),
+    surName varchar (22),
+    organizationName varchar (22),
+    currentName integer,
+    contactInstructions varchar (22),
+    owner integer,
+    PRIMARY KEY(PLANTPARTY_ID)
+);
+----------------------------------------------------------------------------
+-- plantParty
+----------------------------------------------------------------------------
 
+ALTER TABLE plantUsage
+    ADD CONSTRAINT PLANTNAME_ID FOREIGN KEY (PLANTNAME_ID)
+    REFERENCES plantName (PLANTNAME_ID);
+
+ALTER TABLE plantUsage
+    ADD CONSTRAINT PLANTCONCEPT_ID FOREIGN KEY (PLANTCONCEPT_ID)
+    REFERENCES plantConcept (PLANTCONCEPT_ID);
+
+ALTER TABLE plantUsage
+    ADD CONSTRAINT PLANTPARTY_ID FOREIGN KEY (PLANTPARTY_ID)
+    REFERENCES plantParty (PLANTPARTY_ID);
+
+----------------------------------------------------------------------------
+-- plantUsage
+----------------------------------------------------------------------------
+
+ALTER TABLE plantStatus
+    ADD CONSTRAINT PLANTCONCEPT_ID FOREIGN KEY (PLANTCONCEPT_ID)
+    REFERENCES plantConcept (PLANTCONCEPT_ID);
+
+ALTER TABLE plantStatus
+    ADD CONSTRAINT PLANTREFERENCE_ID FOREIGN KEY (PLANTREFERENCE_ID)
+    REFERENCES plantReference (PLANTREFERENCE_ID);
+
+ALTER TABLE plantStatus
+    ADD CONSTRAINT PLANTPARTY_ID FOREIGN KEY (PLANTPARTY_ID)
+    REFERENCES plantParty (PLANTPARTY_ID);
+
+----------------------------------------------------------------------------
+-- plantStatus
+----------------------------------------------------------------------------
+
+----------------------------------------------------------------------------
+-- plantReference
+----------------------------------------------------------------------------
+
+ALTER TABLE plantName
+    ADD CONSTRAINT PLANTREFERENCE_ID FOREIGN KEY (PLANTREFERENCE_ID)
+    REFERENCES plantReference (PLANTREFERENCE_ID);
+
+----------------------------------------------------------------------------
+-- plantName
+----------------------------------------------------------------------------
+
+ALTER TABLE plantLineation
+    ADD CONSTRAINT PLANTSTATUS1_ID FOREIGN KEY (PLANTSTATUS1_ID)
+    REFERENCES plantStatus (PLANTSTATUS_ID);
+
+ALTER TABLE plantLineation
+    ADD CONSTRAINT PLANTSTATUS2_ID FOREIGN KEY (PLANTSTATUS2_ID)
+    REFERENCES plantStatus (PLANTSTATUS_ID);
+
+----------------------------------------------------------------------------
+-- plantLineation
+----------------------------------------------------------------------------
+
+ALTER TABLE plantCorrelation
+    ADD CONSTRAINT PLANTSTATUS_ID FOREIGN KEY (PLANTSTATUS_ID)
+    REFERENCES plantStatus (PLANTSTATUS_ID);
+
+ALTER TABLE plantCorrelation
+    ADD CONSTRAINT PLANTCONCEPT_ID FOREIGN KEY (PLANTCONCEPT_ID)
+    REFERENCES plantConcept (PLANTCONCEPT_ID);
+
+----------------------------------------------------------------------------
+-- plantCorrelation
+----------------------------------------------------------------------------
+
+ALTER TABLE plantConcept
+    ADD CONSTRAINT PLANTNAME_ID FOREIGN KEY (PLANTNAME_ID)
+    REFERENCES plantName (PLANTNAME_ID);
+
+ALTER TABLE plantConcept
+    ADD CONSTRAINT PLANTREFERENCE_ID FOREIGN KEY (PLANTREFERENCE_ID)
+    REFERENCES plantReference (PLANTREFERENCE_ID);
+
+ALTER TABLE plantConcept
+    ADD CONSTRAINT plantParent FOREIGN KEY (plantParent)
+    REFERENCES plantConcept (PLANTCONCEPT_ID);
+
+----------------------------------------------------------------------------
+-- plantConcept
+----------------------------------------------------------------------------
+
+ALTER TABLE plantParty
+    ADD CONSTRAINT currentName FOREIGN KEY (currentName)
+    REFERENCES plantParty (PLANTPARTY_ID);
+
+ALTER TABLE plantParty
+    ADD CONSTRAINT owner FOREIGN KEY (owner)
+    REFERENCES plantParty (PLANTPARTY_ID);
 
