@@ -6,8 +6,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2002-09-10 23:43:46 $'
-  *  '$Revision: 1.6 $'
+  *      '$Date: 2002-09-11 04:36:50 $'
+  *  '$Revision: 1.7 $'
   *
   *
   -->
@@ -75,11 +75,18 @@
 &nbsp;
 &nbsp;
 <span class="itemsmall">
-Email address: <input   class="iform" readonly type="text" readonly  size="25" maxlength="50"  name="emailAddress" value="@emailAddress@"> <br>
-First Name: <input  class="iform" readonly  type="text" readonly  size="25" maxlength="50"  name="givenName" value="@givenName@"> <br>
-Last Name: <input  class="iform" readonly type="text" readonly  size="25" maxlength="50"  name="surName" value="@surName@"> <br>
+<table>
+<tr><td>
+Email address: </td><td><input   class="iform" readonly type="text" readonly  size="40" maxlength="50"  name="emailAddress" value="@emailAddress@"> 
+</td></tr>
+<tr><td>
+First Name: </td><td><input  class="iform" readonly  type="text" readonly  size="40" maxlength="50"  name="givenName" value="@givenName@"> 
+</td></tr>
+<tr><td>
+Last Name: </td><td><input  class="iform" readonly type="text" readonly  size="40" maxlength="50"  name="surName" value="@surName@"> 
+</td></tr>
 </span>
-
+</table>
 <!-- PLANT NAME-->
 <table border="0" width="100%" bgcolor="#DFE5FA">
 	<tr>
@@ -92,12 +99,19 @@ Last Name: <input  class="iform" readonly type="text" readonly  size="25" maxlen
 </table>
 &nbsp;
 &nbsp;
+<table>
 <span class="itemsmall">
-Scientific Name: <input type="text" readonly  size="25" maxlength="50"  name="longName" value="@longName@"> <br>
-Common Name: <input type="text" readonly  size="25" maxlength="50"  name="shortName" value="@shortName@"> <br>
-Code Name: <input type="text" readonly  size="25" maxlength="50"  name="code" value="@code@"> <br>
+<tr><td>
+Scientific Name: </td><td><input type="text" readonly  size="40" maxlength="50"  name="longName" value="@longName@">
+</td></tr>
+<tr><td>
+Common Name: </td><td><input type="text" readonly  size="40" maxlength="50"  name="shortName" value="@shortName@"> 
+</td></tr>
+<tr><td>
+Code Name: </td><td><input type="text" readonly  size="40" maxlength="50"  name="code" value="@code@"> 
+</td></tr>
 </span>
-
+</table>
 <!-- PLANT NAME REFERENCE -->
 <table border="0" width="100%" bgcolor="#DFE5FA">
 	<tr>
@@ -108,48 +122,87 @@ Code Name: <input type="text" readonly  size="25" maxlength="50"  name="code" va
 		</font>
 	</tr>
 </table>
-&nbsp;
-&nbsp;
-<table border="1" >
+
+
+<table border="0" >
 <span class="itemsmall">
 <tr>
-	<td>
-Scientific Name Ref. Author: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefAuthors" value="@longNameRefAuthors@"> <br>
-Scientific Name Ref. Title: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefTitle" value="@longNameRefTitle@"> <br>
-Scientific Name Ref. Date: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefDate" value="@longNameRefDate@"> <br>
-Scientific Name Ref. Edition: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefEdition" value="@longNameRefEdition@"> <br>
-Scientific Name Ref. Series Name: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefSeriesName" value="@longNameRefSeriesName@"> <br>
-Scientific Name Ref. Volume: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefVolume" value="@longNameRefVolume@"> <br>
-Scientific Name Ref. Page: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefPage" value="@longNameRefPage@"> <br>
-Scientific Name Ref. ISSN: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefISSN" value="@longNameRefISSN@"> <br>
-Scientific Name Ref. ISBN: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefISBN" value="@longNameRefISBN@"> <br>
-Scientific Name Ref. Other Details: <input type="text" readonly  size="25" maxlength="50"  name="longNameRefOtherCitDetails" value="@longNameRefOtherCitDetails@"> <br>
-	</td>
-	<td>
-Common Name Ref. Author: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefAuthors" value="@shortNameRefAuthors@"> <br>
-Common Name Ref. Title: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefTitle" value="@shortNameRefTitle@"> <br>
-Common Name Ref. Date: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefDate" value="@shortNameRefDate@"> <br>
-Common Name Ref. Edition: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefEdition" value="@shortNameRefEdition@"> <br>
-Common Name Ref. Series Name: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefSeriesName" value="@shortNameRefSeriesName@"> <br>
-Common Name Ref. Volume: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefVolume" value="@shortNameRefVolume@"> <br>
-Common Name Ref. Page: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefPage" value="@shortNameRefPage@"> <br>
-Common Name Ref. ISSN: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefISSN" value="@shortNameRefISSN@"> <br>
-Common Name Ref. ISBN: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefISBN" value="@shortNameRefISBN@"> <br>
-Common Name Ref. Other Details: <input type="text" readonly  size="25" maxlength="50"  name="shortNameRefOtherCitDetails" value="@shortNameRefOtherCitDetails@"> <br>
-</td>
-<td>
-Code Name Ref. Author: <input type="text" readonly  size="25" maxlength="50"  name="codeRefAuthors" value="@codeRefAuthors@"> <br>
-Code Name Ref. Title: <input type="text" readonly  size="25" maxlength="50"  name="codeRefTitle" value="@codeRefTitle@"> <br>
-Code Name Ref. Date: <input type="text" readonly  size="25" maxlength="50"  name="codeRefDate" value="@codeRefDate@"> <br>
-Code Name Ref. Edition: <input type="text" readonly  size="25" maxlength="50"  name="codeRefEdition" value="@codeRefEdition@"> <br>
-Code Name Ref. Series Name: <input type="text" readonly  size="25" maxlength="50"  name="codeRefSeriesName" value="@codeRefSeriesName@"> <br>
-Code Name Ref. Volume: <input type="text" readonly  size="25" maxlength="50"  name="codeRefVolume" value="@codeRefVolume@"> <br>
-Code Name Ref. Page: <input type="text" readonly  size="25" maxlength="50"  name="codeRefPage" value="@codeRefPage@"> <br>
-Code Name Ref. ISSN: <input type="text" readonly  size="25" maxlength="50"  name="codeRefISSN" value="@codeRefISSN@"> <br>
-Code Name Ref. ISBN: <input type="text" readonly  size="25" maxlength="50"  name="codeRefISBN" value="@codeRefISBN@"> <br>
-Code Name Ref. Other Details: <input type="text" readonly  size="25" maxlength="50"  name="codeRefOtherCitDetails" value="@codeRefOtherCitDetails@"> <br>
+<td>&nbsp;</td>
+     <td><b>Scientific Name</b></td>
+     <td><b>Common Name</b></td>
+     <td><b>Code</b></td>
+</tr>
+<tr>
+<td>Author:
+</td><td><input type="text" readonly  size="40"  name="longNameRefAuthors" value="@longNameRefAuthors@"> 
+</td><td><input type="text" readonly  size="40"  name="shortNameRefAuthors" value="@shortNameRefAuthors@"> 
+</td><td><input type="text" readonly  size="40"  name="codeRefAuthors" value="@codeRefAuthors@"> 
 </td>
 </tr>
+<tr>
+<td>Title: 
+</td><td><input type="text" readonly  size="40"   name="longNameRefTitle" value="@longNameRefTitle@"> 
+</td><td><input type="text" readonly  size="40"   name="shortNameRefTitle" value="@shortNameRefTitle@"> 
+</td><td><input type="text" readonly  size="40"   name="codeRefTitle" value="@codeRefTitle@"> 
+</td>
+</tr>
+<tr>
+<td>Date: 
+</td><td><input type="text" readonly  size="40"   name="longNameRefDate" value="@longNameRefDate@"> 
+</td><td><input type="text" readonly  size="40"   name="shortNameRefDate" value="@shortNameRefDate@"> 
+</td><td><input type="text" readonly  size="40"   name="codeRefDate" value="@codeRefDate@"> 
+</td>
+</tr>
+<tr>
+<td>Edition:        
+</td><td><input type="text" readonly  size="40"   name="longNameRefEdition" value="@longNameRefEdition@"> 
+</td><td><input type="text" readonly  size="40"   name="shortNameRefEdition" value="@shortNameRefEdition@"> 
+</td><td><input type="text" readonly  size="40"   name="codeRefEdition" value="@codeRefEdition@"> 
+</td>
+</tr>
+<tr>
+<td>Series Name:
+</td><td><input type="text" readonly  size="40"   name="longNameRefSeriesName" value="@longNameRefSeriesName@"> 
+</td><td><input type="text" readonly  size="40"   name="shortNameRefSeriesName" value="@shortNameRefSeriesName@"> 
+</td><td><input type="text" readonly  size="40"   name="codeRefSeriesName" value="@codeRefSeriesName@"> 
+</td>
+</tr>
+<tr>
+<td>Volume:         
+</td><td><input type="text" readonly  size="40"   name="longNameRefVolume" value="@longNameRefVolume@"> 
+</td><td><input type="text" readonly  size="40"   name="shortNameRefVolume" value="@shortNameRefVolume@"> 
+</td><td><input type="text" readonly  size="40"   name="codeRefVolume" value="@codeRefVolume@"> 
+</td>
+</tr>
+<tr>
+<td>Page:           
+</td><td><input type="text" readonly  size="40"   name="longNameRefPage" value="@longNameRefPage@"> 
+</td><td><input type="text" readonly  size="40"   name="shortNameRefPage" value="@shortNameRefPage@"> 
+</td><td><input type="text" readonly  size="40"   name="codeRefPage" value="@codeRefPage@"> 
+</td>
+</tr>
+<tr>
+<td>ISSN:           
+</td><td><input type="text" readonly  size="40"   name="longNameRefISSN" value="@longNameRefISSN@"> 
+</td><td><input type="text" readonly  size="40"   name="shortNameRefISSN" value="@shortNameRefISSN@"> 
+</td><td><input type="text" readonly  size="40"   name="codeRefISSN" value="@codeRefISSN@"> 
+</td>
+</tr>
+<tr>
+<td>ISBN:           
+</td><td><input type="text" readonly  size="40"   name="longNameRefISBN" value="@longNameRefISBN@"> 
+</td><td><input type="text" readonly  size="40"   name="shortNameRefISBN" value="@shortNameRefISBN@"> 
+</td><td><input type="text" readonly  size="40"   name="codeRefISBN" value="@codeRefISBN@"> 
+</td>
+</tr>
+<tr>
+<td>Other Details:
+</td><td><input type="text" readonly  size="40"   name="longNameRefOtherCitDetails" value="@longNameRefOtherCitDetails@"> 
+</td><td><input type="text" readonly  size="40"   name="shortNameRefOtherCitDetails" value="@shortNameRefOtherCitDetails@"> 
+</td><td><input type="text" readonly  size="40"   name="codeRefOtherCitDetails" value="@codeRefOtherCitDetails@"> 
+</td>
+</tr>
+
 </span>
 </table>
 
@@ -165,19 +218,40 @@ Code Name Ref. Other Details: <input type="text" readonly  size="25" maxlength="
 </table>
 &nbsp;
 &nbsp;
+<table border="0" >
 <span class="itemsmall">
-Concept Description: <input type="text" readonly  size="25" maxlength="50"  name="conceptDescription" value="@conceptDescription@"> <br>
-Title: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefTitle" value="@conceptRefTitle@"> <br>
-Authors: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefAuthors" value="@conceptRefAuthors@"> <br>
-Pub. Date: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefDate" value="@conceptRefDate@"> <br>
-Edition: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefEdition" value="@conceptRefEdition@"> <br>
-SeriesName: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefSeriesName" value="@conceptRefSeriesName@"> <br>
-Volume: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefVolume" value="@conceptRefVolume@"> <br>
-Page: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefPage" value="@conceptRefPage@"> <br>
-ISBN: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefISBN" value="@conceptRefISBN@"> <br>
-Other Citation Details: <input type="text" readonly  size="25" maxlength="50"  name="conceptRefOtherCitDetails" value="@conceptRefOtherCitDetails@"> <br>
+<tr>
+<td>Concept Description:</td><td><input type="text" readonly  size="25" maxlength="50"  name="conceptDescription" value="@conceptDescription@"> 
+</td></tr>
+<tr>
+<td>Title:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefTitle" value="@conceptRefTitle@"> 
+</td></tr>
+<tr>
+<td>Authors:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefAuthors" value="@conceptRefAuthors@"> 
+</td></tr>
+<tr>
+<td>Pub. Date:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefDate" value="@conceptRefDate@"> 
+</td></tr>
+<tr>
+<td>Edition:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefEdition" value="@conceptRefEdition@"> 
+</td></tr>
+<tr>
+<td>SeriesName:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefSeriesName" value="@conceptRefSeriesName@"> 
+</td></tr>
+<tr>
+<td>Volume:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefVolume" value="@conceptRefVolume@">
+</td></tr>
+<tr>
+<td>Page:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefPage" value="@conceptRefPage@"> 
+</td></tr>
+<tr>
+<td>ISBN:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefISBN" value="@conceptRefISBN@"> 
+</td></tr>
+<tr>
+<td>Other Citation Details:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefOtherCitDetails" value="@conceptRefOtherCitDetails@"> 
+</td></tr>
 </span>
-
+</table>
 <!-- PLANT STATUS -->
 <table border="0" width="100%" bgcolor="#DFE5FA">
 	<tr>
@@ -190,17 +264,34 @@ Other Citation Details: <input type="text" readonly  size="25" maxlength="50"  n
 </table>
 &nbsp;
 &nbsp;
+<table border="0" >
 <span class="itemsmall">
-Status: <input type="text" readonly  size="25" maxlength="50"  name="" value="@conceptStatus@"> <br>
-Status Start Date: <input type="text" readonly  size="25" maxlength="50"  name="" value="@statusStartDate@"> <br>
-Status Stop Date: <input type="text" readonly  size="25" maxlength="50"  name="" value="@statusStopDate@"> <br>
-Status Description: <input type="text" readonly  size="25" maxlength="50"  name="" value="@statusDescription@"> <br>
-Plant Level: <input type="text" readonly  size="25" maxlength="50"  name="" value="@taxonLevel@"> <br>
-Plant Parent Name: <input type="text" readonly  size="25" maxlength="50"  name="" value="@plantParentName@"> <br>
-Parent Ref Title : <input type="text" readonly  size="25" maxlength="50"  name="" value="@plantParentRefTitle@"> <br>
-Parent Ref Authors: <input type="text" readonly  size="25" maxlength="50"  name="" value="@plantParentRefAuthors@"> <br>
+<tr><td>
+Status: </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@conceptStatus@"> 
+</td></tr>
+<tr><td>
+Status Start Date: </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@statusStartDate@"> 
+</td></tr>
+<tr><td>
+Status Stop Date: </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@statusStopDate@"> 
+</td></tr>
+<tr><td>
+Status Description: </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@statusDescription@"> 
+</td></tr>
+<tr><td>
+Plant Level: </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@taxonLevel@"> 
+</td></tr>
+<tr><td>
+Plant Parent Name: </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@plantParentName@"> 
+</td></tr>
+<tr><td>
+Parent Ref Title : </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@plantParentRefTitle@"> 
+</td></tr>
+<tr><td>
+Parent Ref Authors: </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@plantParentRefAuthors@"> 
+</td></tr>
 </span>
-
+</table>
 </form>
 
 <!-- VEGBANK FOOTER -->
