@@ -10,7 +10,7 @@
   @webpage_masthead_html@
     <h2>VegBank Data Dictionary Index</h2>
     <p>See the <a href="{$htmlPrefix}-guide.html">data dictionary guide</a> for more information on how to interpret the information in the data dictionary.</p>
-    <table border="1" cellpadding="0" cellspacing="0">
+    <table class="thinlines">
     <tr>
             <th>Select table</th><th>or a field</th>
     </tr>
@@ -26,9 +26,9 @@
             <xsl:for-each select="entity[count(attribute)&gt;0]">
             <xsl:sort select="entityName" />
             <tr>
-<td class="normal">   <a href="{$htmlPrefix}~table~{translate(entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">
+<td>   <a href="{$htmlPrefix}~table~{translate(entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">
                   <xsl:value-of select="entityName"/> </a> </td>
-      <td class="normal">
+      <td>
         <select onChange="MM_jumpMenu('parent',this,0)">
                 <option>---------------------select field---------------------</option> <!-- wider select field so that combo boxes are same width -->
                 <xsl:for-each select="attribute">
@@ -43,7 +43,7 @@
              </tr>
             </xsl:for-each>
 </table>
- <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p> 
+
 @webpage_footer_html@
   </xsl:template>
 </xsl:stylesheet>

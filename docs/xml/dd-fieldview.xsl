@@ -11,9 +11,7 @@
   <xsl:output method="html"/>
   <xsl:template match="/dataModel">
   <xsl:for-each select="entity/attribute" >
- <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
-   @webpage_top_html@
-
+ <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">@webpage_top_html@
   @webpage_head_html@
 
  <title>VegBank Data Dictionary - field view : <xsl:value-of select="../entityName" />.<xsl:value-of select="attName" /></title>
@@ -32,14 +30,14 @@
               </blockquote>
              
             </p>
-            <table border="1" cellpadding="0" cellspacing="0" width="100%">
-              <tr bgcolor="#FFFFFF">
-                <td class="normal">
+            <table class="thinlines">
+              <tr class="evenrow">
+                <td>
                   <b>
                     <a href="dd-guide.html#field-name">field name:</a>
                   </b>
                 </td>
-                <td class="normal">
+                <td>
                   <xsl:choose>
                     <xsl:when test="attNulls='no'">
                       <b>
@@ -52,43 +50,43 @@
                   </xsl:choose>
                 </td>
               </tr>
-              <tr bgcolor="#FFFFCC">
-                <td class="normal">
+              <tr class="oddrow">
+                <td>
                   <b>
                     <a  href="dd-guide.html#nulls">nulls:</a>
                   </b>
                 </td>
-                <td class="normal">
+                <td>
                   <xsl:value-of select="attNulls"/>
                 </td>
               </tr>
-              <tr bgcolor="#FFFFFF">
-                <td class="normal">
+              <tr class="evenrow">
+                <td>
                   <b>
                     <a  href="dd-guide.html#type">type:</a>
                   </b>
                 </td>
-                <td class="normal">
+                <td>
                   <xsl:value-of select="attType"/>
                 </td>
               </tr>
-              <tr bgcolor="#FFFFCC">
-                <td class="normal">
+              <tr class="oddrow">
+                <td>
                   <b>
                     <a  href="dd-guide.html#key">key:</a>
                   </b>
                 </td>
-                <td class="normal">
+                <td>
                   <xsl:value-of select="attKey"/>
                 </td>
               </tr>
-              <tr bgcolor="#FFFFFF">
-                <td class="normal">
+              <tr class="evenrow">
+                <td>
                   <b>
                    <a  href="dd-guide.html#references">references:</a>
                   </b>
                 </td>
-                <td class="normal">
+                <td>
                   <!-- references can be split so that it doesn't make the column too wide in output -->
 <xsl:choose>
                     <xsl:when test="contains(attReferences,'.')">
@@ -103,33 +101,33 @@
 
                 </td>
               </tr>
-              <tr bgcolor="#FFFFCC">
-                <td class="normal">
+              <tr class="oddrow">
+                <td>
                   <b>
                     <a  href="dd-guide.html#list">list:</a>
                   </b>
                 </td>
-                <td class="normal">
+                <td>
                   <xsl:value-of select="attListType"/>
                 </td>
               </tr>
-              <tr bgcolor="#FFFFFF">
-                <td class="normal">
+              <tr class="evenrow">
+                <td>
                   <b>
                 <a  href="dd-guide.html#field-notes">field notes:</a>
                   </b>
                 </td>
-                <td class="normal">
+                <td>
                   <xsl:value-of select="attNotes"/>
                 </td>
               </tr>
-              <tr bgcolor="#FFFFCC">
-                <td class="normal">
+              <tr class="oddrow">
+                <td>
                   <b>
                  <a  href="dd-guide.html#field-definition">field definition:</a>
                   </b>
                 </td>
-                <td class="normal">
+                <td>
                   <xsl:value-of select="attDefinition"/>
                 </td>
               </tr>
@@ -140,39 +138,29 @@
              list values:
                   </b>
                     <br/>
-                    <table border="1" cellpadding="0" cellspacing="0">
+                    <table class="thinlines">
                       <tr>
-                        <td class="normal">
-                          <b>value</b>
-                        </td>
-                        <td class="normal">
-                          <b>description</b>
-                        </td>
-                        <td class="normal">
-                          <b>sorting</b>
-                        </td>
+                        <th>
+                          value
+                        </th>
+                        <th>
+                          description
+                        </th>
+                        <th>
+                          sorting
+                        </th>
                       </tr>
                       <xsl:for-each select="attList/attListItem">
                         <xsl:sort data-type="number" select="attListSortOrd"/>
                         <!-- <xsl:if test="attribute/attModel='logical'"> -->
-                        <!-- the following variable is 0 for the matching field, and otherwise alternates 1 and 2 - these will be converted into colors orange, yellow, and white -->
-                        <!-- the variables are made uppercase by the translate function so that plot_ID = PLOT_ID -->
-                        <xsl:variable name="RowType" select="string((1+number((position() mod 2) = 0)))"/>
-                        <!-- this will be the green portion of the color -->
-                        <xsl:variable name="GreenAmt" select="translate(translate($RowType,'0','9'),'12','FF')"/>
-                        <!-- this will be the blue portion of the color -->
-                        <xsl:variable name="BlueAmt" select="translate(translate($RowType,'1','C'),'2','F')"/>
-                        <!-- the following variable will be FF9900 or FFFFCC or FFFFFF -->
-                        <xsl:variable name="RowColor">FF<xsl:value-of select="$GreenAmt"/>
-                          <xsl:value-of select="$GreenAmt"/>
-                          <xsl:value-of select="$BlueAmt"/>
-                          <xsl:value-of select="$BlueAmt"/>
+                   
+                        <xsl:variable name="RowColor"><xsl:call-template name="getClass"><xsl:with-param name="position" select="position()" /></xsl:call-template>
                         </xsl:variable>
-                        <tr bgcolor="#{$RowColor}">
-                          <td class="normal">
+                        <tr class="{$RowColor}">
+                          <td>
                             <xsl:value-of select="attListValue"/>
                           </td>
-                          <td class="normal">
+                          <td>
                             <xsl:choose>
                               <xsl:when test="string-length(attListValueDesc)&gt;0">
                                 <xsl:value-of select="attListValueDesc"/>
@@ -180,7 +168,7 @@
                               <xsl:otherwise>--</xsl:otherwise>
                             </xsl:choose>
                           </td>
-                          <td class="normal">
+                          <td>
                             <xsl:value-of select="attListSortOrd"/>
                           </td>
                         </tr>
@@ -196,5 +184,12 @@
 
 </redirect:write>
 </xsl:for-each> <!-- table -->
+  </xsl:template>
+  <xsl:template name="getClass">
+    <xsl:param name="position" />
+    <xsl:choose>
+      <xsl:when test="$position mod 2=0">evenrow</xsl:when>
+      <xsl:otherwise>oddrow</xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 </xsl:stylesheet>
