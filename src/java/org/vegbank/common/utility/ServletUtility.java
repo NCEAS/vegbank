@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-05 18:45:30 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-11-12 22:27:31 $'
+ *  '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -534,29 +534,29 @@ public class ServletUtility
 	 * @param fileType -- the type of file as to be specified in the 
 	 * 	user profile database
 	 */
-	 public void uploadFileDataExcahgeServlet(String fileName, String userName, 
-	 String fileType)
-	 {
-		 try
-		 {
-		 	String temp = null;
-	     	String servlet = "/vegbank/servlet/dataexchange";
-	     	String protocol = "http://";
-	     	String host = "vegbank.nceas.ucsb.edu";
-	     	String server = protocol + host + servlet;
-	     	String filename = fileName;
-			
-	 		// String parameterString = "?action=uploadFile&user=harris02@hotmail.com&exchangeType=upload&submitter=harris&"
-	  		//	+"password=jasmine&file=test.dat";
-	 
-			DataExchangeClient.uploadFile(servlet, protocol, host, server, filename, userName, fileType);
-		 }
-		 catch(Exception e)
-		 {
-			 System.out.println("Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-	 }
+//	 public void uploadFileDataExcahgeServlet(String fileName, String userName, 
+//	 String fileType)
+//	 {
+//		 try
+//		 {
+//		 	String temp = null;
+//	     	String servlet = "/vegbank/servlet/dataexchange";
+//	     	String protocol = "http://";
+//	     	String host = "vegbank.nceas.ucsb.edu";
+//	     	String server = protocol + host + servlet;
+//	     	String filename = fileName;
+//			
+//	 		// String parameterString = "?action=uploadFile&user=harris02@hotmail.com&exchangeType=upload&submitter=harris&"
+//	  		//	+"password=jasmine&file=test.dat";
+//	 
+//			DataExchangeClient.uploadFile(servlet, protocol, host, server, filename, userName, fileType);
+//		 }
+//		 catch(Exception e)
+//		 {
+//			 System.out.println("Exception: " + e.getMessage() );
+//			 e.printStackTrace();
+//		 }
+//	 }
 
 	/**
 	 * @param request

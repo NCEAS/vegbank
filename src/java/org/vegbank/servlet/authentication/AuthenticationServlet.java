@@ -13,11 +13,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.LogUtility;
-
+import org.vegbank.common.utility.UserDatabaseAccess;
 
 
 /**
@@ -33,9 +32,9 @@ import org.vegbank.common.utility.LogUtility;
  * @param authType -- the authentication type {loginUser, uploadFile}
  *
  *
- *  '$Author: anderson $'
- *  '$Date: 2003-11-10 19:18:36 $'
- *  '$Revision: 1.11 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-11-12 22:27:31 $'
+ *  '$Revision: 1.12 $'
  *
  *  @version
  *  @author
@@ -140,55 +139,6 @@ public class AuthenticationServlet extends HttpServlet
 					String s =  handlePasswordRetreival(requestParams);
 					out.println(s);
 				}
-				//LOGIN THE USER
-				else if ( requestParams.get("authType").toString().equals("loginUser")  )
-				{
-					LogUtility.log("AuthenticationServlet > user login attempt");
-					if ( authenticateUser(requestParams, remoteAddress) == true)
-					{
-						//log the login in the clientLogger
-						//set a cookie
-						String user = getUserName(requestParams);
-						Cookie cookie = new Cookie("null", "null");
-						//AuthenticationServlet m =new AuthenticationServlet();
-						registeredCookie = cookieDelegator(cookie, requestParams, remoteAddress, user);
-						response.addCookie(registeredCookie);
-						registeredCookie = cookieDelegator(cookie, requestParams, remoteAddress, user);
-						response.addCookie(registeredCookie);
-						HttpSession session = request.getSession();
-						session.setAttribute("emailAddress", request.getParameter("userName") );
-						//send the user to the correct page
-						Thread.sleep(1100);
-						String redirect = "/vegbank/servlet/usermanagement?action=options";
-						LogUtility.log("AuthentictionServlet > redirecting to: " + redirect);
-						response.sendRedirect(redirect);
-					}
-					else
-					{
-						LogUtility.log("AuthenticationServlet > user login failed");
-						out.println( getErrorRedirection() );
-					}
-				}
-				//AUTHENTICATE THE USER TO UPLOAD A FILE OR SOMETHING SIMILAR
-				else if ( requestParams.get("authType").toString().equals("uploadfile")  )
-				{
-					LogUtility.log("AuthenticationServlet > authenticating for file upload");
-					if ( authenticateUser(requestParams, remoteAddress) == true)
-					{
-						out.println("<authentication>true</authentication>");
-						//set a cookie
-						String user = getUserName(requestParams );
-						Cookie cookie = new Cookie("null", "null");
-						AuthenticationServlet m =new AuthenticationServlet();
-						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
-						response.addCookie(registeredCookie);
-					}
-					else
-					{
-						out.println("<authentication>false</authentication>");
-					}
-				}
-
 				// CREATE A NEW USER
 				else if ( requestParams.get("authType").toString().equals("createUser")  )
 				{
@@ -566,57 +516,6 @@ public class AuthenticationServlet extends HttpServlet
 	 	LogUtility.log("success: " + valid + " and errors: " + errors);
 		return(valid);
 	 }
-
-/**
-	* Method to register a cookie and set it in the browser if there is a match
- * between the issued user name and password with a valid name password pair
- * stored in some data store
- *
- * @param cookie - a cookie whose name, value and max age are set depending on
- * 	the results of validation
- * @param requestParams - 
- * @param remoteAddress -
- * @param userName - the user name issued
- *
- */
-	private Cookie cookieDelegator (
-		Cookie cookie, 
-		Hashtable requestParams,
-		String remoteAddress, 
-		String userName)
-	{
-
-		// below is quite crude but will suffice for the time being.
-		// Soon will rewrite the method to send more meaning values
-		// and will use a database query to access
-		// user information -- the resource bundle is set here b/c
-		// this method may be call from another class
-		//ResourceBundle rbun = ResourceBundle.getBundle("LocalStrings");
-		//String clientLogFile = rbun.getString("requestparams.clientLog");
-
-		//get the cookie value form the user database class
-		LogUtility.log("AuthenticationServlet > USER NAME: " + userName );
-		String cookieValue = uda.getUserCookieValue(userName);
-		String cookieName = "framework";
-		
-		Cookie registeredCookie = null;
-		
-		if (cookieName != null)
-		{
-			String cookieAddress = remoteAddress; //same
-			cookie = new Cookie(cookieName, cookieValue);
-			cookie.setMaxAge(3600);  //set cookie for an hour
-     	 	cookie.setPath("/");  // cookie applies to all contexts
-			registeredCookie=cookie;
-		  LogUtility.log("AuthenticationServlet > using cookie name : " + cookieName + " val: " + cookieValue );
-		}
-		else
-		{
-			LogUtility.log("AuthenticationServlet > ERROR null user name");
-		}
-		return registeredCookie;
-	}
-
 }
 
 

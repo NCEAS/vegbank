@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-10-27 19:49:02 $'
- *  '$Revision: 1.18 $'
+ *  '$Date: 2003-11-12 22:27:31 $'
+ *  '$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,12 +38,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.vegbank.common.Constants;
 import org.vegbank.common.command.Query;
+import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.communities.datasource.VegCommunityLoader;
 import org.vegbank.databaseAccess.CommunityQueryStore;
 import org.vegbank.plots.datasource.PlotDataSource;
 import org.vegbank.plots.rmi.DataSourceClient;
-import org.vegbank.servlet.authentication.UserDatabaseAccess;
+import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.utility.datafileexchange.DataFileExchange;
 import org.w3c.dom.Document;
 
@@ -135,12 +136,14 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				// IS LOADED TO VEGBANK AND THEN GET THE REST OF THE USER-RELATED 
 				// ATTRIBUTES
 				String user = su.getCookieValue(request);
-				Hashtable userAtts = this.getUserIdParameters(user);
-				String salutation = (String)userAtts.get("salutation");
-				String surName = (String)userAtts.get("surName");
-				String givenName = (String)userAtts.get("givenName");
-				String institution = (String)userAtts.get("institution");
-				String permissionType = (String)userAtts.get("permissionType");
+				
+				UserDatabaseAccess uda = new UserDatabaseAccess();
+				WebUser userBean = uda.getUser(user);
+				String salutation = userBean.getSalutation();
+				String surName = userBean.getSurname();
+				String givenName = userBean.getGivenname();
+				String institution = userBean.getInsitution();
+				String permissionType = userBean.getPermissiontype();
 				int permissionLevel = 0;
 				try
 				{
@@ -242,13 +245,13 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 						else if ( submitDataType.trim().equals("vegPlot")  )
 						{
 							//out.println("DataSubmitServlet > action unknown!");
-							StringBuffer sb = handleVegPlotSubmittal(enum, request, response, user, userAtts);
+							StringBuffer sb = handleVegPlotSubmittal(enum, request, response, user, userBean);
 							out.println( sb.toString() );
 						}
 						else if ( submitDataType.trim().toUpperCase().equals("PLANTTAXA")  )
 						{
 							AddPlant ap = new AddPlant();
-							StringBuffer sb = ap.execute(request, response,userAtts);
+							StringBuffer sb = ap.execute(request, response,userBean);
 							out.println( sb.toString() );
 						}
 						else
@@ -312,42 +315,6 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			e.printStackTrace();
 		 }
 	 }
-	 
-	 /**
-	  * Method that uses the user database class to access the parameters 
-		* for a given user so that those attributes can be used in the 
-		* forms.
-		* 
-		* @param emailAddress -- the email address of the user
-		* @return userInfo -- a hashtable with the following attributes <br> <br>
-		* surName
-		*	givenName
-		*	password 
-		*	address
-		*	city
-		*	state
-		*	country
-		*	zipCode
-		*	dayPhone
-		*	ticketCount
-		*	permissionType
-		*	institution
-		*/
-		private Hashtable getUserIdParameters(String emailAddress)
-		{
-			Hashtable h = new Hashtable();
-			try
-			{
-				UserDatabaseAccess userdb = new UserDatabaseAccess();
-				h = userdb.getUserInfo(emailAddress);
-			}
-			catch( Exception e ) 
-			{
-				System.out.println("Exception:  " + e.getMessage() );
-				e.printStackTrace();
-			}
-			return(h);
-		}
 
 	 /**
 	  * mrthod to read, format and return as a string the plot submittal 
@@ -406,14 +373,14 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	 	HttpServletRequest request, 
 	 	HttpServletResponse response, 
 	 	String user,
-	 	Hashtable userAtts)
+	 	WebUser userBean)
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		String salutation = (String)userAtts.get("salutation");
-		String surName = (String)userAtts.get("surName");
-		String givenName = (String)userAtts.get("givenName");
-		String institution = (String)userAtts.get("institution");
+		String salutation = userBean.getSalutation();
+		String surName = userBean.getSurname();
+		String givenName = userBean.getGivenname();
+		String institution = userBean.getInsitution();
 		
 		try
 		{

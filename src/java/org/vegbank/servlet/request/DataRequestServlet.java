@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-05 20:48:59 $'
- *  '$Revision: 1.19 $'
+ *  '$Date: 2003-11-12 22:27:31 $'
+ *  '$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,8 +61,6 @@ import org.vegbank.xmlresource.transformXML;
  * REQUIRED PARAMETERS
  * @param queryType -- includes: simple, compound and extended
  * @param requestDataType -- includes: vegPlot, plantTaxon, vegCommunity
- * @param requestDataFormatType -- includes: html, xml, text
- * @param clientType -- includes: browser, clientApplication
  * @param resultType -- includes: summary, full
  * 
  * 
@@ -81,8 +79,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-11-05 20:48:59 $'
- *  '$Revision: 1.19 $'
+ *  '$Date: 2003-11-12 22:27:31 $'
+ *  '$Revision: 1.20 $'
  * 
  */
 
@@ -279,15 +277,10 @@ public class DataRequestServlet extends HttpServlet
 	 * client
 	 * 
 	 * @param out -- PrintWriter back to the client
-	 * @param clientType -- the type of client {browser, 'clientApplication' or 'app' where
-	 * app and clientApplication are synonomous}
-	 * @param requestDataFormatType -- the data format type that the client has 
-	 *		requested {tsxt, html, xml}
 	 * @param response -- the servlet response to the client 
 	 * @param params -- the parameters passed to the servlet
 	 */
 	private void handleQueryResultsResponse(
-		String clientType,
 		String requestDataType,
 		PrintWriter out,
 		HttpServletResponse response,
@@ -297,11 +290,6 @@ public class DataRequestServlet extends HttpServlet
 	{
 		try
 		{
-			LogUtility.log(
-				"DataRequestServlet > result sets: "
-					+ qr.getResultsTotal()
-					+ " to: "
-					+ clientType);
 			//pass back the summary of parameters passed to the servlet
 			//returnQueryElementSummary(out, params, response);
 			if (requestDataType.equals("vegPlot"))
@@ -657,9 +645,6 @@ public class DataRequestServlet extends HttpServlet
 			//String resultType = (String)params.get("resultType");
 			String requestDataType = (String) params.get("requestDataType");
 			//the servlet directory
-			String clientType = params.get("clientType").toString();
-			String requestDataFormatType =
-				params.get("requestDataFormatType").toString();
 
 	
 			if ( accessionCode != null && ( resultType.equals("full") || resultType.equals("summary") || resultType.equals("rawXML") ) )
@@ -676,7 +661,6 @@ public class DataRequestServlet extends HttpServlet
 			if (qr.getResultsTotal() >= 1)
 			{
 				handleQueryResultsResponse(
-					clientType,
 					requestDataType,
 					out,
 					response,
@@ -1225,35 +1209,24 @@ private void updateClientLog (String clientLog, String remoteHost)
 	{	 
 			try	 
 			{	 
-					//get the parameters needed for retuning the results	 
-					String clientType = params.get("clientType").toString();	 
-					String requestDataFormatType  = params.get("requestDataFormatType").toString();	 
+					//get the parameters needed for retuning the results	  
 					if (requestDataType.trim().equals("plantTaxon")) 	 
 					{  	 
 					//        out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "	 
 					//        + "plant taxonomy information - not requesting plot info");	 
 							String query = composePlantTaxonomyQuery(params, resultType, requestDataType);	 
-							QueryResult qr = issueQuery("simplePlantTaxonomyQuery", clientType, userName, query);	 
+							QueryResult qr = issueQuery("simplePlantTaxonomyQuery", userName, query);	 
 							//out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");	 
 							//use the method that handles the response        	 
 							if (qr.getResultsTotal() >=1) 	 
 							{	 
-									handleQueryResultsResponse(	 
-											clientType,	 
+									handleQueryResultsResponse(	  
 											requestDataType,	 
 											out,	 
 											response,	 
 											params,	 
 											resultType,	 
 											qr);	 
-							}	 
-							else 	 
-							{ 	 
-									if ( ! clientType.equals("clientApplication") )	 
-									{	 
-											String results = this.getEmptyResultSetMessage(params);	 
-											out.println( results );	 
-									}	 
 							}	 
 					}	 
 			}	 
@@ -1286,9 +1259,6 @@ private void updateClientLog (String clientLog, String remoteHost)
 		try
 		{
 			// get the parameters needed for retuning the results	 
-			String clientType = params.get("clientType").toString();
-			String requestDataFormatType =
-				params.get("requestDataFormatType").toString();
 			if (requestDataType.trim().equals("vegCommunity"))
 			{
 				System.out.println(
@@ -1299,7 +1269,6 @@ private void updateClientLog (String clientLog, String remoteHost)
 				QueryResult qr =
 					issueQuery(
 						"simpleCommunityQuery",
-						clientType,
 						userName,
 						query);
 				System.out.println(
@@ -1313,21 +1282,12 @@ private void updateClientLog (String clientLog, String remoteHost)
 				if (qr.getResultsTotal() >= 1)
 				{
 					handleQueryResultsResponse(
-						clientType,
 						requestDataType,
 						out,
 						response,
 						params,
 						resultType,
 						qr);
-				}
-				else
-				{
-					if (!clientType.equals("clientApplication"))
-					{
-						String results = this.getEmptyResultSetMessage(params);
-						out.println(results);
-					}
 				}
 			}
 		}
@@ -1348,7 +1308,6 @@ private void updateClientLog (String clientLog, String remoteHost)
 	 */	 
 	private QueryResult issueQuery(
 		String queryType,
-		String clientType,
 		String userName,
 		String xmlString)
 	{
@@ -1356,20 +1315,15 @@ private void updateClientLog (String clientLog, String remoteHost)
 
 		// IF IT IS A BROWSER QUERY THEN REGISTER THE DOCUMENT -- IF 	 
 		// CACHING IS TURNED ON	 
-		if (clientType.equals("browser"))
+		if (QUERYCACHING.booleanValue())
 		{
-			if (QUERYCACHING.booleanValue())
-			{
-				System.out.println(
-					"DataRequestServlet > Caching the query doc");
-				// FIXME: Don't know if this used or not ???	 
-				//registerQueryDocument();	 
-			}
-			else
-			{
-				System.out.println(
-					"DataRequestServlet > Not caching the query doc");
-			}
+			System.out.println(
+				"DataRequestServlet > Caching the query doc");
+		}
+		else
+		{
+			System.out.println(
+				"DataRequestServlet > Not caching the query doc");
 		}
 
 		//call the plot access module	 

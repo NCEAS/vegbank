@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-05 20:54:15 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2003-11-12 22:27:31 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ import org.vegbank.common.model.Plant;
 import org.vegbank.common.model.Plantparty;
 import org.vegbank.common.model.Reference;
 import org.vegbank.common.model.ReferenceSummary;
+import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.HTMLUtil;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.Utility;
@@ -86,7 +87,7 @@ public class AddPlant implements Constants
 	public StringBuffer execute(
 		HttpServletRequest request,
 		HttpServletResponse response,
-		Hashtable userAtts)
+		WebUser userBean)
 		throws IOException
 	{
 		StringBuffer sb = new StringBuffer();
@@ -124,9 +125,9 @@ public class AddPlant implements Constants
 
 				Plantparty party = new Plantparty();
 
-				party.setGivenname((String) userAtts.get("givenName"));
-				party.setSurname((String) userAtts.get("surName"));
-				party.setOrganizationname((String) userAtts.get("institution"));
+				party.setGivenname( userBean.getGivenname() );
+				party.setSurname( userBean.getSurname()  );
+				party.setOrganizationname( userBean.getInsitution() );
 
 				plant.setPlantParty(party);
 
@@ -282,7 +283,7 @@ public class AddPlant implements Constants
 					plant.getCommonName(),
 					plant.getCode(),
 					out,
-					userAtts);
+					userBean);
 			}
 			// STEP WHEREBY THE USER SUBMITS THE STATUS USAGE DATA AND 
 			// THE RECIPT IS RETURNED
@@ -316,7 +317,7 @@ public class AddPlant implements Constants
 					emailAddress,
 					plant,
 					out,
-					userAtts);
+					userBean);
 			}
 			// STEP WHERE THE PLANT ACTUALLY GETS LOADED TO THE DATABASE
 			else if (action.equals("plantsubmittalreceipt"))
@@ -329,7 +330,7 @@ public class AddPlant implements Constants
 
 				// WRITE THE RESULTS BACK TO THE BROWSER
 				String receipt =
-					this.getPlantInsertionReceipt(results, plant, userAtts);
+					this.getPlantInsertionReceipt(results, plant, userBean);
 				out.println(receipt);
 			}
 			else
@@ -362,7 +363,7 @@ public class AddPlant implements Constants
 	private String getPlantInsertionReceipt(
 		boolean results,
 		Plant plant,
-		Hashtable userAtts)
+		WebUser userBean)
 	{
 		StringWriter output = new StringWriter();
 		StringBuffer sb = new StringBuffer();
@@ -370,9 +371,9 @@ public class AddPlant implements Constants
 		{
 
 			//get the required elements from the planttaxonobject
-			String email = (String) userAtts.get("emailAddress");
-			String name = (String) userAtts.get("surName");
-			String institution = (String) userAtts.get("institution");
+			String email = userBean.getEmail();
+			String name = userBean.getSurname();
+			String institution = userBean.getInsitution();
 			String sciName = plant.getScientificName();
 			String commonName = plant.getCommonName();
 			String code = plant.getCode();
@@ -517,7 +518,7 @@ public class AddPlant implements Constants
 		String emailAddress,
 		Plant plant,
 		Writer out,
-		Hashtable userAtts)
+		WebUser userBean)
 	{
 		Reference ref = new Reference();
 		try
@@ -526,8 +527,8 @@ public class AddPlant implements Constants
 
 			// THE INFORMATION ABOUT THE SUBMITTER
 			replaceHash.put("emailAddress", "" + emailAddress);
-			replaceHash.put("givenName", "" + userAtts.get("givenName"));
-			replaceHash.put("surName", "" + userAtts.get("surName"));
+			replaceHash.put("givenName", "" + userBean.getGivenname() );
+			replaceHash.put("surName", "" + userBean.getSurname() );
 
 			// THE NAMES OF THE PLANT
 			replaceHash.put("longName", "" + plant.getScientificName());
@@ -686,7 +687,7 @@ public class AddPlant implements Constants
 		String shortName,
 		String code,
 		Writer out,
-		Hashtable userAtts)
+		WebUser userBean)
 	{
 		try
 		{
@@ -702,11 +703,11 @@ public class AddPlant implements Constants
 			replaceHash.put("emailAddress", "" + emailAddress);
 			replaceHash.put(
 				"plantPartyGivenName",
-				"" + userAtts.get("givenName"));
-			replaceHash.put("plantPartySurName", "" + userAtts.get("surName"));
+				"" + userBean.getGivenname() );
+			replaceHash.put("plantPartySurName", "" + userBean.getSurname() );
 			replaceHash.put(
 				"plantPartyInstitution",
-				"" + userAtts.get("institution"));
+				"" + userBean.getInsitution() );
 			replaceHash.put("plantPartyEmailAddress", "" + emailAddress);
 
 			su.filterTokenFile(plantStatusUsageTemplate, out, replaceHash);

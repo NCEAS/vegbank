@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-11 23:14:05 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-11-12 22:27:32 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
  
 package org.vegbank.servlet.request;
 
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.vegbank.databaseAccess.dbAccess;
@@ -38,33 +37,18 @@ public class FullPlotQuery
 	
 	public void execute(
 		QueryResult qr,
-		String plotId)
+		String accessionCode)
 	{
 
 		System.out.println(
-			"FullPlotQuery > requesting full data set for plot: " + plotId);
+			"FullPlotQuery > requesting full data set for plot: " + accessionCode);
 					
 		dbAccess dba = new dbAccess();
 				
 		Vector vec = new Vector();
-		//check to see how many plots are being requested -- if there are 
-		//commas then there are multiple
-		if (plotId.indexOf(",") > 0)
-		{
-			System.out.println("DataRequestServlet plot collection: " + plotId);
-			StringTokenizer tok = new StringTokenizer(plotId, ",");
-			while (tok.hasMoreTokens())
-			{
-				String buf = tok.nextToken();
-				vec.addElement(buf);
-			}
-			qr.setResultsTotal(vec.size());
-		}
-		else
-		{
-			vec.addElement(plotId);
-			qr.setResultsTotal(1);
-		}
+		vec.addElement(accessionCode);
+		qr.setResultsTotal(1);
+
 		qr.setXMLString( dba.getMultipleVegBankPlotXMLString(vec) );
 		System.out.println("FullPlotQuery > done writing "+ vec.size()+ " plots. ");
 	}
