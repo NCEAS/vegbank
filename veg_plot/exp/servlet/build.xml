@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *   '$Date: 2002-12-06 18:40:53 $'
-  *   '$Revision: 1.10 $'
+  *   '$Date: 2002-12-08 23:04:49 $'
+  *   '$Revision: 1.11 $'
   *
   *  Authors: John Harris
   *  Copyright: 2000 Regents of the University of California and the
@@ -168,7 +168,7 @@
 	/>
 
 	<echo message="compiling other vegbank-request" />
-	<ant dir="vegbank-request" target="compile"/>	
+	<ant dir="vegbank-request" inheritAll="false" target="compile"/>	
 </target>	
 
 
@@ -211,7 +211,7 @@
 	/>
 	
 	<echo message="Generating jar for vegbank-request" />
-	<ant dir="vegbank-request" target="jar"/>	
+	<ant dir="vegbank-request" inheritAll="false" target="jar"/>	
 	
 </target>
 
