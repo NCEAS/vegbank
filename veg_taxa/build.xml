@@ -35,10 +35,8 @@
 	<property name="build_sql" value="${build.dir}/sql" />
 	<property name="build.lib.dir" value="${build.dir}/lib" />
 	<property name="build_src" value="${build.dir}/src" />
-	<property name="build_data" value="${build.dir}/data" />
 	<property name="release" value="development"/>
 	
-	<property name="data" value="./taxaData"/>
 	<property name="src" value="./src"/>
 	<property name="bin" value="./bin"/>
 	<property name="sql" value="./sql"/>
@@ -80,7 +78,6 @@
 	<mkdir dir="${build_sql}" />
 	<mkdir dir="${build_src}" />
 	<mkdir dir="${build.lib.dir}" />
-	<mkdir dir="${build_data}" />
 		
 	<!-- copy the sql scripts required to
 			run the software 
@@ -106,10 +103,6 @@
 
   <copy todir="${build_bin}" filtering="yes">
     <fileset dir="${bin}" includes="**/*.sh **/*.bat"/>
-  </copy>
-
-  <copy todir="${build_data}" filtering="yes">
-    <fileset dir="${data}" includes="plantlst1996.bin.gz plantlst2000.bin.gz"/>
   </copy>
 
   <copy todir="${build.lib.dir}" filtering="yes">
