@@ -5,8 +5,8 @@ package org.vegbank.ui.struts;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-24 19:26:40 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-25 01:51:21 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.DynaActionForm;
 import org.vegbank.common.model.Observation;
+import org.vegbank.common.utility.StopWatchUtil;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.plots.datasource.DBObservationReader;
  
@@ -77,11 +78,18 @@ public class DisplayPlotAction extends Action
 		{
 			try
 			{
+				StopWatchUtil sw =
+					new StopWatchUtil("Read an Observertion Object from the database");
+				sw.startWatch();
+				
 				DBObservationReader dbor = new DBObservationReader();
 				Observation obs =
 					dbor.getObservation(
 						"observation_id",
 						((Integer) new Integer(plotId)).intValue());
+						
+				sw.stopWatch();
+				sw.printTimeElapsed();
 						
 				response.setContentType("text/xml");
 				response.getWriter().print( obs.toXML());
