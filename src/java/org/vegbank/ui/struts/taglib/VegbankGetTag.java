@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-17 05:37:19 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-09-28 18:35:49 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.6 $ $Date: 2004-09-17 05:37:19 $
+ * @version $Revision: 1.7 $ $Date: 2004-09-28 18:35:49 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -192,7 +192,12 @@ public class VegbankGetTag extends VegbankTag {
 	protected String wparam;
 
     public String getWparam() {
-		return findAttribute("wparam", this.wparam);
+		String s = findAttribute("wparam", this.wparam);
+		if (s != null) {
+			return s.toLowerCase();
+		} else {
+			return s;
+		}
     }
 
     public void setWparam(String s) {
