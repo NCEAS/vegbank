@@ -4,9 +4,9 @@ package org.vegbank.filter;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-03-07 17:55:28 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-03-24 17:13:33 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ public class GZIPFilter implements Filter {
       HttpServletResponse response = (HttpServletResponse) res;
       String ae = request.getHeader("accept-encoding");
       if (ae != null && ae.indexOf("gzip") != -1) {
-        log.info("GZIP supported, compressing.");
+        //log.debug("GZIP supported, compressing.");
         GZIPResponseWrapper wrappedResponse =
           new GZIPResponseWrapper(response);
         chain.doFilter(req, wrappedResponse);
