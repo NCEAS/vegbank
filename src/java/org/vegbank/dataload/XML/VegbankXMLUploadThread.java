@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-11-16 01:21:31 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2005-01-24 18:29:59 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,10 +96,10 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 		}
 		*/
 		delayLength = 5;
-		log.debug("Delay time: " + delayLength);
 
 
 		// used only in Thread
+		log.debug("XML file name: " + xmlFileName);
 		this.xmlFileName = xmlFileName;
 		this.fwdName = "vberror";
 		this.isDone = false;

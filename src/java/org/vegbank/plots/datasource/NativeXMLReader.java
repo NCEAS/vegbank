@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-23 01:13:44 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2005-01-24 18:30:00 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,8 @@ public class NativeXMLReader
 		{
 			// parsing error
 		} 
-	}
+    }
+	
 
 
 

@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-11-16 01:21:31 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2005-01-24 18:29:59 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,18 +129,21 @@ public class VegbankXMLUpload
 		errorHandler = new SAXValidationErrorHandler(errors);
 		contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load);
 		contentHandler.setController(controller);
-		log.debug("Set ConditionalContentHandlerController");
+		log.debug("set ConditionalContentHandlerController");
 
+		log.debug("Loading file " + xmlFileName);
 		xmlFile = new File(xmlFileName);
 		
 		if ( validate )
 		{	
 			xr.setErrorHandler( errorHandler );
+		    log.debug("about to parse XML");
 			xr.parse( this.getInputSource(xmlFile) );
+		    log.debug("done parsing XML");
 		}
 		
-		if ( errorHandler.isValid() )
-		{
+		log.debug("checking if valid...");
+		if ( errorHandler.isValid() ) {
 			log.info( xmlFileName + " is a valid vegbank XML package");
 
 			//if ( load ) // Only load if told to
@@ -153,11 +156,11 @@ public class VegbankXMLUpload
 			if (!load) {
 				contentHandler.generateSummary(null, 0);
 			}
+		} else {
+			log.debug( "Invalid XML file.  No attempt was made to rectify or load this dataset");
 		}
-		else 
-		{
-			log.debug( "Invalid file.  No attempt was made to rectify or load this dataset");
-		}
+
+		log.debug("Done processing XML file");
 	}
 	
 	private InputSource getInputSource( File pFile) throws FileNotFoundException

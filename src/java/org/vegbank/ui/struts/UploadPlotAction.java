@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-11-16 01:21:31 $'
- *	'$Revision: 1.17 $'
+ *	'$Date: 2005-01-24 18:30:00 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.FileWrapper;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.Utility;
@@ -52,7 +53,7 @@ import org.vegbank.common.utility.datafileexchange.DataFileDB;
 import org.vegbank.dataload.XML.*;
 
 /**
- * @author farrell
+ * @author anderson
  *
  * Struts Action to upload plot from file
  */
@@ -76,8 +77,8 @@ public class UploadPlotAction extends VegbankAction
 
 		UploadPlotForm theForm = (UploadPlotForm) form;
 
-		int archiveType = theForm.getArchiveType();
-		boolean upload = theForm.isUpload();
+		int archiveType;
+		boolean upload;
 		boolean validate = true;
 		boolean rectify = false;
 		boolean dbLoad = false;
@@ -87,16 +88,31 @@ public class UploadPlotAction extends VegbankAction
 		String savedFileName = null;
 		Collection files = new Vector();
 		VegbankXMLUploadThread worker = null;
+		WebUser user = getUser(request.getSession());
+		String userId = user.getUseridLong().toString();
 
-		setSaveDir( getUser(request.getSession()).getUseridLong().toString() );
+        // use the userId as the save dir
+		setSaveDir(userId);
 
+        // put the email address in context
+        request.setAttribute("email", user.getEmail());
+
+		VegbankActionMapping vbMapping = (VegbankActionMapping)mapping;
+		String param = vbMapping.getParameter();
+		if (param != null && param.equals("form")) { 
+            // just load the form
+            log.debug("forwarding to form...");
+		    return mapping.findForward("form");
+        }
+
+        log.debug("processing XML upload");
 
 		/////////////////////////////////////////////////
 		// GET THE ACTION
 		/////////////////////////////////////////////////
 		String action = request.getParameter("action");
 		if (Utility.isStringNullOrEmpty(action)) {
-			action = "summarize";
+			action = "load";
 		} 
 
 		action = action.toLowerCase();
@@ -111,7 +127,8 @@ public class UploadPlotAction extends VegbankAction
 			summarize = false;
 		}
 
-
+        archiveType = theForm.getArchiveType();
+        upload = theForm.isUpload();
 
 		// Handle the uploaded file
 		if (summarize) {
@@ -233,7 +250,7 @@ public class UploadPlotAction extends VegbankAction
 		try {
 			switch (archiveType) {
 				case UploadPlotForm.VEGBANK_XML_FORMAT :
-					log.info("VEGBANK_XML_FORMAT format uploaded");
+					log.info("VEGBANK_XML_FORMAT format uploaded: " + savedFileName);
 					worker = this.uploadVegbankXML(request, savedFileName, validate, dbLoad, rectify);
 					break;
 		
@@ -256,6 +273,7 @@ public class UploadPlotAction extends VegbankAction
 		}
 
 
+        /*
 		// put the worker thread in the session
 		if (worker != null) {
 			log.debug("setting PW worker thread in session");
@@ -274,18 +292,21 @@ public class UploadPlotAction extends VegbankAction
 		} else {
 			log.debug("no worker thread");
 		}
+        */
 
+        /*
 		if (summarize) {
 			request.setAttribute("plotFilePath", savedFileName);
 		}
+        */
 
 		ActionMessages messages = new ActionMessages();
 		messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"errors.general", worker.getStatusMessages()));
 		saveMessages(request, messages);
 
-		return mapping.findForward("PleaseWait");
-		//return mapping.findForward("summary");
+		//return mapping.findForward("PleaseWait");
+		return mapping.findForward("summary");
 	}
 	
 	/**
@@ -303,11 +324,10 @@ public class UploadPlotAction extends VegbankAction
 	 * @param savedFileName
 	 * @return worker thread 
 	 */
-	private VegbankXMLUploadThread uploadVegbankXML(HttpServletRequest request, String savedFileName, 
+	private VegbankXMLUploadThread uploadVegbankXML(HttpServletRequest request, String savedFileName,
 			boolean validate, boolean dbLoad, boolean rectify) throws Exception
 	{
-		//System.out.println(validate + " , " +  dbLoad + " , " + rectify);
-		log.debug("============= SPAWNING LOADER THREAD =============");
+		log.debug("============= SPAWNING LOADER THREAD ============= " + savedFileName);
 		VegbankXMLUploadThread worker = new VegbankXMLUploadThread();
 		worker.init(validate, rectify, dbLoad, savedFileName);
 		worker.start();
