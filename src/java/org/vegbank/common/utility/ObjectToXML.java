@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 00:19:51 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-06-30 20:02:59 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,16 +67,16 @@ public class ObjectToXML extends VegBankObjectWriter
 			
 			try
 			{
-				if ( isGetMethod(method, "java.lang.String") )
+				if ( VBObjectUtils.isGetMethod(method, "java.lang.String") )
 				{
 					indentCount++;
-					String fieldName = this.getFieldName(methodName, "");
+					String fieldName = VBObjectUtils.getFieldName(methodName, "");
 					String fieldValue = (String) method.invoke(object, null);
 					String xmlNodeString = "<" + fieldName + ">" + fieldValue + "</" + fieldName + ">\n";				
 					result.append( getIndent()  + xmlNodeString);	
 					indentCount--;
 				}
-				else if ( isGetMethod(method, "java.util.Vector") )
+				else if ( VBObjectUtils.isGetMethod(method, "java.util.Vector") )
 				{
 					indentCount++;
 					Vector vector = (Vector) method.invoke(object, null);
@@ -89,7 +89,7 @@ public class ObjectToXML extends VegBankObjectWriter
 					}
 					indentCount--;
 				}
-				else if ( isGetMethod(method) )
+				else if ( VBObjectUtils.isGetMethod(method) )
 				{
 					indentCount++;
 					Object obj = (Object) method.invoke(object, null);

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-06-30 20:03:00 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,13 +68,13 @@ public class XMLToObjectTest extends TestCase
 	
 	public void  testExistsInObjectModel()
 	{
-		boolean shouldBeFalse = VegBankObjectWriter.existsInVegbankObjectModel("this_is_not_a_classname");
+		boolean shouldBeFalse = VBObjectUtils.existsInVegbankObjectModel("this_is_not_a_classname");
 		assertEquals("No class by this name", false, shouldBeFalse);
 		
-		boolean shouldBeTrue = VegBankObjectWriter.existsInVegbankObjectModel("org.vegbank.common.model.PlantUsage");
+		boolean shouldBeTrue = VBObjectUtils.existsInVegbankObjectModel("org.vegbank.common.model.PlantUsage");
 		assertEquals("The PlantUsage Object should exist", true, shouldBeTrue);
 		
-		boolean shouldBeFalse2 = VegBankObjectWriter.existsInVegbankObjectModel("org.vegbank.common.model.pLaNtUsAge");
+		boolean shouldBeFalse2 = VBObjectUtils.existsInVegbankObjectModel("org.vegbank.common.model.pLaNtUsAge");
 		assertEquals("The pLaNtUsAge Object should not exist", false, shouldBeFalse2);
 	}
 	

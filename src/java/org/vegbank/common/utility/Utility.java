@@ -26,8 +26,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-05-30 17:59:26 $'
- * '$Revision: 1.12 $'
+ * '$Date: 2003-06-30 20:02:59 $'
+ * '$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -277,6 +277,18 @@ public class Utility
 			}
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Capitalizes the first letter of a string. Leaves the rest of the Sting alone
+	 * @param text
+	 * @return String 
+	 */
+	public static String upperCaseFirstLetter(String text)
+	{
+		String result = text.substring(0, 1).toUpperCase() + text.substring(1);
+		//System.out.println("Utiltiy > " +result);
+		return result;
 	}
 	
 	

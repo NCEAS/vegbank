@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-29 00:24:54 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-06-30 20:02:59 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -124,20 +124,20 @@ public class ObjectToDB extends VegBankObjectWriter
 			Object[] parameters = {};
 			
 			// Search this object for get methods 
-			if ( isGetMethod(method) )
+			if ( VBObjectUtils.isGetMethod(method) )
 			{
-				if ( isGetMethod(method, "java.lang.String") )
+				if ( VBObjectUtils.isGetMethod(method, "java.lang.String") )
 				{					
 					// get the name and value of the field 
-					String fieldName = this.getFieldName(methodName, null);
+					String fieldName = VBObjectUtils.getFieldName(methodName, null);
 					String fieldValue = (String) method.invoke(object, parameters);
 					
 					storeNameAndValue(fieldName, fieldValue);
 				}
-				else if ( isGetMethod(method, "int") )
+				else if ( VBObjectUtils.isGetMethod(method, "int") )
 				{
 					// I have a referenced Object  -- I want to get its foriegn key
-					String fieldName = this.getFieldName(methodName, "");
+					String fieldName = VBObjectUtils.getFieldName(methodName, "");
 					String fieldValue = (String) foreignKeyHash.get(fieldName.toUpperCase() );
 					if (Utility.isStringNullOrEmpty(fieldValue))
 					{			
@@ -271,7 +271,7 @@ public class ObjectToDB extends VegBankObjectWriter
 			Method method = methods[i];
 			String methodName = method.getName();
 
-			if ( isGetMethod(method, "java.util.List") )
+			if ( VBObjectUtils.isGetMethod(method, "java.util.List") )
 			{
 				System.out.println("ObjectToDB > Handling a list");
 				// Need to Loop throught all elements and insert them into the DB
@@ -376,15 +376,15 @@ public class ObjectToDB extends VegBankObjectWriter
 			Object[] parameters = {};
 				
 			// Search this object for get methods 
-			if ( isGetMethod(method) )
+			if ( VBObjectUtils.isGetMethod(method) )
 			{
-				String fieldName = this.getFieldName(methodName, null);
+				String fieldName = VBObjectUtils.getFieldName(methodName, null);
 				// If null or matches a field that is unique
 				if (uniqueFields == null
-					|| uniqueFields.contains(this.getFieldName(methodName, null)) )
+					|| uniqueFields.contains(VBObjectUtils.getFieldName(methodName, null)) )
 				{
 				
-					if ( isGetMethod(method, "java.lang.String") )
+					if ( VBObjectUtils.isGetMethod(method, "java.lang.String") )
 					{					
 						// get the name and value of the field 
 						String fieldValue = (String) method.invoke(object, parameters);
@@ -394,7 +394,7 @@ public class ObjectToDB extends VegBankObjectWriter
 							nameValue.put(fieldName, fieldValue);
 						}
 					}
-					else if ( isGetMethod(method, "int") )
+					else if ( VBObjectUtils.isGetMethod(method, "int") )
 					{
 						// I have a referenced Object  -- I want to get its foriegn key
 						String fieldValue = (String) foreignKeyHash.get(fieldName.toUpperCase() );

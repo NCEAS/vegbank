@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-06-30 20:02:59 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,98 +40,8 @@ public class VegBankObjectWriter
 		Class theClass = object.getClass();
 		methods = theClass.getDeclaredMethods();
 		
-		// Get qualified name
-		className = theClass.getName();
 		// Get unqualified name
-		if (className.lastIndexOf('.') > 0) 
-		{
-			className = className.substring(className.lastIndexOf('.')+1);  
-		}
-	}
-
-	/**
-		 * Gets the fieldname from a get method
-		 * i.e. getFieldName returns FieldName
-		 * 
-		 * @param methodName
-		 * @param suffixToAdd 
-		 * @return String -- the database fieldName
-		 */
-	protected String getFieldName(String methodName, String suffixToAdd)
-	{
-		System.out.println(" VegBankObjectWriter > " + methodName);
-		// Remove the first 3 chars
-		String result = methodName.substring(3);
-		if ( suffixToAdd != null)
-		{
-			result = result +suffixToAdd;
-		}
-		return result;
-	}
-
-	/**
-		 * @param method
-		 * @return boolean
-		 */
-	protected boolean isGetMethod(Method method, String returnType)
-	{
-		boolean result = false;
-		//System.out.println("++++++>>>> " + returnType + " & " + method.getReturnType() );
-		// Check for the get method naming convention
-		try
-		{
-			if ( isGetMethod(method))
-			{
-				if ( method.getReturnType().toString().equals(returnType) )
-				{
-					//System.out.println("match " + returnType + " & " + method.getReturnType() );
-					result = true;
-				}
-				else if ( method.getReturnType().equals( Class.forName(returnType))  )
-				{
-					result = true;
-				}
-			}
-		}
-		catch (ClassNotFoundException e)
-		{
-			// Return false here
-		}
-		return result;
-	}
-
-	protected boolean isGetMethod(Method method) throws ClassNotFoundException
-	{
-		boolean result = false;
-		// Check for the get method naming convention
-		if ( method.getName().startsWith("get"))
-		{
-				result = true;
-		}
-		return result;
-	}
-
-	/**
-	 * Seaches the vegbank object model for a a classname
-	 * 
-	 * @param className
-	 * @return boolean - is there a corresponding class
-	 */
-	public static boolean existsInVegbankObjectModel(String className)
-	{
-		boolean result = false;
-		try
-		{
-			//System.out.println("--->" + className);
-			Class classDefinition = Class.forName(className);
-			result = true;
-		}
-		catch (ClassNotFoundException e)
-		{
-			// No object of this name in the datamodel;
-		}
-		//System.out.println("--->" + result);
-		return result;
+		className = VBObjectUtils.getUnQualifiedName(theClass.getName());
 	}
 
 	protected Object object = null;

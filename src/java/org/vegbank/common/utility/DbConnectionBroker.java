@@ -68,7 +68,10 @@ public class DbConnectionBroker implements Runnable
 	private PrintWriter log;
 	private SQLWarning currSQLWarning;
 	private String pid;
-
+	
+	private final static  int maxCheckoutSeconds = 500;
+	private final static  int debugLevel = 2;
+	
 	/**
 	 * Creates a new Connection Broker<br>
 	 * dbDriver:        JDBC driver. e.g. 'oracle.jdbc.driver.OracleDriver'<br>
@@ -113,7 +116,6 @@ public class DbConnectionBroker implements Runnable
 		try
 		{
 			log = new PrintWriter(new FileOutputStream(logFileString), true);
-
 			// Can't open the requested file. Open the default file.
 		}
 		catch (IOException e1)
@@ -435,6 +437,7 @@ public class DbConnectionBroker implements Runnable
 							if ((connStatus[roundRobin] < 1)
 								&& (!connPool[roundRobin].isClosed()))
 							{
+								System.out.println("Got a connection");
 								conn = connPool[roundRobin];
 								connStatus[roundRobin] = 1;
 								connLockTime[roundRobin] = System.currentTimeMillis();
@@ -456,6 +459,7 @@ public class DbConnectionBroker implements Runnable
 				}
 				catch (SQLException e1)
 				{
+					log.println("Failed to get a connection");
 				}
 
 				if (gotOne)
@@ -504,8 +508,9 @@ public class DbConnectionBroker implements Runnable
 		} // End if(available)
 
 		return conn;
-
 	}
+	
+	
 	/**
 	 * Returns the number of connections in the dynamic pool.
 	 */
@@ -566,6 +571,7 @@ public class DbConnectionBroker implements Runnable
 		}
 		return match;
 	}
+	
 	/**
 	 * Housekeeping thread.  Runs in the background with low CPU overhead.
 	 * Connections are checked for warnings and closure and are periodically
@@ -580,6 +586,7 @@ public class DbConnectionBroker implements Runnable
 		boolean forever = true;
 		Statement stmt = null;
 		String currCatalog = null;
+		long maxCheckoutMillis = maxCheckoutSeconds * 1000;
 
 		while (forever)
 		{
@@ -632,17 +639,23 @@ public class DbConnectionBroker implements Runnable
 					currSQLWarning = connPool[i].getWarnings();
 					if (currSQLWarning != null)
 					{
-						log.println(
-							"Warnings on connection "
-								+ String.valueOf(i)
-								+ " "
-								+ currSQLWarning);
+						if (debugLevel > 1)
+						{
+							log.println(
+								"Warnings on connection "
+									+ String.valueOf(i)
+									+ " "
+									+ currSQLWarning);
+						}
 						connPool[i].clearWarnings();
 					}
 				}
 				catch (SQLException e)
 				{
-					log.println("Cannot access Warnings: " + e);
+					if (debugLevel > 1)
+					{
+						log.println("Cannot access Warnings: " + e);
+					}
 				}
 
 			}
@@ -651,17 +664,44 @@ public class DbConnectionBroker implements Runnable
 			{ // Do for each connection
 				long age = System.currentTimeMillis() - connCreateDate[i];
 
-				synchronized (connStatus)
-				{
-					if (connStatus[i] > 0)
-					{ // In use, catch it next time!
-						continue;
-					}
-					connStatus[i] = 2; // Take offline (2 indicates housekeeping lock)
-				}
-
 				try
 				{ // Test the connection with createStatement call
+					synchronized (connStatus)
+					{
+						if (connStatus[i] > 0)
+						{ // In use, catch it next time!
+
+							// Check the time it's been checked out and recycle
+							long timeInUse = System.currentTimeMillis() - connLockTime[i];
+							if (debugLevel > 2)
+							{
+								log.println(
+									"Warning.  Connection "
+										+ i
+										+ " in use for "
+										+ timeInUse
+										+ " ms");
+							}
+							if (maxCheckoutMillis != 0)
+							{
+								if (timeInUse > maxCheckoutMillis)
+								{
+									if (debugLevel > 1)
+									{
+										log.println(
+											"Warning. Connection "
+												+ i
+												+ " failed to be returned in time.  Recycling...");
+									}
+									throw new SQLException();
+								}
+							}
+
+							continue;
+						}
+						connStatus[i] = 2; // Take offline (2 indicates housekeeping lock)
+					}
+
 					if (age > maxConnMSec)
 					{ // Force a reset at the max conn time
 						throw new SQLException();
@@ -682,21 +722,41 @@ public class DbConnectionBroker implements Runnable
 				}
 				catch (SQLException e)
 				{
-					try
+
+					if (debugLevel > 1)
 					{
 						log.println(
 							new Date().toString()
 								+ " ***** Recycling connection "
 								+ String.valueOf(i)
 								+ ":");
+					}
 
+					try
+					{
 						connPool[i].close();
-						createConn(i);
+					}
+					catch (SQLException e0)
+					{
+						if (debugLevel > 0)
+						{
+							log.println(
+								"Error!  Can't close connection!  Might have been closed already.  Trying to recycle anyway... ("
+									+ e0
+									+ ")");
+						}
+					}
 
+					try
+					{
+						createConn(i);
 					}
 					catch (SQLException e1)
 					{
-						log.println("Failed: " + e1);
+						if (debugLevel > 0)
+						{
+							log.println("Failed to create connection: " + e1);
+						}
 						connStatus[i] = 0; // Can't open, try again next time
 					}
 				}
@@ -723,9 +783,9 @@ public class DbConnectionBroker implements Runnable
 
 			catch (InterruptedException e)
 			{
-				// Returning from the run method sets the internal
+				// Returning from the run method sets the internal 
 				// flag referenced by Thread.isAlive() to false.
-				// This is required because we don't use stop() to
+				// This is required because we don't use stop() to 
 				// shutdown this thread.
 				return;
 			}
@@ -733,4 +793,173 @@ public class DbConnectionBroker implements Runnable
 		}
 
 	} // End run
+	
+//	/**
+//	 * Housekeeping thread.  Runs in the background with low CPU overhead.
+//	 * Connections are checked for warnings and closure and are periodically
+//	 * restarted.
+//	 * This thread is a catchall for corrupted
+//	 * connections and prevents the buildup of open cursors. (Open cursors
+//	 * result when the application fails to close a Statement).
+//	 * This method acts as fault tolerance for bad connection/statement programming.
+//	 */
+//	public void run()
+//	{
+//		boolean forever = true;
+//		Statement stmt = null;
+//		String currCatalog = null;
+//
+//		while (forever)
+//		{
+//
+//			// Make sure the log file is the one this instance opened
+//			// If not, clean it up!
+//			try
+//			{
+//				BufferedReader in =
+//					new BufferedReader(new FileReader(logFileString + "pid"));
+//				String curr_pid = in.readLine();
+//				if (curr_pid.equals(pid))
+//				{
+//					//log.println("They match = " + curr_pid);
+//				}
+//				else
+//				{
+//					//log.println("No match = " + curr_pid);
+//					log.close();
+//
+//					// Close all connections silently - they are definitely dead.
+//					for (int i = 0; i < currConnections; i++)
+//					{
+//						try
+//						{
+//							connPool[i].close();
+//						}
+//						catch (SQLException e1)
+//						{
+//						} // ignore
+//					}
+//					// Returning from the run() method kills the thread
+//					return;
+//				}
+//
+//				in.close();
+//
+//			}
+//			catch (IOException e1)
+//			{
+//				log.println(
+//					"Can't read the file for pid info: " + logFileString + "pid");
+//			}
+//
+//			// Get any Warnings on connections and print to event file
+//			for (int i = 0; i < currConnections; i++)
+//			{
+//				try
+//				{
+//					currSQLWarning = connPool[i].getWarnings();
+//					if (currSQLWarning != null)
+//					{
+//						log.println(
+//							"Warnings on connection "
+//								+ String.valueOf(i)
+//								+ " "
+//								+ currSQLWarning);
+//						connPool[i].clearWarnings();
+//					}
+//				}
+//				catch (SQLException e)
+//				{
+//					log.println("Cannot access Warnings: " + e);
+//				}
+//
+//			}
+//
+//			for (int i = 0; i < currConnections; i++)
+//			{ // Do for each connection
+//				long age = System.currentTimeMillis() - connCreateDate[i];
+//
+//				synchronized (connStatus)
+//				{
+//					if (connStatus[i] > 0)
+//					{ // In use, catch it next time!
+//						continue;
+//					}
+//					connStatus[i] = 2; // Take offline (2 indicates housekeeping lock)
+//				}
+//
+//				try
+//				{ // Test the connection with createStatement call
+//					if (age > maxConnMSec)
+//					{ // Force a reset at the max conn time
+//						throw new SQLException();
+//					}
+//
+//					stmt = connPool[i].createStatement();
+//					connStatus[i] = 0; // Connection is O.K.
+//					//log.println("Connection confirmed for conn = " +
+//					//             String.valueOf(i));
+//
+//					// Some DBs return an object even if DB is shut down
+//					if (connPool[i].isClosed())
+//					{
+//						throw new SQLException();
+//					}
+//
+//					// Connection has a problem, restart it
+//				}
+//				catch (SQLException e)
+//				{
+//					try
+//					{
+//						log.println(
+//							new Date().toString()
+//								+ " ***** Recycling connection "
+//								+ String.valueOf(i)
+//								+ ":");
+//
+//						connPool[i].close();
+//						createConn(i);
+//
+//					}
+//					catch (SQLException e1)
+//					{
+//						log.println("Failed: " + e1);
+//						connStatus[i] = 0; // Can't open, try again next time
+//					}
+//				}
+//				finally
+//				{
+//					try
+//					{
+//						if (stmt != null)
+//						{
+//							stmt.close();
+//						}
+//					}
+//					catch (SQLException e1)
+//					{
+//					};
+//				}
+//
+//			}
+//
+//			try
+//			{
+//				Thread.sleep(20000);
+//			} // Wait 20 seconds for next cycle
+//
+//			catch (InterruptedException e)
+//			{
+//				// Returning from the run method sets the internal
+//				// flag referenced by Thread.isAlive() to false.
+//				// This is required because we don't use stop() to
+//				// shutdown this thread.
+//				return;
+//			}
+//
+//		}
+//
+//	} // End run
+	
 } // End class

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-10 00:33:27 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-06-30 20:02:59 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,8 +48,6 @@ import org.xml.sax.SAXException;
 public class XMLToObject
 {
 	private File file;
-	private static final String DATA_MODEL_PACKAGE =
-		"org.vegbank.common.model.";
 	private Vector generatedObjects = new Vector();
 
 	public XMLToObject(String fileName)
@@ -188,18 +186,6 @@ public class XMLToObject
 		return text.toString();
 	}
 
-	/**
-	 * Capitalizes the first letter of a string. Leaves the rest of the Sting alone
-	 * @param text
-	 * @return String 
-	 */
-	private String upperCaseFirstLetter(String text)
-	{
-		String result = text.substring(0, 1).toUpperCase() + text.substring(1);
-		//System.out.println("XMLToObject > " +result);
-		return result;
-	}
-
 	private boolean isStringFirstParameter(Method method)
 	{
 		String nameOfFirstParameter = method.getParameterTypes()[0].getName();
@@ -211,12 +197,12 @@ public class XMLToObject
 		throws Exception
 	{
 		Object newObject = null;
-		String fullyQualifiedName = getFullyQualifiedName(node);
+		String fullyQualifiedName = VBObjectUtils.getFullyQualifiedName(node.getNodeName());
 		// no parent Object
 		if (parent == null)
 		{
 			// Is this handled in the vegbank object model
-			if (VegBankObjectWriter.existsInVegbankObjectModel(fullyQualifiedName))
+			if (VBObjectUtils.existsInVegbankObjectModel(fullyQualifiedName))
 			{
 				// create the object
 				newObject = Utility.createObject(fullyQualifiedName);
@@ -234,7 +220,7 @@ public class XMLToObject
 				newObject = this.callSetMethod(parent, method, node);
 			}
 			// No set method exists but there is a cognate object 
-			else if (VegBankObjectWriter.existsInVegbankObjectModel(fullyQualifiedName))
+			else if (VBObjectUtils.existsInVegbankObjectModel(fullyQualifiedName))
 			{
 				// Get the object and search it for a set for the parent
 				newObject = Utility.createObject(fullyQualifiedName);
@@ -262,9 +248,9 @@ public class XMLToObject
 		throws Exception
 	{
 		Object newObject = null;
-		String fullyQualifiedName = getFullyQualifiedName(node);
+		String fullyQualifiedName = VBObjectUtils.getFullyQualifiedName(node.getNodeName());
 		//System.out.println("---> " + fullyQualifiedName);
-		if (VegBankObjectWriter.existsInVegbankObjectModel(fullyQualifiedName) )
+		if (VBObjectUtils.existsInVegbankObjectModel(fullyQualifiedName) )
 		{
 			System.out.println("XMLToObject > creating Object " + fullyQualifiedName);
 			// create the object and add it to the parent
@@ -284,18 +270,4 @@ public class XMLToObject
 		return newObject;
 	}
 
-	/**
-	 * Gets the fullyQualified Object name from a node. Assumes that node name
-	 * is an unqualified className.
-	 * 
-	 * @param node 
-	 * @return String -- fully qualifiedClassName
-	 */
-	private String getFullyQualifiedName(Node node)
-	{
-		String result =
-			DATA_MODEL_PACKAGE + upperCaseFirstLetter(node.getNodeName());
-		return result;
-
-	}
 }

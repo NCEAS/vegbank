@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-30 22:58:55 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-06-30 20:02:59 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,14 +27,12 @@ package org.vegbank.common.command;
 	
 import java.sql.ResultSet;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.vegbank.common.utility.DatabaseAccess;
-import org.vegbank.common.utility.IssueStatement;
 
 /**
  * @author farrell
@@ -96,25 +94,18 @@ public class QueryJournals  implements VegbankCommand
 	/* (non-Javadoc)
 	 * @see org.vegbank.common.command.VegbankCommand#execute(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	public String execute(HttpServletRequest request, HttpServletResponse response)
+	public void execute(HttpServletRequest request, HttpServletResponse response)
 		throws Exception
 	{
 		// Query the database for references
-
-	
-		Hashtable references = new Hashtable();
-		IssueStatement is = new IssueStatement();
-		is.issueSelect(query, fields, references);
-	
-		return null;
+		Collection collection = this.execute();
+		request.setAttribute("journals", collection);
 	}
 
 	public Collection execute()
 		throws Exception
 	{
 		// Query the database for references
-		String[] fields = {"reference_id", "title"}; 
-	
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect(query);
 		

@@ -107,9 +107,16 @@ public class LocalDbConnectionBroker
 					try 
 					{
 						System.out.println("LocalDbConnectionBroker > re-starting the connection pooling");
-						myBroker = new DbConnectionBroker(dbUtil.driverClass, dbUtil.connectionString,
-						dbUtil.login,dbUtil.passwd,dbUtil.minConnections,dbUtil.maxConnections, 
-						dbUtil.logFile,1.0);
+						myBroker =
+							new DbConnectionBroker(
+								dbUtil.driverClass,
+								dbUtil.connectionString,
+								dbUtil.login,
+								dbUtil.passwd,
+								dbUtil.minConnections,
+								dbUtil.maxConnections,
+								dbUtil.logFile,
+								1.0);
 					} 
 					catch( Exception e ) 
 					{

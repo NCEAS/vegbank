@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-30 22:58:55 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-06-30 20:02:59 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,17 +24,15 @@
  
 package org.vegbank.common.command;
 
-import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.vegbank.common.model.*;
 import org.vegbank.common.utility.DatabaseAccess;
-import org.vegbank.common.utility.IssueStatement;
 
 
 
@@ -45,86 +43,33 @@ import org.vegbank.common.utility.IssueStatement;
 public class QueryReferences  implements VegbankCommand
 {
 	
-	
-
-	/**
-	 * @author farrell
-	 *
-	 * JavaBean to hold the reference summary.
-	 */
-	public class ReferenceSummary  implements Serializable
-	{
-		private String title;
-		private String id;
-
-		public ReferenceSummary()
-		{
-		}
-		
-		/**
-		 * @return
-		 */
-		public String getId()
-		{
-			return id;
-		}
-
-		/**
-		 * @return
-		 */
-		public String getTitle()
-		{
-			return title;
-		}
-
-		/**
-		 * @param key
-		 */
-		public void setId(String key)
-		{
-			id = key;
-		}
-
-		/**
-		 * @param string
-		 */
-		public void setTitle(String string)
-		{
-			title = string;
-		}
-
-	}
 	/* (non-Javadoc)
 	 * @see org.vegbank.common.command.VegbankCommand#execute(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	public String execute(HttpServletRequest request, HttpServletResponse response)
+	public void execute(HttpServletRequest request, HttpServletResponse response)
 		throws Exception
 	{
-		// Query the database for references
-		String[] fields = {"reference_id", "title"}; 
-		
-		Hashtable references = new Hashtable();
-		IssueStatement is = new IssueStatement();
-		is.issueSelect("select reference_id, title from reference", fields, references);
-		
-		return null;
+		Collection collection = this.execute();
+		request.setAttribute("references", collection);
 	}
 	
 	public Collection execute()
 		throws Exception
 	{
 		// Query the database for references
-		String[] fields = {"reference_id", "title"}; 
+		//String[] fields = {"reference_id", "title", "shortname", "referencetype"}; 
 		
 		DatabaseAccess da = new DatabaseAccess();
-		ResultSet rs = da.issueSelect("select reference_id, title from reference");
+		ResultSet rs = da.issueSelect("select reference_id, title, shortname, referencetype from reference");
 		
 		Collection col = new Vector();
 		while ( rs.next())
 		{
-			ReferenceSummary refsum = new ReferenceSummary();
+			ReferenceSummary refsum = new ReferenceSummary(this);
 			refsum.setId(rs.getString(1));
 			refsum.setTitle(rs.getString(2));
+			refsum.setShortname( rs.getString(3));
+			refsum.setReferenceType( rs.getString(4));
 			col.add(refsum);
 		}
 		return col;

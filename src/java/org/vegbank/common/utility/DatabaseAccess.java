@@ -40,10 +40,13 @@ public class DatabaseAccess
 	public ResultSet issueSelect(String inputStatement) throws SQLException
 	{
 		ResultSet results = null;
-		//compose and issue a prepared statement for loading a table	
-		//execute the query
-		Statement query = this.getConnection().createStatement();
+		Connection connection = this.getConnection();
+		System.out.println("DatabaseAccess > Running query: " + inputStatement);
+		
+		Statement query = connection.createStatement();
 		results = query.executeQuery(inputStatement);
+		
+		// return the connection
 		LocalDbConnectionBroker.manageLocalDbConnectionBroker("releaseConn");
 		return results;
 	} //end method
