@@ -82,9 +82,16 @@ for (int ii=0; ii<addressNum; ii++)
 //insert the plot data
 	if (address[ii] != null && address[ii].startsWith("plot.authorPlotCode")) {
 	System.out.println("XMLfile AUTHORPLOTNAME: "+dataString[ii]);	
-		
+	String authorPlotCode=dataString[ii];
+	String parentPlot=dataString[ii+1];
+	String plotType =dataString[ii+2];
+	String samplingMethod =dataString[ii+3];
+	String coverScale=dataString[ii+4];
+	String latitude=dataString[ii+5];
+	String longitude=dataString[ii+6];
 	plotWriter g =new plotWriter();  
-	g.putPlot(projectId, dataString[ii], dataString[ii+1]);
+	g.putPlot(projectId, authorPlotCode, parentPlot, plotType, samplingMethod, coverScale, latitude,
+	longitude);
 	plotId=g.outPlotId;		
 	}//end if
 				
@@ -245,7 +252,7 @@ try {
 	//if single match found
 	if (j.outReturnFieldsNum==1) {
 		
-		outProjectId=j.outReturnFields[0];  //return to caller
+		outProjectId=j.outReturnFields[0].replace('|', ' ').trim();  //return to caller
 		System.out.println("Matching project found, ID number: "+j.outReturnFields[0]);
 	
 	}
@@ -297,7 +304,10 @@ public String outProjectId=null;
 * in the table
 */
 
-private void putPlot (String projectId, String authorPlotCode, String parentPlot) {
+
+private void putPlot (String projectId, String authorPlotCode, String parentPlot, 
+String plotType, String samplingMethod, String coverScale, String latitude, 
+String longitude) {
 int plotId=0;
 try {
 
@@ -312,14 +322,29 @@ outPlotId=""+plotId; //pass to public
 		
 //pass the required arguements to the isssue SQl class
 String insertString="INSERT INTO PLOT";
-String attributeString="PLOT_ID, PROJECT_ID, AUTHORPLOTCODE, PARENTPLOT";
-int inputValueNum=4;
-String inputValue[]=new String[4];	
+String attributeString="PLOT_ID, PROJECT_ID, AUTHORPLOTCODE, PARENTPLOT, PLOTTYPE, "+
+"SAMPLINGMETHOD, COVERSCALE, PLOTORIGINLAT, PLOTORIGINLONG";
+int inputValueNum=9;
+String inputValue[]=new String[9];	
 inputValue[0]=""+plotId;
+	System.out.println(" plotId: "+plotId);
 inputValue[1]=projectId;
+	System.out.println(" projectId: "+projectId);
 inputValue[2]=authorPlotCode;
+	System.out.println(" authorPlotCode: "+authorPlotCode);
 inputValue[3]=parentPlot;
-
+	System.out.println(" parentPlot: "+parentPlot);
+inputValue[4]=plotType;
+	System.out.println(" plotType: "+plotType);
+inputValue[5]=samplingMethod;
+	System.out.println(" samplingMethod: "+samplingMethod);
+inputValue[6]=coverScale;
+	System.out.println(" coverScale: "+coverScale);
+inputValue[7]=latitude;
+	System.out.println(" latitude: "+latitude);
+inputValue[8]=longitude;
+	System.out.println(" longitude: "+longitude);
+	
 //get the valueString from the method
 issueStatement k = new issueStatement();
 k.getValueString(inputValueNum);	
@@ -327,7 +352,7 @@ String valueString = k.outValueString;
 //issue the above statement
 issueStatement l = new issueStatement();
 l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);	
-	
+
 }
 catch (Exception e) {System.out.println("failed in plotWriter.putPlot " + 
 	e.getMessage());}

@@ -119,6 +119,7 @@ try {
 * compose and issue a prepared statement for loading a table
 */	
 
+
 if (inputAction.equals("select")) {
 
 //execute the query
@@ -127,7 +128,7 @@ results = query.executeQuery(inputStatement);
 outReturnFieldsNum=0;
 //make a matrix to store the returned values because storing them directly
 //in a string was giving a jdbc error that couldn't be fixed
-//String verticalStore[] = new String[inputReturnFieldLength];
+String verticalStore[] = new String[inputReturnFieldLength];
 
 //get all the levels returned
 while (results.next()) {
@@ -139,18 +140,27 @@ while (results.next()) {
 		//if the results is null then handle it below
 		if (results.getString(inputReturnFields[i])==null) {
 			resultLine=resultLine.append(" nullValue");
+			verticalStore[i]="nullValue"; //populate the vertical storage array
 		}
 
 		else {			
 			String buf =(results.getString(inputReturnFields[i]));
 			resultLine.append(" ").append(buf.trim());
+			verticalStore[i]=buf;	//populate the vertical storage array
 		}
-
+	
 	}
 
-	
-	
-	outReturnFields[outReturnFieldsNum]=resultLine.toString();
+	//grab the values out of the vertical store and stick them into a string
+	//that is separated by pipes
+	String returnedRow="";
+	for (int ii=0;ii<verticalStore.length; ii++) {
+			returnedRow=returnedRow+"|"+verticalStore[ii];
+	}
+		
+	System.out.println("Printed from issueStatement.issueSelect: "+returnedRow);
+	//outReturnFields[outReturnFieldsNum]=resultLine.toString();
+	outReturnFields[outReturnFieldsNum]=returnedRow;
 	outReturnFieldsNum++;
 	
 }  //end while

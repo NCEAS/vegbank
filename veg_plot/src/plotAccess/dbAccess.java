@@ -49,6 +49,10 @@ String action=args[2];
 dbAccess g =new dbAccess();  
 g.accessDatabase(inputXml, inputXSL, action);
 
+//print the results to the System out
+for (int ii=0; ii<g.queryOutputNum; ii++) {
+	System.out.println("printing this from dbAccess.main "+g.queryOutput[ii]);
+}
 
 } //end main method
 
@@ -62,18 +66,15 @@ g.accessDatabase(inputXml, inputXSL, action);
 * transform the document and action, either insert or query
 */
 public void accessDatabase (String inputXml, String inputXSL, String action) {
-
 try {
 
 /**
 * call the method to transform the data xml document and pass back a string writer  
 */
-
 transformXML m = new transformXML();
-m.getTransformed(inputXml, inputXSL);  //call the method
+m.getTransformed(inputXml, inputXSL);
 
 StringWriter transformedData=m.outTransformedData;  //the stringwriter containg all the transformed data
-
 
 /**
 * pass the String writer to the utility class to convert the StringWriter to an array
@@ -88,6 +89,7 @@ int transformedStringNum=u.outStringNum; // the number of vertical elements cont
 
 
 
+
 //query action
 if (action.equals("query")) {
 
@@ -97,8 +99,14 @@ if (action.equals("query")) {
 
 	sqlMapper w =new sqlMapper();
 	w.developPlotQuery(transformedString, transformedStringNum);
-
+	
+	//grab the results from the sqlMapper class
+	queryOutput=w.queryOutput;
+	queryOutputNum=w.queryOutputNum;
+	
 }  //end if
+
+
 
 //insert action
 if (action.equals("insert")) {
@@ -129,6 +137,9 @@ catch( Exception e ) {System.out.println(" failed in: dbLoader.main  "+e.getMess
 
 } //end method
 
+
+public String queryOutput[] = new String[10000];  //the output from query
+int queryOutputNum; //the number of output rows from the query
 
 
 }

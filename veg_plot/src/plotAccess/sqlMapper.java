@@ -59,37 +59,35 @@ for (int i=0;i<transformedStringNum; i++) {
 	if (element[i] != null && element[i].startsWith("queryElement")) {
 		
 		if (value[i] != null && value[i].startsWith("taxonName")) { //if this and the above are true then trigger sql stmt below
-		System.out.println("bad");
-		
-		
-		String action="select";
-		String statement="select PLOT_ID, AUTHORPLOTCODE, Project_ID from PLOT where PLOT_ID in"+
-		"(select PARENTPLOT  from PLOTOBSERVATION  where OBS_ID in"+
-		"(select OBS_ID from TAXONOBSERVATION where AUTHORNAMEID like '%"+value[i+1]+"%'))";
-		String returnFields[]=new String[3];	
-		returnFields[0]="PLOT_ID";
-		returnFields[1]="AUTHORPLOTCODE";
-		returnFields[2]="Project_id";
-		int returnFieldLength=3;
-
-
-		/**
-		* Call the issueSelect method which will return an arry with the return
-		* values
-		*/
-
-		issueStatement j = new issueStatement();
-		j.issueSelect(statement, action, returnFields, returnFieldLength);	
-
-
-		//grab the returned array and print to the screen
-		for (int ii=0;ii<j.outReturnFieldsNum; ii++) {System.out.println(j.outReturnFields[ii]);}
-		
+			//call the queryStore method associated with this request
+			//to get the plot id numbers having the associated taxon
+			queryStore j = new queryStore();
+			j.getPlotId(value[i+1]);
+			queryOutput=j.outPlotId;
+			queryOutputNum=j.outPlotIdNum;
 		}  //end if
 	} //end if
+
 	
-	
-	//System.out.println(transformedString[i]);
+	/*determine the type of out put requested by the calling class*/
+	if (element[i] != null && element[i].startsWith("resultType")) {
+		//if summary - call the method to return the summary elements
+		if (value[i] != null && value[i].startsWith("summary")) {
+			System.out.println("outputing the results set as: "+value[i]);
+			queryStore k = new queryStore();
+			k.getPlotSummary(queryOutput, queryOutputNum);
+			
+						
+			//pass the returned summary results to the xmlWriter
+			//to write the xml file whis is identified in the xml
+			String outFile=value[i+1];
+			xmlWriter l = new xmlWriter();
+			l.writePlotSummary(k.summaryOutput, k.summaryOutputNum, outFile);
+			
+			
+		} //end if
+	} //end if
+		
 
 	
 } //end for
@@ -98,8 +96,9 @@ for (int i=0;i<transformedStringNum; i++) {
 
 
 /**
-* general method to tokenize a string of type: col1|col2 into two seperate strings called element and 
-* value
+* General method to tokenize a string of type: col1|col2 into two seperate strings 
+* usually refered to as element and value.  In the future this method, being a 
+* utility should be put in a utility class
 */
 	
 private void setAttributeAddress (String[] combinedString, int combinedStringNum) {
@@ -107,41 +106,33 @@ private void setAttributeAddress (String[] combinedString, int combinedStringNum
 	
 try {
 int count=0;
-
-
-
-
-	for (int ii=0; ii<combinedStringNum; ii++) { 
-	
-			if (combinedString[ii].indexOf("|")>0 && combinedString[ii].trim() != null ) {  //make sure to tokenize an appropriate string
-			//System.out.println(combinedString[ii]);
-			StringTokenizer t = new StringTokenizer(combinedString[ii].trim(), "|");  //tokenize the string to get the requyired address
-			//count++;
-				if (t.hasMoreTokens())	{	//make sure that there are more tokens or else replace with the null value 
-					element[count]=t.nextToken();
-				}				//capture the required element
-				else {element[count]="-999.25";}
+for (int ii=0; ii<combinedStringNum; ii++) { 
+	if (combinedString[ii].indexOf("|")>0 && combinedString[ii].trim() != null ) {  //make sure to tokenize an appropriate string
+		//System.out.println(combinedString[ii]);
+		StringTokenizer t = new StringTokenizer(combinedString[ii].trim(), "|");  //tokenize the string to get the requyired address
+		
+		if (t.hasMoreTokens())	{	//make sure that there are more tokens or else replace with the null value 
+			element[count]=t.nextToken();
+		}				//capture the required element
+		else {element[count]="-999.25";}
 				
 				
-				if (t.hasMoreTokens() )	{	//make sure that there are more tokens or else replace with the null value (-999)
-					value[count]=t.nextToken();
-				} 				//capture the attributeString
-				else {value[count]="-999.25";}  //do the replacement
+		if (t.hasMoreTokens() )	{	//make sure that there are more tokens or else replace with the null value (-999)
+			value[count]=t.nextToken();
+		} 				//capture the attributeString
+		else {value[count]="-999.25";}  //do the replacement
 			
 			
-			System.out.println(element[count]+" "+value[count]+" "+ii+" "+count);
+		System.out.println(element[count]+" "+value[count]+" "+ii+" "+count);
 			
-			}//end if
-			count++;
-	elementNum=count;
-			
-	}//end for
-
-	
+		}//end if
+		count++;
+		elementNum=count;
+}//end for
 } //end try
 catch ( Exception e ){System.out.println("failed at: sqlMapper.setAttributeAddress  "+e.getMessage());}
-	
 }  //end method
+
 
 
 public String queryOutput[] = new String[10000];  //the output from the issue sql can be mapped to this varaiable
