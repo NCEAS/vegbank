@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-06-28 20:52:20 $'
- * '$Revision: 1.17 $'
+ *     '$Date: 2002-07-01 20:58:19 $'
+ * '$Revision: 1.18 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ public class USDAPlantsLoader
  		{
 			Class.forName("org.postgresql.Driver");
 		//	c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/plants_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/plants_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -469,9 +469,11 @@ private int plantUsageKey(String plantName)
 			{
 				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
+				//String s = (String)plantInstanceHash.get("concatenatedName");
+				//String s1 = (String)plantInstanceHash.get("concatenatedLongName");
+				//System.out.println("USDAPlantsLoader > subspecies: " + s1 );
 				this.loadSinglePlantInstance(plantInstanceHash, "subspecies");
 			}
-			
 			//load the varieties fourth
 			for (int i=0; i<plantNumber; i++) 
 			{
@@ -479,8 +481,6 @@ private int plantUsageKey(String plantName)
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
 				this.loadSinglePlantInstance(plantInstanceHash, "variety");
 			}
-			
-			
 		}
 		catch (Exception e)
 	  {
@@ -506,6 +506,8 @@ private int plantUsageKey(String plantName)
  	*/	
 	private void loadSinglePlantInstance(Hashtable singlePlantInstance, String plantLevel)
 	{
+		try
+		{
 		int sciNameId = 0;
 		int commonNameId = 0;
 		int codeNameId = 0;
@@ -584,7 +586,15 @@ private int plantUsageKey(String plantName)
 							loadPlantUsageInstanceNew(plantCode, codeNameId, conceptId, "STANDARD", 
 							"30-JUN-96", "30-JUN-2001",  "CODE", partyId);
 					}
-					//chect to see that these plants are accepted or wait till the 
+					// IF THE CONCEPT DOES EXIST THEN SEND A WARNING AND THEN GET IT
+					else
+					{
+						System.out.println("######## EXISTING CONCEPT ##########");
+						// BELOW THE CONCATENATEDNAME IS THE PLANT DESCRIPTION
+						conceptId =  getPlantConceptId(sciNameId, refId, concatenatedName, 
+						plantCode, rank, concatenatedLongName);
+					}
+					//check to see that these plants are accepted or wait till the 
 					//last loading step
 					if ( synonymousName.equals("nullToken") )
 					{
@@ -645,7 +655,6 @@ private int plantUsageKey(String plantName)
 							loadPlantUsageInstanceNew(commonName, commonNameId, conceptId, "NONSTANDARD", 
 							"30-JUN-96", "30-JUN-1996",  "COMMONNAME", partyId, synonymousName);
 						}
-						
 					}
 				}
 				else
@@ -655,8 +664,66 @@ private int plantUsageKey(String plantName)
 			}
 		}
 	}
+	catch( Exception e )
+	{
+		System.out.println("Exception: " + e.getMessage());
+		e.printStackTrace();
+		System.out.println("plant: " + singlePlantInstance.toString() );
+		System.exit(0);
+	}
+	}
 
-
+/**
+ * method that returns the primary key value
+ * from the plant concept key based on the 
+ * input parameters
+ * 
+ * @param plantDescription -- the plantDescription
+ * @param longNameId -- the long name of the plant
+ * @param refId -- the reference ID for the concept
+ * @param code -- the codeName for the plant
+ * @param rank -- the heirarchical rank of the concept
+ * @param longName -- the longName of the plantName
+ * fix -- the name if the input plantDesc to taxonDes
+ */
+	private int getPlantConceptId(int longNameId, int refId, String plantDescription, 
+	String code, String rank, String longName)
+	{
+		int plantConceptId = -999;
+		try
+		{
+			//now get the associated primary key value
+			String s1 = " select plantconcept_id from plantconcept where plantDescription = '"
+			+plantDescription+"'";
+			
+			PreparedStatement pstmt1 = conn.prepareStatement(s1);
+			ResultSet rs = pstmt1.executeQuery();
+			int cnt = 0;
+			while	( rs.next() )
+			{	
+				plantConceptId = rs.getInt(1);
+				cnt++;
+			}
+			if ( cnt > 1 )
+			{
+				System.out.println("USDAPlantsLoader > plantConceptKey violation:  more than one"
+				+" keys returned");
+			}
+			//if there are no returned results
+			else if ( cnt == 0 )
+			{
+				System.out.println("USDAPlantsLoader > no  "+plantDescription+" found in the concept table");
+			}
+		}
+		catch(Exception e)
+		{
+			//commit = false;
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+			//System.exit(0);
+		}
+		return(plantConceptId);
+	}
 
 /**
  * method to extract a single plant instance
@@ -1247,7 +1314,8 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 		{
 			System.out.println("Exception: " + e.getMessage() );
 			System.out.println("sql: " + s);
-				System.out.println("plantNameId: " + name_id );
+			System.out.println("concatenatedName: " + concatenatedName );
+			System.out.println("plantNameId: " + name_id );
 			System.out.println("plantConceptId: " + concept_id );
 			System.out.println("usage: " + usage );
 			System.out.println("startDate" + startDate  );
@@ -1309,6 +1377,7 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 		{
 			System.out.println("Exception: " + e.getMessage() );
 			System.out.println("sql: " + s);
+			System.out.println("concatenatedName: " + concatenatedName );
 			System.out.println("plantNameId: " + name_id );
 			System.out.println("plantConceptId: " + concept_id );
 			System.out.println("usage: " + usage );
@@ -1408,6 +1477,11 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 			//figure out how many 
 			if (cnt > 0 )
 			{
+				// SEND A WARNING IF THE COUNT IS MORE THAN ONE
+				if ( cnt > 1 )
+				{
+					System.out.println("USDAPlantsLoader > more than on matching concept");
+				}
 				result =true;
 			}
 			else 
@@ -1612,7 +1686,7 @@ public Hashtable plantInstance(Vector fileVector, int startLevel)
 			plantInstance.put("concatenatedName", 
 				pipeStringTokenizer(fileVector.elementAt(i).toString(), 2) );
 		}
-		else if ( fileVector.elementAt(i).toString().startsWith("concatenatediLongName") )
+		else if ( fileVector.elementAt(i).toString().startsWith("concatenatedLongName") )
 		{
 			plantInstance.put("concatenatedLongName", 
 				pipeStringTokenizer(fileVector.elementAt(i).toString(), 2) );
