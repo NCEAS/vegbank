@@ -2,19 +2,18 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<jsp:useBean id="certBean" class="org.vegbank.ui.struts.CertificationForm"/>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: view_certification.jsp,v 1.2 2004-04-08 05:44:30 mlee Exp $ '
+  *   '$Id: view_certification.jsp,v 1.3 2004-04-15 02:49:21 anderson Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2004-04-08 05:44:30 $'
-  *  '$Revision: 1.2 $'
+  *    '$Author: anderson $'
+  *      '$Date: 2004-04-15 02:49:21 $'
+  *  '$Revision: 1.3 $'
   *
   *
   -->
@@ -33,7 +32,7 @@
 @vegbank_header_html_normal@
 
         <h2 align="center" class="vegbank">Certification Application: 
-			<i><bean:write name="reqCertBean" property="surName"/></i>
+			<i><bean:write name="certBean" property="surName"/></i>
 		</h2>
 
 		<html:errors/>
@@ -44,7 +43,12 @@
 	<!-- main table -->
 	<table width="700" border="0" cellspacing="5" cellpadding="2">
 	<html:form method="post" action="ViewCertification.do">
-        <input type="hidden" value="cert" name="<bean:write property="cert_id"/>">
+        <html:hidden name="dform" property="certId"/>
+        <html:hidden name="dform" property="usrId"/>
+
+	<!--form method="post" action="@web_context@ViewCertification.do"-->
+		<!--input type="hidden" name="certId" value="<%= (String)request.getAttribute("certId") %>"-->
+		<!--input type="hidden" name="usrId" value="<%= (String)request.getAttribute("usrId") %>"-->
 
     <tr> 
       <td colspan="2">
@@ -60,16 +64,16 @@
 			</tr>
 			<tr bgcolor="#FEFEFE">
 			  <td>
-				<bean:write name="reqCertBean" property="givenName"/> 
-				<bean:write name="reqCertBean" property="surName"/>
-        		(<bean:write name="reqCertBean" property="currentCertLevelName"/>)
+				<bean:write name="certBean" property="givenName"/> 
+				<bean:write name="certBean" property="surName"/>
+        		(<bean:write name="certBean" property="currentCertLevelName"/>)
 				<br/>
 
-				<logic:notEqual name="reqCertBean" property="emailAddress" value="null">
-					<bean:write name="reqCertBean" property="emailAddress"/>
+				<logic:notEqual name="certBean" property="emailAddress" value="null">
+					<bean:write name="certBean" property="emailAddress"/>
 				</logic:notEqual> 
-				<logic:notEqual name="reqCertBean" property="phoneNumber" value="null">
-					<bean:write name="reqCertBean" property="phoneNumber"/>
+				<logic:notEqual name="certBean" property="phoneNumber" value="null">
+					<bean:write name="certBean" property="phoneNumber"/>
 				</logic:notEqual>
 				<br/>
 			  </td>
@@ -83,7 +87,9 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;
         <input type="submit" value="APPROVE" name="action">  
 		&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" value="DECLINE" name="action">
+        <input type="submit" value="REJECT" name="action">
+		&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" value="DISCARD" name="action">
 		<br/>&nbsp;
            
 	  </td>
@@ -95,10 +101,10 @@
 		Requested certification 
 		</span>
 		<br/>
-		&raquo; <logic:equal name="reqCertBean" property="requestedCert" value="2">
+		&raquo; <logic:equal name="certBean" property="requestedCert" value="2">
 	    	CERTIFIED
 		</logic:equal>
-		<logic:equal name="reqCertBean" property="requestedCert" value="4">
+		<logic:equal name="certBean" property="requestedCert" value="4">
 	    	PROFESSIONAL
 		</logic:equal>
 	  </td>
@@ -110,14 +116,14 @@
 		Highest degree
 	    </span>
         <br/> 
-	    &raquo; <bean:write name="reqCertBean" property="highestDegree"/>
+	    &raquo; <bean:write name="certBean" property="highestDegree"/>
         </td>
     </tr>
     <tr>
       <td>
 	    <span class="vegbank_small">Year of degree</span>
         <br/> 
-        &raquo; <bean:write name="reqCertBean" property="degreeYear"/>
+        &raquo; <bean:write name="certBean" property="degreeYear"/>
         </td>
     </tr>
     <tr> 
@@ -127,7 +133,7 @@
 		Institution of highest degree
 		</span>
         <br/> 
-        &raquo; <bean:write name="reqCertBean" property="degreeInst"/>
+        &raquo; <bean:write name="certBean" property="degreeInst"/>
         </td>
     </tr>
     <tr> 
@@ -138,7 +144,7 @@
 		Current organization  
 		</span>
 		<br/>
-        &raquo; <bean:write name="reqCertBean" property="currentOrg"/>
+        &raquo; <bean:write name="certBean" property="currentOrg"/>
         </td>
     </tr>
     <tr> 
@@ -148,7 +154,7 @@
 	    <span class="vegbank_small">
 		Current position </span>
 		<br/>
-        &raquo; <bean:write name="reqCertBean" property="currentPos"/>
+        &raquo; <bean:write name="certBean" property="currentPos"/>
         </td>
     </tr>
     <tr> 
@@ -159,10 +165,10 @@
 		ESA Certified Ecologist?</span>
 		<br/>
 		&raquo;
-		<logic:equal name="reqCertBean" property="esaMember" value="1">
+		<logic:equal name="certBean" property="esaMember" value="1">
 		 	YES
 		</logic:equal>
-		<logic:equal name="reqCertBean" property="esaMember" value="0">
+		<logic:equal name="certBean" property="esaMember" value="0">
 		 	NO
 		</logic:equal>
         </td>
@@ -172,7 +178,7 @@
 	    <br/>
         <span class="vegbank_small">Other <b>PROFESSIONAL</b> certification or experience?</span>
 		<br/>
-        &raquo; <bean:write name="reqCertBean" property="profExp"/>
+        &raquo; <bean:write name="certBean" property="profExp"/>
       </td>
     </tr>
     <tr> 
@@ -182,7 +188,7 @@
         List up to 5 of your relevant <b>PUBLICATIONS/THESES</b>:
 		</span>
 		<br/>
-        &raquo; <bean:write name="reqCertBean" property="relevantPubs"/>
+        &raquo; <bean:write name="certBean" property="relevantPubs"/>
       </td>
     </tr>
     <tr> 
@@ -192,7 +198,7 @@
 	    <span class="vegbank_small">
 		Briefly describe your background and expertise in vegetation <b>SAMPLING</b>:</span>
         <br/>
-        &raquo; <bean:write name="reqCertBean" property="vegSamplingExp"/>
+        &raquo; <bean:write name="certBean" property="vegSamplingExp"/>
       </td>
     </tr>
     <tr> 
@@ -202,7 +208,7 @@
 	    <span class="vegbank_small">
 		Briefly describe your background and expertise with vegetation <b>ANALYSIS</b>, description &amp; classification:</span>
         <br/>
-        &raquo; <bean:write name="reqCertBean" property="vegAnalysisExp"/>
+        &raquo; <bean:write name="certBean" property="vegAnalysisExp"/>
       </td>
     </tr>
     <tr> 
@@ -212,7 +218,7 @@
 	    <span class="vegbank_small">
 		Briefly describe your prior experience with the <b>US National Vegetation Classification</b>, if any:</span>
 		<br/>
-        &raquo; <bean:write name="reqCertBean" property="usnvcExp"/>
+        &raquo; <bean:write name="certBean" property="usnvcExp"/>
       </td>
     </tr>
     <tr> 
@@ -221,7 +227,7 @@
 	    <span class="vegbank_small">
 		Briefly describe your prior experience with <b>VEGBANK</b>, if any:</span>
         <br/>
-        &raquo; <bean:write name="reqCertBean" property="vbExp"/>
+        &raquo; <bean:write name="certBean" property="vbExp"/>
       </td>
     </tr>
   <tr> 
@@ -231,7 +237,7 @@
 	    <span class="vegbank_small">
 		How do you <b>INTEND TO USE VEGBANK</b>?</span>
 		<br/>
-        &raquo; <bean:write name="reqCertBean" property="vbIntention"/>
+        &raquo; <bean:write name="certBean" property="vbIntention"/>
       </td>
     </tr>
     <tr> 
@@ -240,7 +246,7 @@
 	    <span class="vegbank_small">
 		Briefly describe your prior experience with vegetation plot <b>DATABASES</b> and/or analytical <b>TOOLS</b>:</span>
 		<br/>
-        &raquo; <bean:write name="reqCertBean" property="toolsExp"/>
+        &raquo; <bean:write name="certBean" property="toolsExp"/>
       </td>
     </tr> 
 	<tr bgcolor="#FFFFFF"> 
@@ -272,53 +278,53 @@
 
 		<tr bgcolor="#FFFFFF"> 
 		  <td align="center"> 
-			<html:select name="reqCertBean" property="expRegionA">
+			<html:select name="certBean" property="expRegionA">
 			  <option value="">--select a region--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
 			</html:select>
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
-			<bean:write name="reqCertBean" property="expRegionAVeg"/>
+			<bean:write name="certBean" property="expRegionAVeg"/>
 		  </td>
 		  <td align="center"> 
-			<bean:write name="reqCertBean" property="expRegionAFlor"/>
+			<bean:write name="certBean" property="expRegionAFlor"/>
 		  </td>
 		  <td align="center"> 
-			<bean:write name="reqCertBean" property="expRegionANVC"/>
+			<bean:write name="certBean" property="expRegionANVC"/>
 		  </td>
 		</tr>
 		<tr bgcolor="#EEEEEE"> 
 		  <td align="center">
-			<html:select name="reqCertBean" property="expRegionB">
+			<html:select name="certBean" property="expRegionB">
 			  <option value="">--no other regions--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
 			</html:select>
 		  </td>
 		  <td align="center"> 
-			<bean:write name="reqCertBean" property="expRegionBVeg"/>
+			<bean:write name="certBean" property="expRegionBVeg"/>
 		  </td>
 		  <td align="center"> 
-			<bean:write name="reqCertBean" property="expRegionBFlor"/>
+			<bean:write name="certBean" property="expRegionBFlor"/>
 		  </td>
 		  <td align="center"> 
-			<bean:write name="reqCertBean" property="expRegionBNVC"/>
+			<bean:write name="certBean" property="expRegionBNVC"/>
 		  </td>
 		</tr>
 		<tr bgcolor="#FFFFFF"> 
 		  <td align="center">
-			<html:select name="reqCertBean" property="expRegionC">
+			<html:select name="certBean" property="expRegionC">
 			  <option value="">--no other regions--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
 			</html:select>
 			</td>
 		  <td bgcolor="#FFFFFF" align="center"> 
-			<bean:write name="reqCertBean" property="expRegionCVeg"/>
+			<bean:write name="certBean" property="expRegionCVeg"/>
 		  </td>
 		  <td align="center"> 
-			<bean:write name="reqCertBean" property="expRegionCFlor"/>
+			<bean:write name="certBean" property="expRegionCFlor"/>
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
-			<bean:write name="reqCertBean" property="expRegionCNVC"/>
+			<bean:write name="certBean" property="expRegionCNVC"/>
 		  </td>
 		</tr>
 		  </table>
@@ -357,11 +363,11 @@
 			    <table>
 				<tr>
 				  <td align="right"><span class="vegclass_small">Name: </span></td>
-				  <td><bean:write name="reqCertBean" property="esaSponsorNameA"/>
+				  <td><bean:write name="certBean" property="esaSponsorNameA"/>
 				</tr>
 				<tr>
 				  <td align="right"><span class="vegclass_small">e-Mail: </span></td>
-				  <td><bean:write name="reqCertBean" property="esaSponsorEmailA"/>
+				  <td><bean:write name="certBean" property="esaSponsorEmailA"/>
 				</tr>
 				</table>
 			  </td>
@@ -370,11 +376,11 @@
 			    <table>
 				<tr>
 				  <td align="right"><span class="vegclass_small">Name: </span></td>
-				  <td><bean:write name="reqCertBean" property="esaSponsorNameB"/>
+				  <td><bean:write name="certBean" property="esaSponsorNameB"/>
 				</tr>
 				<tr>
 				  <td align="right"><span class="vegclass_small">e-Mail: </span></td>
-				  <td><bean:write name="reqCertBean" property="esaSponsorEmailB"/>
+				  <td><bean:write name="certBean" property="esaSponsorEmailB"/>
 				</tr></table>
 			  </td>
 			</tr>
@@ -391,10 +397,10 @@
         </span>
 		<br/>
 		&nbsp;&nbsp;&nbsp;&raquo; 
-		<logic:equal name="reqCertBean" property="peerReview" value="1">
+		<logic:equal name="certBean" property="peerReview" value="1">
 		 	YES, I am interested in being a peer reviewer.
 		</logic:equal>
-		<logic:equal name="reqCertBean" property="peerReview" value="0">
+		<logic:equal name="certBean" property="peerReview" value="0">
 		 	NO thank you.
 		</logic:equal>
 		</td>
@@ -407,7 +413,17 @@
         Additional statements:
 		</span>
         <br/>
-		<bean:write name="reqCertBean" property="addlStmt"/>
+		<bean:write name="certBean" property="addlStmt"/>
+      </td>
+    </tr>
+    <tr> 
+      <td colspan="2">
+	    <br/>
+		<span class="vegbank_small">
+        Panel Member's Comments (optional):
+		</span>
+        <br/>
+        <html:textarea property="statusComment" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
@@ -416,10 +432,13 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;
         <input type="submit" value="APPROVE" name="action">  
 		&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" value="DECLINE" name="action">
+        <input type="submit" value="REJECT" name="action">
+		&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" value="DISCARD" name="action">
       </td>
     </tr>
 </html:form>
+<!--form-->
   </table>
            
 
