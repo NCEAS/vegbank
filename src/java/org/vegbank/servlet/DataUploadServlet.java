@@ -4,8 +4,8 @@
  * Purpose: Upload and save any file.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-11-02 00:53:29 $'
- * '$Revision: 1.2 $'
+ * '$Date: 2004-11-29 18:35:52 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,6 +51,7 @@ import servlet.util.ServletUtility;
 import org.vegbank.common.utility.Utility;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vegbank.common.utility.mail.*;
 
 
 public class DataUploadServlet extends HttpServlet 
@@ -86,14 +87,8 @@ public class DataUploadServlet extends HttpServlet
 			uploadDir += "tmp";
 		}
 
-		try {
-			File udir = new File(uploadDir);
-			if (!udir.exists()) {
-				udir.mkdirs();
-			}
-		} catch (Exception ex) {
-			log.error("problem making upload dirs", ex);
-		}
+		checkUploadDir();
+
 	}
 	
 	
@@ -116,9 +111,11 @@ public class DataUploadServlet extends HttpServlet
 				{
 					try 
 					{
+						checkUploadDir();
 						log.debug("DataUploadServlet > client connected using multipart encoding");
 						//then get the user name and password -- this is where the upload 
 						//file is defined
+				 		log.info("uploading a file to " + uploadDir);
 						multi=new MultipartRequest(req, uploadDir, fileMaxSize);
 						// get the un-encoded parameter names back from the 
 						// MultipartRequest class
@@ -132,14 +129,14 @@ public class DataUploadServlet extends HttpServlet
 					}
 					catch(Exception e)
 					{
-						log.error("Exception: " , e);
+						out.println(handleError("Problem while uploading file", e));
 					}
 				}
 				//no encoding
 			}
 			catch (Exception e)
 			{
-				log.error("Exception: ", e);
+				out.println(handleError("Problem while uploading file", e));
 			}
 		}
 		
@@ -184,7 +181,7 @@ public class DataUploadServlet extends HttpServlet
 			 }
 			 catch (Exception e) 
 			 {
-				 log.error("Exception: " , e);
+				s = handleError("Problem while getting content type", e);
 			 }
 			 return(s);
 		 }
@@ -220,12 +217,10 @@ public class DataUploadServlet extends HttpServlet
 					sb.append(" \n" + s + " \n" );
 					log.debug("DataUploadServlet > handleExchangeRequest: " + s);
 				}
+			} catch ( Exception e ) {
+				sb.append(handleError("Problem while handling multipart request", e));
 			}
-			catch ( Exception e ) 
-			{
-				log.error("Exception: " , e);
-			}
-			 return( sb.toString() );
+			return( sb.toString() );
 		 }
 		
 
@@ -320,12 +315,7 @@ public class DataUploadServlet extends HttpServlet
 		}
  		catch (Exception e) 
 		{ 
-			sb.append("<PRE> \n"); 
-			sb.append( e.getMessage() );
-			sb.append("</PRE> \n");  
-			sb.append("</body> \n");  
-			sb.append("</html> \n");  
-			log.error(e.getMessage(), e);
+			sb.append(handleError("Problem while uploading file", e));
 		}
 		return(sb.toString());
 	}
@@ -387,8 +377,26 @@ public class DataUploadServlet extends HttpServlet
 	 }
 	 
 	 
+	/**
+	 *
+	 */
+	private void checkUploadDir() {
+		try {
+			File udir = new File(uploadDir);
+			if (!udir.exists()) {
+				udir.mkdirs();
+				log.info("made upload dir: " + uploadDir);
+			}
+		} catch (Exception ex) {
+			handleError("problem making upload dirs", ex);
+		}
+	}
 
-
-
+	private String handleError(String msg, Exception ex) {
+		log.error(msg, ex);
+		Utility.notifyAdmin(msg, ex.getMessage());
+		return "<br>ERROR: " + ex.getMessage() + 
+			"<br><br>Sorry!  The site admin has been notified.";
+	}
 }
 

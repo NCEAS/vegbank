@@ -22,6 +22,7 @@ import org.vegbank.common.model.Aux_role;
 import org.vegbank.common.model.Place;
 import org.vegbank.common.model.Plantconcept;
 import org.vegbank.common.model.Plantstatus;
+import org.vegbank.common.utility.mail.*;
 
 /*
  * '$RCSfile: Utility.java,v $'
@@ -29,8 +30,8 @@ import org.vegbank.common.model.Plantstatus;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-11-06 01:10:20 $'
- * '$Revision: 1.40 $'
+ * '$Date: 2004-11-29 18:35:52 $'
+ * '$Revision: 1.41 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -793,5 +794,29 @@ public class Utility
 		}
 
 		return isNumeric(value);
+	}
+
+
+	/**
+	 *
+	 */
+	public static void notifyAdmin(String subject, String body) {
+		String adminFromEmail = vegbankPropFile.getString("admin.email.from");
+		String adminToEmail = vegbankPropFile.getString("admin.email.to");
+		String server = vegbankPropFile.getString("machine_url");
+
+		if (isStringNullOrEmpty(adminFromEmail)) { adminFromEmail = "site@vegbank.org"; }
+		if (isStringNullOrEmpty(adminToEmail)) { adminToEmail = "dba@vegbank.org"; }
+		if (isStringNullOrEmpty(server)) { server = "unknown vegbank host"; }
+
+		try {
+			Mailer m = new Mailer();
+			m.sendPlain("ADMIN NOTIFICATION FROM " + server,
+					"SUBJECT:  " + subject + "\n\n" + body, adminToEmail,
+					null, null, adminFromEmail);
+			log.info("Sent an email notification to admin re: " + subject);
+		} catch (MailerException  mex) {
+			log.error("Problem notifying admin", mex);
+		}
 	}
 }
