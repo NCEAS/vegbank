@@ -7,8 +7,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 21:34:35 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-04-16 17:54:16 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,100 +39,17 @@
 
   <xsl:output method="text" indent="no"/>
   
-  <!-- Hack to handle the different sql scripts we want generated -->
-  <xsl:param name="module"/>
-  
   <xsl:template match="/dataModel">
     -- This is a generated SQL script for postgresql
     --
+   
     <xsl:for-each select="entity">
-      <xsl:call-template name="StepOne"/>
+      <xsl:call-template name="createTable"/>
     </xsl:for-each>
-    
     <xsl:for-each select="entity">
-      <xsl:call-template name="StepTwo"/>
+      <xsl:call-template name="alterTable"/>
     </xsl:for-each>
-    
   </xsl:template>
-
-  <!--
-    Logic to decide what entities to process
-  -->
-  <xsl:template name="StepOne">
-    <!-- Which Module are we dealing with -->
-    <xsl:choose>
-      
-      <!-- COMMUNITY -->
-      <xsl:when test="$module='community'">
-        <xsl:if test="module='community'">
-          <xsl:call-template name="createTable"/>
-        </xsl:if>  
-      </xsl:when>
-      
-      <!-- PLANT -->
-      <xsl:when test="$module='plant'">
-        <xsl:if test="module='plant'">
-          <xsl:call-template name="createTable"/>
-        </xsl:if>  
-      </xsl:when>
-      
-      <!-- PLOT -->
-      <xsl:when test="$module='plot'">
-        <xsl:if test="module='plot'">
-          <xsl:call-template name="createTable"/>
-        </xsl:if>  
-      </xsl:when>
-      
-      <!-- ?????? -->
-      <xsl:otherwise>
-        <xsl:message>
-          Please choose a valid module i.e. community, plot, plant
-        </xsl:message>
-      </xsl:otherwise>
-      
-    </xsl:choose>
-    
-  </xsl:template>
-
-  <!--
-    Logic to decide what entities to process
-  -->
-  <xsl:template name="StepTwo">
-    <!-- Which Module are we dealing with -->
-    <xsl:choose>
-      
-      <!-- COMMUNITY -->
-      <xsl:when test="$module='community'">
-        <xsl:if test="module='community'">
-          <xsl:call-template name="alterTable"/>
-        </xsl:if>  
-      </xsl:when>
-      
-      <!-- PLANT -->
-      <xsl:when test="$module='plant'">
-        <xsl:if test="module='plant'">
-          <xsl:call-template name="alterTable"/>
-        </xsl:if>  
-      </xsl:when>
-      
-      <!-- PLOT -->
-      <xsl:when test="$module='plot'">
-        <xsl:if test="module='plot'">
-          <xsl:call-template name="alterTable"/>
-        </xsl:if>  
-      </xsl:when>
-      
-      <!-- ?????? -->
-      <xsl:otherwise>
-        <xsl:message>
-          Please choose a valid module i.e. community, plot, plant
-        </xsl:message>
-      </xsl:otherwise>
-      
-    </xsl:choose>
-    
-  </xsl:template>
-
 
   <!--
     Most work done here for handling entities/tables
@@ -154,8 +71,6 @@ CREATE TABLE <xsl:value-of select="entityName"/>
     <xsl:apply-templates>
       <xsl:with-param name="sequenceName" select="$sequenceName"/> 
     </xsl:apply-templates>
-      
-PRIMARY KEY ( <xsl:value-of select="attribute[attKey='PK']/attName"/>  )
 );    
     
   
@@ -185,12 +100,20 @@ ALTER TABLE  <xsl:value-of select="../entityName"/>
     <xsl:choose>
       <xsl:when test="attKey='PK'">
         <xsl:value-of select="attName"/> integer <xsl:call-template name="handleNotNull"/>
-          default nextval('<xsl:value-of select="$sequenceName"/>'),
-      </xsl:when>
+          NOT NULL PRIMARY KEY default nextval('<xsl:value-of select="$sequenceName"/>')</xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="attName"/> <xsl:text> </xsl:text> <xsl:value-of select="attType"/> <xsl:call-template name="handleNotNull"/>,
+        <xsl:value-of select="attName"/> <xsl:text> </xsl:text> <xsl:value-of select="attType"/> <xsl:call-template name="handleNotNull"/>
       </xsl:otherwise>
     </xsl:choose>
+
+
+    <!-- Comma unless it is the last attribute -->
+    <xsl:choose>
+      <!-- I wish I knew why I need to decrement last() in this case ??? well it works -->
+      <xsl:when test="position() = last()-1"></xsl:when>
+      <xsl:otherwise>,</xsl:otherwise>
+    </xsl:choose>
+
   </xsl:template>
 
 
