@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-05-30 22:37:19 $'
-  *     '$Revision: 1.10 $'
+  *     '$Date: 2003-05-30 23:29:32 $'
+  *     '$Revision: 1.11 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
@@ -149,7 +149,7 @@
   </target>
 
 
-  <target name="db_rebuild_vegbank"
+  <target name="db_rebuild_empty_vegbank"
           description="==> Rebuild the vegbank Database"
           depends="db_generate_sql">
     <!-- DROP and CREATE Database -->
@@ -157,14 +157,23 @@
       <arg value="${db.name}"/>
       <arg value="${build.sql.src.dir}/vegbank.sql"/>
       <arg value="veg_plot/sql/makePlotSummaryTables_postgres.sql"/>
-      <arg value="${sql.src.dir}/insert_preload_ANSI.sql"/>
     </exec>
 
     <antcall target="grant_db_privilages"/>
   </target>
- 
+  
+  <target name="db_pre_load"
+          description="==> Preload data into database"
+          depends="prepare">
+    <exec executable="${bin.dir}/run_sql.sh">
+      <arg value="${db.name}"/>
+      <arg value="${sql.src.dir}/insert_preload_ANSI.sql"/>
+    </exec>
+  </target>
+
   <target name="grant_db_privilages"
-          description="==> Grant privilages to qa user">
+          description="==> Grant privilages to qa user"
+          depends="prepare">
     <!-- Grant privilages -->
     <exec executable="bin/qa_user/grantQAPrivil.pl"/>
   </target>
