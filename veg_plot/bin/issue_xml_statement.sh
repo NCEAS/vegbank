@@ -34,7 +34,6 @@ else
 fi
 fi
 
-STYLESHEET=../xml/querySpec.xsl
 ACCESSRESOURCE=../lib/dbAccess.jar
 ACCESSMODULE=../lib/dbAccess.jar
 JDBC=../lib/oracleJDBC.jar
@@ -57,4 +56,4 @@ fi
 # convert the existing path to windows
 
 
-java -cp $CLASSPATH dbAccess $1 $2 $3 
+java -cp $CLASSPATH dbAccess $XMLFILE $STYLESHEET $ACTION 
