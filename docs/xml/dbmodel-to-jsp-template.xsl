@@ -3,8 +3,8 @@
   <xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
   <xsl:param name="view">Detail</xsl:param>
-  <xsl:param name="oneTbl">coverMethod</xsl:param>
-  <xsl:param name="detailAdd">coverIndex</xsl:param>
+  <xsl:param name="oneTbl">reference</xsl:param>
+  <xsl:param name="detailAdd"></xsl:param>
   <xsl:param name="more">yes</xsl:param><!-- yes if you want a link to details for each summary row -->
   <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
   <xsl:param name="alphahigh">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:param>
@@ -30,7 +30,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
 
 <html>
 <HEAD>
-<!--<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 @defaultHeadToken@
  
 <TITLE>View VegBank Data: <xsl:value-of select="entityName"/>s - <xsl:value-of select="$view"/>
