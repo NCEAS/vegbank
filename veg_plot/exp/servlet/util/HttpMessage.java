@@ -7,11 +7,11 @@ package servlet.util;
  *   Copyright: 2000 Regents of the University of California and the
  *              National Center for Ecological Analysis and Synthesis
  *     Authors: Dan Higgins modified for metacat by Chad Berkley
- *     Version: '$Id: HttpMessage.java,v 1.2 2002-01-24 00:24:19 harris Exp $'
+ *     Version: '$Id: HttpMessage.java,v 1.3 2002-04-11 23:53:25 harris Exp $'
  *
  *     '$Author: harris $'
- *     '$Date: 2002-01-24 00:24:19 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2002-04-11 23:53:25 $'
+ *     '$Revision: 1.3 $'
  */
 
 
@@ -27,8 +27,12 @@ public class HttpMessage {
     URL servlet = null;
     String argString = null;
     static String cookie = null;
-    public HttpMessage(URL servlet) {
-        this.servlet = servlet;
+    
+		//constructor
+		public HttpMessage(URL servlet) 
+		{
+			System.out.println("HttpMessage > constructed");
+    	this.servlet = servlet;
     }
     
     /**

@@ -10,9 +10,9 @@ import javax.servlet.http.*;
 import org.apache.tools.ant.taskdefs.Copy;
 import org.apache.tools.ant.*;
 import org.apache.tools.mail.MailMessage;
-
-import servlet.util.*;
 import servlet.util.GetURL;
+//import servlet.util.*;
+
 
 /**
  * Utility class for java servltes for doing a range of utility 
@@ -22,8 +22,8 @@ import servlet.util.GetURL;
  *    etc.. 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-04 02:08:14 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2002-04-11 23:53:24 $'
+ *  '$Revision: 1.9 $'
  *
  */
 
@@ -31,7 +31,6 @@ import servlet.util.GetURL;
 
 public class ServletUtility 
 {
-
 	private GetURL gurl = new GetURL();
 	public Vector outVector;
 	public int vecElementCnt;
@@ -240,7 +239,11 @@ public void fileCopy (String inFile, String outFile, String appendFlag)
 		{
 			out  = new PrintStream(new FileOutputStream(outFile, true)); 
 		}
-		System.out.println("servletUtility.fileCopy copying a file");
+		
+		System.out.println("ServletUtility > fileCopy");
+		System.out.println("ServletUtility > inFile: " + inFile);
+		System.out.println("ServletUtility > outFile: " + outFile);
+		
 		int c;
 		while((c = in.read()) != -1)
         out.write(c);
@@ -270,7 +273,9 @@ public void fileCopy (String inFile, String outFile)
 		BufferedReader in = new BufferedReader(new FileReader(inFile));
 		PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
 		
-		System.out.println("servletUtility.fileCopy copying a file");
+		System.out.println("ServletUtility > fileCopy");
+		System.out.println("ServletUtility > inFile: " + inFile);
+		System.out.println("ServletUtility > outFile: " + outFile);
 		
 		int c;
 		while((c = in.read()) != -1)
@@ -495,9 +500,13 @@ public void gzipCompress (String inFile, String outFile)
 	{
 		BufferedReader in = new BufferedReader(new FileReader(inFile));
 		BufferedOutputStream out = new BufferedOutputStream(new GZIPOutputStream(
-			new FileOutputStream(outFile)));
-
-		System.out.println("servletUtility.gzipCompress Writing a compressed file");
+		new FileOutputStream(outFile)));
+		
+		System.out.println("ServletUtility > gzipCompress");
+		System.out.println("ServletUtility > inFile: " + inFile);
+		System.out.println("ServletUtility > outFile: "  + outFile );
+		
+		//System.out.println("servletUtility.gzipCompress Writing a compressed file");
 		int c;
 		while((c = in.read()) != -1)
 		out.write(c);

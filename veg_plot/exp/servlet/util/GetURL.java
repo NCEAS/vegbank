@@ -1,4 +1,5 @@
 package servlet.util;
+
 /**
  *	Name: GetUrl.java
  *  Purpose: Used for Java servlet/applet/application communication
@@ -6,15 +7,15 @@ package servlet.util;
  *		"Java Servlet Programming" by Hunter & crawford and
  *
  *     '$Author: harris $'
- *     '$Date: 2002-03-14 22:01:28 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2002-04-11 23:53:25 $'
+ *     '$Revision: 1.3 $'
  *
  */
 
 import java.net.*;
 import java.util.*;
 import java.io.*;
-import servlet.util.*;
+//import servlet.util.HttpMessage;
 
 public class GetURL 
 { 
@@ -104,7 +105,6 @@ public class GetURL
 	public static String requestURL(String servlet, String protocol, String host, 
 		Properties parameters) 
 	{
-
 		StringBuffer buf = new StringBuffer();
 		Enumeration names = parameters.propertyNames();
 		while (names.hasMoreElements()) 
@@ -144,13 +144,12 @@ public class GetURL
 		try 
 		{
 			u = new URL(url); //convert the string to a url
-	
 			try 
 			{
 				uc = u.openConnection();
 				//uc.setRequestProperty("ENCTYPE", "multipart/form-data");
-				//System.out.println("***"+uc.getHeader());
-				//System.out.println("***"+uc.getContentEncoding());
+				//System.out.println("GetURL > url header: "+uc.getHeader() );
+				System.out.println("GetURL > url encoding:"+uc.getContentEncoding());
 	  
 				//now turn the URLConnection into a BufferedReader
 				BufferedReader theHTML = new BufferedReader(new InputStreamReader(uc.getInputStream()));
@@ -161,25 +160,22 @@ public class GetURL
 					{
 						buf.append(thisLine+" ");
 						//System.out.println(thisLine);
-					}
-          
+					} 
 				} 
 				catch (Exception e) 
 				{
 					System.err.println(e);
 				}
-	
 			} 
 			catch (Exception e) 
 			{
 				System.err.println(e);
 			}
-
 		} 
 		catch (MalformedURLException e) 
 		{
-			System.err.println(url + " is not a parseable URL");
-			System.err.println(e);
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 	//	System.out.println(buf.toString() );
 	return buf.toString();
@@ -234,7 +230,7 @@ public class GetURL
 			{
 				//add the results to the vector
       	responseVector.addElement(line);
-      	System.out.println("GetURL > server response: " + line);
+      	//System.out.println("GetURL > server response: " + line);
 				//and add to the hashtable too
       	responseVec.put(new Integer(lineCnt), line);
       	lineCnt++;
