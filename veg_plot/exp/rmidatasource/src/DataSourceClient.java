@@ -6,7 +6,10 @@ import java.math.*;
 import java.net.*;
 import java.io.*; 
 import java.rmi.*;
-
+import org.w3c.dom.Node;
+import org.w3c.dom.Document;
+import xmlresource.utils.transformXML;
+//import javax.xml.*;
 
 /** 
  * class that mimics the functionality of the PlotDataSource class except that 
@@ -22,8 +25,8 @@ import java.rmi.*;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-29 16:22:23 $'
- * 	'$Revision: 1.14 $'
+ *  '$Date: 2002-03-29 21:22:26 $'
+ * 	'$Revision: 1.15 $'
  *
  *
  */
@@ -35,6 +38,7 @@ public class DataSourceClient
 	private String serverClass = "DataSourceServer";
 	private String url = null;
 	DataSourceServerInterface source;
+	private transformXML transformer  = new transformXML(); 
 	
 	/**
 	 * this constructor method makes a connection to the 
@@ -47,6 +51,7 @@ public class DataSourceClient
 	{
 		try
 		{
+
 			System.out.println("DataSourceCleint > connecting to server: " +hostName );
 			System.out.println("DataSourceCleint > on port: " +port );
 			this.serverHost = hostName;
@@ -889,20 +894,35 @@ public class DataSourceClient
 					//if the all flag is passed
 					if ( testPlot.equals("-all") )
 					{
+						StringBuffer sb = new StringBuffer();
+						sb.append("<archiveInsertion>");
 						String insertResults = "";
 						System.out.println("DataSourceCleint > inserting all the plots in the archive " );
 						for (int c = 0; c < v.size(); c++)
 						{
-							 insertResults = insertResults+ " \n" +client.insertPlot( v.elementAt(c).toString() );
+							 insertResults = client.insertPlot( v.elementAt(c).toString() );
+							 sb.append(insertResults);
 						}
-						System.out.println("DataSourceCleint > insertion results: \n" + insertResults );
+						sb.append("</archiveInsertion>");
+						
+						//transform the xml using a generic xslt sheet
+						transformXML trans  = new transformXML(); 
+						String tr = trans.getTransformedFromString( sb.toString() , "./lib/ascii-treeview.xsl");
+						System.out.println("DataSourceCleint > insertion results html: \n" + tr );
 					}
-					//just load the sible plot identified on the command line
+					//just load the single plot identified on the command line
 					else
 					{
 						System.out.println("DataSourceCleint > inserting the first plot in the archive: " + testPlot );
-						String insertResults = client.insertPlot(testPlot);
-						System.out.println("DataSourceCleint > insertion results: \n" + insertResults );
+						//String insertResults =  "<?xml version=\"1.0\"?> \n"+client.insertPlot(testPlot);
+						
+						String insertResults =   client.insertPlot(testPlot);
+						
+						//System.out.println("DataSourceCleint > insertion results: \n" + insertResults );
+						//transform the xml using a generic xslt sheet
+						transformXML trans  = new transformXML(); 
+						String tr = trans.getTransformedFromString(insertResults, "./lib/ascii-treeview.xsl");
+						System.out.println("DataSourceCleint > insertion results html: \n" + tr );
 					}
 				}
 				//else load the first plot only
