@@ -6,12 +6,12 @@
       <br/>
 This tutorial works here in the right frame, while the VegBank content stays in the left frame.  If you click a blue link here, like <a href="@general_link@info.html">this info page</a> or <a href="@general_link@faq.html">this faq</a>, it will open to the left.  If you click a navigation button (i.e. next, previous, or tutorial menu items), they open here on the right.  This allows you to read help here and independently control VegBank on the left.  Press next to start finding plots in VegBank!
 </manualHTML>
-<manualItem refURL="@web_context@" name="index-plot-search" topic="First Plot Search">
-  <manualHTML>
-  <p>This tutorial page will show you how to find your first set of vegetation plots.  If you are unfamiliar with what a plot is, please see our <a href="@general_link@faq.html">FAQ</a>.  Press the above header to return to the VegBank main page to start you search when you are ready.  This help will remain here until you close it with the red "close tutorial" below.  Some browsers (Mozilla Firebird) prevent frames from being closed like this.  If so, please use the right click functions of your browser to close this frame. </p>
-<p>To start your first plot search, go to the <a href="@web_context@">VegBank Home Page</a>.  There is a searching function from this page that allows you to search for plots with a particular plant in them.  You can use any type of plant name, such as scientific name or common name.  You can also use USDA codes if you like.  Enter a plant name in the search box (an example if you need one is: "Sugar Maple", without quotes) and press the "search" button. </p>
-  </manualHTML>
-</manualItem>
+    <manualItem refURL="@web_context@" name="index-plot-search" topic="First Plot Search">
+      <manualHTML>
+        <p>This tutorial page will show you how to find your first set of vegetation plots.  If you are unfamiliar with what a plot is, please see our <a href="@general_link@faq.html">FAQ</a>.  Press the above header to return to the VegBank main page to start you search when you are ready.  This help will remain here until you close it with the red "close tutorial" below.  Some browsers (Mozilla Firebird) prevent frames from being closed like this.  If so, please use the right click functions of your browser to close this frame. </p>
+        <p>To start your first plot search, go to the <a href="@web_context@">VegBank Home Page</a>.  There is a searching function from this page that allows you to search for plots with a particular plant in them.  You can use any type of plant name, such as scientific name or common name.  You can also use USDA codes if you like.  Enter a plant name in the search box (an example if you need one is: "Sugar Maple", without quotes) and press the "search" button. </p>
+      </manualHTML>
+    </manualItem>
   </manualItem>
   <manualItem refURL="@general_link@info.html" name="vegbank-information" topic="VegBank Information">
     <manualItem refURL="" name="what-is-a-plot" topic="What is a Plot?">
@@ -192,9 +192,9 @@ formats (click links for more information on each).  See the next few screens fo
       <manualItem refURL="@vegbranch_link@vegbranch.html" name="vegbranch" topic="VegBranch">
         <manualHTML>
           <a href="@vegbranch_link@vegbranch.html">VegBranch</a>
-          <font color="red" size="-1">
+          <span class="category bright">
             <b> (the recommended way of submitting plots to VegBank)</b>
-          </font> - VegBank's client database,
+          </span> - VegBank's client database,
     in MS Access, can import data from other formats to prepare for submission to VegBank.
     Unfortunately, VegBranch requires that you have MS Access 2000 or higher running
     on your machine.  We hope to create a new version of VegBranch that will be platform independant
@@ -261,7 +261,7 @@ which are the party's self-assessment of how well the plot-observation matches t
 sure the party is that such a fit is indeed accurate.
 </p>
         <p>
-          <font color="red">Coming very soon!</font>
+          <span class="bright">Coming very soon!</span>
         </p>
       </manualHTML>
     </manualItem>
@@ -298,7 +298,7 @@ to VegBank to those which may be useful to the community at large.   Helpful not
 there fires in this national park were 42 years before this plot-observation."
 </p>
         <p>
-          <font color="red">Coming in early 2005!</font>
+          <span class="bright">Coming in early 2005!</span>
         </p>
       </manualHTML>
     </manualItem>

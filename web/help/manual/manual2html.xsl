@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: mlee $'
- *  '$Date: 2004-07-29 09:07:16 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2004-11-17 01:56:30 $'
+ *  '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@
           <table width="100%" height="100%">
             <tr>
               <td valign="top" align="center">
-                <font size="+1">
-                  <b>VegBank</b>
-                </font> -- tutorial</td>
+                
+                  <h2>VegBank  -- tutorial</h2>
+</td>
             </tr>
 <tr><td valign="top">          
           <p>
@@ -62,9 +62,9 @@
 </td></tr>
 <tr><td valign="bottom">
 <p>
-            <font color="red">
+            <span class="bright">
               <xsl:call-template name="closeManual" />
-            </font>
+            </span>
 </p>
 </td></tr>
 </table>          
@@ -106,9 +106,9 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
                       <table width="100%">
                         <tr>
                           <td align="center">
-                            <font size="+1">
-                              <b>VegBank</b>
-                            </font> -- tutorial</td>
+                            <h2>
+                              VegBank
+                            -- tutorial</h2></td>
                         </tr>
                       </table>
                     </td>
@@ -176,11 +176,11 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
                               </xsl:if>
                             </xsl:element>
                             <br/>
-                            <font size="-2">prev</font>
+                            <span class="sizetiny">prev</span>
                           </td>
                           <td align="center">
                             <input value="MENU" type="button" onclick="window.location='{$menu_url}'"/><br />
-                            <font size="-2" color="red"> <xsl:call-template name="closeManual" /></font></td>
+                            <span class="sizetiny bright"> <xsl:call-template name="closeManual" /></span></td>
                           <td align="right">
                             <!--                            <input value="&gt;&gt;" type="button" onclick="window.location='{$next_url}'"/> -->
                             <xsl:element name="input">
@@ -193,7 +193,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
                               </xsl:if>
                             </xsl:element>
                             <br/>
-                            <font size="-2">next</font>
+                            <span class="sizetiny">next</span>
                           </td>
                         </tr>
                         <tr>
