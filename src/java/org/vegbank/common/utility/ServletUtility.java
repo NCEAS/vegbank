@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2004-02-27 19:13:52 $'
- *  '$Revision: 1.9 $'
+ *  '$Date: 2004-03-02 03:36:43 $'
+ *  '$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,9 +51,11 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.upload.FormFile;
 import org.apache.tools.ant.filters.ReplaceTokens;
+import org.vegbank.common.Constants;
 
 import com.Ostermiller.util.LineEnds;
 
@@ -132,6 +134,23 @@ public class ServletUtility
 		msg.setContent(body, "text/html");
 		// -- Send the message --
 		Transport.send(msg);
+	}
+	
+	/**
+	 * Get the usrId from the session.
+	 *
+	 * @param request -- to get at session object
+	 * @return Long the usrid ( or null if not found)
+	 */
+	public static Long getUsrIdFromSession(HttpServletRequest request)
+	{
+		Long usrId = null;
+		HttpSession session = request.getSession();
+		if ( session != null )
+		{
+			usrId = (Long) session.getAttribute(Constants.USER_KEY);	
+		}
+		return usrId;
 	}
 
 	/**

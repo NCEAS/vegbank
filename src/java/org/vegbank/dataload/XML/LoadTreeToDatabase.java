@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-01 23:34:21 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-03-02 03:36:43 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -627,7 +627,7 @@ import org.vegbank.common.utility.Utility;
 //			else
 //			{
 //				LogUtility.log(
-//					"LoadTreeToDatabase: Got an alien accessionCode in table "
+//					"LoadTreeToDatabase: Got an accessionCode in table "
 //						+ tableName
 //						+ " --> "
 //						+ accessionCode, LogUtility.TRACE);

@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2004-03-02 01:54:20 $'
- *  '$Revision: 1.24 $'
+ *  '$Date: 2004-03-02 03:36:43 $'
+ *  '$Revision: 1.25 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,13 +43,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.vegbank.common.Constants;
 import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.DBConnectionPool;
-import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
-import org.vegbank.common.utility.Utility;
 import org.vegbank.databaseAccess.dbAccess;
 
 import org.vegbank.xmlresource.transformXML;
@@ -84,8 +82,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2004-03-02 01:54:20 $'
- *  '$Revision: 1.24 $'
+ *  '$Date: 2004-03-02 03:36:43 $'
+ *  '$Revision: 1.25 $'
  * 
  */
 
@@ -176,7 +174,7 @@ public class DataRequestServlet extends HttpServlet
 		PrintWriter out = response.getWriter();
 		try
 		{
-			Long usrId = (Long)request.getSession().getAttribute(Constants.USER_KEY);
+			Long usrId = ServletUtility.getUsrIdFromSession(request);
 			String userName = null;
 			if (usrId != null && usrId.longValue() == 0) 
 			{
@@ -248,6 +246,7 @@ public class DataRequestServlet extends HttpServlet
 			LogUtility.log("DataRequestServlet: " + e.getMessage(), e);
 		}
 	}
+
 
 	/**
 	 * this method is to be used for passing the results from the 

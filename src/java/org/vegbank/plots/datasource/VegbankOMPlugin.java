@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-02 01:54:20 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2004-03-02 03:36:43 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Vector;
 import org.vegbank.common.model.*;
 import org.vegbank.common.utility.MBReadHelper;
+import org.vegbank.common.utility.LogUtility;
 
 /**
  * @author farrell
@@ -1579,7 +1580,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		Iterator taxonImportanceIt = tiList.iterator();
 		while ( taxonImportanceIt.hasNext() )
 		{
-			// FIXME: What does it mean when a taxonImportance has no single strata?
+			// If a taxonimportance has no stratum child it refers to all strata
 			String stratumName = "";
 			Taxonimportance ti = (Taxonimportance) taxonImportanceIt.next();
 			Stratum stratum = ti.getStratumobject();
@@ -1591,6 +1592,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 					stratumName = stratumType.getStratumname();
 					strataList.add(stratumName);
 					taxonImportances.put(stratumName, ti);
+					LogUtility.log("Adding stratum " +  stratumName + " for " + plantName, LogUtility.TRACE);
 				}
 			}
 		}
