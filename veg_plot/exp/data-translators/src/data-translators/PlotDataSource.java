@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-02-03 19:24:31 $'
- * 	'$Revision: 1.9 $'
+ *  '$Date: 2002-03-15 19:22:21 $'
+ * 	'$Revision: 1.10 $'
  */
 public class PlotDataSource 
 {
@@ -131,7 +131,7 @@ public class PlotDataSource
 	{
 		try
 		{
-
+			System.out.println("PlotDataSource >  getting plot based on name: " + plotName );
 			projectName = ((PlotDataSourceInterface)pluginObj).getProjectName(plotName);
 			projectDescription = ((PlotDataSourceInterface)pluginObj).getProjectDescription(plotName);
 			projectContributors = ((PlotDataSourceInterface)pluginObj).getProjectContributors(plotName);
@@ -156,6 +156,7 @@ public class PlotDataSource
 			longitude = ((PlotDataSourceInterface)pluginObj).getLongitude(plotName);
 			
 			//NEXT LINES FOR DEBUGGING W/IN SERVLETS
+/**
 			System.out.println("PlotDataSource >   start: " + this.projectName);
 			System.out.println("PlotDataSource >   desc: " + this.projectDescription);
 	    System.out.println("PlotDataSource >   contr: " + this.projectContributors.toString() );
@@ -178,7 +179,7 @@ public class PlotDataSource
 			System.out.println("PlotDataSource >   stan: " + standSize );
 			System.out.println("PlotDataSource >   lat: " + latitude );
 			System.out.println("PlotDataSource >   long: " + longitude );
-			
+*/			
 			
 			confidentialityReason = ((PlotDataSourceInterface)pluginObj).getConfidentialityReason(plotName);
 			confidentialityStatus = ((PlotDataSourceInterface)pluginObj).getConfidentialityStatus(plotName);
@@ -190,9 +191,9 @@ public class PlotDataSource
 			= ((PlotDataSourceInterface)pluginObj).getElevationAccuracy(plotName);
 			
 			uniqueStrataNames = ((PlotDataSourceInterface)pluginObj).getUniqueStrataNames(plotName);
-			plantTaxaNames = ((PlotDataSourceInterface)pluginObj).getPlantTaxaNames(plotCode);
+			plantTaxaNames = ((PlotDataSourceInterface)pluginObj).getPlantTaxaNames(plotName);
 			uniquePlantTaxaNumber =  plantTaxaNames.size();
-			System.out.println("PlotDataSource >  end");
+			//System.out.println("PlotDataSource >  end");
 		}
 		catch (Exception e)
 		{
