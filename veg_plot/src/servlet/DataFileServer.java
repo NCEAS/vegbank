@@ -7,59 +7,57 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2001-02-17 00:14:09 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2001-07-19 20:53:23 $'
+ * '$Revision: 1.2 $'
  */
 
-//package edu.ucsb.nceas.metacat;
 
 import java.net.*;
 import java.io.*;
-import java.util.Properties;
-import java.util.Date;
-import java.text.SimpleDateFormat;
+import java.util.*;
+import java.text.*;
 import java.sql.*;
 
-public class DataFileServer extends Thread 
-{
-//  MetaCatUtil util = new MetaCatUtil();
-  static String filedir = "";
-  String user = null;
-  String sess_id = null;
-  int port;
-  static String httpstring = "http://dev.nceas.ucsb.edu:8090/metacat/upload/";
-  protected Socket s;
+	public class DataFileServer extends Thread 
+	{
+		ResourceBundle rb = ResourceBundle.getBundle("veg_servlet");
+		private String uploadDir = rb.getString("uploadDir");
+		//  MetaCatUtil util = new MetaCatUtil();
+  	static String filedir = "";
+  	String user = null;
+  	String sess_id = null;
+  	int port;
+  	static String httpstring = "http://dev.nceas.ucsb.edu:8090/metacat/upload/";
+  	protected Socket s;
   
-  DataFileServer (int port, String user, String sess_id) 
-  {
-    this.sess_id = sess_id;
-    this.user = user;
-    this.port = port;
-//    filedir = util.getOption("datafilepath");
-	filedir = "/jakarta-tomcat/webapps/ROOT/uploads/"; 
-  }
+  	DataFileServer (int port, String user, String sess_id) 
+  	{
+    	this.sess_id = sess_id;
+    	this.user = user;
+    	this.port = port;
+			//    filedir = util.getOption("datafilepath");
+			filedir = uploadDir; 
+  	}
  
  
  /**
   * Main method for testing
   */  
-public static void main(String[] args)
+	public static void main(String[] args)
   {
     System.out.println("Starting DataStreamTest");
-	int newPort=8081;
-	String newUser="harris";
-	String newSess_id="abc";
-	DataFileServer dfs = new DataFileServer(newPort, newUser, newSess_id);
-//DataFileServer dfs = new DataFileServer(Port, newUser, newSess_id);
-      dfs.start();
-	
-	//run();
-    
-   }	
+		int newPort=8081;
+		String newUser="harris";
+		String newSess_id="abc";
+		DataFileServer dfs = new DataFileServer(newPort, newUser, newSess_id);
+		//DataFileServer dfs = new DataFileServer(Port, newUser, newSess_id);
+    dfs.start();
+		//run();
+  }	
    
    
    
-  /**
+	/**
    * returns true if the port specified is not in use.  false otherwise
    */
   public static boolean portIsAvailable(int port)
@@ -208,5 +206,4 @@ public static void main(String[] args)
       System.out.println("DataFileServer.run > done");
     }
   }
-  
 }
