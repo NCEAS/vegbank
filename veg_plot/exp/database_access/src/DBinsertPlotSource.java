@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-05 00:06:24 $'
- * 	'$Revision: 1.19 $'
+ *  '$Date: 2002-04-08 20:20:19 $'
+ * 	'$Revision: 1.20 $'
  */
 package databaseAccess;
 
@@ -667,39 +667,43 @@ public class DBinsertPlotSource
 			for (int ii =0; ii < strataVec.size(); ii++)
 			{
 				String curStrata = strataVec.elementAt(ii).toString();
-					
 				StringBuffer sb = new StringBuffer();
-					
-				//get the strataCompId number
-				int stratumCompositionId  = getNextId("stratumComposition");
+
+				// get th cover of the plant within that strata -- if this comes back
+				// null then there was no observation of this plant in the strata
 				String cover = source.getTaxaStrataCover(plantName, plotName, curStrata);
+				if ( cover != null )
+				{
+					//get the strataCompId number
+					int stratumCompositionId  = getNextId("stratumComposition");
+					
+					//get the strata ID
+					int stratumId = this.getStrataId(plotObservationId, curStrata);
 				
-				//get the strata ID
-				int stratumId = this.getStrataId(plotObservationId, curStrata);
-				
-				debug.append("<stratumComposition> \n");
-				debug.append("<stratumName>"+curStrata+"</stratumName> \n");
-				debug.append("<taxonName>"+plantName.replace('&', '_')+"</taxonName> \n");
-				debug.append("<cover>"+cover+"</cover> \n");
-				debug.append("</stratumComposition> \n");
+					debug.append("<stratumComposition> \n");
+					debug.append("<stratumName>"+curStrata+"</stratumName> \n");
+					debug.append("<taxonName>"+plantName.replace('&', '_')+"</taxonName> \n");
+					debug.append("<cover>"+cover+"</cover> \n");
+					debug.append("</stratumComposition> \n");
 
 			
-				//insert the strata composition values
-				sb.append("INSERT into STRATUMCOMPOSITION (stratumComposition_id, "
-				+" cheatPlantName, cheatStratumName, taxonStratumCover, stratum_id, " 
-				+" taxonobservation_id) ");
-				sb.append("values(?,?,?,?,?,?)");
+					//insert the strata composition values
+					sb.append("INSERT into STRATUMCOMPOSITION (stratumComposition_id, "
+					+" cheatPlantName, cheatStratumName, taxonStratumCover, stratum_id, " 
+					+" taxonobservation_id) ");
+					sb.append("values(?,?,?,?,?,?)");
 				
-				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+					PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 				
-				// Bind the values to the query and execute it
-  	  	pstmt.setInt(1, stratumCompositionId);
-  	  	pstmt.setString(2, plantName);
-				pstmt.setString(3, curStrata);
-				pstmt.setString(4, cover);
-				pstmt.setInt(5, stratumId);
-				pstmt.setInt(6, taxonObservationId);
-  			pstmt.execute();
+					// Bind the values to the query and execute it
+  	  		pstmt.setInt(1, stratumCompositionId);
+  	  		pstmt.setString(2, plantName);
+					pstmt.setString(3, curStrata);
+					pstmt.setString(4, cover);
+					pstmt.setInt(5, stratumId);
+					pstmt.setInt(6, taxonObservationId);
+  				pstmt.execute();
+				}
 			}
 		}
 		catch (SQLException sqle)
