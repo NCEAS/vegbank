@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-12-16 01:44:40 $'
-* '$Revision: 1.141 $'
+* '$Date: 2004-12-16 10:02:57 $'
+* '$Revision: 1.142 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -178,6 +178,7 @@
     <filter token="workshop_link" value="${vegdocs.dir}/workshop/"/>
     <filter token="vegbranch_link" value="${vegdocs.dir}/vegbranch/"/>
     <filter token="vegbranch_demo_link" value="${vegdocs.dir}/vegbranch/docs/demo/"/>
+    <filter token="searchplugins_link" value="${vegdocs.dir}/searchplugins/"/>
     <filter token="xml_link" value="${vegdocs.dir}/xml/"/>
     <filter token="NativeXMLIndexPage" value="${vegdocs.dir}/xml/vegbank-xml-index.html"/>
     <filter token="help_link" value="${vegdocs.dir}/help/"/>
