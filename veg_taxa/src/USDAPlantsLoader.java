@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-15 21:43:05 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-02-19 21:13:16 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,6 +63,7 @@ public class USDAPlantsLoader
 	public String stopDate = "01-JAN-22";
 	public String partyName = "USDA-PLANTS";
 	public String reference = "PLANTS96";
+	public String otherCitationDetails = "PLANTS1996";
 
 	//constructor -- define as static the LocalDbConnectionBroker 
 	//so that methods called by this class can access the 'local' 
@@ -457,14 +458,19 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 		String familyName=singlePlantInstance.get("familyName").toString();
 		String plantCode=singlePlantInstance.get("plantCode").toString();
 		
-		
+		//first load the reference table
+		int refId = this.insertPlantReference(this.otherCitationDetails);
+
+
 		//if the plantname is not there then load it
 		if (plantNameExists(concatenatedName)==false)
 		{
 			System.out.println("USDAPlantsLoader > first instance of plant name: "
 				+ concatenatedName );
-			nameId = loadPlantNameInstance(concatenatedName, commonName, plantCode);
+			nameId = loadPlantNameInstance(refId, concatenatedName, commonName, plantCode);
 		}
+
+	
 		//if the plant concept does not exist create an entry 
 		// and create a status entry for that plant instance - if 
 		//it is not a synonomy b/c if there is a synonomy then the 
@@ -474,13 +480,14 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 			if ( synonymousName.equals("nullToken") )
 			{
 				//upadte the concept
-				conceptId = loadPlantConceptInstance(concatenatedName, tsnValue, rank, 
-				"PLANTS96", startDate);
+				conceptId = loadPlantConceptInstance(nameId, refId, concatenatedName, 
+				plantCode);
 				//update the status
 				statusId = loadPlantStatusInstance(conceptId, itisUsage, "01-JAN-96", 
 				"01-JAN-01", "PLANTS96");
 			}
 		}
+/*	
 		//if no synonomies then add the accepted 
 		//usage to the usage table
 		if ( synonymousName.equals("nullToken") )
@@ -497,10 +504,135 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 				System.out.println("USDAPlantsLaoder > FAILURE LOADING THE USAGE INSTANCE FOR A PLANT");
 			}
 		}
+		
+		*/
 	}
 }
 
 
+ /** 
+	 * method that inserts the reference data 
+	 */
+		private int getPlantReferenceId(String otherCitationDetails)
+	  {
+		 	int refId = 0; 
+			try
+			{
+		 		StringBuffer sb = new StringBuffer();
+				sb.append("SELECT plantreference_id from PLANTREFERENCE where othercitationdetails"
+				+" like '"+otherCitationDetails+"'");
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					refId = rs.getInt(1);
+					cnt++;
+				}
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(refId);
+	 }
+	 
+		
+		 /** 
+	  * method that inserts the reference data 
+		*/
+		private boolean plantReferenceExists(String otherCitationDetails)
+	  {
+			boolean exists = false;
+		 try
+		 {
+		 	StringBuffer sb = new StringBuffer();
+			//get the refId
+			sb = new StringBuffer();
+			sb.append("SELECT plantreference_id from PLANTREFERENCE where othercitationdetails"
+			+" like '"+otherCitationDetails+"'");
+			
+			Statement query = conn.createStatement();
+			ResultSet rs = query.executeQuery( sb.toString() );
+			
+			int cnt = 0;
+			while ( rs.next() ) 
+			{
+				cnt++;
+			}
+			if (cnt > 0)
+			{
+				System.out.println("USDAPlantsLoader > matching reference:  " + cnt  );
+				exists = true;
+			}
+			else
+			{
+				exists = false;
+			}
+		 }
+			catch (Exception e)
+		 {
+			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(exists);
+	 }
+	 
+	 
+	 
+ /** 
+  * method that inserts the reference data 
+	*/
+	private int insertPlantReference(String otherCitationDetails)
+  {
+	 int refId = 0; 
+	 try
+	 {
+	 	StringBuffer sb = new StringBuffer();
+		//first see if the reference already exists
+		boolean refExists = plantReferenceExists(otherCitationDetails);
+		//System.out.println("USDAPlantsLoader > refExists: " + refExists); 
+		
+		if (refExists == true)
+		{
+			refId = getPlantReferenceId(otherCitationDetails);
+			//throw new Exception("reference already exists");
+		}
+		else
+		{
+			//insert the strata values
+			sb.append("INSERT into PLANTREFERENCE (othercitationdetails) "
+			+" values(?)");
+			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+			// Bind the values to the query and execute it
+ 			pstmt.setString(1, otherCitationDetails);
+			//execute the p statement
+ 			pstmt.execute();
+ 			// pstmt.close();
+			
+			//get the refId
+			sb = new StringBuffer();
+			sb.append("SELECT plantreference_id from PLANTREFERENCE where othercitationdetails"
+			+" like '"+otherCitationDetails+"'");
+			Statement query = conn.createStatement();
+			ResultSet rs = query.executeQuery( sb.toString() );
+			int cnt = 0;
+			while ( rs.next() ) 
+			{
+				refId = rs.getInt(1);
+				cnt++;
+			}
+		}
+	 }
+		catch (Exception e)
+	 {
+		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+		 e.printStackTrace();
+	 }
+	 return(refId);
+ }
+	 
 
 
 	/**
@@ -514,8 +646,8 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 	{
 		try
 		{
-			String s = "insert into PLANTCONCEPTSTATUS "
-			+"(plantConcept_id, status, startDate, stopDate, event)  values(?,?,?,?,?) ";
+			String s = "insert into PLANTSTATUS "
+			+"(plantConcept_id, plantconceptstatus, startDate, stopDate, plantPartyComments)  values(?,?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			//bind the values
 			pstmt.setInt(1, conceptId);
@@ -622,27 +754,26 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
  	* plant concept then returns to the calling
  	* method the primary key for that concept
  	*/	
-	private int loadPlantConceptInstance(String concatenatedName, String classCode, 
-	String classRank, String conceptRef, String startDate)
+	private int loadPlantConceptInstance(int plantNameId, int plantReferenceId, 
+	String plantName, String plantCode)
 	{
 		int plantConceptId = -999;
 		try
 		{
-			String s = "insert into PLANTCONCEPT (plantName, classCode, classRank, "
-			+"conceptRef, startDate)  values(?,?,?,?,?) ";
+			String s = "insert into PLANTCONCEPT (plantname_id, plantName, "
+			+" plantreference_id, plantCode ) values(?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			//bind the values
-			pstmt.setString(1, concatenatedName);
-			pstmt.setString(2, classCode);
-			pstmt.setString(3, classRank);
-			pstmt.setString(4, conceptRef);
-			pstmt.setString(5, startDate);
+			pstmt.setInt(1, plantNameId);
+			pstmt.setString(2, plantName);
+			pstmt.setInt(3, plantReferenceId);
+			pstmt.setString(4, plantCode);
 			pstmt.execute();
 			pstmt.close();	
 		
 			//now get the associated primary key value
 			String s1 = "select plantconcept_id from plantconcept where plantname = '"
-			+concatenatedName+"'";
+			+plantName+"'";
 			
 			PreparedStatement pstmt1 = conn.prepareStatement(s1);
 			ResultSet rs = pstmt1.executeQuery();
@@ -714,29 +845,26 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 	}
 
 
-
-
-
-
 	/**
  	* method that loads a new instance of a 
  	* plant name and then returns the primary
  	* key value of that plant name to the calling
  	* method
  	*/	
-	private int loadPlantNameInstance(String concatenatedName, String commonName, 
-	String plantCode)
+	private int loadPlantNameInstance(int refId, String concatenatedName, 
+	String commonName, String plantCode)
 	{
 		int plantNameId = -999;
 		try
 		{
-			String s = "insert into PLANTNAME (plantName, plantCommonName, plantSymbol) "
-			+" values(?,?,?) ";
+			String s = "insert into PLANTNAME (plantreference_id, plantName, plantCommonName, plantSymbol) "
+			+" values(?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			//bind the values
-			pstmt.setString(1, concatenatedName);
-			pstmt.setString(2, commonName);
-			pstmt.setString(3, plantCode);
+			pstmt.setInt(1, refId);
+			pstmt.setString(2, concatenatedName);
+			pstmt.setString(3, commonName);
+			pstmt.setString(4, plantCode);
 			pstmt.execute();
 			pstmt.close();	
 		
