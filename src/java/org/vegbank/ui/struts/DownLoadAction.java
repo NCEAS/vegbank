@@ -5,8 +5,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,17 +17,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.DynaActionForm;
-import org.vegbank.common.model.Commclass;
-import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Plot;
-import org.vegbank.common.model.Stratumcomposition;
-import org.vegbank.common.model.Taxoninterpretation;
-import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
-import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.XMLUtil;
+import org.vegbank.plots.datasink.ASCIIReportsHelper;
 import org.vegbank.plots.datasource.DBModelBeanReader;
+
+import com.Ostermiller.util.LineEnds;
 
 /*
  * '$RCSfile: DownLoadAction.java,v $'
@@ -37,8 +32,8 @@ import org.vegbank.plots.datasource.DBModelBeanReader;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-03 05:28:24 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-11-05 18:43:29 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,6 +65,10 @@ public class DownLoadAction extends Action
 	private static final String SPECIES_DATA_TYPE = "species";
 	private static final String ENVIRONMENTAL_DATA_TYPE = "environmental";
 	
+	// Response content Types
+	private static final String ZIP_CONTENT_TYPE = "application/x-zip";
+	private static final String DOWNLOAD_CONTENT_TYPE = "application/x-zip";
+	
 	public ActionForward execute(
 		ActionMapping mapping,
 		ActionForm form,
@@ -85,8 +84,7 @@ public class DownLoadAction extends Action
 		
 		String dataType = (String ) thisForm.get("dataType");
 		String formatType = (String) thisForm.get("formatType");
-		// Get the plots form the session
-		String[] plotsToDownLoad = (String[]) request.getSession().getAttribute("plotsToDownLoad");
+		String[] plotsToDownLoad = (String[]) thisForm.get("plotsToDownLoad");
 		
 		LogUtility.log("dataType = " + dataType + ", formatType = " + formatType +", plotsToDownLoad = " + plotsToDownLoad);
 		
@@ -105,7 +103,7 @@ public class DownLoadAction extends Action
 					String XML = XMLUtil.getVBXML(plotObservations);
 					
 					// Place into file for download
-					this.initResponseForFileDownLoad( response, "VegbankDownload.xml");
+					this.initResponseForFileDownLoad( response, "VegbankDownload.xml", DOWNLOAD_CONTENT_TYPE);
 					this.sendFileToBrowser(XML, response);
 				}
 				else
@@ -141,8 +139,8 @@ public class DownLoadAction extends Action
 				// Good to go
 				else 
 				{			
-					StringBuffer environmentalData = null;
-					StringBuffer speciesData = null;
+					String environmentalData = null;
+					String speciesData = null;
 					
 					// Get plotObservation Collection
 					Collection plotObservations = this.getPlotObservations(plotsToDownLoad);
@@ -150,192 +148,44 @@ public class DownLoadAction extends Action
 					if (dataType.equalsIgnoreCase(ENVIRONMENTAL_DATA_TYPE)
 						|| dataType.equalsIgnoreCase(ALL_DATA_TYPE))
 					{
-						// Do enviromental data
-						environmentalData = new StringBuffer();
-
-						// Header line
-						environmentalData.append(
-							"PLOT ID, ACCESSION_NUMBER, COMMUNITY NAME, COLLECTION DATE, LATITUDE, LONGITUDE, ELEVATION, SLOPE ASPECT, SLOPE GRADIENT\n");
-
-						// process plot observations
-						Iterator pos = plotObservations.iterator();
-						while (pos.hasNext())
-						{
-							Plot plot = (Plot) pos.next();
-
-						// Get the values of interest
-						int plotObservationId = 0;
-						String commName = null;
-						String accNumber = null;
-						String collectionDate = null;
-						String latitude = plot.getLatitude();
-						String longitude = plot.getLongitude();
-						String elevatation = plot.getElevation();
-						String slopeAspect = plot.getSlopeaspect();
-						String slopeGradient = plot.getSlopegradient();
-						
-						List observations = plot.getplot_observations();
-						if ( ! observations.isEmpty() )
-						{
-							//Get the observation ( should just be one ) 
-							Observation obs = (Observation) observations.get(0);
-							
-							plotObservationId = obs.getObservation_id();
-							accNumber = obs.getObsaccessionnumber();
-							collectionDate = obs.getObsenddate();
-							
-							// Get commName
-							List commclasses = obs.getobservation_commclasss();
-							if ( ! commclasses.isEmpty() )
-							{
-								// Just get the first one FIXME: Can be more than one
-								Commclass commclass = (Commclass) commclasses.get(0);
-								commName = commclass.getCommname();
-							}
-						}
-
-							// Put them in the String
-							environmentalData.append(
-								""
-									+ plotObservationId
-									+ ","
-									+ accNumber
-									+ ","
-									+ commName
-									+ ","
-									+ collectionDate
-									+ ","
-									+ latitude
-									+ ","
-									+ longitude
-									+ ","
-									+ elevatation
-									+ ","
-									+ slopeAspect
-									+ ","
-									+ slopeGradient
-									+"\n");
-						}
+						environmentalData = 
+							ASCIIReportsHelper.getEnvironmentalData(plotObservations);
 
 					}
 					if (dataType.equalsIgnoreCase(SPECIES_DATA_TYPE)
 						|| dataType.equalsIgnoreCase(ALL_DATA_TYPE))
 					{
-						// Do species
-						speciesData = new StringBuffer();
-
-						// Header line
-						speciesData.append(
-							"PLOT ID, PLANT NAME, STRATUMCOVER, STRATUMNAME, TAXONCOVER\n");
-
-						// process plot observations
-						Iterator pos = plotObservations.iterator();
-						while (pos.hasNext())
-						{
-							Plot plot = (Plot) pos.next();
-
-							// Get the values of interest
-							int plotObservationId = 0;
-							String plantName = null;
-							String stratumCover = null;
-							String stratumName = null;
-							String taxonCover = null;
-
-							List observations = plot.getplot_observations();
-							if ( ! observations.isEmpty() )
-							{
-								//Get the observation ( should just be one ) 
-								Observation obs = (Observation) observations.get(0);
-								
-								plotObservationId = obs.getObservation_id();
-								
-								// Get taxonObservations
-								List taxonobservations = obs.getobservation_taxonobservations();
-								Iterator taxonIter = taxonobservations.iterator();
-								while ( taxonIter.hasNext() )
-								{
-									Taxonobservation taxonObservation = (Taxonobservation) taxonIter.next();
-
-									plantName = taxonObservation.getAuthorplantname();
-									
-									if ( Utility.isStringNullOrEmpty(plantName) )
-									{
-										List taxonInterpretations = taxonObservation.gettaxonobservation_taxoninterpretations();
-										Iterator taxonInterpIter = taxonInterpretations.iterator();
-										while( taxonInterpIter.hasNext() )
-										{
-											Taxoninterpretation ti =  (Taxoninterpretation) taxonInterpIter.next();
-											// Converting a String to boolean ... risky
-											System.out.println("Is this the current interpritation ?" + ti.getCurrentinterpretation() );
-											if ( Utility.isTrue(ti.getCurrentinterpretation()) )
-											{
-												plantName = ti.getPlantconceptobject().getPlantnameobject().getPlantname();
-												System.out.println("The Plantname is  ?" +plantName );
-											}
-											if ( Utility.isStringNullOrEmpty(plantName) )
-											{
-												// No valid taxonInterpritation found use the authors name for the plant
-												// *** to indicate on the ui that this is not accepted yet .
-												plantName =  taxonObservation.getCheatplantname() ;
-											}
-										}
-									}								
-									
-									taxonCover = taxonObservation.getTaxoncover();
-									
-									//Get stratumComposition
-									List stratumCompositions = taxonObservation.gettaxonobservation_stratumcompositions();
-									Iterator stratumCompIter = stratumCompositions.iterator();
-									while ( stratumCompIter.hasNext() )
-									{
-										Stratumcomposition stratumComposition = (Stratumcomposition) stratumCompIter.next();
-										stratumCover = stratumComposition.getTaxonstratumcover();
-									
-										// FIXME: Null pointer City
-										stratumName = stratumComposition.getStratumobject().getStratumtypeobject().getStratumname();
-
-										// Put them in the String
-										speciesData.append(
-											""
-												+ plotObservationId
-												+ ","
-												+ plantName
-												+ ","
-												+ stratumCover
-												+ ","
-												+ stratumName
-												+ ","
-												+ taxonCover
-												+"\n");
-									}
-								}
-							}
-						}
+						speciesData =
+							ASCIIReportsHelper.getSpeciesData(plotObservations);
 					}
 
 					// Place generated file in ZIP archive
 					if ( dataType.equalsIgnoreCase(ALL_DATA_TYPE) )
 					{
-						this.initResponseForFileDownLoad(response, "VegbankDownload.zip");
+						this.initResponseForFileDownLoad(response, "VegbankDownload.zip", ZIP_CONTENT_TYPE);
 						
 						Hashtable nameContent = new Hashtable();
 						nameContent.put("environmentalData.txt",environmentalData);
 						nameContent.put("speciesData.txt", speciesData);
 						OutputStream responseOutputStream = response.getOutputStream();
-						ServletUtility.putZippedFileInOutputStream( nameContent, responseOutputStream );
+						responseOutputStream.flush();
+						
+						// TODO: Get the OS of user if possible and return a native file	
+						// For now use DOS style, cause those idiots would freak with anything else ;)					
+						ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
 						
 					}
 					// Just downLoad the generated file
 					else 
 					{
-						this.initResponseForFileDownLoad( response, "VegbankDownload.txt");
+						this.initResponseForFileDownLoad( response, "VegbankDownload.txt", DOWNLOAD_CONTENT_TYPE);
 						if ( environmentalData != null )
 						{
-							this.sendFileToBrowser(environmentalData.toString() , response);
+							this.sendFileToBrowser( environmentalData.toString() , response);
 						}
 						else if ( speciesData != null ) 
 						{
-							this.sendFileToBrowser(speciesData.toString() , response);
+							this.sendFileToBrowser( speciesData.toString() , response);
 						}
 					}
 				}
@@ -360,6 +210,9 @@ public class DownLoadAction extends Action
 		if ( ! errors.isEmpty() )
 		{
 			saveErrors(request, errors);
+			// Need to put plotsToDownLoad into the request 
+			//TODO: use the form bean instead 
+			request.setAttribute("plotsToDownLoad", plotsToDownLoad);
 			return (mapping.getInputForward());	
 		}
 		
@@ -379,20 +232,21 @@ public class DownLoadAction extends Action
 		for ( int i = 0; i < plotsToDownLoad.length ; i++ )
 		{
 			LogUtility.log("DownLoadAction : DownLoading " + plotsToDownLoad[i]);
-			Plot plot = dbmbReader.getPlotObservationBeanTree( new Integer(plotsToDownLoad[i]).intValue()  );
+			Plot plot = dbmbReader.getPlotObservationBeanTree( plotsToDownLoad[i]  );
 			plotObsersevations.add(plot);
 		}
 		return plotObsersevations;
 	}
 	
-	private void initResponseForFileDownLoad(HttpServletResponse response, String downloadFileName ) 
+	private void initResponseForFileDownLoad(HttpServletResponse response, String downloadFileName , String contentType) 
 	{
-		response.setContentType("application/stream");
+		response.setContentType(contentType);
 		response.setHeader("Content-Disposition","attachment; filename="+downloadFileName+";"); 
 	}
 	
 	private void sendFileToBrowser( String fileContents, HttpServletResponse response ) throws IOException
 	{
-		response.getWriter().print(fileContents);
+		LogUtility.log(fileContents);
+		response.getWriter().write(fileContents);
 	}
 }
