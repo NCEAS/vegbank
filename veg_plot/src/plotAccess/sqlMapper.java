@@ -60,7 +60,7 @@ try {
 				  
 // Get a DB connection from the Broker
  int thisConnection;
- pconn= myBroker.getConnection(); //grab one connectionfrom pool
+ pconn= myBroker.getConnection(); //grab one connection from pool
  thisConnection = myBroker.idOfConnection(pconn);
 
 //This is a scheme to see how many times a database connection is used if 
@@ -102,7 +102,8 @@ if (plotId != null && resultType != null && outFile != null) {
 	/** Start a search for specific queries*/
 	if ( resultType.equals("full") ) {
 	
-		System.out.println("sqlMapper.developPlotQuery - calling queryStore.getEntireSinglePlot");
+		System.out.println("sqlMapper.developPlotQuery - "
+		+" calling queryStore.getEntireSinglePlot");
 		queryStore b = new queryStore();
 		b.getEntireSinglePlot(plotId, pconn);
 		
@@ -120,7 +121,8 @@ if (taxonName != null && resultType != null && outFile != null) {
 
 	if ( resultType.equals("summary") ) { //retrieve the plotId's w taxon
 
-		System.out.println("sqlMapper.developPlotQuery - calling queryStore.getPlotId");
+		System.out.println("sqlMapper.developPlotQuery - "
+		+" calling queryStore.getPlotId (taxonName)");
 			queryStore j = new queryStore();
 			j.getPlotId(taxonName, "taxonName", pconn);
 			queryOutput=j.outPlotId;
@@ -134,7 +136,8 @@ if (elevationMin != null && elevationMax != null && resultType != null && outFil
 
 	if ( resultType.equals("summary") ) { //retrieve the plotId's w	elevation
 
-		System.out.println("sqlMapper.developPlotQuery - calling queryStore.getPlotId");
+		System.out.println("sqlMapper.developPlotQuery - "
+		+" calling queryStore.getPlotId (elevation option)");
 		queryStore j = new queryStore();
 		j.getPlotId(elevationMin,  elevationMax, "elevation", pconn);
 
@@ -151,7 +154,7 @@ k.getPlotSummary(queryOutput, queryOutputNum, pconn);
 
 // manage the database connections -- this doesn't really work here but keep it
 // for later
-connectionUses=connectionUses+k.outConnectionUses;
+///connectionUses=connectionUses+k.outConnectionUses;
 System.out.println("number of uses of this connection: "+connectionUses);
 if (connectionUses>12) {
 	System.out.println("reseting the current connection");
@@ -252,7 +255,8 @@ if (taxonName != null && resultType != null && outFile != null) {
 	
 	if ( resultType.equals("summary") ) { //retrieve the plotId's w taxon
 
-		System.out.println("sqlMapper.developCompoundPlotQuery - calling queryStore.getPlotId");
+		System.out.println("sqlMapper.developCompoundPlotQuery - "
+		+" calling queryStore.getPlotId (compound)");
 		queryStore j = new queryStore();
 		j.getPlotId(taxonName, state, elevationMin, elevationMax,
 		surfGeo, multipleObs, community, pconn);

@@ -19,6 +19,12 @@ public class  queryStore
  {
 
 
+utility g =new utility(); 
+//g.getDatabaseParameters("database", "query");
+Connection pconn=null; 
+DbConnectionBroker myBroker;
+
+
 
 /**
  * Method using as input a single plot database id number to retieve all the 
@@ -135,18 +141,28 @@ public int entireSinglePlotOutputNum;
  *
  * @param plotId - an array of plotId numbers
  * @param plotIdNum - the number of elements in the above array
- * @param conn - a database connection 
+ * @param conn - a database connection -- get rid of this and put the conn
+ * management here in this class
  */
 public void getPlotSummary(String plotId[], int plotIdNum, Connection conn)
 {
+
+//get the database management parameter settings
+g.getDatabaseParameters("database", "query");
+
+try {
+myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
+	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile+"QueryStore",1.0);
+conn=myBroker.getConnection(); //grab one connection from pool
+
+//this is the number of uses that an input connection has had
+int connectionUses=1;
+
 
 //this array will hold all the results before passing it back to the 
 //calling class
 String summaryResult[] = new String[10000];
 int summaryResultNum=0;
-
-//this is the number of uses that an input connection has had
-int connectionUses=1;
 
 //iterate through the plot id numbers
 for (int i=0;i<plotIdNum; i++) {
@@ -200,14 +216,14 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 	//note that the j.outReturnFieldsNum should always be = 1 in this case
 	//because we are querying by a plot ID number which should be unique
 	for (int ii=0;ii<j.outReturnFieldsNum; ii++) {
-	summaryResult[i]=j.outReturnFields[ii];
+		summaryResult[i]=j.outReturnFields[ii];
 	}
 	
-/**	
-* make a second query here to get the species specific information which will
-* be appended onto the summary results line and ultimately tokenized in the 
-* xmlWrter class - at some point this function may become its own method
-*/
+	
+// make a second query here to get the species specific information which will
+// be appended onto the summary results line and ultimately tokenized in the 
+// xmlWrter class - at some point this function may become its own method
+
 	action="select";
 	statement="select AUTHORNAMEID from taxonObservation where OBS_ID in"+
 		"(select OBS_ID from PLOTOBSERVATION where PARENTPLOT in"+
@@ -217,17 +233,22 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 	String returnFieldsB[]=new String[1];	
 	returnFieldsB[0]="AUTHORNAMEID";
 	int returnFieldLengthB=1;
-
-
-	/*
-	* Call the issueSelect method which will return an array with the return
-	*/
-
+	
+	//issue the select statement
 	issueStatement k = new issueStatement();
 	k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB, conn);	
 
 	//iterate the connection use counter
 	connectionUses++;
+	System.out.println("queryStore.getPlotSummary - connection uses:"
+		+connectionUses);
+	//if the connection has been used more than some arbitrary times renew conn
+	if (connectionUses > 90) {
+		conn.close(); 
+		myBroker.freeConnection(conn); 
+		conn=myBroker.getConnection();
+		connectionUses=0;
+	}
 	
 	
 	//take the results from this query and append to the summary line
@@ -243,11 +264,18 @@ summaryResultNum=i;
 summaryOutput=summaryResult;
 summaryOutputNum=summaryResultNum;
 outConnectionUses=connectionUses;
-	
+
+} //end try
+catch (Exception e) {System.out.println("failed in querySrore.getPlotSummary"
+		+" " + e.getMessage());}
+		
 }//end method
-public String summaryOutput[] = new String[10000];  //the output from the issue sql can be mapped to this varaiable
-public int summaryOutputNum; //the number of output rows from the issue sql is mapped to this varable
-public int outConnectionUses; //number of connection uses
+public String summaryOutput[] = new String[10000]; 
+public int summaryOutputNum; 
+public int outConnectionUses; 
+
+
+
 
 
 
