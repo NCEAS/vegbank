@@ -7505,7 +7505,7 @@ conditions may change between resampling events.
       <attDefinition>Landform type.</attDefinition>
     </attribute>
     <attribute>
-      <attName>geology</attName>
+      <attName>surficialDeposits</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (90)</attType>
@@ -7515,182 +7515,650 @@ conditions may change between resampling events.
       <attList>
         <attListItem>
           <attListValue>Aeolian Deposits: Aeolian sand flats</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Aeolian Deposits: Cover sands</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Aeolian Deposits: Dunes</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Aeolian Deposits: Loess deposits</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Aeolian Deposits: Volcanic Ash</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Alluvial Deposits: Alluvial Fan</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Alluvial Deposits: Deltas</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Alluvial Deposits: Floodplain</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Chemical Deposits: Evaporites and Precipitates</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Flat (n/a)</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Glacial Deposits: Bedrock and till</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Glacial Deposits: Deltaic deposits</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Glacial Deposits: Glacial-fluvial deposits</attListValue>
-          <attListValueDesc/>
+          <attListValue>Glacial Deposits: Glacial-fluvial deposits (outwash)</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Glacial Deposits: Lacustrine and fluvial deposits</attListValue>
-          <attListValueDesc/>
+          <attListValue>Glacial Deposits: Lacustrine deposits</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Glacial Deposits: Marine deposits</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Glacial Deposits: Moraine</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Glacial Deposits: Till</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Glacial Deposits: Undifferentiated glacial deposit</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Igneous Rocks: Dioritic</attListValue>
-          <attListValueDesc/>
+          <attListValue>Marine Deposits: Other</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Igneous Rocks: Gabbroic</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Igneous Rocks: Granitic</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Metamorphic Rocks: Gneiss</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Metamorphic Rocks: Marble</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Metamorphic Rocks: Schist</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Metamorphic Rocks: Serpentine</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Metamorphic Rocks: Slate and Phyllite</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Organic Deposits: Marsh: regularly flooded by lake or river</attListValue>
-          <attListValueDesc/>
+          <attListValue>Marine Deposits: Unconsolidated Sediments</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Organic Deposits: Muck</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Organic Deposits: Peat</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Sedimentary Rocks: Conglomerates and Breccias</attListValue>
-          <attListValueDesc/>
+          <attListValue>Other</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Sedimentary Rocks: Gypsum</attListValue>
-          <attListValueDesc/>
+          <attListValue>Residual Deposits: Bedrock</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Sedimentary Rocks: Limestone and Dolomite</attListValue>
-          <attListValueDesc/>
+          <attListValue>Residual Deposits: Deeply Weathered Rock</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Sedimentary Rocks: Marl</attListValue>
-          <attListValueDesc/>
+          <attListValue>Residual Deposits: Disintegrated Rock</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Sedimentary Rocks: Sandstone</attListValue>
-          <attListValueDesc/>
+          <attListValue>Slope and Modified Deposits: Colluvial</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Sedimentary Rocks: Shale</attListValue>
-          <attListValueDesc/>
+          <attListValue>Slope and Modified Deposits: Solifluction, landslide</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Sedimentary Rocks: Siltstone</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Slope &amp; Modified Deposits: Colluvial</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Slope &amp; Modified Deposits: Solifluction, landslide</attListValue>
-          <attListValueDesc/>
-          <attListSortOrd>-2</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Slope &amp; Modified Deposits: Talus and scree slopes</attListValue>
-          <attListValueDesc/>
+          <attListValue>Slope and Modified Deposits: Talus and scree slopes</attListValue>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Variable</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc> </attListValueDesc>
           <attListSortOrd>-2</attListSortOrd>
         </attListItem>
       </attList>
-      <attNotes>open list (perhaps 2-tier heirarchy)</attNotes>
-      <attDefinition>Surface geology type. </attDefinition>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The type of deposits on the surface level of the plot.</attDefinition>
+    </attribute>
+    <attribute>
+      <attName>rockType</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (90)</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>aa</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>acidic-ash</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>andesite</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>andesitic-ash</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>arkose</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>basalt</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>basaltic-ash</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>basic-ash</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>chalk</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>charcoal</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>chert</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>cinders</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>coal</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>conglomerate, calcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>conglomerate, noncalcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>conglomerate, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>diorite</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>dolostone</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>ejecta-ash</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>gabbro</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>glauconite</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>gneiss</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>gneiss-acidic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>gneiss-basic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>granite</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>graywacke</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>gypsum</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>hornfels</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>igneous, acid</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>igneous, basic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>igneous, coarse crystal</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>igneous, fine crystal</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>igneous, intermediate</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>igneous, ultrabasic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>igneous, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>interbedded sedimentary</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>limestone, arenaceous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>limestone, argillaceous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>limestone, cherty</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>limestone, phosphatic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>limestone, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>limestone-sandstone</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>limestone-sandstone-shale</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>limestone-shale</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>limestone-siltstone</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>marble</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>marl</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>metaconglomerate</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>metamorphic, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>mixed</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>mixed calcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>mixed igneous-metamorphic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>mixed igneous-metamorphic-sedimentary</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>mixed igneous-sedimentary</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>mixed metamorphic-sedimentary</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>mixed noncalcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>obsidian</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>pahoehoe</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>phyllite</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>pumice</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>pyroclastic, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>quartzite</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>rhyolite</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>sandstone, calcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>sandstone, noncalcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>sandstone, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>sandstone-shale</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>sandstone-siltstone</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>schist, acidic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>schist, basic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>schist, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>scoria</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>sedimentary, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>serpentinite</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>shale, acid</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>shale, calcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>shale, clayey</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>shale, noncalcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>shale, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>shale-siltstone</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>siltstone, calcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>siltstone, noncalcareous</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>siltstone, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>slate</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>tuff breccia</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>tuff, acidic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>tuff, basic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>tuff, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>volcanic bombs</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>volcanic breccia, acidic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>volcanic breccia, basic</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>volcanic breccia, unspecified</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>wood</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>other</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>no rock visible</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>no observation</attListValue>
+          <attListValueDesc> </attListValueDesc>
+          <attListSortOrd>-2</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The lithology/composition of the 2mm or larger fraction of the soil.</attDefinition>
     </attribute>
     <attribute>
       <attName>notesPublic</attName>
