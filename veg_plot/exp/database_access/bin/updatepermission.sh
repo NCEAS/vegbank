@@ -3,8 +3,8 @@
 # This script will update the permissions of a user from the 
 # vegbank user profile database 
 #	 '$Author: farrell $'
-#  '$Date: 2003-02-03 18:41:07 $'
-#  '$Revision: 1.2 $'
+#  '$Date: 2003-07-09 23:30:06 $'
+#  '$Revision: 1.3 $'
 
 
 if [ "$#" -ne 3 ]
@@ -21,16 +21,7 @@ EMAIL=$1
 HOST=$2
 LEVEL=$3
 
+source ./setclasspath
 
-DATATRANSLATOR=../lib/datatranslator.jar
-XMLRESOURCE=../lib/xmlresource.jar
-PG_JDBC=../lib/jdbc7.0-1.2.jar
-XALAN=../lib/xalan_1_2_2.jar
-XERCES=../lib/xerces_1_4.jar
-ACCESSRESOURCE=../lib/database_access.jar
-UTILS=../lib/utilities.jar
-PLANTTAXON=../lib/planttaxonomy.jar
-CLASSPATH=$XMLRESOURCE:$DATATRANSLATOR:$PG_JDBC:$XALAN:$XERCES:$ACCESSRESOURCE:$UTILS:$PLANTTAXON
-
-java  -cp $CLASSPATH databaseAccess.Utility $ACTION $EMAIL $HOST $LEVEL
+java  -cp $CLASSPATH org.vegbank.common.utility.DatabaseUtility $ACTION $EMAIL $HOST $LEVEL
  
