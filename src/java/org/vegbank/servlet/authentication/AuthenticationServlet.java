@@ -34,8 +34,8 @@ import org.vegbank.common.utility.LogUtility;
  *
  *
  *  '$Author: anderson $'
- *  '$Date: 2003-10-30 00:41:02 $'
- *  '$Revision: 1.10 $'
+ *  '$Date: 2003-11-10 19:18:36 $'
+ *  '$Revision: 1.11 $'
  *
  *  @version
  *  @author
@@ -119,7 +119,7 @@ public class AuthenticationServlet extends HttpServlet
 			//get the request - parameters using the
 			//servlet Utility class
 			Hashtable requestParams = su.parameterHash(request);
-			LogUtility.log("AuthenticationServlet > " + requestParams.toString() );
+			//LogUtility.log("AuthenticationServlet > " + requestParams.toString() );
 			//grab the remote host information
 			String remoteHost=request.getRemoteHost();
 			String remoteAddress = request.getRemoteAddr();
@@ -151,6 +151,8 @@ public class AuthenticationServlet extends HttpServlet
 						String user = getUserName(requestParams);
 						Cookie cookie = new Cookie("null", "null");
 						//AuthenticationServlet m =new AuthenticationServlet();
+						registeredCookie = cookieDelegator(cookie, requestParams, remoteAddress, user);
+						response.addCookie(registeredCookie);
 						registeredCookie = cookieDelegator(cookie, requestParams, remoteAddress, user);
 						response.addCookie(registeredCookie);
 						HttpSession session = request.getSession();
@@ -414,7 +416,7 @@ public class AuthenticationServlet extends HttpServlet
 		 	//grab thee user name and password
 			String userName=requestParams.get("userName").toString();
 			String passWord=requestParams.get("password").toString();
-			LogUtility.log("AuthenticationServlet > name password/pair: "+userName+" "+passWord);
+			LogUtility.log("AuthenticationServlet > authenticating: "+userName);
 
 			//access the class in the dbAccess class to validate the
 			//login and password with that stored in the database
@@ -572,8 +574,9 @@ public class AuthenticationServlet extends HttpServlet
  *
  * @param cookie - a cookie whose name, value and max age are set depending on
  * 	the results of validation
+ * @param requestParams - 
+ * @param remoteAddress -
  * @param userName - the user name issued
- * @param passWord - the issued password
  *
  */
 	private Cookie cookieDelegator (
@@ -603,7 +606,7 @@ public class AuthenticationServlet extends HttpServlet
 			String cookieAddress = remoteAddress; //same
 			cookie = new Cookie(cookieName, cookieValue);
 			cookie.setMaxAge(3600);  //set cookie for an hour
-      cookie.setPath("/");  // cookie applies to all contexts
+     	 	cookie.setPath("/");  // cookie applies to all contexts
 			registeredCookie=cookie;
 		  LogUtility.log("AuthenticationServlet > using cookie name : " + cookieName + " val: " + cookieValue );
 		}
