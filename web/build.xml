@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2004-03-25 18:27:42 $'
-* '$Revision: 1.96 $'
+* '$Date: 2004-03-25 21:20:37 $'
+* '$Revision: 1.97 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -102,7 +102,7 @@
     <!-- the following is a duplicate : -->
     <filter token="images_link" value="/${web.context_uri}/images/"/>
     <filter token="stylesheet" value="/${web.context_uri}/includes/default.css"/>
-    <filter token="plotquery_page" value="/${web.context_uri}/forms/plot-query.jsp"/>
+    <filter token="plotquery_page" value="/${web.context_uri}/LoadPlotQuery.do"/>
     <filter token="nestedplotquery_page" value="/${web.context_uri}/forms/nested-plot-query.html"/>
     <filter token="uploaddata_page" value="/${web.context_uri}/forms/uploadFile.html"/>
     <filter token="general_link" value="/${web.context_uri}/general/"/>

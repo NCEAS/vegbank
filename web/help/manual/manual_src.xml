@@ -108,9 +108,9 @@ The next few pages explain the main search pages.  There will be
 more specific instructions on each search page.
 </p>
     </manualHTML>
-    <manualItem refURL="@forms_link@plot-query.jsp" name="search-for-plots" topic="Search for Plots">
+    <manualItem refURL="@web_context@/LoadPlotQuery.do" name="search-for-plots" topic="Search for Plots">
       <manualHTML>
-        <a href="@forms_url@plot-query.jsp">Plot Query</a> 
+        <a href="@web_context@LoadPlotQuery.do">Plot Query</a> 
      - search for plots by location, species present, community type, 
   plot collectors, and other plot criteria. <br/>
         <br/>More help is available from that form (click the link here to see the plot-query form).  
