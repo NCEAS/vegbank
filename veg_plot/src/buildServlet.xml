@@ -20,8 +20,8 @@
 	<tstamp/>
 	
 	<property name="installDir" value="C://jakarta-tomcat/webapps/examples/WEB-INF/lib/" />
-  <property name="web_docs" value="../html" />
-	<property name="src_image_content" value="../html/images" />
+  <property name="web_docs" value="../web_docs/html" />
+	<property name="src_image_content" value="../web_docs/images" />
 	<property name="build_image_content" value="C://jakarta-tomcat/webapps/ROOT/images" />
 	<property name="file_upload_dir" value="C://jakarta-tomcat/webapps/ROOT/uploads" />
 	
