@@ -5,7 +5,10 @@
  *    Copyright: 2000 Regents of the University of California and the
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
- *
+ * 		
+ *		 '$Author: harris $'
+ *     '$Date: 2001-06-11 23:28:01 $'
+ *     '$Revision: 1.4 $'
  */
 
 import java.sql.*;
@@ -180,6 +183,7 @@ plotProjectParams =(Hashtable)comprehensivePlot.get("projectParameters");
 
 //grab the hash that has all the plot site specific parameters
 plotSiteParams = (Hashtable)comprehensivePlot.get("siteParameters");
+//System.out.println(plotSiteParams.toString() );
 
 //grab the hash that has all the observational data
 plotObservationParams = (Hashtable)comprehensivePlot.get("observationParameters");
@@ -267,8 +271,21 @@ output.append("	</project> \n"
 private void writeSiteData (Hashtable plotSiteParams)
 {
 
-output.append("	<plot> \n"
-+"		<authorPlotCode>"+plotSiteParams.get("authorCode")+"</authorPlotCode> \n"
+	//because at times data commining into this method
+	//will not be from the database, but instead will 
+	//beform legacy data there will not always be a 
+	//'plotId'
+	if ( plotSiteParams.containsKey("plotId") )
+	{
+		output.append(" <plot> \n");
+		output.append(" 	<plotId>"+plotSiteParams.get("plotId")+"</plotId>  \n");
+	}
+	else
+	{
+		output.append(" <plot> \n");
+	}
+
+output.append("		<authorPlotCode>"+plotSiteParams.get("authorCode")+"</authorPlotCode> \n"
 +"		<plotShape>"+plotSiteParams.get("topoShape")+"</plotShape> \n"
 +"		<slopeGradient>"+plotSiteParams.get("slopeGradient")+" </slopeGradient> \n"
 +"		<slopeAspect>"+plotSiteParams.get("slopeAspect")+" </slopeAspect> \n"
