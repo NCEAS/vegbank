@@ -7,14 +7,83 @@ import java.sql.*;
 
 
 /**
-* This class will write out an xml file corresponding with the vegPlot.dtd
-*/
-
-
+ * This class will write out an xml file containing the results from database
+ * queries.  These xml files will be consistent with either vegPlot.dtd, or the
+ * community dtd file or the plant taxonomy dtd file
+ *
+ *
+ */
 
 public class  xmlWriter
 {
 
+private StringBuffer printString = new StringBuffer(); //this is the print string
+
+/**
+ * Method to print the summary information returned about one or a group of
+ * vegetation communities.  Currently this method is to take as input a vector
+ * containing the information and the output file and then print such data as
+ * the name, nvc level, abiCode, and parentName of the returned community(s)
+ *
+ * @param communitySummary - the vector that contains the information 
+ * @param outFile - the output file 
+ */
+public void writeCommunitySummary(Vector communitySummary, String outFile)
+{
+try {
+		
+//set up the output query file called query.xml	using append mode 
+PrintStream out  = new PrintStream(new FileOutputStream(outFile, false));
+
+String commName=null;
+String commDesc=null;
+String abiCode=null;
+String parentCommName=null;
+String nullValue = "-999.25";
+
+for (int i=0;i<communitySummary.size(); i++) {
+
+//tokenize each line of the vector
+StringTokenizer t = new StringTokenizer(communitySummary.elementAt(i).toString().trim(), "|");
+commName=t.nextToken().trim();
+abiCode=t.nextToken();
+commDesc=t.nextToken();
+parentCommName=t.nextToken();
+
+printString.append("<?xml version=\"1.0\"?> \n");
+printString.append("<!DOCTYPE vegPlot SYSTEM \"vegCommunity.dtd\">     \n");
+printString.append("<vegCommunity> \n");
+printString.append("   <commName>"+commName+"</commName> \n");
+printString.append("   <commDesc>"+commDesc+"</commDesc> \n");
+printString.append("   <abiCode>"+abiCode+"</abiCode> \n");
+printString.append("   <classCode>"+nullValue+"</classCode> \n");
+printString.append("   <classLevel>"+nullValue+"</classLevel> \n");
+printString.append("   <originDate>"+nullValue+"</originDate> \n");
+printString.append("   <updateDate>"+nullValue+"</updateDate> \n");
+
+printString.append("   <parentComm> \n");
+printString.append("     <commName>"+parentCommName+"</commName> \n");
+printString.append("     <abiCode>"+nullValue+"</abiCode> \n");
+printString.append("     <commDesc>"+nullValue+"</commDesc> \n");
+printString.append("   </parentComm>");
+
+printString.append("</vegCommunity>");
+
+}
+//print to the output file
+out.println( printString.toString() );
+
+
+
+}
+catch (Exception e) {System.out.println("failed in xmlWriter.writePlotSummary" + 
+	e.getMessage());
+}
+}
+
+
+	
+	
 public void writePlotSummary(String plotSummary[], int plotSummaryNum, String outFile)
 {
 try {
