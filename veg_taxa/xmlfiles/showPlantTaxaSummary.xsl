@@ -83,7 +83,7 @@ return "Check All"; }
   	<a><span class="category">Plant Name: </span> 
 		<span class="item"><xsl:value-of select="name/plantName"/> </span> </a> <br></br>
   	<a><span class="category">Alias: </span> 
-		<span class="item"> <xsl:value-of select="name/plantName"/> </span> </a> <br></br>
+		<span class="itemsmall"> <xsl:value-of select="name/plantNameAlias"/> </span> </a> <br></br>
 <!--
 		<a><span class="category">Name ID: </span> <xsl:value-of select="name/plantNameId"/></a> <br></br>
 -->		
@@ -101,7 +101,7 @@ return "Check All"; }
 		<a> <span class="category">Concept ID:</span>  <xsl:value-of select="name/plantConceptId"/>;</span>  </a> <br></br>
 -->		
 		<a> <span class="category">Concept Desc:</span> 
-		<xsl:value-of select="name/plantDescription"/>; </a> <br></br>
+	     <span class="item">	<xsl:value-of select="name/plantDescription"/>; </span> </a> <br></br>
 		
 	</td>
 	<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="middle">
@@ -122,7 +122,7 @@ return "Check All"; }
   	<a> <span class="category">Plant Name:</span> 
 		<span class="item"><xsl:value-of select="name/plantName"/> </span>  </a> <br></br>
   	<a> <span class="category">Alias:</span> 
-		<span class="item"><xsl:value-of select="name/plantName"/> </span> </a> <br></br>
+		<span class="itemsmall"><xsl:value-of select="name/plantNameAlias"/> </span> </a> <br></br>
 <!--		
 		<a><span class="category"> Name ID:</span>  <xsl:value-of select="name/plantNameId"/></a> <br></br>
 -->
