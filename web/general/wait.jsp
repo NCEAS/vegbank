@@ -11,8 +11,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-05-07 19:03:15 $'
-  *  '$Revision: 1.2 $'
+  *      '$Date: 2004-07-24 00:56:02 $'
+  *  '$Revision: 1.3 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@
   -->
 
 <HEAD>@defaultHeadToken@
-<meta http-equiv="Refresh" content='1; URL=@web_context@PleaseWait.do'>
+<meta http-equiv="Refresh" content='5; URL=@web_context@PleaseWait.do'>
 <META HTTP-EQUIV="expires" CONTENT="Wed, 12 Nov 2003 00:00:00 GMT">
 <title>Please Wait</title>
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
