@@ -13,8 +13,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-12-02 23:58:54 $'
-*  '$Revision: 1.12 $'
+*  '$Date: 2004-12-15 21:18:43 $'
+*  '$Revision: 1.13 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -216,9 +216,10 @@
 	  
 		<span class=" sizelarge">Go to the 
 			<html:link action="AdminMenu.do">Admin Menu</html:link></span>
-		<br/>
+		<br/><br/>
 		<span class="sizelarge">See the current <a href="@forms_link@system-status.jsp">System Status</a></span>
-	  
+	    <br/><br/>
+		<span class="sizelarge">Check <a href="@forms_link@businessrules.jsp">Business Rules</a></span>
 <% 
 		}
 	} 

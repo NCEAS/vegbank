@@ -59,7 +59,8 @@
 		</logic:empty>
 	      
        <hr/>
-	  
+	  <h3>Business Rules Adherence</h3>
+	  <p>Please see <a href="@forms_link@businessrules.jsp">Business Rules Page</a>.</p>
 <% 
 		}
 	} 
