@@ -5,8 +5,8 @@
  *		"Java Servlet Programming" by Hunter & crawford and
  *
  *     '$Author: harris $'
- *     '$Date: 2001-06-12 17:08:32 $'
- *     '$Revision: 1.3 $'
+ *     '$Date: 2001-11-15 22:36:07 $'
+ *     '$Revision: 1.4 $'
  *
  */
 
@@ -41,13 +41,16 @@ public class GetURL
 		String urlString = "http://dev.nceas.ucsb.edu/harris/servlet/"
 		 +"DataRequestServlet?requestDataType=vegPlot&queryType=extended&"
 		 +"resultType=summary&operator=eq&criteria=state&value=WY&operator=gt&"
-		 +"criteria=elevation&value=10500";
-		 
+		 +"criteria=elevation&value=9000&criteria=plantTaxon&operator=contains&value=1,2,3";
+		
+//	String urlString = "http://www.cnn.com";
+	
+		
 		int port = 80;
 		String requestType = "GET";
 		
 		//make the request
-		//g.getPost(urlString, port, requestType);
+		g.getPost(urlString, port, requestType);
 		
 		
 		
@@ -67,11 +70,14 @@ public class GetURL
 		parameters.setProperty("operator", "gt");
 		parameters.setProperty("criteria", "elevation");
 		parameters.setProperty("operator", "gt");
-		parameters.setProperty("value", "10600");
+		parameters.setProperty("value", "10700");
 		
 		
 		//request the data from the servlet and print the results to the system
-		System.out.println( requestURL(servlet, protocol, host, parameters) );
+////		System.out.println("THE PARAMETERS BEING PASSED TO DATA REQUEST SERVLET: "
+////			+parameters.toString() );
+					
+////		System.out.println( requestURL(servlet, protocol, host, parameters) );
 		
 		
 		
@@ -200,7 +206,7 @@ public class GetURL
 			System.err.println(url + " is not a parseable URL");
 			System.err.println(e);
 		}
-		System.out.println(buf.toString() );
+	//	System.out.println(buf.toString() );
 	return buf.toString();
 	}
 

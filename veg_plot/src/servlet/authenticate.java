@@ -11,12 +11,13 @@ import javax.servlet.http.*;
  * the authentication level
  *
  * <p>Valid parameters are:<br><br>
- * 
- * userName - user name of the user tying to be authenticated <br>
- * password - the password of the user attempting to be authenticated <br> 
+ * REQUIRED PARAMETERS
+ * @param userName - user name of the user tying to be authenticated <br>
+ * @param password - the password of the user attempting to be authenticated <br> 
+ * @param authType -- the authentication type {loginUser, uploadFile}
  *
- * @version 12 Jan 2001
- * @author John Harris
+ * @version 
+ * @author 
  * 
  */
 
@@ -70,7 +71,8 @@ public class authenticate extends HttpServlet
 			//determine what the client wants to do
 			if ( requestParams.containsKey("authType") == false)
 			{
-				out.println("unrecognized request -- redirecting to vegetation portal");
+				out.println("unrecognized request");
+				out.println("PARAMETERS INCLUDE: " + this.getParameters() );
 			}
 			else
 			{
@@ -102,6 +104,34 @@ public class authenticate extends HttpServlet
 						//response.sendRedirect("/harris/servlet/pageDirector?pageType=login");
 					}
 				}
+				//AUTHENTICATE THE USER TO UPLOAD A FILE
+				else if ( requestParams.get("authType").toString().equals("uploadfile")  )
+				{
+					System.out.println("authenticating for file upload");
+					if ( authenticateUser(requestParams, remoteAddress) == true)
+					{
+						out.println("<authentication>true</authentication>");
+						
+						//log the login in the clientLogger
+						//set a cookie
+						Cookie cookie = new Cookie("null", "null");
+						authenticate m =new authenticate();  
+						m.cookieDelegator(cookie, requestParams, remoteAddress);
+						response.addCookie(m.registeredCookie);
+						
+ 						
+						//send the user to the correct page
+						//Thread.currentThread().sleep(100);
+						
+						//response.sendRedirect(servletPath+"pageDirector?pageType=loggedin");
+						//response.sendRedirect("/harris/servlet/pageDirector?pageType=loggedin");
+					}
+					else 
+					{
+						out.println("<authentication>false</authentication>");
+					}
+				}
+				
 				// CREATE A NEW USER
 				else if ( requestParams.get("authType").toString().equals("createUser")  )
 				{
@@ -117,6 +147,11 @@ public class authenticate extends HttpServlet
 						out.println("unsuccessful user creation -- please try again");
 					}
 				}
+				
+				else
+				{
+					System.out.println("incorect input paramaters to authenticate");
+				}
 			}
 			
 
@@ -128,7 +163,16 @@ public class authenticate extends HttpServlet
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * method that returns the parameters for this class
+	 *
+	 */
+	 private String getParameters()
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 return(sb.toString());
+	 }
 	
 	/**
 	 * method to authenticate a known user

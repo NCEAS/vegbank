@@ -10,8 +10,8 @@ import javax.servlet.http.*;
 /**
  * Class that acts as a utility to the plotQuery servlet
  *
- * @version 11 Jan 2001
- * @author John Harris
+ * @version 
+ * @author 
  *
  */
 
@@ -19,6 +19,54 @@ import javax.servlet.http.*;
 public class servletUtility 
 {
 
+	private GetURL gurl = new GetURL();
+	
+	
+	/**
+   * method that will retrive the authentication results
+	 * from an 'AuthenticationServlet' using as input a 
+	 * username and password -- it is expected that a number
+	 * of the inter-servlet communication practices will require
+	 * authentication and this utility method will be used 
+	 *
+	 * @param userName
+	 * @param passWord
+	 * @param authType -- this is the desired authentication type desired
+	 * 	{ uploadFile, loginUser }
+	 * @return -- a string containing either:
+	 * 	<authentication>true</auentication>
+	 * 	<cookieName>name</cookieName>
+	 * 	<cookieValue>value</cookieValue>
+	 * 	or
+	 * 	<authentication>false</auentication>
+	 *
+   */
+  public String httpAuthenticationHandler( String userName, String passWord, String authType)
+  {
+    String htmlResults = null;
+    try
+    {
+      //create the parameter string to be passed to the DataRequestServlet -- 
+			//this first part has the data request type stuff
+      StringBuffer sb = new StringBuffer();
+      sb.append("?userName="+userName+"&password="+passWord+"&authType="+authType);
+			
+      //connect to the authentication servlet
+			//String uri = "http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet"
+			String uri = "http://dev.nceas.ucsb.edu/harris/servlet/authenticate"+sb.toString().trim();
+			System.out.println("OUT PARAMETERS: "+uri);
+      int port=80;
+      String requestType="POST";
+      htmlResults = gurl.requestURL(uri);
+    }
+    catch( Exception e )
+    {
+      System.out.println("** failed :  "
+      +e.getMessage());
+    }
+    return(htmlResults);
+  }
+	
 	
 	
 	
@@ -33,7 +81,7 @@ public class servletUtility
 		try 
 		{
 			Enumeration enum =request.getParameterNames();
-			System.out.println("QueryBuilderServlet contacted");
+			//System.out.println("servletUtility 'parameterHash' contacted ");
  			while (enum.hasMoreElements()) 
 			{
 				String name = (String) enum.nextElement();
@@ -190,7 +238,6 @@ public void getViewOption (String summaryViewType)
 	//+"<body> \n"
 	//+"<head> \n"
 	+"<form action=\"http://"+rb.getString("server")+""+rb.getString("servlet-path")+"viewData\" method=\"GET\"> \n"
-	//+"<form action=\"http://127.0.0.1:8080/examples/servlet/viewData\" method=\"GET\"> \n"
 	+"<input type=\"hidden\" name=\"resultType\" value=\"summary\" > \n"
 	+"<input type=\"hidden\" name=\"summaryViewType\" value=\""+summaryViewType+"\"> \n"
 	+"<input type=\"submit\" name=\"submitButton\" value=\"view data\" > \n"
