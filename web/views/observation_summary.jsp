@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-10-01 00:20:21 $'
-*  '$Revision: 1.12 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-10-01 18:14:27 $'
+*  '$Revision: 1.13 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -343,6 +343,31 @@ name="onerow" property="covermethod_id_transl"/></a>&nbsp;</td>
 <tr><td colspan="2">--no data--</td></tr>
 </logic:equal>
 
+<bean:define id="obsId" name="onerow" property="observation_id"/>
+<tr><th class="subheader">Community Classification:</th><th class="subheader">&nbsp;</th></tr>
+
+<!-- community info -->
+<vegbank:get id="comminterpretation" select="comminterpretation" beanName="map" 
+  where="where_observation_pk" wparam="obsId" perPage="-1" pager="false"/>
+<logic:empty name="comminterpretation-BEANLIST">
+<tr class='@nextcolorclass@'><td>  No Community Interpretations.</td></tr>
+</logic:empty>
+<logic:notEmpty name="comminterpretation-BEANLIST">
+<tr>
+<td class="datalabel">Community Concept(s)<a href="@get_link@dd/comminterpretation/commconcept_id"><img src="@images_link@question.gif" alt="?" border="0"></a></td>
+<td>
+<logic:iterate id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
+<table class="leftrightborders" cellpadding="0"><!--each field, only write when field HAS contents-->
+<logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
+<tr class='@nextcolorclass@'>
+<td><a href="@get_link@std/commconcept/<bean:write name='onerowofcomminterpretation' property='commconcept_id' />"><bean:write name="onerowofcomminterpretation" property="commconcept_id_transl"/>&nbsp;</a></td>
+</tr>
+</logic:notEmpty>
+</table>
+</logic:iterate>
+</td></tr>
+</logic:notEmpty>
+
 
 
 </table>
@@ -350,10 +375,11 @@ name="onerow" property="covermethod_id_transl"/></a>&nbsp;</td>
 
 </TD><TD valign="top"><!-- plants in this plot -->
 
-<bean:define id="obsId" name="onerow" property="observation_id"/>
+
 <!-- Obs id is <%= obsId %> -->
 
-<vegbank:get select="taxonimportance" where="where_observation_pk" beanName="map" wparam="obsId" perPage="-1"/>
+<vegbank:get select="taxonimportance" where="where_observation_pk" beanName="map" 
+ wparam="obsId" perPage="-1"/>
 
      <table cellpadding="1" class="leftrightborders">
      <tr><th colspan="2"><strong>Taxa occurring on <bean:write name="onerow" property="authorplotcode"/></strong></th></tr>
