@@ -1,7 +1,12 @@
 <html>
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<title>-- VegBranch --</title>
+<title>VegBranch, the desktop database for VegBank</title>
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
+
+<style type="text/css">
+p.VegBank {font: Georgia, Times New Roman, Times, serif ; color : #531100}
+</style>
 </head>
 <body lang=EN-US class="Normal" bgcolor="#FFFFFF">
 <table cellspacing="0" cellpadding="0" border="0" width="800">
@@ -16,50 +21,104 @@
     <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
     <td width="119" height="26" valign="top" bgcolor="#336633">
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b>
-        <a href="http://vegbank.nceas.ucsb.edu/vegbank/general/login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+        <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
     </td>
     <td width="114" height="26" valign="top" bgcolor="#336633">
       <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b>
-        <a href="http://vegbank.nceas.ucsb.edu/vegbank/general/info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+        <a href="@general_link@info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
     </td>
     <td width="114" height="26" valign="top" bgcolor="#336633">
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="http://vegbank.nceas.ucsb.edu/vegbank/general/help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="@general_link@help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
     </td>
   </tr>
 </table>
 <table width = "800">
 <tr width="800">
-    <td width = "800"><font size="5"><b>VegBranch</b></font>
-      <p>VegBranch is a Microsoft Access database designed primarily to import legacy
+    <td width = "800">
+<p class="VegBank">
+<h2 class="VegBank" align="center">VegBranch</h2>
+      <p class="VegBank">VegBranch is a Microsoft Access database designed primarily to import legacy
   vegetation plot data, modify those data to conform to VegBank standards, migrate
   the data to the VegBank format, then prepare the data to be sent to the VegBank
   server (www.vegbank.org). There are help files associated with VegBranch that
   describe each function of VegBranch in detail. VegBranch will eventually support
   downloading of data from VegBank so that one can easily manipulate and analyze
   data on their home computer.</p>
-<p>Click file(s) to download:</p>
+<p class="VegBank"><b>VegBranch, beta version 4.0.0<font color="red">*</font>:</b></p>
+<ul>
+<li class="VegBank">This is the interface of VegBranch, the database that you will open to start VegBranch.  It 
+    contains all the forms, instructions, and tools for VegBranch. </li>
+<li class="VegBank"><a href="vegbranch-ver-b.4.0.zip">Download
+  VegBranch</a></li>
+<ul>  
+  <li class="VegBank">(~4 MB zip file that expands to 12.5 MB)</li>
+</ul>
+</ul>
+</p>
+<p class="VegBank"><b>VegBank Module database<font color="red">*</font></b> (pick one):
+  <ul><li class="VegBank">This is an Access database that contains the VegBank data structure.  
+  The following versions contain varying amounts of data that are preloaded.  The VegBranch database 
+  connects to this database.</li>
+<li class="VegBank"><a href="vegbank-module-full-01.zip">Download VegBank module (full data version)</a></li>
+  <ul><li class="VegBank">full USDA year 2000 taxonomy</li>
+      <li class="VegBank">full soil taxa and place names</li>
+      <li class="VegBank">very limited community concepts</li>
+      <li class="VegBank">(26 MB zip file that expands to 108 MB)</li>
+  </ul>
+<li class="VegBank"><a href="vegbank-module-light-01.zip">Download VegBank module (light data version)</a></li>
+  <ul><li class="VegBank">very limited USDA (year 2000) taxonomy</li>
+      <li class="VegBank">no soil taxa or place Names</li>
+      <li class="VegBank">very limited community concepts</li>
+      <li class="VegBank">(0.2 MB zip file that expands to 2.8 MB)</li>
+  </ul>
+</ul>
+<p class="VegBank"><b>VegBranch sample .csv files for import:</b></p>
+<ul><li class="VegBank">These files give you sample datasets to load into VegBranch to explore its functionality.</li>
+<li class="VegBank"><a href="vegbranch-samplecsv1-b.4.0.zip">Download
+  very simple .csv files</a></li>
+   <li class="VegBank"><a href="vegbranch-samplecsv2-b.4.0.zip">Download
+  more complex .csv files</a></li>
+</ul>
+</p>
+<p class="VegBank"><font color="red">*</font>Indicates a component that is required for VegBranch to function properly.</p>
 <hr>
+<h2 class="VegBank" align="center">Getting started with VegBranch</h2>
+<p class="VegBank">After downloading VegBranch and one of the VegBank module databases, you will need 
+ to extract the databases from the zip files (.zip) that you downloaded to the database files (.mdb) 
+ that are in the zipped archive.   You can do this with several different programs, such as 
+ <a href="http://www.winzip.com/">WinZip</a> or <a href="http://www.pkware.com/">PKZip</a>.
+</p>
+<p class="VegBank">Once you have the Access Databases unzipped, you are ready to start using VegBranch.
+Double-click on VegBranch.mdb (or run MS-Access, then open VegBranch.mdb).
+</p>
+<p class="VegBank">There are a few steps that VegBranch takes to initialize:</p> 
+<h4 class="VegBank">Connecting to the VegBank module database</h4>
+<p class="VegBank">First, VegBranch makes sure that it is connected to a valid VegBank module database.  As you have just downloaded VegBranch, it is
+not currently connected to a valid VegBank module database, and you should see the following dialog box, 
+asking you if you want to connect to the default vegbank module database, vegbank_module.mdb in the same
+folder as VegBranch:<br />
+<img src="connect-dialog.jpg" /><br />
+Press YES, and VegBranch will attempt to connect to vegbank_module.mdb in the same folder.  If you have
+renamed the vegbank module database or it isn't in the same folder, press NO, and you will 
+be shown a form that allows you to browse for the vegbank module database and connect to it.
+</p>
+<h4 class="VegBank">Turning Off Confirmation Messages</h4>
+<p class="VegBank">Secondly, VegBranch checks the settings on your computer for Access confirmation messages.  
+These messages appear before action queries are run, records are changed, or objects (tables, queries) are deleted.
+VegBranch will perform all these operations from time to time, and you will receive hundreds, perhaps thousands of
+messages if you have confirmations on.  For this reason, we recommend you let VegBranch turn off your confirmations.  
+(If confirmations are already turned off, this form will not appear.)
+VegBranch will turn off your confirmations if you click "YES" on the following form:<br />
+<img src="confirmation-dialog.jpg" /><br />
+Press YES, and VegBranch will turn off confirmations, but then return confirmations to their
+previous settings after exiting VegBranch (unless VegBranch is exited abnormally).  
+This will affect all databases opened while VegBranch is open!  For more information, please 
+read the "more information..." box at the bottom of the form. <br />
+Note: check the box "Do not display this message again..." to have VegBranch always perform the option you choose here 
+(always turns confirmations off when loading or always leaves them as is).
+</p>
+
 </td></tr>
-<tr><td>
-<p><b>VegBranch, beta version 3.0:</b></p>
-<p><a href="http://vegbank.nceas.ucsb.edu/vegbranch/vegbranch-ver-b.3.0.zip">Download
-  VegBranch</a> with full USDA (year 2000) taxonomy included </p>
-<ul>
-  (<i>Recommended</i>, 43 MB zip file that expands to 142 MB)
-</ul>
-<p>Or <a href="http://vegbank.nceas.ucsb.edu/vegbranch/vegbranch-ver-b.3.0-fewertaxa.zip">Download
-  VegBranch</a> with USDA (year 2000) taxonomy excluding synonyms</p>
-<ul>(36 MB zip file that expands to 114 MB)</ul>
-<hr>
-<p><b>VegBranch documentation:</b></p>
-<p> <a href="http://vegbank.nceas.ucsb.edu/vegbranch/vegbranch-help-ver-b.3.0.zip">Download
-  help files</a> for VegBranch </p>
-<ul>
-  (<i>Recommended</i>, 5 MB zip file that expands to 8 MB)
-</ul>
-<p> <a href="http://vegbank.nceas.ucsb.edu/vegbranch/vegbranch-sample-csv-ver-b.3.0.zip">Download
-  sample .csv files</a> to import into VegBranch </p>
-<ul>(<i>Recommended</i>, <10 KB)</ul></td></tr>
 
   <tr bgcolor="#EED85B">
     <td colspan="6" height="8" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="-7">&nbsp;</font></td>
@@ -71,21 +130,21 @@
     <td width="971" height="21" colspan="13" valign="top">
 <P align=center><FONT face="Georgia, Times New Roman, Times, serif"
       size=2><A
-      href="http://vegbank.nceas.ucsb.edu/vegbank/general/info.html">About
+      href="@general_link@info.html">About
       VegBank</A> |<A
-      href="http://vegbank.nceas.ucsb.edu/vegbank/general/help.html"> Help</A> |
-      <A href="http://vegbank.nceas.ucsb.edu/vegbank/panel/panel.html">ESA
+      href="@general_link@help.html"> Help</A> |
+      <A href="@general_link@../panel/panel.html">ESA
       Vegetation Panel</A> |<A
-      href="http://vegbank.nceas.ucsb.edu/vegbank/general/contact.html">
+      href="@general_link@contact.html">
       Contact</A></FONT></P></td>
   </tr>
   <tr>
     <td width="971" height="24" colspan="13" valign="top">
 <P align=center><FONT face="Georgia, Times New Roman, Times, serif"
       color=#808000 size=1>© 2002 Ecological Society of America<BR><A
-      href="http://vegbank.nceas.ucsb.edu/vegbank/general/terms.html">Terms of
+      href="@general_link@terms.html">Terms of
       use</A> |<A
-      href="http://vegbank.nceas.ucsb.edu/vegbank/general/privacy.html"> Privacy
+      href="@general_link@privacy.html"> Privacy
       policy</A></FONT></P></td>
   </tr>
 </table>
