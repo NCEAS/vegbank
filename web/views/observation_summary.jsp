@@ -1,65 +1,198 @@
-@stdvegbankget_jspdeclarations@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/vegbank.tld" prefix="vegbank" %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <html>
-<HEAD>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-@defaultHeadToken@
- 
-<TITLE>View VegBank Data: Observations - Simple Summary</TITLE>
-<link rel="stylesheet" href="@stylesheet@" type="text/css" />
-</HEAD>
-<body>
-      @vegbank_header_html_normal@
-      @possibly_center@
-        <h2>View VegBank Observations</h2>
-<!--Get standard declaration of rowClass as string: -->
-        <% String rowClass = "evenrow"; %>
- <vegbank:get id="observation" select="plotandobservation" whereNumeric="where_observation_pk" 
-     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
-
-
-<vegbank:pager /><logic:empty name="observation-BEANLIST">
-<p>  Sorry, no Observations found.</p>
-</logic:empty>
-<logic:notEmpty name="observation-BEANLIST">
-<table class="outsideborders" cellpadding="2">
-<TR><!-- one row for whole thing -->
-<logic:iterate id="onerowofobservation" name="observation-BEANLIST">
-<TD valign="top"><!-- new column -->
-<!-- iterate over all records in set : new table for each -->
-<table class="leftrightborders" cellpadding="2">
-<bean:define id="onerowofplot" name="onerowofobservation" />
-<!-- get both PKs -->
-        <bean:define id="observation_pk" name="onerowofobservation" property="observation_id" />
-        <bean:define id="plot_pk" name="onerowofobservation" property="plot_id" />
-
-
-<% rowClass = "evenrow"; %> <!-- reset colors -->
-<tr><th colspan="2"><bean:write name="onerowofobservation" property="authorobscode" />
-  -<a href='@get_link@detail/observation/<bean:write name="onerowofobservation" property="observation_id" />'>more details</a>
-</th></tr>
-        <%@ include file="autogen/observation_plotshowmany_data.jsp" %>
-        <%@ include file="autogen/plot_plotshowmany_data.jsp" %>
         
-      <%@ include file="includeviews/sub_place.jsp" %>
-      
-<!--Insert a nested get statement here:
-   example:   
+<!-- 
+*  '$RCSfile: observation_summary.jsp,v $'
+*   Copyright: 2000 Regents of the University of California and the
+*              National Center for Ecological Analysis and Synthesis
+*   Authors: @author@
+*
+*  '$Author: mlee $'
+*  '$Date: 2004-10-12 15:31:34 $'
+*  '$Revision: 1.22 $'
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+  
+   <%
+                       //**************************************************************************************
+                       //  Set up alternating row colors
+                       //**************************************************************************************
+                       String rowClass = "evenrow";
+    %>
 
-<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_observation_pk" wparam="observation_pk" />-->
-<TR><TD COLSPAN="2">
-<bean:define id="smallheader" value="yes" />
-<%@ include file="includeviews/sub_taxonobservation.jsp" %>
-</TD></TR>
+<head>@defaultHeadToken@
+<title>Plot Observation Summary View</title>
+<link REL=STYLESHEET HREF="@stylesheet@" TYPE="text/css">
+</head>
 
-<p>&nbsp;</p>
-</table>
-</TD>
-</logic:iterate>
-</TR>
-</TABLE>
-</logic:notEmpty>
-<br />
+
+<body>  
+
+ 
+
+@vegbank_header_html_normal@
+ @possibly_center@  
+  <h2>View Plot-Observations</h2>
+  <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
+    whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
+
 <vegbank:pager />
-</body></html>
-          @vegbank_footer_html_tworow@
+
+<logic:empty name="plotobs-BEANLIST">
+                Sorry, no plot-observations are available.
+          </logic:empty>
+<logic:notEmpty name="plotobs-BEANLIST"><!-- set up table -->
+
+
+<logic:iterate id="onerowofobservation" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
+<bean:define id="onerowofplot" name="onerowofobservation" />
+<bean:define id="obsId" name="onerowofplot" property="observation_id"/>
+<bean:define id="plot_pk" name="onerowofplot" property="plot_id"/>
+<bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
+
+<!-- start of plot & obs fields-->
+<TABLE width="100%" border="0" cellpadding="2" cellspacing="2">
+<tr><td colspan="2">See more info with the <a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>comprehensive view.</a></td></tr>
+<TR><TD width="55%" valign="top"><!-- plot level info -->
+
+
+<table class="leftrightborders" cellpadding="1"><!--each field, only write when HAS contents-->
+<tr><th class="major" colspan="2">Plot Level Data: <bean:write name="onerowofplot" property="authorplotcode"/></th></tr>
+
+<tr><th>Plot ID Fields:</th><th>&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+
+<%@ include file="autogen/plot_plotidshort_data.jsp" %>         
+<%@ include file="autogen/observation_plotidshort_data.jsp" %>
+
+<%@ include file="includeviews/sub_haddata.jsp" %>
+<tr><th>Location Fields:</th><th>&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+
+<%@ include file="autogen/plot_plotlocshort_data.jsp" %>
+<%@ include file="autogen/observation_plotlocshort_data.jsp" %>
+<%@ include file="includeviews/sub_place.jsp" %>
+
+<%@ include file="includeviews/sub_haddata.jsp" %>
+<tr><th>Layout Fields:</th><th>&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+
+
+<%@ include file="autogen/plot_plotlayoutshort_data.jsp" %>
+<%@ include file="autogen/observation_plotlayoutshort_data.jsp" %>
+
+<%@ include file="includeviews/sub_haddata.jsp" %>
+<tr><th>Environment Fields:</th><th>&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+
+<%@ include file="autogen/plot_plotenvshort_data.jsp" %>
+<%@ include file="autogen/observation_plotenvshort_data.jsp" %>
+
+
+<%@ include file="includeviews/sub_haddata.jsp" %>
+<tr><th>Methods Fields:</th><th>&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+
+<%@ include file="autogen/plot_plotmethodshort_data.jsp" %>
+<%@ include file="autogen/observation_plotmethodshort_data.jsp" %>
+
+
+<%@ include file="includeviews/sub_haddata.jsp" %>
+<tr><th>Plot quality Fields:</th><th>&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+
+<%@ include file="autogen/plot_plotqualityshort_data.jsp" %>
+<%@ include file="autogen/observation_plotqualityshort_data.jsp" %>
+
+<%@ include file="includeviews/sub_haddata.jsp" %>
+<tr><th>Overall Plot Vegetation Fields:</th><th>&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+
+<%@ include file="autogen/plot_plotoverallvegshort_data.jsp" %>
+<%@ include file="autogen/observation_plotoverallvegshort_data.jsp" %>
+
+<%@ include file="includeviews/sub_haddata.jsp" %>
+
+<tr><th>Misc Fields:</th><th>&nbsp;</th></tr>
+<bean:define id="hadData" value="false" /> <!-- sets to false the variable that keeps track if we have written a field in this section -->
+<%@ include file="autogen/plot_plotmiscshort_data.jsp" %>
+<%@ include file="autogen/observation_plotmiscshort_data.jsp" %>
+
+<%@ include file="includeviews/sub_haddata.jsp" %>
+
+<!-- end of plot/obs fields -->
+
+
+
+
+<tr><th>Community Classification:</th><th>&nbsp;</th></tr>
+
+<!-- community info -->
+<vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
+  where="where_observation_pk" wparam="obsId" perPage="-1" pager="false"/>
+<logic:empty name="comminterpretation-BEANLIST">
+<tr class='@nextcolorclass@'><td>  No Community Interpretations.</td></tr>
+</logic:empty>
+<logic:notEmpty name="comminterpretation-BEANLIST">
+<tr><td colspan="2">
+<table class="leftrightborders" cellpadding="2" width="100%"><!--each field, only write when field HAS contents-->
+
+<tr>
+<%@ include file="autogen/comminterpretation_summary2_head.jsp" %>
+</tr>
+<logic:iterate id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
+<logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
+<tr class='@nextcolorclass@'>
+<%@ include file="autogen/comminterpretation_summary2_data.jsp" %>
+</tr>
+</logic:notEmpty>
+</logic:iterate>
+</table>
+
+</td></tr>
+</logic:notEmpty>
+
+
+
+</table>
+
+
+</TD><TD valign="top"><!-- plants in this plot -->
+
+<%@ include file="includeviews/sub_taxonobservation.jsp" %>
+</TD>
+</TR>
+
+<TR><TD colspan="2"><hr noshade="true"/><br/></TD></TR>
+</TABLE>
+
+</logic:iterate>
+
+<vegbank:pager/>
+
+</logic:notEmpty>
+
+<br>
+@vegbank_footer_html_tworow@
+</BODY>
+</html>
