@@ -9,7 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
 <body>@vegbank_header_html_normal@  <br><h2>View Public VegBank Datasets</h2>
-<vegbank:get select="userdataset_nonprivate" beanName="map" where="where_usr_email" />
+<vegbank:get select="userdataset_nonprivate" beanName="map" where="where_usr_email" pager="true"/>
 
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>
 

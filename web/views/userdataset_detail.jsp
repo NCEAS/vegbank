@@ -20,7 +20,7 @@ if ( localPgUserId==null )
 
 %>
 <!-- <h1>Temp: You are user: <%= strUserId %> </h1> -->
-<vegbank:get select="userdataset" beanName="map" where="where_usr_pk" wparam="<%= strUserId %>"/>
+<vegbank:get select="userdataset" beanName="map" where="where_usr_pk" wparam="<%= strUserId %>" pager="true"/>
 
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>
 
