@@ -16,8 +16,8 @@ import org.vegbank.common.utility.Utility;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-18 01:07:40 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-03-02 01:54:19 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -190,7 +190,7 @@ public class ASCIIReportsHelper
 				plantName = MBReadHelper.getPlantName(taxonObservation);												
 				
 				// FIXME: Confirm this is wanted value
-				taxonCover = MBReadHelper.getTotalTaxonCover(taxonObservation);				
+				taxonCover = MBReadHelper.getStrataTaxonCover(taxonObservation, null);				
 								
 				//Get taxonImportances
 				List taxonImportances = taxonObservation.gettaxonobservation_taxonimportances();

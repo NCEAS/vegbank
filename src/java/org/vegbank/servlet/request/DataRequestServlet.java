@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2004-02-18 19:00:36 $'
- *  '$Revision: 1.23 $'
+ *  '$Date: 2004-03-02 01:54:20 $'
+ *  '$Revision: 1.24 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ package org.vegbank.servlet.request;
  */
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -48,6 +49,7 @@ import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
+import org.vegbank.common.utility.Utility;
 import org.vegbank.databaseAccess.dbAccess;
 
 import org.vegbank.xmlresource.transformXML;
@@ -82,8 +84,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2004-02-18 19:00:36 $'
- *  '$Revision: 1.23 $'
+ *  '$Date: 2004-03-02 01:54:20 $'
+ *  '$Revision: 1.24 $'
  * 
  */
 
@@ -176,7 +178,7 @@ public class DataRequestServlet extends HttpServlet
 		{
 			Long usrId = (Long)request.getSession().getAttribute(Constants.USER_KEY);
 			String userName = null;
-			if (usrId.longValue() == 0) 
+			if (usrId != null && usrId.longValue() == 0) 
 			{
 				WebUser user = (new UserDatabaseAccess()).getUser(usrId);
 				userName = user.getUsername();
@@ -211,7 +213,6 @@ public class DataRequestServlet extends HttpServlet
 						accessionCode,
 						requestDataType,
 						resultType,
-						userName,
 						request);
 				}
 				else if (queryType.equalsIgnoreCase("extended"))
@@ -268,6 +269,11 @@ public class DataRequestServlet extends HttpServlet
 	{
 		try
 		{
+			File outputfile = new File("/usr/vegbank/currentXML.xml");
+			PrintStream fileOut = new PrintStream(new FileOutputStream(outputfile));
+			fileOut.println(qr.getXMLString());
+			fileOut.close(); 
+			
 			//pass back the summary of parameters passed to the servlet
 			//returnQueryElementSummary(out, params, response);
 			if (requestDataType.equals("vegPlot"))
@@ -276,7 +282,6 @@ public class DataRequestServlet extends HttpServlet
 				// FROM HERE THEY SHOULD BE ABLE TO SEE MORE
 				if (resultType.equalsIgnoreCase("identity"))
 				{
-					Thread.sleep(1000);
 					out.println(this.getPlotIdentityResults( qr.getXMLString() ));
 				}
 				// THE USER WANTS TO SEE THE COMPREHENSIVE VIEW 
@@ -526,7 +531,6 @@ public class DataRequestServlet extends HttpServlet
 		String accessionCode,
 		String requestDataType,
 		String resultType,
-		String userName,
 		HttpServletRequest request)
 	{
 

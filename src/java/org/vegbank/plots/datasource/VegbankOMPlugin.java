@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-27 21:39:57 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2004-03-02 01:54:20 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 
 	private void  init(String accessionCode)
   	{
-		// Get All Observations related to this plot
+		// Get Observations related to this plot
   	
 		try
 		{
@@ -950,7 +950,8 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getPlantTaxonCode(String plantName)
 	{
 		String plantTaxonCode = "";
-		// FIXME: Model change broke code
+		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
+		plantTaxonCode = MBReadHelper.getPlantCode(to);
 		return plantTaxonCode;
 	}
 
@@ -960,7 +961,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getPlantTaxonCover(String plantName, String plotName)
 	{
 		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
-		return MBReadHelper.getTotalTaxonCover(to);
+		return MBReadHelper.getStrataTaxonCover(to, null);
 	}
 
 	/* (non-Javadoc)
@@ -1563,17 +1564,8 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		String plotCode,
 		String stratumName)
 	{
-		String taxaStrataCover = "";
-		if (stratumName == null )
-		{
-			return taxaStrataCover;
-		}
-		Taxonimportance ti = (Taxonimportance) taxonImportances.get(stratumName);
-		if ( ti != null )
-		{
-			return ti.getCover();
-		}
-		return taxaStrataCover;
+		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
+		return MBReadHelper.getStrataTaxonCover(to, stratumName );
 	}
 
 	/* (non-Javadoc)
@@ -1588,15 +1580,19 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		while ( taxonImportanceIt.hasNext() )
 		{
 			// FIXME: What does it mean when a taxonImportance has no single strata?
-			String stratumName = "ALL STRATA";
+			String stratumName = "";
 			Taxonimportance ti = (Taxonimportance) taxonImportanceIt.next();
 			Stratum stratum = ti.getStratumobject();
 			if ( stratum != null )
 			{
-				stratumName = stratum.getStratumname();
+				Stratumtype stratumType = stratum.getStratumtypeobject();
+				if ( stratumType != null )
+				{
+					stratumName = stratumType.getStratumname();
+					strataList.add(stratumName);
+					taxonImportances.put(stratumName, ti);
+				}
 			}
-			strataList.add(stratumName);
-			taxonImportances.put(stratumName, ti);
 		}
 		return strataList;
 	}

@@ -3,9 +3,9 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
- *	'$Author: anderson $'
- *  '$Date: 2004-02-28 11:22:37 $'
- *  '$Revision: 1.26 $'
+ *	'$Author: farrell $'
+ *  '$Date: 2004-03-02 01:54:20 $'
+ *  '$Revision: 1.27 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				int permissionType = 0;
 				WebUser user = null;
 				
-				if (usrId.longValue() == 0) 
+				if (usrId != null && usrId.longValue() != 0) 
 				{
 					user = (new UserDatabaseAccess()).getUser(usrId);
 					userName = user.getUsername();
