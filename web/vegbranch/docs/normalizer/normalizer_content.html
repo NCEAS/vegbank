@@ -1,7 +1,7 @@
-<html>
-<head>@defaultHeadToken@
-
-<link rel="stylesheet" href="@stylesheet@" type="text/css">
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+  <title>VegBranch Normalizer</title>
 <style type="text/css">
 
 td.empty {background-color:#CCCCCC}
@@ -13,10 +13,14 @@ td.TLbl  {background-color:#6699FF}
 td.highlite {background-color:#FF9933}
 </style>
 
-</head>
 
-<body>
-@vegbank_header_html_normal@
+  @webpage_masthead_html@
+
+
+
+
+
+
 <h2>Normalizer</h2>
 <p><a href="#howitworks">How it works</a>  <a href="#examples">Examples</a>
   <a href="@vbr_clientserver@vegbranch_normalizer.zip">Download it</a></p>
@@ -294,6 +298,6 @@ The three cells in which the complex label could be divided could be colored lik
 <tr><td><b>Cell data</b></td><td>linked to the "top data" in same column and "left data" in same row.</td></tr>
 <tr><td class="highlite"><b>Highlighted cell</b></td><td>illustrates something.</td></tr>
 </table>
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 </body>
 </html>

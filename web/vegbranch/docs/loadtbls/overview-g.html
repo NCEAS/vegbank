@@ -1,5 +1,8 @@
 <!-- created by VegBranch, writeAllLoadingTableInfoToHTML() -->
-<html> <head> <title>VegBranch- loading table information - Disturbance Data</title><link rel='stylesheet' href='@stylesheet@' type='text/css' /><style type='text/css'>          td.color1 {background-color: FF6666} 
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@ <title>VegBranch- loading table information - Disturbance Data</title>
+   <style type='text/css'>          td.color1 {background-color: FF6666} 
           td.color1_5 {background-color: FF9966} 
          td.color2 {background-color: FFCC99} 
         td.color3 {background-color: FFFF99} 
@@ -7,9 +10,8 @@
        td.color0 {background-color: 9999FF} 
       .weight1 {font-weight:bold} 
       </style> 
- </head>
- <body>
-<a name='top'></a>@vegbank_header_html_normal@ <br/><h2><img src='@vbr_imageserver@g_icon.jpg' /><a href='@vegbranch_link@vegbranch.html'>VegBranch</a> Loading Tables Overview -- Disturbance Data (G)</h2>
+ @webpage_masthead_html@
+<a name='top'></a> <br/><h2><img src='@vbr_imageserver@g_icon.jpg' /><a href='@vegbranch_link@vegbranch.html'>VegBranch</a> Loading Tables Overview -- Disturbance Data (G)</h2>
 <p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  <a href='overview-b.html'>Species List</a>  |  <a href='overview-c.html'>Plot Data</a>  |  <a href='overview-c2.html'>Plot Normalized</a>  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  <a href='overview-e.html'>Stem Data</a>  |  <a href='overview-e2.html'>Stem Classes</a>  |  <a href='overview-f.html'>Soil Data</a>  |  Disturbance Data  |  <a href='overview-h.html'>Community Concept</a>  |  <a href='overview-i.html'>Plot Communities</a>  |  <a href='overview-j.html'>User Defined Metadata</a> </p><p>Jump to a different part of this page: <a href='#fields'>Field Descriptions</a> | <a href='#examples'>Example Data</a></p><table><tr class='grey' ><td><span class='weight1 normal'>Summary: </span></td><td class='item'> Data about evidence of disturbance observed on the plot.</td></tr>
 <tr><td><span class='weight1 normal'>Description: </span></td><td class='item'> Different types of disturbance can be described in this table.  Plots may have many different types of disturbance, each with its own record in this table.  Each plot is linked to Plot Data by authorPlotCode.</td></tr>
 <tr class='grey' ><td><span class='weight1 normal'>Required in VegBranch: </span></td><td class='item'> Not required.</td></tr>
@@ -48,4 +50,4 @@
 <tr class='evenrow'><td>plt1</td><td>Fire</td><td>Severe</td><td>1</td><td class='item'>Heavy fires burned this area about 15 months ago.</td></tr>
 <tr class='oddrow'><td>plt1</td><td>Insects</td><td>Moderate</td><td>&nbsp;</td><td>Caterpillars</td></tr>
 <tr class='evenrow'><td>plt2</td><td>Hiking</td><td>Moderate</td><td>&nbsp;</td><td>Campers and trails, some beer cans</td></tr>
-</table><p>Download this example as a <a href='example_z_user_g_disturbance_g_simple1.csv'>.csv file</a></p><p><a href='#top'>top</a></p>@vegbank_footer_html_onerow@ </body> </html>
+</table><p>Download this example as a <a href='example_z_user_g_disturbance_g_simple1.csv'>.csv file</a></p><p><a href='#top'>top</a></p>@webpage_footer_html@ </body> </html>

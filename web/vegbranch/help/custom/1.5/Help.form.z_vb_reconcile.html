@@ -1,10 +1,8 @@
-<html>
-<head>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>VegBranch help</title>
-<link href="@stylesheet@" type="text/css" rel="stylesheet">
-</head>
-<body>@vegbank_header_html_normal@
+@webpage_top_html@
+  @stdvegbankget_jspdeclarations@
+  @webpage_head_html@
+  <title>VegBranch help</title>
+  @webpage_masthead_html@
 <h2>Help for 'Manage Manual Matches to VegBank Values<!-- [z_vb_reconcile]-->'</h2>
 <img border="0" alt="in progress: (screen shot of 'Manage Manual Matches to VegBank Values')" src="../screenshots/smaller/z_vb_reconcile_1.4.png">
 <p>
@@ -13,6 +11,6 @@
 <br>Here, you are finding a record that is currently in VegBank and matching your value to it.  Examples of this include: matching your party names to VegBank party names; matching your stratum method to VegBank stratum methods.  The database matches these values to a particular record in the VegBank module.  WARNING: Connecting to a different VegBank module database before migrating your data could result in the corruption of this manual matching criteria.  (The record that you pointed to before could be gone or different!)  VegBranch will attempt to find that same record in a newly connected vegbank module database, and if none can be found, an accessionCode conflict will be reported.  This means that you manually matched value in the vegbank module can't be found in the new vegbank module and must be rematched.</help>
 
 
-@vegbank_footer_html_tworow@
+@webpage_footer_html@
 </body>
 </html>
