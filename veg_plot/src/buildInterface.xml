@@ -20,11 +20,10 @@
 	<tstamp/>
         <property name="current" value="./" />
 	<property name="build" value="interfaceBuild" />
-	 <property name="client_build" value="interfaceBuild/client" />
-	 <property name="client" value="client" />
-	 <property name="utility_src" value="utilities" />
-	 <property name="embeddedDB_src" value="embeddedDB" /> 
-
+	<property name="client_build" value="interfaceBuild/client" />
+	<property name="client" value="client" />
+	<property name="utility_src" value="utilities" />
+	<property name="embeddedDB_src" value="embeddedDB" /> 
 
 	<property name="dist" value="dist" />
 	<property name="release" value="development"/>
@@ -35,15 +34,15 @@
 	<filter token="version" value="development"/>
 	
 	<property name="servlet_home" 
-                value="D:\\jakarta-tomcat-3.2.1/lib/servlet.jar" />
+    	value="D:\\jakarta-tomcat-3.2.1/lib/servlet.jar" />
 	<property name="toolsDir" 
-                value="D:\\devtools" />
+		value="D:\\devtools" />
 	<property name="devtools" 
-                value="D:\\devtools" />	
+		value="D:\\devtools" />	
 	<property name="xmlp" 
-                value="${toolsDir}/xalan.jar:${toolsDir}/xerces.jar"/>
+		value="${toolsDir}/xalan.jar:${toolsDir}/xerces.jar"/>
 	<property name="cpath" 
-                value="${build}:${xmlp}:${toolsDir}:./"/>
+		value="${client_build}:${build}:${xmlp}:${toolsDir}:./"/>
 </target>
 
 <target name="prepare" depends="init">
@@ -57,10 +56,8 @@ to optomize the local database  and the database properties file(s)-->
 <copydir src="${embeddedDB_src}"
                dest="${build}"
                filtering="yes"
-               includes="**.java database.properties"
+               includes="LocalDatabaseManager.java database.properties"
                excludes="**/CVS* "/>
-
-
 
 <!-- get the required xml-related resources required to run the interface tools
 these include such things as the style sheets used to show results and the dtd's 
@@ -81,33 +78,40 @@ information out as xml documents   -->
                <copydir src="${utility_src}"
                dest="${build}"
                filtering="yes"
-               includes="**.java "
+               includes="PlotDataMapper.java PlotXmlWriter.java utility.java "
                excludes="**/CVS* "/>
 
 
 <!-- client library src which contains the classes to do such things as request 
 data from the servlet   -->
                <copydir src="${client}"
-               dest="${client_build}"
+               dest="${build}"
                filtering="yes"
-               includes="**.java "
+               includes="DataRequestClient.java DataExchangeClient.java 
+			   HttpMessage.java DataRequestHandler.java   "
                excludes="**/CVS* "/>
 
-<!-- get the database access library which allows the interface tools to
-directly query the locala embedded database -->
+<!-- get the database access library which allows the interface tools to 
+directly query the local embedded database put these classes into the client 
+library -->
+
 <copydir src="${dbAccess_src}" 
                dest="${build}" 
                filtering="yes"
-               includes="**.java "
+               includes="  LocalDbConnectionBroker.java sqlMapper.java queryStore.java xmlWriter.java 
+			   issueStatement.java PlotDBWriter.java DbConnectionBroker.java 
+			   dbAccess.java CommunityQueryStore.java dbConnect.java 
+			   plotWriter.java transformXML.java"
                excludes="**/CVS* "/>
 	       
 <!-- get the source code for the interface classes and the manifest file that is
 used to create executable jar file -->
 
-	<copydir src="${src}" 
+<copydir src="${src}" 
                dest="${build}" 
                filtering="yes"
-               includes="**.java interface.properties manifest"
+               includes="HtmlViewer.java DataUpload.java QueryModule.java 
+			   MenuTest.java interface.properties manifest"
                excludes="**/CVS* "/>
 
 </target>	
@@ -126,8 +130,6 @@ used to create executable jar file -->
 	<mkdir dir="${dist}/lib" />
 	<deltree dir="${dist}" />
 	
-	
-	
 <!-- build the executable jar file -->
 	<jar jarfile ="${build}/interface.jar"
 		basedir="${build}"
@@ -135,23 +137,8 @@ used to create executable jar file -->
 		includes="${build}/ ** ${src}/test.gif"
 		
 	/>
-</target>		
-
-<!--
-<jar jarfile ="${build}/plotAccess.jar"
-		basedir="${build}"
-		includes="${build}/ database.properties xmlWriter.class dbAccess.class 
-		dbConnect.class issueStatement.class plotWriter.class 
-		queryStore.class sqlMapper.class transformXML.class utility.class  
-		DbConnectionBroker.class"
-	/>
--->
-<!--
-LocalStrings.properties wellQuery9.class wellQuery9.java 
-		fileDownload.properties GetURL.class inputReader.class fileDownload.class 
-		wellQuery.properties wellQuery.class 
-		servletUtility.class viewData.class authenticate.class 
-		ViewFile.class pageDirector.class"
-		-->
+	
+	
+</target>
 
 </project>

@@ -49,7 +49,7 @@
 	<copydir src="${src}" 
                dest="${build}" 
                filtering="yes"
-               includes="CommunityQueryStore.java  xmlWriter.java queryStore.java 
+               includes=" LocalDbConnectionBroker.java CommunityQueryStore.java  xmlWriter.java queryStore.java 
 			   	PlotDBWriter.java dbConnect.java plotWriter.java 
 	       		dbAccess.java utility.java transformXML.java sqlMapper.java 
 	       		issueStatement.java DbConnectionBroker.java "
