@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-02-28 11:18:16 $'
-  *  '$Revision: 1.7 $'
+  *      '$Date: 2004-03-02 22:31:01 $'
+  *  '$Revision: 1.8 $'
   *
   *
   -->
@@ -290,6 +290,7 @@
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
 			<html:select property="expRegionAVeg">
+			  <option value="0">0</option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -299,6 +300,7 @@
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionAFlor">
+			  <option value="0">0</option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -308,6 +310,7 @@
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionANVC">
+			  <option value="0">0</option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -325,6 +328,7 @@
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionBVeg">
+			  <option value="0">0</option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -334,6 +338,7 @@
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionBFlor">
+			  <option value="0">0</option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -343,6 +348,7 @@
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionBNVC">
+			  <option value="0">0</option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -360,6 +366,7 @@
 			</td>
 		  <td bgcolor="#FFFFFF" align="center"> 
 			<html:select property="expRegionCVeg">
+			  <option value="0">0</option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -369,6 +376,7 @@
 		  </td>
 		  <td align="center"> 
 			<html:select property="expRegionCFlor">
+			  <option value="0">0</option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
@@ -378,6 +386,7 @@
 		  </td>
 		  <td bgcolor="#FFFFFF" align="center"> 
 			<html:select property="expRegionCNVC">
+			  <option value="0">0</option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
