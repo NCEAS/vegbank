@@ -18,9 +18,9 @@ import java.util.Date;
  *  Authors: @author@
  *  Release: @release@
  *	
- *  '$Author: harris $'
- *  '$Date: 2002-09-16 17:23:11 $'
- * 	'$Revision: 1.25 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2002-12-05 23:43:51 $'
+ *  '$Revision: 1.26 $'
  */
 public class PlotDataSource 
 {
@@ -35,6 +35,7 @@ public class PlotDataSource
 	//project contributor and each element is used to retrive the data associated
 	//with that specific user explicitly through method calls 
 	public Vector projectContributors = new Vector();
+	public Vector observationContributors = new Vector();
 	public String latitude = null;
 	public String longitude = null;
 	public Vector namedPlaces = new Vector();
@@ -352,6 +353,119 @@ public class PlotDataSource
 		 return(s);
 	 }
 
+	 //Observation Contributors
+	 public Vector getObservationContributors(String plotName)
+{
+	return null;
+}
+
+public String getObservationContributorSalutation(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorSalutation(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorGivenName(String contributorWholeName) 
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorGivenName(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorMiddleName(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorMiddleName(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorSurName(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorSurName(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorOrganizationName(String contributorWholeName){
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorOrganizationName(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorContactInstructions(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorContactInstructions(contributorWholeName);	
+	return(s);;
+}
+
+public String getObservationContributorPhoneNumber(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorPhoneNumber(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorCellPhoneNumber(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCellPhoneNumber(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorFaxPhoneNumber(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorFaxPhoneNumber(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorOrgPosition(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorOrgPosition(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorEmailAddress(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorEmailAddress(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorDeliveryPoint(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorDeliveryPoint(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorCity(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCity(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorAdministrativeArea(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorAdministrativeArea(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorPostalCode(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorPostalCode(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorCountry(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCountry(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorCurrentFlag(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorCurrentFlag(contributorWholeName);	
+	return(s);
+}
+
+public String getObservationContributorAddressStartDate(String contributorWholeName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationContributorAddressStartDate(contributorWholeName);	
+	return(s);
+}
+
 //START
 public String getPlotValidationLevel(String plotName)
 {
@@ -651,6 +765,7 @@ public boolean  getRevisions(String plotName)
 			projectName = ((PlotDataSourceInterface)pluginObj).getProjectName(plotName);
 			projectDescription = ((PlotDataSourceInterface)pluginObj).getProjectDescription(plotName);
 			projectContributors = ((PlotDataSourceInterface)pluginObj).getProjectContributors(plotName);
+			observationContributors = ((PlotDataSourceInterface)pluginObj).getObservationContributors(plotName);
 			projectStartDate = ((PlotDataSourceInterface)pluginObj).getProjectStartDate(plotName);
 			projectStopDate = ((PlotDataSourceInterface)pluginObj).getProjectStopDate(plotName);
 			plotCode = ((PlotDataSourceInterface)pluginObj).getPlotCode(plotName);
@@ -1255,6 +1370,46 @@ public boolean  getRevisions(String plotName)
 				System.out.println("PlotDataSource > project contributor addressStartDate: "+ addressStartDate+"\n");
 			}
 			
+			System.out.println(" \n ---------------------observation info------------------------");
+			System.out.println("PlotDataSource > number of project contributors: " + source.observationContributors.size() );
+			for (int i=0; i<source.observationContributors.size(); i++)
+			{
+				String wholeName = source.observationContributors.elementAt(i).toString();
+				String salutation = source.getObservationContributorSalutation(wholeName);
+				String givenName = source.getObservationContributorGivenName(wholeName);
+				String middleName = source.getObservationContributorMiddleName(wholeName);
+				String surName = source.getObservationContributorSurName(wholeName);
+				String organizationName = source.getObservationContributorOrganizationName(wholeName);
+				String contactInstructions = source.getObservationContributorContactInstructions(wholeName);
+				String phoneNumber = source.getObservationContributorPhoneNumber(wholeName);
+				String orgPosition = source.getObservationContributorOrgPosition(wholeName);
+				String email = source.getObservationContributorEmailAddress(wholeName);
+				String deliveryPoint = source.getObservationContributorDeliveryPoint(wholeName);
+				String city = source.getObservationContributorCity(wholeName);
+				String administrativeArea = source.getObservationContributorAdministrativeArea(wholeName);
+				String postalCode = source.getObservationContributorPostalCode(wholeName);
+				String country = source.getObservationContributorCountry(wholeName);
+				String currentFlag = source.getObservationContributorCurrentFlag(wholeName);
+				String addressStartDate = source.getObservationContributorAddressStartDate(wholeName);
+				
+				System.out.println("PlotDataSource > observation contributor whole name: "+ wholeName);
+				System.out.println("PlotDataSource > observation contributor salutation: "+ salutation);
+				System.out.println("PlotDataSource > observation contributor given name: "+ givenName );
+				System.out.println("PlotDataSource > observation contributor middle name: "+ middleName);
+				System.out.println("PlotDataSource > project contributor sur name: "+ surName);
+				System.out.println("PlotDataSource > observation contributor org name: "+ organizationName);
+				System.out.println("PlotDataSource > observation contributor contactInstructions: "+ contactInstructions);
+				System.out.println("PlotDataSource > observation contributor phoneNumber: "+ phoneNumber);
+				System.out.println("PlotDataSource > observation contributor orgPosition: "+ orgPosition);
+				System.out.println("PlotDataSource > observation contributor email: "+ email);
+				System.out.println("PlotDataSource > observation contributor deliveryPoint: "+ deliveryPoint);
+				System.out.println("PlotDataSource > observation contributor city: "+ city);
+				System.out.println("PlotDataSource > observation contributor administrativeArea: "+ administrativeArea);
+				System.out.println("PlotDataSource > observation contributor postalCode: "+ postalCode);
+				System.out.println("PlotDataSource > observation contributor country: "+ country);
+				System.out.println("PlotDataSource > observation contributor currentFlag: "+ currentFlag);
+				System.out.println("PlotDataSource > observation contributor addressStartDate: "+ addressStartDate+"\n");
+			}
 			
 			System.out.println(" \n ----------------------plot site info-----------------------------");
 			System.out.println("PlotDataSource > authorplotcode: " + source.plotCode );
