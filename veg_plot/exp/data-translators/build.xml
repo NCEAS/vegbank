@@ -13,9 +13,9 @@
 	* embedded database(s) etc.  Before building this check the 
 	* dependencies
 	*
-	* 		'$Author: farrell $'
- 	*     '$Date: 2002-12-06 18:40:55 $'
- 	*     '$Revision: 1.14 $'
+	* 		'$Author: harris $'
+ 	*     '$Date: 2003-01-02 17:16:55 $'
+ 	*     '$Revision: 1.15 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -73,7 +73,8 @@
 	
 	
 	<!-- COMPILE -->
-	<target name="compile" depends="copy">
+	<target name="compile" depends="copy" description=">> compiles the java source
+  code">
 
 		<echo message="Compiling datasource code"/>
 		
@@ -119,7 +120,8 @@
 	
 	
 	<!-- JAR -->
-	<target name="jar" depends="compile">
+	<target name="jar" depends="compile" description=">> creates a java archive
+  (jar) file -- required by the database acceess module">
 		<jar jarfile ="${lib}/datatranslator.jar"
 			basedir="${build}"
 			includes="** "
@@ -128,7 +130,8 @@
 	
 		
 	<!-- DIST  - this will put the package into the db access lib -->
-	<target name="dist" depends="jar">
+	<target name="dist" depends="jar" description=">> distributes the jar file to
+  the ../database_access/lib/ dir.">
 		<copy todir="../database_access/lib/" filtering="no" >
 			<fileset dir="${lib}" >
   	    <include name="datatranslator.jar"/>
@@ -137,7 +140,7 @@
 	</target>
 	
 	<!-- JDOC - creates the javadoc's -->
-	<target name="jdoc"> 	
+	<target name="jdoc" description=">> creates the javadoc html"> 	
 	<javadoc
   		sourcefiles="src/data-translators/PlotXmlWriterV2.java,src/data-translators/PlotDataSourceInterface.java,src/data-translators/NativeXmlCache.java,src/data-translators/NativeXmlPlugin.java,src/data-translators/TNCPlotsDB.java,src/data-translators/VegBankDataSourcePlugin.java,src/data-translators/VBAccessDataSourcePlugin.java"
   		sourcepath="src/data-translators/"
@@ -152,13 +155,13 @@
 
 
 	<!-- TEST - this will test the package -->
-	<target name="test">
+	<target name="test" description=">> run a simple test">
 		<exec dir="./" executable="write-VegBank-plot.sh" os="Linux" >
 		</exec>
 	</target>
 	
 	<!-- CLEAN UP -->
-	<target name="clean" description="Delete Generated Files" depends="init">
+	<target name="clean" description=">> Delete Generated Files" depends="init">
 		<delete dir="${build}" />
 	</target>
 	
