@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #List of databases to visit
-@databases =  ('framework','vegbank'); 
+@databases =  ('vegbank'); 
 
 $user = $ARGV[0];
 $permissions = $ARGV[1];
