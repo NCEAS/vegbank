@@ -506,6 +506,7 @@ public String fileToString(String fileName)
 	 * @param outfile -- the output file with the replaced token
 	 * @param  token -- the token to replace in the file
 	 * @param value -- the value to replace the token with
+	 *
 	 */
 	public boolean filterTokenFile( String inFile, String outFile,  Hashtable values)
 	{
@@ -519,7 +520,7 @@ public String fileToString(String fileName)
  			while (enum.hasMoreElements()) 
 			{
 				String key = (String)enum.nextElement();
-				System.out.println("ServletUtility > filter key: " + key  );
+				//System.out.println("ServletUtility > filter key: " + key  );
 				keyVec.addElement(key);
  			}
 			
@@ -569,7 +570,7 @@ public String fileToString(String fileName)
 			{
 				String token = (String)keyVec.elementAt(i);
 				String val = (String)values.get(token);
-				System.out.println("ServletUtility > applying filter: " + token +" "+ val );
+				//System.out.println("ServletUtility > applying filter: " + token +" "+ val );
 				fset.addFilter(token, val);
 			}
 			fset.setProject(proj);

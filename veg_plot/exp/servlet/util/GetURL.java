@@ -6,8 +6,8 @@ package servlet.util;
  *		"Java Servlet Programming" by Hunter & crawford and
  *
  *     '$Author: harris $'
- *     '$Date: 2001-12-03 17:47:15 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2002-03-14 22:01:28 $'
+ *     '$Revision: 1.2 $'
  *
  */
 
@@ -31,65 +31,40 @@ public class GetURL
 	//from the default url
 	if (args.length == 0) 
 	{
-		//currently take as imput the las file which should be either version 1 or 2
-		System.out.println("Usage: GetUrl  [urlString] [port] [request type {get, post}]");
-		System.out.println(" No arguments so running the default request to: ");
-		System.out.println("http://dev.nceas.ucsb.edu/harris/servlet/"
-		 +"DataRequestServlet?requestDataType=vegPlot&queryType=extended&"
-		 +"resultType=summary&operator=eq&criteria=state&value=WY&operator=gt&"
-		 +"criteria=elevation&value=10500 \n");
-		
-		String urlString = "http://dev.nceas.ucsb.edu/harris/servlet/"
-		 +"DataRequestServlet?requestDataType=vegPlot&queryType=extended&"
-		 +"resultType=summary&operator=eq&criteria=state&value=WY&operator=gt&"
-		 +"criteria=elevation&value=9000&criteria=plantTaxon&operator=contains&value=1,2,3";
-		
-//	String urlString = "http://www.cnn.com";
-	
-		
+		//THIS USES THE GET POST METHOD
+		String urlString="http://vegbank.nceas.ucsb.edu/framework/servlet/framework?action=coordinateTransform&returnformattype=html&x=4555&y=23553&zone=12";
 		int port = 80;
 		String requestType = "GET";
-		
-		//make the request
 		g.getPost(urlString, port, requestType);
-		
-		
-		
-		//this uses the requestURL class
-		String servlet = "/harris/servlet/DataRequestServlet";
+	
+	
+		//THIS USES THE REQUESTURL METHOD
+		String servlet = "/framework/servlet/framework?action=coordinateTransform&returnformattype=html&x=4555&y=23553&zone=12";
 		String protocol = "http://";
-	  String host = "dev.nceas.ucsb.edu";
+	  String host = "vegbank.nceas.ucsb.edu";
+		String s = g.requestURL(protocol+host+servlet);
+		System.out.println("GetURL > output: " + s);
 		
+		//THIS USES THE OTHER REQUEST URL METHOD
+		servlet = "/framework/servlet/framework";
 		Properties parameters = new Properties();
-		parameters.setProperty("requestDataType", "vegPlot");
-		parameters.setProperty("queryType", "extended");
-		parameters.setProperty("resultType", "summary");
-		parameters.setProperty("operator", "eq");
-		parameters.setProperty("criteria", "state");
-		
-		parameters.setProperty("value", "WY");
-		parameters.setProperty("operator", "gt");
-		parameters.setProperty("criteria", "elevation");
-		parameters.setProperty("operator", "gt");
-		parameters.setProperty("value", "10700");
-		
-		
-		//request the data from the servlet and print the results to the system
-////		System.out.println("THE PARAMETERS BEING PASSED TO DATA REQUEST SERVLET: "
-////			+parameters.toString() );
-					
-////		System.out.println( requestURL(servlet, protocol, host, parameters) );
-		
+		parameters.setProperty("action", "coordinateTransform");
+		parameters.setProperty("returnformattype", "xml");
+		parameters.setProperty("x", "4555");
+		parameters.setProperty("y", "23553");
+		parameters.setProperty("zone", "12");
+		s = g.requestURL(servlet,  protocol, host, 
+		 parameters);
+		System.out.println("GetURL > output: " + s);
 		
 		
 	}
-
 	else
 	{
 		String urlString = new String(args[0]); //url starting with http://
 		int port = Integer.parseInt(args[1]); //port number
 		String requestType=new String(args[2]); //GET or POST  
-//		g.getPost(urlString, port, requestType);
+		//g.getPost(urlString, port, requestType);
 		
 		//this uses the requestURL class
 		String servlet = "/harris/servlet/DataRequestServlet?requestDataType=vegPlot&queryType=extended&"
@@ -100,7 +75,6 @@ public class GetURL
 		
 		Properties parameters = new Properties();
 		parameters.setProperty("test", "test");
-		
 		
 		//request the data from the servlet and print the results to the system
 		System.out.println( requestURL(servlet, protocol, host, parameters) );
@@ -185,7 +159,7 @@ public class GetURL
 				{
 					while ((thisLine = theHTML.readLine()) != null) 
 					{
-						buf.append(thisLine+"\n");
+						buf.append(thisLine+" ");
 						//System.out.println(thisLine);
 					}
           
@@ -218,14 +192,13 @@ public class GetURL
  * url, port number and requestType
  *
  */
-
 	public void getPost (String uri, int port, String requestType) 
 	{
 		StringTokenizer tok = new StringTokenizer(uri); 
 		String protocol = tok.nextToken(":"); 
 		String host = tok.nextToken(":/"); 
 		//Hashtable responseVec = new Hashtable();
-		System.out.println("uri originally passed: "+uri);
+		System.out.println("GetURL > uri originally passed: "+uri);
 		if (tok.hasMoreTokens()) 
 		{  
 			uri =  tok.nextToken(" ") + "/";
@@ -237,16 +210,16 @@ public class GetURL
 		//System.out.println("original uri passed: "+uri);
 		//  JHH - removed the last forward slash if one exists with at least one element in 
 		//  URI  - marked by a '?' b/c can't figure why would it would be needed
-		if ( (uri.indexOf("?")>0) && (uri.endsWith("/")) ) 
+		if ( (uri.indexOf("?") > 0) && (uri.endsWith("/")) ) 
 		{
 			int uriLength=uri.length();
 			int newLength=uriLength-1;
 			String correctedUri=uri.substring(0, newLength);
 			uri=correctedUri;
-			System.out.println("GetURL.getPOST: abnormal forward slash at "
+			System.out.println("GetURL > abnormal forward slash at "
 			+"the end of the uri - trimmed");
 		}
-		System.out.println("Protocol=" + protocol + ", host=" + host + ", uri=" + uri); 
+		System.out.println("GetURL > Protocol=" + protocol + ", host=" + host + ", uri=" + uri); 
 		// send the request using GET or post depending on the input
 		try 
 		{ 
@@ -257,29 +230,36 @@ public class GetURL
 			outStream.println(requestType+" " + uri + " HTTP/1.0\n"); 
 			String line; 
 			int lineCnt=1;
-
 			while ((line = inStream.readLine()) != null) 
 			{
-				 	//add the results to the vector
-      	 	responseVector.addElement(line);
-      		//and add to the hashtable too
-      		responseVec.put(new Integer(lineCnt), line);
-      		lineCnt++;
+				//add the results to the vector
+      	responseVector.addElement(line);
+      	System.out.println("GetURL > server response: " + line);
+				//and add to the hashtable too
+      	responseVec.put(new Integer(lineCnt), line);
+      	lineCnt++;
 			}
 		} //end try 
 		catch(IOException ioe) 
 		{ 
 			System.out.println("IOException:" + ioe); 
 		} 
-	catch(Exception e) 
-	{ 
-		System.out.println(e.fillInStackTrace()); 
-		System.out.println(e.getMessage()); 
-		e.printStackTrace(); 
-		System.out.println("Error! " + e); 
-	} 
-}
+		catch(Exception e) 
+		{ 
+			System.out.println("Exception: " + e.getMessage()); 
+			e.printStackTrace(); 
+		} 
+	}
 
-} 
+	/**
+	 * overloaded method from above
+	 */
+	 
+	 
+
+
+
+
+}
 
 
