@@ -7,8 +7,8 @@
 *    Release: @release@
 *
 *   '$Author: farrell $'
-*   '$Date: 2002-12-03 23:21:32 $'
-*    '$Revision: 1.4 $'
+*   '$Date: 2002-12-10 23:16:28 $'
+*    '$Revision: 1.5 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -750,8 +750,7 @@ public class DBinsertPlotSource {
 		String contributor) {
 		try {
 			int partyId = 0;
-			boolean pExists =
-				partyExists(salutation, givenName, surName, email);
+			boolean pExists = partyExists(salutation, givenName, surName);
 			System.out.println("DBinsertPlotSource > party exists: " + pExists);
 			// INSERT INTO THE PARTY TABLE FIRST, ALONG WITH THE ADDRESS AND TELEPHONE
 			if (pExists == false) {
@@ -765,14 +764,14 @@ public class DBinsertPlotSource {
 						contact);
 				if (partyId > 0) {
 					// THESE METHODS USER THE 'PlotDataSource' Object directly
-					insertAddress(partyId, contributor);
-					insertTelephone(partyId, contributor);
+					insertProjectContributorAddress(partyId, contributor);
+					insertProjectContributorTelephone(partyId, contributor);
 				}
 			}
 
 			//else get the party id for this contributor
 			else {
-				partyId = getPartyId(salutation, givenName, surName, email);
+				partyId = getPartyId(salutation, givenName, surName);
 			}
 			// insert the role table
 
@@ -799,6 +798,85 @@ public class DBinsertPlotSource {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * handle the loading of the observation contributor information
+	 *
+	 * @param salutation 
+	 * @param surName
+	 * @param givenName
+	 * @param email
+	 * @param roleDescription -- Decription of contributors role
+	 * @param observationId
+	 * @param orgName -- the name of the org that the contributor belongs
+	 * @param contact -- the contact instructions
+	 * @param contributor -- the contributors whole name which is used 
+	 * to lookup via the 'PlotDataSource' object the required info
+	 *
+	 */
+	private void insertObservationContributor( 	String salutation,
+																			        String givenName,
+																			        String surName,
+																			        String email,
+																			        String roleDescription,
+																			        int observationId,
+																			        String orgName,
+																			        String contact,
+																			        String contributor) 
+    {
+		try 
+		{
+			int partyId = 0;
+			boolean pExists =	partyExists(salutation, givenName, surName);
+			System.out.println("DBinsertPlotSource > party exists: " + pExists);
+			// INSERT INTO THE PARTY TABLE FIRST, ALONG WITH THE ADDRESS AND TELEPHONE
+			if (pExists == false) 
+			{
+				partyId = insertParty(salutation,
+                              givenName,
+													    surName,
+													    email,
+													    orgName,
+													    contact);
+				if (partyId > 0) 
+				{
+					// THESE METHODS USER THE 'PlotDataSource' Object directly
+					insertObservationContributorAddress(partyId, contributor);
+					insertObservationContributorTelephone(partyId, contributor);
+				}
+			}
+			else 
+			{
+				partyId = getPartyId(salutation, givenName, surName);
+			}
+			// insert the role table
+			
+			// Use roleDescription to find existing roleId or to create a new one.
+			int roleId = 0;			
+
+			//insert into the project contributor table
+			StringBuffer sb = new StringBuffer();
+			sb.append("INSERT into OBSERVATIONCONTRIBUTOR ");
+			sb.append("( party_id, observation_id , role_id) ");
+			sb.append(" values (?,?,?)");
+
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setInt(1, partyId);
+			pstmt.setString(2, "" + observationId);
+			pstmt.setString(3, "" + roleId);
+
+      pstmt.execute();
+      pstmt.close();
+
+      // DEBUG
+      //System.out.println("DBinsertPlotSources > " + sb.toString() + "; partyId=" + partyId 
+      //+ "; observationId=" + observationId + "; roleId=" + roleId); 
+      
+		} catch (Exception e) {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}	
 
 	/**
 	 * method that inserts address information for a user
@@ -809,12 +887,11 @@ public class DBinsertPlotSource {
 		* @param partyId  -- the partyid for the party table
 		* @param contributor -- the whole name of the contributor
 		*/
-	private void insertTelephone(int partyId, String contributor) {
+	private void insertTelephone(int partyId, String number) 
+	{
 		StringBuffer sb = new StringBuffer();
-		try {
-
-			String number =
-				source.getProjectContributorPhoneNumber(contributor);
+		try 
+		{
 			String type = "work";
 
 			sb.append("INSERT into TELEPHONE ");
@@ -829,13 +906,41 @@ public class DBinsertPlotSource {
 
 			pstmt.execute();
 			pstmt.close();
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			System.out.println("Exception: " + e.getMessage());
 			System.out.println("sql: " + sb.toString());
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+   * Get the projectContributors Telephone number and call a method that inserts
+   * it into the database
+   *
+   *  @param partyId      -- The foriegn key
+   *  @param contributor  -- The full name of the contibutor
+   **/
+  private void insertProjectContributorTelephone(int partyId, String contributor)
+	{
+		String number = source.getProjectContributorPhoneNumber(contributor);	
+		this.insertTelephone(partyId, number);
+	}
+	
+	/**
+   * Get the observationContributors Telephone number and call a method that inserts
+   * it into the database
+   *
+   *  @param partyId      -- The foriegn key
+   *  @param contributor  -- The full name of the contibutor
+   **/
+	private void insertObservationContributorTelephone(int partyId, String contributor) 
+  {
+		String number = source.getObservationContributorPhoneNumber(contributor);	
+		this.insertTelephone(partyId, number);
+  }
+  
 	/**
 	 * method that inserts address information for a user
 		* by using the contributor ( the wholename of the user
@@ -845,21 +950,11 @@ public class DBinsertPlotSource {
 		* @param partyId  -- the partyid for the party table
 		* @param contributor -- the whole name of the contributor
 		*/
-	private void insertAddress(int partyId, String contributor) {
+	private void insertAddress(int partyId,  String email, String street, String city, String adminArea, String postalCode, String country) 
+	{
 
 		StringBuffer sb = new StringBuffer();
 		try {
-			String email =
-				source.getProjectContributorEmailAddress(contributor);
-			String street =
-				source.getProjectContributorDeliveryPoint(contributor);
-			String adminArea =
-				source.getProjectContributorAdministrativeArea(contributor);
-			String city = source.getProjectContributorCity(contributor);
-			String postalCode =
-				source.getProjectContributorPostalCode(contributor);
-			String country = source.getProjectContributorCountry(contributor);
-
 			sb.append("INSERT into ADDRESS ");
 			sb.append(
 				"( party_id, email, deliverypoint, city, administrativearea, ");
@@ -883,27 +978,76 @@ public class DBinsertPlotSource {
 			e.printStackTrace();
 		}
 	}
+	
+  /**
+	 *  Fetch the address information observationContributor and call a method that 
+	 *  inserts it into the database.
+	 * 
+	 * @param partyId -- Foriegn key to use 
+	 * @param contributor -- Full name of contributor
+	 * */
+  
+	private void insertObservationContributorAddress(int partyId, String contributor)
+	{
+		String email = source.getObservationContributorEmailAddress(contributor);
+		String street = source.getObservationContributorDeliveryPoint(contributor);
+		String adminArea = source.getObservationContributorAdministrativeArea(contributor);
+		String city = source.getObservationContributorCity(contributor);
+		String postalCode = source.getObservationContributorPostalCode(contributor);
+		String country =  source.getObservationContributorCountry(contributor);
+
+		this.insertAddress(partyId, email, street, city, adminArea, postalCode, country);		
+	}
+
+  /**
+	 *  Fetch the address information projectContributor and call a method that 
+	 *  inserts it into the database.
+	 * 
+	 * @param partyId -- Foriegn key to use 
+	 * @param contributor -- Full name of contributor
+	 * */
+  
+	private void insertProjectContributorAddress(int partyId, String contributor)
+	{
+		String email = source.getProjectContributorEmailAddress(contributor);
+		String street = source.getProjectContributorDeliveryPoint(contributor);
+		String adminArea = source.getProjectContributorAdministrativeArea(contributor);
+		String city = source.getProjectContributorCity(contributor);
+		String postalCode = source.getProjectContributorPostalCode(contributor);
+		String country =  source.getProjectContributorCountry(contributor);
+	
+    this.insertAddress(partyId, email, street, city, adminArea, postalCode, country);		
+	}
+
 
 	/**
-	 * method that the party id for an individual
-	 * otherwise false is returned
+	 * Gets the party id for an the matching individual
+	 * otherwise return code of 0 is returned ... 
+   * A 0 return represents a failure to get the party id
+   * 
 	 * @param salutation 
 	 * @param surName
 	 * @param givenName
-	 * @param email
 	 */
-	private int getPartyId(
-		String salutation,
-		String givenName,
-		String surName,
-		String email) {
+	private int getPartyId(	String salutation,
+											    String givenName,
+											    String surName
+                          ) 
+	{
 		int i = 0;
-		try {
-			StringBuffer sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer();
+
+		try 
+		{
 			sb.append("SELECT party_id from PARTY where ");
-			sb.append(" upper(salutation) ");
-			sb.append(" like '" + salutation.toUpperCase() + "'");
-			sb.append(" and ");
+			
+      if (salutation != null)   // Use salutation in search if available   
+      {
+        sb.append(" upper(salutation) ");
+			  sb.append(" like '" + salutation.toUpperCase() + "'");
+			  sb.append(" and ");
+      }
+      
 			sb.append(" upper(givenName) ");
 			sb.append(" like '" + givenName.toUpperCase() + "'");
 			sb.append(" and ");
@@ -912,10 +1056,23 @@ public class DBinsertPlotSource {
 			System.out.println("DBinsertPlotSource > query: " + sb.toString());
 			Statement query = conn.createStatement();
 			ResultSet rs = query.executeQuery(sb.toString());
-			while (rs.next()) {
+			
+			while (rs.next())
+			{
 				i = rs.getInt(1);
 			}
-		} catch (Exception e) {
+		} 
+    catch (SQLException se) 
+    {
+			System.out.println("Caught SQL Exception: " + se.getMessage());
+      if ( !se.getMessage().equals("No results were returned by the query.") )
+      {
+			  System.out.println("sql: " + sb.toString());
+        se.printStackTrace();
+      }
+		}
+	  catch (Exception e) 
+		{
 			System.out.println("Caught Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
@@ -967,6 +1124,8 @@ public class DBinsertPlotSource {
 			while (rs.next()) {
 				partyId = rs.getInt(1);
 			}
+
+
 		} catch (Exception e) {
 			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
@@ -980,20 +1139,27 @@ public class DBinsertPlotSource {
 	 * @param salutation 
 	 * @param surName
 	 * @param givenName
-	 * @param email
 	 */
-	private boolean partyExists(
-		String salutation,
-		String givenName,
-		String surName,
-		String email) {
+	private boolean partyExists(String salutation,
+		                          String givenName,
+		                          String surName
+                              ) 
+    {
+    
 		int rows = 0;
-		try {
+    
+    try 
+    {
 			StringBuffer sb = new StringBuffer();
 			sb.append("SELECT count(*) from PARTY where ");
-			sb.append(" upper(salutation) ");
-			sb.append(" like '" + projectName.toUpperCase() + "'");
-			sb.append(" and ");
+      
+      if (salutation != null)   // Use salutation in search if available 
+      {
+			  sb.append(" upper(salutation) ");
+			  sb.append(" like '" + salutation.toUpperCase() + "'");
+			  sb.append(" and ");
+      }
+      
 			sb.append(" upper(givenName) ");
 			sb.append(" like '" + givenName.toUpperCase() + "'");
 			sb.append(" and ");
@@ -1002,18 +1168,28 @@ public class DBinsertPlotSource {
 			System.out.println("DBinsertPlotSource > query: " + sb.toString());
 			Statement query = conn.createStatement();
 			ResultSet rs = query.executeQuery(sb.toString());
-			while (rs.next()) {
+		
+      while (rs.next()) 
+      {
 				rows = rs.getInt(1);
 			}
-		} catch (Exception e) {
-			System.out.println("Caught Exception: " + e.getMessage());
-			e.printStackTrace();
+		} 
+    catch (SQLException se) 
+    {
+			System.out.println("Caught SQL Exception: " + se.getMessage());
+      if ( !se.getMessage().equals("No results were returned by the query.") )
+      {
+        se.printStackTrace();
+      }
 		}
-		if (rows == 0) {
-			System.out.println("DBinsertPlotSource > project does not exist");
+		if (rows == 0) 
+    {
+			System.out.println("DBinsertPlotSource >  party does not exist");
 			return (false);
-		} else {
-			System.out.println("DBinsertPlotSource > project does exist");
+		} 
+    else 
+    {
+			System.out.println("DBinsertPlotSource > party does exist");
 			return (true);
 		}
 	}
@@ -1205,9 +1381,14 @@ public class DBinsertPlotSource {
 				System.out.println(
 					"warning: There were no strata matching: " + stratumType);
 			}
-		} catch (Exception e) {
-			System.out.println("Caught Exception  " + e.getMessage());
-			e.printStackTrace();
+    }
+    catch (SQLException se) 
+    {
+			System.out.println("Caught SQL Exception: " + se.getMessage());
+      if ( !se.getMessage().equals("No results were returned by the query.") )
+      {
+        se.printStackTrace();
+      }
 		}
 		return (strataId);
 	}
@@ -1519,11 +1700,15 @@ public class DBinsertPlotSource {
 			while (rs.next()) {
 				stratumTypeId = rs.getInt(1);
 			}
-
-		} catch (Exception e) {
-			System.out.println("Caught Exception: " + e.getMessage());
-			System.out.println("sql: " + sb.toString());
-			e.printStackTrace();
+    }
+    catch (SQLException se) 
+    {
+			System.out.println("Caught SQL Exception: " + se.getMessage());
+      if ( !se.getMessage().equals("No results were returned by the query.") )
+      {
+			  System.out.println("sql: " + sb.toString());
+        se.printStackTrace();
+      }
 		}
 		return (stratumTypeId);
 	}
@@ -1535,14 +1720,38 @@ public class DBinsertPlotSource {
 	 * were loaded to the database. The attributes loaded in this 
 	 * method are accessed via the 'PlotDataSource' class and the 
 	 * plugins that it uses.
-	 *
+	 * 
 	 */
 	private boolean insertPlotObservation() {
 		StringBuffer sb = new StringBuffer();
 		try {
 			//get the plotid number
 			plotObservationId = getNextId("observation");
-
+			
+			Vector projContributors = source.observationContributors;
+			for (int i = 0; i < projContributors.size(); i++) 
+			{			
+				String wholeName = source.observationContributors.elementAt(i).toString();
+				String salutation = source.getObservationContributorSalutation(wholeName);
+				String givenName = source.getObservationContributorGivenName(wholeName);
+				String surName = source.getObservationContributorSurName(wholeName);
+				String email = source.getObservationContributorEmailAddress(wholeName);
+				String role = "project manager";
+				String organizationName = source.getObservationContributorOrganizationName(wholeName);
+				String contactInstructions = source.getObservationContributorContactInstructions(wholeName);
+				
+				insertObservationContributor(
+					salutation,
+					givenName,
+					surName,
+					email,
+					role,
+					plotObservationId,
+					organizationName,
+					contactInstructions,
+					wholeName);
+			}
+			
 			// get the observation accession number
 			String obsAccession =
 				getObservationAccessionNumber(plotName, plotObservationId);
@@ -2266,9 +2475,13 @@ public class DBinsertPlotSource {
 			while (rs.next()) {
 				rows = rs.getInt(1);
 			}
-		} catch (Exception e) {
-			System.out.println("Caught Exception: " + e.getMessage());
-			e.printStackTrace();
+    }
+    catch ( SQLException se ) {      
+	    System.out.println("Caught SQL Exception: " + se.getMessage());
+      if ( !se.getMessage().equals("No results were returned by the query.") )
+      {
+			  se.printStackTrace();
+      }
 		}
 		if (rows == 0) {
 			System.out.println("DBinsertPlotSource > project does not exist");
@@ -2287,8 +2500,8 @@ public class DBinsertPlotSource {
 	 */
 	private int getProjectId(String projectName) {
 		int projectId = 0;
+		StringBuffer sb = new StringBuffer();
 		try {
-			StringBuffer sb = new StringBuffer();
 			sb.append(
 				"SELECT project_id from PROJECT where projectName like '"
 					+ projectName
@@ -2298,9 +2511,15 @@ public class DBinsertPlotSource {
 			while (rs.next()) {
 				projectId = rs.getInt(1);
 			}
-		} catch (Exception e) {
-			System.out.println("Caught Exception: " + e.getMessage());
-			e.printStackTrace();
+    } 
+    catch (SQLException se) 
+    {
+			System.out.println("Caught SQL Exception: " + se.getMessage());
+      if ( !se.getMessage().equals("No results were returned by the query.") )
+      {
+			  System.out.println("sql: " + sb.toString());
+        se.printStackTrace();
+      }
 		}
 		return (projectId);
 	}
@@ -2308,7 +2527,7 @@ public class DBinsertPlotSource {
 	/**
 	 * method that returns the next primary key value for a table
 	 * @param tableName -- the table whose pk value is desired
-	 * @return int -- the promary key value
+	 * @return int -- the primary key value
 	 */
 	private int getNextId(String tableName) {
 		int rows = -1;
@@ -2334,10 +2553,15 @@ public class DBinsertPlotSource {
 			while (rs.next()) {
 				rows = rs.getInt(1);
 			}
-		} catch (Exception e) {
-			System.out.println("Exception: " + e.getMessage());
-			System.out.println("sql: " + sb.toString());
-			e.printStackTrace();
+	  } 
+    catch (SQLException se) 
+    {
+			System.out.println("Caught SQL Exception: " + se.getMessage());
+      if ( !se.getMessage().equals("No results were returned by the query.") )
+      {
+			  System.out.println("sql: " + sb.toString());
+        se.printStackTrace();
+      }
 		}
 		return (rows);
 	}
@@ -2398,19 +2622,21 @@ public class DBinsertPlotSource {
 	}
 	
   /*
-   * method that returns the hostname that should be used for
+   * Find the hostname that should be used for
    * servlet communication such as getting the permission levels 
    */
 	private String getHostname() 
   {
-	try
+	  try
     {
-      if  ( !hostname.equals("localhost") ) 
-      {
-		  	String propFile = "database";
-		  	ResourceBundle rb = ResourceBundle.getBundle(propFile);
-		  	hostname=rb.getString("hostname");
-	}
+	  	String propFile = "database";
+	  	ResourceBundle rb = ResourceBundle.getBundle(propFile);
+	  	hostname=rb.getString("hostname");
+	
+		// Give it a default value if needed
+		if  ( hostname == null || hostname.equals("")  ) {
+			hostname = "localhost"; 
+		}
     }
     catch (Exception e)
     {
@@ -2418,5 +2644,17 @@ public class DBinsertPlotSource {
     }
 		return hostname;
 	}
-	
+  
+  /**
+  * Handle SQLExceceptions thrown by JDBC layer. 
+  * In particular the "No results found" error" does not trigger a
+  * printStacktrace while all other errors do.
+  **/
+  private void handleSQLException (SQLException se) {
+		System.out.println("Caught SQL Exception: " + se.getMessage());
+    if ( !se.getMessage().equals("No results were returned by the query.") )
+    {
+      se.printStackTrace();
+    }   
+  }
 }
