@@ -105,7 +105,7 @@ CREATE TABLE plantCorrelation
 (
     PLANTCORRELATION_ID serial,
     PLANTSTATUS_ID integer NOT NULL,
-    PLANTCONCEPT_ID integer NOT NULL,
+    PLANTCONCEPT_ID integer,
     plantConvergence varchar (20) NOT NULL,
     correlationStart timestamp NOT NULL,
     correlationStop timestamp,
