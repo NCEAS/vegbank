@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-04-08 05:44:28 $'
-  *  '$Revision: 1.4 $'
+  *      '$Date: 2004-07-16 18:44:10 $'
+  *  '$Revision: 1.5 $'
   *
   *
   -->
@@ -25,15 +25,7 @@
 
   <title>PLANT CONCEPT LOOKUP</title>
   <link rel="stylesheet" href="@stylesheet@" type="text/css">
-  <script type="text/javascript">
-        <!--
-        function getHelp()
-        {
-        return "@manualFrameFor-search-for-plants@"
-        }
-        
-        -->
-  </script>
+
   <style type="text/css">
   body {
   background-color: #FFFFFF;
