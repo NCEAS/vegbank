@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-09-24 01:39:38 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2004-10-12 00:58:33 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ public class GenericDispatcherAction extends Action
 				// Handle special URL /get/view/entity/params
 				///////////////////////////////////////////////////////////////
 				
-				// view: literal value { detail | summary | dd | bean | xml } 
+				// view: literal value { detail | summary | dd | bean | xml | *} 
 				String view = request.getParameter("view").toLowerCase();
 
 				if (view.equals("std")) {
@@ -153,9 +153,36 @@ public class GenericDispatcherAction extends Action
 							entity + ", " + beanName + ", " + whereKey + ", (" + params + "), " + jsp);
 
 
-				} else if (view.equals("detail") || view.equals("summary")) {
+				} else if (view.equals("dd")) {
 					//////////////////////////////////////////
-					// VIEWS: detail or summary
+					// VIEW: dd
+					//////////////////////////////////////////
+					command = FORWARD;
+					fwdURL = "/dbdictionary/dd~table~" + entity;
+					if (Utility.isStringNullOrEmpty(params)) {
+						fwdURL += "~type~tableview.html";
+					} else {
+						// add a field
+						fwdURL += "~field~" + params + "~type~fieldview.html";
+					}
+
+				} else if (view.equals("xml")) {
+					//////////////////////////////////////////
+					// VIEW: xml
+					//////////////////////////////////////////
+					//command = "GetXML";
+					// make a custom VegbankCommand maybe
+
+				} else if (view.equals("bean")) {
+					//////////////////////////////////////////
+					// VIEW: bean
+					//////////////////////////////////////////
+					command = RETRIEVE_BEAN;
+
+				//} else if (view.equals("detail") || view.equals("summary")) {
+				} else {
+					//////////////////////////////////////////
+					// VIEWS: detail or summary or catch-all
 					//////////////////////////////////////////
 					command = FORWARD;
 
@@ -229,31 +256,6 @@ public class GenericDispatcherAction extends Action
 					}
 
 
-				} else if (view.equals("dd")) {
-					//////////////////////////////////////////
-					// VIEW: dd
-					//////////////////////////////////////////
-					command = FORWARD;
-					fwdURL = "/dbdictionary/dd~table~" + entity;
-					if (Utility.isStringNullOrEmpty(params)) {
-						fwdURL += "~type~tableview.html";
-					} else {
-						// add a field
-						fwdURL += "~field~" + params + "~type~fieldview.html";
-					}
-
-				} else if (view.equals("xml")) {
-					//////////////////////////////////////////
-					// VIEW: xml
-					//////////////////////////////////////////
-					//command = "GetXML";
-					// make a custom VegbankCommand maybe
-
-				} else if (view.equals("bean")) {
-					//////////////////////////////////////////
-					// VIEW: bean
-					//////////////////////////////////////////
-					command = RETRIEVE_BEAN;
 				} 
 
 			}
