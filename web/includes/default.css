@@ -1,6 +1,10 @@
 
 /* body element, present in all pages */
-BODY			{ background-color: #FFFFFF;}
+BODY			{ background-color: #FFFFFF;
+                  font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+				  					font-size: 10pt;
+					color: #000000
+}
 
 
 
