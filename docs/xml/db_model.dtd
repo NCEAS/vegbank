@@ -16,7 +16,7 @@
 <!ELEMENT attReferences (#PCDATA)>
 <!ELEMENT attRelType (#PCDATA)>
 <!ELEMENT attType (#PCDATA)>
-<!ELEMENT attribute (attName, attModel, attNulls, attType, javaType?, attKey, attRelType?, attReferences, attListType, attList,  attNotes, attDefinition, archive?)>
+<!ELEMENT attribute (attName, attModel, attNulls, attType, javaType?, attKey, attRelType?, attReferences, attListType, attList, attNotes, attDefinition, archive?)>
 <!ELEMENT author (#PCDATA)>
 <!ELEMENT contributor (#PCDATA)>
 <!ELEMENT dataModel (title, version, versionDesc, author, institution, contributor, description, date, entity+)>
@@ -34,6 +34,7 @@
 <!ELEMENT versionDesc (#PCDATA)>
 <!ATTLIST javaType
   type CDATA #IMPLIED
+  class CDATA #IMPLIED
   relation CDATA #IMPLIED
 >
 <!ATTLIST attRelType
