@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-12 05:50:53 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2004-10-12 17:50:40 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.Utility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.9 $ $Date: 2004-10-12 05:50:53 $
+ * @version $Revision: 1.10 $ $Date: 2004-10-12 17:50:40 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -93,6 +93,7 @@ public class VegbankGetTag extends VegbankTag {
 			gc.setPageNumber(getPageNumber());
 			gc.setNumItems(findAttribute("numItems"));
 			gc.setPerPage(getPerPage());
+			gc.setWhereSubquery(getWhereSubquery());
 
 			try { gc.setPager(Boolean.valueOf(getPager()).booleanValue()); 
 			} catch (Exception ex) { gc.setPager(false); }
