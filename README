@@ -1,6 +1,6 @@
-'$Author: harris $'
-'$Date: 2002-12-04 22:01:27 $'
-'$Revision: 1.6 $'
+'$Author: farrell $'
+'$Date: 2002-12-30 19:28:46 $'
+'$Revision: 1.7 $'
 THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
 
 REQUIRED JAR FILES
@@ -67,9 +67,9 @@ createdb "name of database" #repeat for each
 
 >psql plants_dev < veg_taxa/sql/createPlantTaxonDb_pg.sql  
 
->psql community_dev < veg_community/sql/community_implementation.sql  
->psql community_dev < veg_community/sql/createCommunitySummary_pg.sql  
->psql community_dev < veg_community/sql/ createEcoartTables_pg.sql   
+>psql communities_dev < veg_community/sql/community_implementation.sql  
+>psql communities_dev < veg_community/sql/createCommunitySummary_pg.sql  
+>psql communities_dev < veg_community/sql/createEcoartTables_pg.sql   
 
 >psql framework < ./veg_plot/sql/create_veguser_tables.sql
 
