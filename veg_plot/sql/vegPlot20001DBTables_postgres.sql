@@ -104,11 +104,12 @@ drop SEQUENCE strataComposition_id_seq;
 CREATE SEQUENCE strataComposition_id_seq;
 
 CREATE TABLE strataComposition (
-strataComposition_id NUMERIC(20) default nextval('strataComposition_id_seq'),
-taxonObservation_id NUMERIC(20),
-strata_id NUMERIC(20),
-cheatStratumType VARCHAR(32),
-percentCover NUMERIC(8)
+	strataComposition_id INT8  default nextval('strataComposition_id_seq'),
+	taxonObservation_id NUMERIC(20),
+	strata_id NUMERIC(20),
+	cheatStratumType VARCHAR(32),
+	percentCover NUMERIC(8),
+	CONSTRAINT strataComposition_pk PRIMARY KEY (strataComposition_id)
 );
 
 
