@@ -272,6 +272,9 @@ public void doGet(HttpServletRequest request,
  		plotId = (String)params.get("plotId");
  		resultType = (String)params.get("resultType");
  		requestDataType = (String)params.get("requestDataType");
+		//the servlet directory
+		servletDir = rb.getString("requestparams.servletDir");
+		
 		//attempt to recognize the request as a query for communities 
 		if (requestDataType.trim().equals("community")) 
 		{  
@@ -284,7 +287,7 @@ public void doGet(HttpServletRequest request,
 		// Cheat here - to recognise the single plot query to return entire plot */
 		else if (plotId != null && resultType.equals("full") ) 
 		{
-			String outFile="/jakarta-tomcat/webapps/examples/WEB-INF/lib/atomicResult";
+			String outFile=servletDir+"atomicResult";
 			out.println("<br>DataRequestServlet.handleSimpleQuery - returning a full data set "
 				+"for plot: "+plotId+" <br>");
 			composeSinglePlotQuery(plotId, resultType, outFile);
@@ -551,8 +554,9 @@ private void updateClentLog (String clientLog, String remoteHost)
 	{
 		try 
 		{
+			String servletDir = rb.getString("requestparams.servletDir");
 			PrintStream queryOutFile = new PrintStream(new FileOutputStream(
-			"/jakarta-tomcat/webapps/examples/WEB-INF/lib/query.xml", false)); 
+			servletDir+"query.xml", false)); 
 
 			//print the query instructions in the xml document
 			queryOutFile.println("<?xml version=\"1.0\"?> \n"+       
