@@ -165,7 +165,7 @@
     <!-- Display the Plot Upload screen --> 
     <action path="/DisplayUploadPlotAction" forward="/forms/plot-submit.jsp">
       <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
-      <set-property property="minCertLevel" value="2" />
+      <set-property property="reqRoles" value="registered" />
     </action>
 
     <!-- Upload Plot Action -->
