@@ -16,7 +16,7 @@
 </HEAD>
 <BODY >@vegbank_header_html_normal@
 
-<h3>Data Currently in VegBank </h3>
+<h1>Data Currently in VegBank </h1>
 <div align="center">
 <table class="leftrightborders" cellpadding="2">
 <% String rowClass = "evenrow"; %>
@@ -70,7 +70,7 @@
 
  <vegbank:get select="place_summ" beanName="map" perPage="-1" pager="false"/>
  <logic:notEmpty name="BEANLIST">
-<h4>Geographical Distribution of Observations</h4>
+<h2>Geographical Distribution of Observations</h2>
 
    <table class="thinlines" cellpadding="2"> 
    
@@ -81,6 +81,10 @@
      </logic:iterate>
    </table>
  </logic:notEmpty> 
+<%@ include file="plot-map-northamerica.html" %>
+
+
+
 </div>
 
 @vegbank_footer_html_tworow@
