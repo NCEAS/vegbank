@@ -18,4 +18,4 @@ INSERT INTO referenceParty (givenName, surname) SELECT 'M.D.','Jennings' ;
 INSERT INTO referenceContributor (reference_ID, referenceParty_id, roleType) 
   SELECT (select referencE_ID from reference where accessionCode='VB.Rf.331.MIKEJENNINGSREF'),
   (select min(referenceParty_ID) from referenceParty where surname='Jennings' and givenName='M.D.'),'Author';
-,  
+  
