@@ -28,6 +28,196 @@ public class DataSourceImpl extends UnicastRemoteObject
      //source.getPlot("VOYA.03");
    }
 	
+	
+	
+	//#START EDITIONS
+
+		/**
+	 * method that retuns the start date of the project that corresponds
+	 * to the input plot
+	 */
+	public String getProjectStartDate(String plot)
+	{
+		try
+		{
+			return( "01-JUN-1999" );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+
+	/**
+	 * method that retuns the stop date of the project that corresponds
+	 * to the input plot
+	 */
+	public String getProjectStopDate(String plot)
+	{
+		try
+		{
+			return( "20-JUN-1999" );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	
+	
+	//retuns the input plot name
+	public String getAuthorPlotCode(String plotName)
+	{
+		try
+		{
+			return( plotName );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	public String getObservationCode(String plotName)
+	{
+		try
+		{
+			return( plotName );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	public String getSamplingMethod(String plotName)
+	{
+		try
+		{
+			return( plotName );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	public String getObservationStartDate(String plotName)
+	{
+		try
+		{
+			return( plotName );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	
+	public String getObservationDateAccuracy(String plotName)
+	{
+		try
+		{
+			return( plotName );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	public String getSoilDepth(String plotName)
+	{
+		try
+		{
+			return( plotName );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	public String getPercentRock(String plotName)
+	{
+		try
+		{
+			return( plotName );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	public String getPercentLitter(String plotName)
+	{
+		try
+		{
+			return( plotName );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	public String getPercentWater(String plotName)
+	{
+		try
+		{
+			return( plotName );
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+		return(null);
+	}
+	
+	public Vector getUniqueStrataNames(String plotName)
+	{
+		Vector v = new Vector();
+		return(v);
+	}
+	
+	
+	public Vector getPlantNames(String plotName)
+	{
+		Vector v = new Vector();
+		return(v);
+	}
+	
+	
+//#STOP EDDITIONS
+	
+
+	
+	
+	
 	// see the interface for method descriptions
 	public String getProjectDescription(String plotName)
 	{

@@ -117,4 +117,58 @@ public interface DataSourceServerInterface extends Remote
 	String getConfidentialityStatus(String plotName)
 	throws Exception;
 	
+	//#START EDITIONS
+	//retuns the input plot name
+	public String getAuthorPlotCode(String plotName)
+	throws Exception;
+	
+		/**
+	 * method that retuns the start date of the project that corresponds
+	 * to the input plot
+	 */
+	public String getProjectStartDate(String plot)
+	throws Exception;
+
+	/**
+	 * method that retuns the stop date of the project that corresponds
+	 * to the input plot
+	 */
+	public String getProjectStopDate(String plot)
+	throws Exception;
+		
+	public String getObservationCode(String plotName)
+	throws Exception;
+	
+	public String getSamplingMethod(String plotName)
+	throws Exception;
+	
+	public String getObservationStartDate(String plotName)
+	throws Exception;
+	
+	public String getObservationDateAccuracy(String plotName)
+	throws Exception;
+	
+	public String getSoilDepth(String plotName)
+	throws Exception;
+	
+	public String getPercentRock(String plotName)
+	throws Exception;
+	
+	public String getPercentLitter(String plotName)
+	throws Exception;
+	
+	public String getPercentWater(String plotName)
+	throws Exception;
+	
+	public Vector getUniqueStrataNames(String plotName)
+	throws Exception;
+	
+	public Vector getPlantNames(String plotName)
+	throws Exception;
+	
+	
+//#STOP EDDITIONS
+	
+
+	
 }
