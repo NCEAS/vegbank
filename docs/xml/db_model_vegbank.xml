@@ -12121,6 +12121,10 @@ conditions may change between resampling events.
         <formShow name="Detail">1050</formShow>
         <formShow name="csvvegbranch">337</formShow>
       </attForms>
+      <attFormsHTMLpre>@subst_lt@dt:format pattern="dd-MMM-yyyy"@subst_gt@
+  @subst_lt@dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS"@subst_gt@</attFormsHTMLpre>
+      <attFormsHTMLpost>  @subst_lt@/dt:parse@subst_gt@
+@subst_lt@/dt:format@subst_gt@</attFormsHTMLpost>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -12142,6 +12146,10 @@ conditions may change between resampling events.
         <formShow name="Detail">1053</formShow>
         <formShow name="csvvegbranch">338</formShow>
       </attForms>
+      <attFormsHTMLpre>@subst_lt@dt:format pattern="dd-MMM-yyyy"@subst_gt@
+  @subst_lt@dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS"@subst_gt@</attFormsHTMLpre>
+      <attFormsHTMLpost>  @subst_lt@/dt:parse@subst_gt@
+@subst_lt@/dt:format@subst_gt@</attFormsHTMLpost>
       <update>1.0.0</update>
     </attribute>
     <attribute>
