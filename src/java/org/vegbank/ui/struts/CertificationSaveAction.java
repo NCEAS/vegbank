@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-15 02:08:05 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-04-30 13:03:53 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,6 +59,7 @@ public class CertificationSaveAction extends VegbankAction {
 
 		try {
 			CertificationForm certForm = getCertForm(form, getUser(request.getSession()));
+			certForm.setCertificationstatus("requested");
 			
 			log.debug("CertSave: Saving...");
 			saveCertification(certForm, errors);
@@ -105,7 +106,7 @@ public class CertificationSaveAction extends VegbankAction {
 		tags.put("applicantName", form.getGivenName() + " " + form.getSurName());
 		tags.put("requestedRole", form.getRequestedCertName());
 
-		ServletUtility.sendEmailTemplate("certification-application.vm", 
+		ServletUtility.sendEmailTemplate("certification-received.vm", 
 				tags, from, to, cc, subject,true);
 	 }
 	 
@@ -136,7 +137,7 @@ public class CertificationSaveAction extends VegbankAction {
 
 		messageBody.append("Dear VegPanel Member:\n")
 			.append(" Please review the following certification application. \n")
-			.append(" http://vegbank.org/vegbank/ViewCertification.do?cert=")
+			.append(" http://vegbank.org/vegbank/ViewCertification.do?certId=")
 			.append(form.getCertId())
 			.append("\n\n")
 			
@@ -144,7 +145,7 @@ public class CertificationSaveAction extends VegbankAction {
 			.append(" Email:  "+form.getEmailAddress()+" \n")
 			.append(" Phone Number:  "+form.getPhoneNumber()+" \n\n")
 			.append(" Current Cert Level:  "+form.getCurrentCertLevelName()+" \n")
-			.append(" Requested Cert Level:  "+form.getRequestedCert()+" \n")
+			.append(" Requested Cert Level:  "+form.getRequestedCertName()+" \n")
 			.append(" Highest Degree:  "+form.getHighestDegree()+" \n");
 
 		// degreeYear
@@ -230,8 +231,8 @@ public class CertificationSaveAction extends VegbankAction {
 
 		String mailHost = "vegbank.org";
 		String from = "vegbank";
-		String to = "anderson@nceas.ucsb.edu";
-		//String to = "panel@vegbank.org";
+		//String to = "anderson@nceas.ucsb.edu";
+		String to = "panel@vegbank.org";
 		String cc = null;
 		String subject = "VegBank certification for " + form.getGivenName() + " " + form.getSurName();
 		String body = messageBody.toString();
@@ -286,13 +287,15 @@ public class CertificationSaveAction extends VegbankAction {
 		}
 		
 		// set current certification level
+		certForm.setCurrentCertLevel(user.getPermissiontype());
+
+/*
 		if (PermComparison.matchesOne("pro", user.getPermissiontype())) {
 			certForm.setCurrentCertLevel(PermComparison.getRoleConstant("pro"));
 		} else {
 			certForm.setCurrentCertLevel(PermComparison.getRoleConstant("cert"));
 		}
-
-		
+*/
 		return certForm;
 	}
 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-26 20:48:29 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-04-30 13:03:53 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,32 +65,39 @@ public class CertificationViewAction extends VegbankAction {
 
 
 		// get the certId from the form
-		CertificationForm certForm = (CertificationForm)form; 
-		long certId = certForm.getCertId();
-
-		if (certId == 0) {
-			// check the request next
-			log.debug("certId not in form; checking request...");
-			String strCertId = request.getParameter("certId");
-			if (Utility.isStringNullOrEmpty(strCertId)) {
-				log.debug("no given certId");
-				errors.add(Globals.ERROR_KEY, new ActionMessage(
-							"errors.required", "certId=usercertification_id"));
-				saveErrors(request, errors);
-				return mapping.findForward("failure");
-			} else {
-				certId = Long.parseLong(strCertId);
-			}
-		}
-
-		long usrId = 0;
 		UserDatabaseAccess uda = new UserDatabaseAccess(); 
+		CertificationForm adminCertForm = (CertificationForm)form; 
+		CertificationForm certForm = null;
 
-		// handle approval & declination
+
 		try {
-			log.debug("getting certId: " + certId);
-			certForm = uda.getCertificationApp(certId);
+			long certId = adminCertForm.getCertId();
+			log.debug("loading cert #" + certId);
 
+			certForm = uda.getCertificationApp(certId);
+			certForm.setCertificationstatus(
+					adminCertForm.getCertificationstatus());
+			certForm.setCertificationstatuscomments(
+					adminCertForm.getCertificationstatuscomments());
+
+			if (certId == 0) {
+				// check the request next
+				log.debug("certId not in form; checking request...");
+				String strCertId = request.getParameter("certId");
+				if (Utility.isStringNullOrEmpty(strCertId)) {
+					log.debug("no given certId");
+					errors.add(Globals.ERROR_KEY, new ActionMessage(
+								"errors.required", "certId=usercertification_id"));
+					saveErrors(request, errors);
+					return mapping.findForward("failure");
+				} else {
+					certId = Long.parseLong(strCertId);
+				}
+			}
+
+			long usrId = 0;
+
+			// handle approval & declination
 			// get action, if there is one
 			String cmd = getDispatchCommand(request);
 			if (Utility.isStringNullOrEmpty(cmd)) {
@@ -106,14 +113,7 @@ public class CertificationViewAction extends VegbankAction {
 
 				// set current certification level; use String for display ONLY
 				long userPerms = uda.getUserPermissionSum(usrId);
-
-				if (PermComparison.matchesOne("pro", userPerms)) {
-					certForm.setCurrentCertLevelName("professional");
-				} else if (PermComparison.matchesOne("certified", userPerms)) {
-					certForm.setCurrentCertLevelName("certified");
-				} else {
-					certForm.setCurrentCertLevelName("registered");
-				}
+				certForm.setCurrentCertLevel(userPerms);
 
 				log.debug("setting usr: " + usrId);
 				certForm.setUsrId(usrId);
@@ -157,18 +157,25 @@ public class CertificationViewAction extends VegbankAction {
 					uda.setUserPermissionSum(usrId, sum);
 					
 					// send email message to the applicant 
-					/*
 					notifyApplicant(certForm.getEmailAddress(), 
 							certForm.getGivenName() + " " + certForm.getSurName(),
 							certForm.getRequestedCertName(), comment);
-					*/
 
 					log.debug("updating status of #" + certId + " to " + newStatus);
+					// add and ActionMessage
 					ActionMessages messages = new ActionMessages();
-					messages.add("updated", new ActionMessage(
+					messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 								"messages.cert.updated", Long.toString(certId)));
-					saveMessages(request, messages);
 					
+					// add and ActionMessage
+					messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+								"messages.cert.approval-email-sent", certForm.getEmailAddress()));
+					saveMessages(request, messages);
+					///////////////////
+					// Messages are not working.
+					// Maybe because we're redirecting to the list
+					///////////////////
+
 				} else if (newStatus.equals("rejected")) {
 					// might want to handle this in a special way, some day
 					log.debug("Reject!");
@@ -203,14 +210,16 @@ public class CertificationViewAction extends VegbankAction {
 		tags.put("applicantName", applicantName);
 		tags.put("requestedRole", requestedRole);
 		if (!Utility.isStringNullOrEmpty(comment)) {
-			tags.put("comment", comment);
+			comment = "Thank you.";
 		}
+		tags.put("comment", comment);
 
 		String from = "panel@vegbank.org";
 		String to = emailAddress;
 		String cc = "";
-		String subject = "VegBank Certification Response";
+		String subject = "VegBank Certification APPROVED";
 
+		log.debug("Sending approval mail to " + to);
 		ServletUtility.sendEmailTemplate("admin/certification-approval.vm", 
 				tags, from, to, cc, subject, true);
 	}

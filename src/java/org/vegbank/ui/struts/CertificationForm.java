@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-26 20:48:29 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-04-30 13:03:53 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -202,21 +202,12 @@ public class CertificationForm extends ValidatorForm
 
 	/**
 	 * Get value of 'currentCertLevelName' property.
-	 * @return abbreviated name of role
+	 * @return name of role
 	 */
 	public String getCurrentCertLevelName() {
-		if (this.currentCertLevelName == null) {
-log.debug("perm comparing to " + this.currentCertLevel);
-
-			if (PermComparison.matchesOne("pro", this.currentCertLevel))
-				return "professional";
-			else if (PermComparison.matchesOne("cert", this.currentCertLevel))
-				return "certified";
-			else
-				return "other";
-		} else {
-			return this.currentCertLevelName;
-		}
+		this.currentCertLevelName = 
+			PermComparison.getRoleNamesCSVFromSum(this.currentCertLevel);
+		return this.currentCertLevelName;
 	}
 
 	/**
@@ -230,12 +221,15 @@ log.debug("perm comparing to " + this.currentCertLevel);
 	 * Get name based on 'requestedCert' property.
 	 */
 	public String getRequestedCertName() {
-		if (PermComparison.matchesOne("pro", this.requestedCert))
-			return "professional";
-		else if (PermComparison.matchesOne("cert", this.requestedCert))
-			return "certified";
-		else
-			return "other";
+		return PermComparison.getRoleNamesCSVFromSum(this.requestedCert);
+	}
+
+	/**
+	 * Set value of 'currentCertLevel' (long) by looking up String.
+	 */
+	public void setRequestedCertName(String requestedCertName) {
+		this.requestedCert = 
+			PermComparison.getRoleConstant(requestedCertName);
 	}
 
 	/**

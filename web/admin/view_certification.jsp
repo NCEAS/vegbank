@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: view_certification.jsp,v 1.5 2004-04-26 20:49:43 anderson Exp $ '
+  *   '$Id: view_certification.jsp,v 1.6 2004-04-30 13:02:57 anderson Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-04-26 20:49:43 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2004-04-30 13:02:57 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
@@ -44,27 +44,29 @@
 	<!-- main table -->
 	<table width="700" border="0" cellspacing="5" cellpadding="2">
 	<html:form method="post" action="ViewCertification.do">
-		<html:hidden property="usrId"/>
-		<html:hidden property="certId"/>
+		<html:hidden name="certBean" property="usrId"/>
+		<html:hidden name="certBean" property="certId"/>
 
     <tr> 
       <td colspan="2" class="vegbank_small">
 	    <br/>
         <b>Enter comments</b> (optional):
         <br/>
-        <html:textarea property="certificationstatuscomments" cols="60" rows="3"/>
+        <html:textarea name="certBean" property="certificationstatuscomments" cols="60" rows="3"/>
       </td>
     </tr>
     <tr> 
       <td colspan="3" class="vegbank_small"> 
 		<b>Choose a new status:</b>
-			<html:select property="certificationstatus">
+			<html:select name="certBean" property="certificationstatus">
 			  <option value="<bean:write name="certBean" property="certificationstatus"/>">
 			  	--<bean:write name="certBean" property="certificationstatus"/>--</option>
 			  <html:optionsCollection name="certstatuslistbean" property="allCertstatusesNames"/>
 			</html:select>
 		<!-- action is the language-specific button label -->
         <input type="submit" value="update status" name="action">  
+		&nbsp; &nbsp; &nbsp; &nbsp; 
+        <html:cancel accesskey="c" value="cancel"/>
 		<!-- cmd is an implementation field that represents the action -->
         <input type="hidden" value="updateStatus" name="cmd">  
 		<br/>
@@ -86,6 +88,7 @@
 			</tr>
 			<tr bgcolor="#FEFEFE">
 			  <td>
+			  	<p>
 				<bean:write name="certBean" property="givenName"/> 
 				<bean:write name="certBean" property="surName"/>
         		(<bean:write name="certBean" property="currentCertLevelName"/>)
@@ -97,7 +100,7 @@
 				<logic:notEqual name="certBean" property="phoneNumber" value="null">
 					<bean:write name="certBean" property="phoneNumber"/>
 				</logic:notEqual>
-				<br/>
+				</p>
 			  </td>
 			</tr>
 			</table>
@@ -288,7 +291,7 @@
 
 		<tr bgcolor="#FFFFFF"> 
 		  <td align="center"> 
-			<html:select name="certBean" property="expRegionA">
+			<html:select name="certBean" property="expRegionA" disabled="true">
 			  <option value="">--select a region--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
 			</html:select>
@@ -305,7 +308,7 @@
 		</tr>
 		<tr bgcolor="#EEEEEE"> 
 		  <td align="center">
-			<html:select name="certBean" property="expRegionB">
+			<html:select name="certBean" property="expRegionB" disabled="true">
 			  <option value="">--no other regions--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
 			</html:select>
@@ -322,7 +325,7 @@
 		</tr>
 		<tr bgcolor="#FFFFFF"> 
 		  <td align="center">
-			<html:select name="certBean" property="expRegionC">
+			<html:select name="certBean" property="expRegionC" disabled="true">
 			  <option value="">--no other regions--</option>
 			  <html:optionsCollection name="regionlistbean" property="allRegionsNames"/>
 			</html:select>

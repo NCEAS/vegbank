@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-15 02:08:05 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-04-30 13:03:53 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,6 +85,9 @@ public class CertificationLoadAction extends VegbankAction {
 		tmp = user.getEmail();
 		if (tmp != null)  certForm.setEmailAddress(tmp);
 
+		// set perms
+		certForm.setCurrentCertLevel(user.getPermissiontype());
+
 		if (certForm.getCurrentOrg() == null) {
 			if (user.getOrganizationname() == null) {
 				tmp = user.getOrganizationname();
@@ -93,18 +96,6 @@ public class CertificationLoadAction extends VegbankAction {
 				certForm.setCurrentOrg(user.getOrganizationname());
 			}
 		}
-
-		// set current certification level
-		// ONLY AS STRINGS for display
-		// but note that the Save action uses ints
-		if (PermComparison.matchesOne("pro", user.getPermissiontype())) {
-			certForm.setCurrentCertLevelName("professional");
-		} else if (PermComparison.matchesOne("certified", user.getPermissiontype())) {
-			certForm.setCurrentCertLevelName("certified");
-		} else {
-			certForm.setCurrentCertLevelName("registered");
-		}
-	
 		
 		// using <bean:write> requires this
 		request.setAttribute("reqAttribBean", certForm);

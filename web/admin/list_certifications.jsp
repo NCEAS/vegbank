@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: list_certifications.jsp,v 1.3 2004-04-26 20:49:43 anderson Exp $ '
+  *   '$Id: list_certifications.jsp,v 1.4 2004-04-30 13:02:57 anderson Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-04-26 20:49:43 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2004-04-30 13:02:57 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -33,9 +33,13 @@
 
         <h2 align="center" class="vegbank">Certification Administration</h2>
 
-		Updated: 
-		<br>
-		<html:messages id="updated"/>
+		<logic:messagesPresent message="true">
+			<ul>
+			<html:messages id="msg" message="true">
+				<li><bean:write name="msg"/></li>
+			</html:messages>
+			</ul>
+		</logic:messagesPresent>
 
         <p class="vegbank_normal">
 			Below is a list of all VegBank certification applications.
@@ -46,11 +50,15 @@
 	<table width="700" border="0" cellspacing="5" cellpadding="2">
 		<!--  display list containing applicant name, date, requested perm. Delim by status. -->
 
+	<bean:define id="sortbyId" value="usercertification_id"/>
+	<bean:define id="sortbyReq" value="requested_cert_level"/>
+	<bean:define id="sortbyStatus" value="certificationstatus"/>
+
     <tr> 
-      <th>Applicant</th>
-      <th>Requested Permission</th>
-      <th>Current Permissions</th>
-      <th>Status</th>
+      <th><html:link styleClass="headerLink" action="ListCertifications" paramId="sortby" paramName="sortbyId">Applicant</html:link></th>
+      <th>Permissions at Time of Submission</th>
+      <th><html:link styleClass="headerLink" action="ListCertifications" paramId="sortby" paramName="sortbyReq">Requested Permission</html:link></th>
+      <th><html:link styleClass="headerLink" action="ListCertifications" paramId="sortby" paramName="sortbyStatus">Status</html:link></th>
       <th><b>ACTION</b></th>
 	</tr>
 
@@ -60,7 +68,7 @@
 	<html:form method="get" action="ListCertifications.do">
 		<html:hidden name="certBean" property="certId"/>
     <tr> 
-		<td>
+		<td nowrap>
 			#<bean:write name="certBean" property="certId"/>: 
 			<bean:write name="certBean" property="surName"/>, 
 			<bean:write name="certBean" property="givenName"/>
@@ -70,11 +78,11 @@
 			</html:link>)
 		</td>
 
-		<td align="center"> <bean:write name="certBean" property="requestedCertName"/> </td>
+		<td align="center"><bean:write name="certBean" property="currentCertLevelName"/></td>
 
-		<td align="center"> <bean:write name="certBean" property="currentCertLevelName"/> </td>
+		<td align="center"><bean:write name="certBean" property="requestedCertName"/></td>
 
-		<td align="center"> <bean:write name="certBean" property="certificationstatus"/> </td>
+		<td align="center"><bean:write name="certBean" property="certificationstatus"/></td>
 		<td align="center" class="vegbank">
 			<html:link action="ViewCertification" paramId="certId" 
 						paramName="certBean" paramProperty="certId" title="view">View</html:link>

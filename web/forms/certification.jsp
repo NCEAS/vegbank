@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-04-15 02:56:29 $'
-  *  '$Revision: 1.10 $'
+  *      '$Date: 2004-04-30 13:02:57 $'
+  *  '$Revision: 1.11 $'
   *
   *
   -->
@@ -103,7 +103,7 @@
         <span class="vegbank_small">
 		Requested certification 
 		<br/>
-	    <html:select property="requestedCert" size="1">
+	    <html:select property="requestedCertName" size="1">
           <option value="certified">Certified User</option>
           <option value="professional">Professional User</option>
 	    </html:select>
