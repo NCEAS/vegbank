@@ -11,7 +11,13 @@
   * This build file will build and insert an xml document, containing plot data,
   * into a working version of the plots database
   * usage: ant [compile|jar|install|jdoc]
---> 
+
+  
+  * Novemeber 15, 2000 - added the function to compile the 
+  * new plotQuery module that takes as imput an xml file 
+  * containing "query attributes" which are used to 'build'
+  * a sql statement
+  --> 
 <project name="plotQuery" default="dist" basedir=".">
 	<target name="init">
 	<tstamp/>
@@ -59,10 +65,16 @@
           <copydir src="${plotLoader.dir}" 
                dest="${build}" 
                filtering="yes"
-               includes="dbConnect.java"
+               includes="dbConnect.java transformXML.java utility.java"
                excludes="**/CVS* "/> 
-        
-        
+
+<!-- copy the required xml related documentation-->	       
+	  <copydir src="${xmlFiles}" 
+               dest="${build}" 
+               filtering="yes"
+               includes="plotQuery.dtd querySpec.xsl examplePlotQuery.xml"
+               excludes="**/CVS* "/> 
+	       
         
         </target>	
 	
@@ -78,10 +90,19 @@
 	<mkdir dir="${dist}/lib" />
 	<deltree dir="${dist}" />
 	
-	<!-- run the plots data loader-->
+	<!-- run the original plot Query devise-->
 	<java classname="testPlotQuery" 
 	classpath="${cpath}"
 	fork="yes"
+	
+	/>
+	
+	
+	<java classname="dbQuery"
+	args="${build}/examplePlotQuery.xml ${build}/querySpec.xsl query"
+	classpath="${cpath}"
+	fork="yes"
+	
 	/>
 </target>		
 
