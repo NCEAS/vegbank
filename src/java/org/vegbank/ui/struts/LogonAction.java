@@ -26,8 +26,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-05-07 19:04:31 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-06-12 00:30:21 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -200,8 +200,10 @@ public class LogonAction extends VegbankAction
 		// TODO: This can be made more efficient, 
 		// make a singleton by subclassing webuser?
 		WebUser guestUser = new WebUser();
+		guestUser.setUserid(0);
 		guestUser.setPermissiontype(0);
-		guestUser.setEmail("guest@vegbank.org");
+		guestUser.setEmail(Constants.GUEST_USER_KEY);
+		guestUser.setUsername(Constants.GUEST_USER_KEY);
 		guestUser.setGivenname("Guest");
 		guestUser.setSurname("User");
 		guestUser.isGuest(true);

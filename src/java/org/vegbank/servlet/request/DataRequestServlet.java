@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-06-09 22:45:20 $'
- *  '$Revision: 1.26 $'
+ *  '$Date: 2004-06-12 00:30:20 $'
+ *  '$Revision: 1.27 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
+import org.vegbank.common.Constants;
 import org.vegbank.databaseAccess.dbAccess;
 
 import org.vegbank.xmlresource.transformXML;
@@ -84,8 +85,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: anderson $'
- *  '$Date: 2004-06-09 22:45:20 $'
- *  '$Revision: 1.26 $'
+ *  '$Date: 2004-06-12 00:30:20 $'
+ *  '$Revision: 1.27 $'
  * 
  */
 
@@ -180,8 +181,10 @@ public class DataRequestServlet extends HttpServlet
 		{
 			Long usrId = ServletUtility.getUsrIdFromSession(request);
 			String userName = null;
-			if (usrId != null && usrId.longValue() == 0) 
+			if (usrId == null || usrId.longValue() == 0) 
 			{
+				userName = Constants.GUEST_USER_KEY;
+			} else {
 				WebUser user = (new UserDatabaseAccess()).getUser(usrId);
 				userName = user.getUsername();
 			}
