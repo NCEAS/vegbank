@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-13 17:59:08 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-12-13 22:25:15 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,11 +66,11 @@ public class PlotValidator implements PlotValidationInterface
 		System.out.println("PlotValidator > isPlotValid() called for: " + plot );
 		
 		//do the logic here -- as a test just do the geology
-		String table = "plot";
-		String attribute = "geology";
+		String table = "observation";
+		String attribute = "representativeness";
 		
 		//get the constaining vocabulary
-		Vector constraints = constraint.getConstraints(plot, attribute);
+		Vector constraints = constraint.getConstraints(table, attribute);
 		//get the value from the data source 
 		String target = this.source.getRepresentativeness(plot);
 		
