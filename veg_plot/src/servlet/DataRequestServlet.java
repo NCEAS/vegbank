@@ -32,7 +32,8 @@ import java.net.URL;
  * resultType - type of results expected by the user may include summary, where
  * 	a summary of the plot is returned and full where all plot attributes 
  *	are returned 
- * requestDataType <br>
+ * requestDataType 
+ * resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  * @version Feb. 09 2001
  * @author John Harris
@@ -114,7 +115,7 @@ try {
  	resultType = (String)params.get("resultType");
  }
  
- //what type of data is being requested -- plot, plnat, community
+ //what type of data is being requested -- plot, plant, community
  if ( (String)params.get("requestDataType") != null )
  {
  	requestDataType = (String)params.get("requestDataType");
@@ -138,8 +139,9 @@ catch( Exception e ) {System.out.println("** failed in: DataRequestServlet.main 
  */
 try {
 
-//return to the browser a summary of the request being made of the servlet
- returnQueryElemenySummary (out, params, response);
+//return to the browser a summary of the request being made of the servlet this
+//method also adds some tags that are required many browsers
+returnQueryElemenySummary (out, params, response);
 
 //authenticate the client user - skip for now
 
@@ -155,6 +157,7 @@ try {
 //	System.out.println("*compond query: "+compoundQuery);
  }
 
+ //else is not a coumpund query
  else 
  {
 	handleSimpleQuery (params, out, response);
@@ -251,17 +254,26 @@ if (requestDataType.trim().equals("community")) {
  }
  
  
-//if multiple results returned then grab the summary viewer
+//if there are results returned to the servlet from the database in the form 
+//of a file returned then grab the summary viewer then let the user know
+
 if (queryOutputNum>=1) {
  	servletUtility l =new servletUtility();  
  	l.getViewOption(requestDataType);
  	out.println(l.outString);
 }
 
+
+
+
 else { 
 	out.println("<br> <b> Please try another query </b> <br>"); 
 	out.println("<a href = \"/examples/servlet/pageDirector?pageType=DataRequestServlet\">"
 		+"return to query page</a><b>&#183;</b>"); //put in rb
+
+
+
+
 
 }
 
@@ -405,6 +417,7 @@ private void returnQueryElemenySummary (PrintWriter out, Hashtable params,
                  HttpServletResponse response) {
 try {
 	
+//this utility class is to store reused html code
  servletUtility k =new servletUtility();  
  k.htmlStore();
  out.println(k.outString); 
@@ -425,6 +438,9 @@ try {
 
 //close the table
 out.println("</table>");
+//next line is for debuging
+out.println("---end of DataRequestServlet.returnQueryElemenySummary----<br></br>");
+
 
 }
 catch (Exception e) {System.out.println("failed in "

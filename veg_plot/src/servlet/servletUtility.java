@@ -86,15 +86,15 @@ ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 //compose a very simple html page to dispaly that the user query is being
 //handled by the servlet engine
 String mainPage="<html> \n"
-+"<body> \n"
+//+"<body> \n"
 +"<head> \n"
-+"<title> plotServe - Query Engine for the National Plots Database </title> \n"
++"	<title> plotServe - Query Engine for the National Plots Database </title> \n"
 +"</head>  \n"
-+"<body bgcolor=\"white\"> \n"
-+"<table border=\"0\" width=\"100%\"> \n"
-+"<tr bgcolor=\"#9999CC\"><td>&nbsp;<B><FONT FACE=\"arial\" COLOR=\"FFFFFF\" SIZE=\"-1\"> "
-+"plotServe - Query Engine for the National Plots Database "
-+"</FONT></B></td></tr> \n"
++" 	<body bgcolor=\"white\"> \n"
++" 	<table border=\"0\" width=\"100%\"> \n"
++" 	<tr bgcolor=\"#9999CC\"><td>&nbsp;<B><FONT FACE=\"arial\" COLOR=\"FFFFFF\" SIZE=\"-1\"> "
++" 	plotServe - Query Engine for the National Plots Database "
++" 	</FONT></B></td></tr> \n"
 +"</table> \n"
 +" \n"
 +"<br><i><small> \n"
@@ -110,9 +110,11 @@ String mainPage="<html> \n"
 +" "
 +"</FONT></B></td></tr> \n"
 +"</table> \n"
-+"<br><br> \n"
-+"</body> \n"
-+"</html> \n";
++"<br><br> \n";
+
+//don't close the html b/c more will be written by the servlet
+//+"</body> \n"
+//+"</html> \n";
 outString = mainPage;
 
 }
@@ -130,19 +132,21 @@ outString = mainPage;
  */
 public void getViewOption (String summaryViewType) {
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
-String response="<html> \n"
-+"<body> \n"
-+"<head> \n"
-+"<form action="
-+"viewData \n"  
-+"method=GET> \n"
-+"<input type=hidden name=resultType value=summary> \n"
-+"<input type=hidden name=summaryViewType value="+summaryViewType+"> \n"
-+"<input type=\"submit\" value=\"view data\" /> \n"
+StringBuffer responseBuf=null; //use this string buffer instead
+String response=
+" "
+//+"<html> \n"
+//+"<body> \n"
+//+"<head> \n"
++"<form action=\"http://beta.nceas.ucsb.edu:8080/examples/servlet/viewData\" method=\"GET\"> \n"
++"<input type=\"hidden\" name=\"resultType\" value=\"summary\" > \n"
++"<input type=\"hidden\" name=\"summaryViewType\" value=\""+summaryViewType+"\"> \n"
++"<input type=\"submit\" name=\"submitButton\" value=\"view data\" > \n"
 +"</form> \n"
-+"</body> \n"
+//+"</body> \n"
 +"</html> \n";
 outString=response;
+
 }
 
 
