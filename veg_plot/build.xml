@@ -5,9 +5,9 @@
   * Global build script for veg_plot. This simply allows running all the sub 
   * scripts from one place 
   *
-  *     '$Author: anderson $'
-  *     '$Date: 2003-10-28 04:38:20 $'
-  *     '$Revision: 1.40 $'
+  *     '$Author: farrell $'
+  *     '$Date: 2003-10-29 18:30:51 $'
+  *     '$Revision: 1.41 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -347,7 +347,7 @@
 			<property name="hostname" value="${hostname}"/>
 		</ant>
 
-		<echo>deploying veg_plot jars to vegtest</echo>
+		<echo>deploying veg_plot jars to ${webapp}</echo>
 		<echo>db connect: ${databaseConnectString}</echo>
 		<copy todir="${web.servlet.lib.dir}">
 			<fileset dir="${build.lib.dir}" includes="*jar"/>

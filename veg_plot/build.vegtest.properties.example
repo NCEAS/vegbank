@@ -1,4 +1,4 @@
-#rmiserver = 128.111.220.59
+rmiserver = false # ip address of rmiserver 
 # I am mounting my home dir on the rmiserver so it easy to make updates 
 # Great for development -- production probably not
 #rmiserver.home.dir = /home/farrell/muse/rmiserver/gyro
@@ -29,3 +29,7 @@ logFile = connectionPool.log
 
 # Vegbank Directories
 vegbank.home.dir=/usr/vegtest
+
+# XML Schema
+vegbankSchemaName=vegbank-data-ver1.0.1.xsd
+
