@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+
+<dataModel>	
+
+
+<title> Prototype Veg Plots Database Component Description: Stratum Type</title>
+<author>J. Harris </author>
+<institution>NCEAS </institution>
+<contributor> </contributor>
+<description>This table specifies the cover scale recognized by the plot data collectors.</description>
+<date></date>
+
+<entity>
+	<entityName>vegPlot.CoverMethod </entityName>
+	<entitySummary>This table links the cover scale recognized by the plot data collectors
+	to a cover scale specified in the coverIndicies table. </entitySummary>
+	<entityDescription> </entityDescription>
+
+        <attribute>
+                <attName>coverMethodId</attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>PK </attKey>
+		<attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Primary Key for the coverMethod table.</attDefinition>
+        </attribute>
+
+
+	<attribute> 
+		<attName>coverType</attName>
+		<attNulls>No </attNulls>	
+		<attType>NUMBER </attType>
+		<attKey>n/a </attKey>
+		<attReferences>n/a </attReferences>
+		<attNotes>n/a</attNotes>
+		<attDefinition>Cover scale type (examples may include: Braun-Blanquet scale, the Barkman et al., Franklin et al., Pfister-Arnold etc..</attDefinition>
+	</attribute>
+
+
+
+	<children> </children>
+</entity>
+</dataModel>	
