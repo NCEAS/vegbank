@@ -9,7 +9,6 @@ import java.sql.*;
  * either select, insert or update and issue the query to the database 
  *
  *
- * @version 11 Jan 2001
  * @author John Harris
  */
 
@@ -21,6 +20,13 @@ public class  issueStatement
 Connection conn=null;
 Statement query = null;
 ResultSet results = null;
+
+
+public String outValueString; 
+public String outReturnFields[] = new String[10000]; //array containg returned vals
+public int outReturnFieldsNum;  //number of lines returned
+public Vector returnedValues = new Vector(); //vector containg the same as above array
+
 
 
 /**
@@ -165,11 +171,10 @@ while (results.next()) {
 	for (int ii=0;ii<verticalStore.length; ii++) {
 			returnedRow=returnedRow+"|"+verticalStore[ii];
 	}
-		
-	//System.out.println("Printed from issueStatement.issueSelect: "+returnedRow);
-	//outReturnFields[outReturnFieldsNum]=resultLine.toString();
-	outReturnFields[outReturnFieldsNum]=returnedRow;
+	
+	outReturnFields[outReturnFieldsNum]=returnedRow; //add to the array
 	outReturnFieldsNum++;
+	returnedValues.addElement(returnedRow); //add to the vector
 	
 }  //end while
 
@@ -261,10 +266,9 @@ if (inputAction.equals("select")) {
 			returnedRow=returnedRow+"|"+verticalStore[ii];
 		}
 		
-		//System.out.println("Printed from issueStatement.issueSelect: "+returnedRow);
-		//outReturnFields[outReturnFieldsNum]=resultLine.toString();
-		outReturnFields[outReturnFieldsNum]=returnedRow;
+		outReturnFields[outReturnFieldsNum]=returnedRow; //add to array
 		outReturnFieldsNum++;
+		returnedValues.addElement(returnedRow); //add to the vector
 	
 	}  //end while
 
@@ -418,9 +422,7 @@ valueString =valueString+"?)";
 outValueString=valueString;
 }  //end method
 
-public String outValueString;
-public String outReturnFields[] = new String[10000];
-public int outReturnFieldsNum;
+
 
 
 }
