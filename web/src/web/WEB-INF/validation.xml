@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.9 2003-12-02 20:02:15 farrell Exp $
+    $Id: validation.xml,v 1.10 2003-12-05 22:49:35 farrell Exp $
 -->
 
 <form-validation>
@@ -90,14 +90,14 @@
         </form>
 
 
-	<form name="DisplayPlotForm">
+	<form name="DisplayEntityForm">
 	    <field property="resultType"
 		depends="required">
               <arg0   key="The type of result requested" resource="false"/>
             </field>
 	    <field property="accessionCode"
 		depends="required">
-              <arg0   key="The accessionCode of the observation" resource="false"/>
+              <arg0   key="The accessionCode of the entity" resource="false"/>
             </field>
 	</form>
 

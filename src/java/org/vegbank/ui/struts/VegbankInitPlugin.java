@@ -1,0 +1,71 @@
+/*
+ * Created on Nov 26, 2003
+ *
+ * '$RCSfile: VegbankInitPlugin.java,v $'
+ *	Authors: @author@
+ *	Release: @release@
+ *
+ *	'$Author: farrell $'
+ *	'$Date: 2003-12-05 22:49:35 $'
+ *	'$Revision: 1.1 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ */
+
+package org.vegbank.ui.struts;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
+import org.apache.struts.action.ActionServlet;
+import org.apache.struts.action.PlugIn;
+import org.apache.struts.config.ModuleConfig;
+import org.vegbank.common.Constants;
+import org.vegbank.common.model.utility.Countrylist;
+import org.vegbank.common.model.utility.Statelist;
+
+/**
+ * Set up beans in application scope for the vegbank webapp.
+ * 
+ * @author Gabriel
+ **/
+public class VegbankInitPlugin implements PlugIn
+{
+
+	/* (non-Javadoc)
+	 * @see org.apache.struts.action.PlugIn#destroy()
+	 */
+	public void destroy()
+	{
+		// Nothing to do yet.
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.struts.action.PlugIn#init(org.apache.struts.action.ActionServlet, org.apache.struts.config.ModuleConfig)
+	 */
+	public void init(ActionServlet servlet, ModuleConfig config)
+		throws ServletException
+	{
+		ServletContext sc = servlet.getServletContext();
+		
+		Statelist statelist = new Statelist();
+		Countrylist countrylist = new Countrylist();
+		
+		// Make the initialized beans available in application scope
+		sc.setAttribute(Constants.STATELISTBEAN_KEY, statelist);
+		sc.setAttribute(Constants.COUNTRYLISTBEAN_KEY, countrylist);
+	}
+
+}

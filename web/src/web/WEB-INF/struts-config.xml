@@ -49,7 +49,7 @@
 		<form-property name="plotIdList" type="java.lang.String"/>
     </form-bean>
 		
-    <form-bean  name="DisplayPlotForm"
+    <form-bean  name="DisplayEntityForm"
                 type="org.apache.struts.validator.DynaValidatorForm">
 		<form-property name="accessionCode" type="java.lang.String"/>
 		<form-property name="resultType" type="java.lang.String"/>
@@ -237,10 +237,10 @@
       	input="PlotQuery">
     </action>
 
-    <!-- Display a plot -->
-    <action path="/DisplayPlot"
-        type="org.vegbank.ui.struts.DisplayPlotAction"
-        name="DisplayPlotForm"
+    <!-- Display a Entity -->
+    <action path="/DisplayEntity"
+        type="org.vegbank.ui.struts.DisplayEntityAction"
+        name="DisplayEntityForm"
         scope="request"
         validate="true"
 	input="failure">
