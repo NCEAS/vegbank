@@ -56,7 +56,7 @@ public class AsciiDataLoader
 		{
 
 			//make the data file a vector
-			utility u = new utility();
+			Utility u = new Utility();
 			u.fileVectorizer(dataFile);
 			dataVector = u.outVector;
 

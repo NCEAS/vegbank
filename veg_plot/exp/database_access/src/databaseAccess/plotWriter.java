@@ -65,7 +65,7 @@ Statement query = null;
 ResultSet results = null;
 	
 //get the database parameters from the database.parameters file
-utility g2 =new utility(); 
+Utility g2 =new Utility(); 
 g2.getDatabaseParameters("database", "insert");
 
 		

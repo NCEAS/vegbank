@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:12:41 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2003-01-14 01:23:51 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -627,7 +627,7 @@ out.println("			</strata>        ");
 
 /*this is where to print out the list of different species found in the resultset
 * for now just print the unique ones*/
-utility m = new utility();
+Utility m = new Utility();
 m.getUniqueArray(speciesArray, speciesArrayNum);
 
 //print the unique species types

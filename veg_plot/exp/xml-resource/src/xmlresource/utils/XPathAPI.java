@@ -5,9 +5,9 @@
  *    Authors: @author@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2001-11-01 17:44:42 $'
- * '$Revision: 1.1 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2003-01-14 01:23:51 $'
+ * '$Revision: 1.2 $'
  *
  */
 
@@ -72,18 +72,16 @@
 //package vegclient.framework;
 package xmlresource.utils; 
 
-import org.xml.sax.SAXException;
-import org.w3c.dom.Node;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.apache.xalan.xpath.XPathSupport;
+import org.apache.xalan.xpath.XObject;
 import org.apache.xalan.xpath.XPath;
 import org.apache.xalan.xpath.XPathProcessorImpl;
-import org.apache.xalan.xpath.xml.XMLParserLiaisonDefault;
+import org.apache.xalan.xpath.XPathSupport;
 import org.apache.xalan.xpath.xml.PrefixResolverDefault;
-import org.apache.xalan.xpath.XObject;
-
-import xmlresource.utils.*;
+import org.apache.xalan.xpath.xml.XMLParserLiaisonDefault;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 /**
  * The methods in this class are convenience methods into the
  * low-level XPath API.  We would like to eventually move these

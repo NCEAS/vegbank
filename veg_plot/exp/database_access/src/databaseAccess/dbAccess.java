@@ -31,8 +31,8 @@ import PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-01-14 01:12:40 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2003-01-14 01:23:51 $'
+ * 	'$Revision: 1.5 $'
  */
 
 public class dbAccess {
@@ -156,7 +156,7 @@ public class dbAccess {
 			//the stringwriter containg all the transformed data
 			StringWriter transformedData = m.outTransformedData;
 			//pass to the utility class to convert the StringWriter to an array
-			utility u = new utility();
+			Utility u = new Utility();
 			u.convertStringWriter(transformedData);
 			String transformedString[] = u.outString;
 			int transformedStringNum = u.outStringNum;

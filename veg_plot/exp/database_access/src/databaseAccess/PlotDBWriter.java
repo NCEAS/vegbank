@@ -337,7 +337,7 @@ private void insertToDB (String dataType) {
 Connection conn=null; 
 	
 //get the database parameters from the database.parameters file
-utility g2 =new utility(); 
+Utility g2 =new Utility(); 
 g2.getDatabaseParameters("database", "insert");
 
 DbConnectionBroker myBroker;
