@@ -11698,7 +11698,6 @@ conditions may change between resampling events.
       <attNotes>Foreign key to parent plot</attNotes>
       <attDefinition>Link to the observation event to which this soil observation is associated.</attDefinition>
       <attForms>
-        <formShow name="Summary">1092</formShow>
         <formShow name="Detail">1093</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -12333,7 +12332,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>stemDiameter</attName>
-      <attLabel>Stem Diameter</attLabel>
+      <attLabel>DBH</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
@@ -12354,7 +12353,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>stemDiameterAccuracy</attName>
-      <attLabel>Stem Diameter Accuracy</attLabel>
+      <attLabel>DBH err</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
@@ -12371,11 +12370,12 @@ conditions may change between resampling events.
         <formShow name="Summary">1160</formShow>
         <formShow name="Detail">1161</formShow>
       </attForms>
+      <attFormsHTMLpre>±</attFormsHTMLpre>
       <update>1.0.0</update>
     </attribute>
     <attribute>
       <attName>stemHeight</attName>
-      <attLabel>Stem Height</attLabel>
+      <attLabel>Ht.</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
@@ -12396,7 +12396,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>stemHeightAccuracy</attName>
-      <attLabel>Stem Height Accuracy</attLabel>
+      <attLabel>Ht. Err</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
@@ -12413,11 +12413,12 @@ conditions may change between resampling events.
         <formShow name="Summary">1166</formShow>
         <formShow name="Detail">1167</formShow>
       </attForms>
+      <attFormsHTMLpre>±</attFormsHTMLpre>
       <update>1.0.0</update>
     </attribute>
     <attribute>
       <attName>stemCount</attName>
-      <attLabel>Stem Count</attLabel>
+      <attLabel>#</attLabel>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
@@ -13046,6 +13047,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign Key into the stratum table, if this record is limited to the importance of a taxon in one stratum. If null, all values in this record speak of the importance of the entire taxon across all strata.</attDefinition>
       <attForms>
+        <formShow name="SummaryNoTaxon">2</formShow>
         <formShow name="Summary">1299</formShow>
         <formShow name="SummaryOnlyStrata">1300</formShow>
       </attForms>
@@ -13067,6 +13069,7 @@ conditions may change between resampling events.
       <attUnits>%</attUnits>
       <attForms>
         <formShow name="SummaryNoStrata">1299</formShow>
+        <formShow name="SummaryNoTaxon">3</formShow>
         <formShow name="Summary">1300</formShow>
         <formShow name="SummaryOnlyStrata">1301</formShow>
       </attForms>
@@ -13092,6 +13095,7 @@ conditions may change between resampling events.
       <attUnits>m²/ha</attUnits>
       <attForms>
         <formShow name="Austere">1300</formShow>
+        <formShow name="SummaryNoTaxon">4</formShow>
         <formShow name="Summary">1301</formShow>
         <formShow name="Detail">1302</formShow>
       </attForms>
@@ -13113,6 +13117,7 @@ conditions may change between resampling events.
       <attUnits>g/m²</attUnits>
       <attForms>
         <formShow name="Austere">1300.5</formShow>
+        <formShow name="SummaryNoTaxon">5</formShow>
         <formShow name="Summary">1301.5</formShow>
         <formShow name="Detail">1302.5</formShow>
       </attForms>
@@ -13208,6 +13213,7 @@ conditions may change between resampling events.
       <attNotes>Foreign key into the plantConcept table.</attNotes>
       <attDefinition>Link to a taxon in the plantConcept table. The entry in the plantConcept table will in turn point to a reference and a name used in the reference, thereby defining the taxon concept. The name that should be applied to the plantConcept will be party specific and will be found in the plantUsage table. For other than legacy data, the first interpretation recorded for a taxon observation should be redundant with the information contained in taxonObservation.PLANTNAME_ID + PLANTREFERENCE_ID.</attDefinition>
       <attForms>
+        <formShow name="notblshort">1</formShow>
         <formShow name="Summary">1252</formShow>
         <formShow name="Detail">1253</formShow>
       </attForms>
@@ -13228,6 +13234,7 @@ conditions may change between resampling events.
       <attDefinition>The date that the interpretation was made.</attDefinition>
       <attForms>
         <formShow name="Austere">1254</formShow>
+        <formShow name="notblshort">2</formShow>
         <formShow name="Summary">1255</formShow>
         <formShow name="Detail">1256</formShow>
       </attForms>
@@ -13267,6 +13274,7 @@ conditions may change between resampling events.
       <attNotes>Foreign key into the party table.</attNotes>
       <attDefinition>Foreign key that identifies the party that made the interpretation, which could be the observation author.</attDefinition>
       <attForms>
+        <formShow name="notblshort">3</formShow>
         <formShow name="Summary">1259</formShow>
         <formShow name="Detail">1260</formShow>
       </attForms>
@@ -13337,6 +13345,7 @@ conditions may change between resampling events.
       <attDefinition>Categories for the interpretation (e.g.,  author, computer generated, simplified for comparative analysis, correction, finer resolution).</attDefinition>
       <attForms>
         <formShow name="Austere">1263</formShow>
+        <formShow name="notblshort">4</formShow>
         <formShow name="Summary">1264</formShow>
         <formShow name="Detail">1265</formShow>
       </attForms>
@@ -13377,6 +13386,7 @@ conditions may change between resampling events.
       <attDefinition>This interpretation corresponds to the original interpretation of the plot author, as best as can be determined.  There is no requirement that the authority match the authority of the author; only that the concepts are synonymous.</attDefinition>
       <attForms>
         <formShow name="Austere">1268</formShow>
+        <formShow name="notblshort">5</formShow>
         <formShow name="Summary">1269</formShow>
         <formShow name="Detail">1270</formShow>
       </attForms>
@@ -13398,6 +13408,7 @@ conditions may change between resampling events.
       <attDefinition>This interpretation is the most accurate and precise interpretation currently available.</attDefinition>
       <attForms>
         <formShow name="Austere">1271</formShow>
+        <formShow name="notblshort">6</formShow>
         <formShow name="Summary">1272</formShow>
         <formShow name="Detail">1273</formShow>
       </attForms>
@@ -13444,6 +13455,7 @@ conditions may change between resampling events.
       <attDefinition>Indicates the degree of fit with the plant concept being assigned. Values derive from Gopal, S., and Woodcock, C. (1994), Theory and methods for accuracy assessment of thematic maps using fuzzy sets. Photogrammetric Engineering and Remote Sensing 60(2):181-188.</attDefinition>
       <attForms>
         <formShow name="Austere">1272</formShow>
+        <formShow name="notblshort">7</formShow>
         <formShow name="Summary">1253</formShow>
         <formShow name="Detail">1274</formShow>
       </attForms>
@@ -13480,6 +13492,7 @@ conditions may change between resampling events.
       <attDefinition>Indicates the degree of confidence of the interpreter(s) in the interpretation made. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</attDefinition>
       <attForms>
         <formShow name="Austere">1273</formShow>
+        <formShow name="notblshort">8</formShow>
         <formShow name="Summary">1253.5</formShow>
         <formShow name="Detail">1275</formShow>
       </attForms>
@@ -13608,6 +13621,7 @@ conditions may change between resampling events.
       <attDefinition>The type of group formed for this taxonInterpretation_ID. </attDefinition>
       <attForms>
         <formShow name="Austere">1271.7</formShow>
+        <formShow name="notblshort">9</formShow>
         <formShow name="Summary">1272.7</formShow>
         <formShow name="Detail">1273.7</formShow>
       </attForms>
