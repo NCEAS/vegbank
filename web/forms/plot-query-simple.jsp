@@ -10,26 +10,26 @@
  * On button click, copy values to appropriate form.
  */
 function doPlantQuery() {
-	return validateName(document.plantform.plantname.value, 'plant');
+	return validateName(document.plantform.xwhereParams_plantname_0.value, 'plant');
 }
 function doCommQuery() {
-	return validateName(document.commform.wparam.value, 'community');
+	return validateName(document.commform.xwhereParams_commname_0.value, 'community');
 }
 function doPlotQuery() {
-	if (document.plantform.plantname.value != "") {
-		if (!validateName(document.plantform.plantname.value, 'plant')) {
+	if (document.plantform.xwhereParams_plantname_0.value != "") {
+		if (!validateName(document.plantform.xwhereParams_plantname_0.value, 'plant')) {
 			return false;
 		}
 	}
-	if (document.commform.wparam.value != "") {
-		if (!validateName(document.commform.wparam.value, 'community')) {
+	if (document.commform.xwhereParams_commname_0.value != "") {
+		if (!validateName(document.commform.xwhereParams_commname_0.value, 'community')) {
 			return false;
 		}
 	}
 	// set plantName
-	document.plotform.plantName.value = document.plantform.plantname.value;
+	document.plotform.plantName.value = document.plantform.xwhereParams_plantname_0.value;
 	// set commName
-	document.plotform.commName.value = document.commform.wparam.value;
+	document.plotform.commName.value = document.commform.xwhereParams_commname_0.value;
 	return true;
 }
 			
@@ -56,7 +56,8 @@ function validateName(value, label) {
 <p><span class="category">Three-in-one plot/plant/community search.</span></p>
 <table  bgcolor="#FFFFFF" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td></td><form name="plantform" action="/vegbank/PlantQuery.do" method="get">
+    <td></td><form name="plantform" action="@views_link@plantconcept_summary.jsp" method="get">
+    
     <td bgcolor="#CCCCCC"><img src="@image_server@uplt3.gif" /></td>
     <td bgcolor="#CCCCCC"></td>
     <td bgcolor="#CCCCCC"><img src="@image_server@uprt3.gif" /></td>
@@ -76,9 +77,16 @@ function validateName(value, label) {
     <td bgcolor="#66CC66"></td>
     <td bgcolor="#66CC66" class="label_small">Plant name<br/>
 	&nbsp; 
-	<input type=text name="plantname" size="30"/></td>
+	<input type="text" name="xwhereParams_plantname_0" size="30"/></td>
     <td bgcolor="#66CC66"></td>
     <td bgcolor="#99FF99">&nbsp; <img src="@image_server@rtarr.gif">
+              <input type="hidden" name="where" value="where_plantconcept_mpq" />
+			  <input type="hidden" name="xwhereParams_plantname_1" value="pu.plantname" />
+			  <input type="hidden" name="matchType" value="all" />
+			  <input type="hidden" name="xwhereKey_plantname" value="xwhere_match" />
+			  <input type="hidden" name="xwhereSearch_plantname" value="true" />
+			  <input type="hidden" name="xwhereMatchAny_plantname" value="false" />
+              <input type="hidden" name="xwhereGlue" value="AND" />
               <input type="submit" value="search for plants" onClick="javascript:return doPlantQuery()" name="btnPlant"/></td>
     <td bgcolor="#99FF99"></td></form>
   </tr>
@@ -112,10 +120,19 @@ function validateName(value, label) {
     <td bgcolor="#CCCC99"></td>
     <td bgcolor="#CCCC99" class="label_small">Community name<br/>
 	&nbsp; 
-	<input type=text name="wparam" size="30"/></td>
+	
+	<input type=text name="xwhereParams_commname_0" size="30"/></td>
     <td bgcolor="#CCCC99"></td>
     <td bgcolor="#FFFFCC">&nbsp; <img src="@image_server@rtarr.gif">
+                <input type="hidden" name="matchType" value="all" /> 
+                <input type="hidden" name="where" value="where_commconcept_mpq" />
+				<input type="hidden" name="xwhereParams_commname_1" value="cu.commname" />
+				<input type="hidden" name="xwhereKey_commname" value="xwhere_match" />
+				<input type="hidden" name="xwhereSearch_commname" value="true" />
+				<input type="hidden" name="xwhereMatchAny_commname" value="false" />
+				<input type="hidden" name="xwhereGlue" value="AND" />
                 <input type="submit" onClick="javascript:return doCommQuery()" value="search for communities" name="btnComm"></td>
+
     <td bgcolor="#FFFFCC">
 	
 </form></td>	
