@@ -234,16 +234,18 @@ for (int ii=0; ii<addressNum; ii++)
 
 //validate that the data is extensive and cohesive enough to load to the
 // database
-if (dataType.equals("entirePlot")) {
-	System.out.println("PlotDBWriter.insertPlot: validating entire plot");
-	validatePlotData("entirePlot");
+	if (dataType.equals("entirePlot")) 
+	{
+		System.out.println("PlotDBWriter.insertPlot: validating entire plot");
+		validatePlotData("entirePlot");
 	
-	//if the data is valid then upload to the database
-	if (dataValid) {
-		System.out.println(" ** valid plot"); 
-		insertToDB("entirePlot");
+		//if the data is valid then upload to the database
+		if (dataValid) 
+		{
+			System.out.println(" ** valid plot"); 
+			insertToDB("entirePlot");
+		}
 	}
-}
 
 else {System.out.println("PlotDBWriter.insertPlot: unrecognized dataType");}
 
@@ -396,6 +398,11 @@ for (int i=0; i<taxonNameElements.size(); i++) {
 	stratumType=(String)strataTypeElements.elementAt(i);
 	percentCover=(String)coverAmountElements.elementAt(i);
 	
+///	System.out.println("authorNameId: "+authorNameId);
+///	System.out.println("stratumType: "+stratumType);
+///	System.out.println("percentCover: "+percentCover);
+	
+	
 	//insert to the taxonObservation table
 	putTaxonObservation(conn);
 
@@ -428,8 +435,6 @@ myBroker.destroy();
 catch (IOException e5)  {System.out.println("connection pooling failed: "
 	+e5.getMessage());
 	System.exit(0);}
-
-
 
 }
 
@@ -715,44 +720,60 @@ catch (Exception e) {System.out.println("failed in PlotDBWriter.putStrata " +
 
 
 /**
- *  Method that takes as input the attributes from the taxonObservation tables 
- *  and inserts/updates the table with the input data
+ *  Method that takes as input the attributes from the 
+ *  taxonObservation tables and inserts/updates the 
+ * 	table with the input data
  *
  */
 
-private void putTaxonObservation (Connection conn) {
+private void putTaxonObservation (Connection conn) 
+ {
 
-try {
-//grab the next value in the strata table
-PlotDBWriter g =new PlotDBWriter();  
-g.getNextId("test", "taxonObservation", conn);
+ try 
+ {
+	 
+	 
+	 
+  //grab the next value in the strata table
+  PlotDBWriter g =new PlotDBWriter();  
+  g.getNextId("test", "taxonObservation", conn);
 				
-taxonObservationId=""+g.outNextId;  //grab the returned value
+  taxonObservationId=""+g.outNextId;  //grab the returned value
 	
-//pass the required arguements to the isssue SQl class
-String insertString="INSERT INTO TAXONOBSERVATION";
-String attributeString="TAXONOBSERVATION_ID, OBS_ID, AUTHORNAMEID, "
-	+"ORIGINALAUTHORITY";
-int inputValueNum=4;
-String inputValue[]=new String[4];	
-inputValue[0]=taxonObservationId;
-inputValue[1]=plotObservationId;
-inputValue[2]=authorNameId;
-inputValue[3]=originalAuthority;
+  //pass the required arguements to the isssue SQl class
+  String insertString="INSERT INTO TAXONOBSERVATION";
+  String attributeString="TAXONOBSERVATION_ID, OBS_ID, AUTHORNAMEID, "
+  	+"ORIGINALAUTHORITY";
+  int inputValueNum=4;
+  String inputValue[]=new String[4];	
+  inputValue[0]=taxonObservationId;
+  inputValue[1]=plotObservationId;
+  inputValue[2]=authorNameId;
+  inputValue[3]=originalAuthority;
 
-//get the valueString from the method
-issueStatement k = new issueStatement();
-k.getValueString(inputValueNum);	
-String valueString = k.outValueString;
-//issue the above statement
-issueStatement l = new issueStatement();
-l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
+  //get the valueString from the method
+  issueStatement k = new issueStatement();
+  k.getValueString(inputValueNum);	
+  String valueString = k.outValueString;
+	
+	System.out.println("LOADING TAXONOBSERVATION: ");
+	System.out.println("TAXONOBSERVATION_ID: "+taxonObservationId);
+	System.out.println("PLOTOBSERVATIONID: "+plotObservationId);
+	System.out.println("AUTHORNAMEID: "+authorNameId);
+	System.out.println("ORIGIONAL AUTHORITY: "+originalAuthority);	
+	System.out.println("\n");
+	
+	
+  //issue the above statement
+  issueStatement l = new issueStatement();
+  l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
 	inputValue, conn);	
-				
-
-}
-catch (Exception e) {System.out.println("failed in PlotDBWriter.putTaxonObservation "
-	+e.getMessage());}
+ }
+	catch (Exception e) 
+	{
+		System.out.println("failed in PlotDBWriter.putTaxonObservation "
+	+e.getMessage());
+	}
 }  //end method
 
 
@@ -761,36 +782,41 @@ catch (Exception e) {System.out.println("failed in PlotDBWriter.putTaxonObservat
  *  Method that takes as input the attributes from the strataComposition tables and 
  * inserts/updates the table with the input data
  */
-private void putStrataComposition (Connection conn) {
-try {
+private void putStrataComposition (Connection conn) 
+{
+	try 
+	{
 
-System.out.println("TOAST: "+strataCompositionId);
-//get the strataId value associated with this specific taxon
-getStrataComposition(plotObservationId, stratumType, conn);	
+	//System.out.println("This Taxon in strataComposition: "+strataCompositionId);
+	//get the strataId value associated with this specific taxon
+	getStrataComposition(plotObservationId, stratumType, conn);	
 	
-String insertString="INSERT INTO STRATACOMPOSITION";
-String attributeString="TAXONOBSERVATION_ID, STRATA_ID, "
+	String insertString="INSERT INTO STRATACOMPOSITION";
+	String attributeString="TAXONOBSERVATION_ID, STRATA_ID, "
 	+"CHEATSTRATUMTYPE, PERCENTCOVER";
-int inputValueNum=4;
-String inputValue[]=new String[4];	
-//inputValue[0]=strataCompositionId;
-inputValue[0]=taxonObservationId;
-inputValue[1]=strataId;
-inputValue[2]=stratumType;
-inputValue[3]=percentCover;
+	int inputValueNum=4;
+	String inputValue[]=new String[4];	
+	//inputValue[0]=strataCompositionId;
+	inputValue[0]=taxonObservationId;
+	inputValue[1]=strataId;
+	inputValue[2]=stratumType;
+	inputValue[3]=percentCover;
 
-//get the valueString from the method
-issueStatement k = new issueStatement();
-k.getValueString(inputValueNum);	
-String valueString = k.outValueString;
+	//get the valueString from the method
+	issueStatement k = new issueStatement();
+	k.getValueString(inputValueNum);	
+	String valueString = k.outValueString;
 
-issueStatement l = new issueStatement();
-l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
+	issueStatement l = new issueStatement();
+	l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
 	inputValue, conn);	
 
-}
-catch (Exception e) {System.out.println("failed in PlotDBWriter.putStrataComposition " + 
-	e.getMessage());}
+	}
+	catch (Exception e) 
+	{
+		System.out.println("failed in PlotDBWriter.putStrataComposition " + 
+		e.getMessage());
+	}
 }  //end method
 
 
@@ -894,37 +920,41 @@ catch (Exception e) {System.out.println("failed in PlotDBWriter.getNextId trying
  * @param strataType - the type of strata in which the taxon is found
  *
  */
-private void getStrataComposition (String plotObservationId, String stratumType, 
-	Connection pconn) {
-try {	
+	private void getStrataComposition (String plotObservationId, String stratumType, 
+		Connection pconn) 
+	{
+		try 
+		{	
 	
-//because the TNC data sometimes uses upercase and other times doesn't
-//make the query using uppercases
+		//because the TNC data sometimes uses upercase and other times doesn't
+		//make the query using uppercases
 
-//System.out.println("plotObservationId: "+plotObservationId+" stType: "+stratumType);
+		//System.out.println("plotObservationId: "+plotObservationId+" stType: "+stratumType);
 
-String action="select";
-String statement="SELECT STRATA_ID from STRATA where OBS_ID = "
-	+plotObservationId.toUpperCase()+" and stratumType like '%"
-	+stratumType.toUpperCase()+"%'";
+		String action="select";
+		String statement="SELECT STRATA_ID from STRATA where OBS_ID = "
+		+plotObservationId.toUpperCase()+" and stratumType like '%"
+		+stratumType.toUpperCase()+"%'";
 
-int returnFieldLength=1;
-String returnFields[]=new String[1];	
-returnFields[0]="STRATA_ID";	
+		int returnFieldLength=1;
+		String returnFields[]=new String[1];	
+		returnFields[0]="STRATA_ID";	
 
 
-issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength, pconn);	
+		issueStatement j = new issueStatement();
+		j.issueSelect(statement, action, returnFields, returnFieldLength, pconn);	
 
-//return the strataId
-strataId=j.outReturnFields[0].replace('|',' ').trim();
-//System.out.println("strataID "+strataId);
+		//return the strataId
+		strataId=j.outReturnFields[0].replace('|',' ').trim();
+		//System.out.println("strataID "+strataId);
 
-} //end try
-catch (Exception e) {System.out.println("failed in: "
-	+"PlotDBWriter.getStrataComposition " + e.getMessage());}
-
-		
+	}	 //end try
+	catch (Exception e) 
+	{
+		System.out.println("failed in: "
+		+"PlotDBWriter.getStrataComposition " 
+		+ e.getMessage());
+	}	
 }//end method
 
 
