@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-27 15:51:05 $'
- * '$Revision: 1.12 $'
+ *     '$Date: 2002-02-28 00:23:59 $'
+ * '$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -367,7 +367,7 @@ private int plantNameKey(String plantName)
 		{
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
-			System.exit(0);
+			//System.exit(0);
 		}
 		return(plantConceptId);
 	}
@@ -485,7 +485,7 @@ private int plantUsageKey(String plantName)
 	  {
 		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
 		 e.printStackTrace();
-		 System.exit(0);
+		 //System.exit(0);
 	  }
 	}
 
@@ -532,11 +532,10 @@ private int plantUsageKey(String plantName)
 			//to this method then try to load the plant
 			if(rank.equalsIgnoreCase(plantLevel) )
 			{
-				//see if we already loaded this plant
+				//see if we already loaded this plant from the hash
+				//table
 				if (! this.loadedPlantCodeHash.contains(plantCode) )
 				{
-					//System.out.println("USDAPlantsLoader > plant code not loaded: " + plantCode);
-			
 					//add the plant code to the cache of all the plants already 
 					//loaded so that we do not try to load again
 					this.loadedPlantCodeHash.put(plantCode, plantCode);
@@ -566,9 +565,6 @@ private int plantUsageKey(String plantName)
 						//codeNameId = loadPlantNameInstance(refId, plantCode, commonName, plantCode);
 						codeNameId = loadPlantNameInstance(refId, plantCode, "", dateEntered);
 					}
-					
-					
-
 					//if the plant concept does not exist create an entry 
 					// and create a status entry for that plant instance - if 
 					//it is not a synonomy b/c if there is a synonomy then the 
@@ -578,45 +574,76 @@ private int plantUsageKey(String plantName)
 							//update the concept 
 							conceptId = loadPlantConceptInstance(sciNameId, refId, concatenatedName, 
 							plantCode, rank );
-							
 							//update the status add the plant parent here and also
 							statusId = loadPlantStatusInstance(conceptId, plantConceptStatus, "30-JUN-96", 
 							"01-JAN-01", "PLANTS96", partyId, parentName);
-							
 							//first and always load the usage for the code no matter if it is standard or not
 							loadPlantUsageInstanceNew(plantCode, codeNameId, conceptId, "STANDARD", 
 							"30-JUN-96", "30-JUN-2001",  "CODE", partyId);
 					}
-			
-					
 					//chect to see that these plants are accepted or wait till the 
 					//last loading step
 					if ( synonymousName.equals("nullToken") )
 					{
-						//requst the concpt id or else all will be zeros
-						
-						//System.out.println("USDAPlantsLoader > loading usage instance plantNameId: " + nameId);
-						//System.out.println("USDAPlantsLoader > updating usage for: "+ concatenatedName);
-						//System.out.println("USDAPlantsLoader > plantNameStatus: "+ plantConceptStatus);
-						if ( sciNameId > 0 && commonNameId > 0)
+						//update the usage table with the scientific names and the 
+						//commun names notice that if the nameid is zero (meaning that the 
+						//name are not new names) then get the names and load
+						if ( sciNameId > 0 )
 						{
-							//loadPlantUsageInstance(concatenatedName, sciNameId, conceptId, 
-							//"standard", "30-JUN-1996", stopDate, reference);
 							loadPlantUsageInstanceNew(concatenatedName, sciNameId, conceptId, "STANDARD", 
 							"30-JUN-96", "30-JUN-2001",  "SCIENTIFICNAME", partyId);
-							
+						}
+						else
+						{
+							sciNameId  = this.getPlantNameId(concatenatedName);
+							loadPlantUsageInstanceNew(concatenatedName, sciNameId, conceptId, "STANDARD", 
+							"30-JUN-96", "30-JUN-2001",  "SCIENTIFICNAME", partyId);
+						}
+						//repeat this for the commonName
+						if ( commonNameId > 0)
+						{
 							loadPlantUsageInstanceNew(commonName, commonNameId, conceptId, "STANDARD", 
 							"30-JUN-96", "30-JUN-2001",  "COMMONNAME", partyId);
 						}
-			
 						else 
 						{
-							System.out.println("USDAPlantsLaoder > FAILURE LOADING THE USAGE INSTANCE FOR A PLANT");
-							System.out.println("USDAPlantsLaoder > CONCEPT IDENTIFIER: " + conceptId );
+							commonNameId = this.getPlantNameId(commonName);
+							loadPlantUsageInstanceNew(commonName, commonNameId, conceptId, "STANDARD", 
+							"30-JUN-96", "30-JUN-2001",  "COMMONNAME", partyId);
 						}
 					}
-					
-			
+					//else if not a standard and has a synonym
+					else
+					{
+						System.out.println("USDAPLantsLoader > loading non standard plant: " + concatenatedName);
+						//update the usage table with the scientific names and the 
+						//commun names notice that if the nameid is zero (meaning that the 
+						//name are not new names) then get the names and load
+						if ( sciNameId > 0 )
+						{
+							loadPlantUsageInstanceNew(concatenatedName, sciNameId, conceptId, "NONSTANDARD", 
+							"30-JUN-96", "30-JUN-1996",  "SCIENTIFICNAME", partyId, synonymousName);
+						}
+						else
+						{
+							sciNameId  = this.getPlantNameId(concatenatedName);
+							loadPlantUsageInstanceNew(concatenatedName, sciNameId, conceptId, "NONSTANDARD", 
+							"30-JUN-96", "30-JUN-1996",  "SCIENTIFICNAME", partyId, synonymousName);
+						}
+						//repeat this for the commonName
+						if ( commonNameId > 0)
+						{
+							loadPlantUsageInstanceNew(commonName, commonNameId, conceptId, "NONSTANDARD", 
+							"30-JUN-96", "30-JUN-1996",  "COMMONNAME", partyId, synonymousName);
+						}
+						else 
+						{
+							commonNameId = this.getPlantNameId(commonName);
+							loadPlantUsageInstanceNew(commonName, commonNameId, conceptId, "NONSTANDARD", 
+							"30-JUN-96", "30-JUN-1996",  "COMMONNAME", partyId, synonymousName);
+						}
+						
+					}
 				}
 				else
 				{
@@ -749,7 +776,7 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 	 {
 		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
 		 e.printStackTrace();
-		 System.exit(0);
+		 //System.exit(0);
 	 }
 	 return(partyId);
 	}
@@ -785,6 +812,40 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 		 }
 		 return(partyId);
 	 }
+	 
+	
+	/** 
+	 * method that returns the plantnameId based on a plant name
+	 *
+	 * @param plantName -- the name of the plant
+	 * @return plantnameId -- the plantnameId
+	 * 
+	 */
+		private int getPlantNameId(String plantName)
+	  {
+		 	int plantNameId = 0; 
+			try
+			{
+		 		StringBuffer sb = new StringBuffer();
+				sb.append("SELECT plantname_id from PLANTNAME where plantname"
+				+" like '"+plantName+"'");
+				Statement query = conn.createStatement();
+				ResultSet rs = query.executeQuery( sb.toString() );
+				int cnt = 0;
+				while ( rs.next() ) 
+				{
+					plantNameId = rs.getInt(1);
+					cnt++;
+				}
+			}
+			catch (Exception e)
+		 {
+			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(plantNameId);
+	 }
+	 
 	 
 	
 	/** 
@@ -1176,12 +1237,65 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 			System.out.println("plantNameId: " + name_id );
 			System.out.println("plantConceptId: " + concept_id );
 			e.printStackTrace();
-			System.exit(0);
+			//System.exit(0);
 		}
 		return(0);	
 	}
-
-
+	
+	/**
+	 * this is an overloaded method of the above method
+	 ** method that loads a new instance of a 
+ 	 * plant concept - name usage returns to 
+ 	 * the calling method the primary key for 
+ 	 * that concept - name usage
+	 * 
+	 * @param concatenatedName
+	 * @param name_id
+	 * @param concept_id
+	 * @param plantNameStatus -- standard or non standard
+	 * @param usageStart
+	 *  @param usageStop
+	 * @param classSystem -- common name or code or scientific name
+	 * @param acceptedSynonym -- if the plant name is no longer standard
+	 * 		then this refers to the synonym
+	 */
+	 private int loadPlantUsageInstanceNew(String concatenatedName, int name_id, 
+	int concept_id, String usage, String startDate, String stopDate, 
+	String classSystem, int partyId, String acceptedSynonym)
+	{
+		try
+		{
+			String s = "insert into PLANTUSAGE (plantName, plantName_id, plantConcept_id, "+
+				" plantNameStatus, usageStart, usageStop, classSystem, plantParty_id, "
+				+"acceptedSynonym) "
+				+" values(?,?,?,?,?,?,?,?,?) ";
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			//bind the values
+			pstmt.setString(1, concatenatedName);
+			pstmt.setInt(2, name_id);
+			pstmt.setInt(3, concept_id);
+			pstmt.setString(4, usage);
+			pstmt.setString(5, startDate);
+			pstmt.setString(6, stopDate);
+			pstmt.setString(7, classSystem);
+			pstmt.setInt(8, partyId);
+			pstmt.setString(9, acceptedSynonym);
+			boolean results = true;
+			results = pstmt.execute();
+			pstmt.close();	
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			System.out.println("plantNameId: " + name_id );
+			System.out.println("plantConceptId: " + concept_id );
+			e.printStackTrace();
+			//System.exit(0);
+		}
+		return(0);	
+	}
+		
+		
 
 	/**
  	* method that loads a new instance of a 
@@ -1229,7 +1343,7 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
 			+ "\n conceptId: " +  plantConceptId 
 			+"\n plantDescription: " + plantDescription);
 			e.printStackTrace();
-			System.exit(0);
+			//System.exit(0);
 		}
 		return(plantConceptId);
 	}
