@@ -5,8 +5,8 @@
  *             			National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:31:34 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2003-12-05 22:24:20 $'
+ *	'$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,10 +56,10 @@ public class DatabaseAccess
 		//	Get DBConnection
 		try
 		{
-			dbConn=DBConnectionPool.getInstance().getDBConnection("This is an empty string");
+			dbConn=DBConnectionPool.getInstance().getDBConnection("Select from database");
 			serialNumber=dbConn.getCheckOutSerialNumber();
 			
-			System.out.println("DatabaseAccess > Running query: " + inputStatement);
+			LogUtility.log("DatabaseAccess > Running query: " + inputStatement);
 			
 			Statement query = dbConn.createStatement();
 			results = query.executeQuery(inputStatement);

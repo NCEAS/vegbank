@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-13 22:38:16 $'
- *  '$Revision: 1.21 $'
+ *  '$Date: 2003-12-05 22:24:20 $'
+ *  '$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,8 +81,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-11-13 22:38:16 $'
- *  '$Revision: 1.21 $'
+ *  '$Date: 2003-12-05 22:24:20 $'
+ *  '$Revision: 1.22 $'
  * 
  */
 
@@ -162,109 +162,85 @@ public class DataRequestServlet extends HttpServlet
 		}
 
 
-	/** Handle "POST" method requests from HTTP clients */ 
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-		throws IOException, ServletException  
+	/** Handle "POST" method requests from HTTP clients */
+	public void doPost(
+		HttpServletRequest request,
+		HttpServletResponse response)
+		throws IOException, ServletException
+	{
+		LogUtility.log("DataRequestServlet > POST");
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		try
 		{
-			LogUtility.log("DataRequestServlet > POST");
-			response.setContentType("text/html");
-			PrintWriter out = response.getWriter();
-			try 
-			{	
-				WebUser user = 
-					(WebUser) request.getSession().getAttribute( Constants.USER_KEY );
-				String userName = user.getUsername();
-				
-				LogUtility.log("DataRequstServlet > current user: " +  userName   );
-				
-				//enumeration is needed for those
-				//cases where there are multiple values 
-				// for a given parameter
-				Enumeration enum =request.getParameterNames();
-				Hashtable params = new Hashtable();
-				params = su.parameterHash(request);
+			WebUser user =
+				(WebUser) request.getSession().getAttribute(Constants.USER_KEY);
+			String userName = user.getUsername();
+
+			LogUtility.log("DataRequstServlet > current user: " + userName);
+
+			String resultType = request.getParameter("resultType");
+			String requestDataType = request.getParameter("requestDataType");
+			String queryType = request.getParameter("queryType");
+			String accessionCode = request.getParameter("accessionCode");
+			String communityName = request.getParameter("communityName");
+			String communityLevel = request.getParameter("communityLevel");
 			
-				LogUtility.log("DataRequestServlet > IN PARAMETERS: "+params.toString() );
- 
- 				String resultType = null;
- 				//how much data is being requested -- summary set, full data set etc
- 				if ( (String)params.get("resultType") != null )
-		 		{
- 					resultType = (String)params.get("resultType");
- 				}
- 			//what type of data is being requested -- ie. plot, plantTaxon, vegCommunity
- 			String requestDataType = null;
- 			if ( (String)params.get("requestDataType") != null )
- 			{
- 				requestDataType = (String)params.get("requestDataType");
- 			}
- 			//get the variables privately held in the properties file
- 			String clientLog= (rb.getString("requestparams.clientLog"));
- 			String remoteHost=request.getRemoteHost();
-			LogUtility.log("DataRequstServlet > accessed by: "+remoteHost);
-			
+			//get the variables privately held in the properties file
+			String clientLog = (rb.getString("requestparams.clientLog"));
+			String remoteHost = request.getRemoteHost();
+			LogUtility.log("DataRequstServlet > accessed by: " + remoteHost);
+
 			// PLOT QUERY
-			if ( requestDataType.trim().equals("vegPlot") )
+			if (requestDataType.trim().equals("vegPlot"))
 			{
-				LogUtility.log("DataRequstServlet > determining query type: " + determineQueryType(params) );
-				if ( determineQueryType(params).equals("simple") )
+				LogUtility.log(
+					"DataRequstServlet > determining query type: " + queryType);
+				
+				if (queryType.equalsIgnoreCase("simple"))
 				{
-					handleSimpleQuery(params, out, response, resultType, userName);
+					handleSimpleQuery(
+						out,
+						response,
+						accessionCode,
+						requestDataType,
+						resultType,
+						userName,
+						request);
 				}
-				else if ( determineQueryType(params).equals("extended") )
+				else if (queryType.equalsIgnoreCase("extended"))
 				{
 					LogUtility.log("DataRequstServlet > Unknown query type ");
 				}
 			}
-			// PLANT TAXONOMY QUERY	 
-			else if ( requestDataType.trim().equals("plantTaxon") )	 
-			{	 
-					System.out.println( "DataRequstServlet > query on the plant taxonomy database \n");	 
-					handlePlantTaxonQuery( params, out, requestDataType, response, resultType, userName);	 
-			}	 
-			// VEG COMMUNITY QUERY	 
-			else if ( requestDataType.trim().equals("vegCommunity") )	 
-			{	 
-					System.out.println("DataRequstServlet > query on the vegetation community database \n"	 
-							+" not yet implemented ");	 
-					handleVegCommunityQuery( params, out, requestDataType, response, resultType, userName);	 
+			// VEG COMMUNITY QUERY
+			else if (requestDataType.trim().equals("vegCommunity"))
+			{
+				System.out.println(
+					"DataRequstServlet > query on the vegetation community database \n"
+						+ " not yet implemented ");
+				handleVegCommunityQuery(
+					out,
+					requestDataType,
+					response,
+					resultType,
+					userName,
+					communityName, 
+					communityLevel);
 			}
 			//UNKNOWN QUERY
-			else 
+			else
 			{
-				LogUtility.log("DataRequstServlet > unknown 'requestDataType' parameter "
-					+" must be: vegPlot or plantTaxon or vegCommunity ");
+				LogUtility.log(
+					"DataRequstServlet > unknown 'requestDataType' parameter "
+						+ " must be: vegPlot or plantTaxon or vegCommunity ");
 			}
 		}
-		catch( Exception e ) 
+		catch (Exception e)
 		{
 			LogUtility.log("DataRequestServlet", e);
 			e.printStackTrace();
 		}
-	}
-
-
-
-
-/**
- * method to determine the type of query that should be handled
- * by the servlet -- types include:
- * 1] simple -- the result sets are summarized and returned to client
- * 2] compound -- same as simple but that there are multiple query elements
- * 3] extended -- the user gets the option to view or reduce selection
- */
-	private String determineQueryType (Hashtable params) 
-	{
-		String queryType = null;
-		if ( params.containsKey("queryType") == true )
-		{
-			queryType = (String)params.get("queryType");
-		}
-		else
-		{
-			LogUtility.log("DataRequstServlet > cannot process query: no type specified");
-		}
-		return(queryType);
 	}
 
 	/**
@@ -282,7 +258,6 @@ public class DataRequestServlet extends HttpServlet
 		String requestDataType,
 		PrintWriter out,
 		HttpServletResponse response,
-		Hashtable params,
 		String resultType,
 		QueryResult qr)
 	{
@@ -333,20 +308,6 @@ public class DataRequestServlet extends HttpServlet
 					String results = this.getCommunityResults( qr.getXMLString() );
 					out.println(results);
 				}
-				// ELSE IF LOOKING FOR THE PLANT TAXA RESULTS SET
-				else
-					if (requestDataType.equalsIgnoreCase("plantTaxon"))
-					{
-						String results = this.getPlantTaxaResults(  qr.getXMLString() );
-						out.println(results);
-					}
-					else
-					{
-						//this method below has been deprecated and there should be a mthod
-						//written in this class to handle this
-						String result = this.getViewOption(requestDataType);
-						out.println(result);
-					}
 			}
 		}
 		catch (Exception e)
@@ -355,66 +316,6 @@ public class DataRequestServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * Method to store html code that can be accessed based on the requests
-	 * made by the user that will allow the user to access the summary viewer class
-	 * called 'viewData' and depending on the input parameter passed will show the 
-	 * user the summary of the selected plots, veg vommunities, or plant taxonmies.
-	 *
-	 * @param summaryViewType -- the type of summary to view, can include vegPlot, 
-	 *	vegCommunity, or plantTaxa
-	 * 
-	 *
-	 */
-	public String getViewOption(String summaryViewType) 
-	{
-		LogUtility.log("ServletUtility > accessing the getViewOptionMethod");
-		ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
-		StringBuffer responseBuf=null; //use this string buffer instead
-		String response=
-		" "
-		//+"<html> \n"
-		//+"<body> \n"
-		//+"<head> \n"
-		+"<form action=\"/vegbank/servlet/viewData\" method=\"GET\"> \n"
-		+"<input type=\"hidden\" name=\"resultType\" value=\"summary\" > \n"
-		+"<input type=\"hidden\" name=\"summaryViewType\" value=\""+summaryViewType+"\"> \n"
-		+"<input type=\"submit\" name=\"submitButton\" value=\"view data\" > \n"
-		+"</form> \n"
-		//+"</body> \n"
-		+"</html> \n";
-		return response;	
-	}
-	
-	/**
-	 * method that returns an html form that contains the plant taxa results
-	 * by transforming the result-sets xml document with the appropriate stylesheet
-	 * @see handleQueryResultsResponse -- the method that calls this one
-	 */
-	 private String getPlantTaxaResults(String xmlString)
-	 {
-		 StringBuffer sb = new StringBuffer();
-		try
-		{
-			String styleSheet = SERVLET_DIR + "showPlantTaxaSummary.xsl";
-
-			LogUtility.log(
-				"DataRequestServlet > stylesheet name: '" + styleSheet + "'");
-			LogUtility.log(
-				"DataRequestServlet > XML input: '" + xmlString + "'");
-
-			sb.append( transformer.getTransformedFromString(xmlString, styleSheet) );
-		}
-		catch (Exception e)
-		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
-		}
-		return( sb.toString() );
-	 }
-	
-	
 	
 	/**
 	 * method that returns an html form that contains the veg community results
@@ -615,36 +516,21 @@ public class DataRequestServlet extends HttpServlet
  * @param response - the response object linked to the client 
  */
 	private void handleSimpleQuery(
-		Hashtable params,
 		PrintWriter out,
 		HttpServletResponse response,
+		String accessionCode,
+		String requestDataType,
 		String resultType,
-		String userName)
+		String userName,
+		HttpServletRequest request)
 	{
 
 		QueryResult qr = new QueryResult();
 
 		try
 		{
-			// Get all possible parameters from the hash 	
-			String taxonName = (String) params.get("taxon");
-			String communityName = (String) params.get("community");
-			String taxonOperation = (String) params.get("taxonOperation");
-			String commOperation = (String) params.get("commOperation");
-			String minElevation = (String) params.get("minElevation");
-			String maxElevation = (String) params.get("maxElevation");
-			String state = (String) params.get("state");
-			String surfGeo = (String) params.get("surfGeo");
-			String multipleObs = (String) params.get("multipleObs");
-			String compoundQuery = (String) params.get("compoundQuery");
-			String plotId = (String) params.get("plotId");
-			String accessionCode = (String) params.get("vegbankAccessionNumber");
-			// may be 'full', 'summary', or 'identity'
-			//String resultType = (String)params.get("resultType");
-			String requestDataType = (String) params.get("requestDataType");
-			//the servlet directory
 
-	
+			LogUtility.log(accessionCode + " == " + resultType);
 			if ( accessionCode != null && ( resultType.equals("full") || resultType.equals("summary") || resultType.equals("rawXML") ) )
 			{
 				LogUtility.log("About to run plot query");
@@ -662,13 +548,12 @@ public class DataRequestServlet extends HttpServlet
 					requestDataType,
 					out,
 					response,
-					params,
 					resultType,
 					qr);
 			}
 			else
 			{
-				String results = this.getEmptyResultSetMessage(params);
+				String results = this.getEmptyResultSetMessage(request);
 				out.println(results);
 			}
 		}
@@ -686,209 +571,102 @@ public class DataRequestServlet extends HttpServlet
 	 * @return contents -- the contents of the empty result set page
 	 *
 	 */
-	 private String getEmptyResultSetMessage(Hashtable params)
-	 {
-		 StringBuffer sb = new StringBuffer();
-			StringWriter output = new StringWriter();
-		 try
-		 {
-			 // GET THE DATA REQUEST TYPE PARAMETER
-			 String requestDataType  = params.get("requestDataType").toString();
-			 Hashtable replaceHash = new Hashtable();
-			 sb.append("<b> Sorry, no results found for ");
-			 sb.append(requestDataType);
-			 sb.append(" query: <br> <br> </b>\n ");
-			 
-			 
-			 // GET THE REST OF THE PARAMETERS
-			 Enumeration e = params.keys();
-			 
-			 while (e.hasMoreElements()) 
-			 {
-				String name = (String)e.nextElement();
-				LogUtility.log("getting : " + name );
-				String value = (String)params.get(name);
-				sb.append(name+ ":   "+value+" <br>  \n");
-			 }
-			
-			 replaceHash.put("messages", sb.toString() );
-			 
-			 su.filterTokenFile(GENERICFORM, output , replaceHash);
-			 Thread.sleep(800);
-		 }
-		 catch(Exception e)
-		 {
+	private String getEmptyResultSetMessage(HttpServletRequest request)
+	{
+		StringBuffer sb = new StringBuffer();
+		StringWriter output = new StringWriter();
+		try
+		{
+			// GET THE DATA REQUEST TYPE PARAMETER
+			String requestDataType = request.getParameter("requestDataType");
+			Hashtable replaceHash = new Hashtable();
+			sb.append("<b> Sorry, no results found for ");
+			sb.append(requestDataType);
+			sb.append(" query: <br> <br> </b>\n ");
+
+			// GET THE REST OF THE PARAMETERS
+			Enumeration e = request.getParameterNames();
+
+			while (e.hasMoreElements())
+			{
+				String name = (String) e.nextElement();
+				LogUtility.log("getting : " + name);
+				String value = (String) request.getParameter(name);
+				sb.append(name + ":   " + value + " <br>  \n");
+			}
+
+			replaceHash.put("messages", sb.toString());
+
+			su.filterTokenFile(GENERICFORM, output, replaceHash);
+			Thread.sleep(800);
+		}
+		catch (Exception e)
+		{
 			LogUtility.log("DataRequestServlet", e);
 			e.printStackTrace();
-		 }
-		 return( output.toString() );
-	 }
+		}
+		return (output.toString());
+	}
 	 
-/**
- * This method takes the hashtable that stores the input parameters passed to
- * the servlet -- which in this case refer to the community that the user wants
- * data about and builds the query xml file that is passed then to the database
- * access module
- *
- * @param params -- all the params passed to the servlet that contains
- * attributes used for, in this care, query the community database
- * 
- */
-	private String composeCommunityQuery (Hashtable params, String resultType, String requestDataType) 
+	/**
+	 * This method takes the hashtable that stores the input parameters passed to
+	 * the servlet -- which in this case refer to the community that the user wants
+	 * data about and builds the query xml file that is passed then to the database
+	 * access module
+	 * 
+	 * @param params --
+	 *          all the params passed to the servlet that contains attributes used
+	 *          for, in this care, query the community database
+	 *  
+	 */
+	private String composeCommunityQuery(
+		String resultType,
+		String requestDataType,
+		String communityName, 
+		String communityLevel)
 	{
 		StringBuffer output = new StringBuffer();
- 		try 
+		try
 		{
-			
-			//grab the relevent query attributes out of the hash
-			String communityName = (String)params.get("communityName");
-			String communityLevel = (String)params.get("communityLevel");
+			LogUtility.log(
+				"DataRequstServlet > printing from DataRequestServlet.composeCommunityQuery: "
+					+ "communityName: "
+					+ communityName);
 
-			LogUtility.log("DataRequstServlet > printing from DataRequestServlet.composeCommunityQuery: "+
-			"communityName: "+communityName);
-
-			output.append("<?xml version=\"1.0\"?> \n"+       
- 				"<!DOCTYPE dbQuery> \n"+     
- 				"<dbQuery> \n"+
- 				"<query> \n"+
- 				"<queryElement>communityName</queryElement> \n"+
- 				"<elementString>"+communityName+"</elementString> \n"+
- 				"</query> \n"+
- 				"<query> \n"+
- 				"<queryElement>communityLevel</queryElement> \n"+
- 				"<elementString>"+communityLevel+"</elementString> \n"+
- 				"</query> \n"+
- 				"<requestDataType>"+requestDataType+"</requestDataType> \n"+
- 				"<resultType>"+resultType+"</resultType> \n"+
- 				"<outFile>"+SERVLET_DIR+"summary.xml</outFile> \n"+
- 				"</dbQuery>"
- 			);
- 		}
-		catch (Exception e) 
+			output.append(
+				"<?xml version=\"1.0\"?> \n"
+					+ "<!DOCTYPE dbQuery> \n"
+					+ "<dbQuery> \n"
+					+ "<query> \n"
+					+ "<queryElement>communityName</queryElement> \n"
+					+ "<elementString>"
+					+ communityName
+					+ "</elementString> \n"
+					+ "</query> \n"
+					+ "<query> \n"
+					+ "<queryElement>communityLevel</queryElement> \n"
+					+ "<elementString>"
+					+ communityLevel
+					+ "</elementString> \n"
+					+ "</query> \n"
+					+ "<requestDataType>"
+					+ requestDataType
+					+ "</requestDataType> \n"
+					+ "<resultType>"
+					+ resultType
+					+ "</resultType> \n"
+					+ "<outFile>"
+					+ SERVLET_DIR
+					+ "summary.xml</outFile> \n"
+					+ "</dbQuery>");
+		}
+		catch (Exception e)
 		{
 			LogUtility.log("DataRequestServlet", e);
 			e.printStackTrace();
 		}
 		return output.toString();
 	}
-
-
-
-
-
-/**
- * This method takes the hashtable that stores the input parameters passed to
- * the servlet -- which in this case refer to the community that the user wants
- * data about and builds the query xml file that is passed then to the database
- * access module
- *
- * @param params -- all the params passed to the servlet that contains
- * attributes used for, in this care, query the community database
- * 
- */
-	private String composePlantTaxonomyQuery (Hashtable params, String resultType, String requestDataType) 
-	{
-		StringBuffer query = new StringBuffer();
- 		try 
-		{
-			LogUtility.log("DataRequstServlet > printing from composePlantTaxonomyQuery: "+
-			" hash: " + params.toString() );
-			
-			//grab the relevent query attributes out of the hash
-			String taxonName = (String)params.get("taxonName");
-			
-			// Special handling here
-			String taxonNameType = (String)params.get("taxonNameType");
-			String taxonLevel = (String)params.get("taxonLevel");
-			
-			// Check for nulls .... Query does't work with nulls for these values 
-			//	because the null gets converted into a string bellow and the query
-			// uses this "null" for its search 
-			//	FIXME: do this in a better way ... hack
-			if (taxonNameType == null)
-			{
-				taxonNameType = "";
-			}
-			if (taxonLevel == null )
-			{
-				taxonLevel = "";
-			}
-			
-			String party = (String)params.get("party");
-			String startDate = (String)params.get("startDate");
-			String stopDate = (String)params.get("stopDate");
-			String targetDate = (String)params.get("targetDate");
-	
-			
-			LogUtility.log(
-				"DataRequstServlet > printing composePlantTaxonomyQuery: "+
-				"taxonName: "+taxonName +
-				" taxonNameType: " + taxonNameType +
-				" taxonLevel: " + taxonLevel
-			);
-			
-			
-			
-			query.append("<?xml version=\"1.0\"?> \n");       
-			query.append(	"<!DOCTYPE dbQuery> \n");
-			query.append(	"	<dbQuery> \n");
-			query.append(	"		<query> \n");
-			query.append(	"			<queryElement>taxonName</queryElement> \n");
-			query.append(	"			<elementString>"+taxonName+"</elementString> \n");
-			query.append(	"		</query> \n");
-			query.append(	"		<query> \n");
-			query.append(	"			<queryElement>taxonNameType</queryElement> \n");
-			query.append(	"			<elementString>"+taxonNameType+"</elementString> \n");
-			query.append(	"		</query> \n");
-			query.append(	"		<query> \n");
-			query.append(	"			<queryElement>taxonLevel</queryElement> \n");
-			query.append(	"			<elementString>"+taxonLevel+"</elementString> \n");
-			query.append(	"		</query> \n");
-			query.append(	"		<query> \n");
-			query.append(	"			<queryElement>party</queryElement> \n");
-			query.append(	"			<elementString>"+party+"</elementString> \n");
-			query.append(	"		</query> \n");
-
-			
-			// if the target date was passed instead of the start and stop compose a 
-			// slightly different query 
-			if ( targetDate != null )
-			{
-				query.append(	"		<query> \n");
-				query.append(	"			<queryElement>targetDate</queryElement> \n");
-				query.append(	"			<elementString>"+targetDate+"</elementString> \n");
-				query.append(	"		</query> \n");
-				
-
-			}
-			else
-			{
-				//print the query instructions in the xml document
-				query.append(	"		<query> \n");
-				query.append(	"			<queryElement>startDate</queryElement> \n");
-				query.append(	"			<elementString>"+startDate+"</elementString> \n");
-				query.append(	"		</query> \n");
-				query.append(	"		<query> \n");
-				query.append(	"			<queryElement>stopDate</queryElement> \n");
-				query.append(	"			<elementString>"+stopDate+"</elementString> \n");
-				query.append(	"		</query> \n");				
-			}
-			
-			query.append(	"		<requestDataType>"+requestDataType+"</requestDataType> \n");
-			query.append(	"		<resultType>"+resultType+"</resultType> \n");
-			query.append(	"		<outFile>"+SERVLET_DIR+"summary.xml</outFile> \n");
-			query.append(	"</dbQuery>");
- 		}
-		catch (Exception e) 
-		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
-		}
-		return query.toString();
-	}
-
-
-
 
 /**
  * logs the use of this servlet, the date and the remote host of the client in 
@@ -1187,56 +965,6 @@ private void updateClientLog (String clientLog, String remoteHost)
 	
 	/**	 
 	 * method to handle queries that are meant to be issued against 	 
-	 * the plantTaxonomy database	 
-	 *	 
-	 * @param params -- the prameters that are passed to the method	 
-	 * @param out -- the printwriter back to the client	 
-	 * @param requestDataType -- the data type requested by the client	 
-	 *          used to check that the query was diercted to the correct method	 
-	 *                {plantTaxon}	 
-	 * @param response - the response object linked to the client 	 
-	 * 	 
-	 */	 
-	private void handlePlantTaxonQuery(	 
-			Hashtable params, 	 
-			PrintWriter out, 	 
-			String requestDataType, 	 
-			HttpServletResponse response,	 
-			String resultType,	 
-			String userName)	 
-	{	 
-			try	 
-			{	 
-					//get the parameters needed for retuning the results	  
-					if (requestDataType.trim().equals("plantTaxon")) 	 
-					{  	 
-					//        out.println("<br>DataRequestServlet.handleSimpleQuery - requesting "	 
-					//        + "plant taxonomy information - not requesting plot info");	 
-							String query = composePlantTaxonomyQuery(params, resultType, requestDataType);	 
-							QueryResult qr = issueQuery("simplePlantTaxonomyQuery", userName, query);	 
-							//out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");	 
-							//use the method that handles the response        	 
-							if (qr.getResultsTotal() >=1) 	 
-							{	 
-									handleQueryResultsResponse(	  
-											requestDataType,	 
-											out,	 
-											response,	 
-											params,	 
-											resultType,	 
-											qr);	 
-							}	 
-					}	 
-			}	 
-			catch( Exception e ) 	 
-			{	 
-					System.out.println("DataRequestServlet Exception: " + e.getMessage());	 
-					e.printStackTrace();	 
-			}	 
-	}
-	
-	/**	 
-	 * method to handle queries that are meant to be issued against 	 
 	 * the vegetation community database	 
 	 *	 
 	 *        @param params -- the prameters that are passed to the method	 
@@ -1247,12 +975,13 @@ private void updateClientLog (String clientLog, String remoteHost)
 	 *         @param response - the response object linked to the client 	 
 	 */	 
 	private void handleVegCommunityQuery(
-		Hashtable params,
 		PrintWriter out,
 		String requestDataType,
 		HttpServletResponse response,
 		String resultType,
-		String userName)
+		String userName,
+		String communityName, 
+		String communityLevel)
 	{
 		try
 		{
@@ -1263,7 +992,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 					"DataRequestServlet > DataRequestServlet.handleSimpleQuery - requesting "
 						+ "community information - not requesting plot info");
 				String query =
-					composeCommunityQuery(params, resultType, requestDataType);
+					composeCommunityQuery(resultType, requestDataType, communityName, communityLevel);
 				QueryResult qr =
 					issueQuery(
 						"simpleCommunityQuery",
@@ -1283,7 +1012,6 @@ private void updateClientLog (String clientLog, String remoteHost)
 						requestDataType,
 						out,
 						response,
-						params,
 						resultType,
 						qr);
 				}

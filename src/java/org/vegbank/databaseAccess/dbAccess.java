@@ -33,8 +33,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-11-05 20:48:59 $'
- *  '$Revision: 1.10 $'
+ *  '$Date: 2003-12-05 22:24:20 $'
+ *  '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -280,17 +280,6 @@ public class dbAccess
 			sqlMapper w = new sqlMapper();
 			xmlResult =
 				w.developSimpleCommunityQuery(
-					transformedString,
-					transformedStringNum);
-			//grab the results from the sqlMapper class	 
-			queryOutput = w.queryOutput;
-			queryOutputNum = w.queryOutputNum;
-		}
-		else if (action.equals("simplePlantTaxonomyQuery"))
-		{
-			sqlMapper w = new sqlMapper();
-			xmlResult =
-				w.developSimplePlantTaxonomyQuery(
 					transformedString,
 					transformedStringNum);
 			//grab the results from the sqlMapper class	 
