@@ -112,7 +112,7 @@ Start date: <span class="item"> <xsl:value-of select="name/startDate"/> </span>
 <td vAlign="top" align="left" width="32%" bgcolor="{$evenRowColor}"  height="106"> 
 <p><b><font face="Arial, Helvetica, sans-serif" size="-1">
 Scientific: <span class="item"><xsl:value-of select="name/scientificName"/> </span>  <br></br>
-Scientific + authors: <span class="item"><xsl:value-of select="name/plantNameAlias"/> </span> <br> </br>
+Scientific + authors: <span class="item"><xsl:value-of select="name/scientificNameWithAuthors"/> </span> <br> </br>
 Common: <span class="item"> <xsl:value-of select="name/commonName"/> </span>  <br> </br>
 Code: <span class="item"> <xsl:value-of select="name/plantCode"/> </span>  <br> </br>
 Parent: <span class="item"> <xsl:value-of select="name/parentName"/> </span> </font></b><b>
@@ -153,7 +153,7 @@ Start date: <span class="item"> <xsl:value-of select="name/startDate"/> </span>
 <td vAlign="top" align="left" width="32%" bgcolor="{$oddRowColor}"  height="106"> 
 <p><b><font face="Arial, Helvetica, sans-serif" size="-1">
 Scientific: <span class="item"><xsl:value-of select="name/scientificName"/> </span>  <br></br>
-Scientific + authors: <span class="item"><xsl:value-of select="name/plantNameAlias"/> </span> <br> </br>
+Scientific + authors: <span class="item"><xsl:value-of select="name/scientificNameWithAuthors"/> </span> <br> </br>
 Common: <span class="item"> <xsl:value-of select="name/commonName"/> </span>  <br> </br>
 Code: <span class="item"> <xsl:value-of select="name/plantCode"/> </span>  <br> </br>
 Parent: <span class="item"> <xsl:value-of select="name/parentName"/> </span> </font></b><b>

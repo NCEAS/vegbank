@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-02-21 18:13:32 $'
-* '$Revision: 1.33 $'
+* '$Date: 2003-02-24 19:54:17 $'
+* '$Revision: 1.34 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -193,11 +193,9 @@
 	* SERVLETS IN THE APPROPRIATE LOCATION
 -->
 <target name="forms" depends="hdrftr">
-	<copydir src="${forms}"
-		dest="${forms_server}"
-		filtering="yes"
-		includes="
-			nested-plot-query.html
+	<copy todir="${forms_server}" filtering="yes">
+    <fileset dir="${forms}"
+      includes="nested-plot-query.html
 			resultset-download.html
 			plot-query.html
 			plant-query.html
@@ -229,8 +227,9 @@
 			submit-plantstatususage.html
 			submit-plantcorrelation.html
 			submit-plantsubmittal-receipt.html"
-		excludes="**/CVS* "
-	/>
+		  excludes="**/CVS* "
+	  />
+  </copy>
 
   <copy todir="${forms_server}" filtering="yes">
     <fileset dir="${forms}">

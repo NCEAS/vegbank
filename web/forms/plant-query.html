@@ -7,9 +7,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2003-02-01 18:21:49 $'
-  *  '$Revision: 1.16 $'
+  *    '$Author: farrell $'
+  *      '$Date: 2003-02-24 19:54:18 $'
+  *  '$Revision: 1.17 $'
   *
   *
   -->
@@ -98,17 +98,16 @@
   </tr>
   <!-- TAXON TYPE -->
   <tr> 
-        <td width="156" align=left valign=top> <b>Taxon type:</b> </td>
-        <td align=left valign=top width="556"> <font face="Helvetica,Arial,Verdana" color=000000> 
-          <input type = "radio" name="taxonNameType" value = "%" checked >
-      Any <br>
-      <input type = "radio" name="taxonNameType" value = "scientific Name">
-      Scientific name<br>
-      <input type = "radio" name="taxonNameType" value = "common Name">
-      Common name<br>
-      <input type = "radio" name="taxonNameType" value = "Code">
-      Code <br>
-      </font> </td>
+        <td width="156" align=left valign=top> 
+          <b>Taxon type:</b> </td>
+          <td align=left valign=top width="556"> 
+            <font face="Helvetica,Arial,Verdana" color=000000> 
+              <input type="radio" name="taxonNameType" value="" checked />Any<br/>
+              <input type="radio" name="taxonNameType" value="Scientific Name"/>Scientific name<br/>
+              <input type="radio" name="taxonNameType" value="Common Name">Common name<br/>
+              <input type="radio" name="taxonNameType" value="Code"/>Code <br/>
+            </font> 
+          </td>
   </tr>
   <!-- HORIZONTAL LINE -->
   <tr> 
@@ -119,7 +118,7 @@
   <tr> 
         <td width="156" align=left valign=top> <b>Taxon level:</b> </td>
         <td align=left valign=top width="556"> <font face="Helvetica,Arial,Verdana" color=000000> 
-          <input type = "radio" checked name="taxonLevel" value = "%">
+          <input type = "radio" checked name="taxonLevel" value="">
       Any <br>
       <input type = "radio" name="taxonLevel" value = "family">
       Family<br>
@@ -174,7 +173,7 @@
         <td width="156" align=left valign=top height="54"> <b>Party:</b> </td>
         <td align=left valign=top height="54" width="556"> <font face="Helvetica,Arial,Verdana" color=000000> 
           <select name="party" size="1" value="" onchange="setParty(this);">
-        <option value="%">All</option>
+        <option value="">All</option>
         <option value="usda">USDA</option>
       </select>
       </font> </td>
