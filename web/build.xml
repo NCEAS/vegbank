@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2004-02-29 22:59:52 $'
-* '$Revision: 1.88 $'
+* '$Author: anderson $'
+* '$Date: 2004-03-01 21:46:34 $'
+* '$Revision: 1.89 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -43,6 +43,7 @@
 		makes the first part of the URI. -->
     <property name="web.context_uri" value="vegbank"/>
     <property name="forms" value="./forms"/>
+    <property name="admin_src" value="./admin"/>
     <property name="general_src" value="./general"/>
     <property name="design_src" value="./design"/>
     <property name="dictionary_src" value="./dbdictionary"/>
@@ -73,6 +74,7 @@
     <!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
     <property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
+    <property name="admin_server" value="${tomcat.home.dir}/webapps/${webapp}/admin"/>
     <property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
     <property name="general_server" value="${tomcat.home.dir}/webapps/${webapp}/general/"/>
     <property name="design_server" value="${tomcat.home.dir}/webapps/${webapp}/design/"/>
@@ -101,6 +103,7 @@
     <filter token="uploaddata_page" value="/${web.context_uri}/forms/uploadFile.html"/>
     <filter token="general_link" value="/${web.context_uri}/general/"/>
     <filter token="forms_url" value="/${web.context_uri}/forms/"/>
+    <filter token="admin_url" value="/${web.context_uri}/admin/"/>
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="/${web.context_uri}/forms/"/>
     <filter token="dbdictionary_link" value="/${web.context_uri}/dbdictionary/"/>
@@ -178,9 +181,17 @@
     </copy>
   </target>
   <!--
+	* TARGET TO BUILD THE ADMIN PAGES AND DIST
+	-->
+  <target name="admin" depends="news" description="=&gt; dist the admin pages to server">
+    <copy overwrite="true" todir="${admin_server}" filtering="yes">
+      <fileset dir="${admin_src}"/>
+    </copy>
+  </target>
+  <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
--->
+	-->
   <target name="news" depends="vbsummary" description="=&gt; dist the news to server">
     <copy overwrite="true" todir="${news_server}" filtering="yes">
       <fileset dir="${news_src}"/>
@@ -189,7 +200,7 @@
   <!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
--->
+	-->
   <target name="panel" depends="robot" description="=&gt; dist the panel pages to server">
     <copy overwrite="true" todir="${panel_server}" filtering="yes">
       <fileset dir="${panel_src}">
@@ -474,7 +485,7 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="deploy" depends="news" description="=&gt; All files that dynamic code depends on">
+  <target name="deploy" depends="admin" description="=&gt; All files that dynamic code depends on">
     <!-- Deployment uses a dependency chain:
 		init
 		tokenfiles
