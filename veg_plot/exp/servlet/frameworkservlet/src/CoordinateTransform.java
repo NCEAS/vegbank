@@ -1,14 +1,15 @@
 package servlet.plugin.spatial;
 
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
+import java.sql.*;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+import java.math.*;
+import java.net.URL;
+import java.util.Date;
+
+import servlet.framework.ServletPluginInterface;
 
 public class CoordinateTransform implements ServletPluginInterface
 {
