@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-07-13 18:46:15 $'
-*  '$Revision: 1.2 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-07-26 16:13:02 $'
+*  '$Revision: 1.3 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -146,7 +146,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 	<td><html:text name="formBean" property="plantName" size="45"/></td>
 </tr>
 <tr>
-	<td class="listhead">Fit</td>
+	<td class="listhead">Fit of your concept to the plant of the plot</td>
 	<td>
 	    <html:select name="formBean" property="taxonfit" size="1">
 			<html:option value="">choose...</html:option>
@@ -159,7 +159,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 	</td>
 	</tr>
 	<tr>
-		<td class="listhead">Confidence</td>
+		<td class="listhead">Confidence you have in what you've entered here</td>
 		<td> 
 	    	<html:select name="formBean" property="taxonconfidence" size="1">
 				<html:option value="">choose...</html:option>
