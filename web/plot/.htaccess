@@ -1,4 +1,4 @@
 RewriteEngine  on
-
-RewriteRule    ^([0-9]+)$  /vegbank/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&vegbankAccessionNumber=$1 [L]
-RewriteRule    ^([a-zA-Z][a-zA-Z])(.+)\.(.*)$  /vegbank/servlet/DataRequestServlet?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&vegbankAccessionNumber=$2&vbi=$1&date=$3   [R,L]
+# Need to get the prefix (VB) as a parameter
+RewriteRule    ^([0-9]+)$  @datarequestservlet@?requestDataType=vegPlot&resultType=summary&queryType=simple&vegbankAccessionNumber=VB.$1 [L]
+RewriteRule    ^([a-zA-Z][a-zA-Z])(.+)\.(.*)$   @datarequestservlet@?requestDataType=vegPlot&resultType=summary&queryType=simple&vegbankAccessionNumber=VB.$2&vbi=$1&date=$3   [R,L]
