@@ -28,6 +28,7 @@ eighty_eighty=:8080
 
 # Vegbank Directories
 vegbank.home.dir=/usr/vegbank
+vegbank.data.dir=/usr/vegbank/upload
 apache.document.root=/var/www/html
 
 # XML Schema
