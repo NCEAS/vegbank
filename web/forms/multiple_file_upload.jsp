@@ -1,8 +1,8 @@
 <!--
   *   '$RCSfile: multiple_file_upload.jsp,v $'
   *   '$Author: mlee $'
-  *   '$Date: 2004-11-17 21:28:44 $'
-  *   '$Revision: 1.3 $'
+  *   '$Date: 2004-11-17 21:39:10 $'
+  *   '$Revision: 1.4 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -104,7 +104,7 @@
 </form>
 
 
-<br>2. Choose the files you want to upload:
+<p>2. Choose the files you want to upload: </p>
   
 <form action="@web_context@servlet/upload" enctype="multipart/form-data" name="fileform" method="post"  onsubmit="return doSubmit(this)">
  <input type="hidden" name="action" value="upload"/>
@@ -116,7 +116,7 @@
     }
   %>
 </table>
-<br>3. Submit the files to the server:<br>
+<p>3. Submit the files to the server:</p>
 <input type="submit" value="Submit"/>
 <input type="reset" value="Reset"/>
 </form>
