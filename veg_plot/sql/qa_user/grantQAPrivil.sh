@@ -3,6 +3,6 @@
 
 psql plots_dev < grant_privil_plots_dev.sql
 psql plants_dev < grant_privil_plants_dev.sql
-psql communties_dev < grant_privil_communties_dev.sql
+psql communities_dev < grant_privil_communities_dev.sql
 psql framework < grant_privil_framework.sql
 
