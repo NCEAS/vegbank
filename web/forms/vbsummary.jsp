@@ -68,7 +68,7 @@
 
 
 
- <vegbank:get select="place_summ" beanName="map" perPage="-1" pager="false"/>
+ <vegbank:get select="place_summ" beanName="map" perPage="-1" pager="false" where="where_group_place_summ" wparam="1"/>
  <logic:notEmpty name="BEANLIST">
 <h2>Geographical Distribution of Observations</h2>
 
