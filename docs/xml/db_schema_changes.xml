@@ -6361,4 +6361,177 @@ conditions may change between resampling events.
       </entity>
     </change>
   </modelChange>
+  <modelChange>
+    <modelChangeID>44</modelChangeID>
+    <modelChangeName>add denorm fields to obs to record top 5 species</modelChangeName>
+    <modelChangeStatus>true</modelChangeStatus>
+    <modelChangeVersion>1.0.2</modelChangeVersion>
+    <modelChangeComments>this makes the plot query faster, as it doesn't have to look this up.</modelChangeComments>
+    <change type="create field">
+      <entity>
+        <entityName>observation</entityName>
+        <entityLabel>Observation</entityLabel>
+        <entitySummary>This table stores plot observation results that might vary between official observation events.</entitySummary>
+        <entityDescription>Observation is a child of plot in recognition of the fact that a plot may be re-sampled and that some of the environmental
+conditions may change between resampling events.
+	</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>topTaxon1Name</attName>
+          <attLabel>Top Taxon #1</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (255)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Name of the highest cover taxon on the plot, ignoring strata.</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>topTaxon1Cover</attName>
+          <attLabel>Top Taxon #1 Cover</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Float</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Percent Cover for the highest cover taxon on the plot, ignoring strata.</attDefinition>
+          <attUnits>%</attUnits>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>topTaxon2Name</attName>
+          <attLabel>Top Taxon #2</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (255)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Name of the 2nd highest cover taxon on the plot, ignoring strata.</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>topTaxon2Cover</attName>
+          <attLabel>Top Taxon #2 Cover</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Float</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Percent Cover for the 2nd highest cover taxon on the plot, ignoring strata.</attDefinition>
+          <attUnits>%</attUnits>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>topTaxon3Name</attName>
+          <attLabel>Top Taxon #3</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (255)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Name of the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>topTaxon3Cover</attName>
+          <attLabel>Top Taxon #3 Cover</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Float</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Percent Cover for the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
+          <attUnits>%</attUnits>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>topTaxon4Name</attName>
+          <attLabel>Top Taxon #4</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (255)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Name of the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>topTaxon4Cover</attName>
+          <attLabel>Top Taxon #4 Cover</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Float</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Percent Cover for the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
+          <attUnits>%</attUnits>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>topTaxon5Name</attName>
+          <attLabel>Top Taxon #5</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (255)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Name of the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>topTaxon5Cover</attName>
+          <attLabel>Top Taxon #5 Cover</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Float</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Percent Cover for the 3rdhighest cover taxon on the plot, ignoring strata.</attDefinition>
+          <attUnits>%</attUnits>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+    </change>
+  </modelChange>
 </modelChangeDocument>
