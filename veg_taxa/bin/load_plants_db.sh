@@ -19,6 +19,12 @@ CLASSPATH=/home/computer/harris/java/xml/xalan_1_0_0/xerces.jar:\
 ../lib/PlantTaxonomy.jar:./
 
 
+# gunzip the plant data files (they are)
+# gzip compressed in cvs
+gunzip -r $DATADIR
+
+
+
 # make a test data set from the 1996 and 2000
 # plants list that contains just the Pineacea
 # the Juglandacea and the Aster families.
