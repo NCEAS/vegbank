@@ -4,9 +4,9 @@ package org.vegbank.ui.struts;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-01-08 23:44:39 $'
- *	'$Revision: 1.7 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-02-19 17:45:52 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.DynaActionForm;
+import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Plot;
 import org.vegbank.common.utility.StopWatchUtil;
 import org.vegbank.common.utility.Utility;
@@ -97,8 +98,8 @@ public class DisplayPlotAction extends Action
 				sw.startWatch();
 				
 				DBModelBeanReader mbReader = new DBModelBeanReader();
-				Plot plot =
-					mbReader.getPlotObservationBeanTree(accessionCode);
+				Observation observation =
+					mbReader.getObservationBeanTree(accessionCode);
 						
 				sw.stopWatch();
 				sw.printTimeElapsed();
@@ -107,7 +108,7 @@ public class DisplayPlotAction extends Action
 				if ( resultType.equals("rawxml"))
 				{
 					response.setContentType("text/xml");
-					response.getWriter().write( XMLUtil.getVBXML(plot) );
+					response.getWriter().write( XMLUtil.getVBXML(observation) );
 					// This is to prevent struts from grabbing the response away
 					fwd = null;
 				}
@@ -116,7 +117,7 @@ public class DisplayPlotAction extends Action
 				{
 					LogUtility.log("DisplayPlotAction: getting asciispecies data");
 					response.setContentType("text/plain");
-					response.getWriter().write( ASCIIReportsHelper.getSpeciesData(plot) );
+					response.getWriter().write( ASCIIReportsHelper.getSpeciesData(observation) );
 					// This is to prevent struts from grabbing the response away
 					fwd = null;
 				}
@@ -124,7 +125,7 @@ public class DisplayPlotAction extends Action
 				else if (resultType.equals("asciienvironment"))
 				{
 					response.setContentType("text/plain");
-					response.getWriter().write( ASCIIReportsHelper.getEnvironmentalData(plot) );
+					response.getWriter().write( ASCIIReportsHelper.getEnvironmentalData(observation) );
 					// This is to prevent struts from grabbing the response away
 					fwd = null;
 				}
