@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-05-15 19:50:53 $'
- 	*     '$Revision: 1.9 $'
+ 	*     '$Date: 2002-05-15 20:57:35 $'
+ 	*     '$Revision: 1.10 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -131,8 +131,9 @@
 	destdir="doc/api"
   author="true"
   version="true"
+	private="true"
   use="true"
-  windowtitle="Test API">
+  windowtitle="VEGBANK RMI SERVER / CLIENT API">
 
 
 </javadoc>
