@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-06-28 20:52:21 $'
- * '$Revision: 1.8 $'
+ *     '$Date: 2002-07-01 20:38:05 $'
+ * '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -450,6 +450,11 @@ public class PlantTaxaLoader
  * input parameters
  * 
  * @param plantDescription -- the plantDescription
+ * @param longNameId -- the long name of the plant
+ * @param refId -- the reference ID for the concept
+ * @param code -- the codeName for the plant
+ * @param rank -- the heirarchical rank of the concept
+ * @param longName -- the longName of the plantName
  * fix -- the name if the input plantDesc to taxonDes
  */
 	private int getPlantConceptId(int longNameId, int refId, String plantDescription, 
