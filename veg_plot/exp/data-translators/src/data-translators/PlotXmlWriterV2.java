@@ -1,11 +1,5 @@
-import java.sql.*;
-import java.awt.*;
 import java.io.*;
 import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
-
 import PlotDataSource;
 
 /**
@@ -19,8 +13,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-28 00:37:12 $' <br>
- *  '$Revision: 1.14 $' <br>
+ *  '$Date: 2003-01-08 02:00:10 $' <br>
+ *  '$Revision: 1.15 $' <br>
  */
 
  
@@ -259,6 +253,7 @@ public class PlotXmlWriterV2
 		{
 			String name = datasrc.getCommunityName(plotCode);
 			String code = datasrc.getCommunityCode(plotCode);
+			String classNotes = datasrc.getClassNotes(plotCode);
 			StringBuffer sb = new StringBuffer();
 			sb.append("\n");
 			sb.append("<communityClassification> \n");
@@ -271,7 +266,7 @@ public class PlotXmlWriterV2
 			sb.append("	<tableAnalysis></tableAnalysis> \n");
 			sb.append("	<multivariateAnalysis></multivariateAnalysis> \n");
 			sb.append("	<expertSystem></expertSystem> \n");
-			sb.append("	<classNotes></classNotes> \n");
+			sb.append("	<classNotes>" + classNotes + "</classNotes> \n");
 			sb.append("	<classPublication></classPublication> \n");
 			return( sb.toString() );
 		}

@@ -7,19 +7,15 @@
  *  Authors: @author@
  *  Release: @release@
  *	
- *  '$Author: harris $'
- *  '$Date: 2001-11-01 17:39:00 $'
- * 	'$Revision: 1.1 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2003-01-08 02:00:11 $'
+ * 	'$Revision: 1.2 $'
  */
 //package vegclient.framework;
 
-import java.sql.*;
-import java.awt.*;
 import java.io.*;
 import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
+
 
 //import vegclient.framework.*;
 

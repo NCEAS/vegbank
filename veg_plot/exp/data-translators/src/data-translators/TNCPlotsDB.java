@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-28 00:37:12 $' <br>
- * 	'$Revision: 1.32 $' <br>
+ *  '$Date: 2003-01-08 02:00:11 $' <br>
+ * 	'$Revision: 1.33 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -1108,6 +1108,15 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			return(code);
 	}
 	
+	/**
+	 * returns the community classification notes for the named plot
+	 */
+	public String getClassNotes(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+  
 	/**
 	 * returns the community level of the framework for the named plot
 	 */
@@ -2987,7 +2996,50 @@ public boolean  getRevisions(String plotName)
 			}
 			return(code);
 	 	}
-		 
+		
+    /**
+		 * method to return the taxa code from a data source using as input 
+		 * the scientific plant name -- or the plant name that comes from 
+		 * the 'getPlantTaxaNames' method
+	 	 *
+	 	 * @param plantName -- the scientific plantName
+	 	 */
+		public String getPlantTaxonCover(String plantName)
+	 	{
+			Statement stmt = null;
+			String taxonCover = "";
+      
+      /*
+      FIXME: Need to get the return the taxonCover instead of empty string
+			try
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Plant Symbol])  "
+				+" from ([Plots-Species]) where ([Scientific Name]) like '"+plantName+"'");
+				while (rs.next()) 
+				{
+					code = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("TNCPlotsDB > Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+      */
+      
+			System.out.println("TNCPlotsDB > FIXME: returing '' for taxonCover"); 
+      
+			return(taxonCover);
+	 	}
+		
+
+
 		 
 	 /**
 	  * method that updates the publicly accessible variables with the 

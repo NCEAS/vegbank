@@ -1,6 +1,4 @@
 import java.lang.*;
-import java.io.*;
-import java.text.*;
 import java.util.*;
 import java.sql.*;
 
@@ -9,11 +7,11 @@ import java.sql.*;
  * plugin to allow access to plot data stored in the VegBank - plots 
  * database 
  *
- *  Release: 
+ *  Release: @release@
  *	
- *  '$Author: farrell $'
- *  '$Date: 2002-12-28 00:37:12 $'
- * 	'$Revision: 1.10 $'
+ * 	'$Author: farrell $'  
+ * 	'$Date: 2003-01-08 02:00:11 $' 
+ * 	'$Revision: 1.11 $'
  */
  
 //public class VBAccessDataSourcePlugin

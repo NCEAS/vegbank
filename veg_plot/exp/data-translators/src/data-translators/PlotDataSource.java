@@ -1,10 +1,4 @@
-import java.sql.*;
-import java.awt.*;
-import java.io.*;
 import java.util.*;
-import java.math.*;
-import java.net.URL;
-import java.util.Date;
 
 /**
  * this class represents an 'exeternal' data source -- a data source which
@@ -19,8 +13,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2002-12-28 00:37:12 $'
- *  '$Revision: 1.29 $'
+ *  '$Date: 2003-01-08 02:00:10 $'
+ *  '$Revision: 1.30 $'
  */
 public class PlotDataSource 
 {
@@ -1091,8 +1085,19 @@ public class PlotDataSource
 		//String s = "bad";	
 		return(s);
 	}
-	
-	
+	/**
+	 * method to return the taxon cover from a data source using as input 
+	 * the scientific plant name -- or the plant name that comes from 
+	 * the 'getPlantTaxaNames' method
+	 *
+	 * @param plantName -- the scientific plantName
+	 */
+	 public String getPlantTaxonCover(String plantName)
+	 {
+		 String s = ((PlotDataSourceInterface)pluginObj).getPlantTaxonCover(plantName);
+		return(s);
+	 }
+	 
 	/**
 	 * method to return the taxa code from a data source using as input 
 	 * the scientific plant name -- or the plant name that comes from 
@@ -1277,7 +1282,14 @@ public class PlotDataSource
 		return(s);
 	}
 	
-	//returns the community name associated with a plot
+	//returns the community classification notes associated with a plot
+	public String getClassNotes(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getClassNotes(plotName);
+		return(s);
+	}
+  
+  //returns the community name associated with a plot
 	public String getCommunityName(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getCommunityName(plotName);
@@ -1559,6 +1571,7 @@ public class PlotDataSource
 			System.out.println("PlotDataSource > community code: " + source.getCommunityCode(plotName));
 			System.out.println("PlotDataSource > community level: " + source.getCommunityLevel(plotName));
 			System.out.println("PlotDataSource > community framework: " + source.getCommunityFramework(plotName));
+			System.out.println("PlotDataSource > community classNotes: " + source.getClassNotes(plotName));
 			
 			System.out.println("PlotDataSource > obs date acc.: " + source.getObsDateAccuracy(plotName));
 			System.out.println("PlotDataSource > cover method: " + source.getCoverMethod(plotName));

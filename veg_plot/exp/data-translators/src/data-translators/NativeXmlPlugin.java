@@ -1,31 +1,21 @@
 import org.apache.xerces.parsers.DOMParser;
-import org.apache.xalan.xpath.xml.FormatterToXML;
-import org.apache.xalan.xpath.xml.TreeWalker;
-import org.apache.xalan.*;
-import org.w3c.dom.Attr;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import java.io.*;
 import java.util.Vector;
 import java.util.Hashtable;
-import javax.swing.*;
-
-
-import  xmlresource.datatype.*;
-import  xmlresource.utils.XMLparse;
+import xmlresource.utils.XMLparse;
 
 /**
  * This is a plugin to implement the DataSourceInterface class, allowing 
  * Access to the data stored in the native VegBank XML structure.
  * 
  *	'$Author: farrell $'
- *	'$Date: 2002-12-28 00:37:12 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2003-01-08 02:00:10 $'
+ *	'$Revision: 1.14 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -228,6 +218,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	{
 		return(stringBuf);
 	}
+  
 	public String getProjectContributorCountry(String contributorWholeName)
 	{
 		//this.init(plotName);
@@ -240,24 +231,29 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		return( s );
 	}
+  
 	public String getProjectContributorCurrentFlag(String contributorWholeName)
 	{
 		return(stringBuf);
 	}
+  
 	public String getProjectContributorAddressStartDate(String contributorWholeName)
 	{
 		return(stringBuf);
 	}
+  
 	public String getProjectStartDate(String plotName)
 	{
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "startDate") );
 	}
+  
 	public String getProjectStopDate(String plotName)
 	{
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "stopDate") );
 	}
+  
 	public String getProjectDescription(String plotName)
 	{
 		this.init(plotName);
@@ -653,19 +649,30 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "className") );
 	}
-	public String getCommunityCode(String plotName)
+	
+  public String getCommunityCode(String plotName)
 	{
-		return(stringBuf);
+		return( this.getPlotAttribute(plotName, "classCode") );
 	}
-	public String getCommunityLevel(String plotName)
+	
+  public String getCommunityLevel(String plotName)
 	{
-		return(stringBuf);
+    return(stringBuf);
+		//return( this.getPlotAttribute(plotName, "") );
 	}
-	public String getCommunityFramework(String plotName)
+	
+  public String getCommunityFramework(String plotName)
 	{
-		return(stringBuf);
+    return(stringBuf);
+		//return( this.getPlotAttribute(plotName, "") );
 	}
-	public String getHydrologicRegime(String plotName)
+  
+  public String getClassNotes(String plotName)
+	{
+		return( this.getPlotAttribute(plotName, "classNotes") );
+	}
+  
+  public String getHydrologicRegime(String plotName)
 	{
 		return( this.getPlotAttribute(plotName, "hydrologicRegime") );
 	}
@@ -1425,6 +1432,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	
 	public Vector getTaxaStrataExistence(String plantName, String plotName)
 	{
+    // TODO: Use xpath to get info!!
 		// first figure out the number corresponding to the specific 
 		// taxonObservation block containing this plantName
 		Vector nameVec = new Vector();
@@ -1444,25 +1452,26 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 			int len = children.getLength();
       for (int i = 0; i < len; i++)
       {
-				//System.out.println( children.item(i) );
-				//Node cn = children.item(i).getFirstChild();
+
 				Node cn = children.item(i);
 				String nodeName = cn.getNodeName();
-				//System.out.println("node name: " + nodeName+" " + cn.getNodeType() );
+				System.out.println("NativeXMLPlugin > node name: " + nodeName+" " + cn.getNodeType() );
 				
 				if ( nodeName.equals("stratumComposition") )
 				{
-					if ((cn != null) && (cn.getNodeType() == 1))
+					NodeList children2 = cn.getChildNodes();
+					if (children2 != null)
 					{
-						NodeList children2 = cn.getChildNodes();
-						//System.out.println("length: " + children2.getLength() );
-						Node renegade = children2.item(3);
-						String s = (renegade.getNodeName());
-						//System.out.println("renegade name: " + s );
-					
-						s = renegade.getFirstChild().getNodeValue();
-						//System.out.println("renegade val: " + s );
-						strataVec.addElement( s );
+						int len2 = children2.getLength();
+						for (int ii = 0; ii < len2; ii++)
+						{				
+							Node n = children2.item(ii);
+							if ( n.getNodeName().equals("stratumName") )
+							{
+								// Assumming that firstChild is the text node
+								strataVec.addElement( n.getFirstChild().getNodeValue() );
+							}
+						}
 					}
 				}
       }
@@ -1511,17 +1520,42 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
     }
 		return(s);
 	}
-	public String getTaxaStrataCover(String plantName, String plotCode, String stratumName)
+	
+  public String getTaxaStrataCover(String plantName, String plotCode, String stratumName)
 	{
-		return(stringBuf);
+		String taxonStrataCover = null;
+		String path2taxonStrataCover = 
+      "/project/plot/observation/taxonObservation[./authorNameId='"+plantName+"']"
+      +"/stratumComposition[./stratumName = '"+stratumName+"']/taxonStratumCover";
+    Vector taxonStrataCovers = parse.getValuesForPath(doc, path2taxonStrataCover);
+    return (String) taxonStrataCovers.firstElement(); 
 	}
-	public String getPlantTaxonCode(String plantName)
+	
+  public String getPlantTaxonCode(String plantName)
 	{
-		return(stringBuf);
+		String taxonCode = null;
+		String path2taxonCode = 
+      "/project/plot/observation/taxonObservation[./authorNameId='"+plantName+"']"
+      +"/authorCodeId";
+    Vector taxonCodes = parse.getValuesForPath(doc, path2taxonCode);
+    // TODO: I only expect one value returned should be assertive here
+    return (String) taxonCodes.firstElement(); 
+  }
+  
+  public String getPlantTaxonCover(String plantName)
+	{
+		String taxonCover = null;
+		String path2taxonCover = 
+      "/project/plot/observation/taxonObservation[./authorNameId='"+plantName+"']"
+      +"/taxonCover";
+    Vector taxonCovers = parse.getValuesForPath(doc, path2taxonCover);
+    // TODO: I only expect one value returned should be assertive here
+    return (String) taxonCovers.firstElement(); 
 	}
+  
 	public Vector getUniqueStrataNames(String plotName)
 	{
-		this.init(plotName);
+		this.init(plotName); //FIXME: The doc value needs to be made availible
 		String path = "/project/plot/observation/stratum/stratumName";
 		Vector pathContent = parse.getValuesForPath(doc, path);
 		return(pathContent);
@@ -1607,15 +1641,8 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		return(returnVec);
 	}
-	
-	
 
-
-		/**
-		* method that returns a hashtable containing the information for a given
-		* strataType the keys include.  The keys in the hashtable are : <br> <br>
-		* stratumType -- the name of the stratum which should be the same as the 
-		* 	input parameter 'stratumType' <br>
+   /*
 		* stratumCover -- the percent cover of vegetation in that stratum <br>
 		* stratumBase -- the height of the base of the stratum in meters <br>
 		* strataumHeight -- the height of the top of stratum in meters <br> <br>
@@ -1690,6 +1717,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
     // FIXME: This is logically flawed .... should be able to return nothing
     // rather than forcing a boolean on us. Nothing should be returned when 
     // nothing in datasource or a value we don't have a match for.
+    // Must be a library that does this?
 
     boolean retVal;
     // Need to turn this string into a boolean.

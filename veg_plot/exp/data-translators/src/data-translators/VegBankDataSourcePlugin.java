@@ -1,6 +1,4 @@
 import java.lang.*;
-import java.io.*;
-import java.text.*;
 import java.util.*;
 import java.sql.*;
 
@@ -11,8 +9,8 @@ import java.sql.*;
  *
  *	
  *	'$Author: farrell $' <br>
- *	'$Date: 2002-12-28 00:37:12 $' <br>
- *	'$Revision: 1.25 $' <br>
+ *	'$Date: 2003-01-08 02:00:11 $' <br>
+ *	'$Revision: 1.26 $' <br>
  */
  
 public class VegBankDataSourcePlugin implements PlotDataSourceInterface
@@ -44,7 +42,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 * constructor for this class.  The input parameter is the database type
 	 * so that the class can determine the type of database parameters to 
 	 * use
-	 * @param databaseType -- includes: postgresql, oracle, msaccess -- for now 
+	 * @param databaseType -- includes: postgresql, oracle, msaccess -- for now
 	 */
 	public VegBankDataSourcePlugin(String databaseType)
 	{
@@ -78,6 +76,8 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			ex.printStackTrace();
 		}
 	}
+	
+
 	
 	  
 	/**
@@ -272,7 +272,40 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		
 		return(s);
 	}
+		
+  /**
+	 * method to return the taxonCovet from a data source using as input
+	 * the scientific plant name -- or the plant name that comes from
+	 * the 'getPlantTaxaNames' method
+	 *
+	 * @param plantName -- the scientific plantName
+	 */
+	public String getPlantTaxonCover(String plantName)
+	{
+		String taxonCover = "";
+		StringBuffer sb = new StringBuffer();
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			sb.append("select TAXONCOVER from TAXONOBSERVATION where CHEATPLANTNAME = '"+plantName+"'"); 
+			ResultSet rs = stmt.executeQuery(sb.toString());
+			while (rs.next()) 
+			{
+				taxonCover = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			// All other types of exceptions
+			System.out.println("VegBankDataSourcePlugin > Exception finding taxonCover: " + ex );
+			System.out.println("sql: " + sb.toString() );
+			ex.printStackTrace();
+		}
+	 	return(taxonCover);
+	}
 	
+
 	
   /**
 	 * method to return the taxa code from a data source using as input
@@ -289,21 +322,17 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		try 
 		{
 			stmt = con.createStatement();
-			sb.append("select distinct(AUTHORPLANTCODE) from PLOTSPECIESSUM where AUTHORNAMEID LIKE '"+plantName+"'"); 
+			sb.append("select CHEATPLANTCODE from TAXONOBSERVATION where CHEATPLANTNAME = '"+plantName+"'"); 
 			ResultSet rs = stmt.executeQuery(sb.toString());
 			while (rs.next()) 
 			{
 				code = rs.getString(1);
 			}
 		}
-	//	catch (SQLException ex) 
-	//	{
-	//		this.handleSQLException( ex );
-	//	}
 		catch (java.lang.Exception ex) 
 		{   
 			// All other types of exceptions
-			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
+			System.out.println("VegBankDataSourcePlugin > Exception finding taxonCode: " + ex );
 			System.out.println("sql: " + sb.toString() );
 			ex.printStackTrace();
 		}
@@ -528,6 +557,20 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 {
 		return getElement(plotName,  "PLOT" , elementName, null);
 	 }
+	
+  /**
+	 * utlility method for querying the commclass table and returning 
+	 * each of the elements as a string
+	 * @param plotName -- the name of the plot 
+	 * @param elementname -- the attribute name of the desired attribute 
+	 * @return elementValue -- the value of the desired attribute
+   *
+   * FIXME: Not using this right now
+	 */
+	 private String getCommunityElement(String plotName, String elementName )
+	 {
+		return getElement(plotName,  "COMMCLASS" , elementName, null);
+	 }
 	 
 	 /**
 	  *  Ruturns the results of a SQL query in a string
@@ -552,7 +595,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 				{
  					sb.append(" where PLOT_ID = ");
 					sb.append(plotName);
-				} 
+				}
 				else 
 				{				
 					sb.append( " where PROJECT_ID = (" + subQuery + plotName + ")" );
@@ -1950,6 +1993,32 @@ public boolean  getRevisions(String plotName)
 		return(s);
 	}
 	
+	/**
+   *  gets the community classification notes
+   **/
+  public String getClassNotes(String plotName)
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select CLASSNOTES from COMMCLASS where OBSERVATION_ID = ");
+			sb.append(" ( select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+")");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("VegBankDataSourcePlugin > Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	/**
 	 * returns the community code for the named plot
@@ -1987,6 +2056,7 @@ public boolean  getRevisions(String plotName)
 		return(s);
 	}
 	
+    
 	/**
 	 * returns the community framework for the named plot
 	 */

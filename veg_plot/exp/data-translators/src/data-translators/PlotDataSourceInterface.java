@@ -17,8 +17,8 @@ import java.util.*;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2002-12-14 00:03:20 $' <br>
- * '$Revision: 1.17 $' <br>
+ * '$Date: 2003-01-08 02:00:10 $' <br>
+ * '$Revision: 1.18 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -283,6 +283,10 @@ public interface PlotDataSourceInterface
 	 */
 	String getCommunityFramework(String plotName);
 	
+	/**
+	 * returns the community classification notes for the named plot
+	 */
+	String getClassNotes(String plotName);
 	
 	
 	/**
@@ -577,6 +581,16 @@ public interface PlotDataSourceInterface
 	 String getPlantTaxonCode(String plantName);
 	
 	
+	/**
+	 * method to return the taxon cover from a data source using as input 
+	 * the scientific plant name -- or the plant name that comes from 
+	 * the 'getPlantTaxaNames' method
+	 *
+	 * @param plantName -- the scientific plantName
+	 */
+	 String getPlantTaxonCover(String plantName);
+	
+
 	/**
 	 * method that retuns the names of the unique strata elements 
 	 * for a given plot as a vector.
