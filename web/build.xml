@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-11-18 21:23:03 $'
-* '$Revision: 1.135 $'
+* '$Date: 2004-11-24 17:26:50 $'
+* '$Revision: 1.136 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -69,6 +69,12 @@
         <isset property="eighty_eighty"/>
       </not>
     </condition>
+    <condition property="headerImageMachine" value="">
+          <not>
+            <isset property="headerImageMachine"/>
+          </not>
+    </condition>
+    <filter token="headerImageMachine" value="${headerImageMachine}" />
     <echo>BASE URL:  ${machine_url}(${eighty_eighty})
     </echo>
     <!-- set the apache doc root -->
