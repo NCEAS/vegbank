@@ -13,7 +13,16 @@
 
 <!ELEMENT projectContributor (role, party)>
 	<!ELEMENT role (#PCDATA)>
-	<!ELEMENT party (onlineResource, telephone, email, address)>
+	<!ELEMENT party (salutation, givenName, surName, organizationName, positionName, hoursOfService, contactInstructions, 
+	onlineResource, telephone, email, address)>
+		<!ELEMENT salutation (#PCDATA)>
+		<!ELEMENT givenName (#PCDATA)>
+		<!ELEMENT surName (#PCDATA)>
+		<!ELEMENT organizationName (#PCDATA)>
+		<!ELEMENT  positionName (#PCDATA)>
+		<!ELEMENT hoursOfService (#PCDATA)>
+		<!ELEMENT contactInstructions (#PCDATA)>
+
 		<!ELEMENT onlineResource (linkage, protocol, name, applicationProfile, description)>
 			<!ELEMENT linkage (#PCDATA)>
 			<!ELEMENT protocol (#PCDATA)>

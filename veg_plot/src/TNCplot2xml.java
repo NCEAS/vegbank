@@ -26,7 +26,9 @@ String speciesFile=args[1];
 
 String s=null;
 int lineNum=0;
+int speciesLineNum=0;
 String infileArray[]=new String[1000];
+String speciesArray[]=new String[1000];
 
 /*Below are all the variables that are going to be required for writing out teh xml file*/
 String nullValue="-999.25";
@@ -96,7 +98,8 @@ try {
 BufferedReader plotIn = new BufferedReader(new FileReader(plotFile), 8192);
 BufferedReader speciesIn = new BufferedReader(new FileReader(speciesFile), 8192);
 
-	/*read the input file into the array*/
+
+/*read the plot-specific input file into the array*/
 	while ( (s=plotIn.readLine()) != null ){
 
 		if (s.startsWith("#")) {System.out.println("reading header");}
@@ -106,6 +109,20 @@ BufferedReader speciesIn = new BufferedReader(new FileReader(speciesFile), 8192)
 	lineNum++;
 	} //end else
 	} //end while 
+
+/*read the species-specific input file into the array*/
+
+while ( (s=speciesIn.readLine()) != null ){
+
+		if (s.startsWith("#")) {System.out.println("reading header");}
+
+		else {
+	speciesArray[speciesLineNum]=s;
+	speciesLineNum++;
+	} //end else
+	} //end while 
+
+
 	} //end  try
 catch (Exception ex) {System.out.println("Error reading input data"+ex);System.exit(1);}
 
@@ -259,163 +276,174 @@ try {
 		 perBedRx=buf;
 		buf=t.nextToken().replace('"',' ').trim();
 		 perLargeRx=buf;
-
 /*There are many other fields that go here*/
+
+/*read the species-related elements*/
+
+for (int ii=0; ii<speciesLineNum; ii++) { 
+	if (speciesArray[ii].indexOf(authorPlotCode)>0 || speciesArray[ii].startsWith(authorPlotCode))
+		{
+		StringTokenizer speciesTok = new StringTokenizer(speciesArray[ii], "|");
+		String speciesBuf= speciesTok.nextToken();
+		speciesBuf= speciesTok.nextToken();
+
+		System.out.println(speciesBuf);
+		} //end if
+} //end for
+
 } //end for loop
-
-
 } //end try
 catch (Exception ex) {System.out.println("Error reading input data"+ex);System.exit(1);}
 
-/*print the xml file*/
 
+
+
+
+
+
+/*print the xml file*/
 try {
 
 PrintStream out = new PrintStream(new FileOutputStream("outfile.xml"));
 
 out.println("<?xml version=\"1.0\"?>       ");
 out.println("<!DOCTYPE vegPlot SYSTEM \"vegPlot.dtd\">     ");
-out.println("        ");
-out.println("<vegPlot>        ");
-out.println("<project>        ");
-out.println("<projectName>"+ authorPlotCode+"</projectName>");
-out.println("<projectDescription>TNC PROJECT:  </projectDescription>       ");
-out.println("<projectContributor>        ");
-out.println("<role>"+nullValue+"</role>       ");
-out.println("<party>"+nullValue+"</party>       ");
-out.println("<onlineResource>        ");
-out.println("<linkage>"+nullValue+"</linkage>       ");
-out.println("<protocol>"+nullValue+"</protocol>       ");
-out.println("<name>"+nullValue+"</name>       ");
-out.println("<applicationProfile>"+nullValue+"</applicationProfile>       ");
-out.println("<description>"+nullValue+"</description>       ");
-out.println("</onlineResource>        ");
-out.println("        ");
-out.println("<telephone>        ");
-out.println("<phoneNumber></phoneNumber>        ");
-out.println("<phoneType>"+nullValue+"</phoneType>       ");
-out.println("</telephone>        ");
-out.println("        ");
-out.println("<email>        ");
-out.println("<emailAddress>"+nullValue+"</emailAddress>       ");
-out.println("</email>        ");
-out.println("        ");
-out.println("<address>        ");
-out.println("<deliveryPoint>"+nullValue+"</deliveryPoint>       ");
-out.println("<city>"+nullValue+"</city>       ");
-out.println("<administrativeArea>"+nullValue+"</administrativeArea>       ");
-out.println("<postalCode>"+nullValue+"</postalCode>       ");
-out.println("<country>"+nullValue+"</country>       ");
-out.println("<currentFlag>"+nullValue+"</currentFlag>       ");
-out.println("</address>        ");
-out.println("</projectContributor>        ");
-out.println("        ");
-out.println("<plot>        ");
-out.println("<authorPlotCode>"+ authorPlotCode+" </authorPlotCode>       ");
-out.println("<parentPlot>"+nullValue+"</parentPlot>       ");
-out.println("<plotType>vegetation</plotType>       ");
-out.println("<samplingMethod>"+nullValue+"</samplingMethod>       ");
-out.println("<coverScale>"+nullValue+"</coverScale>       ");
-out.println("<plotOriginLat>"+corLat+" </plotOriginLat>       ");
-out.println("<plotOriginLong>"+corLong+"</plotOriginLong>       ");
-out.println("<plotShape>"+plotShape+" </plotShape>       ");
-out.println("<plotSize>"+Xdim+" "+Ydim+"</plotSize>       ");
-out.println("<plotSizeAcc>"+nullValue+"</plotSizeAcc>       ");
-out.println("<altValue>"+elev+" </altValue>       ");
-out.println("<altPosAcc>"+nullValue+"</altPosAcc>       ");
-out.println("<slopeAspect>"+nullValue+"</slopeAspect>       ");
-out.println("<slopeGradient>"+slope+"</slopeGradient>       ");
-out.println("<slopePosition>"+topoPos+" </slopePosition>       ");
-out.println("<hydrologicRegime>"+cowardinSys+" </hydrologicRegime>       ");
-out.println("<soilDrainage>"+soilDrain+" </soilDrainage>       ");
-out.println("<surfGeo>"+surfGeo+" </surfGeo>       ");
-out.println("        ");
-out.println("<plotObservation>        ");
-out.println("<previousPlot>"+nullValue+"</previousPlot>       ");
-out.println("<plotStartDate>"+surDate+" </plotStartDate>       ");
-out.println("<plotStopDate>"+nullValue+"</plotStopDate>       ");
-out.println("<dateAccuracy>"+nullValue+"</dateAccuracy>       ");
-out.println("<effortLevel>"+nullValue+"</effortLevel>       ");
-out.println("        ");
-out.println("<strata>        ");
-out.println("<stratumCover>"+nullValue+"</stratumCover>       ");
-out.println("<stratumHeight>"+nullValue+"</stratumHeight>       ");
-out.println("</strata>        ");
-out.println("        ");
-out.println("        ");
-out.println("<taxonObservations>        ");
-out.println("<authNameId>"+nullValue+"</authNameId>       ");
-out.println("<originalAuthority>"+nullValue+"</originalAuthority>       ");
-out.println("<strataComposition>        ");
-out.println("<strataType>"+nullValue+"</strataType>       ");
-out.println("<percentCover>"+nullValue+"</percentCover>       ");
-out.println("</strataComposition>        ");
-out.println("        ");
-out.println("<interptretation>        ");
-out.println("<circum_id>"+nullValue+"</circum_id>       ");
-out.println("<role>"+nullValue+"</role>       ");
-out.println("<date>"+nullValue+"</date>       ");
-out.println("<notes>"+nullValue+"</notes>       ");
-out.println("</interptretation>        ");
-out.println("</taxonObservations>        ");
-out.println("        ");
-out.println("<communityType>        ");
-out.println("<classAssociation>"+classCommName+"</classAssociation>       ");
-out.println("<classQuality>"+nullValue+"</classQuality>       ");
-out.println("<startDate>"+nullValue+"</startDate>       ");
-out.println("<stopDate>"+nullValue+"</stopDate>       ");
-out.println("</communityType>        ");
-out.println("        ");
-out.println("        ");
-out.println("<citation>        ");
-out.println("<title>"+nullValue+"</title>       ");
-out.println("<altTitle>"+nullValue+"</altTitle>       ");
-out.println("<pubDate>"+nullValue+"</pubDate>       ");
-out.println("<edition>"+nullValue+"</edition>       ");
-out.println("<editionDate>"+nullValue+"</editionDate>       ");
-out.println("<seriesName>"+nullValue+"</seriesName>       ");
-out.println("<issueIdentification>"+nullValue+"</issueIdentification>       ");
-out.println("<otherCredentials>"+nullValue+"</otherCredentials>       ");
-out.println("<page>"+nullValue+"</page>       ");
-out.println("<isbn>"+nullValue+"</isbn>       ");
-out.println("<issn>"+nullValue+"</issn>       ");
-out.println("        ");
-out.println("<citationContributor>        ");
-out.println("        ");
-out.println("</citationContributor>        ");
-out.println("        ");
-out.println("</citation>        ");
-out.println("</plotObservation>        ");
-out.println("        ");
-out.println("<namedPlace>        ");
-out.println("<placeName>"+nullValue+"</placeName>       ");
-out.println("<placeDescription>"+nullValue+"</placeDescription>       ");
-out.println("<gazeteerRef>"+nullValue+"</gazeteerRef>       ");
-out.println("</namedPlace>        ");
-out.println("        ");
-out.println("<stand>        ");
-out.println("<standSize>"+nullValue+"</standSize>       ");
-out.println("<standDescription>"+nullValue+"</standDescription>       ");
-out.println("<standName>"+nullValue+"</standName>       ");
-out.println("</stand>        ");
-out.println("        ");
-out.println("        ");
-out.println("<graphic>        ");
-out.println("<browseName>"+nullValue+"</browseName>       ");
-out.println("<browseDescription>"+nullValue+"</browseDescription>       ");
-out.println("<browseType>"+nullValue+"</browseType>       ");
-out.println("<browseData>"+nullValue+"</browseData>       ");
-out.println("</graphic>        ");
-out.println("        ");
-out.println("<plotContributor>        ");
-out.println("<role>"+nullValue+"</role>       ");
-out.println("<party>"+nullValue+"</party>       ");
-out.println("</plotContributor>        ");
-out.println("        ");
-out.println("        ");
-out.println("</plot>");
-out.println("        ");
-out.println("        ");
+
+out.println("<vegPlot>");
+out.println("<project>");
+out.println("	<projectName>"+ authorPlotCode+"</projectName>");
+out.println("	<projectDescription>TNC PROJECT:  </projectDescription>");
+out.println("	<projectContributor>");
+out.println("		<role>"+nullValue+"</role>");
+out.println("		<party>");
+out.println("			<salutation>"+nullValue+" </salutation>");
+out.println("			<givenName>"+surveyor+"  </givenName>");
+out.println("			<surName>"+nullValue+" </surName>");
+out.println("			<organizationName>"+nullValue+" </organizationName>");
+out.println("			<positionName>"+nullValue+" </positionName>");
+out.println("			<hoursOfService>"+nullValue+" </hoursOfService>");
+out.println("			<contactInstructions>"+nullValue+" </contactInstructions>");
+out.println("			<onlineResource>        ");
+out.println("				<linkage>"+nullValue+"</linkage>       ");
+out.println("				<protocol>"+nullValue+"</protocol>       ");
+out.println("				<name>"+nullValue+"</name>       ");
+out.println("				<applicationProfile>"+nullValue+"</applicationProfile>       ");
+out.println("				<description>"+nullValue+"</description>       ");
+out.println("			</onlineResource>        ");
+out.println("			<telephone>        ");
+out.println("				<phoneNumber></phoneNumber>        ");
+out.println("				<phoneType>"+nullValue+"</phoneType>       ");
+out.println("			</telephone>        ");
+out.println("			<email>        ");
+out.println("				<emailAddress>"+nullValue+"</emailAddress>       ");
+out.println("			</email>        ");
+out.println("			<address>        ");
+out.println("				<deliveryPoint>"+nullValue+"</deliveryPoint>       ");
+out.println("				<city>"+nullValue+"</city>       ");
+out.println("				<administrativeArea>"+nullValue+"</administrativeArea>       ");
+out.println("				<postalCode>"+nullValue+"</postalCode>       ");
+out.println("				<country>"+nullValue+"</country>       ");
+out.println("				<currentFlag>"+nullValue+"</currentFlag>       ");
+out.println("			</address>        ");
+out.println("		</party>");
+out.println("	</projectContributor>        ");
+out.println("	<plot>        ");
+out.println("		<authorPlotCode>"+ authorPlotCode+" </authorPlotCode>       ");
+out.println("		<parentPlot>"+nullValue+"</parentPlot>       ");
+out.println("		<plotType>vegetation</plotType>       ");
+out.println("		<samplingMethod>"+nullValue+"</samplingMethod>       ");
+out.println("		<coverScale>"+nullValue+"</coverScale>       ");
+out.println("		<plotOriginLat>"+corLat+" </plotOriginLat>       ");
+out.println("		<plotOriginLong>"+corLong+"</plotOriginLong>       ");
+out.println("		<plotShape>"+plotShape+" </plotShape>       ");
+out.println("		<plotSize>"+Xdim+" "+Ydim+"</plotSize>       ");
+out.println("		<plotSizeAcc>"+nullValue+"</plotSizeAcc>       ");
+out.println("		<altValue>"+elev+" </altValue>       ");
+out.println("		<altPosAcc>"+nullValue+"</altPosAcc>       ");
+out.println("		<slopeAspect>"+nullValue+"</slopeAspect>       ");
+out.println("		<slopeGradient>"+slope+"</slopeGradient>       ");
+out.println("		<slopePosition>"+topoPos+" </slopePosition>       ");
+out.println("		<hydrologicRegime>"+cowardinSys+" </hydrologicRegime>       ");
+out.println("		<soilDrainage>"+soilDrain+" </soilDrainage>       ");
+out.println("		<surfGeo>"+surfGeo+" </surfGeo>       ");
+out.println("		<plotObservation>        ");
+out.println("			<previousPlot>"+nullValue+"</previousPlot>       ");
+out.println("			<plotStartDate>"+surDate+" </plotStartDate>       ");
+out.println("			<plotStopDate>"+nullValue+"</plotStopDate>       ");
+out.println("			<dateAccuracy>"+nullValue+"</dateAccuracy>       ");
+out.println("			<effortLevel>"+nullValue+"</effortLevel>       ");
+
+out.println("			<strata>        ");
+out.println("				<stratumType>"+nullValue+"</stratumType>       ");	
+out.println("				<stratumCover>"+nullValue+"</stratumCover>       ");
+out.println("				<stratumHeight>"+nullValue+"</stratumHeight>       ");
+out.println("			</strata>        ");
+
+out.println("			<taxonObservations>        ");
+out.println("				<authNameId>"+nullValue+"</authNameId>       ");
+out.println("				<originalAuthority>"+nullValue+"</originalAuthority>       ");
+out.println("				<strataComposition>        ");
+out.println("					<strataType>"+nullValue+"</strataType>       ");
+out.println("					<percentCover>"+nullValue+"</percentCover>       ");
+out.println("				</strataComposition>        ");
+out.println("				<interptretation>        ");
+out.println("					<circum_id>"+nullValue+"</circum_id>       ");
+out.println("					<role>"+nullValue+"</role>       ");
+out.println("					<date>"+nullValue+"</date>       ");
+out.println("					<notes>"+nullValue+"</notes>       ");
+out.println("				</interptretation>        ");
+out.println("			</taxonObservations>        ");
+
+out.println("			<communityType>        ");
+out.println("				<classAssociation>"+classCommName+"</classAssociation>       ");
+out.println("				<classQuality>"+nullValue+"</classQuality>       ");
+out.println("				<startDate>"+nullValue+"</startDate>       ");
+out.println("				<stopDate>"+nullValue+"</stopDate>       ");
+out.println("			</communityType>        ");
+
+out.println("			<citation>        ");
+out.println("				<title>"+nullValue+"</title>       ");
+out.println("				<altTitle>"+nullValue+"</altTitle>       ");
+out.println("				<pubDate>"+nullValue+"</pubDate>       ");
+out.println("				<edition>"+nullValue+"</edition>       ");
+out.println("				<editionDate>"+nullValue+"</editionDate>       ");
+out.println("				<seriesName>"+nullValue+"</seriesName>       ");
+out.println("				<issueIdentification>"+nullValue+"</issueIdentification>       ");
+out.println("				<otherCredentials>"+nullValue+"</otherCredentials>       ");
+out.println("				<page>"+nullValue+"</page>       ");
+out.println("				<isbn>"+nullValue+"</isbn>       ");
+out.println("				<issn>"+nullValue+"</issn>       ");
+
+out.println("				<citationContributor>        ");
+out.println("				</citationContributor>        ");
+
+out.println("			</citation>        ");
+out.println("		</plotObservation>        ");
+
+out.println("		<namedPlace>        ");
+out.println("			<placeName>"+nullValue+"</placeName>       ");
+out.println("			<placeDescription>"+nullValue+"</placeDescription>       ");
+out.println("			<gazeteerRef>"+nullValue+"</gazeteerRef>       ");
+out.println("		</namedPlace>        ");
+
+out.println("		<stand>        ");
+out.println("			<standSize>"+nullValue+"</standSize>       ");
+out.println("			<standDescription>"+nullValue+"</standDescription>       ");
+out.println("			<standName>"+nullValue+"</standName>       ");
+out.println("		</stand>        ");
+
+out.println("		<graphic>        ");
+out.println("			<browseName>"+nullValue+"</browseName>       ");
+out.println("			<browseDescription>"+nullValue+"</browseDescription>       ");
+out.println("			<browseType>"+nullValue+"</browseType>       ");
+out.println("			<browseData>"+nullValue+"</browseData>       ");
+out.println("		</graphic>        ");
+
+out.println("		<plotContributor>        ");
+out.println("			<role>"+nullValue+"</role>       ");
+out.println("			<party>"+nullValue+"</party>       ");
+out.println("		</plotContributor>        ");
+out.println("	</plot>");
 out.println("</project>");
 out.println("</vegPlot>");
 } //end try

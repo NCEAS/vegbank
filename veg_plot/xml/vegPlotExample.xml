@@ -7,32 +7,41 @@
 	<projectDescription> </projectDescription>	
 	<projectContributor>
 		<role> </role>
-		<party> </party>
-		<onlineResource>
-			<linkage> </linkage>
-			<protocol> </protocol>
-			<name> </name>
-			<applicationProfile> </applicationProfile>
-			<description> </description>
-		</onlineResource>
+		<party> 
+			<salutation> </salutation>
+			<givenName>  </givenName>
+			<surname> </surname>
+			<organizationName> </organizationName>
+			<positionName> </positionName>
+			<hoursOfService> </hoursOfService>
+			<contactInstructions> </contactInstructions>
 
-		<telephone>
-			<phoneNumber></phoneNumber>
-			<phoneType> </phoneType>
-		</telephone>
+			<onlineResource>
+				<linkage> </linkage>
+				<protocol> </protocol>
+				<name> </name>
+				<applicationProfile> </applicationProfile>
+				<description> </description>
+			</onlineResource>
 
-		<email>
-			<emailAddress> </emailAddress>
-		</email>
+			<telephone>
+				<phoneNumber></phoneNumber>
+				<phoneType> </phoneType>
+			</telephone>
 
-		<address>
-			<deliveryPoint> </deliveryPoint>
-			<city> </city>
-			<administrativeArea> </administrativeArea>
-			<postalCode> </postalCode>
-			<country> </country>
-			<currentFlag> </currentFlag>
-		</address>
+			<email>
+				<emailAddress> </emailAddress>
+			</email>
+
+			<address>
+				<deliveryPoint> </deliveryPoint>
+				<city> </city>
+				<administrativeArea> </administrativeArea>
+				<postalCode> </postalCode>
+				<country> </country>
+				<currentFlag> </currentFlag>
+			</address>
+		</party>
 	</projectContributor>
 
 	<plot>
