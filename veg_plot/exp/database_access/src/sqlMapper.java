@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *    '$Date: 2002-07-26 17:43:44 $'
- * 	'$Revision: 1.16 $'
+ *    '$Date: 2002-07-30 16:36:50 $'
+ * 	'$Revision: 1.17 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,11 +84,11 @@ public class  sqlMapper
 		try 
 		{
 			Hashtable extendedQueryHash=getQueryTripleHash(transformedString, transformedStringNum);
+			System.out.println("sqlMapper > extend. query tokens:  " + extendedQueryHash.toString() );
 			//make a completely separate hashtable for use with the 
 			//taxonomic queries for the is something weird when the
 			//same hash is used for creating both sql statements
-			Hashtable extendedTaxonQueryHash = getQueryTripleHash(transformedString, 
-				transformedStringNum);
+			Hashtable extendedTaxonQueryHash = getQueryTripleHash(transformedString, transformedStringNum);
 			
 			System.out.println("sqlMapper > developExtendedPlotQuery");
 			System.out.println("sqlMapper > query elements: " + extendedQueryHash.toString() );
@@ -109,14 +109,14 @@ public class  sqlMapper
 				//fix this so that you can pass a string to the method
 				StringBuffer sqlBuf = new StringBuffer();
 				sqlBuf.append(taxonSql);
-				//issue the statement to the database - to return the 
-				//plot id's of those plots which have the taxon
+				
+				// ISSUE THE STATEMENT TO THE DATABASE - TO RETURN THE 
+				// PLOT ID'S OF THOSE PLOTS WHICH HAVE THE TAXON
 				Vector taxonPlotIdVec = is.issuePureSQL(sqlBuf);
 				System.out.println("sqlMapper > number of plots with taxon: "+ taxonPlotIdVec.size() );
 				
-				//get the sql query for the attributes 
-				//that are not related to the taxonomy
-				nonTaxonSql = getExtendedNonTaxonomicQuery(extendedQueryHash, taxonPlotIdVec) ;
+				// GET THE SQL QUERY FOR THE ATTRIBUTES THAT ARE NOT RELATED TO THE TAXONOMY
+				nonTaxonSql = getExtendedNonTaxonomicQuery(extendedQueryHash, taxonPlotIdVec);
 			}
 			else 
 			{
@@ -126,6 +126,7 @@ public class  sqlMapper
 				nonTaxonSql = getExtendedNonTaxonomicQuery(extendedQueryHash, plotIdVec);
 			}
 			
+			// CREATE AN INSTANCE OF THE ISSUE STATEMENT CLASS
 			issueStatement is = new issueStatement();
 			StringBuffer sqlBuf = new StringBuffer();
 			sqlBuf.append(nonTaxonSql);
@@ -209,7 +210,7 @@ public class  sqlMapper
 		return(sb.toString() );
 	}
 	
-		/**
+	/**
 	 * method that will create a taxonomic query from the 
 	 * hashtable of extended query elements -- not yet totally
 	 * figured out how this should work
@@ -227,25 +228,13 @@ public class  sqlMapper
 		try 
 		{
 				Hashtable isolatedNonTaxonQueryHash = isolateNonTaxonQuery(extendedQueryHash);
-				//start the sql statement
-				sb.append("select PLOT_ID from PLOTSITESUMMARY where ");
+				
 				int queryInstanceNum = getExtendedQueryInstanceNumber( isolatedNonTaxonQueryHash );
-				for (int i=0;i<queryInstanceNum; i++) 
+				System.out.println("sqlMapper > non-tax query instance num: " + queryInstanceNum );
+				// IF THERE ARE NO NON-TAXON RELATED QUERY INSTANCE THEN MODIFY THE SQL CODE APPROPRIATLY
+				if ( queryInstanceNum == 0 )
 				{
-					sb.append( getSingleExtendedQueryInstanceSQL(isolatedNonTaxonQueryHash, i) );
-					sb.append("\n");
-					//print the 'and'
-					if(i != ( queryInstanceNum-1) )
-					{
-						sb.append("and");
-					}
-				}
-				//now add the plotId's if there are any in the 
-				//passed in vector
-				if (plotIdVec.size() > 0)
-				{
-					sb.append("AND PLOT_ID IN ( " );
-					System.out.println("sqlMapper > futher constraining the site-related sql");
+					sb.append("select PLOT_ID from PLOTSITESUMMARY where PLOT_ID in ( ");
 					for (int j=0;j<plotIdVec.size(); j++)
 					{
 						sb.append(plotIdVec.elementAt(j) );
@@ -261,13 +250,47 @@ public class  sqlMapper
 				}
 				else
 				{
-					sb.append(";");
+					//start the sql statement
+					sb.append("select PLOT_ID from PLOTSITESUMMARY where ");
+					for (int i=0;i<queryInstanceNum; i++) 
+					{
+						sb.append( getSingleExtendedQueryInstanceSQL(isolatedNonTaxonQueryHash, i) );
+						sb.append("\n");
+						//print the 'and'
+						if(i != ( queryInstanceNum-1) )
+						{
+							sb.append("and");
+						}
+					}
+					//now add the plotId's if there are any in the 
+					//passed in vector
+					if (plotIdVec.size() > 0)
+					{
+						sb.append("AND PLOT_ID IN ( " );
+						System.out.println("sqlMapper > futher constraining the site-related sql");
+						for (int j=0;j<plotIdVec.size(); j++)
+						{
+							sb.append(plotIdVec.elementAt(j) );
+							if (j == (plotIdVec.size() -1))
+							{
+								sb.append(");");
+							}
+							else
+							{
+								sb.append(", ");
+							}
+						}
+					}
+					else
+					{
+						sb.append(";");
+					}
 				}
 		}
 		catch ( Exception e )
 		{
-			System.out.println("failed :   "
-			+e.getMessage());
+			System.out.println("Exception :   " + e.getMessage());
+			System.out.println("sql: " + sb.toString() );
 			e.printStackTrace();
 		}
 		return(sb.toString() );
