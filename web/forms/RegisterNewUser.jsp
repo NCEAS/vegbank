@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2003-11-26 23:59:59 $'
-*  '$Revision: 1.2 $'
+*  '$Author: farrell $'
+*  '$Date: 2003-12-05 22:52:11 $'
+*  '$Revision: 1.3 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -239,9 +239,7 @@ to become a Certified User</b></a></font><br>
       <TD width="309"> 
         <html:select property="address.administrativearea"> 
           <option value="">-- select one --</option>
-          <html:optionsCollection property="statelist.states"/>
-          <!-- Pull in StateList widget -->
-          <%@ include file="../includes/StatesList.jsp" %>
+          <html:optionsCollection name="statelistbean" property="allStatesNames"/>
         </html:select>
       </TD>
       <TD align=right width=1></TD>
@@ -256,8 +254,7 @@ to become a Certified User</b></a></font><br>
       <TD colSpan=3> 
         <html:select property="address.country">
           <option value="">-- select one --</option>
-          <!-- Pull in Country widget -->
-          <%@ include file="../includes/CountryList.jsp" %>
+          <html:optionsCollection name="countrylistbean" property="allCountriesNames"/>
         </html:select>
       </TD>
     </TR>
