@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-29 23:55:17 $'
- * 	'$Revision: 1.11 $'
+ *  '$Date: 2002-04-02 19:40:08 $'
+ * 	'$Revision: 1.12 $'
  */
 package databaseAccess;
 
@@ -922,7 +922,6 @@ public class DBinsertPlotSource
 					Hashtable h = getCommunityData( name );
 				}
 
-				
 				//insert the strata values
 				sb.append("INSERT into commclass (observation_id, commName, " 
 				+" commCode, commFramework, commLevel) "
@@ -1007,11 +1006,10 @@ public class DBinsertPlotSource
 	
 	
 		/**
-		 * method that returns the prepared statement for inserting data
-		 * into the plotObservation table
-		 *
-		 * @param conn -- the current connection
-		 * @return pstmt -- the prepared statement
+		 * method that loads the observation table in the VegBank
+		 * database and then returns a sting buffer which represents 
+		 * an xml document with the attribute names and values that 
+		 * were loaded to the database.
 		 *
 		 */
 		private boolean insertPlotObservation()
@@ -1022,7 +1020,7 @@ public class DBinsertPlotSource
 				//get the plotid number
 				plotObservationId = getNextId("observation");
 				//the variables from the plot file
-				String observationCode = "obscode";
+				String observationCode = source.getAuthorObsCode(plotName);
 				String startDate = source.getObsStartDate(plotName);
 				String stopDate = source.getObsStopDate(plotName);
 				String taxonObservationArea = "999.99";
@@ -1286,12 +1284,24 @@ public class DBinsertPlotSource
 		 	parameters);
 			System.out.println("DBinsertPlotSource > string passed from web service: \n" + s);
 			
-			//parse the returned xml doc
+			// parse the returned xml doc to get the relevant data and 
+			// put it into the hash table
 			parser = new XMLparse();	
 			Document doc = parser.getDocumentFromString(s);
-			String lev = parser.getNodeValue(doc, "classLevel");
-			String c  = parser.getNodeValue(doc, "classCode");
-			String conceptId = parser.getNodeValue(doc, "commConceptId");
+			Vector levelVec = parser.getValuesForPath(doc, "/vegCommunity/community/classLevel");
+			Vector codeVec = parser.getValuesForPath(doc, "/vegCommunity/community/classCode");
+			Vector conceptIdVec = parser.getValuesForPath(doc, "/vegCommunity/community/commConceptId");
+			
+			
+			String lev = (String)levelVec.elementAt(0);
+			String c = (String)codeVec.elementAt(0);
+			String conceptId = (String)conceptIdVec.elementAt(0);
+			
+			
+			
+			//String lev = parser.getNodeValue(doc, "classLevel");
+			//String c  = parser.getNodeValue(doc, "classCode");
+			//String conceptId = parser.getNodeValue(doc, "commConceptId");
 			System.out.println("DBinsertPlotSource > parsed community xml: " +lev+" "+c+" "+conceptId);
 			
 			if ( lev != null && c != null && conceptId != null)
