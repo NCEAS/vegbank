@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-25 21:50:55 $'
- * '$Revision: 1.8 $'
+ *     '$Date: 2002-03-07 18:06:38 $'
+ * '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ import java.sql.*;
 	public String refTitle = "International Classification of Ecological "
 	+" Communities: Terrestrial Vegetation. EcoArt version 2.55";
 	public String refPubDate = "13-FEB-2002";
-	public String partyOrgName = "NatureServe";
+	public String partyOrgName = "U.S. National Vegetation Classification System";
 	
 	
 	//constructor to create the database connections etc..
@@ -175,39 +175,6 @@ import java.sql.*;
 		
 		
 	 
-	 /**
-	  * public method to allow access to the alliance name trans which can
-		* be thought of as a common name for communities
-		*
-		* @param communityCode -- the alliance code
-		* @return allianceNameTrans -- the common name
-		*/
-		public String getAllianceNameTrans(String code)
-		{
-			String allianceNameTrans = null;
-		 try
-		 {
-			// Create a Statement so we can submit SQL statements to the driver
-			Statement stmt = con.createStatement();
-			String query = null;
-			query = "select ([alliancenametrans]) from alliance where ([alliancekey]) like '"+code+"'";
-			ResultSet rs = stmt.executeQuery(query);
-			while (rs.next()) 
-			{
-				//trim out the faulty characters
-				String s =  rs.getString(1);
-				allianceNameTrans =s.replace('\'', ' ');
-			}
-			rs.close();
-			stmt.close();
-		 }
-		 catch (Exception e)
-		 {
-			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
-			 e.printStackTrace();
-		 }
-		 return(allianceNameTrans);
-		}
 		
 	 
 	 /**
@@ -256,6 +223,26 @@ import java.sql.*;
 		 }
 		 return(commName);
 	 }
+	 
+	 
+	 /**
+	  * method to return the date entered
+		*/
+		public String getDateEntered(String communityCode, String level)
+		{
+			String dateEntered = null;
+			try
+			{
+				dateEntered = "1997-11-26";
+			}
+			 catch (Exception e)
+		 {
+			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(dateEntered);
+		}
+	 
 	 
 	 
  	 /** method that returns the community codes for the entire ecoart 
@@ -382,27 +369,6 @@ import java.sql.*;
 				String ecoartCode = "A.101";
 				System.out.println("EcoartVegCommunitySource > alliance trans: " 
 				+ source.getAllianceNameTrans(ecoartCode)  );
-		/*		
-				String ecoartCode = "A.101";
-			
-				String name = source.getCommunityName(ecoartCode);
-				String level = source.getCommunityLevel(ecoartCode);
-				String commonName = source.getCommunityCommonName(ecoartCode);
-				String parentCode = source.getParentCode(ecoartCode);
-				//Vector v = source.getCommunityCodes();
-				System.out.println("EcoartVegCommunitySource > name: " + name);
-				System.out.println("EcoartVegCommunitySource > level: " + level );
-				System.out.println("EcoartVegCommunitySource > commonName: " + commonName );
-				System.out.println("EcoartVegCommunitySource > parentCode: " + parentCode );
-			
-				String parentLevel = source.getCommunityLevel(parentCode);
-				String parentName = source.getCommunityName(parentCode);
-				String parentCommonName = source.getCommunityCommonName(parentCode);
-			
-				System.out.println("EcoartVegCommunitySource > parentLevel: " + parentLevel);
-				System.out.println("EcoartVegCommunitySource > parentName: " + parentName);
-				System.out.println("EcoartVegCommunitySource > parentCommonName: " + parentCommonName);
-		*/			
 		}
 			catch (Exception e)
 		 {
@@ -411,9 +377,4 @@ import java.sql.*;
 		 }
 		}
 	 
-	 
-	 
-	 
-
-
 }

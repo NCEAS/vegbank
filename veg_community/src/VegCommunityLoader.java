@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-25 21:52:07 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2002-03-07 18:06:38 $'
+ * '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public class VegCommunityLoader
  		{
 			Class.forName("org.postgresql.Driver");
 			//the framework database
-			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/test", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/communities_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -103,7 +103,8 @@ public class VegCommunityLoader
 			//System.out.println("VegCommunityLoader > refId: " + refId);
 			int commNameId = insertCommunityName(commName, refId, dateEntered);
 			int commCodeId = insertCommunityName(conceptCode, refId, dateEntered);
-			//load the alliance trans if this is that value
+			//load the alliance trans if this is an alliance that trans name is
+			//basically a common name used to describe the association 
 			if (conceptLevel.equals("alliance") )
 			{
 				int commTransId = insertCommunityName(allianceTransName, refId, dateEntered);
@@ -112,7 +113,7 @@ public class VegCommunityLoader
 			//System.out.println("VegCommunityLoader > commNameId: " + commNameId);
 			int commConceptId = insertCommunityConcept(conceptCode, commNameId, 
 			conceptLevel, parentCommunity, commName, refId );
-			//System.out.println("VegCommunityLoader > commConceptId: " + commConceptId);
+
 			//if the class variable 'commit' is still true then commit
 			//otherwise rollback the connection
 			int commStatusId = insertCommunityStatus(commConceptId, "accepted", 
@@ -121,6 +122,7 @@ public class VegCommunityLoader
 			//insert the usage data
 			insertCommunityUsage( commNameId, commConceptId, partyId, "standard"
 			, "01-JAN-1999", "NVC");
+			
 			if (this.commit == true)
 			{
 				conn.commit();
@@ -278,7 +280,7 @@ public class VegCommunityLoader
 		 try
 		 {
 			boolean commExists = communityNameExists(commName);
-			System.out.println("VegCommunityLoader > commExists: " + commExists); 
+			//System.out.println("VegCommunityLoader > commExists: " + commExists); 
 			
 			if (commExists == true)
 			{
@@ -354,7 +356,7 @@ public class VegCommunityLoader
 			//update the parentCommunity
 			if (parentCommunity != null)
 			{
-				System.out.println("VegCommunityLoader > updating parentCommunity" );
+				//System.out.println("VegCommunityLoader > updating parentCommunity" );
 				sb = new StringBuffer();
 				sb.append("UPDATE commconcept set commparent = ");
 				sb.append("(select commconcept_id from commconcept where ceglcode = '"+parentCommunity+"')");
@@ -688,8 +690,8 @@ public class VegCommunityLoader
 				Vector v = source.getCommunityCodes("association");
 				//this is a hack to restart the ecoart connections after 100 uses
 				int connCnt = 0;
-				//for (int i =0; i < v.size(); i++)
-				for (int i =0; i < 600; i++)
+				for (int i =0; i < v.size(); i++)
+				//for (int i =0; i < 600; i++)
 				{
 					connCnt++;
 					if (connCnt == 100)
@@ -755,7 +757,8 @@ public class VegCommunityLoader
 					String commName = source.getCommunityName(communityCode);
 					String allianceTransName = source.getAllianceNameTrans(communityCode);
 					String level = "alliance";
-					String dateEntered = "11-FEB-2002";
+					//pass the code and the level to the method below
+					String dateEntered = source.getDateEntered(communityCode, "allinace");
 					String parentCommunity = null; //this means top level
 					if (commName != null)
 					{
