@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-07-10 18:15:53 $'
-* '$Revision: 1.47 $'
+* '$Date: 2003-07-22 01:15:59 $'
+* '$Revision: 1.48 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -101,6 +101,7 @@
     <filter filtersfile="${style_server}/closedlist-tokens.properties"/>
     <!-- set the properties file as a filtersfile to distribute headers and footers -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
+    <filter filtersfile="${style_server}/url2get_data.properties"/>
   </target>
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="init" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
@@ -252,6 +253,7 @@
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
+    <copy file="${sharedhtml_src}/url2get_data.properties" tofile="${style_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
     <ant dir="../../../docs/xml" target="dist-closedlist-tokenfile"/>
   </target>
   <target name="vbsummary" depends="hdrftr" description="=&gt; dist a summary of data in vegbank to the appropriate page">
