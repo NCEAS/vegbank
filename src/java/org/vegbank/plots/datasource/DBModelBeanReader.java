@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-29 06:57:24 $'
- *	'$Revision: 1.20 $'
+ *	'$Date: 2005-02-17 22:22:14 $'
+ *	'$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,6 @@ import java.util.Vector;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vegbank.common.Constants;
 import org.vegbank.common.model.Covermethod;
 import org.vegbank.common.model.Observation;
 import org.vegbank.common.model.Observationsynonym;
@@ -66,6 +65,7 @@ import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
 import org.vegbank.common.utility.XMLUtil;
+import org.vegbank.common.Constants;
 
 /**
  * Reads an <code>VBModelBean</code> from the Vegbank Database and populates
@@ -312,7 +312,7 @@ public class DBModelBeanReader
 		while ( strata.hasNext())
 		{
 			Stratum stratum = (Stratum) strata.next();
-			//System.out.println(">> Ignore when searching through Stratum " + ignoreObjects);
+			//log.debug(">> Ignore when searching through Stratum " + ignoreObjects);
 			getRelatedObjectsFromDB(Stratum.PKNAME, stratum.getStratum_id(), stratum );
 		}
 		
@@ -350,7 +350,7 @@ public class DBModelBeanReader
 	{
 		// Get the one to many relationships
 		Collection ListMethods = VBObjectUtils.getSetMethods(bean, "java.util.List");
-		//System.out.println("##### " + ListMethods);
+		//log.debug("##### " + ListMethods);
 		Iterator iter = ListMethods.iterator();
 		
 		OUTERLOOP: while ( iter.hasNext() )
@@ -360,7 +360,7 @@ public class DBModelBeanReader
 			String tableName = getTableName(bean, method);	
 			
 			// Filter out tables called
-			//System.out.println("----- " + ignoreObjects);
+			//log.debug("----- " + ignoreObjects);
 			Iterator iterator = ignoreObjects.iterator();
 			while ( iterator.hasNext()  )
 			{
@@ -374,7 +374,7 @@ public class DBModelBeanReader
 			try
 			{
 				Collection keysToUse = this.getFKNameInTable(key, tableName);
-				//System.out.println("getObjectsFromDataBase(" + tableName + " , " + keytoUse + " , " + keyValue + ")");
+				//log.debug("getObjectsFromDataBase(" + tableName + " , " + keytoUse + " , " + keyValue + ")");
 				Iterator it = keysToUse.iterator();
 				while ( it.hasNext() )
 				{
@@ -413,7 +413,7 @@ public class DBModelBeanReader
 		
 		// Reconstitute the name of the table from the mess that is the methodName
 		
-		//System.out.println(VBObjectUtils.getUnQualifiedName( object.getClass().getName().toLowerCase()));
+		//log.debug(VBObjectUtils.getUnQualifiedName( object.getClass().getName().toLowerCase()));
 		//tableName = StringUtils.replaceOnce(tableName,VBObjectUtils.getUnQualifiedName( object.getClass().getName()).toLowerCase(), "");
 		
 		return tableName;
@@ -430,7 +430,7 @@ public class DBModelBeanReader
 		String SQLQuery = 
 			"SELECT " + PKName + " FROM " + table + " WHERE " + FKName + " = " + FKValue;
 		
-		//System.out.println("]]] "  + SQLQuery);
+		//log.debug("]]] "  + SQLQuery);
 		
 		Statement selectStatement = con.createStatement();	
 		try
@@ -456,7 +456,7 @@ public class DBModelBeanReader
 			this.getObjectFromDB(newObject, PKName, key);
 			retrivedObjects.add(newObject);
 		}
-		//System.out.println("##### " + retrivedObjects);
+		//log.debug("##### " + retrivedObjects);
 		return retrivedObjects;
 	}
 
@@ -501,7 +501,7 @@ public class DBModelBeanReader
 		
 		Method[] methods = bean.getClass().getMethods();
 		String className = VBObjectUtils.getUnQualifiedName(bean.getClass().getName());
-		//System.out.println(">>>> " + className + "," + object+ "," + object.getClass().getName());
+		//log.debug(">>>> " + className + "," + object+ "," + object.getClass().getName());
 		
 		Vector fieldNames = new Vector();
 		
@@ -516,7 +516,20 @@ public class DBModelBeanReader
 			if ( VBObjectUtils.isGetMethod(method, "java.lang.String") )
 			{					
 				// get the name of the field 
-				fieldNames.add(fieldName);
+                if (fieldName.toLowerCase().equals("accessioncode")) {
+                    // certain beans don't actually have ACs
+                    String ac = bean.getAccessioncode();
+                    if (ac != null && ac.equals(Constants.NO_AC)) {
+                        log.debug("added accessioncode to field list..." + methodName);
+                    } else {
+                        // add the accession code
+				        fieldNames.add(fieldName);
+                    }
+
+                } else {
+                    // add the normal field
+				    fieldNames.add(fieldName);
+                }
 			}
 			else if ( VBObjectUtils.isGetMethod(method, "long") )
 			{
@@ -532,11 +545,11 @@ public class DBModelBeanReader
 				methodAndType.add( parameterTypes[0].getName() );
 				methodAndType.add( method );
 				objectSetMethods.put( VBObjectUtils.getKeyName(fieldName), methodAndType);
-				//System.out.println("Processing: " + methodAndType );
+				//log.debug("Processing: " + methodAndType );
 			}
 			else
 			{
-				//System.out.println("Not processing: " + method.toString() );
+				//log.debug("Not processing: " + method.toString() );
 			}
 		}
 		
@@ -577,7 +590,7 @@ public class DBModelBeanReader
 					String value = (String) hmap.get(fieldName);
 					
 					// DO NOT GET OBJECTS WITH INVERTED RELATIONSHIP
-					//System.out.println("Checking inverted "  + propertyName);
+					//log.debug("Checking inverted "  + propertyName);
 					if ( ! bean.isInvertedRelationship( propertyName ) )
 					{	
 						// Need to create an object for each Set Object Method
@@ -613,12 +626,12 @@ public class DBModelBeanReader
 				{
 					String name = (String) it.next();
 					String value = (String) hmap.get(name);
-					//System.out.println("DBObservationReader > name: '" + name + "' value: '" + value + "'" );
+					//log.debug("DBObservationReader > name: '" + name + "' value: '" + value + "'" );
 					
 					// Populate Object with value
 					String property = getPropertyName(name);
 					BeanUtils.copyProperty(bean, property, value);
-					//System.out.println(BeanUtils.getSimpleProperty(object, property) );
+					//log.debug(BeanUtils.getSimpleProperty(object, property) );
 				}
 			}
 			else
@@ -661,7 +674,7 @@ public class DBModelBeanReader
 			{
 				value = ""+booleanValue;
 			}
-			//System.out.println("boolean was " + value);
+			//log.debug("boolean was " + value);
 		}
 		else if ( SQLType == Types.DATE )
 		{
@@ -678,8 +691,8 @@ public class DBModelBeanReader
 		}
 		else
 		{
-			//System.out.println( metaData.getColumnName(i) + ": Just get as String for SQLTYPE: " + SQLType );
-			//System.out.println( "BOOLEAN is " + Types.BOOLEAN);
+			//log.debug( metaData.getColumnName(i) + ": Just get as String for SQLTYPE: " + SQLType );
+			//log.debug( "BOOLEAN is " + Types.BOOLEAN);
 			value = rs.getString(i);
 		}
 		return value;
@@ -735,7 +748,7 @@ public class DBModelBeanReader
 		}
 		sb.append( " FROM " + className + " WHERE " + key + " = " + keyValue);
 		
-		//System.out.println(">>>>> " + className +" :::: " + sb.toString());
+		//log.debug(">>>>> " + className +" :::: " + sb.toString());
 		return sb.toString();
 	}
 	
