@@ -1856,7 +1856,7 @@ change through time.</entitySummary>
       <attName>addressStartDate</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
-      <attType>timestamp</attType>
+      <attType>Date</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
