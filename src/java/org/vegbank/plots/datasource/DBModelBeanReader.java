@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-04 10:33:50 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-11-04 10:39:53 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -587,9 +587,9 @@ public class DBModelBeanReader
 							}
 							// New Method end -- maybe
 							
-							LogUtility.log("]]]" + hmap);
+							//LogUtility.log("]]]" + hmap);
 							//	Fill out this object  --- RECURSIVE carefull
-							LogUtility.log("this.getObjectFromDB( " + newObject + "," + fieldName+ ", " +  new Integer(value).intValue() + ")" );
+							//LogUtility.log("this.getObjectFromDB( " + newObject + "," + fieldName+ ", " +  new Integer(value).intValue() + ")" );
 							this.getObjectFromDB(newObject, fieldName, new Integer(value).intValue() );
 							Object[] parameters =  {newObject} ;
 							//	Add it using the set method
