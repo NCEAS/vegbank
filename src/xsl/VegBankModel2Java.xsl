@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-04-16 17:54:16 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-05-16 02:54:22 $'
+ *  '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,9 +50,10 @@
   </xsl:template>
 
   <xsl:template match="entity">
+   <xsl:variable name="entityName" select="entityName"/>
    <xsl:variable name="CappedEntityName">
      <xsl:call-template name="str:to-upper">
-       <xsl:with-param name="text" select="substring(entityName, 1, 1)"/>
+       <xsl:with-param name="text" select="substring($entityName, 1, 1)"/>
      </xsl:call-template>
      <xsl:value-of select="substring(entityName, 2)"/>
    </xsl:variable>
@@ -60,15 +61,19 @@
 
    <redirect:write select="$aFile">
 /*
- * This is an auto-generated file
+ * This is an auto-generated javabean 
  */
 
 package org.vegbank.common.model;
 
 import java.util.Vector;
+import java.util.Collection;
 import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.Serializable;
 
-public class <xsl:value-of select="$CappedEntityName"/> 
+public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
 {
    
    <xsl:choose>
@@ -81,20 +86,51 @@ public class <xsl:value-of select="$CappedEntityName"/>
      </xsl:otherwise>
    </xsl:choose>
    
-    <xsl:variable name="primativeAttribs" select="attribute[javaType/@type = 'primative']"/>
+   <xsl:variable name="primativeAttribs" select="attribute[javaType/@type = 'String' or javaType/@type = 'int']"/>
     <xsl:variable name="simpleRelationalAttribs" select="attribute[javaType/@type='Object' and javaType/@relation='one']"/>
-    <xsl:variable name="complexRelationalAttribs" select="attribute[javaType/@type='Object' and javaType/@relation='many']"/>
+    <!--    <xsl:variable name="complexRelationalAttribs" select="../entity/attribute/attReferences[starts-with(text(),$entityName)]"/> -->
 
     <xsl:apply-templates mode="declareAttrib" select="$primativeAttribs"/>
-    <xsl:apply-templates mode="declareObjectAttrib" select="$simpleRelationalAttribs"/>
+    <xsl:apply-templates mode="declareAttrib" select="$simpleRelationalAttribs"/>
     
-    <!-- ????? -->
-    <xsl:apply-templates mode="declareAttrib" select="$complexRelationalAttribs"/>
-    <xsl:apply-templates mode="declareComplexAttrib" select="$complexRelationalAttribs"/>
+    <!--<xsl:apply-templates mode="declareComplexAttrib" select="$complexRelationalAttribs"/>-->
 
     <xsl:apply-templates mode="get-setSimpleAttrib" select="$primativeAttribs"/>
-    <xsl:apply-templates mode="get-setObjectAttrib" select="$simpleRelationalAttribs"/>
-    <xsl:apply-templates mode="get-setComplexAttrib" select="$complexRelationalAttribs"/>
+    <xsl:apply-templates mode="get-setSimpleAttrib" select="$simpleRelationalAttribs"/>
+    <!--<xsl:apply-templates mode="get-setComplexAttrib" select="$complexRelationalAttribs"/>-->
+
+    <xsl:for-each select="../entity/attribute[starts-with(attReferences, concat(current()/entityName,'.') )]">
+      
+      <xsl:variable name="javaType">
+        <xsl:call-template name="UpperFirstLetter">
+          <xsl:with-param name="text">
+            <xsl:value-of select="../entityName"/>                
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:variable>
+
+      <xsl:variable name="variableName">
+        <xsl:value-of select="substring-before(attName, '_ID')"/><xsl:value-of select="$javaType"/>
+      </xsl:variable>
+
+    private List <xsl:value-of select="$variableName"/>s = new ArrayList();
+
+    public void set<xsl:value-of select="$variableName"/>s ( List <xsl:value-of select="$variableName"/>s )
+    {
+      this.<xsl:value-of select="$variableName"/>s = <xsl:value-of select="$variableName"/>s;
+    }
+
+    public List get<xsl:value-of select="$variableName"/>s()
+    {
+      return this.<xsl:value-of select="$variableName"/>s;
+    }
+
+      public void add<xsl:value-of select="$variableName"/> ( <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="$variableName"/> )
+    {
+      this.<xsl:value-of select="$variableName"/>s.add( <xsl:value-of select="$variableName"/> );
+    }
+    
+    </xsl:for-each>
 
 }
     </redirect:write>
@@ -121,9 +157,12 @@ public class <xsl:value-of select="$CappedEntityName"/>
  </xsl:template>
 
  <xsl:template match="attribute" mode="declareAttrib">
-   <xsl:variable name="javaType">String</xsl:variable>
+   <xsl:variable name="javaType">
+     <xsl:value-of select="javaType/@type"/>
+   </xsl:variable>
   private <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="attName"/>; 
  </xsl:template>
+
 
 
  <xsl:template match="attribute" mode="declareComplexAttrib">
@@ -134,15 +173,18 @@ public class <xsl:value-of select="$CappedEntityName"/>
        </xsl:with-param>
      </xsl:call-template>
    </xsl:variable>   
-  private Vector <xsl:text> </xsl:text> <xsl:value-of select="concat(attName,'s')"/>; 
+  private List <xsl:text> </xsl:text> <xsl:value-of select="concat(attName,'s')"/>; 
  </xsl:template>
 
  <!-- ***************************************************************************** -->
  <!-- Generate get and set methods -->
  <!-- ***************************************************************************** -->
 
+ <!-- simple attributes -->
  <xsl:template match="attribute" mode="get-setSimpleAttrib">
-   <xsl:variable name="javaType">String</xsl:variable> 
+   <xsl:variable name="javaType">
+     <xsl:value-of select="javaType/@type"/>
+   </xsl:variable> 
    <xsl:variable name="cappedVariableName">
      <xsl:call-template name="UpperFirstLetter">
        <xsl:with-param name="text" select="attName"/>
@@ -157,6 +199,25 @@ public class <xsl:value-of select="$CappedEntityName"/>
      <xsl:with-param name="cappedVariableName" select="$cappedVariableName"/>
      <xsl:with-param name="uncappedVariableName" select="$uncappedVariableName"/>
    </xsl:call-template>
+
+   <!-- Has a closed list of values generate a get${variable}PickList method-->
+   <xsl:if test="attListType='closed'">
+  private static Collection <xsl:value-of select="$uncappedVariableName"/>PickList;
+
+  {
+    <xsl:value-of select="$uncappedVariableName"/>PickList = new Vector();
+    
+    <xsl:for-each select="attList/attListItem">
+      <xsl:sort select="attListSortOrd" data-type="number"/>
+    <xsl:value-of select="$uncappedVariableName"/>PickList.add("<xsl:value-of select="attListValue"/>");
+    </xsl:for-each>
+  }
+  
+  public Collection get<xsl:value-of select="$cappedVariableName"/>PickList()
+  {
+    return <xsl:value-of select="$uncappedVariableName"/>PickList;
+  }
+   </xsl:if>
 
  </xsl:template>
 
@@ -190,6 +251,34 @@ public class <xsl:value-of select="$CappedEntityName"/>
    
  </xsl:template>
 
+ <!-- Generate gets and sets for Forgien Keys -->
+ <xsl:template match="attribute" mode="get-setFKAttrib">
+   <xsl:variable name="javaType">
+     <xsl:value-of select="substring-before(attReferences, '.')"/>
+   </xsl:variable>
+
+   <xsl:variable name="cappedVariableName">
+     <xsl:call-template name="UpperFirstLetter">
+       <xsl:with-param name="text">
+         <xsl:value-of select="substring-before(attName, '_ID')"/>
+       </xsl:with-param>
+     </xsl:call-template>
+   </xsl:variable>
+
+   <xsl:variable name="uncappedVariableName">
+     <xsl:value-of select="substring-before(attName, '_ID')"/>
+   </xsl:variable>
+
+   <xsl:call-template name="GenerateGetSet">
+     <xsl:with-param name="javaType" select="$javaType"/>
+     <xsl:with-param name="cappedVariableName" select="$cappedVariableName"/>
+     <xsl:with-param name="uncappedVariableName" select="$uncappedVariableName"/>
+   </xsl:call-template>
+   
+ </xsl:template>
+
+
+ <!-- Set Complex Attributes , not used yet -->
  <xsl:template match="attribute" mode="get-setComplexAttrib">
    <xsl:variable name="CappedAttName">
      <xsl:call-template name="str:to-upper">
@@ -205,7 +294,7 @@ public class <xsl:value-of select="$CappedEntityName"/>
   /**
    * Set the value for <xsl:value-of select="attName"/>
    */
-   public void set<xsl:value-of select="$CappedAttName"/>s( Vector <xsl:value-of select="attName"/>)
+   public void set<xsl:value-of select="$CappedAttName"/>s( List <xsl:value-of select="attName"/>)
   {
     this.<xsl:value-of select="attName"/>s = <xsl:value-of select="attName"/>;
   }
@@ -213,7 +302,7 @@ public class <xsl:value-of select="$CappedEntityName"/>
   /**
    * Get the <xsl:value-of select="attName"/>s
    */
-  public AbstractList get<xsl:value-of select="$CappedAttName"/>s()
+  public List get<xsl:value-of select="$CappedAttName"/>s()
   {
     return this.<xsl:value-of select="attName"/>s;
   }
