@@ -9,8 +9,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-12-08 22:34:44 $'
-  *  '$Revision: 1.2 $'
+  *      '$Date: 2004-12-12 18:50:32 $'
+  *  '$Revision: 1.3 $'
   *
   *
   -->
@@ -63,21 +63,21 @@ out.println("<BR><BR>");
 		<!-- FIRST PARAM -->
 		<b>FIRST PARAM</b>
 	<blockquote>
-		xwhereParams.commname.*:
-		<input type="text" name="xwhereParams.commname.1" value="cu.commname"/>
+		xwhereParams_commname_*:
+		<input type="text" name="xwhereParams_commname_1" value="cu.commname"/>
 		=
-		<input type="text" name="xwhereParams.commname.0" value="tidal"/>
+		<input type="text" name="xwhereParams_commname_0" value="tidal"/>
 		<br>
-		xwhereKey: <input type="text" name="xwhereKey.commname" value="xwhere_match"/>
+		xwhereKey_commname: <input type="text" name="xwhereKey_commname" value="xwhere_match"/>
 		<br>
-		xwhereSearch.commname: 
-			<select name="xwhereSearch.commname">
+		xwhereSearch_commname: 
+			<select name="xwhereSearch_commname">
 				<option value="false" SELECTED>false</option>
 				<option value="true">true</option>
 			</select>
 		<br>
-		xwhereMatchAny.commname: 
-			<select name="xwhereMatchAny.commname">
+		xwhereMatchAny_commname: 
+			<select name="xwhereMatchAny_commname">
 				<option value="false" SELECTED>false</option>
 				<option value="true">true</option>
 			</select>
@@ -86,51 +86,43 @@ out.println("<BR><BR>");
 		<!-- SECOND PARAM -->
 		<b>SECOND PARAM</b>
 	<blockquote>
-		xwhereParams.party.*:
-		<input type="text" name="xwhereParams.party.1" value="cs.party_id"/>
+		xwhereParams_party_*:
+		<input type="text" name="xwhereParams_party_1" value="cs.party_id"/>
 		=
-		<input type="text" name="xwhereParams.party.0" value="512"/>
+		<input type="text" name="xwhereParams_party_0" value="512"/>
 		<br>
-		xwhereKey: <input type="text" name="xwhereKey.party" value="xwhere_eq"/>
+		xwhereKey_party: <input type="text" name="xwhereKey_party" value="xwhere_eq"/>
 		<br>
-		xwhereSearch.party: 
-			<select name="xwhereSearch.party">
+		xwhereSearch_party: 
+			<select name="xwhereSearch_party">
 				<option value="false" SELECTED>false</option>
 				<option value="true">true</option>
 			</select>
 		<br>
-		xwhereMatchAny.party: 
-			<select name="xwhereMatchAny.party">
+		xwhereMatchAny_party: 
+			<select name="xwhereMatchAny_party">
 				<option value="false" SELECTED>false</option>
 				<option value="true">true</option>
 			</select>
 	</blockquote>
 
-		<!-- TEXT FIELD -->
-		<!--
-		xwhereParams.b:
-		<input type="text" name="xwhereParams.keywords.1" value="keywords"/>
-		= <input type="text" name="xwhereParams.keywords.0"/> 
-		default: <input type="text" name="xwhereParams.keywords.2" value=""/>
-		key: <input type="text" name="xwhereKey.keywords" value="xwhere_gt"/>
-		<br/>
-		-->
 
-		<!-- MULTI SELECT -->
-		<!--
-		xwhereParams.c:
-		<input type="text" name="xwhereParams.table_id.1" value="table_id"/>
+		<!-- MULTI PARAM -->
+		<b>MULTI PARAM</b>
+	<blockquote>
+		xwhereParams_commlevel:
+		<input type="text" name="xwhereParams_commlevel_1" value="cs.commlevel"/>
 		IN
-	    <select property="xwhereParams.table_id.0" size="4" multiple="true">
+	    <select name="xwhereParams_commlevel_0" size="4" multiple="true">
 			<option value="" selected>--ANY--</option>
-			<option value="1" selected>1</option>
-			<option value="2" selected>2</option>
-			<option value="3" selected>3</option>
+			<option value="Alliance" selected>Alliance</option>
+			<option value="Association" selected>Association</option>
+			<option value="Class" selected>Class</option>
 		</select>
-		default: <input type="text" name="xwhereParams.table_id.2" value=""/>
-		key: <input type="op" name="xwhereKey.table_id" value="xwhere_eq"/>
+		<br>
+		xwhereKey_commlevel: <input type="op" name="xwhereKey_commlevel" value="xwhere_in"/>
+	</blockquote>
 		<br/>
-		-->
 
 		<p>
 		<input type="submit" value="submit"/>

@@ -13,7 +13,7 @@
 			<form-property name="newpassword2" type="java.lang.String" />
 			<form-property name="action" type="java.lang.String" />
 		</form-bean>
-		<form-bean name="CommQueryForm" type="org.vegbank.ui.struts.CommQueryForm" />
+		<!--form-bean name="CommQueryForm" type="org.vegbank.ui.struts.CommQueryForm" /-->
 		<form-bean name="DisplayEntityForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="accessionCode" type="java.lang.String" />
 			<form-property name="resultType" type="java.lang.String" />
@@ -132,8 +132,8 @@
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="cert" />
 		</action>
-		<action path="/CommQuery" type="org.vegbank.ui.struts.QueryAction" name="CommQueryForm" scope="request" validate="true" input="CommQuery">
-			<forward name="success" path="/forms/DisplayQueryResults.jsp" />
+		<!--action path="/CommQuery" type="org.vegbank.ui.struts.DummyAction" name="CommQueryForm" scope="request" validate="true" input="CommQuery"-->
+			<forward name="default" path="/views/commconcept_detail.jsp" />
 		</action>
 		<action path="/DownLoad" type="org.vegbank.ui.struts.DownLoadAction" name="DownLoadForm" scope="request" validate="true" input="DownLoad" />
 		<action path="/DownLoadManager" type="org.vegbank.ui.struts.DownLoadManagerAction" name="DownLoadManagerForm" scope="request" validate="true" input="DisplayResults">
