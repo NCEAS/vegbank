@@ -1,0 +1,91 @@
+view_vegbank_via_odbc.txt
+----------------------------------
+Instructions for connecting to vegbank (or beta or tekka) with a Windows machine
+to view the contents of the vegbank database on those machines.
+
+----------------------------------
+1)Obtaining PostgreSQL ODBC Driver
+----------------------------------
+You must have a PostgreSQL ODBC driver installed on your machine.  If you know that you do,
+proceed to "step 2: Setting up the PostgreSQL Driver"
+
+1a) Downloading the PostgreSQL ODBC driver
+    The driver I've used thus far is from the PostgreSQL ODBC project http://odbc.postgresql.org/,
+since moved to : http://gborg.postgresql.org/project/psqlodbc/projdisplay.php
+    The driver I downloaded from them is at:
+    ftp://ftp.us.postgresql.org/odbc/versions/msi/
+    titled "psqlodbc-07_02_0005.zip"
+    I have made this file available at http://tekka.nceas.ucsb.edu/~lee/odbc/
+--->Download this file, a zipped driver, from one of these locations.
+
+1b) Installing the PostgreSQL ODBC driver
+--->Unzip the file you downloaded, which will give you the file: psqlodbc.msi
+--->Assuming you have the windows installer already installed on your machine, you can double-click
+this file to install the postgreSQL driver.  If you have problems installing, or do not have the windows
+installer, go the the ftp://ftp.us.postgresql.org/odbc/versions/full/ website to download
+drivers with self-extracting installers (as opposed to windows installer)
+
+----------------------------------------
+2) Setting up the PostgreSQL ODBC Driver
+----------------------------------------
+Once the driver is installed, you must set up your computer's ODBC data sources to recognize the driver
+and look for the vegbank database over the web.  To do this:
+2a) Creating a New ODBC Datasource
+--->Open the Control Panel
+--->Double-click "Administrative Tools" (if you don't see this, then it is either hidden, which can be corrected
+in the start menu properties, or you may not have sufficient priviliges on your machine to modify these settings).
+--->Double click "Data Sources (ODCB)"
+    You will now see a dialog box that is titled "ODBC Data Source Administrator"
+--->Click the "User DSN" tab
+--->Click the button to the right "Add..."
+    Now you should see a new window titled "Create New Data Source"
+--->Scroll down in the window of drivers and select "PostgresSQL" version 7.02.00.05, insight distrinution systems...
+   (there may also be "+ (beta)"  and "+ Unicode (beta)" - try one of these if the first one isn't working)
+--->Click "Finish"
+2b) Setting up the new ODBC connection
+    Now you see a new window titled "PostgreSQL ODBS Driver (psqlODBC) Setup
+--->Supply a name for the ODBC connection in the "Data Source" box, for example 
+    "vegbank" or "vegbank on tekka" (since you may want to connect ot vegbank on tekka, beta, and vegbank machines)
+--->You can also add a description of this connection to help you remember exactly what it is
+--->Specify the database name to connect to, for us "vegbank" (case-sensitive?)
+--->specify the server address, either "vegbank.nceas.ucsb.edu" or "tekka.nceas.ucsb.edu" or "beta.nceas.ucsb.edu"
+--->Specify the user name "qa"
+--->The password should be blank
+--->The port number should be "5432"
+--->Press the "SAVE" button.
+--->Press the "OK" button on the ODBC window since it should still be open
+
+---------------------------------
+3) Linking the tables from Access
+---------------------------------
+   Here, you can use an extant database or create a new database in access.  You can use a database that 
+I developed with a few queries already in it to make browsing taxonomy a bit easier.  It is located:
+http://tekka.nceas.ucsb.edu/~lee/odbc/odbc_qrys.zip 
+------->MAKE A BACKUP COPY OF YOUR ACCESS DATABASE IF IT HAS DATA IN IT THAT ARE VALUABLE<----------
+--->Open the MS-Access database that you would like to use as the front-end for the vegbank database
+    If there are already tables with vegbank table names in this database, the new vegbank tables from the odbc source will be renamed.
+--->Rename any tables that have vegbank table names or delete the tables, or pick a new database
+--->Click the File menu | Get External Data | Link Tables
+--->In the dialog box, select "Files of Type" as "ODBC()"
+    This should open a new dialog box titled "Select Data Source"
+--->In the "machine data source" tab, clcik on the name of the ODBC datasource that you created above, as named in step 2b)
+--->Press "OK"
+    If something doesn't work, now is probably the time.  You may get an error message.  
+    The most likely one is that your IP address doesn't match the list of allowed IP addresses.  
+    Contact Gabe to have him add your IP address.  You can find out your ip address by going to the windows start menu,
+    then "run", then type "cmd", then when you get the black and white DOS screen, type "ipconfig" and press enter. (Type
+    "exit" and enter to close the window).
+    
+    If it worked, you should see a new dialog box that says "Link Tables."  You can eiter select tables
+    individually, or, I recommend:
+--->Press "select all" and then click "OK"
+    It will begin linking the tables.  It may (but shouldn't) ask you to identify field(s) that will identify 
+    a unique record.  If this happens, just select something and press OK.  These shouldn't be proper vegbank tables.
+    
+Now your Access database will have tables that have icons of black arrows next to a globe.  They will
+behave just like tables in Access.  You can base forms on them, write reports, make queries, etc.  You
+should not be able to edit the data, though.
+
+Good luck!
+Questions, contact me at mikelee@unc.edu
+
