@@ -7,6 +7,10 @@ import java.util.zip.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.tools.ant.taskdefs.Copy;
+import org.apache.tools.ant.*;
+
+
 import servlet.util.*;
 
 
@@ -23,13 +27,9 @@ import servlet.util.*;
 public class ServletUtility 
 {
 
-	
-	
 	private GetURL gurl = new GetURL();
-	
-
-
-
+	public Vector outVector;
+	public int vecElementCnt;
 	
   /**
    * creates an object of a type className. this is used for instantiating
@@ -395,7 +395,7 @@ catch(Exception e)
  *
  * @param fileName name of the file that whose contents should be written to a vector
  */
-public void fileVectorizer (String fileName) 
+public void fileVectorizer(String fileName) 
 {
 	try 
 	{
@@ -417,8 +417,68 @@ public void fileVectorizer (String fileName)
 		e.getMessage());
 	}
 }
-public Vector outVector;
-public int vecElementCnt;
+
+
+
+/**
+ *  Method that takes as input a name of a file and writes the file contents 
+ *  to a vector and then makes the vector and number of vector elements access
+ *  to the public 
+ *
+ * @param fileName name of the file that whose contents should be written to a vector
+ */
+public Vector fileToVector(String fileName) 
+{
+	Vector v = new Vector();
+	try 
+	{
+		vecElementCnt=0;
+		BufferedReader in = new BufferedReader(new FileReader(fileName));
+		Vector localVector = new Vector();
+		String s;
+		while((s = in.readLine()) != null) 
+		{
+			v.addElement(s);
+		}
+	}
+	catch (Exception e) 
+	{
+		System.out.println("Exception: " + 
+		e.getMessage());
+		e.printStackTrace();
+	}
+	return(v);
+}
+
+
+
+/**
+ *  Method that takes as input a name of a file and writes the file contents 
+ *  to a vector and then makes the vector and number of vector elements access
+ *  to the public 
+ *
+ * @param fileName name of the file that whose contents should be written to a vector
+ */
+public String fileToString(String fileName) 
+{
+	StringBuffer sb = new StringBuffer();
+	try 
+	{
+		BufferedReader in = new BufferedReader(new FileReader(fileName));
+		String s;
+		while((s = in.readLine()) != null) 
+		{
+			sb.append(s+"\n");
+		}
+	}
+	catch (Exception e) 
+	{
+		System.out.println("Exception: " + 
+		e.getMessage());
+		e.printStackTrace();
+	}
+	return(sb.toString() );
+}
 
 	/**
 	 * method that allows a class (in this case a servlet) to upload
@@ -441,6 +501,77 @@ public int vecElementCnt;
 		 }
 	 }
 	 
+	 /**
+ 	 * method to copy a file and filter the tokens, this method uses the 
+ 	 * jakarta ant library 1.4.1 and above
+ 	 *
+	 * @param infile -- the file to be copied that contains the token
+	 * @param outfile -- the output file with the replaced token
+	 * @param  token -- the token to replace in the file
+	 * @param value -- the value to replace the token with
+	 */
+	public boolean filterTokenFile( String inFile, String outFile, String token, String value)
+	{
+		boolean result = true;
+		try
+		{
+			System.out.println("ServletUtility > in file: " + inFile );
+			System.out.println("ServletUtility > out file: " + outFile );
+
+			//SET UP THE PROJECT
+	  	Project proj = new Project();
+			System.out.println("ServletUtility > base directory:  " + proj.getBaseDir() );
+	
+	
+			//SET UP THE COPY TASK
+			Copy copy = new Copy();
+			copy.setVerbose(true);
+			File in = new File(inFile);
+			File outf = new File(outFile);
+			//File outf = new File("./out1");
+			File dir = new File("./");
+
+			boolean readable =  in.canRead();
+			boolean writeable =  outf.canWrite();
+			System.out.println("ServletUtility > in readable " + in.canRead() );
+			System.out.println("ServletUtility > out writeable " + outf.canWrite() );
+			if (readable == false )
+			{
+				System.out.println("ServletUtility > cannot perfor copy " );
+				result=false;
+			}
+
+			copy.setFiltering(true);
+			copy.setFile(in);
+			copy.setOverwrite(true);
+			copy.setTofile(outf);
+		
+			//SET THE COPY TASK AS A TASK IN THE PROJECT
+			copy.setProject(proj);
+		
+			System.out.println("ServletUtility > owning target: " + copy.getOwningTarget() );
+			System.out.println("ServletUtility > targets in proj: " + proj.getTargets().toString() );
+
+			org.apache.tools.ant.taskdefs.Filter filter = new org.apache.tools.ant.taskdefs.Filter();
+			//CREATE A FILTER SET
+			org.apache.tools.ant.types.FilterSet fset = copy.createFilterSet();
+			fset.addFilter(token, value);
+			fset.setProject(proj);
+			System.out.println("ServletUtility > task has filters: " + fset.hasFilters() );
+		
+			//EXECUTE THE COPY TASK
+			copy.execute();
+
+		}
+		catch (BuildException e )
+		{
+			System.out.println(e.getMessage() );
+			e.printStackTrace();
+			result=false;
+		}
+		return(result);
+	}		
+
 	 
 	 /**
 	 * method that allows a class (in this case a servlet) to upload
