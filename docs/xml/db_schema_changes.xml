@@ -6249,4 +6249,116 @@ conditions may change between resampling events.
     <modelChangeStatus>false</modelChangeStatus>
     <modelChangeComments>Names change and have lots of spelling, esp. dealing with author names.  It would be nice to avoid using new concepts for each of these.  Maybe have a spelling table, or perhaps a recursive key in name to equivalentName_ID.  Bob thinking about this 4/26/04.</modelChangeComments>
   </modelChange>
+  <modelChange>
+    <modelChangeID>43</modelChangeID>
+    <modelChangeName>cover/presence updates</modelChangeName>
+    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeComments>this is to help the "weird cover codes" be found in the CoverIndex table.  Cover still populated in taxonImportance.  PresenceDefined is to allow "near" or "overhanging" spp.</modelChangeComments>
+    <change type="create field">
+      <entity>
+        <entityName>taxonImportance</entityName>
+        <entityLabel>Taxon Importance</entityLabel>
+        <entitySummary>This table stores information about the importance (i.e. cover, basal area, biomass) of each taxon observed on a plot.  Records may be limited to one stratum or apply to all strata.</entitySummary>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>COVERINDEX_ID</attName>
+          <attLabel>COVER CODE</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Integer</attType>
+          <attKey>FK</attKey>
+          <attRelType type="normal" name="n/a"/>
+          <attReferences>coverIndex.COVERINDEX_ID</attReferences>
+          <attFKTranslationSQL>(select coverCode from  coverIndex where coverIndex.COVERINDEX_ID=taxonImportance.COVERINDEX_ID)</attFKTranslationSQL>
+          <attListType>closed</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Foreign Key to the cover code used to measure the cover range of the taxon in the field.</attDefinition>
+          <attUnits/>
+          <attForms>
+            <formShow name="Summary">1300.5</formShow>
+          </attForms>
+          <update>1.0.3</update>
+        </attribute>
+      </entity>
+    </change>
+    <change type="create field">
+      <entity>
+        <entityName>taxonObservation</entityName>
+        <entityLabel>Taxon Observation</entityLabel>
+        <entitySummary>This table contains the author's determination of a taxon and the overall cover of that taxon.</entitySummary>
+        <entityDescription>This table stores information about the original identification by the author of the plot and the taxonomic authority used by that author (i.e. a name - citation pair constituting a taxonomic concept).  The table also contains a record of cumulative cover (cover across all strata) of the taxon when not divided into strata.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>presenceDefinition</attName>
+          <attLabel>Presence Definition</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (50)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>closed</attListType>
+          <attList>
+            <attListItem>
+              <attListValue>present</attListValue>
+              <attListValueDesc>default value.  Presence is implied, but not rigidly defined.</attListValueDesc>
+              <attListSortOrd>1</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>present-rooted</attListValue>
+              <attListValueDesc>Taxon is found with one or more individuals rooted within the bounds of the plot.</attListValueDesc>
+              <attListSortOrd>2</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>overhanging</attListValue>
+              <attListValueDesc>Taxon is not rooted in the plot, but is found overhanging the plot, thus potentially have a cover value.</attListValueDesc>
+              <attListSortOrd>3</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>near plot</attListValue>
+              <attListValueDesc>Taxon is not found on this plot, but is found near the plot.</attListValueDesc>
+              <attListSortOrd>4</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>not present</attListValue>
+              <attListValueDesc>This taxon is not found on the plot.  Rarely used.</attListValueDesc>
+              <attListSortOrd>5</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>planted</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>6</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>uprooted</attListValue>
+              <attListValueDesc>destroyed during sampling</attListValueDesc>
+              <attListSortOrd>7</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>dead</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>8</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>seeds present</attListValue>
+              <attListSortOrd>9</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>pollen present</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>10</attListSortOrd>
+            </attListItem>
+          </attList>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Defines how a taxon is determined to be present on the plot.</attDefinition>
+          <attForms>
+            <formShow name="Detail">1305.5</formShow>
+          </attForms>
+          <update>1.0.3</update>
+        </attribute>
+      </entity>
+    </change>
+  </modelChange>
 </modelChangeDocument>
