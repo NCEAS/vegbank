@@ -1,0 +1,106 @@
+<html><!-- expnps_mainform -->
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>VegBranch help: Exporting to NPS-PLOTS</title>
+<link href="@stylesheet@" type="text/css" rel="stylesheet">
+</head>
+<body>@vegbank_header_html_normal@
+<h2>Help for "Export Data to NPS-PLOTS" Form<!-- [z_user_b_speclist_new]--></h2>
+
+<p>Back to <a href="@vegbranch_link@vbr-help.html">the Main VegBranch Help Page</a></p>
+
+<p class="instructions">Note: to open this form in VegBranch, click "Export Data" from the Main Menu.
+Then choose the NPS-PLOTS data format in the "custom data formats" box.
+</p>
+<p>
+<a href="../screenshots/expnps_mainform_1.5.png" target="_new" border="0">
+<img  border="0" src="../screenshots/expnps_mainform_1.5.png" alt="screenshot of this form" /> </a> click on the image to open a copy in a new window.
+</p>
+
+<h4>Purpose</h4>
+<p>This form allows data to be transferred from the VegBank Module into a new NPS-PLOTS database.
+To do this, there are several steps to complete.</p>
+<h4>Which Observations?</h4>
+<p>The first step is to tell VegBranch which observations from the VegBank Module you'd like to send
+to the new NPS-PLOTS database.  You can either:
+<ul><li>Select all observations</li>
+<li>Select observations in the list on the right.  <ul><li>
+  Note that you can select multiple plots by using shift and control on your keyboard while selecting plots with your mouse</li>
+  </ul>
+  </li>
+<li>Select observation via a query
+  <ul><li>You should be familiar with the VegBank Module structure (see the ERD and data dictionary for information on this)</li>
+      <li>You should know how to write queries in Access, or you should know SQL</li>
+      <li>You must include the observation_ID in the custom query of the observations to include</li>
+      <li>You should save the custom query when finished</li></ul>
+</li> 
+ </ul>
+ <h4>Other information to supply</h4>
+   <strong>Cover Method</strong> <br/>
+   <ul><li>Select the Cover Method you'd like to use for the "Range Cover" field in the new NPS-PLOTS database
+    This allows all observations to fit within same the cover codes.
+   </li>
+   <li>You can tell VegBranch to be strict in how this is done, by only using <strong>exact matches</strong> of cover percent, rather than a range.
+   </li>
+   </ul>
+   <p>This part is a little complicated.  Cover Methods contain cover classes, like "+" means "0-1%" for an average of "0.5%".  
+   See the <a href="@get_link@std/covermethod">Cover Methods</a> for more examples. 
+   If you selected this imaginary Cover Method (but not the exact matches box), any cover values between 0 and 1 would
+   have a "Range Cover" of "+" in the NPS-PLOTS database.  If you check the exact matches box,
+   then only cover values of exactly "0.5" will get the cover code of "+".  
+   </p>
+   <strong>Plants and Communities</strong> <br/>
+   <p>VegBank allows multiple interpretations of each plant that occurs on a plot as well as multiple community types 
+   linked to a plot.  This causes a difficulty because NPS-PLOTS allows only one interpretation of each.  
+   So, to resolve this, you need to tell VegBranch how to "choose" only one Taxon Interpretation per plant on each plot-observation
+   and one Community Interpretation per plot-observation.</p>
+   <p>VegBranch gives you two ways of specifying how it selects each:</p>
+   <ul><li>quality of interpretation, such as if flagged "current" for taxa, or the most recent interpretation (or the least recent, oldest one).
+   You can also select the best combination of fit and confidence (the best fit, with ties there resolved by higher confidence levels).
+   </li>
+   <li>interpreting party (optional!).  If you really have a complex set of preferences, it may be best to interpret
+   the plants and plots, and tell VegBranch to prefer your interpretations whereever available.  If you did
+   not interpret something, then VegBranch will use the other criteria you specified (i.e. most recent) to 
+   select an interpretation.</li>
+   </ul>
+   
+   <h4>Previewing and Generating the Data</h4>
+   <p>VegBranch now has enough information to generate the NPS-PLOTS data.  You can <strong>preview</strong> the data for
+   each of the two main NPS-PLOTS tables.  If you like what you see, then you can <strong>generate</strong> the data.
+   This transfers the data from complex queries (this is why previews are slow)
+   into tables in your local VegBranch database.  There are two ways of generating the data:
+   <ul><li>The Quick Way, which uses standard Access Queries to send the data from the queries into the datatables.  
+   Any error messages will be standard ugly Access Error messages that will leave you will the choice
+   of partially moving your data, or not moving it at all.  You should try this first, as it is faster.  
+   If you run into errors, try the other method of generation.</li>
+   <li>The Error-Checking Way, which uses Visual Basic to insert your data, which allows for errors to be resolved as they come up.
+   For example, if you have the wrong data type, such as "5x" for a numeric field, then VegBranch
+   will prompt you when you get to this value, telling you what the problem field and value is and if you'd like to fix
+   it right then (i.e. change 5x to 5).  There shouldn't be errors, as the data are forced into certain 
+   data types in VegBranch, but sometimes text fields accept less data in NPS-PLOTS than in VegBank and this
+   will cause errors.  User Defined data can also be of the wrong data-type.
+   </li>
+   </ul>
+   
+   <h4>Export to New Database</h4>
+   <p>Now you can export these new NPS-PLOTS files that are in VegBranch to a new NPS-PLOTS database.  
+   Write a filename (the default is fine) and press the "Export" button.  This copies these files and 
+   some NPS-PLOTS supporting files to the new database.  If the database already exists, you'll get
+   an error, as VegBranch doesn't want to overwrite the data.  If you want to overwrite the data,
+   delete or rename the existing database.</p>
+   <h4>Cleanup</h4>
+   <p>Once you have exported the data to the NPS-PLOTS database, you no longer need the 
+   generated temporary tables in VegBranch.  Deleting the information from them will make the 
+   VegBranch database smaller.  The last step does this for you.  You should carefully check
+   the data that were exported before doing this, as the deleting of data from these tables
+   is permanent, though you can of course re-export them from the VegBank Module.</p>
+   <p>After deleting lots of data from anywhere in VegBranch, it's a good idea to compact and repair
+   the database.  A note on the screen tells you how to do this.  This reduces the actual size of the
+   database, and helps prevent any corruption of the database that is possible when many records (>200,000) are 
+   deleted.</p>
+
+<p>Back to <a href="@vegbranch_link@vbr-help.html">the Main VegBranch Help Page</a></p>
+
+@vegbank_footer_html_tworow@
+</body>
+</html>
