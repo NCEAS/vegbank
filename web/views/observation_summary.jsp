@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-09-18 22:45:43 $'
-*  '$Revision: 1.8 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-09-23 03:56:12 $'
+*  '$Revision: 1.9 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -49,9 +49,10 @@
 <BODY>
 
 @vegbank_header_html_normal@
+<% String where="where_observation_pk"; %>
 
   <h2>View Plot Observation(s)</h2>
-  <vegbank:get select="plotandobservation" beanName="map" where="where_observation_pk" pager="true"/>
+  <vegbank:get select="plotandobservation" beanName="map" pager="true"/>
 
 
 <logic:empty name="BEANLIST">

@@ -36,8 +36,8 @@ import org.vegbank.common.model.Plantstatus;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-08-27 23:28:22 $'
- * '$Revision: 1.33 $'
+ * '$Date: 2004-09-23 03:56:13 $'
+ * '$Revision: 1.34 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -713,6 +713,19 @@ public class Utility
 
     out.close();
     in.close();
+	}
+
+
+	/**
+	 *
+	 */
+	public static String capitalize(String str) {
+		if (isStringNullOrEmpty(str)) {
+			return "";
+		}
+
+		return Character.toUpperCase(str.charAt(0)) +
+				str.toLowerCase().substring(1);
 	}
 	
 }

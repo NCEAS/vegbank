@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-24 00:42:14 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2004-09-23 03:56:12 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ package org.vegbank.ui.struts;
 
 
 import java.lang.reflect.Method;
-import java.util.Collection;
+import java.util.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -60,8 +60,10 @@ public class GenericDispatcherAction extends Action
 {
 	private static Log log = LogFactory.getLog(GenericDispatcherAction.class);
 
-	// TODO: Make these properties
-	private static final String genericCommandName = "GenericCommand";
+	private static final String GENERIC_CMD = "GenericCommand";
+	private static final String DISPATCH = "Dispatch";
+	private static final String FORWARD = "Forward";
+	private static final String RETRIEVE_BEAN = "RetrieveVBModelBean";
 	private static final String commandLocation = "org.vegbank.common.command.";
 	private static final String jspLocation = "/forms/";
 	private static final String ROOT_ENTITY = "rootEntity";  
@@ -72,26 +74,134 @@ public class GenericDispatcherAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		log.debug("GenericDispatcherAction: begin");
-		DynaActionForm dynaForm = (DynaActionForm) form; 
-		
 		ActionErrors errors = new ActionErrors();
-		String command = request.getParameter("command");
-		String jsp = request.getParameter("jsp");
-		String expandEntity = request.getParameter("expandEntity");
-		String contractEntity = request.getParameter("contractEntity");
+
+		// get form params
+		DynaActionForm dynaForm = (DynaActionForm) form; 
 		String accessionCode = (String)dynaForm.get("accessionCode");
+		String fwdURL = null;
+
+		// get request params
+		String command = request.getParameter("command");
+		String selectKey = request.getParameter("SQL");
+		String whereKey = request.getParameter("WHERE");
+		String beanName = request.getParameter("BeanName");
+		String jsp = request.getParameter("jsp");
+		String[] wparam = request.getParameterValues("wparam");
+
+
 		try
 		{
 			log.debug( "GD: command == " + command );
-			if ( command.equals(genericCommandName)) 
-			{
-				log.debug( "GD: executing new gen cmd" );
-				GenericCommandStatic.execute(request, response);
-				log.debug( "GD: done executing GC" );
+			if (command == null) {
+				command = "";
+				errors.add(
+					ActionErrors.GLOBAL_ERROR,
+					new ActionError("errors.general", "param 'command' not specified"));
+
+
+			} else if ( command.equalsIgnoreCase(DISPATCH)) {
+				///////////////////////////////////////////////////////////////
+				// Handle special URL /get/view/entity/params
+				///////////////////////////////////////////////////////////////
+				
+				// view: literal value { detail | summary | dd | bean | xml } 
+				String view = request.getParameter("view").toLowerCase();
+
+				// entity: { VBModelBean name | SQLStore select key }
+				String entity = request.getParameter("entity");
+				
+				// params: comma-separated PKs or ACs
+				String params = request.getParameter("params");
+
+				log.debug("Dispatching /get\n\tview: " + view +
+						"\n\tentity: " + entity + 
+						"\n\tparams: " + params);
+
+
+
+
+				if (view.equalsIgnoreCase("jsp")) {
+					//////////////////////////////////////////
+					// VIEW: jsp
+					//////////////////////////////////////////
+					command = GENERIC_CMD;
+
+					selectKey = entity;
+					whereKey = buildWhereKey(entity, params);
+					beanName = Utility.capitalize(entity);
+					wparam = buildWparamArray(params);
+
+					if (!jsp.endsWith("ViewData.jsp")) {
+						jsp += "ViewData.jsp";
+					} else if (!jsp.endsWith(".jsp")) {
+						jsp += ".jsp";
+					}
+					request.setAttribute("jsp", jsp);
+
+					log.debug("SQL, BeanName, WHERE, wparam, jsp: " +
+							entity + ", " + beanName + ", " + whereKey + ", (" + params + "), " + jsp);
+
+
+				} else if (view.equalsIgnoreCase("detail") || 
+						view.equalsIgnoreCase("summary")) {
+					//////////////////////////////////////////
+					// VIEW: detail or summary
+					//////////////////////////////////////////
+					command = FORWARD;
+					fwdURL = "/views/" + entity + "_" + view + ".jsp";
+					wparam = buildWparamArray(params);
+
+					if (!Utility.isStringNullOrEmpty(params)) {
+						fwdURL += "?";
+						boolean first = true;
+						for (int i=0; i<wparam.length; i++) {
+							if (!first) {
+								fwdURL += "&";
+							}
+							fwdURL += "wparam=" + wparam[i];
+						}
+					}
+
+
+				} else if (view.equalsIgnoreCase("dd")) {
+					//////////////////////////////////////////
+					// VIEW: dd
+					//////////////////////////////////////////
+					command = FORWARD;
+					fwdURL = "/dbdictionary/dd~table~" + entity;
+					if (Utility.isStringNullOrEmpty(params)) {
+						fwdURL += "~type~tableview.html";
+					} else {
+						// add a field
+						fwdURL += "~field~" + params + "~type~fieldview.html";
+					}
+
+				} else if (view.equalsIgnoreCase("xml")) {
+					//////////////////////////////////////////
+					// VIEW: xml
+					//////////////////////////////////////////
+					//command = "GetXML";
+					// make a custom VegbankCommand maybe
+
+				} else if (view.equalsIgnoreCase("bean")) {
+					//////////////////////////////////////////
+					// VIEW: bean
+					//////////////////////////////////////////
+					command = RETRIEVE_BEAN;
+				} 
+
 			}
-			else if ( command.equals("RetrieveVBModelBean")) 
-			{
+
+
+
+			if ( command.equalsIgnoreCase(GENERIC_CMD)) {
+				log.debug( "GD: executing new gen cmd" );
+				GenericCommandStatic.execute(request, selectKey, whereKey, beanName, wparam);
+				log.debug( "GD: done executing GC" );
+
+
+			} else if ( command.equalsIgnoreCase(RETRIEVE_BEAN)) {
 				log.debug( "GD: executing new RetriveVBModelBean cmd" );
 				VBModelBean bean = new RetrieveVBModelBean().execute(accessionCode);
 				String rootEntity = VBObjectUtils.getUnQualifiedName( bean.getClass().getName() );
@@ -101,6 +211,10 @@ public class GenericDispatcherAction extends Action
 				
 				//Testing out
 				HttpSession session = request.getSession();
+
+				// get more request params
+				String expandEntity = request.getParameter("expandEntity");
+				String contractEntity = request.getParameter("contractEntity");
 				
 				ExpandStatusStore ess = 
 					(ExpandStatusStore) session.getAttribute("DisplayProps");
@@ -125,9 +239,17 @@ public class GenericDispatcherAction extends Action
 				log.debug("Setting rootEntity = " + rootEntity);
 				request.setAttribute(ROOT_ENTITY,rootEntity);
 				request.setAttribute(Constants.ACCESSIONCODENAME,accessionCode);
-			}
-			else
-			{
+
+
+			} else if ( command.equalsIgnoreCase(FORWARD)) {
+				if (Utility.isStringNullOrEmpty(fwdURL)) {
+					fwdURL = request.getParameter("fwd");
+				}
+				log.debug("Forwarding to " + fwdURL);
+				return new ActionForward(fwdURL, true);
+
+
+			} else {
 				Object commandObject = Utility.createObject(commandLocation + command);
 				Class commandClass = commandObject.getClass();
 				Class[] parameterTypes = null;
@@ -164,4 +286,63 @@ public class GenericDispatcherAction extends Action
 		return null;	
 	}
 	
+
+	/**
+	 *
+	 */
+	private String buildWhereKey(String entity, String csvParams) {
+		if (Utility.isStringNullOrEmpty(csvParams)) {
+			return entity;
+		}
+
+		if (isNumericList(csvParams)) {
+			return "where_" + entity + "_pk";
+		} else {
+			return "where_accessioncode";
+		}
+
+	}
+
+
+	/**
+	 * @return a List of values
+	 */
+	private String[] buildWparamArray(String csvParams) {
+		if (Utility.isStringNullOrEmpty(csvParams)) {
+			return null;
+		}
+
+		StringTokenizer st = new StringTokenizer(csvParams, ",");
+		String[] arr = new String[st.countTokens()];
+		int i=0;
+
+		while (st.hasMoreTokens()) { 
+			arr[i++] = st.nextToken(); 
+		}
+
+		return arr;
+	}
+
+
+	/**
+	 * @return true if the first/only value of the given 
+	 *    comma-separated list is a number
+	 */
+	private boolean isNumericList(String csvParams) {
+		if (Utility.isStringNullOrEmpty(csvParams)) {
+			return false;
+		}
+
+		String id = csvParams;
+		if (csvParams.indexOf(',') != -1) {
+			// a list
+			StringTokenizer st = new StringTokenizer(csvParams, ",");
+			if (st.hasMoreTokens()) { id = st.nextToken(); }
+		}
+
+		try { Long.parseLong(id); } 
+		catch (NumberFormatException nfex) { return false; }
+
+		return true;
+	}
 }
