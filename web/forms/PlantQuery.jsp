@@ -103,15 +103,9 @@ function setNameMatchType() {
 	    <select name="xwhereParams_plantlevel_0" size="5" multiple="true">
 			<option value="" selected>--ANY--</option>
 
-<vegbank:get id="plantlevel" select="plantstatus_plantlevel" where="where" pager="false" perPage="-1"/>
-<logic:notEmpty name="plantlevel-BEANLIST">
-	<logic:iterate id="onerow" name="plantlevel-BEANLIST">
-		<logic:notEmpty name="onerow" property="plantlevel">
-		  	<option value='<bean:write name="onerow" property="plantlevel"/>'>
-				<bean:write name="onerow" property="plantlevel"/></option>
-		</logic:notEmpty>
-	</logic:iterate>
-</logic:notEmpty>
+<!--vegbank:get id="plantlevel" select="plantstatus_plantlevel" where="where" pager="false" perPage="-1"/-->
+         <!-- ordered list of plant levels -->
+         <%@ include file="../includes/PlantLevelList.jsp" %>
 
 		</select>
 
