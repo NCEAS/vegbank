@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-03-01 01:54:42 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-02-16 20:59:41 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ public class SAXValidationErrorHandler implements ErrorHandler
 		sb.append("Error: '" + arg0.getMessage() + "'\n");
 		sb.append("\tLine: " + arg0.getLineNumber() + "\n");
 		sb.append("\tColumn : " + arg0.getColumnNumber() + "\n");
-		errors.AddError(LoadingErrors.VALIDATIONERROR, sb.toString() );
+		errors.addError(LoadingErrors.VALIDATIONERROR, sb.toString() );
 		valid = false;
 	}
 
@@ -68,7 +68,7 @@ public class SAXValidationErrorHandler implements ErrorHandler
 		sb.append("Fatal Error: '" + arg0.getMessage() + "'\n");
 		sb.append("\tLine: " + arg0.getLineNumber() + "\n");
 		sb.append("\tColumn : " + arg0.getColumnNumber() + "\n");
-		errors.AddError(LoadingErrors.VALIDATIONERROR, sb.toString() );
+		errors.addError(LoadingErrors.VALIDATIONERROR, sb.toString() );
 		arg0.printStackTrace();
 		valid = false;
 	}
@@ -82,6 +82,6 @@ public class SAXValidationErrorHandler implements ErrorHandler
 		sb.append("Warning: '" + arg0.getMessage() + "'\n");
 		sb.append("\tLine: " + arg0.getLineNumber() + "\n");
 		sb.append("\tColumn : " + arg0.getColumnNumber() + "\n");
-		errors.AddError(LoadingErrors.VALIDATIONERROR, sb.toString() );
+		errors.addError(LoadingErrors.VALIDATIONERROR, sb.toString() );
 	}
 }
