@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-29 22:59:11 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2004-07-24 00:51:38 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Vector;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.vegbank.common.utility.CommandLineTools.StatusBarUtil;
 
@@ -47,6 +49,8 @@ import org.vegbank.common.utility.CommandLineTools.StatusBarUtil;
  * @author anderson
  */
 public class AccessionGen {
+
+	private static Log log = LogFactory.getLog(AccessionGen.class);
 
 	private Connection conn = null;
 	private static ResourceBundle res = null;
@@ -137,7 +141,7 @@ public class AccessionGen {
 		}
 				
 		query += conjugator + Utility.getPKNameFromTableName(table) + " =" + pk;
-		//LogUtility.log("===> " + query);
+		//log.debug("===> " + query);
 		ResultSet rs = conn.createStatement().executeQuery(query);
 
 		if (rs.next()) {
@@ -146,7 +150,7 @@ public class AccessionGen {
 			if (tmpConfirm == null) {
 				tmpConfirm = rs.getString(3);
 			}
-			//LogUtility.log("Resulting AC > " + formatConfirmCode(tmpConfirm));
+			//log.debug("Resulting AC > " + formatConfirmCode(tmpConfirm));
 			return formatConfirmCode(tmpConfirm);
 		}
 
@@ -329,7 +333,7 @@ public class AccessionGen {
 			// tidy up the end of the status bar
 			sb.completeStatusBar(count);
 		//} catch (SQLException sqlex) {
-		//	LogUtility.log("AccessionGen: Problem updating " + tableName +"'s accession code to " + tmpConfirm);
+		//	log.debug("Problem updating " + tableName +"'s accession code to " + tmpConfirm);
 		//}
 
 		rs.close();
@@ -383,7 +387,7 @@ public class AccessionGen {
 							String confirmCode = getConfirmation(tableName, key.toString());
 					
 							String accessionCode = this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt);
-							LogUtility.log("AccessionGen > Set accessionCode for PK: " + key + " on " + tableName);
+							log.debug("Set accessionCode for PK: " + key + " on " + tableName);
 							accessionCodeList.add(accessionCode);
 						}
 					}
