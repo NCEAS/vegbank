@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-09-17 00:15:35 $'
-*  '$Revision: 1.3 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-09-17 05:34:25 $'
+*  '$Revision: 1.4 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@
 
 @vegbank_header_html_normal@
 
-  <h2>View plot-observation(s) in VegBank</h2>
+  <h2>View Plot Observation(s)</h2>
   <vegbank:get select="plotandobservation" beanName="map" where="where_observation_pk" pager="true"/>
 
 
@@ -59,12 +59,12 @@
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="2">
 <TR><TD width="55%" valign="top"><!-- plot level info -->
 
-<table border="1" cellpadding="0" cellspacing="0" class="item"><!--each field, only write when HAS contents-->
+<table border="1" cellpadding="1" cellspacing="0" class="item"><!--each field, only write when HAS contents-->
 
 
 <logic:notEmpty name="onerow" property="authorplotcode">
-<tr><td width="15%"><!--label:--><p><span class="category">Author Plot Code</span></p></td>
-<td width="40%"><p><span class="category"><bean:write name="onerow" property="authorplotcode"/>&nbsp;</span></p></td>
+<tr><td width="35%" nowrap="true"><!--label:--><p><span class="category">Author Plot Code</span></p></td>
+<td><p><span class="category"><bean:write name="onerow" property="authorplotcode"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="confidentialitystatus">
@@ -263,7 +263,7 @@
 </table>
 
 
-</TD><TD width="45%" valign="top"><!-- plants in this plot -->
+</TD><TD valign="top"><!-- plants in this plot -->
 
 <bean:define id="obsId" name="onerow" property="observation_id"/>
 <!-- Obs id is <%= obsId %> -->
@@ -275,13 +275,13 @@
                 <p>(no plants recorded on this plot: error!)</p>
   </logic:empty>
   <logic:notEmpty name="BEANLIST">
-     <table border="1" cellpadding="0" cellspacing="0" class="item">
-     <tr colspan="2"><p>Taxa occurring on this plot</p></tr>
-     <tr><th>Author's Plant Name</th><th>overall cover</th></tr>
+     <table width="100%" border="1" cellpadding="1" cellspacing="0" class="item">
+     <tr colspan="2"><strong>Taxa occurring on this plot:</strong></tr>
+     <tr><th width="75%">Author's Plant Name</th><th>overall cover</th></tr>
      <logic:iterate id="oneobsplants" name="BEANLIST">
      <tr>
        <td><p><span class="item"><bean:write name="oneobsplants" property="authorplantname" />&nbsp;</span></p></td>
-       <td width="20%"><p><span class="item">&nbsp;
+       <td><p><span class="item">&nbsp;
        <logic:notEmpty name="oneobsplants" property="cover">
        <bean:write name="oneobsplants" property="cover" /> %
        </logic:notEmpty>
@@ -298,6 +298,8 @@
   </logic:notEmpty>
 </TD>
 </TR>
+
+<TR><TD colspan="2"><hr noshade="true"/><br/></TD></TR>
 </TABLE>
 
 </logic:iterate>

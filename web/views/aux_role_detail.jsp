@@ -16,7 +16,7 @@
 </HEAD>
 <BODY >@vegbank_header_html_normal@
 
-<h3>View Roles in VegBank </h3>
+<h2>VegBank Roles</h2>
 
 <vegbank:get id="MY_ROLES" select="aux_role" beanName="map" where="where_aux_role_pk" pager="true"/>
 
@@ -24,7 +24,7 @@
         <br>
 
         <logic:empty name="MY_ROLES-BEANLIST">
-                Sorry, no roles are available in the databse!
+                No roles were found.
                 
         </logic:empty>
 
@@ -55,7 +55,7 @@
 		       //**************************************************************************************
 		       bgColor = bgColor.equals("#FFFFF")? "#FFFFC" : "#FFFFF";
     %>
-           <tr bgcolor="<%= bgColor %>" class="sansserif">
+           <tr bgcolor="<%= bgColor %>">
            
               <td>     <bean:write name="onerec" property="rolecode"/>  &nbsp;               </td>
            	<td>   <bean:write name="onerec" property="roledescription"/>&nbsp;      </td>
@@ -76,7 +76,6 @@
 		<br>
 		  <vegbank:pager/>
 
-		<br> &nbsp;
 @vegbank_footer_html_tworow@
 </BODY>
 </html>

@@ -11,10 +11,9 @@
 </HEAD>
 <body>@vegbank_header_html_normal@ 
 
-<h2>View VegBank Community Concepts</h2>
-  <p>The following is a listing of community concepts:</p>
-  <vegbank:get id="concept" select="commconcept" beanName="map" where="where_commconcept_pk" pager="true"/>
+<h2>View Community Concepts</h2>
 
+<vegbank:get id="concept" select="commconcept" beanName="map" where="where_commconcept_pk" pager="true"/>
 
 <logic:empty name="concept-BEANLIST">
              <p>Sorry, no community concepts match your criteria.</p>

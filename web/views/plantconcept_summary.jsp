@@ -11,8 +11,7 @@
 </HEAD>
 <body>@vegbank_header_html_normal@ 
 
-<h2>View VegBank Plant Concepts</h2>
-  <p>The following is a listing of Plant concepts:</p>
+<h2>View Plant Concepts</h2>
   <vegbank:get id="concept" select="plantconcept" beanName="map" where="where_plantconcept_pk" pager="true"/>
 
 

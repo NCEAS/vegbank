@@ -10,41 +10,52 @@
 <meta http-equiv="Content-Type" content="text/html; charset=">
 </HEAD>
 <body>
-@vegbank_header_html_normal@  <br>
-<vegbank:get select="usercertification_approved" beanName="map"/>
+@vegbank_header_html_normal@
+
+<vegbank:get select="usercertification_approved" beanName="map" pager="true"/>
+
 <logic:empty name="BEANLIST">
-                Sorry, no userCertifications are available in the database!
+				<p>
+                There are no certified users.
+				<p> &nbsp;
           </logic:empty>
 <logic:notEmpty name="BEANLIST"><!-- set up table -->
-<logic:iterate id="onerow" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
-<table border="0" cellpadding="0" cellspacing="0" class="item"><!--each field, only write when HAS contents-->
 
-<tr><td><!--label:--><p><span class="category">Name:</span></p></td>
-<td><p><span class="category"><bean:write name="onerow" property="givenname"/>&nbsp; <bean:write name="onerow" property="surname"/>&nbsp;
+<h2>Certified VegBank Users</h2>
+
+<table border="0" bgcolor="#FFFFFF" cellpadding="1" cellspacing="0">
+<tr><td>
+
+<logic:iterate id="onerow" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="item"><!--each field, only write when HAS contents-->
+
+<tr><td colspan="2"><p><span class="sizelarge">
+<bean:write name="onerow" property="givenname"/>&nbsp;<bean:write name="onerow" property="surname"/>
+</span>
 <logic:notEmpty name="onerow" property="organizationname">
-organization:<bean:write name="onerow" property="organizationname"/>
+<span class="normal">from <bean:write name="onerow" property="organizationname"/></span>
 </logic:notEmpty>
-</span></p></td>
+</p></td>
 </tr>
 
 
 <logic:notEmpty name="onerow" property="degree_institution">
-<tr><td><!--label:--><p><span class="category">Degree Institution</span></p></td>
+<tr><td width="40%" align="left"><!--label:--><p><span class="category">Degree Institution</span></p></td>
 <td><p><span class="item"><bean:write name="onerow" property="degree_institution"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="current_org">
-<tr><td><!--label:--><p><span class="category">Current Organization</span></p></td>
+<tr><td align="left"><!--label:--><p><span class="category">Current Organization</span></p></td>
 <td><p><span class="item"><bean:write name="onerow" property="current_org"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="current_pos">
-<tr><td><!--label:--><p><span class="category">Current Position</span></p></td>
+<tr><td align="left"><!--label:--><p><span class="category">Current Position</span></p></td>
 <td><p><span class="item"><bean:write name="onerow" property="current_pos"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="esa_member">
-<tr><td><!--label:--><p><span class="category">ESA Certified Ecologist?</span></p></td>
+<tr><td align="left"><!--label:--><p><span class="category">ESA Certified Ecologist?</span></p></td>
 <td><p><span class="item"><bean:write name="onerow" property="esa_member"/>&nbsp;</span></p></td>
 </tr>
 </logic:notEmpty>
@@ -52,33 +63,33 @@ organization:<bean:write name="onerow" property="organizationname"/>
 <table><tr><th>#</th><th>Region</th><th>Vegetation</th><th>Floristics</th><th>US-NVC</th></tr>
 
 <logic:notEmpty name="onerow" property="exp_region_a">
-<tr>
-<td><p><span class="item">1</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_a"/>&nbsp;</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_a_veg"/>&nbsp;</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_a_flor"/>&nbsp;</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_a_nvc"/>&nbsp;</span></p></td>
+<tr align="center">
+<td>1</td>
+<td align="left"><bean:write name="onerow" property="exp_region_a"/>&nbsp;</td>
+<td><bean:write name="onerow" property="exp_region_a_veg"/>&nbsp;</td>
+<td><bean:write name="onerow" property="exp_region_a_flor"/>&nbsp;</td>
+<td><bean:write name="onerow" property="exp_region_a_nvc"/>&nbsp;</td>
 </tr>
 
 </logic:notEmpty>
 
 <logic:notEmpty name="onerow" property="exp_region_b">
-<tr>
-<td><p><span class="item">2</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_b"/>&nbsp;</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_b_veg"/>&nbsp;</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_b_flor"/>&nbsp;</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_b_nvc"/>&nbsp;</span></p></td>
+<tr align="center">
+<td>2</td>
+<td align="left"><bean:write name="onerow" property="exp_region_b"/>&nbsp;</td>
+<td><bean:write name="onerow" property="exp_region_b_veg"/>&nbsp;</td>
+<td><bean:write name="onerow" property="exp_region_b_flor"/>&nbsp;</td>
+<td><bean:write name="onerow" property="exp_region_b_nvc"/>&nbsp;</td>
 </tr>
 
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="exp_region_c">
-<tr>
-<td><p><span class="item">3</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_c"/>&nbsp;</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_c_veg"/>&nbsp;</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_c_flor"/>&nbsp;</span></p></td>
-<td><p><span class="item"><bean:write name="onerow" property="exp_region_c_nvc"/>&nbsp;</span></p></td>
+<tr align="center">
+<td>3</td>
+<td align="left"><bean:write name="onerow" property="exp_region_c"/>&nbsp;</td>
+<td><bean:write name="onerow" property="exp_region_c_veg"/>&nbsp;</td>
+<td><bean:write name="onerow" property="exp_region_c_flor"/>&nbsp;</td>
+<td><bean:write name="onerow" property="exp_region_c_nvc"/>&nbsp;</td>
 
 </tr>
 
@@ -88,9 +99,20 @@ organization:<bean:write name="onerow" property="organizationname"/>
 
 
 </table><!-- regions table -->
-</td></tr><!-- main tbl -->
+<hr noshade="true">
+</td></tr>
+
+<!--tr bgcolor="#CCCCCC"><td colspan="5"><img src="@image_server@/transparent.gif" width="420" height="1"></td></tr>
+<tr bgcolor="#AAAAAA"><td colspan="5"><img src="@image_server@/transparent.gif" width="1" height="1"></td></tr-->
+
+<!-- main tbl -->
 </table>
 <br/><br/>
 </logic:iterate>
-</logic:notEmpty><br>
+</td></tr> </table>
+
+</logic:notEmpty>
+
+<vegbank:pager/>
+
           @vegbank_footer_html_tworow@
