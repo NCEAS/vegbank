@@ -98,6 +98,11 @@ CREATE TABLE commClass
     expertSystem boolean,
     classPublication_ID integer,
     classNotes  text,
+		--below are denormalized by JHH
+		commName varchar(200), -- the name as used in the plots db
+		commCode varchar(200), -- the code if it exists
+		commFramework varchar(200), --nvc, provisional, etc
+		commLevel varchar(200), -- the level in the heiracry
     PRIMARY KEY(COMMCLASS_ID)
 );
 
@@ -575,7 +580,7 @@ CREATE TABLE soilObs
     soilPH float,
     exchanceCapacity float,
     baseSaturation float,
-    soilDescription varchar text,
+    soilDescription text,
     PRIMARY KEY(SOILOBS_ID)
 );
 
