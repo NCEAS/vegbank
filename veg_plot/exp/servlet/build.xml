@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   *   '$Author: farrell $'
-  *   '$Date: 2002-12-27 19:32:33 $'
-  *   '$Revision: 1.12 $'
+  *   '$Date: 2003-02-03 19:15:33 $'
+  *   '$Revision: 1.13 $'
   *
   *  Authors: John Harris
   *  Copyright: 2000 Regents of the University of California and the
@@ -33,50 +33,49 @@
         <property name="build" value="./build" />
         <property name="lib" value="lib" />
         <property name="servlet_api" value="lib/servlet.jar" />
-        
-        
+    
+    
         <!--NOTICE THE SETTINGS FOR THE PRODUCTION VS THE DEVELOPMENT SERVLET LOCATIONS -->
         <!-- PRODUCTION	 -->
         <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib" />
         <property name="servlet_WEB_INF" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/" />
         <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat/bin" />
         <property name="servlet.webapp.dir" value="/usr/local/devtools/jakarta-tomcat/webapps" />
-        
+    
         <!-- DEVELOPMENT -->
         <!--
-          <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib" />
-          <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat_dev/bin" />
+    	  <property name="servlet_location" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib" />
+    	  <property name="appserver_bin" value="/usr/local/devtools/jakarta-tomcat_dev/bin" />
         -->
-        <property name="xmlresource" value="lib/xmlresource.jar" />
-        <property name="dbaccess" value="lib/database_access.jar" />
-        <property name="data-source" value="lib/datatranslator.jar" />
-        <property name="release" value="development"/>
-        <property name="frameworksrc" value="frameworkservlet/src"/>
-        <property name="authenticationsrc" value="authentication"/>
-        <property name="utilsrc" value="util"/>
-        <property name="datafileexchg_src" value="datafile-exchange"/>
-        <property name="usermanagementsrc" value="usermanagement-servlet"/>
-        <property name="stylesheet_src" value="stylesheet_servlet/src"/>       
-        <property name="multipart_src" value="multipart"/>
-        <property name="multipart" value="lib/multipart.jar"/>
-        <property name="ant" value="ant.jar"/>
-        <property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
- 		<property name="vegbank.home.dir" value="/usr/vegbank"/>
-        <property name="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
-        
-        <!-- Filters -->
-        <filter token="serverUrl" value="beta.nceas.ucsb.edu" />
-        <filter token="servlet-path" value="${servlet-path}" />
-        <filter token="mailHost" value="nceas.ucsb.edu"/>
-        <filter token="systemEmail" value="dba@vegbank.org"/>
-        <filter token="genericForm" value="${servlet.webapp.dir}/forms/generic_form.html"/>
-        <filter token="genericTemplate" value="${servlet.webapp.dir}/forms/tmp.html"/>
-        <filter token="rmiserver"  value="128.111.220.59"/>  
-        <filter token="uploadDir" value="${servlet_location}"/>
-        <filter token="originalDataStore" value="${originalDataStore}"/>
-        <!-- End Filters -->
-        
-	</target>
+	  <property name="xmlresource" value="lib/xmlresource.jar" />
+	  <property name="dbaccess" value="lib/database_access.jar" />
+	  <property name="data-source" value="lib/datatranslator.jar" />
+	  <property name="release" value="development"/>
+	  <property name="frameworksrc" value="frameworkservlet/src"/>
+	  <property name="authenticationsrc" value="authentication"/>
+	  <property name="utilsrc" value="util"/>
+	  <property name="datafileexchg_src" value="datafile-exchange"/>
+	  <property name="usermanagementsrc" value="usermanagement-servlet"/>
+	  <property name="stylesheet_src" value="stylesheet_servlet/src"/>
+	
+	  <property name="multipart_src" value="multipart"/>
+	  <property name="multipart" value="lib/multipart.jar"/>
+	  <property name="ant" value="ant.jar"/>
+
+	
+	  <property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
+	
+		<!-- Filters -->
+	  <filter token="serverUrl" value="beta.nceas.ucsb.edu" />
+	  <filter token="servlet-path" value="${servlet-path}" />
+	  <filter token="mailHost" value="nceas.ucsb.edu"/>
+	  <filter token="systemEmail" value="dba@vegbank.org"/>
+	  <filter token="genericForm" value="${servlet.webapp.dir}/forms/generic_form.html"/>
+	  <filter token="genericTemplate" value="${servlet.webapp.dir}/forms/tmp.html"/>
+	  <filter token="rmiserver"  value="128.111.220.59"/>  
+	  <filter token="uploadDir" value="${servlet_location}"/>
+	  <!-- End Filters -->
+  </target>
 
 
 
@@ -177,7 +176,7 @@
 	/>
 
 	<echo message="compiling other vegbank-request" />
-	<ant dir="vegbank-request" inheritAll="false" target="compile"/>	
+	<!--<ant dir="vegbank-request" inheritAll="false" target="compile"/>	-->
 </target>	
 
 
@@ -188,6 +187,10 @@
 		basedir="${build}"
 		includes="servlet/util/** "
 	/>
+
+  <copy file="${lib}/utilities.jar"
+        filtering="no"
+        todir="../../build/lib/"/>
 	
 	<jar jarfile ="${lib}/stylesheet-generator.jar"
 		basedir="${build}"
@@ -234,14 +237,6 @@
   	    <include name="stylesheet-generator.jar"/>
   	</fileset>
 	</copy>
-
-	
-	<copy todir="${appserver_bin}" filtering="no" >
-		<fileset dir="${lib}" >
-  	    <include name="frameworkservlet-config.xml"/>
-  	</fileset>
-	</copy>
-
 
 	<copy todir="${servlet_location}" filtering="no" >
 			<fileset dir="${lib}" >
