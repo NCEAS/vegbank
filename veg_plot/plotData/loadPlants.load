@@ -1,0 +1,10 @@
+clear
+echo Loading
+sqlldr harris/use4dev  control=/home/computer/harris/projects/vegclass/veg_plot/plotData/loadPlants.ctl
+ log=/home/computer/harris/projects/vegclass/veg_plot/plotData/load.log
+ bad=/home/computer/harris/projects/vegclass/veg_plot/plotData/bad.log
+errors=900000 silent=all
+silent=all
+
+
+#qlplus msbu/msbudba @up_days.sql
