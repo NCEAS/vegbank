@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-04 16:48:31 $'
- * 	'$Revision: 1.16 $'
+ *  '$Date: 2002-04-04 19:32:21 $'
+ * 	'$Revision: 1.17 $'
  */
 package databaseAccess;
 
@@ -423,7 +423,12 @@ public class DBinsertPlotSource
 					if( insertTaxonObservations() == false )
 					{
 						System.out.println("observation>: "+commit);
+						debug.append( "<taxaInsertion>false</taxaInsertion> \n" );
 						commit = false;
+					}
+					else
+					{
+						debug.append( "<taxaInsertion>true</taxaInsertion> \n" );
 					}
 				}
 				System.out.println("DBinsertPlotSource > insertion success: "+ commit);
@@ -662,6 +667,12 @@ public class DBinsertPlotSource
 				//get the strata ID
 				int stratumId = this.getStrataId(plotObservationId, curStrata);
 				
+				debug.append("<stratumComposition> \n");
+				debug.append("<stratumName>"+curStrata+"</stratumName> \n");
+				debug.append("<taxonName>"+plantName.replace('&', '_')+"</taxonName> \n");
+				debug.append("<cover>"+cover+"</cover> \n");
+				debug.append("</stratumComposition> \n");
+
 			
 				//insert the strata composition values
 				sb.append("INSERT into STRATUMCOMPOSITION (stratumComposition_id, "
@@ -678,14 +689,13 @@ public class DBinsertPlotSource
 				pstmt.setString(4, cover);
 				pstmt.setInt(5, stratumId);
 				pstmt.setInt(6, taxonObservationId);
-				
   			pstmt.execute();
 			}
 		}
-		
 		catch (SQLException sqle)
 		{
 			System.out.println("Caught SQL Exception: "+sqle.getMessage() ); 
+			debug.append("<exceptionMessage>"+sqle.getMessage()+" (sqle) loading strata Composition data</exceptionMessage>\n");
 			sqle.printStackTrace();
 			return(false);
 		}
@@ -693,6 +703,7 @@ public class DBinsertPlotSource
 		catch (Exception e)
 		{
 			System.out.println("Caught Exception: "+e.getMessage() ); 
+			debug.append("<exceptionMessage>"+e.getMessage()+"</exceptionMessage>\n");
 			e.printStackTrace();
 			return(false);
 		}
@@ -871,14 +882,13 @@ public class DBinsertPlotSource
 					nameId = (String)h.get("nameId");
 				}
 				
-				
 				//add the taxon name to the debugging
 				debug.append("<taxonObservation> \n");
 				debug.append("<authorTaxonName>"+authorNameId.replace('&', '_')+"</authorTaxonName> \n");
 				debug.append("<authorTaxonCode>"+code+"</authorTaxonCode> \n");
 				debug.append("<vegbankMatch> \n");
 				debug.append("<vegbankLevel>"+level+"</vegbankLevel> \n");
-				debug.append("<vegbankName>"+name+"</vegbankName> \n");
+				debug.append("<vegbankName>"+name.replace('&', '_')+"</vegbankName> \n");
 				debug.append("<vegbankConceptId>"+conceptId+"</vegbankConceptId> \n");
 				debug.append("<vegbankNameId>"+nameId+"</vegbankNameId> \n");
 				debug.append("</vegbankMatch> \n");
@@ -890,38 +900,29 @@ public class DBinsertPlotSource
 					+" values(?,?,?,?) ");
 				
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-				
-				// Bind the values to the query and execute it
   	  	pstmt.setInt(1, taxonObservationId);
   	  	pstmt.setInt(2, plotObservationId);
 				pstmt.setString(3, authorNameId);
 				pstmt.setString(4, nameId);
-				
-				//execute the p statement
   		  pstmt.execute();
-			 try
-			 {
-				 	boolean result = this.insertStrataComposition(authorNameId, taxonObservationId);
-			 		if (result = false)
-					{
-						return(false);
-					}
-			 }
-			 catch (Exception e)
-			 {
-				 	System.out.println("Caught Exception: "+e.getMessage() ); 
-					e.printStackTrace();	
-					return(false);
-			 }
+			 	
+				// insert the strata composition
+				boolean result = this.insertStrataComposition(authorNameId, taxonObservationId);
+			 	if (result == false)
+				{
+					successfulCommit = false; 
+				}
+				debug.append("<insertStrataComp>"+result+"</insertStrataComp> \n");
+			
 			}
 		}
 		catch (Exception e)
 		{
 			System.out.println("Caught Exception: "+e.getMessage() ); 
 			e.printStackTrace();
-			return(false);
+			successfulCommit = false; 
 		}
-		return( true );
+		return( successfulCommit );
 	}
 	
 	
@@ -1263,7 +1264,6 @@ public class DBinsertPlotSource
 			pstmt.setString(22, this.submitterSurName);
 			pstmt.setString(23, this.submitterGivenName);
 			pstmt.setString(24, this.submitterEmail);
-			
 
 			pstmt.getWarnings();
   	  pstmt.execute();
