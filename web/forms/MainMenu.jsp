@@ -12,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-04-26 20:49:43 $'
-*  '$Revision: 1.5 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-08-26 18:06:08 $'
+*  '$Revision: 1.6 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -96,7 +96,6 @@
       <h4 class="VegBank">
         
           Apply to become a <html:link action="LoadCertification.do">Certified VegBank User</html:link>
-        <font color="#F90000"> <b> New! </b></font>
 	<a href="@help-for-certification-href@"><img border="0" src="@image_server@question.gif"></a>
       </h4>
     </li>
