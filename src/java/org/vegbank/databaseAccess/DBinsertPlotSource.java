@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-10-27 20:27:55 $'
-*   '$Revision: 1.7 $'
+*   '$Date: 2003-11-25 19:43:35 $'
+*   '$Revision: 1.8 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -143,7 +143,7 @@ public class DBinsertPlotSource {
 			source.getPlot(plot);
 
 			System.out.println("DBinsertPlotSource > pooling database connections");
-			conn=DBConnectionPool.getDBConnection("Need connection for inserting dataset");
+			conn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
 
 			//System.out.println("opening log file");
 			// make a new output log file
@@ -179,7 +179,7 @@ public class DBinsertPlotSource {
 			
 			//initialize the database connection manager
 			System.out.println("DBinsertPlotSource > pooling database connections");
-			conn=DBConnectionPool.getDBConnection("Need connection for inserting dataset");
+			conn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
 
 			out = new PrintWriter(new FileWriter(logFile));
 		} catch (Exception e) {
@@ -211,7 +211,7 @@ public class DBinsertPlotSource {
 			
 			//initialize the database connection manager
 			System.out.println("DBinsertPlotSource > pooling database connections");
-			conn=DBConnectionPool.getDBConnection("Need connection for inserting dataset");
+			conn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
 
 		} catch (Exception e) {
 			System.out.println("Caught Exception: " + e.getMessage());
