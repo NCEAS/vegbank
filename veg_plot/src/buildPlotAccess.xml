@@ -66,8 +66,7 @@
 	<copydir src="${src_xml}" 
 		dest="${build_xml}" 
     filtering="yes"
-    includes="artificialPlotExample.xml plot2DBaddress.xsl vegPlot.dtd 
-	  plotQuery.dtd querySpec.xsl examplePlotQuery.xml examplePlotQuery2.xml"
+    includes="**.dtd **.xml **.xsl"
     excludes="**/CVS* "
 	/>
 	 
@@ -93,7 +92,12 @@
 		includes="**.sh"
 		excludes="**/CVS* "
 	/>
-								
+
+	<chmod dir="${build_bin}"
+  	perm="a+x"
+		includes="**/*.sh"
+	/>
+					
 	
 	<!-- grab the utility classes that will be needed for such things as data
 	formatting-->  
