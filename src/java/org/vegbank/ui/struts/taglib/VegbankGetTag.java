@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-13 06:44:34 $'
- *	'$Revision: 1.18 $'
+ *	'$Date: 2005-02-16 20:12:18 $'
+ *	'$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ import org.vegbank.common.utility.DatabaseUtility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.18 $ $Date: 2004-12-13 06:44:34 $
+ * @version $Revision: 1.19 $ $Date: 2005-02-16 20:12:18 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -153,7 +153,7 @@ public class VegbankGetTag extends VegbankTag {
 					if (Utility.isStringNullOrEmpty(where)) {
 						// still null, set default numeric
 						where = "where_" + request.getParameter("entity") + "_pk";
-						log.debug("was null so is now: " + where);
+						log.debug("where was null so is now: " + where);
 					}
 
 				} else {
@@ -165,7 +165,7 @@ public class VegbankGetTag extends VegbankTag {
 						// still null, set default non-numeric
 						where = "where_accessioncode";
 						////////where = "where_ac";  // this one uses IN ({0})
-						log.debug("was null so is now: " + where);
+						log.debug("where was null so is now: " + where);
 					}
 				}
 
@@ -277,12 +277,14 @@ public class VegbankGetTag extends VegbankTag {
 			// check for xwhere
 			if (getXwhereEnable()) {
 				arr = new String[2];
-				arr[0] = DatabaseUtility.makeSQLSafe(getWparam(), false);
+				//arr[0] = DatabaseUtility.makeSQLSafe(getWparam(), false);
+				arr[0] = getWparam();
 				arr[1] = getXwhereClause();
 				log.debug(this.select + " has 1 WPARAM + XWHERE");
 			} else {
 				arr = new String[1];
-				arr[0] = DatabaseUtility.makeSQLSafe(getWparam(), false);
+				//arr[0] = DatabaseUtility.makeSQLSafe(getWparam(), false);
+				arr[0] = getWparam();
 				log.debug(this.select + " has 1 WPARAM");
 			}
 
@@ -294,7 +296,8 @@ public class VegbankGetTag extends VegbankTag {
 		if (arr != null) {
 			for (int i=0; i<arr.length; i++) {
 				///////////arr[i] = stripSingleQuotes(arr[i]);
-				arr[i] = DatabaseUtility.makeSQLSafe(arr[i], false);
+				//arr[i] = DatabaseUtility.makeSQLSafe(arr[i], false);
+				arr[i] = arr[i];
 			}
 		}
 
