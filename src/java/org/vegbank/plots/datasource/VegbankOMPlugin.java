@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-18 01:07:40 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-02-19 17:40:27 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	
 	private Hashtable projectContibs = new Hashtable();
 	private Hashtable taxonObs = new Hashtable();
-	private HashMap stratumComposition = new HashMap();	
+	private HashMap taxonImportances = new HashMap();	
 	private HashMap strataNames = new HashMap();	
 	private HashMap placeNames = new HashMap();	
 	
@@ -1566,13 +1566,12 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 			return taxaStrataCover;
 		}
 		// FIXME: Use taxonImportance instead
-//		Stratumcomposition sc = (Stratumcomposition)  stratumComposition.get(stratumName);
-//		if (sc == null )
-//		{
-//			return taxaStrataCover;
-//		}
-//		return sc.getTaxonstratumcover();
-		return taxaStrataCover;
+		Taxonimportance ti = (Taxonimportance) taxonImportances.get(stratumName);
+		if ( ti != null )
+		{
+			return taxaStrataCover;
+		}
+		return ti.getCover();
 	}
 
 	/* (non-Javadoc)
@@ -1582,18 +1581,22 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	{
 		Vector strataList = new Vector();
 		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
-		// FIXME: Use taxonImportance instead
-//		List scList = to.gettaxonobservation_stratumcompositions();
-//		Iterator startumCompsitions = scList.iterator();
-//		while ( startumCompsitions.hasNext() )
-//		{
-//			Stratumcomposition sc = (Stratumcomposition) startumCompsitions.next();
-//			String stratumName = sc.getStratumobject().getStratumname();
-//			strataList.add(stratumName);
-//			stratumComposition.put(stratumName, sc);
-//		}
-//		return strataList;
-		return null;
+		List tiList = to.gettaxonobservation_taxonimportances();
+		Iterator taxonImportanceIt = tiList.iterator();
+		while ( taxonImportanceIt.hasNext() )
+		{
+			// FIXME: What does it mean when a taxonImportance has no single strata?
+			String stratumName = "ALL STRATA";
+			Taxonimportance ti = (Taxonimportance) taxonImportanceIt.next();
+			Stratum stratum = ti.getStratumobject();
+			if ( stratum != null )
+			{
+				stratumName = stratum.getStratumname();
+			}
+			strataList.add(stratumName);
+			taxonImportances.put(stratumName, ti);
+		}
+		return strataList;
 	}
 
 	/* (non-Javadoc)
