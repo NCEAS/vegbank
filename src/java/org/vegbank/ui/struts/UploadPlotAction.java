@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-26 01:45:43 $'
- *	'$Revision: 1.19 $'
+ *	'$Date: 2005-02-11 00:56:25 $'
+ *	'$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,6 @@ import org.vegbank.dataload.XML.*;
 public class UploadPlotAction extends VegbankAction
 {
 	private static Log log = LogFactory.getLog(UploadPlotAction.class);
-	private static String uploadPath = Utility.VB_DATA_DIR;
 	private static ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	private String saveDir = "";
 	
@@ -90,8 +89,7 @@ public class UploadPlotAction extends VegbankAction
 		WebUser user = getUser(request.getSession());
 		String userId = user.getUseridLong().toString();
 
-		// use the userId as the save dir
-		setSaveDir(userId);
+		setSaveDir(user.getUploadDir(true));
 
 		// put the email address in context
 		request.setAttribute("email", user.getEmail());
@@ -226,7 +224,7 @@ public class UploadPlotAction extends VegbankAction
 			switch (archiveType) {
 				case UploadPlotForm.VEGBANK_XML_FORMAT :
 					log.info("VEGBANK_XML_FORMAT format uploaded: " + savedFileName);
-					worker = this.uploadVegbankXML(request, savedFileName, validate, dbLoad, rectify);
+					worker = this.uploadVegbankXML(request, savedFileName, validate, dbLoad, rectify, user);
 					break;
 		
 				default:
@@ -300,11 +298,11 @@ public class UploadPlotAction extends VegbankAction
 	 * @return worker thread 
 	 */
 	private VegbankXMLUploadThread uploadVegbankXML(HttpServletRequest request, String savedFileName,
-			boolean validate, boolean dbLoad, boolean rectify) throws Exception
+			boolean validate, boolean dbLoad, boolean rectify, WebUser webUser) throws Exception
 	{
 		log.debug("============= SPAWNING LOADER THREAD ============= " + savedFileName);
 		VegbankXMLUploadThread worker = new VegbankXMLUploadThread();
-		worker.init(validate, rectify, dbLoad, savedFileName);
+		worker.init(validate, rectify, dbLoad, savedFileName, webUser);
 		worker.start();
 		return worker;
 	}
@@ -405,25 +403,10 @@ public class UploadPlotAction extends VegbankAction
 
 
 	/**
-	 * Returns the full upload path to which files should be saved.
-	 * FORMAT:  /basePath/userId/timestamp/
-	 *
-	 * Does not mkdirs.
+	 * Simply sets the save directory.
 	 */
-	private void setSaveDir(String userId) {
-		saveDir = uploadPath;
-
-		if (!saveDir.endsWith(File.separator)) {
-			 saveDir += File.separator;
-		}
-
-		saveDir += userId;
-
-		if (!saveDir.endsWith(File.separator)) {
-			 saveDir += File.separator;
-		}
-
-		saveDir += DateUtility.getTimestamp() + File.separator;
+	private void setSaveDir(String s) {
+		this.saveDir = s;
 	}
 
 
