@@ -118,7 +118,7 @@ if (downLoadAction != null)
 		}
 	}
  	//now call the download page
- 	response.sendRedirect(servletPath+"pageDirector?pageType=download");	
+ 	response.sendRedirect("http://vegbank.nceas.ucsb.edu/forms/resultset-download.html");	
 	}
 	catch( Exception e ) 
 	{
