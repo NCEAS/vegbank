@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-19 17:49:50 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-10-05 02:13:01 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.validator.ValidatorForm;
 import org.apache.struts.upload.MultipartRequestHandler;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.vegbank.common.utility.Utility;
 
 /**
  * @author farrell
@@ -39,30 +42,36 @@ import org.apache.struts.upload.MultipartRequestHandler;
  */
 public class UploadPlotForm extends ValidatorForm 
 {
+	private static Log log = LogFactory.getLog(UploadPlotAction.class);
+
 	// The formats accepted by vegbank
+	public static final String LOCAL = "local";
+	public static final String REMOTE = "remote";
 	public static final int NATURESERVE_FORMAT = 0;
 	public static final int VEGBANK_ACCESS_FORMAT = 1;
 	public static final int VEGBANK_XML_FORMAT = 2;
+	public static final String ERROR_PROPERTY_MAX_LENGTH_EXCEEDED = 
+		"org.apache.struts.webapp.upload.MaxLengthExceeded";
 	
 	// Give a default
-	private int archieveType = VEGBANK_XML_FORMAT;
+	private int archiveType = VEGBANK_XML_FORMAT;
 	// Only allow false for now
 	private final String updateArchivedPlot = "false";
 	private FormFile plotFile = null; 
-	public static final String ERROR_PROPERTY_MAX_LENGTH_EXCEEDED = "org.apache.struts.webapp.upload.MaxLengthExceeded";
+	private String plotFileURL = null; 
 	
 	// The following variables are for controlling uploader features
 	// defaults are all true
 	public boolean validate = true;
 	public boolean rectify = true;
-	public boolean upload = true;
+	public String dataFileLocation = "local";
 
 	/**
 	 * @return
 	 */
 	public int getArchiveType()
 	{
-		return archieveType;
+		return archiveType;
 	}
 
 	/**
@@ -71,6 +80,14 @@ public class UploadPlotForm extends ValidatorForm
 	public FormFile getPlotFile()
 	{
 		return plotFile;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getPlotFileURL()
+	{
+		return plotFileURL;
 	}
 
 	/**
@@ -86,7 +103,7 @@ public class UploadPlotForm extends ValidatorForm
 	 */
 	public void setArchiveType(int format)
 	{
-		archieveType = format;
+		archiveType = format;
 	}
 
 	/**
@@ -95,6 +112,14 @@ public class UploadPlotForm extends ValidatorForm
 	public void setPlotFile(FormFile file)
 	{
 		plotFile = file;
+	}
+
+	/**
+	 * @param string
+	 */
+	public void setPlotFileURL(String s)
+	{
+		plotFileURL = s;
 	}
 
 	/**
@@ -111,31 +136,45 @@ public class UploadPlotForm extends ValidatorForm
 	 */
 	public ActionErrors validate(ActionMapping am, HttpServletRequest req)
 	{
-		System.out.println("About to validate the form");
-		ActionErrors errors = super.validate(am, req);
-		if ( errors == null)
-			errors = new ActionErrors();
-			
-		FormFile plotFile = this.getPlotFile();
+		log.debug("validating...");
 
-		if ( plotFile== null 
-			|| plotFile.getFileSize() == 0 )
-		{
-			errors.add(
-				ActionErrors.GLOBAL_ERROR,
-				new ActionError("errors.required", "A Plot datafile")
-			);
-		}
-		
-		// Check to see if the maximum file size has been exceeded!
-		Boolean maxLengthExceeded = (Boolean)
-				req.getAttribute(MultipartRequestHandler.ATTRIBUTE_MAX_LENGTH_EXCEEDED);
-		if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue()))
-		{
-			String maxFileSize = am.getModuleConfig().getControllerConfig().getMaxFileSize();
+		ActionErrors errors = super.validate(am, req);
+		if (errors == null) {
 			errors = new ActionErrors();
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.maxLengthExceeded", maxFileSize ));
-		}		
+		}
+			
+		if (isUpload()) {
+			// check the upload file
+			FormFile plotFile = this.getPlotFile();
+
+			if (plotFile == null || plotFile.getFileSize() == 0)
+			{
+				errors.add(
+					ActionErrors.GLOBAL_ERROR,
+					new ActionError("errors.required", "A valid plot datafile")
+				);
+			}
+			
+			// Check to see if the maximum file size has been exceeded!
+			Boolean maxLengthExceeded = (Boolean)
+					req.getAttribute(MultipartRequestHandler.ATTRIBUTE_MAX_LENGTH_EXCEEDED);
+			if ((maxLengthExceeded != null) && (maxLengthExceeded.booleanValue()))
+			{
+				String maxFileSize = am.getModuleConfig().getControllerConfig().getMaxFileSize();
+				errors = new ActionErrors();
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.maxLengthExceeded", maxFileSize ));
+			}		
+
+		} else {
+			// make sure a URL was entered
+			if (Utility.isStringNullOrEmpty(plotFileURL)) {
+				errors.add(
+					ActionErrors.GLOBAL_ERROR,
+					new ActionError("errors.required", "A valid plot datafile URL")
+				);
+			}
+		}
+
 		return errors;
 	}
 
@@ -162,21 +201,55 @@ public class UploadPlotForm extends ValidatorForm
 	/**
 	 * @return Returns the upload.
 	 */
+	public String getDataFileLocation()
+	{
+		log.debug("getting 'dataFileLocation': " + this.dataFileLocation);
+		return dataFileLocation;
+	}
+
+	/**
+	 * @return Returns the upload.
+	 */
 	public boolean isUpload()
 	{
-		return upload;
+		if (this.dataFileLocation.equals(LOCAL)) { 
+			log.debug("is local upload");
+			return true;
+		} else {
+			log.debug("is remote download");
+			return false;
+		}
 	}
 
 	/**
 	 * @param upload The upload to set.
 	 */
-	public void setUpload(Boolean upload)
+	/*
+	public void setUpload(String upload)
 	{
-		if ( upload == null )
+		if ( Utility.isStringNullOrEmpty(upload) || upload != "true" )
 		{
+			this.upload = false;
+		} else {
 			this.upload = true;
+
 		}
-		this.upload = upload.booleanValue();
+		log.debug("set 'upload' to " + this.upload);
+	}
+	*/
+
+	/**
+	 * @param dataFileLocation
+	 */
+	public void setDataFileLocation(String dfl)
+	{
+		if ( Utility.isStringNullOrEmpty(dfl) || !dfl.equals("remote") )
+		{
+			this.dataFileLocation = LOCAL;
+		} else {
+			this.dataFileLocation = REMOTE;
+		}
+		log.debug("set 'dataFileLocation' to " + this.dataFileLocation);
 	}
 
 	/**

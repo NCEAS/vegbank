@@ -1,8 +1,29 @@
+/*
+ * '$RCSfile: UploadPlotAction.java,v $'
+ *	Authors: @author@
+ *	Release: @release@
+ *
+ *	'$Author: anderson $'
+ *	'$Date: 2004-10-05 02:13:01 $'
+ *	'$Revision: 1.13 $'
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ */
 package org.vegbank.ui.struts;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.Vector; 
@@ -25,42 +46,21 @@ import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.FileWrapper;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.WebFileFetch;
 import org.vegbank.common.utility.datafileexchange.DataFileDB;
 import org.vegbank.dataload.XML.*;
 
-/*
- * '$RCSfile: UploadPlotAction.java,v $'
- *	Authors: @author@
- *	Release: @release@
- *
- *	'$Author: anderson $'
- *	'$Date: 2004-05-06 22:42:54 $'
- *	'$Revision: 1.12 $'
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
- */
 /**
  * @author farrell
  *
  * Struts Action to upload plot from file
  */
-public class UploadPlotAction extends Action
+public class UploadPlotAction extends VegbankAction
 {
 	private static Log log = LogFactory.getLog(UploadPlotAction.class);
 
-	private String originalDataStore = Utility.VB_HOME_DIR + "/originalDataStore";
+	private String saveDir = "";
+	private String uploadPath = Utility.VB_DATA_DIR;
 	private ServletUtility util = new ServletUtility();
 	
 	// ResourceBundle properties
@@ -85,17 +85,61 @@ public class UploadPlotAction extends Action
 		String updateArchivedPlot = theForm.getUpdateArchivedPlot();
 		boolean validate = theForm.isValidate();
 		boolean rectify = theForm.isRectify();
+
+		log.debug("ACTION.execute(): calling isUpload");
 		boolean upload = theForm.isUpload();
-		
-		FormFile file = theForm.getPlotFile();
-		String usersFileName = file.getFileName();
-		// Check if has zip extension
 		String savedFileName = null;
 		VegbankXMLUploadThread worker = null;
-		
 		Collection files = new Vector();
+
+		FileWrapper file = null;
+		String fileURL = null;
+
+		if (upload) {
+			try {
+				file = new FileWrapper(theForm.getPlotFile());
+			} catch (Exception ex) {
+				errors.add(
+						ActionErrors.GLOBAL_ERROR,
+						new ActionError(
+							"errors.action.failed",
+							"error uploading local file. " + ex.getMessage()));
+				log.error("error uploading local file. " + ex.getMessage());
+				saveErrors(request, errors);
+				return (mapping.getInputForward());
+			}
+		} else {
+			fileURL = theForm.getPlotFileURL();
+
+			// fetch the file
+			try {
+				WebFileFetch fetcher = new WebFileFetch();
+
+				setSaveDir( getUser(request.getSession()).getUseridLong().toString() );
+				String saveDir = getSaveDir();
+
+				log.debug("user's save dir: " + saveDir);
+				fetcher.setSaveDir(saveDir);
+
+				file = new FileWrapper( 
+						fetcher.saveRemoteFile(fileURL, null, "GET"));
+
+			} catch (Exception ex) {
+				errors.add(
+						ActionErrors.GLOBAL_ERROR,
+						new ActionError(
+							"errors.action.failed",
+							"error downloading remote file. " + ex.getMessage()));
+				log.error("error downloading remote file. " + ex.getMessage());
+				saveErrors(request, errors);
+				return (mapping.getInputForward());
+			}
+
+		}
 		
-		String extension = this.getFileExtension(  file.getFileName());
+		
+		String usersFileName = file.getFileName();
+		String extension = this.getFileExtension(file.getFileName());
 		if ( extension.equalsIgnoreCase("ZIP") )
 		{
 				try
@@ -147,7 +191,7 @@ public class UploadPlotAction extends Action
 			{
 				try 
 				{
-					savedFileName = this.saveAndRegisterFile(thisFile);
+					savedFileName = this.saveFile(thisFile);
 				}
 				catch (Exception e) {
 					errors.add(
@@ -251,8 +295,36 @@ public class UploadPlotAction extends Action
 	}
 
 	/**
+	 * Just save the freaking file.
+	 * 
+	 * @param FormFile -- the uploaded file
+	 * @return String -- the fileName used for saving
+	 */
+	private String saveFile(FileWrapper file) throws Exception {
+		
+		String fileNameAndPath = getSaveDir();
+		fileNameAndPath += file.getFileName();
+
+		//write the file to the file specified
+		InputStream stream = file.getInputStream();
+		OutputStream bos = new FileOutputStream(fileNameAndPath);
+		int bytesRead = 0;
+		byte[] buffer = new byte[8192];
+		
+		while ((bytesRead = stream.read(buffer, 0, 8192)) != -1) {
+			bos.write(buffer, 0, bytesRead);
+		}
+		bos.close();
+		log.debug("UploadPlotAction: The file has been written to \"" + fileNameAndPath + "\"");
+
+		//close the stream
+		stream.close();
+
+		return fileNameAndPath;
+	}
+
+	/**
 	 * Save file to filesystem using a unique name aquired from the the framework 
-	 * database.
 	 * 
 	 * @param FormFile -- the uploaded file
 	 * @return String -- the fileName used for saving
@@ -265,7 +337,7 @@ public class UploadPlotAction extends Action
 		
 		DataFileDB filedb = new DataFileDB();
 		int fileName = filedb.getNewAccessionId();
-		String fileNameAndPath = originalDataStore + "/" + new Integer(fileName).toString();
+		String fileNameAndPath = getSaveDir() + Integer.toString(fileName);
 
 		//write the file to the file specified
 		OutputStream bos = new FileOutputStream(fileNameAndPath);
@@ -276,19 +348,41 @@ public class UploadPlotAction extends Action
 			bos.write(buffer, 0, bytesRead);
 		}
 		bos.close();
-		log.debug(
-			"UploadPlotAction: The file has been written to \"" + fileNameAndPath + "\"");
+		log.debug("UploadPlotAction: The file has been written to \"" + fileNameAndPath + "\"");
 
 		//close the stream
 		stream.close();
 
 		//register the document with the database
+		/*
 		filedb.registerDocument(
 			fileName,
 			file.getFileSize(),  
 			file.getFileName(),
-			originalDataStore);
+			uploadPath);
+		*/
 			
 		return fileNameAndPath;
+	}
+
+
+	private void setSaveDir(String userDirName) {
+		saveDir = uploadPath;
+
+		if (!saveDir.endsWith(File.separator)) {
+			 saveDir += File.separator;
+		}
+
+		saveDir += userDirName;
+
+		if (!saveDir.endsWith(File.separator)) {
+			 saveDir += File.separator;
+		}
+		saveDir += File.separator;
+	}
+
+
+	private String getSaveDir() {
+		return this.saveDir;
 	}
 }
