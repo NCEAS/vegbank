@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-07-30 20:03:09 $'
- * 	'$Revision: 1.30 $'
+ *  '$Date: 2002-08-07 18:22:20 $'
+ * 	'$Revision: 1.31 $'
  */
 package databaseAccess;
 
@@ -140,19 +140,30 @@ public class DBinsertPlotSource
 		{
 			System.out.println("Caught Exception: "+e.getMessage() ); 
 			e.printStackTrace();
-			System.out.println("Exiting at DBinsertPlotSource constructor");
-			//System.exit(0);
 		}
 	}
 	
 	
 	
 	/**
-	 * this constructor -- is empty
+	 * this constructor is called when the class is going to connect 
+	 * to the vagbank database and not to any of the plugins.  This 
+	 * occurs when, for example, the class attemts to create the 
+	 * summary tables.
 	 */
 	public DBinsertPlotSource() 
   {
-		
+		try
+		{
+			//initialize the database connection manager
+			connectionBroker.manageLocalDbConnectionBroker("initiate");
+			conn = connectionBroker.manageLocalDbConnectionBroker("getConn");
+		}
+		catch (Exception e)
+		{
+			System.out.println("Caught Exception: "+e.getMessage() ); 
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -186,6 +197,211 @@ public class DBinsertPlotSource
 			return(v);
 	 }
 	
+	/**
+	 * this method is used to create the denormalized tables that are 
+	 * used by the vegbank for querying plots data.  The sql statements 
+	 * in this method are the same as those in the 'makePlotSummaryTables_postgres.sql'
+	 * script in the sql directory in cvs.  This method will be called by this 
+	 * class after the insertPlot tarnsaction is carried out, and this method 
+	 * is considered a single transaction, so that if any exceptions are thrown the 
+	 * whole thing is 'rolled-back'
+	 *
+	 */
+	 private void createSummaryTables()
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 try
+		 {
+			 	this.conn.setAutoCommit(false);
+			 	
+				// DESTROY THE TABLES 
+				sb.append("drop table plotSiteSummary;");
+				sb.append("drop SEQUENCE PLOTSITESUMMARY_ID_seq;");
+				sb.append("drop table plotSpeciesSum;");
+				sb.append("drop SEQUENCE PLOTSPECIESSUM_ID_seq;");
+				
+				
+				
+				
+				
+				
+				// RE-CREATE THE TABLES
+				sb.append("CREATE SEQUENCE PLOTSITESUMMARY_ID_seq;");
+				sb.append("CREATE TABLE plotSiteSummary (");
+				sb.append("PLOTSITESUMMARY_ID NUMERIC(20) default nextval('PLOTSITESUMMARY_ID_seq'),");
+				sb.append("PLOT_ID integer,");
+				sb.append("OBSERVATION_ID integer,");
+				sb.append("PROJECT_ID integer,");
+				sb.append("PLOTTYPE VARCHAR(30),");
+				sb.append("SAMPLINGMETHOD VARCHAR(45),");
+				sb.append("COVERSCALE VARCHAR(30),");
+				sb.append("PLOTORIGINLAT NUMERIC(30),");
+				sb.append("PLOTORIGINLONG NUMERIC(30),");
+				sb.append("PLOTSHAPE VARCHAR(30),");
+				sb.append("PLOTAREA VARCHAR(30),");
+				sb.append("ALTVALUE float,");
+				sb.append("SLOPEASPECT NUMERIC(30),");
+				sb.append("SLOPEGRADIENT NUMERIC(30),");
+				sb.append("SLOPEPOSITION VARCHAR(100),");
+				sb.append("HYDROLOGICREGIME VARCHAR(100),");
+				sb.append("SOILDRAINAGE VARCHAR(100),");
+				sb.append("CURRENTCOMMUNITY VARCHAR(140),");
+				sb.append("CURRENTCOMMUNITYCODE VARCHAR(45),");
+				sb.append("XCOORD VARCHAR(100),");
+				sb.append("YCOORD VARCHAR(100),");
+				sb.append("COORDTYPE VARCHAR(100),");
+				sb.append("OBSSTARTDATE DATE,");
+				sb.append("OBSSTOPDATE DATE,");
+				sb.append("EFFORTLEVEL VARCHAR(100),");
+				sb.append("HARDCOPYLOCATION VARCHAR(100),");
+				sb.append("SOILTYPE VARCHAR(30),");
+				sb.append("SOILDEPTH VARCHAR(100),");
+				sb.append("PERCENTROCKGRAVEL VARCHAR(30),");
+				sb.append("PERCENTSOIL VARCHAR(30),");
+				sb.append("PERCENTLITTER VARCHAR(30),");
+				sb.append("PERCENTWOOD VARCHAR(30),");
+				sb.append("PERCENTWATER VARCHAR(30),");
+				sb.append("PERCENTSAND VARCHAR(30),");
+				sb.append("PERCENTCLAY VARCHAR(30),");
+				sb.append("PERCENTORGANIC VARCHAR(120),");
+				sb.append("LEAFTYPE VARCHAR(50),");
+				sb.append("PHYSIONOMICCLASS VARCHAR(100),");
+				sb.append("AUTHORPLOTCODE VARCHAR(100),");
+				sb.append("SURFGEO  VARCHAR(70),");
+				sb.append("STATE VARCHAR(50),");
+				sb.append("COUNTRY VARCHAR(100),");
+				sb.append("PARENTPLOT NUMERIC(12),");
+				sb.append("AUTHOROBSCODE VARCHAR(100),");
+				sb.append("ACCESSION_NUMBER varchar (200),");
+				sb.append("CONSTRAINT plotSiteSummary_pk PRIMARY KEY (PLOTSITESUMMARY_ID)");
+				sb.append(");");
+
+				
+				sb.append("CREATE SEQUENCE PLOTSPECIESSUM_ID_seq;");
+				sb.append("CREATE TABLE plotSpeciesSum (");
+				sb.append("PLOTSPECIESSUM_ID integer default nextval('PLOTSITESUMMARY_ID_seq'), ");
+				sb.append("PLOT_ID integer,");
+				sb.append("OBS_ID integer, ");
+				sb.append("PARENTPLOT integer, ");
+				sb.append("AUTHORNAMEID VARCHAR(300), ");
+				sb.append("AUTHORPLANTCODE VARCHAR(300), ");
+				sb.append("AUTHORPLOTCODE VARCHAR(100), ");
+				sb.append("AUTHOROBSCODE VARCHAR(100), ");
+				sb.append("TAXONOBSERVATION_ID NUMERIC(20), ");
+				sb.append("STRATUMTYPE VARCHAR(32), ");
+				sb.append("PERCENTCOVER NUMERIC(8), ");
+				sb.append("CONSTRAINT plotSpeciesSum_pk PRIMARY KEY (PLOTSPECIESSUM_ID) ");
+				sb.append(");"); 
+				
+				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+				SQLWarning warning = pstmt.getWarnings();
+				boolean r = pstmt.execute();
+				
+				
+				// MAKE A NEW STRING BUFFER ETC
+				sb = new StringBuffer();
+				
+				// INSERT THE DATA 
+				sb.append("insert into plotSiteSummary (plot_id, project_id, ");
+				sb.append("plotoriginlat, plotoriginlong, plotshape, altvalue, slopeaspect, ");
+				sb.append("slopegradient, slopeposition, hydrologicregime, soildrainage, currentcommunity, ");
+				sb.append("xcoord, ycoord, coordtype, obsstartdate, obsstopdate, effortlevel,  ");
+				sb.append("authorplotcode, surfGeo, state, country, parentplot, authorobscode, ");
+				sb.append("soilDepth, leaftype, accession_number ) ");
+				sb.append("select plot.plot_id, plot.project_id,  ");
+				sb.append("plot.latitude, plot.longitude, plot.shape,  plot.elevation, ");
+				sb.append("plot.slopeaspect, plot.slopegradient, plot.topoposition, observation.hydrologicregime, ");
+				sb.append("observation.soildrainage, null, plot.authore, plot.authorn, ");
+				sb.append("plot.authordatum, observation.obsstartdate, observation.obsenddate, ");
+				sb.append("observation.effortLevel, ");
+				sb.append("plot.authorplotcode, plot.geology, plot.state, "); 
+				sb.append("plot.country, null, observation.authorobscode,  ");
+				sb.append("observation.soilDepth, null, plot.accession_number ");
+				sb.append("from plot, observation where observation.plot_id = plot.plot_id; ");
+				
+				sb.append("insert into plotSpeciesSum (OBS_ID, AUTHORNAMEID, STRATUMTYPE, PERCENTCOVER, AUTHORPLANTCODE ) ");
+				sb.append("select ");
+				sb.append("TAXONOBSERVATION.OBSERVATION_ID, "); 
+				sb.append("TAXONOBSERVATION.cheatPlantName, ");
+				sb.append("STRATUMCOMPOSITION.CHEATSTRATUMNAME, ");
+				sb.append("STRATUMCOMPOSITION.TAXONSTRATUMCOVER, ");
+				sb.append("STRATUMCOMPOSITION.CHEATPLANTCODE ");
+				sb.append("from ");
+				sb.append("	TAXONOBSERVATION, STRATUMCOMPOSITION ");
+				sb.append("where  ");
+				sb.append("	TAXONOBSERVATION.TAXONOBSERVATION_ID = ");
+				sb.append("	STRATUMCOMPOSITION.TAXONOBSERVATION_ID ");
+				sb.append("and ");
+				sb.append("	STRATUMCOMPOSITION.STRATUMCOMPOSITION_ID > 0; ");
+			
+				
+				// UPDATE THE VALUES
+				sb.append(" update PLOTSITESUMMARY set OBSERVATION_ID = ");
+				sb.append(" (select OBSERVATION_ID from OBSERVATION where OBSERVATION.PLOT_ID = PLOTSITESUMMARY.PLOT_ID); ");
+				sb.append(" update PLOTSITESUMMARY set  CURRENTCOMMUNITY = ");
+				sb.append(" (select COMMNAME from COMMCLASS where COMMCLASS.OBSERVATION_ID = PLOTSITESUMMARY.OBSERVATION_ID); ");
+				sb.append(" update PLOTSITESUMMARY set  CURRENTCOMMUNITYCODE =  ");
+				sb.append(" (select COMMCODE from COMMCLASS where COMMCLASS.OBSERVATION_ID = PLOTSITESUMMARY.OBSERVATION_ID); ");
+	
+				sb.append(" update plotSpeciesSum ");
+				sb.append("set AUTHOROBSCODE  =  ");
+				sb.append("(select OBSERVATION.AUTHOROBSCODE ");
+				sb.append("from OBSERVATION ");
+				sb.append("where OBSERVATION.OBSERVATION_ID = PLOTSPECIESSUM.OBS_ID); ");
+
+
+				//--update the 'parentPlot' table
+				sb.append("update plotSpeciesSum ");
+				sb.append("	set PARENTPLOT  =  ");
+				sb.append("	(select OBSERVATION.PLOT_ID ");
+				sb.append("	from OBSERVATION ");
+				sb.append("	where OBSERVATION.OBSERVATION_ID = PLOTSPECIESSUM.OBS_ID); ");
+
+
+				//--update the authorplot code
+				sb.append("update plotSpeciesSum ");
+				sb.append("	set AUTHORPLOTCODE =  ");
+				sb.append("	(select PLOT.AUTHORPLOTCODE from PLOT "); 
+				sb.append("	where PLOT.PLOT_ID = PLOTSPECIESSUM.PARENTPLOT); ");
+
+
+				//--update the PLOT_ID
+				sb.append("update plotSpeciesSum ");
+				sb.append("	set PLOT_ID = ");
+				sb.append("	(select PLOT.PLOT_ID from PLOT "); 
+				sb.append("	where PLOT.PLOT_ID = PLOTSPECIESSUM.PARENTPLOT); ");
+				
+				pstmt = conn.prepareStatement( sb.toString() );
+				warning = pstmt.getWarnings();
+				r = pstmt.execute();
+				
+				// commit if there are no warning and if the execute executed 
+				if (warning == null )
+				{
+					System.out.println("DBinsertPlotSource > got no warning");
+					this.conn.commit();
+				}
+				else
+				{
+					System.out.println("DBinsertPlotSource > got a warning: ");
+					//System.out.println(  warning.toString()  );
+					System.out.println(r );
+					this.conn.rollback();
+				}
+				// CLOSE THE OBJECTS
+				System.out.println("DBinsertPlotSource > closing objects");
+				pstmt.close();
+				//this.conn.close();
+				// let the connection pool know that the connection pool is to be destroyed
+				System.out.println("DBinsertPlotSource > destroying the conn. pool");
+				connectionBroker.manageLocalDbConnectionBroker("destroy");
+		 }
+		 catch (Exception e )
+		 {
+			 System.out.println("Exception: "+ e.getMessage() );
+			 e.printStackTrace();
+		 }
+	 }
 	
 	/**
    * the main routine used to test the DB class which interacts with the 
@@ -236,6 +452,10 @@ public class DBinsertPlotSource
 			else
 			{
 				System.out.println("Usage: DBinsertPlotSource pluginName plot1 plot2 ... plotn");
+				// TEST THE DENORMALIZATION ROUTINE
+				// no plugin needed b/c we are not connecting to the local data source
+				DBinsertPlotSource db = new DBinsertPlotSource();
+				db.createSummaryTables();
 			}
 		}
 		catch (Exception e)

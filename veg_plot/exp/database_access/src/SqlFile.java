@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-28 16:28:22 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-08-07 18:22:20 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ public class SqlFile
 				Class.forName("org.postgresql.Driver");
 				//the community database
 				System.out.println("SqlFile> connecting to db on: vegbank ");
-				c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/communities_dev", "datauser", "");
+				c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/communities_dev", "datauser", "");
 			}
 			else if ( this.rdbmsType.equals("access") )
 			{
@@ -71,9 +71,8 @@ public class SqlFile
 		}
 		catch ( Exception e )
 		{
-			System.out.println("SqlFile> exception: "
-			+"dbConnect.makeConnection: "+e.getMessage());
-			e.printStackTrace();
+			System.out.println("SqlFile> Exception making db connection: " + e.getMessage());
+			//e.printStackTrace();
 		}
 			return(c);
 	}
