@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-06-12 14:39:18 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2002-06-13 13:05:35 $'
+ * '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ public class UserManagementServlet extends HttpServlet
 		}
 
 	/** Handle "POST" method requests from HTTP clients */
-  public void doPost(HttpServletRequest req, HttpServletResponse res)
+public void doPost(HttpServletRequest req, HttpServletResponse res)
   	throws ServletException, IOException 
 		{
 ///			res.setContentType("text/html");
@@ -135,7 +135,7 @@ public class UserManagementServlet extends HttpServlet
 					// APPLY FOR A CERTIFICATION LEVEL
 					else if ( action.equals("certification") )
 					{
-						//this.handleCertification(req, res, out);
+						this.handleCertification(req, res);
 					}
 					
 					else
@@ -150,6 +150,99 @@ public class UserManagementServlet extends HttpServlet
 				e.printStackTrace();
 			}
 		}
+		
+	/**
+	 * method that hendles the insertion of certification-request data in to the 
+	 * user database ( the USER_CERTIFICATION table ) and notification of the appropriate
+	 * people that the request has been submitted. <br> <br>
+	 * 
+	 * The parameters that can / should be passed to this method are:
+	 * param emailAddress
+	 * param surName 
+	 * param givenName
+	 * param phoneNumber
+	 * param phoneType
+	 * param currentCertLevel
+	 * param cvDoc
+	 * param highestDegree
+	 * param degreeYear
+	 * param degreeInst
+	 * param currentInst
+	 * param currentPos
+	 * param esaPos
+	 * param profExperienceDoc
+	 * param relevantPubs
+	 * param vegSamplingDoc
+	 * param vegAnalysisDoc
+	 * param usnvcExpDoc
+	 * param vegbankExpDoc
+	 * param plotdbDoc
+	 * param nvcExpRegionA
+	 * param nvcExpExpVegA
+	 * param nvcExpFloristicsA
+	 * param nvcExpNVCA
+	 * param esaSponsorNameA
+	 * param esaSponsorEmailA
+	 * param esaSponsorNameB
+	 * param esaSponsorEmailB
+	 * param peerReview
+	 * param additionalStatements
+	 * 
+	 */
+	 private void handleCertification(HttpServletRequest req, HttpServletResponse res)
+	 {
+		 try
+		 {
+			 System.out.println("UserManagementServlet > performing certification action");
+			 
+			 //get the attributes from the form
+			 String emailAddress = "harris02@hotmail.com"; 
+			 String surName = "harris";
+			 String givenName = "john";
+			 String phoneNumber ="";
+			 String phoneType = "";
+			 String currentCertLevel = "";
+			 String cvDoc = "";
+			 String highestDegree ="";
+			 String degreeYear ="";
+			 String degreeInst ="";
+			 String  currentInst = "";
+			 String currentPos ="";
+			 String esaPos = "";
+			 String profExperienceDoc = "";
+			 String relevantPubs ="";
+			 String vegSamplingDoc = "";
+			 String vegAnalysisDoc  = "";
+			 String usnvcExpDoc = "";
+			 String vegbankExpDoc = "";
+			 String plotdbDoc = "";
+			 String nvcExpRegionA ="";
+			 String nvcExpVegA = "";
+			 String nvcExpFloristicsA = "";
+			 String nvcExpNVCA = "";
+			 String esaSponsorNameA = "";
+			 String esaSponsorEmailA = "";
+			 String esaSponsorNameB = "";
+			 String esaSponsorEmailB = "";
+			 String peerReview = "";
+			 String additionalStatements = "";
+		
+		
+			 userdb = new UserDatabaseAccess();
+			 userdb.insertUserCertificationInfo(emailAddress, surName, givenName,
+			 phoneNumber, phoneType, currentCertLevel, cvDoc, highestDegree,
+			 degreeYear, degreeInst, currentInst, currentPos, esaPos,
+			 profExperienceDoc, relevantPubs, vegSamplingDoc,  vegAnalysisDoc, usnvcExpDoc, 
+			 vegbankExpDoc, plotdbDoc, nvcExpRegionA, nvcExpVegA, nvcExpFloristicsA, 
+			 nvcExpNVCA, esaSponsorNameA, esaSponsorEmailA, esaSponsorNameB, esaSponsorEmailB, 
+			 peerReview, additionalStatements);
+		 }
+		 catch(Exception e)
+		 {
+			 System.out.println("Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+	 }
 		
 	/**
 	 * method that handles the download action.  The idea behind the addition
@@ -182,6 +275,8 @@ public class UserManagementServlet extends HttpServlet
 				{
 					//the cookie is not valid
 					System.out.println("UserManagementServlet > not logged in");
+					// redirect to the page that redirects to the login
+					res.sendRedirect("/forms/redirection_template.html");
 				}
 				// else figure out what the client wants, update the database and let them 
 				// have it
@@ -197,7 +292,7 @@ public class UserManagementServlet extends HttpServlet
 						System.out.println("UserManagementServlet > proccessing download: ");
 						// update the database
 						userdb = new UserDatabaseAccess();
-						userdb.insertDownloadInfo(cookieVal); // the users email addy
+						userdb.insertDownloadInfo(cookieVal, downloadType); // the users email addy
 						// create the archive
 						Vector fileVec = new Vector();
 						// add the client software
