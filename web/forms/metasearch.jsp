@@ -54,7 +54,7 @@ if (searchString ==  null || searchString.equals("")) {
 
 <body>
 @vegbank_header_html_normal@
-<h3>VegBank Metasearch</h3>
+<h2>VegBank Metasearch</h2>
 <blockquote>
 
 
