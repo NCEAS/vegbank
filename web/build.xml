@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2004-05-08 01:10:16 $'
-* '$Revision: 1.102 $'
+* '$Author: mlee $'
+* '$Date: 2004-05-12 00:49:46 $'
+* '$Revision: 1.103 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -59,7 +59,7 @@
     </condition>
     <echo>(web/) Loading main props file: ../build${build.props.name}.properties</echo>
     <property file="../build${build.props.name}.properties"/>
-	<!-- set the apache doc root -->
+    <!-- set the apache doc root -->
     <condition property="apache.document.root" value="/usr/www/${webapp}/htdocs">
       <not>
         <isset property="apache.document.root"/>
@@ -450,6 +450,7 @@
     <mkdir dir="${vegbranch_server}/docs"/>
     <mkdir dir="${vegbranch_server}/client"/>
     <mkdir dir="${vegbranch_server}/examples"/>
+    <mkdir dir="${vegbranch_server}/help"/>
   </target>
   <target name="vegbranch-clean-all" depends="vegbranch-init" description="remove all vegbranch files from SERVER">
     <delete>
@@ -511,12 +512,30 @@
       <fileset dir="${lrg_binary_src}" includes="${vegbr_examples_include}"/>
     </copy>
   </target>
+  <target name="vegbranch-dist-help" depends="vegbranch-init" description="dist help files and screenshots to server">
+     <style in="${vegbr_dir}/help/branchhelp.xml" style="${vegbr_dir}/help/branch2html.xsl" out="${vegbr_dir}/help/BOGUS_vbr_hlp"/>
+     <!-- copy files to server -->
+     <copy todir="${vegbranch_server}/help" filtering="yes">
+        <fileset dir="${vegbr_dir}/help">
+          <exclude name="BOGUS*" />
+          <exclude name="*.xsl" />
+          <exclude name="*.xml" />
+        </fileset>
+     </copy>
+     <!-- copy screenshots -->
+     <copy todir="${vegbranch_server}/help" filtering="no">
+       <fileset dir="${lrg_binary_src}/help">
+         <include name="**/*.png" />
+       </fileset>
+     </copy>
+  </target>
   <target name="vegbranch-dist-all" depends="vegbranch-init" description="dist all vegbranch files to server">
     <antcall target="vegbranch-dist-client"/>
     <antcall target="vegbranch-dist-images"/>
     <antcall target="vegbranch-dist-examples"/>
     <antcall target="vegbranch-dist-docs-loadtbls"/>
     <antcall target="vegbranch-dist-docs"/>
+    <antcall target="vegbranch-dist-help"/>
   </target>
   <!-- ________________________ end of VEGBRANCH TARGETS _____________________________________ -->
   <!--
