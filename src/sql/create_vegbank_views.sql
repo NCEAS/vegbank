@@ -128,3 +128,69 @@ DROP VIEW view_notemb_taxonAlt;
              AS party_id_transl, party_id  
          FROM party ;
   
+  
+--- browsing by party views: -----
+DROP VIEW view_browseparty_all_count_combined;
+
+DROP VIEW view_browseparty_classcontrib_count;
+DROP VIEW view_browseparty_obscontrib_count;
+DROP VIEW view_browseparty_projectcontrib_count;
+
+DROP VIEW view_browseparty_all_count;
+DROP VIEW view_browseparty_all;
+DROP VIEW view_browseparty_obscontrib;
+CREATE VIEW view_browseparty_obscontrib AS 
+ SELECT observationContributor.PARTY_ID, observationContributor.OBSERVATION_ID
+ FROM view_notemb_observation as observation INNER JOIN observationContributor ON observation.OBSERVATION_ID = observationContributor.OBSERVATION_ID
+ GROUP BY observationContributor.PARTY_ID, observationContributor.OBSERVATION_ID;
+
+DROP VIEW view_browseparty_projectcontrib;
+CREATE VIEW view_browseparty_projectcontrib AS 
+ SELECT observation_1.OBSERVATION_ID, projectContributor.PARTY_ID
+ FROM (project INNER JOIN view_notemb_observation AS observation_1 ON project.PROJECT_ID = observation_1.PROJECT_ID) INNER JOIN projectContributor ON project.PROJECT_ID = projectContributor.PROJECT_ID
+ GROUP BY observation_1.OBSERVATION_ID, projectContributor.PARTY_ID;
+
+DROP VIEW view_browseparty_classcontrib;
+CREATE VIEW view_browseparty_classcontrib AS 
+ SELECT observation_2.OBSERVATION_ID, classContributor.PARTY_ID
+ FROM view_notemb_observation AS observation_2 INNER JOIN (commClass INNER JOIN classContributor ON commClass.COMMCLASS_ID = classContributor.COMMCLASS_ID) ON observation_2.OBSERVATION_ID = commClass.OBSERVATION_ID
+ GROUP BY observation_2.OBSERVATION_ID, classContributor.PARTY_ID;
+
+
+
+CREATE VIEW view_browseparty_all AS 
+  SELECT OBSERVATION_ID, PARTY_ID
+  FROM view_browseparty_classcontrib
+ union SELECT OBSERVATION_ID, PARTY_ID
+  FROM view_browseparty_projectcontrib
+ UNION SELECT OBSERVATION_ID, PARTY_ID
+  FROM view_browseparty_obscontrib;  
+
+
+CREATE VIEW view_browseparty_all_count AS SELECT count(1) AS countallcontrib, party_ID
+FROM view_browseparty_all
+GROUP BY party_ID;
+
+
+CREATE VIEW view_browseparty_classcontrib_count AS SELECT count(1) AS countclasscontrib, party_ID
+FROM view_browseparty_classcontrib
+GROUP BY party_ID;
+
+
+CREATE VIEW view_browseparty_obscontrib_count AS SELECT count(1) AS countobscontrib, party_ID
+FROM view_browseparty_obscontrib
+GROUP BY party_ID;
+
+
+CREATE VIEW view_browseparty_projectcontrib_count AS SELECT count(1) AS countprojectcontrib, party_ID
+FROM view_browseparty_projectcontrib
+GROUP BY party_ID;
+
+
+CREATE VIEW view_browseparty_all_count_combined AS 
+  SELECT view_browseparty_all_count.party_ID, view_browseparty_all_count.countallcontrib, view_browseparty_classcontrib_count.countclasscontrib, view_browseparty_obscontrib_count.countobscontrib, view_browseparty_projectcontrib_count.countprojectcontrib
+  FROM ((view_browseparty_all_count LEFT JOIN view_browseparty_classcontrib_count ON view_browseparty_all_count.party_ID = view_browseparty_classcontrib_count.party_ID) LEFT JOIN view_browseparty_obscontrib_count ON view_browseparty_all_count.party_ID = view_browseparty_obscontrib_count.party_ID) LEFT JOIN view_browseparty_projectcontrib_count ON view_browseparty_all_count.party_ID = view_browseparty_projectcontrib_count.party_ID
+  ORDER BY countallcontrib DESC;
+
+
+ 
