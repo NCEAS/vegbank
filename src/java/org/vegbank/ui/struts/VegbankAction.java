@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-30 13:16:26 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-06-29 06:56:22 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public abstract class VegbankAction extends Action {
 	/**
 	 *
 	 */
-	public ResourceBundle getResourceBundle(String path) {
+	public static ResourceBundle getResourceBundle(String path) {
 		return ResourceBundle.getBundle(path);
 	}
 		

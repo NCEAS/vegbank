@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-12-05 23:15:29 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-06-29 06:56:22 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ package org.vegbank.common.command;
 
 import java.sql.ResultSet;
 import java.text.MessageFormat;
-import java.util.Collection;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -35,14 +35,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
 
 /**
  * Uses parameters passed in via the request to construct the SQL query,
- * process the ResultSet and populate a Collection of Beans ( name passed in a parameter).
- * This collection is saved into the request as an attribute called genericBean, where it is 
+ * process the ResultSet and populate a List of Beans ( name passed in a parameter).
+ * This List is saved into the request as an attribute called genericBean, where it is 
  * availible for use by a jsp.
  * 
  * @author farrell
@@ -50,6 +52,8 @@ import org.vegbank.common.utility.VBObjectUtils;
 
 public class GenericCommand implements VegbankCommand
 {
+	private static Log log = LogFactory.getLog(GenericCommand.class);
+
 
 	/* (non-Javadoc)
 	 * @see org.vegbank.common.command.VegbankCommand#execute(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -60,17 +64,92 @@ public class GenericCommand implements VegbankCommand
 		// Run the query and stick the generated object into the request
 		String selectClauseKey = request.getParameter("SQL");
 		String whereClauseKey = request.getParameter("WHERE");
+		String beanName = request.getParameter("BeanName");
 		String[] whereParams = request.getParameterValues("wparam");
-		String SQLStatement = getSQLStatement(selectClauseKey, whereClauseKey, whereParams);
-		
+
+		execute(request, selectClauseKey, whereClauseKey, beanName, whereParams);
+	}
+
+	/**
+	 * Another way to execute a command.  It's easier to call this
+	 * from a JSP page directly rather than going through the 
+	 * GenericDispatcherAction.
+	 */
+	public static List execute(HttpServletRequest request, String selectClauseKey, 
+				String whereClauseKey, String beanName, String whereParam)
+				throws Exception {
+
+		String[] arr = new String[1];
+		arr[0] = whereParam;
+		return execute(request, selectClauseKey, whereClauseKey, beanName, whereParam);
+	}
+
+	/**
+	 * Another way to execute a command.  It's easier to call this
+	 * from a JSP page directly rather than going through the 
+	 * GenericDispatcherAction.
+	 */
+	public static List execute(HttpServletRequest request, String selectClauseKey, 
+				String whereClauseKey, String beanName, Object whereParam)
+				throws Exception {
+
+		log.debug("where param: " + whereParam.toString());
+		log.debug("where param's class: " + whereParam.getClass().toString());
+		String str = whereParam.toString();
+		String[] arr = new String[1];
+		arr[0] = str;
+
+		return execute(request, selectClauseKey, whereClauseKey, beanName, arr);
+	}
+
+	public static List execute(String selectClauseKey, 
+				String whereClauseKey, String beanName, Object whereParam)
+				throws Exception {
+		HttpServletRequest req = null;
+		return execute(req, selectClauseKey, whereClauseKey, beanName, whereParam);
+	}
+
+	/**
+	 * Another way to execute a command.  It's easier to call this
+	 * from a JSP page directly rather than going through the 
+	 * GenericDispatcherAction.
+	 */
+	public static List execute(HttpServletRequest request, String selectClauseKey, 
+				String whereClauseKey, String beanName, String[] whereParams)
+				throws Exception {
+
+		String SQLStatement = getSQLStatement(selectClauseKey, whereClauseKey,  whereParams);
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( SQLStatement );
 		
-		Vector propNames = this.getPropertyNames(SQLStatement);
-		String beanName = request.getParameter("BeanName");
-		Collection collection = this.getBeanCollection(beanName, rs, propNames);
-		request.setAttribute("genericBean",  collection);
+		Vector propNames = getPropertyNames(SQLStatement);
+		List list = getBeanList(beanName, rs, propNames);
+
+		if (request != null) {
+			log.debug("Setting genericBean");
+			request.setAttribute("genericBean", list);
+			log.debug("Setting " + beanName);
+			request.setAttribute(beanName, list);
+
+			if (list.size() == 1) {
+				log.debug("Setting genericVariable");
+				request.setAttribute("genericVariable", list.get(0));
+				log.debug("Setting " + beanName);
+				request.setAttribute(beanName, list.get(0));
+			}
+		} 
+
+		return list;
 	}
+
+
+	public static List execute(String selectClauseKey, String whereClauseKey, 
+				String beanName, String[] whereParams ) throws Exception
+	{
+		return execute(null, selectClauseKey, whereClauseKey, beanName, whereParams);
+	}
+
+
 	/**
 	 * Uses parameters passed in via the request to construct a SQL Statement from a 
 	 * properties file
@@ -78,8 +157,8 @@ public class GenericCommand implements VegbankCommand
 	 * @param request
 	 * @return
 	 */
-	private String getSQLStatement(String selectClauseKey, String whereClauseKey, String[] whereParams)
-	{
+	private static String getSQLStatement(String selectClauseKey, String whereClauseKey, String[] whereParams)
+{
 		ResourceBundle SQLResources =  ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 		String selectClause = "";
 		String whereClause = "";
@@ -123,7 +202,7 @@ public class GenericCommand implements VegbankCommand
 	}
 	
 	/**
-	 * Uses a ResultSet to populate a Collection of generated Beans.
+	 * Uses a ResultSet to populate a List of generated Beans.
 	 * Needs a list of the bean properties to populate in the same order
 	 * as the columns in the ResultSet.
 	 * 
@@ -133,10 +212,10 @@ public class GenericCommand implements VegbankCommand
 	 * @return
 	 * @throws Exception
 	 */
-	private Collection getBeanCollection( String className, ResultSet rs, Vector propNames) 
+	private static List getBeanList( String className, ResultSet rs, Vector propNames) 
 		throws Exception
 	{
-		Collection col = new Vector();
+		List col = new Vector();
 		while ( rs.next() )
 		{
 			Object bean = Utility.createObject( VBObjectUtils.DATA_MODEL_PACKAGE +  className);
@@ -165,7 +244,7 @@ public class GenericCommand implements VegbankCommand
 	 * @param selectClause
 	 * @return
 	 */
-	private Vector getPropertyNames(String selectClause)
+	private static Vector getPropertyNames(String selectClause)
 	{
 		Vector results = new Vector();
 		
@@ -202,18 +281,6 @@ public class GenericCommand implements VegbankCommand
 		return results;
 	}
 	
-	public Collection execute ( String selectClauseKey, String whereClauseKey, String beanName,  String[] whereParams ) 
-		throws Exception
-	{
-		String SQLStatement = getSQLStatement(selectClauseKey, whereClauseKey,  whereParams);
-		DatabaseAccess da = new DatabaseAccess();
-		ResultSet rs = da.issueSelect( SQLStatement );
-		
-		Vector propNames = this.getPropertyNames(SQLStatement);
-		Collection collection = this.getBeanCollection(beanName, rs, propNames);
-		return collection;
-	}
-
 	/**
 	 * Just for testing.
 	 * 

@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-27 21:39:57 $'
- *	'$Revision: 1.8 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-06-29 06:56:22 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,12 +51,15 @@ import org.vegbank.common.Constants;
 import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.command.RetrieveVBModelBean;
 import org.vegbank.common.model.VBModelBean;
-import org.vegbank.common.utility.LogUtility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.VBObjectUtils;
 
 public class GenericDispatcherAction extends Action
 {
+	private static Log log = LogFactory.getLog(GenericDispatcherAction.class);
+
 	// TODO: Make these properties
 	private static final String genericCommandName = "GenericCommand";
 	private static final String commandLocation = "org.vegbank.common.command.";
@@ -69,7 +72,7 @@ public class GenericDispatcherAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		LogUtility.log("GenericDispatcherAction: begin");
+		log.debug("GenericDispatcherAction: begin");
 		DynaActionForm dynaForm = (DynaActionForm) form; 
 		
 		ActionErrors errors = new ActionErrors();
@@ -80,21 +83,21 @@ public class GenericDispatcherAction extends Action
 		String accessionCode = (String)dynaForm.get("accessionCode");
 		try
 		{
-			System.out.println( "GD: command == " + command );
+			log.debug( "GD: command == " + command );
 			if ( command.equals(genericCommandName)) 
 			{
-				LogUtility.log( "GD: executing new gen cmd" );
+				log.debug( "GD: executing new gen cmd" );
 				new GenericCommand().execute(request, response);
-				LogUtility.log( "GD: done executing GC" );
+				log.debug( "GD: done executing GC" );
 			}
 			else if ( command.equals("RetrieveVBModelBean")) 
 			{
-				LogUtility.log( "GD: executing new RetriveVBModelBean cmd" );
+				log.debug( "GD: executing new RetriveVBModelBean cmd" );
 				VBModelBean bean = new RetrieveVBModelBean().execute(accessionCode);
 				String rootEntity = VBObjectUtils.getUnQualifiedName( bean.getClass().getName() );
-				LogUtility.log("Putting genericBean in request " + bean);
+				log.debug("Putting genericBean in request " + bean);
 				request.setAttribute("genericBean",  bean);
-				LogUtility.log( "GD: done executing RetriveVBModelBean" );
+				log.debug( "GD: done executing RetriveVBModelBean" );
 				
 				//Testing out
 				HttpSession session = request.getSession();
@@ -108,18 +111,18 @@ public class GenericDispatcherAction extends Action
 				
 				if ( expandEntity != null )
 				{
-					LogUtility.log("Expand: " + expandEntity);
+					log.debug("Expand: " + expandEntity);
 					ess.setNodeExpanded(expandEntity);
 				}
 				if ( contractEntity != null )
 				{
-					LogUtility.log("Expand: " + contractEntity);
+					log.debug("Expand: " + contractEntity);
 					ess.setNodeContracted(contractEntity);
 				}
 				
 				// put in  session
 				session.setAttribute("DisplayProps", ess);
-				LogUtility.log("Setting rootEntity = " + rootEntity);
+				log.debug("Setting rootEntity = " + rootEntity);
 				request.setAttribute(ROOT_ENTITY,rootEntity);
 				request.setAttribute(Constants.ACCESSIONCODENAME,accessionCode);
 			}
@@ -138,10 +141,10 @@ public class GenericDispatcherAction extends Action
 			}
 			
 			// Forward to a jsp
-			LogUtility.log( "GD: fwd to" + jspLocation + jsp );
+			log.debug( "GD: fwd to" + jspLocation + jsp );
 			RequestDispatcher dispatcher = request.getRequestDispatcher(jspLocation + jsp);
-			LogUtility.log( "GD: got dispatcher");
-			LogUtility.log( "rootEntity = " + request.getAttribute(ROOT_ENTITY) );
+			log.debug( "GD: got dispatcher");
+			log.debug( "rootEntity = " + request.getAttribute(ROOT_ENTITY) );
 			dispatcher.forward(request, response);
 		}
 		catch (Exception e)
@@ -149,7 +152,7 @@ public class GenericDispatcherAction extends Action
 			errors.add(
 				ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.resource.not.found", e.getMessage()));
-			LogUtility.log( e.getMessage(),e );
+			log.debug( e.getMessage(),e );
 		}
 		
 		// Report any errors we have discovered to failure page
