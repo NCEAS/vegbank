@@ -5,7 +5,7 @@
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
   -->
 <!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp.xsl"?>
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-autogen.xsl"?>
 <!--
 -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
@@ -91,7 +91,6 @@
       <attNotes>n/a</attNotes>
       <attDefinition>The commDescription is a description of the community concept by the party that contributed the concept.</attDefinition>
       <attForms>
-        <formShow name="Austere">7</formShow>
         <formShow name="Summary">8</formShow>
         <formShow name="Detail">9</formShow>
       </attForms>
@@ -3848,6 +3847,7 @@ change through time.</entitySummary>
       <attForms>
         <formShow name="Summary">478</formShow>
         <formShow name="Detail">479</formShow>
+        <formShow name="Summary2">480</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -4212,13 +4212,13 @@ change through time.</entitySummary>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
+      <attFKTranslationSQL>(select shortName from reference where reference.reference_ID=covermethod.reference_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the reference table.</attNotes>
       <attDefinition>Foreign Key into the reference table, linking the defining reference to a cover method.</attDefinition>
       <attForms>
-        <formShow name="Summary">524</formShow>
-        <formShow name="Detail">525</formShow>
+        <formShow name="Detail">528</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -4236,10 +4236,8 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Name of the coverclass method (e.g., Braun-Blanquet, Barkman, Domin, Daubenmire, Carolina Vegetation Survey, etc.).</attDefinition>
       <attForms>
-        <formShow name="PKTranslate">1</formShow>
-        <formShow name="Austere">526</formShow>
         <formShow name="Summary">527</formShow>
-        <formShow name="Detail">528</formShow>
+        <formShow name="Detail">527</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -4268,7 +4266,6 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>The way that cover is estimated on the observation.</attDefinition>
       <attForms>
-        <formShow name="PKTranslate">1</formShow>
         <formShow name="Detail">529</formShow>
       </attForms>
       <update>1.0.2</update>
