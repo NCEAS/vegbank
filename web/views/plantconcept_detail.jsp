@@ -35,7 +35,7 @@
 <tr>
 <td colspan="4">
 <span class="datalabelsmall">Name: </span><bean:write name="onerow" property="plantname_id_transl"/><br/>
-<span class="datalabelsmall">Reference: </span><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_idl"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
+<span class="datalabelsmall">Reference: </span><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
 <logic:notEmpty name="onerow" property="plantdescription">
 <span class="datalabelsmall">Description: </span><span class="largefield"><bean:write name="onerow" property="plantdescription"/>&nbsp;</span>
 </logic:notEmpty>
