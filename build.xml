@@ -5,9 +5,9 @@
   * Global build script for vegclass. This simply allows running all the sub 
   * scripts from one place.
   *
-  *     '$Author: anderson $'
-  *     '$Date: 2003-10-23 23:33:01 $'
-  *     '$Revision: 1.23 $'
+  *     '$Author: farrell $'
+  *     '$Date: 2003-10-27 18:16:59 $'
+  *     '$Revision: 1.24 $'
 --> 
 <project name="vegclass" default="jar" basedir=".">
 
@@ -28,6 +28,7 @@
     <property name="rmi.dist.dir" value="${dist.dir}/RMIServer"/>
     <property name="bin.dir" value="${basedir}/bin"/>
     <property name="src.dir" value="${basedir}/src"/>
+    <property name="java.src.dir" location="${src.dir}/java" />
     <property name="xsl.src.dir" value="${src.dir}/xsl"/>
     <property name="sql.src.dir" value="${src.dir}/sql"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" />
@@ -60,7 +61,7 @@
   </target>
     
   <target name="jar" depends="compile"
-          description="==> Generates all jars in vegclass module">
+          description="==> Generates all jars in vegbank">
     
     <jar destfile="${lib.dir}/vegbank_datamodel.jar">
    		<fileset dir="${build.classes.dir}" casesensitive="yes">
@@ -148,13 +149,22 @@
   </target>
   
   <target name="compile"
-  			depends="generate_java_datamodel"
-  			description="==> Compile the java code">
-  		<javac srcdir="${build.java.src.dir}"
-  					includes="**/*.java"
-  					destdir="${build.classes.dir}">			
-	      	<classpath refid="classpath.compilation"/>
-   		 </javac>
+          depends="generate_java_datamodel"
+          description="==> Compile the java code">
+
+    <echo>${java.src.dir} to ${build.java.src.dir}</echo>
+    <copy todir="${build.java.src.dir}">
+      <fileset dir="${java.src.dir}">
+        <include name="org/**/*java"/>
+      </fileset>
+    </copy>
+
+    <javac srcdir="${build.java.src.dir}"
+      includes="**/*.java"
+      destdir="${build.classes.dir}">			
+      <classpath refid="classpath.compilation"/>
+   </javac>
+  
   </target>
  
   <target name="install"
