@@ -40,7 +40,7 @@ INSERT INTO taxonImportance ( taxonObservation_ID, cover, basalArea )
 SELECT taxonObservation.TAXONOBSERVATION_ID, taxonObservation.taxonCover, taxonObservation.taxonBasalArea
 FROM taxonObservation;
 --stemCount new key to taxonImp------
-UPDATE stemCount SET stemCount.TAXONIMPORTANCE_ID = (SELECT min([taxonImportance].[taxonImportance_ID])
+UPDATE stemCount SET TAXONIMPORTANCE_ID = (SELECT min([taxonImportance].[taxonImportance_ID])
  FROM  taxonImportance  WHERE stemCount.taxonObservation_ID = taxonImportance.taxonObservation_ID and ((taxonImportance.stratum_ID) Is Null));
 --manual fix required field on stemCount
 ALTER TABLE stemCount ALTER COLUMN TAXONIMPORTANCE_ID SET NOT NULL;
@@ -54,7 +54,7 @@ SELECT stratumComposition.TAXONOBSERVATION_ID, stratumComposition.STRATUM_ID, st
 FROM stratumComposition;
 
 --populate authorPlantName on taxonObservation----
-UPDATE taxonObservation SET taxonObservation.authorPlantName = (SELECT first(plantName.plantName) FROM plantName WHERE taxonObservation.plantName_ID = plantName.PLANTNAME_ID) ;
+UPDATE taxonObservation SET authorPlantName = (SELECT first(plantName.plantName) FROM plantName WHERE taxonObservation.plantName_ID = plantName.PLANTNAME_ID) ;
 
 
 ----creating tables------------      
