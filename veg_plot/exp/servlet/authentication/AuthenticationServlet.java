@@ -10,43 +10,43 @@ import servlet.authentication.UserDatabaseAccess;
 
 
 /**
- * Servlet to perform user authentication for all the 
- * servlets within a domain.  This servlet will recognize varying 
+ * Servlet to perform user authentication for all the
+ * servlets within a domain.  This servlet will recognize varying
  * degrees of authentication for users and will place cookies representing
  * the authentication level
  *
  * <p>Valid parameters are:<br><br>
  * REQUIRED PARAMETERS
  * @param userName - user name of the user tying to be authenticated <br>
- * @param password - the password of the user attempting to be authenticated <br> 
+ * @param password - the password of the user attempting to be authenticated <br>
  * @param authType -- the authentication type {loginUser, uploadFile}
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-07-31 18:24:02 $'
- *  '$Revision: 1.10 $'
- *		 
- *  @version 
- *  @author 
- * 
+ *  '$Date: 2002-09-12 00:51:28 $'
+ *  '$Revision: 1.11 $'
+ *
+ *  @version
+ *  @author
+ *
  */
 
-public class AuthenticationServlet extends HttpServlet 
+public class AuthenticationServlet extends HttpServlet
 {
 	public int cookieValidFlag=0;  //1=valid
 	public Cookie registeredCookie;
 	public String servletPath = null;
 	public ServletUtility su = new ServletUtility();
 	public UserDatabaseAccess uda = new UserDatabaseAccess();
-	
+
 	// THE RESOURCE BUNDLE AND THE ASSOCIATED PARAMETERS
 	private ResourceBundle rb = ResourceBundle.getBundle("authentication");
 	private String serverUrl = "";
-	
+
 	//public String clientLogFile = null; //the file to log the client usage
 	private String genericForm = "/usr/local/devtools/jakarta-tomcat/webapps/forms/generic_form.html";
 	private String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/tmp.html";
-	
+
 	//constructor
 	public AuthenticationServlet()
 	{
@@ -63,8 +63,8 @@ public class AuthenticationServlet extends HttpServlet
 		}
 	}
 
-	/** 
-	 * Handle "GET" method requests from HTTP clients 
+	/**
+	 * Handle "GET" method requests from HTTP clients
 	 */
 	public void doPost(HttpServletRequest request,
 	HttpServletResponse response)
@@ -72,9 +72,9 @@ public class AuthenticationServlet extends HttpServlet
 	{
 		doGet(request, response);
 	}
-    
-	/** 
-	 * Handle "POST" method requests from HTTP clients 
+
+	/**
+	 * Handle "POST" method requests from HTTP clients
 	 */
 	public void doGet(HttpServletRequest request,
 	HttpServletResponse response)
@@ -91,17 +91,17 @@ public class AuthenticationServlet extends HttpServlet
 			servletPath=rb.getString("servlet-path");
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
-	
-			//get the request - parameters using the 
-			//servlet Utility class 
+
+			//get the request - parameters using the
+			//servlet Utility class
 			Hashtable requestParams = su.parameterHash(request);
 			System.out.println("AuthenticationServlet > " + requestParams.toString() );
 			//grab the remote host information
 			String remoteHost=request.getRemoteHost();
 			String remoteAddress = request.getRemoteAddr();
 			System.out.println("AuthenticationServlet > remoteHost: "+remoteHost+" Address: "+remoteAddress);
-			
-			
+
+
 			//determine what the client wants to do
 			if ( requestParams.containsKey("authType") == false)
 			{
@@ -115,7 +115,7 @@ public class AuthenticationServlet extends HttpServlet
 				{
 					String s =  handlePasswordRetreival(requestParams);
 					out.println(s);
-				}		
+				}
 				//LOGIN THE USER
 				else if ( requestParams.get("authType").toString().equals("loginUser")  )
 				{
@@ -126,7 +126,7 @@ public class AuthenticationServlet extends HttpServlet
 						//set a cookie
 						String user = getUserName(requestParams);
 						Cookie cookie = new Cookie("null", "null");
-						AuthenticationServlet m =new AuthenticationServlet();  
+						AuthenticationServlet m =new AuthenticationServlet();
 						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
 						response.addCookie(m.registeredCookie);
 						//send the user to the correct page
@@ -135,7 +135,7 @@ public class AuthenticationServlet extends HttpServlet
 						System.out.println("AuthentictionServlet > redirecting to: " + redirect);
 						response.sendRedirect(redirect);
 					}
-					else 
+					else
 					{
 						System.out.println("AuthenticationServlet > user login failed");
 						out.println( getErrorRedirection() );
@@ -151,16 +151,16 @@ public class AuthenticationServlet extends HttpServlet
 						//set a cookie
 						String user = getUserName(requestParams );
 						Cookie cookie = new Cookie("null", "null");
-						AuthenticationServlet m =new AuthenticationServlet();  
+						AuthenticationServlet m =new AuthenticationServlet();
 						m.cookieDelegator(cookie, requestParams, remoteAddress, user);
 						response.addCookie(m.registeredCookie);
 					}
-					else 
+					else
 					{
 						out.println("<authentication>false</authentication>");
 					}
 				}
-				
+
 				// CREATE A NEW USER
 				else if ( requestParams.get("authType").toString().equals("createUser")  )
 				{
@@ -169,13 +169,13 @@ public class AuthenticationServlet extends HttpServlet
 					{
 						System.out.println("AuthenticationServlet > created a new user");
 						Thread.currentThread().sleep(100);
-						
-						//this response was throwing an exception b/c the user did not yet 
-						//have a cookie associated with the browser, so as a fix create a 
+
+						//this response was throwing an exception b/c the user did not yet
+						//have a cookie associated with the browser, so as a fix create a
 						//small statement and allow the oportunity to login
 						//response.sendRedirect("http://vegbank.nceas.ucsb.edu/framework/servlet/usermanagement?action=options");
 						String cresponse = getUserCreationResponse(true);
-						out.println( cresponse );	
+						out.println( cresponse );
 					}
 					else
 					{
@@ -183,23 +183,23 @@ public class AuthenticationServlet extends HttpServlet
 						out.println( cresponse );
 					}
 				}
-				
+
 				else
 				{
 					System.out.println("AuthenticationServlet > incorect input paramaters to authenticate");
 				}
 			}
 		}
-		catch( Exception e ) 
+		catch( Exception e )
 		{
 			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * method that handles the retreival of a lost password,
-	 * emails it to the valid user and then returns the 
+	 * emails it to the valid user and then returns the
 	 * message to the browser
 	 * @param requestParams -- the hashtable containg the request paramteres
 	 */
@@ -208,11 +208,11 @@ public class AuthenticationServlet extends HttpServlet
 		 StringBuffer msg = new StringBuffer();
 		 try
 		 {
-			 
+
 			 	String email = (String)requestParams.get("userLogin");
 				String passwd = uda.getPassword(email);
 				System.out.println("AuthenticationServlet > emailing password to: " + email );
-					
+
 				boolean validUser = false;
 				String givenName = "";
 				String surName = "";
@@ -222,15 +222,15 @@ public class AuthenticationServlet extends HttpServlet
 				String to = email;
 				String cc = "dba@vegbank.org";
 				String subject = "Recovered VegBank Password";
-				
-					
+
+
 				// if there is a name use it
-				if ( (requestParams.containsKey("firstName") == true ) &&  
+				if ( (requestParams.containsKey("firstName") == true ) &&
 				(requestParams.containsKey("lastName") == true  ))
 				{
 					givenName = (String)requestParams.get("firstName");
 					surName = (String)requestParams.get("lastName");
-					System.out.println("AuthenticationServlet > surName: " + surName 
+					System.out.println("AuthenticationServlet > surName: " + surName
 					+ " givenName: " + givenName );
 					if ( surName.length() > 1 )
 					{
@@ -246,14 +246,14 @@ public class AuthenticationServlet extends HttpServlet
 				{
 					body = "\n  Your Vegbank Password is: " + passwd;
 				}
-					
+
 				//if a password is retreived then send it to the user
 				if ( passwd != null && passwd.length() > 1 )
 				{
 					su.sendEmail( mailHost, from, to, cc, subject, body);
 					validUser = true;
 				}
-				
+
 				//create the message
 				msg.append("<passwordRequest> \n");
 				msg.append("<message> password sent to: </message>\n");
@@ -265,17 +265,17 @@ public class AuthenticationServlet extends HttpServlet
 				msg.append("</user> \n");
 				msg.append("</passwordRequest> \n");
 		 }
-		catch( Exception e ) 
+		catch( Exception e )
 		{
 			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return( msg.toString() );
 	 }
-	
+
 	/**
-	 * method that provides a response to a user who has attempeted to 
-	 * make a new user account.  The input may either be true / false and the 
+	 * method that provides a response to a user who has attempeted to
+	 * make a new user account.  The input may either be true / false and the
 	 * response will be modified accordingly
 	 * @param createResult -- true or false
 	 */
@@ -285,15 +285,19 @@ public class AuthenticationServlet extends HttpServlet
 		 Hashtable replaceHash = new Hashtable();
 		 if ( createResult == true )
 		 {
-			 sb.append("Thank you <br> ");
+			 sb.append("Thank you. <br> ");
 			 sb.append("Your VegBank account has been created. <br>");
+             /* The following 3 lines added by MTL Tuesday, September 10, 2002 */
+			 sb.append("<br>To apply for certification, click ");
+			 sb.append("<a href=\"http://vegbank.nceas.ucsb.edu/forms/certification.html\">here.</a><br>");
+		   sb.append("<br>To begin using VegBank, click \"Login\" above. <br>");
 		 }
 		 else
 		 {
 			 sb.append("<b> USER CREATION ERROR! </b> <br> ");
 			 sb.append("Please review the user-related attributes that you submitted<br>");
 			 sb.append("and resubmit.  If you get this error again, please contact the <br>");
-			 
+
 			 sb.append("<a href=\"mailto:vegbank@nceas.ucsb.edu\" > ");
 			 sb.append(" VegBank Administrator </a>");
 		 }
@@ -320,8 +324,8 @@ public class AuthenticationServlet extends HttpServlet
 		 return(sb.toString() );
 		 */
 	 }
-	 
-	
+
+
 	/**
 	 * method that contains the html and java script to redirect the user to
 	 * an error page and login
@@ -340,7 +344,7 @@ public class AuthenticationServlet extends HttpServlet
 		 //sb.append("window.location=\"http://"+this.serverUrl+"/vegbank/general/login.html\"; \n");
 		 sb.append("window.location=\""+errorPage+"\"; \n");
 		 sb.append("</script> \n");
-		
+
 		 sb.append("Please Click \n");
 		 //sb.append("<a href=\"http://"+this.serverUrl+"/vegbank/general/login.html\">here</a> \n");
 		 sb.append("<a href=\""+errorPage+"\">here</a> \n");
@@ -350,10 +354,10 @@ public class AuthenticationServlet extends HttpServlet
 		 sb.append("</html> \n");
 		 return(sb.toString() );
 	 }
-	 
-	
+
+
 	/**
-	 * method that returns the user name for the given user from the request 
+	 * method that returns the user name for the given user from the request
 	 * parameters
 	 */
 	 private String getUserName(Hashtable requestParams)
@@ -368,7 +372,7 @@ public class AuthenticationServlet extends HttpServlet
 			 return("null");
 		 }
 	 }
-	
+
 	/**
 	 * method that returns the parameters required and accepted by this servlet
 	 *
@@ -381,7 +385,7 @@ public class AuthenticationServlet extends HttpServlet
 		 	sb.append("password <br>");
 		 return(sb.toString());
 	 }
-	
+
 	/**
 	 * method to authenticate a known user
 	 *
@@ -392,17 +396,17 @@ public class AuthenticationServlet extends HttpServlet
 			String userName=requestParams.get("userName").toString();
 			String passWord=requestParams.get("password").toString();
 			System.out.println("AuthenticationServlet > name password/pair: "+userName+" "+passWord);
-		
-			//access the class in the dbAccess class to validate the 
+
+			//access the class in the dbAccess class to validate the
 			//login and password with that stored in the database
 			return( uda.authenticateUser(userName, passWord) );
 	 }
-	 
+
 
 	 /**
-	 * method to create a new user identification 
-	 * in the vegetation user database. There are a 
-	 * number of required paramteres that must exist in 
+	 * method to create a new user identification
+	 * in the vegetation user database. There are a
+	 * number of required paramteres that must exist in
 	 * the input hashtable including: <br>
 	 *	emailAddress, passWord, retypePassWord, termsAccept, <br>
 	 *	givenName, surName <br>
@@ -412,21 +416,21 @@ public class AuthenticationServlet extends HttpServlet
 	 */
 	 private boolean createNewUser(Hashtable requestParams, String remoteAddress)
 	 {
-		 try 
+		 try
 		 {
 			System.out.println("AuthenticationServlet > REQUEST PARAMS: "+requestParams.toString() );
 		 	boolean b = validateNewUserAttributes(requestParams);
 			System.out.println("AuthenticationServlet > valid new user attributes: "+ b );
 			if ( b == true )
 			{
-				//get the key variables that are required 
+				//get the key variables that are required
 		 		String emailAddress = requestParams.get("emailAddress").toString();
 		 		String passWord =  requestParams.get("password").toString();
 				String givenName= requestParams.get("givenname").toString();
 				String surName =  requestParams.get("surname").toString();
 				System.out.println("AuthenticationServlet > given name: "+givenName);
 		 		System.out.println("AuthenticationServlet > sur name: "+surName);
-		 		
+
 				// GET THE OTHER NOT REQUIRED ATTS
 				String inst = requestParams.get("affilInst").toString();
 				String address = requestParams.get("address").toString();
@@ -444,10 +448,10 @@ public class AuthenticationServlet extends HttpServlet
 				System.out.println("AuthenticationServlet > country: "+country);
 				System.out.println("AuthenticationServlet > zip: "+zip);
 				System.out.println("AuthenticationServlet > phone: "+phone);
-				
+
 				// USE THE DB CLASS TO CREATE THE USER
 				//uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
-				boolean b2 = uda.createUser(emailAddress, passWord, givenName,surName, remoteAddress, 
+				boolean b2 = uda.createUser(emailAddress, passWord, givenName,surName, remoteAddress,
 				inst, address, city, state, country, phone, zip);
 				return( b2 );
 			}
@@ -464,7 +468,7 @@ public class AuthenticationServlet extends HttpServlet
 			 return(false);
 		 }
 	 }
-	 
+
 	/*
 	 * method that returns true if the user attemting to create a new account
 	 * has passed the correct parmmeters
@@ -487,7 +491,7 @@ public class AuthenticationServlet extends HttpServlet
 				String email = (String)h.get("emailAddress");
 				if ( email.indexOf("@") > 0 )
 				{
-					System.out.println("AuthenticationServlet > email contains '@'" ); 
+					System.out.println("AuthenticationServlet > email contains '@'" );
 					// CHECK THAT THE SURNAME AND GIVEN NAME HAVE NOT NULL VALUES
 					String sname = (String)h.get("surname");
 					String gname = (String)h.get("givenname");
@@ -514,33 +518,33 @@ public class AuthenticationServlet extends HttpServlet
 		{
 			valid = false;
 		}
-		
+
 		return(valid);
 	 }
 
 /**
-	* Method to register a cookie and set it in the browser if there is a match 
+	* Method to register a cookie and set it in the browser if there is a match
  * between the issued user name and password with a valid name password pair
  * stored in some data store
- *  
+ *
  * @param cookie - a cookie whose name, value and max age are set depending on
- * 	the results of validation 
+ * 	the results of validation
  * @param userName - the user name issued
  * @param passWord - the issued password
  *
  */
-	private void cookieDelegator (Cookie cookie, Hashtable requestParams, 
-		String remoteAddress, String userName) 
+	private void cookieDelegator (Cookie cookie, Hashtable requestParams,
+		String remoteAddress, String userName)
 	{
 
-		// below is quite crude but will suffice for the time being.  
-		// Soon will rewrite the method to send more meaning values 
-		// and will use a database query to access 
+		// below is quite crude but will suffice for the time being.
+		// Soon will rewrite the method to send more meaning values
+		// and will use a database query to access
 		// user information -- the resource bundle is set here b/c
 		// this method may be call from another class
 		//ResourceBundle rbun = ResourceBundle.getBundle("LocalStrings");
 		//String clientLogFile = rbun.getString("requestparams.clientLog");
-		
+
 		//get the cookie value form the user database class
 		System.out.println("AuthenticationServlet > USER NAME: " + userName );
 		String cookieValue = uda.getUserCookieValue(userName);
@@ -556,7 +560,7 @@ public class AuthenticationServlet extends HttpServlet
 		{
 			System.out.println("AuthenticationServlet > ERROR null user name");
 		}
-		
+
 	}
 
 
@@ -572,21 +576,21 @@ public class AuthenticationServlet extends HttpServlet
  * @param remoteHost - remote host's address
  *
  */
-	public void cookieChecker (String cookieName, String cookieValue, 
-		String remoteHost) 
+	public void cookieChecker (String cookieName, String cookieValue,
+		String remoteHost)
 	{
 		ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
- 		if (cookieName.equals("xploit") && cookieValue.equals("001")) 
-		{ 
+ 		if (cookieName.equals("xploit") && cookieValue.equals("001"))
+		{
 			cookieValidFlag=1;
  		}
 
- 		else 
+ 		else
 	 {
 		cookieValidFlag=0;
  		}
 	}
-	
+
 }
 
 
