@@ -171,6 +171,7 @@ update plotSpeciesSum
 * Send a test query
 */
 
+
 select plot_id, accession_number, authorplotcode, plotoriginlat, plotoriginlong from plotsitesummary;
 --select PLOT_ID, AUTHORPLOTCODE, AUTHOROBSCODE,  
 --AUTHORNAMEID,  STRATUMTYPE, PERCENTCOVER 

@@ -10,14 +10,14 @@ CREATE TABLE address
     ADDRESS_ID serial,
     PARTY_ID integer NOT NULL,
     ORGANIZATION_ID integer,
-    orgPosition varchar (22),
-    email varchar (22),
-    deliveryPoint varchar (22),
-    city varchar (22),
-    administrativeArea varchar (22),
-    postalCode varchar (22),
-    country varchar (22),
-    currentFlag varchar (10),
+    orgPosition varchar (50),
+    email varchar (100),
+    deliveryPoint varchar (200),
+    city varchar (50),
+    administrativeArea varchar (50),
+    postalCode varchar (10),
+    country varchar (50),
+    currentFlag boolean,
     addressStartDate timestamp,
     PRIMARY KEY(ADDRESS_ID)
 );
@@ -31,8 +31,8 @@ drop table aux_Role;
 CREATE TABLE aux_Role
 (
     ROLE_ID serial,
-    roleCode varchar (22) NOT NULL,
-    roleDescription varchar (22),
+    roleCode varchar (30) NOT NULL,
+    roleDescription varchar (200),
     roleProject integer,
     roleObservation integer,
     roleTaxonInt integer,
@@ -49,19 +49,19 @@ drop table citation;
 CREATE TABLE citation
 (
     CITATION_ID serial,
-    authors varchar (22),
-    title varchar (22),
-    alternateTitle varchar (22),
+    authors varchar (200),
+    title varchar (200),
+    alternateTitle varchar (50),
     pubDate timestamp,
-    edition varchar (22),
-    seriesName varchar (22),
-    issueIdentification varchar (22),
-    otherCitationDetails varchar (22),
-    page varchar (22),
-    tableCited varchar (22),
-    plotCited varchar (22),
-    ISBN varchar (22),
-    ISSN varchar (22),
+    edition varchar (20),
+    seriesName varchar (50),
+    issueIdentification varchar (20),
+    otherCitationDetails varchar (100),
+    page varchar (20),
+    tableCited varchar (20),
+    plotCited varchar (20),
+    ISBN varchar (20),
+    ISSN varchar (20),
     PRIMARY KEY(CITATION_ID)
 );
 
@@ -92,12 +92,12 @@ CREATE TABLE commClass
     OBSERVATION_ID integer NOT NULL,
     classStartDate timestamp,
     classStopDate timestamp,
-    inspection varchar (10),
-    tableAnalysis varchar (10),
-    multivariateAnalysis varchar (10),
-    expertSystem varchar (10),
+    inspection boolean,
+    tableAnalysis boolean,
+    multivariateAnalysis boolean,
+    expertSystem boolean,
     classPublication_ID integer,
-    classNotes varchar (200),
+    classNotes  text,
     PRIMARY KEY(COMMCLASS_ID)
 );
 
@@ -111,12 +111,15 @@ CREATE TABLE commInterpretation
 (
     COMMINTERPRETATION_ID serial,
     COMMCLASS_ID integer NOT NULL,
-    COMMCONCEPT_ID integer NOT NULL,
-    classFit varchar (22),
-    classConfidence varchar (22),
+    COMMCONCEPT_ID integer,
+		--next two added by JHH
+		commcode varchar (34),
+		commname varchar(200),
+    classFit varchar (15),
+    classConfidence varchar (15),
     commAuthority_ID integer,
-    notes varchar (200),
-    type varchar (10),
+    notes text,
+    type boolean,
     PRIMARY KEY(COMMINTERPRETATION_ID)
 );
 
@@ -130,11 +133,11 @@ CREATE TABLE coverIndex
 (
     COVERINDEX_ID serial,
     COVERMETHOD_ID integer NOT NULL,
-    coverCode varchar (22) NOT NULL,
+    coverCode varchar (12) NOT NULL,
     upperLimit float,
     lowerLimit float,
     coverPercent float NOT NULL,
-    indexDescription varchar (200),
+    indexDescription text,
     PRIMARY KEY(COVERINDEX_ID)
 );
 
@@ -148,7 +151,7 @@ CREATE TABLE coverMethod
 (
     COVERMETHOD_ID serial,
     CITATION_ID integer,
-    coverType varchar (22) NOT NULL,
+    coverType varchar (30) NOT NULL,
     PRIMARY KEY(COVERMETHOD_ID)
 );
 
@@ -177,11 +180,11 @@ CREATE TABLE disturbanceObs
 (
     disturbanceObs serial,
     OBSERVATION_ID integer NOT NULL,
-    disturbanceType varchar (22) NOT NULL,
-    disturbanceIntensity varchar (22),
+    disturbanceType varchar (30) NOT NULL,
+    disturbanceIntensity varchar (30),
     diosturbanceAge float,
     disturbanceExtent float,
-    disturbanceComment varchar (200),
+    disturbanceComment text,
     PRIMARY KEY(disturbanceObs)
 );
 
@@ -195,12 +198,12 @@ CREATE TABLE graphic
 (
     GRAPHIC_ID serial,
     OBSERVATION_ID integer NOT NULL,
-    graphicName varchar (22),
-    graphicLocation varchar (200),
-    graphicDescription varchar (200),
-    graphicType varchar (22),
+    graphicName varchar (30),
+    graphicLocation text,
+    graphicDescription text,
+    graphicType varchar (20),
     graphicDate timestamp,
-    graphicData varchar (10),
+    graphicData oid,
     PRIMARY KEY(GRAPHIC_ID)
 );
 
@@ -213,11 +216,11 @@ drop table namedPlace;
 CREATE TABLE namedPlace
 (
     NAMEDPLACE_ID serial,
-    placeSystem varchar (22),
-    placeName varchar (22) NOT NULL,
-    placeDescription varchar (200),
-    placeCode varchar (22),
-    owner varchar (22),
+    placeSystem varchar (50),
+    placeName varchar (100) NOT NULL,
+    placeDescription text,
+    placeCode varchar (15),
+    owner varchar (100),
     CITATION_ID integer,
     PRIMARY KEY(NAMEDPLACE_ID)
 );
@@ -231,8 +234,8 @@ drop table noteLink;
 CREATE TABLE noteLink
 (
     NOTELINK_ID serial,
-    tableName varchar (22) NOT NULL,
-    attributeName varchar (22) NOT NULL,
+    tableName varchar (50) NOT NULL,
+    attributeName varchar (50) NOT NULL,
     tableRecord integer NOT NULL,
     PRIMARY KEY(NOTELINK_ID)
 );
@@ -250,8 +253,8 @@ CREATE TABLE Note
     PARTY_ID integer NOT NULL,
     ROLE_ID integer NOT NULL,
     noteDate timestamp,
-    noteType varchar (22) NOT NULL,
-    noteText varchar (200) NOT NULL,
+    noteType varchar (20) NOT NULL,
+    noteText text NOT NULL,
     PRIMARY KEY(NOTE_ID)
 );
 
@@ -286,7 +289,7 @@ CREATE TABLE observationSynonym
     ROLE_ID integer NOT NULL,
     classStartDate timestamp NOT NULL,
     classStopDate timestamp,
-    SynonymComment varchar (200),
+    SynonymComment text,
     PRIMARY KEY(OBSERVATIONSYNONYM_ID)
 );
 
@@ -302,36 +305,36 @@ CREATE TABLE observation
     PREVIOUSOBS_ID integer,
     PLOT_ID integer NOT NULL,
     PROJECT_ID integer,
-    authorObsCode varchar (22),
+    authorObsCode varchar (30),
     obsStartDate timestamp,
     obsEndDate timestamp,
-    dateAccuracy varchar (22),
+    dateAccuracy varchar (30),
     SAMPLEMETHOD_ID integer,
     COVERMETHOD_ID integer NOT NULL,
     STRATUMMETHOD_ID integer NOT NULL,
-    stemSizeLimit varchar (10),
-    methodNarrative varchar (200),
+    stemSizeLimit float,
+    methodNarrative text,
     taxonObservationArea float NOT NULL,
-    coverDispersion varchar (22) NOT NULL,
+    coverDispersion varchar (30) NOT NULL,
     autoTaxonCover varchar (10) NOT NULL,
     stemObservationArea float,
-    stemSampleMethod varchar (22),
-    originalData varchar (200),
-    effortLevel varchar (22),
-    plotValidationLevel varchar (22),
-    floristicQuality varchar (22),
-    bryophyteQuality varchar (22),
-    lichenQuality varchar (22),
-    observationNarrative varchar (200),
-    landscapeNarrative varchar (200),
-    homogeneity varchar (22),
-    phenologicAspect varchar (22),
-    representativeness varchar (22),
+    stemSampleMethod varchar (30),
+    originalData text,
+    effortLevel varchar (30),
+    plotValidationLevel varchar (30),
+    floristicQuality varchar (30),
+    bryophyteQuality varchar (30),
+    lichenQuality varchar (30),
+    observationNarrative text,
+    landscapeNarrative text,
+    homogeneity varchar (30),
+    phenologicAspect varchar (30),
+    representativeness varchar (30),
     basalArea float,
-    hydrologicRegime varchar (22),
-    soilMoistureRegime varchar (22),
-    soilDrainage varchar (22),
-    waterSalinity varchar (22),
+    hydrologicRegime varchar (30),
+    soilMoistureRegime varchar (30),
+    soilDrainage varchar (30),
+    waterSalinity varchar (30),
     waterDepth float,
     shoreDistance float,
     soilDepth float,
@@ -343,7 +346,7 @@ CREATE TABLE observation
     percentBareSoil float,
     percentWater float,
     percentOther float,
-    nameOther varchar (22),
+    nameOther varchar (30),
     standMaturity float,
     successionalStatus varchar (200),
     treeHt float,
@@ -357,16 +360,16 @@ CREATE TABLE observation
     nonvascularCover float,
     floatingCover float,
     submergedCover float,
-    dominantStratum varchar (22),
-    growthform1Type varchar (22),
-    growthform2Type varchar (22),
-    growthform3Type varchar (22),
+    dominantStratum varchar (40),
+    growthform1Type varchar (40),
+    growthform2Type varchar (40),
+    growthform3Type varchar (40),
     growthform1Cover float,
     growthform2Cover float,
     growthform3Cover float,
-    notesPublic varchar (10),
-    notesMgt varchar (10),
-    revisions varchar (10),
+    notesPublic boolean,
+    notesMgt boolean,
+    revisions boolean,
     PRIMARY KEY(OBSERVATION_ID)
 );
 
@@ -379,13 +382,13 @@ drop table party;
 CREATE TABLE party
 (
     PARTY_ID serial,
-    salutation varchar (22),
-    givenName varchar (22),
-    middleName varchar (22),
-    surName varchar (22),
-    organizationName varchar (22),
+    salutation varchar (20),
+    givenName varchar (50),
+    middleName varchar (50),
+    surName varchar (50),
+    organizationName varchar (120),
     currentName integer,
-    contactInstructions varchar (22),
+    contactInstructions varchar (1000),
     owner integer NOT NULL,
     PRIMARY KEY(PARTY_ID)
 );
@@ -400,7 +403,7 @@ CREATE TABLE place
 (
     PLOTPLACE_ID serial,
     PLOT_ID integer NOT NULL,
-    Calculated varchar (10),
+    Calculated boolean,
     NAMEDPLACE_ID integer NOT NULL,
     PRIMARY KEY(PLOTPLACE_ID)
 );
@@ -493,8 +496,8 @@ drop table project;
 CREATE TABLE project
 (
     PROJECT_ID serial,
-    projectName varchar (22) NOT NULL,
-    projectDescription varchar (200),
+    projectName varchar (25) NOT NULL,
+    projectDescription text,
     startDate timestamp,
     stopDate timestamp,
     PRIMARY KEY(PROJECT_ID)
@@ -509,12 +512,12 @@ drop table revision;
 CREATE TABLE revision
 (
     REVISION_ID serial,
-    tableName varchar (22) NOT NULL,
-    tableAttribute varchar (22) NOT NULL,
+    tableName varchar (50) NOT NULL,
+    tableAttribute varchar (50) NOT NULL,
     tableRecord integer NOT NULL,
     revisionDate timestamp NOT NULL,
-    previousValueText varchar (22) NOT NULL,
-    previousValueType varchar (22) NOT NULL,
+    previousValueText varchar (500) NOT NULL,
+    previousValueType varchar (20) NOT NULL,
     previousRevision_ID integer,
     PRIMARY KEY(REVISION_ID)
 );
@@ -556,12 +559,12 @@ CREATE TABLE soilObs
 (
     SOILOBS_ID serial,
     OBSERVATION_ID integer NOT NULL,
-    soilHorizon varchar (22) NOT NULL,
+    soilHorizon varchar (15) NOT NULL,
     soilDepthTop float,
     soilDepthBottom float,
-    soilColor varchar (22),
+    soilColor varchar (30),
     soilOrganic float,
-    soilTexture varchar (22),
+    soilTexture varchar (20),
     soilSand float,
     soilSilt float,
     soilClay float,
@@ -569,7 +572,7 @@ CREATE TABLE soilObs
     soilPH float,
     exchanceCapacity float,
     baseSaturation float,
-    soilDescription varchar (200),
+    soilDescription varchar text,
     PRIMARY KEY(SOILOBS_ID)
 );
 
@@ -584,9 +587,9 @@ CREATE TABLE stemSize
     STEMCOUNT_ID serial,
     TAXONOBSERVATION_ID integer NOT NULL,
     stemDiameter float,
-    stemDiameterAccuracy varchar (10),
-    stemHeight varchar (10),
-    stemHeightAccuracy varchar (10),
+    stemDiameterAccuracy float,
+    stemHeight float,
+    stemHeightAccuracy float,
     stemCount integer NOT NULL,
     PRIMARY KEY(STEMCOUNT_ID)
 );
@@ -601,9 +604,9 @@ CREATE TABLE stemLocation
 (
     STEMLOCATION_ID serial,
     STEMCOUNT_ID integer NOT NULL,
-    stemCode varchar (22),
-    stemXPosition varchar (10),
-    stemYPosition varchar (10),
+    stemCode varchar (20),
+    stemXPosition float,
+    stemYPosition float,
     PRIMARY KEY(STEMLOCATION_ID)
 );
 
@@ -635,7 +638,8 @@ CREATE TABLE stratumMethod
 (
     STRATUMMETHOD_ID serial,
     CITATION_ID integer,
-    stratumMethodName varchar (22) NOT NULL,
+    stratumMethodName varchar (30) NOT NULL,
+		stratumMethodDescription text,
     PRIMARY KEY(STRATUMMETHOD_ID)
 );
 
@@ -650,7 +654,7 @@ CREATE TABLE stratum
     STRATUM_ID serial,
     OBSERVATION_ID integer NOT NULL,
     STRATUMMETHOD_ID integer,
-    stratumName varchar (22),
+    stratumName varchar (30),
     stratumHeight float,
     stratumBase float,
     stratumCover float,
@@ -673,14 +677,14 @@ CREATE TABLE taxonInterpretation
     PLANTNAME_ID integer,
     PARTY_ID integer NOT NULL,
     ROLE_ID integer NOT NULL,
-    interpretationType varchar (22),
+    interpretationType varchar (30),
     CITATION_ID integer,
-    originalInterpretation varchar (10) NOT NULL,
-    currentInterpretation varchar (10) NOT NULL,
-    notes varchar (200),
-    notesPublic varchar (10),
-    notesMgt varchar (10),
-    revisions varchar (10),
+    originalInterpretation boolean not null,
+    currentInterpretation boolean NOT NULL,
+    notes text,
+    notesPublic boolean,
+    notesMgt boolean,
+    revisions boolean,
     PRIMARY KEY(TAXONINTERPRETATION_ID)
 );
 
@@ -697,7 +701,7 @@ CREATE TABLE taxonObservation
 		--remove the 'not null' because not implementing the plant taxa db JHH 20020122
     PLANTNAME_ID integer,
     PLANTREFERENCE_ID integer,
-    taxonCollection varchar (22),
+    taxonCollection varchar (100),
     taxonCover float,
     taxonBasalArea float,
     taxonInferenceArea float,
@@ -716,8 +720,8 @@ CREATE TABLE telephone
 (
     TELEPHONE_ID serial,
     PARTY_ID integer NOT NULL,
-    phoneNumber varchar (22) NOT NULL,
-    phoneType varchar (22) NOT NULL,
+    phoneNumber varchar (30) NOT NULL,
+    phoneType varchar (20) NOT NULL,
     PRIMARY KEY(TELEPHONE_ID)
 );
 
@@ -730,11 +734,11 @@ drop table userDefined;
 CREATE TABLE userDefined
 (
     USERDEFINED_ID serial,
-    userDefinedName varchar (22),
-    userDefinedMetadata varchar (200),
-    userDefinedCategory varchar (22),
-    userDefinedType varchar (22) NOT NULL,
-    tableName varchar (22) NOT NULL,
+    userDefinedName varchar (30),
+    userDefinedMetadata text,
+    userDefinedCategory varchar (30),
+    userDefinedType varchar (20) NOT NULL,
+    tableName varchar (50) NOT NULL,
     PRIMARY KEY(USERDEFINED_ID)
 );
 ----------------------------------------------------------------------------
