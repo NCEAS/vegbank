@@ -4,8 +4,15 @@
  * to the sqlMapper class.  Ultimately these queries are issued 
  * to the database though the issue select method
  *
- * @author John Harris
- * @version March 22, 2001
+ * @author 
+ * @version 
+ *
+ *
+ *
+ *  '$Author: harris $'
+ *  '$Date: 2002-01-22 16:30:19 $'
+ * 	'$Revision: 1.2 $'
+ *
  *
  */
 
@@ -19,7 +26,7 @@ import java.sql.*;
 
 import databaseAccess.*;
 
-public class  queryStore
+public class queryStore
 {
 
 
@@ -461,27 +468,34 @@ outPlotIdNum=j.outReturnFieldsNum;
  * @param     queryElementType  the type of element used for querying the DB
  * @param     conn  a database connection that was presumedly taken from the pool 
  */
-public void getPlotId(String queryElement, String queryElement2, 
+	public void getPlotId(String queryElement, String queryElement2, 
 	String queryElementType)
-{
-String action="select";
-String statement="select PLOT_ID from PLOT where ALTVALUE >= "+queryElement+
-	" and ALTVALUE <= "+queryElement2;
-String returnFields[]=new String[1];	
-returnFields[0]="PLOT_ID";
-int returnFieldLength=1;
+	{
+		try
+		{
+			String action="select";
+			String statement="select PLOT_ID from PLOT where ELEVATION >= "+queryElement+
+			" and ELEVATION <= "+queryElement2;
+			String returnFields[]=new String[1];	
+			returnFields[0]="PLOT_ID";
+			int returnFieldLength=1;
 
 
-issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength);	
+			issueStatement j = new issueStatement();
+			j.issueSelect(statement, action, returnFields, returnFieldLength);	
 
 
-//grab the returned result set and transfer to a public array
-//ultimately these results are passed to the calling class
-outPlotId=j.outReturnFields;
-outPlotIdNum=j.outReturnFieldsNum;
-	
-} //end method
+			//grab the returned result set and transfer to a public array
+			//ultimately these results are passed to the calling class
+			outPlotId=j.outReturnFields;
+			outPlotIdNum=j.outReturnFieldsNum;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+	}
 
 
 /**
