@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-13 22:35:17 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-11-25 19:40:56 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,8 +74,7 @@ public class DBPartyWriter
 							party.getMiddlename(),
 							new Long(party.getCurrentname_id() ).toString(),
 							party.getOrganizationname(),
-							party.getContactinstructions(),
-							new Long(party.getOwner_id()).toString() );
+							party.getContactinstructions());
 				}
 				else
 				{
@@ -189,8 +188,7 @@ public class DBPartyWriter
 			String middleName,
 			String currentParty,
 			String organization,
-			String contactInstructions,
-			String owner)
+			String contactInstructions)
 			throws SQLException
 		{
 			System.out.println("DBPartyWriter > attempting to insert party ");
@@ -205,7 +203,7 @@ public class DBPartyWriter
 
 			sb.append("INSERT into " + tableName + " (givenName, surName, middleName, salutation,");
 			sb.append(" currentName_id, organizationName, contactInstructions, owner_id, ");
-			sb.append( pKName + ") values(?,?,?,?,?,?,?,?,?)");
+			sb.append( pKName + ") values(?,?,?,?,?,?,?,?)");
 			
 			//System.out.println("====> '" + currentParty + "' ==== '" + owner + "'");
 			
@@ -225,15 +223,7 @@ public class DBPartyWriter
 			}
 			pstmt.setString(6, organization);
 			pstmt.setString(7, contactInstructions);
-			if ( owner != null && ! owner.trim().equals("0"))
-			{
-				pstmt.setString(8, owner);
-			}
-			else
-			{
-				pstmt.setNull(8, java.sql.Types.INTEGER);
-			}
-			pstmt.setInt(9,partyId);
+			pstmt.setInt(8,partyId);
 			pstmt.execute();
 
 			System.out.println("DBPartyWriter > new partyId: " + partyId);

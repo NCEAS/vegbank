@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-11-25 19:40:56 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ import java.util.Iterator;
 import org.vegbank.common.model.Community;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
-import org.vegbank.common.utility.ObjectToXML;
 import org.vegbank.communities.datasink.DBCommunityWriter;
 
 /**
@@ -78,8 +77,8 @@ public class LoadCommunities
 				}
 				else
 				{
-					ObjectToXML o2X = new ObjectToXML( (Community) i.next());
-					System.out.println( o2X.getXML() );
+					//ObjectToXML o2X = new ObjectToXML( (Community) i.next());
+					//System.out.println( o2X.getXML() );
 				}
 			}
 			
@@ -97,7 +96,7 @@ public class LoadCommunities
 	 */
 	private static DBConnection getDBConnection() throws SQLException
 	{
-		return DBConnectionPool.getDBConnection("Need connection for inserting community");
+		return DBConnectionPool.getInstance().getDBConnection("Need connection for inserting community");
 	}
 	
 	private Connection getConnection() throws ClassNotFoundException, SQLException

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-16 20:09:07 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2003-11-25 19:40:56 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ import java.util.Vector;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.*;
 import org.vegbank.common.model.Reference;
-import org.vegbank.common.utility.ObjectToDB;
+import org.vegbank.common.utility.VBModelBeanToDB;
 
 import com.Ostermiller.util.CSVParser;
 
@@ -80,7 +80,7 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	private static final String contactInstructions = "http://plants.usda.gov";
 	
 	private static Reference ref;
-	private static int refId;
+	private static long refId;
 	{
 		// Initialize the Reference
 		ref = new Reference();
@@ -89,11 +89,10 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		ref.setTitle(title);
 
 		// Write the reference into the database
-		ObjectToDB ref2db = new ObjectToDB(ref);
 		try 
 		{
-			ref2db.insert();
-			refId = ref2db.getPrimaryKey();
+			VBModelBeanToDB ref2db = new VBModelBeanToDB();
+			refId = ref2db.insert(ref);
 		}
 		catch ( Exception e)
 		{
@@ -102,16 +101,15 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	}
 	
 	private static Referenceparty rp = new Referenceparty();
-	private static int refPartyId;
+	private static long refPartyId;
 	{
 		// Initailize ReferenceParty
 		rp.setOrganizationname(organization);
 		// Write the ReferenceParty into the database
-		ObjectToDB refp2db = new ObjectToDB(rp);
 		try 
 		{
-			refp2db.insert();
-			refPartyId = refp2db.getPrimaryKey();
+			VBModelBeanToDB refp2db = new VBModelBeanToDB();
+			refPartyId = refp2db.insert(rp);
 		}
 		catch ( Exception e)
 		{
@@ -122,15 +120,15 @@ public class USDAPlantListReader implements Constants, PlantListReader
 	private static Referencecontributor rc = new Referencecontributor();
 	{
 		// Initailize ReferenceContributor
-		rc.setReference_id(new Integer(refId).intValue() );	
+		rc.setReference_id(new Long(refId).longValue() );	
 		rc.setReferenceparty_id(refPartyId);
 		rc.setPosition("0");
 		
 		// Write the ReferenceContributor into the database
-		ObjectToDB refc2db = new ObjectToDB(rc);
 		try 
 		{
-			refc2db.insert();
+			VBModelBeanToDB refc2db = new VBModelBeanToDB();
+			refc2db.insert(rc);
 		}
 		catch ( Exception e)
 		{
@@ -138,19 +136,18 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		}
 	}
 	
-	private static Plantparty plantParty=new Plantparty();
-	private static int plantPartyId;
+	private static Party party=new Party();
+	private static long plantPartyId;
 	{
 		// Initialize the PlantParty
-		plantParty.setOrganizationname(organization);
-		plantParty.setContactinstructions(contactInstructions);
+		party.setOrganizationname(organization);
+		party.setContactinstructions(contactInstructions);
 		
 		// Write the PlantParty into the database
-		ObjectToDB pp2db = new ObjectToDB(plantParty);
 		try 
 		{
-			pp2db.insert();
-			plantPartyId = pp2db.getPrimaryKey();
+			VBModelBeanToDB pp2db = new VBModelBeanToDB();
+			plantPartyId = pp2db.insert(party);
 		}
 		catch ( Exception e)
 		{
@@ -213,8 +210,8 @@ public class USDAPlantListReader implements Constants, PlantListReader
 			// Always the same for families
 			Plant plant = new Plant();
 			plant.setStatusStartDate(statusStartDate);
-			plant.setAllReferenceIds( new Integer(refId).toString() );
-			plant.setPlantPartyId( new Integer(plantPartyId).toString());
+			plant.setAllReferenceIds( new Long(refId).toString() );
+			plant.setPlantPartyId( new Long(plantPartyId).toString());
 			plant.setClassLevel(PLANT_CLASS_FAMILY);
 			plant.setStatus(CONCEPT_STATUS_ACCEPTED);
 			
@@ -232,8 +229,8 @@ public class USDAPlantListReader implements Constants, PlantListReader
 		Plant plant = new Plant();
 
 		plant.setStatusStartDate(statusStartDate);
-		plant.setAllReferenceIds( new Integer(refId).toString() );
-		plant.setPlantPartyId( new Integer(plantPartyId).toString());
+		plant.setAllReferenceIds( new Long(refId).toString() );
+		plant.setPlantPartyId( new Long(plantPartyId).toString());
 		/* Examples:
 		 * code, name, common name, genus
 		*"ABMO3","Abama montana Small ","=Narthecium americanum","Liliaceae"

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2003-11-25 19:40:56 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,7 +192,7 @@ public class LoadPlantList
 	 */
 	private DBConnection getConnection() throws SQLException
 	{
-		return DBConnectionPool.getDBConnection("Need connection for inserting plant");
+		return DBConnectionPool.getInstance().getDBConnection("Need connection for inserting plant");
 	}
 	
 }

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2003-11-25 19:40:56 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,11 +33,11 @@ import java.util.Iterator;
 import org.vegbank.common.Constants;
 import org.vegbank.common.command.Query;
 import org.vegbank.common.model.Plant;
-import org.vegbank.common.model.Plantparty;
+import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Plantusage;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
-import org.vegbank.common.utility.ObjectToDB;
+import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.Utility;
 
 /**
@@ -80,26 +80,25 @@ public class DBPlantWriter implements Constants
 	
 	
 			// Need to get the referenceIds;
-			int conceptRefId = this.getIntFromString(plant.getConceptReferenceId());
-			int snRefId =  this.getIntFromString(plant.getScientificNameReferenceId());
-			int codeRefId =  this.getIntFromString(plant.getCodeNameReferenceId());
-			int commonRefId =  this.getIntFromString(plant.getCommonNameReferenceId());
-			int statusRefId =  this.getIntFromString(plant.getStatusReferenceId());
-			int snNoAutRefId =  this.getIntFromString(plant.getScientificNameNoAuthorsReferenceId());
+			long conceptRefId = this.getLongFromString(plant.getConceptReferenceId());
+			long  snRefId =  this.getLongFromString(plant.getScientificNameReferenceId());
+			long  codeRefId =  this.getLongFromString(plant.getCodeNameReferenceId());
+			long  commonRefId =  this.getLongFromString(plant.getCommonNameReferenceId());
+			long  statusRefId =  this.getLongFromString(plant.getStatusReferenceId());
+			long  snNoAutRefId =  this.getLongFromString(plant.getScientificNameNoAuthorsReferenceId());
 										
 			// Need to get the partyId
-			Plantparty party = plant.getPlantParty();
-			int partyId;
+			Party party = plant.getParty();
+			long partyId;
 			if (party == null)
 			{
-				String partyIdString = plant.getPlantPartyId();
+				String partyIdString = plant.getPartyId();
 				partyId = new Integer(partyIdString).intValue();
 			}
 			else
 			{
-				ObjectToDB pp2db = new ObjectToDB(party);
-				pp2db.insert();
-				partyId = pp2db.getPrimaryKey();
+				VBModelBeanToDB pp2db = new VBModelBeanToDB();
+				partyId =pp2db.insert(party);
 			}
 
 
@@ -119,7 +118,7 @@ public class DBPlantWriter implements Constants
 				else
 				{
 					// Get the correct ReferenceId
-					int refId = 0;
+					long  refId = 0;
 					
 					if (pu.getClasssystem().equals( USAGE_NAME_CODE) )
 					{
@@ -145,14 +144,14 @@ public class DBPlantWriter implements Constants
 					// Does it have this kind  of  name
 					if ( pu.getPlantname() != null )
 					{
-						int plantNameId =
+						long  plantNameId =
 							this.insertPlantName(
 								refId,
 								pu.getPlantname(),
 								Utility.dbAdapter.getDateTimeFunction() );
 						
 						System.out.println("===" + pu.getClasssystem() + " AND " +plantNameId);
-						plantNameIds.put(pu.getClasssystem(), new Integer(plantNameId) );
+						plantNameIds.put(pu.getClasssystem(), new Long(plantNameId) );
 					}
 				}
 			}
@@ -162,23 +161,23 @@ public class DBPlantWriter implements Constants
 			
 			// The Scienticfic name is prefered for linking but scientic name without authors 
 			// can also be used	
-			Integer sciNameId = (Integer) plantNameIds.get(USAGE_NAME_SCIENTIFIC);
-			Integer sciNameWAId = (Integer) plantNameIds.get(USAGE_NAME_SCIENTIFIC_NOAUTHORS);
+			Long sciNameId = (Long) plantNameIds.get(USAGE_NAME_SCIENTIFIC);
+			Long sciNameWAId = (Long) plantNameIds.get(USAGE_NAME_SCIENTIFIC_NOAUTHORS);
 			
-			int conceptId = 0;
+			long  conceptId = 0;
 			
 			System.out.println( ">>>> " +sciNameId + " **** " + sciNameWAId + " " +plantNameIds);
 			if ( sciNameId == null || sciNameId.equals("") )
 			{
 				if ( sciNameWAId != null || !sciNameWAId.equals("") )
 				{
-					int intSciNameWAId =  sciNameWAId.intValue(); 
+					long  longSciNameWAId =  sciNameWAId.longValue();
 				
 					System.out.println("sciNameId: " + sciNameId);
 					// Insert the Concept
 					conceptId =
 						this.insertPlantConcept(
-							intSciNameWAId,
+							longSciNameWAId,
 							conceptRefId,
 							plant.getScientificNameNoAuthors(),
 							plant.getPlantDescription(),
@@ -192,13 +191,13 @@ public class DBPlantWriter implements Constants
 			else
 			{
 				// Use the scientific Name Id
-				int intSciNameId =  sciNameId.intValue(); 
+				long longSciNameId =  sciNameId.longValue(); 
 			
 				System.out.println("sciNameId: " + sciNameId);
 				// Insert the Concept
 				conceptId =
 					this.insertPlantConcept(
-						intSciNameId,
+						longSciNameId,
 						conceptRefId,
 						plant.getScientificName(),
 						plant.getPlantDescription(),
@@ -210,7 +209,7 @@ public class DBPlantWriter implements Constants
 			//System.out.println(">>>>  " + plant.getStatusStopDate());
 			
 			// Insert the Status
-			int statusId = 
+			long statusId = 
 				this.insertPlantStatus(
 					conceptId,
 					statusRefId,
@@ -239,9 +238,9 @@ public class DBPlantWriter implements Constants
 				else
 				{
 					//System.out.println("LOADING");
-					int usageId = 
+					long usageId = 
 						this.insertPlantUsage(
-							( (Integer) plantNameIds.get(pu.getClasssystem())).intValue(),
+							( (Long) plantNameIds.get(pu.getClasssystem())).longValue(),
 							conceptId,
 							pu.getPlantname(),
 							partyId,				
@@ -285,16 +284,16 @@ public class DBPlantWriter implements Constants
 	}
 
 	/**
-	 * Wrapper for getting int from string,
+	 * Wrapper for getting long  from string,
 	 * suppresses expections and returns a 0
 	 * @return
 	 */
-	private int getIntFromString( String string )
+	private long getLongFromString( String string )
 	{
-		int result = 0;
+		long result = 0;
 		try
 		{
-			result = new Integer(string).intValue();
+			result = new Long(string).longValue();
 		}
 		catch ( Exception e)
 		{
@@ -305,12 +304,12 @@ public class DBPlantWriter implements Constants
 	}
 
 	/**
-	 * @return int Primary Key
+	 * @return long  Primary Key
 	 */
-	private int insertPlantStatus(
-		int plantConceptId, 
-		int referenceId, 
-		int plantPartyId, 
+	private long insertPlantStatus(
+		long plantConceptId, 
+		long referenceId, 
+		long plantPartyId, 
 		String plantConceptStatus,
 		String plantParentName,
 		String startDate,
@@ -319,8 +318,8 @@ public class DBPlantWriter implements Constants
 		String partyComments) 
 		throws SQLException
 	{
-		int statusId = 0;
-		int plantParentConceptId = 0;
+		long statusId = 0;
+		long plantParentConceptId = 0;
 		
 		try
 		{
@@ -344,21 +343,21 @@ public class DBPlantWriter implements Constants
 		+ "plantstatus_id, plantparent_id, plantparentname, plantpartycomments)"
 		+ " values (?,?,?,?,?,?,?,?,?,?,?)");
 		
-		pstmt.setInt(1, plantConceptId);
+		pstmt.setLong(1, plantConceptId);
 		if ( referenceId == 0 )
 		{
 			pstmt.setNull(2, java.sql.Types.INTEGER);
 		}
 		else
 		{
-			pstmt.setInt(2, referenceId);
+			pstmt.setLong(2, referenceId);
 		} 
-		pstmt.setInt(3, plantPartyId);
+		pstmt.setLong(3, plantPartyId);
 		pstmt.setString(4, plantConceptStatus);
 		Utility.insertDateField(startDate, pstmt, 5);  
 		Utility.insertDateField(stopDate, pstmt, 6);  
 		pstmt.setString(7, plantLevel);		
-		pstmt.setInt(8, statusId);		
+		pstmt.setLong(8, statusId);		
 		// 0 => that no plantconcept_id was found
 		if (plantParentConceptId == 0)
 		{
@@ -366,7 +365,7 @@ public class DBPlantWriter implements Constants
 		}
 		else
 		{
-			pstmt.setInt(9, plantParentConceptId);		
+			pstmt.setLong(9, plantParentConceptId);		
 		}
 		pstmt.setString(10, plantParentName);
 		pstmt.setString(11, partyComments);
@@ -377,19 +376,19 @@ public class DBPlantWriter implements Constants
 		return statusId;
 	}
 
-	private int insertPlantUsage(
-		int plantNameId, 
-		int plantConceptId, 
+	private long insertPlantUsage(
+		long plantNameId, 
+		long plantConceptId, 
 		String plantName,
-		int plantPartyId, 
+		long plantPartyId, 
 		String startDate,
 		String synonymName,
 		String plantNameStatus,
 		String classSystem) 		
 		throws SQLException
 	{
-		int usageId =
-			(int) Utility.dbAdapter.getNextUniqueID(
+		long usageId =
+			Utility.dbAdapter.getNextUniqueID(
 				conn,
 				"PLANTUSAGE",
 				"plantusage_id");	
@@ -402,15 +401,15 @@ public class DBPlantWriter implements Constants
 					+ "classsystem, plantusage_id)  values (?,?,?,?,?,?,?,?,?)"
 				);
 				
-		pstmt.setInt(1,plantNameId);
-		pstmt.setInt(2,plantConceptId);		
+		pstmt.setLong(1,plantNameId);
+		pstmt.setLong(2,plantConceptId);		
 		pstmt.setString(3, plantName);
-		pstmt.setInt(4,plantPartyId);			
+		pstmt.setLong(4,plantPartyId);			
 		Utility.insertDateField(startDate, pstmt, 5);  		
 		pstmt.setString(6, synonymName);
 		pstmt.setString(7, plantNameStatus);
 		pstmt.setString(8,classSystem);
-		pstmt.setInt(9,usageId);
+		pstmt.setLong(9,usageId);
 				
 		pstmt.executeUpdate();
 		pstmt.close();
@@ -430,15 +429,15 @@ public class DBPlantWriter implements Constants
 	* @return plantNameId -- the plant name Id assocaited with this plant
 	*
 	*/
-	private int insertPlantName(
-		int refId,
+	private long insertPlantName(
+		long refId,
 		String plantName,
 		String dateEntered)
 		throws SQLException
 	{
 		// Get Primary key for table		
-		int plantNameId =
-			(int) Utility.dbAdapter.getNextUniqueID(
+		long plantNameId =
+			Utility.dbAdapter.getNextUniqueID(
 				conn,
 				"PLANTNAME",
 				"plantname_id");
@@ -455,11 +454,11 @@ public class DBPlantWriter implements Constants
 		}
 		else
 		{
-			pstmt.setInt(1, refId);
+			pstmt.setLong(1, refId);
 		} 
 		pstmt.setString(2, plantName);
 		pstmt.setString(3, dateEntered);
-		pstmt.setInt(4, plantNameId);
+		pstmt.setLong(4, plantNameId);
 		pstmt.executeUpdate();
 		pstmt.close();
 
@@ -473,19 +472,19 @@ public class DBPlantWriter implements Constants
 	 */
 	private DBConnection getConnection() throws SQLException
 	{
-		return DBConnectionPool.getDBConnection("Need connection for inserting plants");
+		return DBConnectionPool.getInstance().getDBConnection("Need connection for inserting plants");
 	}
 	
-	private int insertPlantConcept(
-		int plantNameId,
-		int refId,
+	private long insertPlantConcept(
+		long plantNameId,
+		long refId,
 		String plantName,
 		String plantDescription,
 		String plantCode)
 		throws SQLException
 	{
-		int nextId =
-			(int) Utility.dbAdapter.getNextUniqueID(
+		long nextId =
+			Utility.dbAdapter.getNextUniqueID(
 				conn,
 				"plantconcept",
 				"plantconcept_id");
@@ -495,19 +494,19 @@ public class DBPlantWriter implements Constants
 				" insert into PLANTCONCEPT (PLANTNAME_ID, REFERENCE_ID, PLANTNAME, "
 					+ " PLANTDESCRIPTION,  PLANTCODE, plantconcept_id)   values (?,?,?,?,?,?)");
 
-		pstmt.setInt(1, plantNameId);
+		pstmt.setLong(1, plantNameId);
 		if ( refId == 0)
 		{
 			pstmt.setNull(2, java.sql.Types.INTEGER);
 		}
 		else
 		{
-			pstmt.setInt(2, refId);
+			pstmt.setLong(2, refId);
 		} 
 		pstmt.setString(3, plantName);
 		pstmt.setString(4, plantDescription);
 		pstmt.setString(5, plantCode);
-		pstmt.setInt(6, nextId);
+		pstmt.setLong(6, nextId);
 		pstmt.execute();
 		pstmt.close();
 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:12 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2003-11-25 19:40:56 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,8 +62,8 @@ public class Plant implements Constants, Comparable
 	private String conceptReferenceId = null;	
 	private String plantDescription = null;
 	
-	private Plantparty plantParty = null;
-	private String plantPartyId = null;
+	private Party party = null;
+	private String partyId = null;
 	private String statusPartyComments = null;
 	private String statusReferenceId = null;	
 	
@@ -444,18 +444,18 @@ public class Plant implements Constants, Comparable
 	/**
 	 * @return Party
 	 */
-	public Plantparty getPlantParty()
+	public Party getParty()
 	{
-		return plantParty;
+		return this.party;
 	}
 
 	/**
 	 * Sets the party.
 	 * @param party The party to set
 	 */
-	public void setPlantParty(Plantparty plantParty)
+	public void setParty(Party party)
 	{
-		this.plantParty = plantParty;
+		this.party = party;
 	}
 
 	/**
@@ -708,9 +708,9 @@ public class Plant implements Constants, Comparable
 	/**
 	 * @return
 	 */
-	public String getPlantPartyId()
+	public String getPartyId()
 	{
-		return plantPartyId;
+		return partyId;
 	}
 
 	/**
@@ -718,7 +718,7 @@ public class Plant implements Constants, Comparable
 	 */
 	public void setPlantPartyId(String string)
 	{
-		plantPartyId = string;
+		partyId = string;
 	}
 
 	/**
