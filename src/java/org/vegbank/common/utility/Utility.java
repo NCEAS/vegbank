@@ -10,8 +10,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-02-13 01:06:07 $'
- * '$Revision: 1.3 $'
+ * '$Date: 2003-02-27 01:05:12 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +78,32 @@ public class Utility
 		//System.out.println("---->" + origString + " VS. " + s );
 		return s;
 	}
-	
+  
+  /**
+	* return a database connection for use with the database
+	*
+	private Connection getConnection(String databaseName)
+	{
+		String driverClassName = "";
+    String databaseUserName = "";
+    String databasePassword = "";
+    String host = "";
+    String connectionString = "jdbc:" + database + 
+    Connection c = null;
+		try 
+ 		{
+			Class.forName("org.postgresql.Driver");
+			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/communities_dev", "datauser", "");
+		}
+		catch ( Exception e )
+		{
+			System.out.println("Exception:  " + e.getMessage());
+			e.printStackTrace();
+		}
+			return(c);
+	}
+	*/
+		
 	/**
 	 * Thin wrapper around setting a date field in a PreparedStatement to handle
 	 * adding nulls when needed, e.g. empty string.
