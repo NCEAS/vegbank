@@ -15,8 +15,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2003-10-23 17:28:46 $'
-*  '$Revision: 1.11 $'
+*      '$Date: 2003-10-29 17:13:44 $'
+*  '$Revision: 1.12 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,7 @@
 <head>
 <meta name="generator" content="HTML Tidy, see www.w3.org"/>
 <link rel="STYLESHEET" href="@stylesheet@" type="text/css" />
+
 <title>
 VEGBANK - Simple Plots Query
 </title>
@@ -764,7 +765,7 @@ VEGBANK - Simple Plots Query
   <tr bgcolor="#DDDDDD">
 
     <th rowspan="2"><p><span class="item">Row</span></p></th>
-    <th rowspan="2"><p><span  class="category">Plant Name <a target="_blank" href="/vegbank/forms/plant-query.html">search</a></span></p></th>
+    <th rowspan="2"><p><span  class="category">Plant Name <a class="brightyellow" target="_blank" href="/vegbank/forms/plant-query.html">search</a></span></p></th>
     <th colspan="2"><p><span class="category">Cover (%)</span></p></th>
 
     <!-- no basal area <th colspan="2"><p><span class="category">Basal Area (m2/ha)</span></p></th> -->
@@ -1082,7 +1083,7 @@ VEGBANK - Simple Plots Query
 	  <table border="0" cellspacing="1" cellpadding="1">
 	    <tr bgcolor="#DDDDDD">
 	      <th rowspan="2"><p><span class="item">Row</span></p></th>
-	      <th rowspan="2"><p><span class="category">Community Name <a target="_blank" href="/vegbank/forms/community-query.html">search</a></span></p></th>
+	      <th rowspan="2"><p><span class="category">Community Name <a class="brightyellow" target="_blank" href="/vegbank/forms/community-query.html">search</a></span></p></th>
 	      <!-- TODO:
 	      <th rowspan="2"><p><span class="category">Fit</span></p></th>
 	      <th rowspan="2"><p><span class="category">Confidence</span></p></th>
