@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-19 23:38:54 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-12-26 23:04:16 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,6 +129,7 @@ public class ValidationConstraint
 		 }
 		 catch(Exception e)
 		 {
+			 System.out.println("Exception: looking up constraint for table: " + table +" attribute: " + attribute );
 			 e.printStackTrace();
 		 }
 		 return(contents);

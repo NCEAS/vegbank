@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-19 00:34:46 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-12-26 23:04:16 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,14 +38,23 @@ public class PlotValidationReport
 	
 	/**
 	 * method called by the validator to set a message in the report
+	 * @param dbTable -- the table that the attribute would be put into
+	 * @param dbAttribute -- the attribute where the attribute should be stored
+	 * @param methodName -- the name of the method that was used to look up the attribute
+	 * @param methodParams -- the parameter(s) that are passed to the method
 	 * @param  target -- this is the value used in the 'PlotDataSource'
 	 * @param  constraints -- the vector containing the allowable element values
 	 *
 	 */
-	public void setMessage(String target, Vector constraints)
+	public void setMessage(String dbTable, String dbAttribute, String methodName, 
+	String methodParams, String target, Vector constraints)
 	{
 		System.out.println("PlotValidationReport > setMessage called");
-		this.report.append("\n");
+		this.report.append("\n<failedAttribute>\n");
+		this.report.append("<dbTable>"+dbTable+"</dbTable>\n");
+		this.report.append("<dbAttribute>"+dbAttribute+"</dbAttribute>\n");
+		this.report.append("<methodName>"+methodName+"</methodName>\n");
+		this.report.append("<methodParams>"+methodParams+"</methodParams>\n");
 		this.report.append("<failedTarget>" +target+ "</failedTarget>\n");
 		this.report.append("<constraints>\n");
 		 for (int i = 0; i < constraints.size(); i++)
@@ -53,6 +62,7 @@ public class PlotValidationReport
 			 this.report.append("<constraint>" + (String)constraints.elementAt(i) + "</constraint>\n");
 		 }
 		this.report.append("</constraints> \n");
+		this.report.append("</failedAttribute> \n");
 	}
 	
 	/**

@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-19 23:38:54 $'
- * '$Revision: 1.4 $'
+ *     '$Date: 2002-12-26 23:04:16 $'
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import java.lang.reflect.*;
 import PlotDataSource;
 import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidationReport;
 import edu.ucsb.nceas.vegbank.plotvalidation.ValidationConstraint;
+import edu.ucsb.nceas.vegbank.plotvalidation.ConstraintMap;
 
 
 public class PlotValidator implements PlotValidationInterface
@@ -45,6 +46,13 @@ public class PlotValidator implements PlotValidationInterface
 	// this is the vector that contains the map between the xml and the 
 	// methods in the 'PlotDataSource'
 	private Vector constraintSourceMethodMap;
+	
+	// this attribute should rplace all the code that creates the map(s) within 
+	// this class
+	private ConstraintMap constraintMap; 
+
+	
+	
 	/**
 	  * constructor method that is called for each plot that is to be 
 	  * validated
@@ -64,6 +72,8 @@ public class PlotValidator implements PlotValidationInterface
 			// 'PlotDataSource'
 			this.constraintSourceMethodMap = this.getXMLPlotDataSourceMap();
 			System.out.println("############### " + constraintSourceMethodMap.toString() );
+			
+			constraintMap = new ConstraintMap();
 		}
 	  
 	  /**
@@ -75,35 +85,16 @@ public class PlotValidator implements PlotValidationInterface
 			boolean validFlag = false;
 			System.out.println("PlotValidator > isPlotValid() called for: " + plot );
 			
-			//the first thing is to get the attribute values that are needed to 
-			// be tested from the 'PlotDataSource'
-			getPlotDataSourceAttributeValues();
-		
-			//do the logic here -- as a test just do the geology
-			String table = "observation";
-			String attribute = "representativeness";
 			
-			// this is a test for loop to go thru the map and does a comparison
-			for (int i = 0; i < this.constraintSourceMethodMap.size(); i++) 
+			// the number of rules to use to test the plot with 
+			int constraintNumber = constraintMap.getMapSize();
+			System.out.println("#######: " + constraintNumber);
+			for (int i = 0; i < constraintMap.getMapSize() ; i++) 
 			{
-				Hashtable mapInstance = (Hashtable)constraintSourceMethodMap.elementAt(i);
-				// each mapInstance should only have a single name-value pair
-				
-				for (Enumeration e = mapInstance.keys() ; e.hasMoreElements() ;) 
-				{
-					String cName = (String)e.nextElement();
-					System.out.println("%%%%%: " + cName);
-					
-					// corresponding to the constraint name is a vector with two elements:
-					// 1] method info
-					// 2] database location info
-					Vector mapVals = (Vector)mapInstance.get(cName);
-					Hashtable method = (Hashtable)mapVals.elementAt( 0 );
-					Hashtable database = (Hashtable)mapVals.elementAt( 1 );
-					String methodName = (String)method.get("methodName");
-					String methodParams = (String)method.get("methodParams");
-					String dbTable = (String)database.get("dbTable");
-					String dbAttribute = (String)database.get("dbAttribute");
+					String methodName = constraintMap.getMethodName(i);
+					String methodParams = constraintMap.getMethodParams(i);
+					String dbTable = constraintMap.getDBTable(i);
+					String dbAttribute = constraintMap.getDBAttribute(i);
 					
 					// get the attribute from the plot data soure
 					String val = this.getPlotDataSourceAttributeValue(methodName, plot);
@@ -119,10 +110,13 @@ public class PlotValidator implements PlotValidationInterface
 					if (validFlag == false)
 					{
 						// this will log the messages
-						report.setMessage(val, constraints);
+						report.setMessage(dbTable, dbTable, methodName, methodParams, val, constraints);
 					}
-				}
 			}
+			
+			
+			
+			
 			return(validFlag);
 	  }
 	  
