@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2001-10-11 12:35:53 $'
- 	*     '$Revision: 1.3 $'
+ 	*     '$Date: 2001-10-20 18:15:34 $'
+ 	*     '$Revision: 1.4 $'
 --> 
 <project name="VegClient" default="compile" basedir=".">
 	
@@ -29,6 +29,7 @@
 		<property name="lib" value="./lib" />
 		<property name="bin" value="./bin" />
 		<property name="dist" value="./dist" />
+		<property name="doc" value="./docs" />
 		<property name="data" value="./data" />
 	  <property name="xerces" value="./lib/xerces_1_3_1.jar" />
 		<property name="xalan" value="./lib/xalan_1_2_2.jar" />
@@ -36,7 +37,7 @@
 		<property name="hsqldb" value="./lib/hsqldb.jar" />
 		<property name="db_access_module" value="./lib/database_access.jar" />
 		<property name="cpath" value="${hsqldb}:${xerces}:${xalan}:${xml_editor}:${db_access_module}:${build}"/>
-		<filter token="release" value="alpha-20011010"/>
+		<filter token="release" value="alpha-20011020"/>
 		<filter token="authors" value="HARRIS"/>
 	</target>
 
@@ -178,9 +179,15 @@
 	
 	  <zip zipfile="${dist}/vegclient_dist_20011003.zip">
 	  	<zipfileset dir="${lib}" prefix="lib"/>
-			<zipfileset dir="${data}/turboveg" prefix="data"/>
+			<zipfileset dir="${doc}" prefix="doc"/>
+			<zipfileset dir="${data}/turboveg" prefix="data/turboveg"/>
 			<zipfileset dir="${data}/native" prefix="data/native"/>
+			<zipfileset dir="${data}/tnc_data" prefix="data/tnc_data"/>
+			<zipfileset dir="${data}/structured_data" prefix="data/structured_data"/>
+			
 			<zipfileset dir="${bin}" prefix="bin"/>
+			
+			<fileset dir="${doc}" includes="README"/>
 			
 			<fileset dir="${bin}" includes="vegclient.exe"/>
 			<fileset dir="${bin}" includes="vegclient.sh"/>
@@ -194,6 +201,8 @@
 			<fileset dir="${lib}" includes="${lib}/create_indexes.sql"/>
 			
 			<fileset dir="${lib}" includes="querySpec.xsl vegPlot2001cv.dtd "/>
+			<fileset dir="${lib}" includes="tvexport.dtd "/>
+			<fileset dir="${lib}" includes="transformTurboVeg.xsl"/>
 			
 		</zip>
 	</target>
