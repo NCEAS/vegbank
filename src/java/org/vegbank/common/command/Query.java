@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-11-12 22:24:15 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,7 +169,6 @@ public class Query
 		return commStatustId;
 	}
 
-
 	/**
 	 * @param synonymnName
 	 * @param statusId
@@ -186,7 +185,7 @@ public class Query
 		String stopDate)
 		throws SQLException
 	{
-		DBConnection conn =DBConnectionPool.getDBConnection("Need connection for inserting dataset");
+		DBConnection conn =DBConnectionPool.getDBConnection("Need connection for inserting PlantCorrelation");
 		
 		int correlationId =
 			(int) Utility.dbAdapter.getNextUniqueID(
