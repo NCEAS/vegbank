@@ -42,12 +42,12 @@
             </p>
             <table border="1" cellpadding="0" cellspacing="0" width="100%">
               <tr bgcolor="#FF9900">
-                <td width="20%">
+                <td>
                   <b>
                     <a class="blk" href="dd-guide.html#field-name">field name:</a>
                   </b>
                 </td>
-                <td width="80%">
+                <td>
                   <xsl:choose>
                     <xsl:when test="attNulls='no'">
                       <b>
