@@ -10,17 +10,14 @@
        -->
 
 
-     <table cellpadding="2" class="leftrightborders">
+     <TABLE cellpadding="0" class="thinlines">
   <logic:equal name="smallheader" value="yes">
-     <tr><th colspan="9">--Taxa--</th></tr>
+     <TR><TH colspan="9">--Taxa--</TH></TR>
   </logic:equal>
   <logic:notEqual name="smallheader" value="yes">
-   <tr><th colspan="9" class="major">Taxa occurring on this plot-observation</th></tr>  
+   <TR><TH colspan="9" class="major">Taxa occurring on this plot-observation</TH></TR>  
   </logic:notEqual>
   
-  
-  
-
 
 <bean:define id="stratawritten" value="no" />
 
@@ -30,17 +27,21 @@
    <vegbank:get id="taxonimportanceall" select="taxonimportance" where="where_taxonimportance_obsid_addsort" beanName="map" 
    wparam="observation_pk" perPage="-1"/>
      
-     <tr><th colspan="9"><a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=2">show strata</a> | 
+     <TR><TH colspan="9"><a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=2">show strata</a> | 
 	      <a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=1">show overall cover</a>
 	      | SHOWING strata + overall
-	      </th></tr>
+	      </TH></TR>
           
        <logic:empty name="taxonimportanceall-BEANLIST">
-          <tr><td colspan="2">No cover values for taxa on this plot: error!</td></tr>
+          <TR><TD colspan="2">No cover values for taxa on this plot: error!</TD></TR>
        </logic:empty> <!-- without strata -->
   
        <logic:notEmpty name="taxonimportanceall-BEANLIST">             
-    
+   
+   <TR><TD colspan="9">
+     <!-- sortable table: -->
+     <table cellpadding="2" class="thinlines sortable" id="taxonObservationof<bean:write name='observation_pk' />">
+
          <tr>
          <%@ include file="../autogen/taxonimportance_summary_head.jsp" %>
          </tr>
@@ -52,6 +53,9 @@
          </tr>
 
        </logic:iterate>
+     </table>
+   </TD></TR>  
+       
        </logic:notEmpty>
   <bean:define id="stratawritten" value="yes" />
 
@@ -73,7 +77,13 @@
      <a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=1">show overall cover </a>
      | <a href="@get_link@summary/observation/<bean:write name='observation_pk' />?strata2Show=3">show strata + overall </a> 
      </th></tr>
-     
+   
+     <TR><TD colspan="9">
+        <!-- sortable table: -->
+        <table cellpadding="2" class="thinlines sortable" id="taxonObservationof<bean:write name='observation_pk' />">
+ 
+  
+   
      <tr>
      <%@ include file="../autogen/taxonimportance_summaryonlystrata_head.jsp" %>
      </tr>
@@ -85,7 +95,9 @@
      </tr>
             
      </logic:iterate>
-     <bean:define id="stratawritten" value="yes" />
+       </table>
+      </TD></TR>   
+      <bean:define id="stratawritten" value="yes" />
 
   
 </logic:notEmpty>
@@ -116,6 +128,10 @@
        </logic:empty> <!-- without strata -->
   
        <logic:notEmpty name="taxonimportancens-BEANLIST">             
+    <TR><TD colspan="9">
+     <!-- sortable table: -->
+     <table cellpadding="2" class="thinlines sortable" id="taxonObservationof<bean:write name='observation_pk' />">
+ 
     
          <tr>
          <%@ include file="../autogen/taxonimportance_summarynostrata_head.jsp" %>
@@ -128,7 +144,8 @@
          </tr>
                
        </logic:iterate>
-       </logic:notEmpty>
+      </table>
+   </TD></TR>     </logic:notEmpty>
   <bean:define id="stratawritten" value="yes" />
        
  
@@ -144,18 +161,24 @@
 
 
 
-
-     </table>
+     <TR><TD colspan="9" class="bright sizetiny">This table is SORTABLE.  Click the headers to sort ascending and descending.</TD></TR>
+     </TABLE>
      <br/>
 <!-- ############################# stratum definitions #################################### -->     
      <vegbank:get id="stratum" select="stratum" beanName="map" pager="false" where="where_observation_pk" wparam="observation_pk" perPage="-1" />
-	 <table class="leftrightborders" cellpadding="2">
+	 <TABLE class="thinlines" cellpadding="2">
 	 <tr><th colspan="9">Stratum Definitions:</th></tr>
 	 <logic:empty name="stratum-BEANLIST">
 	 <tr><td class="@nextcolorclass@">  Sorry, no Stratum Definitions found.</td></tr>
 	 </logic:empty>
 	 <logic:notEmpty name="stratum-BEANLIST">
-	 <tr>
+	  <TR><TD colspan="9">
+	     <!-- sortable table: -->
+	     <table cellpadding="2" class="thinlines sortable" id="Strataof<bean:write name='observation_pk' />">
+	 
+  
+	
+	<tr>
 	 <%@ include file="../autogen/stratum_summary_head.jsp" %>
 	 </tr>
 	 <logic:iterate id="onerowofstratum" name="stratum-BEANLIST">
@@ -163,5 +186,8 @@
 	 <%@ include file="../autogen/stratum_summary_data.jsp" %>
 	 </tr>
 	 </logic:iterate>
-	 </logic:notEmpty>
-</table>
+	   </table>
+	   </TD></TR>  
+	   </logic:notEmpty>
+<TR><TD colspan="9" class="bright sizetiny">This table is SORTABLE.  Click the headers to sort ascending and descending.</TD></TR>
+</TABLE>
