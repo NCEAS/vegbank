@@ -4202,13 +4202,14 @@ change through time.</entitySummary>
     </attribute>
     <attribute>
       <attName>type</attName>
-      <attLabel>Type</attLabel>
+      <attLabel>Typal</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN type THEN 'Yes' ELSE 'No' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -4230,13 +4231,13 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN nomenclaturalType THEN 'Yes' ELSE 'No' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Typal plot for the Braun-Blanquet community name.</attDefinition>
       <attForms>
         <formShow name="Austere">500</formShow>
-        <formShow name="Summary">501</formShow>
         <formShow name="Detail">502</formShow>
         <formShow name="csvvegbranch">149</formShow>
       </attForms>
@@ -13923,8 +13924,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>The Base of the Stratum in meters.</attDefinition>
       <attUnits>m</attUnits>
-      <attForms>
-           </attForms>
+      <attForms/>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -13941,9 +13941,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>The Tallest part of the Stratum in meters.</attDefinition>
       <attUnits>m</attUnits>
-      <attForms>
-    
-      </attForms>
+      <attForms/>
       <update>1.0.2</update>
     </attribute>
   </entity>
