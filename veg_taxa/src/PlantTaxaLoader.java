@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-07-08 21:05:09 $'
- * '$Revision: 1.10 $'
+ *     '$Date: 2002-07-08 22:08:22 $'
+ * '$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -321,10 +321,83 @@ public class PlantTaxaLoader
 	 * which need to exist do exist, otherwise it returns false
 	 * @param plant -- the hashtable with the plant elements
 	 * @return valid -- whether the plant is valid or not
+	 * @see loadGenericPlantTaxa method description of the anticipated input 
+	 * 	elements
 	 */
 	private boolean isValidPlantHash(Hashtable plantTaxon)
 	{
-		return(false);
+		boolean valid = true;
+		if (plantTaxon.containsKey("longNameRefAuthors") &&  plantTaxon.containsKey("longNameRefTitle")
+		 && plantTaxon.containsKey("longNameRefDate") && plantTaxon.containsKey("longNameRefEdition") 
+		 && plantTaxon.containsKey("longNameRefSeriesName") && plantTaxon.containsKey("longNameRefVolume")
+		 && plantTaxon.containsKey("longNameRefPage") && plantTaxon.containsKey("longNameRefISSN")
+		 && plantTaxon.containsKey("longNameRefISBN") && plantTaxon.containsKey("longNameRefOtherCitDetails"))
+		{
+			System.out.println("PlantTaxaLoader > contains the long name reference");
+			if (plantTaxon.containsKey("shortNameRefAuthors") &&  plantTaxon.containsKey("shortNameRefTitle")
+			 && plantTaxon.containsKey("shortNameRefDate") && plantTaxon.containsKey("shortNameRefEdition") 
+			 && plantTaxon.containsKey("shortNameRefSeriesName") && plantTaxon.containsKey("shortNameRefVolume")
+			 && plantTaxon.containsKey("shortNameRefPage") && plantTaxon.containsKey("shortNameRefISSN")
+			 && plantTaxon.containsKey("shortNameRefISBN") && plantTaxon.containsKey("shortNameRefOtherCitDetails"))
+			{
+				System.out.println("PlantTaxaLoader > contains the short name reference");
+				if (plantTaxon.containsKey("codeRefAuthors") &&  plantTaxon.containsKey("codeRefTitle")
+				 && plantTaxon.containsKey("codeRefDate") && plantTaxon.containsKey("codeRefEdition") 
+			   && plantTaxon.containsKey("codeRefSeriesName") && plantTaxon.containsKey("codeRefVolume")
+			   && plantTaxon.containsKey("codeRefPage") && plantTaxon.containsKey("codeRefISSN")
+			   && plantTaxon.containsKey("codeRefISBN") && plantTaxon.containsKey("codeRefOtherCitDetails"))
+				{
+					System.out.println("PlantTaxaLoader > contains the code reference");
+					if (plantTaxon.containsKey("conceptRefAuthors") &&  plantTaxon.containsKey("conceptRefTitle")
+				 	 && plantTaxon.containsKey("conceptRefDate") && plantTaxon.containsKey("conceptRefEdition") 
+			   	 && plantTaxon.containsKey("conceptRefSeriesName") && plantTaxon.containsKey("conceptRefVolume")
+			  	 && plantTaxon.containsKey("conceptRefPage") && plantTaxon.containsKey("conceptRefISSN")
+			   	 && plantTaxon.containsKey("conceptRefISBN") && plantTaxon.containsKey("conceptRefOtherCitDetails"))
+					{
+						System.out.println("PlantTaxaLoader > contains the concept reference");
+						if (plantTaxon.containsKey("conceptStatus") &&  plantTaxon.containsKey("statusStartDate")
+				 	 	 && plantTaxon.containsKey("statusStopDate") && plantTaxon.containsKey("statusDescription") 
+			   	 	 && plantTaxon.containsKey("taxonLevel") && plantTaxon.containsKey("plantParentName")
+			  	 	 && plantTaxon.containsKey("plantParentRefTitle") && plantTaxon.containsKey("plantParentRefAuthors"))
+						{
+							System.out.println("PlantTaxaLoader > contains the status info ");
+							// LASTLY GET THE NAME AND USER INFO
+							if (plantTaxon.containsKey("longName") &&  plantTaxon.containsKey("shortName")
+				 	 	 	 && plantTaxon.containsKey("code") && plantTaxon.containsKey("salutation") 
+			   	 	 	 && plantTaxon.containsKey("givenName") && plantTaxon.containsKey("surName"))
+							{
+								System.out.println("PlantTaxaLoader > contains names and user info ");
+							}
+							else
+							{
+								valid = false;
+							}
+						}
+						else
+						{
+							valid = false;
+						}
+					}
+					else
+					{
+						valid = false;
+					}
+				}
+				else
+				{
+					valid=false;
+				}
+			}
+			else
+			{
+				valid=false;
+			}
+		}
+		else
+		{
+			valid=false;
+		}
+		return(valid);	
 	}
 
 	
@@ -1551,6 +1624,63 @@ public class PlantTaxaLoader
 	 		String	plantParentRefTitle =  "";
 	 		String	plantParentRefAuthors = "";
 			
+			//new elements
+			h.put("longNameRefAuthors", longNameRefAuthors);
+			h.put("longNameRefTitle",longNameRefTitle );
+			h.put("longNameRefDate", longNameRefDate );
+			h.put("longNameRefEdition", longNameRefEdition );
+			h.put("longNameRefSeriesName", longNameRefSeriesName );
+			h.put("longNameRefVolume", longNameRefVolume );
+			h.put("longNameRefPage", longNameRefPage );
+			h.put("longNameRefISSN", longNameRefISSN );
+			h.put("longNameRefISBN", longNameRefISBN );
+			h.put("longNameRefOtherCitDetails", longNameRefOtherCitDetails );
+			h.put("shortNameRefAuthors", shortNameRefAuthors );
+			h.put("shortNameRefTitle", shortNameRefTitle );
+			h.put("shortNameRefDate", shortNameRefDate );
+			h.put("shortNameRefEdition", shortNameRefEdition );
+			h.put("shortNameRefSeriesName", shortNameRefSeriesName );
+			h.put("shortNameRefVolume", shortNameRefVolume );
+			h.put("shortNameRefPage", shortNameRefPage );
+			h.put("shortNameRefISSN", shortNameRefISSN );
+			h.put("shortNameRefISBN", shortNameRefISBN );
+			h.put("shortNameRefOtherCitDetails", shortNameRefOtherCitDetails );
+			h.put("codeRefAuthors", codeRefAuthors);
+			h.put("codeRefTitle", codeRefTitle );
+			h.put("codeRefDate", codeRefDate );
+			h.put("codeRefEdition", codeRefEdition );
+			h.put("codeRefSeriesName", codeRefSeriesName );
+			h.put("codeRefVolume", codeRefVolume);
+			h.put("codeRefPage", codeRefPage );
+			h.put("codeRefISSN", codeRefISSN );
+			h.put("codeRefISBN", codeRefISBN );
+			h.put("codeRefOtherCitDetails",codeRefOtherCitDetails );
+			
+			h.put("conceptDescription", conceptDescription );
+			h.put("conceptRefAuthors", conceptRefAuthors );
+			h.put("conceptRefTitle", conceptRefTitle );
+			h.put("conceptRefDate", conceptRefDate);
+			h.put("conceptRefEdition", conceptRefEdition);
+			h.put("conceptRefSeriesName", conceptRefSeriesName );
+			h.put("conceptRefVolume", conceptRefVolume );
+			h.put("conceptRefPage", conceptRefPage );
+			h.put("conceptRefISSN",conceptRefISSN );
+			h.put("conceptRefISBN", conceptRefISBN );
+			h.put("conceptRefOtherCitDetails", conceptRefOtherCitDetails );
+			
+			
+			h.put("conceptStatus", conceptStatus );
+			h.put("statusStartDate", statusStartDate);
+			h.put("statusStopDate", statusStopDate );
+			h.put("statusDescription",statusDescription );
+			h.put("taxonLevel", taxonLevel );
+			h.put("plantParentName", plantParentName );
+			h.put("plantParentRefTitle", plantParentRefTitle);
+			h.put("plantParentRefAuthors",plantParentRefAuthors );
+
+			
+		
+			
 			h.put("longName", longName);
 			h.put("shortName", shortName);
 			h.put("code", code);
@@ -1565,6 +1695,7 @@ public class PlantTaxaLoader
 			h.put("dateEntered", "2002-MAY-29");
 			h.put("usageStopDate", "2005-MAY-29");
 			h.put("rank", taxonLevel);
+			
 			// load this plant
 			loader.loadGenericPlantTaxa(h);
 		}
