@@ -55,7 +55,7 @@ print `psql  -U $username $tempDB < src/sql/vegbank-changes-1.0.1to1.0.2_pg.sql`
 
 print "\n######################################################################\n";
 print "# Dump $tempDB \n"; 
-print `pg_dump -aD --disable-triggers $tempDB > vegbank101_102.sql`;
+print `pg_dump -U $username -aD --disable-triggers $tempDB > vegbank101_102.sql`;
 
 print "\n######################################################################\n";
 print "# Strip sequence setting from dump \n";
