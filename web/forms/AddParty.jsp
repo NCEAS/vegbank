@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-05-10 00:08:25 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2003-05-12 23:12:03 $'
+*  '$Revision: 1.2 $'
 *
 *
 -->
@@ -49,7 +49,6 @@
   <p><span class="item">Click a field label or table name to see more about that field in VegBank's <a href="/vegbank/dbdictionary/dd-index.html">data dictionary</a>.  Some fields are described in more detail just below the field.<br/>
 
   <font color="red">*</font>Indicates a required field.</p>
-  <p><font color="blue">Don't know what to do about address.oganization_ID -- picklist of many parties or just let them fill in the org name and we'll see if we can find it in party?</font></p>
 
   <html:form action="/AddParty" onsubmit="return validateAddPartyMethodForm(this)">
 
@@ -136,7 +135,7 @@
 	
 
 	<p>
-	<b>Party<a href="/vegbank/dbdictionary/dd~table~telephone~type~tableview.html">Telephone Numbers</a>:</b>
+	<b>Party <a href="/vegbank/dbdictionary/dd~table~telephone~type~tableview.html">Telephone Numbers</a>:</b>
 	<br/>
 	<span class="item">Note that you do not need to add any telephone numbers for a new party.  If you add telephone numbers, both the "phone number" and "phone type" are required fields.</span>
 	</p>
@@ -158,17 +157,14 @@
 
 	  <tr>
 	    <td class="oddrow"><%= i + 1 %></td>
-	    <td><html:text property='<%= "phoneNumber[" + i + "]" %>' size="30" maxlength="30"/></td>
+	    <td>
+        <html:text property='<%= "phoneNumber[" + i + "]" %>' size="30" maxlength="30"/>
+      </td>
 	    <td> 
-	      <select name="phoneType">
-		<option value="-1" selected="yes">--choose type--</option>
-		<option>Work</option>
-		<option>Home</option>
-		<option>Cell</option>
-		<option>Fax</option>
-		<option>Secretary</option>
-		<option>Not specified</option>
-	      </select>
+	      <html:select property='<%= "phoneType[" + i + "]" %>'>
+		      <option value="-1" selected="yes">--choose type--</option>
+          <html:options property="phoneTypes"/>
+	      </html:select>
 	    </td>
 	  </tr>
 	  <%
@@ -190,40 +186,11 @@
 	<p><span class="category">Party 
 	<a href="/vegbank/dbdictionary/dd~table~address~type~tableview.html">Addresses</a>:</span>
 
-	<br />
-	<span class="item">
-	You may specify up to two addresses for the new party you are adding (though you do not need to specify any).
-	If you need more than two addresses, you can add this party with two address, then edit the party and add more addresses.
-	</span>
-	</p>
+	<br/>
 	
 	<table border="0" cellpadding="0" cellspacing="0">
 
-	  <!-- The addresses control -->
-
-	  <%
-	  for (int i=0; i<2 ; i++)
-	  {
-	  %>
-	  
-	  <tr>
-	    <td colspan="3" class="oddrow">
-	      <p><span class="category">ADDRESS <%= i + 1 %>:</span></p>
-	    </td>
-	  </tr>
-
-	  
-
-	  <tr class="oddrow">
-	    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-	    <td nowrap><p>
-	      <a href="/vegbank/dbdictionary/dd~table~address~field~organization_id~type~tableview.html">  
-	      Organization</a>:</p>
-	    </td>
-	    <td>
-	      <html:text property='<%= "organization_ID[" + i + "]" %>' size="35"/>
-	    </td>
-	  </tr>
+	  <!-- The address control -->
 	  <tr class="oddrow">
 	    <td>&nbsp;</td>
 	    <td nowrap><p>
@@ -231,7 +198,7 @@
 	      Organization Position</a>:</p>
 	    </td> 
 	    <td>
-	      <html:text property='<%= "orgPosition[" + i + "]" %>' size="35"/>
+	      <html:text property="address.orgPosition" size="35"/>
 	    </td>
 	  </tr>
 	  <!-- explanation -->
@@ -246,7 +213,7 @@
 	    Email</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property='<%= "email[" + i + "]" %>' size="35"/>
+	    <html:text property="address.email" size="35"/>
 	  </td>
 	</tr>
 	<tr class="oddrow">
@@ -256,7 +223,7 @@
 	    Street Address</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property='<%= "deliveryPoint[" + i + "]" %>' size="35"/>
+	    <html:text property="address.deliveryPoint" size="35"/>
 	  </td>
 	</tr>
 	<tr class="oddrow">
@@ -265,7 +232,7 @@
 	    <p><a href="/vegbank/dbdictionary/dd~table~address~field~city~type~tableview.html"> City</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property='<%= "city[" + i + "]" %>' size="35"/>
+	    <html:text property="address.city" size="35"/>
 	  </td>
 	</tr>
 	<tr class="oddrow">
@@ -274,7 +241,7 @@
 	    <p><a href="/vegbank/dbdictionary/dd~table~address~field~administrativearea~type~tableview.html">State/Province</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property='<%= "administrativeArea[" + i + "]" %>' size="35"/>
+	    <html:text property="address.administrativeArea" size="35"/>
 	  </td>
 	</tr>
 	<tr class="oddrow">
@@ -284,7 +251,7 @@
 	    ZIP/Postal Code</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property='<%= "postalCode[" + i + "]" %>' size="35"/>
+	    <html:text property="address.postalCode" size="35"/>
 	  </td>
 	</tr>
 	<tr class="oddrow">
@@ -294,7 +261,7 @@
 	    Country</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property='<%= "country[" + i + "]" %>' size="35"/>
+	    <html:text property="address.country" size="35"/>
 	  </td>
 	</tr>
 	
@@ -305,12 +272,20 @@
 	    Start Date for Address</a>:</p>
 	  </td> 
 	  <td>
-	    <html:text property='<%= "startDate[" + i + "]" %>' size="35"/>
+	    <html:text property="address.addressStartDate" size="35"/>
 	  </td>
 	</tr>
-	<%
-	}
-	%>
+
+  <tr class="oddrow">
+    <td>&nbsp;</td>
+    <td nowrap><p>
+      <a href="/vegbank/dbdictionary/dd~table~address~field~currentflag~type~tableview.html"> 
+      Address is current?</a></p>
+    </td> 
+    <td>
+      <html:checkbox property="currentFlag" value="true"/>
+    </td>
+  </tr>
 
     </table>
     <!-- big surrounding table -->

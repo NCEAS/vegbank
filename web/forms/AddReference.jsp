@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-05-10 00:08:25 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2003-05-12 23:12:03 $'
+*  '$Revision: 1.2 $'
 *
 *
 -->
@@ -84,10 +84,15 @@
 
 	  <tr>
 	    <td class="formLbl"><p><a href="/vegbank/dbdictionary/dd~table~reference~field~referencetype~type~tableview.html">Type of Reference:</a></p></td>
-	    <td><p><select name="reference.referencetype"><option value="-1" selected="yes">--pick a referenceType--</option>
-	      <!-- inserts values for reference type on build -->
-	    <option>Article</option><option>Book</option><option>Chapter</option><option>EditedBook</option><option>Manuscript</option><option>Report</option><option>Thesis</option><option>ConferenceProceedings</option><option>PersonalCommunication</option><option>Presentation</option><option>Website</option><option>Generic</option>
-	      </p></td>
+	    <td>
+        <p>
+          <html:select property="reference.referenceType">
+            <option value="-1" selected="yes">--pick a referenceType--</option>
+            <html:options property="reference.referenceTypePickList"/>
+          </html:select>
+	      </p>
+      </td>
+
 	    </tr>
 
 	    <tr class="oddrow">
@@ -171,7 +176,7 @@
 		</td>
 		<td>
 		  <p>
-		  <bean:define id="list" name="AddReferenceForm" property="journals" type="java.util.Vector"/>
+		  <bean:define id="list" name="AddReferenceForm" property="journals" type="java.util.Collection"/>
 		  <html:select property="reference.referenceJournal_ID">
 		    <option value="-1" selected>--pick a journal--</option>
 		    <html:options collection="list" labelProperty="name" property="id"/>
@@ -528,18 +533,13 @@
 
 	    </p>
 	  </td>
-	  <td>
+    <td>
 	    <p>
-	    <select name="roletype" size="1">
-	      <option value="-1">--please choose a role--</option>  
-	      <option>Author</option>
-	      <option>Editor</option>
-	      <option>Originator</option>
-	      <option>Performer</option>
-	      <option>Recipient</option>
-	      <option>CustodianSteward</option>
-	    </select>
-	    </p>
+          <html:select property='<%= "roletype[" + i + "]" %>'>
+            <option value="-1">--please choose a role--</option>
+            <html:options property="roleTypes"/> 
+          </html:select>
+		    </p>
 	  </td>
 	</tr>
 	<%

@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-05-10 00:08:25 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2003-05-12 23:12:03 $'
+*  '$Revision: 1.2 $'
 *
 *
 -->
@@ -141,8 +141,8 @@
 
 	    <td><html:text property='<%= "coverCode[" + i + "]" %>' maxlength="10" size="10" /></td>
 	    <td><html:text property='<%= "lowerLimit[" + i + "]" %>' maxlength="10" size="10" /></td>
-	    <td><html:text property='<%= "coverPercent[" + i + "]" %>' maxlength="10" size="10" /></td>
 	    <td><html:text property='<%= "upperLimit[" + i + "]" %>' maxlength="10" size="10" /></td>
+	    <td><html:text property='<%= "coverPercent[" + i + "]" %>' maxlength="10" size="10" /></td>
 	    <td><html:text property='<%= "indexDescription[" + i + "]" %>' maxlength="10" size="10" /></td>
 
 	  </tr>
