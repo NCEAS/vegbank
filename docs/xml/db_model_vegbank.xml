@@ -19,7 +19,7 @@
       <attName>COMMCONCEPT_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
-      <attType>serial</attType>
+      <attType>serial</attType> 
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -33,6 +33,7 @@
       <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
+      <javaType type="Object" relation="one"/>
       <attReferences>commName.COMMNAME_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -44,6 +45,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -56,6 +58,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -74,6 +77,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -86,6 +90,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commStatus.COMMSTATUS_ID</attReferences>
       <attListType>no</attListType>
@@ -98,6 +103,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -110,6 +116,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -163,6 +170,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -175,6 +183,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -201,10 +210,11 @@
       <attDefinition>Database assigned value to each unique record in the commLineage table.</attDefinition>
     </attribute>
     <attribute>
-      <attName>COMMSTATUS1_ID</attName>
+      <attName>parentCommStatus_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commStatus.COMMSTATUS_ID</attReferences>
       <attListType>no</attListType>
@@ -214,10 +224,11 @@
 "pointing" to a parent concept.</attDefinition>
     </attribute>
     <attribute>
-      <attName>COMMSTATUS2_ID</attName>
+      <attName>childCommStatus_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commStatus.COMMSTATUS_ID</attReferences>
       <attListType>no</attListType>
@@ -249,6 +260,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -261,6 +273,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -273,6 +286,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -303,6 +317,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -315,6 +330,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -327,6 +343,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -339,6 +356,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -351,6 +369,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -359,10 +378,11 @@
       <attDefinition>Name of an organization.</attDefinition>
     </attribute>
     <attribute>
-      <attName>currentName</attName>
+      <attName>currentName_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commParty.COMMPARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -375,6 +395,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -383,10 +404,11 @@
       <attDefinition>Instructions for contacting a party.</attDefinition>
     </attribute>
     <attribute>
-      <attName>owner</attName>
+      <attName>owner_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commParty.COMMPARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -417,6 +439,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -429,6 +452,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -441,6 +465,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -465,10 +490,11 @@
       <attDefinition>Status of the concept by the party (accepted, not accepted, undetermined)</attDefinition>
     </attribute>
     <attribute>
-      <attName>commParent</attName>
+      <attName>commParent_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -481,6 +507,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (80)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -539,6 +566,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -551,6 +579,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -563,6 +592,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -575,6 +605,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commParty.COMMPARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -605,6 +636,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commName.COMMNAME_ID</attReferences>
       <attListType>no</attListType>
@@ -617,6 +649,7 @@
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -629,6 +662,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -641,6 +675,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -653,6 +688,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -665,6 +701,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -693,6 +730,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commParty.COMMPARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -705,6 +743,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
@@ -766,6 +805,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantName.PLANTNAME_ID</attReferences>
       <attListType>no</attListType>
@@ -778,6 +818,7 @@
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -790,6 +831,7 @@
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -802,6 +844,7 @@
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (23)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -814,6 +857,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -845,6 +889,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
       <attListType>no</attListType>
@@ -857,6 +902,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -869,6 +915,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -922,6 +969,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -934,6 +982,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -960,10 +1009,11 @@ change through time.</entitySummary>
       <attDefinition>Database assigned value to each unique record in the plantLineage table.</attDefinition>
     </attribute>
     <attribute>
-      <attName>PLANTSTATUS1_ID</attName>
+      <attName>childPlantStatus_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
       <attListType>no</attListType>
@@ -973,10 +1023,11 @@ change through time.</entitySummary>
 "pointing" to a child concept.</attDefinition>
     </attribute>
     <attribute>
-      <attName>PLANTSTATUS2_ID</attName>
+      <attName>parentPlantStatus_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
       <attListType>no</attListType>
@@ -1008,6 +1059,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (255)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1020,6 +1072,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -1032,6 +1085,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1062,6 +1116,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1074,6 +1129,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1086,6 +1142,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1098,6 +1155,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1110,6 +1168,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1118,10 +1177,11 @@ change through time.</entitySummary>
       <attDefinition>Name of an organization.</attDefinition>
     </attribute>
     <attribute>
-      <attName>currentName</attName>
+      <attName>currentName_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantParty.PLANTPARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -1134,6 +1194,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1142,10 +1203,11 @@ change through time.</entitySummary>
       <attDefinition>Instructions for contacting a party.</attDefinition>
     </attribute>
     <attribute>
-      <attName>owner</attName>
+      <attName>owner_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantParty.PLANTPARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -1158,6 +1220,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (120)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1188,6 +1251,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -1200,6 +1264,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -1212,6 +1277,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -1240,6 +1306,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1252,6 +1319,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1264,6 +1332,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1276,6 +1345,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantParty.PLANTPARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -1288,6 +1358,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1300,6 +1371,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1308,10 +1380,11 @@ change through time.</entitySummary>
       <attDefinition/>
     </attribute>
     <attribute>
-      <attName>plantParent</attName>
+      <attName>plantParent_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -1324,6 +1397,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (80)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -1455,6 +1529,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantName.PLANTNAME_ID</attReferences>
       <attListType>no</attListType>
@@ -1467,6 +1542,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -1479,6 +1555,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1491,6 +1568,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1503,6 +1581,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -1531,6 +1610,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (220)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1543,6 +1623,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantParty.PLANTPARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -1555,6 +1636,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
@@ -1603,6 +1685,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (220)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1629,10 +1712,11 @@ change through time.</entitySummary>
       <attDefinition>Database generated identifier assigned to each unique party address (note that a single party may have multiple addresses but that only one may be 'current').</attDefinition>
     </attribute>
     <attribute>
-      <attName>PARTY_ID</attName>
+      <attName>party_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -1641,10 +1725,11 @@ change through time.</entitySummary>
       <attDefinition>Link to the party to which this address applies</attDefinition>
     </attribute>
     <attribute>
-      <attName>ORGANIZATION_ID</attName>
+      <attName>organization_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -1657,6 +1742,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1669,6 +1755,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1681,6 +1768,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1694,6 +1782,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1706,6 +1795,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1718,6 +1808,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (10)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1730,6 +1821,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1742,6 +1834,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1754,6 +1847,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>timestamp</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1784,6 +1878,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1796,6 +1891,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1808,6 +1904,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1820,6 +1917,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1832,6 +1930,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1844,6 +1943,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1874,6 +1974,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1886,6 +1987,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -1959,6 +2061,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1971,6 +2074,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1983,6 +2087,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1995,6 +2100,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2007,6 +2113,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2019,6 +2126,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>referenceJournal.referenceJournal_ID</attReferences>
       <attListType>no</attListType>
@@ -2031,6 +2139,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2043,6 +2152,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2055,6 +2165,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2067,6 +2178,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2079,6 +2191,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2091,6 +2204,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2103,6 +2217,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2115,6 +2230,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2127,6 +2243,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2139,6 +2256,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2151,6 +2269,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2163,6 +2282,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2175,6 +2295,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2187,6 +2308,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2199,6 +2321,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2211,6 +2334,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2241,6 +2365,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -2253,6 +2378,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2265,6 +2391,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2295,6 +2422,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -2307,6 +2435,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>referenceParty.referenceParty_ID</attReferences>
       <attListType>no</attListType>
@@ -2319,6 +2448,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -2350,6 +2480,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2380,6 +2511,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2392,6 +2524,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2404,6 +2537,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2416,6 +2550,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2428,6 +2563,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2440,6 +2576,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2452,6 +2589,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2460,10 +2598,11 @@ change through time.</entitySummary>
       <attDefinition>The responsible party field contains the full name of the organization that is associated with the resource. This field is intended to describe which institution or overall organization is associated with the resource being described. Note that this field, used in conjunction with 'individualName' and 'positionName' make up a single logical originator. Because of this, an originator with only the individualName of 'Joe Smith' is NOT the same as an originator with the name of 'Joe Smith' and the organizationName of 'NSF'. Also, the positionName should not be used in conjunction with individualName unless only that individual at that position would be considered an originator for the data package. If a positionName is used in conjunction with an organizationName, then that implies that any person who currently occupies said positionName at organizationName is the originator of the data package. Example(s): National Center for Ecological Analysis and Synthesis</attDefinition>
     </attribute>
     <attribute>
-      <attName>currentParty</attName>
+      <attName>currentParty_ID</attName>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>referenceParty.referenceParty_ID</attReferences>
       <attListType>no</attListType>
@@ -2494,6 +2633,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2506,6 +2646,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2518,6 +2659,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>varchar (250)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2548,6 +2690,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commClass.COMMCLASS_ID</attReferences>
       <attListType>no</attListType>
@@ -2560,6 +2703,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -2572,6 +2716,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
@@ -2602,6 +2747,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -2614,6 +2760,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2626,6 +2773,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2638,6 +2786,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2650,6 +2799,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2662,6 +2812,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2674,6 +2825,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2686,6 +2838,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -2698,6 +2851,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2710,6 +2864,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2722,6 +2877,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2734,6 +2890,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2746,6 +2903,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2776,6 +2934,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commClass.COMMCLASS_ID</attReferences>
       <attListType>no</attListType>
@@ -2788,6 +2947,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -2800,6 +2960,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (34)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2812,6 +2973,7 @@ change through time.</entitySummary>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2824,6 +2986,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -2862,6 +3025,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (15)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -2890,6 +3054,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -2902,6 +3067,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2914,6 +3080,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2956,6 +3123,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>coverMethod.COVERMETHOD_ID</attReferences>
       <attListType>no</attListType>
@@ -2968,6 +3136,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (10)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2980,6 +3149,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2992,6 +3162,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3004,6 +3175,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3016,6 +3188,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3046,6 +3219,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -3058,6 +3232,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3088,6 +3263,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>userDefined.USERDEFINED_ID</attReferences>
       <attListType>no</attListType>
@@ -3100,6 +3276,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (255)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3112,6 +3289,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3142,6 +3320,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -3154,6 +3333,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -3312,6 +3492,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -3345,6 +3526,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3357,6 +3539,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3369,6 +3552,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3399,6 +3583,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -3411,6 +3596,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3423,6 +3609,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3435,6 +3622,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3447,6 +3635,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3459,6 +3648,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3471,6 +3661,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>BLOB</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3501,6 +3692,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -3569,6 +3761,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3581,6 +3774,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3593,6 +3787,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (15)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3605,6 +3800,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3617,6 +3813,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -3647,6 +3844,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>noteLink.NOTELINK_ID</attReferences>
       <attListType>no</attListType>
@@ -3659,6 +3857,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -3671,6 +3870,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
@@ -3683,6 +3883,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3695,6 +3896,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -3728,6 +3930,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3758,6 +3961,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3770,6 +3974,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3782,6 +3987,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3814,6 +4020,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -3827,6 +4034,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plot.PLOT_ID</attReferences>
       <attListType>no</attListType>
@@ -3839,6 +4047,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>project.PROJECT_ID</attReferences>
       <attListType>no</attListType>
@@ -3847,10 +4056,24 @@ conditions may change between resampling events.
       <attDefinition>Link between an observation and the project within which the observation was made</attDefinition>
     </attribute>
     <attribute>
+      <attName>obsaccessionnumber</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes/>
+      <attDefinition/>
+    </attribute>
+    <attribute>
       <attName>authorObsCode</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3863,6 +4086,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3876,6 +4100,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3888,6 +4113,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -3941,6 +4167,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>coverMethod.coverMethod_ID</attReferences>
       <attListType>no</attListType>
@@ -3953,6 +4180,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>stratumMethod.stratumMethod_ID</attReferences>
       <attListType>no</attListType>
@@ -3965,6 +4193,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3977,6 +4206,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3989,6 +4219,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4001,6 +4232,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4039,6 +4271,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4051,6 +4284,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4063,6 +4297,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4106,6 +4341,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4118,6 +4354,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4145,6 +4382,7 @@ conditions may change between resampling events.
       <attName>plotValidationLevel</attName>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
+      <javaType type="primative" relation="one"/>
       <attType>Integer</attType>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
@@ -4174,6 +4412,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4217,6 +4456,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4270,6 +4510,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4323,6 +4564,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4335,6 +4577,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4347,6 +4590,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4380,6 +4624,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4443,6 +4688,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4455,6 +4701,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4467,6 +4714,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4550,6 +4798,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4608,6 +4857,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4656,6 +4906,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4684,6 +4935,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4696,6 +4948,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4708,6 +4961,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4720,6 +4974,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4732,6 +4987,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4744,6 +5000,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4756,6 +5013,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4768,6 +5026,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4780,6 +5039,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4792,6 +5052,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4804,6 +5065,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4816,6 +5078,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4828,6 +5091,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -4871,6 +5135,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4883,6 +5148,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4895,6 +5161,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4907,6 +5174,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4919,6 +5187,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4931,6 +5200,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4943,6 +5213,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4955,6 +5226,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4967,6 +5239,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4979,6 +5252,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -4991,6 +5265,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5003,6 +5278,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5015,6 +5291,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (40)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -5058,6 +5335,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (40)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -5256,6 +5534,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (40)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -5454,6 +5733,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (40)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -5652,6 +5932,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5664,6 +5945,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5676,6 +5958,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5688,6 +5971,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>soilTaxon.soilTaxon_ID</attReferences>
       <attListType>no</attListType>
@@ -5700,6 +5984,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -5728,6 +6013,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5740,6 +6026,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5752,6 +6039,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5782,6 +6070,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -5794,6 +6083,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -5806,6 +6096,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
@@ -5818,6 +6109,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5844,10 +6136,11 @@ conditions may change between resampling events.
       <attDefinition>Database generated identifier assigned to each unique interpretaiton of an observation as a synonym.</attDefinition>
     </attribute>
     <attribute>
-      <attName>OBSERVATION_ID</attName>
+      <attName>synonymObservation_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -5856,10 +6149,11 @@ conditions may change between resampling events.
       <attDefinition>Link to the observation table identifying which observation is being reduced to synonymy.</attDefinition>
     </attribute>
     <attribute>
-      <attName>PRIMARYOBS_ID</attName>
+      <attName>primaryObservation_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.OBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -5872,6 +6166,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -5884,6 +6179,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
@@ -5896,6 +6192,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5908,6 +6205,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5920,6 +6218,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5950,6 +6249,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5962,6 +6262,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5974,6 +6275,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5986,6 +6288,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -5998,6 +6301,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6006,10 +6310,11 @@ conditions may change between resampling events.
       <attDefinition>Name of an organization.</attDefinition>
     </attribute>
     <attribute>
-      <attName>currentName</attName>
+      <attName>currentName_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -6022,6 +6327,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6030,10 +6336,11 @@ conditions may change between resampling events.
       <attDefinition>Instructions for contacting a party.</attDefinition>
     </attribute>
     <attribute>
-      <attName>owner</attName>
+      <attName>owner_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -6046,6 +6353,7 @@ conditions may change between resampling events.
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (120)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6076,6 +6384,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plot.PLOT_ID</attReferences>
       <attListType>no</attListType>
@@ -6088,6 +6397,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6100,6 +6410,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>namedPlace.NAMEDPLACE_ID</attReferences>
       <attListType>no</attListType>
@@ -6130,6 +6441,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6138,22 +6450,11 @@ conditions may change between resampling events.
       <attDefinition>Author's Plot number/code, or the original plot number if taken from literature.</attDefinition>
     </attribute>
     <attribute>
-      <attName>PROJECT_ID</attName>
-      <attModel>implementation</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes/>
-      <attDefinition/>
-    </attribute>
-    <attribute>
       <attName>reference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -6166,6 +6467,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plot.PLOT_ID</attReferences>
       <attListType>no</attListType>
@@ -6178,6 +6480,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6190,6 +6493,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6202,6 +6506,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6214,6 +6519,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -6262,6 +6568,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6274,6 +6581,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6286,6 +6594,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6298,6 +6607,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6310,6 +6620,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6322,6 +6633,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6334,6 +6646,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6346,6 +6659,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6358,6 +6672,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6370,6 +6685,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6382,6 +6698,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6395,6 +6712,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
@@ -6443,6 +6761,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6456,6 +6775,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -6499,6 +6819,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -6542,6 +6863,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6554,6 +6876,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6566,6 +6889,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6578,6 +6902,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6590,6 +6915,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6602,6 +6928,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6614,6 +6941,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6626,6 +6954,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6638,6 +6967,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6650,6 +6980,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6662,6 +6993,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -6674,6 +7006,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (90)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -6747,6 +7080,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
@@ -7805,6 +8139,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (90)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -7981,6 +8316,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (90)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -8474,6 +8810,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8486,6 +8823,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8498,6 +8836,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8510,6 +8849,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (55)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8522,6 +8862,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8534,6 +8875,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8546,6 +8888,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8558,6 +8901,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8570,6 +8914,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8582,6 +8927,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8612,6 +8958,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (150)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8624,6 +8971,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8636,6 +8984,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8648,6 +8997,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8678,6 +9028,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>project.PROJECT_ID</attReferences>
       <attListType>no</attListType>
@@ -8690,6 +9041,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -8702,6 +9054,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
@@ -8714,6 +9067,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8726,6 +9080,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8756,6 +9111,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8768,6 +9124,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8780,6 +9137,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8792,6 +9150,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8804,6 +9163,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8816,6 +9176,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8828,6 +9189,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>revision.REVISION_ID</attReferences>
       <attListType>no</attListType>
@@ -8859,6 +9221,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.observation_ID</attReferences>
       <attListType>no</attListType>
@@ -8871,6 +9234,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (15)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -8919,6 +9283,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8931,6 +9296,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8943,6 +9309,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8955,6 +9322,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -8967,6 +9335,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -9100,6 +9469,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9112,6 +9482,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9124,6 +9495,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9136,6 +9508,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9148,6 +9521,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9160,6 +9534,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9172,6 +9547,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9184,6 +9560,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9214,6 +9591,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (15)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9226,6 +9604,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9238,6 +9617,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9250,6 +9630,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>soilTaxon.SOILTAXON_ID</attReferences>
       <attListType>no</attListType>
@@ -9262,6 +9643,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (33)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9292,6 +9674,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>taxonObservation.TAXONOBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -9304,6 +9687,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9316,6 +9700,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9328,6 +9713,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9340,6 +9726,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9352,6 +9739,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9364,6 +9752,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9394,6 +9783,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>stemCount.STEMCOUNT_ID</attReferences>
       <attListType>no</attListType>
@@ -9406,6 +9796,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9418,6 +9809,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9430,6 +9822,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9460,6 +9853,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.observation_ID</attReferences>
       <attListType>no</attListType>
@@ -9472,6 +9866,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>stratumType.STRATUMTYPE_ID</attReferences>
       <attListType>no</attListType>
@@ -9484,6 +9879,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>
       <attListType>no</attListType>
@@ -9496,6 +9892,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9508,6 +9905,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9520,6 +9918,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9532,6 +9931,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9544,6 +9944,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9574,6 +9975,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>taxonObservation.TAXONOBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -9586,6 +9988,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>stratum.STRATUM_ID</attReferences>
       <attListType>no</attListType>
@@ -9598,6 +10001,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9610,6 +10014,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9622,6 +10027,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9652,6 +10058,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -9664,6 +10071,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9676,6 +10084,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9706,6 +10115,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>stratumMethod.STRATUMMETHOD_ID</attReferences>
       <attListType>no</attListType>
@@ -9718,6 +10128,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (10)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9730,6 +10141,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9742,6 +10154,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9772,6 +10185,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>taxonObservation.TAXONOBSERVATION_ID</attReferences>
       <attListType>no</attListType>
@@ -9784,6 +10198,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantConcept.PLANTCONCEPT_ID</attReferences>
       <attListType>no</attListType>
@@ -9796,6 +10211,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Date</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9808,6 +10224,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantName.PLANTNAME_ID</attReferences>
       <attListType>no</attListType>
@@ -9820,6 +10237,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -9832,6 +10250,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>aux_Role.ROLE_ID</attReferences>
       <attListType>no</attListType>
@@ -9844,6 +10263,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -9887,6 +10307,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -9899,6 +10320,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9911,6 +10333,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9923,6 +10346,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9935,6 +10359,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9947,6 +10372,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9959,6 +10385,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -9989,6 +10416,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>observation.observation_ID</attReferences>
       <attListType>no</attListType>
@@ -10001,6 +10429,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>plantName.plantName_ID</attReferences>
       <attListType>no</attListType>
@@ -10013,6 +10442,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>reference.reference_ID</attReferences>
       <attListType>no</attListType>
@@ -10025,6 +10455,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -10037,6 +10468,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -10049,6 +10481,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -10061,6 +10494,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -10073,6 +10507,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -10103,6 +10538,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
+      <javaType type="Object" relation="one"/>
       <attKey>FK</attKey>
       <attReferences>party.PARTY_ID</attReferences>
       <attListType>no</attListType>
@@ -10115,6 +10551,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -10127,6 +10564,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -10188,6 +10626,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>open</attListType>
@@ -10216,6 +10655,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -10228,6 +10668,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>closed</attListType>
@@ -10286,6 +10727,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (20)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -10298,6 +10740,7 @@ formed in place more-or-less directly from rocks and minerals below.</attDefinit
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (50)</attType>
+      <javaType type="primative" relation="one"/>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
