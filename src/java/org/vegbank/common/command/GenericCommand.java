@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-11 21:59:37 $'
- *	'$Revision: 1.19 $'
+ *	'$Date: 2004-10-11 22:14:05 $'
+ *	'$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -329,8 +329,8 @@ public class GenericCommand
 				// just use the given where clause
 				log.info("Using non-configured (dangerous) where: " + whereClause);
 			}
-
 			sql.append(buildFormattedWhereClause(whereClause, whereParams, selectClause));
+
 		} 
 
 		return sql.toString();
@@ -343,6 +343,7 @@ public class GenericCommand
 	 */
 	private String buildFormattedWhereClause(String whereClause, String[] whereParams, String selectClause) {
 
+		this.whereClauseFormatted = "";
 		boolean hasWhereClause = !Utility.isStringNullOrEmpty(whereClause);
 		boolean hasParams = (whereParams != null && whereParams.length > 0);
 
@@ -370,15 +371,11 @@ public class GenericCommand
 				whereClause = " and " +  whereClause;
 			}
 
+			log.debug("Adding where clause: " + whereClause);
 			this.whereClauseFormatted = whereClause;
 		}
 
-		if (whereClause == null) {
-			return "";
-		} else {
-			log.debug("Adding where clause: " + whereClause);
-			return whereClause;
-		}
+		return this.whereClauseFormatted;
 	}
 
 
