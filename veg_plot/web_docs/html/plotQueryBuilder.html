@@ -101,12 +101,12 @@ src="/harris/images/owlogoBev.jpg" alt = "Vegetation plots logo">
 <option selected>"*"
 -->
 	<option value="%">any</option>
-	<option value="=">is equal to</option>
+	<option value="eq">is equal to</option>
 	<option value="beginsWith">begins with</option>
 	<option value="endsWith">ends with</option>
 	<option value="contains">contains</option>
-	<option value=">">is greater than</option>
-	<option value="<">is less than</option>
+	<option value="gt">is greater than</option>
+	<option value="lt">is less than</option>
 </select><br clear=left>
 </td>
 <!-- Value -->
@@ -118,23 +118,36 @@ src="/harris/images/owlogoBev.jpg" alt = "Vegetation plots logo">
 	 <input size=35 name=value>
  </td>
 </tr>
-
-<td align=left valign=middle colspan=2>
-</td>
+ 
+ <!-- append/ send query -->
+ <tr>
+ </tr>
+ <tr>
+ <td>
+ 				<font face="Arial, Helvetica, sans-serif"> 
+        <font size="2"> <b> 
+         <input type="RADIO" name="queryParameterType" value="append" >
+          append query
+         <input type="RADIO" name="queryParameterType" value="commit" >
+         run query 
+ </td>                  
 </tr>
-<tr>
-<td  align=left valign=middle colspan=2>
-<small>
+ 
+ <tr>
+ <small>
+ <td>
 <INPUT TYPE="submit" VALUE="search">&nbsp;&nbsp;
 <INPUT TYPE="reset" VALUE="reset">
-
-<!-- SSI -->
-<SERVLET CODE=QueryBuilderServlet CODEBASE=http://dev.nceas.ucsb.edu/harris/servlet>
-<PARAM NAME=currentQuery Value=current>
-</SERVLET>
-
+</td>
 </small>
 </tr>
+</table>
+
+<table>
+<textarea cols=65 rows=10 >
+	@replaceAggregateQuery@
+</textarea>
+ 
 </table>
 		
 <!-- bottom section -->
