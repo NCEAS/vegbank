@@ -23,8 +23,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-07 06:45:37 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-02-28 11:22:01 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,50 +91,55 @@ public class LogonAction extends VegbankAction
 		LogUtility.log("LogonAction: authenticating user: '"+ username); 
 	
 		WebUser user = null;
+		UserDatabaseAccess uda = new UserDatabaseAccess();
 		try
 		{
 			// Attempt to get user from database;
 			username = username.trim();
-			user = getUser(username);
+			if ( username.equalsIgnoreCase(Constants.GUEST_USER_KEY)) {
+				user = this.getGuestUser();
+				
+			} else {
+				LogUtility.log("LogonAction: getting user " + username);
+				user = uda.getUser(username);			
+			}
 			
-			if ( user == null )
-			{
-				errors.add(
-				ActionErrors.GLOBAL_ERROR,
-				new ActionError("errors.user.not.found", username));
-			}
-			else if ( user.isGuest() )
-			{
+			if ( user == null ) {
+				errors.add(ActionErrors.GLOBAL_ERROR,
+					new ActionError("errors.user.not.found", username));
+
+			} else if ( user.isGuest() ) {
 				// No need to check password
-			}
-			else if  ( ! user.getPassword().equals(password) )
-			{
-				errors.add(
-					ActionErrors.GLOBAL_ERROR,
+
+			} else if  ( ! user.getPassword().equals(password) ) {
+				// wrong password
+				errors.add(ActionErrors.GLOBAL_ERROR,
 					new ActionError("errors.password.mismatch"));
-			}
-		}
-		catch (Exception e)
-		{
-			errors.add(
-			ActionErrors.GLOBAL_ERROR,
-			new ActionError("errors.action.failed", e.getMessage() ));
-			LogUtility.log("LogonAction: Failured to complete", e);
+			} 
+
+		} catch (Exception e) {
+			errors.add(ActionErrors.GLOBAL_ERROR,
+				new ActionError("errors.action.failed", e.getMessage() ));
+			LogUtility.log("LogonAction: problem: ", e);
 		}
 		
 		// Report any errors we have discovered back to the original form
-		if (!errors.isEmpty())
-		{
+		if (!errors.isEmpty()) {
 			saveErrors(request, errors);
 			return (mapping.getInputForward());
+		}
+
+		if (!user.isGuest()) {
+			// this is a valid, authenticated user
+			uda.updateTicketCount(user.getUsername());
 		}
 
 		// Save the logged-in user's ID in session
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.USER_KEY, user.getUseridLong());
 
-			LogUtility.log("LogonAction: User '"+ user.getUsername() + 
-					"' logged on in session " + session.getId());
+		LogUtility.log("LogonAction: User '"+ user.getUsername() + 
+				"' authenticated in session " + session.getId());
 
 		// Remove the obsolete form bean
 		if (mapping.getAttribute() != null) {
@@ -149,29 +154,8 @@ public class LogonAction extends VegbankAction
 
 		// Forward control to the specified success URI
 		return (mapping.findForward("success"));
-
 	}
 	
-	/**
-	 * Look up the user, throwing an exception to simulate business logic
-	 * rule exceptions.
-	 * 
-	 * @param username Username specified on the logon form
-	 *
-	 * @exception Exception if a business logic rule is violated
-	 */
-	public WebUser getUser(String username) throws Exception
-	{ 
-		if ( username.equalsIgnoreCase(Constants.GUEST_USER_KEY)) {
-			return this.getGuestUser();
-			
-		} else {
-			UserDatabaseAccess uda = new UserDatabaseAccess();
-			LogUtility.log("Authenticate.getUser(): getting " + username);
-			return uda.getUser(username);			
-		}
-	}
-
 	/**
 	 * @return
 	 */

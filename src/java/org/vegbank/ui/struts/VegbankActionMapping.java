@@ -1,6 +1,7 @@
 package org.vegbank.ui.struts;
 
 import org.apache.struts.action.ActionMapping;
+import org.vegbank.common.utility.LogUtility;
 
 /*
  * '$RCSfile: VegbankActionMapping.java,v $'
@@ -8,8 +9,8 @@ import org.apache.struts.action.ActionMapping;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 02:11:44 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-02-28 11:22:01 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,14 +38,15 @@ import org.apache.struts.action.ActionMapping;
  * </p>
  * 
  * @author farrell
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class VegbankActionMapping extends ActionMapping
 {
 
 	protected String authClass;
 	protected String reqRoles;
-	
+	protected String action;
+
 	/**
 	 * Constructor
 	 */
@@ -70,6 +72,13 @@ public class VegbankActionMapping extends ActionMapping
 	}
 
 	/**
+	 * Get value of 'action' property.
+	 */
+	public String getAction() {
+		return this.action;
+	}
+
+	/**
 	 * @param authClass
 	 */
 	public void setAuthClass(String authClass)
@@ -85,4 +94,11 @@ public class VegbankActionMapping extends ActionMapping
 		this.reqRoles = reqRoles;
 	}
 
+	/**
+	 * Set the 'action' property.
+	 */
+	public void setAction(String action) {
+		this.action = action;
+	}
+	
 }

@@ -28,8 +28,8 @@ import org.vegbank.common.utility.PermComparison;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-07 06:45:37 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-02-28 11:22:01 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,10 +123,10 @@ public class RegisterNewUserAction extends VegbankAction
 				party2db.insert(party);
 
 				// create a session
-				LogUtility.log("RegisterNewUserAction: logging new user in");
+				long usrId = uda.getUserId(usr.getEmail_address());
+				LogUtility.log("RegisterNewUserAction: logging in new user, ID #" + usrId);
 				HttpSession session = request.getSession();
-				session.setAttribute(Constants.USER_KEY, 
-						new Long(uda.getUserId(usr.getEmail_address())));
+				session.setAttribute(Constants.USER_KEY, new Long(usrId));
 			}
 		}
 		catch (Exception e)
