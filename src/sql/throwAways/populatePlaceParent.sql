@@ -57,3 +57,6 @@ drop view usStates;
 
 
 -- fix quadrangle overlaps with parent:
+update namedplacecorrelation set placeconvergence='overlapping' where childplace_id in 
+  (select namedplace_ID from namedplace where placeSystem='quadrangle' 
+   AND  placeCode in (select placeCode from namedPlace where placeSystem='quadrangle' group by placecode having count(1) > 1));
