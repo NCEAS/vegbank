@@ -127,5 +127,5 @@ UPDATE plantName set plantName='Grimmia alpicola auct. Amer. var. rivularis (Bri
 -- end updating forma forma;
 
 
-UPDATE plantConcept SET plantname = (select plantName from plantName as pn where pn.plantName_ID=plantConcept.plantName_ID);
-UPDATE plantUsage SET plantname = (select plantName from plantName as pn where pn.plantName_ID=plantUsage.plantName_ID);
+UPDATE plantConcept SET plantname = (select plantName from plantName as pn where pn.plantName_ID=plantConcept.plantName_ID) WHERE plantName LIKE '%forma forma%' OR plantName LIKE '%?%';
+UPDATE plantUsage SET plantname = (select plantName from plantName as pn where pn.plantName_ID=plantUsage.plantName_ID) WHERE plantName LIKE '%forma forma%' OR plantName LIKE '%?%';
