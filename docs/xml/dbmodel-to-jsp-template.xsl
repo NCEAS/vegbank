@@ -30,20 +30,14 @@ where_<xsl:value-of select="$currEnt"/>_pk=<xsl:value-of select="$currPK" /> IN 
       <xsl:comment> ____________________________START:  <xsl:value-of select="entityName"/> _______________________________________ 
 </xsl:comment> 
 
-@stdvegbankget_jspdeclarations@
-
-<html>
-<HEAD>
-<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-@defaultHeadToken@
- 
-<TITLE>View VegBank Data: <xsl:value-of select="entityLabel"/>s - <xsl:value-of select="$view"/>
+@webpage_top_html@
+ @stdvegbankget_jspdeclarations@
+ @webpage_head_html@
+ <TITLE>View VegBank Data: <xsl:value-of select="entityLabel"/>s - <xsl:value-of select="$view"/>
         </TITLE>
-        <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
+@webpage_masthead_html@ 
 
-      </HEAD>
-      <body>
-      @vegbank_header_html_normal@
+
       @possibly_center@
         <h2>View VegBank <xsl:value-of select="entityLabel"/>s</h2>
         <xsl:comment>Get standard declaration of rowClass as string: </xsl:comment>
@@ -150,8 +144,8 @@ where_<xsl:value-of select="$currEnt"/>_pk=<xsl:value-of select="$currPK" /> IN 
         </logic:notEmpty>
         <br/>
         <vegbank:pager />
-      </body></html>
-          @vegbank_footer_html_tworow@
+     
+          @webpage_footer_html@
 <xsl:comment> ____________________________@END:  <xsl:value-of select="entityName"/> _______________________________________ 
 
 
