@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: farrell $'
-*  '$Date: 2003-06-09 22:17:23 $'
-*  '$Revision: 1.3 $'
+*  '$Author: mlee $'
+*  '$Date: 2003-07-09 22:33:37 $'
+*  '$Revision: 1.4 $'
 *
 *
 -->
@@ -54,7 +54,7 @@ aggregating plots for analysis.  There is no a priori correct definition of
 the midpoint.  As a default the mean of the upper and lower limits is 
 acceptable, although this does embed a bias in that cover classes generally 
 tend to have more observations from the lower half of the range.  A geometric 
-mean might be better, thought there is at this time no theoretically 
+mean might be better, though there is at this time no theoretically 
 compelling reason for such a selection. The choice is left to the author of 
 the method.
   </br>
