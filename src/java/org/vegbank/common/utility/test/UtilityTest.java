@@ -7,8 +7,8 @@
  *  Release: @@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-11-12 22:40:42 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2003-12-05 22:16:23 $'
+ *  '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+  
 package org.vegbank.common.utility;
+
+import java.util.HashMap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -157,5 +159,20 @@ public class UtilityTest extends TestCase
     assertEquals(false, Utility.isTrue("This is not true"));
     assertEquals(true, Utility.isTrue("true"));
     assertEquals(true, Utility.isTrue("t"));
+  }
+  
+  public void testParseAccessionCode()
+  {
+  	HashMap parsedAC = Utility.parseAccessionCode("VT.PC.342423");
+  	assertEquals("VT", parsedAC.get("DBCODE"));
+  	assertEquals("PC", parsedAC.get("ENTITYCODE"));
+  	assertEquals("342423", parsedAC.get("KEYVALUE"));
+  	assertEquals("", parsedAC.get("CONFIMATIONCODE"));
+	
+		parsedAC = Utility.parseAccessionCode("VB.Ob.342423.YOSE99K2324");
+		assertEquals("VB", parsedAC.get("DBCODE"));
+		assertEquals("Ob", parsedAC.get("ENTITYCODE"));
+		assertEquals("342423", parsedAC.get("KEYVALUE"));
+		assertEquals("YOSE99K2324", parsedAC.get("CONFIMATIONCODE"));
   }
 }

@@ -6,15 +6,20 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.vegbank.common.dbAdapter.*;
 import org.vegbank.common.model.*;
@@ -25,8 +30,8 @@ import org.vegbank.common.model.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-11-25 19:31:34 $'
- * '$Revision: 1.25 $'
+ * '$Date: 2003-12-05 22:16:23 $'
+ * '$Revision: 1.26 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -606,5 +611,28 @@ public class Utility
 		result.append( stringToCapitalize.substring(0,1).toUpperCase() );
 		result.append( stringToCapitalize.substring(1).toLowerCase() );
 		return result.toString();
+	}
+	
+	/** 
+	 * Parse up an Accessioncode into its parts
+	 * 
+	 * @param accessioncode
+	 * @return String[] - code, entityname, key
+	 */
+	public static HashMap parseAccessionCode(String accessionCode)
+	{
+		HashMap parsedAC = new HashMap();
+		// method
+		LogUtility.log("accessionCode = " + accessionCode);
+		Pattern pattern = Pattern.compile("([^\\.]*)\\.([^\\.]*)\\.([^\\.]*)\\.{0,1}([^\\.]*)");
+		Matcher m = pattern.matcher(accessionCode);
+		if ( m.find() )
+		{	
+			parsedAC.put("DBCODE", m.group(1) );
+			parsedAC.put("ENTITYCODE", m.group(2) );
+			parsedAC.put("KEYVALUE", m.group(3) );
+			parsedAC.put("CONFIMATIONCODE", m.group(4) );
+		}
+		return parsedAC;
 	}
 }
