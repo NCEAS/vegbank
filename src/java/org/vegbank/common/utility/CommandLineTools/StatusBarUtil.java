@@ -5,8 +5,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-27 03:45:39 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-10-27 23:34:09 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ public class StatusBarUtil {
 		if (smallCount) {
 			int num = (int) (100 * scalar) - (int) pct1 * (int) l;
 			for (int i = 0; i < num; i++) {
-				System.out.print(" ");
+				System.out.print("-");
 			}
 		} else {
 			int num = (int) ((100 * scalar) - ((int) count / (int) pct1));
@@ -101,7 +101,7 @@ public class StatusBarUtil {
 
 		System.out.print("0% |");
 		for (int i = 0; i < 100 * scalar; i++) {
-			System.out.print("-");
+			System.out.print(" ");
 		}
 		System.out.println("| 100%  ");
 		// First part of true status bar
