@@ -13,32 +13,42 @@ import java.net.URL;
 /**
  * 
  * Servlet to interactively build the query with the client
+ * The servlet stores the components of the nested query until 
+ * the user decides that it is time to issue the query at which
+ * point the query is issued to the 'DataRequestServlet' 
  *
  * <p>Valid parameters are:<br><br>
  * 
- *
+ * REQUIRED PARAMETERS
+ * @param queryParameterType -- {append, commit}
+ * @param requestDataType -- {vegPlot, plantTaxon, vegCommunity}
+ * @param requestDataFormatType -- includes: html, xml, text
+ * @param clientType -- includes: browser, clientApplication
+ * @param resultType -- {summary, full}
+ * @param criteria -- the query criteria
+ * @param operator -- the query operator
+ * @param value -- the query value
  * 
- * @version @version@
- * @author John Harris
+ * 
  *
  *	'$Author: harris $'
- *  '$Date: 2001-06-22 22:19:44 $'
- *  '$Revision: 1.8 $'
+ *  '$Date: 2001-07-19 03:37:39 $'
+ *  '$Revision: 1.9 $'
  * 
  */
 
 public class QueryBuilderServlet extends HttpServlet 
 {
 
-ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
-public DataRequestServlet drs = new DataRequestServlet();
-public servletUtility su = new servletUtility();
-public GetURL gurl = new GetURL();
-static Vector queryVector = new Vector();
+	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+	public DataRequestServlet drs = new DataRequestServlet();
+	public servletUtility su = new servletUtility();
+	public GetURL gurl = new GetURL();
+	static Vector queryVector = new Vector();
 
 
-/** Handle "POST" method requests from HTTP clients */
-public void doPost(HttpServletRequest request,
+	/** Handle "POST" method requests from HTTP clients */
+	public void doPost(HttpServletRequest request,
 	HttpServletResponse response)
   throws IOException, ServletException 	
 	{
@@ -46,8 +56,8 @@ public void doPost(HttpServletRequest request,
 	}
 
 
-/** Handle "GET" method requests from HTTP clients */ 
-public void doGet(HttpServletRequest request, 
+	/** Handle "GET" method requests from HTTP clients */ 
+	public void doGet(HttpServletRequest request, 
 	HttpServletResponse response)
 	throws IOException, ServletException  
 	{
@@ -55,40 +65,50 @@ public void doGet(HttpServletRequest request,
 		PrintWriter out = response.getWriter();
 		try 
 		{
-			System.out.println("QueryBuilderServlet contacted");
+			String requestDataFormatType = null;
+			String clientType = null;
+			
+			//the format that is requested by the browser is required -- get it
+			if ( parameterHash(request).containsKey("requestDataFormatType") == true )
+			{
+				requestDataFormatType= ( parameterHash(request).get("requestDataFormatType").toString() );
+			}
+			//get the client type; depending on this parameter the client may get 
+			//slightly different responses
+			if ( parameterHash(request).containsKey("clientType") == true )
+			{
+				clientType= ( parameterHash(request).get("clientType").toString() );
+			}
+			
 			//make sure that the client passes the type of query 
 			//parameters to the servlet
 			if ( parameterHash(request).containsKey("queryParameterType") == true )
 			{
-				System.out.println("queryParameterType> "
-					+parameterHash(request).get("queryParameterType").toString() 
-				);
 				//if the client requests to append , via queryParameterType 
 				//the the input query elements to the current standing query
 				if ( parameterHash(request).get("queryParameterType").toString().equals("append") )
 				{
-					System.out.println("appendingParameters to current query");
 					out.println( appendQueryAttributes( parameterHash(request)).toString() );
 					System.out.println("query vector: "+queryVector.toString() );
 					//reprint the client html with the updated aggregate query
 					// in the text area
-					out.println( updateQueryClient(queryVector) );
+					out.println( updateQueryClient(queryVector, requestDataFormatType, clientType ) );
 				}
 				//else run the query
 				else if (parameterHash(request).get("queryParameterType").toString().equals("commit"))
 				{
 					System.out.println("issueing the query to the DataRequestServlet");
 					//pass the query vector to the DataRequestServlet
-					out.println( submitExtendedQuery(queryVector) );
+					out.println( submitExtendedQuery(queryVector, requestDataFormatType, clientType) );
 					//make a new occurence of the queryVector
 					queryVector = new Vector();
 				}
 			}
 			else
 			{
-				System.out.println("didn't pass the parameter type");
+				System.out.println("didn't pass the query parameter type");
 			}
-			out.println(parameterHash(request).toString());
+		//	out.println(parameterHash(request).toString());
 		}
 		catch( Exception e ) 
 		{
@@ -99,18 +119,21 @@ public void doGet(HttpServletRequest request,
 	}
 
 
-	
+
 	 /**
    * method to pass the extended query to the DataRequestServlet
    */
-  private String submitExtendedQuery (Vector queryVector)
+  private String submitExtendedQuery (Vector queryVector, 
+		String requestDataFormatType, String clientType)
   {
     String htmlResults = "test";
     try
     {
-      //create the parameter string to be passed to the DataRequestServlet
+      //create the parameter string to be passed to the DataRequestServlet -- 
+			//this first part has the data request type stuff
       StringBuffer sb = new StringBuffer();
-      sb.append("?requestDataType=vegPlot&queryType=extended&resultType=summary");
+      sb.append("?clientType="+clientType+"&requestDataFormatType="
+			+requestDataFormatType+"&requestDataType=vegPlot&queryType=extended&resultType=summary");
       for (int i=0; i<queryVector.size(); i++)
       {
           sb.append("&");
@@ -120,19 +143,14 @@ public void doGet(HttpServletRequest request,
           String operator = queryInstanceHash.get("operator").toString();
           String value = queryInstanceHash.get("value").toString();
           sb.append("operator="+operator+"&criteria="+criteria+"&value="+value);
-
       }
-
       //connect to the DataRequestServlet
       String uri = "http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet"
         +sb.toString().trim();
+			System.out.println("OUT PARAMETERS: "+uri);
       int port=80;
       String requestType="POST";
-
       htmlResults = gurl.requestURL(uri);
-
-
-
     }
     catch( Exception e )
     {
@@ -143,6 +161,7 @@ public void doGet(HttpServletRequest request,
   }
 
 
+	
 	
 	/**
 	 * method to pass the extended query to the DataRequestServlet
@@ -197,13 +216,16 @@ public void doGet(HttpServletRequest request,
 	 * with the textarea showing the aggregated
 	 * query updated
 	 */
-	private String updateQueryClient (Vector aggregateQuery) 
+	private String updateQueryClient (Vector aggregateQuery, 
+	String requestDataFormatType,  String clientType) 
 	{
 		String clientHtml = null;
 		StringBuffer sb = new StringBuffer();
+		clientHtml = (rb.getString("queryBuilderHtml"));
 		try 
 		{
-			su.fileVectorizer("../../html/plotQueryBuilder.html");
+			//su.fileVectorizer("../../html/plotQueryBuilder.html");
+			su.fileVectorizer(clientHtml);
 			for (int i=0; i<su.outVector.size(); i++) 
 			{
 				//check for the line(s) for
