@@ -6,8 +6,8 @@ package org.vegbank.servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-03-07 22:49:22 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2003-03-20 20:50:17 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Hashtable;
-import java.util.StringTokenizer;
+//import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -55,7 +55,8 @@ public class UserManagementServlet extends HttpServlet
 	
 	//the cookie value is the same as the user name
 	//which is the same as the user's email addy
-	private String cookieValue;
+	//private String cookieValue;
+	ServletUtility su = new ServletUtility();
 	
 	//this is the html paget that will get edited by this servlet so that is
 	//appers to be a custom page for the correponding client
@@ -86,9 +87,9 @@ public class UserManagementServlet extends HttpServlet
 		}
 
 	/** Handle "POST" method requests from HTTP clients */
-public void doPost(HttpServletRequest req, HttpServletResponse res)
+	public void doPost(HttpServletRequest req, HttpServletResponse res)
   	throws ServletException, IOException 
-		{
+	{
 ///			res.setContentType("text/html");
 ///			PrintWriter out = res.getWriter();
 			try 
@@ -97,8 +98,9 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 				Hashtable params = util.parameterHash(req);
 				System.out.println("UserManagementServlet > in params: " + params  );
 				
-				//the cookie value is the same as the user name and email addy
-				cookieValue = new ServletUtility().getCookieValue(req);
+				//the cookie value is the same as the user name and email address
+				String cookieValue = su.getCookieValue(req);
+				
 				String action = getAction( params );
 				if (action == null)
 				{
@@ -132,12 +134,12 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
             }
 					}
 					//SHOW USER FILES 
-					else if ( action.equals("showfiles") )
-					{
-						res.setContentType("text/html");
-						PrintWriter out = res.getWriter();
-						this.showUserFiles(req, res, out);
-					}
+//					else if ( action.equals("showfiles") )
+//					{
+//						res.setContentType("text/html");
+//						PrintWriter out = res.getWriter();
+//						this.showUserFiles(req, res, out);
+//					}
 					// LOGOUT USER 
 					else if ( action.equals("logout") )
 					{
@@ -230,7 +232,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 		 try
 		 {
 			 System.out.println("UserManagementServlet > performing user settings modification");
-			 String emailAddress = this.cookieValue;
+			 String emailAddress = su.getCookieValue(req);
 			 if ( emailAddress != null && emailAddress.length() > 2)
 			 {
 				 // FIGURE OUT WHETHER TO SEND THE UPDATE FORM OR GET THE PARAMETRS
@@ -395,7 +397,7 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 			 
 			 //get the attributes from the form
 			 Hashtable params = util.parameterHash(req);
-			 String emailAddress = this.cookieValue;
+			 String emailAddress = su.getCookieValue(req);
 			 String submittedEmail = (String)params.get("email");
 			 String surName = (String)params.get("surName");
 			 String givenName  = (String)params.get("givenName");
@@ -822,44 +824,46 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 	 * have stored in the profile on the server file
 	 * system
 	 */
-	 private void showUserFiles(HttpServletRequest req, HttpServletResponse res,
-	 	PrintWriter out)
-	 {
-		 try
-		 {
-			 	
-				out.println("<html> \n");
-				out.println("<head> \n");
-				out.println("<body class=\"BODY\" >");
-				out.println("<title> Database User Manager: "+ cookieValue+" </title> \n");
-				out.println("<link rel=\"STYLESHEET\" href=\"http://numericsolutions.com/includes/default.css\" type=\"text/css\">");
-				
-				//get the java-script functions into the html here -- later remove this
-				//and add a link to an external js file
-				out.println( getJavaScriptFunctions() );
-				out.println("</head> \n");
-				
-				//out.println("<br class=\"category\"> Welcome Vegbank User: " + cookieValue +"<br> \n");
-				out.println( getNavigationHeader() );
-				
-				//this is the table that has all the registered queries
-				out.println( getUserRegisteredQuerySummary(cookieValue) );
-				
-				//some space
-				out.println("<br> <br>");
-				
-				//out.println("<br> you have uploaded "+getUserRegisteredFileNum(cookieValue)+"files registered on the server <br>");
-				out.println( getUserRegisteredFileSummary(cookieValue) );
-				out.println("</body>");
-				out.println("</html>");
-			 
-		 }
-		 catch (Exception e)
-			{
-				System.out.println("Exception: "+ e.getMessage() );
-				e.printStackTrace();
-			}
-	 }
+//	 private void showUserFiles(
+//	 	HttpServletRequest req, 
+//	 	HttpServletResponse res,
+//	 	PrintWriter out)
+//	 {
+//		 try
+//		 {
+//				String cookieValue = su.getCookieValue(req);
+//				out.println("<html> \n");
+//				out.println("<head> \n");
+//				out.println("<body class=\"BODY\" >");
+//				out.println("<title> Database User Manager: "+ cookieValue+" </title> \n");
+//				out.println("<link rel=\"STYLESHEET\" href=\"http://numericsolutions.com/includes/default.css\" type=\"text/css\">");
+//				
+//				//get the java-script functions into the html here -- later remove this
+//				//and add a link to an external js file
+//				out.println( getJavaScriptFunctions() );
+//				out.println("</head> \n");
+//				
+//				//out.println("<br class=\"category\"> Welcome Vegbank User: " + cookieValue +"<br> \n");
+//				out.println( getNavigationHeader() );
+//				
+//				//this is the table that has all the registered queries
+//				out.println( getUserRegisteredQuerySummary(cookieValue) );
+//				
+//				//some space
+//				out.println("<br> <br>");
+//				
+//				//out.println("<br> you have uploaded "+getUserRegisteredFileNum(cookieValue)+"files registered on the server <br>");
+//				out.println( getUserRegisteredFileSummary(cookieValue) );
+//				out.println("</body>");
+//				out.println("</html>");
+//			 
+//		 }
+//		 catch (Exception e)
+//			{
+//				System.out.println("Exception: "+ e.getMessage() );
+//				e.printStackTrace();
+//			}
+//	 }
 	
 	
 	/** 
@@ -937,34 +941,34 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 	 * method to return a summary of the query files the user has registered 
 	 * on the server
 	 */
-	 private String getUserRegisteredQuerySummary(String userName )
-	 {
-		  String htmlResults = null;
-    try
-    {
-      //create the parameter string to be passed to the DataRequestServlet -- 
-			//this first part has the data request type stuff
-      StringBuffer sb = new StringBuffer();
-      sb.append("?action=userfilesummary&username="+userName);
-			
-      //connect to the dataExchaneServlet
-			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
-			System.out.println("UserManagementServlet > OUT PARAMETERS: "+uri);
-      int port=80;
-      String requestType="POST";
-      String s = GetURL.requestURL(uri);
-			
-			//get all the files back for the main table -- pass the method the 
-			// all flag
-			htmlResults  = getQueryFileDataTable( s, "query", "Cached Queries");
-    }
-    catch( Exception e )
-    {
-      System.out.println("Exception:  "
-      +e.getMessage());
-    }
-    return(htmlResults);
-	 }
+//	 private String getUserRegisteredQuerySummary(String userName )
+//	 {
+//		  String htmlResults = null;
+//    try
+//    {
+//      //create the parameter string to be passed to the DataRequestServlet -- 
+//			//this first part has the data request type stuff
+//      StringBuffer sb = new StringBuffer();
+//      sb.append("?action=userfilesummary&username="+userName);
+//			
+//      //connect to the dataExchaneServlet
+//			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
+//			System.out.println("UserManagementServlet > OUT PARAMETERS: "+uri);
+//      int port=80;
+//      String requestType="POST";
+//      String s = GetURL.requestURL(uri);
+//			
+//			//get all the files back for the main table -- pass the method the 
+//			// all flag
+//			htmlResults  = getQueryFileDataTable( s, "query", "Cached Queries");
+//    }
+//    catch( Exception e )
+//    {
+//      System.out.println("Exception:  "
+//      +e.getMessage());
+//    }
+//    return(htmlResults);
+//	 }
 	 
 	/**
 	 * method that takes tabular data and retuns the data in an html table 
@@ -978,73 +982,73 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 	 * the client user -- this can be used to return a table having like file
 	 * names where for instance the term query can be applied  
 	 */
-	private String getQueryFileDataTable(String data, 
-		String userFileStartString, String tableName)
-	{
-		//System.out.println("UserManagementServlet > tabularizing data: " + data);
-		StringBuffer sb = new StringBuffer();
-		sb.append("<table cellpadding=0 cellspacing=0 width=75% class=\"filetable\"> \n");
-		//put the name of the table here
-		sb.append("<tr class=\"item\" bgcolor=\"#9999FF\" > <td> "+tableName+"</td> <td></td> <td></td> <td></td> </tr>");
-		//put the table header here
-		sb.append("<tr class=\"item\" bgcolor=\"#9999FF\" >");
-		sb.append("<td>Run</td>");
-		sb.append("<td>Delete</td>");
-		sb.append("<td>View</td>");
-		sb.append("<td>Date</td>");
-		sb.append("<tr>");
-		//notice the end-of-line token is two *
-		StringTokenizer tok = new StringTokenizer(data, "**"); 
-		while ( tok.hasMoreTokens()  ) 
-		{
-			String buf = tok.nextToken();
-			sb.append("<tr  class=\"itemsmall\">  \n");
-			
-			StringTokenizer tok2 = new StringTokenizer(buf, "|"); 
-			int colCnt = 0;
-			String userFileName = null;
-			String createDate = null;
-			String accessionNumber = null;
-			String fileType = null;
-			String buf2 = null;
-			
-			//parse the columns into the cells
-			while (tok2.hasMoreTokens() )
-			{
-				colCnt++;
-				if ( colCnt == 1 )
-					userFileName = tok2.nextToken();
-				else if ( colCnt == 2 )
-					accessionNumber = tok2.nextToken();
-				else if ( colCnt == 4 )
-					createDate = tok2.nextToken();
-				else if ( colCnt == 3 )
-					fileType = tok2.nextToken();
-				else
-					buf2 = tok2.nextToken();
-			}
-				if (accessionNumber != null && userFileName.startsWith("query") )
-				{
-					//first add the option to delete the file then add the file name, date and
-					//type
-					sb.append("	<td width=\"8%\"><input type=\"image\"  src=\"/vegbank/images/runIcon.gif\" value=\"test\" name=\""+accessionNumber+"\" > </td> \n");
-					//sb.append("	<td width=\"8%\"><input type=\"image\"  src=\"/vegbank/images/deleteIcon.gif\" value=\"test\" name=\""+accessionNumber+"\" > </td> \n");
-					//sb.append("	<td width=\"10%\"><input type=\"checkbox\" name=\""+accessionNumber+"\" ></td> \n");
-					
-					//here is the function to delet a file
-					sb.append("	<td width=\"8%\"> <a href=\"/framework/servlet/dataexchange?action=deletefile&filenumber="+accessionNumber+"&username="+this.cookieValue+"\"> " 
-					+" <img src=\"/vegbank/images/deleteIcon.gif\">  </a> </td> \n");
-					
-					sb.append("	<td width=\"25%\"> <a href=\"/uploads/"+accessionNumber+"\">"  + userFileName + "</a> </td> \n");
-					sb.append("	<td>" +createDate+ "</td> \n");
-					//sb.append("	<td>" +fileType+ "</td> \n");
-					sb.append("</tr> \n \n");
-				}
-			}
-		
-		sb.append("</table> \n");
-		return(sb.toString() );
-	}
+//	private String getQueryFileDataTable(String data, 
+//		String userFileStartString, String tableName)
+//	{
+//		//System.out.println("UserManagementServlet > tabularizing data: " + data);
+//		StringBuffer sb = new StringBuffer();
+//		sb.append("<table cellpadding=0 cellspacing=0 width=75% class=\"filetable\"> \n");
+//		//put the name of the table here
+//		sb.append("<tr class=\"item\" bgcolor=\"#9999FF\" > <td> "+tableName+"</td> <td></td> <td></td> <td></td> </tr>");
+//		//put the table header here
+//		sb.append("<tr class=\"item\" bgcolor=\"#9999FF\" >");
+//		sb.append("<td>Run</td>");
+//		sb.append("<td>Delete</td>");
+//		sb.append("<td>View</td>");
+//		sb.append("<td>Date</td>");
+//		sb.append("<tr>");
+//		//notice the end-of-line token is two *
+//		StringTokenizer tok = new StringTokenizer(data, "**"); 
+//		while ( tok.hasMoreTokens()  ) 
+//		{
+//			String buf = tok.nextToken();
+//			sb.append("<tr  class=\"itemsmall\">  \n");
+//			
+//			StringTokenizer tok2 = new StringTokenizer(buf, "|"); 
+//			int colCnt = 0;
+//			String userFileName = null;
+//			String createDate = null;
+//			String accessionNumber = null;
+//			String fileType = null;
+//			String buf2 = null;
+//			
+//			//parse the columns into the cells
+//			while (tok2.hasMoreTokens() )
+//			{
+//				colCnt++;
+//				if ( colCnt == 1 )
+//					userFileName = tok2.nextToken();
+//				else if ( colCnt == 2 )
+//					accessionNumber = tok2.nextToken();
+//				else if ( colCnt == 4 )
+//					createDate = tok2.nextToken();
+//				else if ( colCnt == 3 )
+//					fileType = tok2.nextToken();
+//				else
+//					buf2 = tok2.nextToken();
+//			}
+//				if (accessionNumber != null && userFileName.startsWith("query") )
+//				{
+//					//first add the option to delete the file then add the file name, date and
+//					//type
+//					sb.append("	<td width=\"8%\"><input type=\"image\"  src=\"/vegbank/images/runIcon.gif\" value=\"test\" name=\""+accessionNumber+"\" > </td> \n");
+//					//sb.append("	<td width=\"8%\"><input type=\"image\"  src=\"/vegbank/images/deleteIcon.gif\" value=\"test\" name=\""+accessionNumber+"\" > </td> \n");
+//					//sb.append("	<td width=\"10%\"><input type=\"checkbox\" name=\""+accessionNumber+"\" ></td> \n");
+//					
+//					//here is the function to delet a file
+//					sb.append("	<td width=\"8%\"> <a href=\"/framework/servlet/dataexchange?action=deletefile&filenumber="+accessionNumber+"&username="+	su.getCookieValue(req) +"\"> " 
+//					+" <img src=\"/vegbank/images/deleteIcon.gif\">  </a> </td> \n");
+//					
+//					sb.append("	<td width=\"25%\"> <a href=\"/uploads/"+accessionNumber+"\">"  + userFileName + "</a> </td> \n");
+//					sb.append("	<td>" +createDate+ "</td> \n");
+//					//sb.append("	<td>" +fileType+ "</td> \n");
+//					sb.append("</tr> \n \n");
+//				}
+//			}
+//		
+//		sb.append("</table> \n");
+//		return(sb.toString() );
+//	}
 	
 	
 	
@@ -1055,34 +1059,34 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 	 * method to return a summary  of files the user has registered on the 
 	 * serever
 	 */
-	 private String getUserRegisteredFileSummary(String userName )
-	 {
-		  String htmlResults = null;
-    try
-    {
-      //create the parameter string to be passed to the DataRequestServlet -- 
-			//this first part has the data request type stuff
-      StringBuffer sb = new StringBuffer();
-      sb.append("?action=userfilesummary&username="+userName);
-			
-      //connect to the dataExchaneServlet
-			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
-			System.out.println("UserManagementServlet > OUT PARAMETERS: " + uri);
-      int port=80;
-      String requestType="POST";
-      String s = GetURL.requestURL(uri);
-			
-			//get all the files back for the main table -- pass the method the 
-			// all flag
-			htmlResults  = getUploadedFileDataTable( s, "all", "Registered Files" );
-    }
-    catch( Exception e )
-    {
-      System.out.println("Exception:  "
-      +e.getMessage());
-    }
-    return(htmlResults);
-	 }
+//	 private String getUserRegisteredFileSummary(String userName )
+//	 {
+//		  String htmlResults = null;
+//    try
+//    {
+//      //create the parameter string to be passed to the DataRequestServlet -- 
+//			//this first part has the data request type stuff
+//      StringBuffer sb = new StringBuffer();
+//      sb.append("?action=userfilesummary&username="+userName);
+//			
+//      //connect to the dataExchaneServlet
+//			String uri = "/framework/servlet/dataexchange"+sb.toString().trim();
+//			System.out.println("UserManagementServlet > OUT PARAMETERS: " + uri);
+//      int port=80;
+//      String requestType="POST";
+//      String s = GetURL.requestURL(uri);
+//			
+//			//get all the files back for the main table -- pass the method the 
+//			// all flag
+//			htmlResults  = getUploadedFileDataTable( s, "all", "Registered Files" );
+//    }
+//    catch( Exception e )
+//    {
+//      System.out.println("Exception:  "
+//      +e.getMessage());
+//    }
+//    return(htmlResults);
+//	 }
 	
 	/**
 	 * method that takes tabular data and retuns the data in an html table 
@@ -1096,88 +1100,90 @@ public void doPost(HttpServletRequest req, HttpServletResponse res)
 	 * the client user -- this can be used to return a table having like file
 	 * names where for instance the term query can be applied  
 	 */
-	private String getUploadedFileDataTable(String data, 
-		String userFileStartString, String tableName)
-	{
-		//System.out.println("UserManagementServlet > tabularizing data: " + data);
-		StringBuffer sb = new StringBuffer();
-		sb.append("<table cellpadding=0 cellspacing=0 width=75% class=\"filetable\"> \n");
-		//put the name of the table here
-		sb.append("<tr class=\"item\" bgcolor=\"#9999FF\" > <td> "+tableName+"</td> <td></td> <td></td> <td></td> </tr>");
-		//put the table header here
-		sb.append("<tr class=\"item\" bgcolor=\"#9999FF\" >");
-		sb.append("<td>Load</td>");
-		sb.append("<td>Delete</td>");
-		sb.append("<td>File Name</td>");
-		sb.append("<td>Upload Date</td>");
-		sb.append("<td>Type</td>");
-		sb.append("<tr>");
-		//notice the end-of-line token is two *
-		StringTokenizer tok = new StringTokenizer(data, "**"); 
-		while ( tok.hasMoreTokens()  ) 
-		{
-			String buf = tok.nextToken();
-			sb.append("<tr  class=\"itemsmall\">  \n");
-			
-			StringTokenizer tok2 = new StringTokenizer(buf, "|"); 
-			int colCnt = 0;
-			String userFileName = null;
-			String createDate = null;
-			String accessionNumber = null;
-			String fileType = null;
-			String buf2 = null;
-			
-			//parse the columns into the cells
-			while (tok2.hasMoreTokens() )
-			{
-				colCnt++;
-				if ( colCnt == 1 )
-					userFileName = tok2.nextToken();
-				else if ( colCnt == 2 )
-					accessionNumber = tok2.nextToken();
-				else if ( colCnt == 4 )
-					createDate = tok2.nextToken();
-				else if ( colCnt == 3 )
-					fileType = tok2.nextToken();
-				else
-					buf2 = tok2.nextToken();
-			}
-			//first add the option to delete the file then add the file name, date and
-			//type
-			
-			
-				if (accessionNumber != null &&  ! userFileName.startsWith("query") )
-				{
-					//sb.append("	<td width=\"5%\"><input type=\"image\"  src=\"/vegbank/images/funnelIcon.gif\" value=\"test\" name=\""+accessionNumber+"\" > </td> \n");
-					//sb.append("	<td width=\"8%\"><input type=\"image\"  src=\"/vegbank/images/deleteIcon.gif\" value=\"test\" name=\""+accessionNumber+"\" > </td> \n");
-					
-					//here is the function to init the data loading process, where by the 
-					//filename, url, file type, submitter name are issued to the 
-					//data loading plugin on the frame work servlet which will describe
-					//the data set in a form that the user can use to upload some or all
-					//of the plots
-					sb.append("	<td width=\"8%\"> "
-					+"<a href=\"http://guest06.nceas.ucsb.edu/framework/servlet/framework?action=initPlotLoad&filename="
-					+accessionNumber+"&username="+this.cookieValue+"&plot=all&filetype=tnc&datafileurl=vegbank.nceas.ucsb.edu/framework/servlet/dataexchage\"> " 
-					+" <img src=\"/vegbank/images/funnelIcon.gif\">  </a> </td> \n");
-					
-					
-					
-					//here is the function to delet a file
-					sb.append("	<td width=\"8%\"> "
-					+"<a href=\"/framework/servlet/dataexchange?action=deletefile&filenumber="
-					+accessionNumber+"&username="+this.cookieValue+"\"> " 
-					+" <img src=\"/vegbank/images/deleteIcon.gif\">  </a> </td> \n");
-					
-					sb.append("	<td> <a href=\"/uploads/"+accessionNumber+"\">"  + userFileName + "</a> </td> \n");
-					sb.append("	<td>" +createDate+ "</td> \n");
-					sb.append("	<td>" +fileType+ "</td> \n");
-					sb.append("</tr> \n \n");
-				}
-		}
-		sb.append("</table> \n");
-		return(sb.toString() );
-	}
+//	private String getUploadedFileDataTable(
+//		String data, 
+//		String userFileStartString, 
+//		String tableName)
+//	{
+//		//System.out.println("UserManagementServlet > tabularizing data: " + data);
+//		StringBuffer sb = new StringBuffer();
+//		sb.append("<table cellpadding=0 cellspacing=0 width=75% class=\"filetable\"> \n");
+//		//put the name of the table here
+//		sb.append("<tr class=\"item\" bgcolor=\"#9999FF\" > <td> "+tableName+"</td> <td></td> <td></td> <td></td> </tr>");
+//		//put the table header here
+//		sb.append("<tr class=\"item\" bgcolor=\"#9999FF\" >");
+//		sb.append("<td>Load</td>");
+//		sb.append("<td>Delete</td>");
+//		sb.append("<td>File Name</td>");
+//		sb.append("<td>Upload Date</td>");
+//		sb.append("<td>Type</td>");
+//		sb.append("<tr>");
+//		//notice the end-of-line token is two *
+//		StringTokenizer tok = new StringTokenizer(data, "**"); 
+//		while ( tok.hasMoreTokens()  ) 
+//		{
+//			String buf = tok.nextToken();
+//			sb.append("<tr  class=\"itemsmall\">  \n");
+//			
+//			StringTokenizer tok2 = new StringTokenizer(buf, "|"); 
+//			int colCnt = 0;
+//			String userFileName = null;
+//			String createDate = null;
+//			String accessionNumber = null;
+//			String fileType = null;
+//			String buf2 = null;
+//			
+//			//parse the columns into the cells
+//			while (tok2.hasMoreTokens() )
+//			{
+//				colCnt++;
+//				if ( colCnt == 1 )
+//					userFileName = tok2.nextToken();
+//				else if ( colCnt == 2 )
+//					accessionNumber = tok2.nextToken();
+//				else if ( colCnt == 4 )
+//					createDate = tok2.nextToken();
+//				else if ( colCnt == 3 )
+//					fileType = tok2.nextToken();
+//				else
+//					buf2 = tok2.nextToken();
+//			}
+//			//first add the option to delete the file then add the file name, date and
+//			//type
+//			
+//			
+//				if (accessionNumber != null &&  ! userFileName.startsWith("query") )
+//				{
+//					//sb.append("	<td width=\"5%\"><input type=\"image\"  src=\"/vegbank/images/funnelIcon.gif\" value=\"test\" name=\""+accessionNumber+"\" > </td> \n");
+//					//sb.append("	<td width=\"8%\"><input type=\"image\"  src=\"/vegbank/images/deleteIcon.gif\" value=\"test\" name=\""+accessionNumber+"\" > </td> \n");
+//					
+//					//here is the function to init the data loading process, where by the 
+//					//filename, url, file type, submitter name are issued to the 
+//					//data loading plugin on the frame work servlet which will describe
+//					//the data set in a form that the user can use to upload some or all
+//					//of the plots
+//					sb.append("	<td width=\"8%\"> "
+//					+"<a href=\"http://guest06.nceas.ucsb.edu/framework/servlet/framework?action=initPlotLoad&filename="
+//					+accessionNumber+"&username="+this.cookieValue+"&plot=all&filetype=tnc&datafileurl=vegbank.nceas.ucsb.edu/framework/servlet/dataexchage\"> " 
+//					+" <img src=\"/vegbank/images/funnelIcon.gif\">  </a> </td> \n");
+//					
+//					
+//					
+//					//here is the function to delet a file
+//					sb.append("	<td width=\"8%\"> "
+//					+"<a href=\"/framework/servlet/dataexchange?action=deletefile&filenumber="
+//					+accessionNumber+"&username="+this.cookieValue+"\"> " 
+//					+" <img src=\"/vegbank/images/deleteIcon.gif\">  </a> </td> \n");
+//					
+//					sb.append("	<td> <a href=\"/uploads/"+accessionNumber+"\">"  + userFileName + "</a> </td> \n");
+//					sb.append("	<td>" +createDate+ "</td> \n");
+//					sb.append("	<td>" +fileType+ "</td> \n");
+//					sb.append("</tr> \n \n");
+//				}
+//		}
+//		sb.append("</table> \n");
+//		return(sb.toString() );
+//	}
 	
 	
 	

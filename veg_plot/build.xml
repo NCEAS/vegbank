@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-03-07 22:57:02 $'
-  *     '$Revision: 1.19 $'
+  *     '$Date: 2003-03-20 20:50:12 $'
+  *     '$Revision: 1.20 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -46,8 +46,8 @@
     <property name="rmiserver.lib.dir" location="${rmiserver.home.dir}/lib" /> 
     
     
-    <property name="planttaxonomy" value="${basedir}/../veg_taxa/build/lib/planttaxonomy.jar"/>
-    <property name="vegcommunity" value="${basedir}/../veg_community/build/lib/vegcommunity.jar"/>
+    <property name="planttaxonomy" location="${basedir}/../veg_taxa/build/lib/planttaxonomy.jar"/>
+    <property name="vegcommunity" location="${basedir}/../veg_community/build/lib/vegcommunity.jar"/>
     <!-- Location of jar files 
     <property name="xmlp" value="${top.lib.dir}/xalan_1_2_2.jar:${top.lib.dir}/xerces_1_3_1.jar:${top.lib.dir}/xml-apis.jar" />
     <property name="jdbc" value="${top.lib.dir}/jdbc7.0-1.2.jar" />
@@ -121,14 +121,12 @@
     <path id="classpath.compilation">
       <pathelement path="${planttaxonomy}"/>
       <pathelement path="${vegcommunity}"/>
+      <pathelement path="${build.classes.dir}"/>
       <fileset dir="${top.lib.dir}">
         <include name="**/*jar"/>
       </fileset>
       <fileset dir="${build.lib.dir}">
         <include name="**/*jar"/>
-      </fileset>
-      <fileset dir="${build.classes.dir}">
-        <include name="**/*class"/>
       </fileset>
     </path>
 
@@ -144,9 +142,6 @@
       <fileset dir="./exp/database_access/src" casesensitive="yes">
         <include name="**/*.java"/>
       </fileset>
-      <fileset dir="./exp/data-translators/src/data-translators/" casesensitive="yes">
-        <include name="**/*.java"/>
-      </fileset>
       <fileset dir="./exp/xml-resource/src" casesensitive="yes">
         <include name="**/*.java"/>
       </fileset>
@@ -155,6 +150,7 @@
         <include name="edu/**/*java"/>
       </fileset>
     </copy> 
+
 
     <!-- Copy property files -->
     <copy file="./exp/database_access/lib/database.properties" 
@@ -174,6 +170,9 @@
       <classpath refid="classpath.compilation"/>
     </javac>
 
+    <echo message="Compiling the RMI Stubs and Skeletons"/>
+    <rmic classname="org.vegbank.plots.rmi.DataSourceImpl" base="${build.classes.dir}" />
+    
   </target>
 	
 	<target name="jar" depends="compile"
@@ -287,24 +286,26 @@
     <jar  destfile ="${build.lib.dir}/rmidatasource.jar">
       <fileset dir="${build.classes.dir}" casesensitive="yes">
         <include name="org/vegbank/plots/rmi/**/*class"/>
+        <include name="rmidatasource.properties"/>
       </fileset>
       <fileset dir="${build.java.src.dir}" casesensitive="yes">
         <include name="org/vegbank/plots/rmi/**/*java"/>
       </fileset>
     </jar>
-
-
-
+    <!-- datatranslator.jar -->
+    <jar  destfile ="${build.lib.dir}/datatranslator.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/plots/datasource/**/*class"/>
+        <include name="plugin.properties"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/plots/datasource/**/*java"/>
+      </fileset>
+    </jar>
 
 	</target>
 
   <target name="jar-subprojects" depends="prepare" description="==> jar up subprojects">
-		<ant dir="exp/data-translators" target="jar">
-      <property name="hostname" value="${hostname}"/>
-    </ant>
-		<ant dir="exp/rmidatasource" target="jar"> 
-      <reference refid="classpath.compilation"/>
-    </ant>
 		<ant dir="exp/services" target="jar" inheritAll="false"/>
   </target>
   
@@ -323,9 +324,6 @@
     
 		<ant dir="exp/data-translators" target="dist" inheritAll="false">
       <property name="hostname" value="${hostname}"/>
-    </ant>
-		<ant dir="exp/rmidatasource" target="dist" inheritAll="false"> 
-      <reference refid="classpath.compilation"/>
     </ant>
 		<ant dir="exp/vegbank_web" target="dist" inheritAll="false">
       <property name="hostname" value="${hostname}"/>
@@ -508,8 +506,8 @@
       <arg value="${rmiserver}"/>
       <arg value="../testdata/vbaccess-output.xml"/>
     </exec>
-    --> 
-    <!-- Test Loading a second vbaccess plot  -->
+     -->
+    <!-- Test Loading a second vbaccess plot 
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
       <env key="CLASSPATH" value="${classpath.compilation}"/>
       <arg value="../testdata/vbaccess-example2.mdb"/>
@@ -520,8 +518,8 @@
       <arg value="${rmiserver}"/>
       <arg value="../testdata/vbaccess-example2.xml"/>
     </exec>
-    
-    <!-- Test Loading a tnc plot 
+-->    
+    <!-- Test Loading a tnc plot -->
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
       <env key="CLASSPATH" value="${classpath.compilation}"/>
       <arg value="../testdata/tncplots-example.mdb"/>
@@ -532,8 +530,7 @@
       <arg value="${rmiserver}"/>
       <arg value="../testdata/tnc-output.xml"/>
     </exec>
-    -->
-    
+
     <!-- Test Loading a native plot -->
     <exec executable="${build.test.integration.dir}/LoadPlotTest.sh">
       <env key="CLASSPATH" value="${classpath.compilation}"/>
@@ -548,6 +545,6 @@
   
   </target>
 
-  <target name="run-tests" depends="test, test-integration, dist-testreport" description="==> Run all availible tests"/>
+  <target name="run-tests" depends="test, test-integration" description="==> Run all availible tests"/>
 </project>
 

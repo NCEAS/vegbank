@@ -35,8 +35,8 @@ import org.apache.tools.mail.MailMessage;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-03-07 22:49:22 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-03-20 20:50:18 $'
+ *  '$Revision: 1.3 $'
  *
  */
 
@@ -547,7 +547,7 @@ public void getViewOption(String summaryViewType)
 		Cookie[] cookies = req.getCookies();
 		
 		//determine if the requested page should be shown
-    if (cookies.length >= 0) 
+		if ( cookies != null  &&  cookies.length >= 0 )
 		{
 			for (int i = 0; i < cookies.length; i++) 
 			{

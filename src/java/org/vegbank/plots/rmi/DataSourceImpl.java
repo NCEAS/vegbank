@@ -1,6 +1,6 @@
 package org.vegbank.plots.rmi;
 
-import PlotDataSource;
+import org.vegbank.plots.datasource.PlotDataSource;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -33,8 +33,8 @@ import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
  *	
  * <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-03-07 22:49:21 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2003-03-20 20:50:17 $'
+ * 	'$Revision: 1.2 $'
  *
  */
 

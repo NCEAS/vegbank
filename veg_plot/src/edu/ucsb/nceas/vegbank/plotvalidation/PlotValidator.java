@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-02-26 19:16:27 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2003-03-20 20:50:13 $'
+ * '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 
 package edu.ucsb.nceas.vegbank.plotvalidation;
 
-import PlotDataSource;
+import org.vegbank.plots.datasource.PlotDataSource;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
