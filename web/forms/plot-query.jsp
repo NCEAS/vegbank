@@ -1,8 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/taglibs-datetime.tld" prefix="dt" %>
+@stdvegbankget_jspdeclarations@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
@@ -14,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2004-12-15 21:49:23 $'
-*  '$Revision: 1.29 $'
+*    '$Author: mlee $'
+*      '$Date: 2005-02-10 18:58:22 $'
+*  '$Revision: 1.30 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -139,24 +135,62 @@ VegBank - Advanced Plot Query
 	  <tr>
 	    <td width="12%">&nbsp;</td>
 		<td class="itemsmall">
-	      Country<br/>
+	      Country (plot count)<br/>
 	      <html:select property="countries" size="6" multiple="true">
 		      <option value="ANY">--ANY--</option>
-      		<option value="Canada">Canada</option>
+       	
+     <!-- 	<option value="Canada">Canada</option>
       		<option value="Mexico">Mexico</option>
       		<option value="USA">United States</option>
-      		<option value="IS NOT NULL">--NOT NULL--</option>
-		      <option value="IS NULL">--NULL--</option>
+    -->
+    
+    	    <vegbank:get id="plotcountrylist" select="plotcountrylist" 
+			  beanName="map" pager="false" where="empty" 
+			  wparam="" perPage="-1" />
+			<logic:empty name="plotcountrylist-BEANLIST">
+			  <option value="No countries found">Error: no countries found</option>
+			</logic:empty>
+			<logic:notEmpty name="plotcountrylist-BEANLIST">
+			  <logic:iterate id="onerowofplotcountrylist" name="plotcountrylist-BEANLIST">
+			     <option value='<bean:write name="onerowofplotcountrylist" property="country" />' >  
+	   <bean:write name="onerowofplotcountrylist" property="country" />
+	   (<bean:write name="onerowofplotcountrylist" property="countcountry" />)
+			      
+			     </option>
+			  </logic:iterate>
+        </logic:notEmpty>
+    
+    <!--
+    <option value="IS NOT NULL">--NOT NULL--</option>
+		      <option value="IS NULL">--NULL--</option> -->
+		      
+		      
 	      </html:select>
 	    </td>	 
 
 	    <td class="itemsmall">
-	      State<br/>
+	      State (plot count)<br/>
 	      <html:select property="state" size="6" multiple="true">
 		<option value="ANY">--ANY--</option>
-
+  	   
+  	    <vegbank:get id="plotstatelist" select="plotstatelist" 
+		  beanName="map" pager="false" where="empty" 
+		  wparam="" perPage="-1" />
+		<logic:empty name="plotstatelist-BEANLIST">
+		  <option value="No states found">Error: no states found</option>
+		</logic:empty>
+		<logic:notEmpty name="plotstatelist-BEANLIST">
+		  <logic:iterate id="onerowofplotstatelist" name="plotstatelist-BEANLIST">
+		     <option value='<bean:write name="onerowofplotstatelist" property="stateprovince" />' >  
+   <bean:write name="onerowofplotstatelist" property="stateprovince" />
+   (<bean:write name="onerowofplotstatelist" property="countstate" />)
+		      
+		     </option>
+		  </logic:iterate>
+        </logic:notEmpty>
+   
                 <!-- Pull in StateList widget -->
-                <%@ include file="../includes/StatesList.jsp" %>
+                <!-- %@ include file="../includes/StatesList.jsp" % -->
 
 		<option value="IS NOT NULL">--NOT NULL--</option>
 		<option value="IS NULL">--NULL--</option>
