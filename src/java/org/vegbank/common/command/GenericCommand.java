@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-16 20:11:27 $'
- *	'$Revision: 1.25 $'
+ *	'$Date: 2005-02-16 20:59:15 $'
+ *	'$Revision: 1.26 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -386,27 +386,27 @@ public class GenericCommand
 			this.whereSubquery = null;
 		}
         */
-        //////////////////////////////////////////
-        List wpList = new ArrayList();
-        log.debug("checking for ; delimited wparams");
-        for (int i=0; i<whereParams.length; i++) {
-            StringTokenizer st = new StringTokenizer(whereParams[i], Utility.PARAM_DELIM);
-            //whereParams = new String[st.countTokens()];
-            //int j=0;
-            while (st.hasMoreTokens()) {
-                //whereParams[j++] = st.nextToken();
-                wpList.add(st.nextToken());
-            }
-        }
-
-        // get all of the params as an array
-        whereParams = (String[])wpList.toArray( new String[1] );
-        //////////////////////////////////////////
-
 		// format the where clause
 		if (hasWhereClause && hasParams) {
 
 			if (hasParams) {
+                //////////////////////////////////////////
+                List wpList = new ArrayList();
+                log.debug("checking for ; delimited wparams");
+                for (int i=0; i<whereParams.length; i++) {
+                    StringTokenizer st = new StringTokenizer(whereParams[i], Utility.PARAM_DELIM);
+                    //whereParams = new String[st.countTokens()];
+                    //int j=0;
+                    while (st.hasMoreTokens()) {
+                        //whereParams[j++] = st.nextToken();
+                        wpList.add(st.nextToken());
+                    }
+                }
+
+                // get all of the params as an array
+                whereParams = (String[])wpList.toArray( new String[1] );
+                //////////////////////////////////////////
+
                 /*
 				for (int i=0; i<whereParams.length; i++) {
                     String tmpParam = DatabaseUtility.makeSQLSafe(whereParams[i], false);
