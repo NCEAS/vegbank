@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: mlee $'
- *  '$Date: 2003-11-03 06:07:35 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-11-08 22:35:04 $'
+ *  '$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,19 +46,29 @@
           <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
         </head>
         <body>
-          <table width="100%">
+          <table width="100%" height="100%">
             <tr>
-              <td align="center">
+              <td valign="top" align="center">
                 <font size="+1">
                   <b>VegBank</b>
                 </font> -- tutorial</td>
             </tr>
-          </table>
+<tr><td valign="top">          
           <p>
             <xsl:call-template name="writeMenu">
               <xsl:with-param name="level">0</xsl:with-param>
             </xsl:call-template>
           </p>
+</td></tr>
+<tr><td valign="bottom">
+<p>
+            <font color="red">
+              <xsl:call-template name="closeManual" />
+            </font>
+</p>
+</td></tr>
+</table>          
+          
         </body>
       </html>
     </redirect:write>
@@ -169,8 +179,8 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
                             <font size="-2">prev</font>
                           </td>
                           <td align="center">
-                            <input value="MENU" type="button" onclick="window.location='{$menu_url}'"/>
-                          </td>
+                            <input value="MENU" type="button" onclick="window.location='{$menu_url}'"/><br />
+                            <font size="-2" color="red"> <xsl:call-template name="closeManual" /></font></td>
                           <td align="right">
                             <!--                            <input value="&gt;&gt;" type="button" onclick="window.location='{$next_url}'"/> -->
                             <xsl:element name="input">
@@ -305,4 +315,8 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
+<xsl:template name="closeManual">
+<a style="COLOR: #ff0000" target="_top" href="javascript:window.top.location=window.upperframe.location">close manual</a>
+</xsl:template>
+
 </xsl:stylesheet>
