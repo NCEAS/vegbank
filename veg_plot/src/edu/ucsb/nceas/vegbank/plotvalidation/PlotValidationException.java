@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-30 22:22:09 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2003-01-02 16:28:59 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,18 +31,28 @@ import java.util.*;
 
 public class PlotValidationException extends RuntimeException
 {
+	private Exception hiddenException;
 	
 	// constructor 
 	public PlotValidationException()
 	{
 		super();
+		System.out.println("PlotValidationException > no message");
 	}
 	
 	// constructor 
 	public PlotValidationException(String s)
 	{
 		super(s);
+		System.out.println("PlotValidationException > message: " + s);
 	}
 	
+	// constructor 
+	public PlotValidationException(String error, Exception excp)
+	{
+		super(error);
+		System.out.println("PlotValidationException > error message: " + error);
+		System.out.println("PlotValidationException > exception: " + excp);
+	}
 	
 }

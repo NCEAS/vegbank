@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-30 22:23:07 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2003-01-02 16:29:00 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,8 @@ public class PlotValidator implements PlotValidationInterface
 	// this attribute should rplace all the code that creates the map(s) within 
 	// this class
 	private ConstraintMap constraintMap;
-	private ResourceBundle validatorprops;
+	
+	private static ResourceBundle validatorprops = ResourceBundle.getBundle("plotvalidation");
 	private String constraintListFile;
 	private String constraintMapFile;
 	
@@ -92,19 +93,23 @@ public class PlotValidator implements PlotValidationInterface
 		  * this is a utility function that  reads the properties file and updates
 			* the instance variables with their corresponding values 
 			*/
-			private void getProperties() throws PlotValidationException
+			private void getProperties() 
 			{
 					try
 					{
 						// get info from the properties file
-						validatorprops.getBundle("plotvalidation");
-						constraintListFile = validatorprops.getString("constraintList");
-						constraintMapFile = validatorprops.getString("constraintMap");
-						//throw(PlotValidationException);
+						//validatorprops = new ResourceBundle();
+						
+						//Enumeration keys = validatorprops.getKeys();
+						constraintListFile = validatorprops.getString("constraintlist");
+						constraintMapFile = validatorprops.getString("constraintmap");
+						System.out.println("####################" + constraintMapFile + "$$$$$$" + constraintListFile );
+						Thread.sleep(2000);
+						
 					}
-					catch (PlotValidationException e)
+					catch (Exception e)
 					{
-						//e.printStackTrace();
+						throw new PlotValidationException(" error geting properties from properties file ", e );
 					}
 			}
 	  
