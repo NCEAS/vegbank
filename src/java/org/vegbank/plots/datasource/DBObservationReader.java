@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-24 19:26:40 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-10-25 01:53:19 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,6 +69,9 @@ public class DBObservationReader
 	//private DatabaseAccess da;
 	private DBConnection con = null;
 	private Vector ignoreObjects = new Vector();
+	// Convert a java Date to an xml schema datetime datatype
+	private static final String xsDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss";
+	private static final SimpleDateFormat df = new SimpleDateFormat(xsDateTimePattern);
 	
 	public DBObservationReader() throws SQLException
 	{
@@ -390,10 +393,23 @@ public class DBObservationReader
 		String value = null;
 		int SQLType = metaData.getColumnType(i);
 		
-		if ( SQLType == Types.BOOLEAN )
+		// Postgres claims it bool is a bit so ....
+		if (SQLType == Types.BOOLEAN || SQLType == Types.BIT)
 		{
+			// if null it automatically defaults to false
 			boolean booleanValue = rs.getBoolean(i);
-			value = (new Boolean(booleanValue)).toString();
+			
+			// Was a null read from the database last 
+			if ( rs.wasNull() )
+			{
+				// set to null;
+				value = null;
+			}
+			else
+			{
+				value = ""+booleanValue;
+			}
+			//System.out.println("boolean was " + value);
 		}
 		else if ( SQLType == Types.DATE )
 		{
@@ -404,12 +420,14 @@ public class DBObservationReader
 				value = null;
 			}
 			else
-			{
-				value = dateValue.toString();
+			{	
+				value = df.format(dateValue);
 			}
 		}
 		else
 		{
+			//System.out.println( metaData.getColumnName(i) + ": Just get as String for SQLTYPE: " + SQLType );
+			//System.out.println( "BOOLEAN is " + Types.BOOLEAN);
 			value = rs.getString(i);
 		}
 		return value;
