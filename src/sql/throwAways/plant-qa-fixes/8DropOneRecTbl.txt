@@ -1,0 +1,4 @@
+--special case: drop a table called oneRec, which was added to database so that insert commands can read from it to insert only one record (of other info)--
+
+ALTER TABLE ONLY onerec DROP CONSTRAINT onerec_pkey;
+DROP TABLE onerec;

@@ -1,0 +1,7 @@
+-- special case of ORCO11:--
+INSERT INTO plantName(plantName) select 'Orthotrichum columbicum' FROM OneRec WHERE 'Orthotrichum columbicum' not in (select plantName from plantName);
+UPDATE plantUsage SET plantName='Orthotrichum columbicum', plantNAme_ID=(select min(plantNAME_ID) from plantNAme where plantName='Orthotrichum columbicum')  WHERE plantConcept_ID=84674 and classSystem='Scientific without authors';
+
+UPDATE plantStatus Set plantLevel='Species' WHERE plantConcept_ID=84674;
+
+UPDATE plantStatus set plantParent_ID=4947 WHERE plantConcept_ID=84674;

@@ -1,0 +1,11 @@
+--special case: write a table called oneRec to database so that insert commands can read from it to insert only one record (of other info)--
+
+CREATE TABLE onerec (
+    onerec integer NOT NULL
+);
+
+
+INSERT INTO onerec (onerec) VALUES (1);
+
+ALTER TABLE ONLY onerec
+    ADD CONSTRAINT onerec_pkey PRIMARY KEY (onerec);
