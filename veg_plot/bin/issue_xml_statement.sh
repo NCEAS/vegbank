@@ -1,4 +1,5 @@
 #!/bin/sh
+
 #
 # This shell script starts the nvc database
 # access module allowing a user to issue a 
@@ -6,13 +7,36 @@
 # that is embedded in an xml file 
 #
 # Author: J. Harris
-# Date: 3/08/2001 
+# Date: 3/08/2001
 
-STATEMENTXML=$1
+
+if [ "$#" -ne 2 ]
+then
+	echo "USAGE: issue_xml_statement.sh <xmlfile> <action>  "
+	echo "  action may include: query, insert or verify"
+	exit 1
+fi
+
+XMLFILE=$1
+ACTION=$2
+
+if test $ACTION = query 
+then
+	echo "issuing a database query"
+	STYLESHEET=../xml/querySpec.xsl
+else
+	if  test $ACTION = insert
+	then
+	echo "issuing a database insert"
+	STYLESHEET=../xml/vegPlot2001DBTrans.xsl
+else
+	echo "unrecognized command"
+fi
+fi
+
 STYLESHEET=../xml/querySpec.xsl
 ACCESSRESOURCE=../lib/dbAccess.jar
 ACCESSMODULE=../lib/dbAccess.jar
-#ACCESSMODULE=../src/
 JDBC=../lib/oracleJDBC.jar
 XALAN=../lib/xalan.jar
 XERCES=../lib/xerces.jar
@@ -24,7 +48,7 @@ fi
 
 CLASSPATH=$JDBC:$XALAN:$XERCES:$ACCESSRESOURCE
 
-# convert the existing path to windows
+## convert the existing path to windows
 if [ "$OSTYPE" = "cygwin32" ] || [ "$OSTYPE" = "cygwin" ] ; then
    CLASSPATH=`cygpath --path --windows "$CLASSPATH"`
 fi
@@ -32,8 +56,5 @@ fi
 #java   -cp $CPATH -jar $VCLIENT
 # convert the existing path to windows
 
-echo $CLASSPATH
-
-#java -classpath ${CLASSPATH}  -jar  $ACCESSMODULE $STATEMENTXML $STYLESHEET $2
 
 java -cp $CLASSPATH dbAccess $1 $2 $3 
