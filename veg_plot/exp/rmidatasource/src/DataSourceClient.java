@@ -325,7 +325,49 @@ public class DataSourceClient
 	
 //#STOP EDDITIONS
 	
-
+	/**
+	 * method that returns the state from which the plot was collected from 
+	 * the rmi server based on a plot
+	 *
+	 * @param plot -- string representation of a plot
+	 */
+	 public String getState(String plotName)
+	 {
+	 	String s = null;
+		try
+		{
+			s= source.getState(plotName) ;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+	 	return(s);
+	 }
+	
+	/**
+	 * method that returns community that a plot falls in
+	 * the rmi server based on a plot
+	 *
+	 * @param plot -- string representation of a plot
+	 */
+	 public String getCommunityName(String plotName)
+	 {
+	 	String s = null;
+		try
+		{
+			s=  source.getCommunityName(plotName) ;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+    }
+	 	return(s);
+	 }
+	
+	
 	
 	//returns the easting
 	public String getXCoord(String plotName)
@@ -441,39 +483,7 @@ public class DataSourceClient
 		return(s);
 	}
 	
-	//returns the state for the current plot
-	String getCommunityName(String plotName)
-	{
-		String s = null;
-		try
-		{
-		s = source.getCommunityName(plotName);
-		}
-		catch (Exception e)
-		{
-			System.out.println("Exception: "+e.getMessage());
-      e.printStackTrace();
-    }
-		return(s);
-	}
-	
-	
 
-	//returns the state in which the plot exists
-	String getState(String plotName)
-	{
-		String s = null;
-		try
-		{
-		s = source.getState(plotName);
-		}
-		catch (Exception e)
-		{
-			System.out.println("Exception: "+e.getMessage());
-      e.printStackTrace();
-    }
-		return(s);
-	}
 	
 	//retuns the hydrologic regime
 	String getHydrologicRegime(String plotName)
