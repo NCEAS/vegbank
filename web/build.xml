@@ -5,9 +5,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: mlee $'
-  * '$Date: 2003-02-01 17:27:23 $'
-  * '$Revision: 1.28 $'
+  * '$Author: farrell $'
+  * '$Date: 2003-02-03 19:30:04 $'
+  * '$Revision: 1.29 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -90,6 +90,7 @@
      <!-- set the newly created properties file as a filtersfile to distribute headers and footers -->
      <filter filtersfile="${sharedhtml_src}/filters_detokened.properties"/>
   </target>
+
 
 <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
 <target name="includes" depends="init">
@@ -277,7 +278,8 @@
 	INTO THE CORRECT PLACE
 -->
 <target name="dist" depends="	index, design, forms, general, images,
-													history, includes, init, news, panel, pubs"/>
+													history, includes, init, news, panel, pubs"
+                   description="=> Distribute all web files"/>
 <!-- FIXME dictionary, images target expects files not in cvs -->
 
 
