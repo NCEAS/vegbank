@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-07-23 22:25:30 $'
-* '$Revision: 1.49 $'
+* '$Date: 2003-07-23 22:28:31 $'
+* '$Revision: 1.50 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -295,6 +295,7 @@
                               pubs,
                               xsl,
                               web,
+			      robot,
                               workshop" description="=&gt; Distribute all web files"/>
   <target name="dist-bins" depends="init, panel-big-bin " description="=&gt; dist. all targets that require access to big binary storage "/>
   <target name="dist-everything" depends="dist, dist-bins, dictionary" description="=&gt; dist all targets in the dist target and dist-bins target : DIST EVERYTHING! "/>
