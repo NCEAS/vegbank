@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-11-06 01:10:20 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2004-11-11 22:54:49 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.FileWrapper;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.DateUtility;
 import org.vegbank.common.utility.WebFileFetch;
 import org.vegbank.common.utility.datafileexchange.DataFileDB;
 import org.vegbank.dataload.XML.*;
@@ -99,6 +100,7 @@ public class UploadPlotAction extends VegbankAction
 		if (upload) {
 			try {
 				file = new FileWrapper(theForm.getPlotFile());
+
 			} catch (Exception ex) {
 				errors.add(
 						ActionErrors.GLOBAL_ERROR,
@@ -109,6 +111,7 @@ public class UploadPlotAction extends VegbankAction
 				saveErrors(request, errors);
 				return (mapping.getInputForward());
 			}
+
 		} else {
 			fileURL = theForm.getPlotFileURL();
 
@@ -216,7 +219,14 @@ public class UploadPlotAction extends VegbankAction
 				
 						case UploadPlotForm.VEGBANK_XML_FORMAT :
 							log.info("UploadPlotAction: VEGBANK_XML_FORMAT format uploaded");
-							worker = this.uploadVegbankXML(request, savedFileName, validate, upload, rectify);
+							//worker = this.uploadVegbankXML(request, savedFileName, validate, true, rectify);
+
+
+//// for testing only - set dbCommit to true when ready
+worker = this.uploadVegbankXML(request, savedFileName, validate, true, rectify);
+
+
+
 							break;
 				
 						default :
@@ -251,6 +261,7 @@ public class UploadPlotAction extends VegbankAction
 
 
 		// put the worker thread in the session
+		/*
 		if (worker != null) {
 			log.debug("setting thread in session");
 			HttpSession session = request.getSession();
@@ -260,12 +271,13 @@ public class UploadPlotAction extends VegbankAction
 		} else {
 			log.debug("no worker thread");
 		}
+		*/
 
 		ActionMessages messages = new ActionMessages();
 		messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					"errors.general", worker.getStatusMessages()));
 		saveMessages(request, messages);
-		return mapping.findForward("PleaseWait");
+		return mapping.findForward("success");
 	}
 	
 	/**
@@ -284,12 +296,12 @@ public class UploadPlotAction extends VegbankAction
 	 * @return worker thread 
 	 */
 	private VegbankXMLUploadThread uploadVegbankXML(HttpServletRequest request, String savedFileName, 
-			boolean validate, boolean upload, boolean rectify) throws Exception
+			boolean validate, boolean dbCommit, boolean rectify) throws Exception
 	{
-		//System.out.println(validate + " , " +  upload + " , " + rectify);
+		//System.out.println(validate + " , " +  dbCommit + " , " + rectify);
 		log.debug("============= SPAWNING LOADER THREAD =============");
 		VegbankXMLUploadThread worker = new VegbankXMLUploadThread();
-		worker.init(validate, rectify, upload, savedFileName);
+		worker.init(validate, rectify, dbCommit, savedFileName);
 		worker.start();
 		return worker;
 	}
@@ -389,21 +401,32 @@ public class UploadPlotAction extends VegbankAction
 	}
 
 
-	private void setSaveDir(String userDirName) {
+	/**
+	 * Returns the full upload path to which files should be saved.
+	 * FORMAT:  /basePath/userId/timestamp/
+	 *
+	 * Does not mkdirs.
+	 */
+	private void setSaveDir(String userId) {
 		saveDir = uploadPath;
 
 		if (!saveDir.endsWith(File.separator)) {
 			 saveDir += File.separator;
 		}
 
-		saveDir += userDirName;
+		saveDir += userId;
 
 		if (!saveDir.endsWith(File.separator)) {
 			 saveDir += File.separator;
 		}
+
+		saveDir += DateUtility.getTimestamp() + File.separator;
 	}
 
 
+	/**
+	 * Simply returns the save directory as is.
+	 */
 	private String getSaveDir() {
 		return this.saveDir;
 	}
