@@ -15,16 +15,16 @@ ALTER TABLE classContributor ADD COLUMN emb_classContributor Integer;
 
 --set default values: to 10 so that we can automatically show those <5 (new values not shown until script completes to denorm this data)
 
-ALTER TABLE plot ALTER COLUMN emb_plot SET DEFAULT 10;
-ALTER TABLE observation ALTER COLUMN emb_observation SET DEFAULT 10;
-ALTER TABLE disturbanceObs ALTER COLUMN emb_disturbanceObs SET DEFAULT 10;
-ALTER TABLE soilObs ALTER COLUMN emb_soilObs SET DEFAULT 10;
-ALTER TABLE taxonObservation ALTER COLUMN emb_taxonObservation SET DEFAULT 10;
-ALTER TABLE taxonInterpretation ALTER COLUMN emb_taxonInterpretation SET DEFAULT 10;
-ALTER TABLE taxonAlt ALTER COLUMN emb_taxonAlt SET DEFAULT 10;
-ALTER TABLE taxonImportance ALTER COLUMN emb_taxonImportance SET DEFAULT 10;
-ALTER TABLE stemCount ALTER COLUMN emb_stemCount SET DEFAULT 10;
-ALTER TABLE stemLocation ALTER COLUMN emb_stemLocation SET DEFAULT 10;
-ALTER TABLE commClass ALTER COLUMN emb_commClass SET DEFAULT 10;
-ALTER TABLE commInterpretation ALTER COLUMN emb_commInterpretation SET DEFAULT 10;
-ALTER TABLE classContributor ALTER COLUMN emb_classContributor SET DEFAULT 10;
+ALTER TABLE plot ALTER COLUMN emb_plot DROP DEFAULT;
+ALTER TABLE observation ALTER COLUMN emb_observation DROP DEFAULT;
+ALTER TABLE disturbanceObs ALTER COLUMN emb_disturbanceObs DROP DEFAULT;
+ALTER TABLE soilObs ALTER COLUMN emb_soilObs DROP DEFAULT;
+ALTER TABLE taxonObservation ALTER COLUMN emb_taxonObservation DROP DEFAULT;
+ALTER TABLE taxonInterpretation ALTER COLUMN emb_taxonInterpretation DROP DEFAULT;
+ALTER TABLE taxonAlt ALTER COLUMN emb_taxonAlt DROP DEFAULT;
+ALTER TABLE taxonImportance ALTER COLUMN emb_taxonImportance DROP DEFAULT;
+ALTER TABLE stemCount ALTER COLUMN emb_stemCount DROP DEFAULT;
+ALTER TABLE stemLocation ALTER COLUMN emb_stemLocation DROP DEFAULT;
+ALTER TABLE commClass ALTER COLUMN emb_commClass DROP DEFAULT;
+ALTER TABLE commInterpretation ALTER COLUMN emb_commInterpretation DROP DEFAULT;
+ALTER TABLE classContributor ALTER COLUMN emb_classContributor DROP DEFAULT;
