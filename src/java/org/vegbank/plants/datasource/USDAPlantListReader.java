@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-21 22:26:39 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-04-22 18:52:09 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -431,10 +431,8 @@ public class USDAPlantListReader implements Constants, PlantListReader
 						//System.out.println("LC -->" + Character.isLowerCase( getToken(fieldTwo, 2).charAt(0) ) );
 						classification = PLANT_CLASS_GENUS;
 					}
-				// first letter of either of the first two tokens is '×' ASCII Code 215 ( not the letter x) 
 				else
-					if (getToken(nameField, 1).startsWith("×")
-						|| getToken(nameField, 2).startsWith("×"))
+					if (isHybrid(nameField))
 					{
 						classification = PLANT_CLASS_HYBRID;
 					}
@@ -445,6 +443,26 @@ public class USDAPlantListReader implements Constants, PlantListReader
 			}
 
 		return classification;
+	}
+
+	private boolean isHybrid(String nameField)
+	{
+		boolean isHybrid = false;
+		String nameFirst =  getToken(nameField, 1);
+		String nameSecond = getToken(nameField, 2);
+		
+		// first letter of either of the first two tokens is '×' ASCII Code 215 ( not the letter x) 
+		if (nameFirst.startsWith("×") || nameSecond.startsWith("×") )
+		{
+			isHybrid = true;
+		}
+		// also check the letter lowwercase x
+		if (nameFirst.startsWith("x") || nameSecond.startsWith("x") )
+		{
+			isHybrid = true;
+		}
+		
+		return isHybrid;
 	}
 
 	public static void main(String[] args)

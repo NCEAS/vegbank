@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 00:15:51 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2003-04-22 18:52:09 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ public class DBPlantWriter
 			int plantNameId =
 				this.insertPlantName(
 					refId,
-					plant.getScientificNameNoAuthors(),
+					plant.getScientificName(),
 					Utility.dbAdapter.getDateTimeFunction() );
 	
 			// Insert Other Names ???
