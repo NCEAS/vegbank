@@ -1,8 +1,14 @@
 vim \
+src/java/org/vegbank/common/utility/VBModelBeanToDB.java \
+src/java/org/vegbank/dataload/XML/*.java \
 web/forms/plot-submit.jsp \
 web/forms/plot-upload-summary.jsp \
 src/java/org/vegbank/plots/datasource/*.java \
-src/java/org/vegbank/dataload/XML/*.java \
-src/java/org/vegbank/ui/struts/UploadPlot*.java
+src/java/org/vegbank/common/utility/DatasetUtility.java \
+src/java/org/vegbank/common/utility/DataloadLog.java \
+src/java/org/vegbank/common/utility/Utility.java \
+src/java/org/vegbank/common/utility/KeywordGen.java \
+src/java/org/vegbank/common/utility/ServletUtility.java \
+src/java/org/vegbank/ui/struts/UploadPlot*.java \
 web/src/web/WEB-INF/struts-config.xml \
 src/java/log4j.properties
