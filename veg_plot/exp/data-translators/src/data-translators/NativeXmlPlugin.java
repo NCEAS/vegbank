@@ -24,18 +24,18 @@ import  xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  * 	'$Author: farrell $'
- *	'$Date: 2002-12-05 23:40:08 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2002-12-11 21:13:51 $'
+ *	'$Revision: 1.9 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
 //public class NativeXmlPlugin
 {
-  //root node of the in-memory DOM structure
-  private Node root;
+	//root node of the in-memory DOM structure
+	private Node root;
 	//the current value of the root node
 	private String rootValue = null;
-  // Document node of the in-memory DOM structure
+	// Document node of the in-memory DOM structure
   private Document doc;
   // XML file name in string form
   private String fileName;
@@ -270,25 +270,25 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	 **
 	 **/
 	 
-	 /**
-	  * This method takes as input the plot attribute name of an attribute
-		* that may only have a single occurence in a plot (eg., latitude) and 
-		* returns the element value.  The method was written to minimize the amount 
-		* of code that had to be written for each of the methods that are used to 
-		* implement the interface
-		* @param element -- the attribute name that is to be returned from the 
-		* 	xml document
-		* @param plotName -- the name of the plot for which the attribute should be 
-		*		returned
-		* @return elementValue -- the value of the query attribute
-		*/
-		private String getPlotAttribute(String plotName, String elementName)
-		{
-			String elementValue = null;
-			this.init(plotName);
-			elementValue = parse.getNodeValue(doc, elementName);
-			return(elementValue);
-		}
+	/**
+	* This method takes as input the plot attribute name of an attribute
+	* that may only have a single occurence in a plot (eg., latitude) and 
+	* returns the element value.  The method was written to minimize the amount 
+	* of code that had to be written for each of the methods that are used to 
+	* implement the interface
+	* @param element -- the attribute name that is to be returned from the 
+	* 	xml document
+	* @param plotName -- the name of the plot for which the attribute should be 
+	*		returned
+	* @return elementValue -- the value of the query attribute
+	*/
+	private String getPlotAttribute(String plotName, String elementName)
+	{
+		String elementValue = null;
+		this.init(plotName);
+		elementValue = parse.getNodeValue(doc, elementName);
+		return(elementValue);
+	}
 		
 	public String getPlotCode(String plotName)
 	{
@@ -396,6 +396,11 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	{
 		return null;
 	}
+	
+	public String getObservationContributorRole(String contributorWholeName)
+	{
+		return null;
+	}	
 	
 	public Vector getPlaceNames(String plotName)
 	{
@@ -505,6 +510,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "geology") );
 	}
+
 	public String getCountry(String plotName)
 	{
 		this.init(plotName);

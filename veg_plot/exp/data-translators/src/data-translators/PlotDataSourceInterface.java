@@ -17,8 +17,8 @@ import java.util.*;
  * 
  * Release: @release@ <br>
  * '$Author: farrell $' <br>
- * '$Date: 2002-12-05 23:41:41 $' <br>
- * '$Revision: 1.14 $' <br>
+ * '$Date: 2002-12-11 21:13:52 $' <br>
+ * '$Revision: 1.15 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -28,12 +28,8 @@ public interface PlotDataSourceInterface
 	Vector getPlotNames();
 	
 	
-	//this method retrives all the attributes for a gine plotname
-	void getPlotData(String plotName)
-	throws Exception;
-		
-		
-		
+	//this method retrives all the attributes for a given plotname
+	void getPlotData(String plotName) throws Exception;
 		
 		
 	/**
@@ -304,6 +300,7 @@ public interface PlotDataSourceInterface
 	String getObservationContributorCountry(String contributorWholeName);
 	String getObservationContributorCurrentFlag(String contributorWholeName);
 	String getObservationContributorAddressStartDate(String contributorWholeName);
+	String getObservationContributorRole(String contributorWholeName);
 	 
 	/**
 	 * returns the hydrologic regime of a plot (this is a closed list

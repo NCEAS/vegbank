@@ -10,9 +10,9 @@ import java.sql.*;
  * database <br> <br>
  *
  *	
- *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-05 23:41:00 $' <br>
- * 	'$Revision: 1.20 $' <br>
+ *	'$Author: farrell $' <br>
+ *	'$Date: 2002-12-11 21:13:52 $' <br>
+ *	'$Revision: 1.21 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -229,6 +229,11 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	}
 	
 	public String getObservationContributorAddressStartDate(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorRole(String contributorWholeName)
 	{
 		return null;
 	}

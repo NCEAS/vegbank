@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: farrell $' <br>
- *  '$Date: 2002-12-11 18:04:10 $' <br>
- * 	'$Revision: 1.28 $' <br>
+ *  '$Date: 2002-12-11 21:13:52 $' <br>
+ * 	'$Revision: 1.29 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -62,6 +62,11 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	public String slopeGradient = null;
 	public String hydrologicRegime = null;
 	public String topoPosition = null;
+  	public Vector observationContributors = new Vector();
+  	// Rules for assigning role
+  	public static final String roleFirst = "Primary Observer";
+  	public static final String roleRest = "Co-Observer";  
+  	public static final int roleFirstIndex = 0;
 	
 	//this is used by the get location method
 	private String locationCode = null;
@@ -1300,7 +1305,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 
 	public Vector getObservationContributors(String plotName)
 	{
-		Vector v = new Vector();
+		//Vector v = new Vector();
 		Statement stmt = null;
 		
 		try {
@@ -1308,21 +1313,18 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			ResultSet rs = stmt.executeQuery("select ([Surveyors]) "
 				+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
 		
-			System.out.println("Trying to get surveyors for " + plotName);
+			System.out.println("TNCPlotsDB > Trying to get surveyors for " + plotName);
 			
 			while (rs.next()) 
 			{
 				String s = rs.getString(1);
-				System.out.println("GOTTT " + s);
 				// split into contributors 
 				StringTokenizer st = new StringTokenizer( s, ",");
 				while ( st.hasMoreTokens() ) {
 					String contributorFullName = st.nextToken();
-					v.addElement( contributorFullName );
+					observationContributors.addElement( contributorFullName );
 					System.out.println("TNCPlotsDB > Found Contributor " + contributorFullName );
 				}
-				//v.addElement("Jim Drake");
-				//v.addElement("Dennis Grossman");
 			}
 		}
 		catch( Exception e)
@@ -1330,7 +1332,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
-		return(v);	
+		return(observationContributors);	
 	}
 
 	public String getObservationContributorSalutation(String contributorWholeName)
@@ -1457,7 +1459,39 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	{
 		return null;
 	}
-	
+
+  
+	public String getObservationContributorRole(String contributorWholeName)
+  {
+  		int index = 666;   // Should throw an exception if not initialized 
+  		String role = "";
+  		
+		// Use name to find out if name first, second, etc
+		for (int i =0; i < observationContributors.size(); i++)
+		{
+			String nameToCheck = (String) observationContributors.elementAt(i);
+			if ( contributorWholeName.equals(nameToCheck) )
+				index = i;
+		}
+		
+		
+		if ( index == 666 )
+		{
+				System.out.println("TNCPlotsDB > Error: Could not find index for  '" + contributorWholeName + 
+																			"' observationContributor in Vector  observationContributors" );
+		}
+		else if (  index == roleFirstIndex )
+		{
+			role =  roleFirst;
+		}
+		else 
+		{	
+			role = roleRest;
+		}
+		return role;
+    
+  }
+  
 	/**
 	 * returns the author's observation code
 	 * @param plotName -- the plot
