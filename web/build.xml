@@ -6,8 +6,8 @@
   *    Release: @release@
   *
   * '$Author: harris $'
-  * '$Date: 2002-06-25 01:49:07 $'
-  * '$Revision: 1.18 $'
+  * '$Date: 2002-06-25 16:29:32 $'
+  * '$Revision: 1.19 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -41,6 +41,7 @@
 	<property name="history_src" value="./history" />
 	<property name="pubs_src" value="./pubs" />
 	<property name="style_src" value="./includes" />
+	<property name="image_src" value="./images" />
 	
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
@@ -48,6 +49,7 @@
 	
 	<!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
 	<property name="forms_server" value="/usr/local/devtools/jakarta-tomcat/webapps/forms"/>
+	<property name="image_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/images"/>
 	<property name="general_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/"/>
 	<property name="design_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/design/"/>
 	<property name="dictionary_server" value="/usr/local/devtools/jakarta-tomcat/webapps/vegbank/dbdictionary/"/>
@@ -89,6 +91,16 @@
         </copy>
 </target>
 
+
+<!-- DISTRIBUTE THE IMAGES -->
+<target name="images" depends="init">
+   <copy todir="${image_server}" filtering="no" >
+		<fileset dir="${image_src}" >
+		<include name="**"/>
+		</fileset>
+	</copy>
+</target>
+																												
 
 
 <!--
