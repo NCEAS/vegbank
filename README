@@ -1,10 +1,43 @@
 '$Author: harris $'
-'$Date: 2002-11-26 19:34:18 $'
-'$Revision: 1.3 $'
+'$Date: 2002-11-26 23:07:11 $'
+'$Revision: 1.4 $'
 THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
 
+REQUIRED JAR FILES
+-----------------
+the following jar files are required in the servlet container
 
-Database Setup:
+vegcommunity.jar
+planttaxonomy.jar
+jdbc7.0-1.2.jar
+web.xml
+utilities.jar
+servlet.jar
+multipart.jar
+frameworkservlet-config.xml
+datatranslator.jar
+database_access.jar
+ant.jar
+vegbankquery.jar
+usermanagement.jar
+stylesheet-generator.jar
+frameworkservletmodule.jar
+datafile-exchange.jar
+authservletmodule.jar
+xalan_1_2_2.jar
+xmlresource.jar
+xml-apis.jar
+xerces_1_4.jar
+
+
+PROPERTIES FILES:
+----------------
+./veg_plot/exp/servlet/build/authentication.properties -- edit the name of the server
+
+
+
+DATABASE SETUP:
+---------------
 
 Vegclass has three separate database parts for Plots, Plant Taxonomy and Plant 
 Community. There is also a Framework database for shared resources like users.
