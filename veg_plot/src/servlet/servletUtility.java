@@ -120,19 +120,25 @@ outString = mainPage;
 
 	
 /**
- *  Method to store html code that can be accessed based on the requests
- *  made by the user 
+ * Method to store html code that can be accessed based on the requests
+ * made by the user that will allow the user to access the summary viewer class
+ * called 'viewData' and depending on the input parameter passed will show the 
+ * user the summary of the selected plots, veg vommunities, or plant taxonmies.
+ *
+ * @param summaryViewType -- the type of summary to view, can include vegPlot, 
+ *	vegCommunity, or plantTaxa 
  */
-
-public void getViewOption () {
+public void getViewOption (String summaryViewType) {
 ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 String response="<html> \n"
 +"<body> \n"
 +"<head> \n"
-+"<form action=\""  //these should be together
-+"viewData\"  \n"  //this is the servlet name
-+"method=POST> \n"
-+"<input type=\"submit\" value=\"view plots\" /> \n"
++"<form action="
++"viewData \n"  
++"method=GET> \n"
++"<input type=hidden name=resultType value=summary> \n"
++"<input type=hidden name=summaryViewType value="+summaryViewType+"> \n"
++"<input type=\"submit\" value=\"view data\" /> \n"
 +"</form> \n"
 +"</body> \n"
 +"</html> \n";
