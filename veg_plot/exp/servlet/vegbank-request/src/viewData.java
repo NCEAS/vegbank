@@ -10,7 +10,19 @@ import java.util.*;
 import java.math.*;
 import java.net.URL;
 
+//this is the new xalan
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+
 import xmlresource.utils.transformXML;
+import servlet.util.GetURL;
+
 
 
 /**
@@ -34,106 +46,160 @@ import xmlresource.utils.transformXML;
 public class viewData extends HttpServlet 
 {
 
-ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+	ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
 
-private String downLoadAction=null;
-private String summaryViewType=null;
-private String resultType=null;
-private String servletDir= null; //like: /opt/jakarta/harris/servlet
-private String servletPath=null; //like: /harris/servlet
-
-//access the method to transfor the xml document and retrieve the string writer
-transformXML m = new transformXML();
-			
-/** Handle "POST" method requests from HTTP clients */
-public void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws IOException, ServletException 
-{
-        doGet(request, response);
-}
-
-
-/** Handle "GET" method requests from HTTP clients */
-public void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws IOException, ServletException  
-{
-
-response.setContentType("text/html");
-PrintWriter out = response.getWriter();
-
-//grab all the input parameters
-downLoadAction=request.getParameter("downLoadAction");
-summaryViewType=request.getParameter("summaryViewType");
-resultType=request.getParameter("resultType");
-//print the input to the system
-System.out.println("viewData.doGet - input params > \n downLoadAction: "+
-	downLoadAction+" \n summaryViewType: "+summaryViewType+" \n"
-	+" resultType: "+resultType);
-
-/**
- * Determine if the user wants to download the data or just to view the summary
- * table  - in the future these options will increase
- *
- * Check to see if the user wants to download the data and if so do below - which
- * is to write a list of the selected plots (checked check-boxes) to the local
- * (lib) directory and then call the fileDownload servlet to seperate the desied
- * plots form the undesired plots and then transform the data into the format
- * specified by the form (download.html) calling the fileDownload servlet
- *
- */
-
-//handle a download request
-if (downLoadAction != null) 
-{
-	try 
-	{
-	//print out to file the names of the plots and their 
-	//plotId's for use by the fileDownload servlet
+	private String downLoadAction=null;
+	private String summaryViewType=null;
+	private String resultType=null;
+	private String servletDir= null; //like: /opt/jakarta/harris/servlet
+	private String servletPath=null; //like: /harris/servlet
+	private String userEmail = null;
 	
-	servletDir = rb.getString("requestparams.servletDir");
-	servletPath = rb.getString("servlet-path");
 	
- 	PrintStream outFile  = new PrintStream(
-		new FileOutputStream(servletDir+"plotDownloadList", false));
-		
-	//use this function to figure out the type and number of inputs
-	//it is a temporary function - comment out later
-	Enumeration enum =request.getParameterNames();
-	while (enum.hasMoreElements()) 
+	//access the method to transfor the xml document and retrieve 
+	//the string writer
+	private transformXML m = new transformXML();
+	private GetURL gurl = new GetURL();
+	
+	
+	//constructor
+	public viewData()
 	{
-		String name = (String) enum.nextElement();
-		String values[] = request.getParameterValues(name);
-		if (values != null) 
+		try
 		{
-			for (int i=0; i<values.length; i++) 
-			{
-				if (name.equals("plotName")) 
-				{
-					System.out.println(name+" "+values[i]);
-					outFile.println(values[i]);	
-					out.println(name +" ("+ i + "): "
-					+values[i]+"; <br>");
-				}
-			}
+			System.out.println("init: viewData" );
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
 	}
- 	//now call the download page
- 	response.sendRedirect("http://vegbank.nceas.ucsb.edu/forms/resultset-download.html");	
-	}
-	catch( Exception e ) 
+	
+
+	/** Handle "POST" method requests from HTTP clients */
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException 
 	{
-		System.out.println("servlet failed in: viewData.main"
-		+e.getMessage());
+        doGet(request, response);
 	}
-}
-//If the download page is not requested then request then show the summary
-else 
-{
-	viewResultsSummary(response, out, "fileName", summaryViewType.trim());
-}
 
-}
 
+	/** Handle "GET" method requests from HTTP clients */
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws IOException, ServletException  
+	{
+
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+
+		//grab all the input parameters
+		downLoadAction=request.getParameter("downLoadAction");
+		summaryViewType=request.getParameter("summaryViewType");
+		resultType=request.getParameter("resultType");
+		this.userEmail = this.getCookieValue(request);
+		
+		//print the input to the system
+		System.out.println("viewData.doGet - input params > \n downLoadAction: "
+		+downLoadAction
+		+" \n summaryViewType: "+summaryViewType
+		+" \n user: " + this.userEmail
+		+" \n resultType: "+resultType);
+
+	
+		/**
+ 		* Determine if the user wants to download the data or just to view the summary
+ 		* table  - in the future these options will increase
+ 		*
+ 		* Check to see if the user wants to download the data and if so do below - which
+ 		* is to write a list of the selected plots (checked check-boxes) to the local
+ 		* (lib) directory and then call the fileDownload servlet to seperate the desied
+ 		* plots form the undesired plots and then transform the data into the format
+ 		* specified by the form (download.html) calling the fileDownload servlet
+ 		*
+ 		*/
+
+		//handle a download request
+		if (downLoadAction != null)
+		{
+			try 
+			{
+				//print out to file the names of the plots and their 
+				//plotId's for use by the fileDownload servlet
+	
+				servletDir = rb.getString("requestparams.servletDir");
+				servletPath = rb.getString("servlet-path");
+	
+ 				PrintStream outFile  = new PrintStream(
+				new FileOutputStream(servletDir+"plotDownloadList", false));
+		
+				//use this function to figure out the type and number of inputs
+				//it is a temporary function - comment out later
+				Enumeration enum =request.getParameterNames();
+				while (enum.hasMoreElements()) 
+				{
+					String name = (String) enum.nextElement();
+					String values[] = request.getParameterValues(name);
+					if (values != null) 
+					{
+						for (int i=0; i<values.length; i++) 
+						{
+							if (name.equals("plotName")) 
+							{
+								System.out.println(name+" "+values[i]);
+								outFile.println(values[i]);	
+								out.println(name +" ("+ i + "): "
+								+values[i]+"; <br>");
+							}
+						}
+					}
+				}
+ 			//now call the download page
+ 			response.sendRedirect("http://vegbank.nceas.ucsb.edu/forms/resultset-download.html");	
+			}
+			catch( Exception e ) 
+			{
+				System.out.println("servlet failed in: viewData.main"
+				+e.getMessage());
+			}
+		}
+		//If the download page is not requested then request then show the summary
+		else 
+		{
+			viewResultsSummary(response, out, "fileName", summaryViewType.trim());
+		}
+	}
+	
+	
+	
+	/**
+	 * method that returns the cookie value associated with the 
+	 * current browser
+	 */
+	private String getCookieValue(HttpServletRequest req)
+	{
+		
+		//get the cookies - if there are any
+		String cookieName = null;
+		String cookieValue = null;
+
+		Cookie[] cookies = req.getCookies();
+		//determine if the requested page should be shown
+    if (cookies.length > 0) 
+		{
+			for (int i = 0; i < cookies.length; i++) 
+			{
+      	Cookie cookie = cookies[i];
+				//out.print("Cookie Name: " +cookie.getName()  + "<br>");
+        cookieName=cookie.getName();
+				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
+				cookieValue=cookie.getValue();
+				System.out.println("ViewData > cleint passing the cookie: "+cookieName+" value: "
+					+cookieValue);
+			}
+  	}
+		return(cookieValue);
+	}
 
 
 /**
@@ -169,8 +235,12 @@ else
 			//the default (plots) stylesheet
 			else if (summaryViewType.equals("vegPlot")) 
 			{
-				///styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/showSummary.xsl";
-				styleSheet=servletDir+"transformMultiPlotSummary.xsl";
+				System.out.println("ViewData > retrieving the users stylesheet");
+				String stylefile = getUserDefaultStyle("user");
+				System.out.println("ViewData > stylesheet: " + stylefile );
+				styleSheet = stylefile;
+				
+				//styleSheet=servletDir+"transformMultiPlotSummary.xsl";
 			}
 			//let the user know that there is a problem with the request
 			else 
@@ -178,27 +248,69 @@ else
 				out.println("viewData.viewResultsSummary: unknown request for xsl: '"
 					+summaryViewType+"'" );
 			}
+				System.out.println("viewData > used old transformer");
+				// access the method to transfor the xml document and 
+				// retrieve the string writer
+				String teststyle = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/test.xsl";
+				m.getTransformed(servletDir+"test-summary.xml", teststyle);
+				StringWriter transformedData=m.outTransformedData;
+				
+				
+				Vector contents = this.convertStringWriter(transformedData);
+				
+				//##/test the new method in the xmlTransformer class
+///			transformXML transformer = new transformXML();
+///			String test = transformer.getTransformedNoErrors(servletDir+"summary.xml", styleSheet); 
+///			out.println(test);	
+				for (int ii=0;ii< contents.size() ; ii++) 
+				{
+					out.println( (String)contents.elementAt(ii) );
+				}
 
-			//access the method to transfor the xml document and retrieve the string writer
-			m.getTransformed(servletDir+"summary.xml", styleSheet);
-			StringWriter transformedData=m.outTransformedData;
-
-			Vector contents = this.convertStringWriter(transformedData);
 	
-			for (int ii=0;ii< contents.size() ; ii++) 
-			{
-				out.println( (String)contents.elementAt(ii) );
-				///out.println(u.outString[ii]+"");
-			}
 	
 		} 
 		catch( Exception e ) 
 		{
-				System.out.println("servlet failed in: "
+			System.out.println("servlet failed in: "
 			+"viewData.viewResultsSummary: "
 			+e.getMessage());
+			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
+	/**
+	 * method to request the users default style sheet from the 
+	 * profile database
+	 */
+	 private String getUserDefaultStyle(String userName)
+	 {
+			String htmlResults = null;
+    	try
+    	{
+      	//create the parameter string to be passed to the DataRequestServlet -- 
+				//this first part has the data request type stuff
+      	StringBuffer sb = new StringBuffer();
+      	sb.append("?action=userdefaultstyle&username="+userName);
+			
+      	//connect to the dataExchaneServlet
+				String uri = "http://vegbank.nceas.ucsb.edu/framework/servlet/dataexchange"+sb.toString().trim();
+				System.out.println("ViewData > sent to servlet: " + uri);
+      	int port=80;
+      	String requestType="POST";
+      	htmlResults = gurl.requestURL(uri);
+    	}
+    	catch( Exception e )
+    	{
+     	 System.out.println("** failed :  "
+     	 +e.getMessage());
+    	}
+    	return(htmlResults);
+	 }
+	
 	
 	
 	/**
@@ -229,7 +341,6 @@ else
 				v.addElement( line.trim() );
 				lineCnt++;  //increment the line
 			}
-			//System.out.println("###### number of lines transformed: "+lineCnt);
 
 		} 
 		catch( Exception e ) 
