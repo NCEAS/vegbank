@@ -7,14 +7,12 @@
   	Targets: {init} allfields logical implementation clean-local-html clean-dest-html  dist-closedlist-tokenfile  dist-dataxml **dictionary2html **distdatadic **dd-index **dd-guide
   	  ** indicates targets that are referenced automatically by selected one of the first three targets
   </echo>
-
     <condition property="webapp" value="vegbank">
       <not>
         <isset property="webapp"/>
       </not>
     </condition>
     <echo>init docs/xml webapp '${webapp}'</echo>
-
     <!-- freely editable variables -->
     <property name="origData" value="db_model_vegbank.xml"/>
     <property name="htmlPrefix" value="dd"/>
@@ -30,7 +28,10 @@
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
     <property name="dictionary_server" value="${tomcat.home.dir}/webapps/${webapp}/dbdictionary/"/>
     <property name="style_server" value="${tomcat.home.dir}/webapps/${webapp}/includes/"/>
-    <property name="static_xmlserver" value="/var/www/html/xml"/>
+    <property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
+    <property name="vegdocs.dir" value="/vegdocs"/>  
+    <property name="vegdocs_server" value="${apache.document.root}${vegdocs.dir}"/>
+    <property name="static_xmlserver" value="${vegdocs_server}/xml"/>
     <!-- filters -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
     <filter filtersfile="${style_server}/manual_filters.properties"/>
