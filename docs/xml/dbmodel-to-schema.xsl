@@ -186,6 +186,7 @@
   <xsl:template name="handleType">
     <xsl:choose>
       <xsl:when test="attType='BLOB'">xs:hexBinary</xsl:when>
+      <xsl:when test="attType='oid'">xs:hexBinary</xsl:when>
       <xsl:when test="attType='Boolean'">xs:boolean</xsl:when>
       <xsl:when test="attType='Date'">xs:dateTime</xsl:when>
       <xsl:when test="attType='Float'">xs:decimal</xsl:when>
