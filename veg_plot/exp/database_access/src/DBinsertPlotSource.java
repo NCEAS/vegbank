@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 18:09:07 $'
- * 	'$Revision: 1.6 $'
+ *  '$Date: 2002-03-27 19:46:13 $'
+ * 	'$Revision: 1.7 $'
  */
 package databaseAccess;
 
@@ -351,7 +351,11 @@ public class DBinsertPlotSource
 						System.out.println("observation>: "+commit);
 						commit = false;
 					}
-					
+					if( insertCommunities() == false )
+					{
+						System.out.println("communities>: "+commit);
+						commit = false;
+					}
 					if( insertStrata() == false )
 					{
 						System.out.println("observation>: "+commit);
@@ -829,6 +833,51 @@ public class DBinsertPlotSource
 	}
 	
 	
+	/**
+	 * method that returns false if the community cannot be stored in the 
+	 * database
+	 * 
+	 */
+	private boolean insertCommunities()
+	{
+		try 
+		{
+				StringBuffer sb = new StringBuffer();
+				//String name = source.getCommunityName(plotName);
+				String name = "test";
+				//these are place holders for later extension of the plot source
+				String code =  "";
+				String framework = "";
+				String level = "";
+				
+				//insert the strata values
+				sb.append("INSERT into commclass (observation_id, commName, " 
+				+" commCode, commFramework, commLevel) "
+				+" values(?,?,?,?,?)");
+				
+				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+  		  // Bind the values to the query and execute it
+  		  pstmt.setInt(1, plotObservationId);
+				pstmt.setString(2, name);
+  		  pstmt.setString(3, code);
+				pstmt.setString(4, framework);
+				pstmt.setString(5, level);
+				//execute the p statement
+  		  pstmt.execute();
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println("Caught Exception: "+e.getMessage() ); 
+			e.printStackTrace();
+			//System.exit(0);
+			return(false);
+		}
+		return(true);
+	}
+	
+	
+	
 	
 	
 	/**
@@ -850,19 +899,16 @@ public class DBinsertPlotSource
 				strataId = getNextId("stratum");
 				
 				String sName = strataTypes.elementAt(i).toString();
-			
 				
 				String cover = source.getStrataCover(plotName, sName);
 				String base =  source.getStrataBase(plotName, sName);
 				String height = source.getStrataHeight(plotName, sName);
 
-				
 				//insert the strata values
 				sb.append("INSERT into STRATUM (stratum_id, observation_id, stratumName, " 
 				+" stratumCover, stratumBase ,stratumHeight) "
 				+" values(?,?,?,?,?,?)");
 				
-			
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
   		  // Bind the values to the query and execute it
   		  pstmt.setInt(1, strataId);
@@ -871,14 +917,10 @@ public class DBinsertPlotSource
   		  pstmt.setString(4, cover);
 				pstmt.setString(5, base);
 				pstmt.setString(6, height);
-			
-			
 				//execute the p statement
   		  pstmt.execute();
   		 // pstmt.close();
-			
 			}			
-		
 		}
 		catch (Exception e)
 		{
@@ -1002,7 +1044,6 @@ public class DBinsertPlotSource
 	 */
 	private boolean insertStaticPlotData(int projectId)
 	{
-	//	int plotId = -999;
 		StringBuffer sb = new StringBuffer();
 		try 
 		{
@@ -1108,6 +1149,10 @@ public class DBinsertPlotSource
 	/**
 	 * utility method to get the loatitude and longitude from 
 	 * the web service that serves that information
+	 * 
+	 * @param xCoord -- the x coordinate
+	 * @param yCoord -- the y coordinate
+	 * @param zone -- the utm zone 
 	 */
 	private Hashtable getGeoCoords(String xCoord, String yCoord, String zone)
 	{
@@ -1146,6 +1191,8 @@ public class DBinsertPlotSource
 		}
 		return(h);
 	}
+	
+	
 	
 	//method that returns true if the project with this name exists in the 
 	//database
