@@ -389,7 +389,8 @@ CREATE TABLE party
     organizationName varchar (120),
     currentName integer,
     contactInstructions varchar (1000),
-    owner integer NOT NULL,
+    owner integer ,
+		email varchar (120),
     PRIMARY KEY(PARTY_ID)
 );
 
@@ -483,7 +484,9 @@ CREATE TABLE projectContributor
     PROJECTCONTRIBUTOR_ID serial,
     PROJECT_ID integer NOT NULL,
     PARTY_ID integer NOT NULL,
-    ROLE_ID integer NOT NULL,
+    ROLE_ID integer ,
+		surname varchar(50),
+		role varchar(50),
     PRIMARY KEY(PROJECTCONTRIBUTOR_ID)
 );
 
@@ -496,7 +499,7 @@ drop table project;
 CREATE TABLE project
 (
     PROJECT_ID serial,
-    projectName varchar (25) NOT NULL,
+    projectName varchar (150) NOT NULL,
     projectDescription text,
     startDate timestamp,
     stopDate timestamp,
