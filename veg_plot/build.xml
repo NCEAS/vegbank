@@ -5,9 +5,9 @@
   * Global build script for veg_plot. This simply allows running all the sub 
   * scripts from one place 
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2003-10-17 20:28:54 $'
-  *     '$Revision: 1.36 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2003-10-23 18:43:24 $'
+  *     '$Revision: 1.37 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -15,6 +15,8 @@
   <property file="${basedir}/build.properties"/>
   
   <target name="init" description="=> Initialize global variables">
+    <echo>veg_plot/build.xml:  init</echo>
+
     <property environment="env" />
     <property name="top.dir" location="${basedir}/.."/>
     <property name="top.lib.dir" location="${top.dir}/lib"/>
@@ -347,7 +349,7 @@
     <copy todir="${web.servlet.lib.dir}">
       <fileset dir="${top.lib.dir}" 
                excludes=" xalan.jar 
-                          xerces_1_4.jar
+                          xercesImpl.jar
                           servlet.jar
                           xml-apis.jar"
       />
