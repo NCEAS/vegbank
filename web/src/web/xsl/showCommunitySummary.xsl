@@ -19,15 +19,12 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:output method="html"/>
 	<xsl:template match="/vegCommunity">
-		<html>
-			<head>@defaultHeadToken@
-				<title> VegBank -- Community concept query results </title>
-				<link rel="stylesheet" type="text/css" href="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css"/>
-			</head>
-			<body bgcolor="FFFFFF">
-				<!--VEGBANK HEADER -->
-				@vegbank_header_html_normal@
-				<!--END OF VEGBANK HEADER -->
+		@webpage_top_html@
+
+   @webpage_head_html@
+   				<title> VegBank -- Community concept query results </title>
+  @webpage_masthead_html@
+
 				<blockquote>
 					<p>
 						<font face="Arial, Helvetica, sans-serif" size="5"> Results of Community Concept Lookup</font>
@@ -173,10 +170,6 @@ Recognizing Party: <span class="item">
 						</xsl:for-each>
 					</form>
 				</table>
-				<!-- VEGBANK FOOTER -->
-				@vegbank_footer_html_tworow_nojs@
-				<!-- END OF FOOTER -->
-			</body>
-		</html>
+				@webpage_footer_html@
 	</xsl:template>
 </xsl:stylesheet>
