@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-04 03:29:39 $'
- * '$Revision: 1.6 $'
+ *     '$Date: 2002-06-12 14:39:18 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,12 +39,13 @@ import java.net.URL;
 import servlet.util.ServletUtility;
 import servlet.util.GetURL;
 import org.apache.tools.ant.taskdefs.Copy;
-
+import servlet.authentication.UserDatabaseAccess;
 
 
 public class UserManagementServlet extends HttpServlet 
 {
 	
+	private UserDatabaseAccess userdb;
 	private ServletUtility util = new ServletUtility();
   private GetURL gurl = new GetURL();
 	
@@ -78,12 +79,12 @@ public class UserManagementServlet extends HttpServlet
   public void doPost(HttpServletRequest req, HttpServletResponse res)
   	throws ServletException, IOException 
 		{
-			res.setContentType("text/html");
-			PrintWriter out = res.getWriter();
+///			res.setContentType("text/html");
+///			PrintWriter out = res.getWriter();
 			try 
 			{
 				//get the parameters
-				Hashtable params = util. parameterHash(req);
+				Hashtable params = util.parameterHash(req);
 				System.out.println("UserManagementServlet > in params: " + params  );
 				
 				//the cookie value is the same as the user name and email addy
@@ -98,6 +99,8 @@ public class UserManagementServlet extends HttpServlet
 					//SHOW THE USER'S CUSTOMIZED OPTIONS PAGE
 					if ( action.equals("options") )
 					{
+						res.setContentType("text/html");
+						PrintWriter out = res.getWriter();
 						//copy the actions file and then displat to the browser
 						//String actionFile = "/usr/local/devtools/jakarta-tomcat_dev/webapps/vegbank/general/actions.html";
 						//String outFile ="/tmp/actions_dev.html";
@@ -111,13 +114,30 @@ public class UserManagementServlet extends HttpServlet
 					//SHOW USER FILES 
 					else if ( action.equals("showfiles") )
 					{
+						res.setContentType("text/html");
+						PrintWriter out = res.getWriter();
 						this.showUserFiles(req, res, out);
 					}
 					//SHOW USER FILES 
 					else if ( action.equals("logout") )
 					{
+						res.setContentType("text/html");
+						PrintWriter out = res.getWriter();
 						this.handleLogout(req, res, out);
 					}
+					// DOWN LOAD THE CLIENT
+					else if ( action.equals("download") )
+					{
+						//res.setContentType("text/html");
+						//PrintWriter out = res.getWriter();
+						this.handleDownload(req, res);
+					}
+					// APPLY FOR A CERTIFICATION LEVEL
+					else if ( action.equals("certification") )
+					{
+						//this.handleCertification(req, res, out);
+					}
+					
 					else
 					{
 						System.out.println("UserManagementServlet > unrecognized action: " + action);
@@ -132,7 +152,107 @@ public class UserManagementServlet extends HttpServlet
 		}
 		
 	/**
-	 * method that handles the user logout
+	 * method that handles the download action.  The idea behind the addition
+	 * of this method is to provide download functionality for the vegbank 
+	 * client. The attributes that are proccessed by this method will be input
+	 * to the 'framework' database 'user management tables' specifically the 
+	 * 'downloads' table <br> <br>
+	 * 
+	 * The parameters that can / should be entered to this method: <br>
+	 *  downloadtype -- can be vegclient etc... <br>
+	 *	additionaldata -- is the additional data sets (comma separated that the user wants) <br>
+	 *	useremail -- the email address of the user <br>
+	 * 
+	 * @param req -- the http request object
+	 * @param res -- the http response object
+	 * 
+	 */
+		private void handleDownload(HttpServletRequest req, HttpServletResponse res)
+		{
+			try
+			{
+				System.out.println("UserManagementServlet > performing download action");
+				String cookieVal = this.getCookieValue(req);
+				String cookieName = this.getCookieName(req);
+				System.out.println("UserManagementServlet > cookie value: " + cookieVal);
+				System.out.println("UserManagementServlet > cookie name: " + cookieName);
+				
+				//if the user is not currently logged in then let tem know and send them 
+				if ( cookieVal == null || cookieName == null || cookieVal.length() < 2 )
+				{
+					//the cookie is not valid
+					System.out.println("UserManagementServlet > not logged in");
+				}
+				// else figure out what the client wants, update the database and let them 
+				// have it
+				else
+				{
+					Hashtable params = util.parameterHash(req);
+					String downloadType = (String)params.get("downloadtype");
+					String additionaldata = (String)params.get("additionaldata");
+					System.out.println("UserManagementServlet > downloads: " + downloadType+" "+additionaldata);
+					//make sure that the download request(s) are valid
+					if ( downloadType != null )
+					{
+						System.out.println("UserManagementServlet > proccessing download: ");
+						// update the database
+						userdb = new UserDatabaseAccess();
+						userdb.insertDownloadInfo(cookieVal); // the users email addy
+						// create the archive
+						Vector fileVec = new Vector();
+						// add the client software
+						if ( downloadType.equals("vegclient") )
+						{
+							fileVec.addElement("/tmp/base.mdb");
+							// add the additional data
+							if ( additionaldata != null ) 
+							{
+								fileVec.addElement("/tmp/additional.mdb");
+							}
+						}
+						String outFile = "/tmp/test.zip";
+						// make the zip file
+						System.out.println("UserManagementServlet > attempting a zip creation");
+						util.setZippedFile(fileVec, outFile);
+						
+						// redirect the browser there
+						res.setContentType("application/zip");
+						res.setHeader("Content-Disposition","attachment; filename=download.zip;");
+						//ServletOutputStream out = res.getOutputStream();
+						ServletOutputStream out = res.getOutputStream();
+						BufferedInputStream in = new BufferedInputStream( new FileInputStream( outFile ));
+            byte[] buf = new byte[4 * 1024]; //4K buffer
+            int i = in.read(buf);
+
+            while(i != -1 )
+            {
+              out.write(buf, 0, i);
+              i = in.read(buf);
+						}
+					}
+					else
+					{
+						// let the user know that what they requested could not be found
+					}
+				}
+				
+				
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		}
+		
+	
+	/**
+	 * method that handles the user logout by making the cookie age equal to zero
+	 * 
+	 * @param req -- the http request object
+	 * @param res -- the http response object
+	 * @param out -- the PrintWriter object back to the client
+	 * 
 	 */
 	 private void handleLogout(HttpServletRequest req, HttpServletResponse res,
 	 	PrintWriter out)
@@ -585,7 +705,7 @@ public class UserManagementServlet extends HttpServlet
         cookieName=cookie.getName();
 				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
 				cookieValue=cookie.getValue();
-				System.out.println("UserManagementServlet > cleint passing the cookie: "+cookieName+" value: "
+				System.out.println("UserManagementServlet > client passing the cookie: "+cookieName+" value: "
 					+cookieValue);
 			}
   	}
@@ -614,7 +734,7 @@ public class UserManagementServlet extends HttpServlet
         cookieName=cookie.getName();
 				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
 				cookieValue=cookie.getValue();
-				System.out.println("UserManagementServlet > cleint passing the name: "+cookieName+" value: "
+				System.out.println("UserManagementServlet > client passing the name: "+cookieName+" value: "
 					+cookieValue);
 			}
   	}
