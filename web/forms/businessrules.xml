@@ -6,7 +6,7 @@
     <notes>plot.confidentialityReason needs value if plot is not public</notes>
     <sqlSrc>br_confidentialityreason</sqlSrc>
     <detailFields>
-      <field>plot_id</field>
+      <field get="false">plot_id</field>
       <field>authorplotcode</field>
       <field>accessioncode</field>
       <field>confidentialitystatus</field>
@@ -17,9 +17,67 @@
     <notes>We require an area for each plot, unless the plot is stated to be 'Plotless' in the plot.shape field.  Since there are many offenders, detail report is grouped by project.</notes>
     <sqlSrc>br_plotswithoutarea</sqlSrc>
     <detailFields>
-      <field>project_id</field>
+      <field get="true">project_id</field>
       <field>projectname</field>
       <field>plotcount</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>If Cover exists, must have Cover Method.  </name>
+    <notes>This plot has cover values, but lacks a cover method to describe how the cover was calculated.  Use 'Percentage' Method where exact percent estimated.</notes>
+    <sqlSrc>br_covermethod</sqlSrc>
+    <detailFields>
+      <field get="true">observation_id</field>
+      <field>accessioncode</field>
+      <field>authorobscode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>If Strata are referenced, must have Stratum Method</name>
+    <notes>This plot has strata referenced in the taxonImportance or stratum tables, but no observation.stratumMethod_ID is defined.</notes>
+    <sqlSrc>br_stratummethod</sqlSrc>
+    <detailFields>
+      <field get="true">observation_id</field>
+      <field>authorobscode</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>TaxonImportance must reference strata within the same observation</name>
+    <notes>TaxonImportance could in theory point to a stratum record that belongs to another observation.  This business Rule is trying to prevent that.</notes>
+    <sqlSrc>br_taxonimportancestratum</sqlSrc>
+    <detailFields>
+      <field get="false">taxonimportance_id</field>
+      <field>taxobs_obsid</field>
+      <field>stratum_obsid</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Minimum ONE class contributor per commClass</name>
+    <notes>Comm Class needs at least one ClassContributor that identifies who made the classification link between plot-obs and community.  This commClass record/event has no classContribs.</notes>
+    <sqlSrc>br_classcontributor</sqlSrc>
+    <detailFields>
+      <field get="true">commclass_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Minimum ONE commInterpretation per commClass</name>
+    <notes>Comm Class needs at least one CommInterpretation to provide the link between plot-obs and community.  This commClass record/event has no commInterps.</notes>
+    <sqlSrc>br_comminterpretation</sqlSrc>
+    <detailFields>
+      <field get="true">commclass_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Minimum ONE observation for each plot</name>
+    <notes>This plot has no observations, and this would generally be considered an error of some kind.</notes>
+    <sqlSrc>br_plotsnoobs</sqlSrc>
+    <detailFields>
+      <field get="false">plot_id</field>
+      <field>authorplotcode</field>
+      <field>accessioncode</field>
     </detailFields>
   </busRule>
 </businessRules>

@@ -25,23 +25,33 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="field" type="fieldType"/>
-    <xs:simpleType name="fieldType">
+
+  <xs:simpleType name="fieldType">
     <xs:restriction base="xs:string">
       <xs:pattern value="[a-z0-9_]+"/>
     </xs:restriction>
   </xs:simpleType>
-    <xs:simpleType name="notEmpty">
+ 
+ 
+    <xs:element name="field">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="fieldType">
+          <xs:attribute name="get" type="xs:boolean"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:simpleType name="notEmpty">
     <xs:restriction base="xs:string">
       <xs:pattern value=".+"/>
     </xs:restriction>
   </xs:simpleType>
-
   <xs:element name="name" type="notEmpty"/>
   <xs:element name="notes" type="notEmpty"/>
   <xs:element name="sqlSrc" type="sqlSrcType"/>
-
-    <xs:simpleType name="sqlSrcType">
+  <xs:simpleType name="sqlSrcType">
     <xs:restriction base="xs:string">
       <xs:pattern value="br_[a-z]+"/>
     </xs:restriction>

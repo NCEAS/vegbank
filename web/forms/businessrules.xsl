@@ -34,22 +34,24 @@
 <logic:notEmpty name="{$countSQL}-BEANLIST">
 
 
-<table class="thinlines" cellpadding="2"><tr class="major"><th colspan="3"><xsl:value-of select="name" /></th></tr>
-<tr><td><bean:write name="{$countSQL}-BEAN" property="howmany" /></td>
+<table width="100%" class="thinlines" cellpadding="2"><tr class="major"><th colspan="3"><xsl:value-of select="name" /></th></tr>
+<tr><td class="sizelarger">errors: <bean:write name="{$countSQL}-BEAN" property="howmany" /></td>
+    <logic:notEqual name="{$countSQL}-BEAN" property="howmany" value="0"><td class="error">ERRORS! <a href="javascript:showorhidediv('{sqlSrc}')">Show/Hide Details</a></td></logic:notEqual> 
+    <logic:equal name="{$countSQL}-BEAN" property="howmany" value="0"><th>NO ERRORS!</th></logic:equal> 
     <td><xsl:value-of select="notes" /></td>
-    <td><a href="javascript:showorhidediv('{sqlSrc}')">Show/Hide Details</a></td> 
+    
 </tr>
   <TR><TD COLSPAN="3">
         
    <vegbank:get id="{sqlSrc}" select="{sqlSrc}" beanName="map" pager="false" perPage="-1"/>
 
-<div id='{sqlSrc}'>
-   <table cellpadding="2" class="leftrightborders">
+<div id='{sqlSrc}' style="display:none">
+   <table width="80%" cellpadding="2" class="leftrightborders">
    <logic:iterate name="{sqlSrc}-BEANLIST" id="onerowof{sqlSrc}">
      <xsl:for-each select="detailFields/field">
  
    <tr><td><xsl:value-of select="node()" /></td><td>
-   <bean:write name="onerowof{../../sqlSrc}" property="{node()}" /></td></tr>
+   <bean:write name="onerowof{../../sqlSrc}" property="{node()}" />  <xsl:if test="@get='true'"><a href="@machine_url@/get/std/{substring-before(node(),'_')}/@subst_lt@bean:write name='onerowof{../../sqlSrc}' property='{node()}' /@subst_gt@">Details</a></xsl:if></td></tr>
  
    </xsl:for-each>
    <tr><td>Notes:</td><td>
