@@ -80,6 +80,10 @@ public class DataSubmitServlet extends HttpServlet
 				StringBuffer sb = handleVegCommunityCorrelation(params, response);
 				out.println( sb.toString() );
 			}
+			else
+			{
+				out.println("DataSubmitServlet > action unknown!");
+			}
 			
 		}
 		catch( Exception e ) 
