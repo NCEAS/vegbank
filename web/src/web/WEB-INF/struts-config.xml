@@ -27,8 +27,7 @@
 			<form-property name="newpassword2"
 			               type="java.lang.String"/>
 			<form-property name="action"
-			               type="java.lang.String"
-			               initial="edit"/>
+			               type="java.lang.String"/>
 		</form-bean>
 		<form-bean name="DisplayEntityForm"
 		           type="org.apache.struts.validator.DynaValidatorForm">
@@ -373,6 +372,7 @@
 		        name="ChangePasswordForm"
 		        parameter="pwd"
 		        scope="request"
+		        validate="true"
 		        input="ChangePassword">
 			<set-property property="authClass"
 			              value="org.vegbank.ui.struts.Authenticate"/>
