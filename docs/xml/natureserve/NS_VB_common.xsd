@@ -4,8 +4,8 @@
 
   *
   *     '$Author: mlee $'
-  *     '$Date: 2004-12-18 00:13:25 $'
-  *     '$Revision: 1.3 $'
+  *     '$Date: 2005-01-13 17:22:04 $'
+  *     '$Revision: 1.4 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -250,9 +250,8 @@
       <xs:all>
         <xs:element ref="entity_name.entity_name_id" minOccurs="0"/>
         <xs:element ref="entity_name.ref_id" minOccurs="0"/>
-       <xs:element ref="entity_name.name_system" />
-        <xs:element ref="entity_name.entity_name"/>
-
+        <xs:element ref="entity_name.name_system" minOccurs="1"/>
+        <xs:element ref="entity_name.entity_name" minOccurs="1"/>
       </xs:all>
     </xs:complexType>
   </xs:element>
@@ -287,7 +286,7 @@
   <xs:element name="reference">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="reference.reference_id" minOccurs="0"/>
+        <xs:element ref="reference.reference_id" />
         <xs:element ref="reference.full_citation"/>
       </xs:sequence>
     </xs:complexType>
