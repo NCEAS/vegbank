@@ -19,8 +19,8 @@ import org.vegbank.ui.struts.Authentication;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 02:11:44 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-05-07 19:04:31 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,6 +98,7 @@ public class RequestProcessor extends org.apache.struts.action.RequestProcessor
 			if (!authClass.checkAuth(request))
 			{
 				ActionForward forward = mapping.findForward(AUTHENTICATION_VIOLATION_FORWARD);
+				setPostLoginFwd(request);
 				super.processForwardConfig(request, response, forward);
 				return false;
 			}
@@ -106,11 +107,23 @@ public class RequestProcessor extends org.apache.struts.action.RequestProcessor
 			if (!authClass.checkReqRoles(request, reqRoles))
 			{
 				ActionForward forward = mapping.findForward(CERTIFICATION_VIOLATION_FORWARD);
+				setPostLoginFwd(request);
 				super.processForwardConfig(request, response, forward);
 				return false;
 			}		
 		}
 		return true;
+	}
+
+	/**
+	 * Sets the postLoginFwd session attribute.
+	 */
+	private void setPostLoginFwd(HttpServletRequest request) {
+		if (request.getSession() == null) {
+			log.debug("sPLF: session is null!");
+		}
+		request.getSession().setAttribute("postLoginFwd", 
+				request.getRequestURL().toString() + "?" + request.getQueryString());
 	}
 
 

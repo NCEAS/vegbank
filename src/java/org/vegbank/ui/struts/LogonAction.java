@@ -26,8 +26,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-26 20:45:25 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-05-07 19:04:31 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,6 +73,7 @@ public class LogonAction extends VegbankAction
 			HttpServletRequest request,
 			HttpServletResponse response)	{
 			
+	/*
 		log.debug("LogonAction: calling other execute()");
 		return execute(mapping, (DynaActionForm)form, request, response);
 	}
@@ -82,17 +83,20 @@ public class LogonAction extends VegbankAction
 			DynaActionForm form,
 			HttpServletRequest request,
 			HttpServletResponse response)	{
+	*/
 				
 		log.debug("LogonAction: begin");
-		
+
+		DynaActionForm dform = (DynaActionForm)form;
+
 		// Validate the request parameters specified by the user
 		ActionErrors errors = new ActionErrors();
 		String username =
-			(String)form.get("username");
-//			(String) PropertyUtils.getSimpleProperty(form, "username");
+			(String)dform.get("username");
+//			(String) PropertyUtils.getSimpleProperty(dform, "username");
 		String password =
-			(String)form.get("password");
-//			(String) PropertyUtils.getSimpleProperty(form, "password");
+			(String)dform.get("password");
+//			(String) PropertyUtils.getSimpleProperty(dform, "password");
 		
 		log.debug("LogonAction: authenticating user: '"+ username); 
 	
@@ -137,7 +141,9 @@ public class LogonAction extends VegbankAction
 		} catch (Exception e) {
 			errors.add(ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.action.failed", e.getMessage() ));
-			log.debug("LogonAction: problem: ", e);
+			log.error("LogonAction: problem: ", e);
+			saveErrors(request, errors);
+			return mapping.findForward("vberror");
 		}
 		
 
@@ -167,11 +173,22 @@ public class LogonAction extends VegbankAction
 
 		String postLoginFwd = (String)session.getAttribute("postLoginFwd");
 		if (!Utility.isStringNullOrEmpty(postLoginFwd)) {
-			return mapping.findForward(postLoginFwd);
+			try { 
+				log.debug("Post login redir to: " + postLoginFwd);
+				response.sendRedirect(postLoginFwd);
+				return null;
+				//return mapping.findForward(postLoginFwd);
+			} catch (java.io.IOException ioe) {
+				errors.add(ActionErrors.GLOBAL_ERROR,
+					new ActionError("errors.action.failed", ioe.getMessage() ));
+				log.error("problem redirecting to " + postLoginFwd + " -- ", ioe);
+				saveErrors(request, errors);
+				return mapping.findForward("vberror");
+			}
 		}
 
 		// Forward control to the specified success URI
-		return (mapping.findForward("success"));
+		return mapping.findForward("success");
 	}
 	
 	/**
