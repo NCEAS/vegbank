@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-19 03:55:35 $'
- * 	'$Revision: 1.21 $'
+ *  '$Date: 2002-05-20 23:11:15 $'
+ * 	'$Revision: 1.22 $'
  */
 package databaseAccess;
 
@@ -855,8 +855,8 @@ public class DBinsertPlotSource
 	
 	/**
 	 * method to add the taxonObservation data to the database
-	 * if the method fails it will return false and the plot will be rolled 
-	 * back
+	 * if the method fails it will return false and the plot 
+	 * will be rolled back
 	 */
 	private boolean insertTaxonObservations()
 	{
@@ -866,7 +866,6 @@ public class DBinsertPlotSource
 			//get the number of taxonObservations
 			Vector uniqueTaxa = source.plantTaxaNames;
 			//getPlantTaxaNames(String plotName)
-			
 			System.out.println("DBinsertPlotSource > number of assocated taxa: " + uniqueTaxa.size() );
 			System.out.println("DBinsertPlotSource > taxa: " + uniqueTaxa.toString() );
 			
@@ -879,13 +878,19 @@ public class DBinsertPlotSource
 				String authorNameId = uniqueTaxa.elementAt(i).toString();
 				System.out.println("DBinsertPlotSource > current taxon: " + authorNameId );
 				
-				
-				// get the code associated with this name
+				// get the code associated with this name and if this code
+				// that is returned is empty or null the code that should be
+				// used is the plant name itself
 				String code = source.getPlantTaxonCode(authorNameId);
+				if ( code == null || code.length() < 1 )
+				{
+					System.out.println("DBinsertPlotSource > no plant code id data source " );
+					code = authorNameId;
+				}
 				System.out.println("DBinsertPlotSource > current taxon code: " + code );
 				String percentCover = "25";
 				
-				// get the hashtable with the plant name llok up results from the 
+				// get the hashtable with the plant name look up results from the 
 				// web application
 				Hashtable h = getPlantTaxonomyData( code );
 				String level  = "";
@@ -1212,10 +1217,18 @@ public class DBinsertPlotSource
 			String xCoord = source.xCoord;
 			String yCoord = source.yCoord;
 			String zone = source.utmZone;
-			//use this method to get the latitudes and longitudes
-			Hashtable geoCoords=getGeoCoords(xCoord, yCoord, zone);
-			String latitude = (String)geoCoords.get("latitude");
-			String longitude = (String)geoCoords.get("longitude");
+			// if the plot data source has geocoordinates (latitude, logitude )
+			// use them otherwise lookup the information from the web service
+			String latitude = source.getLatitude(plotName);
+			String longitude = source.getLongitude(plotName);
+			if ( latitude == null || latitude.length() < 2 )
+			{
+				Hashtable geoCoords=getGeoCoords(xCoord, yCoord, zone);
+				latitude = (String)geoCoords.get("latitude");
+				longitude = (String)geoCoords.get("longitude");
+			}
+			
+			
 			String state = source.state;
 			String country = source.country;
 			String authorLocation = source.authorLocation;
@@ -1477,7 +1490,9 @@ public class DBinsertPlotSource
 
 /**
 	 * utility method to use a webservice to lookup the plant 
-	 * related attributes from the vegbank plant taxonomy archive
+	 * related attributes from the vegbank plant taxonomy archive.  
+	 * The input into this method may be either a plant taxon code
+	 * like 'ABIES' or even a plant name like 'Abies bifolia'
 	 * 
 	 * @param code -- the plant taxonomy code used to lookup the related data
 	 * 	that will be returned to from the web service in an xml format
