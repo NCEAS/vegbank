@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-schema.xsl"?>
 <?xml-stylesheet type="text/xsl" href="model_ToSQL.xsl"?>
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
-<!-- <?xml-stylesheet type="text/xsl" href="model-to-schema.xsl"?> -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>1.0.2</version>
@@ -9056,7 +9056,7 @@ conditions may change between resampling events.
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
-      <attReferences>aux_role.role_ID</attReferences>
+      <attReferences>aux_Role.role_ID</attReferences>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
