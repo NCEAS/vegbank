@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-31 01:48:41 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-02-19 17:50:48 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,21 +88,18 @@ public class XMLUtil
 	{
 		StringBuffer fullXML = new StringBuffer();
 		
-		// TODO: This varibles need to be configurable
+		// TODO: This varible need to be configurable
 		String schemaWebLocation = "http://vegbank.nceas.ucsb.edu/xml/";
-		String schemaName = "";
 		
 		fullXML.append("<?xml version='1.0' encoding='UTF-8'?>\n");
 		// TODO: Delaring schema to use here, may need to allow refernce to schema and no refernce
-		fullXML.append("<VegBankPackage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"" + schemaWebLocation + schemaName + "\">\n" );
+		fullXML.append("<VegBankPackage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"" + schemaWebLocation + Utility.VEGBANK_SCHEMA_NAME + "\">\n" );
 		 
-		// TODO: Implement a getVersion() method
-		fullXML.append("\t<doc-VegBankVersion>" + "1.0" + "</doc-VegBankVersion>\n");
+		fullXML.append("\t<doc-VegBankVersion>" + Utility.VEGBANK_VERSION + "</doc-VegBankVersion>\n");
 		fullXML.append("\t<doc-date>" + convertDateToXSdatetime(Utility.getNow()) + "</doc-date>\n");
 		// TODO: Implement a getCurrentPartyFullName() method and/or pass in value 
 		fullXML.append("\t<doc-author>" + "Gabriel Farrell" + "</doc-author>\n"); 
-		// TODO: Implement a getVersion() method
-		fullXML.append("\t<doc-authorSoftware>Vegbank, version: " + "1.0" + "</doc-authorSoftware>\n");
+		fullXML.append("\t<doc-authorSoftware>Vegbank, version: " + Utility.VEGBANK_VERSION + "</doc-authorSoftware>\n");
 		// TODO: Add relevant comments 
 		fullXML.append("\t<doc-comments></doc-comments>\n");
 
