@@ -111,13 +111,13 @@ Public Function checkForMultErrors(strList As String) As Long
   If debugVal > 1 Then Debug.Print "checkForMultErrors>> init. w/ " & strList
   Dim colErrs As New Collection
   Set colErrs = csv_parseCSVstring(strList, ",")
-  Dim inttemp As Integer, lngRep As Long
-  For inttemp = 1 To colErrs.Count
-    If isLongInt(colErrs(inttemp)) Then
-      If debugVal > 0 Then Debug.Print "checkForMultErrors>> checking: " & colErrs(inttemp)
-      lngRep = lngRep + checkForErrors(colErrs(inttemp))
+  Dim intTemp As Integer, lngRep As Long
+  For intTemp = 1 To colErrs.Count
+    If isLongInt(colErrs(intTemp)) Then
+      If debugVal > 0 Then Debug.Print "checkForMultErrors>> checking: " & colErrs(intTemp)
+      lngRep = lngRep + checkForErrors(colErrs(intTemp))
     End If
-  Next inttemp
+  Next intTemp
   checkForMultErrors = lngRep
 End Function
 
@@ -201,11 +201,11 @@ Public Function ManualHyperLink(ByVal strDtl As String, Optional blnReadOnly As 
   If strDtl = "n/a" Then
     msgBox "This is currently not available."
   End If
-  Dim inttemp As Integer
+  Dim intTemp As Integer
   If colMultLink.Count > 1 Then
-   For inttemp = 2 To colMultLink.Count
-     Call ManualHyperLink(colMultLink(inttemp), blnReadOnly, blnCloseFirst)
-   Next inttemp
+   For intTemp = 2 To colMultLink.Count
+     Call ManualHyperLink(colMultLink(intTemp), blnReadOnly, blnCloseFirst)
+   Next intTemp
   End If
   
 exitManHLink:
@@ -249,10 +249,13 @@ If Not blnJustFieldNames Then 'get details and counts
        DoCmd.RunSQL "INSERT INTO Y_ClosedListErr ( tbl, fld, [values], counts )" _
 & " SELECT First(""" & !tbl & """) AS tbl, First(""" & !fld & """) AS fld, " _
 & !tbl & "." & !fld & " AS val, Count(" & !tbl & "." & !fld & ") AS num " _
-& " FROM " & !tbl _
+& " FROM " & !tbl & "" _
 & " GROUP BY " & !tbl & "." & !fld _
-& " HAVING (Count(" & !tbl & "." & !fld & ")>0) AND (" & !tbl & "." & !fld & "<> ""False"") AND (" & !tbl & "." & !fld & "<> ""0"") AND (" _
-& !tbl & "." & !fld & "<> ""True"") (" & !tbl & "." & !fld & "<> ""-1"") ;"
+& " HAVING ((([" & !fld & "])<>""false"" And " _
+& " ([" & !fld & "])<>""true"" And " _
+& " ([" & !fld & "])<>""-1"" And " _
+& " ([" & !fld & "])<>""0"")) "
+   
      End If
     
 Else
