@@ -4,7 +4,7 @@
     If you dont want to limit the xml this way, then target=skip -->
   <target name="init">
     <echo>
-  	Targets: {init} allfields logical implementation clean-local-html clean-dest-html **buildnewbuild **distdatadic **dd-index **dd-guide
+  	Targets: {init} allfields logical implementation clean-local-html clean-dest-html  dist-closedlist-tokenfile  **buildnewbuild **distdatadic **dd-index **dd-guide
   	  ** indicates targets that are referenced automatically by selected one of the first three targets
   </echo>
     <!-- freely editable variables -->
@@ -93,11 +93,14 @@
       </fileset>
     </delete>
   </target>
-    <target name="clean-dest-html" depends="init">
+  <target name="clean-dest-html" depends="init">
     <delete>
       <fileset dir="${dictionary_server}">
         <include name="${htmlPrefix}*.html"/>
       </fileset>
     </delete>
+  </target>
+  <target name="dist-closedlist-tokenfile" depends="init">
+    <style out="${style_server}/closedlist-tokens.properties" in="${origData}" extension=".properties" style="closedList_forms_options.xsl" force="true"/>
   </target>
 </project>
