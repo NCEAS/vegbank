@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-18 21:31:47 $'
- * '$Revision: 1.18 $'
+ *     '$Date: 2002-12-18 22:29:25 $'
+ * '$Revision: 1.19 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,8 @@ public class VegCommunityLoader
  		{
 			Class.forName("org.postgresql.Driver");
 			//the framework database
-			c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/communities_dev", "datauser", "");
+			//c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/communities_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://dhcp87.nceas.ucsb.edu/communities_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -1163,7 +1164,8 @@ public class VegCommunityLoader
 			}
 			if (cnt > 0)
 			{
-				System.out.println("VegCommunityLoader > matching reference  "  );
+				System.out.println("VegCommunityLoader > matching reference: " +
+        otherCitationDetails  );
 				exists = true;
 			}
 			else
