@@ -108,7 +108,12 @@ The next few pages explain the main search pages.  There will be
 more specific instructions on each search page.
 </p>
     </manualHTML>
-    <manualItem refURL="@web_context@/LoadPlotQuery.do" name="search-for-plots" topic="Search for Plots">
+    <manualItem refURL="@forms_link@plot-query-simple.jsp" name="3-in-1-simple-query" topic="3-in-1 Simple Query">
+      <manualHTML>The 3-in-1 simple query is a very simple query that allows you to search for plots, plants, and/or communities, all from one webpage.  You can search for plots based on a plant name that is found in the plot, a community name to which the plot is classified, or a state/province name in which the plot is found.  Leave a field blank if you would like ignore this part.  For example, leave community name blank if you only want the search to consider plant name and state/province.  Press the 'Search for Plots' button below the names and state/province fields to begin your search.<br/>
+        <br/>You can also just provide a plant name and press the button to the right of that field to search for plants that have the name you entered.  Similarly, you can search for communities by filling in a community name and pressing the button next to that field.  If you search for plants or communities, the state/province field is ignored.  Also, the community name field is ignored for a plant search and the plant name field is ignored for a community search.  The colored boxes behind the fields and buttons should guide you in knowing which fields are part of which search.
+      </manualHTML>
+    </manualItem>
+    <manualItem refURL="@web_context@LoadPlotQuery.do" name="search-for-plots" topic="Search for Plots">
       <manualHTML>
         <a href="@web_context@LoadPlotQuery.do">Plot Query</a> 
      - search for plots by location, species present, community type, 
@@ -175,7 +180,7 @@ formats (click links for more information on each).  See the next few screens fo
         <manualHTML>
           <a href="@vegbranch_link@vegbranch.html">VegBranch</a>
           <font color="red" size="-1">
-            <b> (recommended)</b>
+            <b> (the recommended way of submitting plots to VegBank)</b>
           </font> - VegBank's client database,
     in MS Access, can import data from other formats to prepare for submission to VegBank.
     Unfortunately, VegBranch requires that you have MS Access 2000 or higher running
@@ -201,29 +206,28 @@ formats (click links for more information on each).  See the next few screens fo
     sometime in mid-2004.</manualHTML>
       </manualItem>
     </manualItem>
-    <manualItem refURL="@forms_link@plant-submit.html" name="submit-plants" topic="Submit Plants">
+    <manualItem refURL="" name="submit-plants" topic="Submit Plants">
       <manualHTML>
-        <p>You may submit new plant concepts directly to VegBank via
-   web forms.  For an explanation of concept-based taxonomy, please see this 
-   <a href="@design_link@planttaxaoverview.html">overview</a>. To load more than a few new concepts, you should consider using a tool like
-   VegBranch.  For most VegBank users in North America, no new plant concepts should be
+        <p>
+          <!--You may submit new plant concepts directly to VegBank via web forms.-->You may submit new plants via VegBranch.  There are forms and documentation for how to do so in the <a href="@vegbranch_link@vegbranch.html">VegBranch section</a> of the website.  For an explanation of concept-based taxonomy, please see this 
+   <a href="@design_link@planttaxaoverview.html">overview</a>. For most VegBank users in North America, no new plant concepts should be
    needed.  We have loaded the latest version of USDA plants into VegBank.  If you 
    require a large number of taxa to be loaded so that your plots may reference the
    correct taxa, please contact us using the contact link on the VegBank footer.  We
    can help you decide when and how to best upload the taxa to VegBank.
 </p>
-        <p>Load <a href="@forms_link@plant-submit.html">Plant Taxa</a>
-        </p>
+        <!--<p>Load <a href="@forms_link@plant-submit.html">Plant Taxa</a>
+        </p> -->
       </manualHTML>
     </manualItem>
-    <manualItem refURL="@forms_link@community-submit.html" name="submit-communities" topic="Submit Communities">
+    <manualItem refURL="" name="submit-communities" topic="Submit Communities">
       <manualHTML>
-        <p>You may submit new community concepts directly to VegBank via
-   web forms.  For an explanation of concept-based taxonomy, please see this 
-   <a href="@design_link@planttaxaoverview.html">overview</a>. To load more than a few new concepts, you should consider using a tool like
-   VegBranch.</p>
-        <p>Load <a href="@forms_link@community-submit.html">Community Concepts</a>
-        </p>
+        <p>
+          <!--You may submit new community concepts directly to VegBank via
+   web forms. -->You may submit new plants via VegBranch.  There are forms and documentation for how to do so in the <a href="@vegbranch_link@vegbranch.html">VegBranch section</a> of the website.  For an explanation of concept-based taxonomy, please see this 
+   <a href="@design_link@planttaxaoverview.html">overview</a>. </p>
+        <!--    <p>Load <a href="@forms_link@community-submit.html">Community Concepts</a>
+        </p> -->
       </manualHTML>
     </manualItem>
     <manualItem refURL="@general_link@metadata.html" name="submit-supplemental-data" topic="Submit Supplemental Data">
