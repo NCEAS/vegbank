@@ -7,8 +7,8 @@
  *	
  *
  * '$Author: farrell $'
- * '$Date: 2002-12-03 23:22:44 $'
- * '$Revision: 1.7 $'
+ * '$Date: 2002-12-23 22:50:56 $'
+ * '$Revision: 1.8 $'
  *
  */
 
@@ -17,8 +17,11 @@ drop table user_info;
 drop table user_submitted_queries;
 drop sequence user_downloads_seq;
 drop table user_downloads;
-
-																								
+DROP sequence  accession_id_seq;
+DROP table file_accession;
+DROP table datafile;
+ 
+																							
 
 CREATE SEQUENCE user_id_seq;
 
@@ -98,6 +101,24 @@ peer_review varchar(10),
 additional_statements varchar(500)
 );
 
+-- This supports the file upload function
+CREATE SEQUENCE accession_id_seq;
+  
+CREATE table file_accession (
+  accession_id int primary key  default nextval('accession_id_seq'),
+  create_date date not null
+);
+             
+CREATE table datafile (
+  accession_id int,
+  file_type varchar(50),
+  file_size int,
+  user_filename varchar(50) not null,
+  path varchar(50) not null,
+  FOREIGN KEY (accession_id) REFERENCES
+  file_accession
+);
+	
 
 --CREATE A TEST USER WITH A HIGH PERMISSION LEVEL 
 INSERT INTO user_info (sur_name, given_name, email_address, password, ticket_count, permission_type)
