@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-03-17 10:34:10 $'
-* '$Revision: 1.157 $'
+* '$Date: 2005-03-17 13:34:39 $'
+* '$Revision: 1.158 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -196,7 +196,7 @@
    <!-- listserv -->
     <filter token="listservinfo_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
     <filter token="listservarchive_link" value="http://mercury.nceas.ucsb.edu/vegbank/pipermail/"/>
-
+    <filter token="listservuser_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/options/" />
     <!-- Struts -->
     <filter token="DisplayUploadPlotAction" value="${machine_url}${eighty_eighty}/${web.context_uri}/DisplayUploadPlotAction.do"/>
     <!-- FIXME: Should be in a prepare target -->
