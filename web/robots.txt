@@ -1,0 +1,3 @@
+user-agent: *
+Disallow: /vegbank/forms/ 
+Disallow: /vegbank/servlet
