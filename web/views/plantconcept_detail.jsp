@@ -16,11 +16,24 @@
 <h2>View Plant Concepts</h2>
   <vegbank:get id="concept" select="plantconcept" beanName="map" pager="true" xwhereEnable="true"/>
 
-<vegbank:pager />
+
 <logic:empty name="concept-BEANLIST">
              <p>Sorry, no Plant concepts match your criteria.</p>
           </logic:empty>
 <logic:notEmpty name="concept-BEANLIST"><!-- set up table -->
+<!-- if special first letter query, then show that it is and show other options: -->
+<bean:parameter id="prm_where" name="where" value="n/a" />
+<logic:equal name="prm_where" value="where_plantconcept_firstletter">
+  <!-- tell what we are showing: -->
+  <bean:parameter id="prm_wparam" name="wparam" value="?" />
+  <p>
+  <%@ include file="../includes/menu-plants-byletter.jsp" %>
+ <br/> Showing Plants starting with "<bean:write name="prm_wparam" />"
+  </p>
+
+</logic:equal>
+
+<vegbank:pager />
 <table class="outsideborder" width="100%" cellpadding="0" cellspacing="0"><!--each field, only write when HAS contents-->
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
 <tr><th class="major_smaller" colspan="4"><bean:write name="onerow" property="plantname_id_transl"/> | <bean:write name="onerow" property="reference_id_transl"/></th></tr>
