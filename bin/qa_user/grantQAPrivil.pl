@@ -20,20 +20,21 @@ foreach $database (@databases) {
 
   # Get the list of tables in database
   print "#################\n# Get tables for $database\n##################\n";
-  @tables = `psql $database -t -c  "select tablename from pg_tables"`;
+  @tables = `psql -U datauser $database -t -c  "select tablename from pg_tables"`;
 
   foreach $table (@tables) {
     $table =~ m/^\s*$/ and next;
     $table =~ m/^\s*pg_/ and next;
+    $table =~ s/^ (.*)/$1/;
     chomp($table);
 
     # run a grant on this table
     print "Run grant on $table\n";
-    `psql $database -c "GRANT $permissions ON $table TO $user"`;
+    `psql -U datauser $database -c "GRANT $permissions ON $table TO $user"`;
      
-     $sequence = $table . "_id_seq \n";
+     $sequence = $table . "_" . $table . "_id_seq \n";
      print "Run grant on $sequence";
-    `psql $database -c "GRANT $permissions ON $sequence TO $user"`;
+    `psql -U datauser $database -c "GRANT $permissions ON $sequence TO $user"`;
                         
   }
 }
