@@ -35,3 +35,12 @@ CREATE VIEW view_busRule_plotsizeshape AS
    CREATE VIEW view_busRule_duplcovercode AS 
     SELECT count(1), covermethod_id, covercode FROM coverIndex GROUP BY covermethod_id, covercode HAVING count(1) > 1;
     
+drop view view_emb_embargo_currentfullonly;
+CREATE VIEW view_emb_embargo_currentfullonly AS
+  SELECT * FROM embargo WHERE (((defaultStatus)=6) AND ((embargoStart)<Now()) AND ((embargoStop)>Now()));
+    
+    
+drop view view_emb_embargo_complete;
+CREATE VIEW view_emb_embargo_complete AS
+  SELECT Coalesce(emb.defaultStatus,0) AS currentEmb, plot.plot_id
+  FROM plot LEFT JOIN view_emb_embargo_currentfullonly AS emb ON plot.PLOT_ID = emb.plot_ID;
