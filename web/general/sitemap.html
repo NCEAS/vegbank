@@ -33,7 +33,7 @@ if (restore) selObj.selectedIndex=0;
   <td colspan="2" class="vegbank" border="1">
       <p class="vegbank"><a href="/index.html">VegBank Home</a></p>
   </td></tr>
-  <tr valign="top"><td class="vegbank" width="380"><p>Public pages, log in not required</p>
+  <tr valign="top"><td class="vegbank" width="380">
       <ul class="constsize">
         <li>News</li>
         <ul class="constsize">
@@ -45,6 +45,7 @@ if (restore) selObj.selectedIndex=0;
         </ul>
         <li><a href="@general_link@login.jsp">Login</a></li>
         <li><a href="@general_link@logout.html">Logout</a></li>
+        <li><a href="@general_link@instructions.html">Instructions</a></li>
         <li><a href="@general_link@info.html">Information</a></li>
         <ul class="constsize">
        <li>Overview</li>
@@ -111,9 +112,10 @@ if (restore) selObj.selectedIndex=0;
 <option value="@dbdictionary_link@dd~table~stemcount~type~tableview.html">stemCount</option>
 <option value="@dbdictionary_link@dd~table~stemlocation~type~tableview.html">stemLocation</option>
 <option value="@dbdictionary_link@dd~table~stratum~type~tableview.html">stratum</option>
-<option value="@dbdictionary_link@dd~table~stratumcomposition~type~tableview.html">stratumComposition</option>
+
 <option value="@dbdictionary_link@dd~table~stratummethod~type~tableview.html">stratumMethod</option>
 <option value="@dbdictionary_link@dd~table~stratumtype~type~tableview.html">stratumType</option>
+<option value="@dbdictionary_link@dd~table~taxonimportance~type~tableview.html">taxonImportance</option>
 <option value="@dbdictionary_link@dd~table~taxoninterpretation~type~tableview.html">taxonInterpretation</option>
 <option value="@dbdictionary_link@dd~table~taxonobservation~type~tableview.html">taxonObservation</option>
 <option value="@dbdictionary_link@dd~table~telephone~type~tableview.html">telephone</option>
@@ -133,7 +135,6 @@ if (restore) selObj.selectedIndex=0;
 <option value="@dbdictionary_link@dd~table~commcorrelation~type~tableview.html">commCorrelation</option>
 <option value="@dbdictionary_link@dd~table~commlineage~type~tableview.html">commLineage</option>
 <option value="@dbdictionary_link@dd~table~commname~type~tableview.html">commName</option>
-<option value="@dbdictionary_link@dd~table~commparty~type~tableview.html">commParty</option>
 <option value="@dbdictionary_link@dd~table~commstatus~type~tableview.html">commStatus</option>
 <option value="@dbdictionary_link@dd~table~commusage~type~tableview.html">commUsage</option>
 <option value="@dbdictionary_link@dd~table~reference~type~tableview.html">reference</option>
@@ -153,7 +154,6 @@ if (restore) selObj.selectedIndex=0;
 <option value="@dbdictionary_link@dd~table~plantcorrelation~type~tableview.html">plantCorrelation</option>
 <option value="@dbdictionary_link@dd~table~plantlineage~type~tableview.html">plantLineage</option>
 <option value="@dbdictionary_link@dd~table~plantname~type~tableview.html">plantName</option>
-<option value="@dbdictionary_link@dd~table~plantparty~type~tableview.html">plantParty</option>
 <option value="@dbdictionary_link@dd~table~plantstatus~type~tableview.html">plantStatus</option>
 <option value="@dbdictionary_link@dd~table~plantusage~type~tableview.html">plantUsage</option>
 <option value="@dbdictionary_link@dd~table~reference~type~tableview.html">reference</option>
@@ -173,9 +173,9 @@ if (restore) selObj.selectedIndex=0;
 	   </ul>
         </ul>
   </ul></td>
-  <td class="vegbank" width="400"><p>VegBank registration needed (you must log in)</p>
-  <ul class="constsize">
-    <li><a href="@web_context@DisplayMainMenu.do">VegBank - Main Menu</a> (actions)</li>
+  <td class="vegbank" width="400">
+  
+    <p><a href="@web_context@DisplayMainMenu.do">VegBank - Main Menu</a></p>
     <ul class="constsize">
 	    <li><a href="@general_link@plots.html">Access or submit Plot data</a></li>
 	      <ul class="constsize">
@@ -185,25 +185,26 @@ if (restore) selObj.selectedIndex=0;
               <font color="darkSalmon">redesign(v1.1)</font></li>
             <li><a href="@general_link@metadata.html">View Metadata</a></li>
             <li>View plot : 
-            <a href="@datarequestservlet@?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=summary&queryType=simple&vegbankAccessionNumber=VB.483">
+            <a href="@datarequestservlet@?requestDataType=vegPlot&resultType=summary&queryType=simple&accessionCode=VB.Ob.682.YOSE99S106001">
             overview</a> | 
-            <a href="@datarequestservlet@?requestDataFormatType=html&clientType=browser&requestDataType=vegPlot&resultType=full&queryType=simple&vegbankAccessionNumber=VB.483">
+            <a href="@datarequestservlet@?requestDataType=vegPlot&resultType=full&queryType=simple&accessionCode=VB.Ob.682.YOSE99S106001">
             extended</a></li>
             <ul class="constsize">
               <li>Add interpretation of plant in plot<font color="darkSalmon">(v1.1)</font></li>
               <li>Assign a plot to a community<font color="darkSalmon">(v1.1)</font></li>
               <li>Create a note about a field in a plot<font color="darkSalmon">(v2.0)</font></li>
             </ul>
-            <li><a href="@forms_link@Download.jsp">Export plots</a></li>
+            <li>Export plots [no direct link]</li>
 			  <ul class="constsize">
 
               <li>Formats: ASCII, HTML, XML <font color="darkSalmon">(redesign v2.0)</font>,
                 VegBranch <font color="darkSalmon">(v3.0)</font>, User specified <font color="darkSalmon">(v2.0)</font>, TurboVeg <font color="darkSalmon">(v3.0)</font>
             </ul>
-            <li><a href="@datasubmitservlet@?submitDataType=vegPlot&action=preinit">Load
+            <li><a href="/vegbank/DisplayUploadPlotAction.do">Load
               Plot Data</a></li>
             <ul class="constsize">
-			  <li>Formats: NPS, VegBranch, XML <font color="darkSalmon">(redesign v2.0)</font>, TurboVeg <font color="darkSalmon">(v2.0)</font></li>
+			  <li>Formats: NPS, <a href="@vegbranch_link@vegbranch.html">VegBranch</a>, <a href="@NativeXMLIndexPage@">XML</a> <font color="darkSalmon">(redesign v2.0)</font>, TurboVeg <font color="darkSalmon">(v2.0)</font></li>
+              <li>VegBranch documentation: <a href="@vegbranch_link@docs/loadtbls/overview-a.html">overview</a> | <a href="@vegbranch_link@docs/loadtbls/index.html">detailed</a></li>
               <li>Pre-Validate upload <font color="darkSalmon">(v1.1)</font></li>
             </ul>
             <li><a href="@general_link@input.html">Input data from forms</a></li>
@@ -228,29 +229,28 @@ if (restore) selObj.selectedIndex=0;
 		  <ul class="constsize">
             <li><a href="@forms_link@community-query.html">Query Communities</a><font color="darkSalmon">
               update(v1.1)</font></li>
-            <li><a href="@forms_link@community-submit.html">Create a new Community Type</a><font color="darkSalmon">
+            <li>Create a new Community Type<font color="darkSalmon">
               update(v1.1)</font></li>
             <li>Bulk load new Community Types <font color="darkSalmon">(v2.0)</font></li>
-			<li><a href="@forms_link@community-correlate.html">Correlate your type
-              with an NVC Type</a></li>
+			<li>Correlate your type
+              with an NVC Type</li>
             <li>Manage your party perspective on Community Types <font color="darkSalmon">(v2.0)</font></li>
           </ul>
 		<li><a href="@general_link@plants.html">Access or submit Plant Taxon data</a></li>
 		<ul class="constsize">
 		  <li><a href="@forms_link@plant-query.html">Query Plants</a><font color="darkSalmon"> update(v1.1)</font></li>
-		  <li><a href="@forms_link@plant-submit.html">Enter a new Plant</a><font color="darkSalmon"> update(v1.1)</font></li>
+		  <li>Enter a new Plant<font color="darkSalmon"> update(v1.1)</font></li>
 		  <li>Bulk load new Plants <font color="darkSalmon">(v2.0)</font></li>
           <li>Manage your party perspective on Plants <font color="darkSalmon">(v2.0)</font></li>
 		</ul>
-		<li><a href="@usermanagement_servlet@?action=changeusersettings">Edit your VegBank Profile</a></li>
+		<li>Edit your VegBank Profile [no direct link]</li>
 		<li><a href="@forms_link@certification.html">Apply to become a Certified VegBank User</a></li>
 		  <ul class="constsize">
-            <li><a href="@forms_link@hints.html#certification">Certification Help</a></li>
             <li>View registry of certified users <font color="darkSalmon">(v2.0)</font></li>
           </ul>
 	</ul>
 
-   </ul>
+   
    <hr />
    <p>VegBank Header Links:</p>
 	<ul class="constsize">
