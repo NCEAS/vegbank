@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-27 19:13:52 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-03-05 22:36:51 $'
+ *	'$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ import java.io.*;
 import java.net.*;
 import java.sql.*;
 import java.util.*;
+
+import org.apache.struts.util.LabelValueBean;
 /**
  * This class contains multi-purpose utilities for dealing with plot data, 
  * and the VegBank database at this point these may include utilities to 
@@ -650,6 +652,75 @@ public class DatabaseUtility
 		 }
 	 }
 	
+		/**
+		 * This fills a vector with Party name and id stored in a LabelValues bean
+		 * for the results of a query.
+		 * 
+		 * @param partyIdNames
+		 * @param partyQuery
+		 */
+		public static void getPartyValueLabelBeans(Vector partyIdNames, StringBuffer partyQuery)
+		{
+			try
+			{
+				DatabaseAccess da = new DatabaseAccess();
+		
+				// hit the DB, plot
+				ResultSet rs = da.issueSelect(partyQuery.toString());		
+		
+				while (rs.next())
+				{		
+					String partyId  = rs.getString(1);
+					String salutation = rs.getString(2);
+					String givenName = rs.getString(3);
+					String middleName = rs.getString(4);
+					String surName = rs.getString(5);
+					String organizationName = rs.getString(6);
+					
+					StringBuffer partyName = new StringBuffer();
+					
+					if ( Utility.isStringNullOrEmpty(surName) )
+					{
+						partyName.append(organizationName);
+					}
+					else
+					{
+						// Construct the party name 
+						// e.g. 'Dr. James William Smith (NCEAS)'							
+						if ( Utility.isStringNullOrEmpty(salutation) )
+						{
+							partyName.append(salutation + " ");
+						}
+						if ( Utility.isStringNullOrEmpty(givenName) )
+						{
+							partyName.append(givenName + " ");
+						}
+						if ( Utility.isStringNullOrEmpty(middleName) )
+						{
+							partyName.append(middleName + " ");
+						}
+						if ( Utility.isStringNullOrEmpty(surName) )
+						{
+							partyName.append(surName + " ");
+						}
+						if ( Utility.isStringNullOrEmpty(organizationName) )
+						{
+							partyName.append("(" + organizationName + ")");
+						}
+					}
+					
+					LabelValueBean partyNameId = new LabelValueBean(partyName.toString(), partyId);
+					partyIdNames.add(partyNameId);
+				}
+			}
+			catch (SQLException e1)
+			{
+				LogUtility.log("org.vegbank.ui.struts.CommQueryForm:: " +
+					"findPartyNameIdsInDB() ERROR: " + e1.getMessage(), e1);
+			}
+		}
+	 
+	 
 	 /**
 	 * method to update a users password  
 	 * @param email -- the emailaddress of the user that should be dropped 
