@@ -119,7 +119,7 @@ Public Function MakeRightClickCorrect()
   'sometimes Access 2003 doens't load the correct right-click menu, this makes sure it is correct
 '  Debug.Print "MakeRightClickCorrect>> init." & Now()
   Dim strShouldBe As String
-  strShouldBe = Nz(GetSet_manual_option("rightClickMenu", False))
+  strShouldBe = Nz(GetSet_manual_option("rightClickMenu", False, , , "globalHelp2"))
   If Not (strShouldBe) = Nz(Application.ShortcutMenuBar) Then
     'if here, then right click menu not set correctly, set it!
     Debug.Print "MakeRightClickCorrect>> fixed right click menu " & Now()
@@ -127,7 +127,7 @@ Public Function MakeRightClickCorrect()
   End If
   'check size of db:
     Dim lngSizeToWarn As Long
-    lngSizeToWarn = GetSet_manual_option("FileSizeWarning", False)
+    lngSizeToWarn = GetSet_manual_option("FileSizeWarning", False, , , "750")
     If lngSizeToWarn > 0 Then
       Dim fs, f
       Set fs = CreateObject("Scripting.FileSystemObject")
@@ -212,11 +212,11 @@ Public Function WriteQrysForLoadTblsView_levels()
   ''this function writes new query definitions based on which fields are to be exported to xls
   ''this hides database fields from users while "viewing" loading tables
   ''shows only certain levels and below, based on fieldUseGroup (1,1.5,2,3,4)
-  Dim colLevelsToGet As New Collection, strLevs As String, intTemp As Integer, strLevel As String
+  Dim colLevelsToGet As New Collection, strLevs As String, inttemp As Integer, strLevel As String
   strLevs = SQLValuesToCSV("select fieldUseGroup from z_fieldDescription where fieldUseGroup > 0 group by fieldUseGroup", """")
   Set colLevelsToGet = csv_parseCSVstring(strLevs, ",", True)
-For intTemp = 1 To colLevelsToGet.Count
-strLevel = colLevelsToGet(intTemp)
+For inttemp = 1 To colLevelsToGet.Count
+strLevel = colLevelsToGet(inttemp)
   Dim cnnLocal As Connection
   Dim rstCurr As New ADODB.Recordset
   Set cnnLocal = CurrentProject.Connection
@@ -258,7 +258,7 @@ strLevel = colLevelsToGet(intTemp)
   Loop
   End With
   rstCurr.Close
-Next intTemp
+Next inttemp
 End Function
 
 Public Function writeViewVBQrys()
@@ -399,15 +399,22 @@ Else
 End If  'the field exists
 End Function
 
-Public Function MainMenuMessage() As String
+Public Function MainMenuMessage(Optional blnGo As Boolean) As String
+ ' If globaldebug > 0 Then Debug.Print "MainMenuMessage> init. " & Now()
   Dim strTemp As String
 If QuickLinkChk() = False Then
-  strTemp = "YOU MUST CONNECT to a vegbank module."
+  strTemp = "YOU MUST CONNECT to a vegbank module. Double Click here."
+  If blnGo Then
+    DoCmd.OpenForm "W_ConnectToDb"
+  End If
 Else
   
-  If Eval(GetSet_manual_option("VegBankModuleAccepted") = False) Then
+  If Eval(GetSet_manual_option("VegBankModuleAccepted", False, , , "False") = False) Then
     'need to accept vegbank module
-    strTemp = "YOU MUST ACCEPT the vegbank module."
+    strTemp = "YOU MUST ACCEPT the vegbank module. Double Click here."
+    If blnGo Then
+      DoCmd.OpenForm "x_accessionCode_maintain"
+    End If
   Else
     strTemp = ""
   End If
@@ -415,6 +422,8 @@ End If
   MainMenuMessage = strTemp
   ' orig: strTemp = IIf(Eval(GetSet_manual_option("VegBankModuleAccepted") = False) Or QuickLinkChk() = False, "MUST CONNECT AND ACCEPT VegBank module", Null)
 End Function
+
+
 
 Public Function OnOpenVegBranch()
 ''function performs vital operations on VegBranch startup
@@ -433,7 +442,7 @@ Public Function OnOpenVegBranch()
   If GetOption("Confirm Record Changes") Or GetOption("Confirm Document Deletions") Or _
     GetOption("Confirm Action Queries") Then
     ''check to see if user wants to change all the above to false
-    If GetSet_manual_option("TellUserOptionsConfirm", False) = True Then
+    If GetSet_manual_option("TellUserOptionsConfirm", False, , , "True") = True Then
       ''open form to explain confirmations and let user turn on/off
       DoCmd.OpenForm "ConfirmOptions", , , , , acDialog
     End If
@@ -514,7 +523,7 @@ Public Function QuickLinkChk() As Boolean
   On Error GoTo QLErr
   Dim dbCurr As Object
   Set dbCurr = CurrentDb
-  dbCurr.tabledefs("plot").refreshLink
+  dbCurr.TableDefs("plot").RefreshLink
   QuickLinkChk = True
   Exit Function
 ''couldn't refresh table
@@ -779,7 +788,7 @@ Exit Function 'remove
   Dim dbs As Object
   Dim tdfCurr As Object, fldCurr As Object
   Set dbs = CurrentDb
-  Set tdfCurr = dbs.tabledefs(strTable)
+  Set tdfCurr = dbs.TableDefs(strTable)
   For Each fldCurr In tdfCurr.Fields
     If Not fldCurr.AllowZeroLength Then
       Select Case fldCurr.Type
@@ -796,7 +805,7 @@ Public Function updateZeroLenStringToNull(strTable As String)
    Dim dbs As Object
   Dim tdfCurr As Object, fldCurr As Object
   Set dbs = CurrentDb
-  Set tdfCurr = dbs.tabledefs(strTable)
+  Set tdfCurr = dbs.TableDefs(strTable)
   'look at each field
   For Each fldCurr In tdfCurr.Fields
     'if zero len allowed and not required
@@ -891,13 +900,13 @@ Public Function replaceTokens_dataChk_src()
   
   'now have collection of all loading table names
   'convert this into loading table letters
-  Dim colLetters As New Collection, colTemp As New Collection, intTemp As Integer, colNicks As New Collection
-  For intTemp = 1 To colLoadTbls.Count
+  Dim colLetters As New Collection, colTemp As New Collection, inttemp As Integer, colNicks As New Collection
+  For inttemp = 1 To colLoadTbls.Count
     EmptyCollection colTemp
-    Set colTemp = csv_parseCSVstring(colLoadTbls(intTemp), "_")
+    Set colTemp = csv_parseCSVstring(colLoadTbls(inttemp), "_")
     'add letter to collection
     colLetters.Add (colTemp(3))
-    colNicks.Add get_tableInfo(colLoadTbls(intTemp), "TablenickName") & " (" & colTemp(3) & ")", (colTemp(3))
+    colNicks.Add get_tableInfo(colLoadTbls(inttemp), "TablenickName") & " (" & colTemp(3) & ")", (colTemp(3))
   Next
   'now have letters and nicknames to use
   'For inttemp = 1 To colLetters.Count
@@ -910,18 +919,18 @@ Public Function replaceTokens_dataChk_src()
   Do Until .EOF
      Dim strRemoveToks As String
      strRemoveToks = Nz(!Expl_src, "")
-     For intTemp = 1 To colLetters.Count
-       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(intTemp) & "@", colNicks(colLetters(intTemp)))
-     Next intTemp
+     For inttemp = 1 To colLetters.Count
+       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(inttemp) & "@", colNicks(colLetters(inttemp)))
+     Next inttemp
      If strRemoveToks <> "" Then
        !Explanation = strRemoveToks
      Else
        !Explanation = Null
      End If
      strRemoveToks = Nz(!longExpl_src, "")
-     For intTemp = 1 To colLetters.Count
-       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(intTemp) & "@", colNicks(colLetters(intTemp)))
-     Next intTemp
+     For inttemp = 1 To colLetters.Count
+       strRemoveToks = substTextForText(strRemoveToks, "@" & colLetters(inttemp) & "@", colNicks(colLetters(inttemp)))
+     Next inttemp
      If strRemoveToks <> "" Then
        !LongExplanation = strRemoveToks
      Else
@@ -1037,7 +1046,7 @@ strRep = "<!-- created by VegBranch, writeAllLoadingTableInfoToHTML() -->" & vbC
   & "<p><a href='#top'>top</a></p><hr /><a name='examples'></a><h3 class='left'>Examples of this data table:</h3>" & vbCr _
   & html_writeExamples(!TableName, "example_" & !TableName & "_") & "<p><a href='#top'>top</a></p>"
 
-strRep = strRep & "@vegbank_footer_html_onerow@ </body> </html>"
+strRep = strRep & "@webpage_footer_html@"
 Call WriteLineToFile(strRep, strFile)
  .MoveNext
  Loop
@@ -1108,6 +1117,11 @@ Public Function getGrey(Optional blnGetLast As Boolean) As String
   End If
 End Function
 
+Public Function html_vegbankStdHdr(strTitle As String, strExtraHeadHTML As String) As String
+  html_vegbankStdHdr = "@webpage_top_html@" & vbCr & " @stdvegbankget_jspdeclarations@ " & vbCr & " @webpage_head_html@" _
+  & " <title>" & xmlize_txt(strTitle) & "</title>" & strExtraHeadHTML & vbCr & "  @webpage_masthead_html@ "
+End Function
+
 Public Function html_LoadTblInfo(strTblLtr As String) As String
   'function gets loading table names and info (very simple table format) and returns as html table
   '2004-FEB-04 MTL
@@ -1117,7 +1131,7 @@ Public Function html_LoadTblInfo(strTblLtr As String) As String
   With rstTemp
    If Not .EOF Then
      'have table: get info
-     strRep = "@vegbank_header_html_normal@ <br/><h2><img src='@vbr_imageserver@" & LCase(strTblLtr) & "_icon.jpg' /><a href='@vegbranch_link@vegbranch.html'>VegBranch</a> Loading Tables Overview -- " & HTMLize_txt(!tableNickName & " (" & !tblLetter & ")") & "</h2>" & vbCr
+     strRep = html_vegbankStdHdr() & "<br/><h2><img src='@vbr_imageserver@" & LCase(strTblLtr) & "_icon.jpg' /><a href='@vegbranch_link@vegbranch.html'>VegBranch</a> Loading Tables Overview -- " & HTMLize_txt(!tableNickName & " (" & !tblLetter & ")") & "</h2>" & vbCr
      'get links to other tables:
     strRep = strRep & html_linkToLoadTbls(strTblLtr)
      strRep = strRep & "<p>Jump to a different part of this page: <a href='#fields'>Field Descriptions</a> | <a href='#examples'>Example Data</a></p>"
@@ -1144,9 +1158,8 @@ End Function
 
 Public Function html_fileHeader(strTitle As String) As String
  'std VegBranch html file header:
- Dim strRep As String
- strRep = "<html> <head> <title>" & xmlize_txt(strTitle) & "</title><link rel='stylesheet' href='@stylesheet@' type='text/css' />" _
-& "<style type='text/css'>" _
+ Dim strExtra As String
+ strExtra = "<style type='text/css'>" _
  & "          td.color1 {background-color: FF6666} " & vbCr _
   & "          td.color1_5 {background-color: FF9966} " & vbCr _
   & "         td.color2 {background-color: FFCC99} " & vbCr _
@@ -1154,10 +1167,8 @@ Public Function html_fileHeader(strTitle As String) As String
     & "       td.color4 {background-color: 99FFCC} " & vbCr _
     & "       td.color0 {background-color: 9999FF} " & vbCr _
      & "      .weight1 {font-weight:bold} " & vbCr _
-   & "      </style> " & vbCr _
-& " </head>" & vbCr _
-& " <body>"
-html_fileHeader = strRep
+   & "      </style> "
+html_fileHeader = html_vegbankStdHdr(strTitle, strExtra)
 End Function
 
 
@@ -1202,10 +1213,10 @@ Private Function deleteAllButSampleNamedPlaces()
 End Function
 
 Private Function deleteAllButSampleSoilTaxa()
-  Dim intGetLevel As Integer, intTemp As Integer
+  Dim intGetLevel As Integer, inttemp As Integer
   intGetLevel = getvalFrmSQL("select max(soilLevel) from soilTaxon;")
-  For intTemp = 0 To intGetLevel
-  DoCmd.RunSQL "delete * from soilTaxon  where soiltaxon_ID > 52 and soilLevel=" & intGetLevel - intTemp
+  For inttemp = 0 To intGetLevel
+  DoCmd.RunSQL "delete * from soilTaxon  where soiltaxon_ID > 52 and soilLevel=" & intGetLevel - inttemp
   Next
 End Function
 
@@ -1303,7 +1314,7 @@ Public Function UpdateZ_DescJoinedSubField()
   Dim strJoin2 As String
   Dim strJoinMast1 As String, strJoinMaster As String
     
-  If Forms!Z_FieldDesc_countRecs!Empty <> "neither" Then    'linked by empty status
+  If Forms!Z_FieldDesc_countRecs!empty <> "neither" Then    'linked by empty status
      strJoin2 = "empty"
      'MsgBox ("empty based")
   Else ' not linked by empty status
@@ -1463,7 +1474,7 @@ Public Function importDataFromAnotherVegBranch(Optional strFromDB As String)
          'get list of fields that are the same in each db:
          Dim strFlds As String
          strFlds = "" 'init list of fields
-         Set tdfCurr = dbs.tabledefs(strTbl)
+         Set tdfCurr = dbs.TableDefs(strTbl)
          'get list of fields on this table
          For Each fldCurr In tdfCurr.Fields
            'if exists on other table, bring it in
@@ -1572,4 +1583,9 @@ cannotImport:
   msgBox strErrorMsg _
     & Chr(13) & "Error details: " & Err.Description
     Resume exitthis
+End Function
+
+Private Function makeTablesGetZFieldDescriptions(Optional strTable As String)
+  msgBox "this function under construction"
+  CurrentDb.TableDefs("Z_USER_B_specList").Fields("NewPlantConcept").Properties("Description") = "blah"
 End Function
