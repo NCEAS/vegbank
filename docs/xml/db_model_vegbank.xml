@@ -4922,7 +4922,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
-      <javaType type="boolean" relation="one"/>
+      <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
