@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-10-28 18:59:24 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-29 04:04:58 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ public class LogUtility
 
 	public static void log(Object message) {
 		if (enable && message != null) {
-			System.out.println(message.toString());
+			System.out.println("LU--"+message.toString());
 		}
 	}
 	
