@@ -232,7 +232,7 @@ public class DataSubmitServlet extends HttpServlet
 				String conceptStatus = "accepted";
 				String nameStatus = "standard";
 			
-				
+				//CREATE A COMMUNITY CODE
 				String commCode = "";
 				StringTokenizer t = new StringTokenizer(commName);
 	  		while (t.hasMoreTokens() )
@@ -242,14 +242,14 @@ public class DataSubmitServlet extends HttpServlet
 					commCode = commCode+buf.toUpperCase();
 				}
 					
-				//see if the name does not already exist in the database
+				//SEE IF THE NAME ALREADY EXISTS IN THE DATABASE
 				qs = new CommunityQueryStore();
 				Vector v = qs.getCommunityNames(commName);
 				if ( v.size() < 1)
 				{
 					//assume that the name does not already exist in the db
 					//so update the validation page and return it to the user
-					String message = "You have entered a unique name; Vegbank will be the reference";
+					String message = "You have entered a unique name; VegBank will be the reference";
 					updateCommunityValidationPage(salutation, firstName, lastName, 
 					emailAddress, orgName, commName, commCode, commLevel, conceptStatus, 
 					nameStatus, authors, title, pubDate, edition, seriesName,
@@ -273,10 +273,12 @@ public class DataSubmitServlet extends HttpServlet
 					String nameRefPageNumber = (String)refHash.get("pageNumber");
 					String nameRefISBN = (String)refHash.get("isbn");
 					String nameRefISSN = (String)refHash.get("issn");
+					String message =" This name already exists in the vegbank system and was <br>"
+					+"has a refernce to: "+nameRefAuthors;
+					
 					sb.append("nameRefTitle: " + nameRefTitle);
 					sb.append("nameRefAuthors: " + nameRefAuthors);
 					sb.append("nameRefPubDate: " + nameRefPubDate);
-					
 					sb.append("nameRefPubEdition: " + nameRefEdition);
 					sb.append("nameRefSeriesName: " + nameRefSeriesName);
 					sb.append("nameRefIssueId: " + nameRefIssueId);
@@ -284,9 +286,7 @@ public class DataSubmitServlet extends HttpServlet
 					sb.append("nameRefPageNumber: " + nameRefPageNumber);
 					sb.append("nameRefISBN: " + nameRefISBN);
 					sb.append("nameRefISSN: " + nameRefISSN);
-					
-					sb.append("not done");
-					sb.append("found: " +v.size()+ " attributes");
+					System.out.println("DataSubmitServlet > " + sb.toString());
 					
 					
 					//update the html page with the name refrence equal to the 
@@ -296,17 +296,16 @@ public class DataSubmitServlet extends HttpServlet
 					nameStatus, nameRefAuthors, nameRefTitle, nameRefPubDate, nameRefEdition, 
 					nameRefSeriesName, nameRefIssueId, nameRefOtherCitationDetails, 
 					nameRefPageNumber, nameRefISBN, nameRefISSN, 
-					
 					authors, title, pubDate, edition, seriesName,
 					issueId, otherCitationDetails, pageNumber, isbn, issn, 
+					classSystem, message);
 					
-					
-					classSystem);
 					//redirect the browser
 					response.sendRedirect("/forms/valid.html");
 				}
 				
 			}
+			//THIS WHERE THE ACTUAL SUBMITTAL OF THE NEW COMMUNITY TAKES PLACE
 			else if ( action.equals("submit") )
 			{
 				
@@ -332,17 +331,27 @@ public class DataSubmitServlet extends HttpServlet
 				String parentCommunity = "";
 				String partyName = "vegbank";
 				String otherName = "";
-				
-				sb.append("starting the correlation: ");
 				System.out.println("DataSubmitServlet > submit vegCommunity");
-				sb = commLoader.insertGenericCommunity( salutation,  givenName, surName,
+				
+				//SUBMIT THE DATA TO THE DATABASE
+				StringBuffer sbr = commLoader.insertGenericCommunity( salutation,  givenName, surName,
 				middleName, orgName, contactInstructions,conceptReferenceTitle, 
 				conceptReferenceAuthor, conceptReferenceDate, nameReferenceTitle,
 				nameReferenceAuthor, nameReferenceDate, communityCode,communityLevel,
 				communityName,  dateEntered, parentCommunity,  otherName  );
+				
+				String resultString = sbr.toString();
+				
+				System.out.println("DataSubmitServlet > submittal result: " + resultString);
+				//IF SUCCESS THEN PREPARE AND RETURN A PAGE TO THE USER
+				if ( resultString.toUpperCase().indexOf("TRUE") > 0 )
+				{
+					System.out.println("DataSubmitServlet > preparing results page");
+					String resultPage = getSubmittalResultsPage(true, communityName, givenName, 
+					surName, nameReferenceAuthor, conceptReferenceAuthor );
+					sb.append( resultPage );
+				}			
 			}
-			
-			
 		}
 		catch( Exception e ) 
 		{
@@ -351,6 +360,38 @@ public class DataSubmitServlet extends HttpServlet
 		}
 		return(sb);
 	}
+	
+	
+	/**
+	 * method that returns a result page as a string based on a true or false
+	 * 
+	 * @param result -- true or false
+	 * @param commName -- the name of the community
+	 * @param givenName -- the given Name of the system user
+	 * @param surName -- the surName of the system user
+	 * @param nameReferenceAuthor -- the author of the name reference
+	 * @param conceptReferenceAuthor -- the name of the concept reference auth.
+	 */
+	 private String getSubmittalResultsPage( boolean result, String commName, 
+	 String givenName, String surName, String nameReferenceAuthor, 
+	 String conceptReferenceAuthor)
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 sb.append("<html> \n");
+		 sb.append("<b> SUCCESSFUL SUBMITAL <b> \n");
+		 sb.append("<br> \n");
+		 sb.append("VegBank User: " + givenName + " " + surName + " <br> \n");
+		 sb.append("Community Name: " + commName +" <br> \n");
+		 sb.append("Name Reference: " + nameReferenceAuthor +" <br> \n");
+		 sb.append("Concept Reference: " + conceptReferenceAuthor +" <br> \n");
+		 sb.append("<a href=/forms/community-correlate.html> correlate communities  </a> \n");
+		 sb.append("");
+		 sb.append("");
+		 sb.append("");
+		 sb.append("</html> \n");
+		 return(sb.toString() );
+	 }
+	
 	
 	/**
 	 * method that handles updating the validation form for the community
@@ -463,7 +504,7 @@ public class DataSubmitServlet extends HttpServlet
 	 String conceptRefSeriesName, String conceptRefIssueId, String conceptRefOtherCitationDetails, 
 	 String conceptRefPageNumber, String conceptRefISBN, String conceptRefISSN, 
 	 
-	 String classSystem)
+	 String classSystem, String message)
 	 {
 	 	boolean results = true;
 		Hashtable replaceHash = new Hashtable();
@@ -524,7 +565,7 @@ public class DataSubmitServlet extends HttpServlet
 			replaceHash.put("conceptRefISBN", ""+conceptRefISBN );
 			replaceHash.put("conceptRefISSN", ""+conceptRefISSN);
 			
-			
+			replaceHash.put("message", ""+message);
 			
 			replaceHash.put("classSystem", ""+classSystem );
 			
