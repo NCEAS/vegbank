@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-27 20:11:18 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-10-29 18:25:35 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.vegbank.common.model.Observation;
+import org.vegbank.common.model.Observationsynonym;
 import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Plantconcept;
 import org.vegbank.common.model.Plantname;
@@ -45,6 +46,7 @@ import org.vegbank.common.model.Plot;
 import org.vegbank.common.model.Project;
 import org.vegbank.common.model.Projectcontributor;
 import org.vegbank.common.model.Stratum;
+import org.vegbank.common.model.Taxoninterpretation;
 import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.model.VBModelBean;
 import org.vegbank.common.utility.DBConnection;
@@ -76,6 +78,15 @@ public class DBModelBeanReader
 		con = DBConnectionPool.getDBConnection("Needed for reading observation");
 	}
 	
+	/**
+	 * 
+	 * @param key
+	 * @param keyValue
+	 * @return
+	 * @throws Exception
+	 * 
+	 * @deprecated
+	 */
 	public Observation LgetObservation(String key, int keyValue) throws Exception
 	{
 		Observation obs = new Observation();
@@ -228,9 +239,9 @@ public class DBModelBeanReader
 		ignoreObjects.add("Observation");	
 		
 		// Need to fill out some more Objects 
+		
 		// Project 
 		Project project = obs.getProjectobject();
-
 		getRelatedObjectsFromDB(Project.PKNAME, project.getProject_id(), project );
 		
 		// ProjectContributors
@@ -239,9 +250,7 @@ public class DBModelBeanReader
 		{
 			Projectcontributor projectContributor = (Projectcontributor)  projectContributors.next();
 			Party party = (Party) projectContributor.getPartyobject();
-			//System.out.println("###########################################################");
 			getRelatedObjectsFromDB(Party.PKNAME, party.getParty_id(), party );
-			//System.out.println("###########################################################");
 		}
 		
 		// TaxonObservations
@@ -251,7 +260,18 @@ public class DBModelBeanReader
 			Taxonobservation taxonObservation = (Taxonobservation)  taxonObservations.next();
 			getRelatedObjectsFromDB(Taxonobservation.PKNAME, taxonObservation.getTaxonobservation_id(), taxonObservation );
 			
-			Plantname plantName = taxonObservation.getPlantnameobject();
+			//TaxonInterpretations
+			Iterator taxonInterpretations =taxonObservation.gettaxonobservation_taxoninterpretations().iterator();
+			while ( taxonInterpretations.hasNext() )
+			{
+				Taxoninterpretation taxonInterpretation = (Taxoninterpretation)  taxonInterpretations.next();
+				getRelatedObjectsFromDB(Taxoninterpretation.PKNAME, taxonInterpretation.getTaxoninterpretation_id(), taxonInterpretation );
+			
+				Plantconcept pc = taxonInterpretation.getPlantconceptobject();
+				getRelatedObjectsFromDB(Plantconcept.PKNAME, taxonInterpretation.getPlantconcept_id() , pc );
+		
+			}
+			
 		}
 		
 		// Strata
@@ -259,20 +279,16 @@ public class DBModelBeanReader
 		while ( strata.hasNext())
 		{
 			Stratum stratum = (Stratum) strata.next();
-			System.out.println(">> Ignore when searching through Stratum " + ignoreObjects);
+			//System.out.println(">> Ignore when searching through Stratum " + ignoreObjects);
 			getRelatedObjectsFromDB(Stratum.PKNAME, stratum.getStratum_id(), stratum );
-
 		}
-		
 		
 		// Plot
 		int plotId  = obs.getPlot_id();
 		Plot plot = new Plot();
-		System.out.println("1 " + plot.toXML() );
 		getObjectFromDB(plot, Plot.PKNAME, plotId);
-		System.out.println("2 " + plot.toXML() );
 		getRelatedObjectsFromDB(Plot.PKNAME, plotId, plot);
-		System.out.println("3 " + plot.toXML() );
+
 		// Add the observation to the Plot bean
 		plot.addplot_observation( obs );
 		return plot;
@@ -344,7 +360,7 @@ public class DBModelBeanReader
 			String tableName = getTableName(bean, method);	
 			
 			// Filter out tables called
-			System.out.println("----- " + ignoreObjects);
+			//System.out.println("----- " + ignoreObjects);
 			Iterator iterator = ignoreObjects.iterator();
 			while ( iterator.hasNext()  )
 			{
@@ -357,8 +373,9 @@ public class DBModelBeanReader
 			
 			try
 			{
-				//System.out.println("getObjectsFromDataBase(" + tableName + " , " + key + " , " + keyValue + ")");
-				List objectsToAdd =  getObjectsFromDataBase(tableName, key, keyValue);
+				String keytoUse = this.getFKNameInTable(key, tableName);
+				System.out.println("getObjectsFromDataBase(" + tableName + " , " + keytoUse + " , " + keyValue + ")");
+				List objectsToAdd =  getObjectsFromDataBase(tableName, keytoUse, keyValue);
 				Object[] parameters = {objectsToAdd};
 				method.invoke(bean, parameters);
 			}
@@ -411,6 +428,8 @@ public class DBModelBeanReader
 		String SQLQuery = 
 			"SELECT " + PKName + " FROM " + table + " WHERE " + FKName + " = " + FKValue;
 		
+		System.out.println("]]] "  + SQLQuery);
+		
 		Statement selectStatement = con.createStatement();
 		ResultSet rs = selectStatement.executeQuery(SQLQuery);
 		
@@ -442,11 +461,19 @@ public class DBModelBeanReader
 	 */
 	private String getFKNameInTable(String FKName, String tableName)
 	{
-		if ( tableName.equalsIgnoreCase("observationsynonym") && FKName.equalsIgnoreCase("observation_id") )
+		String result = FKName;
+		
+		if ( tableName.equalsIgnoreCase("observationsynonym") && FKName.equalsIgnoreCase(Observation.PKNAME) )
 		{
-			FKName = "primaryobservation_id";
+			result = Observationsynonym.PRIMARYOBSERVATION_ID;
 		}
-		return FKName;
+		
+		if ( tableName.equalsIgnoreCase("plot") && FKName.equals(Plot.PKNAME))
+		{
+			result = Plot.PARENT_ID;
+		}
+		System.out.println(tableName + " X " + FKName + "  = ???? " + result);
+		return result;
 	}
 
 	private void getObjectFromDB(VBModelBean bean, String PKName, int PKValue)
