@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-02-02 00:49:35 $'
- 	*     '$Revision: 1.3 $'
+ 	*     '$Date: 2002-02-05 02:03:39 $'
+ 	*     '$Revision: 1.4 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -28,7 +28,7 @@
 		<property name="build" value="./build" />
 		<property name="lib" value="./lib" />
 		<property name="bin" value="./" />
-		<property name="rmiregistry" value="/home/harris/rmiregistry" />
+		<property name="rmiregistry" value="./server" />
 		<property name="translators" value="./lib/datatranslator.jar" />
 
 		
@@ -108,10 +108,9 @@
 	
 	
 	
-<!-- TEST - this will test the package -->
-	<target name="test">
-		<exec dir="./" executable="write-VegBank-plot.sh" os="Linux" >
-		</exec>
+<!-- CLEAN UP -->
+	<target name="clean">
+		<delete dir="build" />
 	</target>
 	
 	
