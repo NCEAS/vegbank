@@ -16,7 +16,8 @@ public static void main(String[] args) {
 if (args.length < 2) {
 System.out.println("Wrong number of arguments passed to TNCplot2xml\n");
 System.out.println("USAGE: java TNCplot2xml <TNCplot.file> <TNCspecies.file> \n");
-System.out.println("The output from this will be a file called outPlot.xml");
+System.out.println("The output from this will be a file called outPlotX.xml \n"+
+	"where X corresponds to the plot number in the TNC file");
 System.exit(0);}
 
 
@@ -29,7 +30,9 @@ int lineNum=0;
 int speciesLineNum=0;
 String infileArray[]=new String[100000];
 String speciesArray[]=new String[100000];
-String speciesInfoArray[]=new String[100000];
+String speciesInfoArray[]=new String[100000];  //this is storage for species
+String strataInfoArray[]=new String[100000]; //this is the strata for the species
+String coverInfoArray[]=new String[100000];  //this is the percent coverage
 int speciesCount=0;
 
 /*Below are all the variables that are going to be required for writing out teh xml file*/
@@ -94,7 +97,9 @@ String subPlot=null;
 
 
 
-
+/**
+* First try block will read the species and plot tables into memory
+*/
 
 try {
 BufferedReader plotIn = new BufferedReader(new FileReader(plotFile), 8192);
@@ -113,7 +118,6 @@ BufferedReader speciesIn = new BufferedReader(new FileReader(speciesFile), 8192)
 	} //end while 
 
 /*read the species-specific input file into the array*/
-
 while ( (s=speciesIn.readLine()) != null ){
 
 		if (s.startsWith("#")) {System.out.println("reading header");}
@@ -130,6 +134,9 @@ catch (Exception ex) {System.out.println("Error reading input data"+ex);System.e
 
 
 
+/**
+* The next block will tokenize the plot data into respective attributes
+*/
 try {
 
 	for (int i=0; i<lineNum; i++) {
@@ -137,7 +144,7 @@ try {
 
 
 		StringTokenizer t = new StringTokenizer(infileArray[i], "|");
-		 authorPlotCode=t.nextToken().replace('"',' ').trim();
+		authorPlotCode=t.nextToken().replace('"',' ').trim();
 		buf=t.nextToken().replace('"',' ').trim();
 		subPlot=buf;
 		buf=t.nextToken().replace('"',' ').trim();
@@ -280,36 +287,45 @@ try {
 		 perLargeRx=buf;
 /*There are many other fields that go here*/
 
-/*read the species-related elements*/
 
-for (int ii=0; ii<speciesLineNum; ii++) { 
+
+/*read the species-related elements*/
+for (int ii=0; ii<speciesLineNum; ii++) {
+	
+	//determine if the species related record is the refers to this plot
 	if (speciesArray[ii].indexOf(authorPlotCode)>0 || speciesArray[ii].startsWith(authorPlotCode))
 		{
 		StringTokenizer speciesTok = new StringTokenizer(speciesArray[ii], "|");
 		String speciesBuf= speciesTok.nextToken();
+		String strataBuf= null;
 		speciesBuf= speciesTok.nextToken();
 		int bufCount=0;
-		while (speciesTok.hasMoreTokens() && bufCount<4 ) {speciesBuf= speciesTok.nextToken();bufCount++;}
-				speciesInfoArray[speciesCount]=speciesBuf;
-				speciesCount++;
+		
+		//this counts out to the position where the species is stored
+		while (speciesTok.hasMoreTokens() && bufCount<4 ) {
+			speciesBuf= speciesTok.nextToken();
+			bufCount++;
+		} //end while
+		
+		
+		//count out to the strata name and capture
+		while (speciesTok.hasMoreTokens() && bufCount<9 ) {
+			strataBuf= speciesTok.nextToken();
+			bufCount++;
+		} //end while
+		
+			strataInfoArray[speciesCount]=strataBuf;
+			speciesInfoArray[speciesCount]=speciesBuf.replace('&','_').trim();;
+			speciesCount++;
 				//System.out.println(speciesBuf);
 		} //end if
 } //end for
-
-} //end for loop
-} //end try
-catch (Exception ex) {System.out.println("Error reading input data"+ex);System.exit(1);}
-
-
-
-
-
 
 
 /*print the xml file*/
 try {
 
-PrintStream out = new PrintStream(new FileOutputStream("outfile.xml"));
+PrintStream out = new PrintStream(new FileOutputStream("outfile"+i+".xml"));
 
 out.println("<?xml version=\"1.0\"?>       ");
 out.println("<!DOCTYPE vegPlot SYSTEM \"vegPlot.dtd\">     ");
@@ -378,23 +394,30 @@ out.println("			<plotStopDate>"+nullValue+"</plotStopDate>       ");
 out.println("			<dateAccuracy>"+nullValue+"</dateAccuracy>       ");
 out.println("			<effortLevel>"+nullValue+"</effortLevel>       ");
 
+
+/*this is where to print out the list of different strata - firts grab the unique*/
+ 
+utility m = new utility();
+m.getUniqueArray(strataInfoArray, speciesCount);
+
+//print the unique strata types
+for (int ii=0; ii<m.outArrayNum; ii++) {System.out.println(m.outArray[ii]); 
 out.println("			<strata>        ");
-out.println("				<stratumType>"+nullValue+"</stratumType>       ");	
+out.println("				<stratumType>"+m.outArray[ii]+"</stratumType>       ");	
 out.println("				<stratumCover>"+nullValue+"</stratumCover>       ");
 out.println("				<stratumHeight>"+nullValue+"</stratumHeight>       ");
 out.println("			</strata>        ");
-
+}
 
 
 /*this is where to print out the species list*/
- for (int i=0; i<speciesCount; i++) { 
-//System.out.println("test "+speciesInfoArray[i]);
+ for (int iii=0; iii<speciesCount; iii++) { 
 
 out.println("                   <taxonObservations>        ");
-out.println("                           <authNameId>"+speciesInfoArray[i]+"</authNameId>       ");
+out.println("                           <authNameId>"+speciesInfoArray[iii]+"</authNameId>       ");
 out.println("                           <originalAuthority>"+nullValue+"</originalAuthority>       ");
 out.println("                           <strataComposition>        ");
-out.println("                                   <strataType>"+nullValue+"</strataType>       ");
+out.println("                                   <strataType>"+strataInfoArray[iii]+"</strataType>       ");
 out.println("                                   <percentCover>"+nullValue+"</percentCover>       ");
 out.println("                           </strataComposition>        ");
 out.println("                           <interptretation>        ");
@@ -414,7 +437,7 @@ out.println("                   </taxonObservations>        ");
 
 
 out.println("			<communityType>        ");
-out.println("				<classAssociation>"+classCommName+"</classAssociation>       ");
+out.println("				<classAssociation>"+provCommName+"</classAssociation>       ");
 out.println("				<classQuality>"+nullValue+"</classQuality>       ");
 out.println("				<startDate>"+nullValue+"</startDate>       ");
 out.println("				<stopDate>"+nullValue+"</stopDate>       ");
@@ -468,6 +491,18 @@ out.println("</vegPlot>");
 } //end try
 
 catch (Exception ex) {System.out.println("Error printing the xml file "+ex);System.exit(1);}
+
+
+
+
+} //end for loop - looping though the plot array
+} //end try
+catch (Exception ex) {System.out.println("Error reading input data"+ex);System.exit(1);}
+
+
+///this is where the printer used to be
+
+
 
 }
 }
