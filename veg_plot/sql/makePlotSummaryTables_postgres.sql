@@ -1,10 +1,24 @@
 /*
  *
  * This sql script will create two table which queries composed within the
- * servlets can access for querying denormalized data.  Basically the two tables
- * include site data and species information
+ * VegBank servlets can access for querying denormalized data.  Basically 
+ * the two tables include site data and species information
+ *
+ * '$Author: harris $'
+ * '$Date: 2002-05-31 22:16:45 $'
+ * '$Revision: 1.6 $'
  *
  */
+
+
+/*
+ * Update the core VegBank tables so that there will be
+ * no database errors while trying to load the 'snapshot'
+ * tables.  
+ */
+update observation set obsenddate = '2002-JAN-01' where obsenddate = null;
+update observation set obsstartdate = '2002-JAN-01' where obsstartdate = null;
+
 
 /*
  * drop already existing tables
@@ -93,7 +107,6 @@ from plot, observation where observation.plot_id = plot.plot_id;
 /*
  * create the tables  -- for plot species related information
  */
-
 drop table plotSpeciesSum;
 drop SEQUENCE PLOTSPECIESSUM_ID_seq;
 CREATE SEQUENCE PLOTSPECIESSUM_ID_seq;
@@ -133,7 +146,7 @@ and
 	
 
 
-	--UPDATE THE SPECIES SUMMARY TABLE
+--UPDATE THE SPECIES SUMMARY TABLE
 
 
 --update the 'AUTHOROBSCODE' table
