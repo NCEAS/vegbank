@@ -1,36 +1,13 @@
 <HTML>
-<!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+
 <HEAD>
-<!-- #BeginEditable "doctitle" --> 
+ 
 <TITLE>Plant Taxon Data Model</TITLE>
-<!-- #EndEditable --> 
+ 
 <meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
-<table cellspacing="0" cellpadding="0" border="0" width="800">
-  <tr> 
-    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
-    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
-      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
-    </td>
-    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
-  </tr>
-  <tr> 
-    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
-    <td width="119" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="../general/login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="../general/info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="../general/help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
-    </td>
-  </tr>
-</table>
-<!-- #BeginEditable "Body" --> 
+<link rel="stylesheet" href="@stylesheet@" type="text/css" /></HEAD>
+<BODY>
+@vegbank_header_html_normal@
 <table cellspacing="0" cellpadding="0" border="0">
   <tr> 
     <td width="1" height="26" valign="top"></td>
@@ -40,21 +17,17 @@
   <tr> 
     <td width="1" height="566" valign="top"></td>
     <td height="566" colspan="2" valign="top"> 
-      <h2 class=MsoNormal align="center"><b><font face="Georgia, Times New Roman, Times, serif">Taxonomic 
-        data models   </font></b></h2>
-      <p class=MsoNormal style='
-'><font face="Georgia, Times New Roman, Times, serif"><span style='font-size:11.0pt'>Classifications 
+      <h2  align="center"><b>Taxonomic 
+        data models   </b></h2>
+      <p>Classifications 
         of organisms and communities provide a complex set of problems that must 
-        be addressed in any information system </span><span style='font-size:11.0pt;
-'>containing references to biological taxa or ecological communities</span><span style='font-size:11.0pt'>. 
+        be addressed in any information system containing references to biological taxa or ecological communities. 
         The core problem is that taxonomic standards vary with time, place, and 
-        investigator such that </span><span
-style='font-size:11.0pt;'>biological taxa and communities frequently have multiple 
+        investigator such that biological taxa and communities frequently have multiple 
         names and those same names frequently have been applied to multiple taxon 
-        concepts</span><span style='font-size:11.0pt'>. When we combine diverse 
-        data into a single database, we need to reconcile those different standards.</span></font></p>
-      <p class=MsoNormal style='
-'><font face="Georgia, Times New Roman, Times, serif"><span style='font-size:11.0pt'>The 
+        concepts. When we combine diverse 
+        data into a single database, we need to reconcile those different standards.</p>
+      <p>The 
         traditional solution has been to agree on a standard list and to map all 
         the various applications onto that list. For example, within the US we 
         have several standard lists of plant taxa including Kartesz (1999), <a
@@ -69,15 +42,14 @@ href="http://www.natureserveexplorer.org/">NatureServe Explorer</a>. However,
         can be labeled with multiple names. The standard lists do not define the 
         taxonomic concepts employed, or how they have changed as the list has 
         evolved. (3) Different parties have different perspectives on acceptable 
-        names and the meanings associated with them</span></font></p>
-      <p class=MsoNormal style='
-'><font face="Georgia, Times New Roman, Times, serif"><span style='font-size:11.0pt'>Part 
+        names and the meanings associated with them</p>
+      <p>Part 
         of the ambiguity arises from the requirement of biological nomenclature 
         that when a taxon is split, the name continues to be applied to the taxon 
         that includes the type specimen for the original name. Consider the case 
         of shagbark hickory, which some authors think of as a single entity and 
         others think should be divided into two: northern and southern shagbark. 
-        If you encounter the name “<i>Carya ovata</i> (Miller) K. Koch” in a database, 
+        If you encounter the name "<i>Carya ovata</i> (Miller) K. Koch" in a database, 
         you cannot be sure whether it means all shagbarks (<i>sec.</i> Gleason 
         1952), or just northern shagbark (<i>sec.</i> Radford et al. 1968). Trees 
         that Radford recognizes as <i>Carya carolinae-septentrionalis</i> would 
@@ -93,21 +65,20 @@ href="http://www.natureserveexplorer.org/">NatureServe Explorer</a>. However,
         associated with the shagbarks, the three references used above, and how 
         names and references combine to form three concepts. Note that there are 
         two alternative and synonymous name-reference pairs for each of the three 
-        concepts. </span></font></p>
+        concepts. </p>
     </td>
   </tr>
   <tr> 
     <td width="1" height="296" valign="top"></td>
     <td height="296" colspan="2" valign="top">
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><img width=597 height=282
-src="../design/images/carya.jpg" align=middle hspace=12 v:shapes="_x0000_s1029"></font></div>
+      <div align="center"><img width=597 height=282
+src="../design/images/carya.jpg" align=middle hspace=12 v:shapes="_x0000_s1029"></div>
     </td>
   </tr>
   <tr> 
     <td width="1" height="169" valign="top"></td>
-    <td height="169" colspan="2" valign="top"><font face="Georgia, Times New Roman, Times, serif"><span
-style='font-size:11.0pt'>We follow Richard Pyle in referring to the name-reference 
-      couplet as an “assertion” (similar in meaning to “potential taxon” as used 
+    <td height="169" colspan="2" valign="top"><p>We follow Richard Pyle in referring to the name-reference 
+      couplet as an "assertion" (similar in meaning to "potential taxon" as used 
       by Berendsohn 1995). Several points emerge from this example. (1) A name-reference 
       combination constitutes an assertion of a taxonomic concept, though that 
       assertion may be synonymous with other assertions. (2) Identifications (e.g., 
@@ -117,19 +88,19 @@ style='font-size:11.0pt'>We follow Richard Pyle in referring to the name-referen
       assertions as standard, and simultaneously recognize other assertions as 
       nonstandard. (4) Identification of the appropriate assertion to attach to 
       an organism does not immediately dictate which name should be applied to 
-      that assertion.</span></font></td>
+      that assertion.</p></td>
   </tr>
   <tr> 
     <td width="1" height="261" valign="top"></td>
     <td width="778" height="261" valign="top"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><img width=516 height=273
-src="../design/images/assertion.jpg" align=middle hspace=12 v:shapes="_x0000_s1028"></font></div>
+      <div align="center"><img width=516 height=273
+src="../design/images/assertion.jpg" align=middle hspace=12 v:shapes="_x0000_s1028"></div>
     </td>
     <td width="19" height="261" valign="top"></td>
   </tr>
   <tr> 
     <td width="1" height="264" valign="top"></td>
-    <td height="264" colspan="2" valign="top"><font face="Georgia, Times New Roman, Times, serif">We 
+    <td height="264" colspan="2" valign="top"><p>We 
       designed a concept-based taxonomy data model and organized with ITIS and 
       the FGDC Biological Data Working Group <a href="http://biology.usgs.gov/fgdc.bio/FGDC_TaxNom.doc">a 
       meeting</a> to evaluate it. Our model centers on the <b><i>Assertion</i></b> 
@@ -149,24 +120,24 @@ src="../design/images/assertion.jpg" align=middle hspace=12 v:shapes="_x0000_s10
       name that a party would choose to apply to the assertion. A name <b><i>Usage</i></b> 
       is a party-specific application of a name to an assertion, which allows 
       names to change without necessarily changing the assertions tracked in the 
-      database.</font></td>
+      database.</p></td>
   </tr>
   <tr> 
     <td width="1" height="219" valign="top"></td>
     <td width="778" height="219" valign="top"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><img width=752 height=286
-src="../design/images/taxmod.jpg" align=middle hspace=10 vspace=10 v:shapes="_x0000_s1026"></font></div>
+      <div align="center"><img width=752 height=286
+src="../design/images/taxmod.jpg" align=middle hspace=10 vspace=10 v:shapes="_x0000_s1026"></div>
     </td>
     <td width="19" height="219" valign="top"></td>
   </tr>
   <tr> 
     <td width="1" height="198" valign="top"></td>
-    <td height="198" colspan="2" valign="top"><font face="Georgia, Times New Roman, Times, serif">The 
+    <td height="198" colspan="2" valign="top"><p>The 
       model we developed is similar to the data model proposed by the International 
       Organization for Plant Information (<a
 href="http://iopi.csu.edu.au/iopi/">IOPI</a>;  <a href="http://www.bgbm.org/biodivinf/docs/IOPI_Model/">Berendsohn 
       1997</a>). However, our model incorporates a number of advances over the 
-      IOPI model. The core entity in the IOPI model is the “Potential taxon”, 
+      IOPI model. The core entity in the IOPI model is the "Potential taxon", 
       which represents a combination of our Assertion and Usage entities. Keeping 
       these separate clarifies the important difference between taxonomic concepts 
       and the names applied to those concepts, thereby creating greater stability 
@@ -175,44 +146,12 @@ href="http://iopi.csu.edu.au/iopi/">IOPI</a>;  <a href="http://www.bgbm.org/biod
       views as deriving from publications. Because the IOPI model is organized 
       around fixed publication events, it does not efficiently map continually 
       changing party perspectives, making it difficult to provide software generated 
-      time-specific party views of the database </font></td>
+      time-specific party views of the database. </p></td>
   </tr>
 </table>
-<div class=Section1> <font face="Georgia, Times New Roman, Times, serif"><br>
-  </font></div>
-<!-- #EndEditable --><br>
-<table cellspacing="0" cellpadding="0" border="0">
-  <tr bgcolor="#EED85B"> 
-    <td colspan="6" height="8" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="-7">&nbsp;</font></td>
-  </tr>
-  <TR> 
-    <td width="43" height="8" valign="top"></td>
-    <td width="326" height="8" valign="top"></td>
-    <td width="47" height="8" valign="top"></td>
-    <td width="154" height="8" valign="top"></td>
-    <td width="91" height="8" valign="top"></td>
-    <td width="131" height="8" valign="top"></td>
-  </tr>
-  <tr> 
-    <td width="800" height="38" colspan="6" valign="top"> 
-      <p align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../index.html">VegBank 
-        Home</a> | <a href="../general/info.html">About VegBank</a> |<a href="../general/instructions.html">Instructions</a> 
-        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="../general/contact.html"> 
-        Contact</a> | <a href="../general/help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
-        <font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../general/register.html">Register</a> 
-        | <a href="../general/login.html">Login</a> |<a href="../general/actions.html"> 
-        use VegBank</a>| <a href="../general/logout.html">Logout</a> |<a href="../general/account.html"> 
-        My VegBank Account</a></font></font></p>
-    </td>
-  </tr>
-  <tr> 
-    <td width="800" height="24" colspan="6" valign="top"> 
-      <p align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&copy; 
-        2002 Ecological Society of America<br>
-        <a href="../general/terms.html">Terms of use</a> |<a href="../general/privacy.html"> 
-        Privacy policy</a></font></p>
-    </td>
-  </tr>
-</table>
+<div class=Section1> <br>
+  </div>
+<br>
+@vegbank_footer_html_onerow@
 </BODY>
-<!-- #EndTemplate --></HTML>
+</HTML>

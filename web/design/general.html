@@ -1,52 +1,29 @@
 <HTML>
-<!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+
 <HEAD>
-<!-- #BeginEditable "doctitle" --> 
+ 
 <TITLE>Plot module design</TITLE>
-<!-- #EndEditable --> 
+ 
 <meta http-equiv="Content-Type" content="text/html; charset=">
-</HEAD>
-<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
-<table cellspacing="0" cellpadding="0" border="0" width="800">
-  <tr> 
-    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
-    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
-      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
-    </td>
-    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
-  </tr>
-  <tr> 
-    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
-    <td width="119" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="../general/login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="../general/info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="../general/help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
-    </td>
-  </tr>
-</table>
-<!-- #BeginEditable "Body" --> 
-<h2 align="center"><font face="Arial, Helvetica, sans-serif"><br>
-  Overall architecture of the vegetation plot module.</font></h2>
+<link rel="stylesheet" href="@stylesheet@" type="text/css" /></HEAD>
+<BODY>
+@vegbank_header_html_normal@
+<h2 align="center"><br>
+  Overall architecture of the vegetation plot module.</h2>
 <blockquote> 
-  <p><font face="Arial, Helvetica, sans-serif">1. Vegetation plots can be viewed 
-    as occurring at a locality.</font></p>
-  <p><font face="Arial, Helvetica, sans-serif">2. A plot observation occurs at 
+  <p>1. Vegetation plots can be viewed 
+    as occurring at a locality.</p>
+  <p>2. A plot observation occurs at 
     the locality. Plot databases contain site information and taxon co-occurrence 
-    data collected at the plot.</font></p>
-  <p><font face="Arial, Helvetica, sans-serif">3. Plots in plot databases can 
+    data collected at the plot.</p>
+  <p>3. Plots in plot databases can 
     be interpreted as representing communities (syntaxa) that exist in community 
-    classifications.</font></p>
-  <p><font face="Arial, Helvetica, sans-serif">4. Plot observations/collectiuons 
+    classifications.</p>
+  <p>4. Plot observations/collectiuons 
     include observations/specimens of one or more taxa. These same organisms can 
-    be observed in multiple plots.</font></p>
-  <p><font face="Arial, Helvetica, sans-serif">5. Organisms can be interpreted 
-    as representing biological taxa that exisit in various classifications.</font></p>
+    be observed in multiple plots.</p>
+  <p>5. Organisms can be interpreted 
+    as representing biological taxa that exisit in various classifications.</p>
 </blockquote>
 <table width="800" border="0" cellspacing="0" cellpadding="0">
   <tr> 
@@ -58,34 +35,34 @@
     <td> 
       <p>&nbsp;</p>
       <blockquote>
-        <p><font face="Arial, Helvetica, sans-serif">1. A research project can 
+        <p>1. A research project can 
           contain one or more plot observations. The project contains information 
-          that is in common among all the observations that belong to the project.</font></p>
-        <p><font face="Arial, Helvetica, sans-serif">2. Plots can contain plots. 
+          that is in common among all the observations that belong to the project.</p>
+        <p>2. Plots can contain plots. 
           Each subplot references its parent plot through a recursive foreign 
-          key to another plot. </font></p>
-        <p><font face="Arial, Helvetica, sans-serif">3. A plot record contains 
+          key to another plot. </p>
+        <p>3. A plot record contains 
           or references information about attributes of the plot that will not 
-          change between temporally displaced observations of the plot.</font></p>
-        <p><font face="Arial, Helvetica, sans-serif">4. An observation contains 
+          change between temporally displaced observations of the plot.</p>
+        <p>4. An observation contains 
           or references information about attributes that might differ between 
-          observation events.</font></p>
-        <p><font face="Arial, Helvetica, sans-serif">5. A plot most have at least 
+          observation events.</p>
+        <p>5. A plot most have at least 
           one observation and can have several observations, each of which references 
           the parent (earlier) observation via a recursive foreign key to that 
-          observation.</font></p>
-        <p><font face="Arial, Helvetica, sans-serif">6. An observation can be 
+          observation.</p>
+        <p>6. An observation can be 
           interpreted (by one or more parties) at one or more times as belonging 
           to one or more particular types of vegetation. A vegetation type corresponds 
           to a &quot;community concept&quot; in the community taxonomy module. 
           Because vegetation can change, there is no necessary relationshIp between 
-          the interpretations at different observation events for a plot.</font></p>
-        <p><font face="Arial, Helvetica, sans-serif">7. At each observation event, 
-          plant taxa are observed and their attributes are recorded. </font></p>
-        <p><font face="Arial, Helvetica, sans-serif">8. Each plant taxon observed 
+          the interpretations at different observation events for a plot.</p>
+        <p>7. At each observation event, 
+          plant taxa are observed and their attributes are recorded. </p>
+        <p>8. Each plant taxon observed 
           is interpreted as belonging to a particular plant concept in the plant 
           taxonomy module. Taxa can be assigned various interpretations at various 
-          times by various parties. </font></p>
+          times by various parties. </p>
       </blockquote>
     </td>
   </tr>
@@ -96,39 +73,7 @@
   </tr>
 </table>
 <p>&nbsp;</p>
-<!-- #EndEditable --><br>
-<table cellspacing="0" cellpadding="0" border="0">
-  <tr bgcolor="#EED85B"> 
-    <td colspan="6" height="8" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="-7">&nbsp;</font></td>
-  </tr>
-  <TR> 
-    <td width="43" height="8" valign="top"></td>
-    <td width="326" height="8" valign="top"></td>
-    <td width="47" height="8" valign="top"></td>
-    <td width="154" height="8" valign="top"></td>
-    <td width="91" height="8" valign="top"></td>
-    <td width="131" height="8" valign="top"></td>
-  </tr>
-  <tr> 
-    <td width="800" height="38" colspan="6" valign="top"> 
-      <p align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../index.html">VegBank 
-        Home</a> | <a href="../general/info.html">About VegBank</a> |<a href="../general/instructions.html">Instructions</a> 
-        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="../general/contact.html"> 
-        Contact</a> | <a href="../general/help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
-        <font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../general/register.html">Register</a> 
-        | <a href="../general/login.html">Login</a> |<a href="../general/actions.html"> 
-        use VegBank</a>| <a href="../general/logout.html">Logout</a> |<a href="../general/account.html"> 
-        My VegBank Account</a></font></font></p>
-    </td>
-  </tr>
-  <tr> 
-    <td width="800" height="24" colspan="6" valign="top"> 
-      <p align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&copy; 
-        2002 Ecological Society of America<br>
-        <a href="../general/terms.html">Terms of use</a> |<a href="../general/privacy.html"> 
-        Privacy policy</a></font></p>
-    </td>
-  </tr>
-</table>
+<br>
+@vegbank_footer_html_onerow@
 </BODY>
-<!-- #EndTemplate --></HTML>
+</HTML>
