@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-02-04 00:44:58 $'
-*  '$Revision: 1.4 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-02-04 01:19:07 $'
+*  '$Revision: 1.5 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -52,21 +52,22 @@
 <tr>
 <h2 align="center">Register as a VegBank User</h2>
 
-<p>We require that users register so that we can </p>
+<p>VegBank may be freely used without registration.  If you wish to log in as a guest,
+please click <a href="/vegbank/Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">here</a>.  The following features of VegBank require registration:</p>
 <ul>
-  <li>track use of VegBank data, </li>
-  <li>maintain user profiles with preferences and use history, and </li>
-  <li>establish appropriate levels of certification and permissions for advanced functions. </li>
+  <li>Adding data to the archive and annotating extant data (these also require certification). </li>
+  <li>Building personal datasets and queries, requesting special permission to view data [not yet implemented], </li>
+  
 </ul>
-<p>Visitors to www.vegbank.org 
+<p>Visitors to vegbank.org 
   are guaranteed privacy. Information collected on users and their activities 
-  at www.vegbank.org is kept private and never shared with other organizations 
+  at vegbank.org is kept private and never shared with other organizations 
   or persons. However any data, comments, interpretations, or the like that you 
   submit or affix to a record in the VegBank database will be considered public 
   except where confidentiality has been formally requested to protect endangered 
   species or rights of private land owners.</p>
 Permission to use certain 
-advanced features and function requires certification.<br>
+advanced features requires certification.<br>
 
 <h3><br>
   Please fill in the information below to create an account. 
