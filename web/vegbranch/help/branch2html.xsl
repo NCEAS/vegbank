@@ -63,7 +63,14 @@ WRITING TO:<xsl:value-of select="concat(../versionNumber,'/form.',name,$htmlsuff
   <xsl:call-template name="writehtmlhead" />
 <body>
   <h2>Help for '<xsl:value-of select="caption" /> <xsl:call-template name="tempNAme" />'</h2>
-  <img src="screenshots/{name}.png" alt="screen shot of '{caption}'" />
+  
+  <xsl:variable name="imgVersion"><xsl:choose>
+     <xsl:when test="string-length(screenshotVersion)&gt;0"><xsl:value-of select="screenshotVersion" /></xsl:when>
+     <xsl:otherwise><xsl:value-of select="../versionNumber" /></xsl:otherwise>
+   </xsl:choose></xsl:variable>
+   <a href="../screenshots/{name}_{$imgVersion}.png" target="vegbranch_fullsize_img"><img src="../screenshots/smaller/{name}_{$imgVersion}.png" alt="screen shot of '{caption}'" border="0"/></a>
+  
+  <!--<img src="screenshots/{name}.png" alt="screen shot of '{caption}'" /> -->
   <p><xsl:copy-of select="help" />
   <xsl:call-template name="getCtls"><xsl:with-param name="pathSoFar">form.<xsl:value-of select="name" /></xsl:with-param></xsl:call-template>
   </p>
