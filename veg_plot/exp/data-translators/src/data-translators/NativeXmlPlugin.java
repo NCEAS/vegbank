@@ -24,8 +24,8 @@ import  xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  * 	'$Author: harris $'
- *	'$Date: 2002-05-22 14:29:00 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2002-05-23 01:24:56 $'
+ *	'$Revision: 1.5 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -568,13 +568,96 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		}
 		return(v);
 	}
+	
 	public Vector getTaxaStrataExistence(String plantName, String plotName)
 	{
-		return(vectorBuf);
+		// first figure out the number corresponding to the specific 
+		// taxonObservation block containing this plantName
+		Vector nameVec = new Vector();
+		nameVec = parse.get(doc, "authorNameId");
+		//System.out.println("NativeXmlPlugin > nameVec size: " + nameVec.size() );
+		int target = nameVec.indexOf(plantName);
+		//System.out.println("NativeXmlPlugin > target: " + target );
+		
+		 // this is the taxonObs node of interest
+		Node tObs = parse.get(doc, "taxonObservation", target);
+		
+		// blank vector 
+		Vector strataVec = new Vector();
+		NodeList children = tObs.getChildNodes();
+    if (children != null)
+    {
+			int len = children.getLength();
+      for (int i = 0; i < len; i++)
+      {
+				//System.out.println( children.item(i) );
+				//Node cn = children.item(i).getFirstChild();
+				Node cn = children.item(i);
+				String nodeName = cn.getNodeName();
+				//System.out.println("node name: " + nodeName+" " + cn.getNodeType() );
+				
+				if ( nodeName.equals("stratumComposition") )
+				{
+					if ((cn != null) && (cn.getNodeType() == 1))
+					{
+						NodeList children2 = cn.getChildNodes();
+						//System.out.println("length: " + children2.getLength() );
+						Node renegade = children2.item(3);
+						String s = (renegade.getNodeName());
+						//System.out.println("renegade name: " + s );
+					
+						s = renegade.getFirstChild().getNodeValue();
+						//System.out.println("renegade val: " + s );
+						strataVec.addElement( s );
+					}
+				}
+      }
+    }
+		return(strataVec);
 	}
+	
+	
+	
 	public String getCummulativeStrataCover( String plantName, String plotCode)
 	{
-		return(stringBuf);
+		String s = null;
+		// first figure out the number corresponding to the specific 
+		// taxonObservation block containing this plantName
+		Vector nameVec = new Vector();
+		nameVec = parse.get(doc, "authorNameId");
+		System.out.println("NativeXmlPlugin > nameVec size: " + nameVec.size() );
+		int target = nameVec.indexOf(plantName);
+		System.out.println("NativeXmlPlugin > target: " + target );
+		
+		 // this is the taxonObs node of interest
+		Node tObs = parse.get(doc, "taxonObservation", target);
+		
+		// blank vector 
+		Vector strataVec = new Vector();
+		
+		NodeList children = tObs.getChildNodes();
+    if (children != null)
+    {
+			int len = children.getLength();
+      for (int i = 0; i < len; i++)
+      {
+				//System.out.println( children.item(i) );
+				//Node cn = children.item(i).getFirstChild();
+				Node cn = children.item(i);
+				String nodeName = cn.getNodeName();
+				System.out.println("node name: " + nodeName+" " + cn.getNodeType() );
+				
+				if ( nodeName.equals("taxonCover") )
+				{
+					if ((cn != null) && (cn.getNodeType() == 1))
+					{
+						s = (cn.getFirstChild().getNodeValue());
+						System.out.println("value: " + s );
+					}
+				}
+      }
+    }
+		return(s);
 	}
 	public String getTaxaStrataCover(String plantName, String plotCode, String stratumName)
 	{

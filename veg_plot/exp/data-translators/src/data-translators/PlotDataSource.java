@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-22 23:14:03 $'
- * 	'$Revision: 1.18 $'
+ *  '$Date: 2002-05-23 01:24:56 $'
+ * 	'$Revision: 1.19 $'
  */
 public class PlotDataSource 
 {
@@ -814,7 +814,11 @@ public class PlotDataSource
 	
 	/**
 	 * method that prints the variables for a given plot to the 
-	 * sys out
+	 * system.  This method is primarily to be used fro debugging
+	 * the plugin system for accessing plot data sources.
+	 *
+	 * @param pluginClass -- the name of the pluging class (eg. NativeXmlPlugin)
+	 * @param plotName -- the name of the plot
 	 */
 	private void printDBVariables(String pluginClass, String plotName)
 	{
@@ -823,7 +827,6 @@ public class PlotDataSource
 		{
 			//rectify this variable -- use a consistent name
 			plotCode = plotName;
-			
 			//define the plugin
 			PlotDataSource source = new PlotDataSource(pluginClass);
 			//get all the variables for the given plot
@@ -940,13 +943,13 @@ public class PlotDataSource
 			
 			System.out.println(" \n ----------------------plant taxa info-----------------------------");
 			System.out.println("number of unique plant names: " + source.plantTaxaNames.size() );
-			//System.out.println("unique plant names: " + source.plantTaxaNames.toString() );
 			
 			//get the coverages for the plants for each strata
 			for (int i=0; i<source.plantTaxaNames.size(); i++)
 			{
 				String name = source.plantTaxaNames.elementAt(i).toString();
-				//System.out.println("calling plotName : " + plotCode);
+				
+				// get the strata that the plant exists in
 				Vector strata = getTaxaStrataExistence(name, plotCode);
 				System.out.println("PlotDataSource > name:  " + name  );
 				for (int ii=0; ii<strata.size(); ii++)
@@ -956,6 +959,7 @@ public class PlotDataSource
 					System.out.println("PlotDataSource >  cover: " + getTaxaStrataCover(name, 
 						plotCode, curStrata ));
 				}
+				
 			}
 		}
 		catch (Exception e)
