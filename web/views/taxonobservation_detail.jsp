@@ -14,6 +14,7 @@
         <h2>View VegBank Taxon Observations</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
+         <% String rowClassReset = "evenrow"; %>
         <vegbank:get id="taxonobservation" select="taxonobservation" beanName="map" pager="true" />
 <!--Where statement removed from preceding: -->
 <vegbank:pager /><logic:empty name="taxonobservation-BEANLIST">
@@ -21,34 +22,36 @@
 </logic:empty>
 <logic:notEmpty name="taxonobservation-BEANLIST">
 <logic:iterate id="onerowoftaxonobservation" name="taxonobservation-BEANLIST">
+<bean:define id="taxonobservation_pk" name="onerowoftaxonobservation" property="taxonobservation_id" />
+
 <!-- iterate over all records in set : new table for each -->
-<table cellpadding="2" class="outsideborder" width="799">
-<tr>
-<td width="80%"><table class="leftrightborders" width="100%">
+<TABLE cellpadding="2" class="outsideborder" >
+<TR><TH colspan="5" class="major">Taxon:<bean:write name='onerowoftaxonobservation' property='authorplantname' /></TH></TR>
+<TR><TD colspan="5">
+
+<!-- taxon Obs -->
+<table class="leftrightborders" cellpadding="2" width="100%">
         <%@ include file="autogen/taxonobservation_detail_data.jsp" %>
     </table>
-</td>
-<td class="useraction">ACTION:<br/>
-<a href="@web_context@InterpretTaxonObservation.do?tobsAC=<bean:write name='onerowoftaxonobservation' property='accessioncode' />">
-Interpret This Plant</a>
-</td>
-        <bean:define id="taxonobservation_pk" name="onerowoftaxonobservation" property="taxonobservation_id" />
-<!--Insert a nested get statement here:
-   example:   
+</TD>
+</TR>
 
-<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_taxonobservation_pk" wparam="taxonobservation_pk" />-->
-<TR><TD COLSPAN="3">
+
+<TR>
+<!-- 2 HUGE CAPITALIZED CELLS: TaxInterpret | taxonObs | taxonImportance (w/ stems too) -->
+<TD valign="top"><!-- taxoninterpret -->
+
 <vegbank:get id="taxoninterpretation" select="taxoninterpretation_nostem" beanName="map" pager="false" where="where_taxonobservation_pk" wparam="taxonobservation_pk" perPage="-1" />
 <table class="leftrightborders" cellpadding="2">
-<tr><th colspan="19">Current Taxon Interpretations:</th></tr>
+<tr><th colspan="19">Current Interpretations of this Taxon:</th></tr>
 <logic:empty name="taxoninterpretation-BEANLIST">
 <tr><td class="@nextcolorclass@">  ERROR! no Taxon Interpretations found.</td></tr>
 </logic:empty>
 <logic:notEmpty name="taxoninterpretation-BEANLIST">
-<tr>
+<!--<tr>
 <th>More</th>
 <%@ include file="autogen/taxoninterpretation_summary_head.jsp" %>
-</tr>
+</tr>-->
 <logic:iterate id="onerowoftaxoninterpretation" name="taxoninterpretation-BEANLIST">
 <tr class="@nextcolorclass@">
 <td class="sizetiny">
@@ -56,13 +59,94 @@ Interpret This Plant</a>
                             Details
                             </a>
 </td>
-<%@ include file="autogen/taxoninterpretation_summary_data.jsp" %>
+<td><!-- all of this in one cell -->
+<%@ include file="autogen/taxoninterpretation_notblshort_data.jsp" %>
+</td>
 </tr>
 </logic:iterate>
 </logic:notEmpty>
+
+<!-- wanna interpret this differently? -->
+<!-- <br/><br/>
+<table class="noborder"> -->
+<tr>
+<td colspan="19" class="useraction">ACTION:
+<a href="@web_context@InterpretTaxonObservation.do?tobsAC=<bean:write name='onerowoftaxonobservation' property='accessioncode' />">
+Interpret This Plant</a>
+</td></tr>
+<!-- </table> -->
+
+
 </table>
-</TD></TR>
-</table>
+
+
+
+
+</TD>
+
+        
+
+
+
+<TD valign="top"><!-- importance values -->
+  
+  <vegbank:get id="taxonimportance" select="taxonimportance" beanName="map" pager="false" where="where_taxonimportance_taxonobservation_fk" wparam="taxonobservation_pk" perPage="-1" />
+  
+  <table class="leftrightborders" cellpadding="2">
+  <tr><th colspan="9">Taxon Importance Values:</th></tr>
+  <logic:empty name="taxonimportance-BEANLIST">
+  <tr><td class="@nextcolorclass@">  Sorry, no Taxon Importances found.</td></tr>
+  </logic:empty>
+  <logic:notEmpty name="taxonimportance-BEANLIST">
+  <tr>
+  <%@ include file="autogen/taxonimportance_summarynotaxon_head.jsp" %>
+  <th>Stems:</th>
+  </tr>
+  <logic:iterate id="onerowoftaxonimportance" name="taxonimportance-BEANLIST">
+  <bean:define id="taxonimportance_pk" name="onerowoftaxonimportance" property="taxonimportance_id" />
+  <% rowClass = rowClassReset ; %> <!-- reset rowClass, which got off in stems -->
+  <tr class="@nextcolorclass@">
+  
+  <%@ include file="autogen/taxonimportance_summarynotaxon_data.jsp" %>
+  <% rowClassReset = rowClass ; %> <!-- remember where to reset this -->
+  <td>
+    <!-- start stems -->
+    <!-- THIS token 'bumps' the rowClass var to start stems off in same color as last stuff: @nextcolorclass@ -->
+    <vegbank:get id="stemcount" select="stemcount" beanName="map" pager="false" where="where_stemcount_taxonimportance_fk" wparam="taxonimportance_pk" perPage="-1" />
+	<table class="leftrightborders" cellpadding="2">
+	
+	<logic:empty name="stemcount-BEANLIST">
+	<tr  class="@nextcolorclass@"><td>-none-</td></tr>
+	</logic:empty>
+	<logic:notEmpty name="stemcount-BEANLIST">
+	<tr>
+	<%@ include file="autogen/stemcount_summary_head.jsp" %>
+	</tr>
+	
+	<logic:iterate id="onerowofstemcount" name="stemcount-BEANLIST">
+	
+	<tr class="@nextcolorclass@">
+	<%@ include file="autogen/stemcount_summary_data.jsp" %>
+	</tr>
+	</logic:iterate>
+	</logic:notEmpty>
+	</table>
+
+    
+    
+    
+    <!-- end stems -->
+    
+    
+  </td>
+  </tr>
+  </logic:iterate>
+  </logic:notEmpty>
+  </table>
+
+</TD>
+
+</TABLE>
 <p>&nbsp;</p>
 </logic:iterate>
 </logic:notEmpty>
