@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-10-30 10:37:58 $'
-* '$Revision: 1.65 $'
+* '$Date: 2003-10-30 15:04:20 $'
+* '$Revision: 1.66 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -99,7 +99,9 @@
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="/${web.context_uri}/forms/"/>
     <!-- add link for page name that links to help frame jsp -->
-    <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp" />
+    <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
+   <!-- location and filename of xml index page -->
+    <filter token="NativeXMLIndexPage" value="/xml/vegbank-xml-index.html"/>
     <filter token="design_link" value="/${web.context_uri}/design/"/>
     <filter token="panel_link" value="/${web.context_uri}/panel/"/>
     <filter token="help_link" value="/help/"/>
