@@ -30,7 +30,7 @@
 <xsl:for-each select="/dataModel/entity" >
 <xsl:variable name="countAttsInView" select="count(attribute/attForms/formShow[translate(@name,$alphahigh,$alphalow)=$view])" />
 <xsl:comment><xsl:value-of select="entityName" /> has <xsl:value-of select="$countAttsInView" /> fields in view: <xsl:value-of select="$view" /></xsl:comment>
-<xsl:if test="$countAttsInView&gt;0">
+<xsl:if test="$countAttsInView&gt;-1">
 <xsl:variable name="currEnt" select="translate(entityName,$alphahigh,$alphalow)" />
 
             <!-- begin writing data here -->
@@ -90,6 +90,7 @@
                           <xsl:with-param name="currentAtt" select="ancestor::attribute" />
                         </xsl:call-template>
                       </tr>
+                      <bean:define id="hadData" value="true" />
                     </logic:notEmpty>
                   </xsl:for-each>
 </redirect:write>
