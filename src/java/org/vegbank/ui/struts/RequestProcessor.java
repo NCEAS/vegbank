@@ -19,8 +19,8 @@ import org.vegbank.ui.struts.Authentication;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-09 22:47:37 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-07-01 22:34:26 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,7 +113,7 @@ public class RequestProcessor extends org.apache.struts.action.RequestProcessor
 			}		
 		}
 
-		request.getSession().removeAttribute("postLoginFwd");
+		//request.getSession().removeAttribute("postLoginFwd");
 
 		return true;
 	}
