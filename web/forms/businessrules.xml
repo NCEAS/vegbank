@@ -80,4 +80,219 @@
       <field>accessioncode</field>
     </detailFields>
   </busRule>
+  <busRule>
+    <name>Stratum Types Duplicated not allowed within same Method</name>
+    <notes>Stratum Types cannot have duplicate StratumIndex values within the same StratumMethod, as is here happening.</notes>
+    <sqlSrc>br_stratumtypedupl</sqlSrc>
+    <detailFields>
+      <field>count</field>
+      <field get="true">stratummethod_id</field>
+      <field>stratumindex</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Cover Code Duplications not allowed within same method</name>
+    <notes>CoverCode values in CoverIndex may not be duplicated within the same CoverMethod_ID.</notes>
+    <sqlSrc>br_covercodedupl</sqlSrc>
+    <detailFields>
+      <field>count</field>
+      <field get="true">covermethod_id</field>
+      <field>covercode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Plot.DateEntered in null</name>
+    <notes>Default values for plot.dateEntered don't seem to be working.</notes>
+    <sqlSrc>br_plotdateentered</sqlSrc>
+    <detailFields>
+      <field>plot_id</field>
+      <field>accessioncode</field>
+      <field>authorplotcode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Observation.DateEntered in null</name>
+    <notes>Default values for observation.dateEntered don't seem to be working.</notes>
+    <sqlSrc>br_observationdateentered</sqlSrc>
+    <detailFields>
+      <field>observation_id</field>
+      <field>accessioncode</field>
+      <field>authorobscode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>plantUsage pseudo-required fields</name>
+    <notes>several fields in plantUsage are not required in the model, but nonetheless should be populated.  Denorm fields cannot be truly required in the model.</notes>
+    <sqlSrc>br_plantusagereqdflds</sqlSrc>
+    <detailFields>
+      <field>plantusage_id</field>
+      <field>plantstatus_id</field>
+      <field>plantconcept_id</field>
+      <field>party_id</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>commUsage pseudo-required fields.</name>
+    <notes>several fields in commUsage are not required in the model, but nonetheless should be populated.  Denorm fields cannot be truly required in the model.</notes>
+    <sqlSrc>br_commusagereqdflds</sqlSrc>
+       <detailFields>
+      <field>commusage_id</field>
+      <field>commstatus_id</field>
+      <field>commconcept_id</field>
+      <field>party_id</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in aux_role</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_auxroleacccode</sqlSrc>
+    <detailFields>
+      <field>role_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in commclass</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_commclassacccode</sqlSrc>
+    <detailFields>
+      <field>commclass_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in commConcept</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_commconceptacccode</sqlSrc>
+    <detailFields>
+      <field>commconcept_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in coverMethod</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_covermethodacccode</sqlSrc>
+    <detailFields>
+      <field>covermethod_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in  namedPlace</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_namedplaceacccode</sqlSrc>
+    <detailFields>
+      <field>namedplace_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in observation</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_observationacccode</sqlSrc>
+    <detailFields>
+      <field>observation_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in party</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_partyacccode</sqlSrc>
+    <detailFields>
+      <field>party_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in plantConcept</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_plantconceptacccode</sqlSrc>
+    <detailFields>
+      <field>plantconcept_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in plot</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_plotacccode</sqlSrc>
+    <detailFields>
+      <field>plot_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in project</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_projectacccode</sqlSrc>
+    <detailFields>
+      <field>project_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in referenceJournal</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_referencejournalacccode</sqlSrc>
+    <detailFields>
+      <field>referencejournal_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in reference</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_referenceacccode</sqlSrc>
+    <detailFields>
+      <field>reference_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in referenceParty</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_referencepartyacccode</sqlSrc>
+    <detailFields>
+      <field>referenceparty_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in soilTaxon</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_soiltaxonacccode</sqlSrc>
+    <detailFields>
+      <field>soiltaxon_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in StratumMethod</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_stratummethodacccode</sqlSrc>
+    <detailFields>
+      <field>stratummethod_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in taxonObservation</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_taxonobservationacccode</sqlSrc>
+    <detailFields>
+      <field>taxonobservation_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
+  <busRule>
+    <name>Accesion Code nulls in UserDefined</name>
+    <notes>please run accCode Gen, but figure out why they aren't being populated!</notes>
+    <sqlSrc>br_userdefinedacccode</sqlSrc>
+    <detailFields>
+      <field>userdefined_id</field>
+      <field>accessioncode</field>
+    </detailFields>
+  </busRule>
 </businessRules>
