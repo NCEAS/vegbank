@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-11-29 18:35:52 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-02-11 00:36:08 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -295,34 +295,6 @@ public class Mailer
 	public void send(Message message) throws MessagingException
 	{
 		Transport.send(message);
-/*
-		try
-		{ 
-			Transport.send(message);
-		}
-		catch (Exception ex)
-		{ // Attempt to restart the transport server and try again
-			
-			LogUtility.log("[" + DateTool.getDateTime() + "]  " +
-				"SEND FAILED!!  Attempting to restart Sendmail...");
-
-			// Let the sys admin tool try to restart Sendmail
-			this.attemptedRestart = true;
-			String sysResponse = SysAdminTool.restartSendmail();
-
-			LogUtility.log("[" + DateTool.getDateTime() + "]  " +
-				"System response to Sendmail restart:  " + sysResponse);
-				
-			if (!sysResponse.equals(SysAdminTool.SUCCESS))
-				LogUtility.log("[" + DateTool.getDateTime() + "]  " +
-					"Attempting to resend anyway...");
-			else
-				LogUtility.log("[" + DateTool.getDateTime() + "]  " +
-					"Attempting to resend again...");
-
-			Transport.send(message);
-		}
-*/
 	}
 }
 

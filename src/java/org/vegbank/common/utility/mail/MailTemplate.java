@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-11-25 17:48:52 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2005-02-11 00:36:08 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -303,8 +303,8 @@ public class MailTemplate implements Runnable {
 	 *
 	 **/
 	private void setAllProperties() {
-		this.type = "mailthis.templates";
-		this.locale = "enthis.us";
+		this.type = "mail.templates";
+		this.locale = "en.us";
 	}
 
 
