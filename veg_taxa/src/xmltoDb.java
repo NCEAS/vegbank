@@ -39,6 +39,7 @@ String correlationDateEntered = null;
 String correlationCitation = null;
 String correlationLabel = null;
 String congruence =null;
+String blankSwitch=null; 
 
 try {
 BufferedReader in = new BufferedReader(new FileReader(infile), 8192);
@@ -47,12 +48,12 @@ String s=null;
 
 	/*read the input file into the array*/
 	while ( (s=in.readLine()) !=null){
-	if (s.indexOf("#")>0) {System.out.println("reading comments");}
+	if (s.indexOf("#")>0) {blankSwitch="off";}
 
 	else{
 	infileArray[lineNum]=s;
 	lineNum++;
-	System.out.println(lineNum);
+	//System.out.println(lineNum);
 	} //end else	
 
 	} //end while
@@ -145,6 +146,12 @@ lastNameNum++;
 /*insert the name and name information for each document*/
 stmt.executeUpdate("INSERT into name (name_id, symbol, name, ref_id, commonName, family, authorName) values ("+lastNameNum+", '"+symbol+"','"+taxon+"',"+lastRefNum+",'"+commonName+"','"+family+"','"+nameAuthor+"')");
 
+
+
+
+/*insert the circumscription information*/
+lastRefNum++;
+stmt.executeUpdate("INSERT into reference (ref_id, author, speciesName) values ("+lastRefNum+",'"+circumAuthor+"','"+circumLabel+"')");
 
 } catch (Exception ex) {System.out.println("Loading the data failed"+ex);System.exit(1);}
 

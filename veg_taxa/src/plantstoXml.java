@@ -22,6 +22,7 @@ String synonymType = null;
 String symbol = null;
 String name=null;
 String binomial=null;
+String commonName=null;
 String synonym=null;
 String family=null;
 String nameAuthor=null;
@@ -52,6 +53,7 @@ catch(Exception e) {System.out.println("did not load all the data "+e.getMessage
 try {
 for (int i=0; i<lineNum; i++) {
 
+/*treat a line with a synonym differently than one without - below is the synonym line*/
 	if (infileArray[i].indexOf("=") >0 ) { 
 		synonymType = "synonym";
 		StringTokenizer t = new StringTokenizer(infileArray[i], "|");
@@ -78,6 +80,32 @@ for (int i=0; i<lineNum; i++) {
 	} //end if
 
 
+
+/*else the line does not contain a synonym*/
+	else {
+	synonymType = "nonSynonym";
+	StringTokenizer t = new StringTokenizer(infileArray[i], "|");
+                        symbol=t.nextToken().replace('"',' ').trim();
+                        name=t.nextToken().replace('"',' ').trim();
+                        commonName=t.nextToken().replace('=',' ').trim();
+                        family=t.nextToken().replace('"',' ').trim();
+
+
+
+ /*next lines will separate the author from the binomial - this should be modified cause
+   only works when there is a Genus and species name*/
+                        StringTokenizer t2 = new StringTokenizer(name, " ");
+                        String buf = t2.nextToken();
+                        String Genus = buf;
+                        buf= t2.nextToken();
+                        String species=buf;
+                        buf= t2.nextToken();
+                        binomial = Genus+" "+species;
+                        /*make sure to get the whole name*/
+                        while (t2.hasMoreTokens()) {String remaingBuf = t2.nextToken(); buf=buf+remaingBuf;}
+                        nameAuthor=buf;
+
+	} //end else
 
 
 /*next block will write out the xml document*/
@@ -133,6 +161,58 @@ for (int i=0; i<lineNum; i++) {
 			out.println("<congruence>equal</congruence>");
 			out.println("</correlation>");
 			out.println("</plantTaxa>");
+} //end if
+
+	if (synonymType.equals("nonSynonym")) {
+			out.println("<?xml version=\"1.0\"?>");
+                        out.println("<!DOCTYPE plantTaxa SYSTEM \"taxa.dtd\">");
+                        out.println("<plantTaxa>");
+                        out.println("<name>");
+                        out.println("<symbol>"+symbol+"</symbol>");
+                        out.println("<taxon>"+binomial+"</taxon>");
+                        out.println("<commonName>"+commonName+"</commonName>");
+                        out.println("<family>"+family+"</family>");
+                        out.println("<entryDate>2000</entryDate>");
+                        out.println("<nameReference>");
+                        out.println("<author>"+nameAuthor+"</author>");
+                        out.println("<dateEntered>2000</dateEntered>");
+                        out.println("<citation>unknown, from plants 1996</citation>");
+                        out.println("<label>"+name+"</label>");
+                        out.println("</nameReference>");
+                        out.println("</name>");
+                        out.println("");
+                        out.println("<circumscription>");
+                        out.println("<type>No</type>");
+                        out.println("<circumReference>");
+                        out.println("<author>Plants1996</author>");
+                        out.println("<dateEntered>2000</dateEntered>");
+                        out.println("<citation>Plants 1996: plants.usda.gov</citation>");
+                        out.println("<label>"+name+"</label>");
+                        out.println("</circumReference>");
+                        out.println("</circumscription>");
+                        out.println("");
+                        out.println("<party>");
+                        out.println("<orgName>USDA</orgName>");
+                        out.println("</party>");
+                        out.println("");
+                        out.println("<status>");
+                        out.println("<currentStatus>NS</currentStatus>"); //this is std where there is no equals sign
+                        out.println("<statusParty>USDA</statusParty>");
+                        out.println("<startDate>1996</startDate>");  // edit this for the particular year
+                        out.println("<stopDate>null</stopDate>");
+                        out.println("</status>");
+                        out.println("");
+                        out.println("<correlation>");
+                        out.println("<correlationParty>USDA</correlationParty>");
+                        out.println("<correlationReference>");
+                        out.println("<correlationAuthor>Plants1996</correlationAuthor>");
+                        out.println("<correlationDateEntered>2000</correlationDateEntered>");
+                        out.println("<correlationCitation>Plants 1996: plants.usda.gov</correlationCitation>");
+                        out.println("<label>"+synonym+"</label>");
+                        out.println("</correlationReference>");
+                        out.println("<congruence>equal</congruence>");
+                        out.println("</correlation>");
+                        out.println("</plantTaxa>");
 
 
 		} //end if
