@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!-- 
+  * build.xml
+  *
+  * Global build script for veg_plot. This simply allows running all the sub 
+  * scripts from one place 
+  *
+  *     '$Author: farrell $'
+  *     '$Date: 2002-11-22 19:22:23 $'
+  *     '$Revision: 1.1 $'
+--> 
+<project name="veg_plot" default="init" basedir=".">
+        
+        <!-- INITIATION -->
+        <target name="init">
+  
+                <!-- RELEVANT DIRECTORIES -->
+                <property name="current_dir" value="./" />
+                <!--
+			<property name="src" value="./src" />
+                	<property name="html" value="./html" />
+                
+                	<property name="build" value="./build" />
+                	<property name="lib" value="./lib" />
+                	<property name="bin" value="./bin" />
+                	<property name="data" value="./data" />
+                	<property name="jardist" value="/usr/local/devtools/jakarta-tomcat/webapps/mapplotter/WEB-INF/lib/" />
+          		<property name="htmldist" value="/usr/local/devtools/jakarta-tomcat/webapps/forms" />
+                
+                	<property name="ant" value="./lib/ant.jar" /> 
+                	<property name="xerces" value="./lib/xerces_1_3_1.jar" />
+                	<property name="xalan" value="./lib/xalan_1_2_2.jar" />
+                	<property name="glue" value="lib/GLUE-STD.jar" />
+                	<property name="servlet" value="lib/servlet.jar" />
+                
+                	<property name="cpath" value="${servlet}:${glue}:${utilities}:${xmlresource}:${ant}:${servlet_api}:${xerces}:${xalan}:${xml_editor}:${db_access_module}:${build}"/>
+		-->
+        </target>
+        
+	<target name="compile">
+		<echo message="Compiling all of ${ant.project.name}"/>
+		<ant dir="exp/client_installer" target="compile"/>
+		<ant dir="exp/database_access" target="compile"/>
+		<ant dir="exp/data-translators" target="compile"/>
+		<ant dir="exp/rmidatasource" target="compile"/> 
+		<ant dir="exp/services" target="compile"/>
+		<ant dir="exp/servlet" target="compile"/>
+		<!--<ant dir="exp/vegbank_web" target="compile"/>-->
+		<ant dir="exp/vegclient" target="compile"/>
+		<ant dir="exp/xml-resource" target="compile"/>
+		<ant dir="exp/xml_to_sql" target="compile"/>
+	</target>
+</project>
+

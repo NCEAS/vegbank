@@ -5,9 +5,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  *   '$Author: harris $'
-  *     '$Date: 2002-07-31 18:24:02 $'
-  * '$Revision: 1.5 $'
+  *   '$Author: farrell $'
+  *     '$Date: 2002-11-22 19:22:24 $'
+  * '$Revision: 1.6 $'
   *
   *	Authors: John Harris
   *	Copyright: 2000 Regents of the University of California and the
@@ -55,10 +55,11 @@
 	<property name="stylesheet_src" value="stylesheet_servlet/src"/>
 	
 	<property name="multipart_src" value="multipart"/>
+	<property name="multipart" value="lib/multipart.jar"/>
 	<property name="ant" value="ant.jar"/>
 
 	
-	<property name="cpath" value="${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
+	<property name="cpath" value="${multipart}:${ant}:${build}:${data-source}:${dbaccess}:${build}:${xmlresource}:${servlet_api}:${jdbc}:./"/>
 	
 	<filter token="server" value="${server}" />
 	<filter token="servlet-path" value="${servlet-path}" />
@@ -102,13 +103,14 @@
 		excludes="**/CVS* "
 	/>
 	<!-- the multipart encoders decoders -->
+	<!--
 	<copydir src="${multipart_src}" 
 		dest="${build}" 
 		filtering="yes"
 		includes="**.* "
 		excludes="**/CVS* "
 	/>
-	
+	-->
 	
 	<!-- the framework -->
 	<copydir src="${frameworksrc}" 
@@ -199,12 +201,13 @@
 		excludes="${build}/servlet/authentication"
 	/>
 	
+<!--
 	<jar jarfile ="${lib}/multipart.jar"
 		basedir="${build}"
 		includes="servlet/multipart/** "
 		excludes="${build}/servlet/authentication"
 	/>
-	
+	-->
 	<jar jarfile ="${lib}/datafile-exchange.jar"
 		basedir="${build}"
 		includes="servlet/datafile_exchange/** "
