@@ -15,12 +15,20 @@ TH	{
 	background-color : #336633;
 	}
 
+.headerLink,
+a.headerLink:link,
+a.headerLink:visited,
+a.headerLink:hover {
+	color: #FFFF80;
+	text-decoration: underline;
+}
+
 H1, H2, H3, H4, H5, H6	{
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
 						}
-th.grey, td.grey, tr.grey {background-color : #DDDDDD}						
-.listRowA {background-color : #FFFFCC }						
+th.grey, td.grey, tr.grey {background-color : #DDDDDD; color: LightSalmon}
+.listRowA {background-color : #FFFFCC; }						
 .listRowB {background-color : #FFFFFF }						
 .listRowA-Hi {background-color : #FF9933 }						
 .listRowB-Hi {background-color : #FF9933 }						
@@ -220,3 +228,9 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .error { font-weight: bold; color: red;}
 
 .verticaltext { layout-flow: vertical-ideographic }
+
+/* Generic Display styles */
+.gdEntityName { color: #FFFF80; }
+.gdRowLabel { color: Bisque; }
+.gdAttName { background-color : #686868; color: LightSalmon; }
+

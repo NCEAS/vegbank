@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-04-30 13:02:57 $'
-  *  '$Revision: 1.11 $'
+  *      '$Date: 2004-04-30 13:10:21 $'
+  *  '$Revision: 1.12 $'
   *
   *
   -->
@@ -71,6 +71,7 @@
 			    <p>
 				<bean:write name="reqAttribBean" property="givenName"/> 
 				<bean:write name="reqAttribBean" property="surName"/>
+				<br/>
         		(<bean:write name="reqAttribBean" property="currentCertLevelName"/>)
 				<br/>
 				<logic:notEqual name="reqAttribBean" property="emailAddress" value="null">
