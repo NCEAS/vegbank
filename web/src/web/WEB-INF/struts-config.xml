@@ -226,8 +226,6 @@
 		        input="AddStratumMethod"/>
 		<action path="/DisplayMainMenu"
 		        forward="/forms/MainMenu.jsp">
-			<set-property property="authClass"
-			              value="org.vegbank.ui.struts.Authenticate"/>
 		</action>
 		<action path="/DisplayEntity"
 		        type="org.vegbank.ui.struts.DisplayEntityAction"
