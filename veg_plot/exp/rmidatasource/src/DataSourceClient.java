@@ -30,8 +30,8 @@ import xmlresource.utils.transformXML;
  *	
  *  <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2002-05-15 20:53:28 $'
- * 	'$Revision: 1.18 $'
+ *  '$Date: 2002-05-16 15:57:03 $'
+ * 	'$Revision: 1.19 $'
  *
  *
  */
@@ -57,8 +57,8 @@ public class DataSourceClient
 		try
 		{
 
-			System.out.println("DataSourceCleint > connecting to server: " +hostName );
-			System.out.println("DataSourceCleint > on port: " +port );
+			System.out.println("DataSourceClient > connecting to server: " +hostName );
+			System.out.println("DataSourceClient > on port: " +port );
 			this.serverHost = hostName;
 			this.url = "//" + hostName + ":"+port+"/"+serverClass;
 			
@@ -88,21 +88,48 @@ public class DataSourceClient
 	/**
 	 * method that returns the names of the plots stored in this data 
 	 * source 
+	 * @deprecated -- this method assumes that the calling class is to
+	 * access a tnc plots mdb type database which is a bad assumption
 	 */
 	public Vector getPlotNames()
 	{
 		Vector v = new Vector();
 		try
 		{
-			v =  source.getPlotNames( );
+			v = source.getPlotNames();
 		}
-			catch(Exception e)
+		catch(Exception e)
 		{
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(v);
 	}
+	
+	
+	/**
+	 * method that returns the names of the plots stored in this data 
+	 * source 
+	 * @param fileType -- the type of file that the plots are 
+	 * stored in, that dictates the plugin that can be used.
+	 * this may inclued: 'tnc', 'vbaccess', and 'nativexml' only
+	 */
+	public Vector getPlotNames(String fileType)
+	{
+		Vector v = new Vector();
+		try
+		{
+			System.out.println("DataSourceClient > requesting plot names for file type: " + fileType);
+			v = source.getPlotNames(fileType);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(v);
+	}
+	
 
 	/**
 	 * method that returns the name of the project corresponding to 
@@ -935,7 +962,7 @@ public class DataSourceClient
 				System.out.println("DataSourceCleint > transmittal results: " + sendResults );
 				boolean fileValidityResults = client.isMDBFileValid();
 				System.out.println("DataSourceCleint > access file validity: " + fileValidityResults );
-				Vector v = client.getPlotNames();
+				Vector v = client.getPlotNames(fileType);
 				System.out.println("DataSourceCleint > found : " + v.size() +" plots in archive " );
 				String testPlot = "";
 				
@@ -976,6 +1003,7 @@ public class DataSourceClient
 						System.out.println("DataSourceCleint > insertion results html: \n" + tr );
 					}
 				}
+				
 			} 
 			catch(Exception e) 
 			{

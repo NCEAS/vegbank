@@ -31,8 +31,8 @@ import databaseAccess.DBinsertPlotSource;
  *	
  * <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2002-05-15 20:53:28 $'
- * 	'$Revision: 1.13 $'
+ *  '$Date: 2002-05-16 15:57:03 $'
+ * 	'$Revision: 1.14 $'
  *
  *
  */
@@ -185,7 +185,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 	 {
 		 try
 		 {
-				System.out.println("DataSourceImpl > uploading: " + fileName);
+				System.out.println("DataSourceImpl > uploading file named: " + fileName);
 				byte[] filedata = buffer;
 				//make the file that is defined as the instance variable
 				System.out.println("DataSourceImpl > writing to: " + mdbFile);
@@ -193,8 +193,11 @@ public class DataSourceImpl extends UnicastRemoteObject
 				BufferedOutputStream output = new
 				BufferedOutputStream(new FileOutputStream(file ));
 				output.write(filedata,0,filedata.length);
+				System.out.println("DataSourceImpl > file size: " + filedata.length);
 				output.flush();
 				output.close();
+				//sleep for debug purposes
+				Thread.sleep(4000);
 		 }
 		 catch (Exception e)
 		 {
@@ -472,6 +475,8 @@ public class DataSourceImpl extends UnicastRemoteObject
 	/**
 	 * method that retuns all the plots stored in a 
 	 * data source
+	 * @deprecated -- this method assumes that the tnc plots loader 
+	 *	plugin is to be used 
 	 */
   public Vector getPlotNames()
 	{
@@ -484,6 +489,58 @@ public class DataSourceImpl extends UnicastRemoteObject
 			System.out.println("DataSourceImpl > get plot names contacted");
 			v = source.getPlotNames();
 			System.out.println("DataSourceImpl > plot names: " + v.toString() );
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(v);
+	}
+	
+	/**
+	 * method that retuns all the plots stored in a 
+	 * data source
+	 *
+	 * @param fileType -- the type of file that the plots are 
+	 * stored in, that dictates the plugin that can be used.
+	 * this may inclued: 'tnc', 'vbaccess', and 'nativexml' only
+	 */
+  public Vector getPlotNames(String fileType)
+	{
+		System.out.println("DataSourceImpl > get plot names contacted");
+		Vector v = new Vector();
+		try
+		{
+			loaderPlugin = null;
+			System.out.println("DataSourceImpl > plot file type: " + fileType);
+			if ( fileType.toUpperCase().equals("TNC") )
+			{
+				System.out.println("DataSourceImpl > using datasource plugin: TNCPlotsDB");
+				loaderPlugin = "TNCPlotsDB";
+			}
+			else if (fileType.toUpperCase().equals("VBACCESS") )
+			{
+				System.out.println("DataSourceImpl > using datasource plugin: VBAccessDataSourcePlugin");
+				loaderPlugin = "VBAccessDataSourcePlugin";
+			}
+			else if (fileType.toUpperCase().equals("NATIVEXML") )
+			{
+				System.out.println("DataSourceImpl > using datasource plugin: NativeXmlPlugin");
+				loaderPlugin = "NativeXmlPlugin";
+			}
+			else
+			{
+				System.out.println("DataSourceImpl > cannot determine datasrc plugin type");
+			}
+			
+			if ( loaderPlugin != null )
+			{
+				// re-instantiate this class
+				source = new PlotDataSource(this.loaderPlugin);
+				v = source.getPlotNames();
+				System.out.println("DataSourceImpl > plot names: " + v.toString() );
+			}
 		}
 		catch( Exception e)
 		{
