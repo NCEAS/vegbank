@@ -50,6 +50,13 @@ print "# Need to fix the party_id on usr table\n";
 print `psql  -U $username $dbname --command "UPDATE usr SET party_id =  party.party_id WHERE usr.email_address = party.email;"`;
 
 print "\n######################################################################\n";
+print "# Update user permissions\n";
+print `psql  -U $username $dbname --command "UPDATE usr SET permission_type=15 WHERE permission_type=5;"`;
+print `psql  -U $username $dbname --command "UPDATE usr SET permission_type=7 WHERE permission_type=4;"`;
+print `psql  -U $username $dbname --command "UPDATE usr SET permission_type=7 WHERE permission_type=3;"`;
+print `psql  -U $username $dbname --command "UPDATE usr SET permission_type=3 WHERE permission_type=2;"`;
+
+print "\n######################################################################\n";
 print "#CLEAN UP\n";
 print `dropdb -U $username frameworktest`;
 
