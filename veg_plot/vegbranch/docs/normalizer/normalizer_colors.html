@@ -1,0 +1,41 @@
+<html>
+<head>
+<link rel="stylesheet" href="@stylesheet@" type="text/css">
+<style type="text/css">
+
+td.empty {background-color:#CCCCCC}
+td.Tdata {background-color:#99FFFF}
+td.Ldata {background-color:#FFFFCC}
+td.Hdr3  {background-color:#009900}
+td.LLbl  {background-color:#FFFF00}
+td.TLbl  {background-color:#6699FF}
+td.highlite {background-color:#FF9933}
+</style>
+
+</head>
+<body>
+<p><a name="colorkey">Color Key:</a></p>
+<table border="1" cellspacing="0">
+<tr><th>color and name</th><th>explanation</th></tr>
+<tr><td class="empty"><b>empty cell</b></td><td> or unknown column label derived from an empty cell in normalized table.</td></tr>
+<tr><td class="LLbl"><b>Left Label</b></td><td>labels the "left data" column that appears below it.</td></tr>
+<tr><td class="TLbl"><b>Top Label</b></td><td>labels the "top data" row that appears to its right.</td></tr>
+<tr><td class="Hdr3"><b>Complex label</b></td><td>consists first of the last "left label", then "|", then the last "top label", then "|", then "cell data" label.</td></tr>
+<tr><td class="LData"><b>Left Data <br/>(ID columns)</b></td><td>data that applies to all "cell data" in the same row.</td></tr>
+<tr><td class="TData"><b>Top Data <br/>(ID rows)</b></td><td>data that applies to all "cell data" in the same column.</td></tr>
+<tr><td><b>Cell data</b></td><td>linked to the "top data" in same column and "left data" in same row.</td></tr>
+<tr><td class="highlite"><b>Highlighted cell</b></td><td>illustrates something.</td></tr>
+</table>
+<p>pattern: (labels optional)</p>
+<table border="1" cellspacing="0">
+<tr><td class="empty">empty</td><td class="empty">empty</td><td class="TLbl">Top lbl</td><td class="Tdata">Top data</td><td class="Tdata">Top data</td><td class="Tdata">Top data</td><td class="Tdata">...</td></tr>
+<tr><td class="empty">empty</td><td class="empty">empty</td><td class="TLbl">Top lbl</td><td class="Tdata">Top data</td><td class="Tdata">Top data</td><td class="Tdata">Top data</td><td class="Tdata">...</td></tr>
+<tr><td class="empty">empty</td><td class="empty">empty</td><td class="TLbl">Top lbl</td><td class="Tdata">Top data</td><td class="Tdata">Top data</td><td class="Tdata">Top data</td><td class="Tdata">...</td></tr>
+<tr><td class="LLbl">Left lbl</td><td class="LLbl">Left lbl</td><td class="Hdr3">LLbl| Tlbl| cellLbl</td><td class="Tdata">Top data</td><td class="Tdata">Top data</td><td class="Tdata">Top data</td><td class="Tdata">...</td></tr>
+<tr><td class="Ldata">Left data</td><td class="Ldata">Left data</td><td class="Ldata">Left data</td><td>cell data</td><td>cell data</td><td>cell data</td><td>...</td></tr>
+<tr><td class="Ldata">Left data</td><td class="Ldata">Left data</td><td class="Ldata">Left data</td><td>cell data</td><td>cell data</td><td>cell data</td><td>...</td></tr>
+<tr><td class="Ldata">Left data</td><td class="Ldata">Left data</td><td class="Ldata">Left data</td><td>cell data</td><td>cell data</td><td>cell data</td><td>...</td></tr>
+<tr><td class="Ldata">...</td><td class="Ldata">...</td><td class="Ldata">...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+</table>
+</body>
+</html>
