@@ -2,8 +2,8 @@
  * 
  *
  *		 '$Author: harris $'
- *     '$Date: 2001-11-01 17:39:00 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2001-12-06 02:07:58 $'
+ *     '$Revision: 1.2 $'
  *
  */
 //package vegclient.framework;
@@ -95,15 +95,6 @@ public class TurboVegConverter
 			
 			//the printWriter
 			PrintWriter out = new PrintWriter(new FileWriter("test_fix.xml"));
-			
-			
-			//get the file into a vector
-			
-/* not needed anymore b/c stephan changed the code	
-		Vector fileVec = fileVectorizer(inXml);
-			Vector replacedVec = removeQuotes(fileVec);
-			printFile( replacedVec, "tmp.xml" );
-*/		
 			String fileName = inXml;
 		
 			DOMParser parser = new DOMParser();
@@ -124,14 +115,15 @@ public class TurboVegConverter
 			//import that into the new document
 			Node newProject = doc.importNode(root, false);
 			NodeList nl = newProject.getChildNodes();
-			System.out.println("Number of nodes in new project node: "+ nl.getLength() );
+			//System.out.println("Number of nodes in new project node: "+ nl.getLength() );
 			//test print this node
 			//parse.print(out, newProject); 
 		
 		
 			//now do the conversions
 			Vector plotNames = getPlotNames();
-			//System.out.println( getSpeciesList() );
+			System.out.println( plotNames.toString()  );
+			
 			speciesLookUpHash = getSpeciesList();
 
 			//fix one plot at a time
@@ -139,10 +131,10 @@ public class TurboVegConverter
 			System.out.println("number of plots: "+ plotNames.size());
 			for (int i =0; i < plotNames.size() ; i++)
 			{
-				System.out.println("processing plot: " + plotNames.elementAt(i).toString() );
+				//System.out.println("processing plot: " + plotNames.elementAt(i).toString() );
 				Node curPlot = getPlot( plotNames.elementAt(i).toString() );
 				
-				System.out.println("current plot being proccessed:" + curPlot.toString() );
+				//System.out.println("current plot being proccessed:" + curPlot.toString() );
 				fixedPlot = convertDate(curPlot);
 				
 				//this is mearly a test
@@ -158,14 +150,12 @@ public class TurboVegConverter
 			transformXML transformer = new transformXML();
 			transformer.transformXMLDocumentToFile( "test_fix.xml", 
 				"transformTurboVeg.xsl", outXml );
-			
-
     	} 
 			catch(Exception e1) 
 			{
 				System.out.println("Exception: "+e1.getMessage() );
 				e1.printStackTrace();
-    	}		
+    	}
 		}
 	
 	/** 
@@ -209,24 +199,15 @@ public class TurboVegConverter
 						String speciesNumber
 						= snl.item(ii).getFirstChild().getNodeValue().trim();
 						
-						//System.out.println( "species node Names: "+ snl.item(ii).getNodeName());
-//						System.out.println("species_nr: "+ snl.item(ii).getFirstChild().getNodeValue().trim() );
-						//Node speciesName;
-						
 						Node newElem = doc.createElement("species_name");
-						
 						//this is the correct name retrieved from the lookup hash
 						String correctName = (String)speciesLookUpHash.get(speciesNumber); 
-        		
 						Node newText = doc.createTextNode(correctName);
         		//add text to element
         		newElem.appendChild(newText);
-				
-				
 						checker.appendChild(newElem);
 					}
 				}
-		
 			}		
 		}		
 		return( node) ;
@@ -362,10 +343,10 @@ public class TurboVegConverter
 	 }
 	
 		
-	/**
-	 *method to return a vector containing the list of plotNames
-	 */
-	 
+ /**
+	* method to return a vector containing the list of plotNames
+	* for the tvexport file
+	*/
 	public Vector getPlotNames()
 	{
 		Vector plotNames = new Vector();
@@ -373,6 +354,7 @@ public class TurboVegConverter
 		//System.out.println("releve nos : "+ plotNames.toString() );
 		return(plotNames);
 	}
+	
 	
 	
 	/**
@@ -453,9 +435,9 @@ public class TurboVegConverter
 			for (int i =0; i < plotNames.size(); i++)
 			{
 				String currentPlot = plotNames.elementAt(i).toString().trim();
-				System.out.println("currentPlot: " + currentPlot +" > "+ releve_nr);
 				if ( currentPlot.equals(releve_nr) )
 				{
+					System.out.println("currentPlot: " + currentPlot +" ~ "+ releve_nr);
 					System.out.println("index val: " + i);
 					//assign the index
 					index = i;
@@ -464,7 +446,8 @@ public class TurboVegConverter
 			//if the index is unchanged, still -999, then print an error
 			if (index == -999)
 			{
-				System.out.println("plot with authorPlotCode: "+releve_nr+"not found ERROR");
+				System.out.println("plot with authorPlotCode: "+releve_nr
+					+" not found ERROR" );
 			}
 			else
 			{

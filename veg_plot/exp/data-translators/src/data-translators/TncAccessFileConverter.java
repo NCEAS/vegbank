@@ -10,8 +10,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-11-02 19:10:59 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2001-12-06 02:07:58 $'
+ * 	'$Revision: 1.3 $'
  *
  */
 
@@ -29,6 +29,8 @@ import xmlresource.utils.PlotXmlWriter;
 public class TncAccessFileConverter 
 {
 	private PlotXmlWriter xmlwriter = new PlotXmlWriter();
+	//instatntiate the tnc plots database class that is responsible
+	//for querying the mdb file from an odbc src
 	private TNCPlotsDB db = new TNCPlotsDB();
 	
 	public TncAccessFileConverter(String odbcSource)
@@ -85,12 +87,12 @@ public class TncAccessFileConverter
 		pdm.plotElementMapper(db.authorObsCode, "authorObsCode", "observation");
 		
 		
-		System.out.println("cover vals: " + db.t1Height + " " + db.t1Cover);
+		//System.out.println("cover vals: " + db.t1Height + " " + db.t1Cover);
 		//strata info -- these cannot be null
 		pdm.plotElementMapper("t1", "stratumName", "observation");
 		pdm.plotElementMapper( db.t1Height , "stratumHeight", "observation");
 		pdm.plotElementMapper( db.t1Cover , "stratumCover", "observation");
-		System.out.println( "t1 cover: "+ db.t1Cover);
+		//System.out.println( "t1 cover: "+ db.t1Cover);
 		pdm.plotElementMapper( "t2" , "stratumName", "observation");
 		pdm.plotElementMapper( db.t2Height, "stratumHeight", "observation");
 		pdm.plotElementMapper( db.t2Cover, "stratumCover", "observation");
