@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-07-31 22:44:16 $'
- *  '$Revision: 1.23 $'
+ *  '$Date: 2002-08-01 13:56:38 $'
+ *  '$Revision: 1.24 $'
  * 
  */
 
@@ -94,6 +94,7 @@ public class DataRequestServlet extends HttpServlet
 	private transformXML transformer = new transformXML();
 	private String defaultPlotIdentityStyleSheet = "";
 	private String genericForm =""; // this is the vb generic form to attache messages to
+	private boolean queryCaching; // true if queries should be cached for the user
 	
 	/**
 	 * constructor method
@@ -107,6 +108,12 @@ public class DataRequestServlet extends HttpServlet
 			servletDir = rb.getString("requestparams.servletDir");
 			defaultPlotIdentityStyleSheet = rb.getString("defaultplotidentitystylesheet");
 			this.genericForm = rb.getString("genericform");
+			String s = rb.getString("querycaching");
+			if ( s.equals("true") )
+				this.queryCaching = true;
+			else
+				this.queryCaching = false;
+			System.out.println("init: DataRequestServlet > user query caching: " + queryCaching);
 			System.out.println("init: DataRequestServlet > servlet dir: " + servletDir);
 			System.out.println("init: DataRequestServlet > default style sheet: " + this.defaultPlotIdentityStyleSheet);
 			System.out.println("init: DataRequestServlet > generic html form: " + this.genericForm);
@@ -1491,11 +1498,19 @@ private void updateClientLog (String clientLog, String remoteHost)
 		System.out.println("DataRequestServlet > QUERY TYPE  " + queryType);
 		if (queryType.equals("simpleQuery")) 
 		{ 
-			//if it is a browser query then register the document
+			// IF IT IS A BROWSER QUERY THEN REGISTER THE DOCUMENT -- IF 
+			// CACHING IS TURNED ON
 			if (this.clientType.equals("browser") )
 			{
-				System.out.println("DataRequestServlet > registering the doc. -- browser client");
-				registerQueryDocument();
+				if (this.queryCaching == true )
+				{
+					System.out.println("DataRequestServlet > Caching the query doc");
+					registerQueryDocument();
+				}
+				else
+				{
+					System.out.println("DataRequestServlet > Not caching the query doc");
+				}
 			}
 			//else if it is an application (i.e., another servlet ) test the
 			//new xml writer
@@ -1594,11 +1609,13 @@ private void updateClientLog (String clientLog, String remoteHost)
 		
 	/**
 	 * method that registers a query document with the datafile database
+	 * this method should only be called from the 'issueQury' method and only
+	 * if the 'queryCaching' attribute in the properties file is true
+	 * @see composeQuery -- the method that calls this one
 	 */
 	 private void registerQueryDocument()
 	 {
 		 System.out.println("DataRequestServlet > registering the query document ###");
 		 suy.uploadFileDataExcahgeServlet(servletDir+"query.xml", userName);
-		 
 	 }
 }
