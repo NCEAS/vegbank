@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.6 2005-03-17 20:58:12 mlee Exp $
+# $Id: .htaccess,v 1.7 2005-03-19 02:50:15 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -57,3 +57,7 @@ RewriteRule ^cite/([^\.]+)\.Cl\.(.*)$	   @get_link@std/commclass/'$1.Cl.$2'	    
 RewriteRule ^cite/([^\.]+)\.RP\.(.*)$	   @get_link@std/referenceparty/'$1.RP.$2'    [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.AR\.(.*)$	   @get_link@std/aux_role/'$1.AR.$2'	       [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.DS\.(.*)$	   @get_link@std/userdataset/'$1.DS.$2'       [NC,QSA,L]
+
+
+## for deep links FROM natureserve
+RewriteRule ^natureserve/(.*)$   @get_link@std/observation/$1?where=where_observation_nsuid   [NC,QSA,L]
