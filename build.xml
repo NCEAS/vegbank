@@ -6,8 +6,8 @@
   * scripts from one place.
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-10-14 18:49:00 $'
-  *     '$Revision: 1.19 $'
+  *     '$Date: 2003-10-17 20:28:54 $'
+  *     '$Revision: 1.20 $'
 --> 
 <project name="vegclass" default="jar" basedir=".">
 
@@ -150,6 +150,9 @@
     <copy todir="${vegbank.home.dir}/lib">
       <fileset dir="${lib.dir}">
          <include name="**/*.jar"/>
+      </fileset>
+      <fileset dir="${docs.dir}/xml/dataxml">
+	<include name="**/*.xsd"/>
       </fileset>
     </copy>
     <copy todir="${vegbank.home.dir}/lib">

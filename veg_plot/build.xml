@@ -5,9 +5,9 @@
   * Global build script for veg_plot. This simply allows running all the sub 
   * scripts from one place 
   *
-  *     '$Author: anderson $'
-  *     '$Date: 2003-10-17 19:16:44 $'
-  *     '$Revision: 1.35 $'
+  *     '$Author: farrell $'
+  *     '$Date: 2003-10-17 20:28:54 $'
+  *     '$Revision: 1.36 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -89,7 +89,10 @@
     <filter token="maxConnectionUses" value="${maxConnectionUsers}" />
     <filter token="resetTime" value="${resetTime}" />
     <filter token="logFile" value="${logFile}" />
-
+    <filter token="vegbankSchemaName" value="${vegbankSchemaName}" />
+    <filter token="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
+    <filter token="schemaLocation" value="${vegbank.home.dir}/lib"/>
+    
     <!-- Servlet specific -->
     <filter token="mailHost" value="hyperion.nceas.ucsb.edu"/>
     <filter token="systemEmail" value="dba@vegbank.org"/>
@@ -97,7 +100,6 @@
     <filter token="genericTemplate" value="${web.docroot}/vegbank/forms/tmp.html"/>
     <filter token="rmiserver"  value="${rmiserver}"/>
     <filter token="uploadDir" value="${web.servlet.lib.dir}"/>
-    <filter token="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
     <filter token="servlet_lib_dir" value="${web.servlet.lib.dir}/" />
 
     <!-- TODO: Need to define elsewhere-->

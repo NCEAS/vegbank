@@ -30,3 +30,6 @@ logFile = connectionPool.log
 
 # Vegbank Directories
 vegbank.home.dir=/usr/vegbank
+
+# XML Schema
+vegbankSchemaName=vegbank-data-ver1.0.1.xsd
