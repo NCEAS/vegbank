@@ -14,7 +14,7 @@
 <h2>View Community Concepts - Summary</h2>
   <vegbank:get id="concept" select="commconcept" beanName="map" where="where_commconcept_pk" pager="true"/>
 
-
+<vegbank:pager />
 <logic:empty name="concept-BEANLIST">
              <p>Sorry, no Community concepts match your criteria.</p>
           </logic:empty>

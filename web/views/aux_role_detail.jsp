@@ -24,7 +24,7 @@
 <a href="<%= request.getRequestURI() %>?where=where_aux_role_taxonint&wparam=1">Taxon Interpreters</a> | 
 <a href="<%= request.getRequestURI() %>?where=where_aux_role_classint&wparam=1">Community Interpreters</a> </p>
 <vegbank:get id="MY_ROLES" select="aux_role" beanName="map" pager="true"/>
-
+<vegbank:pager />
         <p>
         <br>
 

@@ -18,7 +18,7 @@
 		       String rowClass = "evenrow";
     %>
 <vegbank:get select="usercertification_approved" beanName="map" pager="true"/>
-
+<vegbank:pager />
 <logic:empty name="BEANLIST">
 				<p>
                 There are no certified users.

@@ -14,6 +14,7 @@
 <body   >@vegbank_header_html_normal@  <br><h2>View VegBank Community Classifications</h2>
 <% String rowClass = "evenrow"; %>
 <vegbank:get id="commclass" select="commclass" beanName="map" where="where_observation_pk" pager="true"/>
+<vegbank:pager />
 <logic:empty name="commclass-BEANLIST">
 <p>  Sorry, no communties have been assigned to this plot-observation.</p>
 </logic:empty>

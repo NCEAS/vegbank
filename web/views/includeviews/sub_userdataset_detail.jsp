@@ -5,7 +5,7 @@
 		       //**************************************************************************************
 		       String rowClass = "evenrow";
     %>
-
+<vegbank:pager />
 <logic:empty name="BEANLIST">
                 <p>Sorry, no Datasets found!</p>
           </logic:empty>
@@ -92,3 +92,5 @@ Items in this dataset:
 
 </logic:iterate>
 </logic:notEmpty>
+
+<vegbank:pager />

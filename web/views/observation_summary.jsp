@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-10-02 19:44:37 $'
-*  '$Revision: 1.15 $'
+*  '$Date: 2004-10-04 18:07:54 $'
+*  '$Revision: 1.16 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@
   <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
 
-
+<vegbank:pager />
 
 <logic:empty name="plotobs-BEANLIST">
                 Sorry, no plot-observations are available.

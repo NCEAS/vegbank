@@ -14,7 +14,7 @@
 <h2>View Plant Concepts</h2>
   <vegbank:get id="concept" select="plantconcept" beanName="map" where="where_plantconcept_pk" pager="true"/>
 
-
+<vegbank:pager />
 <logic:empty name="concept-BEANLIST">
              <p>Sorry, no Plant concepts match your criteria.</p>
           </logic:empty>
