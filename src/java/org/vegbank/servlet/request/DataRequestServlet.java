@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-07-11 23:14:05 $'
- *  '$Revision: 1.10 $'
+ *  '$Date: 2003-07-15 20:19:27 $'
+ *  '$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.vegbank.databaseAccess.dbAccess;
 import org.vegbank.servlet.util.ServletUtility;
 
-import xmlresource.utils.transformXML;
+import org.vegbank.xmlresource.transformXML;
 
 
 /**
@@ -77,8 +77,8 @@ import xmlresource.utils.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-07-11 23:14:05 $'
- *  '$Revision: 1.10 $'
+ *  '$Date: 2003-07-15 20:19:27 $'
+ *  '$Revision: 1.11 $'
  * 
  */
 

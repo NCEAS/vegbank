@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.vegbank.servlet.util.GetURL;
 import org.vegbank.servlet.util.ServletUtility;
 
-import xmlresource.utils.transformXML;
+import org.vegbank.xmlresource.transformXML;
 
 /**
  * servlet class to allow a user to creat a default 

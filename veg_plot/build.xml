@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-07-11 23:14:04 $'
-  *     '$Revision: 1.24 $'
+  *     '$Date: 2003-07-15 20:19:26 $'
+  *     '$Revision: 1.25 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -139,16 +139,12 @@
 
     <!-- FIXME: temporary hack to move code up into single tree -->
     <copy todir="${build.java.src.dir}">
-      <fileset dir="./exp/xml-resource/src" casesensitive="yes">
-        <include name="**/*.java"/>
-      </fileset>
       <fileset dir="${java.src.dir}">
         <include name="org/**/*java"/>
         <include name="edu/**/*java"/>
       </fileset>
-    </copy> 
-
-
+    </copy>
+   
     <!-- Copy property files -->
     <copy todir="${build.classes.dir}" filtering="true">
       <fileset dir="${lib.dir}">
@@ -380,10 +376,8 @@
           description="=> Remove all generated files">
     <delete dir="${build.dir}"/>
   
-		<ant dir="exp/data-translators" target="clean"/>
 		<ant dir="exp/rmidatasource" target="clean"/> 
 		<ant dir="exp/services" target="clean"/>
-		<ant dir="exp/xml-resource" target="clean"/>
 	</target>
   
   <!-- ================================================================ -->

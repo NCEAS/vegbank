@@ -7,8 +7,8 @@ import java.io.FileInputStream;
 import java.rmi.Naming;
 import java.util.Vector;
 
-import xmlresource.utils.transformXML;
-//import javax.xml.*;
+import org.vegbank.xmlresource.transformXML;
+
 
 /** 
  * Class that mimics the functionality of the PlotDataSource class except that 
@@ -29,8 +29,8 @@ import xmlresource.utils.transformXML;
  *	
  *  <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-06-04 19:11:42 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2003-07-15 20:19:27 $'
+ * 	'$Revision: 1.4 $'
  *
  *
  */

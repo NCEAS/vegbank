@@ -7,15 +7,15 @@ import org.xml.sax.InputSource;
 import java.io.*;
 import java.util.Vector;
 import java.util.Hashtable;
-import xmlresource.utils.XMLparse;
+import org.vegbank.xmlresource.XMLparse;
 
 /**
  * This is a plugin to implement the DataSourceInterface class, allowing 
  * Access to the data stored in the native VegBank XML structure.
  * 
  *	'$Author: farrell $'
- *	'$Date: 2003-06-03 21:41:33 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-07-15 20:19:27 $'
+ *	'$Revision: 1.5 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface

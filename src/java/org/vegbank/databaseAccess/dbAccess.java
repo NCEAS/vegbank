@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import xmlresource.utils.transformXML;
+import org.vegbank.xmlresource.transformXML;
 
 import org.vegbank.common.utility.*;
 import org.vegbank.plots.datasource.PlotXmlWriterV2;
@@ -36,8 +36,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-07-11 23:14:04 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2003-07-15 20:19:27 $'
+ * 	'$Revision: 1.2 $'
  */
 
 public class dbAccess 

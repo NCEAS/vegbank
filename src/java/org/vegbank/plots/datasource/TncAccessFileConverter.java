@@ -10,8 +10,8 @@
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2003-03-20 20:50:16 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2003-07-15 20:19:27 $'
+ * 	'$Revision: 1.2 $'
  *
  */
 
@@ -19,8 +19,7 @@ package org.vegbank.plots.datasource;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import xmlresource.utils.PlotDataMapper;
-import xmlresource.utils.PlotXmlWriter;
+import org.vegbank.xmlresource.*;
 
 
 public class TncAccessFileConverter 

@@ -10,13 +10,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
-import xmlresource.utils.XMLparse;
+import org.vegbank.xmlresource.XMLparse;
 
 /**
  * 
  * 	'$Author: farrell $'
- *	'$Date: 2003-03-20 20:50:13 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-07-15 20:19:27 $'
+ *	'$Revision: 1.2 $'
  */
 
 public class NativeXmlCache

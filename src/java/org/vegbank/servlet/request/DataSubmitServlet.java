@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-07-11 23:14:05 $'
- *  '$Revision: 1.14 $'
+ *  '$Date: 2003-07-15 20:19:27 $'
+ *  '$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@ import org.vegbank.servlet.datafileexchange.DataFileExchange;
 import org.vegbank.servlet.util.ServletUtility;
 import org.w3c.dom.Document;
 
-import xmlresource.utils.XMLparse;
-import xmlresource.utils.transformXML;
+import org.vegbank.xmlresource.XMLparse;
+import org.vegbank.xmlresource.transformXML;
 
 
 public class DataSubmitServlet extends HttpServlet implements Constants

@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: fileDownload.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-07-02 17:26:49 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2003-07-15 20:19:27 $'
+ *  '$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.vegbank.servlet.util.GetURL;
 import org.vegbank.servlet.util.ServletUtility;
 
-import xmlresource.utils.transformXML;
+import org.vegbank.xmlresource.transformXML;
 
 /**
  * Servlet to perform file downloading operations 

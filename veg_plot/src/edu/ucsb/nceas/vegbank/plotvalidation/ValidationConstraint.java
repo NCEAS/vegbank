@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-02-26 19:16:27 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2003-07-15 20:19:27 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import xmlresource.utils.XMLparse;
+import org.vegbank.xmlresource.XMLparse;
+
 
 
 

@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-07-11 23:14:04 $'
-*   '$Revision: 1.1 $'
+*   '$Date: 2003-07-15 20:19:27 $'
+*   '$Revision: 1.2 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -52,8 +52,8 @@ import org.vegbank.servlet.util.GetURL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import xmlresource.datatype.VegProject;
-import xmlresource.utils.XMLparse;
+import org.vegbank.xmlresource.*;
+
 
 /**
  * this is a class that is used to load the vegbank plots database

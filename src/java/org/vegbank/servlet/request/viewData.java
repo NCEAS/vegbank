@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: viewData.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-30 18:01:59 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-07-15 20:19:27 $'
+ *  '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.servlet.util.GetURL;
 
-import xmlresource.utils.transformXML;
+import org.vegbank.xmlresource.transformXML;
 
 
 
