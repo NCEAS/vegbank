@@ -1,3 +1,14 @@
+/**
+ * This class acts as a store for sql queries which are used 
+ * depending on the number and type of query elements passed
+ * to the sqlMapper class.  Ultimately these queries are issued 
+ * to the database though the issue select method
+ *
+ * @author John Harris
+ * @version March 22, 2001
+ *
+ */
+
 import java.lang.*;
 import java.io.*;
 import java.text.*;
@@ -6,126 +17,63 @@ import java.sql.*;
 
 
 
-/**
- * This class acts as a store for sql queries which are used depending on the 
- * number and type of query elements passed to the sqlMapper class.  Ultimately
- * these queries are issued to the database though the issue select method
- *
- * @author John Harris
- * @version March 22, 2001
- *
- */
-
 public class  queryStore
- {
-
-
-public String summaryOutput[] = new String[10000]; 
-public int summaryOutputNum; 
-////public int outConnectionUses;
-
-//hash table to store the cummulative summary results for all the plots
-public Hashtable cumulativeSummaryResultHash = new Hashtable();
-
-public String entireSinglePlotOutput[] = new String[10000];  //should always = 1
-public int entireSinglePlotOutputNum; 
-public String outPlotId[] = new String[30000];  //the output plotIds
-public int outPlotIdNum; //the number of plotId's
-
-
-
-
-/**
- * Method using as input a single plot database id number to retieve all the 
- * attributes for that plot all fields are made publicly accessible and will,
- * ultimately be passed to the xml writer class for file output
- *
- * @param plotId - database plot id number
- * @param conn - database connection
- *
- */
-public void getEntireSinglePlot(String plotId)
 {
 
-String entireResult=null;
+
+	public String summaryOutput[] = new String[10000]; 
+	public int summaryOutputNum; 
 
 
-String action="select";
-String statement="select PLOT_ID, AUTHORPLOTCODE, project_id, "+
-	"surfGeo,  PLOTTYPE, PLOTORIGINLAT, PLOTORIGINLONG, PLOTSHAPE, "
-	+" PLOTSIZE, PLOTSIZEACC, ALTVALUE, ALTPOSACC, SLOPEASPECT, SLOPEGRADIENT, "
-	+" SLOPEPOSITION, HYDROLOGICREGIME, SOILDRAINAGE, STATE, CURRENTCOMMUNITY "
-	+" from PLOT where PLOT_ID = "+plotId;
-		
-String returnFields[]=new String[19];	
-returnFields[0]="PLOT_ID";	
-returnFields[1]="AUTHORPLOTCODE";
-returnFields[2]="project_id";
-returnFields[3]="surfGeo";
-returnFields[4]="PLOTTYPE";
-returnFields[5]="PLOTORIGINLAT";
-returnFields[6]="PLOTORIGINLONG";
-returnFields[7]="PLOTSHAPE";
-returnFields[8]="PLOTSIZE";
-returnFields[9]="PLOTSIZEACC";
-returnFields[10]="ALTVALUE";
-returnFields[11]="ALTPOSACC";
-returnFields[12]="SLOPEASPECT";
-returnFields[13]="SLOPEGRADIENT";
-returnFields[14]="SLOPEPOSITION";
-returnFields[15]="HYDROLOGICREGIME";
-returnFields[16]="SOILDRAINAGE";
-returnFields[17]="STATE";
-returnFields[18]="CURRENTCOMMUNITY";
-int returnFieldLength=19;
+	//hash table to store the cummulative summary results for all the plots
+	public Hashtable cumulativeSummaryResultHash = new Hashtable();
 
-/** Issue the statement, and iterate the counter */
-issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength);	
-////connectionUses++;
-	
-entireResult=j.outReturnFields[0];
-//System.out.println(entireResult);
-entireSinglePlotOutput[0]=entireResult; //cheat here
-entireSinglePlotOutputNum=1; //and here
+	public String entireSinglePlotOutput[] = new String[10000];  //should always = 1
+	public int entireSinglePlotOutputNum; 
+	public String outPlotId[] = new String[30000];  //the output plotIds
+	public int outPlotIdNum; //the number of plotId's
 
 
 
-/**	
- * make a second query here to get the species specific information which will
- * be appended onto the summary results line and ultimately tokenized in the 
- * xmlWrter class - at some point this function may become its own method
+
+/**
+ * Method using as input a single plot database id number 
+ * to retieve all the attributes for that plot all fields 
+ * are made publicly accessible and will, ultimately be 
+ * passed to the xml writer class for file output
+ *
+ * @param plotId - database plot id number
  */
 
-action="select";
-statement="select AUTHORNAMEID from taxonObservation where OBS_ID in"+
-	"(select OBS_ID from PLOTOBSERVATION where PARENTPLOT in"+
-	"(select plot_ID from plot where PLOT_ID ="+plotId+"))";
-
+ public void getEntireSinglePlot(String plotId)
+ {
+	//because the 'getPlotSummary' method has become
+	//pretty comprehensive just use that for now making
+	// the method pretty much an overloaded method
+	if (plotId != null)
+	{
+		System.out.println(  "getEntireSinglePlot accessed ");
+		//soon make this method accept a vector
+		Vector plotIdVec = new Vector();
+		plotIdVec.addElement(plotId);
 		
-String returnFieldsB[]=new String[1];	
-returnFieldsB[0]="AUTHORNAMEID";
-int returnFieldLengthB=1;
-
-/** Issue the statement, and iterate the counter */
-issueStatement k = new issueStatement();
-k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB);	
-////connectionUses++;
-	
-	
-//take the results from this query and append to the summary line
-//which will ultimately be passed back to the xmlWriter to be tokenized
-//and writen to xml - againd there should only be one line returned 
-
-
-entireResult=entireResult+k.outReturnFields[0];
-entireSinglePlotOutput[0]=entireResult; //cheat here
-entireSinglePlotOutputNum=1; //and here
-
-}//end method
+		String plotIdArray[] = new String[plotIdVec.size()];
+		for (int i=0; i<plotIdVec.size(); i++) 
+		{
+			plotIdArray[i]=plotIdVec.elementAt(i).toString().trim();	
+		}
+		
+		//get the summary info
+		getPlotSummaryNew(plotIdArray,  plotIdVec.size() );
+	}
+	else
+	{
+		System.out.println("null value found where there should have been a plotId");
+	}
+ }
 
 
-
+ 
  /**
   * method to overload the method below allowing for an
 	* input of a vector
@@ -250,11 +198,12 @@ entireSinglePlotOutputNum=1; //and here
 				issueStatement j = new issueStatement();
 				j.issueSelect(statement, action, returnFields, returnFieldLength, 
 				summaryResultHash);	
+			
+				
 	
-	
-				//take the results from the issueSelect and put into the array
-				//note that the j.outReturnFieldsNum should always be = 1 in this case
-				//because we are querying by a plot ID number which should be unique
+			//take the results from the issueSelect and put into the array
+			//note that the j.outReturnFieldsNum should always be = 1 in this case
+			//because we are querying by a plot ID number which should be unique
 			for (int ii=0;ii<j.outReturnFieldsNum; ii++) 
 			{
 				summaryResult[i]=j.outReturnFields[ii];
@@ -279,13 +228,14 @@ entireSinglePlotOutputNum=1; //and here
 			k.issueSelect(statement, action, returnSpeciesFields, 
 			returnSpeciesFieldLength, summaryResultHash);
 	
-			//System.out.println(currentPlotId);
 
 	
 			// add the individual plots (represented as their own hash) and include in the
 			// cumulative hash table
 			cumulativeSummaryResultHash.put("plot"+i,k.outResultHash);
 			summaryResultNum=i;
+			
+			//System.out.println("printing the selection: "+ cumulativeSummaryResultHash.toString() );
 			
 		} //end for
 		summaryOutput=summaryResult;
@@ -302,7 +252,7 @@ entireSinglePlotOutputNum=1; //and here
 	catch (Exception e) 
 	{
 		System.out.println("failed in querySrore.getPlotSummaryNew"
-			+" " + e.getMessage()); e.printStackTrace();
+		+" " + e.getMessage()); e.printStackTrace();
 	}	
 }//end method
 
@@ -551,41 +501,33 @@ public void getPlotId(String taxonName, String state, String elevationMin,
 	String elevationMax, String surfGeo, String community)
 {
 
-System.out.println("queryStore.getPlotId - queryElements > \n"
-	+" taxonName: "+taxonName+" \n state: "+state+" \n elevationMin: "
-	+elevationMin+" \n elevationMax: "+elevationMax+" \n surfGeo: "+surfGeo
-	+" \n community: "+community);
+	System.out.println("queryStore.getPlotId - queryElements > \n"
+		+" taxonName: "+taxonName+" \n state: "+state+" \n elevationMin: "
+		+elevationMin+" \n elevationMax: "+elevationMax+" \n surfGeo: "+surfGeo
+		+" \n community: "+community);
 
 
-String action="select";
-//String statement="select DISTINCT PLOT.PLOT_ID from PLOT where PLOT.ALTVALUE >="+elevationMin+
-//" and PLOT.ALTVALUE <="+elevationMax+" and PLOT.SURFGEO like '%"+surfGeo+"%' and "
-//+"PLOT.STATE like '%"+state+"%' and PLOT.CURRENTCOMMUNITY like '%"+community+"%' and PLOT_ID in"+
-//	"(select PARENTPLOT  from PLOTOBSERVATION  where OBS_ID in"+
-//		"(select OBS_ID from TAXONOBSERVATION where AUTHORNAMEID like '%"+taxonName+"%'))";
+	String action="select";
 
-String statement="select DISTINCT PLOTSITESUMMARY.PLOT_ID from PLOTSITESUMMARY "
-+" WHERE ALTVALUE <="+elevationMax+" and ALTVALUE >="+elevationMin+" and SURFGEO like '%"
-+surfGeo+"%' and STATE like '%"+state+"%' and PLOTSITESUMMARY.PLOT_ID in"
-+"(SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where AUTHORNAMEID like '%"+taxonName+"%')";
+	String statement="select DISTINCT PLOTSITESUMMARY.PLOT_ID from PLOTSITESUMMARY "
+	+" WHERE ALTVALUE <="+elevationMax+" and ALTVALUE >="+elevationMin+" and SURFGEO like '%"
+	+surfGeo+"%' and STATE like '%"+state+"%' and PLOTSITESUMMARY.PLOT_ID in"
+	+"(SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where AUTHORNAMEID like '%"+taxonName+"%')";
 
 
-String returnFields[]=new String[1];	
-returnFields[0]="PLOT_ID";
-int returnFieldLength=1;
+	String returnFields[]=new String[1];	
+	returnFields[0]="PLOT_ID";
+	int returnFieldLength=1;
 
-issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength);	
+	issueStatement j = new issueStatement();
+	j.issueSelect(statement, action, returnFields, returnFieldLength);	
 
 
-//grab the returned result set and transfer to a public array
-//ultimately these results are passed to the calling class
-outPlotId=j.outReturnFields;
-outPlotIdNum=j.outReturnFieldsNum;
-	
+	//grab the returned result set and transfer to a public array
+	//ultimately these results are passed to the calling class
+	outPlotId=j.outReturnFields;
+	outPlotIdNum=j.outReturnFieldsNum;
 } //end method
-
-
 
 
 }
