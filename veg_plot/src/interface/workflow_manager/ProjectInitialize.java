@@ -13,8 +13,8 @@ import java.io.*;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-08-18 00:51:19 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-08-21 07:09:04 $'
+ * 	'$Revision: 1.2 $'
  */
 
 
@@ -90,7 +90,9 @@ public class ProjectInitialize extends javax.swing.JFrame
 				setTitle(" Data-Loading Workflow Manager");
         initComponents ();
         pack ();
-        setSize(375, 370);
+				//for linux increase size by 50
+        //setSize(375, 370);
+				setSize(425, 420);
     }
 
 
@@ -274,7 +276,7 @@ public class ProjectInitialize extends javax.swing.JFrame
 					else
 					{
 						//print the xml file to initiate the workflow process
-						pm.intitateProcessXML( getInterfaceParameters() );
+						pm.initiateProcessXML( getInterfaceParameters() );
 						pm.initiateProgressManager();
 						//new ProcessProgressDisplay().show();
 					}
