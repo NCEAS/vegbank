@@ -68,6 +68,10 @@ public class viewData extends HttpServlet
 		try
 		{
 			System.out.println("init: viewData" );
+			servletDir = rb.getString("requestparams.servletDir");
+			servletPath = rb.getString("servlet-path");
+			System.out.println("viewData > servlet dir: " + servletDir );
+			System.out.println("viewData > servlet path: " + servletPath );
 		}
 		catch(Exception e)
 		{
@@ -126,7 +130,6 @@ public class viewData extends HttpServlet
 			{
 				//print out to file the names of the plots and their 
 				//plotId's for use by the fileDownload servlet
-	
 				servletDir = rb.getString("requestparams.servletDir");
 				servletPath = rb.getString("servlet-path");
 	

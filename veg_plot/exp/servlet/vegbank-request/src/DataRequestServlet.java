@@ -89,6 +89,9 @@ public class DataRequestServlet extends HttpServlet
 	public DataRequestServlet()
 	{
 		System.out.println("init: DataRequestServlet");
+		//sho some of the instance variables
+		servletDir = rb.getString("requestparams.servletDir");
+		System.out.println("init: DataRequestServlet > servlet dir: " + servletDir);	
 	}
 	
 	
@@ -117,7 +120,7 @@ public class DataRequestServlet extends HttpServlet
 			//which will be used to register the query and results documents 
 			//with the dataexcahnge servlet
 			userName = getCookieValue(request);
-			System.out.println("current user: " +  userName   );
+			System.out.println("DataRequstServlet > current user: " +  userName   );
 				
 			//enumeration is needed for those
 			//cases where there are multiple values 
@@ -126,7 +129,7 @@ public class DataRequestServlet extends HttpServlet
 				Hashtable params = new Hashtable();
 				params = su.parameterHash(request);
 			
-				System.out.println("IN PARAMETERS: "+params.toString() );
+				System.out.println("DataRequestServlet > IN PARAMETERS: "+params.toString() );
  
  				//how much data is being requested -- summary set, full data set etc
  				if ( (String)params.get("resultType") != null )
@@ -142,7 +145,7 @@ public class DataRequestServlet extends HttpServlet
  			clientLog= (rb.getString("requestparams.clientLog"));
 			servletDir = rb.getString("requestparams.servletDir");
  			remoteHost=request.getRemoteHost();
-			System.out.println("accessed by: "+remoteHost);
+			System.out.println("DataRequstServlet > accessed by: "+remoteHost);
 			//log the use of the servlet by the client
 			updateClentLog(clientLog, remoteHost);
 			//return to the browser a summary of the request being made of the servlet this
@@ -152,7 +155,7 @@ public class DataRequestServlet extends HttpServlet
 			//figure out what of data request type the client is requesting?
 			if ( requestDataType.trim().equals("vegPlot") )
 			{
-				System.out.println("determining query type: " + determineQueryType(params) );
+				System.out.println("DataRequstServlet > determining query type: " + determineQueryType(params) );
 				if ( determineQueryType(params).equals("simple") )
 				{
 					handleSimpleQuery (params, out, response);
@@ -168,18 +171,18 @@ public class DataRequestServlet extends HttpServlet
 			}
 			else if ( requestDataType.trim().equals("plantTaxon") )
 			{
-				System.out.println( " query on the plant taxonomy database \n");
+				System.out.println( "DataRequstServlet > query on the plant taxonomy database \n");
 				handlePlantTaxonQuery( params, out, requestDataType, response );
 			}
 			else if ( requestDataType.trim().equals("vegCommunity") )
 			{
-				System.out.println( " query on the vegetation community database \n"
+				System.out.println("DataRequstServlet > query on the vegetation community database \n"
 					+" not yet implemented ");
 				handleVegCommunityQuery( params, out, requestDataType, response);
 			}
 			else 
 			{
-				System.out.println( " unknown 'requestDataType' parameter "
+				System.out.println("DataRequstServlet > unknown 'requestDataType' parameter "
 					+" must be: vegPlot or plantTaxon or vegCommunity ");
 				
 			}
@@ -188,9 +191,8 @@ public class DataRequestServlet extends HttpServlet
 		}//end try
 		catch( Exception e ) 
 		{
-			System.out.println("** failed in: DataRequestServlet.main "
-			+" first try - reading parameters "
-			+e.getMessage());
+			System.out.println("Exception :  "+ e.getMessage());
+			e.printStackTrace();
 		}
 		
 	}
@@ -214,7 +216,7 @@ public class DataRequestServlet extends HttpServlet
 		}
 		else
 		{
-			System.out.println("cannot process query: no type specified");
+			System.out.println("DataRequstServlet > cannot process query: no type specified");
 		}
 		return(queryType);
 	}
@@ -246,7 +248,7 @@ public class DataRequestServlet extends HttpServlet
 				|| ( param.containsKey("operator")== false )
 				|| ( param.containsKey("value") == false ))
 			{
-				System.out.println("did not get the correct parameters to handleExtendedQuery");	
+				System.out.println("DataRequstServlet > did not get the correct parameters to handleExtendedQuery");	
 			}
 			//else compose and issue the query to the database access module
 			else
@@ -294,9 +296,8 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed in: DataRequestServlet.main "
-			+" first try - reading parameters "
-			+e.getMessage());
+			System.out.println("Exception:  "	+e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -320,7 +321,7 @@ public class DataRequestServlet extends HttpServlet
 	{
 		try 
 		{
-			System.out.println("result sets: "+queryOutputNum+" to: "+clientType);
+			System.out.println("DataRequstServlet > result sets: "+queryOutputNum+" to: "+clientType);
 			if ( clientType.trim().equals("clientApplication") )
 			{
 				//does the client want xml or html?
@@ -361,8 +362,8 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed: "
-			+e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -527,8 +528,7 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed: "
-			+e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -585,8 +585,7 @@ public class DataRequestServlet extends HttpServlet
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed: "
-			+e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -655,7 +654,7 @@ public class DataRequestServlet extends HttpServlet
 			communityName = (String)params.get("communityName");
 			communityLevel = (String)params.get("communityLevel");
 
-			System.out.println("printing from DataRequestServlet.composeCommunityQuery: "+
+			System.out.println("DataRequstServlet > printing from DataRequestServlet.composeCommunityQuery: "+
 			"communityName: "+communityName);
 
  			//print the query instructions in the xml document
@@ -678,8 +677,8 @@ public class DataRequestServlet extends HttpServlet
  		}
 		catch (Exception e) 
 		{
-			System.out.println("** failed in DataRequestServlet.composeCommunityQuery " 
-			+ e.getMessage());
+			System.out.println("Exception: "+ e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -709,7 +708,7 @@ public class DataRequestServlet extends HttpServlet
 			String taxonNameType = (String)params.get("taxonNameType");
 		
 
-			System.out.println("printing from DataRequestServlet.composePlantTaxonomyQuery: "+
+			System.out.println("DataRequstServlet > printing from DataRequestServlet.composePlantTaxonomyQuery: "+
 			"taxonName: "+taxonName);
 
  			//print the query instructions in the xml document
@@ -732,8 +731,8 @@ public class DataRequestServlet extends HttpServlet
  		}
 		catch (Exception e) 
 		{
-			System.out.println(" failed : " 
-			+ e.getMessage());
+			System.out.println("Exception : " +  e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -761,9 +760,8 @@ private void updateClentLog (String clientLog, String remoteHost)
 	}
 	catch (Exception e) 
 	{
-		System.out.println("failed in DataRequestServlet.updateClientLog " 
-		+"trying to do client book keeping: " 
-		+ e.getMessage());
+		System.out.println("Exception: " 	+ e.getMessage());
+		e.printStackTrace();
 	}
 }
 
@@ -813,9 +811,7 @@ private void updateClentLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in "
-			+"DataRequestServlet.returnQueryElementSummary" 
-			+ e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 	} //end method
@@ -856,8 +852,8 @@ private void updateClentLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in DataRequestServlet.composeSinglePlotQuery" + 
-			e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -902,7 +898,7 @@ private void updateClentLog (String clientLog, String remoteHost)
 			else 
 			{
 				//print the error found
-				System.out.println("cannot compose extended query");
+				System.out.println("DataRequstServlet > cannot compose extended query");
 			}
 			sb.append("</extendedQuery>"+"\n");
 			sb.append("<requestDataType>summary</requestDataType> \n");
@@ -915,8 +911,8 @@ private void updateClentLog (String clientLog, String remoteHost)
 		
 		catch (Exception e) 
 		{
-			System.out.println("failed in DataRequestServlet.composeQuery: " + 
-			e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 		return("composed extended query");
 	}
@@ -955,8 +951,8 @@ private void updateClentLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in DataRequestServlet.composeQuery: " + 
-			e.getMessage());
+			System.out.println("Exception: " + 	e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -1005,8 +1001,8 @@ private void updateClentLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in DataRequestServlet.composeQuery:" + 
-			e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -1080,8 +1076,8 @@ private void updateClentLog (String clientLog, String remoteHost)
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in DataRequestServlet.composeQuery: " + 
-			e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -1094,15 +1090,15 @@ private void updateClentLog (String clientLog, String remoteHost)
  * @param queryType - the type of query to be sent through the dataAccess module
  * including simpleQuery (one attribute) and compoundQuery (multiple attributes) 
  */
-	private void issueQuery (String queryType) 
+	private void issueQuery(String queryType) 
 	{
-		System.out.println("## QUERY TYPE ## " + queryType);
+		System.out.println("DataRequestServlet > QUERY TYPE  " + queryType);
 		if (queryType.equals("simpleQuery")) 
 		{ 
 			//if it is a browser query then register the document
 			if (this.clientType.equals("browser") )
 			{
-				System.out.println("registering the doc. -- browser client");
+				System.out.println("DataRequestServlet > registering the doc. -- browser client");
 				registerQueryDocument();
 			}
 			//else if it is an application (i.e., another servlet ) test the
@@ -1155,7 +1151,7 @@ private void updateClentLog (String clientLog, String remoteHost)
 		
 		else
 		{
-			System.out.println("DataRequestServlet could not handle query type: "
+			System.out.println("DataRequestServlet >  could not handle query type: "
 				+queryType);
 		}
 	}
@@ -1185,7 +1181,7 @@ private void updateClentLog (String clientLog, String remoteHost)
       	Cookie cookie = cookies[i];
 				//out.print("Cookie Name: " +cookie.getName()  + "<br>");
         cookieName=cookie.getName();
-				System.out.println("cookie name: " + cookieName);
+				System.out.println("DataRequestServlet > cookie name: " + cookieName);
 				//out.println("  Cookie Value: " + cookie.getValue() +"<br><br>");
 				cookieValue=cookie.getValue();
 				s = cookieValue.trim(); 
@@ -1193,7 +1189,7 @@ private void updateClentLog (String clientLog, String remoteHost)
   	} 
 		else 
 		{
-			System.out.println("No valid cookies found");
+			System.out.println("DataRequestServlet > No valid cookies found");
 		}
 	return(s);
 	}
@@ -1205,7 +1201,7 @@ private void updateClentLog (String clientLog, String remoteHost)
 	 */
 	 private void registerQueryDocument()
 	 {
-		 System.out.println("### registering the query document ###");
+		 System.out.println("DataRequestServlet > registering the query document ###");
 		 suy.uploadFileDataExcahgeServlet(servletDir+"query.xml", userName);
 		 
 	 }
