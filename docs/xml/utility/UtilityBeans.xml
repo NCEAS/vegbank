@@ -5,7 +5,8 @@
     <entityLabel>State List</entityLabel>
     <entitySummary>A utility for storing lists of
     states</entitySummary>
-    <entityDescription />
+    <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>states</attName>
       <attList>
@@ -527,7 +528,8 @@
     <entityLabel>Country List</entityLabel>
     <entitySummary>A utility for storing lists of
     countries</entitySummary>
-    <entityDescription />
+    <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>countries</attName>
       <attList>
@@ -1518,13 +1520,12 @@
       </attList>
     </attribute>
   </entity>
-
-
   <entity>
     <entityName>regionList</entityName>
     <entityLabel>Region List</entityLabel>
     <entitySummary>A utility for storing lists of regions</entitySummary>
-    <entityDescription />
+    <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>regions</attName>
       <attList>
@@ -1595,12 +1596,12 @@
       </attList>
     </attribute>
   </entity>
-
   <entity>
     <entityName>certStatusList</entityName>
     <entityLabel>Certification Status List</entityLabel>
     <entitySummary>A utility for storing lists of certification statuses</entitySummary>
-    <entityDescription />
+    <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>certstatuses</attName>
       <attList>
@@ -1635,5 +1636,4 @@
       </attList>
     </attribute>
   </entity>
-
 </VegbankUtitiltyBeans>
