@@ -59,6 +59,8 @@ String action=args[0];
 	returnFields[2]="Project_id";
 	int returnFieldLength=3;
 
+
+	
 /**
  * Call the issueSelect method which will return an array with the return
  * values
@@ -76,7 +78,7 @@ String action=args[0];
 
 if (action.trim().equals("insert")) {
 
-	System.out.println("sending a test insert statement to database");
+	System.out.println("issueStatement > sending a test insert statement to database");
 
 	String insertString="INSERT INTO NAMEDPLACE";
 	String attributeString="namedplace_id, placeName";
@@ -155,7 +157,7 @@ public void issueSelect(String inputStatement, String inputAction,
 try {
 ////dbConnect m = new dbConnect();
 ////m.makeConnection(conn, query);
-System.out.println("Grabbing a DB connection from the local pool");
+System.out.println("issueStatement > Grabbing a DB connection from the local pool");
 
 LocalDbConnectionBroker lb = new LocalDbConnectionBroker();
 conn = lb.manageLocalDbConnectionBroker("getConn");

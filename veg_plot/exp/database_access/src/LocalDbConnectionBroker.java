@@ -51,9 +51,7 @@ public class LocalDbConnectionBroker
 	 */
 	public static Connection manageLocalDbConnectionBroker(String action) 
 	{
-
 		classUses++;
-	
 		//define the connection
 		///Connection pconn=null; 
 
@@ -63,16 +61,12 @@ public class LocalDbConnectionBroker
 			{
 				//get the database management parameter settings
 				g.getDatabaseParameters("database", "query");
-	
 				myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
 				g.login,g.passwd,g.minConnections,g.maxConnections, 
 				g.logFile,1.0);
-		
 				pconn=myBroker.getConnection(); //get a connection that will be closed
-		
 				//pool stats -- number of connections in the pool
-				System.out.println("LocalDbConnectionBroker > connectin string: " + g.connectionString);
-		
+				System.out.println("LocalDbConnectionBroker > connection string: " + g.connectionString);
 			}
 			catch( Exception e ) 
 			{
@@ -104,7 +98,7 @@ public class LocalDbConnectionBroker
 			// from the DBConnectionBroker
 			if (currentConnectionUses == g.maxConnectionUses ) 
 			{
-				System.out.println("LocalDbConnectionBroker: grabbing a new connection from pool");
+				System.out.println("LocalDbConnectionBroker > grabbing a new connection from pool");
 		
 				//the next logic is to determine if the max number of connections has been
 				// exceeded the pool numbber and if so then create a new pool
@@ -112,7 +106,7 @@ public class LocalDbConnectionBroker
 				{
 					try 
 					{
-						System.out.println("LocalDbConnectionBroker: re-starting the connection pooling");
+						System.out.println("LocalDbConnectionBroker > re-starting the connection pooling");
 						myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
 						g.login,g.passwd,g.minConnections,g.maxConnections, 
 						g.logFile,1.0);
@@ -141,7 +135,7 @@ public class LocalDbConnectionBroker
 		} 
 		catch( Exception e ) 
 		{
-			System.out.println("failed in: manageLocalDbConnectionBroker realease "
+			System.out.println("Exception: manageLocalDbConnectionBroker realease "
 			+e.getMessage() ); e.printStackTrace();
 		}
 	}
@@ -166,7 +160,11 @@ public class LocalDbConnectionBroker
 	}
 	else 
 	{ 
-		System.out.println("LocalDbConnectionBroker.manageLocalDbConnectionBroker: unrecognized action"
+		System.out.println("LocalDbConnectionBroker > manageLocalDbConnectionBroker: unrecognized action"
 		+action);
 	}
-	return 
+	return pconn;
+}
+
+}
+

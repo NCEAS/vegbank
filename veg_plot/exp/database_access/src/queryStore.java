@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: harris $'
- *  '$Date: 2002-04-09 23:14:42 $'
- * 	'$Revision: 1.6 $'
+ *  '$Date: 2002-04-11 17:42:03 $'
+ * 	'$Revision: 1.7 $'
  *
  *
  */
@@ -391,9 +391,7 @@ catch (Exception e) {System.out.println("failed in querySrore.getPlotSummary"
  */
 public void getPlotId(String queryElement, String queryElementType)
 {
-
 	String queryTableName = null;  //name of the table for which the query to be made
-
 	//translate the query attributeName into the table name and determine the table
 	if ( queryElementType.equals("taxonName") ) 
 	{
@@ -429,10 +427,11 @@ public void getPlotId(String queryElement, String queryElementType)
 	//most of the database attributes are denormalized to two tables:
 	// 'plotSiteSummary' and 'plotSpeciesSum'
 	String action="select";
-	String statement="select DISTINCT PLOT_ID from "+queryTableName+" where "+queryElementType
-	+" like '%"+queryElement+"%'";
+	String statement="select DISTINCT PLOT_ID from "+queryTableName+" where UPPER("+queryElementType
+	+") like '%"+queryElement.toUpperCase()+"%'";
 
-
+	System.out.println("queryStore > select statement: " + statement);
+	
 	String returnFields[]=new String[1];	
 	returnFields[0]="PLOT_ID";
 	int returnFieldLength=1;
@@ -446,7 +445,8 @@ public void getPlotId(String queryElement, String queryElementType)
 	outPlotId=j.outReturnFields;
 	outPlotIdNum=j.outReturnFieldsNum;
 	
-} //end method
+	System.out.println("queryStore > result set size: " + outPlotIdNum );
+}
 
 
 

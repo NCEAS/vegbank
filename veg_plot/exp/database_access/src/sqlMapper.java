@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-09 23:14:42 $'
- * '$Revision: 1.9 $'
+ *     '$Date: 2002-04-11 17:42:03 $'
+ * '$Revision: 1.10 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -773,8 +773,7 @@ public class  sqlMapper
 					System.out.println("sqlMapper > the query element key: "+queryElementType);
 					System.out.println("sqlMapper > the query element value: "+queryElementValue);
 		
-					System.out.println("sqlMapper > developPlotQuery  "
-					+" calling queryStore.getPlotId (single query element)");
+					System.out.println("sqlMapper > developPlotQuery calling queryStore.getPlotId(single query element)");
 					queryStore j = new queryStore();
 					j.getPlotId(queryElementValue, queryElementType);
 					queryOutput=j.outPlotId;
@@ -797,10 +796,12 @@ public class  sqlMapper
 					queryOutputNum=j.outPlotIdNum;
 				}
 
+				// JHH REMOVE THIS METHOD SHOULD NO LONGER BE USED
 				//retrieve the plot summary information, using as input 
 				//the plotId numbers retrieved in the provios query 
-				queryStore k1 = new queryStore();
-				k1.getPlotSummaryNew(queryOutput, queryOutputNum);
+		
+		///		queryStore k1 = new queryStore();
+		///		k1.getPlotSummaryNew(queryOutput, queryOutputNum);
 
 				//write the summary information to the file 
 				//that can be used by the application -- write two
@@ -817,9 +818,10 @@ public class  sqlMapper
 				dbAccess dbaccess = new dbAccess();
 				dbaccess.writeMultipleVegBankPlot(plotIdVec, testFile);
 				
-				System.out.println("sqlMapper > writing the plots using old class - file " + outFile);
-				xmlWriter xw = new xmlWriter();
-				xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
+				// JHH REMOVE BLOCK 20020411 - this class is to be removed
+		///		System.out.println("sqlMapper > writing the plots using old class - file " + outFile);
+		///		xmlWriter xw = new xmlWriter();
+		///		xw.writePlotSummary(k1.cumulativeSummaryResultHash, outFile);
 			}
 			else
 			{
