@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-02-07 06:45:36 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2004-02-28 11:20:37 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,16 +79,19 @@ public class Authenticate implements  Authentication
 			}
 			user = (new UserDatabaseAccess()).getUser(usrId);
 
+			if (user == null) {
+				throw new Exception("could not get user from DB");
+			}
+
 		} catch (Exception ex) {
+			LogUtility.log("Authenticate.checkReqRoles exception getting user: ", ex);
 			return false;
 		}
 			
+		LogUtility.log("Authenticate.checkReqRoles: getting user perms...");
 		int userPerms = user.getPermissiontype();
-		LogUtility.log(
-			"Authenticate: Comparing user's roles;  "
-				+ userPerms
-				+ " with the required roles; "
-				+ reqRoles);
+		LogUtility.log("Authenticate.checkReqRoles: user's role sum = "
+				+ userPerms + ", required roles = " + reqRoles);
 			
 		if (reqRoles == null) {
 			LogUtility.log("Authenticate: assuming Action should be " +
