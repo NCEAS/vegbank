@@ -4,8 +4,8 @@
  *  Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2004-07-22 20:33:37 $' 
- * '$Revision: 1.3 $'
+ * '$Date: 2004-07-29 01:06:12 $' 
+ * '$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -174,7 +174,7 @@ public class QueryHelper
 		String selectSciName = sharedGetNameType
 				+ "'Scientific' ) AS \"Scientific Name\"";
 
-		if (!Utility.isStringNullOrEmpty(plantname) &&
+		if (Utility.AUTO_APPEND_WILDCARD && !Utility.isStringNullOrEmpty(plantname) &&
 				!plantname.endsWith("%")) {
 			plantname += "%";
 		}

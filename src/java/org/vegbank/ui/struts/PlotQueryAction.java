@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-28 07:42:38 $'
- *	'$Revision: 1.22 $'
+ *	'$Date: 2004-07-29 01:06:12 $'
+ *	'$Revision: 1.23 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public class PlotQueryAction extends VegbankAction
 
 	private static final String ANDVALUE = " AND ";
 	private static final String ORVALUE = " OR ";
-	private static final int NUM_TOP_TAXA =	5;
+	private static final int NUM_TOP_TAXA =	0;
 	private static String selectClause =	
 		" SELECT DISTINCT(observation.accessioncode), observation.authorobscode, " +	
 		" plot.latitude, plot.longitude, observation.observation_id ";
@@ -360,11 +360,13 @@ public class PlotQueryAction extends VegbankAction
 		plotsum.setLongitude(new Double(rs.getDouble(4)));
 		plotsum.setPlotId(rs.getString(5));
 
+		/*
 		plotsum.setTopspp1(rs.getString(6));
 		plotsum.setTopspp2(rs.getString(7));
 		plotsum.setTopspp3(rs.getString(8));
 		plotsum.setTopspp4(rs.getString(9));
 		plotsum.setTopspp5(rs.getString(10));
+		*/
 	}
 
 	private void appendWhereClause(
@@ -403,7 +405,7 @@ public class PlotQueryAction extends VegbankAction
 			// If no plantname given then forget it...
 			if ( ! Utility.isStringNullOrEmpty(plantNames[i]))
 			{		
-				if (!plantNames[i].endsWith("%")) {
+				if (Utility.AUTO_APPEND_WILDCARD && !plantNames[i].endsWith("%")) {
 					plantNames[i] += "%";
 				}
 			
@@ -468,7 +470,7 @@ public class PlotQueryAction extends VegbankAction
 			// If no communityname given then forget it...
 			if ( ! Utility.isStringNullOrEmpty(commNames[i]))
 			{
-				if (!commNames[i].endsWith("%")) {
+				if (Utility.AUTO_APPEND_WILDCARD && !commNames[i].endsWith("%")) {
 					commNames[i] += "%";
 				}
 			

@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-07-23 01:14:13 $'
- *  '$Revision: 1.29 $'
+ *  '$Date: 2004-07-29 01:06:12 $'
+ *  '$Revision: 1.30 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,8 +86,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: anderson $'
- *  '$Date: 2004-07-23 01:14:13 $'
- *  '$Revision: 1.29 $'
+ *  '$Date: 2004-07-29 01:06:12 $'
+ *  '$Revision: 1.30 $'
  * 
  */
 
@@ -207,7 +207,7 @@ public class DataRequestServlet extends HttpServlet
 
 			if (Utility.isStringNullOrEmpty(communityName)) {
 				communityName = "";
-			} else if (!communityName.endsWith("%")) {
+			} else if (Utility.AUTO_APPEND_WILDCARD && !communityName.endsWith("%")) {
 				communityName += "%";
 			}
 

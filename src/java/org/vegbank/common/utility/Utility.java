@@ -35,9 +35,9 @@ import org.vegbank.common.model.Plantstatus;
  * 
  * Purpose: An utility class for Vegbank project.
  * 
- * '$Author: farrell $'
- * '$Date: 2004-04-19 14:53:06 $'
- * '$Revision: 1.31 $'
+ * '$Author: anderson $'
+ * '$Date: 2004-07-29 01:06:12 $'
+ * '$Revision: 1.32 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,8 +66,20 @@ public class Utility
 	public static  final String DB_ADAPTER_NAME = "org.vegbank.common.dbAdapter.PostgresqlAdapter";
 
 	
-	public static final String DATABASE_NAME = ResourceBundle.getBundle("database").getString("databaseName");
-	
+	// Bundle:  database
+	public static final String DATABASE_NAME =
+		ResourceBundle.getBundle("database").getString("databaseName");
+
+	// Bundle:  general
+	public static boolean AUTO_APPEND_WILDCARD = false;
+	static {
+		String tmp = ResourceBundle.getBundle("general").getString("queries.auto_append_wildcard");
+		if (!isStringNullOrEmpty(tmp) && !tmp.equals("false") && !tmp.equals("0")) {
+			AUTO_APPEND_WILDCARD = true;
+		}
+	}
+
+	// Bundle:  vegbank
 	public static ResourceBundle vegbankPropFile = ResourceBundle.getBundle("vegbank");
 	public static final String SMTP_SERVER = vegbankPropFile.getString("mailHost");
 	public static final String VEGBANK_SCHEMA_LOACATION = vegbankPropFile.getString("schemaLocation");
