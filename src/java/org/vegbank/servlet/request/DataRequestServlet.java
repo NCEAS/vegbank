@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-07 01:37:27 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-05-07 04:26:31 $'
+ *  '$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,8 +77,8 @@ import databaseAccess.dbAccess;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-05-07 01:37:27 $'
- *  '$Revision: 1.3 $'
+ *  '$Date: 2003-05-07 04:26:31 $'
+ *  '$Revision: 1.4 $'
  * 
  */
 
@@ -95,10 +95,9 @@ public class DataRequestServlet extends HttpServlet
 	private static final String SERVLET_DIR = rb.getString("requestparams.servletDir");
 	
 	// TODO: This need to taken out of here !!
-	private static final String servletLib = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/";
-	private static final String summaryViewStyleSheet = servletLib + "transformPlotSummary.xsl";
-	private static final String comprehensiveViewStyleSheet = servletLib + "transformFullPlot.xsl";
-	private static final String communityQueryPage = "/forms/community-query.html";
+	private static final String summaryViewStyleSheet = SERVLET_DIR + "transformPlotSummary.xsl";
+	private static final String comprehensiveViewStyleSheet = SERVLET_DIR + "transformFullPlot.xsl";
+	private static final String communityQueryPage = "/vegbank/forms/community-query.html";
 	
 	/**
 	 * constructor method
