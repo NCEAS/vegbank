@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v3.0 NT (http://www.xmlspy.com) by Kevin Klingelsmith (USDA) -->
+<!--Dates and Timestamps conform to ISO 8601 (1988).  -->
+<!--Dates will be in the format "YYYY-MM-DD"-->
+<!--Timestamps will be in the format "YYYY-MM-DDTHH:MM:SS"-->
+<!ELEMENT Itis (RootTsn, Names)>
+<!ELEMENT AcquisitionDate (#PCDATA)>
+<!ATTLIST AcquisitionDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT ActualPubDate (#PCDATA)>
+<!ATTLIST ActualPubDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT ApprovedInd (#PCDATA)>
+<!ATTLIST ApprovedInd
+	Type CDATA #FIXED "boolean"
+>
+<!ELEMENT Author (TaxonAuthor, AuthorUpdateDate)>
+<!ELEMENT AuthorUpdateDate (#PCDATA)>
+<!ATTLIST AuthorUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT Child (Tsn, ConcatenatedName, Rank, Author)>
+<!ATTLIST Child
+	NameIDRef IDREF #IMPLIED
+>
+<!ELEMENT Comment (Commentator, Detail, CommentTimeStamp, CommentUpdateDate, CommentLinkUpdateDate)>
+<!ELEMENT Commentator (#PCDATA)>
+<!ATTLIST Commentator
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "100"
+>
+<!ELEMENT CommentLinkUpdateDate (#PCDATA)>
+<!ATTLIST CommentLinkUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT CommentTimeStamp (#PCDATA)>
+<!ATTLIST CommentTimeStamp
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "19"
+>
+<!ELEMENT CommentUpdateDate (#PCDATA)>
+<!ATTLIST CommentUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT CommonName (#PCDATA)>
+<!ATTLIST CommonName
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "80"
+>
+<!ELEMENT Completeness (#PCDATA)>
+<!ATTLIST Completeness
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT ConcatenatedName (#PCDATA)>
+<!ATTLIST ConcatenatedName
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "280"
+>
+<!ELEMENT CredibilityRating (#PCDATA)>
+<!ATTLIST CredibilityRating
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "40"
+>
+<!ELEMENT Currency (#PCDATA)>
+<!ATTLIST Currency
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "7"
+>
+<!ELEMENT Detail (#PCDATA)>
+<!ATTLIST Detail
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "500"
+>
+<!ELEMENT ExpComment (#PCDATA)>
+<!ATTLIST ExpComment
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "500"
+>
+<!ELEMENT Expert (ExpName, ExpComment, ExpertUpdateDate, OriginalDescInd, ExpertLinkUpdateDate)>
+<!ELEMENT ExpertLinkUpdateDate (#PCDATA)>
+<!ATTLIST ExpertLinkUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT ExpertUpdateDate (#PCDATA)>
+<!ATTLIST ExpertUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT ExpName (#PCDATA)>
+<!ATTLIST ExpName
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "100"
+>
+<!ELEMENT GeographicDivision (GeographicValue, GeographicUpdateDate)>
+<!ELEMENT GeographicValue (#PCDATA)>
+<!ATTLIST GeographicValue
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "40"
+>
+<!ELEMENT GeographicUpdateDate (#PCDATA)>
+<!ATTLIST GeographicUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT InitialTimeStamp (#PCDATA)>
+<!ATTLIST InitialTimeStamp
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "19"
+>
+<!ELEMENT Isbn (#PCDATA)>
+<!ATTLIST Isbn
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "16"
+>
+<!ELEMENT Issn (#PCDATA)>
+<!ATTLIST Issn
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "16"
+>
+<!ELEMENT Jurisdiction (JurisdictionValue, Origin, JurisdictionUpdateDate)>
+<!ELEMENT JurisdictionValue (#PCDATA)>
+<!ATTLIST JurisdictionValue
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "30"
+>
+<!ELEMENT JurisdictionUpdateDate (#PCDATA)>
+<!ATTLIST JurisdictionUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT Kingdom (#PCDATA)>
+<!ATTLIST Kingdom
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT Language (#PCDATA)>
+<!ATTLIST Language
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "15"
+>
+<!ELEMENT ListedPubDate (#PCDATA)>
+<!ATTLIST ListedPubDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT Name (Author?, Kingdom, Rank, Tsn, Parent?, ConcatenatedName, Unit_Ind1, Unit_Name1, Unit_Ind2, Unit_Name2, Unit_Ind3, Unit_Name3, Unit_Ind4, Unit_Name4, Usage, UnacceptabilityReason, CredibilityRating, Completeness, Currency, InitialTimeStamp, NameUpdateDate, Child*, Synonym*, Vernacular*, GeographicDivision*, Jurisdiction*, Comment*, Publication*, OtherSource*, Expert*)>
+<!ATTLIST Name
+	NameID ID #REQUIRED
+>
+<!ELEMENT Names (Name*)>
+<!ELEMENT NameUpdateDate (#PCDATA)>
+<!ATTLIST NameUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT Origin (#PCDATA)>
+<!ATTLIST Origin
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "19"
+>
+<!ELEMENT OriginalDescInd (#PCDATA)>
+<!ATTLIST OriginalDescInd
+	Type CDATA #FIXED "boolean"
+>
+<!ELEMENT OtherSource (Source, SourceType, Version, AcquisitionDate, SourceComment, SourceUpdateDate, OriginalDescInd, SourceLinkUpdateDate)>
+<!ELEMENT PagesOld (#PCDATA)>
+<!ATTLIST PagesOld
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "15"
+>
+<!ELEMENT Parent (Tsn, ConcatenatedName, Rank, Author)>
+<!ATTLIST Parent
+	NameIDRef IDREF #IMPLIED
+>
+<!ELEMENT PubComment (#PCDATA)>
+<!ATTLIST PubComment
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "500"
+>
+<!ELEMENT Publication (ReferenceAuthor, Title, PublicationName, ListedPubDate, ActualPubDate, Publisher, PubPlace, Isbn, Issn, PagesOld, PubComment, PublicationUpdateDate, OriginalDescInd, PublicationLinkUpdateDate)>
+<!ELEMENT PublicationName (#PCDATA)>
+<!ATTLIST PublicationName
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "255"
+>
+<!ELEMENT PublicationLinkUpdateDate (#PCDATA)>
+<!ATTLIST PublicationLinkUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT PublicationUpdateDate (#PCDATA)>
+<!ATTLIST PublicationUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT Publisher (#PCDATA)>
+<!ATTLIST Publisher
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "80"
+>
+<!ELEMENT PubPlace (#PCDATA)>
+<!ATTLIST PubPlace
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "40"
+>
+<!ELEMENT Rank (#PCDATA)>
+<!ATTLIST Rank
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "15"
+>
+<!ELEMENT ReferenceAuthor (#PCDATA)>
+<!ATTLIST ReferenceAuthor
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "100"
+>
+<!ELEMENT Roots (RootTsn+)>
+<!ELEMENT RootTsn (#PCDATA)>
+<!ATTLIST RootTsn
+	Type CDATA #FIXED "long"
+	NameIDRef IDREF #REQUIRED
+>
+<!ELEMENT Source (#PCDATA)>
+<!ATTLIST Source
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "64"
+>
+<!ELEMENT SourceComment (#PCDATA)>
+<!ATTLIST SourceComment
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "500"
+>
+<!ELEMENT SourceLinkUpdateDate (#PCDATA)>
+<!ATTLIST SourceLinkUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT SourceUpdateDate (#PCDATA)>
+<!ATTLIST SourceUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT SourceType (#PCDATA)>
+<!ATTLIST SourceType
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT Synonym (Tsn, ConcatenatedName, Rank, Author)>
+<!ATTLIST Synonym
+	NameIDRef IDREF #IMPLIED
+>
+<!ELEMENT TaxonAuthor (#PCDATA)>
+<!ATTLIST TaxonAuthor
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "100"
+>
+<!ELEMENT Title (#PCDATA)>
+<!ATTLIST Title
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "255"
+>
+<!ELEMENT Tsn (#PCDATA)>
+<!ATTLIST Tsn
+	Type CDATA #FIXED "long"
+>
+<!ELEMENT UnacceptabilityReason (#PCDATA)>
+<!ATTLIST UnacceptabilityReason
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "24"
+>
+<!ELEMENT Unit_Ind1 (#PCDATA)>
+<!ATTLIST Unit_Ind1
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "1"
+>
+<!ELEMENT Unit_Ind2 (#PCDATA)>
+<!ATTLIST Unit_Ind2
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "1"
+>
+<!ELEMENT Unit_Ind3 (#PCDATA)>
+<!ATTLIST Unit_Ind3
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "7"
+>
+<!ELEMENT Unit_Ind4 (#PCDATA)>
+<!ATTLIST Unit_Ind4
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "7"
+>
+<!ELEMENT Unit_Name1 (#PCDATA)>
+<!ATTLIST Unit_Name1
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "35"
+>
+<!ELEMENT Unit_Name2 (#PCDATA)>
+<!ATTLIST Unit_Name2
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "35"
+>
+<!ELEMENT Unit_Name3 (#PCDATA)>
+<!ATTLIST Unit_Name3
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "35"
+>
+<!ELEMENT Unit_Name4 (#PCDATA)>
+<!ATTLIST Unit_Name4
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "35"
+>
+<!ELEMENT Usage (#PCDATA)>
+<!ATTLIST Usage
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "12"
+>
+<!ELEMENT Vernacular (CommonName, Language, ApprovedInd, VernacularUpdateDate, Publication*, OtherSource*, Expert*)>
+<!ELEMENT VernacularUpdateDate (#PCDATA)>
+<!ATTLIST VernacularUpdateDate
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
+<!ELEMENT Version (#PCDATA)>
+<!ATTLIST Version
+	Type CDATA #FIXED "string"
+	Size CDATA #FIXED "10"
+>
