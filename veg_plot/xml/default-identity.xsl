@@ -75,15 +75,15 @@ PREV || NEXT
 
 <input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
 <!-- set up a table -->
-<table width="90%">
+<table width="85%">
 
 
-<tr colspan="1" bgcolor="#336633" align="left" valign="top">
-   <th class="tablehead"><font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">Identification</font></th>
+<tr colspan="1" bgcolor="CCCCFF" align="left" valign="top">
+   <th class="tablehead">Identification</th>
 </tr>
 
 	<!-- Header and row colors -->
-        <xsl:variable name="evenRowColor">#ffffcc</xsl:variable>
+        <xsl:variable name="evenRowColor">#C0D3E7</xsl:variable>
         <xsl:variable name="oddRowColor">#FFFFFF</xsl:variable>
 	
 	   

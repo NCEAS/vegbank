@@ -25,7 +25,7 @@
 <html>
 <head>
 		<title> VegBank -- Plant concept query results </title>
-		<link rel="stylesheet" type="text/css" href="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css" />
+		<link rel="stylesheet" type="text/css" href="http://numericsolutions.com/includes/default.css" />
 	<script LANGUAGE="JavaScript">
 <!-- Modified By:  Steve Robison, Jr. (stevejr@ce.net) -->
 <!-- This script and many more are available free online at -->
