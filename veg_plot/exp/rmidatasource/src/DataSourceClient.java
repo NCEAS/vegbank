@@ -29,9 +29,9 @@ import xmlresource.utils.transformXML;
  *  Release: @release@
  *	
  *  <br> <br>
- *  '$Author: harris $'
- *  '$Date: 2002-05-21 17:09:22 $'
- * 	'$Revision: 1.20 $'
+ *  '$Author: farrell $'
+ *  '$Date: 2002-12-03 23:55:06 $'
+ * 	'$Revision: 1.21 $'
  *
  *
  */
@@ -978,7 +978,7 @@ public class DataSourceClient
 				String testPlot = "";
 				
 				//this is the email address of the user who is responsible for laoding the data 
-				String email = "jim_drake@natureserve.org";
+				String email = "test@test.com";
 				
 				if (argv.length == 4)
 				{
