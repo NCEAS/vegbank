@@ -29,10 +29,7 @@
 </tr>
         <%@ include file="autogen/namedplace_detail_data.jsp" %>
         <bean:define id="namedplace_pk" name="onerowofnamedplace" property="namedplace_id" />
-<!--Insert a nested get statement here:
-   example:   
-
-<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_namedplace_pk" wparam="namedplace_pk" />-->
+<!-- plots in this named place -->
 <vegbank:get id="plot" select="place_count" beanName="map" pager="false" perPage="-1" 
   where="where_namedplace_pk" wparam="namedplace_pk" />
 
@@ -48,6 +45,49 @@
 </logic:notEqual>
 </logic:notEmpty>
 </td></tr>
+
+<!-- children and parent places -->
+
+
+<vegbank:get id="namedplacecorrelation_a" select="namedplacecorrelation" where="where_childplace" wparam="namedplace_pk"
+  beanName="map" pager="false" perPage="-1" xwhereEnable="false" />
+<logic:notEmpty name="namedplacecorrelation_a-BEANLIST">
+<TR><TD colspan="9">
+<table class="leftrightborders"><tr><th>parent places</th><th>convergence</th></tr>
+ <logic:iterate id="onerowofnamedplacecorrelation_a" name="namedplacecorrelation_a-BEANLIST">
+   <tr class='@nextcolorclass@'><td>
+   <a href='@get_link@std/namedplace/<bean:write name="onerowofnamedplacecorrelation_a" property="parentplace_id" />'><bean:write name="onerowofnamedplacecorrelation_a" property="parentplace_id_transl" /></td>
+   <td><bean:write name="onerowofnamedplacecorrelation_a" property="placeconvergence" /></td>
+ </logic:iterate>
+   </tr>
+</table>
+
+</TD></TR>
+</logic:notEmpty>
+
+
+<vegbank:get id="namedplacecorrelation_b" select="namedplacecorrelation" where="where_parentplace" wparam="namedplace_pk"
+  beanName="map" pager="false" perPage="-1" xwhereEnable="false" />
+<logic:notEmpty name="namedplacecorrelation_b-BEANLIST">
+<TR><TD colspan="9">
+<table class="leftrightborders"><tr><th>convergence</th><th>child places</th></tr>
+ <logic:iterate id="onerowofnamedplacecorrelation_b" name="namedplacecorrelation_b-BEANLIST">
+   <tr class='@nextcolorclass@'><td><bean:write name="onerowofnamedplacecorrelation_b" property="placeconvergence" /></td>
+   <td><a href='@get_link@std/namedplace/<bean:write name="onerowofnamedplacecorrelation_b" property="childplace_id" />'><bean:write name="onerowofnamedplacecorrelation_b" property="childplace_id_transl" /></a></td>
+   </tr>
+ </logic:iterate>
+
+</table>
+
+</TD></TR>
+</logic:notEmpty>
+
+
+<!--Insert a nested get statement here:
+   example:   
+
+<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_namedplace_pk" wparam="namedplace_pk" />-->
+
 </table>
 <p>&nbsp;</p>
 </logic:iterate>
