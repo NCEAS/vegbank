@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2003-10-24 01:52:43 $'
-*  '$Revision: 1.5 $'
+*      '$Date: 2003-10-24 19:10:15 $'
+*  '$Revision: 1.6 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -71,7 +71,7 @@
       <!-- set up the form which is required by netscape 4.x browsers -->
       <form name="listform" action="@viewdataservlet@" method="post">
 
-	 Choose plots to download from the search results below.
+	 <span class="item">Choose plots to download from the search results below.</span>
 	<br/>
        <input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
 	<br/>&nbsp;
@@ -79,22 +79,24 @@
     <table cellspacing="0" cellpadding="1">
 	<tr><td>&nbsp; &nbsp; &nbsp; &nbsp; </td>
 	<td bgcolor="#000000">
-    <table width="550" cellspacing="0" cellpadding="0">
+    <table width="650" cellspacing="0" cellpadding="0">
 
 
 	 <tr bgcolor="#336633" align="left" valign="top">
-	   <th align="center" nowrap> SEARCH RESULTS </th>
-	   <th align="center"> Vegbank Accession Code </th>
-	   <th align="center"> Author Accession Code </th>
+	   <th align="center" nowrap> SEARCH<br>RESULTS </th>
+	   <th align="center" valign="center" nowrap> Accession Code </th>
+	   <th align="center" valign="center" nowrap> Author's Plot Name </th>
+	   <th align="center" valign="center" nowrap> Latitude  </th>
+	   <th align="center" valign="center" nowrap> Longitude  </th>
 	 </tr>
 
 	 <tr bgcolor="#333333" align="center">
 	   <td class="whitetext" nowrap>
-	   	check +<a class="whitetext" href="#" onclick="checkAll('plotName')">all</a>
+	   	select +<a class="whitetext" href="#" onclick="checkAll('plotName')">all</a>
 		&nbsp; 
 		-<a class="whitetext" href="#" onclick="clearAll('plotName')">none</a>
 	   </td>
-	   <td colspan="2"> &nbsp; </td>
+	   <td colspan="20"> &nbsp; </td>
 	 </tr>
 
 
@@ -154,9 +156,10 @@
 	      	src="/vegbank/images/small_globe.gif" alt="Location"></img></a>
 	      
 		<br/>
-              <input name="plotName" type="checkbox" value="<bean:write property="plotId" name="row"/>" 
-			  	 onclick="toggle(this)"> 
-                <span class="item"> <font color="#0000CC"> download</font> </span> 
+              <input name="plotName" type="checkbox" value='<bean:write property="plotId" name="row"/>' 
+			  	 onclick="toggle(this)" id='<bean:write property="plotId" name="row"/>'>
+                <span class="itemlabel" style="cursor:hand">
+					<label for='<bean:write property="plotId" name="row"/>'>download</label></span>
               </input>
 
 	    </td>
@@ -167,27 +170,46 @@
 	        </span>
          </td>		 
 	    <td align="center" valign="middle">
-	        <span class="category">
+	        <span class="item">
 	          <bean:write name="row" property="authorObservationCode"/>   
+	        </span>
+         </td>		 
+	    <td align="center" valign="middle">
+	        <span class="item">
+	          <bean:write name="row" property="latitude"/>   
+	        </span>
+         </td>		 
+	    <td align="center" valign="middle">
+	        <span class="item">
+	          <bean:write name="row" property="longitude"/>   
 	        </span>
          </td>		 
 	  </tr>
 	  <tr bgcolor="#666666">
-         <td colspan="3"><img src="transparent.gif" height="1" width="1"></td>		 
+         <td colspan="20"><img src="transparent.gif" height="1" width="1"></td>		 
 	  </tr>
-
   
 	</logic:iterate>
 
+	 <tr bgcolor="#333333" align="center">
+	   <td class="whitetext" nowrap>
+	   	select +<a class="whitetext" href="#bottom" onclick="checkAll('plotName')">all</a>
+		&nbsp; 
+		-<a class="whitetext" href="#bottom" onclick="clearAll('plotName')">none</a><a name="bottom"></a>
+	   </td>
+	   <td colspan="20"> &nbsp; </td>
+	 </tr>
+
+
 	 <tr bgcolor="#336633">
-	   <td colspan="3">&nbsp; </td>
+	   <td colspan="20">&nbsp; </td>
 	 </tr>
       </table>
 	  </td></tr>
       </table>
 
 	<br/>
-	 Choose plots to download from the search results above.
+	 <span class="item">Choose plots to download from the search results above.</span>
 	<br/>
        <input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
 	<br/>&nbsp;

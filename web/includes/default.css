@@ -1,13 +1,9 @@
-BODY			{
-					background-color: #FFFFFF;
-				}
+BODY			{ background-color: #FFFFFF; }
 
-A:Link			{
-					color: #005680;
-				}
-A:Visited		{
-					color: #6699CC;
-				}
+A:Link			{ color: #005680; }
+A:Visited		{ color: #6699CC; }
+A:hover			{ color: #3399FF;}
+
 A.blk { color:#000000 }
 A.brightyellow { color:#FFFF80 }
 
@@ -30,9 +26,9 @@ th.grey, td.grey, tr.grey {background-color : #DDDDDD}
 
 .whitetext 		{ font-family: Verdana, Arial, Helvetica, Geneva, sans-serif; color : #FFFFFF; font-size: 8pt}
 
-A.whitetext:link	{ color : #FFFFFF; text-decoration: none}
-A.whitetext:hover	{ color : #3399FF; text-decoration: none}
-A.whitetext:visited	{ color : #FFFFFF; text-decoration: none}
+a.whitetext:link	{ color: #FFFFFF; text-decoration: none}
+a.whitetext:hover	{ color: #3399FF; text-decoration: none}
+a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
 
 .vegbank 		{ font-family: Georgia, Times New Roman, Times, serif; color : #531100}
 .sansserif          { font-family: Verdana, Arial, Helvetica, sans-serif ; color : #531100}
@@ -82,10 +78,18 @@ UL, OL, DL, LI, .list	{
 					font-size: 1em;
 					font-weight: bold;
 				}
+
 .item			{
 					font-family: Verdana, Arial, Helvetica, sans-serif;
 					font-size: .83em;
 					font-weight: normal;
+				}
+
+.itemlabel		{
+					font-family: Verdana, Arial, Helvetica, sans-serif;
+					font-size: .83em;
+					font-weight: normal;
+					color: #3366FF;
 				}
 
 .itemsmall		{

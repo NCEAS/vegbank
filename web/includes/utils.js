@@ -15,7 +15,6 @@ function checkAll(checkboxName) {
 			check(e);
 		}
 	}
-	form.toggleAll.checked = true;
 }
 
 function clearAll(checkboxName) {
@@ -27,7 +26,6 @@ function clearAll(checkboxName) {
 			clear(e);
 		}
 	}
-	form.toggleAll.checked = false;
 }
 
 function highlight(e) {
