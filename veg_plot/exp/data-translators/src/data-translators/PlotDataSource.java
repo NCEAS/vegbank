@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-20 23:02:28 $'
- * 	'$Revision: 1.17 $'
+ *  '$Date: 2002-05-22 23:14:03 $'
+ * 	'$Revision: 1.18 $'
  */
 public class PlotDataSource 
 {
@@ -830,13 +830,13 @@ public class PlotDataSource
 			source.getPlot(plotName);
 			
 			System.out.println(" \n ---------------------project info------------------------");
-			System.out.println("project name: " + source.projectName );
-			System.out.println("project description: " + source.projectDescription );
-			System.out.println("project contributors: " + source.projectContributors.toString() );
-			System.out.println("project start date: " + source.projectStartDate );
-			System.out.println("project stop date: " + source.projectStopDate );
+			System.out.println("PlotDataSource > project name: " + source.projectName );
+			System.out.println("PlotDataSource > project description: " + source.projectDescription );
+			System.out.println("PlotDataSource > project contributors: " + source.projectContributors.toString() );
+			System.out.println("PlotDataSource > project start date: " + source.projectStartDate );
+			System.out.println("PlotDataSource > project stop date: " + source.projectStopDate );
 			//the project contributor info goes here
-			System.out.println("number of project contributors: " + source.projectContributors.size() );
+			System.out.println("PlotDataSource > number of project contributors: " + source.projectContributors.size() );
 			for (int i=0; i<source.projectContributors.size(); i++)
 			{
 				String wholeName = source.projectContributors.elementAt(i).toString();
@@ -857,58 +857,58 @@ public class PlotDataSource
 				String currentFlag = source.getProjectContributorCurrentFlag(wholeName);
 				String addressStartDate = source.getProjectContributorAddressStartDate(wholeName);
 				
-				System.out.println("project contributor whole name: "+ wholeName);
-				System.out.println("project contributor salutation: "+ salutation);
-				System.out.println("project contributor given name: "+ givenName );
-				System.out.println("project contributor middle name: "+ middleName);
-				System.out.println("project contributor sur name: "+ surName);
-				System.out.println("project contributor org name: "+ organizationName);
-				System.out.println("project contributor contactInstructions: "+ contactInstructions);
-				System.out.println("project contributor phoneNumber: "+ phoneNumber);
-				System.out.println("project contributor orgPosition: "+ orgPosition);
-				System.out.println("project contributor email: "+ email);
-				System.out.println("project contributor deliveryPoint: "+ deliveryPoint);
-				System.out.println("project contributor city: "+ city);
-				System.out.println("project contributor administrativeArea: "+ administrativeArea);
-				System.out.println("project contributor postalCode: "+ postalCode);
-				System.out.println("project contributor country: "+ country);
-				System.out.println("project contributor currentFlag: "+ currentFlag);
-				System.out.println("project contributor addressStartDate: "+ addressStartDate+"\n");
+				System.out.println("PlotDataSource > project contributor whole name: "+ wholeName);
+				System.out.println("PlotDataSource > project contributor salutation: "+ salutation);
+				System.out.println("PlotDataSource > project contributor given name: "+ givenName );
+				System.out.println("PlotDataSource > project contributor middle name: "+ middleName);
+				System.out.println("PlotDataSource > project contributor sur name: "+ surName);
+				System.out.println("PlotDataSource > project contributor org name: "+ organizationName);
+				System.out.println("PlotDataSource > project contributor contactInstructions: "+ contactInstructions);
+				System.out.println("PlotDataSource > project contributor phoneNumber: "+ phoneNumber);
+				System.out.println("PlotDataSource > project contributor orgPosition: "+ orgPosition);
+				System.out.println("PlotDataSource > project contributor email: "+ email);
+				System.out.println("PlotDataSource > project contributor deliveryPoint: "+ deliveryPoint);
+				System.out.println("PlotDataSource > project contributor city: "+ city);
+				System.out.println("PlotDataSource > project contributor administrativeArea: "+ administrativeArea);
+				System.out.println("PlotDataSource > project contributor postalCode: "+ postalCode);
+				System.out.println("PlotDataSource > project contributor country: "+ country);
+				System.out.println("PlotDataSource > project contributor currentFlag: "+ currentFlag);
+				System.out.println("PlotDataSource > project contributor addressStartDate: "+ addressStartDate+"\n");
 			}
 			
 			
 			System.out.println(" \n ----------------------plot site info-----------------------------");
-			System.out.println("authorplotcode: " + source.plotCode );
-			System.out.println("latitude: " + source.getLatitude(plotName) );
-			System.out.println("longitude: " + source.longitude );
-			System.out.println("x coord: " + source.xCoord );
-			System.out.println("y coord: " + source.yCoord );
-			System.out.println("utm zone: " + source.utmZone );
-			System.out.println("datum: " + source.datum );
-			System.out.println("state: "+ source.state);
-			System.out.println("country: "+ source.country);
-			System.out.println("plot shape: " + source.plotShape );
-			System.out.println("geology: " + source.surfGeo );
-			System.out.println("topo position: " + source.topoPosition );
-			System.out.println("hydrologic regime: " + source.hydrologicRegime );
-			System.out.println("plot area(m): " + source.plotArea );
-			System.out.println("elevation(m): " + source.elevation );
-			System.out.println("elevation accuracy (%): " + source.elevationAccuracy );
-			System.out.println("landform : " + source.landForm );
-			System.out.println("author location: " + source.authorLocation);
-			System.out.println("stand size: " + source.standSize );
-			System.out.println("slope gradient: " + source.slopeGradient);
-			System.out.println("slope aspect: " + source.slopeAspect);
-			System.out.println("number of named places: " + source.namedPlaces.size() );
-			System.out.println("confidentialityStatus: " + source.getConfidentialityStatus(plotName) );
-			System.out.println("confidentialityReason: " + source.getConfidentialityReason(plotName) );
-			System.out.println("permanence: " + source.isPlotPermanent(plotName) );
+			System.out.println("PlotDataSource > authorplotcode: " + source.plotCode );
+			System.out.println("PlotDataSource > latitude: " + source.getLatitude(plotName) );
+			System.out.println("PlotDataSource > longitude: " + source.longitude );
+			System.out.println("PlotDataSource > x coord: " + source.xCoord );
+			System.out.println("PlotDataSource > y coord: " + source.yCoord );
+			System.out.println("PlotDataSource > utm zone: " + source.utmZone );
+			System.out.println("PlotDataSource > datum: " + source.datum );
+			System.out.println("PlotDataSource > state: "+ source.state);
+			System.out.println("PlotDataSource > country: "+ source.country);
+			System.out.println("PlotDataSource > plot shape: " + source.plotShape );
+			System.out.println("PlotDataSource > geology: " + source.surfGeo );
+			System.out.println("PlotDataSource > topo position: " + source.topoPosition );
+			System.out.println("PlotDataSource > hydrologic regime: " + source.hydrologicRegime );
+			System.out.println("PlotDataSource > plot area(m): " + source.plotArea );
+			System.out.println("PlotDataSource > elevation(m): " + source.elevation );
+			System.out.println("PlotDataSource > elevation accuracy (%): " + source.elevationAccuracy );
+			System.out.println("PlotDataSource > landform : " + source.landForm );
+			System.out.println("PlotDataSource > author location: " + source.authorLocation);
+			System.out.println("PlotDataSource > stand size: " + source.standSize );
+			System.out.println("PlotDataSource > slope gradient: " + source.slopeGradient);
+			System.out.println("PlotDataSource > slope aspect: " + source.slopeAspect);
+			System.out.println("PlotDataSource > number of named places: " + source.namedPlaces.size() );
+			System.out.println("PlotDataSource > confidentialityStatus: " + source.getConfidentialityStatus(plotName) );
+			System.out.println("PlotDataSource > confidentialityReason: " + source.getConfidentialityReason(plotName) );
+			System.out.println("PlotDataSource > permanence: " + source.isPlotPermanent(plotName) );
 			
 			System.out.println(" \n ----------------------plot site-observational info-----------------------------");
-			System.out.println("soilDepth: " + source.getSoilDepth(plotName) );
-			System.out.println("obsStartDate: " + source.getObsStartDate(plotName) );
-			System.out.println("obsStopDate: " + source.getObsStopDate(plotName) );
-			System.out.println("community name: " + source.getCommunityName(plotName));
+			System.out.println("PlotDataSource > soilDepth: " + source.getSoilDepth(plotName) );
+			System.out.println("PlotDataSource > obsStartDate: " + source.getObsStartDate(plotName) );
+			System.out.println("PlotDataSource > obsStopDate: " + source.getObsStopDate(plotName) );
+			System.out.println("PlotDataSource > community name: " + source.getCommunityName(plotName));
 			System.out.println("\n " );
 			
 			
@@ -919,10 +919,10 @@ public class PlotDataSource
 				String placeCode = getPlaceCode(placeName);
 				String placeSystem = getPlaceSystem(placeName);
 				String placeOwner = getPlaceOwner(placeName);
-				System.out.println("place name: " + placeName);
-				System.out.println("place description: " + placeDescription);
-				System.out.println("place code: " + placeCode);
-				System.out.println("place owner: " + placeOwner);
+				System.out.println("PlotDataSource > place name: " + placeName);
+				System.out.println("PlotDataSource > place description: " + placeDescription);
+				System.out.println("PlotDataSource > place code: " + placeCode);
+				System.out.println("PlotDataSource > place owner: " + placeOwner);
 			}
 			
 			
@@ -935,7 +935,7 @@ public class PlotDataSource
 				String cover = getStrataCover(plotCode, curstrata);
 				String base = getStrataBase(plotCode, curstrata);
 				String height = getStrataHeight(plotCode, curstrata);
-				System.out.println("strata: " + curstrata+" cover: "+cover+" base: "+base+" height: "+ height);
+				System.out.println("PlotDataSource > strata: " + curstrata+" cover: "+cover+" base: "+base+" height: "+ height);
 			}
 			
 			System.out.println(" \n ----------------------plant taxa info-----------------------------");
@@ -948,12 +948,12 @@ public class PlotDataSource
 				String name = source.plantTaxaNames.elementAt(i).toString();
 				//System.out.println("calling plotName : " + plotCode);
 				Vector strata = getTaxaStrataExistence(name, plotCode);
-				System.out.println("name:  " + name  );
+				System.out.println("PlotDataSource > name:  " + name  );
 				for (int ii=0; ii<strata.size(); ii++)
 				{
 					String curStrata = strata.elementAt(ii).toString();
-					System.out.println(" strata: " + curStrata );
-					System.out.println(" cover: " + getTaxaStrataCover(name, 
+					System.out.println("PlotDataSource >  strata: " + curStrata );
+					System.out.println("PlotDataSource >  cover: " + getTaxaStrataCover(name, 
 						plotCode, curStrata ));
 				}
 			}
