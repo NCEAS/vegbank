@@ -754,7 +754,7 @@ public class DataSourceClient
 	  * method to load to the server class an ms access file containing 
 		* a specific configuration
 		*/
-		private boolean putMDBFile(String fileName, String fileType)
+		public boolean putMDBFile(String fileName, String fileType)
 		{
 			boolean results = true;
 			try 
