@@ -251,11 +251,11 @@ PREV || NEXT
 			</a>
 			&#160;
 			<!-- THE LINK TO THE SUMMARY-->
-			<!--
+			
 			<a href="/framework/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId={$PLOTID}"> 
-				<img align="center" border="0" src="/vegbank/images/report_sm.gif" alt="Comprehensive view"> </img> 
+				<img align="center" border="0" src="/vegbank/images/report_sm.gif" alt="Summary view"> </img> 
 			</a>
-			-->
+			
 			<br> </br>
 			<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes"> 
 				<span class="item"> <font color="#333333"> download <xsl:number value="position()"/> </font> </span> 
