@@ -17,10 +17,11 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-12-06 02:07:58 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2002-01-11 01:27:03 $'
+ * 	'$Revision: 1.4 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
+//public class TNCPlotsDB
 {
 	private String dbUrl = "jdbc:odbc:test_access"; 
 	private Connection con = null;
@@ -82,7 +83,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 * constructor for this class -- will update the public variables
 	 * that will be used to generate the vegbank xml document
 	 */
-	public TNCPlotsDB()
+	public TNCPlotsDB() 
 	{
 		try 
 		{
@@ -121,79 +122,737 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 	}
 	
-	//returns the project name 
-	public String getProjectName()
-	{ return(projectName); }
-	//returns the project description
-	public String getProjectContributor()
-	{ return(projectContributor); }
-	//returns the project contributor
-	public String getProjectDescription()
-	{ return(projectDescription); }
-	//returns the plot code for the current plot
-	public String getPlotCode()
-	{ return(plotCode); }
-	//returns the easting 
-	public String getXCoord()
-	{ return(yCoord); }
-	//returns the northing
-	public String getYCoord()
-	{ return(xCoord); }
-	//returns the geographic zone
-	public String getUTMZone()
-	{ return(utmZone); }
-	//returns the plot shape
-	public String getPlotShape()
-	{ return(plotShape); }
-	//returns the plot area
-	public String getPlotArea()
-	{ return(plotArea); }
-	//returns the state for the current plot
-	public String getState()
-	{ return(state); }
+	//returns all the plots stored in the access file
+	public Vector getPlotNames()
+	{
+		Vector v = new Vector();
+		Statement stmt = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select Distinct "
+				+" ([Plot Code]) "
+				+" from plots ");
+				while (rs.next()) 
+				{
+					v.addElement( rs.getString(1) );
+				}
+			}
+			catch (Exception x) 
+			{
+				System.out.println("Exception: " + x.getMessage() );
+			}
+		return(v);
+	}
+
 	
-	//returns the state for the current plot
-	public String getCommunityName()
-	{ return(communityName); }
-	
-	//retuns the topo position
-	public String getTopoPosition()
-	{ return(topoPosition); }
-	//returns the hydrologic regime
-	public String getHydrologicRegime()
-	{ return(hydrologicRegime); }
-	//returns the surface geology
-	public String getSurfGeo()
-	{ return(surfGeo); }
-	//returns the country
-	public String getCountry()
-	{ return("USA"); }
-	//returns the slope aspect
-	public String getSlopeAspect()
-	{ return(slopeAspect); }
-	//returns the slope gradient
-	public String getSlopeGradient()
-	{ return(slopeGradient); }
 	//retuns the unique names of all the strata in a given plot
 	public Vector getUniqueStrataNames(String plotName)
 	{
-		return(strataNames);
+		Vector v = new Vector();
+		//watch the case sensetivity
+		v.addElement("H");
+		v.addElement("T1");
+		v.addElement("T2");
+		v.addElement("T3");
+		v.addElement("S1");
+		v.addElement("S2");
+		
+		v.addElement("S3");
+		v.addElement("N");
+		v.addElement("V");
+		v.addElement("E");
+		
+		
+		return(v);
 	}
 	
 	
 	/**
-	 * method that returns the project-level information including the 
-	 * project name and the project description, two variables that are
-	 * not really incledued in the tnc plot database access file
-	 * and for this reason this method creates a project name based on the 
-	 * location of the plots
+	 *
 	 */
 	 private void getProjectData()
 	 {
 		 this.projectName = "tncplots"+this.placeName;
-		 this.projectDescription = "tnc project descripion";
+		 this.projectDescription = "tncplotsDes"+this.placeName;
 	 }
 	
+	// see the interface for method descriptions
+	public String getProjectName(String plotName)
+	{
+		return(" tnc project");
+	}
+	
+	// see the interface for method descriptions
+	public String getProjectDescription(String plotName)
+	{
+		return(" tnc project");
+	}
+	
+	// see the interface for method descriptions
+	public Vector getProjectContributors(String plotName)
+	{
+		Vector v = new Vector();
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			
+			String query = " select ([Surveyors])  "
+			+" from ([Plots])  where ([Plot Code]) = '"+plotName+"'";
+			//System.out.println(query);
+			ResultSet rs = stmt.executeQuery( query);
+			while (rs.next()) 
+			{
+				String party = rs.getString(1);
+				if (party.indexOf(",") >= 0 || party.indexOf("&") >= 0 )
+				{
+					if (party.indexOf(",") >= 0)
+					{
+						StringTokenizer t = new StringTokenizer(party, ",");
+						while ( t.hasMoreTokens() )
+						{
+							String buf = t.nextToken();
+							v.addElement( buf );
+						}
+					}
+					else if ( party.indexOf("&") >= 0 )
+					{
+						StringTokenizer t = new StringTokenizer(party, "&");
+						while ( t.hasMoreTokens() )
+						{
+							String buf = t.nextToken();
+							v.addElement( buf );
+						}
+					}
+					else
+					{
+						System.out.println("cannot tokenize the surveyors");
+					}
+				}
+				else
+				{
+					//add the single surveyor
+					v.addElement(party);
+				}
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(v);
+	}
+	
+	
+	//retuns the person's salutation based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorSalutation(String contributorWholeName)
+	{
+			return("");
+	}
+	//retuns the person's given based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorGivenName(String contributorWholeName)
+	{
+		String givenName = null;
+		try
+		{
+			StringTokenizer t = new StringTokenizer(contributorWholeName, " ");
+		 	String buf = t.nextToken();
+			givenName = buf;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(givenName);
+	}
+	
+	
+	//retuns the person's middle name based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorMiddleName(String contributorWholeName)
+	{
+			return("");
+	}
+	//retuns the person's surName based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorSurName(String contributorWholeName)
+	{
+		String surName = null;
+		try
+		{
+			StringTokenizer t = new StringTokenizer(contributorWholeName, " ");
+		 	String buf = t.nextToken();
+		 	buf = t.nextToken().trim();
+			surName = buf;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(surName);
+	}
+	//retuns the name of an org. that a person is associated with based on 
+	//their full name which is the concatenated givename and surname of the 
+	//user like 'bob peet'
+	public String getProjectContributorOrganizationName(String contributorWholeName)
+	{
+		return("The Nature Conservancy");
+	}
+	
+	//retuns the person's contactinstructions based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorContactInstructions(String contributorWholeName)
+	{
+		return("");
+	}
+	//retuns the person's phone number based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorPhoneNumber(String contributorWholeName)
+	{
+		return("");
+	}
+	//retuns the person's cellPhone based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCellPhoneNumber(String contributorWholeName)
+	{
+		return("");
+	}
+	//retuns the person's fax phone number based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorFaxPhoneNumber(String contributorWholeName)
+	{
+		return("");
+	}
+	//retuns the party's position within an organization based on their full 
+	// name which is the concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorOrgPosition(String contributorWholeName)
+	{
+		return("Ecologist");
+	}
+	//retuns the person's email based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorEmailAddress(String contributorWholeName)
+	{
+		return("");
+	}
+	//retuns the person's address line based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorDeliveryPoint(String contributorWholeName)
+	{
+		return("");
+	}
+	//retuns the person's city based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCity(String contributorWholeName)
+	{
+		return("");
+	}
+	
+	//returns the administrative area, or state that a party is from
+	public String getProjectContributorAdministrativeArea(String contributorWholeName)
+	{
+		return("");
+	}
+	//retuns the zip code for a party
+	public String getProjectContributorPostalCode(String contributorWholeName)
+	{
+		return("");
+	}
+	//retuns the person's country based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCountry(String contributorWholeName)
+	{
+			return("USA");
+	}
+	//retuns a boolean 'true' if it is a party's current address based on their 
+	//full name which is the concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCurrentFlag(String contributorWholeName)
+	{
+		return("true");
+	}
+	//retuns the date that the address became current for a party based on 
+	//their full name which is the concatenated givename and surname of the 
+	//user like 'bob peet'
+	public String getProjectContributorAddressStartDate(String contributorWholeName)
+	{
+		return("");
+	}
+	
+	
+	// see the interface for method descriptions
+	public String getProjectStartDate(String plotName)
+	{
+		return("02-JAN-1998");
+	}
+	
+	// see the interface for method descriptions
+	public String getProjectStopDate(String plotName)
+	{
+		return("02-JAN-1998");
+	}
+	
+	// see the interface for method descriptions
+	public String getPlotCode(String plotName)
+	{
+		return(plotName);
+	}
+	
+	//returns the placeNames each name can be used to retrieve
+	//other information about a place
+	public Vector getPlaceNames(String plotName)
+	{
+		Vector placeNames = new Vector();
+		return(placeNames);
+	}
+	//retuns a description of a place based on a placeName
+	public String getPlaceDescription(String placeName)
+	{
+		return("getPlaceDescription not implemented");
+	}
+	//returns a placeCode based on a placeName
+	public String getPlaceCode(String placeName)
+	{
+		return("getPlaceCode not implemented");
+	}
+	//returns a place system based on a placeName
+	public String getPlaceSystem(String placeName)
+	{
+		return("getPlaceSystem not implemented");
+	}
+	//returns the owner of a place based on the name of a place
+	public String getPlaceOwner(String placeName)
+	{
+		return("getPlaceOwner not implemented");
+	}
+	
+	// see the interface for method descriptions
+	public String getXCoord(String plotName)
+	{
+		Statement stmt = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Corrected UTM X]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					xCoord= rs.getString(1);
+				}
+			}
+			catch (Exception x) 
+			{
+				System.out.println("Exception: " + x.getMessage() );
+			}
+		return(this.xCoord);
+	}
+	
+	// see the interface for method descriptions
+	public String getYCoord(String plotName)
+	{
+		Statement stmt = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Corrected UTM Y]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					yCoord= rs.getString(1);
+				}
+			}
+			catch (Exception x) 
+			{
+				System.out.println("Exception: " + x.getMessage() );
+			}
+		return(this.yCoord);
+	}
+	
+	// see the interface for method descriptions
+	public String getLatitude(String plotName)
+	{
+		return("34");
+	}
+	
+	// see the interface for method descriptions
+	public String getLongitude(String plotName)
+	{
+		return("-116");
+	}
+	
+	// see the interface for method descriptions
+	public String getUTMZone(String plotName)
+	{
+		Statement stmt = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([UTM Zone]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					this.utmZone = rs.getString(1);
+				}
+			}
+			catch (Exception x) 
+			{
+				System.out.println("Exception: " + x.getMessage() );
+			}
+		return(this.utmZone);
+	}
+	
+	// see the interface for method descriptions
+	public String getPlotShape(String plotName)
+	{
+		Statement stmt = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Plot Shape]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					this.plotShape = rs.getString(1);
+				}
+			}
+			catch (Exception x) 
+			{
+				System.out.println("Exception: " + x.getMessage() );
+			}
+		return(this.plotShape);
+	}
+	
+// see the interface for method descriptions
+	public String getPlotArea(String plotName)
+	{
+		Statement stmt = null;
+		String xDim = null;
+		String yDim = null;
+			try 
+			{
+				
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([X Dimension]), ([Y Dimension]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					xDim = rs.getString(1);
+					yDim = rs.getString(2);
+				}
+			}
+			catch (Exception x) 
+			{
+				System.out.println("Exception: " + x.getMessage() );
+			}
+		return("1000");
+	}
+	
+		// see the interface for method descriptions
+	public String getCommunityName(String plotName)
+	{
+		return("vegcommunity");
+	}
+	
+	
+	// see the interface for method descriptions
+	public String getState(String plotName)
+	{
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Location Code]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				String location = rs.getString(1);
+				//in the future query the jurisdiction table -- this is a hack for now
+				if (location.equals("VOYA"))
+				{
+					this.state="MN";
+				}
+				else if ( location.equals("YOSE") )
+				{
+					this.state="CA";
+				}
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(this.state);
+	}
+	
+	// see the interface for method descriptions
+	public String getHydrologicRegime(String plotName)
+	{
+		Statement stmt = null;
+		try 
+		{
+			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Hydro Regime]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				this.hydrologicRegime = rs.getString(1);
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+			//System.out.println("hydroregime: "+ this.hydrologicRegime);
+		 return(this.hydrologicRegime);
+	}
+	
+		// see the interface for method descriptions
+	public String getTopoPosition(String plotName)
+	{
+		 Statement stmt = null;
+		try 
+		{
+			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Topo Position]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				this.topoPosition = rs.getString(1);
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(this.topoPosition);
+	}
+	
+		// see the interface for method descriptions
+	public String getSlopeAspect(String plotName)
+	{
+		 Statement stmt = null;
+		try 
+		{
+			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Aspect]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				String s = rs.getString(1);
+				if (s.startsWith("Flat"))
+					this.slopeAspect = "0";
+				else if (s.startsWith("N"))
+					this.slopeAspect = "0";
+				else if (s.startsWith("S"))
+					this.slopeAspect = "180";
+				else if (s.startsWith("NE"))
+					this.slopeAspect = "45";
+				else if (s.startsWith("SE"))
+					this.slopeAspect = "230";
+				else
+					this.slopeAspect ="-1";
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(this.slopeAspect );
+	}
+	
+		// see the interface for method descriptions
+	public String getSlopeGradient(String plotName)
+	{
+		 Statement stmt = null;
+		try 
+		{
+			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Slope]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				String s = rs.getString(1);
+				if (s.startsWith("Gentle"))
+					this.slopeGradient = "3";
+				else if (s.startsWith("Flat"))
+					this.slopeGradient = "0";
+				else if (s.startsWith("Steep"))
+					this.slopeGradient = "20";
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(this.slopeGradient );
+	}
+	
+	// see the interface for method descriptions
+	public String getSurfGeo(String plotName)
+	{
+		 Statement stmt = null;
+		try 
+		{
+			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Surficial Geology]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				this.surfGeo = rs.getString(1);
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(this.surfGeo);
+	}
+	
+	// see the interface for method descriptions
+	public String getCountry(String plotName)
+	{
+		return("USA");
+	}
+	
+	// see the interface for method descriptions
+	public String getStandSize(String plotName)
+	{
+		return("1200");
+	}
+	
+	// see the interface for method descriptions
+	public String getAuthorLocation(String plotName)
+	{
+		return("national forest");
+	}
+	
+	// see the interface for method descriptions
+	public String getLandForm(String plotName)
+	{
+		return("land form");
+	}
+	
+	// see the interface for method descriptions
+	public String getElevation(String plotName)
+	{
+		 Statement stmt = null;
+		try 
+		{
+			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Elevation]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				this.elevation = rs.getString(1);
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(this.elevation);
+		 
+	}
+	
+
+	
+	
+	// see the interface for method descriptions
+	public String getElevationAccuracy(String plotName)
+	{
+		return("20");
+	}
+	
+	// see the interface for method descriptions
+	public String getConfidentialityReason(String plotName)
+	{
+		return("land form");
+	}
+	
+	// see the interface for method descriptions
+	public String getConfidentialityStatus(String plotName)
+	{
+		return("land form");
+	}
+	
+		 
+	 /**
+	 * method to return the cover for a given strata for a given 
+	 * plot
+	 */
+	 public String getStrataCover(String plotName, String strataName)
+	 {
+		 return("100");
+	 }
+	 
+	  /**
+	 * method to return the cover for a given strata for a given 
+	 * plot
+	 */
+	 public String getStrataBase(String plotName, String strataName)
+	 {
+		 return("99");
+	 }
+	 
+	  /**
+	 * method to return the cover for a given strata for a given 
+	 * plot
+	 */
+	 public String getStrataHeight(String plotName, String strataName)
+	 {
+		 return("200");
+	 }
+	 
+	 
 	
 	/**
 	 * method that takes a plot code and populates the public varaibles with
@@ -341,7 +1000,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				//update the public variable representing the number of 
 				//unique scientific names
 				uniquePlantNameNumber = cnt;
-				System.out.println( uniquePlantNameNumber + " unique plant names");
+				System.out.println( uniquePlantNameNumber + " unique plant names for plot: " + plotName);
 			}
 			catch (SQLException ex) 
 			{
@@ -503,7 +1162,9 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			//there should only be one
 			while (rs.next()) 
 			{
-				v.addElement( rs.getString(1));
+				String curStrata = rs.getString(1);
+				//System.out.println( curStrata );
+				v.addElement( curStrata );
 			}
 		}
 		catch( Exception e)
@@ -520,7 +1181,9 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	 public String getTaxaStrataCover(String plantName, String plotName, String stratum)
 	 {
+		 //System.out.println( "plnat name: " + plantName + "plot: " + plotName +" strata:"+ stratum);
 		 Vector v = new Vector();
+		 String s = null;
 		 Statement stmt = null;
 		try 
 		{
@@ -533,7 +1196,8 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			//there should only be one
 			while (rs.next()) 
 			{
-				v.addElement( rs.getString(1));
+				s = rs.getString(1);
+				v.addElement( s);
 			}
 			//make sure that there are not too many values in the vector
 			if ( v.size() > 1)
@@ -544,8 +1208,9 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		catch( Exception e)
 		{
 			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
-		 return(v.elementAt(0).toString());
+		 return(s);
 	 }
 	 
 	 
@@ -640,7 +1305,15 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}	
 		}
 		
-		
+		/**
+	 * method that retuns the cummulative cover accoss all strata for a given 
+	 * plant taxa in a given plot
+	 */
+	public String getCummulativeStrataCover( String plantName, String plotName )
+	{
+		return("7");
+	}
+	
 
 /**
  * main method for testing --
