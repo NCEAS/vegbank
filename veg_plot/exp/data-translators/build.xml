@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-05-20 19:55:05 $'
- 	*     '$Revision: 1.8 $'
+ 	*     '$Date: 2002-05-24 20:22:24 $'
+ 	*     '$Revision: 1.9 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -31,7 +31,7 @@
 		<property name="dist" value="./dist" />
 		<property name="doc" value="./docs" />
 		<property name="data" value="./data" />
-	  <property name="xerces" value="./lib/xerces_1_4.jar" />
+		<property name="xerces" value="./lib/xerces_1_4.jar" />
 		<property name="xalan" value="./lib/xalan_1_2_2.jar" />
 		<property name="xmlresource" value="./lib/xmlresource.jar" />
 		<property name="cpath" value="${hsqldb}:${xerces}:${xalan}:${xmlresource}:${build}"/>
@@ -66,7 +66,7 @@
 	<!-- COMPILE -->
 	<target name="compile" depends="copy">
 
-		<echo message="Compiling the Veg Client Code"/>
+		<echo message="Compiling datasource code"/>
 		
 		<javac srcdir="${build}" 
 			classpath="${cpath}"
@@ -129,7 +129,7 @@
 	<!-- JDOC - creates the javadoc's -->
 	<target name="jdoc"> 	
 	<javadoc
-  		sourcefiles="src/data-translators/PlotDataSourceInterface.java,src/data-translators/NativeXmlCache.java,src/data-translators/NativeXmlPlugin.java"
+  		sourcefiles="src/data-translators/PlotXmlWriterV2.java,src/data-translators/PlotDataSourceInterface.java,src/data-translators/NativeXmlCache.java,src/data-translators/NativeXmlPlugin.java,src/data-translators/TNCPlotsDB.java,src/data-translators/VegBankDataSourcePlugin.java,src/data-translators/VBAccessDataSourcePlugin.java"
   		sourcepath="src/data-translators/"
   		destdir="doc/api"
   		author="true"

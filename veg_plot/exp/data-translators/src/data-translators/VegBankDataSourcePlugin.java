@@ -7,13 +7,12 @@ import java.sql.*;
 
 /**
  * plugin to allow access to plot data stored in the VegBank - plots 
- * database 
+ * database <br> <br>
  *
- *  Release: 
  *	
- *  '$Author: harris $'
- *  '$Date: 2002-05-20 20:05:31 $'
- * 	'$Revision: 1.11 $'
+ *  '$Author: harris $' <br>
+ *  '$Date: 2002-05-24 20:22:25 $' <br>
+ * 	'$Revision: 1.12 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -324,6 +323,146 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		}
 		return(s);
  	}
+	
+	
+	//START
+	/**
+	 * utlility method for querying the observation table and returning 
+	 * each of the elements as a string
+	 * @param plotName -- the name of the plot 
+	 * @param elementname -- the attribute name of the desired attribute 
+	 * @return elementValue -- the value of the desired attribute 
+	 */
+	 private String getObservationElement(String plotName, String elementName )
+	 {
+		String s = null;
+		Statement stmt = null;
+		StringBuffer sb = new StringBuffer();
+		try 
+		{
+			stmt = con.createStatement();
+			
+			sb.append("select ");
+			sb.append(elementName);
+			sb.append(" from OBSERVATION where PLOT_ID = ");
+			sb.append(plotName);
+			
+			ResultSet rs = stmt.executeQuery(  sb.toString() );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (SQLException ex) 
+		{
+			System.out.println("query > " + sb.toString() );
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	 }
+	 
+	 
+	/**
+	*/
+	public String getObsDateAccuracy(String plotName)
+	{
+		String s = this.getObservationElement(plotName, "dateaccuracy");
+		return(s);
+	}
+	 
+	/**
+	*/
+	public Hashtable getCoverMethod(String plotName)
+	{
+		Hashtable  s = new Hashtable();
+		return(s);
+	}
+	
+	/**
+	 */
+	public Hashtable getStratumMethod(String plotName)
+	{
+		Hashtable s = new Hashtable();
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemSizeLimit(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+
+	/**
+	 */
+	public String getMethodNarrative(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getTaxonObservationArea(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getCoverDispersion(String plotName )
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public boolean getAutoTaxonCover(String plantName)
+	{
+		boolean s = true;
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemObservationArea(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemSampleMethod(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getOriginalData(String plotName )
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getEffortLevel( String plotName )
+	{
+		String s = "";
+		return(s);
+	}
+//END
 
 
 	/**
@@ -374,7 +513,25 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 */
  	public String getSoilTaxonSource(String plotName)
  	{
- 		return("");
+ 		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select SOILTAXONSOURCE from PLOT where PLOT_ID = "+plotName);
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
  	}
 
 
@@ -665,7 +822,6 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	//returns the plot code for the current plot
 	public String getPlotCode(String plotName)
 	{ 
-		
 		String s = null;
 		Statement stmt = null;
 		try 
@@ -673,7 +829,6 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select  authorPlotCode "
 			+" from PLOT where PLOT_ID = " + plotName );
-							
 			while (rs.next()) 
 			{
 				 s = rs.getString(1);
@@ -690,8 +845,6 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			ex.printStackTrace();
 		}
 		return(s);
-		
-		//return(plotName);
 	}
 	
 	//returns the easting 
@@ -848,6 +1001,30 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		return(s);
 	}
 	
+	public String getDatumType(String plotName)
+	{
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select AUTHORDATUM from PLOT where PLOT_ID = " +plotName);
+			ResultSet rs = stmt.executeQuery( sb.toString() );
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
+	
+	
 	//returns the plot shape
 	public String getPlotShape(String plotName)
 	{ 
@@ -938,7 +1115,28 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	
 	//returns the state for the current plot
 	public String getCommunityName(String plotName)
-	{ return("ice-plant community"); }
+	{ 
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select COMMNAME from COMMCLASS where OBSERVATION_ID = ");
+			sb.append(" ( select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+")");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
+	}
 	
 	
 	/**
@@ -946,7 +1144,25 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getCommunityCode(String plotName)
 	{
-		String s = "";
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select COMMCODE from COMMCLASS where OBSERVATION_ID = ");
+			sb.append(" ( select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+")");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
 		return(s);
 	}
 	
@@ -1398,7 +1614,26 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	 public String getStrataCover(String plotName, String strataName)
 	 {
-		 return("100");
+		 String s = null;
+			Statement stmt = null;
+			try 
+			{
+				stmt = con.createStatement();
+				StringBuffer sb = new StringBuffer();
+				sb.append("select STRATUMCOVER from STRATUM where STRATUMNAME like '"+strataName+"' and OBSERVATION_ID = (");
+				sb.append(" select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+")");
+				ResultSet rs = stmt.executeQuery( sb.toString() );			
+				while (rs.next()) 
+				{
+					s = rs.getString(1);
+				}
+			}
+			catch (java.lang.Exception ex) 
+			{   
+				System.out.println("Exception: " + ex );
+				ex.printStackTrace();
+			}
+			return(s);
 	 }
 	 
 	 /** 
@@ -1480,7 +1715,36 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getCummulativeStrataCover( String plantName, String plotName )
 	{
-		return("7");
+		System.out.println("VegBankDataSourcePlugin > looking cum. strata cover for plot: " + plotName);
+		String s = null;
+		Statement stmt = null;
+		StringBuffer sb = new StringBuffer();
+		try 
+		{
+			stmt = con.createStatement();
+			sb.append("select TAXONCOVER from TAXONOBSERVATION where OBSERVATION_ID = ");
+			sb.append(" (select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+" ) ");
+			sb.append(" and CHEATPLANTNAME like '"+plantName+"' ");
+			ResultSet rs = stmt.executeQuery( sb.toString() );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+				 //if we get null returned then make the value = '999.99'
+				 if ( s == null )
+				 {
+					 s = "999.99";
+				 }
+			}
+			stmt.close();
+			rs.close();
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+			System.out.println("VegBankDataSource > query which failed: " + sb.toString() );
+		}
+		return(s);
 	}
 
 	

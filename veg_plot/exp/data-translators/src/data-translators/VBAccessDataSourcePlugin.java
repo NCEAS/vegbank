@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-20 20:03:52 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2002-05-24 20:22:25 $'
+ * 	'$Revision: 1.4 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -139,7 +139,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
  	 */
  	public String getObsStopDate(String plotName)
  	{
-	 return super.getObsStopDate(plotName);	
+		return super.getObsStopDate(plotName);	
  	}
  	
  	/**
@@ -150,7 +150,93 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
  	{
  		return super.getSoilDepth(plotName);
  	}
+	
+	//START
+	/**
+	*/
+	public String getObsDateAccuracy(String plotName)
+	{
+ 		return super.getObsDateAccuracy(plotName);
+	}
+	 
+	/**
+	*/
+	public Hashtable getCoverMethod(String plotName)
+	{
+ 		return super.getCoverMethod(plotName);
+	}
+	
+	/**
+	 */
+	public Hashtable getStratumMethod(String plotName)
+	{
+ 		return super.getStratumMethod(plotName);
+	}
+	
+	/**
+	 */
+	public String getStemSizeLimit(String plotName)
+	{
+ 		return super.getStemSizeLimit(plotName);
+	}
 
+	/**
+	 */
+	public String getMethodNarrative(String plotName)
+	{
+ 		return super.getMethodNarrative(plotName);
+	}
+	
+	/**
+	 */
+	public String getTaxonObservationArea(String plotName)
+	{
+ 		return super.getTaxonObservationArea(plotName);
+	}
+	
+	/**
+	 */
+	public String getCoverDispersion(String plotName )
+	{
+ 		return super.getCoverDispersion(plotName);
+	}
+	
+	/**
+	 */
+	public boolean getAutoTaxonCover(String plotName)
+	{
+ 		return super.getAutoTaxonCover(plotName);
+	}
+	
+	/**
+	 */
+	public String getStemObservationArea(String plotName)
+	{
+ 		return super.getStemObservationArea(plotName);
+	}
+	
+	/**
+	 */
+	public String getStemSampleMethod(String plotName)
+	{
+ 		return super.getStemSampleMethod(plotName);
+	}
+	
+	/**
+	 */
+	public String getOriginalData(String plotName )
+	{
+ 		return super.getOriginalData(plotName);
+	}
+	
+	/**
+	 */
+	public String getEffortLevel( String plotName )
+	{
+ 		return super.getEffortLevel(plotName);
+	}
+//END
+	
 
 	/**
  	 * returns true if the plot is a permanent plot or false if not
@@ -178,7 +264,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
  	 */
  	public String getSoilTaxonSource(String plotName)
  	{
- 		return("");
+ 		return( super.getSoilTaxonSource(plotName) );
  	}
 
 
@@ -583,6 +669,11 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 		return(s);
 	}
 	
+	public String getDatumType(String plotName)
+	{
+		return(super.getDatumType(plotName) );
+	}
+	
 	//returns the plot shape
 	public String getPlotShape(String plotName)
 	{ 
@@ -970,7 +1061,27 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 	 */
 	 public String getStrataCover(String plotName, String strataName)
 	 {
-		 return("100");
+		 String s = null;
+		 Statement stmt = null;
+		 try 
+			{
+				stmt = con.createStatement();
+				StringBuffer sb = new StringBuffer();
+				sb.append("select STRATUMCOVER from STRATUM where STRATUMTYPE_ID in (");
+				sb.append(" select DISTINCT STRATUMTYPE_ID from STRATUMTYPE where STRATUMNAME LIKE '"+strataName+"') and OBSERVATION_ID = (");
+				sb.append(" select observation_id from OBSERVATION where PLOT_ID = " + plotName+" )");
+				ResultSet rs = stmt.executeQuery( sb.toString() );			
+				while (rs.next()) 
+				{
+					s = rs.getString(1);
+				}
+			}
+			catch (java.lang.Exception ex) 
+			{   
+				System.out.println("Exception: " + ex );
+				ex.printStackTrace();
+			}
+			return(s);
 	 }
 	 
 	 /** 
@@ -1087,7 +1198,36 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 	 */
 	public String getCummulativeStrataCover( String plantName, String plotName )
 	{
-		return("7");
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select TAXONCOVER from TAXONOBSERVATION where OBSERVATION_ID = ");
+			sb.append(" (select OBSERVATION_ID from OBSERVATION where PLOT_ID = "+plotName+" ) ");
+			sb.append(" and PLANTNAME_ID = ");
+			sb.append(" ( select PLANTNAME_ID from PLANTNAME where PLANTNAME like '"+plantName+"') ");
+			
+			ResultSet rs = stmt.executeQuery( sb.toString() );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+				 //if we get null returned then make the value = '999.99'
+				 if ( s == null )
+				 {
+					 s = "999.99";
+				 }
+			}
+			stmt.close();
+			//rs.close();
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 
 	

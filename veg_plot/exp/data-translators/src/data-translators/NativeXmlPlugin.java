@@ -24,8 +24,8 @@ import  xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  * 	'$Author: harris $'
- *	'$Date: 2002-05-23 01:24:56 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2002-05-24 20:22:25 $'
+ *	'$Revision: 1.6 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -343,6 +343,11 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		this.init(plotName);
 		return( this.getPlotAttribute(plotName, "authorZone") );
 	}
+	public String getDatumType(String plotName)
+	{
+		this.init(plotName);
+		return( this.getPlotAttribute(plotName, "authorDatum") );
+	}
 	public String getPlotShape(String plotName)
 	{
 		this.init(plotName);
@@ -549,6 +554,105 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	{
 		return(stringBuf);
 	}
+		//START
+	/**
+	*/
+	public String getObsDateAccuracy(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	 
+	/**
+	*/
+	public Hashtable getCoverMethod(String plotName)
+	{
+		Hashtable  s = new Hashtable();
+		return(s);
+	}
+	
+	/**
+	 */
+	public Hashtable getStratumMethod(String plotName)
+	{
+		Hashtable s = new Hashtable();
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemSizeLimit(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+
+	/**
+	 */
+	public String getMethodNarrative(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getTaxonObservationArea(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getCoverDispersion(String plotName )
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public boolean getAutoTaxonCover(String plantName)
+	{
+		boolean s = true;
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemObservationArea(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemSampleMethod(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getOriginalData(String plotName )
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getEffortLevel( String plotName )
+	{
+		String s = "";
+		return(s);
+	}
+//END
+
+
 	/**
 	 **
 	 ** THE TAXONOMY - RELATED DATA
@@ -625,16 +729,14 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		// taxonObservation block containing this plantName
 		Vector nameVec = new Vector();
 		nameVec = parse.get(doc, "authorNameId");
-		System.out.println("NativeXmlPlugin > nameVec size: " + nameVec.size() );
+		//System.out.println("NativeXmlPlugin > nameVec size: " + nameVec.size() );
 		int target = nameVec.indexOf(plantName);
-		System.out.println("NativeXmlPlugin > target: " + target );
+		//System.out.println("NativeXmlPlugin > target: " + target );
 		
 		 // this is the taxonObs node of interest
 		Node tObs = parse.get(doc, "taxonObservation", target);
-		
 		// blank vector 
 		Vector strataVec = new Vector();
-		
 		NodeList children = tObs.getChildNodes();
     if (children != null)
     {
@@ -645,14 +747,14 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 				//Node cn = children.item(i).getFirstChild();
 				Node cn = children.item(i);
 				String nodeName = cn.getNodeName();
-				System.out.println("node name: " + nodeName+" " + cn.getNodeType() );
+				//System.out.println("node name: " + nodeName+" " + cn.getNodeType() );
 				
 				if ( nodeName.equals("taxonCover") )
 				{
 					if ((cn != null) && (cn.getNodeType() == 1))
 					{
 						s = (cn.getFirstChild().getNodeValue());
-						System.out.println("value: " + s );
+						//System.out.println("value: " + s );
 					}
 				}
       }

@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-05-23 01:24:56 $'
- * 	'$Revision: 1.19 $'
+ *  '$Date: 2002-05-24 20:22:25 $'
+ * 	'$Revision: 1.20 $'
  */
 public class PlotDataSource 
 {
@@ -31,19 +31,13 @@ public class PlotDataSource
 	public String projectDescription = null;
 	public String projectStartDate = null;
 	public String projectStopDate = null;
-	
 	//This vector contains the  concatenated given name and sur name for a 
 	//project contributor and each element is used to retrive the data associated
 	//with that specific user explicitly through method calls 
 	public Vector projectContributors = new Vector();
-	
-	
-	
 	public String latitude = null;
 	public String longitude = null;
-	
 	public Vector namedPlaces = new Vector();
-	
 	public String datum = null;
 	public String state = null;
 	public String communityName = null;
@@ -212,7 +206,104 @@ public class PlotDataSource
 		String s = ((PlotDataSourceInterface)pluginObj).getSoilDepth(plotName);	
 		return(s);
  	}
- 
+//START
+ 	/**
+	*/
+	public String getObsDateAccuracy(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getObsDateAccuracy(plotName);	
+		return(s);
+	}
+	 
+	/**
+	*/
+	public Hashtable getCoverMethod(String plotName)
+	{
+		Hashtable s = ((PlotDataSourceInterface)pluginObj).getCoverMethod(plotName);	
+		return(s);
+	}
+	
+	/**
+	 */
+	public Hashtable getStratumMethod(String plotName)
+	{
+		Hashtable s = ((PlotDataSourceInterface)pluginObj).getStratumMethod(plotName);	
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemSizeLimit(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getStemSizeLimit(plotName);	
+		return(s);
+	}
+
+	/**
+	 */
+	public String getMethodNarrative(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getMethodNarrative(plotName);	
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getTaxonObservationArea(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getTaxonObservationArea(plotName);	
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getCoverDispersion(String plotName )
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCoverDispersion(plotName);	
+		return(s);
+	}
+	
+	/**
+	 */
+	public boolean getAutoTaxonCover(String plotName)
+	{
+		boolean s = ((PlotDataSourceInterface)pluginObj).getAutoTaxonCover(plotName);	
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemObservationArea(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getStemObservationArea(plotName);	
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemSampleMethod(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getStemSampleMethod(plotName);	
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getOriginalData(String plotName )
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getOriginalData(plotName);	
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getEffortLevel( String plotName )
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getEffortLevel(plotName);	
+		return(s);
+	}
+//END
+
 
 	/**
  	 * returns true if the plot is a permanent plot or false if not
@@ -690,7 +781,12 @@ public class PlotDataSource
 		String s = ((PlotDataSourceInterface)pluginObj).getUTMZone(plotName);
 		return(s);
 	}
-	
+	//returns the geographic datum
+	String getDatumType(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getDatumType(plotName);
+		return(s);
+	}
 	//returns the plot shape
 	String getPlotShape(String plotName)
 	{
@@ -882,12 +978,13 @@ public class PlotDataSource
 			
 			System.out.println(" \n ----------------------plot site info-----------------------------");
 			System.out.println("PlotDataSource > authorplotcode: " + source.plotCode );
+			System.out.println("PlotDataSource > accession value: " + source.getAccessionValue(plotName) );
 			System.out.println("PlotDataSource > latitude: " + source.getLatitude(plotName) );
 			System.out.println("PlotDataSource > longitude: " + source.longitude );
 			System.out.println("PlotDataSource > x coord: " + source.xCoord );
 			System.out.println("PlotDataSource > y coord: " + source.yCoord );
-			System.out.println("PlotDataSource > utm zone: " + source.utmZone );
-			System.out.println("PlotDataSource > datum: " + source.datum );
+			System.out.println("PlotDataSource > utm zone: " + source.getUTMZone(plotName) );
+			System.out.println("PlotDataSource > datum: " + source.getDatumType(plotName) );
 			System.out.println("PlotDataSource > state: "+ source.state);
 			System.out.println("PlotDataSource > country: "+ source.country);
 			System.out.println("PlotDataSource > plot shape: " + source.plotShape );
@@ -906,12 +1003,31 @@ public class PlotDataSource
 			System.out.println("PlotDataSource > confidentialityStatus: " + source.getConfidentialityStatus(plotName) );
 			System.out.println("PlotDataSource > confidentialityReason: " + source.getConfidentialityReason(plotName) );
 			System.out.println("PlotDataSource > permanence: " + source.isPlotPermanent(plotName) );
+			System.out.println("PlotDataSource > soil taxon: " + source.getSoilTaxon(plotName) );
+			System.out.println("PlotDataSource > soil taxon source: " + source.getSoilTaxonSource(plotName) );
 			
 			System.out.println(" \n ----------------------plot site-observational info-----------------------------");
 			System.out.println("PlotDataSource > soilDepth: " + source.getSoilDepth(plotName) );
 			System.out.println("PlotDataSource > obsStartDate: " + source.getObsStartDate(plotName) );
 			System.out.println("PlotDataSource > obsStopDate: " + source.getObsStopDate(plotName) );
 			System.out.println("PlotDataSource > community name: " + source.getCommunityName(plotName));
+			System.out.println("PlotDataSource > community code: " + source.getCommunityCode(plotName));
+			System.out.println("PlotDataSource > community level: " + source.getCommunityLevel(plotName));
+			System.out.println("PlotDataSource > community framework: " + source.getCommunityFramework(plotName));
+			
+			System.out.println("PlotDataSource > obs date acc.: " + source.getObsDateAccuracy(plotName));
+			System.out.println("PlotDataSource > cover method: " + source.getCoverMethod(plotName));
+			System.out.println("PlotDataSource > stratum method: " + source.getStratumMethod(plotName));
+			System.out.println("PlotDataSource > stem size limit: " + source.getStemSizeLimit(plotName));
+			System.out.println("PlotDataSource > method narrative: " + source.getMethodNarrative(plotName));
+			System.out.println("PlotDataSource > taxon obs. area: " + source.getTaxonObservationArea(plotName));
+			System.out.println("PlotDataSource > cover dispersion: " + source.getCoverDispersion(plotName));
+			System.out.println("PlotDataSource > auto taxon cover: " + source.getAutoTaxonCover(plotName));
+			System.out.println("PlotDataSource > stem obs. area: " + source.getStemObservationArea(plotName));
+			System.out.println("PlotDataSource > stem sample method: " + source.getStemSampleMethod(plotName));
+			System.out.println("PlotDataSource > original data: " + source.getOriginalData(plotName));
+			System.out.println("PlotDataSource > effort level: " + source.getEffortLevel(plotName));
+			
 			System.out.println("\n " );
 			
 			
@@ -948,10 +1064,12 @@ public class PlotDataSource
 			for (int i=0; i<source.plantTaxaNames.size(); i++)
 			{
 				String name = source.plantTaxaNames.elementAt(i).toString();
-				
 				// get the strata that the plant exists in
 				Vector strata = getTaxaStrataExistence(name, plotCode);
-				System.out.println("PlotDataSource > name:  " + name  );
+				System.out.println("PlotDataSource > plant name: " + name  );
+				String code = getPlantTaxonCode(name);
+				System.out.println("PlotDataSource > plant code: " + code  );
+				System.out.println("PlotDataSource > cum. strata cover: " + source.getCummulativeStrataCover(name, plotName));
 				for (int ii=0; ii<strata.size(); ii++)
 				{
 					String curStrata = strata.elementAt(ii).toString();
@@ -959,7 +1077,6 @@ public class PlotDataSource
 					System.out.println("PlotDataSource >  cover: " + getTaxaStrataCover(name, 
 						plotCode, curStrata ));
 				}
-				
 			}
 		}
 		catch (Exception e)

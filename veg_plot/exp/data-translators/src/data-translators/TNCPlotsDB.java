@@ -11,25 +11,21 @@ import java.sql.*;
  * the native XML format used by the vegbank system -- this class 
  * will be one of a number of plugins for access to a data source
  * so the many of the varaibles and methods will be general and 
- * consistent with many other plugins
+ * consistent with many other plugins <br> <br>
  *
- *  Authors: 
- *  Release: 
  *	
- *  '$Author: harris $'
- *  '$Date: 2002-04-10 18:42:56 $'
- * 	'$Revision: 1.20 $'
+ *  '$Author: harris $' <br>
+ *  '$Date: 2002-05-24 20:22:25 $' <br>
+ * 	'$Revision: 1.21 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
 {
 	private String dbUrl = "jdbc:odbc:test_access"; 
 	private Connection con = null;
-	
 	public String projectName = "null";
 	public String projectDescription = "null";
 	public String projectContributor = null;
-	
 	public String communityName = null;
 	public String communityCode = null;
 	public String	xCoord= null;
@@ -41,15 +37,12 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	public String aspect = null;
 	public String surfGeo = null;
 	public String placeName = null;
-	
 	public String state = "null";
 	public String plotCode = "null";
 	public String plotShape = "null";
 	public String test = "null";
-	
 	public String authorObsCode = "null";
 	public String soilDepth = "null";
-	
 	public String t1Height = "n/a";
 	public String t1Cover = "n/a";
 	public String t2Height = "n/a";
@@ -58,13 +51,11 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	public String t3Cover = "n/a";
 	public String s1Height = "n/a";
 	public String	s1Cover = "n/a";
-	
 	public int strataNumber = 4; //always 4 strata
 	public Vector strataNames = new Vector();
 	public Vector strataMinHeight = new Vector();
 	public Vector strataMaxHeight = new Vector();
 	public Vector strataCover = new Vector();
-	
 	public int uniquePlantNameNumber;
 	public String plotArea = null;
 	public String slopeAspect = null;
@@ -114,7 +105,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 		}
 		catch (java.lang.Exception ex) 
-		{   // All other types of exceptions
+		{
 			System.out.println("Exception: " + ex + "<BR>");
 		}
 	}
@@ -295,7 +286,6 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			rs.close();
 			stmt.close();
 		*/
-		
 		}
 		catch( Exception e)
 		{
@@ -533,9 +523,6 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 
 
 
-
-
-
 	/**
 	 * method for looking up the 'Field UTM Y' and if it 
 	 * does not exist a null is returned
@@ -722,49 +709,165 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			}
 		return(x);
 	}
-	
 
-/*
-	
-	// see the interface for method descriptions
-	public String getYCoord(String plotName)
-	{
-		Statement stmt = null;
+	/**
+	 * this is a method for retrieving the corrected latitude
+	 * @param plotName -- the name of the plot.
+	 * @return correctedLat -- the corrected latitude value.
+	 */
+	 private String getCorrectedLatitude(String plotName )
+	 {
+		 Statement stmt = null;
+		 String x = null;
 			try 
 			{
 				// Create a Statement so we can submit SQL statements to the driver
 				stmt = con.createStatement();
 				//create the result set
 				ResultSet rs = stmt.executeQuery("select "
-				+" ([Corrected UTM Y]) "
+				+" ([Corrected Lat]) "
 				+" from plots where ([Plot Code]) like '"+plotName+"'");
 				while (rs.next()) 
 				{
-					yCoord= rs.getString(1);
+					x= rs.getString(1);
 				}
 				rs.close();
 				stmt.close();
 			}
-			catch (Exception x) 
+			catch (Exception e) 
 			{
-				System.out.println("Exception: " + x.getMessage() );
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
 			}
-		return(this.yCoord);
-	}
-	
-*/
-
+		return(x);
+	 }
+	 
+	 /**
+	 * this is a method for retrieving the corrected latitude
+	 * @param plotName -- the name of the plot.
+	 * @return correctedLong -- the corrected longitude value.
+	 */
+	 private String getCorrectedLongitude(String plotName)
+	 {
+		 Statement stmt = null;
+		 String x = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Corrected Long]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					x= rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		return(x);
+	 }
+	 
+	 /**
+	 * this is a method for retrieving the corrected latitude
+	 * @param plotName -- the name of the plot.
+	 * @return fieldLat -- the field latitude value.
+	 */
+	 private String getFieldLatitude(String plotName )
+	 {
+		 Statement stmt = null;
+		 String x = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Field Lat]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					x= rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		return(x);
+	 }
+	 
+	 /**
+	 * this is a method for retrieving the corrected latitude
+	 * @param plotName -- the name of the plot.
+	 * @return fieldLong -- the corrected longitude value.
+	 */
+	 private String getFieldLongitude(String plotName)
+	 {
+		 Statement stmt = null;
+		 String x = null;
+			try 
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Field Long]) "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					x= rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		return(x);
+	 }
 	
 	// see the interface for method descriptions
 	public String getLatitude(String plotName)
 	{
-		return("34");
+		String fl = this.getFieldLatitude(plotName);
+		String cl = this.getCorrectedLatitude(plotName);
+		// return the field corrdinates only if the corrected are null
+		if ( cl != null )
+		{
+			return(cl);
+		}
+		else
+		{
+			return(fl);
+		}
 	}
 	
 	// see the interface for method descriptions
 	public String getLongitude(String plotName)
 	{
-		return("-116");
+		String fl = this.getFieldLongitude(plotName);
+		String cl = this.getCorrectedLongitude(plotName);
+		// return the field corrdinates only if the corrected are null
+		if ( cl != null )
+		{
+			return(cl);
+		}
+		else
+		{
+			return(fl);
+		}
 	}
 	
 	// see the interface for method descriptions
@@ -784,13 +887,18 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 					this.utmZone = rs.getString(1);
 				}
 				rs.close();
-			stmt.close();
+				stmt.close();
 			}
 			catch (Exception x) 
 			{
 				System.out.println("Exception: " + x.getMessage() );
 			}
 		return(this.utmZone);
+	}
+	
+	public String getDatumType(String plotName)
+	{
+		return("NAD27");
 	}
 	
 	// see the interface for method descriptions
@@ -810,7 +918,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 					this.plotShape = rs.getString(1);
 				}
 				rs.close();
-			stmt.close();
+				stmt.close();
 			}
 			catch (Exception x) 
 			{
@@ -1188,16 +1296,129 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	}
 	
 	
-	
-	/**
-	 * returns the soil depth of a plot
-	 * @param plotName -- the plot
-	 */
+	// returns the soil depth
 	public String getSoilDepth(String plotName) 
 	{
-		return("");
+		String depth = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Soil Depth]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				depth = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(depth);
+	}
+		//START
+	/**
+	*/
+	public String getObsDateAccuracy(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	 
+	/**
+	*/
+	public Hashtable getCoverMethod(String plotName)
+	{
+		Hashtable  s = new Hashtable();
+		return(s);
+	}
+	
+	/**
+	 */
+	public Hashtable getStratumMethod(String plotName)
+	{
+		Hashtable s = new Hashtable();
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemSizeLimit(String plotName)
+	{
+		String s = "";
+		return(s);
 	}
 
+	/**
+	 */
+	public String getMethodNarrative(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getTaxonObservationArea(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getCoverDispersion(String plotName )
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public boolean getAutoTaxonCover(String plantName)
+	{
+		boolean s = true;
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemObservationArea(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getStemSampleMethod(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getOriginalData(String plotName )
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 */
+	public String getEffortLevel( String plotName )
+	{
+		String s = "";
+		return(s);
+	}
+//END
 	
 
 
@@ -1375,13 +1596,35 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	// see the interface for method descriptions
 	public String getLandForm(String plotName)
 	{
-		return("land form");
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Landform]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		 return(s);
 	}
 	
 	// see the interface for method descriptions
 	public String getElevation(String plotName)
 	{
-		 Statement stmt = null;
+		Statement stmt = null;
 		try 
 		{
 			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
@@ -1403,7 +1646,6 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			e.printStackTrace();
 		}
 		 return(this.elevation);
-		 
 	}
 	
 
@@ -1418,13 +1660,13 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	// see the interface for method descriptions
 	public String getConfidentialityReason(String plotName)
 	{
-		return("land form");
+		return("no endangered species");
 	}
 	
 	// see the interface for method descriptions
 	public String getConfidentialityStatus(String plotName)
 	{
-		return("land form");
+		return("0");
 	}
 
 	/**
@@ -1475,7 +1717,29 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	*/
 	public String getSoilTaxon(String plotName)
 	{
-		return("");
+		Statement stmt = null;
+		String x = null;
+		try 
+		{
+			// Create a Statement so we can submit SQL statements to the driver
+			stmt = con.createStatement();
+			//create the result set
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Soil Taxon/Description]) "
+			+" from plots where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				x= rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(x);
 	}
 	
 	/**
@@ -1485,7 +1749,15 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getSoilTaxonSource(String plotName)
 	{
-		return("");
+		String t = this.getSoilTaxon(plotName);
+		if ( t != null )
+		{
+			return("field observation");
+		}
+		else
+		{
+			return("");
+		}
 	}
 
 		 
@@ -1509,7 +1781,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	  */
 	 public String getStrataBase(String plotName, String strataName)
 	 {
-		 	System.out.println("TNCPlotsDB > strata height lookup: " + strataName );
+		 	System.out.println("TNCPlotsDB > strata height lookup: '"+strataName+"'" );
 		 	String height = "";
 			String trueHeight = "";
 			Statement stmt = null;
@@ -1588,7 +1860,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				System.out.println("Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
-			System.out.println("TNCPlotsDB > strum true base: '" + trueHeight +"'" );
+			//System.out.println("TNCPlotsDB > strum true base: '" + trueHeight +"'" );
 		 	return(trueHeight);
 	 }
 	 
@@ -1604,7 +1876,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	  */
 	 public String getStrataHeight(String plotName, String strataName)
 	 {
-		 	System.out.println("TNCPlotsDB > strata height lookup: " + strataName );
+		 	//System.out.println("TNCPlotsDB > strata height lookup: " + strataName );
 		 	String height = "";
 			String trueHeight = "";
 			Statement stmt = null;
@@ -1685,7 +1957,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				System.out.println("Exception: " + e.getMessage() );
 				e.printStackTrace();
 			}
-			System.out.println("TNCPlotsDB > strum true height: '" + trueHeight +"'" );
+			//System.out.println("TNCPlotsDB > strum true height: '" + trueHeight +"'" );
 		 	return(trueHeight);
 	 }
 	 
@@ -2209,12 +2481,12 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 				}
 			}
 			catch (java.lang.Exception ex) 
-			{   // All other types of exceptions
+			{
 				System.out.println("Exception: " + ex + "<BR>");
-			}	
+			}
 		}
 		
-		/**
+	/**
 	 * method that retuns the cummulative cover accoss all strata for a given 
 	 * plant taxa in a given plot
 	 */
@@ -2280,8 +2552,6 @@ public static void main(String[] args)
 			System.out.println( "name: " + name );
 			Vector strata = db.getTaxaStrataExistence(name, plotName);
 			System.out.println( "strata: " + strata.toString() );
-	//		for (int ii=0; ii<strata.size(); ii++)
-	//		System.out.println(" cover: " + db.getSpeciesStrataCover(name, plotName, strata.elementAt(ii).toString() ) );
 		}
 	
 	}
