@@ -1,0 +1,93 @@
+<html> <head> <title>VegBranch- loading table information - Plot Communities</title><link rel='stylesheet' href='http://vegbank.org/vegbank/includes/default.css' type='text/css' /><style type='text/css'>          td.color1 {background-color: FF6666} 
+         td.color2 {background-color: FFCC99} 
+        td.color3 {background-color: FFFF99} 
+       td.color4 {background-color: 99FFCC} 
+       td.color0 {background-color: 9999FF} 
+      .weight1 {font-weight:bold} 
+      </style> 
+ </head>
+ <body>
+<h2><img src='@vbr_imageserver@i_icon.jpg' />VegBranch Loading Tables Overview -- Plot Communities (I)</h2>
+<p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  <a href='overview-b.html'>Species List</a>  |  <a href='overview-c.html'>Plot Data</a>  |  <a href='overview-c2.html'>Plot Normalized</a>  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  <a href='overview-e.html'>Stem Data</a>  |  <a href='overview-f.html'>Soil Data</a>  |  <a href='overview-g.html'>Disturbance Data</a>  |  <a href='overview-h.html'>Community Concept</a>  |  Plot Communities  |  <a href='overview-j.html'>User Defined Metadata</a> </p><table><tr class='grey' ><td><span class='weight1 normal'>Summary: </span></td><td class='item'> Assigns plots to particular communities (up to 4 per record), based on a methodology that you specify.</td></tr>
+<tr><td><span class='weight1 normal'>Description: </span></td><td class='item'> Plots may be assigned to communities with this table.  Up to four communities may be linked to a plot with commName1-commName4.  These are matched to VegBank concepts in either the Community Loading Table or by linking directly to a community already in the vegbank_module (with a standard name, ie CEGL code).  Plots are linked with authorPlotCode.</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Required in VegBranch: </span></td><td class='item'> Not required.  Only necessary if you wish to assign plots to communities.</td></tr>
+<tr><td><span class='weight1 normal'>Represents VegBank Tables: </span></td><td class='item'> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~commclass~type~tableview.html'>commClass,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~classcontributor~type~tableview.html'>classContributor</a> (4), <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~comminterpretation~type~tableview.html'>commInterpretation</a> (4) </td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>VegBranch can generate for you: </span></td><td class='item'> no</td></tr>
+<tr><td><span class='weight1 normal'>Questions: </span></td><td class='item'> What communities do each plot belong to? <br />According to whom? <br />With what degree of certainty?</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Expertise Level: </span></td><td class='item'> advanced</td></tr>
+</table>
+
+<hr /><h3>Fields (Columns) in this table:</h3>
+<p>More information about fields available <a href='z_user_i_plotcomm~3.html'>here</a>.</p>  <table width='90%'><tr><td class='color1' colspan='3'>
+<span class='normal'>&raquo; Required fields; you should always fill in values for these:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>AuthorPlotCode</span></td>
+<td ><span class='itemsmall'>Author's Plot number/code, or the original plot number if taken from literature.  This &quot;points&quot; to the right plot in the Plot Data Loading Table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>classStartDate</span></td>
+<td  class='grey' ><span class='itemsmall'>Start date for this classification.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>CommName1</span></td>
+<td ><span class='itemsmall'>Name of a community which may be found in either your Community Concept Table or in the vegbank module.  This field is limited to 255 characters, so if your community name is more than 255 characters, use the Community Concept Table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>InterpParty_A</span></td>
+<td  class='grey' ><span class='itemsmall'>Primary Party: Link to a party that contributed to the classification event.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>RoleCode_PartyA</span></td>
+<td ><span class='itemsmall'>Role code for the contributor to this classification that is listed in InterpParty_A.  Role Codes will be translated in the Translate Data Form.</span></td></tr>
+<tr><td class='color2' colspan='3'>
+<span class='normal'>&raquo; Commonly used fields:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>classStopDate</span></td>
+<td  class='grey' ><span class='itemsmall'>Stop date for this classification.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>inspection</span></td>
+<td ><span class='itemsmall'>Classification informed by simple inspection of data.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>tableAnalysis</span></td>
+<td  class='grey' ><span class='itemsmall'>Classification informed by inspection of floristic composition tables.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>multivariateAnalysis</span></td>
+<td ><span class='itemsmall'>Classification informed by use of multivariate numerical tools.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>expertSystem</span></td>
+<td  class='grey' ><span class='itemsmall'>Classification informed by use of automated expert system.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>classNotes</span></td>
+<td ><span class='itemsmall'>Notes about the classification event by the parties participating in the event. This might include the purpose or rationale for the classification.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>ClassFit1</span></td>
+<td  class='grey' ><span class='itemsmall'>Indicates the degree of fit with the community concept being assigned in CommName1.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>ClassConfidence1</span></td>
+<td ><span class='itemsmall'>Indicates the degree of confidence of the interpretor(s) in the interpretation made for CommName1. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>NotesInterp1</span></td>
+<td  class='grey' ><span class='itemsmall'>Notes pertaining to the classification analysis and decision, for CommName1.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>CommName2</span></td>
+<td ><span class='itemsmall'>Name of a 2nd community to which this plot may belong.  This name may be found in either your Community Concept Table or in the vegbank module.  This field is limited to 255 characters, so if your community name is more than 255 characters, use the Community Concept Table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>ClassFit2</span></td>
+<td  class='grey' ><span class='itemsmall'>Indicates the degree of fit with the community concept being assigned in CommName2.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>ClassConfidence2</span></td>
+<td ><span class='itemsmall'>Indicates the degree of confidence of the interpretor(s) in the interpretation made for CommName2. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>NotesInterp2</span></td>
+<td  class='grey' ><span class='itemsmall'>Notes pertaining to the classification analysis and decision, for CommName2.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>CommName3</span></td>
+<td ><span class='itemsmall'>Name of a 3rd community to which this plot may belong.  This name may be found in either your Community Concept Table or in the vegbank module.  This field is limited to 255 characters, so if your community name is more than 255 characters, use the Community Concept Table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>ClassFit3</span></td>
+<td  class='grey' ><span class='itemsmall'>Indicates the degree of fit with the community concept being assigned in CommName3.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>ClassConfidence3</span></td>
+<td ><span class='itemsmall'>Indicates the degree of confidence of the interpretor(s) in the interpretation made for CommName3. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>NotesInterp3</span></td>
+<td  class='grey' ><span class='itemsmall'>Notes pertaining to the classification analysis and decision, for CommName3.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>CommName4</span></td>
+<td ><span class='itemsmall'>Name of a 4th community to which this plot may belong.  This name may be found in either your Community Concept Table or in the vegbank module.  This field is limited to 255 characters, so if your community name is more than 255 characters, use the Community Concept Table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>ClassFit4</span></td>
+<td  class='grey' ><span class='itemsmall'>Indicates the degree of fit with the community concept being assigned in CommName4.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>ClassConfidence4</span></td>
+<td ><span class='itemsmall'>Indicates the degree of confidence of the interpretor(s) in the interpretation made for CommName4. This can reflect the level of familiarity with the classification or the sufficiency of information about the plot (e.g., High, Moderate, Low).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>NotesInterp4</span></td>
+<td  class='grey' ><span class='itemsmall'>Notes pertaining to the classification analysis and decision, for CommName4.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>InterpParty_B</span></td>
+<td ><span class='itemsmall'>Link to a party that contributed to the classification event.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>RoleCode_PartyB</span></td>
+<td  class='grey' ><span class='itemsmall'>Role code for the contributor to this classification that is listed in InterpParty_A.  Role Codes will be translated in the Translate Data Form.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>InterpParty_C</span></td>
+<td ><span class='itemsmall'>Link to a party that contributed to the classification event.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>RoleCode_PartyC</span></td>
+<td  class='grey' ><span class='itemsmall'>Role code for the contributor to this classification that is listed in InterpParty_A.  Role Codes will be translated in the Translate Data Form.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>InterpParty_D</span></td>
+<td ><span class='itemsmall'>Link to a party that contributed to the classification event.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>RoleCode_PartyD</span></td>
+<td  class='grey' ><span class='itemsmall'>Role code for the contributor to this classification that is listed in InterpParty_A.  Role Codes will be translated in the Translate Data Form.</span></td></tr>
+<tr><td class='color0' colspan='3'>
+<span class='normal'>&raquo; Internal VegBranch fields, please do not edit directly:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>zCOMMCLASS_ID</span></td>
+<td ><span class='itemsmall'>Database generated identifier assigned to each unique plot community classification.</span></td></tr>
+</table>

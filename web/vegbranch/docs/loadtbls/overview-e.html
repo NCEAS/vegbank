@@ -1,0 +1,109 @@
+<html> <head> <title>VegBranch- loading table information - Stem Data</title><link rel='stylesheet' href='http://vegbank.org/vegbank/includes/default.css' type='text/css' /><style type='text/css'>          td.color1 {background-color: FF6666} 
+         td.color2 {background-color: FFCC99} 
+        td.color3 {background-color: FFFF99} 
+       td.color4 {background-color: 99FFCC} 
+       td.color0 {background-color: 9999FF} 
+      .weight1 {font-weight:bold} 
+      </style> 
+ </head>
+ <body>
+<h2><img src='@vbr_imageserver@e_icon.jpg' />VegBranch Loading Tables Overview -- Stem Data (E)</h2>
+<p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  <a href='overview-b.html'>Species List</a>  |  <a href='overview-c.html'>Plot Data</a>  |  <a href='overview-c2.html'>Plot Normalized</a>  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  Stem Data  |  <a href='overview-f.html'>Soil Data</a>  |  <a href='overview-g.html'>Disturbance Data</a>  |  <a href='overview-h.html'>Community Concept</a>  |  <a href='overview-i.html'>Plot Communities</a>  |  <a href='overview-j.html'>User Defined Metadata</a> </p><table><tr class='grey' ><td><span class='weight1 normal'>Summary: </span></td><td class='item'> Data about the stems that you measured on the plot.</td></tr>
+<tr><td><span class='weight1 normal'>Description: </span></td><td class='item'> Each stem observed can have sizes listed (diameter and height), as well as X,Y coordinates, code, and health.  You may also indicate multiple stems per size class, which is useful for those tallying stems in size classes.<br />Each plot is linked to Plot Data by authorPlotCode.  Each plant has a plantCode here, which may either link directly to a plant in the vegbank_module or to a plantCode in the Species List Loading Table.</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Required in VegBranch: </span></td><td class='item'> At least one of the following is required: Cover Data, Stratum Cover Data, Stem Data.  These are the three different options for referencing the plant taxa on your plot.</td></tr>
+<tr><td><span class='weight1 normal'>Represents VegBank Tables: </span></td><td class='item'> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~stemcount~type~tableview.html'>stemCount,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~stemlocation~type~tableview.html'>stemLocation</a> (1). </td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>VegBranch can generate for you: </span></td><td class='item'> no</td></tr>
+<tr><td><span class='weight1 normal'>Questions: </span></td><td class='item'> Were trees measured on the plots? <br />How many? <br />How big? <br />What kind?</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Expertise Level: </span></td><td class='item'> medium</td></tr>
+</table>
+
+<hr /><h3>Fields (Columns) in this table:</h3>
+<p>More information about fields available <a href='z_user_e_stemdata~3.html'>here</a>.</p>  <table width='90%'><tr><td class='color1' colspan='3'>
+<span class='normal'>&raquo; Required fields; you should always fill in values for these:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>AuthorPlotCode</span></td>
+<td ><span class='itemsmall'>Author's Plot number/code, or the original plot number if taken from literature.  This &quot;points&quot; to the right plot in the Plot Data Loading Table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>PLANTCode</span></td>
+<td  class='grey' ><span class='itemsmall'>A code that refers to a plant concept.  This code may be found in the Species List loading table.  It may also link directly to a name in the vegbank module.  For this reason, a species list loading table is not necessary, if your plants can be found in the vegbank module.  Rules for how plant codes are looked up in the vegbank module may be found in the Translate Data Form, on the step where VegBranch matches your plants to VegBank plants.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stemCount</span></td>
+<td ><span class='itemsmall'>The number of stems of a single species that have these specific stem diameter and height data in common.  Default value is 1.</span></td></tr>
+<tr><td class='color2' colspan='3'>
+<span class='normal'>&raquo; Commonly used fields:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>stemDiameter</span></td>
+<td  class='grey' ><span class='itemsmall'>The diameter of the stem in centimeters. When diameter classes are used, the stemDiameter is the midpoint between the low end and high end for the diameter class;  the offset between this and the endpoints is stored in the stemDiameterAccuracy attribute.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stemDiameterAccuracy</span></td>
+<td ><span class='itemsmall'>The accuracy of the stem diameter measurements in centimeters. This represents the distance between the diameter class midpoint and endpoint.</span></td></tr>
+<tr><td class='color3' colspan='3'>
+<span class='normal'>&raquo; Sometimes used fields:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>stemHeight</span></td>
+<td  class='grey' ><span class='itemsmall'>The measured height of the stem in meters. When height classes are used, the stemHeight is the midpoint between the low end and high end for the height class; the offset between this and the endpoint is stored in the stemHeightAccuracy field.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stemHeightAccuracy</span></td>
+<td ><span class='itemsmall'>The accuracy of the measured height of a stem, being the offset between the midpoint of the class and the endpoint, in meters.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StemCode</span></td>
+<td  class='grey' ><span class='itemsmall'>Name or code applied to a specific stem in the plot. This is generally a numeric label to associate a fielddata entry with a stem in the database.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stemXPosition</span></td>
+<td ><span class='itemsmall'>The X-coordinate of the stem position in m. The user will enter the relative position of stems with respect to the plot origin (in meters) with the x-axis defined by the plot azimuth.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>stemYPosition</span></td>
+<td  class='grey' ><span class='itemsmall'>The Y-coordinate of the stem position, as stemXPosition.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>stemHealth</span></td>
+<td ><span class='itemsmall'>Health of the stem referenced in this stemLocation record. Usually used to describe &quot;dead&quot; stems.</span></td></tr>
+<tr><td class='color4' colspan='3'>
+<span class='normal'>&raquo; Fields for expert users:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>stratumIndex</span></td>
+<td  class='grey' ><span class='itemsmall'>OPTIONAL.  References a StratumIndex (1-9) in Plot Data (or Normalized Plot Data) for this plot to link this stratum to the stratum definitions that table.  Most of the time, stems are listed as belonging to the whole plot, not a particular stratum.  In this case, leave this field blank, which signifies that record applies to the whole plot, not just to one stratum.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StemTaxonArea</span></td>
+<td ><span class='itemsmall'>Area of the plot used for this stem size to determine number of stems on a plot where the plot is subsampled differently by species and size.  Leave blank if the full plot size was used, or as indicated by another size field, in observation or taxonObservation.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef1</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef2</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef3</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef4</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef5</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef6</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef7</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef8</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef9</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef10</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef11</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef12</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef13</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef14</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef15</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef16</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef17</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef18</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef19</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef20</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef21</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef22</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef23</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>UserDef24</span></td>
+<td ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserDef25</span></td>
+<td  class='grey' ><span class='itemsmall'>The value of the user-defined variable.</span></td></tr>
+<tr><td class='color0' colspan='3'>
+<span class='normal'>&raquo; Internal VegBranch fields, please do not edit directly:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>STEMID</span></td>
+<td ><span class='itemsmall'>Database generated identifier assigned to each unique stem observation.</span></td></tr>
+</table>

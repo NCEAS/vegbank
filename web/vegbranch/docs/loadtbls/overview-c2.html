@@ -1,0 +1,49 @@
+<html> <head> <title>VegBranch- loading table information - Plot Normalized</title><link rel='stylesheet' href='http://vegbank.org/vegbank/includes/default.css' type='text/css' /><style type='text/css'>          td.color1 {background-color: FF6666} 
+         td.color2 {background-color: FFCC99} 
+        td.color3 {background-color: FFFF99} 
+       td.color4 {background-color: 99FFCC} 
+       td.color0 {background-color: 9999FF} 
+      .weight1 {font-weight:bold} 
+      </style> 
+ </head>
+ <body>
+<h2><img src='@vbr_imageserver@c2_icon.jpg' />VegBranch Loading Tables Overview -- Plot Normalized (C2)</h2>
+<p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  <a href='overview-b.html'>Species List</a>  |  <a href='overview-c.html'>Plot Data</a>  |  Plot Normalized  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  <a href='overview-e.html'>Stem Data</a>  |  <a href='overview-f.html'>Soil Data</a>  |  <a href='overview-g.html'>Disturbance Data</a>  |  <a href='overview-h.html'>Community Concept</a>  |  <a href='overview-i.html'>Plot Communities</a>  |  <a href='overview-j.html'>User Defined Metadata</a> </p><table><tr><td><span class='weight1 normal'>Summary: </span></td><td class='item'> This table contains normalized information about plot data, specifically: contributors, stratum definitions, and place names.</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Description: </span></td><td class='item'> This table should be used if denormalizations in the Plot Data table are too limiting.  VegBranch will normally create this table from the data in Plot Data, but this table can be loaded to directly, as well.  There are three different groups of data in this table.  It does not matter if they occur on the same record or on different records  Fields within the same group do reference each other.  The groups are:<br />(contrib, role); (placeName, placeSystem); (stratumIndex, stratumBase, stratumHeight, stratumCover)</td></tr>
+<tr><td><span class='weight1 normal'>Required in VegBranch: </span></td><td class='item'> Not required.  If you have more than 9 strata per plot, or 5 contributors per plot, or more than the standard placenames, you will have to use this table.</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Represents VegBank Tables: </span></td><td class='item'> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~stratum~type~tableview.html'>stratum,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~place~type~tableview.html'>place,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~observationcontributor~type~tableview.html'>observationContributor</a> </td></tr>
+<tr><td><span class='weight1 normal'>VegBranch can generate for you: </span></td><td class='item'> VegBranch can generate this table from your Plot Data table. You can add to this table afterwards, as well.</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Questions: </span></td><td class='item'> Do you have more than 5 observation contributors, 5 place names, or 9 strata, per plot?<br />Do you have place names of different systems that allowed for in Plot Data?</td></tr>
+<tr><td><span class='weight1 normal'>Expertise Level: </span></td><td class='item'> advanced</td></tr>
+</table>
+
+<hr /><h3>Fields (Columns) in this table:</h3>
+<p>More information about fields available <a href='z_user_c2_plotnorm~3.html'>here</a>.</p>  <table width='90%'><tr><td class='color1' colspan='3'>
+<span class='normal'>&raquo; Required fields; you should always fill in values for these:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>authorPlotCode</span></td>
+<td  class='grey' ><span class='itemsmall'>Author's Plot number/code, or the original plot number if taken from literature.  This &quot;points&quot; to the right plot in the Plot Data Loading Table.</span></td></tr>
+<tr><td class='color2' colspan='3'>
+<span class='normal'>&raquo; Commonly used fields:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>Contrib</span></td>
+<td ><span class='itemsmall'>contributor name for a contributor to this plot.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>Role</span></td>
+<td  class='grey' ><span class='itemsmall'>contributor role for this record</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>PlaceName</span></td>
+<td ><span class='itemsmall'>a named place for this plot</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>PlaceSystem</span></td>
+<td  class='grey' ><span class='itemsmall'>the geographical naming system where the place name should be found</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumIndex</span></td>
+<td ><span class='itemsmall'>This field defines the name of the stratum, as will be referenced in other loading tables (Strata Cover).  Each stratum on a plot should have its own unique stratum code, and should be part of the stratum method used (as selected in the metadata form).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumBase</span></td>
+<td  class='grey' ><span class='itemsmall'>the base of the stratum, in meters</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>StratumHeight</span></td>
+<td ><span class='itemsmall'>the height of the stratum, in meters</span></td></tr>
+<tr><td class='color3' colspan='3'>
+<span class='normal'>&raquo; Sometimes used fields:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>StratumCover</span></td>
+<td  class='grey' ><span class='itemsmall'>the total cover of all vegetation in this stratum, in percent.</span></td></tr>
+<tr><td class='color0' colspan='3'>
+<span class='normal'>&raquo; Internal VegBranch fields, please do not edit directly:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plotC2_ID</span></td>
+<td ><span class='itemsmall'>Database generated ID that uniquely identifies each row in this table.</span></td></tr>
+</table>

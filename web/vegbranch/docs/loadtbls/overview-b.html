@@ -1,0 +1,103 @@
+<html> <head> <title>VegBranch- loading table information - Species List</title><link rel='stylesheet' href='http://vegbank.org/vegbank/includes/default.css' type='text/css' /><style type='text/css'>          td.color1 {background-color: FF6666} 
+         td.color2 {background-color: FFCC99} 
+        td.color3 {background-color: FFFF99} 
+       td.color4 {background-color: 99FFCC} 
+       td.color0 {background-color: 9999FF} 
+      .weight1 {font-weight:bold} 
+      </style> 
+ </head>
+ <body>
+<h2><img src='@vbr_imageserver@b_icon.jpg' />VegBranch Loading Tables Overview -- Species List (B)</h2>
+<p>Navigation between loading tables:<br /> <a href='overview-a.html'>Party Information</a>  |  Species List  |  <a href='overview-c.html'>Plot Data</a>  |  <a href='overview-c2.html'>Plot Normalized</a>  |  <a href='overview-d.html'>Presence Data</a>  |  <a href='overview-d2.html'>Strata Cover Data</a>  |  <a href='overview-e.html'>Stem Data</a>  |  <a href='overview-f.html'>Soil Data</a>  |  <a href='overview-g.html'>Disturbance Data</a>  |  <a href='overview-h.html'>Community Concept</a>  |  <a href='overview-i.html'>Plot Communities</a>  |  <a href='overview-j.html'>User Defined Metadata</a> </p><table><tr><td><span class='weight1 normal'>Summary: </span></td><td class='item'> Information about plants in your dataset.  This table is used when a simple link to a plant in the vegbank module is not possible from your other loading tables.</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Description: </span></td><td class='item'> This table has three uses: linking plantCodes to full plant names; describeing irregular taxa; adding new plant concepts to the vegbank module.<br />1) To link a plant code of yours to a standard plant name, fill in the plantCode field with your value and the plantName field with a recognized plant name that may already be in the vegbank_module (i.e. USDA code, scientific name with or without author). Use plantSyn1 if there is an updated taxonomy name that should be linked to as the &quot;current&quot; concept.  Any plants referenced in the other loading tables with a plantCode here will be looked up as the plantName mentioned here.<br />2) Irregular taxa may be added with a plantCode to link to the irregular taxon from elsewhere, an original name (to be used to describe the irregular taxon), a plantName which is the best single plant concept for the irregular taxon (usually higher level), and optionally up to 4 taxa that may be grouped to comprise the taxon (2 or more of fields PlantSyn1-4).<br />3) New taxa may be added, and must have references and conceptStatus.  They may also have synonyms and several names systems for plantUsage.</td></tr>
+<tr><td><span class='weight1 normal'>Required in VegBranch: </span></td><td class='item'> Not required unless you wish to refer to taxa (that is, plant concepts) that are not already in VegBranch.</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Represents VegBank Tables: </span></td><td class='item'> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~plantconcept~type~tableview.html'>plantConcept,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~plantname~type~tableview.html'>plantName,</a> <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~plantstatus~type~tableview.html'>plantStatus</a> (1), <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~plantusage~type~tableview.html'>plantUsage</a> (4-5), <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~plantcorrelation~type~tableview.html'>plantCorrelation</a> (4),  <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~taxonobservation~type~tableview.html'>taxonObservation</a> (part.), <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~taxoninterpretation~type~tableview.html'>taxonInterpretation</a> (part.) and <a href='http://vegbank.org/vegbank/dbdictionary/dd~table~taxonalt~type~tableview.html'>taxonAlt.</a> </td></tr>
+<tr><td><span class='weight1 normal'>VegBranch can generate for you: </span></td><td class='item'> VegBranch can populate this table from plant names in other tables that do not match records in the VegBank module.</td></tr>
+<tr class='grey' ><td><span class='weight1 normal'>Questions: </span></td><td class='item'> Do you have any synonymized taxa (for example, you call it X, but now it is called Y)?  <br />Do you use codes for plant names that must be matched to 'real' plant names?<br />Do you have any irregular taxa that are not part of standard lists (ie Genus sp#1, Hairy sedge, Species A or Species B)?<br />Do you have taxa to add to VegBank?</td></tr>
+<tr><td><span class='weight1 normal'>Expertise Level: </span></td><td class='item'> medium/expert</td></tr>
+</table>
+
+<hr /><h3>Fields (Columns) in this table:</h3>
+<p>More information about fields available <a href='z_user_b_speclist~3.html'>here</a>.</p>  <table width='90%'><tr><td class='color1' colspan='3'>
+<span class='normal'>&raquo; Required fields; you should always fill in values for these:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantCode</span></td>
+<td  class='grey' ><span class='itemsmall'>A code that uniquely identifies a plant taxon in your other loading tables (Presence Data, Stratum Cover, Stem Data).  This can be any combination of letters, numbers, spaces, and symbols.  It can be a real code, such as a USDA code, or a temporary code, such as a number.  It could be the plant name, too, so long as it does not exceed 255 characters.  Note that the other tables need not reference plants in this table, but can reference plants already in the vegbank module directly by name.  For more on how this works, see the Translate Data form.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantName</span></td>
+<td ><span class='itemsmall'>The plant name for which VegBranch will look up the plant in your vegbank module.  If the plant name is not found, then the current record will be added as a new plant concept, based on the name in this field.</span></td></tr>
+<tr><td class='color2' colspan='3'>
+<span class='normal'>&raquo; Commonly used fields:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>originalName</span></td>
+<td  class='grey' ><span class='itemsmall'>The author's original name for the taxon observed on the plot.  This name does not need to match any name in VegBank, but should be exactly what the author called the plant.  Examples: 'Acer rubrum', 'Carex sp.', 'Potentilla canadensis &amp; simplex complex'</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>groupType</span></td>
+<td ><span class='itemsmall'>If this record in the species list is an irregular taxon, where multiple standard plant concepts are referenced, this field indicates if the multiple taxa mentioned in plantSyn1-plantSyn4 are choices (&quot;one of&quot; the taxa listed, but we're not sure which) or a combination (&quot;union&quot;) of all taxa listed.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantSyn1</span></td>
+<td  class='grey' ><span class='itemsmall'>3 uses for this field: 1) the updated name of a taxon in plantName; 2) if groupType is filled in, this and plantSyn2-plantSyn4 are used to indicate member taxa that are combined to form an irregular taxon; 3) if a new plantConcept being added to VegBank, the first of up to 4 synonyms to be correlated to standard VegBank concepts (then PlantConceptStatus should then be not accepted).</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantSyn2</span></td>
+<td ><span class='itemsmall'>Another plant Synonym, similar to plantSyn1, in uses 2 and 3 in its definition.</span></td></tr>
+<tr><td class='color3' colspan='3'>
+<span class='normal'>&raquo; Sometimes used fields:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>taxonFit</span></td>
+<td  class='grey' ><span class='itemsmall'>This is a default value for taxa occurring on plots being migrated.  This allows you to fill in Fit only once per taxon, rather than for each record in your other data tables.  Indicates the degree of fit with the plant concept being assigned. Is overridden on a plot by overrideTaxonFit in Presence Data or Strata Cover, if a value is there.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>taxonConfidence</span></td>
+<td ><span class='itemsmall'>This is a default value for taxa occurring on plots being migrated.  This allows you to fill in Confidence only once per taxon, rather than for each record in your other data tables.  Indicates the degree of confidence of the interpretor(s) in the interpretation made, of this plant in the plots referenced in Presence Data or Strata Cover Loading tables.  Can be overridden by overrideTaxonConfidence.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantSyn3</span></td>
+<td  class='grey' ><span class='itemsmall'>Another plant Synonym, similar to plantSyn1, in uses 2 and 3 in its definition.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantSyn4</span></td>
+<td ><span class='itemsmall'>Another plant Synonym, similar to plantSyn1, in uses 2 and 3 in its definition.</span></td></tr>
+<tr><td class='color4' colspan='3'>
+<span class='normal'>&raquo; Fields for expert users:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantNameSystem</span></td>
+<td  class='grey' ><span class='itemsmall'>The name of the classification system for the name in plantName (e.g., EnglishCommon or Scientific).  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantNameStatus</span></td>
+<td ><span class='itemsmall'>Is the name in PlantName standard according to the party adding party perspective?  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantShortName</span></td>
+<td  class='grey' ><span class='itemsmall'>A shorter, alternative Name that corresponds to the current plant Concept record, perhaps lacking authority; an abbreviation.  This set of fields (starting with &quot;plantShortName&quot;) need not actually be a shorter plant name, but can be any plant name usage to be added to the VegBank module.  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantShortNameSystem</span></td>
+<td ><span class='itemsmall'>The name of the classification system for the name in plantShortName (e.g., EnglishCommon or Scientific).  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantShortNameStatus</span></td>
+<td  class='grey' ><span class='itemsmall'>Is the name in PlantShortName standard according to the party adding party perspective?  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantCommonName</span></td>
+<td ><span class='itemsmall'>Another set of fields to add another plant name Usage, perhaps a common name, perhaps not.  This set of fields (starting with &quot;plantCommonName&quot;) need not actually be a common plant name, but can be any plant name usage to be added to the VegBank module.  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantCommonNameSystem</span></td>
+<td  class='grey' ><span class='itemsmall'>The name of the classification system for the name in plantCommonName (e.g., EnglishCommon or Scientific).  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantCommonNameStatus</span></td>
+<td ><span class='itemsmall'>Is the name in PlantCommonName standard according to the party adding party perspective?  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>otherPlantName</span></td>
+<td  class='grey' ><span class='itemsmall'>Another set of fields to add another plant name Usage.  This set of fields (starting with &quot;otherPlantName&quot;) can be any type of plantName to be added to the VegBank module.  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>otherPlantNameSystem</span></td>
+<td ><span class='itemsmall'>The name of the classification system for the name in otherPlantName (e.g., EnglishCommon or Scientific).  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>otherPlantNameStatus</span></td>
+<td  class='grey' ><span class='itemsmall'>Is the name in OtherPlantName standard according to the party adding party perspective?  This will be migrated to the plantUsage table for all records that have a party perspective added.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>reference</span></td>
+<td ><span class='itemsmall'>A string (text field) that identifies to you, the user, what reference this plantConcept record will be based upon.  You will be prompted to translate this reference string to an actual reference in the VegBank module (or you can add a new reference).  Required for all new concepts to be added to VegBank.  Will be ignored for all concepts that are matched to VegBank module concepts.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>NamesReference</span></td>
+<td  class='grey' ><span class='itemsmall'>A string (text field) that identifies to you, the user, what reference the plantNames on this record (plantName, plantShortName, plantCommonName, otherPlantName) were originally cited in.  You will be prompted to translate this reference string to an actual reference in the VegBank module (or you can add a new reference).  Not required, and you can add references to individual names in VegBranch if different references are necessary for the different names on this record.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantDescription</span></td>
+<td ><span class='itemsmall'>The plantDescription is a description of the plantConcept by the party contributing the plantConcept.  This is used to provide more information about the plantConcept.  Ignored for concepts that are matched to extant VegBank concepts.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantLevel</span></td>
+<td  class='grey' ><span class='itemsmall'>A level in the taxonomic hierarchy to which the current Plant Concept belongs (i.e. family, genus, species).  Part of the Party Perspective.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantParent</span></td>
+<td ><span class='itemsmall'>The name of the Plant Parent for the current Plant Concept.  A Plant Parent is part of the Party Perspective and identifies which plantConcept the Current Concept should be nested under in the taxonomic hierarchy.  For example if this Plant Concept were at the genus level the Plant Parent would be the Plant Concept that is the family level (or subfamily level).  The name used here will be looked up in the VegBank module or should reference a PLANTcode of a different record in this table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantConceptStatus</span></td>
+<td  class='grey' ><span class='itemsmall'>Status of the concept by the party (accepted, not accepted, undetermined).  Part of the Party Perspective.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantPartyComments</span></td>
+<td ><span class='itemsmall'>Comments by party providing rationale for status assignment in plantConceptStatus.  Part of the Party Perspective.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantSynConverg1</span></td>
+<td  class='grey' ><span class='itemsmall'>If plantSyn1 is of the 3rd usage in its definition, this Convergence value indicates the relationship between the new concept of this record and the correlated concept in PlantSyn1.  Otherwise, this can be left blank.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantSynConverg2</span></td>
+<td ><span class='itemsmall'>Correlation for plantSyn2. (see plantSynConverg1 for definition)</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>plantSynConverg3</span></td>
+<td  class='grey' ><span class='itemsmall'>Correlation for plantSyn3. (see plantSynConverg1 for definition)</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>plantSynConverg4</span></td>
+<td ><span class='itemsmall'>Correlation for plantSyn4. (see plantSynConverg1 for definition)</span></td></tr>
+<tr><td class='color0' colspan='3'>
+<span class='normal'>&raquo; Internal VegBranch fields, please do not edit directly:</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>UserPlant_ID</span></td>
+<td  class='grey' ><span class='itemsmall'>Database assigned value for a unique plant record in this table.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>NewPlantConcept</span></td>
+<td ><span class='itemsmall'>True if this is a new concept to be added to VegBank.  You can set how VegBranch determines if a concept is new in the Metadata form.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td  class='grey' ><span class='weight1 normal'>AddPartyPerspective</span></td>
+<td  class='grey' ><span class='itemsmall'>True if party perspective for this record will be added if new concepts are being added to vegbank.  You can set how VegBranch determines if party perspective is added in the Metadata form.</span></td></tr>
+<tr valign='top' align='left'><td width='5%'/><td ><span class='weight1 normal'>ArchivedStatus</span></td>
+<td ><span class='itemsmall'>internal field which shows the status of migration process.</span></td></tr>
+</table>
