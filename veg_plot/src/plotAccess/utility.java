@@ -11,6 +11,19 @@ import java.util.*;
 
 public class utility {
 
+public String driverClass;
+public String connectionString;
+public String login;
+public String passwd;
+public String logFile;
+public int minConnections;
+public int maxConnections;
+public String maxConnectionTime;
+public int maxConnectionUses;
+
+
+
+
 /**
 * Main route for testing
 *
@@ -66,6 +79,8 @@ String s = null;
 		login=rb.getString("user");
 		passwd=rb.getString("password");
 		logFile=rb.getString("logFile");
+		maxConnectionUses = (new Double(rb.getString("maxConnectionUses"))).intValue();
+		
 		
 		if (accessType.equals("query")) {	
 			minConnections = (new Double(rb.getString("query.minConnections"))).intValue();
@@ -83,14 +98,6 @@ String s = null;
 	catch (MissingResourceException e) {System.out.println("failed in "
 		+"utility.getDatabaseParameters " +e.getMessage());;}
 	}
-public String driverClass;
-public String connectionString;
-public String login;
-public String passwd;
-public String logFile;
-public int minConnections;
-public int maxConnections;
-public String maxConnectionTime;
 
 
 /*
