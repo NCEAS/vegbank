@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-20 20:28:05 $'
- * '$Revision: 1.8 $'
+ *     '$Date: 2002-02-20 23:18:46 $'
+ * '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,6 +67,10 @@ public class USDAPlantsLoader
 	public String otherCitationDetails = "PLANTS1996";
 	private Connection conn = null;
 	
+	//this is the cache that stores all the previously
+	//stored codes
+	private Hashtable loadedPlantCodeHash = new Hashtable();
+	
 	
 	
 	//constructor method
@@ -92,7 +96,7 @@ public class USDAPlantsLoader
 			System.out.println("USDAPlantsLoader > parsing input file contents ");
 			Hashtable plantsHash = this.elementParser(v);
 			
-			System.out.println("USDAPlantsLoader > laoding data to db ");
+			System.out.println("USDAPlantsLoader > loading data to db ");
 			//load new plant instances -- EXCLUDING THOSE WITH SYNONOMYS
 			loadPlantInstances(plantsHash);
 		
@@ -192,21 +196,14 @@ public static void main(String[] args)
  	*/	
 	private void loadPlantSynonym(Hashtable plantsData)
 	{
-		System.out.println("USDAPlantsLaoder > loading synonym ");
-		System.out.println("USDAPlantsLaoder > Size of plants hash: "+plantsData.size());
+		System.out.println("USDAPlantsLoader > loading synonym ");
+		System.out.println("USDAPlantsLoader > Size of plants hash: "+plantsData.size());
 		for (int i=0; i<plantsData.size(); i++) 
 		{
-		
 			//if there is a synonymy associated with this
 			//instance of a plant
-			if (extractSinglePlantInstance(plantsData, i ).get("synonymousName").toString()
-				!= "nullToken"
-				)
+			if (extractSinglePlantInstance(plantsData, i ).get("synonymousName").toString() != "nullToken")
 			{
-			//		System.out.println("there is a synonym associated with "+
-			//			extractSinglePlantInstance(plantsData, i
-			//			).get("synonymousName").toString()
-			//		);
 					//this will load the synonym that is required 
 					loadSinglePlantSynonym( extractSinglePlantInstance(plantsData, i) );
 			}
@@ -215,49 +212,50 @@ public static void main(String[] args)
 
 
 
-/**
- * method to load an instance of a synonym into the 
- * plant taxa database -- the input single plant instance 
- * must contain information related to the synonomy, also
- * the both the plants (the plant that is the synonomy and
- * the plant that has the synonymous value) must already be 
- * in the database
- */	
-private void loadSinglePlantSynonym(Hashtable singlePlantInstance)
-{
-	//veryify that the input hash table has a synonmyName element
-	if (singlePlantInstance.get("synonymousName").toString() != null )
+ /**
+ 	* method to load an instance of a synonym into the 
+ 	* plant taxa database -- the input single plant instance 
+ 	* must contain information related to the synonomy, also
+ 	* the both the plants (the plant that is the synonomy and
+ 	* the plant that has the synonymous value) must already be 
+ 	* in the database
+ 	*/	
+	private void loadSinglePlantSynonym(Hashtable singlePlantInstance)
 	{
-		//System.out.println("from loadSinglePlantSynonym "+singlePlantInstance.get("synonymousName").toString());
-		String concatenatedName
+		//veryify that the input hash table has a synonmyName element
+		String sName = singlePlantInstance.get("synonymousName").toString();
+		if (singlePlantInstance.get("synonymousName").toString() != null )
+		{
+			System.out.println("USDAPlantsLoader > loading a synonym: " + sName);
+			String concatenatedName
 			= singlePlantInstance.get("concatenatedName").toString();
-		String synonymousName
+			String synonymousName
 			= singlePlantInstance.get("synonymousName").toString();
 		
-		//check that the plant name exists
-		if ( plantNameExists(concatenatedName) == true  && 
+			//check that the plant name exists
+			if ( plantNameExists(concatenatedName) == true  && 
 			plantNameExists(synonymousName) == true)
-		{
-			//the synonymous name is the name that the concatenated 
-			//name is now known by
-			int plantConceptId = plantConceptKey(synonymousName);
-			System.out.println("USDAPlantsLaoder > ID plant concept: "+plantConceptId);
-		
-			int plantNameId = plantNameKey(concatenatedName);
+			{
+				//the synonymous name is the name that the concatenated 
+				//name is now known by
+				int plantConceptId = plantConceptKey(synonymousName);
+				System.out.println("USDAPlantsLaoder > ID plant concept: "+plantConceptId);
 			
-			//load the relevant data to the usage table
-			loadPlantUsageInstance(concatenatedName, plantNameId, plantConceptId, 
-			partyName, "SYNONYM", startDate, stopDate, reference);
+				int plantNameId = plantNameKey(concatenatedName);
 			
-			//update the plantConceptStatus table
-			//with the status of "SYNONYM"
-		}
-		else 
-		{
-			System.out.println("USDAPlantsLaoder > synonomy does not exist");
+				//load the relevant data to the usage table
+				loadPlantUsageInstance(concatenatedName, plantNameId, plantConceptId, 
+				 "SYNONYM", startDate, stopDate, reference);
+			
+				//update the plantConceptStatus table
+				//with the status of "SYNONYM"
+			}
+			else 
+			{
+				System.out.println("USDAPlantsLoader > synonomy does not exist");
+			}
 		}
 	}
-}
 
 
 /**
@@ -426,12 +424,18 @@ private int plantUsageKey(String plantName)
 	{
 		try
 		{
+			int plantNumber = plantsData.size();
+			
+			//for performance testing
+			//int plantNumber = 1000;
+			
+			System.out.println("USDAPlantsLoader > number plant instances: " + plantNumber );
 			
 			//load the families first
 			//first load the family associated with each of the plants, this
 			//was written after most of the code was written and may need to be 
 			//changed or the location may need to be changed
-			for (int i=0; i<plantsData.size(); i++) 
+			for (int i=0; i<plantNumber; i++) 
 			{
 				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
@@ -439,7 +443,7 @@ private int plantUsageKey(String plantName)
 			}
 			
 			//load the genus second
-			for (int i=0; i<plantsData.size(); i++) 
+			for (int i=0; i<plantNumber; i++) 
 			{
 				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
@@ -447,7 +451,7 @@ private int plantUsageKey(String plantName)
 			}
 			
 			//load the species second
-			for (int i=0; i<plantsData.size(); i++) 
+			for (int i=0; i<plantNumber; i++) 
 			{
 				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
@@ -455,7 +459,7 @@ private int plantUsageKey(String plantName)
 			}
 			
 			//load the subspecies third
-			for (int i=0; i<plantsData.size(); i++) 
+			for (int i=0; i<plantNumber; i++) 
 			{
 				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
@@ -463,7 +467,7 @@ private int plantUsageKey(String plantName)
 			}
 			
 			//load the varieties fourth
-			for (int i=0; i<plantsData.size(); i++) 
+			for (int i=0; i<plantNumber; i++) 
 			{
 				//the hashtable containing the plant iformation for each plant
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
@@ -509,72 +513,89 @@ private int plantUsageKey(String plantName)
 			String updateDate=singlePlantInstance.get("updateDate").toString();
 			String parentName=singlePlantInstance.get("parentName").toString();
 			String authorName=singlePlantInstance.get("authorName").toString();
-			String itisUsage=singlePlantInstance.get("itisUsage").toString();
+			String plantConceptStatus=singlePlantInstance.get("itisUsage").toString();
 			String synonymousName=singlePlantInstance.get("synonymousName").toString();
 			String publicationName=singlePlantInstance.get("publicationName").toString();
 			String commonName=singlePlantInstance.get("commonName").toString();
 			String familyName=singlePlantInstance.get("familyName").toString();
 			String plantCode=singlePlantInstance.get("plantCode").toString();
 			
-			//if the rank is correct then we can load the data
+			//if the rank is the same as that specified as a input parameter 
+			//to this method then try to load the plant
 			if(rank.equalsIgnoreCase(plantLevel) )
 			{
+				//see if we already loaded this plant
+				if (! this.loadedPlantCodeHash.contains(plantCode) )
+				{
+					//System.out.println("USDAPlantsLoader > plant code not loaded: " + plantCode);
 			
-				System.out.println("USDAPlantsLoader > family : " + familyName);
-				System.out.println("USDAPlantsLoader > code : " + plantCode );
-				System.out.println("USDAPlantsLoader > rank : " +  rank +" \n" );
+					//add the plant code to the cache of all the plants already 
+					//loaded so that we do not try to load again
+					this.loadedPlantCodeHash.put(plantCode, plantCode);
+				
+					//first load the reference table
+					int refId = this.insertPlantReference(this.otherCitationDetails);
 		
-				//first load the reference table
-				int refId = this.insertPlantReference(this.otherCitationDetails);
+					//load the party table
+					int partyId = this.insertPlantPartyInstance(this.partyName, this.partyContractInstructions);
+					//System.out.println("USDAPlantsLoader > party id: " + partyId);
+
+					//if the plantname is not there then load it
+					if (plantNameExists(concatenatedName)==false)
+					{
+						//System.out.println("USDAPlantsLoader > first instance of plant name: "
+						//	+ concatenatedName );
+						nameId = loadPlantNameInstance(refId, concatenatedName, commonName, plantCode);
+					}
+
+					//if the plant concept does not exist create an entry 
+					// and create a status entry for that plant instance - if 
+					//it is not a synonomy b/c if there is a synonomy then the 
+					//concatenated value does not have a concept
+					if (plantConceptExists(concatenatedName, tsnValue) == false)
+					{
+							//upadte the concept 
+							conceptId = loadPlantConceptInstance(nameId, refId, concatenatedName, 
+							plantCode, rank );
+							
+							//update the status add the plant parent here and also
+							statusId = loadPlantStatusInstance(conceptId, plantConceptStatus, "30-JUN-96", 
+							"01-JAN-01", "PLANTS96", partyId);
+					}
+			
+			
+					//THIS IS EXPERIMENTAL AS OF WED
+					//if no synonomies then add the accepted 
+					//usage to the usage table -- CHANGES THIS TO LOOK WHETHER IT IS 
+					//ACCEPTED OR NOT 
+			
+					//get rid of reference and add classSystem and get rid of plantConcept
+					//status and replace with the plantnamStatus and create a common name and 
+					//code do every usad code as standard but for sci names and common names
+					//look first to see if acceepted
 		
-				//load the party table
-				int partyId = this.insertPlantPartyInstance(this.partyName, this.partyContractInstructions);
-				//System.out.println("USDAPlantsLoader > party id: " + partyId);
-
-				//if the plantname is not there then load it
-				if (plantNameExists(concatenatedName)==false)
-				{
-					//System.out.println("USDAPlantsLoader > first instance of plant name: "
-					//	+ concatenatedName );
-					nameId = loadPlantNameInstance(refId, concatenatedName, commonName, plantCode);
-				}
-
-	
-				//if the plant concept does not exist create an entry 
-				// and create a status entry for that plant instance - if 
-				//it is not a synonomy b/c if there is a synonomy then the 
-				//concatenated value does not have a concept
-				if (plantConceptExists(concatenatedName, tsnValue)==false)
-				{
 					if ( synonymousName.equals("nullToken") )
 					{
-						//upadte the concept
-						conceptId = loadPlantConceptInstance(nameId, refId, concatenatedName, 
-						plantCode, rank );
-						//update the status
-						statusId = loadPlantStatusInstance(conceptId, itisUsage, "01-JAN-96", 
-						"01-JAN-01", "PLANTS96", partyId);
+						//System.out.println("USDAPlantsLoader > loading usage instance plantNameId: " + nameId);
+						System.out.println("USDAPlantsLoader > updating usage for: "+ concatenatedName);
+						System.out.println("USDAPlantsLoader > plantNameStatus: "+ plantConceptStatus);
+						if (nameId > 0)
+						{
+							loadPlantUsageInstance(concatenatedName, nameId, conceptId, 
+							"standard", "30-JUN-1996", stopDate, reference);
+						}
+				
+						else 
+						{
+							System.out.println("USDAPlantsLaoder > FAILURE LOADING THE USAGE INSTANCE FOR A PLANT");
+						}
 					}
-				}
-		/*	
-			//if no synonomies then add the accepted 
-			//usage to the usage table
-			if ( synonymousName.equals("nullToken") )
-			{
-				System.out.println("USDAPlantsLoader > loading usage instance plantNameId: " + nameId);
-				System.out.println("USDAPlantsLoader > for plant name: "+ concatenatedName);
-				if (nameId > 0)
-				{
-				loadPlantUsageInstance(concatenatedName, nameId, conceptId, "PLANTS", itisUsage, 
-						startDate, stopDate, reference);
-				}
-				else 
-				{
-					System.out.println("USDAPlantsLaoder > FAILURE LOADING THE USAGE INSTANCE FOR A PLANT");
-				}
-			}
 			
-			*/
+				}
+				else
+				{
+					System.out.println("USDAPlantsLoader > ALREADY LOADED: " + plantCode);
+				}
 			}
 		}
 	}
@@ -595,43 +616,53 @@ private void loadSingleFamilyInstance(Hashtable singlePlantInstance)
 	if ( singlePlantInstance.toString() != null )
 	{
 		String tsnValue=singlePlantInstance.get("tsnValue").toString();
-		String itisUsage= "accepted";
+		String plantConceptStatus= "accepted";
 		String familyName=singlePlantInstance.get("familyName").toString();
 		String rank = "family";
 		String plantCode = "";
 		String commonName = "";
 		
-///		System.out.println("USDAPlantsLoader > LOADING A FAMILY" );
-///		System.out.println("USDAPlantsLoader > family : " + familyName);
-///		System.out.println("USDAPlantsLoader > rank : " +  rank +" \n" );
-		
-		
-		//first load the reference table
-		int refId = this.insertPlantReference(this.otherCitationDetails);
-		
-		//load the party table
-		int partyId = this.insertPlantPartyInstance(this.partyName, this.partyContractInstructions);
-		//System.out.println("USDAPlantsLoader > party id: " + partyId);
-
-		//if the plantname is not there then load it
-		if (plantNameExists(familyName)==false)
+		//see if we already loaded this plant
+		if (! this.loadedPlantCodeHash.contains(familyName) )
 		{
-			//System.out.println("USDAPlantsLoader > first instance of plant name: "
-			//	+ concatenatedName );
-			nameId = loadPlantNameInstance(refId, familyName, commonName, plantCode);
-		}
+			//System.out.println("USDAPlantsLoader > family not loaded: " + familyName);
+			
+			//add the plant code to the cache of all the plants already 
+			//loaded so that we do not try to load again
+			this.loadedPlantCodeHash.put(familyName, familyName);
+		
+			//first load the reference table
+			int refId = this.insertPlantReference(this.otherCitationDetails);
+		
+			//load the party table
+			int partyId = this.insertPlantPartyInstance(this.partyName, this.partyContractInstructions);
 
-		//if the plant concept does not exist create an entry 
-		// and create a status entry for that plant instance - if 
-		//it is not a synonomy b/c if there is a synonomy then the 
-		//concatenated value does not have a concept
-		if (plantConceptExists(familyName, tsnValue)==false)
-		{
-				conceptId = loadPlantConceptInstance(nameId, refId, familyName, 
-				plantCode, rank);
-				//update the status
-				statusId = loadPlantStatusInstance(conceptId, itisUsage, "01-JAN-96", 
-				"01-JAN-01", "PLANTS96", partyId);
+			//if the plantname is not there then load it
+			if (plantNameExists(familyName)==false)
+			{
+				//System.out.println("USDAPlantsLoader > first instance of plant name: "
+				//	+ concatenatedName );
+				nameId = loadPlantNameInstance(refId, familyName, commonName, plantCode);
+			}
+
+			//if the plant concept does not exist create an entry 
+			// and create a status entry for that plant instance - if 
+			//it is not a synonomy b/c if there is a synonomy then the 
+			//concatenated value does not have a concept
+			if (plantConceptExists(familyName, tsnValue)==false)
+			{
+					conceptId = loadPlantConceptInstance(nameId, refId, familyName, 
+					plantCode, rank);
+					//update the status
+					statusId = loadPlantStatusInstance(conceptId, plantConceptStatus, 
+					"30-JUN-96", "01-JAN-01", "PLANTS96", partyId);
+			}
+			
+			//load the plant usage 
+			//load the relevant data to the usage table
+			///fix the reference
+			loadPlantUsageInstance(familyName, nameId, conceptId, 
+			"STANDARD", "30-JUN-96", "01-JAN-01", "reference");
 		}
 	}
 }
@@ -977,26 +1008,24 @@ private boolean conceptNameUsageExists(int nameId, int conceptId)
  	* that concept - name usage
  	*/	
 	private int loadPlantUsageInstance(String concatenatedName, int name_id, 
-	int concept_id, String partyName, String usage, String startDate, 
-	String stopDate, String reference)
+	int concept_id, String usage, String startDate, String stopDate, 
+	String reference)
 	{
 		try
 		{
 			String s = "insert into PLANTUSAGE (plantName, plantName_id, plantConcept_id, "+
-				"partyName, partyUsageStatus, startDate, stopDate)  values(?,?,?,?,?,?,?) ";
+				" plantNameStatus, usageStart, usageStop)  values(?,?,?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			//bind the values
 			pstmt.setString(1, concatenatedName);
 			pstmt.setInt(2, name_id);
 			pstmt.setInt(3, concept_id);
-			pstmt.setString(4, partyName);
-			pstmt.setString(5, usage);
-			pstmt.setString(6, startDate);
-			pstmt.setString(7, stopDate);
+			pstmt.setString(4, usage);
+			pstmt.setString(5, startDate);
+			pstmt.setString(6, stopDate);
 			boolean results = true;
 			results = pstmt.execute();
-			pstmt.close();
-			//System.out.println("USDAPlantsLoader >>>>>>>>>>>>> results: " + results);		
+			pstmt.close();	
 		}
 		catch(Exception e)
 		{
