@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-01-29 00:38:27 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2005-01-29 01:07:19 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1325,14 +1325,13 @@ public class LoadTreeToDatabase
 		}
 		
 		// Add commClass
-        log.debug("Adding commClasses");
 		Enumeration commClasses =  getChildTables(observationHash, "commClass");
 		while ( commClasses.hasMoreElements() )
 		{
 			Hashtable commClass = (Hashtable) commClasses.nextElement();
 			addForeignKey(commClass, Commclass.OBSERVATION_ID, observationId);
 			long commClassId = insertTable("commClass", commClass);
-            log.debug("added commClass #" + commClassId);
+            //log.debug("added commClass #" + commClassId);
 			
 			// Add Classification Contributors
 			Enumeration ccs = this.getChildTables( commClass, "classContributor");
@@ -1638,6 +1637,7 @@ public class LoadTreeToDatabase
 	{
 		long pKey = 0;
 		long plantStatusId = 0;
+		long plantUsageId = 0;
 
 		// Handle null
 		if ( plantConcept == null )
@@ -1675,23 +1675,23 @@ public class LoadTreeToDatabase
 			Hashtable plantStatus = (Hashtable) plantStatuses.nextElement();
 			addForeignKey(plantStatus, Plantstatus.PLANTCONCEPT_ID, pKey);
 			plantStatusId = insertPlantStatus(plantStatus);
+
+            // Add plantUsage
+            Enumeration plantUsages = getChildTables(plantStatus, "plantUsage");
+            ////////////////////////////Enumeration plantUsages = getChildTables(plantConcept, "plantUsage");
+            while ( plantUsages.hasMoreElements())
+            {
+                Hashtable plantUsage = (Hashtable) plantUsages.nextElement();
+                addForeignKey(plantUsage, Plantusage.PLANTCONCEPT_ID, pKey);
+
+                // need to add pu.plantstatus_id needs to be populated
+                addForeignKey(plantUsage, Plantusage.PLANTSTATUS_ID, plantStatusId);
+
+                insertPlantUsage(plantUsage);
+                //log.debug("added plantusage");
+            }
 		}
 		
-		// Add plantUsage
-	    log.debug("----------Checking for plantusage(s)");
-		Enumeration plantUsages = getChildTables(plantConcept, "plantUsage");
-		while ( plantUsages.hasMoreElements())
-		{
-	        log.debug("found a plantusage");
-			Hashtable plantUsage = (Hashtable) plantUsages.nextElement();
-			addForeignKey(plantUsage, Plantusage.PLANTCONCEPT_ID, pKey);
-
-			// need to add pu.plantstatus_id needs to be populated
-			addForeignKey(plantUsage, Plantusage.PLANTSTATUS_ID, plantStatusId);
-		    log.debug("added plantusage to plantstatus_id=" + plantStatusId);
-
-			insertPlantUsage(plantUsage);
-		}
 		
 		return pKey;
 	}
@@ -1857,12 +1857,12 @@ public class LoadTreeToDatabase
 		return pKey;
 	}
 
-	private void insertPlantUsage(Hashtable plantUsage) throws SQLException
+	private long insertPlantUsage(Hashtable plantUsage) throws SQLException
 	{
 		long pKey = getExtantPK(plantUsage);
 		if ( pKey != 0 )
 		{
-			return;
+			return 0;
 		}
 		
 		// Add plantName 
@@ -1876,7 +1876,7 @@ public class LoadTreeToDatabase
 		addForeignKey(plantUsage, Plantusage.PLANTNAME_ID, plantNameId);
 		addForeignKey(plantUsage, Plantusage.PARTY_ID, partyId);
 		
-		insertTable( "plantUsage", plantUsage);
+		return insertTable( "plantUsage", plantUsage);
 	}
 	
 	/**
