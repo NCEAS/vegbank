@@ -1,6 +1,6 @@
-'$Author: farrell $'
-'$Date: 2002-11-27 19:47:45 $'
-'$Revision: 1.5 $'
+'$Author: harris $'
+'$Date: 2002-12-04 22:01:27 $'
+'$Revision: 1.6 $'
 THIS FILE DESCRIBES THE SETUP AND MAINTAINENCE OF A VEGBANK SYSTEM
 
 REQUIRED JAR FILES
@@ -29,6 +29,9 @@ xmlresource.jar
 xml-apis.jar
 xerces_1_4.jar
 
+OTHER REQUIRED SERVLET FILES
+----------------------------
+/vegclass/veg_plot/src/utilities/coord_transform.sh
 
 PROPERTIES FILES:
 ----------------
