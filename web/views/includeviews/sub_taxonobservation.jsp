@@ -33,20 +33,13 @@
   <logic:equal name="smallheader" value="yes">
      <TR><TH colspan="9">--Taxa--
      
-     <logic:notEmpty name="plantRecs2Show">
-  <!-- tell user that not all plants are shown! -->
-<span class="psmall">  Note: maximum of <bean:write name="plantRecs2Show" /> are shown. </span>
-</logic:notEmpty>
+     
 
 </TH></TR>
   </logic:equal>
   <logic:notEqual name="smallheader" value="yes">
    <TR><TH colspan="9" class="major">Taxa occurring on this plot-observation
    
-   <logic:notEmpty name="plantRecs2Show">
-     <!-- tell user that not all plants are shown! -->
-   <span class="psmall">  Note: maximum of <bean:write name="plantRecs2Show" /> are shown. </span>
-</logic:notEmpty>
    
    </TH></TR>  
   </logic:notEqual>
@@ -241,7 +234,13 @@
 
 
      <TR><TD colspan="9" class="bright sizetiny">This table is SORTABLE.  Click the headers to sort ascending and descending.</TD></TR>
-     </TABLE>
+   
+   
+      <logic:greaterThan name="plantRecs2Show" value="-1">
+        <!-- tell user that not all plants are shown! -->
+      <tr><td colspan="9" class="psmall">Note: A maximum of <bean:write name="plantRecs2Show" /> plants are shown. </td></tr>
+</logic:greaterThan>
+   </TABLE>
   
 <logic:notEqual name="showStrataDefn" value="no"> <!-- if no, then don't show this part -->
   
