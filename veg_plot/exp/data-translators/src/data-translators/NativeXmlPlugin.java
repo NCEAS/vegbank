@@ -23,9 +23,9 @@ import  xmlresource.utils.XMLparse;
  * This is a plugin to implement the DataSourceInterface class, allowing 
  * Access to the data stored in the native VegBank XML structure.
  * 
- * 	'$Author: harris $'
- *	'$Date: 2002-08-30 19:12:02 $'
- *	'$Revision: 1.7 $'
+ * 	'$Author: farrell $'
+ *	'$Date: 2002-12-05 23:40:08 $'
+ *	'$Revision: 1.8 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -301,6 +301,100 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	public String getObservationAccessionNumber(String plotName)
 	{
 		return( this.getPlotAttribute(plotName, "plotAccessionNumber") );
+	}
+	
+	public Vector getObservationContributors( String plotName )
+	{
+		return vectorBuf;
+	}
+	
+	public String getObservationContributorSalutation(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorGivenName(String contributorWholeName) 
+	{
+		return null;
+	}
+	
+	public String getObservationContributorMiddleName(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorSurName(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorOrganizationName(String contributorWholeName){
+		return null;
+	}
+	
+	public String getObservationContributorContactInstructions(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorPhoneNumber(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCellPhoneNumber(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorFaxPhoneNumber(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorOrgPosition(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorEmailAddress(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorDeliveryPoint(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCity(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorAdministrativeArea(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorPostalCode(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCountry(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorCurrentFlag(String contributorWholeName)
+	{
+		return null;
+	}
+	
+	public String getObservationContributorAddressStartDate(String contributorWholeName)
+	{
+		return null;
 	}
 	
 	public Vector getPlaceNames(String plotName)
@@ -1363,8 +1457,6 @@ public boolean  getRevisions(String plotName)
 		}
 	}
 	
-	
-	
 	/**
 	 * this is a utility class that can be used by the plugin
 	 */
@@ -1400,6 +1492,9 @@ public boolean  getRevisions(String plotName)
 		return(returnVec);
 	}
 	
+	
+
+
 		/**
 		* method that returns a hashtable containing the information for a given
 		* strataType the keys include.  The keys in the hashtable are : <br> <br>
