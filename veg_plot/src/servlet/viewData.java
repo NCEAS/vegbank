@@ -11,7 +11,6 @@ import java.math.*;
 import java.net.URL;
 
 
-
 /**
 * This class allows the user to navigate the resultset produced by
 * using the plotQuery class
@@ -25,7 +24,60 @@ public void doGet(HttpServletRequest request, HttpServletResponse response)
 response.setContentType("text/html");
 PrintWriter out = response.getWriter();
 
-//call the utility class which will hold all the html
+/**
+* determine if the user wants to download the data or just to view the summary
+* table  - in the future these options will increase
+*/
+
+//check to see if the user wants to download the data
+String downLoadAction= request.getParameter("downLoadAction");
+if (downLoadAction != null) {
+
+//get the other input from the form, like the names of the plots that are
+//needed and pass to the xml transform utility to get correct dataset
+	
+//pass the download dataset to the compression utility
+
+//pass the download-related attributes like filename etc to the function that 
+//creates the html-page for download
+
+	
+	try {
+				
+		//use this function to figure out the type and number of inputs
+		//it is a temporary function - comment out later
+		Enumeration enum =request.getParameterNames();
+		while (enum.hasMoreElements()) {
+			String name = (String) enum.nextElement();
+			String values[] = request.getParameterValues(name);
+			if (values != null) {
+				for (int i=0; i<values.length; i++) {
+					out.println(name +" ("+ i + "): "
+					+values[i]+"; <br></br>");
+				}
+			}
+		}
+	
+	
+	out.println("<a href=\"/downloads/test.zip\">DownloadFile From Here</a>");
+	//response.sendRedirect("/downloads/test.zip");
+
+
+	
+	}  //end try
+	
+	catch( Exception e ) {System.out.println("servlet failed in: viewData.main second try   "+e.getMessage());}
+
+	
+}
+
+/**
+*  If the download page is not requested then request then show the summary
+*  of all the search results
+*/
+else {
+//call the utility class which holds the introduction html as a string that can
+//be returned to the browser
 	servletUtility k =new servletUtility();  
 	k.getViewMethod();
 	out.println(k.outString);
@@ -57,13 +109,55 @@ PrintWriter out = response.getWriter();
 		String transformedString[]=u.outString;  // the string from the utility.convertStringWriter
 		int transformedStringNum=u.outStringNum; // the number of vertical elements contained in the string array
 
-		//print the list of plots to the browser
+		//print the list of plots to the browser as a summary and then
+		//read the further requests such as expanded species, or download
 		for (int ii=0;ii<u.outStringNum; ii++) {
-			out.println(u.outString[ii]+"<br>");
+			out.println(u.outString[ii]+"");
 		}
+	
+		
+		
 	}  //end try
 	catch( Exception e ) {System.out.println("servlet failed in: viewData   "+e.getMessage());}
+
+	/**
+	* This try block retrieves data back from the summary page of the
+	* result set from the plotQuery data and determines which plots should be
+	* downloaded
+	*/
+		
+	try {
+				
+		//use this function to figure out the type and number of inputs
+		//it is a temporary function - comment out later
+		Enumeration enum =request.getParameterNames();
+		while (enum.hasMoreElements()) {
+			String name = (String) enum.nextElement();
+			String values[] = request.getParameterValues(name);
+			if (values != null) {
+				for (int i=0; i<values.length; i++) {
+					out.println(name +" ("+ i + "): "
+					+values[i]+"; ");
+				}
+			}
+		}
+	/*	
+	String buttonAction= request.getParameter("formatType");
+	String downLoadPlot = request.getParameter("myform");
 	
+	String listInput = request.getParameter("list");  //plot numbers
+	out.println("buttonAction: " +buttonAction+"<br>");
+	out.println("downLoadPlot: " +downLoadPlot+"<br>");
+	out.println("listInput: " +listInput+"<br>");
+	*/
+	
+	
+	
+	
+	}  //end try
+	catch( Exception e ) {System.out.println("servlet failed in: viewData.main second try   "+e.getMessage());}
+
+} //end else
 
 }
 
