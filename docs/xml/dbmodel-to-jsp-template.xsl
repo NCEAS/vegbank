@@ -2,8 +2,8 @@
 <xsl:stylesheet version="1.0"  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:vegbank="http://vegbank.org" xmlns:logic="http://vegbank.org" xmlns:bean="http://vegbank.org" >
   <xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
-  <xsl:param name="view">Summary</xsl:param>
-  <xsl:param name="oneTbl">namedPlace</xsl:param>
+  <xsl:param name="view">Detail</xsl:param>
+  <xsl:param name="oneTbl">referenceParty</xsl:param>
   <xsl:param name="detailAdd"></xsl:param>
   <xsl:param name="more">no</xsl:param><!-- yes if you want a link to details for each summary row -->
   <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
@@ -19,7 +19,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
       <xsl:comment> ____________________________START  SQL for:  <xsl:value-of select="entityName"/> _______________________________________ 
 <xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>=SELECT <xsl:for-each select="attribute">
           <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>
-          <xsl:if test="string-length(attFKTranslationSQL)&gt;0">, <xsl:value-of select="attFKTranslationSQL"/> AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_transl </xsl:if>
+          <xsl:if test="string-length(attFKTranslationSQL)&gt;0">, <xsl:value-of select="attFKTranslationSQL"/> AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_transl</xsl:if>
           <xsl:if test="position()!=last()">,</xsl:if> \
       </xsl:for-each>           FROM <xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>
       </xsl:comment>
@@ -38,7 +38,9 @@ Copy from after the START: comment to the END: comment for contents of the file!
         <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
 
       </HEAD>
-      <body>@vegbank_header_html_normal@
+      <body>
+      @vegbank_header_html_normal@
+      @possibly_center@
         <h2>View VegBank <xsl:value-of select="entityLabel"/>s</h2>
         <xsl:comment>Get standard declaration of rowClass as string: </xsl:comment>
         
@@ -112,9 +114,9 @@ Copy from after the START: comment to the END: comment for contents of the file!
   
   <vegbank:get id="{$subtbl}" select="{$subtbl}" beanName="map"  pager="false" where="where_{$currEnt}_pk" wparam="{$currEnt}_pk" perPage="-1"/>
   <table class="leftrightborders" cellpadding="2" >
-<tr><th colspan="9"><xsl:value-of select="$detailAdd"/>s:</th></tr>  
+<tr><th colspan="9"><xsl:call-template name="getEntLabel"><xsl:with-param name="ent" select="$subtbl" /></xsl:call-template>s:</th></tr>  
 <logic:empty name="{$subtbl}-BEANLIST">
-<tr><td  class="@nextcolorclass@">  Sorry, no <xsl:value-of select="$subtbl"/>s found.</td></tr>
+<tr><td  class="@nextcolorclass@">  Sorry, no <xsl:call-template name="getEntLabel"><xsl:with-param name="ent" select="$subtbl" /></xsl:call-template>s found.</td></tr>
 </logic:empty>
 
 <logic:notEmpty name="{$subtbl}-BEANLIST">
@@ -174,4 +176,8 @@ Copy from after the START: comment to the END: comment for contents of the file!
    </xsl:comment>
  </xsl:template>
  <xsl:template name="htmlbreak" ><!-- not needed anymore --></xsl:template>
+<xsl:template name="getEntLabel">
+  <xsl:param name="ent" />
+  <xsl:value-of select="/dataModel/entity[translate(entityName,$alphahigh,$alphalow)=translate($ent,$alphahigh,$alphalow)]/entityLabel" />
+</xsl:template>
 </xsl:stylesheet>
