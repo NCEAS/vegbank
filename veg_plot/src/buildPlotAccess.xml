@@ -34,8 +34,7 @@
 	<filter token="port" value="1521" />
 	<filter token="driverType" value="thin" />
 	<filter token="driverClass" value="org.enhydra.instantdb.jdbc.idbDriver" />
-	<filter token="connectString" value="jdbc:idb:C://cygwin/home/harris/development/veg_plot/lib/idb/Examples/sample.prp
-" />
+	<filter token="connectString" value="jdbc:idb:../data/nvc.prp" />
 	<filter token="databaseName" value="nvc" />
 	<filter token="insert.minConnections" value="8" />
 	<filter token="insert.maxConnections" value="20" />
@@ -47,8 +46,7 @@
 	
 	
 	
-	
-	<!--
+<!--
 	<filter token="databaseType" value="postgresql" />
 	<filter token="user" value="datauser" />
   <filter token="password" value="pass" />
@@ -64,7 +62,7 @@
 	<filter token="maxConnectionUses" value="100" />
 	<filter token="resetTime" value="0.01" />
 	<filter token="logFile" value="connectionPool.log" />
-	-->										
+-->										
 
 
 <!--
@@ -92,6 +90,7 @@
 	<property name="build_src" value="${build}/src" />
 	<property name="build_bin" value="${build}/bin" />
 	<property name="build_sql" value="${build}/sql" />
+	<property name="build_data" value="${build}/data" />
 	
 	<property name="dist" value="dist" />
 	<property name="release" value="development"/>
@@ -120,6 +119,7 @@
 	<mkdir dir="${build_sql}" />
 	<mkdir dir="${build_xml}" />
 	<mkdir dir="${build_bin}" />
+	<mkdir dir="${build_data}" />
 	
 	<copydir src="${src}" 
 		dest="${build_src}" 
