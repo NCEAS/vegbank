@@ -8475,6 +8475,21 @@ conditions may change between resampling events.
       </attForms>
       <update>1.0.2</update>
     </attribute>
+    <attribute>
+      <attName>partyPublic</attName>
+      <attLabel>Party is public?</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Boolean</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This party may be displayed on the website.  Not used for parties that are not contributing anywhere and have only signed up as users.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>partyMember</entityName>
