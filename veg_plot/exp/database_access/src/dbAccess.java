@@ -6,6 +6,17 @@ import java.util.*;
 
 import databaseAccess.*;
 
+//this is currently in the datatranslator package
+//the package name should be changed
+import PlotDataSource;
+
+//this is currently in the datatranslator package but
+//will be moved
+import PlotXmlWriterV2;
+
+
+ 
+
 /**
  * This class will take an xml file containg either query attributes
  * or plot data and depending on the document type, either
@@ -30,6 +41,10 @@ import databaseAccess.*;
  * at this point there is no update capabilities, although it will
  * allow the user to update the database, based on a plot xml 
  * document containing only partial data from a plot 
+ *
+ *  '$Author: harris $'
+ *  '$Date: 2002-01-18 00:21:49 $'
+ * 	'$Revision: 1.2 $'
  */
 
 
@@ -44,35 +59,43 @@ static LocalDbConnectionBroker lb;
 public String queryOutput[] = new String[10000];  //the output from query
 public int queryOutputNum; //the number of output rows from the query
 
-
-/**
- * main method -- really for testing the db
- * access module
- *
- */
-
-public static void main(String[] args) 
-{
-	if (args.length != 3) 
+ /**
+  * constructor method
+	*/
+	public dbAccess()
 	{
-		System.out.println("Usage: java dbAccess  [XML] [XSL] [action] \n"
-			+"version: Feb 2001 \n \n"
-			+"actions:  query, compoundQuery, extendedQuery, insert, insertPlot "
-			+"verify, simpleCommunityQuery");
-			System.out.println("descriptions of input parameters to come soon!");
-			System.exit(0);
+		System.out.println("init: databaseAccess.dbAccess ");
 	}
-	//input xml file for loading to the database
-	String inputXml=args[0];
-	String inputXSL=args[1];
-	String action=args[2];
 
-	//call the public method
-
-	dbAccess g =new dbAccess();  
-	g.accessDatabase(inputXml, inputXSL, action);
-}
-
+ /**
+  * this method will take a plot id number used in vegbank and a
+	* filename to write all the plot data associated with that plot 
+	* into an xml document -- this method is much newer than the
+	* databaseAccess method, and should be used when the explicit 
+	* desire is to write a single plot to an xml doc
+	*/
+	public boolean writeSingleVegBankPlot(String plotId, String outFile)
+	{
+		try
+		{
+			//convert the input integer to a string so that 
+			//it can be passed to the xml writer
+//			String plot = ""+plotId;
+			//this class allows access to the vegbank databases
+			//so the plugin will always be the same 
+			String pluginClass = "VegBankDataSourcePlugin";
+			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
+			writer.writeSinglePlot(plotId, outFile);
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+			return(false);
+		}
+		return(true);
+	}
 
 
 /**
@@ -85,7 +108,7 @@ public static void main(String[] args)
  * @param action - database action
  *
  */
-public void accessDatabase (String inputXml, String inputXSL, String action) 
+public void accessDatabase(String inputXml, String inputXSL, String action) 
 {
 	try 
 	{
@@ -202,6 +225,37 @@ public void accessDatabase (String inputXml, String inputXSL, String action)
 		e.printStackTrace();
 	}
 }
+
+
+
+/**
+ * main method -- really for testing the db
+ * access module
+ *
+ */
+public static void main(String[] args) 
+{
+	if (args.length != 3) 
+	{
+		System.out.println("Usage: java dbAccess  [XML] [XSL] [action] \n"
+			+"version: Feb 2001 \n \n"
+			+"actions:  query, compoundQuery, extendedQuery, insert, insertPlot "
+			+"verify, simpleCommunityQuery");
+			System.out.println("descriptions of input parameters to come soon!");
+			System.exit(0);
+	}
+	//input xml file for loading to the database
+	String inputXml=args[0];
+	String inputXSL=args[1];
+	String action=args[2];
+
+	//call the public method
+
+	dbAccess g =new dbAccess();  
+	g.accessDatabase(inputXml, inputXSL, action);
+}
+
+
 
 }
 
