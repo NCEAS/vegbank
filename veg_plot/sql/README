@@ -1,4 +1,0 @@
-The sql files that are to be used to create the vegbank user database are:
-
-create_veguser_tables.sql
-create-datafile-table.sql
