@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *   '$Date: 2003-08-04 00:37:11 $'
- *   '$Revision: 1.2 $'
+ *   '$Date: 2003-08-10 22:44:50 $'
+ *   '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,9 @@ import electric.registry.Registry;
 import electric.registry.RegistryException;
 import examples.publish.IExchange;
 
+/** 
+ * Class example of connecting to the VegBank web services. 
+ */
 public class VegServiceInvoker 
   {
   public static void main( String[] args )

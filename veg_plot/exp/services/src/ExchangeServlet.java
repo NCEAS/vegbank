@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *   '$Date: 2003-08-04 00:37:11 $'
- *   '$Revision: 1.5 $'
+ *   '$Date: 2003-08-10 22:44:50 $'
+ *   '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,10 @@ package vegbank.publish;
 import java.lang.*;
 import java.io.*;
 import java.text.*;
-import java.util.*;
+import java.util.ResourceBundle;
+import java.util.Vector;
+import java.util.Hashtable;
+import java.util.Enumeration;
 import java.sql.*;
 
 import electric.registry.Registry;
@@ -49,8 +52,8 @@ import javax.servlet.http.*;
  * interested parties can better understand how to integrate vegbank data into
  * their applications.  This source code is derived from similar examples at:
  *
- * http://www.themindelectric.com
- * http://arcweb.esri.com/arcwebonline/
+ * http://www.themindelectric.com <br>
+ * http://arcweb.esri.com/arcwebonline <br>
  *
  * <p>Valid parameters are:<br>
  * querytoken=querystring -- querytoken is a single querystring for which a
@@ -64,40 +67,87 @@ public class ExchangeServlet extends HttpServlet
   private String STYLESHEET; //url of the css stylesheet
   private String IMAGE_URL; // the location to the image directory
   private String VEGBANK_SERVICE_URL; // the url of the vegbank wsdl
+  private ResourceBundle resources;
+  
   public void init(ServletConfig config) throws ServletException 
   {
     System.out.println("ExchangeServlet > init");
     
-    GAZATEER_SERVLET = "http://dredge:8000/mapplotter/servlet/mapplotter";
-    STYLESHEET = "http://numericsolutions.com/includes/default.css";
-    IMAGE_URL = "http://numericsolutions.com/images/";
-    VEGBANK_SERVICE_URL = "http://localhost:8004/vegbank/exchange.wsdl";
+    resources = ResourceBundle.getBundle("vegbankservice");
+    GAZATEER_SERVLET = resources.getString("GAZATEER_SERVLET");
+    STYLESHEET =resources.getString("STYLESHEET");
+    IMAGE_URL = resources.getString("IMAGE_URL");
+    VEGBANK_SERVICE_URL = resources.getString("VEGBANK_SERVICE_URL");
+    
+    System.out.println("ExchangeServlet > GAZATEER_SERVLET: " + GAZATEER_SERVLET);
+    System.out.println("ExchangeServlet > STYLESHEET: " + STYLESHEET);
+    System.out.println("ExchangeServlet > IMAGE_URL: " + IMAGE_URL);
+    System.out.println("ExchangeServlet > VEGBANK_SERVICE_URL: " + VEGBANK_SERVICE_URL);
+
     super.init(config);
   }
 		
 	/**
 	 * handles the doGet method request from the HTTP client
-   * @param - request the HttpServletRequest object 
-   * @param - response the HttpServletResponse object
+   * the API supported by this servlet is as follows:
+   *
+   * querytoken -- a string representation of a key-word for querying vegbank,
+   * whereby the plot accession numbers are returned
+   *
+   * lookupnearestplotlocation -- a plot accession id which will be used to look
+   * up the nearest location from a gazateer database
+   * 
+   * action=lookupnearestlocation -- returns the nearest place for the
+   * corresponding parameters:
+   *  latitude -- the latitude in geocoordinates
+   *  longiude -- the longitude in geocoordinates
+   *
+   *  @param - request the HttpServletRequest object 
+   *  @param - response the HttpServletResponse object
 	 */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	{
 		try
 		{		
 			PrintWriter out = response.getWriter();
-			Hashtable h1 = this.parameterHash(request);
-			String queryString = (String)h1.get("querytoken");
-			System.out.println("ExchangeServlet > query string: " + queryString);
-			
-    	// bind to web service whose WSDL is at the specified URL
-    	//String url = "http://localhost:8004/vegbank/exchange.wsdl";
-			System.out.println("ExchangeServlet > binding to: " + VEGBANK_SERVICE_URL);
-    	ExchangeInterface exchange = (ExchangeInterface)Registry.bind(url, ExchangeInterface.class );
-
-    	// invoke the web service as if it was a local java object
-    	Vector v  = exchange.getPlotAccessionNumber(queryString);
-			System.out.println("ExchangeServlet > service return vector size: " + v.size() );
-	 		this.printResults(v, out);
+			Hashtable h = this.parameterHash(request);
+			String queryString = (String)h.get("querytoken");
+			String lookupNearestPlotLocation = (String)h.get("lookupnearestplotlocation");
+			String action = (String)h.get("action");
+      if (lookupNearestPlotLocation == null && queryString == null && action ==
+      null) {
+        this.handleEmptyRequest(out);
+      }
+      else
+      {
+        // bind to web service whose WSDL is at the specified URL
+			  System.out.println("ExchangeServlet > binding to: " + VEGBANK_SERVICE_URL);
+    	  ExchangeInterface exchange = (ExchangeInterface)Registry.bind(VEGBANK_SERVICE_URL, ExchangeInterface.class );
+        
+        if ( queryString != null ) {
+			    System.out.println("ExchangeServlet > query string: " + queryString);
+    	    // invoke the web service as if it was a local java object
+    	    Vector v  = exchange.getPlotAccessionNumber(queryString);
+			    System.out.println("ExchangeServlet > service return vector size: " + v.size() );
+	 		    this.printQueryResults(v, out); 
+        }
+        else if ( lookupNearestPlotLocation  != null ) {
+          System.out.println("ExchangeServlet > lookupNearestPlotLocation: " + lookupNearestPlotLocation);
+          Hashtable nearestPlace = exchange.getNearestPlaceForPlot(lookupNearestPlotLocation);
+          this.printPlaceQueryResults( nearestPlace, out);
+          //System.out.println("ExchangeServlet > place: " + nearestPlace);
+        }
+        else if ( action != null ) {
+          System.out.println("ExchangeServlet > action: " + action);
+          double lat = (new Double((String)h.get("latitude"))).doubleValue();
+          double lon = (new Double((String)h.get("longitude"))).doubleValue();
+          Hashtable nearestPlace =exchange.getNearestPlaceForLocation(lat, lon);        
+          this.printPlaceQueryResults( nearestPlace, out);
+        }
+        else {
+          this.handleEmptyRequest(out);
+        }
+      }
     }
 		catch (Exception e)
 		{
@@ -105,7 +155,32 @@ public class ExchangeServlet extends HttpServlet
       e.printStackTrace();
 		}
 	}
+
+  /**
+   * method that prints out to the browser an html fragment containing
+   * information corresponding to a 'place' returned from the gazetteer-related
+   * services 
+   * @param place -- the hashtable representation of a place -- see the
+   * GazetterInterface class
+   * @param out -- the printwriter object
+   */
+   private void printPlaceQueryResults(Hashtable place, PrintWriter out) {
+    out.println("<html>");
+    out.println("<br>" + place + "</br>");
+    out.println("</html>");
+   }
+
 	
+  /**
+   * method that is used to handle the case where the request object does not
+   * correspond to the correct api defined in the header for the doGet method
+   * @param out -- the printwriter object
+   */
+   private void handleEmptyRequest(PrintWriter out) {
+    out.println("<html>");
+    out.println("query object does not have the correct parameters");
+    out.println("</html>");
+   }
 
   /**
    * method to print the attributes returned from the web service as an html
@@ -113,7 +188,7 @@ public class ExchangeServlet extends HttpServlet
    * @param v -- the vector containing the resultant plots
    * @param out -- the PrintWriter object to write to the browser
 	 */
-  private void printResults(Vector v, PrintWriter out) {
+  private void printQueryResults(Vector v, PrintWriter out) {
     StringBuffer sb = new StringBuffer();
     sb.append("<html>");
     sb.append("<head>");
@@ -157,6 +232,8 @@ public class ExchangeServlet extends HttpServlet
 	 * method to stick the parameters from the client 
 	 * into a hashtable and then pass it back to the 
 	 * calling method
+   * @param request -- the http request object passed to the servlet
+   * @returns -- a hashtable with the name value pairs in the request
 	 */
 	public Hashtable parameterHash (HttpServletRequest request) 
 	{
@@ -179,9 +256,8 @@ public class ExchangeServlet extends HttpServlet
 		}
 		catch( Exception e ) 
 		{
-			System.out.println("** failed in:  "
-			+" first try - reading parameters "
-			+e.getMessage());
+			System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
 		}
 		return(params);
 	}

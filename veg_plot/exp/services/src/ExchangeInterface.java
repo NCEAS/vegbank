@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *   '$Date: 2003-08-04 00:37:11 $'
- *   '$Revision: 1.2 $'
+ *   '$Date: 2003-08-10 22:44:50 $'
+ *   '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,19 +32,43 @@ import java.text.*;
 import java.util.*;
 import java.sql.*;
 
-public interface ExchangeInterface
-  {
-		/**
-		 * method that takes a plant name and returns
-		 * a summary of all the plots in vegbank that 
-		 * contain that plant
-		 *
-		 * @param plantName -- the name of the plant 
-		 * @return vector containing a hashtable -- with the following elements:
-		 * 1] accessionNumber
-		 * 2] latitude
-		 * 3] longitude
-		 * 4] state
-		 */
-		Vector getPlotAccessionNumber( String plantName );
-  }
+/**
+ * Interface which defines all the methods which should be exposed via the web
+ * services application server (GLUE -- http://themindelectric.com/).  These
+ * functions are relevant to the ecological community.
+ */
+public interface ExchangeInterface {
+		 /**
+		  * method that takes a plant name and returns
+		  * a summary of all the plots in vegbank that 
+		  * contain that plant
+		  * @param plantName -- the name of the plant 
+		  * @return vector containing a hashtable -- with the following elements:
+		  * 1] accessionNumber
+		  * 2] latitude
+		  * 3] longitude
+		  * 4] state
+		  */
+      Vector getPlotAccessionNumber( String plantName );
+
+     /**
+      * method that takes as input a plot accession number and returns the
+      * nearest place registered in a gazateer 
+      * @param plotId -- the plot accession number
+      * @return place -- a hashtable representation of a place object, for
+      * details on the keys stored in the place object see the
+      * GazetteerInterface class.
+      */
+      Hashtable getNearestPlaceForPlot(String plotId);
+
+     /**
+      * method that takes as input the geocoodinates of a location and returns
+      * the nearest place registered in a gazetteer
+      * @param latitude -- the double value for a latitude 
+      * @param longitude -- the double value for a longitude
+      * @return place -- a hashtable representation of a place object, for
+      * details on the keys stored in the place object see the
+      * GazetteerInterface class.
+      */
+      Hashtable getNearestPlaceForLocation(double latitude, double longitude);
+}

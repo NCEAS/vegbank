@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *   '$Date: 2003-08-04 00:37:11 $'
- *   '$Revision: 1.2 $'
+ *   '$Date: 2003-08-10 22:44:50 $'
+ *   '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,15 +29,21 @@ package vegbank.publish;
 import electric.registry.Registry;
 import electric.server.http.HTTP;
 
+/**
+ * Application to start the GLUE (www.themindelectric.com) server, making the
+ * functions defined in the ExchangeInterface available, and to generate the
+ * WSDL at: <br>
+ * http://localhost:8004/vegbank/exchange.wsdl
+ */
 public class Publish
   {
   public static void main( String[] args )
     throws Exception
     {
-    // start a web server on port 8004, accept messages via /glue
-    HTTP.startup( "http://localhost:8004/vegbank" );
+      // start a web server on port 8004, accept messages via /glue
+      HTTP.startup( "http://localhost:8004/vegbank" );
 
-    // publish an instance of Exchange
-    Registry.publish( "exchange", new Exchange() );
+      // publish an instance of Exchange
+      Registry.publish( "exchange", new Exchange() );
     }
   }
