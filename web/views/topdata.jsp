@@ -67,9 +67,12 @@
 
  
  
- </TD><TD>
- <bean:include id="mapfile" href="@forms_link@plot-map-northamerica-sml.jsp" />
- <bean:write name="mapfile" filter="false" />
+ </TD>
+ <TD>
+   <%@ include file="../includes/plot-map-northamerica-sml.jsp" %>
+ </TD>
+ <TD>
+  <%@ include file="../includes/plot-map-northamerica-key.jsp" %>
  </TD></TR>
  </TABLE>
  </logic:notEmpty> 

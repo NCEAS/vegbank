@@ -1,5 +1,3 @@
-
-
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
@@ -75,7 +73,9 @@
    </table>
  </logic:notEmpty> 
   
-<%@ include file="plot-map-northamerica.html" %>
+ <%@ include file="../includes/plot-map-northamerica-sml.jsp" %>
+  
+  <%@ include file="../includes/plot-map-northamerica-key.jsp" %>
 
   
 
