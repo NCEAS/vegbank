@@ -2,20 +2,31 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:vegbank="http://vegbank.org" xmlns:logic="http://vegbank.org" xmlns:bean="http://vegbank.org">
 <xsl:output method="html" />
   <xsl:param name="view">Summary</xsl:param>
-  <xsl:param name="oneTbl">observation</xsl:param>
+  <xsl:param name="oneTbl">userCertification</xsl:param>
  <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
   <xsl:param name="alphahigh">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:param>
 <xsl:template match="entity">
 <xsl:if test="string-length($oneTbl)&lt;1 or entityName=$oneTbl" >
 <br/><br/><br/><br/>
+
+
+
+<xsl:comment> ____________________________START  SQL for:  <xsl:value-of select="entityName" /> _______________________________________ 
+SELECT <xsl:for-each select="attribute"><xsl:value-of select="translate(attName,$alphahigh,$alphalow)" /><xsl:if test="position()!=last()">,</xsl:if> \
+</xsl:for-each>FROM <xsl:value-of select="translate(entityName,$alphahigh,$alphalow)" />
+</xsl:comment> 
+
+
 <xsl:comment> ____________________________START:  <xsl:value-of select="entityName" /> _______________________________________ 
 </xsl:comment> 
+
+
 @stdvegbankget_jspdeclarations@
 
 
 <HEAD>@defaultHeadToken@
  
-<TITLE>View Roles</TITLE>
+<TITLE>View Data in VegBank : <xsl:value-of select="entityName" />(s)</TITLE>
 <link rel="stylesheet" href="@stylesheet@" type="text/css" />
 
 
