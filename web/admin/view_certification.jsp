@@ -5,15 +5,15 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <!-- 
-  *   '$Id: view_certification.jsp,v 1.6 2004-04-30 13:02:57 anderson Exp $ '
+  *   '$Id: view_certification.jsp,v 1.7 2004-06-29 06:48:00 anderson Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-04-30 13:02:57 $'
-  *  '$Revision: 1.6 $'
+  *      '$Date: 2004-06-29 06:48:00 $'
+  *  '$Revision: 1.7 $'
   *
   *
   -->
@@ -434,6 +434,8 @@
         <br/>
 		&nbsp;
 		<a href="#top">Jump to top of page</a>
+		&nbsp; &nbsp; &nbsp; &nbsp; 
+        <html:cancel accesskey="c" value="cancel"/>
 
       </td>
     </tr>
