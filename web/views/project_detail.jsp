@@ -34,7 +34,7 @@
 		   <logic:notEmpty name="onerowofproject" property="countobs">
 		   
 		   <logic:notEqual name="onerowofproject" property="countobs" value="0">
-		   <a href="@get_link@simple/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="onerowofproject" property="countobs" /></a>
+		   <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="onerowofproject" property="countobs" /></a>
 		   </logic:notEqual>
 		   <logic:equal name="onerowofproject" property="countobs" value="0">0</logic:equal>
 		   </logic:notEmpty>
@@ -50,7 +50,7 @@
 		  		   <logic:empty name="classobservation-BEAN">0</logic:empty>
 		  		   <logic:notEmpty name="classobservation-BEAN">
 		  		   <logic:notEqual name="classobservation-BEAN" property="count_observations" value="0">
-		  		   <a href="@get_link@simple/observation/<bean:write name='project_pk' />?where=where_project_pk_and_observationclassified"><bean:write name="classobservation-BEAN" property="count_observations" /></a>
+		  		   <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk_and_observationclassified"><bean:write name="classobservation-BEAN" property="count_observations" /></a>
 		  		   </logic:notEqual>
                    <!-- write 0 with no link -->
                    <logic:equal name="classobservation-BEAN" property="count_observations" value="0">0</logic:equal>
@@ -71,7 +71,7 @@
 			   	 <!-- add semicolon before states that aren't the first one -->
 		        </logic:notEqual>
 		         <!-- loop over list of states -->
-		         <a href='@get_link@simple/observation/<bean:write name="project_pk" />;<bean:write name="oneplace" property="namedplace_id" />?where=where_project_place'><bean:write name="oneplace" property="region_name"/>
+		         <a href='@get_link@summary/observation/<bean:write name="project_pk" />;<bean:write name="oneplace" property="namedplace_id" />?where=where_project_place'><bean:write name="oneplace" property="region_name"/>
 		         (<bean:write name="oneplace" property="count_obs"/>)</a>
 		       </logic:iterate>
 		    

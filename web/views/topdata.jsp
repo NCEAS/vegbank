@@ -108,7 +108,7 @@
       <logic:iterate id="onerowofproject" name="project-BEANLIST">
         <tr  class='@nextcolorclass@'>
           <td><a href='@get_link@std/project/<bean:write name="onerowofproject" property="project_id" />'><bean:write name="onerowofproject" property="projectname" /></a></td>
-          <td class="numeric"><a href="@get_link@simple/observation/<bean:write name='onerowofproject' property='project_id' />?where=where_project_pk"><bean:write name="onerowofproject" property="countobs" /></a></td>
+          <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofproject' property='project_id' />?where=where_project_pk"><bean:write name="onerowofproject" property="countobs" /></a></td>
         </tr>
       </logic:iterate>
       
@@ -134,7 +134,7 @@
       <logic:iterate id="onerowofbrowsecommonplants" name="browsecommonplants-BEANLIST">
 	          <tr class='@nextcolorclass@'>
 	            <td><a href="@get_link@std/plantconcept/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />"><bean:write name="onerowofbrowsecommonplants" property="plantconcept_id_transl" /></td>
-	            <td class="numeric"><a href="@get_link@simple/observation/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />?where=where_plantconcept_observation_complex"><bean:write name="onerowofbrowsecommonplants" property="countobs" /></a></td>
+	            <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />?where=where_plantconcept_observation_complex"><bean:write name="onerowofbrowsecommonplants" property="countobs" /></a></td>
 	          </tr>
       </logic:iterate>
      
@@ -159,7 +159,7 @@
          <logic:iterate id="onerowofbrowsecommoncomms" name="browsecommoncomms-BEANLIST">
    	          <tr class='@nextcolorclass@'>
    	            <td><a href="@get_link@std/commconcept/<bean:write name='onerowofbrowsecommoncomms' property='commconcept_id' />"><bean:write name="onerowofbrowsecommoncomms" property="commconcept_id_transl" /></a></td>
-   	            <td class="numeric"><a href="@get_link@simple/observation/<bean:write name='onerowofbrowsecommoncomms' property='commconcept_id' />?where=where_commconcept_observation_complex"><bean:write name="onerowofbrowsecommoncomms" property="countobs" /></a></td>
+   	            <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofbrowsecommoncomms' property='commconcept_id' />?where=where_commconcept_observation_complex"><bean:write name="onerowofbrowsecommoncomms" property="countobs" /></a></td>
    	          </tr>
          </logic:iterate>
         

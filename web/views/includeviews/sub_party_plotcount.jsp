@@ -32,7 +32,7 @@
 </logic:notEqual>
 <td class="numeric">
   <logic:notEmpty name="onerowofbrowseparty" property="countallcontrib">
-    <a href='@get_link@simple/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_allparty' ><bean:write name="onerowofbrowseparty" property="countallcontrib" /></a>
+    <a href='@get_link@summary/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_allparty' ><bean:write name="onerowofbrowseparty" property="countallcontrib" /></a>
   </logic:notEmpty>
   <logic:empty name="onerowofbrowseparty" property="countallcontrib">
     0
@@ -45,7 +45,7 @@
 
 <td class="numeric">
   <logic:notEmpty name="onerowofbrowseparty" property="countobscontrib">
-    <a href='@get_link@simple/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_obscontrib' ><bean:write name="onerowofbrowseparty" property="countobscontrib" /></a>
+    <a href='@get_link@summary/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_obscontrib' ><bean:write name="onerowofbrowseparty" property="countobscontrib" /></a>
   </logic:notEmpty>
   <logic:empty name="onerowofbrowseparty" property="countobscontrib">
     0
@@ -54,7 +54,7 @@
 
 <td class="numeric">
   <logic:notEmpty name="onerowofbrowseparty" property="countclasscontrib">
-    <a href='@get_link@simple/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_classcontrib' ><bean:write name="onerowofbrowseparty" property="countclasscontrib" /></a>
+    <a href='@get_link@summary/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_classcontrib' ><bean:write name="onerowofbrowseparty" property="countclasscontrib" /></a>
   </logic:notEmpty>
   <logic:empty name="onerowofbrowseparty" property="countclasscontrib">
     0
@@ -63,7 +63,7 @@
 
 <td class="numeric">
   <logic:notEmpty name="onerowofbrowseparty" property="countprojectcontrib">
-    <a href='@get_link@simple/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_projcontrib' ><bean:write name="onerowofbrowseparty" property="countprojectcontrib" /></a>
+    <a href='@get_link@summary/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_projcontrib' ><bean:write name="onerowofbrowseparty" property="countprojectcontrib" /></a>
   </logic:notEmpty>
   <logic:empty name="onerowofbrowseparty" property="countprojectcontrib">
     0
