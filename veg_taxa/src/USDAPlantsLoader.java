@@ -1,3 +1,27 @@
+/**
+ *  '$RCSfile: USDAPlantsLoader.java,v $'
+ *    Authors: @authors@
+ *    Release: @release@
+ *
+ *   '$Author: harris $'
+ *     '$Date: 2002-02-15 19:02:41 $'
+ * '$Revision: 1.3 $'
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 import java.io.IOException;
 import java.io.*;
 import java.util.*;
@@ -6,6 +30,10 @@ import org.apache.xalan.xslt.XSLTProcessorFactory;
 import org.apache.xalan.xslt.XSLTInputSource;
 import org.apache.xalan.xslt.XSLTResultTarget;
 import org.apache.xalan.xslt.XSLTProcessor;
+import java.lang.*;
+import java.text.*;
+import java.util.*;
+import java.sql.*;
 
 //next classes are for the database connectivity
 import LocalDbConnectionBroker.*;
@@ -24,36 +52,70 @@ import issueStatement.*;
  */
 
 
-public class USDAPlantsLoader {
+public class USDAPlantsLoader 
+{
 
-public String styleSheet="../lib/plantsToNVC.xsl";
-public String attributeFile="attFile.txt";
-public Vector fileVector = new Vector();
-public Hashtable attributeHash = new Hashtable();
-public Hashtable constraintHash = new Hashtable();
+	public String styleSheet="../lib/plantsToNVC.xsl";
+	public String attributeFile="attFile.txt";
+	public Vector fileVector = new Vector();
+	public Hashtable attributeHash = new Hashtable();
+	public Hashtable constraintHash = new Hashtable();
 
-public String startDate = "01-JAN-96";
-public String stopDate = "01-JAN-22";
-public String partyName = "USDA-PLANTS";
-public String reference = "PLANTS96";
+	public String startDate = "01-JAN-96";
+	public String stopDate = "01-JAN-22";
+	public String partyName = "USDA-PLANTS";
+	public String reference = "PLANTS96";
 
-//constructor -- define as static the LocalDbConnectionBroker 
-//so that methods called by this class can access the 'local' 
-//pool of database connections
-static LocalDbConnectionBroker lb;
+	//constructor -- define as static the LocalDbConnectionBroker 
+	//so that methods called by this class can access the 'local' 
+	//pool of database connections
+	static LocalDbConnectionBroker lb;
 
-
+	Connection conn = null;
+	
+	//constructor method
+	public USDAPlantsLoader()
+	{
+		conn = this.getConnection();
+	}
+	
+	
+	
+	/**
+	* method that will return a database connection for use with the database
+	*/
+	private Connection getConnection()
+	{
+		Connection c = null;
+		try 
+ 		{
+			Class.forName("org.postgresql.Driver");
+			//the framework database
+			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/nvc", "datauser", "");
+		}
+		catch ( Exception e )
+		{
+			System.out.println("failed making db connection: "
+			+"dbConnect.makeConnection: "+e.getMessage());
+			e.printStackTrace();
+		}
+			return(c);
+	}
+	
 
 /**
  * Main method to run the Legacy Data Wizard requires only the xml file that
  * defines the relationship between the files comprising the data package
  */
-public static void main(String[] args) {
-	if (args.length != 1) {
+public static void main(String[] args) 
+{
+	if (args.length != 1) 
+	{
 		System.out.println("Usage: java USDAPlantsLoader  [XML] \n");
 		System.exit(0);
 	}
-	else {
+	else 
+	{
 		String inputXml=null;
 		inputXml=args[0];
 		//call the method to convert the data package to xml
@@ -64,48 +126,34 @@ public static void main(String[] args) {
 
 /**
  * method that steps thru the processes associated with 
- * transforming and loading the itis xml data
+ * transforming and loading the usda xml data
+ *
  * @param inputXml
  */
 public void transformXmlData (String inputXml) 
 {
-	try {
-		System.out.println(inputXml);
+	try 
+	{
+		System.out.println("USDAPlantsLoader > infile: " + inputXml);
 	
-		//call the method to parse the xml file into appropriate attributes and
-		// store them in appropriate objects
-//		System.out.println(
-//			elementParser(
-//				transformToFile(inputXml)
-//			).toString()
-//		);
-		
 		//first initiate the connection pooling
 		lb.manageLocalDbConnectionBroker("initiate");
 		
 		//load new plant instances -- EXCLUDING THOSE WITH SYNONOMYS
-		loadPlantInstances(
-			elementParser(
-				transformToFile(inputXml)
-			)
-		);
+		loadPlantInstances(elementParser(transformToFile(inputXml)));
 		//purge the file vector
 		fileVector = new Vector();
 		
 		//load the plant INSTANCES WITH SYNONOMYS
-		loadPlantSynonym(
-			elementParser(
-				transformToFile(inputXml)
-			)
-		);
+		loadPlantSynonym(elementParser(transformToFile(inputXml)));
 		
 		//lastly destroy the connection pooling
 		lb.manageLocalDbConnectionBroker("destroy");
 		
 	}
-	catch( Exception e ) {
-		System.out.println(" failed in: USDAPlantsLoader.transformXMLData "
-		+e.getMessage() );
+	catch( Exception e ) 
+	{
+		System.out.println("Exception:  "	+ e.getMessage() );
 		e.printStackTrace();
 	}
 }
@@ -137,7 +185,6 @@ private Vector transformToFile(String inputXml)
 	String s=null;
 	while ((s=in.readLine()) != null) 
 	{
-//		System.out.println(s);
 		fileVector.addElement(s);
 	}
 	return(fileVector);
@@ -151,8 +198,10 @@ private Vector transformToFile(String inputXml)
  */	
 private void loadPlantSynonym(Hashtable plantsData)
 {
-	System.out.println("Size of plantsData hash: "+plantsData.size());
-	for (int i=0; i<plantsData.size(); i++) {
+	System.out.println("USDAPlantsLaoder > loading synonym ");
+	System.out.println("USDAPlantsLaoder > Size of plants hash: "+plantsData.size());
+	for (int i=0; i<plantsData.size(); i++) 
+	{
 		
 		//if there is a synonymy associated with this
 		//instance of a plant
@@ -198,7 +247,7 @@ private void loadSinglePlantSynonym(Hashtable singlePlantInstance)
 			//the synonymous name is the name that the concatenated 
 			//name is now known by
 			int plantConceptId = plantConceptKey(synonymousName);
-			System.out.println("KEY VAL for thet plant concept: "+plantConceptId);
+			System.out.println("USDAPlantsLaoder > ID plant concept: "+plantConceptId);
 		
 			int plantNameId = plantNameKey(concatenatedName);
 			
@@ -208,11 +257,11 @@ private void loadSinglePlantSynonym(Hashtable singlePlantInstance)
 			
 			//update the plantConceptStatus table
 			//with the status of "SYNONYM"
-	}
-	else 
-	{
-		System.out.println("instance with synonomy does not exist");
-	}
+		}
+		else 
+		{
+			System.out.println("USDAPlantsLaoder > synonomy does not exist");
+		}
 	}
 }
 
@@ -239,21 +288,20 @@ private int plantNameKey(String plantName)
 
 	if ( j.returnedValues.size() > 1 )
 	{
-		System.out.println("plantNameKey violation: there are more than one"
+		System.out.println("USDAPlantsLaoder > plantNameKey violation: there are more than one"
 		+" keys returned");
 	}
 	//if there are no returned results
 	else if ( j.returnedValues.size() == 0 )
 	{
-		System.out.println("no usage of "+plantName+" found in the palnt name table");
+		System.out.println("USDAPlantsLaoder > usage "+plantName+" as a plant name ");
 		return(0);
 	}
 	else 
 	{
 		//return the primary key value
-		plantNameId = Integer.parseInt(
-		j.returnedValues.elementAt(0).toString().replace('|', ' ').trim()
-		);
+		plantNameId = 
+		Integer.parseInt(j.returnedValues.elementAt(0).toString().replace('|', ' ').trim());
 	}
 	//System.out.println("####"+ plantNameId );
 	return(plantNameId);
@@ -324,13 +372,13 @@ private int plantConceptKey(String plantName)
 
 	if ( j.returnedValues.size() > 1 )
 	{
-		System.out.println("plantConceptKey violation: there are more than one"
+		System.out.println("USDAPlantsLoader > plantConceptKey violation:  more than one"
 		+" keys returned");
 	}
 	//if there are no returned results
 	else if ( j.returnedValues.size() == 0 )
 	{
-		System.out.println("no usage of "+plantName+" found in the concept table");
+		System.out.println("USDAPlantsLaoder > no  "+plantName+" found in the concept table");
 		return(0);
 	}
 	else 
@@ -368,13 +416,13 @@ private int plantUsageKey(String plantName)
 
 	if ( j.returnedValues.size() > 1 )
 	{
-		System.out.println("plantUsageKey violation: there are more than one"
+		System.out.println("USDAPlantsLoader > plantUsageKey violation: there are more than one"
 		+" keys returned");
 	}
 	//if there are no returned results
 	else if ( j.returnedValues.size() == 0 )
 	{
-		System.out.println("no usage of "+plantName+" found");
+		System.out.println("USDAPlantsLoader > no usage of "+plantName+" found");
 		return(0);
 	}
 	else 
@@ -401,10 +449,9 @@ private int plantUsageKey(String plantName)
 private void loadPlantInstances(Hashtable plantsData)
 {
 //System.out.println(plantsData.toString() );
-	for (int i=0; i<plantsData.size(); i++) {
-		loadSinglePlantInstance( 
-			extractSinglePlantInstance(plantsData, i)
-		);
+	for (int i=0; i<plantsData.size(); i++) 
+	{
+		loadSinglePlantInstance(extractSinglePlantInstance(plantsData, i));
 	}
 }
 
@@ -441,7 +488,8 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 		//if the plantname is not there then load it
 		if (plantNameExists(concatenatedName)==false)
 		{
-			System.out.println("VV>> Loading the first instance of a plant");
+			System.out.println("USDAPlantsLoader > first instance of plant name: "
+				+ concatenatedName );
 			nameId = loadPlantNameInstance(concatenatedName, commonName, plantCode);
 		}
 		//if the plant concept does not exist create an entry 
@@ -464,8 +512,8 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 		//usage to the usage table
 		if ( synonymousName.equals("nullToken") )
 		{
-			System.out.println("loading usage instance: \n plantNameId: "+nameId);
-			System.out.println("for plant name: "+concatenatedName);
+			System.out.println("USDAPlantsLoader > loading usage instance plantNameId: " + nameId);
+			System.out.println("USDAPlantsLoader > for plant name: "+ concatenatedName);
 			if (nameId > 0)
 			{
 			loadPlantUsageInstance(concatenatedName, nameId, conceptId, "PLANTS", itisUsage, 
@@ -473,7 +521,7 @@ private void loadSinglePlantInstance(Hashtable singlePlantInstance)
 			}
 			else 
 			{
-				System.out.println("FAILURE LOADING THE USAGE INSTANCE FOR A PLANT");
+				System.out.println("USDAPlantsLaoder > FAILURE LOADING THE USAGE INSTANCE FOR A PLANT");
 			}
 		}
 	}
@@ -596,51 +644,51 @@ private int loadPlantUsageInstance(String concatenatedName, int name_id,
 
 
 
-/**
- * method that loads a new instance of a 
- * plant concept then returns to the calling
- * method the primary key for that concept
- */	
-private int loadPlantConceptInstance(String concatenatedName, String classCode, 
+	/**
+ 	* method that loads a new instance of a 
+ 	* plant concept then returns to the calling
+ 	* method the primary key for that concept
+ 	*/	
+	private int loadPlantConceptInstance(String concatenatedName, String classCode, 
 	String classRank, String conceptRef, String startDate)
-{
-	String action="insert";
-	String insertString="insert into plantConcept";
-	String attributeString="plantName, classCode, classRank, conceptRef, startDate";
-	int inputValueNum=5;
-	String inputValue[]=new String[5];
-	inputValue[0]=""+concatenatedName;
-	inputValue[1]=""+classCode;
-	inputValue[2]=""+classRank;
-	inputValue[3]=""+conceptRef;
-	inputValue[4]=""+startDate;
-	
-
-	//get the valueString from the method
-	issueStatement k = new issueStatement();
-	k.getValueString(inputValueNum);
-	String valueString = k.outValueString;
-
-	issueStatement j = new issueStatement();
-	j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);
-	
-	
-	//now query for the primary key value for this plantname
-	action="select";
-	String statement="select plantconcept_id from plantconcept where plantname = '"
-		+concatenatedName+"'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantconcept_id";
-
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-	
-	int plantConceptId = Integer.parseInt(
-		j.returnedValues.elementAt(0).toString().replace('|', ' ').trim()
-		);
-	System.out.println("#### plant concept id "+ plantConceptId );
-	return(plantConceptId);
+	{
+		int plantConceptId = -999;
+		try
+		{
+			String s = "insert into PLANTCONCEPT (plantName, classCode, classRank, "
+			+"conceptRef, startDate)  values(?,?,?,?,?) ";
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			//bind the values
+			pstmt.setString(1, concatenatedName);
+			pstmt.setString(2, classCode);
+			pstmt.setString(3, classRank);
+			pstmt.setString(4, conceptRef);
+			pstmt.setString(5, startDate);
+			pstmt.execute();
+			pstmt.close();	
+		
+			//now get the associated primary key value
+			String s1 = "select plantconcept_id from plantconcept where plantname = '"
+			+concatenatedName+"'";
+			
+			PreparedStatement pstmt1 = conn.prepareStatement(s1);
+			ResultSet rs = pstmt1.executeQuery();
+			int cnt = 0;
+			while	( rs.next() )
+			{
+				cnt++;
+				plantConceptId = rs.getInt(1);
+				System.out.println("USDAPlantsLoader >>> plantconcept_id: " + plantConceptId);
+			}
+			if (cnt > 1)
+			throw new Exception("multiple plantconceptID's found");
+			pstmt1.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+		}
+		return(plantConceptId);
 }
 
 
@@ -689,59 +737,50 @@ private boolean plantConceptExists(String concatenatedName, String tsnValue)
 
 
 
-/**
- * method that loads a new instance of a 
- * plant name and then returns the primary
- * key value of that plant name to the calling
- * method
- */	
-private int loadPlantNameInstance(String concatenatedName, String commonName, 
-String plantCode)
-{
-	String action="insert";
-	String insertString="insert into plantName";
-	String attributeString="plantName, plantCommonName, plantSymbol";
-	int inputValueNum=3;
-	String inputValue[]=new String[3];
-	inputValue[0]=""+concatenatedName;
-	inputValue[1]=""+commonName;
-	inputValue[2]=""+plantCode;
-
-	//get the valueString from the method
-	issueStatement k = new issueStatement();
-	k.getValueString(inputValueNum);
-	String valueString = k.outValueString;
-
-	issueStatement j = new issueStatement();
-	j.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue);
-	
-	
-	//now query for the primary key value for this plantname
-	action="select";
-	String statement="select plantname_id from plantName where plantname = '"
-		+concatenatedName+"'";
-
-	String returnFields[]=new String[1];
-	int returnFieldLength=1;
-	returnFields[0]="plantname_id";
-
-	// Issue the statement, and iterate the counter
-	//issueStatement j1 = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);
-
-	//entireResult=j.outReturnFields[0];
-	//entireSinglePlotOutput[0]=entireResult; //cheat here
-	//entireSinglePlotOutputNum=1; //and here
-	
-	//if there are results retuened then a 
-	//plant with the input name does exist
-	
-	int plantNameId = Integer.parseInt(
-		j.returnedValues.elementAt(0).toString().replace('|', ' ').trim()
-		);
-	//System.out.println("####"+ plantNameId );
-	return(plantNameId);
-}
+	/**
+ 	* method that loads a new instance of a 
+ 	* plant name and then returns the primary
+ 	* key value of that plant name to the calling
+ 	* method
+ 	*/	
+	private int loadPlantNameInstance(String concatenatedName, String commonName, 
+	String plantCode)
+	{
+		int plantNameId = -999;
+		try
+		{
+			String s = "insert into PLANTNAME (plantName, plantCommonName, plantSymbol) "
+			+" values(?,?,?) ";
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			//bind the values
+			pstmt.setString(1, concatenatedName);
+			pstmt.setString(2, commonName);
+			pstmt.setString(3, plantCode);
+			pstmt.execute();
+			pstmt.close();	
+		
+			//now get the associated primary key value
+			String s1 = "select plantname_id from PLANTNAME where plantname = '"+ concatenatedName+ "' ";
+			PreparedStatement pstmt1 = conn.prepareStatement(s1);
+			ResultSet rs = pstmt1.executeQuery();
+			int cnt = 0;
+			while	( rs.next() )
+			{
+				cnt++;
+				plantNameId = rs.getInt(1);
+				System.out.println("USDAPlantsLoader >>> plantname_id: " + plantNameId);
+			}
+			if (cnt > 1)
+			throw new Exception("multiple plantnameID's found");
+			pstmt1.close();
+		}
+		catch(Exception e )
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(plantNameId);
+	}
 
 
 
@@ -815,24 +854,28 @@ private Hashtable extractSinglePlantInstance(Hashtable plantsData,
  * containing the element names and element values
  * into a hashtable structure whose elements can easily
  * be extracted and then loaded to the database
+ *
+ * @param fileVector -- the file after being translated via the syle sheer
+ * @return plantHash the hashtable containg the plant attributes 
  */	
 private Hashtable elementParser(Vector fileVector)
 {
 	int hashKey=0;  //the keys in the hash table are incremental integers
 	Hashtable plantHash = new Hashtable();
-	for (int i=0; i<fileVector.size(); i++) {
-		if ( fileVector.elementAt(i) != null )
+	for (int i=0; i<fileVector.size(); i++) 
+	{
+		if ( fileVector.elementAt(i) != null)
 		{
 			if ( plantEntryStart(fileVector.elementAt(i).toString() ) == true )
 			{
 				//the key is a hack -- has to be a string
 				plantHash.put(""+hashKey,  plantInstance(fileVector, i)  );
-		//		System.out.println(fileVector.elementAt(i) );
+				//System.out.println("USDAPlantsLoader > trsnaleted line: "+ fileVector.elementAt(i) );
 				hashKey++;
 			}
 		}
 	}
-	System.out.println(" SIZE OF HASH (number of plant instances):"+hashKey);
+	//System.out.println(" SIZE OF HASH (number of plant instances):"+hashKey);
 	return(plantHash);
 }
 
@@ -854,8 +897,9 @@ public Hashtable plantInstance(Vector fileVector, int startLevel)
 		//if the first level then it is the tsn value
 		if (i==startLevel) 
 		{
-			plantInstance.put("tsnValue", 
-				pipeStringTokenizer(fileVector.elementAt(i).toString(), 2) );
+			String tsnValue = pipeStringTokenizer(fileVector.elementAt(i).toString(), 2);
+			System.out.println("USDAPlantsLoader > tsnValue: " + tsnValue);
+			plantInstance.put("tsnValue", tsnValue );
 		}
 		else if ( fileVector.elementAt(i).toString().startsWith("concatenatedName") )
 		{
@@ -951,13 +995,14 @@ public boolean plantEntryStart (String vectorLine)
  */
 public String pipeStringTokenizer(String pipeString, int tokenPosition)
 {
-	//System.out.println("%%%%% "+pipeString+" "+tokenPosition);
 	String token="nullToken";
-	if (pipeString != null) {
+	if (pipeString != null) 
+	{
 		StringTokenizer t = new StringTokenizer(pipeString.trim(), "|");
 
 		int i=1;
-		while (i<=tokenPosition) {
+		while (i<=tokenPosition) 
+		{
 			if ( t.hasMoreTokens() )
 			{
 				token=t.nextToken();
@@ -976,10 +1021,6 @@ public String pipeStringTokenizer(String pipeString, int tokenPosition)
 		return(token);
 	}
 }
-
-
-
-
 
 
 }
