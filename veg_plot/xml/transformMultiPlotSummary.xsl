@@ -132,9 +132,12 @@ return "Check All"; }
 			<xsl:variable name="PLOTID">
   			<xsl:value-of select="plotId"/>
 			</xsl:variable>
-		<!--	
-			<a> <b>Plot code: </b> VegBank-<xsl:value-of select="plotId"/> <br> </br></a>
-			-->
+			
+			<a> <b>Vegbank code: </b> 	
+				<FONT SIZE="-2" FACE="arial">
+					<xsl:value-of select="plotAccessionNumber"/> <br> </br>
+				</FONT>
+			</a>
 			<a> <b>Author code: </b> <xsl:value-of select="authorPlotCode"/> <br> </br></a>
 			<!-- THE LIST OF NAMES ASSOCIATED WITH THE PROJECT CONTRIBUTORS -->
 			<!--
@@ -142,10 +145,9 @@ return "Check All"; }
 						<a><b>Contributor:</b> <xsl:value-of select="wholeName"/> <br> </br> </a>
 			</xsl:for-each>
 			-->
-			<!--
-			<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
+		
+		<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
 			<xsl:number value="position()"/>
-			-->
 		</td>
         	
 		<td  width="20%" colspan="1" bgcolor="{$evenRowColor}" align="left" valign="middle">
@@ -215,6 +217,11 @@ return "Check All"; }
 		<!--	
 			<a> <b>Plot code: </b> VegBank-<xsl:value-of select="plotId"/> <br> </br></a>
 			-->
+			<a> <b>Vegbank code: </b> 	
+				<FONT SIZE="-2" FACE="arial">
+					<xsl:value-of select="plotAccessionNumber"/> <br> </br>
+				</FONT>
+			</a>
 			<a> <b>Author code: </b> <xsl:value-of select="authorPlotCode"/> <br> </br></a>
 			<!-- THE LIST OF NAMES ASSOCIATED WITH THE PROJECT CONTRIBUTORS -->
 			<!--
@@ -222,10 +229,8 @@ return "Check All"; }
 						<a><b>Contributor:</b> <xsl:value-of select="wholeName"/> <br> </br> </a>
 			</xsl:for-each>
 			-->
-			<!--
 			<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
 			<xsl:number value="position()"/>
-			-->
 		</td>
         	
 		<td  width="20%" colspan="1" bgcolor="{$oddRowColor}" align="left" valign="middle">
