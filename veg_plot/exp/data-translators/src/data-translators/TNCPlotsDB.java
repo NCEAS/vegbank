@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-14 18:03:43 $'
- * 	'$Revision: 1.6 $'
+ *  '$Date: 2002-03-22 20:40:12 $'
+ * 	'$Revision: 1.7 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -105,8 +105,6 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		}
 		catch (SQLException ex) 
 		{
-			// Error, a SQLException was generated. Display the error information
-			System.out.println ("<BR><B>*** SQLException caught ***</B><BR>");
 			while (ex != null)
 			{
 				System.out.println ("TNCPlotsDB > ErrorCode: " + ex.getErrorCode () + "<BR>");
@@ -582,13 +580,97 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		return("1000");
 	}
 	
-		// see the interface for method descriptions
+	
+	/**
+	 * this is the method that returns the community 
+	 * name that the plot is associated with -- not the 
+	 * community code.  If there is no 'Classified community 
+	 * name' then the 'provisional name' is returned 
+	 *
+	 * @param plotName -- the plot
+	 *
+	 */
 	public String getCommunityName(String plotName)
 	{
-		return("vegcommunity");
+		String cn = null;
+		try
+		{
+			String className = getClassifiedCommunityName(plotName);
+			if ( className != null )
+			{
+				cn = className ;
+			}
+			else
+			{
+				String provisionalName = getProvisionalName(plotName);
+				if (provisionalName != null )
+				{
+					cn = provisionalName;
+				}
+				else
+				{
+					cn = "unknown";
+				}
+			}
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+	return( cn);	
 	}
 	
-	
+	/**
+	 * method that returns the provisional community 
+	 * name based on a plot
+	 * 
+	 * @param plotName -- the plot
+	 */
+		private String getProvisionalName(String plotName)
+		{
+			Statement stmt = null;
+			String name = null;
+			try
+			{
+				// Create a Statement so we can submit SQL statements to the driver
+				stmt = con.createStatement();
+				//create the result set
+				ResultSet rs = stmt.executeQuery("select "
+				+" ([Provisional Community Name])  "
+				+" from plots where ([Plot Code]) like '"+plotName+"'");
+				while (rs.next()) 
+				{
+					name = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+			return(name);
+		}
+
+	/**
+	 * method that returns the classified  community 
+	 * name based on a plot
+	 * 
+	 * @param plotName -- the plot
+	 */
+		private String getClassifiedCommunityName(String plotName)
+		{
+			//is seems that this attribute is always null
+			return(null);
+		}
+
+
+
+		
+	 
+
 	// see the interface for method descriptions
 	public String getState(String plotName)
 	{
@@ -602,16 +684,20 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			//there should only be one
 			while (rs.next()) 
 			{
-				String location = rs.getString(1);
-				//in the future query the jurisdiction table -- this is a hack for now
-				if (location.equals("VOYA"))
+				String locationCode = rs.getString(1);
+				System.out.println("TNCPlotsDB > locationCode: " + locationCode);
+				Statement stmt2 = null;
+				stmt2 = con.createStatement();
+				StringBuffer sb = new StringBuffer();
+				sb.append("select ([Jurisdiction Code]) from ([Locations]) where ([Location Code]) like '"+locationCode+"'");
+				System.out.println("TNCPlotsDB > query: " + sb.toString() );
+				ResultSet rs2 = stmt2.executeQuery( sb.toString() );
+				while (rs2.next())
 				{
-					this.state="MN";
+						this.state = rs2.getString(1);
 				}
-				else if ( location.equals("YOSE") )
-				{
-					this.state="CA";
-				}
+				rs2.close();					
+				stmt2.close();
 			}
 			rs.close();
 			stmt.close();
@@ -620,6 +706,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		{
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
+			return("unknown");
 		}
 		 return(this.state);
 	}
