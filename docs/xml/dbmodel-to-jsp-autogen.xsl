@@ -106,10 +106,15 @@
     <xsl:param name="currEnt"/>
     <xsl:param name="currFld"/>
     <xsl:param name="currentAtt"/>
-    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
-    </xsl:comment>
+<!--    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
+    </xsl:comment>-->
     <td>
       <logic:notEmpty name="onerowof{$currEnt}" property="{$currFld}">
+          <!-- extra stuff before something : -->
+         <xsl:if test="string-length($currentAtt/attFormsHTMLpre)&gt;0">
+          <!-- insert extra stuff -->
+          <xsl:value-of select="$currentAtt/attFormsHTMLpre" />
+          </xsl:if>
         <xsl:element name="span">
           <xsl:choose>
             <xsl:when test="string-length(@useClass)=0">
@@ -163,12 +168,14 @@
             </logic:notEmpty>
           </xsl:if>
           <!-- extra -->
-          <xsl:if test="string-length($currentAtt/attFormsHTML)&gt;0">
+          <xsl:if test="string-length($currentAtt/attFormsHTMLpost)&gt;0">
           <!-- insert extra stuff -->
-          <xsl:value-of select="$currentAtt/attFormsHTML" />
+          <xsl:value-of select="$currentAtt/attFormsHTMLpost" />
           </xsl:if>
       </logic:notEmpty>
+      <logic:empty name="onerowof{$currEnt}" property="{$currFld}"><!-- only extra bit if empty -->
       <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+      </logic:empty>
     </td>
   </xsl:template>
   <xsl:template name="writeOneFieldValue">
