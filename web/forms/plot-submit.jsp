@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: farrell $'
-*  '$Date: 2003-10-27 19:58:18 $'
-*  '$Revision: 1.2 $'
+*  '$Author: mlee $'
+*  '$Date: 2003-10-30 16:33:55 $'
+*  '$Revision: 1.3 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@
 			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
 		</td>
 		<td class="item">
-			Please choose to either upload a new plot  or use an previously archived plot.
+			Please choose to either upload new plot(s)  or use previously uploaded plot(s).
 		</td>
 	</tr>
 	
@@ -131,7 +131,7 @@
 	<tr>
 		<td>
 			<html:radio value="false" property="updateArchivedPlot"/>
-    			Upload a new Plot(s) 
+    			Upload new Plot(s) 
 	 	</td>
 	</tr>
 	
@@ -161,7 +161,7 @@
 			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
 		</td>
 		<td class="item">
-		Please choose the type of archive file that you would like to send to VegBank..
+		Please choose the type of archive file that you would like to send to VegBank.
 		</td>
 	</tr>
 	
@@ -175,8 +175,8 @@
 	</tr>
 	<tr>
 	<td> </td>
-	<td>
-		<ul> 
+	<td class="item">
+		<!--<ul> 
 			Bellow are links to the VegBank XML Schema and an example document. 
 			<li>
 				<a href="/xml/vegbank-data-ver1.0.0-simple.xsd">VegBank 1.0.0 XML Schema (XSD)</a> [250KB]
@@ -185,7 +185,10 @@
 				<a href="/xml/vegbank-data-example-ver1.0.0.xml">VegBank 1.0.0 XML Example (XML)</a> [1.8MB]
 				<small>&#134; This Schema is still evolving. </small>
 			</li>
-		</ul>
+		</ul>-->
+		--For more information on VegBank Native  XML, including sample XML documents and schemas, please click 
+		<a href="@NativeXMLIndexPage@">here.</a> The Schema is still evolving, and that page will show you the
+		most recent version.
 
 	</td>
 	</tr>
