@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-24 18:36:30 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-04-16 00:15:51 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ public class LoadPlantList
 	{
 		System.out.println("Getting a new connection");
 		Utility u = new Utility();
-		Connection c = u.getConnection("plants_dev");
+		Connection c = u.getConnection("vegbank", "localhost");
 		return c;
 	}
 	

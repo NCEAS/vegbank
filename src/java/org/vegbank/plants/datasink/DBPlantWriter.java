@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-22 00:31:19 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-04-16 00:15:51 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,8 +73,8 @@ public class DBPlantWriter
 			// Need to get the referenceId;
 			Reference ref = plant.getScientificNameNoAuthorsReference();
 			DBReferenceWriter  dbrw = 
-				new DBReferenceWriter(ref, conn, "PlantReference", "plantreference_id");
-			int plantRefId = dbrw.getReferenceId();
+				new DBReferenceWriter(ref, conn, "reference", "reference_id");
+			int refId = dbrw.getReferenceId();
 				
 	
 			// Need to get the partyId
@@ -86,7 +86,7 @@ public class DBPlantWriter
 			// Insert the Scientific Name
 			int plantNameId =
 				this.insertPlantName(
-					plantRefId,
+					refId,
 					plant.getScientificNameNoAuthors(),
 					Utility.dbAdapter.getDateTimeFunction() );
 	
@@ -96,7 +96,7 @@ public class DBPlantWriter
 			int conceptId =
 				this.insertPlantConcept(
 					plantNameId,
-					plantRefId,
+					refId,
 					plant.getScientificNameNoAuthors(),
 					plant.getDescription(),
 					plant.getCode());
@@ -105,7 +105,7 @@ public class DBPlantWriter
 			int statusId = 
 				this.insertPlantStatus(
 					conceptId,
-					plantRefId,
+					refId,
 					partyId,
 					plant.getStatus(),
 					plant.getParentName(),
@@ -172,7 +172,7 @@ public class DBPlantWriter
 	 */
 	private int insertPlantStatus(
 		int plantConceptId, 
-		int plantReferenceId, 
+		int referenceId, 
 		int plantPartyId, 
 		String plantConceptStatus,
 		String plantParentName,
@@ -191,13 +191,13 @@ public class DBPlantWriter
 						
 		PreparedStatement pstmt =
 					conn.prepareStatement(
-			" insert into PLANTSTATUS (PLANTCONCEPT_ID, PLANTREFERENCE_ID,  "
+			" insert into PLANTSTATUS (PLANTCONCEPT_ID, REFERENCE_ID,  "
 		+ " PLANTPARTY_ID, PLANTCONCEPTSTATUS,  startdate, PLANTLEVEL, " 
-		+ "plantstatus_id, plantparent, plantparentname)"
+		+ "plantstatus_id, plantparent_id, plantparentname)"
 		+ " values (?,?,?,?,?,?,?,?,?)");
 		
 		pstmt.setInt(1, plantConceptId);
-		pstmt.setInt(2, 	plantReferenceId);
+		pstmt.setInt(2, 	referenceId);
 		pstmt.setInt(3, plantPartyId);
 		pstmt.setString(4, plantConceptStatus);
 		Utility.insertDateField(startDate, pstmt, 5);  
@@ -288,7 +288,7 @@ public class DBPlantWriter
 
 		PreparedStatement pstmt =
 			conn.prepareStatement(
-				"insert into PLANTNAME (plantreference_id, plantName,  dateEntered, "
+				"insert into PLANTNAME (reference_id, plantName,  dateEntered, "
 					+ "plantname_id) values(?,?,?,?) ");
 
 		//bind the values
@@ -310,13 +310,13 @@ public class DBPlantWriter
 	private Connection getConnection()
 	{
 		Utility u = new Utility();
-		Connection c = u.getConnection("plants_dev");
+		Connection c = u.getConnection("vegbank");
 		return c;
 	}
 	
 	private int insertPlantConcept(
 		int plantNameId,
-		int plantRefId,
+		int refId,
 		String plantName,
 		String plantDescription,
 		String plantCode)
@@ -330,11 +330,11 @@ public class DBPlantWriter
 
 		PreparedStatement pstmt =
 			conn.prepareStatement(
-				" insert into PLANTCONCEPT (PLANTNAME_ID, PLANTREFERENCE_ID, PLANTNAME, "
+				" insert into PLANTCONCEPT (PLANTNAME_ID, REFERENCE_ID, PLANTNAME, "
 					+ " PLANTDESCRIPTION,  PLANTCODE, plantconcept_id)   values (?,?,?,?,?,?)");
 
 		pstmt.setInt(1, plantNameId);
-		pstmt.setInt(2, plantRefId);
+		pstmt.setInt(2, refId);
 		pstmt.setString(3, plantName);
 		pstmt.setString(4, plantDescription);
 		pstmt.setString(5, plantCode);
