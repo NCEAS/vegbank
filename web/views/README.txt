@@ -12,4 +12,5 @@ step 1:
  then call these with URL : /get/{view}/{table}/{PK|accessionCode}[,PK|accessionCode]*
  
  
- 
+This uses SQL from /src/java/org/vegbank/common/SQLStore.properties 
+  the template .xsl creates a set of SQL that can be added to this file
