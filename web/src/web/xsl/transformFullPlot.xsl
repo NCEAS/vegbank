@@ -770,7 +770,7 @@ return "Check All"; }
                   <xsl:value-of select="taxonCover"/>
                 </span>
               </td>
-              <td><span class="item">--all--</span></td>
+              <td><span class="item">[-all strata-]</span></td>
               </tr>
             
               <xsl:for-each select="stratumComposition">
@@ -1985,7 +1985,7 @@ return "Check All"; }
                                   </span>
                                 </td>
                                 <td>
-                                  <span class="item">--all--</span>
+                                  <span class="item">[-all strata-]</span>
                                 </td>
                               </tr>
                               <xsl:for-each select="stratumComposition">

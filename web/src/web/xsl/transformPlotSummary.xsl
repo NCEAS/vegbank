@@ -531,7 +531,7 @@ return "Check All"; }
                                   </font>
                                 </p>
                               </td>
-                              <td vAlign="top" align="left" width="10%" bgcolor="{$oddRowColor}">
+                              <td vAlign="top" align="left" width="12%" bgcolor="{$oddRowColor}">
                                 <p>
                                   <font size="-1" face="Arial, Helvetica, sans-serif">
                                     <b>
@@ -567,7 +567,7 @@ return "Check All"; }
                                   </span>
                                 </td>
                                 <td>
-                                  <span class="item">--all--</span>
+                                  <span class="item">[-all strata-]</span>
                                 </td>
                               </tr>
                               <xsl:for-each select="stratumComposition">
@@ -1185,7 +1185,7 @@ return "Check All"; }
                                   </span>
                                 </td>
                                 <td>
-                                  <span class="item">--all--</span>
+                                  <span class="item">[-all strata-]</span>
                                 </td>
                               </tr>
                               <xsl:for-each select="stratumComposition">
@@ -1241,7 +1241,7 @@ return "Check All"; }
                                   </font>
                                 </p>
                               </td>
-                              <td vAlign="top" align="left" width="10%" bgcolor="{$evenRowColor}">
+                              <td vAlign="top" align="left" width="12%" bgcolor="{$evenRowColor}">
                                 <p>
                                   <font size="-1" face="Arial, Helvetica, sans-serif">
                                     <b>
