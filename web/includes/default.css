@@ -129,6 +129,10 @@ H1, H2, H3, H4, H5, H6	{
 							color: #333333;
 							text-align: center;
 						}
+H1.left, H2.left, H3.left, H4.left, H5.left, H6.left { 					font-family: Georgia, Times New Roman, Times, serif;
+							color: #333333;
+                        	 text-align: left; }
+
 .headequiv	{
 							font-family: Georgia, Times New Roman, Times, serif;
 							color: #333333;
@@ -195,7 +199,7 @@ UL.constsize,LI.constsize {  font: 10pt Arial, Tahoma, Helvetica, Geneva, sans-s
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 				}
 
-P, .normal, TD	{
+P, .normal, TD, UL, OL, DL, LI	{
 					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
 					font-size: 10pt;
 					color: #000000
@@ -207,9 +211,9 @@ P, .normal, TD	{
 					color: #000000
 				}
 
-UL, OL, DL, LI, .list	{
+/*  UL, OL, DL, LI, .list	{
 							font: .9em/1.5em Arial, Tahoma, Helvetica, Geneva, sans-serif;
-						}
+						} */
 
 .thsmall		{
 					color: #ffff80;
