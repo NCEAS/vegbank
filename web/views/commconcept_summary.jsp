@@ -26,7 +26,7 @@
 <table width="100%" cellpadding="2" class="leftrightborders" ><!--each field, only write when HAS contents-->
 <!-- header -->
 <tr>
-  <th>More</th><th width="40%">Name</th><th width="20%">Reference</th><th>Description</th><th>Accession Code</th>
+  <th width="33%">Name</th><th width="7%">Reference</th><th width="60%">Description</th>
 </tr>
    <%
 		       //**************************************************************************************
@@ -37,11 +37,10 @@
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
 
 <tr class='@nextcolorclass@'>
-<td><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>details</a></td>
-<td><bean:write name="onerow" property="commname_id_transl"/>&nbsp;</td>
+
+<td><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a></td>
 <td><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_idl"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
 <td class="largefield"><bean:write name="onerow" property="commdescription"/>&nbsp;</td>
-<td class="largefield"><bean:write name="onerow" property="accessioncode"/>&nbsp;</td>
 </td>
 </tr>
 
