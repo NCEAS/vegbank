@@ -5,8 +5,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-28 23:03:04 $'
- * 	'$Revision: 1.2 $' 
+ *  '$Date: 2002-04-12 14:38:48 $'
+ * 	'$Revision: 1.3 $' 
  */
 
 package xmlresource.utils; 
@@ -639,6 +639,11 @@ public class XMLparse
 	/**
    *  utility routine to return the value(s) of a node defined by
    *  a specified XPath
+	 *
+	 * @param doc -- the document to extract the values from
+	 * @param pathstring the path string which should look like:
+	 *  /community/classCode where community would be the root node
+	 *
    */
   public Vector getValuesForPath(Document doc, String pathstring) 
 	{
