@@ -156,49 +156,23 @@ return "Check All"; }
 					<xsl:variable name="LONGITUDE">
   				<xsl:value-of select="longitude"/>
 					</xsl:variable>
-					<a href="http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
+					<a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
 					<img align="center" border="0" src="/vegbank/images/small_globe.gif" alt="Location"> </img> 
 					</a>
 					<br> </br>
 					
-					<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
-					<a><b>Country:</b> <xsl:value-of select="country"/>  <br></br> </a>
-					
-			<!--
-					<a><b>Latitude:</b> <xsl:value-of select="latitude"/>  <br></br> </a>
-	     		<a><b>Longitude:</b> <xsl:value-of select="longitude"/>  <br></br> </a>
-			-->
+					<a><b>State:</b> <FONT SIZE="-2" FACE="arial">  <xsl:value-of select="state"/> </FONT>  <br></br> </a>
+					<a><b>Country:</b> <FONT SIZE="-2" FACE="arial">  <xsl:value-of select="country"/> </FONT>   <br></br> </a>
 				
-			<!--
-					<a><b>Area:</b> <xsl:value-of select="area"/>  <br></br> </a>
-					-->
-					<a><b>Topo Position:</b> <xsl:value-of select="topoPosition"/>  <br></br> </a>
-				<!--
-					<a><b>Slope Aspect:</b> <xsl:value-of select="slopeAspect"/> <br></br> </a>
-          <a><b>Slope Gradient:</b> <xsl:value-of select="slopeGradient"/>  <br></br></a>
-	     		<a><b>Slope Position:</b> <xsl:value-of select="slopePosition"/> <br> </br> </a>
-				-->
-					<a><b>Geology:</b> <xsl:value-of select="geology"/> <br> </br> </a>
+					<a><b>Area:</b> <FONT SIZE="-2" FACE="arial">  <xsl:value-of select="area"/> </FONT>  <br></br> </a>
+					<a><b>Topo Position:</b> <FONT SIZE="-2" FACE="arial">  <xsl:value-of select="topoPosition"/> </FONT>  <br></br> </a>
+					<a><b>Slope Aspect:</b> <FONT SIZE="-2" FACE="arial">  <xsl:value-of select="slopeAspect"/> </FONT>  <br></br> </a>
+          <a><b>Slope Gradient:</b> <FONT SIZE="-2" FACE="arial"> <xsl:value-of select="slopeGradient"/> </FONT>  <br></br></a>
+	     		<a><b>Elevation:</b> <FONT SIZE="-2" FACE="arial"> <xsl:value-of select="elevation"/> </FONT> <br> </br> </a>
+					<a><b>Geology:</b> <FONT SIZE="-2" FACE="arial"> <xsl:value-of select="geology"/> </FONT>  <br> </br> </a>
 					
-					<!-- THESE ARE ALL THE NAMED PLACES ASSOCIATED WITH THE PLOT-->
-		<!--
-					<xsl:for-each select="namedPlace">
-						<a><b>Named place:</b> <xsl:value-of select="placeName"/> <br> </br> </a>
-					</xsl:for-each>
-				-->
 		</td>
 	    
-<!--			
-	  <td  width="20%" colspan="1"  bgcolor="{$evenRowColor}" align="left" valign="top">
-					<a> <b>Community Name:</b> <xsl:value-of select="currentCommunity"/> <br></br> </a>
-					<a> <b>Community Code:</b> <xsl:value-of select="currentCommunityCode"/> <br></br> </a>
-       		<a> <b>Hydrologic Regime:</b> <xsl:value-of select="observation/hydrologicRegime"/> <br></br> </a>
-			 		<xsl:for-each select="observation/stratum">
-	    			<a> <b>Strata:</b> <xsl:value-of select="stratumName"/>;  <br></br> </a>
-					</xsl:for-each>
-					
-		</td>
--->
 
 	  <td  width="60%" colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
       <i><FONT SIZE="-1" FACE="arial">
@@ -215,8 +189,10 @@ return "Check All"; }
 				</FONT> 
 			</i>
 			<xsl:for-each select="observation/communityClassification">
+			<FONT SIZE="-2" FACE="arial">
 			<xsl:value-of select="className"/> --  
-			<xsl:value-of select="classCode"/> 
+			<xsl:value-of select="classCode"/>
+			</FONT>
 			</xsl:for-each>
 	</td>
 		
@@ -265,45 +241,20 @@ return "Check All"; }
 					<xsl:variable name="LONGITUDE">
   				<xsl:value-of select="longitude"/>
 					</xsl:variable>
-					<a href="http://beta.nceas.ucsb.edu:8080/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
+					<a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude={$LONGITUDE}&amp;latitude={$LATITUDE}"> 
 					<img align="center" border="0" src="/vegbank/images/small_globe.gif" alt="Location"> </img> 
 					</a>
 					<br> </br>
 					<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
 					<a><b>Country:</b> <xsl:value-of select="country"/>  <br></br> </a>
-	<!--				<a><b>Latitude:</b> <xsl:value-of select="latitude"/>  <br></br> </a>
-	     		<a><b>Longitude:</b> <xsl:value-of select="longitude"/>  <br></br> </a>
-	-->
-		<!--
 					<a><b>Area:</b> <xsl:value-of select="area"/>  <br></br> </a>
-					-->
 					<a><b>Topo Position:</b> <xsl:value-of select="topoPosition"/>  <br></br> </a>
-				<!--
 					<a><b>Slope Aspect:</b> <xsl:value-of select="slopeAspect"/> <br></br> </a>
           <a><b>Slope Gradient:</b> <xsl:value-of select="slopeGradient"/>  <br></br></a>
 	     		<a><b>Slope Position:</b> <xsl:value-of select="slopePosition"/> <br> </br> </a>
-				-->
 					<a><b>Geology:</b> <xsl:value-of select="geology"/> <br> </br> </a>
-					
-					<!-- THESE ARE ALL THE NAMED PLACES ASSOCIATED WITH THE PLOT-->
-		<!--
-					<xsl:for-each select="namedPlace">
-						<a><b>Named place:</b> <xsl:value-of select="placeName"/> <br> </br> </a>
-					</xsl:for-each>
-				-->
 		</td>
 	    
-<!--			
-	  <td  width="20%" colspan="1"  bgcolor="{$evenRowColor}" align="left" valign="top">
-					<a> <b>Community Name:</b> <xsl:value-of select="currentCommunity"/> <br></br> </a>
-
-       		<a> <b>Hydrologic Regime:</b> <xsl:value-of select="observation/hydrologicRegime"/> <br></br> </a>
-			 		<xsl:for-each select="observation/stratum">
-	    			<a> <b>Strata:</b> <xsl:value-of select="stratumName"/>;  <br></br> </a>
-					</xsl:for-each>
-					
-		</td>
--->
 
 	  <td  width="60%" colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
       <i><FONT SIZE="-1" FACE="arial">
@@ -314,67 +265,11 @@ return "Check All"; }
 				<xsl:for-each select="observation/taxonObservation">
 	    	<xsl:value-of select="authorNameId"/>; </xsl:for-each>
 	 		</FONT>
-			 
     </td>
 	 </xsl:if>
-
-
-
-
-	
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	<!-- 
-	 	<xsl:if test="position() mod 2 = 0">
-             		<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
-               		
-			<xsl:variable name="PLOT">
-  			<xsl:value-of select="authorPlotCode"/>
-			</xsl:variable>
-			
-			<xsl:variable name="PLOTID">
-  			<xsl:value-of select="plotId"/>
-			</xsl:variable>
-			
-			<a> <b>plot code: </b> <xsl:value-of select="authorPlotCode"/> <br> </br></a>
-            <input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
-			<xsl:number value="position()"/>
-			</td>
-        	
-	     		<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
-             	<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
-	     		<a><b>slopeAspect:</b> <xsl:value-of select="slopeAspect"/> <br></br> </a>
-             	<a><b>slopeGradient:</b> <xsl:value-of select="slopeGradient"/>  <br></br></a>
-	     		<a><b>slopePosition:</b> <xsl:value-of select="slopePosition"/> <br> </br> </a>
-				<a><b>hydrologicRegime:</b> <xsl:value-of select="hydrologicRegime"/>  </a>
-	     		</td>
-	     
-	     		<td colspan="1"  bgcolor="{$oddRowColor}" align="left" valign="top">
-               		<b>community Name:</b> <xsl:value-of select="currentCommunity"/>
-               		<b>community Code:</b> <xsl:value-of select="currentCommunityCode"/>
-             		</td>
-	 		
-	    		<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
-               		<i><FONT SIZE="-1" FACE="arial">
-			<b>Top species:</b> <xsl:for-each select="plotObservation/taxonObservations">
-	       		<xsl:value-of select="authNameId"/>; </xsl:for-each>
-             		</FONT></i>
-			</td>
-	
-	 	</xsl:if>
--->	 
 	 </tr>    
 	</xsl:for-each>
 
-<!--
-<input type="button" value="Check All" onClick="this.value=check(this.form.plotName)">
-</input>
--->
 </table>
 <input type="submit" name="downLoadAction" value="Continue to Download Wizard" /> 
 </form>
