@@ -29,8 +29,8 @@ import servlet.authentication.UserDatabaseAccess;
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-06-25 23:11:48 $'
- *  '$Revision: 1.36 $'
+ *  '$Date: 2002-06-26 19:13:26 $'
+ *  '$Revision: 1.37 $'
  */
 
 
@@ -68,6 +68,40 @@ public class DataSubmitServlet extends HttpServlet
 	private String longName = "";
 	private String shortName = "";
 	private	String code = "";
+
+	private String longNameRefAuthors = "";
+	private String longNameRefTitle = "";
+	private String longNameRefDate = "";
+	private String longNameRefEdition = "";
+	private String longNameRefSeriesName = "";
+	private String longNameRefVolume = "";
+	private String longNameRefPage = "";
+	private String longNameRefISSN = "";
+	private String longNameRefISBN = "";
+	private String longNameRefOtherCitDetails = "";
+	
+	private String shortNameRefAuthors = "";
+	private String shortNameRefTitle = "";
+	private String shortNameRefDate = "";
+	private String shortNameRefEdition = "";
+	private String shortNameRefSeriesName = "";
+	private String shortNameRefVolume = "";
+	private String shortNameRefPage = "";
+	private String shortNameRefISSN = "";
+	private String shortNameRefISBN = "";
+	private String shortNameRefOtherCitDetails = "";
+	
+	private String codeRefAuthors = "";
+	private String codeRefTitle = "";
+	private String codeRefDate = "";
+	private String codeRefEdition = "";
+	private String codeRefSeriesName = "";
+	private String codeRefVolume = "";
+	private String codeRefPage = "";
+	private String codeRefISSN = "";
+	private String codeRefISBN = "";
+	private String codeRefOtherCitDetails = "";
+	
 	// this is the pre-transformed init template 
 	private String plantNameRectificationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-rectification.html";
 	private String plantNameReferenceTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/forms/submit-plantname-reference.html";
@@ -251,7 +285,8 @@ public class DataSubmitServlet extends HttpServlet
 				response.sendRedirect("/forms/plant-valid.html");
 				
 			}
-			//THIS WHERE THE ACTUAL SUBMITTAL OF THE NEW COMMUNITY TAKES PLACE
+			// THIS WHERE THE RECTIFIED NAMES ARE SUBMITTED TO THE SERVLET
+			// AND WHERE THOSE ATTRIBUTES SHOULD BE IDENTIFIED AND STORED IN THE INSTANCE
 			else if ( action.equals("namerectification") )
 			{
 				System.out.println("DataSubmitServlet > performing the name rectification ");
@@ -277,11 +312,46 @@ public class DataSubmitServlet extends HttpServlet
 				//redirect the browser
 				response.sendRedirect("/forms/plant-valid.html");
 			}
+			// THIS IS WHERE THE NAME REFERENCES INFORMATION IS SUBMITTED TO THE SERVLET
+			// AND WHERE THOSE ATTRIBUTES SHOULD BE STORED
 			else if ( action.equals("namereference") )
 			{
 				System.out.println("DataSubmitServlet > getting the name reference ");
-				// send the user the attributes related to the plant concept
+				// LOAD THE NAME REFERENCE ATTRIBUTES 
+				this.longNameRefAuthors = (String)params.get("longNameRefAuthors");
+				this.longNameRefTitle = (String)params.get("longNameRefTitle");
+				this.longNameRefDate = (String)params.get("longNameRefDate");
+				this.longNameRefEdition = (String)params.get("longNameRefEdition");
+				this.longNameRefSeriesName = (String)params.get("longNameRefSeriesName");
+				this.longNameRefVolume = (String)params.get("longNameRefVolume");
+				this.longNameRefPage = (String)params.get("longNameRefPage");
+				this.longNameRefISSN = (String)params.get("longNameRefISSN");
+				this.longNameRefISBN = (String)params.get("longNameRefISBN");
+				this.longNameRefOtherCitDetails = (String)params.get("longNameRefOtherCitDetails");
 				
+				this.shortNameRefAuthors = (String)params.get("shortNameRefAuthors");
+				this.shortNameRefTitle = (String)params.get("shortNameRefTitle");
+				this.shortNameRefDate = (String)params.get("shortNameRefDate");
+				this.shortNameRefEdition = (String)params.get("shortNameRefEdition");
+				this.shortNameRefSeriesName = (String)params.get("shortNameRefSeriesName");
+				this.shortNameRefVolume = (String)params.get("shortNameRefVolume");
+				this.shortNameRefPage = (String)params.get("shortNameRefPage");
+				this.shortNameRefISSN = (String)params.get("shortNameRefISSN");
+				this.shortNameRefISBN = (String)params.get("shortNameRefISBN");
+				this.shortNameRefOtherCitDetails = (String)params.get("shortNameRefOtherCitDetails");
+				
+				this.codeRefAuthors = (String)params.get("codeRefAuthors");
+				this.codeRefTitle = (String)params.get("codeRefTitle");
+				this.codeRefDate = (String)params.get("codeRefDate");
+				this.codeRefEdition = (String)params.get("codeRefEdition");
+				this.codeRefSeriesName = (String)params.get("codeRefSeriesName");
+				this.codeRefVolume = (String)params.get("codeRefVolume");
+				this.codeRefPage = (String)params.get("codeRefPage");
+				this.codeRefISSN = (String)params.get("codeRefISSN");
+				this.codeRefISBN = (String)params.get("codeRefISBN");
+				this.codeRefOtherCitDetails = (String)params.get("codeRefOtherCitDetails");
+
+			 System.out.println("## long name auth: " + longNameRefAuthors);
 				updatePlantConceptPage(emailAddress, longName, shortName, code);
 				response.sendRedirect("/forms/plant-valid.html");
 			}
@@ -322,6 +392,8 @@ public class DataSubmitServlet extends HttpServlet
 		 {
 			 Hashtable replaceHash = new Hashtable();
 			 replaceHash.put("emailAddress", ""+emailAddress);
+			 System.out.println("## long name auth: " + longNameRefAuthors);
+			 replaceHash.put("longNameRefAuthors", ""+longNameRefAuthors);
 			 su.filterTokenFile(plantSubmittalReceiptTemplate, plantValidationForm, replaceHash);
 		 }
 		 catch( Exception e ) 
@@ -495,7 +567,7 @@ public class DataSubmitServlet extends HttpServlet
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		sb.append("Author: <input type=text size=25 name="+plantNameType+"RefAuthor> <br> \n");
+		sb.append("Authors: <input type=text size=25 name="+plantNameType+"RefAuthors> <br> \n");
 		
 		sb.append("Title: <input type=text size=25 name="+plantNameType+"RefTitle> <br> \n");
 		sb.append("Date: <input type=text size=25 name="+plantNameType+"RefDate> <br> \n");
