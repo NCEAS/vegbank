@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-08-15 03:10:22 $'
- * 	'$Revision: 1.23 $'
+ *  '$Date: 2002-08-30 19:12:03 $'
+ * 	'$Revision: 1.24 $'
  */
 public class PlotDataSource 
 {
@@ -129,6 +129,19 @@ public class PlotDataSource
 		return(accessionValue);
 	}
 	
+	/** 
+	 * method that returns the accession number associated with a plot observation
+	 * the input plot id is the unique identifier of the plot as used by 
+	 * the RDBMS -- this will have to be modified so that if there are multiple 
+	 * observation in a plot.
+	 * @param plotId -- the RDBMS unique plot ID
+	 */
+	public String getObservationAccessionNumber(String plotId)
+	{
+		String accessionValue = ((PlotDataSourceInterface)pluginObj).getObservationAccessionNumber(plotId);
+		return(accessionValue);
+	}
+	
 	/**
  	 * returns the plotId for an input plot -- the plot id id the 
 	 * unique value the RDBMS uses to identify the plot -- as opposed
@@ -222,7 +235,8 @@ public class PlotDataSource
 		String s = ((PlotDataSourceInterface)pluginObj).getSoilDepth(plotName);	
 		return(s);
  	}
-//START
+
+	
  	/**
 	*/
 	public String getObsDateAccuracy(String plotName)
@@ -337,8 +351,235 @@ public class PlotDataSource
 		 String s = ((PlotDataSourceInterface)pluginObj).getProjectStopDate(plotName);	
 		 return(s);
 	 }
-	 
-	 
+
+//START
+public String getPlotValidationLevel(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getPlotValidationLevel(plotName);	
+	return(s);
+}
+
+public String  getFloristicQuality(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getFloristicQuality(plotName);	
+		 return(s);
+}
+
+public String  getBryophyteQuality(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getBryophyteQuality(plotName);	
+		 return(s);
+}
+
+public String  getLichenQuality(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getLichenQuality(plotName);	
+		 return(s);
+}
+
+public String  getObservationNarrative(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getObservationNarrative(plotName);	
+		 return(s);
+}
+
+public String  getHomogeneity(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getHomogeneity(plotName);	
+		 return(s);
+}
+
+public String  getPhenologicAspect(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getPhenologicAspect(plotName);	
+		 return(s);
+}
+
+public String  getRepresentativeness(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getRepresentativeness(plotName);	
+		 return(s);
+}
+
+public String  getBasalArea(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getBasalArea(plotName);	
+		 return(s);
+}
+
+public String  getSoilMoistureRegime(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getSoilMoistureRegime(plotName);	
+		 return(s);
+}
+
+public String  getWaterSalinity(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getWaterSalinity(plotName);	
+		 return(s);
+}
+
+public String  getShoreDistance(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getShoreDistance(plotName);	
+		 return(s);
+}
+
+public String  getOrganicDepth(String plotName)
+{
+ String s = ((PlotDataSourceInterface)pluginObj).getOrganicDepth(plotName);	
+		 return(s);
+}
+
+public String  getPercentBedRock(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getPercentBedRock(plotName);	
+		 return(s);
+}
+
+public String  getPercentRockGravel(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getPercentRockGravel(plotName);	
+		 return(s);
+}
+
+public String  getPercentWood(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getPercentWood(plotName);	
+		 return(s);
+}
+public String  getPercentLitter(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getPercentLitter(plotName);	
+		 return(s);
+}
+
+public String  getPercentBareSoil(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getPercentBareSoil(plotName);	
+		 return(s);
+}
+
+public String  getPercentWater(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getPercentWater(plotName);	
+		 return(s);
+}
+
+public String  getPercentOther(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getPercentOther(plotName);	
+		 return(s);
+}
+
+public String  getNameOther(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getNameOther(plotName);	
+		 return(s);
+}
+
+public String  getStandMaturity(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getStandMaturity(plotName);	
+		 return(s);
+}
+
+
+public String  getSuccessionalStatus(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getSuccessionalStatus(plotName);	
+		 return(s);
+}
+
+public String  getTreeHt(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getTreeHt(plotName);	
+		 return(s);
+}
+
+public String  getShrubHt(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getShrubHt(plotName);	
+		 return(s);
+}
+
+public String  getNonvascularHt(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getNonvascularHt(plotName);	
+		 return(s);
+}
+
+public String  getFloatingCover(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getFloatingCover(plotName);	
+		 return(s);
+}
+
+public String  getSubmergedCover(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getSubmergedCover(plotName);	
+		 return(s);
+}
+
+public String  getDominantStratum(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getDominantStratum(plotName);	
+		 return(s);
+}
+
+public String  getGrowthform1Type(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform1Type(plotName);	
+		 return(s);
+}
+
+public String  getGrowthform2Type(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform2Type(plotName);	
+		 return(s);
+}
+
+public String  getGrowthform3Type(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform3Type(plotName);	
+		 return(s);
+}
+
+public String  getGrowthform1Cover(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform1Cover(plotName);	
+		 return(s);
+}
+
+public String  getGrowthform2Cover(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform2Cover(plotName);	
+		 return(s);
+}
+
+public String  getGrowthform3Cover(String plotName)
+{
+	String s = ((PlotDataSourceInterface)pluginObj).getGrowthform3Cover(plotName);	
+		 return(s);
+}
+
+public boolean  getNotesPublic(String plotName)
+{
+	boolean b = ((PlotDataSourceInterface)pluginObj).getNotesPublic(plotName);	
+		 return(b);
+}
+
+public boolean  getNotesMgt(String plotName)
+{
+	boolean b = ((PlotDataSourceInterface)pluginObj).getNotesMgt(plotName);	
+		 return(b);
+}
+
+public boolean  getRevisions(String plotName)
+{
+	boolean b = ((PlotDataSourceInterface)pluginObj).getRevisions(plotName);	
+		 return(b);
+}
 //END
 
 
@@ -348,7 +589,8 @@ public class PlotDataSource
  	 */
  	 public boolean isPlotPermanent(String plotName)
  	 {
- 	 	return(true);
+ 	 	boolean b = ((PlotDataSourceInterface)pluginObj).isPlotPermanent(plotName);	
+		return(b);
  	 }
   
   /**
@@ -814,13 +1056,13 @@ public class PlotDataSource
 	}
 	
 	//returns the geographic zone
-	String getUTMZone(String plotName)
+	public String getUTMZone(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getUTMZone(plotName);
 		return(s);
 	}
 	//returns the geographic datum
-	String getDatumType(String plotName)
+	public String getDatumType(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getDatumType(plotName);
 		return(s);
@@ -854,7 +1096,7 @@ public class PlotDataSource
 	}
 	
 	//retuns the hydrologic regime
-	String getHydrologicRegime(String plotName)
+	public String getHydrologicRegime(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getHydrologicRegime(plotName);
 		return(s);
@@ -910,7 +1152,7 @@ public class PlotDataSource
 	}
 	
 	//returns the landForm
-	String getLandForm(String plotName)
+	public String getLandForm(String plotName)
 	{
 		String s = ((PlotDataSourceInterface)pluginObj).getLandForm(plotName);
 		return(s);
@@ -1065,7 +1307,47 @@ public class PlotDataSource
 			System.out.println("PlotDataSource > stem sample method: " + source.getStemSampleMethod(plotName));
 			System.out.println("PlotDataSource > original data: " + source.getOriginalData(plotName));
 			System.out.println("PlotDataSource > effort level: " + source.getEffortLevel(plotName));
-			
+			//START
+			System.out.println("PlotDataSource > PlotValidationLevel: " + source.getPlotValidationLevel(plotName));
+			System.out.println("PlotDataSource > FloristicQuality: " + source.getFloristicQuality(plotName));
+			System.out.println("PlotDataSource > BryophyteQuality: " + source.getBryophyteQuality(plotName));
+			System.out.println("PlotDataSource > LichenQuality: " + source.getLichenQuality(plotName));
+			System.out.println("PlotDataSource > ObservationNarrative: " + source.getObservationNarrative(plotName));
+			System.out.println("PlotDataSource > Homogeneity: " + source.getHomogeneity(plotName));
+			System.out.println("PlotDataSource > PhenologicAspect: " + source.getPhenologicAspect(plotName));
+			System.out.println("PlotDataSource > Representativeness: " + source.getRepresentativeness(plotName));
+			System.out.println("PlotDataSource > BasalArea: " + source.getBasalArea(plotName));
+			System.out.println("PlotDataSource > MoistureRegime: " + source.getSoilMoistureRegime(plotName));
+			System.out.println("PlotDataSource > WaterSalinity: " + source.getWaterSalinity(plotName));
+			System.out.println("PlotDataSource > ShoreDistance: " + source.getShoreDistance(plotName));
+			System.out.println("PlotDataSource > OrganicDepth: " + source.getOrganicDepth(plotName));
+			System.out.println("PlotDataSource > PercentBedRock: " + source.getPercentBedRock(plotName));
+			System.out.println("PlotDataSource > PercentRockGravel: " + source.getPercentRockGravel(plotName));
+			System.out.println("PlotDataSource > PercentWood: " + source.getPercentWood(plotName));
+			System.out.println("PlotDataSource > PercentLitter: " + source.getPercentLitter(plotName));
+			System.out.println("PlotDataSource > PercentBareSoil: " + source.getPercentBareSoil(plotName));
+			System.out.println("PlotDataSource > PercentWater: " + source.getPercentWater(plotName));
+			System.out.println("PlotDataSource > PercentOther: " + source.getPercentOther(plotName));
+			System.out.println("PlotDataSource > NameOther: " + source.getNameOther(plotName));
+			System.out.println("PlotDataSource > StandMaturity: " + source.getStandMaturity(plotName));
+			System.out.println("PlotDataSource > SuccessionalStatus: " + source.getSuccessionalStatus(plotName));
+			System.out.println("PlotDataSource > TreeHt: " + source.getTreeHt(plotName));
+			System.out.println("PlotDataSource > ShrubHt: " + source.getShrubHt(plotName));
+			System.out.println("PlotDataSource > NonvascularHt: " + source.getNonvascularHt(plotName));
+			System.out.println("PlotDataSource > FloatingCover: " + source.getFloatingCover(plotName));
+			System.out.println("PlotDataSource > SubmergedCover: " + source.getSubmergedCover(plotName));
+			System.out.println("PlotDataSource > DominantStratum: " + source.getDominantStratum(plotName));
+			System.out.println("PlotDataSource > Growthform1Type: " + source.getGrowthform1Type(plotName));
+			System.out.println("PlotDataSource > Growthform2Type: " + source.getGrowthform2Type(plotName));
+			System.out.println("PlotDataSource > Growthform3Type: " + source.getGrowthform3Type(plotName));
+			System.out.println("PlotDataSource > Growthform1Cover: " + source.getGrowthform1Cover(plotName));
+			System.out.println("PlotDataSource > Growthform2Cover: " + source.getGrowthform2Cover(plotName));
+			System.out.println("PlotDataSource > Growthform3Cover: " + source.getGrowthform3Cover(plotName));
+			System.out.println("PlotDataSource > NotesPublic: " + source.getNotesPublic(plotName));
+			System.out.println("PlotDataSource > NotesMgt: " + source.getNotesMgt(plotName));
+			System.out.println("PlotDataSource > Revisions: " + source.getRevisions(plotName));
+
+//END
 			System.out.println("\n " );
 			
 			

@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-08-15 03:10:22 $'
- * 	'$Revision: 1.7 $'
+ *  '$Date: 2002-08-30 19:12:03 $'
+ * 	'$Revision: 1.8 $'
  */
  
 //public class VBAccessDataSourcePlugin
@@ -52,6 +52,17 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 		return(s);
 	}
 	
+	/** 
+	 * method that returns the accession number for a given plot observation.  
+	 * This method must be in this class eventhough it is not  relevant; because
+	 * the TNC plots database does not use an accession number this method 
+	 * will always return null
+	 * @param plotId -- the RDBMS unique plot ID
+	 */
+	public String getObservationAccessionNumber(String plotId)
+	{
+		return("");
+	}
 	
   /**
 	 * method to return the taxa code from a data source using as input
@@ -256,7 +267,199 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 	{
  		return super.getEffortLevel(plotName);
 	}
+	
+	
+	public String getPlotValidationLevel(String plotName)
+	{
+		return super.getPlotValidationLevel(plotName);
+	}
+
+public String  getFloristicQuality(String plotName)
+{
+	return super.getFloristicQuality(plotName);
+}
+
+public String  getBryophyteQuality(String plotName)
+{
+	return super.getBryophyteQuality(plotName);
+}
+
+public String  getLichenQuality(String plotName)
+{
+	return super.getLichenQuality(plotName);
+}
+
+public String  getObservationNarrative(String plotName)
+{
+	return super.getObservationNarrative(plotName);
+}
+
+public String  getHomogeneity(String plotName)
+{
+	return super.getHomogeneity(plotName);
+}
+
+public String  getPhenologicAspect(String plotName)
+{
+	return super.getPhenologicAspect(plotName);
+}
+
+public String  getRepresentativeness(String plotName)
+{
+	return super.getRepresentativeness(plotName);
+}
+
+public String  getBasalArea(String plotName)
+{
+	return super.getBasalArea(plotName);
+}
+
+public String  getSoilMoistureRegime(String plotName)
+{
+	return super.getSoilMoistureRegime(plotName);
+}
+
+public String  getWaterSalinity(String plotName)
+{
+	return super.getWaterSalinity(plotName);
+}
+
+public String  getShoreDistance(String plotName)
+{
+	return super.getShoreDistance(plotName);
+}
+
+public String  getOrganicDepth(String plotName)
+{
+	return super.getOrganicDepth(plotName);
+}
+
+public String  getPercentBedRock(String plotName)
+{
+	return super.getPercentBedRock(plotName);
+}
+
+public String  getPercentRockGravel(String plotName)
+{
+	return super.getPercentRockGravel(plotName);
+}
+
+public String  getPercentWood(String plotName)
+{
+	return super.getPercentWood(plotName);
+}
+public String  getPercentLitter(String plotName)
+{
+	return super.getPercentLitter(plotName);
+}
+
+public String  getPercentBareSoil(String plotName)
+{
+	return super.getPercentBareSoil(plotName);
+}
+
+public String  getPercentWater(String plotName)
+{
+	return super.getPercentWater(plotName);
+}
+
+public String  getPercentOther(String plotName)
+{
+	return super.getPercentOther(plotName);
+}
+
+public String  getNameOther(String plotName)
+{
+	return super.getNameOther(plotName);
+}
+
+public String  getStandMaturity(String plotName)
+{
+	return super.getStandMaturity(plotName);
+}
+
+
+public String  getSuccessionalStatus(String plotName)
+{
+	return super.getSuccessionalStatus(plotName);
+}
+
+public String  getTreeHt(String plotName)
+{
+	return super.getTreeHt(plotName);
+}
+
+public String  getShrubHt(String plotName)
+{
+	return super.getShrubHt(plotName);
+}
+
+public String  getNonvascularHt(String plotName)
+{
+	return super.getNonvascularHt(plotName);
+}
+
+public String  getFloatingCover(String plotName)
+{
+	return super.getFloatingCover(plotName);
+}
+
+public String  getSubmergedCover(String plotName)
+{
+	return super.getSubmergedCover(plotName);
+}
+
+public String  getDominantStratum(String plotName)
+{
+	return super.getDominantStratum(plotName);
+}
+
+public String  getGrowthform1Type(String plotName)
+{
+	return super.getGrowthform1Type(plotName);
+}
+
+public String  getGrowthform2Type(String plotName)
+{
+	return super.getGrowthform2Type(plotName);
+}
+
+public String  getGrowthform3Type(String plotName)
+{
+	return super.getGrowthform3Type(plotName);
+}
+
+public String  getGrowthform1Cover(String plotName)
+{
+	return super.getGrowthform1Cover(plotName);
+}
+
+public String  getGrowthform2Cover(String plotName)
+{
+	return super.getGrowthform2Cover(plotName);
+}
+
+public String  getGrowthform3Cover(String plotName)
+{
+	return super.getGrowthform3Cover(plotName);
+}
+
+public boolean  getNotesPublic(String plotName)
+{
+	return super.getNotesPublic(plotName);
+}
+
+public boolean  getNotesMgt(String plotName)
+{
+	return super.getNotesMgt(plotName);
+}
+
+public boolean  getRevisions(String plotName)
+{
+	return super.getRevisions(plotName);
+}
 //END
+	
 	
 
 	/**

@@ -15,8 +15,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-08-15 03:10:22 $' <br>
- * 	'$Revision: 1.24 $' <br>
+ *  '$Date: 2002-08-30 19:12:03 $' <br>
+ * 	'$Revision: 1.25 $' <br>
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -119,6 +119,18 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 * @param plotId -- the RDBMS unique plot ID
 	 */
 	public String getAccessionValue(String plotId)
+	{
+		return("null");
+	}
+	
+	/** 
+	 * method that returns the accession number for a given plot observation.  
+	 * This method must be in this class eventhough it is not  relevant; because
+	 * the TNC plots database does not use an accession number this method 
+	 * will always return null
+	 * @param plotId -- the RDBMS unique plot ID
+	 */
+	public String getObservationAccessionNumber(String plotId)
 	{
 		return("null");
 	}
@@ -1262,7 +1274,28 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getSoilDrainage(String plotName)
 	{
-		return("");
+		String depth = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Soil Drainage]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				depth = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(depth);
 	}
 	
 	/**
@@ -1352,7 +1385,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	*/
 	public String getObsDateAccuracy(String plotName)
 	{
-		String s = "";
+		String s = "day";
 		return(s);
 	}
 	 
@@ -1384,7 +1417,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getMethodNarrative(String plotName)
 	{
-		String s = "";
+		String s = "Using the TNC PLOTS DB for NPS Mapping";
 		return(s);
 	}
 	
@@ -1393,14 +1426,18 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	public String getTaxonObservationArea(String plotName)
 	{
 		String s = "";
+		s = this.getPlotArea(plotName);
 		return(s);
 	}
 	
 	/**
+	 * Were cover values for the total taxon list collected from one 
+	 * contiguous area or dispersed subplots (e.g., continguous, 
+	 * dispersed-regular, dispered-random)
 	 */
 	public String getCoverDispersion(String plotName )
 	{
-		String s = "";
+		String s = "contiguous";
 		return(s);
 	}
 	
@@ -1416,7 +1453,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getStemObservationArea(String plotName)
 	{
-		String s = "";
+		String s = this.getPlotArea(plotName);
 		return(s);
 	}
 	
@@ -1432,7 +1469,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getOriginalData(String plotName )
 	{
-		String s = "";
+		String s = "TNC Plots DMS";
 		return(s);
 	}
 	
@@ -1440,9 +1477,434 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getEffortLevel( String plotName )
 	{
-		String s = "";
+		String s = "AVERAGE";
 		return(s);
 	}
+	
+	
+	//START
+
+public String getPlotValidationLevel(String plotName)
+{
+	return("1");
+}
+
+public String  getFloristicQuality(String plotName)
+{
+	return("");
+}
+
+public String  getBryophyteQuality(String plotName)
+{
+	return("");
+}
+
+public String  getLichenQuality(String plotName)
+{
+	return("");
+}
+
+public String  getObservationNarrative(String plotName)
+{
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([other comments]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				String buf = "consolidated "+rs.getString(1);
+				s = buf;
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getHomogeneity(String plotName)
+{
+	return("");
+}
+
+public String  getPhenologicAspect(String plotName)
+{
+	return("");
+}
+
+public String  getRepresentativeness(String plotName)
+{
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([Representativeness]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getBasalArea(String plotName)
+{
+	return("");
+}
+
+public String  getSoilMoistureRegime(String plotName)
+{
+	return("");
+}
+
+public String  getWaterSalinity(String plotName)
+{
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([salinity/halinity]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getShoreDistance(String plotName)
+{
+	return("");
+}
+
+public String  getOrganicDepth(String plotName)
+{
+	return("");
+}
+
+public String  getPercentBedRock(String plotName)
+{
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([% Bedrock]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getPercentRockGravel(String plotName)
+{
+	String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([% Small Rocks]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getPercentWood(String plotName)
+{
+	String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([% Wood]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+
+public String  getPercentLitter(String plotName)
+{
+	String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([% Litter, Duff]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getPercentBareSoil(String plotName)
+{
+	String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([% Bare Soil]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getPercentWater(String plotName)
+{
+	String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([% Water]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getPercentOther(String plotName)
+{
+	String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([% Other]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getNameOther(String plotName)
+{
+	String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([% Other Description]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getStandMaturity(String plotName)
+{
+	return("");
+}
+
+
+public String  getSuccessionalStatus(String plotName)
+{
+	return("");
+}
+
+public String  getTreeHt(String plotName)
+{
+	return("");
+}
+
+public String  getShrubHt(String plotName)
+{
+	return("");
+}
+
+public String  getNonvascularHt(String plotName)
+{
+	return("");
+}
+
+public String  getFloatingCover(String plotName)
+{
+	return("");
+}
+
+public String  getSubmergedCover(String plotName)
+{
+	return("");
+}
+
+public String  getDominantStratum(String plotName)
+{
+	String s = "";
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  ([Leaf Type]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(s);
+}
+
+public String  getGrowthform1Type(String plotName)
+{
+	return("");
+}
+
+public String  getGrowthform2Type(String plotName)
+{
+	return("");
+}
+
+public String  getGrowthform3Type(String plotName)
+{
+	return("");
+}
+
+public String  getGrowthform1Cover(String plotName)
+{
+	return("");
+}
+
+public String  getGrowthform2Cover(String plotName)
+{
+	return("");
+}
+
+public String  getGrowthform3Cover(String plotName)
+{
+	return("");
+}
+
+public boolean  getNotesPublic(String plotName)
+{
+	return(false);
+}
+
+public boolean  getNotesMgt(String plotName)
+{
+	return(false);
+}
+
+public boolean  getRevisions(String plotName)
+{
+	return(false);
+}
+//END
 //END
 	
 
@@ -1812,7 +2274,32 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	 public String getStrataCover(String plotName, String strataName)
 	 {
-		 return("100");
+		 System.out.println("TNCPlotsDB > strata cover lookup: '"+strataName+"'" );
+		 
+		 String coverAttribute = ""; // this will become the attribute name like 'H Cover'
+		 String cover = ""; // the cover 
+		 coverAttribute = strataName+" Cover";
+		 try 
+		 {
+			 Statement stmt = con.createStatement();
+			 StringBuffer sb = new StringBuffer();
+			 sb.append("select  (["+coverAttribute+"])");
+			 sb.append(" from ([Plots]) where ([Plot Code]) like '"+plotName+"'" );
+			 ResultSet rs = stmt.executeQuery(sb.toString() );
+
+				while (rs.next()) 
+				{
+					cover = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
+			}
+		 	return(cover);
 	 }
 	 
 	 

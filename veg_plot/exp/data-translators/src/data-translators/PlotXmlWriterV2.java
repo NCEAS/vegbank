@@ -19,8 +19,8 @@ import PlotDataSource;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: harris $' <br>
- *  '$Date: 2002-08-15 03:10:22 $' <br>
- *  '$Revision: 1.10 $' <br>
+ *  '$Date: 2002-08-30 19:12:03 $' <br>
+ *  '$Revision: 1.11 $' <br>
  */
 
  
@@ -309,10 +309,10 @@ public class PlotXmlWriterV2
 		 {
 		 	sb.append(" \n"
 				+"<project> \n"
-				+"	<projectName>"+datasrc.projectName+"</projectName> \n"
-				+"	<projectDescription>"+datasrc.projectDescription+"</projectDescription> \n"
-				+"	<startDate>"+datasrc.projectStartDate+"</startDate> \n"
-				+"	<stopDate>"+datasrc.projectStopDate+"</stopDate> \n"
+				+"  <projectName>"+datasrc.projectName+"</projectName> \n"
+				+"  <projectDescription>"+datasrc.projectDescription+"</projectDescription> \n"
+				+"  <startDate>"+datasrc.projectStartDate+"</startDate> \n"
+				+"  <stopDate>"+datasrc.projectStopDate+"</stopDate> \n"
 				//get the project contributor information
 				+ this.getProjectContributorContent() 
 				//+"</project> \n"
@@ -348,30 +348,30 @@ public class PlotXmlWriterV2
 			 	{
 					String contributorName=datasrc.projectContributors.elementAt(i).toString();
 		 			sb.append(" \n"
-					+"<projectContributor> \n"
-					+"	<wholeName>"+contributorName+"</wholeName> \n"
-					+"	<salutation>"+datasrc.getProjectContributorSalutation(contributorName)+"</salutation> \n"
-					+"	<givenName>"+datasrc.getProjectContributorGivenName(contributorName)+"</givenName> \n"
-					+"	<middleName>"+datasrc.getProjectContributorMiddleName(contributorName)+"</middleName> \n"
-					+"	<surName>"+datasrc.getProjectContributorSurName(contributorName)+"</surName> \n"
-					+"	<organizationName>"+datasrc.getProjectContributorOrganizationName(contributorName)+"</organizationName> \n"
-					+"	<contactInstructions>"+datasrc.getProjectContributorContactInstructions(contributorName)+"</contactInstructions> \n"
-					+"	<telephone> \n"
-					+"		<phoneNumber>"+datasrc.getProjectContributorPhoneNumber(contributorName)+"</phoneNumber> \n"
-					+"		<phoneType></phoneType> \n"
-					+"	</telephone> \n"
-					+"	<address> \n"
-					+"		<orgPosition>"+datasrc.getProjectContributorOrgPosition(contributorName)+"</orgPosition> \n"
-					+"		<email>"+datasrc.getProjectContributorEmailAddress(contributorName)+"</email> \n"
-					+"		<deliveryPoint>"+datasrc.getProjectContributorDeliveryPoint(contributorName)+"</deliveryPoint> \n"
-					+"		<city>"+datasrc.getProjectContributorCity(contributorName)+"</city> \n"
-					+"		<administrativeArea>"+datasrc.getProjectContributorAdministrativeArea(contributorName)+" </administrativeArea> \n"
-					+"		<postalCode>"+datasrc.getProjectContributorPostalCode(contributorName)+"</postalCode> \n"
-					+"		<country>"+datasrc.getProjectContributorCountry(contributorName)+"</country> \n"
-					+"		<currentFlag>"+datasrc.getProjectContributorCurrentFlag(contributorName)+"</currentFlag> \n"
-					+"		<addressStartDate>"+datasrc.getProjectContributorAddressStartDate(contributorName)+"</addressStartDate> \n"
-					+"	</address> \n"
-					+"</projectContributor>"
+					+"  <projectContributor> \n"
+					+"    <wholeName>"+contributorName+"</wholeName> \n"
+					+"    <salutation>"+datasrc.getProjectContributorSalutation(contributorName)+"</salutation> \n"
+					+"    <givenName>"+datasrc.getProjectContributorGivenName(contributorName)+"</givenName> \n"
+					+"    <middleName>"+datasrc.getProjectContributorMiddleName(contributorName)+"</middleName> \n"
+					+"    <surName>"+datasrc.getProjectContributorSurName(contributorName)+"</surName> \n"
+					+"    <organizationName>"+datasrc.getProjectContributorOrganizationName(contributorName)+"</organizationName> \n"
+					+"    <contactInstructions>"+datasrc.getProjectContributorContactInstructions(contributorName)+"</contactInstructions> \n"
+					+"    <telephone> \n"
+					+"      <phoneNumber>"+datasrc.getProjectContributorPhoneNumber(contributorName)+"</phoneNumber> \n"
+					+"      <phoneType></phoneType> \n"
+					+"    </telephone> \n"
+					+"    <address> \n"
+					+"      <orgPosition>"+datasrc.getProjectContributorOrgPosition(contributorName)+"</orgPosition> \n"
+					+"      <email>"+datasrc.getProjectContributorEmailAddress(contributorName)+"</email> \n"
+					+"      <deliveryPoint>"+datasrc.getProjectContributorDeliveryPoint(contributorName)+"</deliveryPoint> \n"
+					+"      <city>"+datasrc.getProjectContributorCity(contributorName)+"</city> \n"
+					+"      <administrativeArea>"+datasrc.getProjectContributorAdministrativeArea(contributorName)+" </administrativeArea> \n"
+					+"      <postalCode>"+datasrc.getProjectContributorPostalCode(contributorName)+"</postalCode> \n"
+					+"      <country>"+datasrc.getProjectContributorCountry(contributorName)+"</country> \n"
+					+"      <currentFlag>"+datasrc.getProjectContributorCurrentFlag(contributorName)+"</currentFlag> \n"
+					+"      <addressStartDate>"+datasrc.getProjectContributorAddressStartDate(contributorName)+"</addressStartDate> \n"
+					+"    </address> \n"
+					+"  </projectContributor>"
 					+"\n"
 					);
 				}
@@ -445,52 +445,52 @@ public class PlotXmlWriterV2
 			try
 			{
 				sb.append(" \n");
-				sb.append(" <plot> \n");
+				sb.append("  <plot> \n");
 				// get the plotid which is the unique ID for a plot as used by the 
 				// RDBMS
 				String plotId = datasrc.getPlotId(plotCode);
 				// get the accession number associtated with this 
 				String accession = datasrc.getAccessionValue(plotId);
 				
-				sb.append("		<plotId>"+plotId+"</plotId> \n");
-				sb.append("		<plotAccessionNumber>"+accession+"</plotAccessionNumber> \n");
-				sb.append("		<authorPlotCode>"+datasrc.plotCode+"</authorPlotCode> \n");
+				sb.append("    <plotId>"+plotId+"</plotId> \n");
+				sb.append("    <plotAccessionNumber>"+accession+"</plotAccessionNumber> \n");
+				sb.append("    <authorPlotCode>"+datasrc.plotCode+"</authorPlotCode> \n");
 				//citationId
 				//parentId
 				//sampleMethodId
-				sb.append("		<latitude>"+datasrc.latitude+"</latitude> \n");
-				sb.append("		<longitude>"+datasrc.longitude+"</longitude> \n");
-				sb.append("		<authorE>"+datasrc.xCoord+"</authorE> \n");
-				sb.append("		<authorN>"+datasrc.yCoord+"</authorN> \n");
-				sb.append("		<authorZone>"+datasrc.utmZone+"</authorZone> \n");
-				sb.append("		<authorDatum></authorDatum> \n");
-				sb.append("		<authorLocation>"+datasrc.getAuthorLocation(plotCode)+"</authorLocation> \n");
-				sb.append("		<locationNarrative></locationNarrative> \n");
-				sb.append("		<confidentialityStatus>"+datasrc.confidentialityStatus+"</confidentialityStatus> \n");
-				sb.append("		<confidentialityReason>"+datasrc.confidentialityReason+"</confidentialityReason> \n");
-				sb.append("		<azimuth></azimuth> \n");
-				sb.append("		<dsgPoly></dsgPoly> \n");
-				sb.append("		<shape>"+datasrc.plotShape+"</shape> \n");
-				sb.append("		<area>"+datasrc.plotArea+"</area> \n");
-				sb.append("		<standSize></standSize> \n");
-				sb.append("		<placementMethod></placementMethod> \n");
-				sb.append("		<permanence>"+datasrc.isPlotPermanent(plotCode)+"</permanence> \n");
-				sb.append("		<layoutNarative></layoutNarative> \n");
-				sb.append("		<elevation>"+datasrc.getElevation(plotCode)+"</elevation> \n");
-				sb.append("		<elevationAccuracy>"+datasrc.getElevationAccuracy(plotCode)+"</elevationAccuracy> \n");
-				sb.append("		<slopeAspect>"+datasrc.slopeAspect.trim()+" </slopeAspect> \n");
-				sb.append("		<slopeGradient>"+datasrc.slopeGradient.trim()+"</slopeGradient> \n");
-				sb.append("		<topoPosition>"+datasrc.topoPosition+"</topoPosition> \n");
-				sb.append("		<landform>"+datasrc.getLandForm(plotCode)+"</landform> \n");
-				sb.append("		<geology>"+datasrc.surfGeo+"</geology> \n");
-				sb.append("		<soilTaxon>"+datasrc.getSoilTaxon(plotCode)+"</soilTaxon> \n");
-				// THIS ELEMENT HAS BENN REMOVED FROM THE DATABASE 20020717
-				sb.append("		<soilTaxonSource></soilTaxonSource> \n");
-				sb.append("		<notesPublic></notesPublic> \n");
-				sb.append("		<notesMgt></notesMgt> \n");
-				sb.append("		<revisions></revisions> \n");
-				sb.append("		<state>"+datasrc.state+"</state> \n");
-				sb.append("		<country>"+datasrc.country+"</country> \n");
+				sb.append("    <latitude>"+datasrc.latitude+"</latitude> \n");
+				sb.append("    <longitude>"+datasrc.longitude+"</longitude> \n");
+				sb.append("    <authorE>"+datasrc.xCoord+"</authorE> \n");
+				sb.append("    <authorN>"+datasrc.yCoord+"</authorN> \n");
+				sb.append("    <authorZone>"+datasrc.utmZone+"</authorZone> \n");
+				sb.append("    <authorDatum></authorDatum> \n");
+				sb.append("    <authorLocation>"+datasrc.getAuthorLocation(plotCode)+"</authorLocation> \n");
+				sb.append("    <locationNarrative></locationNarrative> \n");
+				sb.append("    <confidentialityStatus>"+datasrc.confidentialityStatus+"</confidentialityStatus> \n");
+				sb.append("    <confidentialityReason>"+datasrc.confidentialityReason+"</confidentialityReason> \n");
+				sb.append("    <azimuth></azimuth> \n");
+				sb.append("    <dsgPoly></dsgPoly> \n");
+				sb.append("    <shape>"+datasrc.plotShape+"</shape> \n");
+				sb.append("    <area>"+datasrc.plotArea+"</area> \n");
+				sb.append("    <standSize>"+datasrc.getStandSize(plotCode)+"</standSize> \n");
+				sb.append("    <placementMethod></placementMethod> \n");
+				sb.append("    <permanence>"+datasrc.isPlotPermanent(plotCode)+"</permanence> \n");
+				sb.append("    <layoutNarative></layoutNarative> \n");
+				sb.append("    <elevation>"+datasrc.getElevation(plotCode)+"</elevation> \n");
+				sb.append("    <elevationAccuracy>"+datasrc.getElevationAccuracy(plotCode)+"</elevationAccuracy> \n");
+				sb.append("    <slopeAspect>"+datasrc.slopeAspect.trim()+" </slopeAspect> \n");
+				sb.append("    <slopeGradient>"+datasrc.slopeGradient.trim()+"</slopeGradient> \n");
+				sb.append("    <topoPosition>"+datasrc.topoPosition+"</topoPosition> \n");
+				sb.append("    <landform>"+datasrc.getLandForm(plotCode)+"</landform> \n");
+				sb.append("    <geology>"+datasrc.surfGeo+"</geology> \n");
+				sb.append("    <soilTaxon>"+datasrc.getSoilTaxon(plotCode)+"</soilTaxon> \n");
+				// THIS ELEMENT HAS BEEN REMOVED FROM THE DATABASE 20020717
+				sb.append("    <soilTaxonSource>"+datasrc.getSoilTaxonSource(plotCode)+"</soilTaxonSource> \n");
+				sb.append("    <notesPublic></notesPublic> \n");
+				sb.append("    <notesMgt></notesMgt> \n");
+				sb.append("    <revisions></revisions> \n");
+				sb.append("    <state>"+datasrc.state+"</state> \n");
+				sb.append("    <country>"+datasrc.country+"</country> \n");
 				sb.append(" \n");
 				
 			}
@@ -519,73 +519,74 @@ public class PlotXmlWriterV2
 		 StringBuffer sb = new StringBuffer();
 		 try 
 		 {
-		 	sb.append("	<observation> \n");
+		 	sb.append("    <observation> \n");
 		 	
-			sb.append("	<authorObsCode></authorObsCode> \n");
-  		sb.append("	<obsStartDate>"+datasrc.getObsStartDate(plotCode)+"</obsStartDate> \n");
-   		sb.append("	<obsEndDate>"+datasrc.getObsStopDate(plotCode)+"</obsEndDate> \n");
-   		sb.append("	<dateAccuracy></dateAccuracy> \n");
-   		sb.append("	<sampleMethodId></sampleMethodId>  \n");
-    	sb.append("	<coverMethodId></coverMethodId> \n");
-   		sb.append("	<stratumMethodId></stratumMethodId> \n");
-    	sb.append("	<stemSizeLimit></stemSizeLimit> \n");
-    	sb.append("	<methodNarrative></methodNarrative> \n");
-    	sb.append("	<taxonObservationArea></taxonObservationArea> \n");
-    	sb.append("	<coverDispersion></coverDispersion> \n");
-    	sb.append("	<autotaxonCover></autotaxonCover> \n");
-    	sb.append("	<stemObservationArea></stemObservationArea> \n");
-    	sb.append("	<stemSampleMethod></stemSampleMethod> \n");
-    	sb.append("	<originalData></originalData> \n");
-    	sb.append("	<effortLevel></effortLevel> \n");
-    	sb.append("	<plotValidationLevel></plotValidationLevel> \n");
-    	sb.append("	<floristicQuality></floristicQuality> \n");
-    	sb.append("	<bryophyteQuality></bryophyteQuality> \n");
-    	sb.append("	<lichenQuality></lichenQuality> \n");
-    	sb.append("	<observationNarrative></observationNarrative> \n");
-    	sb.append("	<landscapeNarrative></landscapeNarrative> \n");
-    	sb.append("	<homogeneity></homogeneity> \n");
-    	sb.append("	<phenologicalAspect></phenologicalAspect> \n");
-    	sb.append("	<representativeness></representativeness> \n");
-    	sb.append("	<basalArea></basalArea> \n");
-			sb.append("	<hydrologicRegime>"+datasrc.hydrologicRegime+"</hydrologicRegime> \n");
-    	sb.append("	<soilMoistureRegime></soilMoistureRegime> \n");
-    	sb.append("	<soilDrainage></soilDrainage> \n");
-    	sb.append("	<waterSalinity></waterSalinity> \n");
-    	sb.append("	<waterDepth></waterDepth> \n");
-    	sb.append("	<shoreDistance></shoreDistance> \n");
-			sb.append("	<soilDepth>"+datasrc.soilDepth+"</soilDepth> \n");
-    	sb.append("	<organicDepth></organicDepth> \n");
-    	sb.append("	<percentBedrock></percentBedrock>  \n");
-    	sb.append("	<percentRockGravel> </percentRockGravel>  \n");
-    	sb.append("	<percentWood></percentWood> \n");
-    	sb.append("	<percentLitter></percentLitter> \n");
-    	sb.append("	<percentBareSoil></percentBareSoil> \n");
-    	sb.append("	<percentWater></percentWater> \n");
-    	sb.append("	<percentOther></percentOther> \n");
-    	sb.append("	<nameOther></nameOther> \n");
-    	sb.append("	<standMaturity></standMaturity> \n"); 
-    	sb.append("	<successionalStatus></successionalStatus> \n"); 
-    	sb.append("	<treeHt></treeHt> \n");
-    	sb.append("	<shrubHt></shrubHt> \n");
-    	sb.append("	<fieldHt></fieldHt> \n");
-    	sb.append("	<nonvascularHt></nonvascularHt> \n");
-    	sb.append("	<submergedHt></submergedHt> \n");
-    	sb.append("	<treeCover></treeCover> \n");
-    	sb.append("	<shrubCover></shrubCover> \n");
-    	sb.append("	<fieldCover></fieldCover> \n");
-    	sb.append("	<nonvascularCover></nonvascularCover> \n");
-    	sb.append("	<floatingCover></floatingCover> \n");
-    	sb.append("	<submergedCover></submergedCover> \n");
-    	sb.append("	<dominantStratum></dominantStratum> \n");
-    	sb.append("	<growthform1type></growthform1type> \n");
-			sb.append("	<growthform2type></growthform2type>  \n");
-    	sb.append("	<growthform3type></growthform3type> \n");
-    	sb.append("	<growthform1cover></growthform1cover>  \n");
-    	sb.append("	<growthform2cover></growthform2cover> \n");
-   		sb.append("	<growthform3cover></growthform3cover>  \n");
-    	sb.append("	<notesPublic></notesPublic> \n");
-    	sb.append("	<notesMgt></notesMgt>  \n");
-			sb.append("	<revisions></revisions>  \n");
+			sb.append("      <authorObsCode>"+datasrc.getObsStartDate(plotCode)+"</authorObsCode> \n");
+  		sb.append("      <obsStartDate>"+datasrc.getObsStartDate(plotCode)+"</obsStartDate> \n");
+   		sb.append("      <obsEndDate>"+datasrc.getObsStopDate(plotCode)+"</obsEndDate> \n");
+   		sb.append("      <dateAccuracy>"+datasrc.getObsDateAccuracy(plotCode)+"</dateAccuracy> \n");
+   		sb.append("      <observationSequence>"+datasrc.getObservationAccessionNumber(plotCode)+"</observationSequence> \n");
+			sb.append("      <sampleMethodId></sampleMethodId>  \n");
+    	sb.append("      <coverMethodId></coverMethodId> \n");
+   		sb.append("      <stratumMethodId></stratumMethodId> \n");
+    	sb.append("      <stemSizeLimit></stemSizeLimit> \n");
+    	sb.append("      <methodNarrative>"+datasrc.getMethodNarrative(plotCode)+"</methodNarrative> \n");
+    	sb.append("      <taxonObservationArea>"+datasrc.getTaxonObservationArea(plotCode)+"</taxonObservationArea> \n");
+    	sb.append("      <coverDispersion>"+datasrc.getCoverDispersion(plotCode)+"</coverDispersion> \n");
+    	sb.append("      <autotaxonCover>"+datasrc.getAutoTaxonCover(plotCode)+"</autotaxonCover> \n");
+    	sb.append("      <stemObservationArea>"+datasrc.getStemObservationArea(plotCode)+"</stemObservationArea> \n");
+    	sb.append("      <stemSampleMethod></stemSampleMethod> \n");
+    	sb.append("      <originalData>"+datasrc.getOriginalData(plotCode)+"</originalData> \n");
+    	sb.append("      <effortLevel>"+datasrc.getEffortLevel(plotCode)+"</effortLevel> \n");
+    	sb.append("      <plotValidationLevel>"+datasrc.getPlotValidationLevel(plotCode)+"</plotValidationLevel> \n");
+    	sb.append("      <floristicQuality>"+datasrc.getFloristicQuality(plotCode)+"</floristicQuality> \n");
+    	sb.append("      <bryophyteQuality>"+datasrc.getBryophyteQuality(plotCode)+"</bryophyteQuality> \n");
+    	sb.append("      <lichenQuality>"+datasrc.getLichenQuality(plotCode)+"</lichenQuality> \n");
+    	sb.append("      <observationNarrative>"+datasrc.getObservationNarrative(plotCode)+"</observationNarrative> \n");
+    	sb.append("      <landscapeNarrative></landscapeNarrative> \n");
+    	sb.append("      <homogeneity>"+datasrc.getHomogeneity(plotCode)+"</homogeneity> \n");
+    	sb.append("      <phenologicalAspect>"+datasrc.getPhenologicAspect(plotCode)+"</phenologicalAspect> \n");
+    	sb.append("      <representativeness>"+datasrc.getRepresentativeness(plotCode)+"</representativeness> \n");
+    	sb.append("      <basalArea>"+datasrc.getBasalArea(plotCode)+"</basalArea> \n");
+			sb.append("      <hydrologicRegime>"+datasrc.hydrologicRegime+"</hydrologicRegime> \n");
+    	sb.append("      <soilMoistureRegime>"+datasrc.getSoilMoistureRegime(plotCode)+"</soilMoistureRegime> \n");
+    	sb.append("      <soilDrainage>"+datasrc.getSoilDrainage(plotCode)+"</soilDrainage> \n");
+    	sb.append("      <waterSalinity>"+datasrc.getWaterSalinity(plotCode)+"</waterSalinity> \n");
+    	sb.append("      <waterDepth></waterDepth> \n");
+    	sb.append("      <shoreDistance>"+datasrc.getShoreDistance(plotCode)+"</shoreDistance> \n");
+			sb.append("      <soilDepth>"+datasrc.soilDepth+"</soilDepth> \n");
+    	sb.append("      <organicDepth>"+datasrc.getOrganicDepth(plotCode)+"</organicDepth> \n");
+    	sb.append("      <percentBedrock>"+datasrc.getPercentBedRock(plotCode)+"</percentBedrock>  \n");
+    	sb.append("      <percentRockGravel>"+datasrc.getPercentRockGravel(plotCode)+"</percentRockGravel>  \n");
+    	sb.append("      <percentWood>"+datasrc.getPercentWood(plotCode)+"</percentWood> \n");
+    	sb.append("      <percentLitter>"+datasrc.getPercentLitter(plotCode)+"</percentLitter> \n");
+    	sb.append("      <percentBareSoil>"+datasrc.getPercentBareSoil(plotCode)+"</percentBareSoil> \n");
+    	sb.append("      <percentWater>"+datasrc.getPercentWater(plotCode)+"</percentWater> \n");
+    	sb.append("      <percentOther>"+datasrc.getPercentOther(plotCode)+"</percentOther> \n");
+    	sb.append("      <nameOther>"+datasrc.getNameOther(plotCode)+"</nameOther> \n");
+    	sb.append("      <standMaturity>"+datasrc.getStandMaturity(plotCode)+"</standMaturity> \n"); 
+    	sb.append("      <successionalStatus>"+datasrc.getSuccessionalStatus(plotCode)+"</successionalStatus> \n"); 
+    	sb.append("      <treeHt>"+datasrc.getTreeHt(plotCode)+"</treeHt> \n");
+    	sb.append("      <shrubHt>"+datasrc.getShrubHt(plotCode)+"</shrubHt> \n");
+    	sb.append("      <fieldHt></fieldHt> \n");
+    	sb.append("      <nonvascularHt></nonvascularHt> \n");
+    	sb.append("      <submergedHt></submergedHt> \n");
+    	sb.append("      <treeCover></treeCover> \n");
+    	sb.append("      <shrubCover></shrubCover> \n");
+    	sb.append("      <fieldCover></fieldCover> \n");
+    	sb.append("      <nonvascularCover></nonvascularCover> \n");
+    	sb.append("      <floatingCover>"+datasrc.getFloatingCover(plotCode)+"</floatingCover> \n");
+    	sb.append("      <submergedCover>"+datasrc.getSubmergedCover(plotCode)+"</submergedCover> \n");
+    	sb.append("      <dominantStratum>"+datasrc.getDominantStratum(plotCode)+"</dominantStratum> \n");
+    	sb.append("      <growthform1type>"+datasrc.getGrowthform1Type(plotCode)+"</growthform1type> \n");
+			sb.append("      <growthform2type>"+datasrc.getGrowthform2Type(plotCode)+"</growthform2type>  \n");
+    	sb.append("      <growthform3type>"+datasrc.getGrowthform3Type(plotCode)+"</growthform3type> \n");
+    	sb.append("      <growthform1cover>"+datasrc.getGrowthform1Cover(plotCode)+"</growthform1cover>  \n");
+    	sb.append("      <growthform2cover>"+datasrc.getGrowthform2Cover(plotCode)+"</growthform2cover> \n");
+   		sb.append("      <growthform3cover>"+datasrc.getGrowthform3Cover(plotCode)+"</growthform3cover>  \n");
+    	sb.append("      <notesPublic>"+datasrc.getNotesPublic(plotCode)+"</notesPublic> \n");
+    	sb.append("      <notesMgt>"+datasrc.getNotesMgt(plotCode)+"</notesMgt>  \n");
+			sb.append("      <revisions>"+datasrc.getRevisions(plotCode)+"</revisions>  \n");
 			
 			//add the skeleton for the community classification stuff
 			sb.append( getVegCommunityContent() );
@@ -764,7 +765,7 @@ public class PlotXmlWriterV2
 			Vector plotIdVec = new Vector();
 		//	plotIdVec.addElement("0");
 		//	plotIdVec.addElement("1");
-			plotIdVec.addElement("377");
+			plotIdVec.addElement("382");
 		//	plotIdVec.addElement("3");
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(plugin);
 			//writer.writeSinglePlot("test-plot");

@@ -17,8 +17,8 @@ import java.util.*;
  * 
  * Release: @release@ <br>
  * '$Author: harris $' <br>
- * '$Date: 2002-07-23 21:42:54 $' <br>
- * '$Revision: 1.11 $' <br>
+ * '$Date: 2002-08-30 19:12:03 $' <br>
+ * '$Revision: 1.12 $' <br>
  */
 public interface PlotDataSourceInterface
 {
@@ -97,6 +97,19 @@ public interface PlotDataSourceInterface
 	 * @param plotId -- the RDBMS unique plot ID
 	 */
 	 String getAccessionValue(String plotId);
+	 
+	 /** 
+	 * method that returns the accession number associated with an observation
+	 * the input plot id is the unique identifier of the plot as used by 
+	 * the RDBMS.  This was added late in August 2002, and this method will
+	 * have to be overloaded by one that accepts the plotId and the vbsequence
+	 * number, for this method will only work where there is a single observation
+	 * per plot.
+	 * @param plotId -- the RDBMS unique plot ID
+	 */
+	 String getObservationAccessionNumber(String plotId);
+	 
+	 
 	//returns the placeNames each name can be used to retrieve
 	//other information about a place
 	Vector getPlaceNames(String plotName);
@@ -299,6 +312,7 @@ public interface PlotDataSourceInterface
 	 */
 	String getSoilDepth(String plotName); 
 	
+	
 	//START
 	/**
 	* method to return the accuracy of the observation date <br>
@@ -435,8 +449,48 @@ public interface PlotDataSourceInterface
 	 * @return autotaxoncover -- the autotaxoncover
 	 */
 	String getEffortLevel( String plotName );	 
-		 
-		 
+
+	//START
+ String getPlotValidationLevel(String plotName);
+String  getFloristicQuality(String plotName);
+ String  getBryophyteQuality(String plotName);
+ String  getLichenQuality(String plotName);
+ String  getObservationNarrative(String plotName);
+ String  getHomogeneity(String plotName);
+ String  getPhenologicAspect(String plotName);
+ String  getRepresentativeness(String plotName);
+ String  getBasalArea(String plotName);
+ String  getSoilMoistureRegime(String plotName);
+ String  getWaterSalinity(String plotName);
+ String  getShoreDistance(String plotName);
+ String  getOrganicDepth(String plotName);
+ String  getPercentBedRock(String plotName);
+ String  getPercentRockGravel(String plotName);
+ String  getPercentWood(String plotName);
+ String  getPercentLitter(String plotName);
+ String  getPercentBareSoil(String plotName);
+ String  getPercentWater(String plotName);
+ String  getPercentOther(String plotName);
+ String  getNameOther(String plotName);
+ String  getStandMaturity(String plotName);
+ String  getSuccessionalStatus(String plotName);
+ String  getTreeHt(String plotName);
+ String  getShrubHt(String plotName);
+ String  getNonvascularHt(String plotName);
+ String  getFloatingCover(String plotName);
+ String  getSubmergedCover(String plotName);
+ String  getDominantStratum(String plotName);
+ String  getGrowthform1Type(String plotName);
+ String  getGrowthform2Type(String plotName);
+ String  getGrowthform3Type(String plotName);
+ String  getGrowthform1Cover(String plotName);
+ String  getGrowthform2Cover(String plotName);
+ String  getGrowthform3Cover(String plotName);
+ boolean  getNotesPublic(String plotName);
+ boolean  getNotesMgt(String plotName);
+ boolean  getRevisions(String plotName);
+
+//END
 	 
 	//END
 	/**

@@ -11,8 +11,8 @@ import java.sql.*;
  *
  *	
  *  '$Author: harris $' <br>
- *  '$Date: 2002-08-15 03:10:22 $' <br>
- * 	'$Revision: 1.18 $' <br>
+ *  '$Date: 2002-08-30 19:12:03 $' <br>
+ * 	'$Revision: 1.19 $' <br>
  */
  
 //public class VegBankDataSourcePlugin
@@ -24,7 +24,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 
 	//variables below are for VEGBANK on postgresql
 	private String driver = "org.postgresql.Driver";
-	private String dbUrl = "jdbc:postgresql://vegbank.nceas.ucsb.edu/plots_dev";
+	private String dbUrl = "jdbc:postgresql://vegbank/plots_dev";
 	private String dbUser = "datauser";
 	public Connection con = null;
 	
@@ -122,6 +122,8 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			{
 				 s = rs.getString(1);
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch (SQLException ex) 
 		{
@@ -133,6 +135,43 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			System.out.println("Exception: " + ex );
 			ex.printStackTrace();
 		}
+		return(s);
+	}
+	
+	
+	/** 
+	 * method that returns the accession number associated with a plot obs
+	 * the input plot id is the unique identifier of the plot observation 
+	 * as used by the RDBMS.  This method is to be revisited in Nov 2002 
+	 * and changed so that the plot id and a sequence number can be traced.
+	 * @param plotId -- the RDBMS unique plot ID
+	 */
+	public String getObservationAccessionNumber(String plotId)
+	{
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select  accession_number "
+			+" from OBSERVATION where PLOT_ID = " + plotId );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch (SQLException ex) 
+		{
+			this.handleSQLException( ex );
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		
 		return(s);
 	}
 	
@@ -247,7 +286,8 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
  	 */
  	public String getSoilDrainage(String plotName)
  	{
- 		return("");
+ 		String s = this.getObservationElement(plotName, "soildrainage");
+		return(s);
  	}
  	
  	/**
@@ -371,7 +411,6 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		try 
 		{
 			stmt = con.createStatement();
-			
 			sb.append("select ");
 			sb.append(elementName);
 			sb.append(" from OBSERVATION where PLOT_ID = ");
@@ -382,6 +421,8 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			{
 				 s = rs.getString(1);
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch (SQLException ex) 
 		{
@@ -433,7 +474,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getMethodNarrative(String plotName)
 	{
-		String s = "";
+		String s = this.getObservationElement(plotName, "methodnarrative");
 		return(s);
 	}
 	
@@ -441,7 +482,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getTaxonObservationArea(String plotName)
 	{
-		String s = "";
+		String s = this.getObservationElement(plotName, "taxonobservationarea");
 		return(s);
 	}
 	
@@ -449,7 +490,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getCoverDispersion(String plotName )
 	{
-		String s = "";
+		String s = this.getObservationElement(plotName, "coverdispersion");
 		return(s);
 	}
 	
@@ -465,7 +506,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getStemObservationArea(String plotName)
 	{
-		String s = "";
+		String s = this.getObservationElement(plotName, "stemobservationarea");
 		return(s);
 	}
 	
@@ -481,7 +522,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getOriginalData(String plotName )
 	{
-		String s = "";
+		String s = this.getObservationElement(plotName, "originaldata");
 		return(s);
 	}
 	
@@ -489,7 +530,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	 */
 	public String getEffortLevel( String plotName )
 	{
-		String s = "";
+		String s = this.getObservationElement(plotName, "effortlevel");
 		return(s);
 	}
 //END
@@ -512,7 +553,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			while (rs.next()) 
 			{
 				 s = rs.getString(1);
-				 if ( s.toUpperCase().equals("false") )
+				 if ( s.toUpperCase().equals("FALSE") || s.toUpperCase().startsWith("F")  )
 				 {
 					 b = false;
 				 }
@@ -550,7 +591,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		{
 			stmt = con.createStatement();
 			StringBuffer sb = new StringBuffer();
-			sb.append("select SOILTAXONSOURCE from PLOT where PLOT_ID = "+plotName);
+			sb.append("select SOILTAXONSRC from OBSERVATION where PLOT_ID = "+plotName);
 			ResultSet rs = stmt.executeQuery( sb.toString() );			
 			while (rs.next()) 
 			{
@@ -565,7 +606,234 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 		return(s);
  	}
 
+//START
+public String getPlotValidationLevel(String plotName)
+{
+		String s = this.getObservationElement(plotName, "plotvalidationlevel");
+		return(s);
+}
 
+public String  getFloristicQuality(String plotName)
+{
+		String s = this.getObservationElement(plotName, "floristicquality");
+		return(s);
+}
+
+public String  getBryophyteQuality(String plotName)
+{
+		String s = this.getObservationElement(plotName, "bryophytequality");
+		return(s);
+}
+
+public String  getLichenQuality(String plotName)
+{
+		String s = this.getObservationElement(plotName, "lichenquality");
+		return(s);
+}
+
+public String  getObservationNarrative(String plotName)
+{
+		String s = this.getObservationElement(plotName, "observationnarrative");
+		return(s);
+}
+
+public String  getHomogeneity(String plotName)
+{
+		String s = this.getObservationElement(plotName, "homogeneity");
+		return(s);
+}
+
+public String  getPhenologicAspect(String plotName)
+{
+		String s = this.getObservationElement(plotName, "phenologicaspect");
+		return(s);
+}
+
+public String  getRepresentativeness(String plotName)
+{
+		String s = this.getObservationElement(plotName, "representativeness");
+		return(s);
+}
+
+public String  getBasalArea(String plotName)
+{
+		String s = this.getObservationElement(plotName, "basalarea");
+		return(s);
+}
+
+public String  getSoilMoistureRegime(String plotName)
+{
+		String s = this.getObservationElement(plotName, "soilmoistureregime");
+		return(s);
+}
+
+public String  getWaterSalinity(String plotName)
+{
+		String s = this.getObservationElement(plotName, "watersalinity");
+		return(s);
+}
+
+public String  getShoreDistance(String plotName)
+{
+		String s = this.getObservationElement(plotName, "shoredistance");
+		return(s);
+}
+
+public String  getOrganicDepth(String plotName)
+{
+		String s = this.getObservationElement(plotName, "organicdepth");
+		return(s);
+}
+
+public String  getPercentBedRock(String plotName)
+{
+		String s = this.getObservationElement(plotName, "percentbedrock");
+		return(s);
+}
+
+public String  getPercentRockGravel(String plotName)
+{
+		String s = this.getObservationElement(plotName, "percentrockgravel");
+		return(s);
+}
+
+public String  getPercentWood(String plotName)
+{
+		String s = this.getObservationElement(plotName, "percentwood");
+		return(s);
+}
+public String  getPercentLitter(String plotName)
+{
+		String s = this.getObservationElement(plotName, "percentlitter");
+		return(s);
+}
+
+public String  getPercentBareSoil(String plotName)
+{
+		String s = this.getObservationElement(plotName, "percentbaresoil");
+		return(s);
+}
+
+public String  getPercentWater(String plotName)
+{
+		String s = this.getObservationElement(plotName, "percentwater");
+		return(s);
+}
+
+public String  getPercentOther(String plotName)
+{
+		String s = this.getObservationElement(plotName, "percentother");
+		return(s);
+}
+
+public String  getNameOther(String plotName)
+{
+		String s = this.getObservationElement(plotName, "nameother");
+		return(s);
+}
+
+public String  getStandMaturity(String plotName)
+{
+		String s = this.getObservationElement(plotName, "standmaturity");
+		return(s);
+}
+
+
+public String  getSuccessionalStatus(String plotName)
+{
+		String s = this.getObservationElement(plotName, "successionalstatus");
+		return(s);
+}
+
+public String  getTreeHt(String plotName)
+{
+		String s = this.getObservationElement(plotName, "treeht");
+		return(s);
+}
+
+public String  getShrubHt(String plotName)
+{
+		String s = this.getObservationElement(plotName, "shrubht");
+		return(s);
+}
+
+public String  getNonvascularHt(String plotName)
+{
+		String s = this.getObservationElement(plotName, "nonvascularht");
+		return(s);
+}
+
+public String  getFloatingCover(String plotName)
+{
+		String s = this.getObservationElement(plotName, "floatingcover");
+		return(s);
+}
+
+public String  getSubmergedCover(String plotName)
+{
+		String s = this.getObservationElement(plotName, "submergedcover");
+		return(s);
+}
+
+public String  getDominantStratum(String plotName)
+{
+		String s = this.getObservationElement(plotName, "dominantstratum");
+		return(s);
+}
+
+public String  getGrowthform1Type(String plotName)
+{
+		String s = this.getObservationElement(plotName, "growthform1type");
+		return(s);
+}
+
+public String  getGrowthform2Type(String plotName)
+{
+	String s = this.getObservationElement(plotName, "growthform2type");
+		return(s);
+}
+
+public String  getGrowthform3Type(String plotName)
+{
+	String s = this.getObservationElement(plotName, "growthform3type");
+		return(s);
+}
+
+public String  getGrowthform1Cover(String plotName)
+{
+	String s = this.getObservationElement(plotName, "growthform1cover");
+		return(s);
+}
+
+public String  getGrowthform2Cover(String plotName)
+{
+	String s = this.getObservationElement(plotName, "growthform2cover");
+		return(s);
+}
+
+public String  getGrowthform3Cover(String plotName)
+{
+	String s = this.getObservationElement(plotName, "growthform3cover");
+		return(s);
+}
+
+public boolean  getNotesPublic(String plotName)
+{
+	String s = this.getObservationElement(plotName, "notespublic");
+		return(false);
+}
+
+public boolean  getNotesMgt(String plotName)
+{
+	String s = this.getObservationElement(plotName, "notesmgt");
+		return(false);
+}
+
+public boolean  getRevisions(String plotName)
+{
+	return(false);
+}
+//END
 
 	//returns all the plots stored in the access file
 	public Vector getPlotNames()
@@ -740,8 +1008,33 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorContactInstructions(String contributorWholeName)
 	{
-			return("");
+		String s = "";
+		Statement stmt = null;
+		try 
+		{
+			// FIRST GET THE SURNAME AND GIVEN NAME
+			StringTokenizer st = new StringTokenizer(contributorWholeName);
+			String givenName = st.nextToken(); 
+			String surName = st.nextToken();
+			// WRITE THE QUERY
+			stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select CONTACTINSTRUCTIONS from PARTY where surname like '"+surName+"' ");
+			sb.append("and givenname like '"+givenName+"'");
+			ResultSet rs = stmt.executeQuery( sb.toString() );			
+			while (rs.next()) 
+			{
+				s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{   
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
+	
 	//retuns the person's phone number based on their full name which is the
 	//concatenated givename and surname of the user like 'bob peet'
 	public String getProjectContributorPhoneNumber(String contributorWholeName)
@@ -757,7 +1050,7 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			// WRITE THE QUERY
 			stmt = con.createStatement();
 			StringBuffer sb = new StringBuffer();
-			sb.append("select phonenumber from telephone where party_id = ( " );
+			sb.append("select phonenumber from telephone where party_id in ( " );
 			sb.append("select party_id from PARTY where surname like '"+surName+"' ");
 			sb.append("and givenname like '"+givenName+"')");
 			ResultSet rs = stmt.executeQuery( sb.toString() );			
@@ -765,6 +1058,8 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 			{
 				s = rs.getString(1);
 			}
+			rs.close();
+			stmt.close();
 		}
 		catch (java.lang.Exception ex) 
 		{   
@@ -1677,7 +1972,24 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	//returns the landForm
 	public String getLandForm(String plotName)
 	{
-		return("aluvial fan");
+		String s = null;
+		Statement stmt = null;
+		try 
+		{
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select LANDFORM "
+			+" from PLOT where PLOT_ID = " + plotName );
+			while (rs.next()) 
+			{
+				 s = rs.getString(1);
+			}
+		}
+		catch (java.lang.Exception ex) 
+		{
+			System.out.println("Exception: " + ex );
+			ex.printStackTrace();
+		}
+		return(s);
 	}
 	
 	//retuns the elevation

@@ -24,8 +24,8 @@ import  xmlresource.utils.XMLparse;
  * Access to the data stored in the native VegBank XML structure.
  * 
  * 	'$Author: harris $'
- *	'$Date: 2002-05-24 20:22:25 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2002-08-30 19:12:02 $'
+ *	'$Revision: 1.7 $'
  *
  */
 public class NativeXmlPlugin implements PlotDataSourceInterface
@@ -298,6 +298,11 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 	{
 		return( this.getPlotAttribute(plotName, "plotAccessionNumber") );
 	}
+	public String getObservationAccessionNumber(String plotName)
+	{
+		return( this.getPlotAttribute(plotName, "plotAccessionNumber") );
+	}
+	
 	public Vector getPlaceNames(String plotName)
 	{
 		return(vectorBuf);
@@ -650,6 +655,541 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 		String s = "";
 		return(s);
 	}
+	
+	//START
+public String getPlotValidationLevel(String plotName)
+{
+	return("");
+}
+
+public String  getFloristicQuality(String plotName)
+{
+	return("");
+}
+
+public String  getBryophyteQuality(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	elementValue = parse.getNodeValue(doc, "bryophyteQuality");
+	return(elementValue);
+}
+
+public String  getLichenQuality(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "lichenQuality");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: lichenQuality");
+	}
+	return(elementValue);
+}
+
+public String  getObservationNarrative(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "observationNarrative");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: observationNarrative");
+	}
+	return(elementValue);
+}
+
+public String  getHomogeneity(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "homogeneity");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: homogeneity");
+	}
+	return(elementValue);
+}
+
+public String  getPhenologicAspect(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "phenologicAspect");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: phenologicAspect");
+	}
+	return(elementValue);
+}
+
+public String  getRepresentativeness(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "representativeness");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: representativeness");
+	}
+	return(elementValue);
+}
+
+public String  getBasalArea(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "basalArea");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: basalArea");
+	}
+	return(elementValue);
+}
+
+public String  getSoilMoistureRegime(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "soilMoistureRegime");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: soilMoistureRegime");
+	}
+	return(elementValue);
+}
+
+public String  getWaterSalinity(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	elementValue = parse.getNodeValue(doc, "waterSalinity");
+	return(elementValue);
+}
+
+public String  getShoreDistance(String plotName)
+{
+	return("");
+}
+
+public String  getOrganicDepth(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "organicDepth");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: organicDepth");
+	}
+	return(elementValue);
+}
+
+public String  getPercentBedRock(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "percentBedrock");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: percentBedRock");
+	}
+	return(elementValue);
+}
+
+public String  getPercentRockGravel(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "percentRockGravel");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: percentRockGravel");
+	}
+	return(elementValue);
+}
+
+public String  getPercentWood(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "percentWood");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: percentWood");
+	}
+	return(elementValue);
+}
+public String  getPercentLitter(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "percentLitter");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: percentLitter");
+	}
+	return(elementValue);
+}
+
+public String  getPercentBareSoil(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "percentBareSoil");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: percentBareSoil");
+	}
+	return(elementValue);
+}
+
+public String  getPercentWater(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "percentWater");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: percentWater");
+	}
+	return(elementValue);
+}
+
+public String  getPercentOther(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "percentOther");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: percentOther");
+	}
+	return(elementValue);
+}
+
+public String  getNameOther(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "nameOther");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: nameOther");
+	}
+	return(elementValue);
+}
+
+public String  getStandMaturity(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "standMaturity");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: standMaturity");
+	}
+	return(elementValue);
+}
+
+
+public String  getSuccessionalStatus(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "successionalStatus");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: successionalStatus");
+	}
+	return(elementValue);
+}
+
+public String  getTreeHt(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "treeHt");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: treeHt");
+	}
+	return(elementValue);
+}
+
+public String  getShrubHt(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "shrubHt");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: shrubHt");
+	}
+	return(elementValue);
+}
+
+public String  getNonvascularHt(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "nonvascularHt");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: nonvascularHt");
+	}
+	return(elementValue);
+}
+
+public String  getFloatingCover(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "floatingCover");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: floatingCover");
+	}
+	return(elementValue);
+}
+
+public String  getSubmergedCover(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "submergedCover");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: submergedCover");
+	}
+	return(elementValue);
+}
+
+public String  getDominantStratum(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "dominantStratum");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: dominantStratum");
+	}
+	return(elementValue);
+}
+
+public String  getGrowthform1Type(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "growthform1Type");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: growthform1Type");
+	}
+	return(elementValue);
+}
+
+public String  getGrowthform2Type(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "growthform2Type");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: growthform2Type");
+	}
+	return(elementValue);
+}
+
+public String  getGrowthform3Type(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "growthform3Type");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: growthform3Type");
+	}
+	return(elementValue);
+}
+
+public String  getGrowthform1Cover(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "growthform1Cover");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: growthform1Cover");
+	}
+	return(elementValue);
+}
+
+public String  getGrowthform2Cover(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "growthform2Cover");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: growthform2Cover");
+	}
+	return(elementValue);
+}
+
+public String  getGrowthform3Cover(String plotName)
+{
+	String elementValue = null;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "growthform3Cover");
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: growthform3Cover");
+	}
+	return(elementValue);
+}
+
+public boolean  getNotesPublic(String plotName)
+{
+	String elementValue = null;
+	boolean b = false;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "notesPublic");
+		System.out.println("NativeXmlPlugin >  " + elementValue);
+		b = Boolean.getBoolean(elementValue);
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: notesPublic");
+	}
+	return(b);
+}
+
+public boolean  getNotesMgt(String plotName)
+{
+	String elementValue = null;
+	boolean b = false;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "notesMgt");
+		b = Boolean.getBoolean(elementValue);
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: notesMgt");
+	}
+	return(b);
+}
+
+public boolean  getRevisions(String plotName)
+{
+	String elementValue = null;
+	boolean b = false;
+	this.init(plotName);
+	try
+	{
+		elementValue = parse.getNodeValue(doc, "revisions");
+		b = Boolean.getBoolean(elementValue);
+	}
+	catch(Exception e )
+	{
+		System.out.println("Exception parsing: revisions");
+	}
+	return(b);
+}
+//END
 //END
 
 
@@ -894,16 +1434,18 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 					}
 				}
 				//if the index is unchanged, still -999, then print an error
-				if (index == -999)
+				if (index == -999 )
 				{
 					System.out.println("strataType: "+stratumType+" not found ERROR");
 				}
 				else
 				{
+					System.out.println("name: " + type +" cover: "+ cover+" base: "+ base+" height: "+height);
 					type = parse.getNodeValue(doc, "stratumName", index);
 					cover = parse.getNodeValue(doc, "stratumCover", index);
 					base = parse.getNodeValue(doc, "stratumBase", index);
 					height = parse.getNodeValue(doc, "stratumHeight", index);
+					System.out.println("name: " + type +" cover: "+ cover+" base: "+ base+" height: "+height);
 					
 					//stick these elements into the hashtable to be returned
 					returnHash.put("stratumType", type);
@@ -924,6 +1466,7 @@ public class NativeXmlPlugin implements PlotDataSourceInterface
 			catch(Exception e) 
 			{
 				System.out.println("Exception: " +e.getMessage() );
+
 				e.printStackTrace();
 			}
 			return(returnHash);
