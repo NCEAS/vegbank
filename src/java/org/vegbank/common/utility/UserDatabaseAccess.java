@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:22:17 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-11-25 19:29:25 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,13 +33,10 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: farrell $'
- *     '$Date: 2003-11-12 22:22:17 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2003-11-25 19:29:25 $'
+ *     '$Revision: 1.2 $'
  */
 
-
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,14 +50,9 @@ import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Telephone;
 import org.vegbank.common.model.WebUser;
-import org.vegbank.common.utility.ObjectToDB;
 
 public class UserDatabaseAccess 
-{
-	//FIXME: Use vegbank only and get a DBConnection
-	private static final String FRAMEWORK_DATABASE = "framework";
-	private static final String VEGBANK_DATABASE = "vegbank";	
-	
+{	
 	/**
 	 * method that, for an email address, will get the user's priveledge level
 	 * @param email -- the user's email address
@@ -93,6 +85,7 @@ public class UserDatabaseAccess
 	 * method to get the password from the database based on an email address
 	 * 
 	 * @param emailAddress
+	 * @deprecated Use getUser and get password from that object
 	 */
 	public String getPassword(String emailAddress)
 	{
@@ -101,7 +94,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection(FRAMEWORK_DATABASE);
+			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
 			StringBuffer sb = new StringBuffer();
 			sb.append("select password from USER_INFO ");
@@ -137,7 +130,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection(FRAMEWORK_DATABASE);
+			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
 			sb.append("select CERTIFICATION_ID from USER_CERTIFICATION ");
 			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"'");
@@ -251,7 +244,7 @@ public class UserDatabaseAccess
 		 {	
 			 System.out.println("UserDatabaseAccess > inserting user cert info");
 			 //get the connections etc
-			 Connection conn = getConnection(FRAMEWORK_DATABASE);
+			 DBConnection conn = getConnection();
 			 //see if this user has an entry in this table and ifso then update it
 			 if ( this.userCertificationExists(emailAddress) == true )
 			 {
@@ -363,7 +356,7 @@ public class UserDatabaseAccess
 			if (i == 0)
 			{
 				//get the connections etc
-				Connection conn = getConnection(FRAMEWORK_DATABASE);
+				DBConnection conn = getConnection();
 				Statement query = conn.createStatement();
 				sb.append("INSERT into USER_INFO (EMAIL_ADDRESS, PASSWORD, GIVEN_NAME, SUR_NAME, REMOTE_ADDRESS, TICKET_COUNT, ");
 				sb.append("INSTITUTION, ADDRESS, CITY, STATE, COUNTRY, PHONE_NUMBER, ZIP_CODE, permission_type) ");
@@ -394,8 +387,8 @@ public class UserDatabaseAccess
 				party.addparty_address( partyAddress );
 
 				// Write to database
-				ObjectToDB party2db = new ObjectToDB(party);
-				party2db.insert();	
+				VBModelBeanToDB party2db = new VBModelBeanToDB();
+				party2db.insert(party);	
 			}
 			else
 			{
@@ -430,7 +423,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection(FRAMEWORK_DATABASE);
+			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
 			StringBuffer sb = new StringBuffer();
 			sb.append("select user_id from USER_INFO ");
@@ -468,7 +461,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection(FRAMEWORK_DATABASE);
+			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
 			sb.append("select user_id from USER_DOWNLOADS ");
 			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"' AND ");
@@ -523,7 +516,7 @@ public class UserDatabaseAccess
 		try
 		{	
 			//get the connections etc
-			Connection conn = getConnection(FRAMEWORK_DATABASE);
+			DBConnection conn = getConnection();
 			//get the userId of the user 
 			int userid = this.getUserId( emailAddress );
 			// now make the entry in the download table
@@ -561,7 +554,7 @@ public class UserDatabaseAccess
 		{	
 			System.out.println("UserDatabaseAccess > inserting download info");
 			//get the connections etc
-			Connection conn = getConnection(FRAMEWORK_DATABASE);
+			DBConnection conn = getConnection();
 			// update the ticket count
 			this.updateTicketCount(emailAddress);
 			
@@ -608,7 +601,7 @@ public class UserDatabaseAccess
 	{
 		try
 		{
-			Connection conn = getConnection(FRAMEWORK_DATABASE);
+			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
 			query.execute("UPDATE USER_INFO set PASSWORD =  '" 
 				+ password + "' WHERE EMAIL_ADDRESS = '"+emailAddress+"' ");	
@@ -633,7 +626,7 @@ public class UserDatabaseAccess
 		try 
 		{
 			//get the connections etc
-			Connection conn = getConnection(FRAMEWORK_DATABASE);
+			DBConnection conn = getConnection();
 			Statement query = conn.createStatement ();
 			StringBuffer sb = new StringBuffer();
 			
@@ -674,7 +667,7 @@ public class UserDatabaseAccess
 		{
 		
 			//get the connections etc
-			Connection conn = getConnection(FRAMEWORK_DATABASE);
+			DBConnection conn = getConnection();
 			Statement query = conn.createStatement ();
 			ResultSet results= null;
 			StringBuffer sb = new StringBuffer();
@@ -726,25 +719,12 @@ public class UserDatabaseAccess
 
 	/**
 	 * utility method to provide this class a connection to the 
-	 * 'framework' database, a database that will contain the 
-	 * database authentication tables etc
+	 * database.
 	 */
-	private Connection getConnection(String databaseName)
+	private DBConnection getConnection() throws SQLException
 	{
-
-		Connection conn = null;
- 		try 
- 		{
-			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/" + databaseName, "datauser", "");
-		}
-		catch ( Exception e )
-		{
-			System.out.println("UserDatabaseAccess > failed making db connection: "
-			+"dbConnect.makeConnection: "+e.getMessage());
-			e.printStackTrace();
-		}
-		return(conn);
+		DBConnectionPool dbCP = DBConnectionPool.getInstance();
+		return dbCP.getDBConnection("Need Connection for User database requests");
 	}
 	
 	/**
@@ -752,28 +732,37 @@ public class UserDatabaseAccess
 	 * user data will be returned as a WebUser bean.
 	 * 
 	 * @param user -- the email address of the user
-	 * @return WebUser
+	 * @return WebUser or null if none found
 	 */
 	 public WebUser getUser(String emailAddress ) throws Exception
 	 {
 		 Hashtable h = new Hashtable();
 		 WebUser userBean = new WebUser();
+		 
+		LogUtility.log(
+			"UserDatabaseAccess: Searching for user with email of: "
+				+ emailAddress);
 
 		 //get the connections etc
-		 Connection conn = getConnection(FRAMEWORK_DATABASE);
+		 DBConnection conn = getConnection();
 		 Statement query = conn.createStatement ();
 		 ResultSet results= null;
 		 StringBuffer sb = new StringBuffer();
-			sb.append("SELECT EMAIL_ADDRESS, PASSWORD, SUR_NAME, 	GIVEN_NAME, ");
-			sb.append(" PERMISSION_TYPE, INSTITUTION, TICKET_COUNT, ADDRESS, CITY, STATE, COUNTRY, ZIP_CODE, PHONE_NUMBER,");
-			sb.append("USER_ID FROM USER_INFO ");
-			sb.append(" WHERE 	EMAIL_ADDRESS = '"+emailAddress+"'");
+			sb.append("SELECT email_address, password, surname, givenname, ");
+			sb.append(" permission_type, organizationname, ticket_count, deliverypoint, ");
+			sb.append(" city, administrativearea, country, postalcode, phonenumber, usr_id, party_id");
+			sb.append(" FROM usr NATURAL JOIN (party LEFT JOIN  ");
+			sb.append(" ( telephone NATURAL JOIN address ) USING (party_id) )");
+			sb.append(" WHERE ( currentflag = true  OR currentflag IS NULL ) AND ");
+			sb.append(" ( phonetype = '" + Telephone.PHONETYPE_WORK + "' OR phonetype IS NULL )   AND EMAIL_ADDRESS = '"+emailAddress+"'");
 	
+		LogUtility.log("UserDatabaseAccess: SQL > " + sb.toString() );
+		
 		//issue the query
 		results = query.executeQuery(sb.toString());
 		
-		//get the results
-		while (results.next()) 
+		//get the results -- assumming 0 or 1 rows returned
+		if (results.next()) 
 		{
 			String DBEmailAddress = results.getString(1); 
 			String DBPassWord = results.getString(2);
@@ -790,7 +779,8 @@ public class UserDatabaseAccess
 			String zipCode = results.getString(12);
 			String dayPhone = results.getString(13);
 			String userId = new Integer( results.getInt(14) ).toString();
-			 
+			String partyId = new Integer( results.getInt(15) ).toString();
+						 
 			h.put("email", ""+DBEmailAddress);
 			h.put("password", ""+DBPassWord);
 			h.put("surname", ""+surName);
@@ -805,29 +795,16 @@ public class UserDatabaseAccess
 			h.put("zipcode", ""+zipCode);
 			h.put("dayphone", ""+dayPhone);
 			h.put("userid",  userId);
+			h.put("partyid",  partyId);		
 			
 			//System.out.println(">>>> " + userId + "  " + dayPhone);
 		}
-		conn.close();
-		
-		// Get the PK form the vegbank.party table
-		Connection vbConn = getConnection(VEGBANK_DATABASE);
-		Statement vbQuery = vbConn.createStatement ();
-		ResultSet vbResults= null;
-		StringBuffer vbSb = new StringBuffer();
-		vbSb.append("SELECT  PARTY_ID FROM PARTY ");
-		vbSb.append(" WHERE 	EMAIL = '"+emailAddress+"'");
-		
-		//issue the query
-		vbResults = vbQuery.executeQuery(vbSb.toString());
-		
-		//get the results
-		while (vbResults.next()) 
-		{		
-			String partyId = vbResults.getString(1);
-			h.put("partyid", partyId);	
+		else
+		{
+			return null;	
 		}
-		vbConn.close();	
+		
+		conn.close();
 		
 		Iterator it = h.keySet().iterator();
 		while ( it.hasNext() )
@@ -889,7 +866,7 @@ public class UserDatabaseAccess
 			{
 				StringBuffer sb = new StringBuffer();
 				//get the connections etc
-				Connection conn = getConnection(FRAMEWORK_DATABASE);
+				DBConnection conn = getConnection();
 				conn.setAutoCommit(false);
 
 				//int userid = this.getUserId( emailAddress );
@@ -914,7 +891,7 @@ public class UserDatabaseAccess
 				pstmt.execute();
 
 				// Also update the Party and related tables
-				Connection vbconn = getConnection(VEGBANK_DATABASE);
+				DBConnection vbconn = getConnection();
 				vbconn.setAutoCommit(false);
 
 				String partyIdSubselect = "party_id = '" +  partyId + "' ";
@@ -962,15 +939,15 @@ public class UserDatabaseAccess
 		return (true);
 	}
 	
-	public boolean isEmailUnique(String emailAddress, String userId) throws SQLException
+	public  boolean isEmailUnique(String emailAddress) throws SQLException
 	{
 		boolean result = true;
 		// Get connection, query
-		Connection conn = this.getConnection(FRAMEWORK_DATABASE);
+		DBConnection conn = this.getConnection();
 		Statement query = conn.createStatement();
 		
 		// Create query
-		ResultSet rs = query.executeQuery("SELECT user_id from user_info where email_address = '" + emailAddress + "' and user_id != '" + "'");
+		ResultSet rs = query.executeQuery("SELECT usr_id from usr where email_address = '" + emailAddress + "'");
 		
 		// If any results returned then email address is not unique
 		if (rs.next())
