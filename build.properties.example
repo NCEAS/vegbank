@@ -37,7 +37,8 @@ vegbank.data.dir=/usr/vegbank/upload
 apache.document.root=/var/www/html
 
 # XML Schema
-vegbankSchemaName=vegbank-data-ver1.0.2.xsd
+vegbank.schema.data=vegbank-data-ver1.0.2usage.xsd
+vegbank.schema.model=db_model_vegbank_schema.xsd
 
 # Old Settings
 java1.4.home.dir = /usr/java/

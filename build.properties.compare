@@ -23,5 +23,6 @@ mail_host
 vegbank.home.dir
 vegbank.data.dir
 apache.document.root
-vegbankSchemaName
+vegbank.schema.data
+vegbank.schema.model
 java1.4.home.dir
