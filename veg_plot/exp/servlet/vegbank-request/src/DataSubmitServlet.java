@@ -25,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-05-16 16:47:09 $'
- *  '$Revision: 1.27 $'
+ *  '$Date: 2002-05-22 20:41:17 $'
+ *  '$Revision: 1.28 $'
  */
 
 
@@ -143,15 +143,23 @@ public class DataSubmitServlet extends HttpServlet
 		
 	/**
 	 * this method is used to handle the submittal of a vegplot into the 
-	 * VegBank database using for the insertion of an access file the 
-	 * rmi datasource client / server system to access the data on a 
-	 * win nt machine
+	 * VegBank database using for the insertion of either an MS access file 
+	 * or an XML document, using the rmi datasource client / server system 
+	 * where the server is running on a  win-nt machine.  Steps handeled by 
+	 * this method include <br> <br>
 	 *
+	 * 1] validating the user <br>
+	 * 2] accepting an uploaded data file <br>
+	 * 3] passing the uploaded archive file to the RMI server <br>
+	 * 4] issueing the request for a plot(s) upload at the RMI server <br>
+	 * 5] passing the receipt back to the client <br>
+	 * 6] emailing the client the receipt for the insertion of their data <br>
+	 * <br> <br>
 	 * @see DataSourceClient
 	 * @param enum -- the input parameters to the parent servlet
 	 * @param params -- a hashtable with the unique parameters sent to the servlet
-	 * @param request -- http request
-	 * @param response -- http reponse
+	 * @param request -- http request sent to the servlet
+	 * @param response -- http reponse sent to the servlet
 	 * 
 	 */
 	 private StringBuffer handleVegPlotSubmittal(Enumeration enum,
@@ -160,6 +168,7 @@ public class DataSubmitServlet extends HttpServlet
 		StringBuffer sb = new StringBuffer();
 		try
 		{
+			String inputEmail = "";
 			String action = (String)params.get("action");
 			System.out.println("DataSubmitServlet > action: " + action);
 			if ( action.equals("init") )
@@ -174,7 +183,6 @@ public class DataSubmitServlet extends HttpServlet
 				// check that the uer has valid priveleges to load a data 
 				// file to the database and if so give the use a window 
 				// to upload some data
-				String inputEmail = "";
 				if ( params.containsKey("emailAddress") )
 				{
 					inputEmail = (String)params.get("emailAddress");
@@ -201,7 +209,6 @@ public class DataSubmitServlet extends HttpServlet
 					}
 				}
 			}
-			
 			// if the action is upload that is basically ar referal 
 			// from the data exchange client after the file has been 
 			// upload
@@ -278,13 +285,14 @@ public class DataSubmitServlet extends HttpServlet
 					}
 				}
 				System.out.println("DataSubmitServlet > requesting an rmi insert ");
+				// email the receipt to the user
+				System.out.println("DataSubmitServlet > emailing the receipt to the user: " + user);
+				this.emailPlotSubmitalReceipt(user, sb.toString() );
 			}
 			else
 			{
 				System.out.println("DataSubmitServlet > unknown plot submital task ");
 			}
-			
-			
 		}
 		catch( Exception e ) 
 		{
@@ -293,7 +301,26 @@ public class DataSubmitServlet extends HttpServlet
 		}
 		return(sb);
 	}
-		
+	
+	/**
+	 * this method will email the plot submital receipt form to the 
+	 * user who has uploaded the plot archive file to the server
+	 *
+	 * @param inputEmail -- the email address of the user
+	 * @param receipt -- string representation of the insertion receipt
+	 * @see ServletUtility -- the class that handles the email process.  the 
+	 * method is called 'sendEmail'
+	 */
+	 private void emailPlotSubmitalReceipt(String inputEmail, String receipt)
+	 {
+	 	String mailHost = "nceas.ucsb.edu";
+		String from = "vegbank";
+		String to = inputEmail;
+		String cc = "dba@vegbank.org";
+		String subject = "VEGBANK PLOT INSERTION RECEIPT";
+	 	String body = receipt;
+		su.sendEmail(mailHost, from, to, cc, subject, body);
+	 }
 		
 	
 	/**
