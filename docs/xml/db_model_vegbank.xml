@@ -5313,9 +5313,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>Primary key for the observation table</attNotes>
       <attDefinition>Database generated identifier assigned to each unique plot observation.</attDefinition>
-      <attForms>
-        <formShow name="plotIDLong">628</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -5370,6 +5368,7 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="plotMethodShort">633</formShow>
         <formShow name="plotMethodLong">634</formShow>
+        <formShow name="plotShowMany">13</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -5390,6 +5389,7 @@ conditions may change between resampling events.
         <formShow name="plotIDLong">1</formShow>
         <formShow name="plotIDShort">1</formShow>
         <formShow name="summaryList">1</formShow>
+        <formShow name="plotShowMany">1</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -5524,6 +5524,7 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="plotMethodShort">650</formShow>
         <formShow name="plotMethodLong">651</formShow>
+        <formShow name="plotShowMany">10</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -5619,6 +5620,7 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="plotMethodShort">652</formShow>
         <formShow name="plotMethodLong">653</formShow>
+        <formShow name="plotShowMany">11</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -8512,9 +8514,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>Primary key for plot</attNotes>
       <attDefinition>Database generated identifier assigned to each unique plot.</attDefinition>
-      <attForms>
-        <formShow name="plotIDLong">900</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -8714,6 +8714,7 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="plotLocLong">924</formShow>
         <formShow name="plotLocShort">925</formShow>
+        <formShow name="plotShowMany">2</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -8734,6 +8735,7 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="plotLocLong">927</formShow>
         <formShow name="plotLocShort">928</formShow>
+        <formShow name="plotShowMany">3</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -8947,6 +8949,7 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="plotLayoutLong">956</formShow>
         <formShow name="plotLayoutShort">957</formShow>
+        <formShow name="plotShowMany">4</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -9102,6 +9105,7 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="plotEnvShort">971</formShow>
         <formShow name="plotEnvLong">972</formShow>
+        <formShow name="plotShowMany">6</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -13021,7 +13025,9 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="SummaryNoStrata">1298</formShow>
         <formShow name="SummaryOnlyStrata">1299</formShow>
+        <formShow name="Summary">1299</formShow>
       </attForms>
+      <attFormsHTML/>
       <update>1.0.2</update>
     </attribute>
     <attribute>
@@ -13063,6 +13069,9 @@ conditions may change between resampling events.
         <formShow name="Summary">1300</formShow>
         <formShow name="SummaryOnlyStrata">1301</formShow>
       </attForms>
+      <attFormsHTML>  @subst_lt@logic:notEmpty name="onerowoftaxonimportance" property="cover"@subst_gt@
+        @subst_lt@img src="@images_link@bluedot.png" height="4px" width='@subst_lt@bean:write name="onerowoftaxonimportance" property="cover"/@subst_gt@px' /@subst_gt@
+         @subst_lt@/logic:notEmpty@subst_gt@</attFormsHTML>
       <update>1.0.2</update>
     </attribute>
     <attribute>

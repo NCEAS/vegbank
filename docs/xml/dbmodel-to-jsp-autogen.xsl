@@ -162,6 +162,11 @@
               </span>
             </logic:notEmpty>
           </xsl:if>
+          <!-- extra -->
+          <xsl:if test="string-length($currentAtt/attFormsHTML)&gt;0">
+          <!-- insert extra stuff -->
+          <xsl:value-of select="$currentAtt/attFormsHTML" />
+          </xsl:if>
       </logic:notEmpty>
       <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
     </td>

@@ -12,6 +12,7 @@
     </xs:complexType>
     <!-- this was an attempt at automating what field appear on different types of forms, and in what order, might be removed from this doc if we don't use them soon -->
   </xs:element>
+  <xs:element name="attFormsHTML" type="xs:string"/>
   <xs:element name="attKey">
     <xs:simpleType>
       <xs:restriction base="xs:string">
@@ -169,6 +170,7 @@
         <xs:element ref="attUnits" minOccurs="0"/>
         <xs:element ref="archive" minOccurs="0"/>
         <xs:element ref="attForms" minOccurs="0"/>
+        <xs:element ref="attFormsHTML" minOccurs="0"/>
         <xs:element ref="update"/>
         <xs:any minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
@@ -186,7 +188,6 @@
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
-
   <!-- document author  -->
   <xs:element name="entity">
     <xs:complexType>
