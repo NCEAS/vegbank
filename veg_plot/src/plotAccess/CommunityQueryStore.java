@@ -1,0 +1,66 @@
+import java.lang.*;
+import java.io.*;
+import java.text.*;
+import java.util.*;
+import java.sql.*;
+
+
+
+/**
+ * This class acts as a store for sql queries which are used depending on the 
+ * number and type of query elements passed to the sqlMapper class.  Ultimately
+ * these queries are issued to the database though the issue select method.
+ * This class stores queries and query generation mechanisms exclusively for
+ * querying the community database 
+ *
+ * @author John Harris
+ *
+ */
+
+public class  CommunityQueryStore
+ {
+
+public Vector communitySummaryOutput;
+private String communityName = null;
+private String communityLevel = null;
+private String action = null; //sql action (select, insert)
+private StringBuffer statement = new StringBuffer(); //sql statement
+
+
+ 
+/**
+ * Method that takes as input queryelements such as communityLevel (the level in
+ * the NVC heirarchy eg. class, subclass, group etc.) and communityName
+ */
+public void getCommunitySummary(String communityName, String communityLevel, 
+	Connection conn)
+{
+action = "select";
+statement.append("select ");
+statement.append("commName, abiCode, commDescription, parentCommName ");
+statement.append("from commSummary where commName like '");
+statement.append(communityName+"'");
+statement.append("and classLevel like '"+communityLevel+"'");
+
+String returnFields[]=new String[4];
+int returnFieldLength=4;
+	
+returnFields[0]="commName";
+returnFields[1]="abiCode";
+returnFields[2]="commDescription";
+returnFields[3]="parentCommName";
+
+//issue the statement
+issueStatement j = new issueStatement();
+j.issueSelect(statement.toString(), action, returnFields, returnFieldLength, conn);
+
+//pass the results back to the calling class
+communitySummaryOutput=j.returnedValues;  //copy this vector
+
+
+//System.out.println("vector numbers: "+j.returnedValues.size() );
+//System.out.println( j.returnedValues.toString());
+
+
+}
+}
