@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dataModel SYSTEM "db_model.dtd">
+<?xml-stylesheet type="text/xsl" href="model_ToSQL.xsl"?>
 <dataModel>
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>beta.2</version>
@@ -8,7 +9,7 @@
   <institution>NCEAS</institution>
   <contributor>M. Lee</contributor>
   <description/>
-  <date>2/05/03 1:43:05 PM</date>
+  <date>4/03/2003 11:12 AM</date>
   <entity>
     <entityName>commConcept</entityName>
     <entitySummary>This table store the concepts (assertions) that are linked to community names through the commUsage table.</entitySummary>
@@ -51,7 +52,7 @@
       <attDefinition>Foreign key into the Reference table to identify a reference in which the community was identified by a name.  This could be a regular publication, or a self reference created by completing the commDescription field in reference</attDefinition>
     </attribute>
     <attribute>
-      <attName>conceptDescription</attName>
+      <attName>commDescription</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
@@ -60,7 +61,7 @@
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>The conceptDescription is a description of the community concept by the party that contributed the concept.</attDefinition>
+      <attDefinition>The commDescription is a description of the community concept by the party that contributed the concept.</attDefinition>
     </attribute>
   </entity>
   <entity>
@@ -83,7 +84,7 @@
     <attribute>
       <attName>COMMSTATUS_ID</attName>
       <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
+      <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attReferences>commStatus.COMMSTATUS_ID</attReferences>
@@ -95,7 +96,7 @@
     <attribute>
       <attName>COMMCONCEPT_ID</attName>
       <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
+      <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attReferences>commConcept.COMMCONCEPT_ID</attReferences>
@@ -107,7 +108,7 @@
     <attribute>
       <attName>commConvergence</attName>
       <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
+      <attNulls>no</attNulls>
       <attType>varchar (20)</attType>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
@@ -160,7 +161,7 @@
     <attribute>
       <attName>correlationStart</attName>
       <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
+      <attNulls>no</attNulls>
       <attType>Date</attType>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
@@ -558,7 +559,7 @@
       <attDefinition>This is the date for which the status assignment by the party ended.</attDefinition>
     </attribute>
     <attribute>
-      <attName>partyComments</attName>
+      <attName>commPartyComments</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
@@ -961,7 +962,7 @@ change through time.</entitySummary>
     <attribute>
       <attName>PLANTSTATUS1_ID</attName>
       <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
+      <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
@@ -974,7 +975,7 @@ change through time.</entitySummary>
     <attribute>
       <attName>PLANTSTATUS2_ID</attName>
       <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
+      <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attReferences>plantStatus.PLANTSTATUS_ID</attReferences>
@@ -2227,7 +2228,7 @@ change through time.</entitySummary>
       <attName>referenceAltIdent_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
-      <attType>Integer</attType>
+      <attType>serial</attType>
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2281,7 +2282,7 @@ change through time.</entitySummary>
       <attName>referenceContributor_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
-      <attType>Integer</attType>
+      <attType>serial</attType>
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2366,7 +2367,7 @@ change through time.</entitySummary>
       <attName>referenceParty_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
-      <attType>Integer</attType>
+      <attType>serial</attType>
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2480,7 +2481,7 @@ change through time.</entitySummary>
       <attName>referenceJournal_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
-      <attType>Integer</attType>
+      <attType>serial</attType>
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3570,10 +3571,10 @@ change through time.</entitySummary>
       <attType>varchar (100)</attType>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
-      <attListType>closed</attListType>
+      <attListType>no</attListType>
       <attList/>
-      <attNotes>open or closed list, depending on the system</attNotes>
-      <attDefinition>The name of a place in or at which a plot is located. The system "placenames" is an open list defined within this table. The other systems are generally closed lists constrained by aux_tables. These include at least USGSQuad, Continent, Country, State, County, HUC, and Ecoregion.</attDefinition>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The name of a place in or at which a plot is located. The system "Geographic Name" is an open list defined within this table. The other systems are generally closed lists constrained by aux_tables. These include at least USGSQuad, Continent, Country, State, County, HUC, and Ecoregion.</attDefinition>
     </attribute>
     <attribute>
       <attName>placeDescription</attName>
