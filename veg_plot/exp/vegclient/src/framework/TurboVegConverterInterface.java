@@ -8,8 +8,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:12:43 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-10-11 17:55:24 $'
+ * 	'$Revision: 1.2 $'
  */
 package vegclient.framework;
 
@@ -31,6 +31,7 @@ public class TurboVegConverterInterface extends javax.swing.JFrame {
     String exportFile = null;
     
     ProjectManager manager = new ProjectManager();
+    ClientFramework framework = new ClientFramework();
     
     //this is the class that handles the conversion of a turbo veg file
     //into the xml document consistent with the plots standard
@@ -41,7 +42,7 @@ public class TurboVegConverterInterface extends javax.swing.JFrame {
         
         initComponents();
         setSize(400, 300);
-        setTitle("Transform TurboVeg File");
+        setTitle("TurboVegConverterInterface build: @release@");
     }
 
     /** This method is called from within the constructor to
@@ -170,7 +171,8 @@ public class TurboVegConverterInterface extends javax.swing.JFrame {
     private void selectExportFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectExportFileButtonActionPerformed
         //do the file selection using the fileChooser method
         
-        String fileName = fileChooser(evt, selectedFileTextField);
+        //String fileName = fileChooser(evt, selectedFileTextField);
+        String fileName = framework.fileChooser();
         if (fileName.indexOf("xml") < 0 )
         {
             manager.debug(1, "not an xml file");
@@ -178,12 +180,14 @@ public class TurboVegConverterInterface extends javax.swing.JFrame {
         else
         {
             exportFile = fileName;
+            selectedFileTextField.setText( fileName );
         }
     }//GEN-LAST:event_selectExportFileButtonActionPerformed
 
     /** Exit the Application */
     private void exitForm(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_exitForm
-        System.exit(1);
+        //System.exit(1);
+        this.dispose();
     }//GEN-LAST:event_exitForm
 
     
