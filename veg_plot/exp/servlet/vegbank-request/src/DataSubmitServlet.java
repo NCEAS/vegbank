@@ -266,7 +266,7 @@ public class DataSubmitServlet extends HttpServlet
 				String y = rmiClient.getYCoord(plot);
 				
 				sb.append("<table> \n");
-				sb.append(" <tr bgcolor=\"blue\"> \n");	
+				sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
 				sb.append(" 	<td> Plot Name: </td> \n");	
 				sb.append(" 	<td> "+plotName+" </td> \n");	
 				sb.append(" </tr> \n");
@@ -275,12 +275,19 @@ public class DataSubmitServlet extends HttpServlet
 				sb.append(" <tr> \n");	
 				sb.append(" 	<td> State </td> \n");	
 				sb.append(" 	<td> "+state+" </td> \n");	
+				sb.append(" </tr> \n");	
+			
+				//the locations
+				sb.append(" <tr> \n");	
 				sb.append(" 	<td> X Coordinate:  </td> \n");	
 				sb.append(" 	<td> "+x+" </td> \n");	
+				sb.append(" </tr> \n");	
+				sb.append(" <tr> \n");	
 				sb.append(" 	<td> Y Coordinate:  </td> \n");	
 				sb.append(" 	<td> "+y+" </td> \n");	
 				sb.append(" </tr> \n");	
-				
+
+			
 				//the community
 				sb.append(" <tr> \n");	
 				sb.append(" 	<td> Commmunity: </td> \n");	
