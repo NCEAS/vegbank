@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-10-29 19:42:57 $'
-* '$Revision: 1.63 $'
+* '$Date: 2003-10-29 19:49:07 $'
+* '$Revision: 1.64 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -110,7 +110,7 @@
     <filter token="viewdataservlet" value="/${web.context_uri}/servlet/viewData"/>
     <filter token="filedownloadservlet" value="/${web.context_uri}/servlet/fileDownload"/>
     <!-- Struts -->
-    <filter token="DisplayUploadPlotAction" value="/${web.context.uri}/DisplayUploadPlotAction.do"/>
+    <filter token="DisplayUploadPlotAction" value="/${web.context_uri}/DisplayUploadPlotAction.do"/>
 	<!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/${webapp}/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
