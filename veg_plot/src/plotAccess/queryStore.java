@@ -22,13 +22,16 @@ public class  queryStore
 * The input to the method is a string array containing plot id numbers and
 * an integer representing the number of elements in the array
 */
-public void getPlotSummary(String plotId[], int plotIdNum)
+public void getPlotSummary(String plotId[], int plotIdNum, Connection conn)
 {
 
 //this array will hold all the results before passing it back to the 
 //calling class
 String summaryResult[] = new String[10000];
 int summaryResultNum=0;
+
+//this is the number of uses that an input connection has had
+int connectionUses=1;
 
 //iterate through the plot id numbers
 for (int i=0;i<plotIdNum; i++) {
@@ -58,8 +61,11 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 	*/
 
 	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength);	
-
+	j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
+	
+	//iterate the connection use counter
+	connectionUses++;
+	
 	//take the results from the issueSelect and put into the array
 	//note that the j.outReturnFieldsNum should always be = 1 in this case
 	//because we are querying by a plot ID number which should be unique
@@ -77,11 +83,7 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 		"(select OBS_ID from PLOTOBSERVATION where PARENTPLOT in"+
 		"(select plot_ID from plot where PLOT_ID ="+currentPlotId+"))";
 
-/*		
-select AUTHORNAMEID, ORIGINALAUTHORITY from taxonObservation where OBS_ID in
-	(select OBS_ID from PLOTOBSERVATION where PARENTPLOT in 
-		(select plot_ID from plot where PLOT_ID = 2));
-*/		
+		
 	String returnFieldsB[]=new String[1];	
 	returnFieldsB[0]="AUTHORNAMEID";
 	int returnFieldLengthB=1;
@@ -92,10 +94,14 @@ select AUTHORNAMEID, ORIGINALAUTHORITY from taxonObservation where OBS_ID in
 	*/
 
 	issueStatement k = new issueStatement();
-	k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB);	
+	k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB, conn);	
 
+	//iterate the connection use counter
+	connectionUses++;
+	
+	
 	//take the results from this query and append to the summary line
-	//which will ultimatell be passed back to the xmlWriter to be tokenized
+	//which will ultimately be passed back to the xmlWriter to be tokenized
 	//and writen to xml - againd there should only be one line returned 
 	for (int ii=0;ii<k.outReturnFieldsNum; ii++) {
 	summaryResult[i]=summaryResult[i]+k.outReturnFields[ii];
@@ -109,6 +115,9 @@ summaryResultNum=i;
 
 summaryOutput=summaryResult;
 summaryOutputNum=summaryResultNum;
+
+outConnectionUses=connectionUses;
+
 	
 
 	
@@ -116,6 +125,8 @@ summaryOutputNum=summaryResultNum;
 public String summaryOutput[] = new String[10000];  //the output from the issue sql can be mapped to this varaiable
 public int summaryOutputNum; //the number of output rows from the issue sql is mapped to this varable
 
+//number of times using the input connection
+public int outConnectionUses;
 
 
 
@@ -123,7 +134,7 @@ public int summaryOutputNum; //the number of output rows from the issue sql is m
 * Method to query the database to get all the plotId's 
 * for the plots containing a taxon that matches the input 
 */
-public void getPlotId(String queryElement, String queryElementType)
+public void getPlotId(String queryElement, String queryElementType, Connection conn)
 {
 String action="select";
 String statement="select PLOT_ID from PLOT where PLOT_ID in"+
@@ -140,7 +151,7 @@ int returnFieldLength=1;
 */
 
 issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength);	
+j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
 
 
 //grab the returned result set and transfer to a public array

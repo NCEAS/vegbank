@@ -40,6 +40,33 @@ public class  sqlMapper
 //accept the transformed xml document as a string and number of rows in the array
 public void developPlotQuery(String[] transformedString, int transformedStringNum)
 {
+/**
+* First set up a pool of connections that can be passed to the queryStore class
+*/
+Connection pconn=null; //this is a connection that is opened from within the pool
+
+DbConnectionBroker myBroker;
+
+try {
+myBroker = new DbConnectionBroker("oracle.jdbc.driver.OracleDriver",
+                                         "jdbc:oracle:thin:@dev.nceas.ucsb.edu:1521:exp",
+                                         "harris","use4dev",3,8,
+                                         "queryPool.log",1.0);
+// Get a DB connection from the Broker
+int thisConnection;
+pconn= myBroker.getConnection(); //grab one connectionfrom pool
+thisConnection = myBroker.idOfConnection(pconn);
+
+//This is an attempt to devise a scheme to see how many times
+//a database connection is used if more than like 50 times 
+//check it back into the pool and grab a new one - the exception
+//thrown otherwise is exeeded max cursors
+int connectionUses=1;
+
+
+
+
+
 
 //pass the inputString to the tokenizer method below
 sqlMapper a =new sqlMapper();
@@ -63,7 +90,7 @@ for (int i=0;i<transformedStringNum; i++) {
 			//call the queryStore method associated with this request
 			//to get the plot id numbers having the associated taxon
 			queryStore j = new queryStore();
-			j.getPlotId(value[i+1], "taxonName");
+			j.getPlotId(value[i+1], "taxonName", pconn);
 			queryOutput=j.outPlotId;
 			queryOutputNum=j.outPlotIdNum;
 		}  //end if
@@ -73,12 +100,35 @@ for (int i=0;i<transformedStringNum; i++) {
 	/*determine the type of output requested by the calling class*/
 	if (element[i] != null && element[i].startsWith("resultType")) {
 		//if summary - call the method to return the summary elements
+		//using as input the plotId numbers returned in the if clause above
 		if (value[i] != null && value[i].startsWith("summary")) {
 			System.out.println("outputing the results set as: "+value[i]);
 			queryStore k = new queryStore();
-			k.getPlotSummary(queryOutput, queryOutputNum);
+			k.getPlotSummary(queryOutput, queryOutputNum, pconn);
 			
-						
+			
+			
+			/**
+			* in the near future will want to look here to check
+			* the number of connection uses to determine if need
+			* to close and reopen
+			*/
+			connectionUses=connectionUses+k.outConnectionUses;
+			System.out.println("number of uses of this connection: "
+				+connectionUses);
+			if (connectionUses>12) {
+				try {
+				pconn.close(); //close it - it is no good anymore
+				myBroker.freeConnection(pconn); //not sure if this should be 
+							//commented b/c not sure of the 
+							//meaning of 'recycle' in the
+							//broker
+				pconn=myBroker.getConnection();
+				connectionUses=0;
+				} catch (Exception e) {System.out.println("failed calling "
+				+" dbConnect.makeConnection call" + e.getMessage());}
+			}
+			
 			//pass the returned summary results to the xmlWriter
 			//to write the xml file whis is identified in the xml
 			String outFile=value[i+1];
@@ -89,9 +139,17 @@ for (int i=0;i<transformedStringNum; i++) {
 		} //end if
 	} //end if
 		
-
 	
 } //end for
+
+// The connection is returned to the Broker
+myBroker.freeConnection(pconn);
+myBroker.destroy();
+} //end try - for conn pooler
+catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery  "
+	+e.getMessage());}
+	
+
 } //end method
 
 
@@ -133,6 +191,9 @@ for (int ii=0; ii<combinedStringNum; ii++) {
 } //end try
 catch ( Exception e ){System.out.println("failed at: sqlMapper.setAttributeAddress  "+e.getMessage());}
 }  //end method
+
+
+
 
 
 

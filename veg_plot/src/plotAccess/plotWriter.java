@@ -74,9 +74,10 @@ pconn= myBroker.getConnection();
 pconn1=myBroker.getConnection();
 thisConnection = myBroker.idOfConnection(conn);
 
-//This is an attempt to devise a sceame to see how many times
-// a database connection is used if more than like 70 times 
-//check it back into the pool and grab a new one
+//This is an attempt to devise a scheme to see how many times
+//a database connection is used if more than like 50 times 
+//check it back into the pool and grab a new one - the exception
+//thrown otherwise is exeeded max cursors
 int connectionUses=0;
 
 for (int ii=0; ii<addressNum; ii++) 
