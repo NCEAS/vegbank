@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- This stylesheet is a rough beginning and not checked into cvs initially: -->
-<!--<?xml-stylesheet type="text/xsl" href="changedoc_2ALTER.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="checkSchema.xsl"?>
+<?xml-stylesheet type="text/xsl" href="changedoc_2ALTER.xsl"?>
+<!--<?xml-stylesheet type="text/xsl" href="checkSchema.xsl"?>-->
 <!-- <?xml-stylesheet type="text/xsl" href="dbmodel_2csv_5flds_version.xsl"?> -->
 <!-- <?xml-stylesheet type="text/xsl" href="changedoc_2dbdoc.xsl"?> -->
 <modelChangeDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="C:\vegbank\sandbox\vegbank\docs\xml\db_schema_changes_schema.xsd">
@@ -35,7 +35,7 @@
           <update>0.0.0</update>
         </attribute>
         <attribute>
-          <attName>Plot_ID</attName>
+          <attName>plot_ID</attName>
           <attModel>logical</attModel>
           <attNulls>no</attNulls>
           <attType>Integer</attType>
@@ -2599,6 +2599,37 @@ observation.COVERMETHOD_ID</modelChangeComments>
         </attribute>
       </entity>
     </change>
+    <change type="create field">
+      <entity>
+        <entityName>stemCount</entityName>
+        <entityLabel>Stem Count</entityLabel>
+        <entitySummary>This table is intended to store information about the abundance of tree stems of a specific size.</entitySummary>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>TAXONIMPORTANCE_ID</attName>
+          <attLabel>Taxon Importance</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>no</attNulls>
+          <attType>Integer</attType>
+          <javaType type="int" relation="one"/>
+          <attKey>FK</attKey>
+          <attRelType type="inverted" name="n/a"/>
+          <attReferences>taxonImportance.TAXONIMPORTANCE_ID</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>Foreign key into the taxonImportance table</attNotes>
+          <attDefinition>Foreign key into the taxonImportance table, thereby associating a taxon identification with the tree stem(s).</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>-1</formAustere>
+            <formSummary>1154</formSummary>
+            <formDetail>1155</formDetail>
+          </attForms>
+          <update>1.0.0</update>
+        </attribute>
+      </entity>
+    </change>
     <change type="drop field">
       <entity>
         <entityName>stemCount</entityName>
@@ -2883,37 +2914,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
             <formAustere>1222</formAustere>
             <formSummary>1223</formSummary>
             <formDetail>1224</formDetail>
-          </attForms>
-          <update>1.0.0</update>
-        </attribute>
-      </entity>
-    </change>
-    <change type="create field">
-      <entity>
-        <entityName>stemCount</entityName>
-        <entityLabel>Stem Count</entityLabel>
-        <entitySummary>This table is intended to store information about the abundance of tree stems of a specific size.</entitySummary>
-        <entityDescription/>
-        <module>plot</module>
-        <attribute>
-          <attName>TAXONIMPORTANCE_ID</attName>
-          <attLabel>Taxon Importance</attLabel>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Integer</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>FK</attKey>
-          <attRelType type="inverted" name="n/a"/>
-          <attReferences>taxonImportance.TAXONIMPORTANCE_ID</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>Foreign key into the taxonImportance table</attNotes>
-          <attDefinition>Foreign key into the taxonImportance table, thereby associating a taxon identification with the tree stem(s).</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>1154</formSummary>
-            <formDetail>1155</formDetail>
           </attForms>
           <update>1.0.0</update>
         </attribute>
@@ -3986,7 +3986,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>AccessionCode</attName>
+          <attName>accessionCode</attName>
           <attLabel> Accession Code</attLabel>
           <attModel>implementation</attModel>
           <attNulls>yes</attNulls>
@@ -4121,7 +4121,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>ItemAccessionCode</attName>
+          <attName>itemAccessionCode</attName>
           <attLabel>Accession Code</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
@@ -4822,7 +4822,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>RecordCreationDate</attName>
+          <attName>recordCreationDate</attName>
           <attLabel>Record Creation Date</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
@@ -4844,7 +4844,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>OwnerStart</attName>
+          <attName>ownerStart</attName>
           <attLabel>Ownership Start Date</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
@@ -4866,7 +4866,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>OwnerStop</attName>
+          <attName>ownerStop</attName>
           <attLabel>Ownership Stop Date</attLabel>
           <attModel>implementation</attModel>
           <attNulls>yes</attNulls>
@@ -4888,7 +4888,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>OwnerType</attName>
+          <attName>ownerType</attName>
           <attLabel>Owner Type</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
@@ -5749,6 +5749,339 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Stop date for the child's membership in the parent party.</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+    </change>
+    <change type="drop field">
+      <entity>
+        <entityName>party</entityName>
+        <entityLabel>Party</entityLabel>
+        <entitySummary>Party contributing to collection or interpretation of a plot;  may be either an individual or an organization.</entitySummary>
+        <entityDescription/>
+        <module>plot</module>
+        <archive>true</archive>
+        <attribute>
+          <attName>owner_ID</attName>
+          <attLabel>Owner</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Integer</attType>
+          <javaType type="int" relation="one"/>
+          <attKey>FK</attKey>
+          <attRelType type="normal" name="n/a"/>
+          <attReferences>party.PARTY_ID</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Recursive foreign key to the Party who owns this party record and who has exclusive rights to update the information content.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>-1</formAustere>
+            <formSummary>885</formSummary>
+            <formDetail>886</formDetail>
+          </attForms>
+          <update>1.0.0</update>
+        </attribute>
+      </entity>
+    </change>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>31</modelChangeID>
+    <modelChangeName>fix spelling of layout naRRative</modelChangeName>
+    <modelChangeStatus>true</modelChangeStatus>
+    <modelChangeVersion>1.0.2</modelChangeVersion>
+    <modelChangeComments>drop and add back the field</modelChangeComments>
+    <change type="drop field">
+      <entity>
+        <entityName>plot</entityName>
+        <entityLabel>Plot</entityLabel>
+        <entitySummary>This table stores general, constant information about the a given plot</entitySummary>
+        <entityDescription>plot contains Plot location, dimension, and similarly constant site data, plus metadata that need be stored only once.   Transient observational information (procured during the first or subsequent observation events) are stored separately in observation or its children.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>layoutNarative</attName>
+          <attLabel>Layout Narrative</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>text</attType>
+          <javaType type="String" relation="one"/>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Text description of and the rationale for the layout of the plot.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>968</formAustere>
+            <formSummary>969</formSummary>
+            <formDetail>970</formDetail>
+          </attForms>
+          <update>1.0.0</update>
+        </attribute>
+      </entity>
+    </change>
+    <change type="create field">
+      <entity>
+        <entityName>plot</entityName>
+        <entityLabel>Plot</entityLabel>
+        <entitySummary>This table stores general, constant information about the a given plot</entitySummary>
+        <entityDescription>plot contains Plot location, dimension, and similarly constant site data, plus metadata that need be stored only once.   Transient observational information (procured during the first or subsequent observation events) are stored separately in observation or its children.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>layoutNarrative</attName>
+          <attLabel>Layout Narrative</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>text</attType>
+          <javaType type="String" relation="one"/>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Text description of and the rationale for the layout of the plot.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>968</formAustere>
+            <formSummary>969</formSummary>
+            <formDetail>970</formDetail>
+          </attForms>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+    </change>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>32</modelChangeID>
+    <modelChangeName>soilObs.soilTexture too short varchar()</modelChangeName>
+    <modelChangeStatus>true</modelChangeStatus>
+    <modelChangeVersion>1.0.2</modelChangeVersion>
+    <modelChangeComments>alter some soilObs fields. add value to closed list and change length of field.</modelChangeComments>
+    <change type="alter field">
+      <entity>
+        <entityName>soilObs</entityName>
+        <entityLabel>Soil Observation</entityLabel>
+        <entitySummary>This table stores observation on soil horizons made during the plot observation event.</entitySummary>
+        <entityDescription>soilObs is child of observation in recognition of the fact that the horizons observed vary among plot observation events as a results of real change plus changes in investigators, methods and circumstances. 
+	</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>soilHorizon</attName>
+          <attLabel>Soil Horizon</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>no</attNulls>
+          <attType>varchar (15)</attType>
+          <javaType type="String" relation="one"/>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>closed</attListType>
+          <attList>
+            <attListItem>
+              <attListValue>A</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>3</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>B</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>5</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>C</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>6</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>E</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>4</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>L</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>1</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>O</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>2</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>R</attListValue>
+              <attListValueDesc/>
+              <attListSortOrd>7</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>unknown</attListValue>
+              <attListSortOrd>8</attListSortOrd>
+            </attListItem>
+          </attList>
+          <attNotes>closed list - USDA</attNotes>
+          <attDefinition>The horizon to which this observation applies.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>1094</formAustere>
+            <formSummary>1095</formSummary>
+            <formDetail>1096</formDetail>
+          </attForms>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+    </change>
+    <change type="alter field">
+      <entity>
+        <entityName>soilObs</entityName>
+        <entityLabel>Soil Observation</entityLabel>
+        <entitySummary>This table stores observation on soil horizons made during the plot observation event.</entitySummary>
+        <entityDescription>soilObs is child of observation in recognition of the fact that the horizons observed vary among plot observation events as a results of real change plus changes in investigators, methods and circumstances. 
+	</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>soilTexture</attName>
+          <attLabel>Soil Texture</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (50)</attType>
+          <javaType type="String" relation="one"/>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>closed</attListType>
+          <attList>
+            <attListItem>
+              <attListValue>Sands: Coarse Sand</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: Coarse Sand</attListValueDesc>
+              <attListSortOrd>1</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sands: Sand</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: Sand</attListValueDesc>
+              <attListSortOrd>2</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sands: Fine Sand</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: Fine Sand</attListValueDesc>
+              <attListSortOrd>3</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sands: Very Fine Sand</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: Very Fine Sand</attListValueDesc>
+              <attListSortOrd>4</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sands: (unspecified)</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Sands | Texture Subclass: (unspecified)</attListValueDesc>
+              <attListSortOrd>5</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Loamy Sands: Loamy Coarse Sand</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: Loamy Coarse Sand</attListValueDesc>
+              <attListSortOrd>6</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Loamy Sands: Loamy Sand</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: Loamy Sand</attListValueDesc>
+              <attListSortOrd>7</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Loamy Sands: Loamy Fine Sand</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: Loamy Fine Sand</attListValueDesc>
+              <attListSortOrd>8</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Loamy Sands: Loamy Very Fine Sand</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: Loamy Very Fine Sand</attListValueDesc>
+              <attListSortOrd>9</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Loamy Sands: (unspecified)</attListValue>
+              <attListValueDesc>Texture Group: Sandy soils | General Term: Coarse-textured | Texture Class: Loamy Sands | Texture Subclass: (unspecified)</attListValueDesc>
+              <attListSortOrd>10</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sandy Loams: Coarse Sandy Loam</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Moderately coarse-textured | Texture Class: Sandy Loams | Texture Subclass: Coarse Sandy Loam</attListValueDesc>
+              <attListSortOrd>11</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sandy Loams: Sandy Loam</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Moderately coarse-textured | Texture Class: Sandy Loams | Texture Subclass: Sandy Loam</attListValueDesc>
+              <attListSortOrd>12</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sandy Loams: Fine Sandy Loam</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Moderately coarse-textured | Texture Class: Sandy Loams | Texture Subclass: Fine Sandy Loam</attListValueDesc>
+              <attListSortOrd>13</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sandy Loams: Very Fine Sandy Loam</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Medium-textured | Texture Class: Sandy Loams | Texture Subclass: Very Fine Sandy Loam</attListValueDesc>
+              <attListSortOrd>14</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sandy Loams: (unspecified)</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Moderately coarse-textured to Medium-textured | Texture Class: Sandy Loams | Texture Subclass: (unspecified)</attListValueDesc>
+              <attListSortOrd>15</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Loam</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Medium-textured | Texture Class: Loam | Texture Subclass: Loam</attListValueDesc>
+              <attListSortOrd>16</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Silt Loam</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Medium-textured | Texture Class: Silt Loam | Texture Subclass: Silt Loam</attListValueDesc>
+              <attListSortOrd>17</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Silt</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Medium-textured | Texture Class: Silt | Texture Subclass: Silt</attListValueDesc>
+              <attListSortOrd>18</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sandy Clay Loam</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Moderately fine-textured | Texture Class: Sandy Clay Loam | Texture Subclass: Sandy Clay Loam</attListValueDesc>
+              <attListSortOrd>19</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Clay Loam</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Moderately fine-textured | Texture Class: Clay Loam | Texture Subclass: Clay Loam</attListValueDesc>
+              <attListSortOrd>20</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Silty Clay Loam</attListValue>
+              <attListValueDesc>Texture Group: Loamy soils | General Term: Moderately fine-textured | Texture Class: Silty Clay Loam | Texture Subclass: Silty Clay Loam</attListValueDesc>
+              <attListSortOrd>21</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Sandy Clay</attListValue>
+              <attListValueDesc>Texture Group: Clayey soils | General Term: Fine-textured | Texture Class: Sandy Clay | Texture Subclass: Sandy Clay</attListValueDesc>
+              <attListSortOrd>22</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Silty Clay</attListValue>
+              <attListValueDesc>Texture Group: Clayey soils | General Term: Fine-textured | Texture Class: Silty Clay | Texture Subclass: Silty Clay</attListValueDesc>
+              <attListSortOrd>23</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Clay</attListValue>
+              <attListValueDesc>Texture Group: Clayey soils | General Term: Fine-textured | Texture Class: Clay | Texture Subclass: Clay</attListValueDesc>
+              <attListSortOrd>24</attListSortOrd>
+            </attListItem>
+          </attList>
+          <attNotes>closed list - USDA</attNotes>
+          <attDefinition>Soil texture class.The texture classes sands, loamy sands, and sandy loams (plural terms) correspond to sand, loamy sand, and sandy loam (singular terms) in the textural triangle.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>1109</formAustere>
+            <formSummary>1110</formSummary>
+            <formDetail>1111</formDetail>
+          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
