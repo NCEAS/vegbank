@@ -1,0 +1,7 @@
+This directory contains the resources for running the RMI client/server system
+used for accessing vegbank plots stored in MS ACCESS format database files.
+
+STARTING THE SERVER
+-------------------
+1] extract the contents of the ./lib/rmiserver.tar file 
+2] run the start_rmi_server.bat file 
