@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-13 22:38:16 $'
- *  '$Revision: 1.20 $'
+ *  '$Date: 2003-11-25 19:46:03 $'
+ *  '$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import java.util.Hashtable;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -653,7 +654,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	 * @see ServletUtility -- the class that handles the email process.  the 
 	 * method is called 'sendEmail'
 	 */
-	 private void emailPlotSubmitalReceipt(String inputEmail, String receipt)
+	 private void emailPlotSubmitalReceipt(String inputEmail, String receipt) throws MessagingException
 	 {
 		String from = "vegbank";
 		String to = inputEmail;

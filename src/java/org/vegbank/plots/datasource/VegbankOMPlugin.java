@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-05 20:50:58 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2003-11-25 19:46:03 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,20 +72,16 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		{
 			DBModelBeanReader mbReader = new DBModelBeanReader();
 			// TODO:  Get a single observation_id for this plot  
-			Plot plot =
+			plot =
 				mbReader.getPlotObservationBeanTree(accessionCode);
 				
 			observation = (Observation) plot.getplot_observations().get(0);
-			
-			// hack to make this work
-			observation.setPlotobject(plot);
 		}
 		catch (Exception e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		plot = observation.getPlotobject();
 		project = observation.getProjectobject();
 		coverMethod = observation.getCovermethodobject();
 		stratumMethod = observation.getStratummethodobject();
@@ -110,7 +106,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getAccessionValue(String plotId)
 	{
-		return plot.getAccession_number();
+		return plot.getAccessioncode();
 	}
 
 	/* (non-Javadoc)
@@ -489,7 +485,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getLayoutNarrative(String plotName)
 	{
-		return plot.getLayoutnarative();
+		return plot.getLayoutnarrative();
 	}
 
 	/* (non-Javadoc)
@@ -577,7 +573,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getObservationAccessionNumber(String plotId)
 	{
-		return observation.getObsaccessionnumber();
+		return observation.getAccessioncode();
 	}
 
 	/* (non-Javadoc)
@@ -951,16 +947,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getPlantTaxonCode(String plantName)
 	{
 		String plantTaxonCode = "";
-		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
-		Plantname plantname = to.getPlantnameobject();
-		if ( plantname == null )
-		{
-			plantTaxonCode = "";
-		}
-		else
-		{
-			plantTaxonCode = plantname.getPlantname();
-		}
+		// FIXME: Model change broke code
 		return plantTaxonCode;
 	}
 
@@ -970,7 +957,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getPlantTaxonCover(String plantName, String plotName)
 	{
 		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
-		return to.getTaxoncover();
+		return MBReadHelper.getTotalTaxonCover(to);
 	}
 
 	/* (non-Javadoc)
@@ -1454,7 +1441,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getState(String plotName)
 	{
-		return plot.getState();
+		return plot.getStateprovince();
 	}
 
 	/* (non-Javadoc)
@@ -1578,12 +1565,14 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		{
 			return taxaStrataCover;
 		}
-		Stratumcomposition sc = (Stratumcomposition)  stratumComposition.get(stratumName);
-		if (sc == null )
-		{
-			return taxaStrataCover;
-		}
-		return sc.getTaxonstratumcover();
+		// FIXME: Use taxonImportance instead
+//		Stratumcomposition sc = (Stratumcomposition)  stratumComposition.get(stratumName);
+//		if (sc == null )
+//		{
+//			return taxaStrataCover;
+//		}
+//		return sc.getTaxonstratumcover();
+		return taxaStrataCover;
 	}
 
 	/* (non-Javadoc)
@@ -1593,16 +1582,18 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	{
 		Vector strataList = new Vector();
 		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
-		List scList = to.gettaxonobservation_stratumcompositions();
-		Iterator startumCompsitions = scList.iterator();
-		while ( startumCompsitions.hasNext() )
-		{
-			Stratumcomposition sc = (Stratumcomposition) startumCompsitions.next();
-			String stratumName = sc.getStratumobject().getStratumname();
-			strataList.add(stratumName);
-			stratumComposition.put(stratumName, sc);
-		}
-		return strataList;
+		// FIXME: Use taxonImportance instead
+//		List scList = to.gettaxonobservation_stratumcompositions();
+//		Iterator startumCompsitions = scList.iterator();
+//		while ( startumCompsitions.hasNext() )
+//		{
+//			Stratumcomposition sc = (Stratumcomposition) startumCompsitions.next();
+//			String stratumName = sc.getStratumobject().getStratumname();
+//			strataList.add(stratumName);
+//			stratumComposition.put(stratumName, sc);
+//		}
+//		return strataList;
+		return null;
 	}
 
 	/* (non-Javadoc)
