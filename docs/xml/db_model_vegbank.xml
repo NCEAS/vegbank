@@ -4,6 +4,7 @@
 <dataModel>
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>beta.2</version>
+  <versionDesc>This version of the VegBank database model includes changes to make reference one set of tables (no more commReference, plantReference, cititation).  level and parent have been moved to Status for plant and comm modules.</versionDesc>
   <author>M. Lee</author>
   <institution>NCEAS</institution>
   <contributor>M. Lee</contributor>
@@ -1583,6 +1584,157 @@ change through time.</entitySummary>
       <attList/>
       <attNotes/>
       <attDefinition/>
+    </attribute>
+  </entity>
+  <entity>
+    <entityName>address</entityName>
+    <entitySummary>This table contains the postal address, email address and/or organizational affiliation for a parties at the time of a plot event. </entitySummary>
+    <entityDescription/>
+    <module>plot</module>
+    <attribute>
+      <attName>ADDRESS_ID</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Primary key for the address table. </attNotes>
+      <attDefinition>Database generated identifier assigned to each unique party address (note that a single party may have multiple addresses but that only one may be 'current').</attDefinition>
+    </attribute>
+    <attribute>
+      <attName>PARTY_ID</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attReferences>party.PARTY_ID</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Foreign key into the party table. </attNotes>
+      <attDefinition>Link to the party to which this address applies</attDefinition>
+    </attribute>
+    <attribute>
+      <attName>ORGANIZATION_ID</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attReferences>party.PARTY_ID</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Foreign key into the party table</attNotes>
+      <attDefinition>Link to an organization with which a party is affiliated</attDefinition>
+    </attribute>
+    <attribute>
+      <attName>orgPosition</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a </attNotes>
+      <attDefinition>Position of party within organization.</attDefinition>
+    </attribute>
+    <attribute>
+      <attName>email</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (100)</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>email address</attDefinition>
+    </attribute>
+    <attribute>
+      <attName>deliveryPoint</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (200)</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a </attNotes>
+      <attDefinition>Address line for the location
+(Street name, box number, suite).</attDefinition>
+    </attribute>
+    <attribute>
+      <attName>city</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a </attNotes>
+      <attDefinition>City of the location. </attDefinition>
+    </attribute>
+    <attribute>
+      <attName>administrativeArea</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a </attNotes>
+      <attDefinition>State, province of the location. </attDefinition>
+    </attribute>
+    <attribute>
+      <attName>postalCode</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (10)</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a </attNotes>
+      <attDefinition>Zip code or other postal code. </attDefinition>
+    </attribute>
+    <attribute>
+      <attName>country</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Country of the physical address. </attDefinition>
+    </attribute>
+    <attribute>
+      <attName>currentFlag</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Boolean</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a </attNotes>
+      <attDefinition>This flag signifies whether the address is the current address of the party. </attDefinition>
+    </attribute>
+    <attribute>
+      <attName>addressStartDate</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>timestamp</attType>
+      <attKey>n/a</attKey>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The first database date on which the address/organization information applied (have a discrete date on which address is known to applied -- not necessarily the first date on which the address applied).</attDefinition>
     </attribute>
   </entity>
   <entity>
@@ -3681,7 +3833,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>COVERMETHOD_ID</attName>
       <attModel>logical</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attReferences>coverMethod.coverMethod_ID</attReferences>
@@ -3693,7 +3845,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>STRATUMMETHOD_ID</attName>
       <attModel>logical</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attReferences>stratumMethod.stratumMethod_ID</attReferences>
@@ -3729,7 +3881,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>taxonObservationArea</attName>
       <attModel>logical</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Float</attType>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
@@ -3741,7 +3893,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>coverDispersion</attName>
       <attModel>logical</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
@@ -3769,7 +3921,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>autoTaxonCover</attName>
       <attModel>logical</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Boolean</attType>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
@@ -5827,7 +5979,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>confidentialityReason</attName>
       <attModel>logical</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
@@ -6003,7 +6155,7 @@ conditions may change between resampling events.
     <attribute>
       <attName>area</attName>
       <attModel>logical</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Float</attType>
       <attKey>n/a</attKey>
       <attReferences>n/a</attReferences>
