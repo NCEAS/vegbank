@@ -2,8 +2,8 @@
  * 
  *
  *		 '$Author: harris $'
- *     '$Date: 2001-12-06 02:07:58 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2002-04-17 01:58:46 $'
+ *     '$Revision: 1.3 $'
  *
  */
 //package vegclient.framework;

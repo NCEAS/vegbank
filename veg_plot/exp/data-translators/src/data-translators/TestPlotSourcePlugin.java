@@ -13,10 +13,11 @@ import java.sql.*;
  *  Release:
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-05 01:25:37 $'
- * 	'$Revision: 1.6 $'
+ *  '$Date: 2002-04-17 01:58:46 $'
+ * 	'$Revision: 1.7 $'
  */
-public class TestPlotSourcePlugin implements PlotDataSourceInterface
+//public class TestPlotSourcePlugin implements PlotDataSourceInterface
+public class TestPlotSourcePlugin
 {
 	private String dbUrl = "jdbc:odbc:test_access"; 
 	private Connection con = null;
@@ -676,8 +677,4 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 	{
 		return("7");
 	}
-
-
-
 }
-                                    

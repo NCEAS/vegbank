@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-04-10 18:42:55 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2002-04-17 01:58:46 $'
+ * '$Revision: 1.8 $'
  *
  *
  */
@@ -28,6 +28,8 @@ public interface PlotDataSourceInterface
 	//this method retrives all the attributes for a gine plotname
   void getPlotData(String plotName)
 		throws Exception;
+		
+		
 		
 		
 		
