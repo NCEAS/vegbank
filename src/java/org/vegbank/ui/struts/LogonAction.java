@@ -21,9 +21,9 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-12-02 20:02:15 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-01-16 02:08:22 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,6 +80,7 @@ public class LogonAction  extends Action
 		try
 		{
 			// Attempt to get user from database;
+			username = username.trim();
 			user = getUser(username);
 			
 			if ( user == null )
