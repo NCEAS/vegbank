@@ -26,6 +26,7 @@
 	<property name="src" value="./servlet"/>
 	<property name="dbAccess_src" value="./plotAccess"/>
 	<property name="xmlFiles" value="../xml"/>
+	<property name="utilities" value="./utilities"/>
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
 	
@@ -72,6 +73,15 @@
                filtering="yes"
                includes="**.java"
                excludes="**/CVS* "/>
+			   
+	<!-- grab the utility classes that will be needed for such things as data
+	 	formatting-->
+	  <copydir src="${utilities}" 
+               dest="${build}" 
+               filtering="yes"
+               includes="PlotDataMapper.java  PlotXmlWriter.java"
+               excludes="**/CVS* "/>
+	 
 	 
 	
         </target>	
@@ -100,7 +110,11 @@
 
 	<jar jarfile ="${build}/plotAccess.jar"
 		basedir="${build}"
-		includes="${build}/ xmlWriter.class CommunityQueryStore.class  dbAccess.class dbConnect.class issueStatement.class plotWriter.class queryStore.class sqlMapper.class transformXML.class utility.class  DbConnectionBroker.class"
+		includes="${build}/ PlotXmlWriter.class PlotDataMapper.class 
+		xmlWriter.class CommunityQueryStore.class  
+		dbAccess.class dbConnect.class issueStatement.class plotWriter.class 
+		queryStore.class sqlMapper.class transformXML.class utility.class  
+		DbConnectionBroker.class"
 	/>
 	
 </target>		

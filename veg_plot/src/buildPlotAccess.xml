@@ -24,6 +24,7 @@
 	<property name="release" value="development"/>
 	<property name="src" value="./plotAccess"/>
 	<property name="xmlFiles" value="../xml"/>
+	<property name="utilities" value="./utilities"/>
 	<filter token="dist" value="dist"/>
 	<filter token="version" value="development"/>
 	
@@ -66,6 +67,15 @@
                filtering="yes"
                includes="database.properties"
                excludes="**/CVS* "/> 
+			   
+	<!-- grab the utility classes that will be needed for such things as data
+	 	formatting-->
+	  <copydir src="${utilities}" 
+               dest="${build}" 
+               filtering="yes"
+               includes="PlotDataMapper.java  PlotXmlWriter.java"
+               excludes="**/CVS* "/>
+	 
 	
         </target>	
 	
