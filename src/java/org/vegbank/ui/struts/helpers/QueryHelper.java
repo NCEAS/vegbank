@@ -4,8 +4,8 @@
  *  Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2004-07-29 01:06:12 $' 
- * '$Revision: 1.4 $'
+ * '$Date: 2004-11-04 19:27:04 $' 
+ * '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -130,7 +130,7 @@ public class QueryHelper
 	private static String isDateInRange(String nameExistsBeforeDate,
 			String startdateField, String stopDateField)
 	{
-		return "AND '" + nameExistsBeforeDate + "' >= " + startdateField + " AND "
+		return " AND '" + nameExistsBeforeDate + "' >= " + startdateField + " AND "
 				+ "( " + stopDateField + " <= '" + nameExistsBeforeDate + "' OR "
 				+ stopDateField + " IS NULL)";
 	}
