@@ -47,14 +47,14 @@ import java.net.URL;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-07-26 03:31:33 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-07-26 18:55:28 $'
+ * 	'$Revision: 1.2 $'
  * 
  */
 
 public class DataRequestHandler {
 
-ResourceBundle rb = ResourceBundle.getBundle("plotQuery");
+ResourceBundle rb = ResourceBundle.getBundle("vegclient");
 
 //the string buffer below is the results that have been requested by the
 // DataRequestClient in the form of a string buffer
