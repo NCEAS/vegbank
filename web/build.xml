@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-10-30 16:17:16 $'
-* '$Revision: 1.67 $'
+* '$Author: farrell $'
+* '$Date: 2003-10-31 22:23:55 $'
+* '$Revision: 1.68 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -62,7 +62,7 @@
     <property name="hostname" value="vegbank"/>
     <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
-    <property name="apache.document.root" value="/var/www/html"/>
+    <property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
     <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
     <filter token="dist" value="dist"/>
@@ -327,10 +327,9 @@
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
     <copy file="${sharedhtml_src}/url2get_data.properties" tofile="${style_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
-    <ant dir="../../../docs/xml" target="dist-closedlist-tokenfile"/>
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
     <copy file="${manual_src}/manual_filters.properties" tofile="${style_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
-
+    <ant dir="../../../docs/xml" target="dist-closedlist-tokenfile"/>
   
   </target>
   <target name="vbsummary" depends="hdrftr" description="=&gt; dist a summary of data in vegbank to the appropriate page">
