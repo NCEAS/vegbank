@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-13 18:41:21 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-02-13 19:32:25 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,12 +99,21 @@ import java.sql.*;
 		 String commName = null;
 		 try
 		 {
+			  //first figure out the level in the heirarcy
+			 this.level = this.getCommunityLevel(community);
+			 System.out.println("EcoartVegCommunity > internal level: " + level); 
 			// Create a Statement so we can submit SQL statements to the driver
 			Statement stmt = con.createStatement();
-			//create the result set
-			ResultSet rs = stmt.executeQuery("select "
-			+" ([Gname]) "
-			+" from ETC where ([Elcode]) like '"+community+"'");
+			String query = null;
+			if (level.equals("association") )
+			{
+				query = "select ([Gname]) from ETC where ([Elcode]) like '"+community+"'";
+			}
+			else if (level.equals("alliance") )
+			{
+				query = "select ([AllianceName]) from Alliance where ([AllianceKey]) like '"+community+"'";
+			}
+			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) 
 			{
 				commName = rs.getString(1);
@@ -119,25 +128,34 @@ import java.sql.*;
 	 }
 	 
 	 /**
-	  * method that returns the community codes for the entire ecoart 
-		* database
-		*
-		* @return communities -- a vector containing all the communities
-		*/
-	 private Vector getCommunityCodes()
+ 	 * method that takes a community code, in this case the ecoart code and
+	 * returns the community 'common' name that is associated with the ecoart code.
+	 * specifically there is an 'Elcode' that is associated with the 
+	 * community Associations, each code represents a unique community concept
+	 * and thus by using these codes the attributes realeted to the community
+	 * entity can be returned to the calling method
+	 *
+	 * @param community -- the ecoart community code, can be an alliance code or a
+	 * 	elcode
+	 * @return commName -- the name of the community
+	 */
+	 private String getCommunityCommonName(String community)
 	 {
-		Vector communities = new Vector();
+		 String commName = null;
 		 try
 		 {
+			 //first figure out the level in the heirarcy
+			 this.level = this.getCommunityLevel(community);
+			 System.out.println("EcoartVegCommunity > internal level: " + level); 
 			// Create a Statement so we can submit SQL statements to the driver
 			Statement stmt = con.createStatement();
 			//create the result set
-			ResultSet rs = stmt.executeQuery("select distinct "
-			+" ([Elcode]) "
-			+" from ETC");
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([GnameTrans]) "
+			+" from ETC where ([Elcode]) like '"+community+"'");
 			while (rs.next()) 
 			{
-				 communities.addElement(rs.getString(1));
+				commName = rs.getString(1);
 			}
 		 }
 		 catch (Exception e)
@@ -145,8 +163,96 @@ import java.sql.*;
 			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
-		 return(communities);
+		 return(commName);
 	 }
+	 
+	 
+ 	 /** method that returns the community codes for the entire ecoart 
+ 		* database
+ 		*
+ 		* @return communities -- a vector containing all the communities
+		*/
+ 	 private Vector getCommunityCodes()
+ 	 {
+ 		Vector communities = new Vector();
+ 		 try
+ 		 {
+ 			// Create a Statement so we can submit SQL statements to the driver
+ 			Statement stmt = con.createStatement();
+ 			//create the result set
+ 			ResultSet rs = stmt.executeQuery("select distinct "
+ 			+" ([Elcode]) "
+ 			+" from ETC");
+ 			while (rs.next()) 
+ 			{
+ 				 communities.addElement(rs.getString(1));
+ 			}
+ 		 }
+ 		 catch (Exception e)
+ 		 {
+ 			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
+ 			 e.printStackTrace();
+ 		 }
+ 		 return(communities);
+ 	 }
+	 
+	 
+	 /**
+		* method that returns the community level in the heirarchy based on 
+		* an input code
+		* @param code -- the ecoart code for the community
+		* @return level -- the level of the community in the heirarchy and may 
+		* 	include the association, alliance etc..
+		*/
+	private String getCommunityLevel(String community)
+ 	{
+		if ( community.startsWith("CEG") )
+		{
+			return("association");
+		}
+		else if (community.startsWith("A.") )
+		{
+			return("alliance");
+		}
+		else
+		{
+			return(null);
+		}
+	}
+	 
+	 
+	 /**
+		* method that returns the code of the parent community, eq, the association 
+		* has a parent, an alliance, so this method passes back the alliance key
+		* if a 'elcode' is passed to this method as a parameter
+		* @param community -- the ecoart code
+		* @return parentCode -- the parent code 
+		*/
+		private String getParentCode(String community)
+	 {
+		 String parentCode = null;
+		 try
+		 {
+			// Create a Statement so we can submit SQL statements to the driver
+			Statement stmt = con.createStatement();
+			//create the result set
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([ClassifKey]) "
+			+" from ETC where ([Elcode]) like '"+community+"'");
+			while (rs.next()) 
+			{
+				parentCode = rs.getString(1);
+			}
+		 }
+		 catch (Exception e)
+		 {
+			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(parentCode);
+	 }
+	 
+	 
 	 
 	 /**
 	  * main method for testing this code
@@ -155,9 +261,20 @@ import java.sql.*;
 		{
 			EcoartVegCommunitySource source = new EcoartVegCommunitySource();
 			String name = source.getCommunityName("CEGL000001");
-			Vector v = source.getCommunityCodes();
+			String level = source.getCommunityLevel("CEGL000001");
+			String commonName = source.getCommunityCommonName("CEGL000001");
+			String parentCode = source.getParentCode("CEGL000001");
+			//Vector v = source.getCommunityCodes();
 			System.out.println("EcoartVegCommunitySource > name: " + name);
-			System.out.println("EcoartVegCommunitySource > name: " + v);
+			System.out.println("EcoartVegCommunitySource > level: " + level );
+			System.out.println("EcoartVegCommunitySource > commonName: " + commonName );
+			System.out.println("EcoartVegCommunitySource > parentCode: " + parentCode );
+			
+			String parentLevel = source.getCommunityLevel(parentCode);
+			String parentName = source.getCommunityName(parentCode);
+			
+			System.out.println("EcoartVegCommunitySource > parentLevel: " + parentLevel);
+			System.out.println("EcoartVegCommunitySource > parentName: " + parentName);
 		}
 	 
 	 
