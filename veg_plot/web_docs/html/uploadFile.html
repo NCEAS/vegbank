@@ -1,0 +1,285 @@
+<html>
+<head>
+<title>
+Plains Resources Exploitation Database - data upload facility
+</title>
+
+</head>
+
+<body bgcolor=#FFFFFF>
+
+<!-- colors: silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
+
+<table align=center border=0 width=90% cellspacing=0 cellpadding=0>
+
+<!-- logo (optional) on lt. blue background -->
+
+<tr>
+<td bgcolor=DFE5FA>
+
+<img align=center border=0 height=144 
+ src="/images/owlogomap.jpg" alt = "data upload facility">
+
+
+<!-- title of page -->
+
+<td align=left valign=bottom>
+    <table border=0 cellpadding=5>
+    <tr>
+    <td align=left valign=bottom>
+    <font face="Helvetica,Arial,Verdana" size=6 color=23238E> DataUpload
+    </font><br>
+    &nbsp;&nbsp;
+    <font face="Helvetica,Arial,Verdana" size=2 color=000000>
+    <b>Data-file upload</b>
+    </font>
+    </td>
+    </table>
+</td>
+</tr>
+
+<!-- cool blue horizontal bar bar -->
+<tr>
+<td colspan=2 bgcolor=9999CC align=center valign=center>
+
+
+<!-- SPECIAL ANNOUNCEMENTS HERE -->
+
+&nbsp;<br>
+&nbsp;
+&nbsp;
+<br>
+
+
+</td></tr>
+
+<!-- left side lt. blue bar with links -->
+
+<tr>
+<td width=15%  bgcolor=DFE5FA align=center valign=top>
+
+<table border=0 cellspacing=5>
+<tr><td bgcolor=FFFFFF align=center>
+ <a href=index.html>
+  <font face="Verdana,Arial,Helvetica" size=2 color=23238E><b>
+  Overview
+  </b></font>
+ </a>
+</td></tr>
+<tr><td bgcolor=FFFFFF align=center>
+ <a href=index.html>
+  <font face="Verdana,Arial,Helvetica" size=2 color=23238E><b>
+  Underlying Databases
+  </b></font>
+ </a>
+</td></tr>
+</table>
+<hr width=50% size=".5">
+
+<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+see also:
+</font>
+<p>
+<font face="Helvetica,Arial,Verdana" size=1>
+ <a href=about_plot.html>about Well Data</a>
+<p>
+ <a href=about_plant.html>about Production</a>
+<p>
+ <a href=news.html>what's new?</a><br>
+<p>
+ <a href=faq.html>frequently asked questions</a>
+<p>
+ <a href=references.html>references</a>
+<p>
+ <a href=people.html>staff</a>
+<p>
+
+ 
+</font>
+</td>
+
+
+<!-- main menu -->
+
+<td align=center>
+
+<table border=0 cellspacing=5 cellpadding=5>
+<FORM action=/examples/servlet/DataExchangeServlet encType=multipart/form-data method=POST>
+
+
+<tr valign=top>
+<td  align=left valign=middle colspan=2>
+<!-- <font face="Helvetica,Arial,Verdana" size=2 color=2F4F2F> -->
+<font face="Helvetica,Arial,Verdana" size=2 color=209020>
+
+
+</font>
+<p>
+<small>
+<INPUT TYPE="submit" VALUE="upload file">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+</small>
+<br>
+
+<tr>
+<br>
+<td  align=right valign=top>
+<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+<b>file name</b>
+</td>
+
+
+<INPUT name=submitter type=hidden>
+
+<!--get the file name -->
+<td  align=left valign=top>
+<INPUT name=file type=file> 
+<b>
+<font face="Helvetica,Arial,Verdana" size=1>
+
+</font>
+</small>
+</font>
+
+<tr>
+<td  colspan=2 rowspan=1 align=left valign=middle>
+<hr size=.5>
+
+<tr>
+<td  align=right valign=top>
+<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+<b>fileType</b>
+
+</td>
+<td  align=left valign=top>
+<select name="fileType" multiple size=5>
+        <option selected>LAS-2.0
+	<option>LAS-1.2
+	<option>EV-pdat
+        <option>EV-dat
+        <option>EV-path
+	<option>EV-tops
+	<option>EV-2grd
+	<option>EV-3grd
+	<options>EV-faces
+	<option>EV-ply
+	<options>EV-ann
+	
+
+</select><br clear=left>
+<!--  put map here later
+<small><small><a href=/images/statemap.gif target=_blank>reference map</a></small></small>
+-->
+</p>
+
+
+</td>
+
+<tr>
+<td colspan=2 align=left valign=middle>
+<hr size=.85>
+</td>
+
+<tr>
+<td align=right valign=top>
+<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+<b>creation date</b>
+</td>
+
+<td align=left valign=top>
+<font face="Helvetica,Arial,Verdana" size=2>
+occurs between:<br>
+<INPUT TYPE="HIDDEN" NAME="minDate?" VALUE=contains>
+<input size=10 name="minDate" value="21-Feb-2001">
+</td>
+
+
+
+<tr>
+<td colspan=2 align=left valign=middle>
+<hr size=.5>
+
+<!--the production type and amount are here-->
+<tr>
+<td align=right valign=top>
+<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
+<b>Notes:</b>
+</td>
+</font>
+
+<td align=left valign=top>
+<textarea> </textarea>
+<font face="Helvetica,Arial,Verdana" size=2 color=000000>
+</td>
+
+
+
+<tr>
+<td colspan=2 align=left valign=middle>
+<hr size=.5>
+
+
+
+<tr>
+<td  align=left valign=middle colspan=2>
+<small>
+<INPUT TYPE="submit" VALUE="upload file">&nbsp;&nbsp;
+<INPUT TYPE="reset" VALUE="reset">
+</small>
+  </tr>
+    </table>
+
+<!-- bottom section -->
+
+<tr>
+<td colspan=2 bgcolor=DFE5FA>
+    <table cellpadding=15 width=100%>
+    <tr>
+    <td>
+ <font face="Helvetica,Arial,Verdana" size=2>
+
+ 
+  <script language=JavaScript alt="JavaScript not enabled!">
+   <!-- 
+    today = new Date()
+    document.write("(Accessed: " + today + ")")
+   //-->
+ </script>
+</dd></dt></dl-->
+<table border=0 cellpadding=5 cellspacing=5 align=left><tr><td bgcolor=FFFFFF>
+
+</td></tr<tr><td bgcolor=FFFFFF>
+ <a href=contributions.html#suggestions>
+ <font face="Helvetica,Arial,Verdana" size=1 color=23238E>
+ Suggestions Box</a><br>
+</td><td bgcolor=FFFFFF>
+ <a href=questions.html>
+ <font face="Helvetica,Arial,Verdana" size=1 color=23238E>
+ questions and comments</a>
+</td></tr></table>
+</font>
+
+    </td>
+    </tr>
+    </table>
+</td></tr><tr><td align=center bgcolor=#FFFFFF colspan=2>
+ <P align=center>
+<font face="Helvetica,Arial,Verdana">
+<small>The Plains Resources Exploitation Database is hosted by Numeric Solutions 
+ <!--
+ <a href=http:// target="_new">
+ <img src=http://1.1.1.1/logo.gif border=0 align=middle></a>
+-->
+ </small>
+</font>
+</p>
+
+</td>
+</tr>
+
+
+</table>
+</body>
+</html>
+
+
+
