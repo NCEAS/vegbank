@@ -25,10 +25,57 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 super();
 		 System.out.println("DataSourceImpl > plugin to be used: " + sourcePluginClass);
 		 source = new PlotDataSource(sourcePluginClass);
+		 System.out.println("DataSourceImpl > number of plots:  " + source.getPlotNames().size() );
      //source.getPlot("VOYA.03");
    }
 	
 	
+	
+	/**
+	 * method used for uploading the access mdb file
+	 */
+	 public String getMDBFile(String fileName, String fileType, byte buffer[] )
+	 {
+		 try
+		 {
+				System.out.println("DataSourceImpl > uploading: " + fileName);
+				byte[] filedata = buffer;
+				File file = new File("exp.mdb");
+				BufferedOutputStream output = new
+				BufferedOutputStream(new FileOutputStream(file.getName()));
+				output.write(filedata,0,filedata.length);
+				output.flush();
+				output.close();
+				
+				/*
+					String name = "//" + argv[1] + "/DataSourceServer";
+				DataSourceServerInterface fi = (DataSourceServerInterface)Naming.lookup(name);
+				byte[] filedata = fi.downloadFile(argv[0]);
+				File file = new File(argv[0]);
+				BufferedOutputStream output = new
+				BufferedOutputStream(new FileOutputStream(file.getName()));
+				output.write(filedata,0,filedata.length);
+				output.flush();
+				output.close();
+				*/
+				
+				/*
+				 File file = new File(fileName);
+         byte buffer[] = new byte[(int)file.length()];
+         BufferedInputStream input = new
+      	 BufferedInputStream(new FileInputStream(fileName));
+         input.read(buffer,0,buffer.length);
+         input.close();
+				*/
+				
+		 }
+		 catch (Exception e)
+		 {
+		 	System.out.println("Exception: "+e.getMessage());
+      e.printStackTrace();
+     }
+		 return("true");
+	 }
 	
 	//#START EDITIONS
 
@@ -218,6 +265,8 @@ public class DataSourceImpl extends UnicastRemoteObject
 	public Vector getPlantNames(String plotName)
 	{
 		Vector v = new Vector();
+		v = source.getPlantNames(plotName);
+		System.out.println("DataSourceImpl > plant names: " + v.toString() );
 		return(v);
 	}
 	

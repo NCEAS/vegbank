@@ -9,7 +9,11 @@ import java.rmi.RemoteException;
 
 public interface DataSourceServerInterface extends Remote 
 {
-   public byte[] downloadFile(String fileName) throws
+   //method for uploading a file to the server
+	 public String getMDBFile(String fileName, String fileType,  byte buffer[] )
+	 throws Exception;
+	 
+	 public byte[] downloadFile(String fileName) throws
    RemoteException;
 	 
 	//this method retrives all the attributes for a gine plotname

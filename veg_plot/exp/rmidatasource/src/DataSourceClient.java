@@ -57,7 +57,7 @@ public class DataSourceClient
 			this.source = (DataSourceServerInterface)Naming.lookup(url);
 			
 			//make a test
-			//System.out.println("DataSourceCleint > " + source.getPlotNames() );
+			System.out.println("DataSourceCleint > plots:" + source.getPlotNames() );
 		}
 		catch(Exception e)
 		{
@@ -730,6 +730,10 @@ public class DataSourceClient
 		 }
 	 }
 	
+	
+	
+	 
+	
 	/**
 	 * method to unbind from the server
 	 */
@@ -746,6 +750,33 @@ public class DataSourceClient
 			}
 		}
 	 
+	 /**
+	  * method to load to the server class an ms access file containing 
+		* a specific configuration
+		*/
+		private boolean putMDBFile(String fileName, String fileType)
+		{
+			try 
+			{
+				
+         File file = new File(fileName);
+         byte buffer[] = new byte[(int)file.length()];
+         BufferedInputStream input = new
+      	 BufferedInputStream(new FileInputStream(fileName));
+         input.read(buffer,0,buffer.length);
+         input.close();
+				
+				 String s = source.getMDBFile(fileName, fileType, buffer);
+      } 
+			catch(Exception e)
+			{
+         System.out.println("FileImpl: "+e.getMessage());
+         e.printStackTrace();
+      }
+			return(true);
+		}
+		
+	 
 	 
 	/**
 	 * main method for testing
@@ -753,7 +784,8 @@ public class DataSourceClient
 	public static void main(String argv[]) 
 	{
 		//get a file from the server
-		if(argv.length != 2) 
+		System.out.println("DataSourceCleint > argument length: " + argv.length );
+		if(argv.length == 1) 
 		{
 			try
 			{
@@ -765,8 +797,6 @@ public class DataSourceClient
 				client.printDBVariables(plot);
 				client.closeConnection();
 				
-				
-				
 			}
 			catch(Exception e) 
 			{
@@ -774,10 +804,22 @@ public class DataSourceClient
 				e.printStackTrace();
 			}		
 		}
-		else
+		else if (argv.length == 2)
 		{
+			System.out.println("DataSourceCleint >  posting a file " );
 			try 
 			{
+				
+				//START
+				String hostServer =  argv[0];
+				String file =  argv[1];
+				String fileType = "tncplots";
+				DataSourceClient client = new DataSourceClient(hostServer, "1099");
+				System.out.println("DataSourceCleint > " + client.getPlotNames() );
+				System.out.println("DataSourceCleint > " + client.putMDBFile(file, fileType) );
+				
+				//END
+/*				
 				String name = "//" + argv[1] + "/DataSourceServer";
 				DataSourceServerInterface fi = (DataSourceServerInterface)Naming.lookup(name);
 				byte[] filedata = fi.downloadFile(argv[0]);
@@ -787,7 +829,8 @@ public class DataSourceClient
 				output.write(filedata,0,filedata.length);
 				output.flush();
 				output.close();
-			} 
+*/
+} 
 			catch(Exception e) 
 			{
 				System.err.println("FileServer exception: "+ e.getMessage());
