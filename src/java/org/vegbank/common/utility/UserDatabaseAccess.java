@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-01 01:04:49 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-03-02 22:33:43 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-03-01 01:04:49 $'
- *     '$Revision: 1.10 $'
+ *     '$Date: 2004-03-02 22:33:43 $'
+ *     '$Revision: 1.11 $'
  */
 
 import java.sql.PreparedStatement;
@@ -123,7 +123,7 @@ public class UserDatabaseAccess
 		DBConnection conn = getConnection();
 		//get the connections etc
 		Statement query = conn.createStatement();
-		sb.append("SELECT certification_id FROM usercertification ");
+		sb.append("SELECT usercertification_id FROM usercertification ");
 		sb.append("where usr_id=" + usrId);
 		
 		//issue the query
@@ -302,11 +302,10 @@ public class UserDatabaseAccess
 	 */
 	private DBConnection getConnection() throws SQLException
 	{
-		LogUtility.log("UDA.getConnection(): getting DB connection");
 		DBConnectionPool dbCP = DBConnectionPool.getInstance();
 		DBConnection conn = dbCP.getDBConnection("UserDatabaseAccess");
 
-		LogUtility.log("UDA.getConnection(): DB connection tag: " + conn.getTag() );
+		//LogUtility.log("UDA.getConnection(): DB connection tag: " + conn.getTag() );
 /*  // This makes sure a connection is established
 		int loopCount = 0;
 		while (conn.getTag() == null) {
@@ -353,7 +352,7 @@ public class UserDatabaseAccess
 		sb.append("' OR phonetype IS NULL ) AND " + uniqueClause);
 		*/
 	
-		LogUtility.log("UDA.getAllUserData(): " + sb.toString() );
+		//LogUtility.log("UDA.getAllUserData(): " + sb.toString() );
 		
 		 //issue the query
 		 ResultSet results = query.executeQuery(sb.toString());
@@ -386,6 +385,97 @@ public class UserDatabaseAccess
 		conn.close();
 		DBConnectionPool.returnDBConnection(conn);
 		return userBean;
+	 }
+	 
+
+	/**
+	 * Private method to return the user info for a user in the user database.  The
+	 * user data will be returned as a WebUser bean.
+	 * 
+	 * @param usercertification_id
+	 * @return CertificationForm or null if none found
+	 */
+	 public CertificationForm getCertificationApp(int usercertification_id) throws Exception
+	 {
+		//get the connections etc
+		DBConnection conn = getConnection();
+		 
+		Statement query = conn.createStatement();
+		StringBuffer sb = new StringBuffer();
+		sb.append("SELECT ")
+			.append(" current_cert_level, requested_cert_level, ")
+			.append(" highest_degree, degree_year, degree_institution, current_org, ")
+			.append(" current_pos, esa_member, prof_exp, relevant_pubs, veg_sampling_exp, ")
+			.append(" veg_analysis_exp, usnvc_exp, vb_exp, tools_exp, vb_intention,")
+			.append(" exp_region_a, exp_region_a_veg, exp_region_a_flor, exp_region_a_nvc, ")
+			.append(" exp_region_b, exp_region_b_veg, exp_region_b_flor, exp_region_b_nvc, ")
+			.append(" exp_region_c, exp_region_c_veg, exp_region_c_flor, exp_region_c_nvc, ")
+			.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ")
+			.append(" esa_sponsor_name_b,  esa_sponsor_email_b, ")
+			.append(" peer_review, addl_stmt, usr_id ")
+			.append(" FROM usercertification ")
+			.append(" WHERE usercertification_id = ").append(usercertification_id);
+	
+		 //issue the query
+		LogUtility.log("UDA.getCert: QUERY: " + sb.toString());
+		ResultSet results = query.executeQuery(sb.toString());
+		
+		//get the results -- assumming 0 or 1 rows returned
+		CertificationForm certForm = new CertificationForm();
+		if (results.next()) 
+		{
+			certForm.setCurrentCertLevel( results.getInt(1) );
+			certForm.setRequestedCert( results.getString(2) );
+			certForm.setHighestDegree( results.getString(3) );
+			certForm.setDegreeYear( results.getString(4) );
+			certForm.setDegreeInst( results.getString(5) );
+			certForm.setCurrentOrg( results.getString(6) );
+			certForm.setCurrentPos( results.getString(7) );
+			certForm.setEsaMember( results.getString(8) );
+			certForm.setProfExp( results.getString(9) );
+			certForm.setRelevantPubs( results.getString(10) );
+			certForm.setVegSamplingExp( results.getString(11) );
+			certForm.setVegAnalysisExp( results.getString(12) );
+			certForm.setUsnvcExp( results.getString(13) );
+			certForm.setVbExp( results.getString(14) );
+			certForm.setToolsExp( results.getString(15) );
+			certForm.setVbIntention( results.getString(16) );
+			certForm.setExpRegionA( results.getString(17) );
+			certForm.setExpRegionAVeg( results.getString(18) );
+			certForm.setExpRegionAFlor( results.getString(19) );
+			certForm.setExpRegionANVC( results.getString(20) );
+			certForm.setExpRegionB( results.getString(21) );
+			certForm.setExpRegionBVeg( results.getString(22) );
+			certForm.setExpRegionBFlor( results.getString(23) );
+			certForm.setExpRegionBNVC( results.getString(24) );
+			certForm.setExpRegionC( results.getString(25) );
+			certForm.setExpRegionCVeg( results.getString(26) );
+			certForm.setExpRegionCFlor( results.getString(27) );
+			certForm.setExpRegionCNVC( results.getString(28) );
+			certForm.setEsaSponsorNameA( results.getString(29) );
+			certForm.setEsaSponsorEmailA( results.getString(30) );
+			certForm.setEsaSponsorNameB( results.getString(31) );
+			certForm.setEsaSponsorEmailB( results.getString(32) );
+			certForm.setPeerReview( results.getString(33) );
+			certForm.setAddlStmt( results.getString(34) );
+			certForm.setUsrId( results.getInt(35) );
+
+
+		} else {
+			LogUtility.log("UDA.getCert: NOT FOUND # " + usercertification_id);
+			return null;
+		}
+
+		conn.close();
+		DBConnectionPool.returnDBConnection(conn);
+
+		WebUser user = getUser(certForm.getUsrId());
+		certForm.setEmailAddress( user.getEmail() );
+		certForm.setSurName( user.getSurname() );
+		certForm.setGivenName( user.getGivenname() );
+		certForm.setPhoneNumber( user.getDayphone() );
+
+		return certForm;
 	 }
 	 
 	/**
@@ -552,6 +642,27 @@ public class UserDatabaseAccess
 		DBConnectionPool.returnDBConnection(conn);
 		return result;
 	}
+
+	/**
+	 * 
+	 * @param usrId -- the usr.usr_id of the user
+	 * @return sum of permissions
+	 */
+	 public int getUserPermissionSum(long usrId) throws Exception
+	 {
+		DBConnection conn = getConnection();
+		Statement query = conn.createStatement();
+		query.executeQuery("SELECT permission_type FROM usr WHERE usr_id=" + usrId);
+		ResultSet rs = query.getResultSet();
+		
+		DBConnectionPool.returnDBConnection(conn);
+		while (rs.next() ) 
+		{
+			return rs.getInt(1);
+		}
+		return 0;
+	 }
+	 
 	
 	/**
 	 * main method for testing 

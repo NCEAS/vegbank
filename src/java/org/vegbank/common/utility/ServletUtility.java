@@ -7,9 +7,9 @@ package org.vegbank.common.utility;
  * 		figuring the the type of client browser
  *    etc.. 
  *
- *	'$Author: farrell $'
- *  '$Date: 2004-03-02 03:36:43 $'
- *  '$Revision: 1.10 $'
+ *	'$Author: anderson $'
+ *  '$Date: 2004-03-02 22:33:43 $'
+ *  '$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -565,5 +565,6 @@ public class ServletUtility
 		
 		return fileList;
 	}
+
 }	
 

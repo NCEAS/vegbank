@@ -8,9 +8,9 @@
  * National Center for Ecological Analysis and
  * Synthesis Authors: Jing Tao Release: @release@
  * 
- * '$Author: farrell $' 
- * '$Date: 2004-02-27 16:37:52 $'
- * '$Revision: 1.4 $'
+ * '$Author: anderson $' 
+ * '$Date: 2004-03-02 22:33:43 $'
+ * '$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -111,6 +111,7 @@ public class DBConnectionPool implements Runnable
 			runner = new Thread(this);
 			runner.start();
 		}
+		/*
 		LogUtility.log("DBConnectionPool: MaximumConnectionNumber: "
 				+ MAXIMUMCONNECTIONNUMBER, LogUtility.INFO);
 		LogUtility.log("DBConnectionPool: Intial connection number: "
@@ -127,6 +128,7 @@ public class DBConnectionPool implements Runnable
 				+ DBCONNECTIONRECYCLETHREAD, LogUtility.INFO);
 		LogUtility.log("DBConnectionPool: Cycle time of recycle: "
 				+ CYCLETIMEOFDBCONNECTION, LogUtility.INFO);
+		*/
 	} //DBConnection
 
 	/**
@@ -177,9 +179,9 @@ public class DBConnectionPool implements Runnable
 		int random = 0; //random number
 		int index = 0; //index
 		int size = 0; //size of connection pool
-		LogUtility.log("DBConnectionPool: Try to check out connection...", LogUtility.TRACE);
+		//LogUtility.log("DBConnectionPool: Try to check out connection...", LogUtility.TRACE);
 		size = connectionPool.size();
-		LogUtility.log("DBConnectionPool: size of connection pool: " + size, LogUtility.TRACE);
+		//LogUtility.log("DBConnectionPool: size of connection pool: " + size, LogUtility.TRACE);
 		//try every DBConnection in the pool
 
 		//every DBConnection will be tried LIMIT times
@@ -193,9 +195,9 @@ public class DBConnectionPool implements Runnable
 				index = (i + random) % size;
 				db = (DBConnection) connectionPool.elementAt(index);
 
-				LogUtility.log("DBConnectionPool: Index: " + index, LogUtility.TRACE);
+				//LogUtility.log("DBConnectionPool: Index: " + index, LogUtility.TRACE);
 				//LogUtility.log("DBConnectionPool: Tag: " + db.getTag(), LogUtility.TRACE);
-				LogUtility.log("DBConnectionPool: Status: " + db.getStatus(), LogUtility.TRACE);
+				//LogUtility.log("DBConnectionPool: Status: " + db.getStatus(), LogUtility.TRACE);
 
 				//check if the connection is free
 				if (db.getStatus() == FREE)
@@ -213,8 +215,8 @@ public class DBConnectionPool implements Runnable
 						db.setCheckOutMethodName(methodName);
 						db.setAutoCommit(true);
 						//debug message
-						LogUtility.log("DBConnectionPool: The connection is checked out: "
-								+ db.getTag(), LogUtility.TRACE);
+						//LogUtility.log("DBConnectionPool: The connection is checked out: "
+						//		+ db.getTag(), LogUtility.TRACE);
 
 						//set check out time
 						db.setCheckOutTime(System.currentTimeMillis());
@@ -306,8 +308,7 @@ public class DBConnectionPool implements Runnable
 		}
 		
 		if (dbConn.getTag() == null) {
-			LogUtility.log(
-				"DBConnectionPool: Connection tag is null");
+			//LogUtility.log("DBConnectionPool: Connection tag is null");
 			return false;
 		}
 
@@ -356,9 +357,9 @@ public class DBConnectionPool implements Runnable
 		index = getIndexOfPoolForConnection(conn);
 		if (index == -1)
 		{
-			LogUtility
-					.log("DBConnectionPool: Couldn't find a DBConnection in the pool"
-							+ " which have same tag to the returned DBConnetion object", LogUtility.DEBUG);
+			LogUtility.log(
+					"DBConnectionPool.returnDBConnection: Couldn't find a DBConnection in the pool"
+							+ " with same tag as the returned DBConnection object", LogUtility.DEBUG);
 			return;
 		} //if
 		else
@@ -368,10 +369,10 @@ public class DBConnectionPool implements Runnable
 			//if it is same return it. If it is not same, maybe the connection
 			// already
 			// was returned ealier.
-			LogUtility.log("DBConnectionPool: serial number in Connection: "
-					+ conn.getCheckOutSerialNumber(), LogUtility.TRACE);
-			LogUtility.log("DBConnectionPool: serial number in local: "
-					+ serialNumber, LogUtility.TRACE);
+			//LogUtility.log("DBConnectionPool: serial number in Connection: "
+			//		+ conn.getCheckOutSerialNumber(), LogUtility.TRACE);
+			//LogUtility.log("DBConnectionPool: serial number in local: "
+			//		+ serialNumber, LogUtility.TRACE);
 			if (conn.getCheckOutSerialNumber() == serialNumber)
 			{
 				dbConn = (DBConnection) connectionPool.elementAt(index);
@@ -382,10 +383,9 @@ public class DBConnectionPool implements Runnable
 						- dbConn.getCheckOutTime());
 				//set check out time to 0
 				dbConn.setCheckOutTime(0);
-				LogUtility.log("DBConnectionPool: Connection: " + dbConn.getTag()
-						+ " checked in.", LogUtility.DEBUG);
-				LogUtility.log("DBConnectionPool: Connection: " + dbConn.getTag()
-						+ "'s status: " + dbConn.getStatus(), LogUtility.TRACE);
+				LogUtility.log("DBConnectionPool: checked in: " + dbConn.getTag(), LogUtility.DEBUG);
+				//LogUtility.log("DBConnectionPool: Connection: " + dbConn.getTag()
+				//		+ "'s status: " + dbConn.getStatus(), LogUtility.TRACE);
 			} //if
 			else
 			{
