@@ -25,8 +25,8 @@ import DataSourceClient; //this is the rmi client for loading mdb files
  * 
  *
  *	'$Author: harris $'
- *  '$Date: 2002-04-04 22:18:48 $'
- *  '$Revision: 1.22 $'
+ *  '$Date: 2002-04-05 22:10:22 $'
+ *  '$Revision: 1.23 $'
  */
 
 
@@ -180,7 +180,16 @@ public class DataSubmitServlet extends HttpServlet
 					// if not then send the user to a login
 					else
 					{
-						sb.append("<a href=\"www.vegbank.org\">You are not logged in! </a> ");
+						//if the user did not pass in an email send them back
+						if (inputEmail.length() < 2)
+						{
+							sb.append("<b>Please Go Back and enter a valid email login</b> ");
+						}
+						//they are just not logged in
+						else
+						{
+							sb.append("<a href=\"www.vegbank.org\">You are not logged in! </a> ");
+						}
 					}
 				}
 				
