@@ -109,6 +109,7 @@ if (searchString ==  null || searchString.equals("")) {
 	<form> 
 	</table>
 
+<br/>
 <logic:notEmpty name="meta-BEANLIST">
 <% String rowClass = "evenrow"; %>
 
@@ -176,7 +177,7 @@ String getURL = "@get_link@" + getView + "/" + getName + "/" + params +
 	</logic:iterate>
 
 	</table></td></tr></table>
-
+<br/>
 
 <span class="sizesmall" align="center">
 <% if (searchString !=  null && !searchString.equals("")) { %>
