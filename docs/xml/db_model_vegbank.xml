@@ -8118,7 +8118,6 @@ conditions may change between resampling events.
       <attDefinition>Salutation preceding one's given name.</attDefinition>
       <attForms>
         <formShow name="Austere">865</formShow>
-        <formShow name="Detail">867</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -8139,7 +8138,6 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="Austere">868</formShow>
         <formShow name="Summary">869</formShow>
-        <formShow name="Detail">870</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -8159,7 +8157,6 @@ conditions may change between resampling events.
       <archive>true</archive>
       <attForms>
         <formShow name="Austere">871</formShow>
-        <formShow name="Detail">873</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -8180,7 +8177,6 @@ conditions may change between resampling events.
       <attForms>
         <formShow name="Austere">874</formShow>
         <formShow name="Summary">875</formShow>
-        <formShow name="Detail">876</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>
@@ -8214,6 +8210,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
+      <attFKTranslationSQL>(SELECT CASE WHEN surname is null THEN 'org:' || organizationname ELSE surname || ', ' || givenname END  FROM party2 WHERE party.currentname_id=party2.party_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -14062,7 +14059,7 @@ conditions may change between resampling events.
       <attDefinition>This is the type of telephone: home, work, fax, cell, secretary, other.</attDefinition>
       <attForms>
         <formShow name="Austere">1316</formShow>
-        <formShow name="Summary">1317</formShow>
+        <formShow name="Summary" useClass="datalabel">2</formShow>
         <formShow name="Detail">1318</formShow>
       </attForms>
       <update>1.0.0</update>
