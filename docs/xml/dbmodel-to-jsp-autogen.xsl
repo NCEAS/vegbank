@@ -117,11 +117,14 @@
     <xsl:param name="currFld"/>
     <xsl:param name="currentAtt" />
     <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld" /> and att is: <xsl:value-of select="$currentAtt/attName" /></xsl:comment>
-    <xsl:element name="td">
+    <td>
+      <logic:notEmpty name="onerowof{$currEnt}" property="{$currFld}">
+      <xsl:element name="span">
       <!-- fill in different class for long text fields: -->
       <xsl:if test="$currentAtt/attType='text' or (contains($currentAtt/attType,'varchar (') and string-length($currentAtt/attType)&gt;12)">
         <xsl:attribute name="class">sizetiny</xsl:attribute>
       </xsl:if>
+
       <!-- this is what gets written on cell -->
       <xsl:variable name="currFldMaybeTransl">
         <xsl:value-of select="$currFld"/>
@@ -157,14 +160,15 @@
           </span>
         </logic:notEmpty>
       </xsl:if>
-      <!--</td>-->
-    </xsl:element>
+
+    
+         
+    </xsl:element>      <!--</span>-->  </logic:notEmpty> <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
   </xsl:template>
   <xsl:template name="writeOneFieldValue">
     <xsl:param name="currEnt"/>
     <xsl:param name="beanPropName"/>
     <bean:write name="onerowof{$currEnt}" property="{$beanPropName}"/>
-    <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
   </xsl:template>
   <xsl:template name="labelField">
     <xsl:param name="currEnt"/>
