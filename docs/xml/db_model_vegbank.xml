@@ -13,6 +13,7 @@
     <entityName>commConcept</entityName>
     <entitySummary>This table store the concepts (assertions) that are linked to community names through the commUsage table.</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>COMMCONCEPT_ID</attName>
       <attModel>logical</attModel>
@@ -50,18 +51,6 @@
       <attDefinition>Foreign key into the Reference table to identify a reference in which the community was identified by a name.  This could be a regular publication, or a self reference created by completing the commDescription field in commReference</attDefinition>
     </attribute>
     <attribute>
-      <attName>ceglCode</attName>
-      <attModel>logical</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (20)</attType>
-      <attKey>n/a</attKey>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>The ceglCode is the CEGL code used by TNC/ABI/NatureServe, which is a unique identifier for a specific vegetation community.</attDefinition>
-    </attribute>
-    <attribute>
       <attName>conceptDescription</attName>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
@@ -78,6 +67,7 @@
     <entityName>commCorrelation</entityName>
     <entitySummary>This table correlates multiple community concepts as they change through time in the perception of a party</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>COMMCORRELATION_ID</attName>
       <attModel>logical</attModel>
@@ -186,6 +176,7 @@
     <entityName>commLineage</entityName>
     <entitySummary>This table stores tracks the lineage of vegetation community concepts.</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>COMMLINEAGE_ID</attName>
       <attModel>logical</attModel>
@@ -229,6 +220,7 @@
     <entityName>commName</entityName>
     <entitySummary>This table stores vegetation community names</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>COMMNAME_ID</attName>
       <attModel>logical</attModel>
@@ -282,6 +274,7 @@
     <entityName>commParty</entityName>
     <entitySummary>Party contributing commuinity taxonomic perspective;  may be either an individual or an organization.</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>COMMPARTY_ID</attName>
       <attModel>logical</attModel>
@@ -395,6 +388,7 @@
     <entityName>commStatus</entityName>
     <entitySummary>This table store the status of a community concept as perceived by a party at a time. </entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>COMMSTATUS_ID</attName>
       <attModel>logical</attModel>
@@ -582,6 +576,7 @@
     <entityName>commUsage</entityName>
     <entitySummary>This table links a community name with a concept.</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>COMMUSAGE_ID</attName>
       <attModel>logical</attModel>
@@ -754,11 +749,12 @@
     <entityName>commReference</entityName>
     <entitySummary>This table stores references which are linked to community concepts.</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>commReference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
-      <attType>Integer</attType>
+      <attType>serial</attType>
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -1093,9 +1089,10 @@
     </attribute>
   </entity>
   <entity>
-    <entityName>commReferenceAlternateIdentifier</entityName>
+    <entityName>commReferenceAltIdent</entityName>
     <entitySummary>This table stores information about identifiers that can be used to indicate a particular commReference.</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>commReferenceAlternateIdentifier_ID</attName>
       <attModel>logical</attModel>
@@ -1149,6 +1146,7 @@
     <entityName>commReferenceContributor</entityName>
     <entitySummary>This table links commReference parties with commReferences and shows how a contribution was made by the party.</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>commReferenceContributor_ID</attName>
       <attModel>logical</attModel>
@@ -1217,7 +1215,7 @@
       <attDefinition>Use this field to describe the role the party played with respect to the resource. Some potential roles include technician, reviewer, principal investigator, and many others.</attDefinition>
     </attribute>
     <attribute>
-      <attName>order</attName>
+      <attName>position</attName>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
@@ -1233,6 +1231,7 @@
     <entityName>commReferenceParty</entityName>
     <entitySummary>This table stores information about parties that contributed to a commReference.</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>commReferenceParty_ID</attName>
       <attModel>logical</attModel>
@@ -1346,6 +1345,7 @@
     <entityName>commReferenceJournal</entityName>
     <entitySummary>This table stores information about journals used as part of a commReference.</entitySummary>
     <entityDescription/>
+    <module>community</module>
     <attribute>
       <attName>commReferenceJournal_ID</attName>
       <attModel>logical</attModel>
@@ -1399,6 +1399,7 @@
     <entityName>plantConcept</entityName>
     <entitySummary>This table store the concepts that are linked to plant names through the plantUsage table.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>PLANTCONCEPT_ID</attName>
       <attModel>logical</attModel>
@@ -1477,6 +1478,7 @@
     <entitySummary>This table correlates multiple plant concepts as they 
 change through time.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>PLANTCORRELATION_ID</attName>
       <attModel>logical</attModel>
@@ -1585,6 +1587,7 @@ change through time.</entitySummary>
     <entityName>plantLineage</entityName>
     <entitySummary>This table stores tracks the lineage of plant taxon concepts.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>PLANTLINEAGE_ID</attName>
       <attModel>logical</attModel>
@@ -1628,6 +1631,7 @@ change through time.</entitySummary>
     <entityName>plantName</entityName>
     <entitySummary>This table stores plant names</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>PLANTNAME_ID</attName>
       <attModel>logical</attModel>
@@ -1681,6 +1685,7 @@ change through time.</entitySummary>
     <entityName>plantParty</entityName>
     <entitySummary>Party contributing plant taxonomic perspective;  may be either an individual or an organization.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>PLANTPARTY_ID</attName>
       <attModel>logical</attModel>
@@ -1806,6 +1811,7 @@ change through time.</entitySummary>
     <entityName>plantStatus</entityName>
     <entitySummary>This table store the status of a community concept as perceived by a party at a time. </entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>PLANTSTATUS_ID</attName>
       <attModel>logical</attModel>
@@ -2072,6 +2078,7 @@ change through time.</entitySummary>
     <entityName>plantUsage</entityName>
     <entitySummary>This table links a plant name with a concept.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>PLANTUSAGE_ID</attName>
       <attModel>logical</attModel>
@@ -2244,11 +2251,12 @@ change through time.</entitySummary>
     <entityName>plantReference</entityName>
     <entitySummary>This table stores references which are linked to plant names and plant concepts.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>plantReference_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
-      <attType>Integer</attType>
+      <attType>serial</attType>
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -2583,9 +2591,10 @@ change through time.</entitySummary>
     </attribute>
   </entity>
   <entity>
-    <entityName>plantReferenceAlternateIdentifier</entityName>
+    <entityName>plantReferenceAltIdent</entityName>
     <entitySummary>This table stores information about identifiers that can be used to indicate a particular plantReference.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>plantReferenceAlternateIdentifier_ID</attName>
       <attModel>logical</attModel>
@@ -2639,6 +2648,7 @@ change through time.</entitySummary>
     <entityName>plantReferenceContributor</entityName>
     <entitySummary>This table links plantReference parties with plantReferences and shows how a contribution was made by the party.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>plantReferenceContributor_ID</attName>
       <attModel>logical</attModel>
@@ -2707,7 +2717,7 @@ change through time.</entitySummary>
       <attDefinition>Use this field to describe the role the party played with respect to the resource. Some potential roles include technician, reviewer, principal investigator, and many others.</attDefinition>
     </attribute>
     <attribute>
-      <attName>order</attName>
+      <attName>position</attName>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
@@ -2723,6 +2733,7 @@ change through time.</entitySummary>
     <entityName>plantReferenceParty</entityName>
     <entitySummary>This table stores information about parties that contributed to a plantReference.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>plantReferenceParty_ID</attName>
       <attModel>logical</attModel>
@@ -2836,6 +2847,7 @@ change through time.</entitySummary>
     <entityName>plantReferenceJournal</entityName>
     <entitySummary>This table stores information about journals used as part of a plantReference.</entitySummary>
     <entityDescription/>
+    <module>plant</module>
     <attribute>
       <attName>plantReferenceJournal_ID</attName>
       <attModel>logical</attModel>
@@ -2889,6 +2901,7 @@ change through time.</entitySummary>
     <entityName>address</entityName>
     <entitySummary>This table contains the postal address, email address and/or organizational affiliation for a parties at the time of a plot event. </entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>ADDRESS_ID</attName>
       <attModel>logical</attModel>
@@ -3039,6 +3052,7 @@ change through time.</entitySummary>
     <entityName>aux_Role</entityName>
     <entitySummary>This table stores valid role codes for use in contributor tables</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>ROLE_ID</attName>
       <attModel>logical</attModel>
@@ -3128,11 +3142,12 @@ change through time.</entitySummary>
     <entityName>citation</entityName>
     <entitySummary>This table stores information about references cited within the database</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>citation_ID</attName>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
-      <attType>Integer</attType>
+      <attType>serial</attType>
       <attKey>PK</attKey>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -3467,9 +3482,10 @@ change through time.</entitySummary>
     </attribute>
   </entity>
   <entity>
-    <entityName>citationAlternateIdentifier</entityName>
+    <entityName>citationAltIdent</entityName>
     <entitySummary>This table stores information about identifiers that can be used to indicate a particular citation.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>citationAlternateIdentifier_ID</attName>
       <attModel>logical</attModel>
@@ -3523,6 +3539,7 @@ change through time.</entitySummary>
     <entityName>citationContributor</entityName>
     <entitySummary>This table links citation parties with citations and shows how a contribution was made by the party.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>citationContributor_ID</attName>
       <attModel>logical</attModel>
@@ -3591,7 +3608,7 @@ change through time.</entitySummary>
       <attDefinition>Use this field to describe the role the party played with respect to the resource. Some potential roles include technician, reviewer, principal investigator, and many others.</attDefinition>
     </attribute>
     <attribute>
-      <attName>order</attName>
+      <attName>position</attName>
       <attModel>logical</attModel>
       <attNulls>YES</attNulls>
       <attType>Integer</attType>
@@ -3607,6 +3624,7 @@ change through time.</entitySummary>
     <entityName>citationParty</entityName>
     <entitySummary>This table stores information about parties that contributed to a citation.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>citationParty_ID</attName>
       <attModel>logical</attModel>
@@ -3720,6 +3738,7 @@ change through time.</entitySummary>
     <entityName>citationJournal</entityName>
     <entitySummary>This table stores information about journals used as part of a citation.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>citationJournal_ID</attName>
       <attModel>logical</attModel>
@@ -3773,6 +3792,7 @@ change through time.</entitySummary>
     <entityName>classContributor</entityName>
     <entitySummary>This table stores information about who participated in a classification event</entitySummary>
     <entityDescription>This table serves as an interesection entity used to link a party with
+    <module>plot</module>
 a specific plot classification event.</entityDescription>
     <attribute>
       <attName>CLASSCONTRIBUTOR_ID</attName>
@@ -3827,6 +3847,7 @@ a specific plot classification event.</entityDescription>
     <entityName>commClass</entityName>
     <entitySummary>This table stores general information about classification events where one or more community concepts were applied to a specific Observation by one or more parties.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>COMMCLASS_ID</attName>
       <attModel>logical</attModel>
@@ -4000,6 +4021,7 @@ a specific plot classification event.</entityDescription>
     <entityName>commInterpretation</entityName>
     <entitySummary>This table tracks the assignment of specific community concepts to plot observations </entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>COMMINTERPRETATION_ID</attName>
       <attModel>logical</attModel>
@@ -4167,6 +4189,7 @@ a specific plot classification event.</entityDescription>
     <entityName>coverIndex</entityName>
     <entitySummary>This table stores the definitions of each coverclass unit associated with each coverclass method.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>COVERINDEX_ID</attName>
       <attModel>logical</attModel>
@@ -4256,6 +4279,7 @@ a specific plot classification event.</entityDescription>
     <entityName>coverMethod</entityName>
     <entitySummary>This table associates a cover scale recognized by the plot data collectors with a set of coverclasses specified in the coverIndex table. This table, together with the coverIndex table, defines a coverclass method.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>COVERMETHOD_ID</attName>
       <attModel>logical</attModel>
@@ -4297,6 +4321,7 @@ a specific plot classification event.</entityDescription>
     <entityName>definedValue</entityName>
     <entitySummary>This table stores the values of user-defined variables.   </entitySummary>
     <entityDescription>This table stores values associated with specific user-defined variables identified in the userDefined table.  </entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>DEFINEDVALUE_ID</attName>
       <attModel>logical</attModel>
@@ -4350,6 +4375,7 @@ a specific plot classification event.</entityDescription>
     <entityName>disturbanceObs</entityName>
     <entitySummary>This table stores plot observation information pertaining toobserver estamation of the disturbance history of the plot. </entitySummary>
     <entityDescription>disturbanceObs is  a child of observation; a plot might experience many types of disturbance unique to different observation events.</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>disturbanceObs</attName>
       <attModel>logical</attModel>
@@ -4576,6 +4602,7 @@ a specific plot classification event.</entityDescription>
     <entityName>graphic</entityName>
     <entitySummary>This table stores information about graphical files related to vegetation plot observations</entitySummary>
     <entityDescription>Graphical files can include, among other formats: gif, jpeg, and tif file formats.  Because many graphical files, especially remote sensing digital photographs, may be too large to be stored within the database, a graphicLocation may be given as an altern</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>GRAPHIC_ID</attName>
       <attModel>logical</attModel>
@@ -4677,6 +4704,7 @@ a specific plot classification event.</entityDescription>
     <entityName>namedPlace</entityName>
     <entitySummary>This tables stores information about the various 'named places' that a plot may have been located within. Such places could include geographic regions, study sites, ownership units, managed units, any placename in the USGS glossary (http://www-nmd.usgs.go</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>NAMEDPLACE_ID</attName>
       <attModel>logical</attModel>
@@ -4812,6 +4840,7 @@ a specific plot classification event.</entityDescription>
     <entityName>note</entityName>
     <entitySummary>This table is where notations associated with table records are stored</entitySummary>
     <entityDescription>All notes associated with plots and plot observations are stored in this table.  These notes can be linked to any table, record and attribute via the noteLink table.</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>NOTE_ID</attName>
       <attModel>logical</attModel>
@@ -4922,6 +4951,7 @@ a specific plot classification event.</entityDescription>
     <entityName>noteLink</entityName>
     <entitySummary>This table links a note made by a database user or manager to a specific table, record and attribute in the database. </entitySummary>
     <entityDescription>This table was developed with the goal of keeping all the notes associated with the plots in a single table rather than distributed in many tables across  the database.  </entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>NOTELINK_ID</attName>
       <attModel>logical</attModel>
@@ -4977,6 +5007,7 @@ a specific plot classification event.</entityDescription>
     <entityDescription>Observation is a child of plot in recognition of the fact that a plot may be resampled and that some of the environmental
 conditions may change between resampling events.
 	</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>OBSERVATION_ID</attName>
       <attModel>logical</attModel>
@@ -6764,6 +6795,7 @@ conditions may change between resampling events.
     <entityName>observationContributor</entityName>
     <entitySummary>This table stores information about which parties contributed to specific plot observation events.</entitySummary>
     <entityDescription>This table serves as an interesection that links a party with a specific plot observation event.  Note that there is no plotContributor table because all contributions take place at a particular observation, such as the first observation.</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>PLOTCONTRIBUTOR_ID</attName>
       <attModel>logical</attModel>
@@ -6829,6 +6861,7 @@ conditions may change between resampling events.
     <entityName>observationSynonym</entityName>
     <entitySummary>This table stores opinions as to whether one observation record is a synonym of another owing to double entry into the database.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>OBSERVATIONSYNONYM_ID</attName>
       <attModel>logical</attModel>
@@ -6930,6 +6963,7 @@ conditions may change between resampling events.
     <entityName>party</entityName>
     <entitySummary>Party contributing to collection or interpretation of a plot;  may be either an individual or an organization.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>PARTY_ID</attName>
       <attModel>logical</attModel>
@@ -7055,6 +7089,7 @@ conditions may change between resampling events.
     <entityName>place</entityName>
     <entitySummary>This table is the intersection between the plot table and the namedPlace table and is used for querying for plots located in a named place or named region in which a plot or group of plots is located. </entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>PLOTPLACE_ID</attName>
       <attModel>logical</attModel>
@@ -7108,6 +7143,7 @@ conditions may change between resampling events.
     <entityName>plot</entityName>
     <entitySummary>This table stores general, constant information about the a given plot </entitySummary>
     <entityDescription>plot contains Plot location, dimension, and similarly constant site data, plus metadata that need be stored only once.   Transient observational information (procured during the first or subsequent observation events) are stored separately in observation </entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>PLOT_ID</attName>
       <attModel>logical</attModel>
@@ -9093,6 +9129,7 @@ conditions may change between resampling events.
     <entityName>project</entityName>
     <entitySummary>This table stores information about a project established to collect vegetation plot data. </entitySummary>
     <entityDescription>Each plot originates as part of a project. A project can contain from one tomany plots.</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>PROJECT_ID</attName>
       <attModel>logical</attModel>
@@ -9158,6 +9195,7 @@ conditions may change between resampling events.
     <entityName>projectContributor</entityName>
     <entitySummary>This table stores information about a party contributing to a project.</entitySummary>
     <entityDescription>This table serves as an intersection entity used to 'link' a party with a specific project wherin vegetation plots are described. </entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>PROJECTCONTRIBUTOR_ID</attName>
       <attModel>logical</attModel>
@@ -9235,6 +9273,7 @@ conditions may change between resampling events.
     <entityName>revision</entityName>
     <entitySummary>This table constitutes a log of  changes in data deposited in the database. </entitySummary>
     <entityDescription>This table was designed to store as a single, stand-alone table information about attributes in any of the database tables.</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>REVISION_ID</attName>
       <attModel>logical</attModel>
@@ -9337,6 +9376,7 @@ conditions may change between resampling events.
     <entitySummary>This table stores observation on soil horizons made during the plot observation event.</entitySummary>
     <entityDescription>soilObs is child of observation in recognition of the fact that the hoizons observed vary among plot observation events as a results of real change plus changes in investigators, methods and circumstances. 
 	</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>SOILOBS_ID</attName>
       <attModel>logical</attModel>
@@ -9611,6 +9651,7 @@ conditions may change between resampling events.
     <entityName>soilTaxon</entityName>
     <entitySummary/>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>SOILTAXON_ID</attName>
       <attModel>logical</attModel>
@@ -9688,6 +9729,7 @@ conditions may change between resampling events.
     <entityName>stemCount</entityName>
     <entitySummary>This table is intended to store information about the abundance of tree stems of a specific size.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>STEMCOUNT_ID</attName>
       <attModel>logical</attModel>
@@ -9789,6 +9831,7 @@ conditions may change between resampling events.
     <entityName>stemLocation</entityName>
     <entitySummary>This table is intended to store location information about indivdual tree stems.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>STEMLOCATION_ID</attName>
       <attModel>logical</attModel>
@@ -9854,6 +9897,7 @@ conditions may change between resampling events.
     <entityName>stratum</entityName>
     <entitySummary>This table stores collective information about strata defined within a plot observation.</entitySummary>
     <entityDescription>This table is used to record non-species-specific information about a stratum. Examples include total cover of the stratum and maximum height of the stratum.</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>STRATUM_ID</attName>
       <attModel>logical</attModel>
@@ -9967,6 +10011,7 @@ conditions may change between resampling events.
     <entityName>stratumComposition</entityName>
     <entitySummary>This table stores information about the cover of a single taxon within a specific stratum.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>STRATUMCOMPOSITION_ID</attName>
       <attModel>logical</attModel>
@@ -10044,6 +10089,7 @@ conditions may change between resampling events.
     <entityName>stratumMethod</entityName>
     <entitySummary>This table links a set of strata to a sampling protocol . This table, when combined a set of linked stratum occurences, defines the strata used by a plot observer.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>STRATUMMETHOD_ID</attName>
       <attModel>logical</attModel>
@@ -10097,6 +10143,7 @@ conditions may change between resampling events.
     <entityName>stratumType</entityName>
     <entitySummary>This table stores collective information about strata defined within a plot observation.</entitySummary>
     <entityDescription>This table is used to record non-species-specific information about a stratum. Examples include total cover of the stratum and maximum height of the stratum.</entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>STRATUMTYPE_ID</attName>
       <attModel>logical</attModel>
@@ -10162,6 +10209,7 @@ conditions may change between resampling events.
     <entityName>taxonInterpretation</entityName>
     <entitySummary>This table allows all users, including the author and/or subsequent interpreters, to attach taxon names and authorities to a specific taxon observation</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>TAXONINTERPRETATION_ID</attName>
       <attModel>logical</attModel>
@@ -10378,6 +10426,7 @@ conditions may change between resampling events.
     <entityName>taxonObservation</entityName>
     <entitySummary>This table contains the author's determination of a taxon and the overall cover of that taxon.</entitySummary>
     <entityDescription>This table stores information about the original identification by the author of the plot and the taxonomic authority used by that author (i.e. a name - citation pair constituting a taxnomic concept).  The table also contains a record of cumulative cover </entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>TAXONOBSERVATION_ID</attName>
       <attModel>logical</attModel>
@@ -10491,6 +10540,7 @@ conditions may change between resampling events.
     <entityName>telephone</entityName>
     <entitySummary>Telephone numbers for the various individuals and organizations in the party table.</entitySummary>
     <entityDescription/>
+    <module>plot</module>
     <attribute>
       <attName>TELEPHONE_ID</attName>
       <attModel>logical</attModel>
@@ -10575,6 +10625,7 @@ conditions may change between resampling events.
     <entityName>userDefined</entityName>
     <entitySummary/>
     <entityDescription>This table contains the definitions of user-defined variables.  The table structure stems from desire to keep the user-defined variables separate from the main body of the database.  </entityDescription>
+    <module>plot</module>
     <attribute>
       <attName>USERDEFINED_ID</attName>
       <attModel>logical</attModel>
