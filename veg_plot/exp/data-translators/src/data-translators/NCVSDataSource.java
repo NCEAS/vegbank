@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-10 22:29:03 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2002-01-11 01:09:53 $'
+ * 	'$Revision: 1.3 $'
  */
 public class NCVSDataSource implements PlotDataSourceInterface
 //public class NCVSDataSource
@@ -46,7 +46,7 @@ public class NCVSDataSource implements PlotDataSourceInterface
 	
 	public String authorObsCode = "null";
 	public String soilDepth = "null";
-	
+
 	public String t1Height = "n/a";
 	public String t1Cover = "n/a";
 	public String t2Height = "n/a";
@@ -55,7 +55,7 @@ public class NCVSDataSource implements PlotDataSourceInterface
 	public String t3Cover = "n/a";
 	public String s1Height = "n/a";
 	public String	s1Cover = "n/a";
-	
+
 	public int strataNumber = 4; //always 4 strata
 	public Vector strataNames = new Vector();
 	public Vector strataMinHeight = new Vector();
@@ -911,19 +911,27 @@ public class NCVSDataSource implements PlotDataSourceInterface
 			while (rs.next()) 
 			{
 				String s = rs.getString(1);
-			//	System.out.println("asp: " + s);
-				if (s.startsWith("Flat"))
-					this.slopeAspect = "0";
-				else if (s.startsWith("N"))
-					this.slopeAspect = "0";
-				else if (s.startsWith("S"))
-					this.slopeAspect = "180";
-				else if (s.startsWith("NE"))
-					this.slopeAspect = "45";
-				else if (s.startsWith("SE"))
-					this.slopeAspect = "230";
-				else
+				System.out.println("asp: " + s);
+				//if there is no value update the variable
+				if (s == null)
+				{
 					this.slopeAspect ="-1";
+				}
+				else
+				{
+					if (s.startsWith("Flat"))
+					this.slopeAspect = "0";
+					else if (s.startsWith("N"))
+					this.slopeAspect = "0";
+					else if (s.startsWith("S"))
+					this.slopeAspect = "180";
+					else if (s.startsWith("NE"))
+					this.slopeAspect = "45";
+					else if (s.startsWith("SE"))
+					this.slopeAspect = "230";
+					else
+					this.slopeAspect ="-1";
+				}
 			}
 		}
 		catch( Exception e)
