@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: anderson $'
-* '$Date: 2004-03-25 21:20:37 $'
-* '$Revision: 1.97 $'
+* '$Date: 2004-04-12 22:29:07 $'
+* '$Revision: 1.98 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -32,12 +32,38 @@
 		* Below are the basic propoerties and tokens for
 		* building the vegbank web site
 	-->
+
+
     <condition property="webapp" value="vegbank">
       <not>
         <isset property="webapp"/>
       </not>
     </condition>
     <echo>init webapp '${webapp}'</echo>
+
+
+	<!-- Get the main build.properties -->
+    <condition property="build.props.name" value="">
+		<!-- If webapp is 'vegbank', use blank -->
+		<or>
+        	<equals arg1="${webapp}" arg2="vegbank"/>
+			<not>
+        		<isset property="webapp"/>
+			</not>
+		</or>
+    </condition>
+    <condition property="build.props.name" value=".${webapp}">
+		<!-- If webapp is not 'vegbank' -->
+		<and>
+			<isset property="webapp"/>
+			<not>
+        		<equals arg1="${webapp}" arg2="vegbank"/>
+			</not>
+		</and>
+    </condition>
+    <echo>(web/) Loading main props file: ../build${build.props.name}.properties</echo>
+    <property file="../build${build.props.name}.properties"/>
+
     <!-- The webapp that contains copy, images and other
 		resources is defined by web.context_uri and
 		makes the first part of the URI. -->
@@ -386,8 +412,9 @@
   </target>
   <target name="vbsummary" depends="email_templates" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
+	<echo>Creating vbsummary with databaseUser = ${databaseUser}</echo>
     <exec dir="./general" executable="psql">
-      <arg line="-U datauser ${webapp} -f get_vb_stats_cmds.txt"/>
+      <arg line="-U ${databaseUser} ${webapp}102 -f get_vb_stats_cmds.txt"/>
     </exec>
     <!-- copy summary file with filtering to general dir -->
     <copy overwrite="true" tofile="${general_server}/vbsummary.html" filtering="yes" file="./general/get_vb_stats_temp.html"/>
