@@ -8,6 +8,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -22,8 +23,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 07:10:07 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-02-07 06:45:37 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +45,7 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  * 
  * @author farrell
  */
-public class LogonAction  extends Action 
+public class LogonAction extends VegbankAction 
 {
 	/**
 	 * Process the specified HTTP request, and create the corresponding HTTP
@@ -61,22 +62,35 @@ public class LogonAction  extends Action
 	 * @exception Exception if business logic throws an exception
 	 */
 	public ActionForward execute(
-		ActionMapping mapping,
-		ActionForm form,
-		HttpServletRequest request,
-		HttpServletResponse response)
-		throws Exception
-	{
-		WebUser user = null;
+			ActionMapping mapping,
+			ActionForm form,
+			HttpServletRequest request,
+			HttpServletResponse response)	{
+			
+		LogUtility.log("LogonAction: calling other execute()");
+		return execute(mapping, (DynaActionForm)form, request, response);
+	}
 
+	public ActionForward execute(
+			ActionMapping mapping,
+			DynaActionForm form,
+			HttpServletRequest request,
+			HttpServletResponse response)	{
+				
+		LogUtility.log("LogonAction: begin");
+		
 		// Validate the request parameters specified by the user
 		ActionErrors errors = new ActionErrors();
 		String username =
-			(String) PropertyUtils.getSimpleProperty(form, "username");
+			(String)form.get("username");
+//			(String) PropertyUtils.getSimpleProperty(form, "username");
 		String password =
-			(String) PropertyUtils.getSimpleProperty(form, "password");
+			(String)form.get("password");
+//			(String) PropertyUtils.getSimpleProperty(form, "password");
 		
+		LogUtility.log("LogonAction: authenticating user: '"+ username); 
 	
+		WebUser user = null;
 		try
 		{
 			// Attempt to get user from database;
@@ -115,25 +129,20 @@ public class LogonAction  extends Action
 			return (mapping.getInputForward());
 		}
 
-		// Save our logged-in user in the session
+		// Save the logged-in user's ID in session
 		HttpSession session = request.getSession();
-		session.setAttribute(Constants.USER_KEY, user);
+		session.setAttribute(Constants.USER_KEY, user.getUseridLong());
 
-			LogUtility.log(
-				"LogonAction: User '"
-					+ user.getUsername()
-					+ "' logged on in session "
-					+ session.getId());
+			LogUtility.log("LogonAction: User '"+ user.getUsername() + 
+					"' logged on in session " + session.getId());
 
 		// Remove the obsolete form bean
-		if (mapping.getAttribute() != null)
-		{
-			if ("request".equals(mapping.getScope()))
-			{
+		if (mapping.getAttribute() != null) {
+			
+			if ("request".equals(mapping.getScope())) {
 				request.removeAttribute(mapping.getAttribute());
-			}
-			else
-			{
+				
+			} else {
 				session.removeAttribute(mapping.getAttribute());
 			}
 		}
@@ -153,17 +162,14 @@ public class LogonAction  extends Action
 	 */
 	public WebUser getUser(String username) throws Exception
 	{ 
-		WebUser user = null;
-		if ( username.equalsIgnoreCase(Constants.GUEST_USER_KEY))
-		{
-			user = this.getGuestUser();
+		if ( username.equalsIgnoreCase(Constants.GUEST_USER_KEY)) {
+			return this.getGuestUser();
+			
+		} else {
+			UserDatabaseAccess uda = new UserDatabaseAccess();
+			LogUtility.log("Authenticate.getUser(): getting " + username);
+			return uda.getUser(username);			
 		}
-		else
-		{
-			UserDatabaseAccess uda = new UserDatabaseAccess();                                                                                                                                            
-			user = uda.getUser(username);
-		}
-		return user;
 	}
 
 	/**

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-10-30 19:46:22 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-02-07 06:45:37 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.Utility;
  * @author anderson
  */
 
-public class EntityNameAction extends Action
+public class EntityNameAction extends VegbankAction
 {
 
 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-31 01:31:13 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-02-07 06:45:36 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import org.vegbank.common.Constants;
 import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.PermComparison;
+import org.vegbank.common.utility.UserDatabaseAccess;
 
 
 /**
@@ -69,8 +70,18 @@ public class Authenticate implements  Authentication
 		boolean result = false;
 		
 		// Get the certification level of the user
-		WebUser user = 
-			(WebUser) request.getSession().getAttribute(Constants.USER_KEY);
+		WebUser user;
+		try {
+			Long usrId = (Long)request.getSession().getAttribute(Constants.USER_KEY);
+			LogUtility.log("Authenticate.checkReqRoles: getting user where usr_id=" + usrId);
+			if (usrId.longValue() == 0) {
+				return false;
+			}
+			user = (new UserDatabaseAccess()).getUser(usrId);
+
+		} catch (Exception ex) {
+			return false;
+		}
 			
 		int userPerms = user.getPermissiontype();
 		LogUtility.log(

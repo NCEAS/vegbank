@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-31 01:29:25 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-02-07 06:45:36 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -240,8 +240,8 @@ public class CertificationSaveAction extends VegbankAction {
 	private CertificationForm getCertForm(ActionForm form, WebUser user) {
 		CertificationForm certForm = (CertificationForm)form;
 	
-		int iTmp = user.getUserid();
-		if (iTmp != 0)  certForm.setUsrId(iTmp);
+		long lTmp = user.getUserid();
+		if (lTmp != 0)  certForm.setUsrId(lTmp);
 
 		String tmp = user.getGivenname();
 		if (tmp != null && !tmp.equals("") && !tmp.equals("null")) {  

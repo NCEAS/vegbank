@@ -17,9 +17,9 @@ import org.vegbank.common.utility.LogUtility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:22:18 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-02-07 06:45:37 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,9 +41,9 @@ import org.vegbank.common.utility.LogUtility;
  * user logoff.
  * 
  * @author farrell
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public class LogoffAction extends Action
+public class LogoffAction extends VegbankAction
 {
 	/**
 	 * Process the specified HTTP request, and create the corresponding HTTP
@@ -64,12 +64,15 @@ public class LogoffAction extends Action
 		ActionForm form,
 		HttpServletRequest request,
 		HttpServletResponse response)
-		throws Exception
 	{
 
 		// Extract attributes we will need
 		HttpSession session = request.getSession();
-		WebUser user = (WebUser) session.getAttribute(Constants.USER_KEY);
+		WebUser user = null;
+		try {
+			user = getUser(session);
+		} catch(Exception ex) {
+		}
 
 		// Process this user logoff
 		if (user != null)
@@ -83,7 +86,7 @@ public class LogoffAction extends Action
 		else
 		{
 			LogUtility.log(
-				"LogoffActon: User logged off in session " + session.getId());
+				"LogoffAction: User logged off in session " + session.getId());
 		}
 		session.removeAttribute(Constants.USER_KEY);
 		session.invalidate();

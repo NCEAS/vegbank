@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 02:09:17 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-02-07 06:45:37 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import org.apache.struts.action.*;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.UserDatabaseAccess;
 
 
 /**
@@ -41,21 +42,17 @@ import org.vegbank.common.utility.LogUtility;
  */
 public abstract class VegbankAction extends Action {
 
-
 	/**
-	 *
-	 */
-	public abstract ActionForward execute(
-			ActionMapping mapping,
-			ActionForm form,
-			HttpServletRequest request,
-			HttpServletResponse response);
-
-	/**
-	 *
+	 * @return the WebUser instance in given session or null
 	 */
 	public WebUser getUser(HttpSession session) {
-		return (WebUser)session.getAttribute(Constants.USER_KEY);
+		try {
+			return (new UserDatabaseAccess().getUser(
+				(Long)session.getAttribute(Constants.USER_KEY)));
+		} catch (Exception ex) {
+			LogUtility.log("VegbankAction.getUser() error: returning null", ex);
+			return null;
+		}
 	}
 
 	/**

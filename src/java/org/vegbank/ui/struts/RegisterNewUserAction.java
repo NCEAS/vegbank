@@ -2,6 +2,7 @@ package org.vegbank.ui.struts;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -18,6 +19,7 @@ import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.Constants;
 import org.vegbank.common.utility.PermComparison;
 
 /*
@@ -25,9 +27,9 @@ import org.vegbank.common.utility.PermComparison;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-01-18 20:47:47 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-02-07 06:45:37 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +51,7 @@ import org.vegbank.common.utility.PermComparison;
  * @author farrell
  *
  */
-public class RegisterNewUserAction extends Action
+public class RegisterNewUserAction extends VegbankAction
 {
 	
 	public ActionForward execute(
@@ -61,21 +63,19 @@ public class RegisterNewUserAction extends Action
 		LogUtility.log(" In RegisterNewUserAction ");
 		ActionErrors errors = new ActionErrors();
 
-		DynaActionForm thisForm = (DynaActionForm) form;
+		DynaActionForm dform = (DynaActionForm) form;
 
 		// Get the properties of the form
-		Party party = (Party) thisForm.get("party");
-		Usr usr = (Usr) thisForm.get("user");
-		Address address = (Address) thisForm.get("address");
-		Telephone telephone = (Telephone) thisForm.get("telephone");
-		String termsaccept = (String) thisForm.get("termsaccept");
-		String password1 = (String) thisForm.get("password1");
-		String password2 = (String) thisForm.get("password2");
+		Party party = (Party) dform.get("party");
+		Usr usr = (Usr) dform.get("usr");
+		String termsaccept = (String) dform.get("termsaccept");
+		String password1 = (String) dform.get("password1");
+		String password2 = (String) dform.get("password2");
 
 		try
 		{
-			UserDatabaseAccess udba = new UserDatabaseAccess();
-			if (! udba.isEmailUnique(usr.getEmail_address()))
+			UserDatabaseAccess uda = new UserDatabaseAccess();
+			if (! uda.isEmailUnique(usr.getEmail_address()))
 			{
 				errors.add(
 					ActionErrors.GLOBAL_ERROR,
@@ -105,35 +105,28 @@ public class RegisterNewUserAction extends Action
 			}
 			else
 			{
-				// Fill out defaut fields
-				// Start off as registered user TODO: Get these as Constants
+				// Fill out default fields
+				// Start off as registered user 
 				usr.setPermission_type(String.valueOf(
 						PermComparison.getRoleConstant("reg")));
-				// FIXME: Should be set upon first logon?
+
 				usr.setBegin_time(Utility.getCurrentDate());
 
-				// Already check that they are identical
+				// Already checked that they are identical
 				usr.setPassword(password1);
 
-				// Get as a constant
-				if ( telephone.getPhonenumber().equals(""))
-				{
-					// No need to add the telephone if no number provided
-				}
-				else
-				{
-					// Go ahead and add the telephone
-					telephone.setPhonetype(Telephone.PHONETYPE_WORK);
-					party.addparty_telephone(telephone);
-				}
-				
-				party.addparty_address(address);
+				// add the usr to the party
 				party.addparty_usr(usr);
 
 				// Put in the database
-
 				VBModelBeanToDB party2db = new VBModelBeanToDB();
 				party2db.insert(party);
+
+				// create a session
+				LogUtility.log("RegisterNewUserAction: logging new user in");
+				HttpSession session = request.getSession();
+				session.setAttribute(Constants.USER_KEY, 
+						new Long(uda.getUserId(usr.getEmail_address())));
 			}
 		}
 		catch (Exception e)
@@ -141,7 +134,8 @@ public class RegisterNewUserAction extends Action
 			errors.add(
 				ActionErrors.GLOBAL_ERROR,
 				new ActionError("errors.database", e.getMessage()));
-			LogUtility.log("RegisterNewUserAction: " + e.getMessage(), e);
+			LogUtility.log("RegisterNewUserAction error: " + e.getMessage(), e);
+			return mapping.findForward("vberror");
 		}
 
 		// Report any errors we have discovered back to the original form
