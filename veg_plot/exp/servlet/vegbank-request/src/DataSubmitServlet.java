@@ -10,6 +10,7 @@ import java.math.*;
 import java.net.URL;
 
 import databaseAccess.dbAccess;
+import databaseAccess.CommunityQueryStore;
 import servlet.util.ServletUtility;
 
 
@@ -24,6 +25,7 @@ public class DataSubmitServlet extends HttpServlet
 	
 	ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	private ServletUtility su = new ServletUtility();
+	private CommunityQueryStore qs;
 	private VegCommunityLoader commLoader = new VegCommunityLoader();
 	
 	/**
@@ -123,7 +125,7 @@ public class DataSubmitServlet extends HttpServlet
 				String commLevel ="--";
 				String conceptStatus = "accepted";
 				String nameStatus = "standard";
-				
+			
 				
 				String commCode = "";
 				StringTokenizer t = new StringTokenizer(commName);
@@ -133,21 +135,75 @@ public class DataSubmitServlet extends HttpServlet
 					buf = buf.substring(0, 1);
 					commCode = commCode+buf.toUpperCase();
 				}
+					
+				//see if the name already existis
+				qs = new CommunityQueryStore();
+				Vector v = qs.getCommunityNames(commName);
+				if ( v.size() < 1)
+				{
+					//if action is init then do the logic and display the user a second form
 				
-				//if action is init then do the logic and display the user a second form
-				
-				//assume that the name does not already exist in the db
-				//so update the validation page and return it to the user
-				updateCommunityValidationPage(salutation, firstName, lastName, 
-				emailAddress, orgName, commName, commCode, commLevel, conceptStatus, 
-				nameStatus, authors, title, pubDate, edition, seriesName,
-				issueId, otherCitationDetails, pageNumber, isbn, issn, classSystem);
-				
-				response.sendRedirect("/forms/valid.html");
+					//assume that the name does not already exist in the db
+					//so update the validation page and return it to the user
+					updateCommunityValidationPage(salutation, firstName, lastName, 
+					emailAddress, orgName, commName, commCode, commLevel, conceptStatus, 
+					nameStatus, authors, title, pubDate, edition, seriesName,
+					issueId, otherCitationDetails, pageNumber, isbn, issn, classSystem);
+					//redirect the browser
+					response.sendRedirect("/forms/valid.html");
+				}
+				else
+				{
+					String curName = v.elementAt(0).toString();
+					qs = new CommunityQueryStore();
+					Hashtable refHash = qs.getNameReference(curName);
+					String nameRefTitle = (String)refHash.get("title");
+					String nameRefAuthors = (String)refHash.get("authors");
+					String nameRefPubDate = (String)refHash.get("pubDate");
+					String nameRefEdition = (String)refHash.get("edition");
+					String nameRefSeriesName = (String)refHash.get("seriesName");
+					String nameRefIssueId = (String)refHash.get("issueId");
+					String nameRefOtherCitationDetails = (String)refHash.get("otherCitationDetails");
+					String nameRefPageNumber = (String)refHash.get("pageNumber");
+					String nameRefISBN = (String)refHash.get("isbn");
+					String nameRefISSN = (String)refHash.get("issn");
+					sb.append("nameRefTitle: " + nameRefTitle);
+					sb.append("nameRefAuthors: " + nameRefAuthors);
+					sb.append("nameRefPubDate: " + nameRefPubDate);
+					
+					sb.append("nameRefPubEdition: " + nameRefEdition);
+					sb.append("nameRefSeriesName: " + nameRefSeriesName);
+					sb.append("nameRefIssueId: " + nameRefIssueId);
+					sb.append("nameRefOtherCitationDetails: " + nameRefOtherCitationDetails);
+					sb.append("nameRefPageNumber: " + nameRefPageNumber);
+					sb.append("nameRefISBN: " + nameRefISBN);
+					sb.append("nameRefISSN: " + nameRefISSN);
+					
+					sb.append("not done");
+					sb.append("found: " +v.size()+ " attributes");
+					
+					
+					//update the html page with the name refrence equal to the 
+					//data retrieved from the database
+					updateCommunityValidationPage(salutation, firstName, lastName, 
+					emailAddress, orgName, commName, commCode, commLevel, conceptStatus, 
+					nameStatus, nameRefAuthors, nameRefTitle, nameRefPubDate, nameRefEdition, 
+					nameRefSeriesName, nameRefIssueId, nameRefOtherCitationDetails, 
+					nameRefPageNumber, nameRefISBN, nameRefISSN, 
+					
+					authors, title, pubDate, edition, seriesName,
+					issueId, otherCitationDetails, pageNumber, isbn, issn, 
+					
+					
+					classSystem);
+					//redirect the browser
+					response.sendRedirect("/forms/valid.html");
+				}
 				
 			}
-			else
+			else if ( action.equals("submit") )
 			{
+				sb.append("starting the correlation: "-);
 				System.out.println("DataSubmitServlet > submit vegCommunity");
 				//sb = commLoader.insertGenericCommunity( conceptCode, conceptLevel, commName,
 				//dateEntered, parentCommunity, allianceTransName, partyName );
@@ -194,30 +250,54 @@ public class DataSubmitServlet extends HttpServlet
 			System.out.println("DataSubmitServlet > ");
 			System.out.println("DataSubmitServlet > ");
 			
-			replaceHash.put("communityName", commName);
-			replaceHash.put("communityLevel", commLevel);
-			replaceHash.put("communityCode", commCode);
-			replaceHash.put("conceptStatus", conceptStatus);
-			replaceHash.put("nameStatus", nameStatus);
+			replaceHash.put("communityName", ""+commName);
+			replaceHash.put("communityLevel", ""+commLevel);
+			replaceHash.put("communityCode", ""+commCode);
+			replaceHash.put("conceptStatus", ""+conceptStatus);
+			replaceHash.put("nameStatus", ""+nameStatus);
 			
 			replaceHash.put("level", "unknown");
-			replaceHash.put("salutation", salutation);
-			replaceHash.put("firstName", firstName);
-			replaceHash.put("lastName", lastName);
-			replaceHash.put("emailAddress", emailAddress);
-			replaceHash.put("orgName" , orgName);
+			replaceHash.put("salutation", ""+salutation);
+			replaceHash.put("firstName", ""+firstName);
+			replaceHash.put("lastName", ""+lastName);
+			replaceHash.put("emailAddress", ""+emailAddress);
+			replaceHash.put("orgName" , ""+orgName);
 			
-			replaceHash.put("authors" , authors);
-			replaceHash.put("title" , title);
-			replaceHash.put("pubDate" , pubDate);
-			replaceHash.put("edition", edition);
-			replaceHash.put("seriesName", seriesName);
-			replaceHash.put("issueId", issueId );
-			replaceHash.put("otherCitationDetails", otherCitationDetails);
-			replaceHash.put("pageNumber", pageNumber );
-			replaceHash.put("isbn", isbn );
-			replaceHash.put("issn", issn );
-			replaceHash.put("classSystem", classSystem );
+			
+			replaceHash.put("nameRefAuthors" , ""+authors);
+			replaceHash.put("nameRefTitle" , ""+ title);
+			replaceHash.put("nameRefPubDate" , ""+pubDate);
+			replaceHash.put("nameRefEdition", ""+edition);
+			replaceHash.put("nameRefSeriesName", ""+seriesName);
+			replaceHash.put("nameRefIssueId", ""+ issueId);
+			replaceHash.put("nameRefOtherCitationDetails", ""+otherCitationDetails);
+			replaceHash.put("nameRefPageNumber", ""+pageNumber );
+			replaceHash.put("nameRefISBN", ""+ isbn );
+			replaceHash.put("nameRefISSN", ""+issn);
+			
+			replaceHash.put("conceptRefAuthors" , ""+authors);
+			replaceHash.put("conceptRefTitle" , ""+ title);
+			replaceHash.put("conceptRefPubDate" , ""+pubDate);
+			replaceHash.put("conceptRefEdition", ""+edition);
+			replaceHash.put("conceptRefSeriesName", ""+seriesName);
+			replaceHash.put("conceptRefIssueId", ""+issueId);
+			replaceHash.put("conceptRefOtherCitationDetails", ""+otherCitationDetails);
+			replaceHash.put("conceptRefPageNumber", ""+pageNumber );
+			replaceHash.put("conceptRefISBN", ""+isbn );
+			replaceHash.put("conceptRefISSN", ""+issn);
+			
+			
+			replaceHash.put("authors" , ""+authors);
+			replaceHash.put("title" , ""+title);
+			replaceHash.put("pubDate" , ""+pubDate);
+			replaceHash.put("edition", ""+edition);
+			replaceHash.put("seriesName", ""+seriesName);
+			replaceHash.put("issueId", ""+issueId );
+			replaceHash.put("otherCitationDetails", ""+otherCitationDetails);
+			replaceHash.put("pageNumber", ""+pageNumber );
+			replaceHash.put("isbn", ""+isbn );
+			replaceHash.put("issn", ""+issn );
+			replaceHash.put("classSystem", ""+classSystem );
 			
 			//replaceHash.put("", );
 			//replaceHash.put("", );
@@ -232,6 +312,105 @@ public class DataSubmitServlet extends HttpServlet
 		}
 		return(results);
 	 }
+	 
+	 
+	 
+	 private boolean updateCommunityValidationPage(String salutation, 
+	 String firstName, String lastName, String emailAddress, String orgName, 
+	 String commName, String commCode, String commLevel, String conceptStatus, 
+	 String nameStatus, 
+	 
+	 String nameRefAuthors, String nameRefTitle, String nameRefPubDate, 
+	 String nameRefEdition,
+	 String nameRefSeriesName, String nameRefIssueId, String nameRefOtherCitationDetails, 
+	 String nameRefPageNumber, String nameRefISBN, String nameRefISSN, 
+	 
+	 String conceptRefAuthors, String conceptRefTitle, String conceptRefPubDate, 
+	 String conceptRefEdition,
+	 String conceptRefSeriesName, String conceptRefIssueId, String conceptRefOtherCitationDetails, 
+	 String conceptRefPageNumber, String conceptRefISBN, String conceptRefISSN, 
+	 
+	 String classSystem)
+	 {
+	 	boolean results = true;
+		Hashtable replaceHash = new Hashtable();
+		try
+		{
+			System.out.println("DataSubmitServlet > commName: " + commName);
+			System.out.println("DataSubmitServlet > commLevel: " + commCode);
+			System.out.println("DataSubmitServlet > commCode: " + commLevel);
+			
+			
+			System.out.println("DataSubmitServlet > salutation: " + salutation);
+			System.out.println("DataSubmitServlet > firstname: " + firstName);
+			System.out.println("DataSubmitServlet > lastName: " + lastName );
+			System.out.println("DataSubmitServlet > emailAddress: " + emailAddress);
+			System.out.println("DataSubmitServlet > orgname: " + orgName);
+			
+			System.out.println("DataSubmitServlet > nameRefAuthors: " + nameRefAuthors);
+			System.out.println("DataSubmitServlet > nameRefTitle: " + nameRefTitle);
+			System.out.println("DataSubmitServlet > nameRefPubDate: " + nameRefPubDate);
+			
+			System.out.println("DataSubmitServlet > conceptRefAuthors: " + conceptRefAuthors);
+			System.out.println("DataSubmitServlet > conceptRefTitle: " + conceptRefTitle);
+			System.out.println("DataSubmitServlet > conceptRefPubDate: " + conceptRefPubDate);
+			
+			
+			replaceHash.put("communityName", ""+commName);
+			replaceHash.put("communityLevel", ""+commLevel);
+			replaceHash.put("communityCode", ""+commCode);
+			replaceHash.put("conceptStatus", ""+conceptStatus);
+			replaceHash.put("nameStatus", ""+nameStatus);
+			
+			replaceHash.put("level", "unknown");
+			replaceHash.put("salutation", ""+salutation);
+			replaceHash.put("firstName", ""+firstName);
+			replaceHash.put("lastName", ""+lastName);
+			replaceHash.put("emailAddress", ""+emailAddress);
+			replaceHash.put("orgName" , ""+orgName);
+			
+			replaceHash.put("nameRefAuthors" , ""+nameRefAuthors);
+			replaceHash.put("nameRefTitle" , ""+ nameRefTitle);
+			replaceHash.put("nameRefPubDate" , ""+nameRefPubDate);
+			replaceHash.put("nameRefEdition", ""+nameRefEdition);
+			replaceHash.put("nameRefSeriesName", ""+nameRefSeriesName);
+			replaceHash.put("nameRefIssueId", ""+ nameRefIssueId);
+			replaceHash.put("nameRefOtherCitationDetails", ""+nameRefOtherCitationDetails);
+			replaceHash.put("nameRefPageNumber", ""+nameRefPageNumber );
+			replaceHash.put("nameRefISBN", ""+nameRefISBN );
+			replaceHash.put("nameRefISSN", ""+nameRefISSN);
+			
+			replaceHash.put("conceptRefAuthors" , ""+conceptRefAuthors);
+			replaceHash.put("conceptRefTitle" , ""+ conceptRefTitle);
+			replaceHash.put("conceptRefPubDate" , ""+conceptRefPubDate);
+			replaceHash.put("conceptRefEdition", ""+conceptRefEdition);
+			replaceHash.put("conceptRefSeriesName", ""+conceptRefSeriesName);
+			replaceHash.put("conceptRefIssueId", ""+conceptRefIssueId);
+			replaceHash.put("conceptRefOtherCitationDetails", ""+conceptRefOtherCitationDetails);
+			replaceHash.put("conceptRefPageNumber", ""+conceptRefPageNumber );
+			replaceHash.put("conceptRefISBN", ""+conceptRefISBN );
+			replaceHash.put("conceptRefISSN", ""+conceptRefISSN);
+			
+			
+			
+			replaceHash.put("classSystem", ""+classSystem );
+			
+			//replaceHash.put("", );
+			//replaceHash.put("", );
+			//replaceHash.put("", );
+			//replaceHash.put("", );
+			su.filterTokenFile(communityValidationTemplate, communityValidationForm, replaceHash);
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception:  " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(results);
+	 }
+	 
+	 
+	 
 
 
 }
