@@ -178,8 +178,11 @@
 
                     try {
                         Class.forName (dbDriver);
-
-                        connPool[i] = DriverManager.getConnection
+System.out.println("> "+dbServer);
+dbServer = dbServer.trim();
+//dbServer="jdbc:idb:/home/computer/harris/compare/vegclass/veg_plot/src/build/bin/sample.prp";
+System.out.println("> "+dbServer);
+												connPool[i] = DriverManager.getConnection
                                       (dbServer,dbLogin,dbPassword);
 
                         connStatus[i]=0;
