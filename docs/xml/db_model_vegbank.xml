@@ -3688,6 +3688,22 @@ change through time.</entitySummary>
       </attForms>
       <update>1.0.0</update>
     </attribute>
+    <attribute>
+      <attName>emb_classContributor</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>commClass</entityName>
@@ -3980,6 +3996,22 @@ change through time.</entitySummary>
       </attForms>
       <update>1.0.2</update>
     </attribute>
+    <attribute>
+      <attName>emb_commClass</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>commInterpretation</entityName>
@@ -4242,6 +4274,22 @@ change through time.</entitySummary>
         <formShow name="csvvegbranch">149</formShow>
       </attForms>
       <update>1.0.0</update>
+    </attribute>
+    <attribute>
+      <attName>emb_commInterpretation</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
     </attribute>
   </entity>
   <entity>
@@ -4928,6 +4976,22 @@ change through time.</entitySummary>
         <formShow name="csvvegbranch">167</formShow>
       </attForms>
       <update>1.0.0</update>
+    </attribute>
+    <attribute>
+      <attName>emb_disturbanceObs</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
     </attribute>
   </entity>
   <entity>
@@ -8348,6 +8412,22 @@ conditions may change between resampling events.
       <attDefinition>Percent Cover for the 3rdhighest cover taxon on the plot, ignoring strata.</attDefinition>
       <attUnits>%</attUnits>
       <attForms/>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>emb_observation</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
       <update>1.0.2</update>
     </attribute>
   </entity>
@@ -11924,6 +12004,22 @@ conditions may change between resampling events.
       </attForms>
       <update>1.0.0</update>
     </attribute>
+    <attribute>
+      <attName>emb_plot</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>project</entityName>
@@ -12852,6 +12948,22 @@ conditions may change between resampling events.
       </attForms>
       <update>1.0.0</update>
     </attribute>
+    <attribute>
+      <attName>emb_soilObs</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>soilTaxon</entityName>
@@ -13177,6 +13289,22 @@ conditions may change between resampling events.
       </attForms>
       <update>1.0.0</update>
     </attribute>
+    <attribute>
+      <attName>emb_stemCount</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>stemLocation</entityName>
@@ -13321,6 +13449,22 @@ conditions may change between resampling events.
         <formShow name="csvvegbranch">382</formShow>
       </attForms>
       <update>1.0.1</update>
+    </attribute>
+    <attribute>
+      <attName>emb_stemLocation</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
     </attribute>
   </entity>
   <entity>
@@ -13944,6 +14088,22 @@ conditions may change between resampling events.
       <attForms/>
       <update>1.0.2</update>
     </attribute>
+    <attribute>
+      <attName>emb_taxonImportance</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>taxonInterpretation</entityName>
@@ -14529,6 +14689,22 @@ conditions may change between resampling events.
       </attForms>
       <update>1.0.0</update>
     </attribute>
+    <attribute>
+      <attName>emb_taxonInterpretation</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>taxonObservation</entityName>
@@ -14658,6 +14834,22 @@ conditions may change between resampling events.
         <formShow name="Detail">1306</formShow>
         <formShow name="csvvegbranch">429</formShow>
       </attForms>
+      <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>emb_taxonObservation</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
       <update>1.0.2</update>
     </attribute>
   </entity>
@@ -14829,6 +15021,22 @@ conditions may change between resampling events.
         <formShow name="csvvegbranch">433</formShow>
       </attForms>
       <update>1.0.1</update>
+    </attribute>
+    <attribute>
+      <attName>emb_taxonAlt</attName>
+      <attLabel>this row embargoed.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
+      <update>1.0.2</update>
     </attribute>
   </entity>
   <entity>
