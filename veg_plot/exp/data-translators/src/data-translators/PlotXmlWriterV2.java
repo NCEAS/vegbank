@@ -8,8 +8,8 @@
  * 		@version @release@ 
  *
  *     '$Author: harris $'
- *     '$Date: 2002-01-18 00:17:06 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2002-01-23 08:19:41 $'
+ *     '$Revision: 1.2 $'
  *
  *
  */
@@ -99,7 +99,6 @@ public class PlotXmlWriterV2
 				sb.append( getPlotObservationContent() );
 				
 				
-			
 			//end tags
 				sb.append( getPlotObservationEndTag() );
 			sb.append( getPlotSiteEndTag() );
@@ -115,8 +114,73 @@ public class PlotXmlWriterV2
 			System.out.println("Exception: " + e.getMessage() );
 		}
 	}
-	 
-	 
+	
+	
+	
+	
+	/**
+	 * overloaded method of the same name above
+	 *
+	 * @param plotNameVec -- a vector containg the names 
+	 *	(or in some cases) the ids of a plot
+	 * @param fileName -- the output fully qualified filename with absolute path
+	 *
+	 */
+	 public void writeMultiplePlot(Vector plotNameVec, String fileName)
+	 {
+		try
+		{
+			//initialize the class variable, plotCode, with this plot name
+			//this.plotCode = plotName;
+			//the printWriter
+			PrintWriter out = new PrintWriter(new FileWriter(fileName));
+			//String buffer to store the plot
+			StringBuffer sb = new StringBuffer();
+			//load the public variables in the data source class with those 
+			//from the plotName
+			
+			sb.append( getPlotHeader() );
+			
+			//get each of the plots in the vector
+			for (int i=0; i< plotNameVec.size(); i++)
+			{
+				String plotName = plotNameVec.elementAt(i).toString();
+				datasrc.getPlot(plotName);
+				
+				//initialize the class variable, plotCode, with this plot name
+				this.plotCode = plotName;
+			
+				sb.append( getPlotProjectContent() );
+				sb.append( getPlotSiteContent() );
+				//this is a child of the site content
+				sb.append( getPlotPlaceContent() );
+			
+				sb.append( getPlotObservationContent() );
+				
+				
+				//end tags
+				sb.append( getPlotObservationEndTag() );
+				sb.append( getPlotSiteEndTag() );
+				sb.append( getPlotProjectEndTag() );
+				
+			}
+			sb.append( getPlotFooter() );
+			
+			out.println( sb.toString() );
+			out.close();
+			//System.out.println("datasrc: " + datasrc.state);
+		
+		}
+		catch (Exception e) 
+		{
+			System.out.println("Exception: " + e.getMessage() );
+		}
+	}
+	
+	
+	
+	
+	
 	
 	
 	
@@ -652,8 +716,17 @@ public class PlotXmlWriterV2
 		//the default
 		else
 		{
-			PlotXmlWriterV2 writer = new PlotXmlWriterV2();
-			writer.writeSinglePlot("test-plot");
+			//use the vegbank plugin
+			String plugin = "VegBankDataSourcePlugin";
+			//test the multiple plot writer
+			Vector plotIdVec = new Vector();
+			plotIdVec.addElement("0");
+			plotIdVec.addElement("1");
+			plotIdVec.addElement("2");
+			plotIdVec.addElement("3");
+			PlotXmlWriterV2 writer = new PlotXmlWriterV2(plugin);
+			//writer.writeSinglePlot("test-plot");
+			writer.writeMultiplePlot(plotIdVec, "test.xml");
 		}
 	}
 	
