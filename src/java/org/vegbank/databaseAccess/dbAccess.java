@@ -1,11 +1,6 @@
 package org.vegbank.databaseAccess;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.StringWriter;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.Vector;
 
 import org.vegbank.xmlresource.transformXML;
@@ -38,8 +33,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-11-02 23:35:54 $'
- *  '$Revision: 1.9 $'
+ *  '$Date: 2003-11-05 20:48:59 $'
+ *  '$Revision: 1.10 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,7 +121,7 @@ public class dbAccess
 		*
 		* @param plotIdVec -- a vector contaning a number of the VegBank plotId's
 		*/
-	public String getMultipleVegBankPlotXMLString(Vector plotIdVec) {
+	public String getMultipleVegBankPlotXMLString(Vector accessionCodeVec) {
 	  String xmlResult = null;
     try {
 			System.out.println("dbAccess > return multiple plots");
@@ -134,7 +129,7 @@ public class dbAccess
 			//so the plugin will always be the same 
 			String pluginClass = "VegbankOMPlugin";
 			PlotXmlWriterV2 writer = new PlotXmlWriterV2(pluginClass);
-			xmlResult = writer.getMultiplePlotXMLString(plotIdVec);
+			xmlResult = writer.getMultiplePlotXMLString(accessionCodeVec);
 		} catch (Exception e) {
 			System.out.println("dbAccess > Exception: " + e.getMessage());
 			e.printStackTrace();

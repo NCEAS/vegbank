@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-11-03 00:52:20 $'
- *  '$Revision: 1.18 $'
+ *  '$Date: 2003-11-05 20:48:59 $'
+ *  '$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,8 +81,8 @@ import org.vegbank.xmlresource.transformXML;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2003-11-03 00:52:20 $'
- *  '$Revision: 1.18 $'
+ *  '$Date: 2003-11-05 20:48:59 $'
+ *  '$Revision: 1.19 $'
  * 
  */
 
@@ -217,7 +217,7 @@ public class DataRequestServlet extends HttpServlet
 				}
 				else if ( determineQueryType(params).equals("extended") )
 				{
-					handleExtendedQuery(enum, params, out, response, request, resultType, userName);
+					LogUtility.log("DataRequstServlet > Unknown query type ");
 				}
 			}
 			// PLANT TAXONOMY QUERY	 
@@ -271,79 +271,6 @@ public class DataRequestServlet extends HttpServlet
 		return(queryType);
 	}
 
-	
-	/**
-	 * method to handle extended queries hich are those queries 
-	 * whose parameters are equal to criteria operator and value
-	 * and are being requested by a more complex client than
-	 * the simple html form known as plot query --
-	 * @param enum -- an enumeration of all the paramters passed to the servlet
-	 * @param param -- a hashtable with all the parameters passed to the servlet
-	 * @param out --  the printwriter back to the client
-	 * @param response -- the http response object
-	 * @param request -- the http request object
-	 */	 
-	private void handleExtendedQuery(
-		Enumeration enum,
-		Hashtable param,
-		PrintWriter out,
-		HttpServletResponse response,
-		HttpServletRequest request,
-		String resultType,
-		String userName)
-	{
-		Hashtable extendedParamsHash = new Hashtable();
-		try
-		{
-			//figure out what type of client that is accessing the servlet
-			//the results that are returned depend on this parameter
-			String clientType = param.get("clientType").toString();
-			String requestDataType  = param.get("requestDataType").toString();
-			LogUtility.log("DataRequestServlet > requestDataType for extended query: " + requestDataType);
-			
-			//validate that there are the correct type and number
-			//of parameters being passed to thie method
-			if ( (param.containsKey("criteria") == false ) 
-				|| ( param.containsKey("operator")== false )
-				|| ( param.containsKey("value") == false ))
-			{
-				LogUtility.log("DataRequstServlet > did not get the correct parameters to handleExtendedQuery");	
-			}
-			//else compose and issue the query to the database access module
-			else
-			{
-//				LogUtility.log("ELEMENTS TO BE PROCESSED: "+enum.toString() );
-				while (enum.hasMoreElements()) 
-				{
-					//process the criteria data to make a hashtbale
-					// with keys that equal 'criteria', 'operator'
-					// and 'value'
-					String name = (String)enum.nextElement();
-//					LogUtility.log("ELEMENT : "+name  );
-					if ( name.equals("criteria")  
-						|| name.equals("operator") 
-						|| name.equals("value"))
-					{
-						Vector  extendedValsVector = new Vector();
-						String values[] = request.getParameterValues(name);
-						for (int i=0; i<values.length; i++) 
-						{
-							extendedValsVector.addElement( ( values[i]) );
-						}
-						extendedParamsHash.put( name, extendedValsVector );
-					}
-				}
-			}
-		}
-		catch( Exception e ) 
-		{
-			LogUtility.log("DataRequestServlet", e);
-			e.printStackTrace();
-		}
-	}
-
-	
-	
 	/**
 	 * this method is to be used for passing the results from the 
 	 * servlet to the client that has accessed the client.  Depending 
@@ -725,6 +652,7 @@ public class DataRequestServlet extends HttpServlet
 			String multipleObs = (String) params.get("multipleObs");
 			String compoundQuery = (String) params.get("compoundQuery");
 			String plotId = (String) params.get("plotId");
+			String accessionCode = (String) params.get("vegbankAccessionNumber");
 			// may be 'full', 'summary', or 'identity'
 			//String resultType = (String)params.get("resultType");
 			String requestDataType = (String) params.get("requestDataType");
@@ -734,13 +662,10 @@ public class DataRequestServlet extends HttpServlet
 				params.get("requestDataFormatType").toString();
 
 	
-			// Cheat here - to recognize the single plot query to return entire plot
-			//20020117 testing the new plot writer and data translation 
-			//modules so cheating here first
-			if ( plotId != null && ( resultType.equals("full") || resultType.equals("summary") || resultType.equals("rawXML") ) )
+			if ( accessionCode != null && ( resultType.equals("full") || resultType.equals("summary") || resultType.equals("rawXML") ) )
 			{
 				LogUtility.log("About to run plot query");
-				new FullPlotQuery().execute(qr, plotId);
+				new FullPlotQuery().execute(qr, accessionCode);
 			}
 			else
 			{

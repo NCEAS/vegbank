@@ -13,8 +13,8 @@ import java.util.*;
  *  legacy data sources to the native vegbank XML format <br> <br>
  *     
  *  '$Author: farrell $' <br>
- *  '$Date: 2003-10-24 05:27:22 $' <br>
- *  '$Revision: 1.5 $' <br>
+ *  '$Date: 2003-11-05 20:48:59 $' <br>
+ *  '$Revision: 1.6 $' <br>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ public class PlotXmlWriterV2
 	 * @param fileName -- the output fully qualified filename with absolute path
 	 *
 	 */
-	 public String getMultiplePlotXMLString(Vector plotNameVec)
+	 public String getMultiplePlotXMLString(Vector accessionNameVec)
 	 {
 
 		StringBuffer sb = new StringBuffer();
@@ -119,9 +119,9 @@ public class PlotXmlWriterV2
 			sb.append( getPlotHeader() );
 			
 			//get each of the plots in the vector
-			for (int i=0; i< plotNameVec.size(); i++)
+			for (int i=0; i< accessionNameVec.size(); i++)
 			{
-				String plotName = plotNameVec.elementAt(i).toString();
+				String plotName = accessionNameVec.elementAt(i).toString();
 				datasrc.getPlot(plotName);
 				
 				//initialize the class variable, plotCode, with this plot name

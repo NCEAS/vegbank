@@ -13,8 +13,8 @@
 *     Authors: @author@
 *
 *    '$Author: farrell $'
-*      '$Date: 2003-11-05 18:47:20 $'
-*  '$Revision: 1.13 $'
+*      '$Date: 2003-11-05 20:48:59 $'
+*  '$Revision: 1.14 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -145,11 +145,11 @@
 	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap>
 	      
 	      <!-- THE LINK TO THE SUMMARY-->
-             <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>" title="summary report"><img align="center" border="0" 
+             <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="vegbankAccessionNumber" name="row"/>" title="summary report"><img align="center" border="0" 
 	     	src="/vegbank/images/report_sm.gif" alt="Summary view"></img></a>
 
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-	      <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;plotId=<bean:write property="plotId" name="row"/>" title="comprehensive report"><img align="center" border="0" 
+	      <a href="/vegbank/servlet/DataRequestServlet?requestDataFormatType=html&amp;clientType=browser&amp;requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;vegbankAccessionNumber=<bean:write property="vegbankAccessionNumber" name="row"/>" title="comprehensive report"><img align="center" border="0" 
 	      	src="/vegbank/images/comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
