@@ -12,7 +12,7 @@
 <html:html>
   <HEAD>
     <html:base/>
-    <link rel="STYLESHEET" href="@stylesheet@" type="text/css" /> 
+    @webpage_stylesheets_declaration@
     <title><tiles:getAsString name="title"/></title>
   </HEAD>
 
