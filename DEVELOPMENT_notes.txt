@@ -70,15 +70,15 @@ This doc describes issues, problems, and workarounds that we encounter that may 
      generate sql create scripts and data-dictionary.
   Tomcat: http://jakarta.apache.org/tomcat/ is the servlet container used.
 
-  Setting up all of this is not comprihensively documented but some good info
+  Setting up all of this is not comprehensively documented but some good info
   can be found in vegclass/README
 
   
 ------------------------------------------------------------------------------------------------------------------------
 
-  Xalan to use
+  How to use Xalan
 
-  Vegbank uses a newer version of xalan that the one that comes with TOMCAT.
+  Vegbank uses a newer version of xalan than the one that comes with TOMCAT.
   I put the vegbank/lib/xalan.jar, xerces.jar and xml-apis.jar into
   $TOMCAT_HOME/common/endorsed to make it work.
 

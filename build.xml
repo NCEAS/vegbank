@@ -5,9 +5,9 @@
   * Global build script for vegclass. This simply allows running all the sub 
   * scripts from one place.
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2003-07-21 17:52:12 $'
-  *     '$Revision: 1.13 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2003-08-28 20:05:03 $'
+  *     '$Revision: 1.14 $'
 --> 
 <project name="vegclass" default="compile" basedir=".">
 
@@ -25,7 +25,7 @@
     <property name="lib.dir" value="${basedir}/lib"/>
     <property name="docs.dir" value="${basedir}/docs"/>
     <property name="dist.dir" value="${basedir}/dist"/>
-    <property name="rmi.dist.dir" value="${distdir}/RMIServer"/>
+    <property name="rmi.dist.dir" value="${dist.dir}/RMIServer"/>
     <property name="bin.dir" value="${basedir}/bin"/>
     <property name="src.dir" value="${basedir}/src"/>
     <property name="xsl.src.dir" value="${src.dir}/xsl"/>
@@ -81,7 +81,7 @@
   
   </target>
 
-	<target name="clean" description="==> Remove all generated files">
+  <target name="clean" description="==> Remove all generated files">
     <ant dir="common" target="clean" inheritAll="false"/>
     <ant dir="veg_plot" target="clean" inheritAll="false"/>
     <ant dir="veg_community" target="clean" inheritAll="false"/>

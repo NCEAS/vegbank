@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.Vector;
 
 import org.vegbank.xmlresource.transformXML;
@@ -35,9 +37,9 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * allow the user to update the database, based on a plot xml 
  * document containing only partial data from a plot 
  *
- *  '$Author: farrell $'
- *  '$Date: 2003-08-21 21:16:44 $'
- *  '$Revision: 1.4 $'
+ *  '$Author: anderson $'
+ *  '$Date: 2003-08-28 20:05:03 $'
+ *  '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -355,7 +357,7 @@ public class dbAccess
 					+ "actions: writeSingleVegbankPlot  [plotId] and [outputFile]"
 					+ "         query, compoundQuery, extendedQuery, insert, insertPlot "
 					+ "         verify, simpleCommunityQuery"
-					+ "         takes - [inputXML] [inputXSL]");
+					+ "         takes - [XML filename] [XSL filename]");
 			System.exit(0);
 		}
 
@@ -380,9 +382,23 @@ public class dbAccess
 
 		} else {
 			//input xml file for loading to the database
-			String inputXml = args[0];
+			String xmlFilename = args[0];
 			String inputXSL = args[1];
-			g.accessDatabase(inputXml, inputXSL, action);
+			String line;
+			StringBuffer inputXml = new StringBuffer(1024);
+
+			try {
+				BufferedReader reader = new BufferedReader(new FileReader(xmlFilename));
+				while ((line=reader.readLine()) != null) { 
+					inputXml.append(line);
+				}
+
+				g.accessDatabase(inputXml.toString(), inputXSL, action);
+
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+
 		}
 	}
 }
