@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-08 23:48:30 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-01-16 07:11:14 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,16 +65,43 @@ public class PermComparison {
 		return Integer.parseInt(value);
 	}
 
+	/* =============================================================== */
 	
 	/**
+	 * @param required comma separated list of required role names
+	 * @param given comma separated list of given role names
 	 * @return true if given list of comma separated roles 
-	 * match at least ALL of the required roles.
+	 * match ALL of the required roles.
 	 */
 	public static boolean matchesAll(String required, String given) {
 		return matchesAll(parsePermissions(required), parsePermissions(given));
 	}
 
 	/**
+	 * @param required integer sum of required roles
+	 * @param given comma separated list of given role names
+	 * @return true if given list of comma separated roles 
+	 * match ALL of the required roles.
+	 */
+	public static boolean matchesAll(int required, String given) {
+		return matchesAll(required, parsePermissions(given));
+	}
+	
+	/**
+	 * @param required comma separated list of required role names
+	 * @param given integer sum of given roles
+	 * @return true if given role sum matches ALL of the required roles.
+	 */
+	public static boolean matchesAll(String required, int given) {
+		return matchesAll(parsePermissions(required), given);
+	}
+	
+
+	/* =============================================================== */
+
+	/**
+	 * @param required comma separated list of required role names
+	 * @param given comma separated list of given role names
 	 * @return true if given list of comma separated roles 
 	 * match at least ONE of the required roles.
 	 */
@@ -83,6 +110,31 @@ public class PermComparison {
 	}
 
 	/**
+	 * @param required integer sum of required roles
+	 * @param given comma separated list of given role names
+	 * @return true if given list of comma separated roles 
+	 * match at least ONE of the required roles.
+	 */
+	public static boolean matchesOne(int required, String given) {
+		return matchesOne(required, parsePermissions(given));
+	}
+	
+	/**
+	 * @param required comma separated list of required role names
+	 * @param given integer sum of given roles
+	 * @return true if given role sum matches at least ONE of the required roles.
+	 */
+	public static boolean matchesOne(String required, int given) {
+		return matchesOne(parsePermissions(required), given);
+	}
+	
+
+	/* =============================================================== */
+
+
+	/**
+	 * @param required integer sum of required roles
+	 * @param given integer sum of given roles
 	 * @return true if given sum of roles match at least all of the 
 	 * required roles.
 	 */
