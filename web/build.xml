@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-11-02 00:54:35 $'
-* '$Revision: 1.127 $'
+* '$Date: 2004-11-02 18:15:38 $'
+* '$Revision: 1.128 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -568,6 +568,13 @@
       </fileset>
     </copy>
   </target>
+  <target name="vegbranch-dist-demomedia" depends="vegbranch-init" description="dist demo media to server from noncvs large binary src">
+    <copy todir="${vegbranch_server}/docs/demo/media" filtering="no">
+      <fileset dir="${lrg_binary_src}/media">
+        <include name="**/*.*"/>
+      </fileset>
+    </copy>
+  </target>
   <target name="vegbranch-dist-all" depends="vegbranch-init" description="dist all vegbranch files to server">
     <antcall target="vegbranch-dist-client"/>
     <antcall target="vegbranch-dist-images"/>
@@ -575,6 +582,7 @@
     <antcall target="vegbranch-dist-docs-loadtbls"/>
     <antcall target="vegbranch-dist-docs"/>
     <antcall target="vegbranch-dist-help"/>
+    <antcall target="vegbranch-dist-demomedia"/>
   </target>
   <!-- ________________________ end of VEGBRANCH TARGETS _____________________________________ -->
   <!--
