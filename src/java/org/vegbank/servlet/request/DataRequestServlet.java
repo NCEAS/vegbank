@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
  *	'$Author: farrell $'
- *  '$Date: 2000-11-20 15:45:44 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2003-06-09 22:06:48 $'
+ *  '$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,8 +76,8 @@ import databaseAccess.dbAccess;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: farrell $'
- *  '$Date: 2000-11-20 15:45:44 $'
- *  '$Revision: 1.7 $'
+ *  '$Date: 2003-06-09 22:06:48 $'
+ *  '$Revision: 1.8 $'
  * 
  */
 
@@ -726,10 +726,9 @@ public class DataRequestServlet extends HttpServlet
 			// Cheat here - to recognize the single plot query to return entire plot
 			//20020117 testing the new plot writer and data translation 
 			//modules so cheating here first
-			if (
-				plotId != null
-					&& (resultType.equals("full") || resultType.equals("summary") || resultType.equals("rawXML") ))
+			if ( plotId != null && ( resultType.equals("full") || resultType.equals("summary") || resultType.equals("rawXML") ) )
 			{
+				System.out.println("About to run plot query");
 				new FullPlotQuery().execute(qr, plotId);
 			}
 			// this is where the query element checking is done for the vegetation plots
@@ -788,6 +787,10 @@ public class DataRequestServlet extends HttpServlet
 				//+"containing plots with a surface geology like: "+surfGeo+" <br>");
 				String query = composeQuery("surfGeo", surfGeo, resultType);
 				qr = issueQuery("simpleQuery", clientType, userName, query);
+			}
+			else
+			{
+				System.out.println("DataRequestServlet > This request is not understood");
 			}
 			// if there are results returned to the servlet from the database in the form 
 			// of a file returned then grab the summary viewer then let the user know

@@ -29,11 +29,11 @@ foreach $database (@databases) {
 
     # run a grant on this table
     print "Run grant on $table\n";
-    `psql $database -c "GRANT $permissions ON $table TO lee"`;
+    `psql $database -c "GRANT $permissions ON $table TO $user"`;
      
      $sequence = $table . "_id_seq \n";
      print "Run grant on $sequence";
-    `psql $database -c "GRANT $permissions ON $sequence TO lee"`;
+    `psql $database -c "GRANT $permissions ON $sequence TO $user"`;
                         
   }
 }
