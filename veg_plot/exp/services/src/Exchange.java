@@ -87,7 +87,7 @@ public class Exchange implements ExchangeInterface
  		{
 			Class.forName("org.postgresql.Driver");
 
-			String driverString = "jdbc:postgresql://127.0.0.1/plots_dev";
+			String driverString = "jdbc:postgresql://127.0.0.1/vegbank";
 			System.out.println("Exchange > connecting to: " + driverString   );
 			c = DriverManager.getConnection(driverString, "datauser", "");
 		}

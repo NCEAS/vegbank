@@ -19,6 +19,18 @@ public class ExchangeServlet extends HttpServlet
  public void init(ServletConfig config) throws ServletException 
 	{
 		System.out.println("ExchangeServlet > init");
+		
+		// Startup the webservice
+		try
+		{
+			Publish.main(null);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Could not start Webservice");
+			e.printStackTrace();
+		}
+		
 		super.init(config);
   }
 		
