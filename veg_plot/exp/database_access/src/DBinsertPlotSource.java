@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-04 22:22:07 $'
- * 	'$Revision: 1.18 $'
+ *  '$Date: 2002-04-05 00:06:24 $'
+ * 	'$Revision: 1.19 $'
  */
 package databaseAccess;
 
@@ -344,6 +344,11 @@ public class DBinsertPlotSource
 	{
 		try 
 		{
+			// update the instance vraible with the user's email address
+			// which will be used for loading the plot and for constructing the 
+			// accession number
+			this.submitterEmail = emailAddress;
+		
 			//add a line for the user that is inserting the data
 			debug.append( "<vegbankUser>"+emailAddress+"</vegbankUser> \n" );
 			//this boolean determines if the plot should be commited or rolled-back
@@ -1205,7 +1210,7 @@ public class DBinsertPlotSource
 			String authorLocation = source.authorLocation;
 			
 			//make a temporary accession number for each unique plot
-			String accessionNumber = getAccessionNumber( authorPlotCode,  plotId, this.loaderEmail);
+			String accessionNumber = getAccessionNumber(authorPlotCode, plotId, this.submitterEmail);
 			System.out.println("DBinsertPlotSource > accession number: " + accessionNumber);
 			
 			//print the variables to the screen for debugging
@@ -1642,16 +1647,12 @@ public class DBinsertPlotSource
 			 +"values("+projectId+", '"+projectName+"', '"+projectDescription+"')" );
 			Statement insertStatement = conn.createStatement();
 			insertStatement.executeUpdate(sb.toString());
-			System.out.println("DBinsertPlotSource > inserted PROJECT");
-			
+			System.out.println("DBinsertPlotSource > inserted PROJECT");	
 		}
 		catch (Exception e)
 		{
 			System.out.println("Caught Exception: "+e.getMessage() ); 
 			e.printStackTrace();
 		}
-		
 	}
-
-
 }
