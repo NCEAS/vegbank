@@ -38,6 +38,7 @@ public class DataSourceClient
 	{
 		try
 		{
+			System.out.println("DataSourceCleint > connecting to server: " +hostName );
 			this.serverHost = hostName;
 			this.url = "//" + hostName + "/"+serverClass;
 			//list the bound serveres to this host
@@ -58,6 +59,7 @@ public class DataSourceClient
 		catch(Exception e)
 		{
 			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
 		}
 	}
 	

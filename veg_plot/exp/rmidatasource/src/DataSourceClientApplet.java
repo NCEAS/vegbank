@@ -11,7 +11,7 @@ import java.util.*;
  * @author  administrator
  */
 public class DataSourceClientApplet extends javax.swing.JApplet {
-    private String server = "128.111.220.84";
+    private String server = "128.111.220.69";
     private DataSourceClient source = new DataSourceClient(server);
     private String targetPlot = null; //the plot of interest
 

@@ -22,8 +22,9 @@ public class DataSourceServer
       }
       try 
 			{
-         DataSourceServerInterface fi = new DataSourceImpl("TNCPlotsDB");
-         Naming.rebind("//127.0.0.1/DataSourceServer", fi);
+         //DataSourceServerInterface fi = new DataSourceImpl("TNCPlotsDB");
+         DataSourceServerInterface fi = new DataSourceImpl("TestPlotSourcePlugin");
+				 Naming.rebind("//127.0.0.1/DataSourceServer", fi);
       } catch(Exception e) 
 			{
          System.out.println("FileServer: "+e.getMessage());
