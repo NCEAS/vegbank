@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-06 04:26:17 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2002-01-07 22:38:14 $'
+ * 	'$Revision: 1.4 $'
  */
 
 import java.sql.*;
@@ -514,6 +514,8 @@ public class PlotDataSource
 			System.out.println("y coord: " + source.yCoord );
 			System.out.println("utm zone: " + source.utmZone );
 			System.out.println("datum: " + source.datum );
+			System.out.println("state: "+ source.state);
+			System.out.println("country: "+ source.country);
 			System.out.println("plot shape: " + source.plotShape );
 			System.out.println("geology: " + source.surfGeo );
 			System.out.println("topo position: " + source.topoPosition );
@@ -526,6 +528,7 @@ public class PlotDataSource
 			System.out.println("stand size: " + source.standSize );
 			System.out.println("slope gradient: " + source.slopeGradient);
 			System.out.println("slope aspect: " + source.slopeAspect);
+			System.out.println("community name: " + source.communityName);
 			System.out.println("number of named places: " + source.namedPlaces.size() );
 			for (int i=0; i<source.namedPlaces.size(); i++)
 			{
