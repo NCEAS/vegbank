@@ -7,8 +7,9 @@
  *    Authors: John Harris
  * 		
  *		 '$Author: harris $'
- *     '$Date: 2001-11-01 17:00:43 $'
- *     '$Revision: 1.1 $'
+ *     '$Date: 2002-08-29 17:22:51 $'
+ *     '$Revision: 1.2 $'
+ * @deprecated -- this class is now part of the servlet.authentication package
  */
 
 package databaseAccess;

@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *    '$Date: 2002-08-13 21:39:10 $'
- * 	'$Revision: 1.20 $'
+ *    '$Date: 2002-08-29 17:22:52 $'
+ * 	'$Revision: 1.21 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1039,13 +1039,23 @@ public void developCompoundPlotQuery(String[] transformedString, int transformed
 			String taxonLevel = (String)queryElementHash.get("taxonLevel");
 			
 			String party = (String)queryElementHash.get("party");
-			String startDate = (String)queryElementHash.get("startDate");
-			String stopDate = (String)queryElementHash.get("stopDate");
-			
+			String startDate = null;
+			String stopDate = null;
+			String targetDate = null;
 			TaxonomyQueryStore tqs = new TaxonomyQueryStore();
-			Vector taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType, taxonLevel, party, startDate, stopDate);
+			Vector taxaResults = null;
+			if ( queryElementHash.containsKey("startDate") && queryElementHash.containsKey("stopDate") )
+			{
+				startDate = (String)queryElementHash.get("startDate");
+				stopDate = (String)queryElementHash.get("stopDate");
+				taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType, taxonLevel, party, startDate, stopDate);
+			}
+			else if ( queryElementHash.containsKey("targetDate") )
+			{
+				targetDate = (String)queryElementHash.get("targetDate");
+				taxaResults = tqs.getPlantTaxonSummary(taxonName, taxonNameType, taxonLevel, party, targetDate);
+			}
 			queryOutputNum=taxaResults.size();
-			
 			//print the results by passing the summary vector to the xml writer class
 			System.out.println("sqlMapper > writing the plant results as xml ");
 			xmlWriter l = new xmlWriter();

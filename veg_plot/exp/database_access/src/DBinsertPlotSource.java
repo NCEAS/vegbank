@@ -7,8 +7,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-08-15 03:07:47 $'
- * '$Revision: 1.34 $'
+ *     '$Date: 2002-08-29 17:22:51 $'
+ * '$Revision: 1.35 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,6 +99,7 @@ public class DBinsertPlotSource
 	public PlotDataSource source;
 	private GetURL gurl = new GetURL();
 	private PlantTaxaLoader plantLoader = new PlantTaxaLoader();
+	
 	
  /**
 	* constructor -- input the name if the plugin and plot
@@ -443,7 +444,7 @@ public class DBinsertPlotSource
 					System.out.println("loading single plot: "+plot+"\n");
 					DBinsertPlotSource db = new DBinsertPlotSource(plugin, plot);
 					String s = 	db.insertPlot(plot, 2, emailAddress);
-					System.out.println("RECEIPT: " + 	s);
+					System.out.println("RECEIPT: \n" + 	s);
 				}
 			}
 			//load all the plots in the package
@@ -579,6 +580,18 @@ public class DBinsertPlotSource
 	 */
 	public void insertPlot(String plotName, String emailAddress)
 	{
+		//add a line for the user that is inserting the data
+		debug.append( "<vegbankUser>"+emailAddress+"</vegbankUser> \n" );
+		// before anything else is done verify if the user has appropriate 
+		// priveleges 
+		if ( this.getUserPrivileges(emailAddress) <= 1 )
+		{
+			debug.append("<permissionLevel>invalid</permissionLevel> \n");
+			// close the connections 
+			connectionBroker.manageLocalDbConnectionBroker("destroy");
+		}
+		else
+		{
 		try 
 		{
 			System.out.println("DBinsertPlotSource > inserting plot: " + plotName);
@@ -587,9 +600,7 @@ public class DBinsertPlotSource
 			// accession number
 			this.submitterEmail = emailAddress;
 			this.plotName = plotName;
-		
-			//add a line for the user that is inserting the data
-			debug.append( "<vegbankUser>"+emailAddress+"</vegbankUser> \n" );
+			
 			//this boolean determines if the plot should be commited or rolled-back
 			boolean commit = true;
 			int projectId = 0;
@@ -696,14 +707,54 @@ public class DBinsertPlotSource
 				debug.append( "<insert>false</insert>\n" );
 			}
 			connectionBroker.manageLocalDbConnectionBroker("destroy");
-		}
-		catch (Exception e)
-		{
-			System.out.println("Exception: "+e.getMessage() ); 
-			debug.append("<exceptionMessage>"+e.getMessage()+"</exceptionMessage>\n");
-			e.printStackTrace();
+			}
+			catch (Exception e)
+			{
+				System.out.println("Exception: "+e.getMessage() ); 
+				debug.append("<exceptionMessage>"+e.getMessage()+"</exceptionMessage>\n");
+				e.printStackTrace();
+			}
 		}
 	}
+	
+	/**
+	 * method that returns the priveleges of a user based on their email address
+	 * @param email -- the email address of the user
+	 * @return privilege value -- and interger between 1 - 5
+	 */
+	 private int getUserPrivileges(String emailAddress)
+	 {
+		 int privilegeLevel=0;
+		 try
+		 {
+			 //THIS USES THE REQUESTURL METHOD
+			 String protocol = "http://";
+			 String host = "vegbank.nceas.ucsb.edu";
+			 String s = null;
+			 //THIS USES THE OTHER REQUEST URL METHOD
+			 String servlet = "/framework/servlet/usermanagement";
+			 Properties parameters = new Properties();
+			 parameters.setProperty("action", "getpermissionlevel");
+			 parameters.setProperty("user", emailAddress);
+			 s = gurl.requestURL(servlet, protocol, host, parameters);
+			 try
+			 {
+				 privilegeLevel = Integer.parseInt( s.trim() );
+			 }
+			 catch (Exception e1)
+			 {
+				 System.out.println("Exception: couldn't parse privilegeLevel: '"+s+"' "
+				 + e1.getMessage()  ); 
+			 }
+		 }
+		 catch (Exception e)
+		 {
+			System.out.println("Exception: "+e.getMessage() ); 
+			e.printStackTrace();
+		 }
+		 return(privilegeLevel);
+	 }
+	 
 	
 	/**
 	 * method that handles the loading of the project contributor information
@@ -737,7 +788,7 @@ public class DBinsertPlotSource
 				 {
 					 // THESE METHODS USER THE 'PlotDataSource' Object directly
 					 insertAddress(partyId, contributor);
-					 //insertTelephone(partyId, contributor);
+					 insertTelephone(partyId, contributor);
 				 }
 			 }
 			 
@@ -764,6 +815,46 @@ public class DBinsertPlotSource
 			e.printStackTrace();
 		 }
 	 }
+	 
+	 /**
+	  * method that inserts address information for a user
+		* by using the contributor ( the wholename of the user
+		* and the partyId.  The contributor string is used directly
+		* with the PlotDataSource object for looking up the address
+		* information
+		* @param partyId  -- the partyid for the party table
+		* @param contributor -- the whole name of the contributor
+		*/
+		private void insertTelephone(int partyId, String contributor)
+		{
+			StringBuffer sb = new StringBuffer();
+			try
+			{
+				
+				String number = source.getProjectContributorPhoneNumber(contributor);
+				String type = "work";
+				
+				sb.append("INSERT into TELEPHONE ");
+				sb.append("( party_id, phonenumber, phonetype ");
+				sb.append(" ) ");
+				sb.append(" values (?,?,?)");
+				
+				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+				pstmt.setInt(1, partyId);
+  	  	pstmt.setString(2, number);
+				pstmt.setString(3, type);
+				
+				pstmt.execute();
+				pstmt.close();
+			}
+			catch( Exception e)
+			{
+				System.out.println("Exception: "+e.getMessage() );
+				System.out.println("sql: " + sb.toString() );
+				e.printStackTrace();
+			}
+		}
+	 
 	 
 	 /**
 	  * method that inserts address information for a user
@@ -1450,7 +1541,9 @@ public class DBinsertPlotSource
 		 * method that loads the observation table in the VegBank
 		 * database and then returns a sting buffer which represents 
 		 * an xml document with the attribute names and values that 
-		 * were loaded to the database.
+		 * were loaded to the database. The attributes loaded in this 
+		 * method are accessed via the 'PlotDataSource' class and the 
+		 * plugins that it uses.
 		 *
 		 */
 		private boolean insertPlotObservation()
@@ -1460,15 +1553,62 @@ public class DBinsertPlotSource
 			{
 				//get the plotid number
 				plotObservationId = getNextId("observation");
-				//the variables from the plot file
 				String observationCode = source.getAuthorObsCode(plotName);
 				String startDate = source.getObsStartDate(plotName);
 				String stopDate = source.getObsStopDate(plotName);
-				String taxonObservationArea = "999.99";
-				String autoTaxonCover = " ";
-				String coverDispersion = " ";
+				String taxonObservationArea = source.getTaxonObservationArea(plotName);
+				boolean autoTaxonCover = source.getAutoTaxonCover(plotName);
+				String coverDispersion = source.getCoverDispersion(plotName);
 				boolean permanence = source.isPlotPermanent(plotName);
-			
+				String stemObservationArea = source.getStemObservationArea(plotName);
+				
+				// ADDED 
+				String dateAccuracy = source.getObsDateAccuracy(plotName);
+				String hydrologicRegime = source.getHydrologicRegime(plotName);
+				String stemSampleMethod = source.getStemSampleMethod(plotName);
+				String originalData = source.getOriginalData(plotName);
+				String effortLevel = source.getEffortLevel(plotName);
+				String plotValidationLevel = source.getPlotValidationLevel(plotName);
+				String floristicQuality = source.getFloristicQuality(plotName);
+				String bryophyteQuality =  source.getBryophyteQuality(plotName);
+				String lichenQuality = source.getLichenQuality(plotName);
+				String observationNarrative = source.getObservationNarrative(plotName);
+				String homogeneity =  source.getHomogeneity(plotName);
+				String phenologicAspect = source.getPhenologicAspect(plotName);
+				String representativeness = source.getRepresentativeness(plotName);
+				String basalArea =  source.getBasalArea(plotName);
+				String soilMoistureRegime =  source.getSoilMoistureRegime(plotName);
+				String soilDrainage = source.getSoilDrainage(plotName);
+				String waterSalinity = source.getWaterSalinity(plotName);
+				String shoreDistance = source.getShoreDistance(plotName);
+				String soilDepth = source.getSoilDepth(plotName);
+				String organicDepth= source.getOrganicDepth(plotName);
+				String percentBedRock = source.getPercentBedRock(plotName);
+				String percentRockGravel = source.getPercentRockGravel(plotName);
+				String percentWood = source.getPercentWood(plotName);
+				String percentLitter = source.getPercentLitter(plotName);
+				String percentBareSoil = source.getPercentBareSoil(plotName);
+				String percentWater = source.getPercentWater(plotName);
+				String percentOther = source.getPercentOther(plotName);
+				String nameOther  = source.getNameOther(plotName);
+				String standMaturity = source.getStandMaturity(plotName);
+				String successionalStatus = source.getSuccessionalStatus(plotName);
+				String treeHt = source.getTreeHt(plotName);
+				String shrubHt = source.getShrubHt(plotName);
+				String nonvascularHt = source.getNonvascularHt(plotName);
+				String floatingCover = source.getFloatingCover(plotName);
+				String submergedCover = source.getSubmergedCover(plotName);
+				String dominantStratum = source.getDominantStratum(plotName);
+				String growthform1Type = source.getGrowthform1Type(plotName);
+				String growthform2Type =  source.getGrowthform2Type(plotName);
+				String growthform3Type = source.getGrowthform3Type(plotName);
+				String growthform1Cover = source.getGrowthform1Cover(plotName);
+				String growthform2Cover =  source.getGrowthform2Cover(plotName);
+				String growthform3Cover =  source.getGrowthform3Cover(plotName) ;
+				boolean notesPublic = source.getNotesPublic(plotName) ;
+				boolean notesMgt = source.getNotesMgt(plotName);
+				boolean revisions =   source.getRevisions(plotName);
+				
 				// update the debugging stringbuffer
 				debug.append("<plotId>"+ plotId+"</plotId> \n");
 				debug.append("<observationCode>"+observationCode+"</observationCode>\n");
@@ -1477,12 +1617,27 @@ public class DBinsertPlotSource
 				debug.append("<permanent>"+permanence+"</permanent> \n");
 				
 				
-				sb.append("INSERT into OBSERVATION (observation_id, covermethod_id,  "
-				+" plot_Id, authorobscode, "
-				+" obsStartDate, obsEndDate, stratummethod_id, taxonObservationArea, "
-				+" autoTaxonCover, coverDispersion) "
-				+" values(?,?,?,?,?,?,?,?,?,?)" );
-	
+				sb.append("INSERT into OBSERVATION (observation_id, covermethod_id,  ");
+				sb.append(" plot_Id, authorobscode, obsStartDate, obsEndDate, ");
+				sb.append(" stratummethod_id, taxonObservationArea,  autoTaxonCover,");
+				sb.append(" coverDispersion, STEMOBSERVATIONAREA, dateAccuracy, ");
+				sb.append(" HYDROLOGICREGIME, stemSampleMethod, originalData, effortLevel, ");
+				sb.append(" plotValidationLevel, floristicQuality, bryophyteQuality, ");
+				sb.append(" lichenquality, observationNarrative, homogeneity, phenologicAspect, ");
+				sb.append(" representativeness, basalArea, soilMoistureRegime, soilDrainage,");
+				sb.append(" waterSalinity, shoreDistance, soilDepth, organicDepth, ");
+				sb.append(" percentBedRock, percentRockGravel, percentWood, percentLitter, ");
+				sb.append(" percentBareSoil, percentWater, percentOther, nameOther, ");
+				sb.append(" standMaturity, successionalStatus, treeHt, shrubHt, nonvascularHt, ");
+				sb.append(" floatingCover, submergedCover, dominantStratum, growthform1Type, ");
+				sb.append(" growthform2Type, growthform3Type, growthform1Cover, growthform2Cover, ");
+				sb.append(" growthform3Cover, notesPublic, notesMgt, revisions )");
+				
+				//55 total
+				sb.append(" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?, ");
+				sb.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?");
+				sb.append(",?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" );
+				//56
 			
 				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
   		  // Bind the values to the query and execute it
@@ -1494,10 +1649,59 @@ public class DBinsertPlotSource
 				pstmt.setString(6, stopDate);
 				pstmt.setInt(7, stratumMethodId);
 				pstmt.setString(8, taxonObservationArea);
-				//pstmt.setString(9, autoTaxonCover);
-				pstmt.setString(9, "true");
+				pstmt.setBoolean(9, autoTaxonCover);
 				pstmt.setString(10, coverDispersion);
+				pstmt.setString(11, stemObservationArea);
+				pstmt.setString(12, dateAccuracy);
+				pstmt.setString(13, hydrologicRegime);
+				
+				pstmt.setString(14, stemSampleMethod);
+				pstmt.setString(15, originalData);
+				pstmt.setString(16, effortLevel);
+				pstmt.setString(17, plotValidationLevel);
+				pstmt.setString(18, floristicQuality);
+				pstmt.setString(19, bryophyteQuality);
+				pstmt.setString(20, lichenQuality);
+				pstmt.setString(21, observationNarrative);
+				pstmt.setString(22, homogeneity);
+				pstmt.setString(23, phenologicAspect);
+				pstmt.setString(24, representativeness);
+				pstmt.setString(25, basalArea); //12
+				pstmt.setString(26, soilMoistureRegime);
+				pstmt.setString(27, soilDrainage);
+				pstmt.setString(28, waterSalinity);
+				pstmt.setString(29, shoreDistance);
+				pstmt.setString(30, soilDepth);
+				pstmt.setString(31, organicDepth);
+				pstmt.setString(32, percentBedRock);
+				pstmt.setString(33, percentRockGravel);
+				pstmt.setString(34, percentWood);
+				pstmt.setString(35, percentLitter);
+				pstmt.setString(36, percentBareSoil);
+				pstmt.setString(37, percentWater);//24
+				pstmt.setString(38, percentOther);
+				pstmt.setString(39, nameOther);
+				pstmt.setString(40, standMaturity);
+				pstmt.setString(41, successionalStatus);
+				pstmt.setString(42, treeHt);
+				pstmt.setString(43, shrubHt);
+				pstmt.setString(44, nonvascularHt);
+				pstmt.setString(45, floatingCover);
+				pstmt.setString(46, submergedCover);
+				pstmt.setString(47, dominantStratum);
+				pstmt.setString(48, growthform1Type);
+				pstmt.setString(49, growthform2Type);//36
+				pstmt.setString(50, growthform3Type);
+				pstmt.setString(51, growthform1Cover);
+				pstmt.setString(52, growthform2Cover);
+				pstmt.setString(53, growthform3Cover);
+				pstmt.setBoolean(54, notesPublic);
+				pstmt.setBoolean(55, notesMgt);
+				pstmt.setBoolean(56, revisions);//13
+				
   		  pstmt.execute();
+				//Thread.sleep(20000);
+				pstmt.close();
 			}
 			catch (Exception e)
 			{
@@ -1505,8 +1709,8 @@ public class DBinsertPlotSource
 				System.out.println("sql: "+sb.toString() );
 				e.printStackTrace();
 				debug.append("<exceptionMessage>"+e.getMessage()+"</exceptionMessage>\n");
+				
 				return(false);
-				//System.exit(0);
 			}
 		return(true);
 	}

@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-08-13 21:39:10 $'
- * '$Revision: 1.23 $'
+ *     '$Date: 2002-08-29 17:22:51 $'
+ * '$Revision: 1.24 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -221,6 +221,10 @@ import databaseAccess.*;
 	 * @param taxonNameType -- the type of taxon name input by the client, may
 	 * include: scientificName, commonName, symbolCode (the usda code)
 	 * @param taxonLevel -- the level in the heirarchy (eg, species, genus)
+	 * @param party -- the name of the party
+	 * @param startDate -- the usage startDate 
+	 * @param stopDate -- the usage stop date 
+	 * 
 	 * @see xmlWriter.writePlantTaxonSummary -- the xml writer used to write the 
 	 * contents of the Vector returned by this method
 	 * 
@@ -247,7 +251,6 @@ import databaseAccess.*;
 					stopDate = "01-JAN-2100";
 				}
 				
-
 				//create and issue the query --
 				StringBuffer sqlBuf = new StringBuffer();
 
@@ -277,16 +280,22 @@ import databaseAccess.*;
 					int plantNameId = results.getInt(1);
 					int plantConceptId = results.getInt(2);
 					String plantName = results.getString(3);
+					plantName = this.removeSensitiveChars(plantName);
 					String plantDescription = results.getString(4);
+					plantDescription = this.removeSensitiveChars(plantDescription);
 					String status = results.getString(5);
 					String classSystem = results.getString(6);
 					String plantLevel = results.getString(7);
 					String parentName = results.getString(8);
+					parentName = this.removeSensitiveChars(parentName);
 					String acceptedSynonym = results.getString(9);
+					acceptedSynonym = this.removeSensitiveChars(acceptedSynonym);
 					startDate = results.getString(10);
 					stopDate = results.getString(11);
 					String plantNameAlias = results.getString(12);
+					plantNameAlias = this.removeSensitiveChars(plantNameAlias);
 					String plantConceptRefAuthor = results.getString(13);
+					plantConceptRefAuthor = this.removeSensitiveChars(plantConceptRefAuthor);
 					String plantConceptRefDate = results.getString(14);
 					String plantUsagePartyOrgName = results.getString(15);
 					
@@ -296,9 +305,11 @@ import databaseAccess.*;
 					
 					// GET THE OTHER ATTRIBUTES 
 					String code = this.getTaxonCode(plantConceptId);
+					code = this.removeSensitiveChars(code);
 					String comName = this.getCommonName(plantConceptId);
+					comName = this.removeSensitiveChars(comName);
 					String scientificName = this.getScientificName(plantConceptId);
-					
+					scientificName = this.removeSensitiveChars(scientificName);
 					
 					Hashtable h = consolidateTaxaSummaryInstance( 
 						plantNameId,
@@ -333,6 +344,171 @@ import databaseAccess.*;
 			return( returnVector );
 		}
 		
+		
+				
+	/**
+	 * method that is overloading the method above that in that this one
+	 * allows an explicit request of a name, name type (eg, scientific, common)
+	 * and level in the heirarchy (eg., genus, species) 
+	 * method to query the plant taxonomy database using as input a 
+	 * taxon name.  The structure of the vector that is returned is meant
+	 * to parallel the structure of the 'taxa.dtd'
+	 *
+	 * @param taxonName -- the 
+	 * @param taxonNameType -- the type of taxon name input by the client, may
+	 * include: scientificName, commonName, symbolCode (the usda code)
+	 * @param taxonLevel -- the level in the heirarchy (eg, species, genus)
+	 * @param party -- the name of the party
+	 * @param targetDate -- the targetDate which is to be between the start and the 
+	 * stop date (for example if the date 01-JAN-1997 is enterered then the plants 
+	 * associated with that time interval will be queried 
+	 * 
+	 * @see xmlWriter.writePlantTaxonSummary -- the xml writer used to write the 
+	 * contents of the Vector returned by this method
+	 * 
+ 	 */
+		public Vector getPlantTaxonSummary(String taxonName, String taxonNameType,
+		String taxonLevel, String party, String targetDate)
+		{
+			Vector returnVector = new Vector();
+			try 
+			{
+				// CONNECTION STUFF
+				Connection conn = this.getConnection();
+				Statement query = conn.createStatement();
+				ResultSet results = null;
+				
+				// MAKE SURE THE INPUT CRITERIA ARE OK
+				if (party == null || party.length() == 0 || party.trim().equals("null"))
+				{
+					party = "%";
+				}
+				if (targetDate == null || targetDate.length() <= 4 )
+				{
+					targetDate = "now()";
+				}
+				
+				
+				//create and issue the query --
+				StringBuffer sqlBuf = new StringBuffer();
+
+				sqlBuf.append("SELECT plantname_id, plantconcept_id, plantName, ");
+				sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
+				sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
+				sqlBuf.append(" startDate, stopDate, plantNameAlias, plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName  ");
+				sqlBuf.append(" from VEG_TAXA_SUMMARY where upper(plantName) like '"+taxonName.toUpperCase()+"'");
+				
+				// ADD THE PARTY ELEMENT
+				sqlBuf.append(" and upper(PLANTUSAGEPARTYORGNAME) like '%"+party.toUpperCase()+"%' ");
+				// ADD THE DATE RESTRICTION
+				sqlBuf.append(" and STARTDATE <= '"+targetDate+"' and STOPDATE >= '"+targetDate+"'  ");
+				// ADD THE PLANTLEVEL 
+				sqlBuf.append(" and upper(PLANTLEVEL) like  '"+taxonLevel.toUpperCase()+"'");
+				// ADD THE NAME TYPE
+				sqlBuf.append(" and ( CLASSSYSTEM like '"+taxonNameType+"' ");
+				sqlBuf.append(" or  upper(CLASSSYSTEM) like '"+taxonNameType.toUpperCase()+"' ");
+				sqlBuf.append(")");
+
+				System.out.println("TaxonomyQueryStore > query: " + sqlBuf.toString() );	
+				results = query.executeQuery( sqlBuf.toString() );
+			
+				//retrieve the results
+				while (results.next()) 
+				{
+					int plantNameId = results.getInt(1);
+					int plantConceptId = results.getInt(2);
+					String plantName = results.getString(3);
+					plantName = this.removeSensitiveChars(plantName);
+					String plantDescription = results.getString(4);
+					plantDescription = this.removeSensitiveChars(plantDescription);
+					String status = results.getString(5);
+					String classSystem = results.getString(6);
+					String plantLevel = results.getString(7);
+					String parentName = results.getString(8);
+					parentName = this.removeSensitiveChars(parentName);
+					String acceptedSynonym = results.getString(9);
+					acceptedSynonym = this.removeSensitiveChars(acceptedSynonym);
+					String startDate = results.getString(10);
+					String stopDate = results.getString(11);
+					String plantNameAlias = results.getString(12);
+					plantNameAlias = this.removeSensitiveChars(plantNameAlias);
+					String plantConceptRefAuthor = results.getString(13);
+					plantConceptRefAuthor = this.removeSensitiveChars(plantConceptRefAuthor);
+					String plantConceptRefDate = results.getString(14);
+					String plantUsagePartyOrgName = results.getString(15);
+					
+					//little trick to keep from breaking the code
+					String commonName = plantName;
+					String concatenatedName = plantName;
+					
+					// GET THE OTHER ATTRIBUTES 
+					String code = this.getTaxonCode(plantConceptId);
+					code = this.removeSensitiveChars(code);
+					String comName = this.getCommonName(plantConceptId);
+					comName = this.removeSensitiveChars(comName);
+					String scientificName = this.getScientificName(plantConceptId);
+					scientificName = this.removeSensitiveChars(scientificName);
+					
+					Hashtable h = consolidateTaxaSummaryInstance( 
+						plantNameId,
+						plantConceptId,
+						plantName,
+						plantDescription,
+						status,
+						classSystem,
+						plantLevel,
+						parentName,
+						acceptedSynonym,
+						startDate,
+						stopDate,
+						plantNameAlias,
+						code,
+						comName, 
+						plantConceptRefAuthor, plantConceptRefDate, plantUsagePartyOrgName, 
+						scientificName);	
+					returnVector.addElement(h);
+				}
+				//remember to close the connections etc..
+				results.close();
+				query.close();
+				conn.close();
+			}
+			catch (Exception e) 
+			{
+				System.out.println("Exception " + e.getMessage());
+				e.printStackTrace();
+			}
+			System.out.println("TaxonomyQueryStore > returning results: " + returnVector.size()  );
+			return( returnVector );
+		}
+		
+		
+		
+		/**
+		 * this is a utility method that is used to remove or replace sensitive 
+		 * charaters which cause the xml parser to fail
+		 * @param inString -- the original input string containing, possibly, sensitive 
+		 * characters
+		 * @param outString -- the reformated outString
+		 */
+		 private String removeSensitiveChars(String inString)
+		 {
+			 String outString = "";
+			 try 
+			 {
+				 if ( inString != null && inString.length() > 1 )
+				 {
+					 outString = inString.replace('&', '_');
+				 }
+			 }
+			 catch (Exception e) 
+			 {
+				 System.out.println("Exception " + e.getMessage());
+				 e.printStackTrace();
+			 }
+			 return(outString);
+		 }
+		 
 		/**
 		 * method to lookup a commonname based on a concept id.
 		 * The concept for a given plant offen correponds to multiple 
@@ -351,7 +527,7 @@ import databaseAccess.*;
 				 Statement query = conn.createStatement();
 				 ResultSet results = null;
 				 sb.append("select plantname from plantusage where plantconcept_id = "+conceptId+" and ");
-				 sb.append(" ( upper(classsystem) like 'COMMONNAME' or upper(classsystem) like 'SHORTNAME' ) ");
+				 sb.append(" ( upper(classsystem) like 'COMMON NAME' or upper(classsystem) like 'SHORTNAME' ) ");
 				 results = query.executeQuery( sb.toString() );
 				 while (results.next()) 
 				 {
