@@ -1,8 +1,16 @@
 #!/bin/sh  
 
-export INFILE=../testdata/nativeDataSource.xml
-export PLOT=Fern-1
-OUTFILE=out.xml
+INFILE=$1
+PLOT=$2
+OUTFILE=$3
+PLUGIN=$4
+TESTNAME=$5
+RMISERVER=$6
+EXPECTEDFILE=$7
+
+#export INFILE=../testdata/nativeDataSource.xml
+#export PLOT=Fern-1
+#OUTFILE=out.xml
 
 cd @build.test.integration.dir@ 
 
@@ -13,7 +21,13 @@ cd @build.test.integration.dir@
 # copy the infile to the target file
 cp $INFILE ./input.xml
  
-java databaseAccess.DBinsertPlotSource NativeXmlPlugin $PLOT
+case $PLUGIN in
+  NativeXmlPlugin)
+    java databaseAccess.DBinsertPlotSource $PLUGIN $PLOT
+    ;;
+  *)
+    java DataSourceClient $RMISERVER $INFILE $PLUGIN $PLOT
+esac    
 
 # remove the plot cache
 rm -rf plot_cache
@@ -22,7 +36,7 @@ rm -rf plot_cache
 # Get the plotId 
 ###############################
 PLOTID=`psql plots_dev < getLastPlotId.sql | sed '3!d'`
-echo $PLOTID
+echo PLOTID is $PLOTID
 
 
 ###############################
@@ -37,7 +51,8 @@ echo $PLOTID
 # Need to compare both -- java 1.3.1 fails to complete this transformation due 
 # stack overflow errors => use java 1.4.1
 @java1.4.home.dir@/bin/java org.apache.xalan.xslt.Process   -XSL compareXML.xsl \
--IN $INFILE -OUT  @reports.test.dir@/TEST-PlotInsertion.tmp -PARAM output $OUTFILE  #@outputXML@
+-IN $EXPECTEDFILE -OUT  @reports.test.dir@/TEST-$TESTNAME.tmp \
+-PARAM output $OUTFILE -PARAM testName $TESTNAME
 
 
 ###############################
@@ -47,10 +62,10 @@ echo $PLOTID
 # Process the output xml so it follows the junit standard
 #@java1.4.home.dir@/bin/java  -classpath @cpath@:../../lib/xalan_1_2_2.jar:\
 #../../lib/xerces_1_3_1.jar org.apache.xalan.xslt.Process   -XSL generateJunitXML.xsl \
-#-IN @reports.test.dir@/TEST-PlotInsertion.tmp -OUT  @reports.test.dir@/TEST-PlotInsertion.xml
+#-IN @reports.test.dir@/TEST-$TESTNAME.tmp -OUT  @reports.test.dir@/TEST-$TESTNAME.xml
 
 @java1.4.home.dir@/bin/java  org.apache.xalan.xslt.Process -XSL generateJunitXML.xsl \
--IN @reports.test.dir@/TEST-PlotInsertion.tmp \
--OUT  @reports.test.dir@/TEST-PlotInsertion.xml
+-IN @reports.test.dir@/TEST-$TESTNAME.tmp \
+-OUT  @reports.test.dir@/TEST-$TESTNAME.xml
 
-rm @reports.test.dir@/TEST-PlotInsertion.tmp 
+rm @reports.test.dir@/TEST-$TESTNAME.tmp 

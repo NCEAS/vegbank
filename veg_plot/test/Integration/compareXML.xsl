@@ -8,8 +8,8 @@
  Release: @release@
 
    '$Author: farrell $'
-   '$Date: 2003-01-08 02:02:53 $'
-   '$Revision: 1.2 $'
+   '$Date: 2003-01-16 00:14:49 $'
+   '$Revision: 1.3 $'
 
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -49,11 +49,12 @@
     encoding="ISO-8859-1"/>
 
   <xsl:param name="output"/>
+  <xsl:param name="testName"/>
   <xsl:variable name="doc2node" select="document($output)" />
   <xsl:variable name="in" select="$output" />
 
   <xsl:template match="/">
-    <testsuite errors="0" failures="0" name="INTEGATION.InsertPlot" tests="1" time="">
+    <testsuite errors="0" failures="0" name="INTEGATION.{$testName}" tests="1" time="">
       <xsl:for-each select="*">
         <xsl:variable name="elementName" select="name()"/>
         <xsl:apply-templates select=".">
