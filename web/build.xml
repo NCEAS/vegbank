@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-02-06 03:16:10 $'
-* '$Revision: 1.86 $'
+* '$Date: 2004-02-07 02:27:07 $'
+* '$Revision: 1.87 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -63,7 +63,8 @@
     <property name="sharedhtml_src" value="./sharedhtml"/>
     <property name="workshop_src" value="./workshop"/>
     <property name="apache.document.root" value="/usr/www/${webapp}/htdocs"/>
-    <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
+    <property name="vegdocs.dir" value="/vegdocs"/>
+    <property name="vegdocs_server" value="${apache.document.root}${vegdocs.dir}"/>
     <!-- large binary files location:   targets that read from large binaries separate -->
     <property name="lrg_binary_src" value="/home/lee/VegBranchReleases"/>
     <filter token="dist" value="dist"/>
@@ -113,12 +114,12 @@
     <filter token="design_link" value="/${web.context_uri}/design/"/>
     <filter token="panel_link" value="/${web.context_uri}/panel/"/>
     <filter token="workshop_link" value="/${web.context_uri}/workshop/"/>
-    <filter token="vegbranch_link" value="${vegdocs_server}/vegbranch/"/>
-    <filter token="xml_link" value="${vegdocs_server}/xml/"/>
-    <filter token="NativeXMLIndexPage" value="${vegdocs_server}/xml/vegbank-xml-index.html"/>
-    <filter token="help_link" value="${vegdocs_server}/help/"/>
-    <filter token="help" value="${vegdocs_server}/help/"/>
-    <filter token="manual_link" value="${vegdocs_server}/help/manual/"/>
+    <filter token="vegbranch_link" value="${vegdocs.dir}/vegbranch/"/>
+    <filter token="xml_link" value="${vegdocs.dir}/xml/"/>
+    <filter token="NativeXMLIndexPage" value="${vegdocs.dir}/xml/vegbank-xml-index.html"/>
+    <filter token="help_link" value="${vegdocs.dir}/help/"/>
+    <filter token="help" value="${vegdocs.dir}/help/"/>
+    <filter token="manual_link" value="${vegdocs.dir}/help/manual/"/>
     <!-- SERVLETS -->
     <filter token="framework_servlet" value="/${web.context_uri}/servlet/framework"/>
     <filter token="usermanagement_servlet" value="/${web.context_uri}/servlet/usermanagement"/>
@@ -388,13 +389,13 @@
     <!-- docs files: -->
     <property name="vegbr_docs_include" value=" **/*.html "/>
     <!-- images files: -->
-    <property name="vegbr_img_include" value="confirmation-dialog.jpg connect-dialog.jpg rtarrow.gif "/>
+    <property name="vegbr_img_include" value="*.jpg *.gif "/>
     <property name="vegbr_examples_include" value=" vegbranch-samplecsv1-b.4.0.zip  vegbranch-samplecsv2-b.4.0.zip normalizer_examples.zip"/>
     <property name="vegbr_htmlfile" value="vegbranch.html"/>
     <!--tokens particular to vegbranch html files.-->
-    <filter token="vbr_imageserver" value="/vegbranch/images/"/>
-    <filter token="vbr_examplesserver" value="/vegbranch/examples/"/>
-    <filter token="vbr_clientserver" value="/vegbranch/client/"/>
+    <filter token="vbr_imageserver" value="${vegdocs.dir}/vegbranch/images/"/>
+    <filter token="vbr_examplesserver" value="${vegdocs.dir}/vegbranch/examples/"/>
+    <filter token="vbr_clientserver" value="${vegdocs.dir}/vegbranch/client/"/>
     <!-- make certain that dir structure is there -->
     <mkdir dir="${vegbranch_server}"/>
     <mkdir dir="${vegbranch_server}/images"/>
