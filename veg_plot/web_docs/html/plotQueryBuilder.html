@@ -65,6 +65,8 @@ src="@image-path@/owlogoBev.jpg" alt = "Vegetation plots logo">
 <!--variables that are used by the servlet to figure out which query(s) to issue -->
 <input type="hidden" name="requestDataType" value="vegPlot">
 <input type="hidden" name="resultType" value="summary">
+<input type="hidden" name="requestDataFormatType" value="html">
+<input type="hidden" name="clientType" value="browser">
 <tr valign=top>
 <td  align=left valign=middle colspan=2>
 <p>
@@ -109,13 +111,12 @@ src="@image-path@/owlogoBev.jpg" alt = "Vegetation plots logo">
 <!--
 <option selected>"*"
 -->
-	<option value="%">any</option>
 	<option value="eq">is equal to</option>
-	<option value="beginsWith">begins with</option>
-	<option value="endsWith">ends with</option>
 	<option value="contains">contains</option>
 	<option value="gt">is greater than</option>
 	<option value="lt">is less than</option>
+	<option value="beginsWith">begins with</option>
+	<option value="endsWith">ends with</option>
 </select><br clear=left>
 </td>
 <!-- Value -->
@@ -193,7 +194,7 @@ src="@image-path@/owlogoBev.jpg" alt = "Vegetation plots logo">
 		<!--
 		function WinOpen() 
 		{
-			open("/harris/html/query_tips.html","Window1","width=400,height=600");
+			open("/harris/html/query_tips.html","Window1","width=400,height=600,scrollbars=yes");
 		}
 		//-->
 
