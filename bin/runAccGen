@@ -1,2 +1,3 @@
 #!/bin/sh
-java -cp ../lib/jdbc7.0-1.2.jar:../lib/vegclass_common.jar:../lib/commons-codec-1.1.1-dev.jar org.vegbank.common.utility.AccessionGen $1 $2 $3 $4
+source @vegbank.home.dir@bin/includes/setupCLASSPATH
+java -cp $CLASSPATH org.vegbank.common.utility.AccessionGen $1 $2 $3 $4
