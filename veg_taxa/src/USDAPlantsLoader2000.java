@@ -39,10 +39,13 @@ public class USDAPlantsLoader2000
 	private Vector statusTableValues = new Vector();
 	private Vector usageTableValues = new Vector();
 	private String organization = "USDA-NRCS-PLANTS-2002";
-	private  int partyId = 0;
+	private  int partyId = 1;
 	private String email = "plants@plants.usda.gov";
 	private String contactInstructions = "http://plants.usda.gov";
 	private String year = "2002"; // this is the year that the list was from
+	private static final String connectionString = "jdbc:postgresql://127.0.0.1/plants_dev";
+	private static final String databaseUser = "datauser";
+	private static final String jdbcDriver = "org.postgresql.Driver";
 	/**
 	 * This is where it happens -- the data are loaded from this 
 	 * method
@@ -51,16 +54,16 @@ public class USDAPlantsLoader2000
 	{
 		try 
  		{
-			System.out.println("USDAPlantsLoader > infile: " + inputXml);
-			System.out.println("USDAPlantsLoader > reading input xml  file ");
+			System.out.println("USDAPlantsLoader2000 > infile: " + inputXml);
+			System.out.println("USDAPlantsLoader2000 > reading input xml  file ");
 			this.transformToFile(inputXml);
-			System.out.println("USDAPlantsLoader > reading attribute file ");
+			System.out.println("USDAPlantsLoader2000 > reading attribute file ");
 			Vector v = this.getAttributeFile();
 			
-			System.out.println("USDAPlantsLoader > parsing input file contents ");
+			System.out.println("USDAPlantsLoader2000 > parsing input file contents ");
 			Hashtable plantsHash = this.elementParser(v);
 			
-			System.out.println("USDAPlantsLoader > loading data to db ");
+			System.out.println("USDAPlantsLoader2000 > loading data to db ");
 			////load new plant instances -- EXCLUDING THOSE WITH SYNONOMYS
 			loadPlantInstances(plantsHash);
 		}
@@ -81,7 +84,7 @@ public class USDAPlantsLoader2000
 		try
 		{
 			int plantNumber = plantsData.size();
-			System.out.println("USDAPlantsLoader > number plant instances: " + plantNumber );
+			System.out.println("USDAPlantsLoader2000 > number plant instances: " + plantNumber );
 			Connection conn = this.getConnection();
 			
 			//remove any known temporary database objects 
@@ -115,7 +118,7 @@ public class USDAPlantsLoader2000
 				// if the plant is missing then add it to the list of missing names
 				if ( rs.first()  == false )
 				{
-					System.out.println("USDAPlantsLoader >>> not found: " + concatenatedName);
+					System.out.println("USDAPlantsLoader2000 >>> not found: " + concatenatedName);
 					// add the names to those that are missing
 					if ( missingNamesCache.containsKey(concatenatedName) == false )
 					{
@@ -133,7 +136,7 @@ public class USDAPlantsLoader2000
 				// if the plant is missing then add it to the list of missing names
 				if ( rs.first()  == false )
 				{
-					System.out.println("USDAPlantsLoader >>> not found: " + plantCode);
+					System.out.println("USDAPlantsLoader2000 >>> not found: " + plantCode);
 					// add the names to those that are missing
 					if ( missingNamesCache.containsKey(plantCode) == false )
 					{
@@ -143,7 +146,7 @@ public class USDAPlantsLoader2000
 				}
 				
 				//do the same for the commonname -- but only if there is one
-				if (commonName.length() > 1 )
+				if (commonName.length() > 0 )
 				{
 					s = "select PLANTNAME_ID from PLANTNAME where PLANTNAME = '"+commonName+ "' ";
 					pstmt = conn.prepareStatement(s);
@@ -151,7 +154,7 @@ public class USDAPlantsLoader2000
 					// if the plant is missing then add it to the list of missing names
 					if ( rs.first()  == false )
 					{
-						System.out.println("USDAPlantsLoader >>> not found: " + commonName);
+						System.out.println("USDAPlantsLoader2000 >>> not found: " + commonName);
 						// add the names to those that are missing
 						if ( missingNamesCache.containsKey(commonName) == false )
 					{
@@ -164,7 +167,7 @@ public class USDAPlantsLoader2000
 			}
 			
 			// now insert the missing plant names 
-			System.out.println("USDAPlantsLoader > inserting missing plant names : " + this.missingPlantNames.size()  );
+			System.out.println("USDAPlantsLoader2000 > inserting missing plant names : " + this.missingPlantNames.size()  );
 			for (int i=0; i<missingPlantNames.size(); i++) 
 			{
 				StringTokenizer st = new StringTokenizer((String)missingPlantNames.elementAt(i), "|");
@@ -208,7 +211,7 @@ public class USDAPlantsLoader2000
 				// if the plant is missing then add it to the list of missing names
 				if ( rs.first()  == false )
 				{
-					System.out.println("USDAPlantsLoader >>> not found should not happen ever : " + concatenatedName);
+					System.out.println("USDAPlantsLoader2000 >>> not found should not happen ever : " + concatenatedName);
 					// add the names to those that are missing
 					//this.missingPlantNames.add(concatenatedName+"|"+concatenatedLongName+"|scientific");
 				}
@@ -224,27 +227,25 @@ public class USDAPlantsLoader2000
 			
 			
 			// now insert the concept information
-			System.out.println("USDAPlantsLoader > inserting new concepts : " + this.conceptTableValues.size()  );
+			System.out.println("USDAPlantsLoader2000 > inserting new concepts : " + this.conceptTableValues.size()  );
 			for (int i=0; i<this.conceptTableValues.size(); i++) 
 			{
 				StringTokenizer st = new StringTokenizer((String)conceptTableValues.elementAt(i), "|");
 				String plantId = st.nextToken();
 				String concatName = st.nextToken();
 				String code = st.nextToken();
-				String level = st.nextToken();
-				String parent = st.nextToken();
+
 				
 				StringBuffer sb = new StringBuffer();
 				sb.append(" insert into PLANTCONCEPT (PLANTNAME_ID, PLANTREFERENCE_ID, PLANTNAME, ");
-				sb.append(" PLANTDESCRIPTION, PLANTLEVEL, PLANTCODE) ");
-				sb.append(" values (?,?,?,?,?,?)");
+				sb.append(" PLANTDESCRIPTION,  PLANTCODE) ");
+				sb.append(" values (?,?,?,?,?)");
 				PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
 				pstmt.setString(1, plantId);
 				pstmt.setInt(2, this.refId);
 				pstmt.setString(3, concatName);
 				pstmt.setString(4, concatName);
-				pstmt.setString(5, level);
-				pstmt.setString(6, code);
+				pstmt.setString(5, code);
 				
 				pstmt.execute();
 				pstmt.close();	
@@ -254,7 +255,7 @@ public class USDAPlantsLoader2000
 			this.createPlantConceptIndex();
 			
 			//create the vector with the status values 
-			System.out.println("USDAPlantsLoader > creating status load values: " + this.conceptTableValues.size()  );
+			System.out.println("USDAPlantsLoader2000 > creating status load values: " + this.conceptTableValues.size()  );
 			for (int i=0; i<this.conceptTableValues.size(); i++) 
 			{
 				StringTokenizer st = new StringTokenizer((String)conceptTableValues.elementAt(i), "|");
@@ -274,24 +275,25 @@ public class USDAPlantsLoader2000
 				ResultSet rs = pstmt.executeQuery();
 				rs.first();
 				int conceptId = rs.getInt(1);
-				this.statusTableValues.add( conceptId+"|"+status+"|"+parent);
+				this.statusTableValues.add( conceptId+"|"+status+"|"+parent+"|"+level);
 				pstmt.close();	
 			}
 			
 			
 			//insert the status data
-			System.out.println("USDAPlantsLoader > inserting status values: " + this.statusTableValues.size()  );
+			System.out.println("USDAPlantsLoader2000 > inserting status values: " + this.statusTableValues.size()  );
 			for (int i=0; i<this.conceptTableValues.size(); i++)
 			{
 				StringTokenizer st = new StringTokenizer((String)statusTableValues.elementAt(i), "|");
 				String conceptId = st.nextToken();
 				String status = st.nextToken();
 				String parentname = st.nextToken();
+				String level = st.nextToken();
 				
 				StringBuffer sb = new StringBuffer();
 				sb.append(" insert into PLANTSTATUS (PLANTCONCEPT_ID, PLANTREFERENCE_ID, PLANTPARTY_ID, ");
-				sb.append(" PLANTCONCEPTSTATUS, PLANTPARENTNAME, startdate) ");
-				sb.append(" values (?,?,?,?,?,?)");
+				sb.append(" PLANTCONCEPTSTATUS, PLANTPARENTNAME, startdate, PLANTLEVEL) ");
+				sb.append(" values (?,?,?,?,?,?,?)");
 				PreparedStatement pstmt = conn.prepareStatement(sb.toString() );
 				pstmt.setString(1, conceptId);
 				pstmt.setInt(2, this.refId);
@@ -299,12 +301,13 @@ public class USDAPlantsLoader2000
 				pstmt.setString(4, status);
 				pstmt.setString(5, parentname);
 				pstmt.setString(6, this.dateEntered);
+				pstmt.setString(7, level);
 				pstmt.execute();
 				pstmt.close();	
 			}
 
 			//generate the usage vector 
-			System.out.println("USDAPlantsLoader > creating usage values: " + this.conceptTableValues.size()  );
+			System.out.println("USDAPlantsLoader2000 > creating usage values: " + this.conceptTableValues.size()  );
 			for (int i=0; i<plantNumber; i++) 
 			{
 				Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
@@ -323,7 +326,7 @@ public class USDAPlantsLoader2000
 				PreparedStatement pstmt = conn.prepareStatement(s);
 				ResultSet rs = pstmt.executeQuery();
 				rs.first();
-				int plantNameId = rs.getInt(1);
+				int plantNameId = rs.getInt(1); 
 				pstmt.close();
 				rs.close();
 				
@@ -372,12 +375,12 @@ public class USDAPlantsLoader2000
 			}
 			
 			// insert the data to the usage table
-			System.out.println("USDAPlantsLoader > inserting usage values: " + this.usageTableValues.size()  );
+			System.out.println("USDAPlantsLoader2000 > inserting usage values: " + this.usageTableValues.size()  );
 			for (int i=0; i<this.usageTableValues.size(); i++)
 			{
 				String line = (String)usageTableValues.elementAt(i);
 				StringTokenizer st = new StringTokenizer(line, "|");
-				//System.out.println("USDAPlantsLoader > line: " + line); 
+				//System.out.println("USDAPlantsLoader2000 > line: " + line); 
 				
 				String nameId = st.nextToken();
 				String name = st.nextToken();
@@ -410,8 +413,8 @@ public class USDAPlantsLoader2000
 			this.createCorrelationPerfIndicies();
 			
 			// insert into the temp the correlation table
-			System.out.println("USDAPlantsLoader > inserting correlations: "  );
-			System.out.println("USDAPlantsLoader > inserting to temp-correlation table " );
+			System.out.println("USDAPlantsLoader2000 > inserting correlations: "  );
+			System.out.println("USDAPlantsLoader2000 > inserting to temp-correlation table " );
 			for (int i=0; i<this.usageTableValues.size(); i++)
 			{
 				String line = (String)usageTableValues.elementAt(i);
@@ -474,7 +477,7 @@ public class USDAPlantsLoader2000
 		}
 		catch (Exception e)
 	  {
-		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+		 System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 		 e.printStackTrace();
 		// System.exit(0);
 	  }
@@ -487,36 +490,45 @@ public class USDAPlantsLoader2000
 	 {
 		 try
 		 {
-			 System.out.println("USDAPlantsLoader > removing any known db temporary objects ");
-			 Connection conn = this.getConnection();
-			 StringBuffer sb = new StringBuffer();
+			 	System.out.println("USDAPlantsLoader2000 > removing any known db temporary objects ");
+			 	Connection conn = this.getConnection();
+			 	StringBuffer sb = new StringBuffer();
+				PreparedStatement pstmt = null;
 			 
-			 System.out.println(" dropping the temp_correlation table ");
-			 sb.append("drop table temp_correlation");
-			 PreparedStatement pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
+			 	System.out.println(" USDAPlantsLoader2000 > dropping the temp_correlation table ");
+			 	if ( ! this.databaseEntityExists("temp_correlation", "table"))
+			 	{
+			 		sb.append("drop table temp_correlation");
+			 		pstmt = conn.prepareStatement(sb.toString());
+			 		pstmt.execute();
+			 		pstmt.close();
+			 	}
 			 
-			 System.out.println(" dropping the temp_parentconcepts table ");
-			 sb = new StringBuffer();
-			 sb.append("drop table temp_parentconcepts");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
-			 
-			 System.out.println(" dropping some indicies tmp_concept_dual ");
-			 sb = new StringBuffer();
-			 sb.append("drop index tmp_concept_dual ");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
-			 conn.close();
-			 
+			 	System.out.println("USDAPlantsLoader2000 > dropping the temp_parentconcepts table ");
+			 	sb = new StringBuffer();
+				if ( ! this.databaseEntityExists("temp_parentconcepts", "table"))
+				{
+			 		sb.append("drop table temp_parentconcepts");
+			 		pstmt = conn.prepareStatement(sb.toString());
+			 		pstmt.execute();
+			 		pstmt.close();
+				}
+				
+			 	System.out.println("USDAPlantsLoader2000 > dropping some indicies tmp_concept_dual ");
+			 	sb = new StringBuffer();
+			 	if ( ! this.databaseEntityExists("tmp_concept_dual", "index"))
+			 	{
+			 		sb.append("drop index tmp_concept_dual ");
+			 		pstmt = conn.prepareStatement(sb.toString());
+			 		pstmt.execute();
+			 		pstmt.close();
+			 		conn.close();
+			 	}
 		 
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
 	 }
@@ -530,8 +542,8 @@ public class USDAPlantsLoader2000
 	 {
 		 try
 		 {
-			 System.out.println("USDAPlantsLoader > updating the 1996 data");
-			 
+			 System.out.println("USDAPlantsLoader2000 > updating the 1996 data");
+	 
 			 System.out.println("updating the correlations ");
 			 Connection conn = this.getConnection();
 			 StringBuffer sb = new StringBuffer();
@@ -541,105 +553,123 @@ public class USDAPlantsLoader2000
 			 pstmt.execute();
 			 pstmt.close();
 			 
-///			 System.out.println("dropping a temp table ");
-			 // drop the table if it exists
-///			 sb = new StringBuffer();
-///			 sb.append("drop table cross_year_correlations");
-///			 pstmt = conn.prepareStatement(sb.toString());
-///			 pstmt.execute();
-///			 pstmt.close();
+			 String tableName = "cross_year_correlations";
+				if ( this.tableExists(tableName) )
+				{
+					System.out.println("USDAPlantsLoader2000 > Table "+tableName+" already exists");					
+				}
+				else
+				{
+					System.out.println("creating a table ");					
+					//create the table
+					sb = new StringBuffer();
+					sb.append("create table cross_year_correlations");
+					sb.append("(");
+					sb.append("PLANTSTATUS_ID integer,");
+					sb.append("PAST_PLANTCONCEPT_ID integer,");
+					sb.append("PLANTCONCEPT_ID integer,");
+					sb.append("plantCode varchar (20) ");
+					sb.append(")");
+					pstmt = conn.prepareStatement(sb.toString());
+					pstmt.execute();
+					pstmt.close();
+				}
 			 
-			 System.out.println("createing a table ");
-			 //create the table
-			 sb = new StringBuffer();
-			 sb.append("create table cross_year_correlations");
-			 sb.append("(");
-			 sb.append("PLANTSTATUS_ID integer,");
-			 sb.append("PAST_PLANTCONCEPT_ID integer,");
-			 sb.append("PLANTCONCEPT_ID integer,");
-			 sb.append("plantCode varchar (20) ");
-			 sb.append(")");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
+			 	System.out.println("inserting the base 1996 - 2002 correlation data ");
+			 	//insert the base data 
+			 	sb = new StringBuffer();
+			 	sb.append("insert into cross_year_correlations ( PLANTSTATUS_ID,     PAST_PLANTCONCEPT_ID) "); 
+			 	sb.append("select  PLANTSTATUS_ID, PLANTCONCEPT_ID from plantstatus where plantreference_id = 1");
+			 	pstmt = conn.prepareStatement(sb.toString());
+			 	pstmt.execute();
+			 	pstmt.close();
 			 
-			 System.out.println("inserting the base 1996 - 2002 correlation data ");
-			 //insert the base data 
-			 sb = new StringBuffer();
-			 sb.append("insert into cross_year_correlations ( PLANTSTATUS_ID,     PAST_PLANTCONCEPT_ID) "); 
-			 sb.append("select  PLANTSTATUS_ID, PLANTCONCEPT_ID from plantstatus where plantreference_id = 1");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
+			 	System.out.println("updating the correlation data ");
+			 	//update the plantcodes
+			 	sb = new StringBuffer();
+			 	sb.append("update  cross_year_correlations set plantCode = ");
+			 	sb.append("(select plantcode from plantconcept where plantconcept.plantconcept_id = cross_year_correlations.PAST_PLANTCONCEPT_ID)");
+			 	pstmt = conn.prepareStatement(sb.toString());
+			 	pstmt.execute();
+			 	pstmt.close();
 			 
-			 System.out.println("updating the correlation data ");
-			 //update the plantcodes
-			 sb = new StringBuffer();
-			 sb.append("update  cross_year_correlations set plantCode = ");
-			 sb.append("(select plantcode from plantconcept where plantconcept.plantconcept_id = cross_year_correlations.PAST_PLANTCONCEPT_ID)");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
-			 
-			 System.out.println("making some performance indexes");
-			 //create the indicies
-			 sb = new StringBuffer();
-			 sb.append("create index tmp_code_concept on plantconcept (plantCode);");
-			 sb.append("create index tmp_ref_concept on plantconcept(plantreference_id);");
-			 sb.append("create index tmp_dual_concept on  plantconcept(plantCode,plantreference_id );");
-			 sb.append("create index tmp_code_crsscorre on cross_year_correlations (plantCode);");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
-			 
-			 System.out.println("updating the concept id's for the new correlations ");
-			 //update the plantconcept
-			 sb = new StringBuffer();
-			 sb.append("update cross_year_correlations set PLANTCONCEPT_ID = ");
-			 sb.append("(select max(plantconcept_id) from plantconcept where plantconcept.plantcode = cross_year_correlations.plantCode and plantconcept.plantreference_id = 2)");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
-			 
-			 System.out.println("deleting any nulls ");
-			 //delete any nulls
-			 sb = new StringBuffer();
-			 sb.append("delete from cross_year_correlations where plantconcept_id = null");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
-			 
-			 System.out.println("migrating the data ");
-			 //migrate the correlation data 
-			 sb = new StringBuffer();
-			 sb.append("insert into PLANTCORRELATION (PLANTSTATUS_ID, PLANTCONCEPT_ID, PLANTCONVERGENCE, CORRELATIONSTART)");
-			 sb.append("select PLANTSTATUS_ID, PLANTCONCEPT_ID, 'UNKNOWN', '10-JUN-2002'");
-			 sb.append("from cross_year_correlations where plantstatus_id > 0 and plantconcept_id > 0");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
-			 
-			 System.out.println("setting the plantstatus index on the reference ");
-			 sb = new StringBuffer();
-			 sb.append(" create index tmp_status_dualb on plantstatus (  plantreference_id, plantstatus_id ); ");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
-			 
-			 System.out.println("setting the plantstatus stop date to 2002 ");
-			 sb = new StringBuffer();
-			 sb.append(" update plantstatus set stopdate = '20-JUN-2002' where plantreference_id = 1 and plantstatus_id > 0 ; ");
-			 //sb.append("update plantstatus set plantpartycomments  = 'supperceeded by 2002 data' where plantreference_id != "+this.refId+";");
-			 pstmt = conn.prepareStatement(sb.toString());
-			 pstmt.execute();
-			 pstmt.close();
-			 
-			 conn.close();
+			 	/////////////////////////
+			 	System.out.println("making some performance indexes");
+			 	//create the indicies
+			 	sb = new StringBuffer();
+			 	String entityType = "index";
+			 	
+				String indexName = "tmp_code_concept";			
+				if ( !databaseEntityExists(indexName, entityType ) )
+					sb.append("create index " + indexName + " on plantconcept (plantCode);");
+
+				indexName = "tmp_ref_concept";			
+				if ( !databaseEntityExists(indexName, entityType ) )
+					sb.append("create index " + indexName + " on plantconcept(plantreference_id);");
+				
+				indexName = "tmp_dual_concept";			
+				if ( !databaseEntityExists(indexName, entityType ) )
+					sb.append("create index " + indexName + " on plantconcept(plantCode,plantreference_id );");
+
+				indexName = "tmp_code_crsscorre";			
+				if ( !databaseEntityExists(indexName, entityType ) )
+					sb.append("create index " + indexName + " on cross_year_correlations (plantCode);");
+
+				pstmt = conn.prepareStatement(sb.toString());
+				pstmt.execute();
+				pstmt.close();
+				//////////////////////////////
+				 
+				 System.out.println("updating the concept id's for the new correlations ");
+				 //update the plantconcept
+				 sb = new StringBuffer();
+				 sb.append("update cross_year_correlations set PLANTCONCEPT_ID = ");
+				 sb.append("(select max(plantconcept_id) from plantconcept where plantconcept.plantcode = cross_year_correlations.plantCode and plantconcept.plantreference_id = 2)");
+				 pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+				 
+				 System.out.println("deleting any nulls ");
+				 //delete any nulls
+				 sb = new StringBuffer();
+				 sb.append("delete from cross_year_correlations where plantconcept_id = null");
+				 pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+				 
+				 System.out.println("migrating the data ");
+				 //migrate the correlation data 
+				 sb = new StringBuffer();
+				 sb.append("insert into PLANTCORRELATION (PLANTSTATUS_ID, PLANTCONCEPT_ID, PLANTCONVERGENCE, CORRELATIONSTART)");
+				 sb.append("select PLANTSTATUS_ID, PLANTCONCEPT_ID, 'UNKNOWN', '10-JUN-2002'");
+				 sb.append("from cross_year_correlations where plantstatus_id > 0 and plantconcept_id > 0");
+				 pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+				 
+				 System.out.println("setting the plantstatus index on the reference ");
+					if ( !databaseEntityExists("tmp_status_dualb", "index" ) )
+					{
+						String s = " create index tmp_status_dualb on plantstatus (  plantreference_id, plantstatus_id ); ";
+					 	pstmt = conn.prepareStatement(s);
+					 	pstmt.execute();
+					 	pstmt.close();
+					}
+				 
+				 System.out.println("setting the plantstatus stop date to 2002 ");
+				 sb = new StringBuffer();
+				 sb.append(" update plantstatus set stopdate = '20-JUN-2002' where plantreference_id = 1 and plantstatus_id > 0 ; ");
+				 //sb.append("update plantstatus set plantpartycomments  = 'supperceeded by 2002 data' where plantreference_id != "+this.refId+";");
+				 pstmt = conn.prepareStatement(sb.toString());
+				 pstmt.execute();
+				 pstmt.close();
+				 
+				 conn.close();
 			 
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
 	 }
@@ -698,7 +728,7 @@ public class USDAPlantsLoader2000
 				 pstmt.close();
 				 
 				 sb = new StringBuffer();
-				 sb.append(" update plantconcept set plantparent = ");
+				 sb.append(" update plantstatus set plantparent = ");
 				 sb.append(" ( select max(parent_id) from temp_parentconcepts where temp_parentconcepts.child_id = plantconcept.plantconcept_id ); ");
 				 pstmt = conn.prepareStatement(sb.toString());
 				 pstmt.execute();
@@ -706,7 +736,7 @@ public class USDAPlantsLoader2000
 			 }
 			 catch (Exception e)
 			 {
-				 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+				 System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 				 e.printStackTrace();
 				 // System.exit(0);
 			 }
@@ -752,99 +782,38 @@ public class USDAPlantsLoader2000
 	
 	private void createCorrelationPerfIndicies()
 	{
+		Connection conn = this.getConnection();
+		String entityType = "index";
+		String indexName = "";	
+		StringBuffer sb = new StringBuffer();
+		
 		try
 		{
-			Connection conn = this.getConnection();
-			String s = " create index TMP_CONCEPT_DUAL on plantconcept (PLANTNAME, PLANTREFERENCE_ID)";
-			String s1 = " create index TMP_STATUS_DUAL on plantstatus (PLANTCONCEPT_ID, PLANTCONCEPTSTATUS)";
-			String s2 = " create index TMP_CORRCON on temp_correlation (PAST_PLANTCONCEPT_ID)";
-			PreparedStatement pstmt = conn.prepareStatement(s);
-			pstmt.execute();
-			pstmt.close();
-			pstmt = conn.prepareStatement(s1);
+			indexName = "TMP_CONCEPT_DUAL";
+			if ( !databaseEntityExists(indexName, entityType) )
+				sb.append( "create index " + indexName + " on plantconcept (PLANTNAME, PLANTREFERENCE_ID);" );
+
+			indexName = "TMP_STATUS_DUAL";
+			if ( !databaseEntityExists(indexName, entityType) )			
+				sb.append( "create index " + indexName + " on plantstatus (PLANTCONCEPT_ID, PLANTCONCEPTSTATUS);" );
+
+			// This is NOT currently used
+			//indexName = "TMP_CORRCON";
+			//if ( !databaseEntityExists(indexName, entityType) )			
+			//	String s2 = " create index " + indexName = " on temp_correlation (PAST_PLANTCONCEPT_ID)";
+
+			PreparedStatement pstmt = conn.prepareStatement(sb.toString());
 			pstmt.execute();
 			pstmt.close();
 			conn.close();
 		}
 		catch (Exception e)
 	  {
-		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+		 System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 		 e.printStackTrace();
 	  }
 	}
 	
-	
-	/**
-	 * method that updates the plantparent attribute in the plant concept table
-	 * @deprecated  -- this method should never be used jhh 2002824 
-	 */
-	 private void updateParentConcept(Hashtable plantsData)
-	 {
-		 // the vector containing the data to be inserted
-		 Vector parentVector = new Vector();
-		 try
-		 {
-			 Connection conn = this.getConnection();
-			 int plantNumber = plantsData.size();
-			 // create the missing plants and the concept data vector
-			 for (int i=0; i<plantNumber; i++) 
-			 {
-					Hashtable plantInstanceHash = extractSinglePlantInstance(plantsData, i);
-					String plantCode=plantInstanceHash.get("plantCode").toString();
-					String concatenatedName= plantInstanceHash.get("concatenatedName").toString();
-					String concatenatedLongName = plantInstanceHash.get("concatenatedLongName").toString();
-					String rank= plantInstanceHash.get("rank").toString();
-					String parentName=plantInstanceHash.get("parentName").toString();
-					//System.out.println("parent " + parentName );
-					String plantConceptStatus=plantInstanceHash.get("itisUsage").toString();
-					String synonymousName=plantInstanceHash.get("synonymousName").toString();
-					String familyName=plantInstanceHash.get("familyName").toString();
-					String commonName=plantInstanceHash.get("commonName").toString();
-						
-					// now get the associated primary key value for the sciname and not 
-					// rankled the highest ( genus )
-					if ( ( parentName.length() > 2 ) &&  (! rank.toUpperCase().startsWith("GEN") ) )
-					{
-						StringBuffer sb = new StringBuffer(); 
-						sb.append("select  PLANTCONCEPT_ID from PLANTCONCEPT  where  PLANTNAME like '"+parentName+"'");
-						sb.append(" and PLANTREFERENCE_ID = "+this.refId );
-						PreparedStatement pstmt = conn.prepareStatement(sb.toString());
-						ResultSet rs = pstmt.executeQuery();
-						if ( rs.first() )
-						{
-							int parentId = rs.getInt(1);
-							parentVector.add(concatenatedName+"|"+parentId);
-							//System.out.println("parent vec "+  );
-						}
-						pstmt.close();
-					}
-				}
-				
-				for (int i=0; i<parentVector.size(); i++) 
-				{
-					String line = (String)parentVector.elementAt(i);
-					StringTokenizer st = new StringTokenizer(line, "|");
-					String childName =  st.nextToken();
-					String parentId = st.nextToken();
-					
-					
-					StringBuffer sb = new StringBuffer(); 
-					sb.append("update plantconcept set plantparent = ");
-					sb.append(parentId+"  where plantName like '"+childName+"' ");
-							
-					PreparedStatement pstmt = conn.prepareStatement(sb.toString());
-					pstmt.execute();
-					pstmt.close();
-				}
-
-		 }
-		 catch (Exception e)
-		 {
-			 	System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
-				e.printStackTrace();
-				System.exit(0);
-		 }
-	 }
 	
 	/**
 	 * method that migrates the data from the temporary table into 
@@ -876,7 +845,7 @@ public class USDAPlantsLoader2000
 		}
 		catch (Exception e)
 	  {
-		 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+		 System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 		 e.printStackTrace();
 		 System.exit(0);
 	  }
@@ -910,7 +879,7 @@ public class USDAPlantsLoader2000
 		 }
 		 catch (Exception e)
 		 {
-			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		 }
 	 }
@@ -935,7 +904,7 @@ public class USDAPlantsLoader2000
 		 }
 		 catch (Exception e)
 		 {
-			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		 }
 	 }
@@ -959,7 +928,7 @@ public class USDAPlantsLoader2000
 		 }
 		 catch (Exception e)
 		 {
-			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		 }
 	 }
@@ -982,7 +951,7 @@ public class USDAPlantsLoader2000
 		 }
 		 catch (Exception e)
 		 {
-			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		 }
 	 }
@@ -1004,7 +973,7 @@ public class USDAPlantsLoader2000
 		 }
 		 catch (Exception e)
 		 {
-			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		 }
 	 }
@@ -1028,7 +997,7 @@ public class USDAPlantsLoader2000
 		 }
 		 catch (Exception e)
 		 {
-			System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 			e.printStackTrace();
 		 }
 	 }
@@ -1053,7 +1022,7 @@ public class USDAPlantsLoader2000
 			 // check to see that we got one row at least 
 			 if ( rs.first()  == true )
 			 {
-				System.out.println("USDAPlantsLoader > reference exists ");
+				System.out.println("USDAPlantsLoader2000 > reference exists ");
 				refId = rs.getInt(1);
 			 }
 			 else
@@ -1089,7 +1058,7 @@ public class USDAPlantsLoader2000
 			 // check to see that we got one row at least 
 			 if ( rs.first()  == true )
 			 {
-				System.out.println("USDAPlantsLoader > party exists ");
+				System.out.println("USDAPlantsLoader2000 > party exists ");
 				refId = rs.getInt(1);
 			 }
 			 // else insert it and get it
@@ -1117,7 +1086,7 @@ public class USDAPlantsLoader2000
 		 }
 		 catch (Exception e)
 		 {
-			 System.out.println("USDAPlantsLoader > Exception: " + e.getMessage() );
+			 System.out.println("USDAPlantsLoader2000 > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 			 System.exit(0);
 		 }
@@ -1135,10 +1104,8 @@ public class USDAPlantsLoader2000
 		Connection c = null;
 		try 
  		{
-			Class.forName("org.postgresql.Driver");
-			//c = DriverManager.getConnection("jdbc:postgresql://vegbank/tmp2", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/plants_dev", "datauser", "");
-		
+			Class.forName(jdbcDriver);
+			c = DriverManager.getConnection(connectionString, databaseUser, "");	
 		}
 		catch ( Exception e )
 		{
@@ -1256,7 +1223,7 @@ public String pipeStringTokenizer(String pipeString, int tokenPosition)
 				{
 					//the key is a hack -- has to be a string
 					plantHash.put(""+hashKey,  plantInstance(fileVector, i)  );
-					//System.out.println("USDAPlantsLoader > trsnaleted line: "+ fileVector.elementAt(i) );
+					//System.out.println("USDAPlantsLoader2000 > trsnaleted line: "+ fileVector.elementAt(i) );
 					hashKey++;
 				}
 			}
@@ -1284,7 +1251,7 @@ public Hashtable plantInstance(Vector fileVector, int startLevel)
 		if (i==startLevel) 
 		{
 			String tsnValue = pipeStringTokenizer(fileVector.elementAt(i).toString(), 2);
-			//System.out.println("USDAPlantsLoader > tsnValue: " + tsnValue);
+			//System.out.println("USDAPlantsLoader2000 > tsnValue: " + tsnValue);
 			plantInstance.put("tsnValue", tsnValue );
 		}
 		else if ( fileVector.elementAt(i).toString().startsWith("concatenatedName") )
@@ -1445,6 +1412,104 @@ public Hashtable plantInstance(Vector fileVector, int startLevel)
 		 e.printStackTrace();
 	 }
  }
+	
+	
+	/*
+	 * Finds out if a table exits in the database ...
+	 * This method is specific to postgres because it looks into the postgres
+	 * table calles pg_tables. Similar tables exist in other databases so this
+	 * method could be grown. Ideally, I would like to see it dissappear.
+	 */
+	private boolean tableExists(String tableName)
+	{
+		boolean retVal = false;
+		Connection conn = this.getConnection();
+		String s = "select tablename from pg_tables where tablename =  '" + tableName +"'" ;
+		
+		try 
+		{
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.first() )
+			{
+				//System.out.println("---->" + rs.getString("tableName"));
+				retVal = true;
+			}
+			else 
+			{
+				//System.out.println("----> Nothing here!!!");
+				retVal = false;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+	
+	/**
+	 * Find out if an entity exists in the database ... Specific to postgres
+	 * because it looks into the postgres specific tables to check the existence
+	 * of the entity of that name. Similar tables exist in other databases so this
+	 * method could be grown. Ideally, I would like to see it dissappear.
+	 * 
+	 * @param entityName --  
+	 * @param entityType -- like indexs, tables etc.
+	 *  
+	 * */
+	private boolean databaseEntityExists(String entityName, String entityType)
+	{
+		boolean retVal = false;
+		String tableToSearch = null;
+		String fieldName = null;
+		entityName = entityName.toLowerCase();
+		
+		// Lookup fieldName and tableToSearch given an specfic entityType 
+		if ( entityType == "index")
+		{
+			tableToSearch = "pg_indexes";
+			fieldName = "indexname";
+		}
+		else if (entityType == "table") 
+		{
+			tableToSearch = "pg_tables";
+			fieldName = "tablename";
+		}
+		else
+		{
+			System.out.println("USDAPlantsLoader2000 > Invalid entityType given" + entityType);
+			return false; // seems like a resonable default here
+		}
+		
+		// Generate the sql query
+		String s = "select " + fieldName + " from " + tableToSearch + " where " + fieldName +  " = '" + entityName +"'" ;
+		System.out.println("--->" +s);
+		
+		Connection conn = this.getConnection();
+		try 
+		{
+			PreparedStatement pstmt = conn.prepareStatement(s);
+			ResultSet rs = pstmt.executeQuery();
+			
+			// Check if any results returned, results => entity exists ... I hope ;)
+			if (rs.first() )
+			{
+				System.out.println("---->" + rs.getString( fieldName ));
+				retVal = true;
+			}
+			else 
+			{
+				System.out.println("----> Nothing here!!!");
+				retVal = false;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return retVal;
+	}
 	
 /**
  * Main method to run the Legacy Data Wizard requires only the xml file that

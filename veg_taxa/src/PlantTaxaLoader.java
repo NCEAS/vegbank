@@ -1,8 +1,8 @@
 /**
- *  '$RCSfile: PlantTaxaLoader.java,v $'
- *   '$Author: farrell $'
- *     '$Date: 2003-01-14 01:12:43 $'
- * '$Revision: 1.17 $'
+ * '$RCSfile: PlantTaxaLoader.java,v $'
+ * '$Author: farrell $'
+ * '$Date: 2003-02-03 19:47:35 $'
+ * '$Revision: 1.18 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -276,12 +276,15 @@ public class PlantTaxaLoader
 				int refId = this.insertPlantReference(longNameRefAuthors, longNameRefTitle, longNameRefDate, 
 					longNameRefEdition, longNameRefSeriesName, longNameRefOtherCitDetails, longNameRefPage, 
 					longNameRefISBN, longNameRefISSN, conceptDescription);
+					
 				int shortNameRefId = this.insertPlantReference(shortNameRefAuthors, shortNameRefTitle, shortNameRefDate, 
 					shortNameRefEdition, shortNameRefSeriesName, shortNameRefOtherCitDetails, shortNameRefPage, 
 					shortNameRefISBN, shortNameRefISSN, conceptDescription);
+					
 				int codeRefId = this.insertPlantReference(codeRefAuthors, codeRefTitle, codeRefDate, 
 					codeRefEdition, codeRefSeriesName, codeRefOtherCitDetails, codeRefPage, 
 					codeRefISBN, codeRefISSN, conceptDescription);
+					
 				int conceptRefId = this.insertPlantReference(conceptRefAuthors, conceptRefTitle, conceptRefDate, 
 					conceptRefEdition, conceptRefSeriesName, conceptRefOtherCitDetails, conceptRefPage, 
 					conceptRefISBN, conceptRefISSN, conceptDescription);
@@ -358,7 +361,7 @@ public class PlantTaxaLoader
 				{
 					System.out.println("PlantTaxaLoader > concept does not exist -- adding it");
 					conceptId = loadPlantConceptInstance(longNameId, conceptRefId, conceptDescription, 
-					code, taxonLevel, longName );
+					code, longName );
 				}
 				else
 				{
@@ -376,7 +379,7 @@ public class PlantTaxaLoader
 				{
 					System.out.println("PlantTaxaLoader > status does not exist ");
 					statusId = loadPlantStatusInstance(conceptId, conceptStatus, statusStartDate, 
-					statusStopDate, email, partyId, plantParentName, refId);
+					statusStopDate, email, partyId, plantParentName, refId, taxonLevel);
 				}
 				
 				// LOAD THE USAGE TABLES
@@ -436,6 +439,10 @@ public class PlantTaxaLoader
 					conn.rollback();
 				}
 				conn.close();
+			}
+			else 
+			{
+				System.out.println("Invalid plant taxa");
 			}
 		}
 		catch ( Exception e )
@@ -501,31 +508,37 @@ public class PlantTaxaLoader
 							}
 							else
 							{
+								System.out.println("PlantTaxaLoader > not containing names and user info ");
 								valid = false;
 							}
 						}
 						else
 						{
+							System.out.println("PlantTaxaLoader > not containing the status info ");
 							valid = false;
 						}
 					}
 					else
 					{
+						System.out.println("PlantTaxaLoader > not containing the concept reference");
 						valid = false;
 					}
 				}
 				else
 				{
+					System.out.println("PlantTaxaLoader > not containing the code reference");
 					valid=false;
 				}
 			}
 			else
 			{
+				System.out.println("PlantTaxaLoader > not containing the short name reference");
 				valid=false;
 			}
 		}
 		else
 		{
+			System.out.println("PlantTaxaLoader > not containing the long name reference");
 			valid=false;
 		}
 		return(valid);	
@@ -763,8 +776,8 @@ public class PlantTaxaLoader
 			sb = new StringBuffer();
 			sb.append(" update  veg_taxa_summary ");
 			sb.append(" set plantlevel = ");
-			sb.append("  (select plantlevel from plantconcept where veg_taxa_summary.plantconcept_id ");
-			sb.append("  = plantconcept.plantconcept_id  ) where  plantusage_id >= " + minUsageId );
+			sb.append("  (select plantlevel from plantstatus where veg_taxa_summary.plantconcept_id ");
+			sb.append("  = plantstatus.plantconcept_id  ) where  plantusage_id >= " + minUsageId );
 			pstmt = conn.prepareStatement( sb.toString() );
 			pstmt.execute();
 			pstmt.close();	
@@ -1070,10 +1083,11 @@ public class PlantTaxaLoader
 	* @param endDate
 	* @param event
 	* @param plantPartyId
+	* @param taxonLevel
  	*/	
 	private int loadPlantStatusInstance(int conceptId, String status, 
-	String startDate, String endDate, String event, int plantPartyId, 
-	String plantParent, int refId)
+			String startDate, String endDate, String event, int plantPartyId, 
+			String plantParent, int refId, String taxonLevel)
 	{
 		try
 		{
@@ -1100,7 +1114,7 @@ public class PlantTaxaLoader
 				String s = "insert into PLANTSTATUS "
 				+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
 				+" plantPartyComments, plantParty_id, plantParentName, "
-				+" plantParentConcept_id)  values(?,?,?,?,?,?,?,?) ";
+				+" plantParentConcept_id, plantlevel)  values(?,?,?,?,?,?,?,?,?) ";
 				
 				PreparedStatement pstmt = conn.prepareStatement(s);
 				//bind the values
@@ -1119,7 +1133,8 @@ public class PlantTaxaLoader
 				pstmt.setInt(6, plantPartyId);
 				pstmt.setString(7, plantParent);
 				pstmt.setInt(8, parentConceptId);
-			
+				pstmt.setString(8, taxonLevel);
+				
 				boolean results = true;
 				results = pstmt.execute();
 				pstmt.close();
@@ -1129,8 +1144,8 @@ public class PlantTaxaLoader
 			{
 				String s = "insert into PLANTSTATUS "
 				+"(plantConcept_id, plantconceptstatus, startDate, stopDate, "
-				+" plantPartyComments, plantParty_id, plantParentName, plantreference_Id) "
-				+" values(?,?,?,?,?,?,?,?) ";
+				+" plantPartyComments, plantParty_id, plantParentName, plantreference_Id, "
+				+" plantlevel) values(?,?,?,?,?,?,?,?,?) ";
 				PreparedStatement pstmt = conn.prepareStatement(s);
 				//bind the values
 				pstmt.setInt(1, conceptId);
@@ -1148,6 +1163,8 @@ public class PlantTaxaLoader
 				pstmt.setInt(6, plantPartyId);
 				pstmt.setString(7, plantParent);
 				pstmt.setInt(8, refId);
+				pstmt.setString(8, taxonLevel);
+				
 				boolean results = true;
 				results = pstmt.execute();
 				pstmt.close();
@@ -1175,12 +1192,11 @@ public class PlantTaxaLoader
 	* @param plantReferenceId
 	* @param plantDescription
 	* @param plantCode
-	* @param rank
 	* @param plantName
 	* @return plantConceptId -- the PK value for this table
  	*/	
 	private int loadPlantConceptInstance(int plantNameId, int plantReferenceId, 
-	String plantDescription, String plantCode, String rank, String plantName)
+		String plantDescription, String plantCode, String plantName)
 	{
 		int plantConceptId = 0;
 		try
@@ -1191,15 +1207,14 @@ public class PlantTaxaLoader
 				plantDescription = "";
 			}
 			String s = "insert into PLANTCONCEPT (PLANTNAME_ID, PLANTDESCRIPTION, "
-			+" PLANTREFERENCE_ID, PLANTCODE, PLANTLEVEL, PLANTNAME) values(?,?,?,?,?,?) ";
+			+" PLANTREFERENCE_ID, PLANTCODE, PLANTNAME) values(?,?,?,?,?) ";
 			PreparedStatement pstmt = conn.prepareStatement(s);
 			//bind the values
 			pstmt.setInt(1, plantNameId);
 			pstmt.setString(2, plantDescription);
 			pstmt.setInt(3, plantReferenceId);
 			pstmt.setString(4, plantCode);
-			pstmt.setString(5, rank);
-			pstmt.setString(6, plantName);
+			pstmt.setString(5, plantName);
 			pstmt.execute();
 			pstmt.close();	
 		
@@ -1775,8 +1790,10 @@ public class PlantTaxaLoader
 			System.out.println("date entered: " +argv[10]  );
 			System.out.println("usage stopdate: " + argv[11] );
 			System.out.println("rank: " + argv[12] );
-			loader.loadGenericPlantTaxa(h);
 			
+			System.out.println("About to load plant taxa");		
+			loader.loadGenericPlantTaxa(h);
+			System.out.println("Finished loading plant taxa");			
 		}
 		else
 		{

@@ -37,7 +37,9 @@ CREATE TABLE plantStatus
     plantPartyComments varchar (500),
     PLANTPARTY_ID integer NOT NULL,
     plantParentName varchar (200),
-plantParentConcept_id integer,
+    plantParentConcept_id integer,
+    plantParent integer,
+    plantLevel varchar (20),
     PRIMARY KEY(PLANTSTATUS_ID)
 );
 
@@ -123,11 +125,9 @@ CREATE TABLE plantConcept
     PLANTCONCEPT_ID serial,
     PLANTNAME_ID integer NOT NULL,
     PLANTREFERENCE_ID integer NOT NULL,
-	plantname varchar (200),
-	plantCode varchar (23),
-	plantDescription varchar (600),
-    plantLevel varchar (20),
-    plantParent integer,
+  	plantname varchar (200),
+  	plantCode varchar (23),
+  	plantDescription varchar (600),
     PRIMARY KEY(PLANTCONCEPT_ID)
 );
 
@@ -182,6 +182,11 @@ ALTER TABLE plantStatus
 ALTER TABLE plantStatus
     ADD CONSTRAINT PLANTPARTY_ID FOREIGN KEY (PLANTPARTY_ID)
     REFERENCES plantParty (PLANTPARTY_ID);
+
+ALTER TABLE plantStatus
+    ADD CONSTRAINT PLANTPARENT FOREIGN KEY (PLANTPARENT)
+    REFERENCES plantConcept (PLANTCONCEPT_ID);
+
 
 ----------------------------------------------------------------------------
 -- plantStatus

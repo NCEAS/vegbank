@@ -3,6 +3,7 @@
  * plant names database on an 
  * Oracle RDBMS
  *
+ * FIXME: This is out of date!!!
  */
 
 
