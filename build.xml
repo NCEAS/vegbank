@@ -7,9 +7,9 @@
   * can call ant like this:
   *  % echo "[build.context]" | ant [target]
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2003-12-05 22:56:12 $'
-  *     '$Revision: 1.33 $'
+  *     '$Author: anderson $'
+  *     '$Date: 2004-01-05 23:38:52 $'
+  *     '$Revision: 1.34 $'
 --> 
 <project name="Vegbank" default="jar" basedir=".">
 
@@ -166,7 +166,16 @@
 			<fileset dir="${build.java.src.dir}" casesensitive="yes">
 				<include name="org/vegbank/**/*.java"/>
       			</fileset>
-    		</jar> 
+    	</jar> 
+
+		<!--
+			Copy all support jars into the build dir
+			before being deployed 
+		-->
+		<copy todir="${build.lib.dir}">
+			<fileset dir="${lib.dir}" includes="*jar"/>
+		</copy> 
+	
   </target>
 
   <target name="run-tests" description="==> Run all the tests availible">
