@@ -7,8 +7,8 @@
  *    Authors: John Harris
  * 		
  *		'$Author: farrell $' 
- *     '$Date: 2003-01-14 01:12:40 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2003-05-16 03:33:34 $'
+ *     '$Revision: 1.3 $'
  * @deprecated -- this class is now part of the servlet.authentication package
  */
 
@@ -17,6 +17,8 @@ package databaseAccess;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
+import org.vegbank.common.utility.*;
 
 public class UserDatabaseAccess 
 {

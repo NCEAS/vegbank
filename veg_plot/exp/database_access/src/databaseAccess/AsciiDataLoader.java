@@ -3,6 +3,8 @@ package databaseAccess;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.vegbank.common.utility.*;
+
 /**
  * This class allows a user to input an ascii file along with a header file that
  * can be loaded directly to a database.  It is intended that the user use this
@@ -56,7 +58,7 @@ public class AsciiDataLoader
 		{
 
 			//make the data file a vector
-			Utility u = new Utility();
+			DatabaseUtility u = new DatabaseUtility();
 			u.fileVectorizer(dataFile);
 			dataVector = u.outVector;
 

@@ -18,6 +18,8 @@ import java.io.*;
 import java.util.*;
 import java.sql.*;
 
+import org.vegbank.common.utility.*;
+
 public class PlotDBWriter 
 {
 
@@ -334,7 +336,7 @@ private void insertToDB (String dataType) {
 Connection conn=null; 
 	
 //get the database parameters from the database.parameters file
-Utility g2 =new Utility(); 
+DatabaseUtility g2 =new DatabaseUtility(); 
 g2.getDatabaseParameters("database", "insert");
 
 DbConnectionBroker myBroker;

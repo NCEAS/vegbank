@@ -5,9 +5,9 @@ package databaseAccess;
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *     '$Date: 2003-05-07 01:41:35 $'
- * '$Revision: 1.3 $'
+ * '$Author: farrell $'
+ * '$Date: 2003-05-16 03:33:34 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,27 +100,6 @@ public class  CommunityQueryStore
 			sqlStatement.append(" and upper(commusage.commname) like " + "'" + communityName.toUpperCase()+"'");
 			sqlStatement.append(" and commstatus.commlevel like '"+communityLevel+"'");
 			
-//			statement.append("select ");
-//			statement.append("commName, ");
-//			statement.append("dateentered, ");
-//			statement.append("classcode, ");
-//			statement.append("classlevel, ");
-//			statement.append("commdescription, ");
-//			statement.append("conceptorigindate, ");
-//			statement.append("conceptupdatedate, ");
-//			statement.append("commconcept_id, ");
-//			statement.append("recognizingparty, ");
-//			statement.append("partyconceptstatus, ");
-//			statement.append("parentcommconceptid, ");
-//			statement.append("parentcommconceptcode, ");
-//			statement.append("parentcommname, ");
-//			statement.append("parentcommdescription ");
-			//MAKE ALL QUERIES CASE INSENSITIVE
-//			statement.append("from commSummary where upper(commName) like '");
-//			statement.append(communityName.toUpperCase()+"'");
-//			statement.append("and classLevel like '"+communityLevel+"'");
-
-
 			System.out.println("CommunityQueryStore > "+ statement.toString()  );
 			PreparedStatement pstmt;
     	pstmt = conn.prepareStatement( sqlStatement.toString()  );
@@ -172,28 +151,38 @@ public class  CommunityQueryStore
 			
 		}
 	}
-	
-	
-	
+
 	//get a vector that contains hashtables with all the possible 
 	//correlation ( name, recognizing party, system, status, level)
 	//as input use the authors and the commname
-	public Vector getCorrelationTargets(String commName, String nameRefAuthors, 
-	String classLevel)
+	public Vector getCorrelationTargets(
+		String commName, 
+		String nameRefAuthors, 
+		String classLevel)
 	{
 		Vector v = new Vector();
 		try
 		{
 			Connection conn = this.getConnection();
 			
-			statement.append("select ");
-			statement.append("commName, recognizingParty, partyConceptStatus, classLevel,  ");
-			statement.append(" commconcept_id, usage_id ");
-			statement.append("from commSummary where upper(commName) like '");
-			statement.append(commName.toUpperCase()+"' and upper(nameRefAuthors) ");
-			statement.append(" like '"+nameRefAuthors.toUpperCase()+"' and ");
-			statement.append(" upper(classlevel) like '"+classLevel.toUpperCase()+"'");
+//			statement.append("select ");
+//			statement.append("commName, recognizingParty, partyConceptStatus, classLevel,  ");
+//			statement.append(" commconcept_id, usage_id ");
+//			statement.append("from commSummary where upper(commName) like '");
+//			statement.append(commName.toUpperCase()+"' and upper(nameRefAuthors) ");
+//			statement.append(" like '"+nameRefAuthors.toUpperCase()+"' and ");
+//			statement.append(" upper(classlevel) like '"+classLevel.toUpperCase()+"'");
 			//gather the responses
+			statement.append(
+				"select commname.commname, commstatus.commconceptstatus, "
+				+ " commstatus.commlevel, commconcept.commconcept_id,  "
+				+ "commusage.commusage_id from commname, commstatus, commusage"
+				+ "commconcept  where commstatus.commconcept_id = commconcept.commconcept_id"
+				+ " and commname.commname_id = commusage.commname_id  "
+				+ " and upper(commname.commname) like '" + commName.toUpperCase() +"'"
+				+ " and upper(commstatus.classlevel) like '"+classLevel.toUpperCase()+"'"
+				);
+			
 			System.out.println("CommunityQueryStore > "+ statement.toString()  );
 			PreparedStatement pstmt;
     	pstmt = conn.prepareStatement( statement.toString()  );            
@@ -208,13 +197,13 @@ public class  CommunityQueryStore
 				
 				buf = rs.getString(1);
 				hash.put("commName", ""+buf);
+				//buf = rs.getString(2);
+				//hash.put("recognizingParty", ""+buf);
 				buf = rs.getString(2);
-				hash.put("recognizingParty", ""+buf);
-				buf = rs.getString(3);
 				hash.put("conceptStatus", ""+buf);
-				buf = rs.getString(4);
+				buf = rs.getString(3);
 				hash.put("level", ""+buf);
-				buf = rs.getString(5);
+				buf = rs.getString(4);
 				hash.put("commConceptId", ""+buf);
 				buf = rs.getString(6);
 				hash.put("usageId", ""+buf);
@@ -313,7 +302,7 @@ public class  CommunityQueryStore
 			statement.append("select ");
 			statement.append("commName ");
 			//MAKE ALL QUERIES CASE INSENSITIVE
-			statement.append("from commSummary where upper(commName) like '");
+			statement.append("from commname where upper(commName) like '");
 			statement.append(commName.toUpperCase()+"'");
 			//gather the responses
 			System.out.println("CommunityQueryStore > "+ statement.toString()  );

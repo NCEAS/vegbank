@@ -17,21 +17,13 @@
       <load-on-startup>5</load-on-startup>
     </servlet>
     
-    <servlet-mapping>
-      <servlet-name>DataSubmitServlet</servlet-name>
-      <url-pattern>/servlet/DataSubmitServlet</url-pattern>
-    </servlet-mapping>  
 
     <servlet>
-      <servlet-name>viewdata</servlet-name>
+      <servlet-name>viewData</servlet-name>
       <description>servlet to allow for the viewing of an xml doc</description>
       <servlet-class>org.vegbank.servlet.request.viewData</servlet-class>
       <load-on-startup>5</load-on-startup>
     </servlet>
-    <servlet-mapping>
-      <servlet-name>viewdata</servlet-name>
-      <url-pattern>/servlet/viewdata</url-pattern>
-    </servlet-mapping>  
 
 
     <servlet>
@@ -40,10 +32,6 @@
       <servlet-class>org.vegbank.servlet.stylesheet.StyleSheetGenerator</servlet-class>
       <load-on-startup>5</load-on-startup>
     </servlet>
-    <servlet-mapping>
-      <servlet-name>stylesheetgenerator</servlet-name>
-      <url-pattern>/servlet/stylesheetgenerator</url-pattern>
-    </servlet-mapping>  
 
 
 
@@ -53,10 +41,6 @@
       <servlet-class>org.vegbank.servlet.request.fileDownload</servlet-class>
       <load-on-startup>5</load-on-startup>
     </servlet>
-    <servlet-mapping>
-      <servlet-name>result-download</servlet-name>
-      <url-pattern>/servlet/result-download</url-pattern>
-    </servlet-mapping>  
 
 
     <servlet>
@@ -65,10 +49,6 @@
       <servlet-class>org.vegbank.servlet.framework.FrameworkServlet</servlet-class>
       <load-on-startup>5</load-on-startup>
     </servlet>
-    <servlet-mapping>
-      <servlet-name>framework</servlet-name>
-      <url-pattern>/servlet/framework</url-pattern>
-    </servlet-mapping>  
 
     <servlet>
       <servlet-name>authenticate</servlet-name>
@@ -76,10 +56,6 @@
       <servlet-class>org.vegbank.servlet.authentication.AuthenticationServlet</servlet-class>
       <load-on-startup>5</load-on-startup>
     </servlet>
-    <servlet-mapping>
-      <servlet-name>authenticate</servlet-name>
-      <url-pattern>/servlet/authenticate</url-pattern>
-    </servlet-mapping>  
 
 
     <servlet>
@@ -88,10 +64,6 @@
       <servlet-class>org.vegbank.servlet.datafileexchange.DataExchangeServlet</servlet-class>
       <load-on-startup>5</load-on-startup>
     </servlet>
-    <servlet-mapping>
-      <servlet-name>dataexchange</servlet-name>
-      <url-pattern>/servlet/dataexchange</url-pattern>
-    </servlet-mapping>  
 
     <servlet>
       <servlet-name>usermanagement</servlet-name>
@@ -99,10 +71,6 @@
       <servlet-class>org.vegbank.servlet.usermanagement.UserManagementServlet</servlet-class>
       <load-on-startup>5</load-on-startup>
     </servlet>
-    <servlet-mapping>
-      <servlet-name>usermanagement</servlet-name>
-      <url-pattern>/servlet/usermanagement</url-pattern>
-    </servlet-mapping>  
 
     <servlet>
       <servlet-name>DataRequestServlet</servlet-name>
@@ -110,9 +78,78 @@
       <servlet-class>org.vegbank.servlet.request.DataRequestServlet</servlet-class>
       <load-on-startup>5</load-on-startup>
     </servlet>
+
+    <servlet>
+      <servlet-name>QueryBuilderServlet</servlet-name>
+      <description>Currently used for building nested queries</description>
+      <servlet-class>org.vegbank.servlet.request.QueryBuilderServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+      <servlet-name>VegbankController</servlet-name>
+      <description>A dispatcher to the commands</description>
+      <servlet-class>org.vegbank.servlet.VegbankController</servlet-class>
+      <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- The Mappings -->
+
+    <servlet-mapping>
+      <servlet-name>DataSubmitServlet</servlet-name>
+      <url-pattern>/servlet/DataSubmitServlet</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet-mapping>
+      <servlet-name>viewData</servlet-name>
+      <url-pattern>/servlet/viewData</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet-mapping>
+      <servlet-name>stylesheetgenerator</servlet-name>
+      <url-pattern>/servlet/stylesheetgenerator</url-pattern>
+    </servlet-mapping>  
+
+
+    <servlet-mapping>
+      <servlet-name>result-download</servlet-name>
+      <url-pattern>/servlet/fileDownload</url-pattern>
+    </servlet-mapping>  
+
+    
+    <servlet-mapping>
+      <servlet-name>framework</servlet-name>
+      <url-pattern>/servlet/framework</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+      <servlet-name>authenticate</servlet-name>
+      <url-pattern>/servlet/authenticate</url-pattern>
+    </servlet-mapping> 
+
+    <servlet-mapping>
+      <servlet-name>dataexchange</servlet-name>
+      <url-pattern>/servlet/dataexchange</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet-mapping>
+      <servlet-name>usermanagement</servlet-name>
+      <url-pattern>/servlet/usermanagement</url-pattern>
+    </servlet-mapping>  
+    
     <servlet-mapping>
       <servlet-name>DataRequestServlet</servlet-name>
       <url-pattern>/servlet/DataRequestServlet</url-pattern>
     </servlet-mapping>  
+    
+    <servlet-mapping>
+      <servlet-name>QueryBuilderServlet</servlet-name>
+      <url-pattern>/servlet/QueryBuilderServlet</url-pattern>
+    </servlet-mapping>  
+ 
+    <servlet-mapping>
+      <servlet-name>VegbankController</servlet-name>
+      <url-pattern>/servlet/VegbankController</url-pattern>
+    </servlet-mapping>  
+    
 
 </web-app>

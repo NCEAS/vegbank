@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2003-05-07 01:41:35 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2003-05-16 03:33:34 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
 
 
         
-public class SqlFile 
+public class SqlFile
 {
 	private String sqlFile = null;
 	//private String rdbmsType = "access"; //ms access database

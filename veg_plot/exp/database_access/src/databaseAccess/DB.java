@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: farrell $'
- *  '$Date: 2003-01-14 01:12:40 $'
- *  '$Revision: 1.2 $'
+ *  '$Date: 2003-05-16 03:33:34 $'
+ *  '$Revision: 1.3 $'
  */
 package databaseAccess;
 
@@ -19,6 +19,7 @@ import java.sql.Statement;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.vegbank.common.utility.*;
 import org.w3c.dom.Node;
 
 import xmlresource.datatype.Plot;

@@ -31,8 +31,8 @@ import org.vegbank.servlet.util.ServletUtility;
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-07 01:37:27 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-05-16 03:33:34 $'
+ *  '$Revision: 1.5 $'
  *
  *  @version
  *  @author
@@ -460,8 +460,20 @@ public class AuthenticationServlet extends HttpServlet
 
 				// USE THE DB CLASS TO CREATE THE USER
 				//uda.createUser(emailAddress, passWord, givenName, surName, remoteAddress);
-				boolean b2 = uda.createUser(emailAddress, passWord, givenName,surName, remoteAddress,
-				inst, address, city, state, country, phone, zip);
+				boolean b2 =
+					uda.createUser(
+						emailAddress,
+						passWord,
+						givenName,
+						surName,
+						remoteAddress,
+						inst,
+						address,
+						city,
+						state,
+						country,
+						phone,
+						zip);
 				return( b2 );
 			}
 			else
@@ -569,6 +581,7 @@ public class AuthenticationServlet extends HttpServlet
 			String cookieAddress = remoteAddress; //same
 			cookie = new Cookie(cookieName, cookieValue);
 			cookie.setMaxAge(3600);  //set cookie for an hour
+      cookie.setPath("/");  // cookie applies to all contexts
 			registeredCookie=cookie;
 		  System.out.println("AuthenticationServlet > using cookie name : " + cookieName + " val: " + cookieValue );
 		}

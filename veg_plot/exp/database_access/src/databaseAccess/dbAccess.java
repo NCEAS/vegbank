@@ -4,6 +4,8 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import xmlresource.utils.transformXML;
+
+import org.vegbank.common.utility.*;
 import org.vegbank.plots.datasource.PlotXmlWriterV2;
 /**
  * Takes an xml file containg either query attributes
@@ -31,8 +33,8 @@ import org.vegbank.plots.datasource.PlotXmlWriterV2;
  * document containing only partial data from a plot 
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-07 01:41:35 $'
- * 	'$Revision: 1.8 $'
+ *  '$Date: 2003-05-16 03:33:34 $'
+ * 	'$Revision: 1.9 $'
  */
 
 public class dbAccess 
@@ -236,7 +238,7 @@ public class dbAccess
 			m.getTransformedFromString(inputXmlString, inputXSL, transformedData);
 			
 			//pass to the utility class to convert the StringWriter to an array
-			Utility u = new Utility();
+			DatabaseUtility u = new DatabaseUtility();
 			u.convertStringWriter(transformedData);
 			String transformedString[] = u.outString;
 			int transformedStringNum = u.outStringNum;

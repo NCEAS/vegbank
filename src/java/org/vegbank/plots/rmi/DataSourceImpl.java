@@ -1,5 +1,6 @@
 package org.vegbank.plots.rmi;
 
+import org.vegbank.common.utility.DatabaseUtility;
 import org.vegbank.plots.datasource.PlotDataSource;
 
 import java.io.BufferedInputStream;
@@ -18,7 +19,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import databaseAccess.DBinsertPlotSource;
-import databaseAccess.Utility;
 import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
 
 /** 
@@ -38,8 +38,8 @@ import edu.ucsb.nceas.vegbank.plotvalidation.PlotValidator;
  *	
  * <br> <br>
  *  '$Author: farrell $'
- *  '$Date: 2003-05-06 23:27:44 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2003-05-16 03:33:34 $'
+ * 	'$Revision: 1.4 $'
  *
  */
 
@@ -76,7 +76,7 @@ public class DataSourceImpl extends UnicastRemoteObject
 				
 				// test the vegbank systrem
 				System.out.println("DataSourceImpl >  testing the VegBank services:  " );
-				Utility util = new Utility();
+				DatabaseUtility util = new DatabaseUtility();
 				boolean success = util.testVegBankConnections();
 				System.out.println("DataSourceImpl >  VegBank services passed:  " + success );
 				

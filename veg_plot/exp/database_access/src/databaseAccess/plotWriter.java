@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 import java.sql.*;
 
+import org.vegbank.common.utility.*;
+
 
 
 /**
@@ -64,7 +66,7 @@ Statement query = null;
 ResultSet results = null;
 	
 //get the database parameters from the database.parameters file
-Utility g2 =new Utility(); 
+DatabaseUtility g2 =new DatabaseUtility(); 
 g2.getDatabaseParameters("database", "insert");
 
 		

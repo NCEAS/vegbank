@@ -8,8 +8,8 @@ package org.vegbank.servlet.util;
  *    etc.. 
  *
  *	'$Author: farrell $'
- *  '$Date: 2003-05-07 01:37:28 $'
- *  '$Revision: 1.5 $'
+ *  '$Date: 2003-05-16 03:33:34 $'
+ *  '$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -920,6 +921,28 @@ public String fileToString(String fileName)
 		return sb.toString();
 	}
 	
+	/**
+	 * method that retuns the date in a format that can be accepted 
+	 * by the RDBMS and that is like: Aug 9, 2002
+	 */
+	 public String getCurrentDate()
+	 {
+		String s = "";
+		 try
+		 {
+			Date now = new Date();  //Set Date variable now to the current date and time
+			DateFormat med = DateFormat.getDateInstance (DateFormat.MEDIUM);
+			s = med.format(now);
+			//System.out.println ("MEDIUM: " + s);
+		 }
+			catch(Exception e )
+			{
+				e.printStackTrace();
+			}
+			return(s);
+	 }
+	 
+	 
 
 }	
 

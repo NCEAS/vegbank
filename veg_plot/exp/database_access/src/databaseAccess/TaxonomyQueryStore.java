@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-07 01:41:35 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-05-16 03:33:34 $'
+ *	'$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 import org.vegbank.common.Constants;
+import org.vegbank.common.utility.*;
 
 /**
  * this class has been implemented to contain methods which are to be
@@ -676,15 +677,11 @@ public class TaxonomyQueryStore implements Constants
 			Statement query = conn.createStatement();
 			ResultSet results = null;
 
+
+			String referenenceQuery = 
+				"select  reference.REFERENCE_ID, additionalinfo, TITLE, PUBDATE, " +				"EDITION, PAGERANGE, ISBN from REFERENCE, referencecontributor, " +				"referenceparty where reference.REFERENCE_ID = " +				"(  select REFERENCE_ID from PLANTNAME where PLANTNAME ="; 
 			// create and issue the query --
-			sqlBuf.append(
-				"select  PLANTREFERENCE_ID, AUTHORS, OTHERCITATIONDETAILS, ");
-			sqlBuf.append(
-				"TITLE, PUBDATE, EDITION, SERIESNAME, ISSUEIDENTIFICATION, ");
-			sqlBuf.append(" PAGE, TABLECITED, ISBN, ISSN, PLANTDESCRIPTION ");
-			sqlBuf.append(" from PLANTREFERENCE where PLANTREFERENCE_ID = ( ");
-			sqlBuf.append(
-				" select PLANTREFERENCE_ID from PLANTNAME where PLANTNAME like ");
+			sqlBuf.append(referenenceQuery);
 			sqlBuf.append("'" + name + "' )");
 			results = query.executeQuery(sqlBuf.toString());
 
@@ -692,31 +689,31 @@ public class TaxonomyQueryStore implements Constants
 			while (results.next())
 			{
 				int plantReferenceId = results.getInt(1);
-				String authors = results.getString(2);
-				String otherCitationDetails = results.getString(3);
-				String title = results.getString(4);
-				String pubDate = results.getString(5);
-				String edition = results.getString(6);
-				String seriesName = results.getString(7);
-				String issueIdentification = results.getString(8);
-				String page = results.getString(9);
-				String tableCited = results.getString(10);
-				String isbn = results.getString(11);
-				String issn = results.getString(12);
-				String plantDescription = results.getString(13);
+				//String authors = results.getString(2);
+				String otherCitationDetails = results.getString(2);
+				String title = results.getString(3);
+				String pubDate = results.getString(4);
+				String edition = results.getString(5);
+				//String seriesName = results.getString(7);
+				//String issueIdentification = results.getString(8);
+				String page = results.getString(6);
+				//String tableCited = results.getString(10);
+				String isbn = results.getString(7);
+				//String issn = results.getString(12);
+				//String plantDescription = results.getString(13);
 
 				h.put("plantReferenceId", "" + plantReferenceId);
-				h.put("authors", "" + authors);
+				//h.put("authors", "" + authors);
 				h.put("otherCitationDetails", "" + otherCitationDetails);
 				h.put("title", "" + title);
 				h.put("pubDate", "" + pubDate);
 				h.put("edition", "" + edition);
-				h.put("seriesName", "" + seriesName);
-				h.put("issueIdentification", "" + issueIdentification);
+				//h.put("seriesName", "" + seriesName);
+				//h.put("issueIdentification", "" + issueIdentification);
 				h.put("page", "" + page);
-				h.put("tableCited", "" + tableCited);
+				//h.put("tableCited", "" + tableCited);
 				h.put("isbn", "" + isbn);
-				h.put("issn", "" + issn);
+				//h.put("issn", "" + issn);
 
 			}
 			//remember to close the connections etc..
