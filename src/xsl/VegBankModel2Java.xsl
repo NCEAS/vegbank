@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-10-11 21:20:09 $'
- *  '$Revision: 1.6 $'
+ *  '$Date: 2003-10-22 19:32:32 $'
+ *  '$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,6 +69,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import java.util.Iterator;
 
 public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
 {
@@ -83,21 +84,27 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
      </xsl:otherwise>
    </xsl:choose>
    
-   <xsl:variable name="primativeAttribs" select="attribute"/>
-   <xsl:variable name="simpleRelationalAttribs" select="attribute[javaType/@type='Object' and javaType/@relation='one']"/>
+   <xsl:variable name="primativeAttribs" select="attribute[attRelType/@type = 'n/a' or attKey='PK']"/>
+   <xsl:variable name="FKAttribs" select="attribute[attRelType/@type = 'normal' or attRelType/@type='inverted']"/>
+   <!--<xsl:variable name="simpleRelationalAttribs" select="attribute[javaType/@type='Object' and javaType/@relation='one']"/>-->
    <!--   <xsl:variable name="simpleRelationalAttribs" select="attribute[javaType/@type='int' and javaType/@relation='one']"/>-->
     <!--    <xsl:variable name="complexRelationalAttribs" select="../entity/attribute/attReferences[starts-with(text(),$entityName)]"/> -->
 
     <xsl:apply-templates mode="declareAttrib" select="$primativeAttribs"/>
-    <xsl:apply-templates mode="declareObjectAttrib" select="$simpleRelationalAttribs"/>
+    <xsl:apply-templates mode="declareAttrib" select="$FKAttribs"/>
+    <xsl:apply-templates mode="declareObjectAttrib" select="$FKAttribs"/>
+    <!--<xsl:apply-templates mode="declareObjectAttrib" select="$simpleRelationalAttribs"/>-->
     
     <!--<xsl:apply-templates mode="declareComplexAttrib" select="$complexRelationalAttribs"/>-->
 
     <xsl:apply-templates mode="get-setSimpleAttrib" select="$primativeAttribs"/>
-    <xsl:apply-templates mode="get-setObjectAttrib" select="$simpleRelationalAttribs"/>
+    <xsl:apply-templates mode="get-setSimpleAttrib" select="$FKAttribs"/>
+    <xsl:apply-templates mode="get-setObjectAttrib" select="$FKAttribs"/>
+    <!--<xsl:apply-templates mode="get-setObjectAttrib" select="$simpleRelationalAttribs"/>-->
     <!--<xsl:apply-templates mode="get-setComplexAttrib" select="$complexRelationalAttribs"/>-->
 
-    <xsl:for-each select="../entity/attribute[starts-with(attReferences, concat(current()/entityName,'.') )]">
+    <!-- choose all entities that have an inverted FK relationship to this entity -->
+    <xsl:for-each select="../entity/attribute[starts-with(attReferences, concat(current()/entityName,'.') ) and attRelType/@type = 'inverted']">
       
       <xsl:variable name="javaType">
         <xsl:call-template name="UpperFirstLetter">
@@ -127,7 +134,7 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
       return this.<xsl:value-of select="$variableName"/>s;
     }
 
-      public void add<xsl:value-of select="$variableName"/> ( <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="$variableName"/> )
+    public void add<xsl:value-of select="$variableName"/> ( <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="$variableName"/> )
     {
       this.<xsl:value-of select="$variableName"/>s.add( <xsl:value-of select="$variableName"/> );
     }
@@ -135,6 +142,119 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
     
     </xsl:for-each>
 
+ <!-- ***************************************************************************** -->
+ <!-- Generate getXML() method  -->
+ <!-- ***************************************************************************** -->
+    public String getXML()
+    {
+      StringBuffer xml = new StringBuffer();
+      xml.append("&lt;<xsl:value-of select="$entityName"/>&gt;");
+
+    <xsl:for-each select="attribute">
+
+      <xsl:variable name="javaType">
+        <xsl:call-template name="UpperFirstLetter">
+         <xsl:with-param name="text">
+           <xsl:value-of select="substring-before(attReferences, '.')"/>
+         </xsl:with-param>
+        </xsl:call-template>     
+      </xsl:variable>
+      
+<!--
+      <xsl:variable name="variableName">
+        <xsl:call-template name="to-lower">
+          <xsl:with-param name="text">
+            <xsl:value-of select="substring-before(attName, '_ID')"/><xsl:value-of select="$javaType"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:variable>
+-->
+      <xsl:variable name="cappedVariableName">
+        <xsl:choose>
+          <xsl:when test="attKey='FK'">
+            <xsl:call-template name="UpperFirstLetter">
+              <xsl:with-param name="text" select="concat(substring-before(attName, '_ID'), 'object')"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="UpperFirstLetter">
+              <xsl:with-param name="text" select="attName"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <xsl:choose>
+        <xsl:when test="./attRelType/@type ='n/a' and attKey!='PK'">
+      if ( this.get<xsl:value-of select="$cappedVariableName"/>() != null)
+      {
+        xml.append("&lt;<xsl:value-of select="./attName"/>&gt;");
+        xml.append(this.get<xsl:value-of select="$cappedVariableName"/>() );
+        xml.append("&lt;/<xsl:value-of select="./attName"/>&gt;");
+      }
+        </xsl:when>
+        <xsl:when test="./attRelType/@type ='n/a' and attKey='PK'">
+      if ( this.get<xsl:value-of select="$cappedVariableName"/>() != 0)
+      {
+        xml.append("&lt;<xsl:value-of select="./attName"/>&gt;");
+        xml.append(this.get<xsl:value-of select="$cappedVariableName"/>() );
+        xml.append("&lt;/<xsl:value-of select="./attName"/>&gt;");
+      }
+        </xsl:when>
+        <xsl:when test="./attRelType/@type ='normal'">
+      if ( this.get<xsl:value-of select="$cappedVariableName"/>() != null)
+      {
+        xml.append("&lt;<xsl:value-of select="./attName"/>&gt;");
+        <xsl:value-of select="$javaType"/> object = this.get<xsl:value-of select="$cappedVariableName"/>();
+        xml.append( object.getXML() );
+        xml.append("&lt;/<xsl:value-of select="./attName"/>&gt;");
+      }
+        </xsl:when>
+        <xsl:otherwise>
+          // Got <xsl:value-of select="./javaType/@type"/> <xsl:value-of select="./attName"/>
+          <!-- Do Nothing -->
+        </xsl:otherwise>
+      </xsl:choose>
+
+    </xsl:for-each>
+    
+     <!-- ***************************************************************************** -->
+     <!-- Handle one to many's   -->
+     <!-- ***************************************************************************** -->
+     <!-- choose all entities that have an inverted FK relationship to this entity -->
+    <xsl:for-each select="../entity/attribute[starts-with(attReferences, concat(current()/entityName,'.') ) and attRelType/@type = 'inverted'] ">
+      
+      <xsl:variable name="javaType">
+        <xsl:call-template name="UpperFirstLetter">
+          <xsl:with-param name="text">
+            <xsl:value-of select="../entityName"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:variable>
+      
+      <xsl:variable name="variableName">
+        <xsl:call-template name="to-lower">
+          <xsl:with-param name="text">
+            <xsl:value-of select="substring-before(attName, '_ID')"/><xsl:value-of select="$javaType"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:variable>
+
+      if ( this.get<xsl:value-of select="$variableName"/>s() != null)
+      {
+        List list = this.get<xsl:value-of select="$variableName"/>s();
+         Iterator iterator = list.iterator();
+        while ( iterator.hasNext() )
+        {
+          <xsl:value-of select="$javaType"/> object = (<xsl:value-of select="$javaType"/>) iterator.next();
+          xml.append( object.getXML() );
+        };
+      }
+    </xsl:for-each>
+
+      xml.append("&lt;/<xsl:value-of select="$entityName"/>&gt;");
+      return xml.toString();
+    }
 }
     </redirect:write>
  </xsl:template>
@@ -154,11 +274,22 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
    </xsl:variable>
 
    <xsl:variable name="memberName">
-     <xsl:call-template name="to-lower">
-       <xsl:with-param name="text">
-        <xsl:value-of select="substring-before(attName, '_ID')"/>
-       </xsl:with-param>
-     </xsl:call-template>
+     <xsl:choose>
+       <xsl:when test="attKey='FK' or attKey='PK'">
+         <xsl:call-template name="to-lower">
+           <xsl:with-param name="text">
+             <xsl:value-of select="concat(substring-before(attName, '_ID'), 'object')"/>
+           </xsl:with-param>
+         </xsl:call-template>
+       </xsl:when>
+       <xsl:otherwise>
+         <xsl:call-template name="to-lower">
+           <xsl:with-param name="text">
+             <xsl:value-of select="substring-before(attName, '_ID')"/>
+           </xsl:with-param>
+         </xsl:call-template>
+       </xsl:otherwise>
+     </xsl:choose>
    </xsl:variable>
   private <xsl:value-of select="$javaType"/> <xsl:text> </xsl:text> <xsl:value-of select="$memberName"/>; 
  </xsl:template>
@@ -240,19 +371,39 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
    </xsl:variable>
 
    <xsl:variable name="cappedVariableName">
-     <xsl:call-template name="UpperFirstLetter">
-       <xsl:with-param name="text">
-         <xsl:value-of select="substring-before(attName, '_ID')"/>
-       </xsl:with-param>
-     </xsl:call-template>
+     <xsl:choose>
+       <xsl:when test="attKey='FK' or attKey='PK'">
+         <xsl:call-template name="UpperFirstLetter">
+           <xsl:with-param name="text">
+             <xsl:value-of select="concat(substring-before(attName, '_ID'), 'object')"/>
+           </xsl:with-param>
+         </xsl:call-template>	     
+       </xsl:when>
+       <xsl:otherwise>
+         <xsl:call-template name="UpperFirstLetter">
+           <xsl:with-param name="text">
+             <xsl:value-of select="substring-before(attName, '_ID')"/>
+           </xsl:with-param>
+         </xsl:call-template>
+       </xsl:otherwise>
+     </xsl:choose>
    </xsl:variable>
 
    <xsl:variable name="uncappedVariableName">
-     <xsl:call-template name="to-lower">
-       <xsl:with-param name="text">
-        <xsl:value-of select="substring-before(attName, '_ID')"/>
-       </xsl:with-param>
-     </xsl:call-template>
+   <!--
+     <xsl:choose>
+       <xsl:when test="attKey='FK' or attKey='PK'"><xsl:value-of select="$cappedVariableName"/></xsl:when>
+       <xsl:otherwise>
+   -->
+         <xsl:call-template name="to-lower">
+           <xsl:with-param name="text">
+             <xsl:value-of select="$cappedVariableName"/>
+           </xsl:with-param>
+         </xsl:call-template>
+       <!--
+       </xsl:otherwise>
+     </xsl:choose>
+     -->
    </xsl:variable>
 
    <xsl:call-template name="GenerateGetSet">
