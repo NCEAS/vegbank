@@ -37,6 +37,24 @@
 </tr>
 
 <bean:define id="concId" name="onerow" property="plantconcept_id"/>
+<tr><td colspan="4"><span class="datalabelsmall">Plot-observations with this plant Concept:</span>
+<vegbank:get id="observation" select="observation_count" 
+  where="where_plantconcept_observation_complex" beanName="map" 
+  wparam="concId" perPage="-1" pager="false" />
+<logic:empty name="observation-BEAN">
+-none-
+</logic:empty>
+<logic:notEmpty name="observation-BEAN">
+<bean:write name="observation-BEAN" property="count_observations" />
+<logic:notEqual name="observation-BEAN" property="count_observations" value="0">
+<a href="@get_link@summary/observation/<bean:write name='concId' />?where=where_plantconcept_observation_complex">View 
+  observation(s)</a>
+</logic:notEqual>
+</logic:notEmpty>
+
+
+</td></tr>
+
 <vegbank:get id="plantstatus" select="plantstatus" where="where_plantconcept_pk" beanName="map" wparam="concId" perPage="-1" pager="false"/>
 <logic:notEmpty name="plantstatus-BEANLIST">
 <logic:iterate id="statusbean" name="plantstatus-BEANLIST">
