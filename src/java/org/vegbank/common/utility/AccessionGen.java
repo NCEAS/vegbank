@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-12-10 19:40:14 $'
- *	'$Revision: 1.6 $'
+ *	'$Author: farrell $'
+ *	'$Date: 2004-02-18 02:04:44 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,22 @@ public class AccessionGen {
 
 
 	public AccessionGen() {
+		init();
+	}
+	
+	/**
+	 * Hit some problems using this class regarding the connection
+	 * not being initialized.
+	 * Allowing it to be passed in via the constructor if need be. * 
+	 */
+	public AccessionGen( Connection dbconn, String dbCode) {
+		init();
+		this.conn = dbconn;
+		this.dbCode = dbCode;
+	}
+	
+	private void init()
+	{
 		res = ResourceBundle.getBundle("accession");
 		tableCodes = new HashMap();
 		String key;
@@ -55,7 +71,6 @@ public class AccessionGen {
 		}
 	}
 
-
 	/**
 	 * Generates an accession code. DB.Tbl.PK#.Confirm  ex:  VB.TC.126.AKMP
 	 * @param db - database code
@@ -66,15 +81,8 @@ public class AccessionGen {
 
 		StringBuffer accCode = new StringBuffer(32);
 
-		// database
-		accCode.append(db.toUpperCase()).append(".");
-
-		// table -- do case insensitive lookup
-		String tableCode = (String)tableCodes.get( table.toLowerCase() );
-		if (tableCode == null) {
-			tableCode = "??";
-		}
-		accCode.append(tableCode).append(".");
+		// Lay down the base AC e.g. VB.PL.
+		accCode.append(this.getBaseAccessionCode(table));
 
 		// primary key
 		accCode.append(pk).append(".");
@@ -97,8 +105,22 @@ public class AccessionGen {
 		if (query == null) {
 			return null;
 		}
-
-		query += " WHERE " + table + "_id=" + pk;
+		
+		// get the confirm type
+		String confirmType = res.getString("confirm.type." + table).toUpperCase();
+		// This is either WHERE or AND depending on if where is used in the SQL already
+		String conjugator = "";
+		if (confirmType.equals("JOIN") )
+		{
+			conjugator = " AND ";
+		}
+		else
+		{
+			conjugator = " WHERE ";
+		}
+				
+		query += conjugator + table + "_id=" + pk;
+		//LogUtility.log("===> " + query);
 		ResultSet rs = conn.createStatement().executeQuery(query);
 
 		if (rs.next()) {
@@ -107,7 +129,7 @@ public class AccessionGen {
 			if (tmpConfirm == null) {
 				tmpConfirm = rs.getString(3);
 			}
-
+			//LogUtility.log("Resulting AC > " + formatConfirmCode(tmpConfirm));
 			return formatConfirmCode(tmpConfirm);
 		}
 
@@ -223,7 +245,7 @@ public class AccessionGen {
 
 		double scalar = .6;  // width of screen
 		long pct1, l, count=0, tmpId;
-		String update, baseAC, tmpConfirm, tableCode;
+		String baseAC, tmpConfirm;
 		StringBuffer tmpAC = null;
 		Statement stmt = conn.createStatement();
 		ResultSet rs;
@@ -270,17 +292,8 @@ public class AccessionGen {
 		}
 		System.out.println("| 100%  ");
 
-		// prepare the update statement
-		update = "UPDATE " + tableName + " SET accessioncode = ? WHERE " + tableName + "_id = ?";
-		PreparedStatement pstmt = conn.prepareStatement(update);
-
-		// table -- do case insensitive lookup
-		tableCode = (String)tableCodes.get( tableName.toLowerCase() );
-		if (tableCode == null) {
-			tableCode = "??";
-		}
-
-		baseAC = dbCode + "." + tableCode + ".";
+		PreparedStatement pstmt = getUpdatePreparedStatement(tableName);
+		baseAC = getBaseAccessionCode(tableName);
 		
 		// update!
 		conn.setAutoCommit(false);
@@ -315,15 +328,7 @@ public class AccessionGen {
 				// format
 				tmpConfirm = formatConfirmCode(tmpConfirm);
 
-				// build the accession code
-	 			// DB.Tbl.PK#.Confirm  ex:  VB.TC.126.AKMP
-				tmpAC = new StringBuffer(32);
-				tmpAC.append(baseAC).append(tmpId)
-						.append(".").append(tmpConfirm);
-
-				pstmt.setString(1, tmpAC.toString());
-				pstmt.setLong(2, tmpId);
-				pstmt.executeUpdate();
+				updateRowAC(tmpId, baseAC, tmpConfirm, pstmt);
 			}
 
 			// tidy up the end of the status bar
@@ -348,6 +353,90 @@ public class AccessionGen {
 		System.out.println("| 100%");
 		System.out.println("updated " + l + "\n");
 		return true;
+	}
+	
+	/**
+	 * Utility that updates a discrete set of rows with AccessionCodes.
+	 * It takes a HashMap of tableNames.
+	 * Each tableName is associated with a Vector of primary  keys for the 
+	 * specific rows to be updated with newly generated AccessionCodes.
+	 * 
+	 * @param tablesAndKeys
+	 * @throws SQLException
+	 */
+	public void updateSpecificRows(HashMap tablesAndKeys) throws SQLException
+	{
+		String tableName;
+
+		Iterator it = tablesAndKeys.keySet().iterator();
+		while (it.hasNext()) {
+			tableName = (String)it.next();
+	
+			// Only deal with tableNames that are defined in the property file
+			// i.e. filter junk and tables without accessionCode rules
+			Iterator tcodesIt = tableCodes.keySet().iterator();
+			while ( tcodesIt.hasNext() )
+			{
+				String supportedTableName = (String) tcodesIt.next();
+				
+				// Is this a supported table ?
+				if ( supportedTableName.equalsIgnoreCase(tableName) )
+				{
+					Vector keys = (Vector) tablesAndKeys.get(tableName);
+			
+					if (  keys != null && ! keys.isEmpty() )
+					{	
+						// Add an AccessionCode for each Key
+						PreparedStatement pstmt = this.getUpdatePreparedStatement(tableName);
+				
+						for ( int i=0; i<keys.size(); i++ )
+						{
+							Long key = (Long) keys.elementAt(i);
+							String baseAC = this.getBaseAccessionCode(tableName);
+							String confirmCode = getConfirmation(tableName, key.toString());
+					
+							this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt);
+							LogUtility.log("AccessionGen > Set accessionCode for PK: " + key + " on " + tableName);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void updateRowAC(long tmpId, String baseAC, String tmpConfirm, PreparedStatement pstmt) throws SQLException
+	{
+		StringBuffer tmpAC;
+		// build the accession code
+		// DB.Tbl.PK#.Confirm  ex:  VB.TC.126.AKMP
+		tmpAC = new StringBuffer(32);
+		tmpAC.append(baseAC).append(tmpId)
+				.append(".").append(tmpConfirm);
+
+		pstmt.setString(1, tmpAC.toString());
+		pstmt.setLong(2, tmpId);
+		pstmt.executeUpdate();
+	}
+
+	private PreparedStatement getUpdatePreparedStatement(String tableName) throws SQLException
+	{
+		// prepare the update statement
+		String update = "UPDATE " + tableName + " SET accessioncode = ? WHERE " + tableName + "_id = ?";
+		PreparedStatement pstmt = conn.prepareStatement(update);
+		return pstmt;
+	}
+
+	private String getBaseAccessionCode(String tableName)
+	{
+		String baseAC;
+		// table -- do case insensitive lookup
+		String tableCode = (String)tableCodes.get( tableName.toLowerCase() );
+		if (tableCode == null) {
+			tableCode = "??";
+		}
+
+		baseAC = dbCode + "." + tableCode + ".";
+		return baseAC;
 	}
 
 	/**
