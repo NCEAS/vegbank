@@ -7,8 +7,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:12:43 $'
- * 	'$Revision: 1.2 $'
+ *  '$Date: 2001-10-23 00:25:02 $'
+ * 	'$Revision: 1.3 $'
  */
 package vegclient.framework;
 
@@ -20,6 +20,7 @@ import java.util.*;
 import java.io.*;
 
 import vegclient.framework.*;
+import vegclient.ternarysearch.ObjectLookupInterface; // a utility
 
 
 
@@ -129,6 +130,7 @@ public class VegClient extends JFrame
 				JMenuItem configuration = new JMenuItem("Client Configuration");
 				JMenuItem workflowManager = new JMenuItem("Workflow Manager");
 				JMenuItem databaseTools = new JMenuItem("Database Tools");
+				JMenuItem commonLists = new JMenuItem("Common Lists");
 				
 				//set the action command
 				mbar.add(makeMenu(utilitiesMenu,
@@ -137,6 +139,7 @@ public class VegClient extends JFrame
 					configuration,
 					workflowManager,
 					databaseTools,
+					commonLists,
 					"Exit"
 				},
 				this));
@@ -219,9 +222,14 @@ public class VegClient extends JFrame
 				System.out.println("Launching the New Data Loader");
 				new NewDataLoader().show();
 			}
+			else if ( arg.trim().equals("Common Lists") )
+			{
+				System.out.println("Launching the ObjectLookupInterface");
+				new ObjectLookupInterface().show();
+			}
 			else 
 			{
-				//senf to the debugger
+				//send to the debugger
 				ProjectManager.debug(0, "not yet implemented: "+evt.getActionCommand() );
 			}
    	}
