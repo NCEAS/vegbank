@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-08-21 21:15:54 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-10-22 19:35:33 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,11 +79,11 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		plot = observation.getPlot();
-		project = observation.getProject();
-		coverMethod = observation.getCovermethod();
-		stratumMethod = observation.getStratummethod();
-		soilTaxon = observation.getSoiltaxon();
+		plot = observation.getPlotobject();
+		project = observation.getProjectobject();
+		coverMethod = observation.getCovermethodobject();
+		stratumMethod = observation.getStratummethodobject();
+		soilTaxon = observation.getSoiltaxonobject();
 		
 		// Just get the first one as thats all the interface supports
 		Iterator commClasses = observation.getobservationcommclasss().iterator();
@@ -873,6 +873,11 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getPlaceDescription(String placeName)
 	{
 		Namedplace namedPlace = (Namedplace) placeNames.get(placeName);
+		String namedPlaceDecription = namedPlace.getPlacedescription();
+		if ( namedPlaceDecription == null )
+		{
+			namedPlaceDecription = "";
+		}
 		return namedPlace.getPlacedescription();
 	}
 
@@ -886,7 +891,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		while ( places.hasNext() )
 		{
 			Place place = (Place) places.next();
-			Namedplace namedPlace = (Namedplace) place.getNamedplace();
+			Namedplace namedPlace = (Namedplace) place.getNamedplaceobject();
 			String key = namedPlace.getPlacename();
 
 			placeNames.put(key, place);
@@ -936,7 +941,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
         System.out.println("Is this the current interpritation ?" + ti.getCurrentinterpretation() );
 				if ( Utility.isTrue(ti.getCurrentinterpretation()) )
 				{
-					key = ti.getPlantconcept().getPlantname();
+					key = ti.getPlantconceptobject().getPlantname();
 				}
 				if ( key.equals(""))
 				{
@@ -957,8 +962,18 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	 */
 	public String getPlantTaxonCode(String plantName)
 	{
+		String plantTaxonCode = "";
 		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
-		return to.getPlantname().getPlantname();
+		Plantname plantname = to.getPlantnameobject();
+		if ( plantname == null )
+		{
+			plantTaxonCode = "";
+		}
+		else
+		{
+			plantTaxonCode = plantname.getPlantname();
+		}
+		return plantTaxonCode;
 	}
 
 	/* (non-Javadoc)
@@ -1259,7 +1274,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		while ( pcIterator.hasNext() )
 		{
 			Projectcontributor  pc = (Projectcontributor) pcIterator.next();
-			Party party = pc.getParty();
+			Party party = pc.getPartyobject();
 			String key = party.getGivenname() + " " + party.getSurname();
 			projectContibs.put(key, party);
 			nameList.add(key);
@@ -1566,8 +1581,13 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		String plotCode,
 		String stratumName)
 	{
+		String taxaStrataCover = "";
 		Stratumcomposition sc = (Stratumcomposition)  stratumComposition.get(stratumName);
-		return sc.getTaxonstratumcover();
+		if (sc == null )
+		{
+			taxaStrataCover = sc.getTaxonstratumcover();
+		}
+		return taxaStrataCover;
 	}
 
 	/* (non-Javadoc)
@@ -1582,7 +1602,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		while ( startumCompsitions.hasNext() )
 		{
 			Stratumcomposition sc = (Stratumcomposition) startumCompsitions.next();
-			String stratumName = sc.getStratum().getStratumname();
+			String stratumName = sc.getStratumobject().getStratumname();
 			strataList.add(stratumName);
 			stratumComposition.put(stratumName, sc);
 		}
@@ -1631,9 +1651,13 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		while ( strata.hasNext())
 		{
 			Stratum stratum = (Stratum) strata.next();
-			String statumName = stratum.getStratumname();
-			uniqueStrataNames.add(statumName);
-			strataNames.put(statumName, stratum);
+			String stratumName = stratum.getStratumname();
+			if ( stratumName == null )
+			{
+				stratumName ="";
+			}
+			uniqueStrataNames.add(stratumName);
+			strataNames.put(stratumName, stratum);
 		}
 		return uniqueStrataNames;
 	}
