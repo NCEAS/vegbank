@@ -5,7 +5,7 @@
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
   -->
 <!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-autogen.xsl"?>
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-template.xsl"?>
 <!--
 -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
@@ -3556,6 +3556,11 @@ change through time.</entitySummary>
       <attList/>
       <attNotes>Foreign key into the observation table</attNotes>
       <attDefinition>Link to the observation table identifying which observation is being classified.</attDefinition>
+      <attForms>
+
+  <formShow name="Summary">439</formShow>
+  <formShow name="Detail">440</formShow>
+</attForms>
       <update>1.0.0</update>
     </attribute>
     <attribute>
