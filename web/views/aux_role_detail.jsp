@@ -29,16 +29,16 @@
         </logic:empty>
 
         <logic:notEmpty name="MY_ROLES-BEANLIST">
-          <table border="1" cellspacing="0" cellpadding="3">
+          <table border="1" class="thinlines" cellpadding="3">
            <tr>
 
         <th>     role Code          </th>  
 	<th>     role Description   </th>
 	<th>     accession Code     </th>
-	<th>     role-Project	   </th>
-	<th>     role-Observation  </th>
-	<th>     role-TaxonInt	  </th>
-	 <th>    role-ClassInt     </th>
+	<th>     Project Contributor	   </th>
+	<th>     Observation  Contributor </th>
+	<th>     Taxon Interpretation	  </th>
+	 <th>    Community Interpretation     </th>
 	 		     
            </tr>
            <%
@@ -60,10 +60,10 @@
               <td>     <bean:write name="onerec" property="rolecode"/>  &nbsp;               </td>
            	<td>   <bean:write name="onerec" property="roledescription"/>&nbsp;      </td>
            	<td>   <bean:write name="onerec" property="accessioncode"/> &nbsp;       </td>
-           	<td>   <bean:write name="onerec" property="roleproject"/>&nbsp;	    </td>
-           	<td>   <bean:write name="onerec" property="roleobservation"/> &nbsp;     </td>
-           	<td>   <bean:write name="onerec" property="roletaxonint"/>	&nbsp;    </td>
-           	<td>   <bean:write name="onerec" property="roleclassint"/>  &nbsp;       </td>
+           	<td>   <bean:write name="onerec" property="roleproject_transl"/>&nbsp;	    </td>
+           	<td>   <bean:write name="onerec" property="roleobservation_transl"/> &nbsp;     </td>
+           	<td>   <bean:write name="onerec" property="roletaxonint_transl"/>	&nbsp;    </td>
+           	<td>   <bean:write name="onerec" property="roleclassint_transl"/>  &nbsp;       </td>
            
             </tr> 
           </logic:iterate>
