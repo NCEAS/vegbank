@@ -1,0 +1,28 @@
+#*
+  $Id: dataload-failure.vm,v 1.1 2005-02-01 21:39:17 anderson Exp $
+*#
+VEGBANK DATA SUBMISSION RECEIPT
+
+result:  FAILURE
+file:  $fileName
+when:  $timestamp
+user:  $username
+reason: $failureReason
+
+Sorry, there was a problem loading the VegBank data file you submitted.
+Please let us know if you require assistance in finding a remedy.  Our 
+development team has been notified and will contact you if they find a
+bug responsible for this issue.
+
+
+Thank you for your patience.
+help@vegbank.org
+
+
+#if ($transcript != null)
+LOG TRANSCRIPT
+#foreach ($line in $transcript)
+    $line
+#end
+#end
+

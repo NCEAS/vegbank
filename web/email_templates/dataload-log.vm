@@ -1,0 +1,27 @@
+#*
+  $Id: dataload-log.vm,v 1.1 2005-02-01 21:41:20 anderson Exp $
+*#
+VEGBANK DATA SUBMISSION LOG
+
+result:  SUCCESS
+dataset:  $datasetURL
+file:  $fileName
+when:  $timestamp
+user:  $username
+
+
+#if ($entityCounts.size() > 0)
+Loaded item counts
+#foreach ($entity in $entityCounts.keySet())
+    $entity:  $entityCounts.get($entity)
+#end
+#end
+
+
+#if ($transcript != null)
+LOG TRANSCRIPT
+#foreach ($line in $transcript)
+    $line
+#end
+#end
+

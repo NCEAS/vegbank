@@ -1,0 +1,24 @@
+#*
+  $Id: dataload-success.vm,v 1.1 2005-02-01 21:39:17 anderson Exp $
+*#
+VEGBANK DATA SUBMISSION RECEIPT
+
+result:  SUCCESS
+dataset:  $datasetURL
+file:  $fileName
+when:  $timestamp
+user:  $username
+
+
+#if ($entityCounts.size() > 0)
+Loaded item counts
+#foreach ($entity in $entityCounts.keySet())
+    $entity:  $entityCounts.get($entity)
+#end
+#end
+
+
+Thank you for your submission.
+help@vegbank.org
+
+
