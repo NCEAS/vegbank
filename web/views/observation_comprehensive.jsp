@@ -68,6 +68,27 @@
 </table>
 </TD><TD valign="top"><!-- plants in this plot -->
 <%@ include file="includeviews/sub_taxonobservation.jsp" %>
+
+
+<vegbank:get id="stemcount" select="stemcount" beanName="map" pager="false" where="where_observation_pk" wparam="observation_pk" perPage="-1" />
+<logic:notEmpty name="stemcount-BEANLIST">
+<br/><br/>
+<table class="leftrightborders" cellpadding="2">
+<tr><th colspan="9">Stems:</th></tr>
+
+<tr>
+<th>Plant Name</th>  <%@ include file="autogen/stemcount_summary_head.jsp" %>
+</tr>
+<logic:iterate id="onerowofstemcount" name="stemcount-BEANLIST">
+<tr class="@nextcolorclass@">
+<td><a href="@get_link@std/taxonobservation/<bean:write name='onerowofstemcount' property='taxonobservation_id' />"><bean:write name="onerowofstemcount" property="authorplantname" /></a></td>
+<%@ include file="autogen/stemcount_summary_data.jsp" %>
+</tr>
+</logic:iterate>
+
+</table>
+</logic:notEmpty>
+
 </TD>
 </TR><TR><TD colspan="2" valign="top" align="left">
 <!-- community info -->
