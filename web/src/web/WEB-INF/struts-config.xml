@@ -112,9 +112,10 @@
 		</action>
 		<action path="/DisplayEntity" type="org.vegbank.ui.struts.DisplayEntityAction" name="DisplayEntityForm" scope="request" validate="true" input="failure" />
 		<action path="/DisplayPlot" type="org.vegbank.ui.struts.DisplayPlotAction" name="DisplayPlotForm" scope="request" validate="true" input="failure" />
-		<action path="/DisplayUploadPlotAction" forward="/forms/plot-submit.jsp">
+		<action path="/DisplayUploadPlotAction" parameter="form" type="org.vegbank.ui.struts.UploadPlotAction" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
+            <forward name="form" path="/forms/plot-submit.jsp"/>
 		</action>
 		<action path="/DisplayAddStratumMethodAction" forward="/forms/AddStratumMethod.jsp">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
