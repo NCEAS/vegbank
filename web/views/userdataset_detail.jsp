@@ -1,5 +1,5 @@
 @stdvegbankget_jspdeclarations@
-<!-- $Id: userdataset_detail.jsp,v 1.8 2005-02-12 00:06:57 mlee Exp $ -->
+<!-- $Id: userdataset_detail.jsp,v 1.9 2005-03-15 06:39:47 anderson Exp $ -->
 <!-- purpose : show user's datasets, either all of them (mode=all in URL) or only certain ones:
 
   mode=ac is to show accessioncodes
@@ -78,4 +78,4 @@ if (getType="all")  -->
 
 
 
-          @vegbank_footer_html_tworow@
+          @webpage_footer_html@

@@ -157,4 +157,4 @@
 <NOPE /logic:iterate NOPE>
 <vegbank:pager/>
 <NOPE /logic:notEmpty NOPE><br>
-@vegbank_footer_html_tworow@</BODY></html>
+@webpage_footer_html@

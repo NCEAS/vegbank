@@ -201,4 +201,4 @@
 <vegbank:pager/>
 
 <br/>
-          @vegbank_footer_html_tworow@
+          @webpage_footer_html@

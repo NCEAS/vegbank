@@ -16,4 +16,4 @@
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>
 
 <br>
-          @vegbank_footer_html_tworow@
+          @webpage_footer_html@

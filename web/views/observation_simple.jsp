@@ -106,5 +106,5 @@
 <br />
 <vegbank:pager />
 
-          @vegbank_footer_html_tworow@
-</body></html>
+          @webpage_footer_html@
+</html>

@@ -81,6 +81,6 @@
 		<br>
 		  <vegbank:pager id="MY_ROLES"/>
 
-@vegbank_footer_html_tworow@
-</BODY>
+@webpage_footer_html@
+
 </html>

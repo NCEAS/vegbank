@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2004-10-21 15:08:57 $'
-*  '$Revision: 1.23 $'
+*  '$Date: 2005-03-15 06:39:47 $'
+*  '$Revision: 1.24 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -193,6 +193,6 @@
 </logic:notEmpty>
 
 <br>
-@vegbank_footer_html_tworow@
-</BODY>
+@webpage_footer_html@
+
 </html>
