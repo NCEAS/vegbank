@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2003-11-20 00:07:45 $'
-* '$Revision: 1.73 $'
+* '$Date: 2003-11-20 18:29:04 $'
+* '$Revision: 1.74 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -223,6 +223,8 @@
 	* WEB SERVER
 -->
   <target name="history" depends="hdrftr" description="=&gt; dist the history pages to server ">
+    <style basedir="${history_src}" destdir="${history_src}" style="${history_src}/normalhtml.xsl" force="yes" includes=" development.xml" />
+    
     <copy overwrite="true" todir="${history_server}" filtering="yes">
       <fileset dir="${history_src}">
         <exclude name="**/**.gif"/>
@@ -253,11 +255,10 @@
       </fileset>
     </copy>
   </target>
-  <target name="workshop-big-bin" depends="hdrftr" description="=&gt; dist the workshop large binary files to server " >
+  <target name="workshop-big-bin" depends="hdrftr" description="=&gt; dist the workshop large binary files to server ">
     <copy overwrite="true" todir="${workshop_server}" filtering="no">
-      <fileset dir="${lrg_binary_src}" includes="  VegBank_NVC.pdf  VegBank_NVC.ppt  VegBank_tutorial_model.pdf  VegBank_tutorial_model.ppt VegBank_tutorial_why.pdf  VegBank_tutorial_why.ppt " />
+      <fileset dir="${lrg_binary_src}" includes="  VegBank_NVC.pdf  VegBank_NVC.ppt  VegBank_tutorial_model.pdf  VegBank_tutorial_model.ppt VegBank_tutorial_why.pdf  VegBank_tutorial_why.ppt "/>
     </copy>
-  
   </target>
   <target name="pubs" depends="hdrftr" description="=&gt; dist the pubs pages to server">
     <copy overwrite="true" todir="${pubs_server}" filtering="no">
