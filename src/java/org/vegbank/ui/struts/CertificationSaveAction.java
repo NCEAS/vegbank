@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 19:28:56 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-01-31 01:29:25 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,11 +27,18 @@ package org.vegbank.ui.struts;
 import java.sql.*;
 import java.util.*;
 import javax.servlet.http.*;
+import javax.mail.internet.AddressException;
+import javax.mail.MessagingException;
 
+import org.apache.struts.Globals;
 import org.apache.struts.action.*;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.PermComparison;
+import org.vegbank.common.Constants;
+import org.vegbank.common.model.utility.Regionlist;
+import org.vegbank.common.model.WebUser;
 
 /**
  * @author anderson
@@ -45,15 +52,28 @@ public class CertificationSaveAction extends VegbankAction {
 			HttpServletRequest request,
 			HttpServletResponse response) {
 
-		LogUtility.log(" In action CertificationSaveAction");
 		ActionErrors errors = new ActionErrors();
 
-		CertificationForm certForm = (CertificationForm)form;
-		saveCertification(certForm, errors);
-		sendAdminCertRequest(certForm, errors);
+		try {
+			CertificationForm certForm = getCertForm(form, getUser(request.getSession()));
+			
+			LogUtility.log("CertSave: Saving...");
+			saveCertification(certForm, errors);
+			
+			LogUtility.log("CertSave: Notifying admin...");
+			sendAdminCertRequest(certForm, errors);
+			
+		} catch(Exception ex) {
+			LogUtility.log("ERROR: CertificationSaveAction", ex);
+			//errors.add(ActionErrors.GLOBAL_ERROR, new ActionMessage(
+			errors.add(Globals.ERROR_KEY, new ActionMessage(
+						"errors.general", ex.getMessage()));
+			saveErrors(request, errors);
+			return mapping.findForward("vberror");
+		}
+
 		
-		LogUtility.log("Leaving CertificationSaveAction");
-		return mapping.findForward("Certification");
+		return mapping.findForward("success");
 	}
 
 
@@ -63,32 +83,30 @@ public class CertificationSaveAction extends VegbankAction {
 	 * people that the request has been submitted.
 	 * 
 	 */
-	 private void saveCertification(CertificationForm form, ActionErrors errors) {
+	 private void saveCertification(CertificationForm form, ActionErrors errors)
+			throws AddressException, MessagingException, SQLException {
 
-		try {
-			LogUtility.log("CertSave > saving certification application");
-			 
-			UserDatabaseAccess userdb = new UserDatabaseAccess();
+		UserDatabaseAccess userdb = new UserDatabaseAccess();
 
-			userdb.insertUserCertificationInfo(form);
-			
-			// send email message to the user 
-			String mailHost = "hyperion.nceas.ucsb.edu";
-			String from = "help@vegbank.org";
-			String to = form.getEmailAddress();
-			String cc = "anderson@nceas.ucsb.edu";
-			//String cc = "";
-			String subject = "Your VegBank Certification Request";
-			String body = "Dear " + form.getGivenName() + 
-				": \n\nYour VegBank certification request has been received and will " +
-				"be reviewed.  Please await our response.\n\n" +
-				"Thank you,\nThe VegPanel\n\n\n";
+		userdb.insertUserCertificationInfo(form);
+		
+		// send email message to the user 
+		String mailHost = "hyperion.nceas.ucsb.edu";
+		String from = "help@vegbank.org";
+		String to = form.getEmailAddress();
+		String cc = "";
+		String subject = "Your VegBank Certification Request";
+		String body = "Dear " + form.getGivenName() + 
+			": \n\nYour VegBank certification request has been received and will " +
+			"be reviewed.  Please await our response.\n\n" +
+			"Thank you,\nThe VegPanel\n\n\n";
 
-			ServletUtility.sendPlainTextEmail(mailHost, from, to, cc, subject, body);
-			
-		 } catch(Exception e) {
-		 	LogUtility.log("CertificationSaveAction: ", e);
-		 }
+		if (to == null || to.equals("")) {
+			throw new AddressException("CertSave: no email address for user");
+		}
+		LogUtility.log("CertSave: Sending confirmation to user: to=" +
+				to + ", from=" + from);
+		ServletUtility.sendPlainTextEmail(mailHost, from, to, cc, subject, body);
 	 }
 	 
 	/**
@@ -96,74 +114,181 @@ public class CertificationSaveAction extends VegbankAction {
 	 * and sends them to the vegpanel email list.
 	 * @param form -- the cert. form bean
 	 */
-	private void sendAdminCertRequest(CertificationForm form, ActionErrors errors) {
-
-		try {
-			StringBuffer messageBody = new StringBuffer();
-
-			messageBody.append("VegBank Administrator, \n")
-				.append(" Please review the following certification information. \n\n")
+	private void sendAdminCertRequest(CertificationForm form, ActionErrors errors) 
+			throws javax.mail.internet.AddressException, javax.mail.MessagingException {
 				
-				.append(" Name: "+form.getSurName() +", "+form.getGivenName()+" \n")
-				.append(" Email: "+form.getEmailAddress()+" \n")
-				.append(" Phone Number: "+form.getPhoneNumber()+" \n\n")
-				
-				.append(" Current Cert Level: "+form.getCurrentCertLevel()+" \n")
-				.append(" Requested Cert Level: " + form.getRequestedCert() +" \n")
-				.append(" Highest Degree: "+form.getHighestDegree()+" \n")
-				.append(" Degree Year: "+form.getDegreeYear()+" \n")
-				.append(" Degree Inst: "+form.getDegreeInst()+" \n")
-				.append(" Current Organization: "+form.getCurrentOrg()+" \n")
-				.append(" Current Position: "+form.getCurrentPos()+" \n")
-				.append(" ESA Member: "+form.getEsaMember()+" \n")
-				.append(" Prof. Experience: "+form.getProfExp()+" \n")
-				.append(" Relevant Pubs: "+form.getRelevantPubs()+" \n")
-				.append(" Veg Sampling Exp: "+form.getVegSamplingExp()+" \n")
-				.append(" Veg Analysis Exp: "+form.getVegAnalysisExp()+" \n")
-				.append(" US-NVC Exp: "+form.getUsnvcExp()+" \n")
-				.append(" VegBank Experience: "+form.getVbExp()+" \n")
-				.append(" Intended VB Use: "+form.getVbIntention()+" \n")
-				.append(" Plot DB/Tools Exp: "+ form.getToolsExp()+" \n\n")
+		// get the region names				
+		javax.servlet.ServletContext sc = this.getServlet().getServletContext();
+		Regionlist regions = (Regionlist)sc.getAttribute(
+				Constants.REGIONLISTBEAN_KEY);
+		String regionA=null, regionB=null, regionC=null;
+		String tmp = form.getExpRegionA();			
+		if (tmp != null) {	regionA = regions.getName(tmp); }
+		tmp = form.getExpRegionB();			
+		if (tmp != null) {	regionB = regions.getName(tmp); }
+		tmp = form.getExpRegionC();
+		if (tmp != null) {	regionC = regions.getName(tmp); }
 
-				.append(" Self assessment of knowledge (1=least, 5=most)\n")
-				.append(" Region 1: "+form.getExpRegionA()+" \n")
-				.append("   Vegetation : "+form.getExpRegionAVeg()+" \n")
-				.append("   Floristics : "+form.getExpRegionAFlor()+" \n")
-				.append("   US-NVC/IVC : "+form.getExpRegionANVC()+" \n")
-				.append(" Region 2: "+form.getExpRegionB()+" \n")
-				.append("   Vegetation : "+form.getExpRegionBVeg()+" \n")
-				.append("   Floristics : "+form.getExpRegionBFlor()+" \n")
-				.append("   US-NVC/IVC : "+form.getExpRegionBNVC()+" \n")
-				.append(" Region 3: "+form.getExpRegionC()+" \n")
-				.append("   Vegetation : "+form.getExpRegionCVeg()+" \n")
-				.append("   Floristics : "+form.getExpRegionCFlor()+" \n")
-				.append("   US-NVC/IVC : "+form.getExpRegionCNVC()+" \n\n")
+		
 
-				.append(" ESA Sponsor #1 \n")
-				.append("   Name : "+form.getEsaSponsorNameA()+" \n")
-				.append("   Email: "+form.getEsaSponsorEmailA()+" \n")
-				.append(" ESA Sponsor #2 \n")
-				.append("   Name : "+form.getEsaSponsorNameB()+" \n")
-				.append("   Email: "+form.getEsaSponsorEmailB()+" \n\n")
+		StringBuffer messageBody = new StringBuffer();
 
-				.append(" Peer review interest?: "+form.getPeerReview()+" \n")
-				.append(" Additional statement: "+form.getAddlStmt()+" \n")
-				.append(" \n\n")
-				.append(" THANK YOU\n")
-				.append(" \n\n\n");
+		messageBody.append("Dear VegPanel Member:\n")
+			.append(" Please review the following certification application. \n\n")
+			
+			.append(" Name:  "+form.getSurName() +", "+form.getGivenName()+" \n")
+			.append(" Email:  "+form.getEmailAddress()+" \n")
+			.append(" Phone Number:  "+form.getPhoneNumber()+" \n\n")
+			.append(" Current Cert Level:  "+form.getCurrentCertLevelName()+" \n")
+			.append(" Requested Cert Level:  "+form.getRequestedCert()+" \n")
+			.append(" Highest Degree:  "+form.getHighestDegree()+" \n");
 
-			String mailHost = "vegbank.org";
-			String from = "vegbank";
-			String to = "anderson@nceas.ucsb.edu";
-			//String to = "panel@vegbank.org";
-			String cc = null;
-			String subject = "VegBank Certification for " + form.getGivenName() + " " + form.getSurName();
-			String body = messageBody.toString();
-			ServletUtility.sendPlainTextEmail(mailHost, from, to, cc, subject, body);
+		// degreeYear
+		tmp = form.getDegreeYear();
+		if (tmp != null && !tmp.equals("")) messageBody.append(" Degree Year:  "+tmp+" \n");
 
-		} catch(Exception e) {
-			LogUtility.log("CertificationSaveAction.sendAdminCertRequest: ", e);
+		// degreeInst
+		tmp = form.getDegreeInst();
+		if (tmp != null && !tmp.equals("")) messageBody.append(" Degree Inst:  "+tmp+" \n");
+
+		messageBody.append(" Current Organization:  "+form.getCurrentOrg()+" \n")
+			.append(" Current Position:  "+form.getCurrentPos()+" \n");
+
+		tmp = form.getEsaMember();
+		if (tmp == null || tmp.equals("") || tmp.equals("0")) 
+				{ tmp="NO"; } else { tmp="YES"; }
+		messageBody.append(" ESA Member:  "+tmp+" \n\n");
+
+		// profExp
+		tmp = form.getProfExp();
+		if (tmp != null && !tmp.equals("")) messageBody.append(" Prof. Experience:  "+tmp+" \n\n");
+
+		// relevantPubs
+		tmp = form.getRelevantPubs();
+		if (tmp != null && !tmp.equals("")) messageBody.append(" Relevant Pubs:  "+tmp+" \n\n");
+
+		messageBody.append(" Veg Sampling Exp:  "+form.getVegSamplingExp()+" \n\n")
+			.append(" Veg Analysis Exp:  "+form.getVegAnalysisExp()+" \n\n")
+			.append(" US-NVC Exp:  "+form.getUsnvcExp()+" \n\n");
+
+		// vbExp
+		tmp = form.getVbExp();
+		if (tmp != null && !tmp.equals("")) messageBody.append(" VegBank Experience:  "+tmp+" \n\n");
+
+		// vbIntention
+		messageBody.append(" Intended VB Use:  "+form.getVbIntention()+" \n\n");
+
+		// toolsExp
+		tmp =  form.getToolsExp();
+		if (tmp != null && !tmp.equals("")) messageBody.append(" Plot DB/Tools Exp:  "+tmp+" \n\n");
+
+		// self assessment
+		messageBody.append("\n Self assessment of knowledge (1=least, 5=most)\n");
+			
+		if (regionA != null) {
+			messageBody.append(" Region 1:  "+regionA+" \n")
+			.append("   Vegetation :  "+form.getExpRegionAVeg()+" \n")
+			.append("   Floristics :  "+form.getExpRegionAFlor()+" \n")
+			.append("   US-NVC/IVC :  "+form.getExpRegionANVC()+" \n");
 		}
+			
+		if (regionB != null) {
+			messageBody.append(" Region 2:  "+regionB+" \n")
+			.append("   Vegetation :  "+form.getExpRegionBVeg()+" \n")
+			.append("   Floristics :  "+form.getExpRegionBFlor()+" \n")
+			.append("   US-NVC/IVC :  "+form.getExpRegionBNVC()+" \n");
+		}
+			
+		if (regionC != null) {
+			messageBody.append(" Region 3:  "+regionC+" \n")
+			.append("   Vegetation :  "+form.getExpRegionCVeg()+" \n")
+			.append("   Floristics :  "+form.getExpRegionCFlor()+" \n")
+			.append("   US-NVC/IVC :  "+form.getExpRegionCNVC()+" \n");
+		}
+
+		messageBody.append("\n ESA Sponsor #1 \n")
+			.append("   Name :  "+form.getEsaSponsorNameA()+" \n")
+			.append("   Email:  "+form.getEsaSponsorEmailA()+" \n")
+			.append(" ESA Sponsor #2 \n")
+			.append("   Name :  "+form.getEsaSponsorNameB()+" \n")
+			.append("   Email:  "+form.getEsaSponsorEmailB()+" \n\n");
+
+		tmp = form.getPeerReview();
+		tmp = ((tmp != null && !tmp.equals("")) ? "YES" : "NO");
+		messageBody.append(" Peer review interest?:  "+tmp+" \n\n");
+
+		tmp = form.getAddlStmt();
+		if (tmp != null && !tmp.equals("")) messageBody.append(" Additional statement:   "+tmp+" \n");
+
+		messageBody.append(" \n\n")
+			.append(" THANK YOU\n")
+			.append(" \n\n\n");
+
+		String mailHost = "vegbank.org";
+		String from = "vegbank";
+		String to = "panel@vegbank.org";
+		String cc = null;
+		String subject = "VegBank certification for " + form.getGivenName() + " " + form.getSurName();
+		String body = messageBody.toString();
+		ServletUtility.sendPlainTextEmail(mailHost, from, to, cc, subject, body);
+
+	}
+
+	/**
+	 * Populates user info.
+	 */
+	private CertificationForm getCertForm(ActionForm form, WebUser user) {
+		CertificationForm certForm = (CertificationForm)form;
+	
+		int iTmp = user.getUserid();
+		if (iTmp != 0)  certForm.setUsrId(iTmp);
+
+		String tmp = user.getGivenname();
+		if (tmp != null && !tmp.equals("") && !tmp.equals("null")) {  
+			certForm.setGivenName(tmp);
+		}
+		tmp = user.getSurname();
+		if (tmp != null && !tmp.equals("") && !tmp.equals("null")) {  
+			certForm.setSurName(tmp);
+		}
+
+		tmp = user.getDayphone();
+		if (tmp != null && !tmp.equals("") && !tmp.equals("null")) {
+			LogUtility.log("CertSave: setting phone="+tmp);
+			certForm.setPhoneNumber(tmp);
+		} else {
+			LogUtility.log("CertSave: setting phone=n/a");
+			certForm.setPhoneNumber("n/a");
+		}
+
+		tmp = user.getEmail();
+		if (tmp != null && !tmp.equals("") && !tmp.equals("null")) {
+			certForm.setEmailAddress(tmp);
+		}
+
+		if (certForm.getCurrentOrg() == null) {
+			// user did not enter current org
+			// so try saved org name
+			tmp = user.getOrganizationname();
+			if (tmp == null || tmp.equals("")) {
+				// then try institution
+				tmp = user.getInstitution();
+				if (tmp != null && !tmp.equals(""))  certForm.setCurrentOrg(tmp);
+				else certForm.setCurrentOrg("n/a");
+			} else {
+				certForm.setCurrentOrg(tmp);
+			}
+		}
+		
+		// set current certification level
+		if (PermComparison.matchesOne("pro", user.getPermissiontype())) {
+			certForm.setCurrentCertLevel(PermComparison.getRoleConstant("pro"));
+		} else {
+			certForm.setCurrentCertLevel(PermComparison.getRoleConstant("cert"));
+		}
+
+		
+		return certForm;
 	}
 
 }

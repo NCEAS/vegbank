@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-01-16 19:28:56 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-01-31 01:29:25 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import java.sql.*;
 import org.apache.struts.validator.ValidatorForm;
 import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.utility.DatabaseAccess;
+import org.vegbank.common.utility.PermComparison;
 
 /**
  * @author anderson
@@ -37,12 +38,16 @@ import org.vegbank.common.utility.DatabaseAccess;
 public class CertificationForm extends ValidatorForm 
 			implements java.io.Serializable
 {
+
+
 	// prepopulated fields
+	private long usrId;
 	private String emailAddress;
 	private String surName;
 	private String givenName;
 	private String phoneNumber;
-	private String currentCertLevel;
+	private int currentCertLevel;
+	private String currentCertLevelName;
 	
 	// user enters these fields
 	private String requestedCert;
@@ -51,7 +56,7 @@ public class CertificationForm extends ValidatorForm
 	private String degreeInst;
 	private String currentOrg;
 	private String currentPos;
-	private String esaMember="no";
+	private String esaMember="0";
 
 	private String profExp;
 	private String relevantPubs;
@@ -89,6 +94,21 @@ public class CertificationForm extends ValidatorForm
 		super();
 	}
 	
+
+	/**
+	 * Get value of 'usrId' property.
+	 */
+	public long getUsrId() {
+		return this.usrId;
+	}
+
+	/**
+	 * Set the 'usrId' property.
+	 */
+	public void setUsrId(long usrId) {
+		this.usrId = usrId;
+	}
+
 	/**
 	 * @return
 	 */
@@ -102,20 +122,6 @@ public class CertificationForm extends ValidatorForm
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
-
-	/**
-	 * @return
-	 */
-//	public String getSubmittedEmail() {
-//		return submittedEmail;
-//	}
-
-	/**
-	 * @param string
-	 */
-//	public void setSubmittedEmail(String submittedEmail) {
-//		this.submittedEmail = submittedEmail;
-//	}
 
 	/**
 	 * @return
@@ -134,14 +140,14 @@ public class CertificationForm extends ValidatorForm
 	/**
 	 * @return
 	 */
-	public String getGivenName () {
+	public String getGivenName() {
 		return givenName;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setGivenName (String givenName ) {
+	public void setGivenName(String givenName ) {
 		this.givenName  = givenName;
 	}
 
@@ -162,15 +168,38 @@ public class CertificationForm extends ValidatorForm
 	/**
 	 * @return abbreviated name of role
 	 */
-	public String getCurrentCertLevel() {
+	public int getCurrentCertLevel() {
 		return currentCertLevel;
 	}
 
 	/**
 	 * @param string must be either "cert" or "pro"
 	 */
-	public void setCurrentCertLevel(String currentCertLevel) {
+	public void setCurrentCertLevel(int currentCertLevel) {
 		this.currentCertLevel = currentCertLevel;
+	}
+
+	/**
+	 * Get value of 'currentCertLevelName' property.
+	 */
+	public String getCurrentCertLevelName() {
+		if (this.currentCertLevelName == null) {
+			if (PermComparison.matchesOne("pro", this.currentCertLevel))
+				return "professional";
+			else if (PermComparison.matchesOne("cert", this.currentCertLevel))
+				return "certified";
+			else
+				return "other";
+		} else {
+			return this.currentCertLevelName;
+		}
+	}
+
+	/**
+	 * Set the 'currentCertLevelName' property.
+	 */
+	public void setCurrentCertLevelName(String currentCertLevelName) {
+		this.currentCertLevelName = currentCertLevelName;
 	}
 
 	/**
