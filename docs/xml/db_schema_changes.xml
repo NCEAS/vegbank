@@ -2278,12 +2278,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Cover, in percent, of the taxon (potentially limitied to one stratum if stratum_ID has a value).</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1299</formAustere>
-            <formSummary>1300</formSummary>
-            <formDetail>1301</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -2300,12 +2294,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Total basal area of the species in m2/ha (potentially limitied to one stratum if stratum_ID has a value).</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1300</formAustere>
-            <formSummary>1301</formSummary>
-            <formDetail>1302</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -2322,12 +2310,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>The biomass of the species in g/m2 (potentially limitied to one stratum if stratum_ID has a value).</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1300.5</formAustere>
-            <formSummary>1301.5</formSummary>
-            <formDetail>1302.5</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -2344,12 +2326,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>The area used to infer the importance values of the taxon, if not the same as observation.taxonInferenceArea.</attNotes>
           <attDefinition>This is the area in m2 used to infer the importance values in this record.  Generally this should be equal to observation.taxonInferenceArea, but at times this area may be larger or smaller for a specific taxon.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1303</formAustere>
-            <formSummary>1304</formSummary>
-            <formDetail>1305</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -2375,12 +2351,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>Foreign key into the taxonImportance table</attNotes>
           <attDefinition>Foreign key into the taxonImportance table, thereby associating a taxon identification with the tree stem(s).</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>1154</formSummary>
-            <formDetail>1155</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -2406,12 +2376,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>Foreign key into the taxonObservation table</attNotes>
           <attDefinition>Foreign key into the taxonObservation table, thereby associating a taxon identification with the tree stem(s).</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>1154</formSummary>
-            <formDetail>1155</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -2435,12 +2399,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Specifics about the accession number and location of a collection made of the taxon</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1294</formAustere>
-            <formSummary>1295</formSummary>
-            <formDetail>1296</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -2457,12 +2415,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>(could be calculated)</attNotes>
           <attDefinition>Overall cover of the taxon across all strata</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1297</formAustere>
-            <formSummary>1298</formSummary>
-            <formDetail>1299</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -2479,12 +2431,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Total basal area of the species in the stemInferenceArea in m2/ha</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1300</formAustere>
-            <formSummary>1301</formSummary>
-            <formDetail>1302</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -2501,12 +2447,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes/>
           <attDefinition/>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1306</formAustere>
-            <formSummary>1307</formSummary>
-            <formDetail>1308</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -2523,12 +2463,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>Foreign key into plantName table.</attNotes>
           <attDefinition>The taxon name that the author of the plot used to refer to a taxon observed within the plot.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>-1</formSummary>
-            <formDetail>-1</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -2554,12 +2488,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Database generated identifier assigned to each unique observation of a taxon in a stratum.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>1210</formSummary>
-            <formDetail>1211</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -2576,12 +2504,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>Foreign key into the taxonObservation table, which identifies the taxon.</attNotes>
           <attDefinition>Link to the identification of the taxon being observed.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>1212</formSummary>
-            <formDetail>1213</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -2598,12 +2520,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>Foreign key into the stratum table.</attNotes>
           <attDefinition>Link to the specific stratum in which the taxon occurs.  Because a single taxon may occur in more than one stratum, this attribute has a many to one relationship with a single taxon observation.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>1214</formSummary>
-            <formDetail>1215</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -2620,12 +2536,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Percent cover of taxon in stratum</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1216</formAustere>
-            <formSummary>1217</formSummary>
-            <formDetail>1218</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -2642,12 +2552,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes/>
           <attDefinition/>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1219</formAustere>
-            <formSummary>1220</formSummary>
-            <formDetail>1221</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -2664,12 +2568,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes/>
           <attDefinition/>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1222</formAustere>
-            <formSummary>1223</formSummary>
-            <formDetail>1224</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -4692,12 +4590,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Name of the table that the ownsership is associated with.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>618</formAustere>
-            <formSummary>619</formSummary>
-            <formDetail>620</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -4714,12 +4606,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>The record number (row) containing the value with which the ownership is associated (which translates to the primary key value for the table wherein the record is stored).</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>624</formAustere>
-            <formSummary>625</formSummary>
-            <formDetail>626</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -4736,12 +4622,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Date the record in question was created in VegBank.  This could be different from OwnerStart if ownership was transferred to another user.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>79</formAustere>
-            <formSummary>80</formSummary>
-            <formDetail>81</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -4758,12 +4638,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Start date of the ownership of the record specified.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>79</formAustere>
-            <formSummary>80</formSummary>
-            <formDetail>81</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -4780,12 +4654,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Stop date of the ownership of the record specified.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>82</formAustere>
-            <formSummary>83</formSummary>
-            <formDetail>84</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -4845,12 +4713,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Foreign key that identifies the party that made the status assignment</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>88</formSummary>
-            <formDetail>89</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -4874,12 +4736,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Foreign key that identifies the party that used the class concept with the name.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>108</formSummary>
-            <formDetail>109</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -4903,12 +4759,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Foreign key that identifies the party that made the status assignment</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>210</formAustere>
-            <formSummary>204</formSummary>
-            <formDetail>205</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -4932,12 +4782,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Foreign key that identifies  the party that uses the concept with the name.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>230</formAustere>
-            <formSummary>235</formSummary>
-            <formDetail>236</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -4963,12 +4807,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Foreign key that identifies the party that made the status assignment</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>88</formSummary>
-            <formDetail>89</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -4992,12 +4830,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Foreign key that identifies the party that used the class concept with the name.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>108</formSummary>
-            <formDetail>109</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -5021,12 +4853,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Foreign key that identifies the party that made the status assignment</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>210</formAustere>
-            <formSummary>204</formSummary>
-            <formDetail>205</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -5050,12 +4876,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Foreign key that identifies  the party that uses the concept with the name.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>230</formAustere>
-            <formSummary>235</formSummary>
-            <formDetail>236</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -5081,12 +4901,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>Primary key for the party table.</attNotes>
           <attDefinition>Database generated identifier assigned to each unique party.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>159</formSummary>
-            <formDetail>160</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5103,12 +4917,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Salutation preceding one's given name.</attDefinition>
-          <attForms>
-            <formPKTranslate>8</formPKTranslate>
-            <formAustere>161</formAustere>
-            <formSummary>162</formSummary>
-            <formDetail>163</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5125,12 +4933,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>One's first name.</attDefinition>
-          <attForms>
-            <formPKTranslate>9</formPKTranslate>
-            <formAustere>164</formAustere>
-            <formSummary>165</formSummary>
-            <formDetail>166</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5147,12 +4949,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>One's middle name or initial, if any.</attDefinition>
-          <attForms>
-            <formPKTranslate>10</formPKTranslate>
-            <formAustere>167</formAustere>
-            <formSummary>168</formSummary>
-            <formDetail>169</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5169,12 +4965,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Name shared in common to identify the members of a family, as distinguished from each member's given name.</attDefinition>
-          <attForms>
-            <formPKTranslate suffix=", ">5</formPKTranslate>
-            <formAustere>170</formAustere>
-            <formSummary>171</formSummary>
-            <formDetail>172</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5191,12 +4981,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Name of an organization.</attDefinition>
-          <attForms>
-            <formPKTranslate prefix="(org:" suffix=")">12</formPKTranslate>
-            <formAustere>173</formAustere>
-            <formSummary>174</formSummary>
-            <formDetail>175</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5213,12 +4997,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Recursive foreign key to current name of this party.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>176</formSummary>
-            <formDetail>177</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5235,12 +5013,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Instructions for contacting a party.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>178</formAustere>
-            <formSummary>179</formSummary>
-            <formDetail>180</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5257,12 +5029,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Recursive foreign key to the Party who owns this party record and who has exclusive rights to update the information content.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>181</formSummary>
-            <formDetail>182</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5279,12 +5045,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes/>
           <attDefinition/>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>183</formAustere>
-            <formSummary>184</formSummary>
-            <formDetail>185</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -5308,12 +5068,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>Primary key for the party table.</attNotes>
           <attDefinition>Database generated identifier assigned to each unique party.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>41</formSummary>
-            <formDetail>42</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5330,12 +5084,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Salutation preceding one's given name.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>43</formAustere>
-            <formSummary>44</formSummary>
-            <formDetail>45</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5352,12 +5100,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>One's first name.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>46</formAustere>
-            <formSummary>47</formSummary>
-            <formDetail>48</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5374,12 +5116,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>One's middle name or initial, if any.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>49</formAustere>
-            <formSummary>50</formSummary>
-            <formDetail>51</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5396,12 +5132,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Name shared in common to identify the members of a family, as distinguished from each member's given name.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>52</formAustere>
-            <formSummary>53</formSummary>
-            <formDetail>54</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5418,12 +5148,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Name of an organization.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>55</formAustere>
-            <formSummary>56</formSummary>
-            <formDetail>57</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5440,12 +5164,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Recursive foreign key to current name of this party.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>58</formSummary>
-            <formDetail>59</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5462,12 +5180,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Instructions for contacting a party.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>60</formAustere>
-            <formSummary>61</formSummary>
-            <formDetail>62</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
         <attribute>
@@ -5484,12 +5196,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Recursive foreign key to the Party who owns this party record and who has exclusive rights to update the information content.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>63</formSummary>
-            <formDetail>64</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -5544,12 +5250,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           </attList>
           <attNotes>n/a</attNotes>
           <attDefinition>The type of party this is.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>868</formAustere>
-            <formSummary>869</formSummary>
-            <formDetail>870</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -5676,12 +5376,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Recursive foreign key to the Party who owns this party record and who has exclusive rights to update the information content.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>885</formSummary>
-            <formDetail>886</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -5714,12 +5408,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Text description of and the rationale for the layout of the plot.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>968</formAustere>
-            <formSummary>969</formSummary>
-            <formDetail>970</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -5745,12 +5433,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Text description of and the rationale for the layout of the plot.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>968</formAustere>
-            <formSummary>969</formSummary>
-            <formDetail>970</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -5824,12 +5506,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           </attList>
           <attNotes>closed list - USDA</attNotes>
           <attDefinition>The horizon to which this observation applies.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1094</formAustere>
-            <formSummary>1095</formSummary>
-            <formDetail>1096</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -5977,12 +5653,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           </attList>
           <attNotes>closed list - USDA</attNotes>
           <attDefinition>Soil texture class.The texture classes sands, loamy sands, and sandy loams (plural terms) correspond to sand, loamy sand, and sandy loam (singular terms) in the textural triangle.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1109</formAustere>
-            <formSummary>1110</formSummary>
-            <formDetail>1111</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -6268,12 +5938,6 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition/>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1025</formAustere>
-            <formSummary>1026</formSummary>
-            <formDetail>1027</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -6298,12 +5962,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Accession code that uniquely identifies this observation publicly.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>635</formAustere>
-            <formSummary>636</formSummary>
-            <formDetail>637</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -6335,12 +5993,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes/>
           <attDefinition/>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1065</formAustere>
-            <formSummary>1066</formSummary>
-            <formDetail>1067</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -6363,12 +6015,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>State or Province where the plot is located.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1019</formAustere>
-            <formSummary>1020</formSummary>
-            <formDetail>1021</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -6391,12 +6037,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>The value of the user-defined variable.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>533</formAustere>
-            <formSummary>534</formSummary>
-            <formDetail>535</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -6421,12 +6061,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes/>
           <attDefinition/>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1065</formAustere>
-            <formSummary>1066</formSummary>
-            <formDetail>1067</formDetail>
-          </attForms>
           <update>1.0.0</update>
         </attribute>
       </entity>
@@ -6449,12 +6083,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>State or Province where the plot is located.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>1019</formAustere>
-            <formSummary>1020</formSummary>
-            <formDetail>1021</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -6477,12 +6105,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>The value of the user-defined variable.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>533</formAustere>
-            <formSummary>534</formSummary>
-            <formDetail>535</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -6514,12 +6136,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Name of the attribute in the table (stored in tableName) that the note is associated with.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>621</formAustere>
-            <formSummary>622</formSummary>
-            <formDetail>623</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -6551,12 +6167,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Comm Status which applies to this commUsage.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>108</formSummary>
-            <formDetail>109</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -6579,12 +6189,6 @@ conditions may change between resampling events.
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Plant Status which applies to this plantUsage.</attDefinition>
-          <attForms>
-            <formPKTranslate>-1</formPKTranslate>
-            <formAustere>-1</formAustere>
-            <formSummary>108</formSummary>
-            <formDetail>109</formDetail>
-          </attForms>
           <update>1.0.2</update>
         </attribute>
       </entity>
@@ -6626,5 +6230,11 @@ conditions may change between resampling events.
         </attribute>
       </entity>
     </change>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>39</modelChangeID>
+    <modelChangeName>authorCommName ala taxonObservation add</modelChangeName>
+    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeComments>could add this field to observation and possibly also commInterpretation</modelChangeComments>
   </modelChange>
 </modelChangeDocument>
