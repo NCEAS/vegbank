@@ -51,8 +51,8 @@ import servlet.util.ServletUtility;
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
  * 
  *	'$Author: harris $'
- *  '$Date: 2002-07-30 22:18:29 $'
- *  '$Revision: 1.22 $'
+ *  '$Date: 2002-07-31 22:44:16 $'
+ *  '$Revision: 1.23 $'
  * 
  */
 
@@ -745,6 +745,7 @@ public class DataRequestServlet extends HttpServlet
 				}
 				dba.writeMultipleVegBankPlot(vec, outFile);
 				queryOutputNum = vec.size();
+				System.out.println("DataRequestServlet > done writing "+ vec.size() +" plots to: " + outFile );
 			}
 			else
 			{

@@ -248,13 +248,9 @@ public class fileDownload extends HttpServlet
 				}
 			}
 				//THIS USES THE REQUESTURL METHOD
-	//			String protocol = "http://";
-	 // 		String host = "vegbank.nceas.ucsb.edu";
 				String s = null;		
-		//		String servlet = "/framework/servlet/DataRequestServlet";
 				//try a different method
 			 	StringBuffer urlBuf = new StringBuffer();
-			// 	urlBuf.append(protocol+host+servlet+"/?");
 			 	urlBuf.append(DataRequestServletURL+"/?");
 				urlBuf.append("requestDataType=vegPlot&");
 			 	urlBuf.append("resultType=full&");
@@ -280,7 +276,9 @@ public class fileDownload extends HttpServlet
          temp2 += c;
        	 i = isr.read();
        }
-			System.out.println("fileDownload > retreiving the DataRequestServlet response" );
+			System.out.println("fileDownload > retreiving the DataRequestServlet response " );
+			System.out.println(temp2);
+			
 			// Concatenate the resulting file so that it isnt overwritten  
 			sutil.fileCopy(atomicResultSet, cummulativeResultSet, "concat");
 		}
@@ -304,8 +302,9 @@ public class fileDownload extends HttpServlet
  * @param formatType the format of the file desired by the user including
  *	gzipped single file, zipped, aggregate files, or both
  */
-	private void dataTransformer (String plotFile, String formatType) 
+	private void dataTransformer(String plotFile, String formatType) 
 	{
+		System.out.println("fileDownload > dataTransformer working on: " + plotFile);
 		String workFile = "/tmp/filedownload-work.txt";
 		String workFile2 = "/tmp/filedownload-work-species.txt";
 		try
@@ -318,6 +317,7 @@ public class fileDownload extends HttpServlet
 				transformer.transformXMLDocumentToFile(plotFile, asciiSitesStyleSheet, workFile);
 				System.out.println("fileDownload > transforming data to flat-ascii -- species");
 				transformer.transformXMLDocumentToFile(plotFile, asciiSpeciesStyleSheet, workFile2);
+				Thread.sleep(1200);
 				//copy the work file to the target file
 				sutil.fileCopy(workFile, cummulativeResultSet, "append");
 				sutil.fileCopy(workFile2, cummulativeResultSet, "concat");
