@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: harris $'
-  *      '$Date: 2002-03-19 21:58:28 $'
-  *  '$Revision: 1.1 $'
+  *      '$Date: 2002-03-19 22:16:17 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
@@ -84,7 +84,7 @@
 			<tr valign=top>
 			<td  align=left valign=middle colspan=2>
 			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
-				<b>Enter the new community data in the field provided below. </b>
+				<b>Enter the new plot data in the fields provided below. </b>
 			</font>
 			<p>
 			<small>
@@ -114,7 +114,9 @@
 			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
 		</td>
 		<td class="item">
-		Please enter data that corresponds to you, as a vegBank user, below
+		Please enter data that corresponds to you, as a VegBank user, below <br>
+		This data will be checked against the VegBank Entitlement Engine before <br>
+		the data are loaded to the database.
 		</td>
 	</tr>
 	
@@ -188,12 +190,12 @@
 &nbsp;
 
 
-<!-- BLUE TABLE WITH THE NAME COMMUNITY-->
+<!-- PLOT DATA DESCRIPTION -->
 <table border="0" width="100%" bgcolor="#DFE5FA">
 	<tr>
 		<td  align=left valign=top width="5%" >
 			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
-			<b>Community:</b>
+			<b>PLOTS:</b>
 		</td>
 		</font>
 	</tr>
@@ -202,11 +204,12 @@
 			<img src="/vegbank/images/icon_cat31.gif" alt="exclamation" width="15" height="15" >
 		</td>
 		<td class="item">
-		Please enter data corresponding to the community that you want to add to VegBank. <br>
-		In the case that the community has never been submitted you will be the <br>
-		owner of the new name and concept.  If, on the other hand, a community with		<br>
-		that name already exists in the system, you will own the new concept related <br>
-		to that name.
+		Please upload the data from your hard-drive to the server here.  Currently VegBank is <br>
+		accepting data stored in the following Format(s): <br>
+		<br>
+		<b> TNC Plots MS Access Format </b>
+			&nbsp;	&nbsp; 
+		<a href="/data/tncplots-example.mdb">Example data file</a>
 		</td>
 	</tr>
 </table>
@@ -218,14 +221,13 @@
 	<tr align="left">
 		<td width="30%" align=left valign=top>
 			<font size="2" >
-			<b>New Community Name <font color="#F90000"><b>*</b></font>:</font></b>
+			<b>Plot Data: <font color="#F90000"><b>*</b></font>:</font></b>
 		</td>
 		<td  align="left" valign="middle">
-			<input size="60" name="communityName">
+			<input type="file" name="file">
 			<b>
 			<font face="Helvetica,Arial,Verdana" size=1>
 			</font>
-			
 		</td>
 	</tr>
 	
@@ -238,8 +240,6 @@
 &nbsp;
 
 <br>
-Example existing name: Brackish - Tidal Estuarine Mud Flats Sparse Vegetation <br>
-Eaxmple new name: Brackish - Tidal Estuarine Mud Flats Sparse Vegetation2
 	
 	
 
