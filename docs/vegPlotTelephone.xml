@@ -1,64 +1,53 @@
 <?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
-
-<dataModel>	
-<title>Prototype Veg Plots Database Component Description: telephone</title>
-<author>J. Harris </author>
-<institution>NCEAS </institution>
-<contributor> </contributor>
-<description> </description>
-<date></date>
-
-
-
-<entity>
-	<entityName>vegPlot.TELEPHONE</entityName>
-	<entitySummary>This table stores telephone numbers for the various entries in the PARTY table.</entitySummary>
-	<entityDescription> </entityDescription>
-	<attribute> 
-		<attName>TELEPHONE_ID</attName>
-		<attNulls>No</attNulls>	
-		<attType>NUMBER</attType>
-		<attKey>P</attKey>
-		<attReferences>n/a</attReferences>
-		<attNotes>Primary key for the telephone table.</attNotes>
-		<attDefinition>Database assigned value for a uniquely associated telephone number.</attDefinition>
-	</attribute>
-
-
-
-	<attribute>
-                <attName>PARTY_ID</attName>
-                <attNulls>No</attNulls>
-                <attType>NUMBER</attType>
-                <attKey>F </attKey>
-                <attReferences>PARTY</attReferences>
-                <attNotes>Foreign key into the PARTY table.</attNotes>
-                <attDefinition>This is the 'link' between a PARTY and an entry in the TELEPHONE table.</attDefinition>
-        </attribute>
-
-<attribute>
-                <attName>phoneNumber</attName>
-                <attNulls>No</attNulls>
-                <attType>VARCHAR2</attType>
-                <attKey>n/a</attKey>
-		<attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>Telephone number.</attDefinition>
-        </attribute>
-
-
-
-        <attribute>
-                <attName>phoneType</attName>
-                <attNulls>No</attNulls>
-                <attType>VARCHAR2</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>This is the type of phone that the number is related to (examples: home, work, fax and cell).</attDefinition>
-        </attribute>
-
-	<children> </children>
-</entity>
-</dataModel>	
+<dataModel>
+	<title>Vegetation Plots Database Component Description: telephone</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>22 Sept 2001</date>
+	<entity>
+		<entityName>vegPlot.telephone</entityName>
+		<entitySummary>Telephone numbers for the various individuals and organizations in the party table.</entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>TELEPHONE_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>P</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for the telephone table. </attNotes>
+			<attDefinition>Database generated identifier assigned to each unique telephone contact record. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PARTY_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>F </attKey>
+			<attReferences>party.PARTY_ID</attReferences>
+			<attNotes>Foreign key into the party table</attNotes>
+			<attDefinition>This is the 'link' between a PARTY and an entry in the TELEPHONE table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>phoneNumber</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Telephone number.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>phoneType</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>This is the type of telephone: home, work, fax, cell, secretary, other.</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

@@ -1,101 +1,89 @@
 <?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
-
-<dataModel>	
-<title> Prototype Veg Plots Database Component Description: graphic</title>
-<author>J. Harris </author>
-<institution>NCEAS </institution>
-<contributor> </contributor>
-<description> </description>
-<date></date>
-
-
-<entity>
-	<entityName>vegPlot.GRAPHIC  </entityName>
-	<entitySummary>This table stores information about a graphical files related to vegetation plots.</entitySummary>
-	<entityDescription>Graphical files currently can include: gif, jpeg, and tiff file formats.  It is
-	recognized that many graphical files, especially remote sensing digital photographs may be
-	gigabytes in size and for this reason the database developers are considering limiting the 
-	size of the files stored in the plots database.  Also, after discussion at the Sepetember NCEAS
-	meeting, it was decided that a URL pointing to the image file would not work unless we controlled the
-	web address.</entityDescription>
-	<attribute> 
-		<attName>GRAPHIC_ID</attName>
-		<attNulls>No</attNulls>	
-		<attType>NUMBER</attType>
-		<attKey>PK </attKey>
-		<attReferences>n/a</attReferences>
-		<attNotes>n/a </attNotes>
-		<attDefinition>This is an internal database identifier assigned to each unique graphical file.</attDefinition>
-	</attribute>
-
-
-
-	<attribute>
-                <attName>PLOT_ID</attName>
-                <attNulls>No</attNulls>
-                <attType>NUMBER</attType>
-                <attKey>FK</attKey>
-                <attReferences>PLOT</attReferences>
-                <attNotes>Foreign key into the plot table.</attNotes>
-                <attDefinition>This represents the link between a graphical file and a specific plot.</attDefinition>
-        </attribute>
-
-	<attribute>
-                <attName>graphicName</attName>
-                <attNulls>No</attNulls>
-                <attType>VARCHAR</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>Name of the graphical file.</attDefinition>
-        </attribute>
-	
-	<attribute>
-                <attName>graphicDescription</attName>
-                <attNulls>No</attNulls>
-                <attType>VARCHAR</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>Description of the graphical file.</attDefinition>
-        </attribute>
-	
-	<attribute>
-                <attName>graphicType</attName>
-                <attNulls>No</attNulls>
-                <attType>VARCHAR</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>This may, in later versions, become domain locked to a few 
-		specific types of graphical files.  Currently any file type can 
-		be stored.</attNotes>
-                <attDefinition>The type of the graphical file format.</attDefinition>
-        </attribute>
-	
-	
-	<attribute>
-                <attName>graphicDate</attName>
-                <attNulls>Yes</attNulls>
-                <attType>DATE</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>Date that the graphic was produced.</attDefinition>
-        </attribute>
-	
-	
-	<attribute>
-                <attName>graphicData</attName>
-                <attNulls>No</attNulls>
-                <attType>BLOB</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>The graphical file data.</attDefinition>
-        </attribute>
-	
-
-	<children> </children>
-</entity>
-</dataModel>	
+<dataModel>
+	<title>Vegetation Plots Database Component Description: graphic</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K.Peet</contributor>
+	<description/>
+	<date>22 Sep2001</date>
+	<entity>
+		<entityName>vegPlot.graphic </entityName>
+		<entitySummary>This table stores information about graphical files related to vegetation plot observations</entitySummary>
+		<entityDescription>Graphical files can include, among other formats: gif, jpeg, and tif file formats.  It is recognized that many graphical files, especially remote sensing digital photographs, may be to large to be stored within the database</entityDescription>
+		<attribute>
+			<attName>GRAPHIC_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK </attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key the graphic table</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique graphic idem. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>OBSERVATION_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>observation.OBSERVATION_ID</attReferences>
+			<attNotes>Foreign key into the observation table.</attNotes>
+			<attDefinition>Link from a graphic file to a specific plot observation.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>graphicName</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Name of the graphic file.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>graphicLocation</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Where the graphic is located, if not in the database</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>graphicDescription</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Description of the graphical file and associated metadata such as contributor, author, sensor, etc.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>graphicType</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>may become a closed list</attNotes>
+			<attDefinition>The type of the graphical file format (e.g. gif, tif, ,jpeg).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>graphicDate</attName>
+			<attNulls>Yes</attNulls>
+			<attType>DATE</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Date that the graphic was produced.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>graphicData</attName>
+			<attNulls>Yes</attNulls>
+			<attType>UNDEFINED</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>may be constrainted by a maximum size</attNotes>
+			<attDefinition>The graphical file data.</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

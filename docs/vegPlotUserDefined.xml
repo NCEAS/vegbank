@@ -1,99 +1,71 @@
 <?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
-
-<dataModel>	
-
-
-<title> Prototype Veg Plots Database Component Description: userDefined </title>
-<author>J. Harris </author>
-<institution>NCEAS </institution>
-<contributor> </contributor>
-<description>This table stores the linkage between a plot observation and a user defined value.</description>
-<date></date>
-
-<entity>
-	<entityName>vegPlot.USERDEFINED </entityName>
-	<entitySummary>This table stores the linkage between a plot observation and a user defined value.</entitySummary>
-	<entityDescription>As with the notation related tables, the table structure of the user defined values stems
-	from the desire to keep the user defined values seperate from the bulk of the plots database.  This structure basically allows the 
-	user to define attributes and store information in those attributes that can be associated with a given plot observation.  
-	Moreover, the user can designate a catagory for each of their user defined attribites in order to associate the data 
-	with a specific type including: environmental, vegetation, reference related and party oriented.</entityDescription>
-        <attribute>
-                <attName>USERDEFINED_ID</attName>
-                <attNulls>No </attNulls>
-                <attType>NUMBER</attType>
-                <attKey>PK</attKey>
-		<attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>Primary key for the userDefined table.</attDefinition>
-        </attribute>
-
-
-
-
-	<attribute>
-                <attName>userDefinedName</attName>
-                <attNulls>No</attNulls>
-                <attType>VARCHAR</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>Name of the used defined element.</attDefinition>
-        </attribute>
-
-	
-	<attribute>
-                <attName>userDefinedMetadata</attName>
-                <attNulls>No</attNulls>
-                <attType>TEXT</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>This attribute stores metadata about this user defined 
-		attribute.</attDefinition>
-        </attribute>
-
-	
-	<attribute>
-                <attName>userDefinedCategory</attName>
-                <attNulls>No</attNulls>
-                <attType>VARCHAR2</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>This is the category for the association between 
-		the plot observation and the user defined attribute stored in this 
-		table.  Business rules will lock the vocabulary used in this column to specific 
-		categories such as environmental and vegetation.</attDefinition>
-        </attribute>
-
-	
-	<attribute>
-                <attName>userDefinedType</attName>
-                <attNulls>No</attNulls>
-                <attType>VARCHAR</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>Database data type of the user defined element.</attDefinition>
-        </attribute>
-	
-	
-	<attribute>
-                <attName>tableName</attName>
-                <attNulls>No</attNulls>
-                <attType>VARCHAR</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>Name of table that this element is most closely associated 
-		with, an attribute that will be infered by the interface tools.  For 
-		example soilColor may be an attribute defined by the user an would be 
-		associated with the plot table.</attDefinition>
-        </attribute>
-	
-	
-	<children> </children>
-</entity>
-</dataModel>	
+<dataModel>
+	<title>Vegetation Plots Database Component Description: userDefined </title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>22 Sep 2001</date>
+	<entity>
+		<entityName>vegPlot.userdefined </entityName>
+		<entitySummary/>
+		<entityDescription>This table contains the definitions of user-defined variables.  The table structure stems from desire to keep the user-defined variables separate from the main body of the database.  </entityDescription>
+		<attribute>
+			<attName>USERDEFINED_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>PK</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for userDefined</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique user-defined variable. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>userDefinedName</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>open list</attNotes>
+			<attDefinition>Name of the user-defined variable.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>userDefinedMetadata</attName>
+			<attNulls>Yes</attNulls>
+			<attType>TEXT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Metadata about this user-defined variable.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>userDefinedCategory</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(30)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>closed list</attNotes>
+			<attDefinition>Category of variable; included to facilitate queries for specific types of data.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>userDefinedType</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(20)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Database data type of the user-defined variable.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>tableName</attName>
+			<attNulls>No</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Name of table with which this user-defined variable is associated.  For example soilBHorizonColor may be defined by the data contributor as associated with the observation table.</attDefinition>
+		</attribute>
+		<children>definedValue</children>
+	</entity>
+</dataModel>

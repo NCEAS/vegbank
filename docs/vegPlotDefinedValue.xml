@@ -1,79 +1,53 @@
 <?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
-
-<dataModel>	
-
-
-<title> Prototype Veg Plots Database Component Description: definedValue </title>
-<author>J. Harris </author>
-<institution>NCEAS </institution>
-<contributor> </contributor>
-<description>This table stores the names and values of user defined attributes.   </description>
-<date></date>
-
-<entity>
-	<entityName>vegPlot.definedValue </entityName>
-	<entitySummary>This table stores the user defined information.</entitySummary>
-	<entityDescription>This table stores information representing user defined attributes.  Through 
-	the 'userDefined' table these attributes are associated with a plot observation and catagorized into 
-	as specific types, such as environmental or vegetation.</entityDescription>
-
-        <attribute>
-                <attName>DEFINEDVALUE_ID</attName>
-                <attNulls>No</attNulls>
-                <attType>NUMBER</attType>
-                <attKey>PK </attKey>
-		<attReferences>n/a</attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>Primary key in the definedValue table.</attDefinition>
-        </attribute>
-
-	<attribute>
-                <attName>USERDEFINED_ID</attName>
-                <attNulls>No</attNulls>
-                <attType>NUMBER</attType>
-                <attKey>FK</attKey>
-		<attReferences>userDefined</attReferences>
-                <attNotes>n/a</attNotes>
-                <attDefinition>Foreign key into the userDefined table.</attDefinition>
-        </attribute>
-
-
-
-	<attribute>
-                <attName>value</attName>
-                <attNulls>No</attNulls>
-                <attType>TEXT</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>The value of the user defined value.</attDefinition>
-        </attribute>
-
-<attribute>
-                <attName>tableRecord</attName>
-                <attNulls>No</attNulls>
-                <attType>NUMBER</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a </attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>The numeric value of the primary key that this user 
-		defined value is associated with as specified in the userDefined.tableName 
-		attribute.</attDefinition>
-</attribute>
-
-<attribute>
-                <attName>definedValue</attName>
-                <attNulls>No</attNulls>
-                <attType>TEXT/BLOB </attType>
-                <attKey>n/a </attKey>
-                <attReferences>n/a </attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>The actual data associated with the user defined attribute.</attDefinition>
-</attribute>
-
-	
-	
-	<children>userDefined</children>
-</entity>
-</dataModel>	
+<dataModel>
+	<title>Vegetation Plots Database Component Description: definedValue </title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>22 Sep 2001</date>
+	<entity>
+		<entityName>vegPlot.definedValue </entityName>
+		<entitySummary>This table stores the values of user-defined variables.   </entitySummary>
+		<entityDescription>This table stores specific values associated with user-defined variables identified in the userDefined table.  </entityDescription>
+		<attribute>
+			<attName>DEFINEDVALUE_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>PK </attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>Primary key for the definedValue table</attNotes>
+			<attDefinition>Database generated identifier assigned to each unique defined value. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>USERDEFINED_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>userDefined</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Link to a specific user-defined variable defined in the userDefined table.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>value</attName>
+			<attNulls>No</attNulls>
+			<attType>UNKNOWN</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>The value of the user-defined value.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>tableRecord_ID</attName>
+			<attNulls>No</attNulls>
+			<attType>INT</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>Pseudo key for the table with which this value should be associated </attNotes>
+			<attDefinition>The numeric value of the record number (primary key) that this user-defined value would have if it were in the table identified by USERDEFINED_ID. .</attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>

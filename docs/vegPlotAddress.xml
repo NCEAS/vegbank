@@ -1,123 +1,117 @@
 <?xml version="1.0"?>
+<!-- edited with XML Spy v4.0 U (http://www.xmlspy.com) by Robert K. Peet (private) -->
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
-
-<dataModel>	
-
-
-
-<title> Prototype Veg Plots Database Component Description: address</title>
-<author>J. Harris </author>
-<institution>NCEAS </institution>
-<contributor> </contributor>
-<description> </description>
-<date></date>
-
-<entity>
-	<entityName>vegPlot.ADDRESS </entityName>
-	<entitySummary>This table contains addresses for parties. </entitySummary>
-	<entityDescription>Initially, before the September meeting at NCEAS, there was a link between each of the 
-	contributor tables and the addess table which allowed for the address of a given contributor to be
-	stored each time he/she contributed to either a plot, project, citation.  Now all these 
-	entries are not being stored, instead the institution at which the plot contributor was 
-	working while contributing to the plot/project/citation is stored in the plotContributor table.</entityDescription>
-<attribute>
-                <attName>ADDRESS_ID</attName>
-                <attNulls>No </attNulls>
-                <attType>NUMBER </attType>
-                <attKey>PK </attKey>
-		<attReferences>n/a </attReferences>
-                <attNotes>Primary key for the address table. </attNotes>
-                <attDefinition>Database assigned value unique to each address for a 
-		given party (note that a single party may have numerous addresses 
-		but that only one may be 'current').
-		 </attDefinition>
-        </attribute>
-
-
-
-        <attribute>
-                <attName>PARTY_ID </attName>
-                <attNulls>No </attNulls>
-                <attType>NUMBER </attType>
-                <attKey>FK </attKey>
-                <attReferences>PARTY </attReferences>
-                <attNotes>Foreign key into the party table. </attNotes>
-                <attDefinition>Database assigned value that is
-                                                unique to each contributing party. </attDefinition>
-        </attribute>
-	
-	<attribute>
-                <attName>deliveryPoint </attName>
-                <attNulls>No </attNulls>
-                <attType>VARCHAR2 </attType>
-                <attKey>n/a </attKey>
-		<attReferences>n/a </attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>Address line for the location
-                (Street name, box number, suite).
-		</attDefinition>
-	</attribute>
-
-
-
-        <attribute>
-                <attName>city </attName>
-                <attNulls>No </attNulls>
-                <attType>VARCHAR2 </attType>
-                <attKey>n/a </attKey>
-                <attReferences>n/a </attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>City of the location. </attDefinition>
-        </attribute>
-<attribute>
-                <attName>administrativeArea </attName>
-                <attNulls>No </attNulls>
-                <attType>VARCHAR2 </attType>
-                <attKey>n/a </attKey>
-                <attNotes>n/a </attNotes>
-                <attDefinition>
-                                                State, province of the location. </attDefinition>
-        </attribute>
-
-
-
-        <attribute>
-                <attName>postalCode </attName>
-                <attNulls>No </attNulls>
-                <attType>VARCHAR2 </attType>
-                <attKey>n/a </attKey>
-                <attReferences>n/a </attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>
-                                                Zip code. </attDefinition>
-        </attribute>
-	
-
-
-<attribute> 
-		<attName>country </attName>
-		<attNulls>No </attNulls>	
-		<attType>VARCHAR2 </attType>
-		<attKey>n/a </attKey>
-		<attReferences> n/a </attReferences>
-		<attNotes>n/a </attNotes>
-		<attDefinition>
-                                                Country of the physical address. </attDefinition>
-	</attribute>
-
-
-
-	<attribute>
-                <attName>currentFlag </attName>
-                <attNulls>No </attNulls>
-                <attType>VARCHAR2 </attType>
-                <attKey>n/a </attKey>
-                <attReferences>n/a </attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>This is the flag to signify whether or not an address is the current address of the party. </attDefinition>
-        </attribute>
-
-
-	<children> </children>
-</entity>
-</dataModel>	
+<dataModel>
+	<title>Vegetation Plots Database Component Description: address</title>
+	<author>J. Harris </author>
+	<institution>NCEAS </institution>
+	<contributor>R.K. Peet</contributor>
+	<description/>
+	<date>22 Sept 2001</date>
+	<entity>
+		<entityName>vegPlot.address </entityName>
+		<entitySummary>This table contains addresses and/or organizational affiliations for parties at the time of a plot event. </entitySummary>
+		<entityDescription/>
+		<attribute>
+			<attName>ADDRESS_ID</attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>PK </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>Primary key for the address table. </attNotes>
+			<attDefinition>Database generated identifier assigned to each unique party address (note that a single party may have multiple addresses but that only one may be 'current').</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>PARTY_ID </attName>
+			<attNulls>No </attNulls>
+			<attType>INT</attType>
+			<attKey>FK </attKey>
+			<attReferences>party.PARTY_ID </attReferences>
+			<attNotes>Foreign key into the party table. </attNotes>
+			<attDefinition>Link to the party to whcih this address applies</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>ORGANIZATION_ID</attName>
+			<attNulls>Yes</attNulls>
+			<attType>INT</attType>
+			<attKey>FK</attKey>
+			<attReferences>party.PARTY_ID </attReferences>
+			<attNotes>Foreign key into the party table</attNotes>
+			<attDefinition>Link to an organization with which a party is affiliated</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>addressStartDate</attName>
+			<attNulls>Yes</attNulls>
+			<attType>DATE</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The first database date on which the address/organization information applied (have a discrete date on which address is known to applied -- not necessarily the first date on which the address applied).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>orgPosition</attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Position of party within organization.</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>deliveryPoint </attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(200)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Address line for the location
+(Street name, box number, suite).</attDefinition>
+		</attribute>
+		<attribute>
+			<attName>city </attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>City of the location. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>administrativeArea </attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>State, province of the location. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>postalCode </attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(10)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>Zip code or other postal code. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>country </attName>
+			<attNulls>Yes</attNulls>
+			<attType>VARCHAR(50)</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>Country of the physical address. </attDefinition>
+		</attribute>
+		<attribute>
+			<attName>currentFlag </attName>
+			<attNulls>Yes</attNulls>
+			<attType>BOOLEAN</attType>
+			<attKey>n/a </attKey>
+			<attReferences>n/a </attReferences>
+			<attNotes>n/a </attNotes>
+			<attDefinition>This flag signifies whether the address is the current address of the party. </attDefinition>
+		</attribute>
+		<children/>
+	</entity>
+</dataModel>
