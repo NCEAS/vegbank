@@ -114,3 +114,31 @@ CREATE VIEW view_plantConcept_hierarchy_pre AS
          RIGHT JOIN plantStatus 
          ON plantConcept.PLANTCONCEPT_ID = plantStatus.plantParent_ID) 
        ON (view_plantConcept_hierarchy_pre.PARTY_ID = plantStatus.PARTY_ID) AND (view_plantConcept_hierarchy_pre.concept_id = plantStatus.PLANTCONCEPT_ID);
+
+-- note these are NOT time specific!! --
+ DROP VIEW view_commConcept_hierarchy;
+ DROP VIEW view_commConcept_hierarchy_pre;
+
+CREATE VIEW view_commConcept_hierarchy_pre AS 
+  SELECT commStatus.commSTATUS_ID, commStatus.commCONCEPT_ID AS childconcept_id, commStatus_1.commCONCEPT_ID AS concept_id, 
+    commconcept_child.commname AS childName, commconcept.commname AS conceptname, commStatus_1.PARTY_ID
+  FROM (commStatus AS commStatus_1 
+    LEFT JOIN (commConcept AS commconcept_child 
+      RIGHT JOIN commStatus 
+      ON commconcept_child.commCONCEPT_ID = commStatus.commCONCEPT_ID) 
+    ON (commStatus_1.PARTY_ID = commStatus.PARTY_ID) AND (commStatus_1.commCONCEPT_ID = commStatus.commParent_ID)) 
+  LEFT JOIN commconcept 
+  ON commStatus_1.commCONCEPT_ID = commconcept.commCONCEPT_ID
+  WHERE (((commStatus_1.commConceptStatus)='accepted'));
+
+  CREATE VIEW view_commConcept_hierarchy AS 
+  SELECT view_commConcept_hierarchy_pre.*, commStatus.commParent_ID AS parentconcept_id, 
+     commConcept.commname AS parentname
+     FROM view_commConcept_hierarchy_pre 
+       LEFT JOIN (commConcept 
+         RIGHT JOIN commStatus 
+         ON commConcept.commCONCEPT_ID = commStatus.commParent_ID) 
+       ON (view_commConcept_hierarchy_pre.PARTY_ID = commStatus.PARTY_ID) 
+         AND (view_commConcept_hierarchy_pre.concept_id = commStatus.commCONCEPT_ID);
+         
+         
