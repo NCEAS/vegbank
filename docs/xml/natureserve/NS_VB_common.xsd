@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ this document validates VegBank data xml documents, for version 1.0.0 
+
+  *
+  *     '$Author: mlee $'
+  *     '$Date: 2004-10-15 03:52:45 $'
+  *     '$Revision: 1.1 $'
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="VegBankPackage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="doc-VegBankVersion"/>
+        <xs:element ref="doc-date"/>
+        <xs:element ref="doc-author"/>
+        <xs:element ref="doc-authorSoftware" minOccurs="0"/>
+        <xs:element ref="doc-comments" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="entity" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="doc-VegBankVersion" type="xs:string"/>
+  <xs:element name="doc-date" type="xs:dateTime"/>
+  <xs:element name="doc-author" type="xs:string"/>
+  <xs:element name="doc-authorSoftware" type="xs:string"/>
+  <xs:element name="doc-comments" type="xs:string"/>
+  <xs:simpleType name="nonEmptyString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="entity.classification_level__closedlistType">
+    <xs:restriction base="nonEmptyString">
+      <xs:enumeration value="species"/>
+      <xs:enumeration value="subspecies"/>
+      <xs:enumeration value="variety"/>
+      <xs:enumeration value="association"/>
+      <xs:enumeration value="alliance"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="entity.classification_status__closedlistType">
+    <xs:restriction base="nonEmptyString">
+      <xs:enumeration value="accepted"/>
+      <xs:enumeration value="not accepted"/>
+      <xs:enumeration value="undetermined"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="entity.entity_type_cd__closedlistType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="P"/>
+      <xs:enumeration value="C"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="entity_lineage.convergence__closedlistType">
+    <xs:restriction base="nonEmptyString">
+      <xs:enumeration value="less than"/>
+      <xs:enumeration value="greater than"/>
+      <xs:enumeration value="unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="entity_usage.name_status_cd__closedlistType">
+    <xs:restriction base="nonEmptyString">
+      <xs:enumeration value="S"/>
+      <xs:enumeration value="N"/>
+      <xs:enumeration value="U"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="entity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="entity.entity_id" minOccurs="0"/>
+        <xs:element ref="entity.circ_name_id"/>
+        <xs:element ref="entity.circ_ref_id"/>
+        <xs:element ref="entity.classification_com" minOccurs="0"/>
+        <xs:element ref="entity.classification_level"/>
+        <xs:element ref="entity.classification_parent_id" minOccurs="0"/>
+        <xs:element ref="entity.classification_start_date"/>
+        <xs:element ref="entity.classification_status"/>
+        <xs:element ref="entity.classification_stop_date" minOccurs="0"/>
+        <xs:element ref="entity.entity_desc" minOccurs="0"/>
+        <xs:element ref="entity.entity_type_cd" minOccurs="0"/>
+        <xs:element ref="entity.ns_uid" minOccurs="1"/>
+        <xs:element ref="entity.vb_uid"  minOccurs="0"/>
+        <xs:element ref="entity_lineage" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="entity_usage" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.entity_id">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:long"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.circ_name_id">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="entity_name"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.circ_ref_id">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="reference"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.classification_com">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.classification_level">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="entity.classification_level__closedlistType"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.classification_parent_id">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="entity"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.classification_start_date">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:dateTime"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.classification_status">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="entity.classification_status__closedlistType"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.classification_stop_date">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:dateTime"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.entity_desc">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.entity_type_cd">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="entity.entity_type_cd__closedlistType"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.ns_uid">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity.vb_uid">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="nonEmptyString"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_lineage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="entity_lineage.entity_lineage_id"/>
+        <xs:element ref="entity_lineage.successor_id"/>
+        <xs:element ref="entity_lineage.convergence"/>
+        <xs:element ref="entity_lineage.lineage_start_date"/>
+        <xs:element ref="entity_lineage.lineage_stop_date" minOccurs="0"/>
+        <!--predecessor_id is inverted rel-->
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_lineage.entity_lineage_id">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:long"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_lineage.successor_id">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="entity"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_lineage.convergence">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="entity_lineage.convergence__closedlistType"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_lineage.lineage_start_date">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:dateTime"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_lineage.lineage_stop_date">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:dateTime"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_name">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="entity_name.entity_name_id" minOccurs="0"/>
+        <xs:element ref="entity_name.ref_id" minOccurs="0"/>
+        <xs:element ref="entity_name.entity_name"/>
+        <xs:element ref="entity_name.name_system"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_name.entity_name_id">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:long"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_name.ref_id">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="reference"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_name.entity_name">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="nonEmptyString"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_name.name_system">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="nonEmptyString"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="reference">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="reference.reference_id"/>
+        <xs:element ref="reference.full_citation"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="reference.reference_id">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:long"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="reference.full_citation">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="nonEmptyString"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_usage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="entity_usage.entity_usage_id" minOccurs="0"/>
+        <xs:element ref="entity_usage.entity_name_id"/>
+        <xs:element ref="entity_usage.name_status_cd"/>
+        <xs:element ref="entity_usage.usage_start_date"/>
+        <xs:element ref="entity_usage.usage_stop_date" minOccurs="0"/>
+        <!--entity_id is inverted rel-->
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_usage.entity_usage_id">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:long"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_usage.entity_name_id">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="entity_name"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_usage.name_status_cd">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="entity_usage.name_status_cd__closedlistType"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_usage.usage_start_date">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:dateTime"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="entity_usage.usage_stop_date">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:dateTime"/>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
+  <title>Common data model between NatureServe and VegBank</title>
+  <version>1.0.0</version>
+  <versionDesc>Initial description of fields and definitions, based on work from Carol Fogelsong, Gwen Davis, Maggie Woo, and Michael Lee</versionDesc>
+  <author>M. Lee</author>
+  <institution>VegBank</institution>
+  <contributor>M. Lee</contributor>
+  <description>This file describes the common database structure.</description>
+  <date>2004-07-20T10:22:00-07:00</date>
+  <entity>
+    <entityName>entity</entityName>
+    <entityLabel>Entity: Global Element or Concept</entityLabel>
+    <entitySummary/>
+    <entityDescription>A fundamental unit of biodiversity.  The combination of one concept name and one concept reference.  Similar to: circumscription, potential taxon, assertion. For NS, these entities with be species, subspecies, varieties, associations, or alliances.</entityDescription>
+    <attribute>
+      <attName>entity_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="root" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Will not correspond to anything in anybody's database.  This local document id is used only for the purpose of  exchanging data between NS and VB (if needed at all in the XML schema).</attDefinition>
+      <update>1.0.0</update>
+      <VB_column>plantConcept.PLANTCONCEPT_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>circ_name_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
+      <attReferences>entity_name.entity_name_id</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Name upon which the plant or community concept is based.  This should generally be the name as applied in the reference in which it was originally described.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>ELEMENT_GLOBAL.concept_name_id, HIGHER_CLASS_UNIT.higher_class_unit_name</NS_column>
+      <VB_column>plantConcept.PLANTNAME_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>circ_ref_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
+      <attReferences>reference.reference_id</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>The exact ID won't correspond with IDs in NS or VB database, but columns listed are where the info comes from.</attNotes>
+      <attDefinition>Reference in which the plant or community concept was originally described.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>ELEMENT_GLOBAL.concept_reference_id, HIGHER_CLASS_UNIT_REF.reference_id</NS_column>
+      <VB_column>plantConcept.reference_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>classification_com</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Comments about the classification of this entity as applicable to current status, level and parent. These comments are constrained to the date range between start and stop dates (as are all fields starting with 'class' in this table </attDefinition>
+      <update>1.0.0</update>
+      <NS_column>EGT.g_classification_com</NS_column>
+      <VB_column>plantStatus.plantPartyComments</VB_column>
+    </attribute>
+    <attribute>
+      <attName>classification_level</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (20)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>species</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>subspecies</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>variety</attListValue>
+          <attListSortOrd>3</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>association</attListValue>
+          <attListSortOrd>4</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>alliance</attListValue>
+          <attListSortOrd>5</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>Level is based on usage (NS gname), not concept name.</attNotes>
+      <attDefinition>The level in the classification hierarchy that this name occupies. Values: species, subspecies, variety, association, alliance</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>SCIENTIFIC_NAME.d_classification_level_id (of the gname), HIGHER_CLASS_UNIT.d_classification_level_id</NS_column>
+      <VB_column>plantConcept.plantLevel</VB_column>
+    </attribute>
+    <attribute>
+      <attName>classification_parent_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
+      <attReferences>entity.entity_id</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Parent will be based on NS usage (gname) not on parent of concept name. </attNotes>
+      <attDefinition>Will NOT be provided where classification level = species or alliance.  Will be provided for subspecies, varieties, and associations</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>EGT.higher_class_unit_id (for associations), TAXON_GLOBAL.parent_species_id (for ssp and var)</NS_column>
+      <VB_column>plantStatus.plantParent_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>classification_start_date</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Date</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>At 6/1 meeting we agreed that there will only be a VB_status_start_date and that a new classification_status will start whenever there is a change in concept_status (NS classification status), parent, or level - the start date would be the latest of NS change date for any of those fields (End Date, audit log for higher_class_unit, and audit log for gname level change). The triplicate of old values will get a stop date equal to the new values' start date. But on 6/8, we then decided to keep both dates and send rows for each change.  The start date of something would NOT be derived from the stop date of another.  In other words, the 'unambiguous' method.</attNotes>
+      <attDefinition>The date that changes when one or more of the following things becomes effective: class status, class level, parent, class comments, active/inactive status</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>AUDIT_LOG.audit_date + AUDIT_LOG.table_name (ELEMENT_GLOBAL or ALLIANCE) + AUDIT_LOG_COLUMN.column_name (inactive_ind, classification_com, higher_class_unit_id, d_classification_status_id) or EGT.add_to_std_date, or ALLIANCE.add_to_std_date</NS_column>
+      <VB_column>plantStatus.startDate</VB_column>
+    </attribute>
+    <attribute>
+      <attName>classification_status</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (20)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>standard</attListValue>
+          <attListValueDesc>accepted</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>nonstandard</attListValue>
+          <attListValueDesc>not accepted, provisional</attListValueDesc>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>undetermined</attListValue>
+          <attListSortOrd>3</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>n/a</attNotes>
+      <attDefinition>"The state of acceptance that an organization gives to an element concept. NS: Standard, nonstandard, provisional, VB: accepted, not accepted, undetermined This applies between the start date and stop date, i.e. what the classification was between the those dates.  NS inactive &amp; provisional elements will be considered nonstandard."</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>EGT.d_classification_status_id, EGT.inactive_ind, ALLIANCE.d_classification_status_id,  ALLIANCE.inactive_ind</NS_column>
+      <VB_column>plantStatus.plantConceptStatus</VB_column>
+    </attribute>
+    <attribute>
+      <attName>classification_stop_date</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Date</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The date that one or more of the following things is no longer effective: class status, class level, parent, class comments, active/inactive status</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>AUDIT_LOG.audit_date + AUDIT_LOG.table_name (ELEMENT_GLOBAL or ALLIANCE) + AUDIT_LOG_COLUMN.column_name (inactive_ind, classification_com, higher_class_unit_id, d_classification_status_id) or EGT.remove_from_std_date or ALLIANCE.remove_from_std_date</NS_column>
+      <VB_column>plantStatus.stopDate</VB_column>
+    </attribute>
+    <attribute>
+      <attName>entity_desc</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>supplied only for communities</attNotes>
+      <attDefinition>A description or summary of the element concept.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>COMMUNITY_GLOBAL.g_element_summary</NS_column>
+      <VB_column>plantConcept.plantDescription</VB_column>
+    </attribute>
+    <attribute>
+      <attName>entity_type_cd</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (1)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>P</attListValue>
+          <attListValueDesc>entity is a plant</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>C</attListValue>
+          <attListValueDesc>entity is a community</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>n/a</attNotes>
+      <attDefinition>"Used to distinguish between plant and community entities. P = plant C = community"</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>Derived from SCIENTIFIC_NAME.d_name_category_id or HIGHER_CLASS_UNIT.d_classification_level_id</NS_column>
+      <VB_column/>
+      <!--This determines if * in this col is 'Plant' or 'Comm'-->
+    </attribute>
+    <attribute>
+      <attName>ns_uid</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (20)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>UID for the Nature Serve Biotics(?) DB which will be used by VegBank to match incoming data to previous data.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>EGT.element_global_ou_uid + EGT.element_global_seq_uid, HIGHER_CLASS_UNIT.higher_class_unit_ou_uid + HIGHER_CLASS_UNIT.higher_class_unit_seq_uid</NS_column>
+      <VB_column/>
+      <!--usage.*name_ID (system='NatureServe UID')-->
+    </attribute>
+    <attribute>
+      <attName>vb_uid</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (20)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>VegBank AccessionCode for plantConcept or commConcept in question.  Not populated for data going from NS to VB.</attDefinition>
+      <update>1.0.0</update>
+      <VB_column>plantConcept.accessionCode</VB_column>
+    </attribute>
+  </entity>
+  <entity>
+    <entityName>entity_lineage</entityName>
+    <entityLabel>Lineage</entityLabel>
+    <entitySummary/>
+    <entityDescription>The historical relationship between accepted and unaccepted entities.  At each data refresh (after initial data delivery), when data are available , entities that were previously accepted and are now not accepted will be predecessor(s) to one or more newly accepted successors(s).</entityDescription>
+    <attribute>
+      <attName>entity_lineage_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Will not correspond to anything in anybody's database.  This local id is used only for the purpose of  exchanging data between NS and VB (if needed at all in XML Schema).</attDefinition>
+      <update>1.0.0</update>
+      <VB_column>correlation.*correlation_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>predecessor_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
+      <attReferences>entity.entity_id</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Actual value could be the NS UID or the entity_id of the predecessor.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>ELEMENT_LINEAGE.predecessor_id,  ALLIANCE_LINEAGE.predecessor_id</NS_column>
+      <VB_column>correlation.*status_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>successor_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
+      <attReferences>entity.entity_id</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Actual value could be the NS UID or the entity_id of the successor.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>ELEMENT_LINEAGE.successor_id,  ALLIANCE_LINEAGE.successor_id</NS_column>
+      <VB_column>correlation.*concept_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>convergence</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (20)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>less than</attListValue>
+          <attListValueDesc>Predecessor is less than successor, i.e. lumping of entities</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>greater than</attListValue>
+          <attListValueDesc>Predecessor is greater than successor, i.e. splitting of entities</attListValueDesc>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>unknown</attListValue>
+          <attListValueDesc>the relationship between predecessor and successor is not known</attListValueDesc>
+          <attListSortOrd>3</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>See Maggie Woo's description on Wiki of how convergence should be derived.</attNotes>
+      <attDefinition>"The degree of congruence between a standard and  a nonstandard element concept. greater than, less than, overlapping, unknown. Default value is 'Unknown'.  The direction of this value is predecessor (convergence) successor, i.e. predecessor is 'less than' successor in the case of lumping concepts."</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>Derived from ELEMENT_STD_NONSTD_REL.d_element_rel_type_id.  Value for D_ELEMENT_REL_TYPE.rel_nonstd_std_desc will be used. 'Unknown' will be sent for alliances</NS_column>
+      <VB_column>correlation.*convergence</VB_column>
+    </attribute>
+    <attribute>
+      <attName>lineage_start_date</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Date</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Verify - NS is not supplying a correlation stop date (CORRELATION.correlationstop) because there won't be one? OK with VB. Also need to define which date this is in NS audit log - e.g., is it the date something was entered as a predecessor to the new standard entity? Yes, it should be the date that the corresponding ELEMENT_LINEAGE record was created.</attNotes>
+      <attDefinition>The date on which the lineage between these 2 entities was established.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>ELEMENT_LINEAGE.rec_create_date from ELEMENT_LINEAGE record where predecessor_id = id of old standard.  ALLIANCE_LINEAGE.rec_create_date from ALLIANCE_LINEAGE record where predecessor_id = id of old standard</NS_column>
+      <VB_column>correlation.correlationStart</VB_column>
+    </attribute>
+    <attribute>
+      <attName>lineage_stop_date</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Date</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>During the requirements/crosswalk phase of the this project, we were unable to determine how this information would be derived from the NS database as well as how important it was that it be provided.  We decided that NS would not provide this information to VB, but we would leave this column in the common data model so that it would be there for any future requirements.</attNotes>
+      <attDefinition>The date on which this lineage between these 2 entities became obsolete or was removed.  Not to be used according to our present understanding of the model, but may be used in the future.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>ELEMENT_LINEAGE.rec_last_mod_date or deleted date in deleted schema?????</NS_column>
+      <VB_column>correlation.correlationStop</VB_column>
+    </attribute>
+  </entity>
+  <entity>
+    <entityName>entity_name</entityName>
+    <entityLabel>Name of entity</entityLabel>
+    <entitySummary/>
+    <entityDescription>A name that is applied to an entity.  Types of names are: scientific names, scientific name + author (plants only), common names, abbreviated names,elcode (plants and associations only), translated name (alliances only) alliance key (alliances only)</entityDescription>
+    <attribute>
+      <attName>entity_name_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Won't correspond to actual fields in database, but for every NS SCIENTIFIC_NAME record (associated with an element we send VB), there will be an entity_name_id. And every entity_name_id will result in a new VB record in the NAME table.</attNotes>
+      <attDefinition>Will not correspond to anything in anybody's database.  This local id is used only for the purpose of  exchanging data between NS and VB (if needed at all in XML Schema).</attDefinition>
+      <update>1.0.0</update>
+      <VB_column>name.*name_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>ref_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
+      <attReferences>reference.reference_id</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This will be the primary_name_ref. If none is marked, take the first ref.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>SCIENTIFIC_NAME_REF.reference_id, HIGHER_CLASS_UNIT_REF.reference_id</NS_column>
+      <VB_column>name.reference_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>entity_name</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (1000)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>NS needs to calculate scientific name + author name so that author of species appears before ssp and var epithets. In Table Comment, change "Examples of concept names" to "Examples of entity names"?</attNotes>
+      <attDefinition>Name of a plant or community.  This will be referenced by entity (circ_name) as a name upon which a concept is based, and also in usage, as a name applied to a concept.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>SCIENTIFIC_NAME.scientific_name (without author), SCIENTIFIC_NAME.scientific_name + author_name, SCIENTIFIC_NAME.translated_name, (EGT.g_primary_common_name, OTHER_GLOBAL_COMMON_NAME.Other_global_common_name" see business rules 19 and 20 for calculation),  HIGHER_CLASS_UNIT.higher_class_unit_name or ALLIANCE.translated_name or ALLIANCE.alliance_key_bcd</NS_column>
+      <VB_column>name.*name</VB_column>
+    </attribute>
+    <attribute>
+      <attName>name_system</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>open</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>scientific name</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>scientific name with author</attListValue>
+          <attListValueDesc>plants only</attListValueDesc>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>English common name</attListValue>
+          <attListSortOrd>3</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>abbreviated name</attListValue>
+          <attListSortOrd>4</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>elcode</attListValue>
+          <attListValueDesc>plants and assoc. only</attListValueDesc>
+          <attListSortOrd>5</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>translated name</attListValue>
+          <attListValueDesc>alliance only</attListValueDesc>
+          <attListSortOrd>6</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>key</attListValue>
+          <attListValueDesc>alliance only</attListValueDesc>
+          <attListSortOrd>7</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>n/a</attNotes>
+      <attDefinition>A type of entity name. Types of names are: scientific names, scientific name + author (plants only), common names, abbreviated names,elcode (plants and associations only), translated name (alliances only) alliance key (alliances only)</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>derived from attributes of SCIENTIFIC_NAME or HIGHER_CLASS_UNIT or ALLIANCE</NS_column>
+      <VB_column>usage.classSystem</VB_column>
+    </attribute>
+  </entity>
+  <entity>
+    <entityName>reference</entityName>
+    <entityLabel>Reference</entityLabel>
+    <entitySummary/>
+    <entityDescription>Sources of information about an entity.  Examples: published or unpublished materials, including articles, books, journals, documents, field surveys, research projects, organizations, personal communications, specimens, </entityDescription>
+    <attribute>
+      <attName>reference_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Will not correspond to anything in anybody's database.  This local id is used only for the purpose of  exchanging data between NS and VB (if needed at all in XML Schema).</attDefinition>
+      <update>1.0.0</update>
+      <VB_column>reference.reference_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>full_citation</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (4000)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The full text of the formal citation for a reference.</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>REFERENCE.full_citation</NS_column>
+      <VB_column>reference.fulltext</VB_column>
+    </attribute>
+  </entity>
+  <entity>
+    <entityName>entity_usage</entityName>
+    <entityLabel>Usage</entityLabel>
+    <entitySummary/>
+    <entityDescription>The association of one entity with one name.  This does not include the use of a name by an entity as its circumscription name.</entityDescription>
+    <attribute>
+      <attName>entity_usage_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Will not correspond to anything in anybody's database.  This local id is used only for the purpose of  exchanging data between NS and VB (if needed at all in XML Schema).</attDefinition>
+      <update>1.0.0</update>
+      <VB_column>usage.*usage_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>entity_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="inverted" name="n/a"/>
+      <attReferences>entity.entity_id</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Link to the entity_ID of the entity about which this usage applies.</attDefinition>
+      <update>1.0.0</update>
+      <VB_column>usage.*concept_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>entity_name_id</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="normal" name="n/a"/>
+      <attReferences>entity_name.entity_name_id</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>Definition: The name which applies to the entity. Zero or one standard name of each type (there may be no common name) will be sent for each entity with each refresh. If a new name is applied to an element for any given name system, (e.g. a new translated name, a new common name), NS will send 3 rows: 1) the old standard name with a usage_stop_date, 2) the old name with a new status of nonstandard with a usage_start_date, and 3) the new standard name with a usage_start_date. (The unambiguous method)</attNotes>
+      <attDefinition>Link to the Name_ID that applies to the concept of this record.</attDefinition>
+      <update>1.0.0</update>
+      <VB_column>usage.*name_ID</VB_column>
+    </attribute>
+    <attribute>
+      <attName>name_status_cd</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (20)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>S</attListValue>
+          <attListValueDesc>standard</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>N</attListValue>
+          <attListValueDesc>nonstandard</attListValueDesc>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>U</attListValue>
+          <attListValueDesc>Unknown</attListValueDesc>
+          <attListSortOrd>3</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Status of this name between usage start and stop dates.  Values: S = standard N = nonstandard U = unknown</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>derived from changes in NS database</NS_column>
+      <VB_column>usage.*namestatus</VB_column>
+    </attribute>
+    <attribute>
+      <attName>usage_start_date</attName>
+      <attModel>logical</attModel>
+      <attNulls>no</attNulls>
+      <attType>Date</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Usage start and stop dates will be the date a name was changed at NS (in which case an audit log date of gname or common name change must be sent)</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>AUDIT_LOG.audit_date + AUDIT_LOG.table_name (ELEMENT_GLOBAL, ALLIANCE) + AUDIT_LOG_COLUMN.column_name (gname_id, g_primary_common_name, elcode_bcd, alliance_key_bcd, translated_name)</NS_column>
+      <VB_column>usage.usageStart</VB_column>
+    </attribute>
+    <attribute>
+      <attName>usage_stop_date</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Date</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Usage start and stop dates will be the date a name was changed at NS (in which case an audit log date of gname or common name change must be sent)</attDefinition>
+      <update>1.0.0</update>
+      <NS_column>AUDIT_LOG.audit_date + AUDIT_LOG.table_name (ELEMENT_GLOBAL) + AUDIT_LOG_COLUMN.column_name (gname_id, g_primary_common_name)</NS_column>
+      <VB_column>usage.usageStop</VB_column>
+    </attribute>
+  </entity>
+</dataModel>
