@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-12-02 02:10:11 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-12-04 02:11:59 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ package org.vegbank.common.utility;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
+import org.vegbank.common.utility.LogUtility;
 
 /**
  * @author anderson
@@ -34,33 +35,24 @@ import java.util.*;
 public class AccessionGen {
 
 	private Connection conn = null;
-	private static ResourceBundle res = ResourceBundle.getBundle("accession");
+	private static ResourceBundle res = null;
 
 	private HashMap tableCodes;
 	private String dbCode;
 
-	private long count;
-
 
 	public AccessionGen() {
-		// load the table abbreviations
+		res = ResourceBundle.getBundle("accession");
 		tableCodes = new HashMap();
-		tableCodes.put("plantconcept", res.getString("abbr.plantconcept"));
-		tableCodes.put("commconcept", res.getString("abbr.commconcept"));
-		tableCodes.put("plot", res.getString("abbr.plot"));
-		tableCodes.put("observation", res.getString("abbr.observation"));
-		tableCodes.put("party", res.getString("abbr.party"));
-		tableCodes.put("reference", res.getString("abbr.reference"));
-		tableCodes.put("referenceJournal", res.getString("abbr.referenceJournal"));
-		tableCodes.put("stratumMethod", res.getString("abbr.stratumMethod"));
-		tableCodes.put("coverMethod", res.getString("abbr.coverMethod"));
-		tableCodes.put("namedPlace", res.getString("abbr.namedPlace"));
-		tableCodes.put("project", res.getString("abbr.project"));
-		tableCodes.put("soilTaxon", res.getString("abbr.soilTaxon"));
-		tableCodes.put("userDefined", res.getString("abbr.userDefined"));
-		tableCodes.put("taxonObservation", res.getString("abbr.taxonObservation"));
-		tableCodes.put("commClass", res.getString("abbr.commClass"));
-		tableCodes.put("referenceParty", res.getString("abbr.referenceParty"));
+		String key;
+
+		// load the table abbreviations
+		for (Enumeration e = res.getKeys(); e.hasMoreElements() ;) {
+			key = (String)e.nextElement();
+			if (key.startsWith("abbr.")) {
+				tableCodes.put(key.substring(5), res.getString(key));
+			}
+		}
 	}
 
 
@@ -71,9 +63,9 @@ public class AccessionGen {
 	 * @param pk - primary key
 	 * @param decoded - common name to be encoded
 	 */
-	public String getAccession(String db, String table, String pk) {
+	public String getAccession(String db, String table, String pk) throws SQLException {
 
-		StringBuffer accCode = new StringBuffer(28);
+		StringBuffer accCode = new StringBuffer(32);
 
 		// database
 		accCode.append(db.toUpperCase()).append(".");
@@ -96,15 +88,28 @@ public class AccessionGen {
 
 	/**
 	 * Generates a confirmation code. 
-	 * @param table - full name of the table to be abbreviated  
-	 * @param pk - primary key
+	 * @param table - full name of the table 
+	 * @param pk - primary key from given table
 	 */
-	public String getConfirmation(String table, String pk) {
+	public String getConfirmation(String table, String pk) throws SQLException {
 
-		// table -- do case insensitive lookup
-		String tableCode = (String)tableCodes.get( table.toLowerCase() );
-		if (tableCode == null) {
-			return "????";
+		table = table.toLowerCase();
+		String query = getConfirmationQuery(table);
+		if (query == null) {
+			return null;
+		}
+
+		query += " WHERE " + table + "_id=" + pk;
+		ResultSet rs = conn.createStatement().executeQuery(query);
+
+		if (rs.next()) {
+			String tmpConfirm = rs.getString(2);
+
+			if (tmpConfirm == null) {
+				tmpConfirm = rs.getString(3);
+			}
+
+			return formatConfirmCode(tmpConfirm);
 		}
 
 		return null;
@@ -148,10 +153,12 @@ public class AccessionGen {
 	/**
 	 * Allows only alpha numeric (other chars deleted), not longer than 15 chars total.
 	 */
-	public static String formatConfirmCode(String before) {
-		//before.replace(".", "");
-
-		return before;
+	public static String formatConfirmCode(String code) {
+		code = code.replaceAll("[\\W]", "");
+		if (code.length() > 15) {
+			code = code.substring(0, 15);
+		}
+		return code.toUpperCase();
 	}
 
 
@@ -159,7 +166,7 @@ public class AccessionGen {
 	// STANDALONE
 	//////////////////////////////////////////////////////////
 	public void run(String dbName, String dbCode, String dbHost) {
-		this.dbCode = dbCode;
+		this.dbCode = dbCode.toUpperCase();
 
 		String dbURL = "jdbc:postgresql://"+dbHost+"/"+dbName;
 		System.out.println("connect string: " + dbURL);
@@ -198,7 +205,8 @@ public class AccessionGen {
 		while (it.hasNext()) {
 			// the tableCode key is a tableName
 			// generate accession codes for this table
-			tableName = (String)tableCodes.get((String)it.next());
+			//tableName = (String)tableCodes.get((String)it.next());
+			tableName = (String)it.next();
 			if (!updateTable(tableName)) {
 				throw new SQLException("Problem updating " + tableName);
 			}
@@ -214,117 +222,126 @@ public class AccessionGen {
 	private boolean updateTable(String tableName) throws SQLException {
 		System.out.println("Updating accession codes in " + tableName);
 
-		double scalar = .8;  // width of screen
-		long pct1, l=0, tmpId;
-
-		String sqlSelect = null;
-		String sqlFrom = null;
-		String update, tmpConfirm;
-		String confirmField = res.getString("confirm." + tableName);
-		String confirmField2 = res.getString("confirm." + tableName + ".2");
+		double scalar = .6;  // width of screen
+		long pct1, l, count=0, tmpId;
+		String update, baseAC, tmpConfirm, tableCode;
+		StringBuffer tmpAC = null;
 		Statement stmt = conn.createStatement();
 		ResultSet rs;
 			
-		if (confirmField == null || confirmField.equals("")) {
-			return false;
-		}
-
 		// select the proper value to use as a confirmation code
 		tableName = tableName.toLowerCase();
 
-		// select from same table
-		if (tableName.equals("plot") || tableName.equals("observation") || 
-				tableName.equals("stratummethod") || tableName.equals("covermethod") || 
-				tableName.equals("namedplace") || tableName.equals("project") || 
-				tableName.equals("soiltaxon") || tableName.equals("userdefined") || 
-				tableName.equals("taxonobservation") || tableName.equals("commclass") || 
-				tableName.equals("commconcept")) {
-
-			sqlSelect = "SELECT " + tableName + "_id," + confirmField + " FROM " + tableName;
-		}
-
-		// if value exists, use it, else use secondary field
-		if (tableName.equals("referenceparty") || tableName.equals("party") ||
-				tableName.equals("reference") || tableName.equals("referencejournal")) {
-
-			sqlSelect  = "SELECT " + tableName + "_id," + confirmField + "," + 
-					confirmField2 + " FROM " + tableName;
-		}
-
-		// do crazy stuff:
-		// if scientific name without authors system exists for this concept, 
-		// use the first two letters of the first word there and first 2 letters 
-		// of the second word (ie ACRU for Acer rubrum), else metaphonetic code 
-		// for plantName.plantName corresponding to plantConcept.plantName_ID 
-		if (tableName.equals("plantconcept") || tableName.equals("plantconcept")) {
-			// example query:
-			// SELECT c.commconcept_id, n.commname 
-			// FROM commname n, commconcept c 
-			// WHERE c.commname_id=n.commname_id;
-			sqlSelect = "SELECT c." + tableName + "_id, n." + confirmField;
-			sqlFrom = " FROM " + tableName + " c, " + confirmField + " n WHERE c." + 
-					confirmField + "_id=n." + confirmField + "_id";
-		}
-		
-		if (sqlSelect == null) {
+		// get confirmation values
+		String query = getConfirmationQuery(tableName);
+		if (query == null) {
 			return false;
 		}
 
-		System.out.println("Selecting confirmation values...please wait");
-
-		// get confirmation values
-		showSQL(sqlSelect + sqlFrom);
-		rs = stmt.executeQuery(sqlSelect + sqlFrom);
-
 		// count records
+		String sqlFrom = query.substring( query.indexOf("FROM") );
 		rs = stmt.executeQuery("SELECT COUNT(*) AS count " + sqlFrom);
 		if (rs.next()) {
-			l = rs.getLong("count");
+			count = rs.getLong("count");
 		}
 
+		if (count == 0) {
+			System.out.println("No records found.");
+			return true;
+		}
+
+		System.out.println("Selecting " + count + " confirmation values...please wait");
+		showSQL(query);
+		rs = stmt.executeQuery(query);
+
 		// set up the progress meter
-		scalar = .8;  // width of display screen
-		pct1 = (long)(l / 100 / scalar);
-		l = 0;
+		boolean smallCount = false;
+		pct1 = (long)((count / 100) / scalar);
+		if (pct1 < 1) {
+			pct1 = (long)((100 / count) * scalar);
+			smallCount = true;
+		} else {
+			// correction
+			pct1++;
+		}
 
 		System.out.print("0% |");
 		for (int i=0; i<100*scalar; i++) {
 			System.out.print("-");
 		}
-		System.out.println("| 100%");
+		System.out.println("| 100%  ");
 
 		// prepare the update statement
 		update = "UPDATE " + tableName + " SET accessioncode = ? WHERE " + tableName + "_id = ?";
 		PreparedStatement pstmt = conn.prepareStatement(update);
-		System.out.println("Updating accession codes...");
-		showSQL(update);
 
+		// table -- do case insensitive lookup
+		tableCode = (String)tableCodes.get( tableName.toLowerCase() );
+		if (tableCode == null) {
+			tableCode = "??";
+		}
+
+		baseAC = dbCode + "." + tableCode + ".";
 		
 		// update!
 		conn.setAutoCommit(false);
 		System.out.print("0% |");
-		while (rs.next()) {
+		l=0;
+		//try {
+			while (rs.next()) {
 
-			// update the status bar
-			if (++l < pct1) {
-				// do nothing
-			} else if (l % pct1 == 0) {
-				System.out.print("-");
+				// update the status bar
+				l++;
+				if (smallCount) {
+					for (int i=0; i < pct1; i++) {
+						System.out.print("-");
+					}
+
+				} else {
+					if (l < pct1) {
+						// do nothing
+					} else if (l % pct1 == 0) {
+						System.out.print("-");
+					}
+				}
+
+				// get the selected data
+				tmpId = rs.getLong(1);
+				tmpConfirm = rs.getString(2);
+
+				if (tmpConfirm == null) {
+					tmpConfirm = rs.getString(3);
+				}
+
+				// format
+				tmpConfirm = formatConfirmCode(tmpConfirm);
+
+				// build the accession code
+	 			// DB.Tbl.PK#.Confirm  ex:  VB.TC.126.AKMP
+				tmpAC = new StringBuffer(32);
+				tmpAC.append(baseAC).append(tmpId)
+						.append(".").append(tmpConfirm);
+
+				pstmt.setString(1, tmpAC.toString());
+				pstmt.setLong(2, tmpId);
+				pstmt.executeUpdate();
 			}
 
-			// get the selected data
-			tmpId = rs.getLong(1);
-			tmpConfirm = rs.getString(2);
-
-			if (tmpConfirm == null) {
-				tmpConfirm = rs.getString(3);
+			// tidy up the end of the status bar
+			if (smallCount) {
+				int num = (int)(100 * scalar) - (int)pct1 * (int)l;
+				for (int i=0; i < num; i++) {
+					System.out.print("-");
+				}
+			} else {
+				int num = (int)((100 * scalar) - ((int)count / (int)pct1));
+				for (int i=0; i < num; i++) {
+					System.out.print("-");
+				}
 			}
-
-			// set the accession code
-			pstmt.setString(1, formatConfirmCode(tmpConfirm));
-			pstmt.setLong(2, tmpId);
-			//pstmt.executeUpdate();
-		}
+		//} catch (SQLException sqlex) {
+		//	LogUtility.log("AccessionGen: Problem updating " + tableName +"'s accession code to " + tmpConfirm);
+		//}
 
 		rs.close();
 		conn.commit();
@@ -332,6 +349,44 @@ public class AccessionGen {
 		System.out.println("| 100%");
 		System.out.println("updated " + l + "\n");
 		return true;
+	}
+
+	/**
+	 *
+	 */
+	private String getConfirmationQuery(String tableName) {
+
+		String query = null;
+		String confirmField = res.getString("confirm." + tableName);
+
+		if (confirmField == null || confirmField.equals("")) {
+			return null;
+		}
+
+		// get the confirm type
+		String confirmType = res.getString("confirm.type." + tableName).toUpperCase();
+
+		if (confirmType.equals("BASIC")) {
+			// select from same table
+			query = "SELECT " + tableName + "_id," + confirmField + " FROM " + tableName;
+
+		} else if (confirmType.equals("DUAL")) {
+			// if value exists, use it, else use secondary field
+			String confirmField2 = res.getString("confirm." + tableName + ".2");
+			query  = "SELECT " + tableName + "_id," + confirmField + "," + 
+					confirmField2 + " FROM " + tableName;
+
+		} else if (confirmType.equals("JOIN")) {
+			// EXAMPLE QUERY:
+			// SELECT c.commconcept_id, n.commname 
+			// FROM commname n, commconcept c 
+			// WHERE c.commname_id=n.commname_id;
+			query = "SELECT c." + tableName + "_id, n." + confirmField +
+					" FROM " + tableName + " c, " + confirmField + " n WHERE c." + 
+					confirmField + "_id=n." + confirmField + "_id";
+		}
+
+		return query;
 	}
 
 	private void usage(String msg) {
