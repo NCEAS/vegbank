@@ -1,12 +1,12 @@
 /**
- * class used to parese xml documents in various ways
+ * class used to parse xml documents in various ways
  *
  *  Authors: @author@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-12 14:38:48 $'
- * 	'$Revision: 1.3 $' 
+ *  '$Date: 2002-07-31 22:46:11 $'
+ * 	'$Revision: 1.4 $' 
  */
 
 package xmlresource.utils; 
@@ -129,7 +129,7 @@ public class XMLparse
 		}
 		catch (Exception e) 
 		{
-			System.out.println("\nError: " + e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 		}
 	}
 	
@@ -695,7 +695,7 @@ public class XMLparse
 		}
 		catch (Exception e) 
 		{
-			System.out.println("\nError: " + e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 		}
 		return(doc);
 	}
@@ -806,7 +806,7 @@ public class XMLparse
 	}
 	catch (Exception e) 
 	{
-		System.out.println("\nError: " + e.getMessage());
+		System.out.println("Exception: " + e.getMessage());
 	}
 		return(valString);
 	}
@@ -865,7 +865,7 @@ public class XMLparse
 		}
 		catch (Exception e) 
 		{
-			System.out.println("\nError: " + e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 		}
 		return(valString);
 	}
@@ -932,7 +932,7 @@ public class XMLparse
 		}
 		catch (Exception e) 
 		{
-			System.out.println("\nError: " + e.getMessage());
+			System.out.println("Exception: " + e.getMessage());
 		}
 		
 	}
