@@ -10,15 +10,29 @@
   <p class="category bright">
   <logic:equal value="1" name="QueryResultsSize">
     
-      There was one plant that matched your search criteria:
+      One plant 
   
   </logic:equal>
   <logic:notEqual name="QueryResultsSize" value="1">
    
-	<bean:write name="QueryResultsSize"/> plants matched your search criteria:
+	<bean:write name="QueryResultsSize"/> plants 
 
-  </logic:notEqual>
+  </logic:notEqual>matched your search criteria:
   </p>
+  <TABLE class="noborder" cellpadding="10"><TR><TD valign="top">
+  <p>
+   <span class="intro">Available Reports:</span>
+  		&nbsp; &nbsp; &nbsp; &nbsp;
+        <span class="item">
+          <img align="center" src="@image_server@report_sm.gif" alt="Summary report" border="0"></img>=Summary Report 
+  		&nbsp; &nbsp; &nbsp; &nbsp;
+          <img align="center" border="0" src="@image_server@leaficon.gif" alt="View USDA Plants page"></img>=View USDA Plants page (external website)
+      </span>
+  
+  </p>
+  </TD><TD>
+    <a href="@forms_link@PlantQuery.jsp">Try a New Plant Search</a>
+  </TD></TR></TABLE>  
 
 <!-- set up a table -->
 <table cellspacing="0" cellpadding="1">
@@ -92,18 +106,18 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
 	    <!-- First Cell-->
 	    <th width="20%" bgcolor="<%= marginBgColor %>" align="center" nowrap rowspan="2">
 	      <html:link href="@get_link@detail/plantconcept/?where=where_accessioncode" title="summary report" paramId="wparam" paramName="row" paramProperty="accessioncode">
-                <img align="center" src="@image_server@report_sm.gif" alt="Detail view" border="0"></img>
+                <img align="center" src="@image_server@report_sm.gif" alt="Summary report" border="0"></img>
               </html:link>
-              <html:link page="/DisplayEntity.do?resultType=rawXML" paramId="accessionCode" paramName="row" paramProperty="accessioncode" title="view raw XML">
+           <!--   <html:link page="/DisplayEntity.do?resultType=rawXML" paramId="accessionCode" paramName="row" paramProperty="accessioncode" title="view raw XML">
                 <img align="center" border="0" src="@image_server@xml_icon.gif" alt="Raw XML view"></img>
-              </html:link>
+              </html:link> -->
               
               <!-- USDA link to plant --><!-- only if code isn't empty -->
         <logic:empty name="row" property="code">
          <!-- <img align="center" border="2" src="@image_server@leaficon.gif" alt="No USDA Plants page available" ></img> -->
        </logic:empty>
     <logic:notEmpty name="row" property="code">
-
+       &nbsp;&nbsp;&nbsp;&nbsp;
       <html:link href="http://plants.usda.gov/cgi_bin/plant_search.cgi?mode=Symbol&go=go" paramId="keywordquery" paramName="row" paramProperty="code" title="View USDA Plants page" target="_new">
                 <img align="center" border="0" src="@image_server@leaficon.gif" alt="View USDA Plants page"></img>
        </html:link>
@@ -190,3 +204,5 @@ if ( ! columnName.equalsIgnoreCase("accessioncode") )
 		</td>
 	</tr>
 </table> 
+
+<p><a href="@forms_link@PlantQuery.jsp">Try a New Plant Search</a></p>
