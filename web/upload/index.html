@@ -1,71 +1,47 @@
+@webpage_top_html@
 
-<html>
-  <head>
+   @webpage_head_html@
     <title>
       Upload File(s) to VegBank.org
 
     </title>
 
-<link rel="stylesheet" href="@stylesheet@" type="text/css">		
-  </head>
-  <body>
-    <!-- colors: silver=#E6E8FA navyblu=#23238E ltblue=DFE5FA  -->
-    <table border="0" cellspacing="0" cellpadding="0" width="60%">
-      <tr class="grey">
-				<td align="center">
+  @webpage_masthead_html@ 
+
+
 		 			<h1>Upload File to VegBank.org</h1>
 <p>This upload function can be used to place a file for the VegBank staff to look at. <br/>  This does NOT load plot data into the vegbank database.</p>
-		 		</td>
+		 		
        
-      </tr>
-			
-			
-      <tr>
+     
         
         <!-- Input parameters here-->
-        <td align="CENTER">
+       
           <form action="/vegbank/servlet/upload" enctype="multipart/form-data" method="post">
 
 
-          <table border="0" cellspacing="5" cellpadding="5" width="100%">
-            <tr>
-              <td class="category">
+          <p>
                 Browse, choose, upload.
                 <!--get the file name -->
-              </td>
-						</tr>
-						<tr>
-              <td>
-			  
+              </p>
+						
+			  <p>
                 STEP 1:  <input name="file" type="file"> 
-              </td>
-            </tr>
+              </p>
             
 						
 						
-            <tr>
-              <td colspan="2">
+            <p>
                
                
                   STEP 2:  <input type="submit" value="upload file">
                
-              </td>
-            </tr>
+              </p>
 
 </form>
-            <tr>
-              <td colspan="2">
+            
                 <p>
 				Do you need to <a href="@forms_link@multiple_file_upload.jsp">upload multiple files</a>?
                 </p>
-              </td>
-            </tr>
-          </table>
-          <!-- bottom section -->
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>
-
+@webpage_footer_html@
 
