@@ -43,7 +43,7 @@
     <form-bean  name="UploadPlotForm"
                 type="org.vegbank.ui.struts.UploadPlotForm"/>
 
-	<!-- DynaActionForms -->
+    <!-- DynaActionForms -->
     <form-bean  name="DropPlotForm"
                 type="org.apache.struts.action.DynaActionForm">
 		<form-property name="plotIdList" type="java.lang.String"/>
@@ -78,7 +78,25 @@
       <form-property name="username" type="java.lang.String"/>
       <form-property name="password" type="java.lang.String"/>
     </form-bean>
-
+   
+    <!-- Email password form bean -->
+    <form-bean  name="EmailPasswordForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="email" type="java.lang.String"/>
+    </form-bean>
+	
+    <!-- Register new user form bean -->
+    <form-bean  name="RegisterNewUserForm"
+                type="org.apache.struts.validator.DynaValidatorForm">
+		<form-property name="user" type="org.vegbank.common.model.Usr"/>
+		<form-property name="party" type="org.vegbank.common.model.Party"/>
+		<form-property name="address" type="org.vegbank.common.model.Address"/>
+		<form-property name="telephone" type="org.vegbank.common.model.Telephone"/>
+		<form-property name="termsaccept" type="java.lang.String"/>
+		<form-property name="password1" type="java.lang.String"/>
+		<form-property name="password2" type="java.lang.String"/>
+		<form-property name="statelist" type="org.vegbank.common.model.utility.Statelist"/>
+    </form-bean>
 
 
   </form-beans>
@@ -106,6 +124,8 @@
     <forward   name="DropPlotAction" path="/forms/plot-drop.jsp"/>
     <forward   name="DownLoad"	path="/forms/DownLoad.jsp"/>
     <forward   name="DownLoadManager"	path="/DownLoadManager.do"/>
+    <forward   name="EmailPassword"	path="/forms/EmailPassword.jsp"/>
+    <forward   name="RegisterNewUser"	path="/forms/RegisterNewUser.jsp"/>
   </global-forwards>
 
 
@@ -246,6 +266,26 @@
     <action path="/GenericDispatcher"
     	  type="org.vegbank.ui.struts.GenericDispatcherAction"
           scope="request">
+    </action>
+
+    <!-- Email the user their password -->
+    <action path="/EmailPassword"
+            type="org.vegbank.ui.struts.EmailPasswordAction"
+            name="EmailPasswordForm"
+            scope="request"
+            validate="true"
+            input="EmailPassword">
+      <forward name="success" path="/index.jsp"/>
+    </action>
+
+    <!-- Email the user their password -->
+    <action path="/RegisterNewUser"
+            type="org.vegbank.ui.struts.RegisterNewUserAction"
+            name="RegisterNewUserForm"
+            scope="request"
+            validate="true"
+            input="RegisterNewUser">
+      <forward name="success" path="/index.jsp"/>
     </action>
 
   </action-mappings>

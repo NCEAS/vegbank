@@ -1,15 +1,23 @@
-<html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+
+<!DOCTYPE HTML PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+
+<html:html locale="true">
+
 	
 <!-- 
-  *   '$RCSfile: fetch-password.html,v $'
-  *     Purpose: web form tosubmit community data to vegbank system
+  *   '$RCSfile: EmailPassword.jsp,v $'
+  *     Purpose: Jsp form to allow users to retrive lost passwords from the
+  *              system over email. 
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: farrell $'
-  *      '$Date: 2003-11-06 17:31:11 $'
-  *  '$Revision: 1.13 $'
+  *      '$Date: 2003-11-25 20:04:17 $'
+  *  '$Revision: 1.1 $'
   *
   *
   -->
@@ -18,7 +26,7 @@
 
 <head>
 		<title>VegBank Retrieve your lost password</title>
-		<link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
+		<link REL=STYLESHEET HREF="@stylesheet@" TYPE="text/css">
  <script type="text/javascript">
 <!--
 function getHelp()
@@ -35,18 +43,21 @@ return "@manualFrameFor-forgot-my-password@"
 <BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
 @vegbank_header_html_normal@
 
+
+<html:errors/>
+
 <!-- SECOND TABLE -->
 <table align=left border="0" width=90% cellspacing=0 cellpadding=0>
 	<tr>
 		<td bgcolor="white">
 			<img align=center border=0 height=144 src="@image_server@owlogoBev.jpg" alt = "Veg plots logo">
-			<td align=left valign=middle>
-    			<table border=0 cellpadding=5>
+			<td align="left" valign="middle">
+    			<table border="0" cellpadding="5">
     				<tr>
-    					<td align=left valign=bottom>
-    					<font face="Helvetica,Arial,Verdana" size=6 color=23238E>
-							Retrieve a Lost VegBank Password
-    					</font><br>
+    					<td align="left" valign="bottom">
+    					<font face="Helvetica,Arial,Verdana" size="6" color="23238E">
+							  Retrieve a Lost VegBank Password
+    					</font><br/>
     					</td>
    					</tr>
 					</table>
@@ -61,18 +72,15 @@ return "@manualFrameFor-forgot-my-password@"
 	
 		<td align="left">
 			<table border="0" cellspacing=5 cellpadding=5>
-			<form action="@authenticationservlet@" method="get">
-			<input type="hidden" name="referURL" value="www.vegbank.org">
-			<input type="hidden" name="authType" value="getpassword">		
-	
-			
+			<html:form action="/EmailPassword" focus="email">
+
 			<tr valign=top>
-			<td  align=left valign=middle colspan=2>
-			<font face="Helvetica,Arial,Verdana" size="2" color="209020">
-				<b>Use this form to request your VegBank Password. </b>
-			</font>
-			<p>
-			</td>
+			  <td  align=left valign=middle colspan=2>
+			    <font face="Helvetica,Arial,Verdana" size="2" color="209020">
+				    <b>Use this form to request your VegBank Password. </b>
+			    </font>
+			    <br/>
+			  </td>
 			</tr>
 		</td>
 	</tr>
@@ -106,19 +114,14 @@ return "@manualFrameFor-forgot-my-password@"
 	
 	<tr>
 		<td align="left" width="20%">
-			<font  size="2">
-			Email address
-			<!--
-			<font color="#F90000"><b>*</b></font>
-			-->
-			:</font>
+			<font  size="2">Email address:</font>
 		</td>
 		<td align="left">
-			<input type="text"  size="25" maxlength="70"  name="userLogin">
+		  <html:text property="email" size="25" maxlength="70" />
 		</td>
 	</tr>
 	<tr>
-	<td> </td>
+	<td>&nbsp;</td>
 	</tr>
 	
 </table>
@@ -132,17 +135,13 @@ return "@manualFrameFor-forgot-my-password@"
 
 
 <small>
-			<INPUT TYPE="submit" VALUE="continue">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+			<html:submit value="continue"/>
+			&nbsp;&nbsp;
+			<html:reset value="reset"/>
 </small>
-<br>
+<br/>
 
-
-    <!-- required = red * -->
-	<!--
-			<font size="2" >
-			<font color="#F90000"><b>*</b></font><b> indicates a required field</font></b>
-	-->
-
+</html:form>
 
 &nbsp;
 &nbsp;	
@@ -156,7 +155,4 @@ return "@manualFrameFor-forgot-my-password@"
 </table>
 
 </body>
-</html>
-
-
-
+</html:html>

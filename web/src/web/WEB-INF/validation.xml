@@ -7,7 +7,7 @@
 <!--
     Validation Rules for the Vegbank application 
 
-    $Id: validation.xml,v 1.7 2003-11-12 22:14:43 farrell Exp $
+    $Id: validation.xml,v 1.8 2003-11-25 20:04:17 farrell Exp $
 -->
 
 <form-validation>
@@ -110,14 +110,13 @@
             </field>
 	</form>
 
-
+	<!-- Rules for the LogonForm -->
         <form name="LogonForm">
             <field property="username"
                     depends="required,email">
                 <arg0   key="Username"
 			resource="false"/>
-            </field>
-                                                                                                                                                            
+            </field>                                                                                                                    
             <field property="password"
                     depends="required, minlength,maxlength">
                 <arg0   key="Password" resource="false"/>
@@ -136,6 +135,70 @@
             </field>
         </form>
 
+        <!-- Rules for emailing password to user form -->
+        <form name="EmailPasswordForm">
+            <field property="email" depends="required,email">
+                <arg0   key="Email address" resource="false"/>
+            </field>
+        </form>
+
+        <!-- Rules for registering a new user -->
+        <form name="RegisterNewUserForm">
+            <field property="user.email_address" depends="required,email">
+                <arg0   key="Email address" resource="false"/>
+            </field>
+            <field property="termsaccept" depends="required,mask">
+                <arg0   key="Acceptance of terms" resource="false"/>
+                <var>
+                  <var-name>mask</var-name>
+                  <var-value>accept</var-value>
+                </var>
+            </field>
+            <field property="password1" depends="required,minlength,maxlength">
+                <arg0   key="Password" resource="false"/>
+                <arg1   key="${var:minlength}" name="minlength"
+                   resource="false"/>
+                <arg2   key="${var:maxlength}" name="maxlength"
+                   resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>16</var-value>
+                </var>
+                <var>
+                    <var-name>minlength</var-name>
+                    <var-value>3</var-value>
+                </var>
+            </field>
+            <field property="password2" depends="required,minlength,maxlength">
+                <arg0   key="Password confirmation" resource="false"/>
+                <arg1   key="${var:minlength}" name="minlength"
+                   resource="false"/>
+                <arg2   key="${var:maxlength}" name="maxlength"
+                   resource="false"/>
+                <var>
+                    <var-name>maxlength</var-name>
+                    <var-value>16</var-value>
+                </var>
+                <var>
+                    <var-name>minlength</var-name>
+                    <var-value>3</var-value>
+                </var>
+            </field>
+            <field property="party.givenname" depends="required">
+                <arg0   key="First name" resource="false"/>
+            </field>
+            <field property="party.surname" depends="required">
+                <arg0   key="Last name" resource="false"/>
+            </field>
+            <field property="address.postalcode" depends="mask">
+                <arg0   key="Postal Code" resource="false"/>
+                <var>
+                  <var-name>mask</var-name>
+                  <var-value>^\d{5}\d*$</var-value>
+                </var>
+
+            </field>
+        </form>
 
     </formset>
 
