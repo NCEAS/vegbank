@@ -33,7 +33,7 @@
 	<filter token="port" value="1521" />
 	<filter token="driverType" value="thin" />
 	<filter token="driverClass" value="org.postgresql.Driver" />
-	<filter token="connectString" value="jdbc:postgresql://beta.nceas.ucsb.edu/vegbank" />
+	<filter token="connectString" value="jdbc:postgresql://beta.nceas.ucsb.edu/plots_dev" />
 	<filter token="databaseName" value="nvc" />
 	<filter token="insert.minConnections" value="1" />
 	<filter token="insert.maxConnections" value="3" />
@@ -59,8 +59,12 @@
 	
 	<property name="cpath" value="${datatranslator}:${xmlresource}:${xmlp}:${jdbc}:${build}:./"/>
 
+	<!-- SERVLET LOCATION -->
 	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
-
+	<!--
+	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat_dev/webapps/framework/WEB-INF/lib//" />
+	-->
+	
 </target>
 
 <target name="prepare" depends="init">
@@ -91,6 +95,8 @@
 		PlotXmlWriter.java
 		PlotElements.java
 		
+		SqlFile.java
+		DBinsertPlotSource.java
 		DB.java"
 		excludes="**/CVS* "
 	/>

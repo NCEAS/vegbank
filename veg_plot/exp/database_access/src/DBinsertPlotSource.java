@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-22 21:58:53 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2002-03-14 16:54:56 $'
+ * 	'$Revision: 1.2 $'
  */
 package databaseAccess;
 
@@ -26,7 +26,8 @@ import PlotDataSource;
  * this is a class that is used to load the database by parsing an xml document
  * that is consistent with the  veg plot project
  */
-public class DBinsertPlotSource implements ServletPluginInterface
+//public class DBinsertPlotSource implements ServletPluginInterface
+public class DBinsertPlotSource
 {
 
 	// constructor -- define as static the LocalDbConnectionBroker
