@@ -6,8 +6,8 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2003-02-24 20:10:09 $'
-  *     '$Revision: 1.17 $'
+  *     '$Date: 2003-02-26 19:18:46 $'
+  *     '$Revision: 1.18 $'
 --> 
 <project name="veg_plot" default="compile" basedir=".">
 
@@ -18,7 +18,9 @@
     <property environment="env" />
     <property name="top.lib.dir" location="${basedir}/../lib"/>
     <property name="build.dir" location="${basedir}/build" />
+    <property name="src.dir" location="${basedir}/src" />
     <property name="java.src.dir" location="${basedir}/src" />
+    <property name="web.src.dir" location="${src.dir}/web" />
     <property name="lib.dir" location="${basedir}/lib" />
     <property name="doc.dir" location="${basedir}/doc"/>
     <property name="build.src.dir" location="${build.dir}/src"/>
@@ -36,10 +38,14 @@
     <property name="test.integration.dir" location="${test.dir}/Integration"/>
     <property name="ant.style.dir" location="${env.ANT_HOME}/etc" /> 
     <property name="web.docroot" location="${env.TOMCAT_HOME}/webapps" /> 
+    <property name="web.context" location="${web.docroot}/framework" /> 
     <property name="web.servlet.lib.dir"
-      location="${web.docroot}/framework/WEB-INF/lib" /> 
+      location="${web.context}/WEB-INF/lib" /> 
     <property name="rmiserver.lib.dir" location="${rmiserver.home.dir}/lib" /> 
-        
+    
+    
+    <property name="planttaxonomy" value="${basedir}/../veg_taxa/build/lib/planttaxonomy.jar"/>
+    <property name="vegcommunity" value="${basedir}/../veg_community/build/lib/vegcommunity.jar"/>
     <!-- Location of jar files 
     <property name="xmlp" value="${top.lib.dir}/xalan_1_2_2.jar:${top.lib.dir}/xerces_1_3_1.jar:${top.lib.dir}/xml-apis.jar" />
     <property name="jdbc" value="${top.lib.dir}/jdbc7.0-1.2.jar" />
@@ -47,12 +53,13 @@
     <property name="servlet" value="${top.lib.dir}/servlet.jar:${top.lib.dir}/multipart.jar" />
     <property name="xmlresource" value="${build.lib.dir}/xmlresource.jar" />
     <property name="datatranslator" value="${build.lib.dir}/datatranslator.jar" />
-    <property name="rmidatasource" value="${build.lib.dir}/rmidatasource.jar" />
+    <property name="rmidatasource" value="${top.lib.dir}/rmidatasource.jar" />
     <property name="cpath" 
-      value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${build.classes.dir}:${vegclass_common}"/>
+      value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${build.classes.dir}:${vegclass_common}:${planttaxonomy}:${vegcommunity}"/>
     <property name="cpath2" 
       value="${rmidatasource}:${servlet}:${xmlp}:${jdbc}:${xmlresource}:${datatranslator}:${build.classes.dir}:${vegclass_common}"/>
     -->
+
     <filter token="reports.test.dir" value="${reports.test.dir}"/>
     <!-- This is no longer used ?? -->
     <filter token="outputXML" value="${web.servlet.lib.dir}/atomicResult"/>
@@ -85,7 +92,17 @@
     <filter token="maxConnectionUses" value="${maxConnectionUsers}" />
     <filter token="resetTime" value="${resetTime}" />
     <filter token="logFile" value="${logFile}" />
-    
+
+    <!-- Servlet specific -->
+    <filter token="mailHost" value="nceas.ucsb.edu"/>
+    <filter token="systemEmail" value="dba@vegbank.org"/>
+    <filter token="genericForm" value="${web.docroot}/forms/generic_form.html"/>
+    <filter token="genericTemplate" value="${web.docroot}/forms/tmp.html"/>
+    <filter token="rmiserver"  value="${rmiserver}"/>
+    <filter token="uploadDir" value="${web.servlet.lib.dir}"/>
+    <filter token="originalDataStore" value="${vegbank.home.dir}/originalDataStore"/>
+    <filter token="servlet_lib_dir" value="${web.servlet.lib.dir}/" />
+
     <!-- TODO: Need to define elsewhere-->
     <filter token="constraintlist" value="./constraints.xml"/>
     <filter token="constraintmap" value="./constraint-map.xml"/>
@@ -100,6 +117,8 @@
     <mkdir dir="${build.classes.dir}"/>
     <!-- Classpaths -->
     <path id="classpath.compilation">
+      <pathelement path="${planttaxonomy}"/>
+      <pathelement path="${vegcommunity}"/>
       <fileset dir="${top.lib.dir}">
         <include name="**/*jar"/>
       </fileset>
@@ -132,8 +151,9 @@
       <fileset dir="./exp/xml-resource/src" casesensitive="yes">
         <include name="**/*.java"/>
       </fileset>
-      <fileset dir="./exp" casesensitive="yes">
-        <include name="servlet/util/*.java"/>
+      <fileset dir="${java.src.dir}">
+        <include name="org/**/*java"/>
+        <include name="edu/**/*java"/>
       </fileset>
     </copy> 
 
@@ -155,16 +175,6 @@
       <classpath refid="classpath.compilation"/>
     </javac>
 
-    <!-- Call sub-project ant build files -->
-    <!--<ant dir="exp/client_installer" target="compile"/>-->
-    <!--<ant dir="exp/database_access" target="compile"/>-->
-    <!--<ant dir="exp/data-translators" target="compile"/>-->
-    <!--<ant dir="exp/rmidatasource" target="compile"/> 
-    <ant dir="exp/services" target="compile" inheritAll="false"/>
-    <ant dir="exp/servlet" target="compile" inheritAll="false"/> -->
-    <!--<ant dir="exp/vegclient" target="compile" inheritAll="false"/>-->
-    <!--<ant dir="exp/xml-resource" target="compile" inheritAll="false"/>
-    <ant dir="exp/xml_to_sql" target="compile" inheritAll="false"/>-->
   </target>
 	
 	<target name="jar" depends="compile"
@@ -193,76 +203,160 @@
     <!-- plotvalidator.jar -->
     <jar  destfile ="${build.lib.dir}/plotvalidator.jar">
       <fileset dir="${build.classes.dir}" casesensitive="yes">
-        <include name="edu/ucsb/nceas/vegbank/plotvalidation/**/*.class"/>
+        <include name="edu/ucsb/nceas/vegbank/plotvalidation/**/*class"/>
         <include name="plotvalidation.properties"/>
       </fileset>
       <fileset dir="${build.java.src.dir}" casesensitive="yes">
-        <include name="edu/ucsb/nceas/vegbank/plotvalidation/**/*.java"/>
+        <include name="edu/ucsb/nceas/vegbank/plotvalidation/**/*java"/>
       </fileset>
     </jar>
+    <!-- authservletmodule.jar -->
+    <jar  destfile ="${build.lib.dir}/authservletmodule.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/authentication/**/*class"/>
+        <include name="authentication.properties"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/authentication/**/*java"/>
+      </fileset>
+    </jar>
+    <!-- usermanagement.jar -->
+    <jar  destfile ="${build.lib.dir}/usermanagement.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/usermanagement/**/*class"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/usermanagement/**/*java"/>
+      </fileset>
+    </jar>
+    <!-- utilities.jar -->
+    <jar  destfile ="${build.lib.dir}/utilities.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/util/**/*class"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/util/**/*java"/>
+      </fileset>
+    </jar>
+    <!-- framework.jar -->
+    <jar  destfile ="${build.lib.dir}/framework.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/framework/**/*class"/>
+        <include name="org/vegbank/servlet/plugin/**/*class"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/framework/**/*java"/>
+        <include name="org/vegbank/servlet/plugin/**/*java"/>
+      </fileset>
+    </jar>
+    <!-- datafile-exchange.jar -->
+    <jar  destfile ="${build.lib.dir}/datafile-exchange.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/datafileexchange/**/*class"/>
+        <include name="dataexchange.properties"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/datafileexchange/**/*java"/>
+      </fileset>
+    </jar>
+    <!-- stylesheet-generator.jar -->
+    <jar  destfile ="${build.lib.dir}/stylesheet-generator.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/stylesheet/**/*class"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/stylesheet/**/*java"/>
+      </fileset>
+    </jar>
+    <!-- vegbankquery.jar -->
+    <jar  destfile ="${build.lib.dir}/vegbankquery.jar">
+      <fileset dir="${build.classes.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/request/**/*class"/>
+        <!-- FIXME: Confirm these are used -->
+        <include name="fileDownload.properties"/>
+        <include name="pageDirector.properties"/>
+        <include name="veg_servlet.properties"/>
+        <include name="plotQuery.properties"/>
+        <include name="vegbank.properties"/>
+        <include name="authenticate.properties"/>
+      </fileset>
+      <fileset dir="${build.java.src.dir}" casesensitive="yes">
+        <include name="org/vegbank/servlet/request/**/*java"/>
+      </fileset>
+    </jar>
+
+
+
+
 	</target>
 
-  <target name="jar-subprojects" description="==> jar up subprojects">
-    <!--<ant dir="exp/database_access" target="jar"/>-->
+  <target name="jar-subprojects" depends="prepare" description="==> jar up subprojects">
 		<ant dir="exp/data-translators" target="jar">
       <property name="hostname" value="${hostname}"/>
     </ant>
-		<!-- <ant dir="exp/xml-resource" target="jar"/> -->
 		<ant dir="exp/rmidatasource" target="jar"> 
       <reference refid="classpath.compilation"/>
     </ant>
 		<ant dir="exp/services" target="jar" inheritAll="false"/>
-		<ant dir="exp/servlet" target="jar" inheritAll="false">
-      <reference refid="classpath.compilation"/>
-      <property name="serverUrl" value="${serverUrl}"/>
-      <property name="rmiserver" value="${rmiserver}"/>
-    </ant>
-		<!--<ant dir="exp/vegbank_web" target="jar"/>-->
-		<!--<ant dir="exp/vegclient" target="jar"/>-->
-		<!--<ant dir="exp/xml_to_sql" target="jar"/>-->
   </target>
   
   <target name="jar-all" depends="jar, jar-subprojects" description="==> Generate all jar files"/>
 
+
+
+  <!-- ================================================================ -->
+  <!-- DEPLOYMENT RELATED TARGETS                                       -->
+  <!-- ================================================================ -->
+  
   <target name="deploy" depends="jar, deploy-resources"
           description="=> Deploys jars in veg_plot module to servlet container">
-		<echo message="Distr all of jars in ${ant.project.name}"/>
+	
+    <echo message="Distr all of jars in ${ant.project.name}"/>
     
-		<!--<ant dir="exp/database_access" target="dist-web" inheritAll="false"/>-->
 		<ant dir="exp/data-translators" target="dist" inheritAll="false">
       <property name="hostname" value="${hostname}"/>
     </ant>
-		<!--<ant dir="exp/xml-resource" target="jar"/>-->
 		<ant dir="exp/rmidatasource" target="dist" inheritAll="false"> 
       <reference refid="classpath.compilation"/>
-    </ant>
-		<!-- <ant dir="exp/services" target="jar"/> No dist target -->
-		<ant dir="exp/servlet" target="dist" inheritAll="false">
-      <reference refid="classpath.compilation"/>
-      <property name="serverUrl" value="${serverUrl}"/>
-      <property name="rmiserver" value="${rmiserver}"/>
     </ant>
 		<ant dir="exp/vegbank_web" target="dist" inheritAll="false">
       <property name="hostname" value="${hostname}"/>
     </ant>
-    
-		<!-- FIXME <ant dir="exp/vegclient" target="dist"/>  target fails to build -->
-		<!-- <ant dir="exp/xml-resource" target="dist"/> No dist target -->
-		<!-- <ant dir="exp/xml_to_sql" target="jar"/> No dist target -->
-    <copy todir="${servlet_lib}">
+
+    <copy todir="${web.servlet.lib.dir}">
       <fileset dir="${build.lib.dir}" includes="*jar"/>
     </copy> 
 	</target>
 
-	<target name="deploy-resources" depends="init" 
+  <target name="deploy-prepare">
+    <!-- Make dirs of the application -->
+    <mkdir dir="${web.context}"/>
+    <mkdir dir="${web.servlet.lib.dir}"/>
+  </target>
+
+	<target name="deploy-resources" depends="init, deploy-prepare" 
           description="=> Deploy resources to servlet container">
-		<!-- Copy xml resources to servlet container -->
-		<copy todir="${servlet_lib}">
+
+    <copy todir="${web.context}">
+      <fileset dir="${src.dir}/web/"/>
+    </copy>
+
+    <!-- Copy xml resources to servlet container -->
+		<copy todir="${web.servlet.lib.dir}">
 			<fileset dir="xml" includes="*dtd, *xml"/>
 		</copy>
+   
+    <!-- Copy misc. files into container -->
+		<copy file="src/utilities/coord_transform.sh" todir="${web.servlet.lib.dir}"/>
+		<copy file="../veg_community/sql/update_community_summary.sql" todir="${web.servlet.lib.dir}"/>
     
-		<copy file="src/utilities/coord_transform.sh" todir="${servlet_lib}"/>
-		<copy file="../veg_community/sql/update_community_summary.sql" todir="${servlet_lib}"/>
+    <!-- Copy Third Party jars -->
+    <copy todir="${web.servlet.lib.dir}">
+      <fileset dir="${top.lib.dir}"/>
+    </copy>
+    <copy todir="${web.servlet.lib.dir}" file="${planttaxonomy}"/>
+    <copy todir="${web.servlet.lib.dir}" file="${vegcommunity}"/>
+    
 	</target>
 
   <target name="deploy-rmi-resources" depends="jar" 
@@ -289,13 +383,6 @@
 		<ant dir="exp/xml_to_sql" target="clean"/>
 	</target>
   
-	<!-- Want to pass command line variables in ant but no working yet	
-	<target name="database_access">
-		<echo message="Going to call ${target} "/>
-		<ant dir="exp/database_access" target="${target}"/>		
-	</target>
-	-->
- 
   <!-- ================================================================ -->
   <!-- TEST RELATED TARGETS                                             -->
   <!-- ================================================================ -->

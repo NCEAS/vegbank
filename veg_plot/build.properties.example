@@ -28,3 +28,6 @@ query.maxConnections = 3
 maxConnectionUsers = 100
 resetTime = 0.01
 logFile = connectionPool.log
+
+# Vegbank Directories
+vegbank.home.dir=/usr/vegbank
