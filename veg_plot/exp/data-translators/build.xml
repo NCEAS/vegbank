@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2001-11-01 17:52:04 $'
- 	*     '$Revision: 1.1 $'
+ 	*     '$Date: 2001-12-06 02:10:24 $'
+ 	*     '$Revision: 1.2 $'
 --> 
 <project name="data-translators" default="compile" basedir=".">
 	
@@ -80,13 +80,25 @@
 		
 			 TncConverter.java
 			 TurboVegConverter.java
-			 TNCPlotsDB.java
-			 TncAccessFileConverter.java
+			 
+			 
+
+			 PlotDataSource.java
+			 PlotDataSourceInterface.java
+			 
+			 TestPlotSourcePlugin.java
+			 
+			 
 			"
 			destdir="${build}"
 		/>
 	</target>	
+	<!-- take this out while getting going 
+	TNCPlotsDB.java 
+	TncAccessFileConverter.java 
 	
+	PlotXmlWriter.java
+	-->
 	
 	
 	<!-- JAR -->
