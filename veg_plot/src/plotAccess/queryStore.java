@@ -7,21 +7,127 @@ import java.sql.*;
 
 
 /**
-* This class stores the sql code that will be issued through the 
-* issueStatement class as directed by the sqlMapper class
-*/
-
+ * This class acts as a store for sql queries which are used depending on the 
+ * number and type of query elements passed to the sqlMapper class.  Ultimately
+ * these queries are issued to the database though the issue select method
+ *
+ * @author John Harris
+ *
+ */
 
 public class  queryStore
-{
+ {
+
 
 
 /**
-* Method to query the database by using a plot id number to obtain a summary of 
-* that plot including 1] author plot code, 2] surfaceGeology
-* The input to the method is a string array containing plot id numbers and
-* an integer representing the number of elements in the array
-*/
+ * Method using as input a single plot database id number to retieve all the 
+ * attributes for that plot all fields are made publicly accessible and will,
+ * ultimately be passed to the xml writer class for file output
+ *
+ * @param plotId - database plot id number
+ * @param conn - database connection
+ */
+public void getEntireSinglePlot(String plotId, Connection conn)
+{
+//at this point the query is the same as the get summary query - wait till
+//closure on data model before adjusting
+
+String entireResult=null;
+int connectionUses=1;
+
+String action="select";
+String statement="select PLOT_ID, AUTHORPLOTCODE, project_id, "+
+	"surfGeo,  PLOTTYPE, PLOTORIGINLAT, PLOTORIGINLONG, PLOTSHAPE, "
+	+" PLOTSIZE, PLOTSIZEACC, ALTVALUE, ALTPOSACC, SLOPEASPECT, SLOPEGRADIENT, "
+	+" SLOPEPOSITION, HYDROLOGICREGIME, SOILDRAINAGE, STATE, CURRENTCOMMUNITY "
+	+" from PLOT where PLOT_ID = "+plotId;
+		
+String returnFields[]=new String[19];	
+returnFields[0]="PLOT_ID";	
+returnFields[1]="AUTHORPLOTCODE";
+returnFields[2]="project_id";
+returnFields[3]="surfGeo";
+returnFields[4]="PLOTTYPE";
+returnFields[5]="PLOTORIGINLAT";
+returnFields[6]="PLOTORIGINLONG";
+returnFields[7]="PLOTSHAPE";
+returnFields[8]="PLOTSIZE";
+returnFields[9]="PLOTSIZEACC";
+returnFields[10]="ALTVALUE";
+returnFields[11]="ALTPOSACC";
+returnFields[12]="SLOPEASPECT";
+returnFields[13]="SLOPEGRADIENT";
+returnFields[14]="SLOPEPOSITION";
+returnFields[15]="HYDROLOGICREGIME";
+returnFields[16]="SOILDRAINAGE";
+returnFields[17]="STATE";
+returnFields[18]="CURRENTCOMMUNITY";
+int returnFieldLength=19;
+
+/** Issue the statement, and iterate the counter */
+issueStatement j = new issueStatement();
+j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
+connectionUses++;
+	
+entireResult=j.outReturnFields[0];
+System.out.println(entireResult);
+
+
+
+/**	
+ * make a second query here to get the species specific information which will
+ * be appended onto the summary results line and ultimately tokenized in the 
+ * xmlWrter class - at some point this function may become its own method
+ */
+
+action="select";
+statement="select AUTHORNAMEID from taxonObservation where OBS_ID in"+
+	"(select OBS_ID from PLOTOBSERVATION where PARENTPLOT in"+
+	"(select plot_ID from plot where PLOT_ID ="+plotId+"))";
+
+		
+String returnFieldsB[]=new String[1];	
+returnFieldsB[0]="AUTHORNAMEID";
+int returnFieldLengthB=1;
+
+/** Issue the statement, and iterate the counter */
+issueStatement k = new issueStatement();
+k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB, conn);	
+connectionUses++;
+	
+	
+//take the results from this query and append to the summary line
+//which will ultimately be passed back to the xmlWriter to be tokenized
+//and writen to xml - againd there should only be one line returned 
+
+/*
+for (int ii=0;ii<k.outReturnFieldsNum; ii++) {
+	String buf =
+	entireResult=entireResult+k.outReturnFields[ii];
+}
+*/	
+
+//entireSinglePlotOutput=entireResult;
+//entireSinglePlotOutputNum=entireResultNum;
+//outConnectionUses=connectionUses;
+
+}//end method
+public String entireSinglePlotOutput[] = new String[10000];  //should always = 1
+public int entireSinglePlotOutputNum; 
+
+
+
+/**
+ * Method to query the database by using a plot id number to obtain a summary of 
+ * that plot including 1] author plot code, 2] surfaceGeology
+ * The input to the method is a string array containing plot id numbers and
+ * an integer representing the number of elements in the array
+ *
+ * @param plotId - an array of plotId numbers
+ * @param plotIdNum - the number of elements in the above array
+ * @param conn - a database connection 
+ */
 public void getPlotSummary(String plotId[], int plotIdNum, Connection conn)
 {
 
@@ -119,29 +225,20 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 	//which will ultimately be passed back to the xmlWriter to be tokenized
 	//and writen to xml - againd there should only be one line returned 
 	for (int ii=0;ii<k.outReturnFieldsNum; ii++) {
-	summaryResult[i]=summaryResult[i]+k.outReturnFields[ii];
+		summaryResult[i]=summaryResult[i]+k.outReturnFields[ii];
 	}
 	
-
-
-
 summaryResultNum=i;
 } //end for
 
 summaryOutput=summaryResult;
 summaryOutputNum=summaryResultNum;
-
 outConnectionUses=connectionUses;
-
-	
-
 	
 }//end method
 public String summaryOutput[] = new String[10000];  //the output from the issue sql can be mapped to this varaiable
 public int summaryOutputNum; //the number of output rows from the issue sql is mapped to this varable
-
-//number of times using the input connection
-public int outConnectionUses;
+public int outConnectionUses; //number of connection uses
 
 
 
@@ -258,22 +355,9 @@ outPlotIdNum=j.outReturnFieldsNum;
 	
 } //end method
 
-
-
-/**
-* Method to query the database to retrieve all the plot attributes
-* by using a plotID
-*/
-public void getPlot(int plotId)
-{
-
-	
-} //end method
-
-
-
 public String outPlotId[] = new String[10000];  //the output plotIds
 public int outPlotIdNum; //the number of plotId's
+
 
 
 }
