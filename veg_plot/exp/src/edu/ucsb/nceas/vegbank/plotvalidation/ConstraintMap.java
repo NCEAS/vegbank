@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-23 15:19:26 $'
- * '$Revision: 1.2 $'
+ *     '$Date: 2002-12-23 16:22:24 $'
+ * '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ import xmlresource.utils.XMLparse;
  **/                               
 
  
-public class ConstraintMap
+public class ConstraintMap implements ConstraintMapInterface
 {
 	
   private XMLparse parser;
@@ -158,6 +158,30 @@ public class ConstraintMap
 			 e.printStackTrace();
 		 }
 	 }
+   /**
+    * method that returns the size of the constraint map -- basically 
+    * the number of elements that are to be constrained 
+    */
+     public int getMapSize()
+     {
+       return(map.size() );
+     }
+     
+     
+    /**
+     * method that returns the rule that governs the way the attribute 
+     * is to be constrained by the constraint list
+     * @param mapLevel -- the level in the map corresponding to the attribute 
+     * of interest.
+     */
+     public String getConstraintRule(int mapLevel)
+     {
+      //place holder
+      return("exact");
+     }
+
+
+
 
    /**
     * method that adds each of the mapInstance elements to the map object
@@ -205,6 +229,8 @@ public class ConstraintMap
    /**
     * this method is to be called to get the methodParams using the integer 
     * number that corresponds to the level in the 'map' vector
+    * @param mapLevel -- the level in the map corresponding to the attribute 
+    * of interest.
     **/
     public String getDBAttribute(int mapLevel)
     {
@@ -220,7 +246,6 @@ public class ConstraintMap
 				  dbAttribute = (String)database.get("dbAttribute");
           rval = dbAttribute;
          }
-
       }
       catch(Exception e)
 		  {
@@ -232,6 +257,8 @@ public class ConstraintMap
    /**
     * this method is to be called to get the methodParams using the integer 
     * number that corresponds to the level in the 'map' vector
+    * @param mapLevel -- the level in the map corresponding to the attribute 
+    * of interest.
     **/
     public String getDBTable(int mapLevel)
     {
@@ -259,7 +286,9 @@ public class ConstraintMap
    /**
     * this method is to be called to get the methodParams using the integer 
     * number that corresponds to the level in the 'map' vector
-    **/
+    * @param mapLevel -- the level in the map corresponding to the attribute 
+    * of interest.
+    */
     public String getMethodParams(int mapLevel)
     {
       String rval = "";
@@ -286,6 +315,8 @@ public class ConstraintMap
    /**
     * this method is to be called to get the methodName using the integer 
     * number that corresponds to the level in the 'map' vector
+    * @param mapLevel -- the level in the map corresponding to the attribute 
+    * of interest.
     **/
     public String getMethodName(int mapLevel)
     {
@@ -302,7 +333,6 @@ public class ConstraintMap
 				  methodName = (String)method.get("methodName");
           rval = methodName;
          }
-
       }
       catch(Exception e)
 		  {
@@ -318,10 +348,11 @@ public class ConstraintMap
    public static void main(String[] args)
    {
       ConstraintMap map = new ConstraintMap(); 
+      System.out.println("map size: "+ map.getMapSize() );
+      System.out.println("rule: "+ map.getConstraintRule(0) );
       System.out.println("method name element 1: " + map.getMethodName(0) );
       System.out.println("method params element 1: " + map.getMethodParams(0) );
       System.out.println("table element 1: " + map.getDBTable(0) );
       System.out.println("attribute element 1: " + map.getDBAttribute(0) );
    }
-
 }
