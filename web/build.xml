@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2004-05-13 17:59:06 $'
-* '$Revision: 1.105 $'
+* '$Author: mlee $'
+* '$Date: 2004-06-03 17:18:07 $'
+* '$Revision: 1.106 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -398,6 +398,7 @@
     <!-- calls ant to run a different ant target which creates the vegbank dictionary based on logical fields only -->
     <echo>calling ../docs/xml with webapp '${webapp}'</echo>
     <ant dir="../docs/xml" target="logical"/>
+    <ant dir="../docs/xml" target="dist-dataxml"/>
   </target>
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
@@ -432,7 +433,8 @@
       vegbranch-dist-docs | vegbranch-dist-images | vegbranch-dist-docs-loadtbls (before vegbranch-dist-docs)</echo>
     <!-- RELEVANT DIRECTORIES -->
     <property name="vegbr_dir" value="./vegbranch"/>
-    <filter filtersfile="${vegbr_dir}/vegbranch.properties" /> <!-- get version  -->
+    <filter filtersfile="${vegbr_dir}/vegbranch.properties"/>
+    <!-- get version  -->
     <!-- RELEVANT FILES TO COPY / DELETE -->
     <!-- client files: -->
     <property name="vegbr_client_include" value="vegbank-module*.zip  vegbranch-v*.zip   vegbranch_normalizer.zip "/>
@@ -441,7 +443,8 @@
     <!-- images files: -->
     <property name="vegbr_img_include" value="*.jpg *.gif "/>
     <property name="vegbr_examples_include" value=" vegbranch-samplecsv1-b.4.0.zip  vegbranch-samplecsv2-b.4.0.zip normalizer_examples.zip"/>
-    <property name="vegbr_htmlfile" value="vegbranch.html vbr*.html"/> <!-- include these as html files in root of vegbranhc dir -->
+    <property name="vegbr_htmlfile" value="vegbranch.html vbr*.html"/>
+    <!-- include these as html files in root of vegbranhc dir -->
     <!--tokens particular to vegbranch html files.-->
     <filter token="vbr_imageserver" value="${vegdocs.dir}/vegbranch/images/"/>
     <filter token="vbr_examplesserver" value="${vegdocs.dir}/vegbranch/examples/"/>
