@@ -5,7 +5,7 @@
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
   -->
 <!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-schema.xsl"?>
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-template.xsl"?>
 <!--
 -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
@@ -8018,6 +8018,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>party.PARTY_ID</attReferences>
+      <attFKTranslationSQL>(SELECT CASE WHEN surname is null THEN 'org:' || organizationname ELSE surname || ', ' || givenname END FROM party WHERE party.party_id=observationContributor.party_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>This is the foreign key into the party table.</attNotes>
@@ -8037,6 +8038,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
+      <attFKTranslationSQL>(select roleCode from aux_role where aux_role.role_id=observationContributor.role_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>This is the foreign key into the aux_Role table</attNotes>
