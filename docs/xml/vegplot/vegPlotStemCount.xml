@@ -75,6 +75,15 @@
 			<attNotes>The default value is 1.  This field is not logically necessary, but allows for more compact entry and storage of tree stem tally data.</attNotes>
 			<attDefinition>The number of stems of a single species that have these specific stem diameter and height data in common.</attDefinition>
 		</attribute>
+		<attribute>
+			<attName>stemTaxonArea</attName>
+			<attNulls>Yes</attNulls>
+			<attType>NUMERIC(5,0)</attType>
+			<attKey>n/a</attKey>
+			<attReferences>n/a</attReferences>
+			<attNotes>n/a</attNotes>
+			<attDefinition>The total surface area (in m2) observed for recording woody stem data for this stemTaxon of this stem diameter and height.</attDefinition>
+		</attribute>
 		<children/>
 	</entity>
 </dataModel>

@@ -587,6 +587,8 @@ CREATE TABLE stemCount
     stemHeight float,
     stemHeightAccuracy float,
     stemCount integer NOT NULL,
+--the following added by MTL 20020624    
+    stemTaxonArea float,
     PRIMARY KEY(STEMCOUNT_ID)
 );
 
