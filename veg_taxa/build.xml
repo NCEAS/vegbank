@@ -159,15 +159,18 @@
 	
 <target name="dist" depends="compile">
 
-<!--	
-	<mkdir dir="${dist}/lib" />
-	<deltree dir="${dist}" />
--->	
-
-	<jar jarfile ="${build_lib}/PlantTaxonomy.jar"
+	<jar jarfile ="${build_lib}/planttaxonomy.jar"
 		basedir="${build_src}"
 		includes="${build_src}/ **.class **.dtd **.xsl  **.properties"
 	/>
+
+	
+	<!-- COPY THE JAR ARCHIVE BACK TO THE LIB DIRECTORY -->
+	<copydir src="${build_lib}"
+  	dest="${lib}"
+		includes="planttaxonomy.jar"
+	/>
+	
 </target>		
 
 

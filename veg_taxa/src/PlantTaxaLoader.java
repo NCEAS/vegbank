@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-05-30 00:10:31 $'
- * '$Revision: 1.3 $'
+ *     '$Date: 2002-05-30 02:50:19 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -162,14 +162,22 @@ public class PlantTaxaLoader
 				loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
 				dateEntered, usageStopDate,  "CODE", partyId);
 			}
-			
+
+			// last thing to do is to denormalize the database for querying
+			// but dont mess with the lengthy stuff if we have failed already
+			if (commit == true )
+			{
+				this.denormTaxonDB();
+			}
 			// decide on the transaction
 			if (commit == true )
 			{
+				System.out.println("commiting transaction");
 				conn.commit();
 			}
 			else
 			{
+				System.out.println("not commiting transaction");
 				conn.rollback();
 			}
 			
@@ -183,6 +191,87 @@ public class PlantTaxaLoader
 		return(true);
 	}
 	
+	/**
+	 * method to denormalize the plant taxonomy database for querying
+	 * by the VegBank servlet
+	 */
+	 private void denormTaxonDB()
+	 {
+		StringBuffer sb = new StringBuffer();
+	 	try
+		{
+			//get the max usage in the summary table
+			sb.append("select max( PLANTUSAGE_ID ) from veg_taxa_summary ");
+			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+			ResultSet rs = pstmt.executeQuery();
+			int usageId = 0;
+			while	( rs.next() )
+			{	
+				usageId = rs.getInt(1);
+			}
+			System.out.println("usages in sum table: " + usageId);	
+
+			sb = new StringBuffer();
+			pstmt.close();
+			sb.append("select max( PLANTUSAGE_ID ) from plantusage ");
+			pstmt = conn.prepareStatement( sb.toString() );
+			rs = pstmt.executeQuery();
+			while ( rs.next() )
+			{
+			  usageId = rs.getInt(1);
+			}
+			System.out.println("usages in usage table: " + usageId);
+			
+			//insert the data into the summary table
+			sb = new StringBuffer();
+			sb.append("INSERT INTO veg_taxa_summary ");
+			sb.append("(plantusage_id, plantname_id, plantconcept_id, plantName, classsystem, ");
+			sb.append(" plantnamestatus, startdate, stopDate, acceptedSynonym) ");
+			sb.append(" SELECT plantusage_id, plantname_id, plantconcept_id, plantname, ");
+			sb.append(" classsystem, plantnamestatus, usagestart, usagestop, acceptedSynonym ");
+			sb.append(" from plantusage where plantusage_id > " +( usageId-10) );
+			pstmt = conn.prepareStatement( sb.toString() );
+			pstmt.execute();
+			pstmt.close();	
+
+			//do the updates
+			sb = new StringBuffer();
+			sb.append(" update  veg_taxa_summary ");
+			sb.append(" set plantDescription = ");
+			sb.append("  (select plantDescription from plantConcept where veg_taxa_summary.plantconcept_id ");
+			sb.append("  = plantconcept.plantconcept_id ) where  plantusage_id > " + usageId );
+			pstmt = conn.prepareStatement( sb.toString() );
+			pstmt.execute();
+			pstmt.close();	
+			
+			sb = new StringBuffer();
+			sb.append(" update  veg_taxa_summary ");
+			sb.append(" set plantlevel = ");
+			sb.append("  (select plantlevel from plantconcept where veg_taxa_summary.plantconcept_id ");
+			sb.append("  = plantconcept.plantconcept_id  ) where  plantusage_id > " + usageId );
+			pstmt = conn.prepareStatement( sb.toString() );
+			pstmt.execute();
+			pstmt.close();	
+			
+			sb = new StringBuffer();
+			sb.append(" update  veg_taxa_summary ");
+			sb.append("  set parentName =");
+			sb.append("  (select plantparentname from plantstatus where veg_taxa_summary.plantconcept_id ");
+			sb.append("  = plantstatus.plantconcept_id ) where  plantusage_id > " + usageId );
+			pstmt = conn.prepareStatement( sb.toString() );
+			pstmt.execute();
+			pstmt.close();	
+
+
+		}
+		catch ( Exception e )
+		{
+			commit = false;
+			System.out.println("Erroneous sql: " + sb.toString() );
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+	 }
 		
 	
  /**
@@ -1012,8 +1101,8 @@ public class PlantTaxaLoader
 		try 
  		{
 			Class.forName("org.postgresql.Driver");
-			c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
-			//c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/plants_dev", "datauser", "");
+			//c = DriverManager.getConnection("jdbc:postgresql://vegbank.nceas.ucsb.edu/plants_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/plants_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -1032,10 +1121,10 @@ public class PlantTaxaLoader
 	{
 		PlantTaxaLoader loader = new PlantTaxaLoader();
 		Hashtable h = new Hashtable();
-		h.put("longName", "Abies bifoliaxxx");
-		h.put("shortName", "green stem tree");
-		h.put("code", "ABGS");
-		h.put("taxonDescription", "A wicked green-stemed plant");
+		h.put("longName", "Green Bark");
+		h.put("shortName", "GRN BRK");
+		h.put("code", "GRBRK");
+		h.put("taxonDescription", "GREEN plant");
 		h.put("salutation", "Mr.");
 		h.put("givenName", "John");
 		h.put("middleName", "H.");
