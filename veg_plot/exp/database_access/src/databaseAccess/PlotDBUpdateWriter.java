@@ -2,6 +2,7 @@ package databaseAccess;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -9,10 +10,9 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.xalan.xslt.XSLTInputSource;
-import org.apache.xalan.xslt.XSLTProcessor;
-import org.apache.xalan.xslt.XSLTProcessorFactory;
-import org.apache.xalan.xslt.XSLTResultTarget;
+import xmlresource.utils.transformXML;
+
+
 
 /**
  * 
@@ -87,14 +87,12 @@ private Vector translateUpdateXml(String inputXml, String styleSheet,
 {
 	Vector fileVector = new Vector();
 	//obtain a interface to a new XSLTProcessor object.
-	XSLTProcessor processor = XSLTProcessorFactory.getProcessor();
-
-	// Have the XSLTProcessor processor object transform inputXML  to
-	// StringWriter, using the XSLT instructions found in "*.xsl".
-	//print to a file
-	processor.process(new XSLTInputSource(inputXml), 
-		new XSLTInputSource(styleSheet),
-		new XSLTResultTarget(attributeFile));
+	
+	
+	transformXML trans = new transformXML();
+	FileWriter fw = new FileWriter(attributeFile);
+	trans.getTransformed(inputXml, styleSheet, fw);
+	fw.close();
 
 	//read the resulting file into the attribute vector
 	BufferedReader in = new BufferedReader(new FileReader(attributeFile), 8192);
