@@ -1,12 +1,15 @@
 package org.vegbank.common.model;
+
+import java.util.LinkedHashMap;
+
 /*
  * '$RCSfile: VBModelBean.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-27 20:16:42 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2003-11-25 19:39:58 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +43,13 @@ public abstract class VBModelBean
  	 */
  	public abstract String toXML();
  	
+	/**
+	 * UnMarshall this bean to an <code>LinkedHashMap</code>.
+	 * 
+	 * @return LinkedHashMap -- LinkedHashMap of this Bean
+	 */
+	public abstract LinkedHashMap toOrderedHashMap();
+ 	
  	/**
  	 * Allows pretty printing of xml ( tabs )
  	 * @return String
@@ -59,6 +69,27 @@ public abstract class VBModelBean
 	 * @return boolean
 	 */
 	public abstract boolean isInvertedRelationship( String attributName );
+	
+	/**
+	 * Convience to get the Primary Key
+	 * 
+	 * @return long
+	 */
+	public abstract long returnPrimaryKey();
+
+	/**
+	 * Convience to set the Primary Key
+	 * 
+	 * @return void
+	 */
+	public abstract void putPrimaryKey( long primaryKey );
+
+	/**
+	 * Convience to set a Foreign Key
+	 * 
+	 * @return void
+	 */
+	public abstract void putForeignKey( String keyName, long keyValue );
 	
 	// Implemented methods 
     

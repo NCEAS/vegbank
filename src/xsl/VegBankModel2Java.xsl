@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-11-17 19:10:24 $'
- *  '$Revision: 1.15 $'
+ *  '$Date: 2003-11-25 19:39:59 $'
+ *  '$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@
        the method should be changed, right now this XSL depends on Xalan.
   -->
   <!-- ***************************************************************************** -->
+
+  <xsl:import href="utility/common.xsl"/>
 
   <xsl:output method="text" indent="no"/>
 
@@ -69,6 +71,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
 
 /**
  * &lt;p&gt;<xsl:value-of select="entitySummary"/>&lt;/p&gt;
@@ -92,6 +96,8 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
    * The name of the database Primary Key for this Class ( table, entity).
    */
   public static final String PKNAME = "<xsl:value-of select="./attribute[attKey = 'PK']/attName"/>"; 
+
+
     <xsl:apply-templates mode="declareConstants" select="$primativeAttribs"/>
     <xsl:apply-templates mode="declareConstants" select="$FKAttribs"/>
 
@@ -104,6 +110,19 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
     <xsl:apply-templates mode="get-setSimpleAttrib" select="$primativeAttribs"/>
     <xsl:apply-templates mode="get-setSimpleAttrib" select="$FKAttribs"/>
     <xsl:apply-templates mode="get-setObjectAttrib" select="$FKAttribs"/>
+    
+
+  /**
+   * Convience method for setting a Foreign Key if you know the name but not 
+   * the method name
+   *
+   * @param String the name of the Foreign key to set.
+   * @param long the value to set
+   */
+  public void putForeignKey( String keyName, long keyValue)
+  {
+    <xsl:apply-templates mode="putForeignKey" select="$FKAttribs"/>
+  }
 
     <!-- choose all entities that have an inverted FK relationship to this entity -->
     <xsl:for-each select="../entity/attribute[starts-with(attReferences, concat(current()/entityName,'.') ) and attRelType/@type = 'inverted']">
@@ -288,6 +307,66 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
       xml.append(getIndent( indent -1 ) +"&lt;/<xsl:value-of select="$entityName"/>&gt;\n");
       return xml.toString();
     }
+
+
+ <!-- ***************************************************************************** -->
+ <!-- Generate toOrderHashMap() method  -->
+ <!-- ***************************************************************************** -->
+    /**
+     * UnMarshals this object to SQL  including calling this method on child objects
+     *
+     * @return String the XML representation.
+     */     
+    public LinkedHashMap toOrderedHashMap()
+    {
+      LinkedHashMap orderedHashMap = new LinkedHashMap(); 
+      Hashtable hashtable = new Hashtable();
+    <xsl:for-each select="attribute">
+
+      <xsl:variable name="javaType">
+        <xsl:call-template name="UpperFirstLetter">
+         <xsl:with-param name="text">
+           <xsl:value-of select="substring-before(attReferences, '.')"/>
+         </xsl:with-param>
+        </xsl:call-template>     
+      </xsl:variable>
+      
+
+      <xsl:variable name="XMLElementName" select="concat($entityName, '.', ./attName )"/>
+      
+      <xsl:variable name="cappedVariableName">
+        <xsl:call-template name="UpperFirstLetter">
+          <xsl:with-param name="text" select="attName"/>
+        </xsl:call-template>
+      </xsl:variable>
+      
+      <xsl:variable name="cappedObjectVariableName">
+        <xsl:call-template name="UpperFirstLetter">
+          <xsl:with-param name="text" select="concat(substring-before(attName, '_ID'), 'object')"/>
+        </xsl:call-template>
+      </xsl:variable>
+      
+      <xsl:choose>
+        <xsl:when test="./attRelType/@type ='n/a' and attKey!='PK'">
+     orderedHashMap.put("<xsl:value-of select="$cappedVariableName"/>", this.get<xsl:value-of select="$cappedVariableName"/>() );
+        </xsl:when>
+        <xsl:when test="attKey='PK' or attKey='FK'">
+     orderedHashMap.put("<xsl:value-of select="$cappedVariableName"/>", new Long(this.get<xsl:value-of select="$cappedVariableName"/>()) );
+        </xsl:when>
+        <xsl:otherwise>
+          // Got <xsl:value-of select="./attName"/>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <xsl:if test="./attRelType/@type='normal'">
+     orderedHashMap.put("<xsl:value-of select="$cappedObjectVariableName"/>", this.get<xsl:value-of select="$cappedObjectVariableName"/>() );
+      </xsl:if>
+
+    </xsl:for-each>
+
+      return orderedHashMap;
+    } 
+
     
  <!-- ***************************************************************************** -->
  <!-- Generate isInvertedRelationship(String attributeName) method  -->
@@ -444,6 +523,27 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
      <xsl:with-param name="attDefinition" select="$attDefinition"/>
    </xsl:call-template>
 
+   <!-- Create Convience methods for getting/setting PK -->
+   <xsl:if test="attKey='PK'">
+  /**
+   * Convience method to get the PK
+   */
+  public long returnPrimaryKey()
+  {
+    return this.get<xsl:value-of select="$cappedVariableName"/>();
+  }
+
+  /**
+   * Convience method to get the PK
+   */
+  public void putPrimaryKey(long PK)
+  {
+    this.set<xsl:value-of select="$cappedVariableName"/>(PK);
+  }
+   </xsl:if>
+
+
+
    <!-- Has a closed list of values generate some convience methods -->
    <xsl:if test="attListType='closed'">
   private static Collection <xsl:value-of select="$uncappedVariableName"/>PickList;
@@ -516,30 +616,27 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
    </xsl:variable>
 
    <xsl:variable name="uncappedVariableName">
-   <!--
-     <xsl:choose>
-       <xsl:when test="attKey='FK' or attKey='PK'"><xsl:value-of select="$cappedVariableName"/></xsl:when>
-       <xsl:otherwise>
-   -->
-         <xsl:call-template name="to-lower">
-           <xsl:with-param name="text">
-             <xsl:value-of select="$cappedVariableName"/>
-           </xsl:with-param>
-         </xsl:call-template>
-       <!--
-       </xsl:otherwise>
-     </xsl:choose>
-     -->
+     <xsl:call-template name="to-lower">
+       <xsl:with-param name="text">
+         <xsl:value-of select="$cappedVariableName"/>
+       </xsl:with-param>
+     </xsl:call-template>
    </xsl:variable>
    <xsl:variable name="attDefinition"><xsl:value-of select="attDefinition"/></xsl:variable>
 
-   <xsl:call-template name="GenerateGetSet">
-     <xsl:with-param name="javaType" select="$javaType"/>
-     <xsl:with-param name="cappedVariableName" select="$cappedVariableName"/>
-     <xsl:with-param name="uncappedVariableName" select="$uncappedVariableName"/>
-     <xsl:with-param name="attDefinition" select="$attDefinition"/>
-   </xsl:call-template>
-   
+   <!--
+        Do not allow geting and setting of objects with an inverted relationship
+        This prevents (hopefully) possible circular loops of objects which would 
+        be bad ;) 
+   -->
+   <xsl:if test="not(attRelType/@type='inverted')">
+     <xsl:call-template name="GenerateGetSet">
+       <xsl:with-param name="javaType" select="$javaType"/>
+       <xsl:with-param name="cappedVariableName" select="$cappedVariableName"/>
+       <xsl:with-param name="uncappedVariableName" select="$uncappedVariableName"/>
+       <xsl:with-param name="attDefinition" select="$attDefinition"/>
+     </xsl:call-template>
+   </xsl:if>
  </xsl:template>
 
  <!-- Generate gets and sets for Forgien Keys -->
@@ -570,6 +667,24 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
    </xsl:call-template>
    
  </xsl:template>
+
+ <!-- Generate single convience set for Foreign Keys -->
+ <xsl:template match="attribute" mode="putForeignKey">
+
+   <xsl:variable name="cappedVariableName">
+     <xsl:call-template name="UpperFirstLetter">
+       <xsl:with-param name="text">
+         <xsl:value-of select="attName"/>
+       </xsl:with-param>
+     </xsl:call-template>
+   </xsl:variable>
+
+    if ( keyName != null &amp;&amp; keyName.equalsIgnoreCase("<xsl:value-of select="attName"/>") )
+    {
+      this.set<xsl:value-of select="$cappedVariableName"/>( keyValue );
+    } 
+ </xsl:template>
+
 
 
  <!-- Set Complex Attributes , not used yet -->
@@ -614,23 +729,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
   }
  </xsl:template>
 
- <!-- ***************************************************************************** -->
- <!-- Utility templates                                                             -->
- <!-- ***************************************************************************** -->
 
- <xsl:template name="UpperFirstLetter">
-   <xsl:param name="text"/>
-   <xsl:call-template name="to-upper">
-     <xsl:with-param name="text">
-       <xsl:value-of select="substring($text,1,1)"/>
-     </xsl:with-param>
-   </xsl:call-template>
-   <xsl:call-template name="to-lower">
-    <xsl:with-param name="text">
-      <xsl:value-of select="substring($text,2)"/>
-    </xsl:with-param>
-  </xsl:call-template>
- </xsl:template>
 
   <!--
    # Basically convert to upper case, replace ' ' with '_' and no longer than 62 chars
@@ -650,21 +749,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
     <xsl:value-of select="translate($upperTruncatedText, ' -|/,:()', '________')"/>
   </xsl:template>
 
-  <xsl:template name="to-upper">
-    <xsl:param name="text"/>
-    <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
-    <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
 
-    <xsl:value-of select="translate($text,$lcletters,$ucletters)"/>
-  </xsl:template>
-
-  <xsl:template name="to-lower">
-    <xsl:param name="text"/>
-    <xsl:variable name="lcletters">abcdefghijklmnopqrstuvwxyz</xsl:variable>
-    <xsl:variable name="ucletters">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:variable>
-
-    <xsl:value-of select="translate($text,$ucletters,$lcletters)"/>
-  </xsl:template>
 
 
  <xsl:template name="GenerateGetSet">
