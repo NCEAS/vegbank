@@ -7,9 +7,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: farrell $'
-  *      '$Date: 2003-01-31 19:37:50 $'
-  *  '$Revision: 1.17 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2003-02-01 18:21:50 $'
+  *  '$Revision: 1.18 $'
   *
   *
   -->
@@ -38,31 +38,9 @@ MM_reloadPage(true);
 <input type="hidden" name="action" value="init">		
 
 
-<table cellspacing="0" cellpadding="0" border="0" width="800">
-  <tr> 
-    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
-    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
-      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="6" color="#FFFFFF"><b>VegBank</b></font></div>
-    </td>
-    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
-  </tr>
-  <tr> 
-    <td width="97" height="26" valign="top" bgcolor="#336633">&nbsp;</td>
-    <td width="119" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="@general_link@info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="@general_link@help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
-    </td>
-  </tr>
-</table>
+@vegbank_header_html_normal@
 
-<br> </br>
+<br> 
 
 <!-- SECOND TABLE -->
 <table  border="0" width="800" >
@@ -80,7 +58,7 @@ MM_reloadPage(true);
 
 
 
-<br> </br>
+<br> 
 
 <table border="0">
 	<tr>
@@ -179,7 +157,7 @@ MM_reloadPage(true);
     <!-- required = red * -->
 	
 			<font size="2" >
-			<font color="#F90000"><b>*</b></font><b> indicates a required field</font></b>
+			<font color="#F90000"><b>*</b></font><b> indicates a required field</b></font>
 
 
 &nbsp;
@@ -320,40 +298,14 @@ MM_reloadPage(true);
 &nbsp;	
 	
 
-<!-- VEGBANK FOOTER -->
-<table cellspacing="0" cellpadding="0" border="0">
-  <tr bgcolor="#EED85B"> 
-    <td colspan="6" height="8" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="-7">&nbsp;</font></td>
-  </tr>
-  <TR> 
-    <td width="43" height="8" valign="top"></td>
-    <td width="326" height="8" valign="top"></td>
-    <td width="47" height="8" valign="top"></td>
-    <td width="154" height="8" valign="top"></td>
-    <td width="91" height="8" valign="top"></td>
-    <td width="131" height="8" valign="top"></td>
-  </tr>
-  <tr> 
-    <td width="800" height="38" colspan="6" valign="top"> 
-      <p align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="/">VegBank 
-        Home</a> | <a href="@general_link@info.html">About VegBank</a> |<a href="@general_link@instructions.html">Instructions</a> 
-        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="@general_link@contact.html"> 
-        Contact</a> | <a href="@general_link@help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
-        <a href="register.html">Register</a> | <a href="@general_link@login.html">Login</a> 
-        |<a href="@general_link@actions.html"> use VegBank</a>| <a href="@general_link@logout.html">Logout</a> 
-        |<a href="@general_link@account.html"> My VegBank Account</a></font></p>
-    </td>
-  </tr>
-  <tr> 
-    <td width="800" height="24" colspan="6" valign="top"> 
-      <p align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&copy; 
-        2002 Ecological Society of America<br>
-        <a href="@general_link@terms.html">Terms of use</a> |<a href="@general_link@privacy.html"> 
-        Privacy policy</a></font></p>
-    </td>
-  </tr>
-</table>
 </form>
+
+<!-- VEGBANK FOOTER -->
+@vegbank_footer_html_tworow@
+
+
+
+
 
 </body>
 </html>

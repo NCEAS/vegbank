@@ -7,9 +7,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: farrell $'
-  *      '$Date: 2002-12-27 19:00:01 $'
-  *  '$Revision: 1.7 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2003-02-01 18:21:48 $'
+  *  '$Revision: 1.8 $'
   *
   *
   -->
@@ -25,29 +25,7 @@
 
 
 <BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
-<table cellspacing="0" cellpadding="0" border="0" width="800">
-  <tr> 
-    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
-    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
-      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
-    </td>
-    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
-  </tr>
-  <tr> 
-    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
-    <td width="119" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="@general_link@info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="@general_link@help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
-    </td>
-  </tr>
-</table>
+@vegbank_header_html_normal@
 
 
 
@@ -188,8 +166,13 @@ ISSN: <input name="conceptRefISSN"   size="25" value="@conceptRefISSN@"  > <br>
 <br>
 
 <br>
-
-
+ </tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td colspan="2">
+@vegbank_footer_html_tworow@
+</td>
+</tr>
+</table> 
 </body>
 </html>
 

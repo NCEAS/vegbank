@@ -3,9 +3,10 @@
  <head>
   <meta name="generator" content="HTML Tidy, see www.w3.org"><!--  -->
   <title>
-   Vegetation plots data download
+   VegBank plots data download
   </title>
   <meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link REL=STYLESHEET HREF="/vegbank/includes/default.css" TYPE="text/css">
 <style type="text/css">
 .tiny {
     FONT-SIZE: 10px
@@ -28,11 +29,15 @@
 </style>
  </head>
  <!--access to the fileDownload servlet-->
- <body bgcolor="#ffffcc">
+ <body bgcolor="#ffffff">
+<!-- VegBank Header -->
+<p>
+@vegbank_header_html_normal@
+</p>
   <form action="/framework/servlet/fileDownload" method="GET">
    <br>
     
-   <table border="0" cellpadding="0" cellspacing="0" width="100%">
+ <!--  <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tbody>
      <tr bgcolor="DFE5FA">
       <td align="Center" height="30" bgcolor="red" valign="center" width="1%">
@@ -43,8 +48,8 @@
       </td>
      </tr>
     </tbody>
-   </table>
-   <table border="0" cellpadding="0" cellspacing="0" width="725">
+   </table> -->
+   <table border="0" cellpadding="0" cellspacing="0" width="725" bgcolor="#ffffcc">
     <tbody>
      <tr>
       <td align="Center" colspan="8" height="10" valign="center">
@@ -89,9 +94,9 @@
        
       </td>
       <td align="left" valign="Bottom" width="200">
-       <a href="/framework/servlet/viewData?resultType=identity&summaryViewType=vegPlot&submitButton=Continue"><img alt="Back to My Files" border=
+   <!--    <a href="/framework/servlet/viewData?resultType=identity&summaryViewType=vegPlot&submitButton=Continue"><img alt="Back to My Files" border=
        "0" height="19" src="@image_server@btn_back_to_files.gif" title=
-       "Back to My Files" vspace="5" width="124"></a> 
+       "Back to My Files" vspace="5" width="124"></a> -->
       </td>
      </tr>
      <tr>
@@ -286,13 +291,13 @@
        "@image_server@btn_download.gif" width="99">
 <!-- Edit the next line for debugging: 0 is for normal use -->       
         <input name="debugLevel" type="hidden" value="0"> &nbsp;<br>
-        <br>
+     <!--   <br>
         
         &nbsp; <input alt="Update" border="0" height="19" name="upload" src=
        "@image_server@btn_update.gif" title="Update" type="image" width="99"><br>
         <br>
         &nbsp; <img alt="Cancel" border="0" height="19" src=
-       "@image_server@btn_cancel.gif" title="Cancel" width="99"> 
+       "@image_server@btn_cancel.gif" title="Cancel" width="99"> -->
       </td>
      </tr>
      <tr>
@@ -312,7 +317,7 @@
    </table>
    <table summary="navigation" border="0" cellpadding="0" cellspacing="5" width="725">
     <tbody>
-     <tr>
+    <!-- <tr>
       <td align="Center">
        <font class="sm" color="#666666" face=
        "Verdana, Arial, Helvetica, sans-serif" size="1"><a href=
@@ -323,7 +328,7 @@
        "http://www.nceas.ucsb.edu/collab/2180/docs/" title=
        "Database documentaion">Database Documentation</a></font> 
       </td>
-     </tr>
+     </tr> -->
      <tr>
       <td align="Center">
        <br>
@@ -338,6 +343,9 @@
     </tbody>
    </table>
   </form>
+<!-- VegBank footer -->
+<p>
+@vegbank_footer_html_tworow@</p>
  </body>
 </html>
 

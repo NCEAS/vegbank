@@ -8,9 +8,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: farrell $'
-  *      '$Date: 2002-12-27 19:00:01 $'
-  *  '$Revision: 1.18 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2003-02-01 18:21:49 $'
+  *  '$Revision: 1.19 $'
   *
   *
   -->
@@ -23,49 +23,8 @@
     </title>
   </head>
   <body bgcolor="#ffffff">
-    <table cellspacing="0" cellpadding="0" border="0" width="80%">
-      <tr>
-        <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">
-          &nbsp;
-        </td>
-        <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633">
-          <div align="left">
-            <font face="Georgia, Times New Roman, Times, serif" size=
-            "7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font>
-          </div>
-        </td>
-        <td height="28" colspan="4" valign="top" bgcolor="#336633">
-          &nbsp;
-        </td>
-      </tr>
-      <tr>
-        <td width="97" height="26" valign="top" bgcolor="#336633">
-          <font face=
-          "Georgia, Times New Roman, Times, serif"><b>&nbsp;</b></font> 
-        </td>
-        <td width="119" height="26" valign="top" bgcolor="#336633">
-          <div align="center">
-            <font face="Georgia, Times New Roman, Times, serif"><b><a href=
-            "@general_link@login.html" style=
-            "text-decoration:none; color:#FFFF80">Login</a></b></font>
-          </div>
-        </td>
-        <td width="114" height="26" valign="top" bgcolor="#336633">
-          <div align="center">
-            <font face="Georgia, Times New Roman, Times, serif"><b><a href=
-            "@general_link@info.html" style=
-            "text-decoration:none; color:#FFFF80">Information</a></b></font>
-          </div>
-        </td>
-        <td width="114" height="26" valign="top" bgcolor="#336633">
-          <div align="center">
-            <font face="Georgia, Times New Roman, Times, serif"><b><a href=
-            "@general_link@help.html" style=
-            "text-decoration:none; color:#FFFF80">Help</a></b></font>
-          </div>
-        </td>
-      </tr>
-    </table>
+@vegbank_header_html_normal@
+
     <!-- SECOND TABLE -->
     <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
       <tr>
@@ -684,7 +643,8 @@
         </td>
       </tr>
       <tr>
-        <td bgcolor="#dfe5fa" colspan="2">
+ <!--
+       <td bgcolor="#dfe5fa" colspan="2">
  <!--         <table cellpadding="15" width="100%">
             <tbody>
               <tr>
@@ -738,6 +698,14 @@
       </tr>
     </table>
 -->
+
+</tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td colspan="2">
+<!-- VEGBANK FOOTER -->
+@vegbank_footer_html_tworow@
+</td></tr>
+</table>
   </body>
 </html>
 

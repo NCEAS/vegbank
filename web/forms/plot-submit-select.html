@@ -7,9 +7,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: farrell $'
-  *      '$Date: 2003-01-31 19:37:49 $'
-  *  '$Revision: 1.10 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2003-02-01 18:21:50 $'
+  *  '$Revision: 1.11 $'
   *
   *
   -->
@@ -25,29 +25,8 @@
 
 
 <BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
-<table cellspacing="0" cellpadding="0" border="0" width="800">
-  <tr> 
-    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
-    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
-      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
-    </td>
-    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
-  </tr>
-  <tr> 
-    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
-    <td width="119" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="@general_link@login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
-        <a href="@general_link@info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
-    </td>
-    <td width="114" height="26" valign="top" bgcolor="#336633"> 
-      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="@general_link@help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
-    </td>
-  </tr>
-</table>
+@vegbank_header_html_normal@
+
 
 
 
@@ -67,7 +46,7 @@
    				</tr>
 			</table>
 			</td>
-		</td>
+		<!-- </td> -->
 	</tr>
 	<tr>
 		<!-- LEFT MARGIN -->
@@ -75,8 +54,9 @@
 		</td>
 	
 		<td align="left">
+			<form action="@datasubmitservlet@" method="get"> 			
 			<table border="0" cellspacing=5 cellpadding=5>
-			<form action="@datasubmitservlet@" method="get"> 
+			
 			
 			<input type="hidden" name="submitDataType" value="vegPlot">
 			<input type="hidden" name="action" value="submit">		
@@ -92,9 +72,10 @@
 			</small>
 			</td>
 			</tr>
-		</td>
-	</tr>
-	</table>
+			</table>
+		
+	
+	
 	
 	
 	
@@ -107,8 +88,8 @@
 		<td  align=left valign=top width="5%" >
 			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
 			<b>AVAILABLE PLOTS:</b>
+			</font>
 		</td>
-		</font>
 	</tr>
 	<tr>
 		<td align="center" width="5%">
@@ -127,7 +108,7 @@
 	<tr align="left">
 		<td width="30%" align=left valign=top>
 			<font size="2" >
-			<b>Available Plots: <font color="#F90000"><b>*</b></font>:</font></b>
+			<b>Available Plots: </b><font color="#F90000"><b>*</b></font>:</font>
 		</td>
 		<td  align="left" valign="middle">
 			<select class="item" name="plotID" multiple size=10>
@@ -138,7 +119,7 @@
 </table>
     <!-- required = red * -->
 	    	<font size="2" >
-			<font color="#F90000"><b>*</b></font><b> indicates a required field</font></b>
+			<font color="#F90000"><b>*</b></font><b> indicates a required field</b></font>
 		
 
 <!-- FILE FORMAT OF THE PLOT TYPE -->
@@ -174,8 +155,9 @@
 		<td  align=left valign=top width="5%" >
 			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
 			<b>SUBMITTAL RECEIPT:</b>
+			</font>		
 		</td>
-		</font>
+		
 	</tr>
 	
 	<tr>
@@ -241,42 +223,15 @@
 
 &nbsp;
 &nbsp;
+</form>
+</td>
+</tr>
+<tr><td colspan="2">
 
 <!-- VEGBANK FOOTER -->
-<table cellspacing="0" cellpadding="0" border="0">
-  <tr bgcolor="#EED85B"> 
-    <td colspan="6" height="8" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="-7">&nbsp;</font></td>
-  </tr>
-  <TR> 
-    <td width="43" height="8" valign="top"></td>
-    <td width="326" height="8" valign="top"></td>
-    <td width="47" height="8" valign="top"></td>
-    <td width="154" height="8" valign="top"></td>
-    <td width="91" height="8" valign="top"></td>
-    <td width="131" height="8" valign="top"></td>
-  </tr>
-  <tr> 
-    <td width="800" height="38" colspan="6" valign="top"> 
-      <p align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="/">VegBank 
-        Home</a> | <a href="@general_link@info.html">About VegBank</a> |<a href="@general_link@instructions.html">Instructions</a> 
-        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="@general_link@contact.html"> 
-        Contact</a> | <a href="@general_link@help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
-        <font size="2" face="Georgia, Times New Roman, Times, serif"><a href="register.html">Register</a> 
-        | <a href="@general_link@login.html">Login</a> |<a href="@general_link@actions.html"> 
-        use VegBank</a>| <a href="@general_link@logout.html">Logout</a> |<a href="@general_link@account.html"> 
-        My VegBank Account</a></font></font></p>
-    </td>
-  </tr>
-  <tr> 
-    <td width="800" height="24" colspan="6" valign="top"> 
-      <p align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&copy; 
-        2002 Ecological Society of America<br>
-        <a href="@general_link@terms.html">Terms of use</a> |<a href="@general_link@privacy.html"> 
-        Privacy policy</a></font></p>
-    </td>
-  </tr>
+@vegbank_footer_html_tworow@
+</td></tr>
 </table>
-
 
 </body>
 </html>
