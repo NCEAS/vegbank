@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-07 02:53:45 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2004-12-07 20:48:32 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.14 $ $Date: 2004-12-07 02:53:45 $
+ * @version $Revision: 1.15 $ $Date: 2004-12-07 20:48:32 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -452,63 +452,6 @@ public class VegbankGetTag extends VegbankTag {
 	protected String xwhereParams;
 
 	/**
-	 * Gets an array of xwhereParam values, or an array of arrays.
-	 * Allows for composite request params up to two levels deep.
-	 * e.g. xwhereParams.0, xwhereParams.1, xwhereParams.2 or 
-	 * xwhereParams.something.0, xwhereParams.something.1, etc. and
-	 * xwhereParams.another.0, xwhereParams.something.1 etc.
-	 *
-	 * Note that the final param key must be an integer and order matters.
-	 *
-	 * If the non-composite xwhereParams is also set, that value is added
-	 * to the end of the returned String[] array.
-	 */
-    public String[] getXwhereParamArray() {
-		String normalXwhereParams = findAttribute("xwhereParams", this.xwhereParams);
-
-		log.debug("about to parse composite xwhereParams...");
-		CompositeRequestParamUtil util = new CompositeRequestParamUtil(pageContext.getRequest()); 
-		boolean hasCompositeParams = util.parseParent("xwhereParams");
-
-		String[] arr;
-		if (!hasCompositeParams) {
-			arr = new String[1];
-			arr[0] = normalXwhereParams;
-			return arr;
-
-		} else {
-			arr = util.getStringArray("xwhereParams");
-			if (Utility.isArrayNullOrEmpty(arr)) {
-				// try digging one level deeper
-				Map m = util.getMap("xwhereParams");
-				if (m == null) {
-					return null;
-				}
-
-				Iterator it = m.keySet().iterator();
-				ArrayList l = new ArrayList();
-				while (it.hasNext()) {
-					arr = util.getStringArray("xwhereParams." + (String)it.next());
-					if (!Utility.isArrayNullOrEmpty(arr)) {
-						l.add(arr);
-					}
-				}
-
-				if (!Utility.isStringNullOrEmpty(normalXwhereParams)) {
-					// add the simple xwhereParams value too
-					l.add(normalXwhereParams);
-				}
-
-				return l.toArray();
-
-			} else {
-				// just return the first level array
-				return arr;
-			}
-		}
-	}
-
-	/**
 	 *
 	 */
     public String getXwhereParams() {
@@ -597,47 +540,5 @@ public class VegbankGetTag extends VegbankTag {
 	/**
 	 *
 	 */
-	public String makeStringSearchable(String xwParam, String xwClause, String type) {
-		StringTokenizer stWords = new StringTokenizer(xwParam, " ");
-		int numWords = stWords.countTokens();
-
-		MessageFormat format = new MessageFormat(xwClause);
-		String[] arr = new String[1];
-
-		// handle AND specially
-		if (numWords > 1 && getXwhereGlue().equalsIgnoreCase("and")) {
-			StringBuffer sb = new StringBuffer(numWords * xwParam.length() * 2);
-
-			// repeat the swapped xwClause for each word in order to match all words
-			boolean first = true;
-			while (stWords.hasMoreTokens()) {
-				if (first) { first = false;
-				} else { sb.append(" AND "); }
-
-				arr[0] = stWords.nextToken();
-				log.debug("formatting with: " + arr[0]);
-				sb.append(format.format(arr));
-			}
-
-//			for (int j=0; j<numWords; j++) {
-//				if (j>0) {
-//					sb.append(".*");
-//				}
-//
-//				sb.append("(").append(xwParam).append(")");
-//			}
-
-			xwParam = sb.toString();
-
-		} else {
-			// matching any word (OR) is easy
-			log.debug("Just one word or ANY match");
-			arr[0] = xwParam.replace(' ', '|');
-			xwParam = format.format(arr);
-		}
-
-		log.debug("searchable xwParam: " + xwParam);
-		return xwParam;
-	}
 
 }
