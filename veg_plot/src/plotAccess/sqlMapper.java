@@ -26,14 +26,16 @@ public class  sqlMapper
 
 /**
 *
-* This method will take as input a queryElement (like taxonName, namedPlace, communityType etc)
-* or a grouping of these elements, and depending on these elements will build a sql query which
-* will be passed to another class and issued to the database which will pass back a result set
-* The design of this class has not yet been finished and at this point this method is just 
-* a skeleton that allows the plot query module to work.  It is envisioned that a future version
-* of this class will take the aforementioned input plus a transformed xml string containing a set
-* of criteria and sql statements, that if the criteria are met then the sql statements are
-* passed to sql issuing class
+* This method will take as input a single  queryElement (like taxonName, 
+* namedPlace, communityType etc), and depending on the type of this single
+* element will map the input to one or a series of queries in the queryStore
+* class. The output will from the query(s) will be passed directly to the 
+* the xml writer which will write the plot info out (as directed in the query 
+* xml document to a file
+*
+* @param 	transformedString string containg the query element type and 
+*		value (| delimeted )
+* @param 	transformedSringNum integer defining number of query elements
 */
 
 
@@ -47,23 +49,10 @@ public void developPlotQuery(String[] transformedString, int transformedStringNu
 utility g =new utility(); 
 g.getDatabaseParameters("database", "query");
 
-/*		
-System.out.println(g.driverClass+" "
-	+"driverClass: "+g.driverClass+" \n"
-	+"connectionString: "+g.connectionString+" \n"
-	+"login: "+g.login+" \n"
-	+"password: "+g.passwd+" \n"
-	+"minConnection: "+g.minConnections+" \n"
-	+"maxConnections: "+g.maxConnections+" \n"
-	+"pooling logFile: "+g.logFile);
-*/
 	
 Connection pconn=null; //this is a connection that is taken from within the pool
-
 DbConnectionBroker myBroker;
-
 try {
-
 myBroker = new DbConnectionBroker(g.driverClass,
                                   g.connectionString,
                                   g.login,g.passwd,
@@ -83,10 +72,6 @@ thisConnection = myBroker.idOfConnection(pconn);
 int connectionUses=1;
 
 
-
-
-
-
 //pass the inputString to the tokenizer method below
 sqlMapper a =new sqlMapper();
 a.setAttributeAddress(transformedString, transformedStringNum);	
@@ -95,9 +80,9 @@ a.setAttributeAddress(transformedString, transformedStringNum);
 String element[]=a.element;  // the returned database address string
 String value[]=a.value;  // the returened data string
 int elementNum=a.elementNum; //the number of addresses and attributes in the returned set
-		
-	
-	
+
+
+
 //check to see the type of the query attributes passed 
 //and depending, assign a sql query to the query
 for (int i=0;i<transformedStringNum; i++) {
@@ -113,6 +98,19 @@ for (int i=0;i<transformedStringNum; i++) {
 			queryOutput=j.outPlotId;
 			queryOutputNum=j.outPlotIdNum;
 		}  //end if
+		
+		if (value[i] != null && value[i].startsWith("elevationMin")) {
+			//require that an elevation restriction have both min max
+			queryStore l = new queryStore();
+			System.out.println("passing the following "+value[i+1]+
+				" "+value[i+3]);
+			l.getPlotId(value[i+1],  value[i+3], "elevation", pconn);
+			queryOutput=l.outPlotId;
+			queryOutputNum=l.outPlotIdNum;
+			
+		}
+		
+		
 	} //end if
 
 	
@@ -171,6 +169,43 @@ catch ( Exception e ){System.out.println("failed at: sqlMapper.developPlotQuery 
 	
 
 } //end method
+
+
+
+/**
+* This is an overloaded method of the above for mapping compound queries
+* input includes the transformed query string from the xml query document 
+* and the number of elements as well as the number of query element types 
+* being passed to the method.  Output includes 
+*
+* @param  transformedString string containg the query element type and 
+*		value (| delimeted )
+* @param  transformedSringNum integer defining number of query elements
+* @param  elementTypeNum the number of different element types
+*
+*/
+
+
+//accept the transformed xml document as a string and number of rows in the array
+public void developPlotQuery(String[] transformedString, int transformedStringNum,
+	int elementTypeNum)
+{
+
+//grab the elements and put into an array mapping to the following:
+//	1] taxonName, 2] state, 3] eleveationMin, 4] elevationMax, 5] surfGeo
+//	6] multipleObs, 7]community
+
+
+//pass the array to the corresponding getPlotId
+
+
+//grab the summary data and send to xml writer
+
+} //end method
+
+
+
+
 
 
 

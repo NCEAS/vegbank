@@ -131,8 +131,12 @@ public int outConnectionUses;
 
 
 /**
-* Method to query the database to get all the plotId's 
-* for the plots containing a taxon that matches the input 
+* Method to query the database to get all the plotId's by using a single attribute
+* currently only a taxon will work - soon to implement a community name -
+* this method will be overloaded in methods below
+* @param     queryElement  the value of the attribute used to query
+* @param     queryElementType  the type of element used for querying the DB
+* @param     conn  a database connection that was presumedly taken from the pool 
 */
 public void getPlotId(String queryElement, String queryElementType, Connection conn)
 {
@@ -145,10 +149,39 @@ returnFields[0]="PLOT_ID";
 int returnFieldLength=1;
 
 
+issueStatement j = new issueStatement();
+j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
+
+
+//grab the returned result set and transfer to a public array
+//ultimately these results are passed to the calling class
+outPlotId=j.outReturnFields;
+outPlotIdNum=j.outReturnFieldsNum;
+	
+} //end method
+
+
+
+
 /**
-* Call the issueSelect method which will return an arry with the return
-* values
+* Method to query the database to get all the plotId's by using a two attributes
+* currently only a min/max elevation will work - soon to implement a community name -
+* this method will be overloaded in methods below
+* @param     queryElement  the value of the attribute used to query
+* @param     queryElement2  the value of the attribute used to query
+* @param     queryElementType  the type of element used for querying the DB
+* @param     conn  a database connection that was presumedly taken from the pool 
 */
+public void getPlotId(String queryElement, String queryElement2, 
+	String queryElementType, Connection conn)
+{
+String action="select";
+String statement="select PLOT_ID from PLOT where ALTVALUE >= "+queryElement+
+	" and ALTVALUE <= "+queryElement2;
+String returnFields[]=new String[1];	
+returnFields[0]="PLOT_ID";
+int returnFieldLength=1;
+
 
 issueStatement j = new issueStatement();
 j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
@@ -160,6 +193,10 @@ outPlotId=j.outReturnFields;
 outPlotIdNum=j.outReturnFieldsNum;
 	
 } //end method
+
+
+
+
 
 public String outPlotId[] = new String[10000];  //the output plotIds
 public int outPlotIdNum; //the number of plotId's

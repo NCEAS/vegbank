@@ -31,12 +31,11 @@ import java.util.*;
 */
 public class dbAccess {
 
-//main method for testing
 public static void main(String[] args) {
-        if (args.length != 3) {
-            System.out.println("Usage: java dbQuery  [XML] [XSL] [action]");
-            System.exit(0);
-        }  //end if
+if (args.length != 3) {
+	System.out.println("Usage: java dbQuery  [XML] [XSL] [action]");
+        System.exit(0);
+}  //end if
 
 
 //input xml file for loading to the database
@@ -93,9 +92,9 @@ int transformedStringNum=u.outStringNum; // the number of vertical elements cont
 //query action
 if (action.equals("query")) {
 
-/**
-* pass the array to the sql mapping class
-*/
+	/**
+	* pass the array to the sql mapping class
+	*/
 
 	sqlMapper w =new sqlMapper();
 	w.developPlotQuery(transformedString, transformedStringNum);
@@ -111,9 +110,9 @@ if (action.equals("query")) {
 //insert action
 if (action.equals("insert")) {
 
-/**
-* pass the array to the plot writer to be inserted into the database
-*/
+	/**
+	* pass the array to the plot writer to be inserted into the database
+	*/
 
 	plotWriter w =new plotWriter();
 	w.insertPlot(transformedString, transformedStringNum);
