@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-02-27 19:13:52 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-08-27 23:28:22 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,11 +23,7 @@
  */
 package org.vegbank.common.utility;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 
 import org.apache.struts.upload.FormFile;
 
@@ -38,24 +34,31 @@ import org.apache.struts.upload.FormFile;
  * Simple  wrapper around the java.util.File and the 
  * org.apache.struts.upload.FormFile classes
  */
-public class FileWrapper
+public class FileWrapper implements FormFile
 {			
 	private String fileName;
-	private InputStream inputstream;
+	private String contentType;
+	private InputStream inputStream;
+	private boolean isFormFile;
 	private int fileSize = 0;
+	private File file = null;
+	private FormFile formFile = null;
 	
-	public FileWrapper( File file ) throws Exception
+	public FileWrapper( File f ) throws Exception
 	{
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		inputstream = new BufferedInputStream(new FileInputStream(file));
-		fileName = file.getName();
+		isFormFile = false;
+		file = f;
+		inputStream = new BufferedInputStream(new FileInputStream(f));
+		fileName = f.getName();
 	}
 	
-	public FileWrapper( FormFile file ) throws Exception
+	public FileWrapper( FormFile f ) throws Exception
 	{
-		inputstream = file.getInputStream();
-		fileName = file.getFileName();
-		fileSize = file.getFileSize();
+		isFormFile = true;
+		formFile = f;
+		inputStream = f.getInputStream();
+		fileName = f.getFileName();
+		fileSize = f.getFileSize();
 	}
 	
 	/**
@@ -63,7 +66,7 @@ public class FileWrapper
 	 */
 	public InputStream getInputStream()
 	{
-		return inputstream;
+		return inputStream;
 	}
 	
 	/**
@@ -73,11 +76,94 @@ public class FileWrapper
 	{
 		return fileName;
 	}
+
+	/**
+	 * @return 
+	 */
+	public void setFileName(String s)
+	{
+		if (isFormFile) {
+			formFile.setFileName(s);
+		} 
+		fileName = s;
+	}		
+
+
 	/**
 	 * @return Returns the fileSize.
 	 */
 	public int getFileSize()
 	{
+		if (isFormFile) {
+			return formFile.getFileSize();
+		}
 		return fileSize;
+	}		
+
+	/**
+	 * @return Sets the fileSize.
+	 */
+	public void setFileSize(int i)
+	{
+		if (isFormFile) {
+			formFile.setFileSize(i);
+		}
+		fileSize = i;
+	}		
+
+	/**
+	 * 
+	 */
+	public String getContentType()
+	{
+		if (isFormFile) {
+			return formFile.getContentType();
+		}
+		return null;
 	}
+
+	/**
+	 * 
+	 */
+	public void setContentType(String s)
+	{
+		if (isFormFile) {
+			formFile.setContentType(s);
+		}
+		// else do nothing
+	}
+
+	/**
+	 * 
+	 */
+	public void destroy()
+	{
+		if (isFormFile) {
+			formFile.destroy();
+		} else {
+			file.delete();
+			file = null;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public byte[] getFileData() throws java.io.FileNotFoundException, java.io.IOException
+	{
+		if (isFormFile) {
+			return formFile.getFileData();
+
+		} else {
+			StringBuffer sb = new StringBuffer(fileSize);
+			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+
+			for (int d=in.read(); d != -1; d=in.read()) {
+				sb.append((char)d);
+			}
+
+			return sb.toString().getBytes();
+		}
+	}
+
 }

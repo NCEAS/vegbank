@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-06-10 21:42:25 $'
- *  '$Revision: 1.13 $'
+ *  '$Date: 2004-08-27 23:28:22 $'
+ *  '$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -279,13 +279,13 @@ public class ServletUtility
 	 * into a hashtable and then pass it back to the 
 	 * calling method
 	 */
-	public Hashtable parameterHash (HttpServletRequest request) 
+	public static Hashtable parameterHash (HttpServletRequest request) 
 	{
 		Hashtable params = new Hashtable();
 		try 
 		{
 			Enumeration enum =request.getParameterNames();
-			//System.out.println("servletUtility 'parameterHash' contacted ");
+			//log.debug("servletUtility 'parameterHash' contacted ");
  			while (enum.hasMoreElements()) 
 			{
 				String name = (String) enum.nextElement();
@@ -301,7 +301,7 @@ public class ServletUtility
 		}
 		catch( Exception e ) 
 		{
-			System.out.println(
+			log.debug(
 					"** failed in:  " + " first try - reading parameters " + e.getMessage()
 			);
 		}
@@ -324,8 +324,7 @@ public class ServletUtility
 		}
 		catch(Exception e) 
 		{
-			System.out.println("failed: servletUtility.flushFile");
-			e.printStackTrace();
+			log.debug("failed: servletUtility.flushFile");
 		}
 	}
 	
@@ -344,9 +343,9 @@ public class ServletUtility
 			PrintStream out =
 				new PrintStream(new FileOutputStream(outFile, false));
 
-			System.out.println("ServletUtility > fileCopy");
-			System.out.println("ServletUtility > inFile: " + inFile);
-			System.out.println("ServletUtility > outFile: " + outFile);
+			log.debug("ServletUtility > fileCopy");
+			log.debug("ServletUtility > inFile: " + inFile);
+			log.debug("ServletUtility > outFile: " + outFile);
 
 			int c;
 			while ((c = in.read()) != -1)
@@ -354,14 +353,13 @@ public class ServletUtility
 				out.write(c);
 			}
 
-			System.out.println("ServletUtility > file size: " + c);
+			log.debug("ServletUtility > file size: " + c);
 			in.close();
 			out.close();
 		}
 		catch (Exception e)
 		{
-			System.out.println("Exception: " + e.getMessage());
-			e.printStackTrace();
+			log.debug("Exception: " + e.getMessage());
 		}
 	}
 	
@@ -381,11 +379,11 @@ public class ServletUtility
 			{
 	      String headerName = (String)headerNames.nextElement();
 	      String value = request.getHeader(headerName);
-				//System.out.println("ServletUtility > headerName: " + headerName+ " value: " + value);
+				//log.debug("ServletUtility > headerName: " + headerName+ " value: " + value);
 	      if ( headerName.toUpperCase().startsWith("USER") )
 				{
 					String ua = headerName.toUpperCase();
-					//System.out.println("ServletUtility > UA: "+ value );
+					//log.debug("ServletUtility > UA: "+ value );
 					if ( value.toUpperCase().indexOf("MSIE") >= 1 )
 					{
 						s = "msie";
@@ -400,12 +398,11 @@ public class ServletUtility
 					}
 				}
 	    }
-			System.out.println("ServletUtility > browserType: " + s); 
+			log.debug("ServletUtility > browserType: " + s); 
 		 }
 		 catch(Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage() );
-			e.printStackTrace();
+			log.debug("Exception: " + e.getMessage() );
 		}
 		 return(s);
 	 }
@@ -441,20 +438,20 @@ public class ServletUtility
 		Vector vector = new Vector();
 		try 
 		{
-			System.out.println("ServletUtility > vectorizing file: " + fileName);
+			log.debug("ServletUtility > vectorizing file: " + fileName);
 			int vecElementCnt=0;
 			BufferedReader in = new BufferedReader(new FileReader(fileName));
 			String s;
 			while((s = in.readLine()) != null) 
 			{
-				//System.out.println(s);	
+				//log.debug(s);	
 				vector.addElement(s);
 				vecElementCnt++;
 			}
 		}
 		catch (Exception e) 
 		{
-			System.out.println("failed in servletUtility.fileVectorizer" + 
+			log.debug("failed in servletUtility.fileVectorizer" + 
 			e.getMessage());
 		}
 		return vector;
@@ -479,8 +476,7 @@ public class ServletUtility
 		}
 		catch (Exception e )
 		{
-			System.out.println(e.getMessage() );
-			e.printStackTrace();
+			log.debug(e.getMessage() );
 			result=false;
 		}
 		return(result);
@@ -517,7 +513,6 @@ public class ServletUtility
 		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}		
 		
 		
@@ -545,8 +540,7 @@ public class ServletUtility
 		}
 		catch (Exception e )
 		{
-			System.out.println(e.getMessage() );
-			e.printStackTrace();
+			log.debug(e.getMessage() );
 			result=false;
 		}
 		return(result);
@@ -588,6 +582,37 @@ public class ServletUtility
 		 }
 		
 		return sb.toString();
+	}
+
+	/**
+	 *
+	 */
+	public static String buildQueryString(Map params) {
+		StringBuffer qs = new StringBuffer(params.size() * 17)
+			.append("?");
+
+		String p;
+		boolean first = true;
+		Iterator pit = params.keySet().iterator();
+		try {
+
+			while (pit.hasNext()) {
+				if (first) {
+					first = false;
+				} else {
+					qs.append("&");
+				}
+
+				p = (String)pit.next();
+				qs.append(p).append("=");
+				qs.append( (java.net.URLEncoder.encode((String)params.get(p), "UTF-8")) );
+			}
+		} catch (Exception ex) {
+			log.error("problem building query string", ex);
+		}
+
+
+		return qs.toString();
 	}
 
 	/**

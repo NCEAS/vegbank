@@ -36,8 +36,8 @@ import org.vegbank.common.model.Plantstatus;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2004-07-29 01:06:12 $'
- * '$Revision: 1.32 $'
+ * '$Date: 2004-08-27 23:28:22 $'
+ * '$Revision: 1.33 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,6 +87,7 @@ public class Utility
 	public static final String VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
 	public static final String VEGBANK_XML_SCHEMA= VEGBANK_SCHEMA_LOACATION + "/" + VEGBANK_SCHEMA_NAME;
 	public static final String VB_HOME_DIR = vegbankPropFile.getString("vegbank.home.dir");
+	public static final String VB_DATA_DIR = vegbankPropFile.getString("vegbank.data.dir");
 	public static final String MODELBEAN_CACHING = vegbankPropFile.getString("modelbean.caching");
 
 	
