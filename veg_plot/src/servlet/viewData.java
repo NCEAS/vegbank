@@ -154,16 +154,16 @@ else
 		try 
 		{
 			//determine the style sheet to use for the xsl transform
-			if (summaryViewType.equals("community")) 
+			if (summaryViewType.equals("vegCommunity")) 
 			{
   			styleSheet=servletDir+"showCommunitySummary.xsl";
 			}
-			if (summaryViewType.equals("plantTaxa")) 
+			else if (summaryViewType.equals("plantTaxon")) 
 			{
   			styleSheet=servletDir+"showPlantTaxaSummary.xsl";
 			}
 			//the default (plots) stylesheet
-			if (summaryViewType.equals("vegPlot")) 
+			else if (summaryViewType.equals("vegPlot")) 
 			{
 				///styleSheet="/jakarta-tomcat/webapps/examples/WEB-INF/lib/showSummary.xsl";
 				styleSheet=servletDir+"transformMultiPlotSummary.xsl";
@@ -171,7 +171,8 @@ else
 			//let the user know that there is a problem with the request
 			else 
 			{
-				out.println("viewData.viewResultsSummary: unknown request for xsl sheet");
+				out.println("viewData.viewResultsSummary: unknown request for xsl: '"
+					+summaryViewType+"'" );
 			}
 
 			//access the method to transfor the xml document and retrieve the string writer
