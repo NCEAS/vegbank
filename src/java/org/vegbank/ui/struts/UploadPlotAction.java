@@ -9,16 +9,20 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.FileWrapper;
-import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.datafileexchange.DataFileDB;
@@ -29,9 +33,9 @@ import org.vegbank.dataload.XML.*;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2004-03-05 22:39:14 $'
- *	'$Revision: 1.11 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-05-06 22:42:54 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +58,8 @@ import org.vegbank.dataload.XML.*;
  */
 public class UploadPlotAction extends Action
 {
+	private static Log log = LogFactory.getLog(UploadPlotAction.class);
+
 	private String originalDataStore = Utility.VB_HOME_DIR + "/originalDataStore";
 	private ServletUtility util = new ServletUtility();
 	
@@ -68,7 +74,7 @@ public class UploadPlotAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		LogUtility.log(" In UploadPlotAction ", LogUtility.DEBUG );
+		log.debug(" In UploadPlotAction ");
 		ActionErrors errors = new ActionErrors();
 		LoadingErrors loadingErrors = null;
 
@@ -85,6 +91,7 @@ public class UploadPlotAction extends Action
 		String usersFileName = file.getFileName();
 		// Check if has zip extension
 		String savedFileName = null;
+		VegbankXMLUploadThread worker = null;
 		
 		Collection files = new Vector();
 		
@@ -103,13 +110,14 @@ public class UploadPlotAction extends Action
 							new ActionError(
 								"errors.action.failed",
 								e.getMessage()));
-					LogUtility.log("Added error: " + e.getMessage(), LogUtility.ERROR);
+					log.error("error unzipping given file: " + e.getMessage());
 				}
 		}
 		else
 		{
 			try
 			{
+				log.debug("Adding file: " + file.getFileName());
 				files.add( new FileWrapper(file) );
 			} 
 			catch (Exception e) 
@@ -119,16 +127,16 @@ public class UploadPlotAction extends Action
 						new ActionError(
 							"errors.action.failed",
 								e.getMessage()));
-				LogUtility.log("Added error: " + e.getMessage(), LogUtility.ERROR);
+				log.error("error adding given file: " + e.getMessage());
 			}
 		}
 
-		LogUtility.log("Got " + files.size() + " files ");
-		if ( files.size() > 1 )
+		log.debug("Got " + files.size() + " files ");
+		if ( files.size() != 1 )
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 				"errors.action.failed", "Vegbank can only handle one file at a time ( even if zipped archive )"));
-			LogUtility.log("Added error: " + files.size() + " where uploaded at once by user");	
+			log.debug("Added error: " + files.size() + " where uploaded at once by user");	
 		}
 		else
 		{
@@ -155,21 +163,20 @@ public class UploadPlotAction extends Action
 					switch (archiveType)
 					{
 						case UploadPlotForm.NATURESERVE_FORMAT :
-							LogUtility.log("UploadPlotAction: NATURESERVE_FORMAT format uploaded", LogUtility.INFO);
+							log.info("UploadPlotAction: NATURESERVE_FORMAT format uploaded");
 							break;
 				
 						case UploadPlotForm.VEGBANK_ACCESS_FORMAT :
-							LogUtility.log("UploadPlotAction: VEGBANK_ACCESS_FORMAT format uploaded", LogUtility.INFO);
+							log.info("UploadPlotAction: VEGBANK_ACCESS_FORMAT format uploaded");
 							break;
 				
 						case UploadPlotForm.VEGBANK_XML_FORMAT :
-							LogUtility.log("UploadPlotAction: VEGBANK_XML_FORMAT format uploaded", LogUtility.INFO);
-							loadingErrors = this.uploadVegbankXML(savedFileName, validate,
-									upload, rectify);
+							log.info("UploadPlotAction: VEGBANK_XML_FORMAT format uploaded");
+							worker = this.uploadVegbankXML(request, savedFileName, validate, upload, rectify);
 							break;
 				
 						default :
-							LogUtility.log("UploadPlotAction: Unknown format uploaded", LogUtility.WARN);
+							log.warn("UploadPlotAction: Unknown format uploaded");
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 									"Unknown format type uploaded"));
 					}
@@ -177,14 +184,14 @@ public class UploadPlotAction extends Action
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"errors.action.failed", e.getMessage()));
-					LogUtility.log("Added error: " + e.getMessage(), e);
+					log.debug("Added error: " + e.getMessage(), e);
 				}
 			}
 			else 
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 					"errors.action.failed", "Vegbank can only upload a *.xml file or a zipped *.xml file" ));
-				LogUtility.log("Added error: Attempt to load a file with extension  " + thisExtension + " failed", LogUtility.WARN);
+				log.warn("Added error: Attempt to load a file with extension  " + thisExtension + " failed");
 			}
 		}
 		//destroy the temporary file created
@@ -198,8 +205,23 @@ public class UploadPlotAction extends Action
 			return (mapping.getInputForward());
 		}
 
-		request.setAttribute("ErrorsReport",  loadingErrors);
-		return mapping.findForward("DisplayLoadReport");
+
+		// put the worker thread in the session
+		if (worker != null) {
+			log.debug("setting thread in session");
+			HttpSession session = request.getSession();
+			session.setAttribute("threadId",  worker.getThreadId());
+			session.setAttribute("started",  new Boolean(true));
+			session.setAttribute(worker.getThreadId(),  worker);
+		} else {
+			log.debug("no worker thread");
+		}
+
+		ActionMessages messages = new ActionMessages();
+		messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					"errors.general", worker.getStatusMessages()));
+		saveMessages(request, messages);
+		return mapping.findForward("PleaseWait");
 	}
 	
 	/**
@@ -209,19 +231,23 @@ public class UploadPlotAction extends Action
 	private String getFileExtension(String string)
 	{
 		String extension = string.substring(string.lastIndexOf('.') + 1);
-		LogUtility.log("Got extension: " + extension + " from: " + string, LogUtility.INFO);
+		log.debug("Got extension: " + extension + " from: " + string);
 		return extension;
 	}
 
 	/**
 	 * @param savedFileName
+	 * @return worker thread 
 	 */
-	private LoadingErrors uploadVegbankXML(String savedFileName, boolean validate, boolean upload, boolean rectify) throws Exception
+	private VegbankXMLUploadThread uploadVegbankXML(HttpServletRequest request, String savedFileName, 
+			boolean validate, boolean upload, boolean rectify) throws Exception
 	{
 		//System.out.println(validate + " , " +  upload + " , " + rectify);
-		VegbankXMLUpload xmlUpload = new VegbankXMLUpload(validate, rectify, upload);
-		xmlUpload.processXMLFile(savedFileName);
-		return xmlUpload.getErrors();
+		log.debug("============= SPAWNING LOADER THREAD =============");
+		VegbankXMLUploadThread worker = new VegbankXMLUploadThread();
+		worker.init(validate, rectify, upload, savedFileName);
+		worker.start();
+		return worker;
 	}
 
 	/**
@@ -250,8 +276,8 @@ public class UploadPlotAction extends Action
 			bos.write(buffer, 0, bytesRead);
 		}
 		bos.close();
-		LogUtility.log(
-			"UploadPlotAction: The file has been written to \"" + fileNameAndPath + "\"", LogUtility.INFO);
+		log.debug(
+			"UploadPlotAction: The file has been written to \"" + fileNameAndPath + "\"");
 
 		//close the stream
 		stream.close();
