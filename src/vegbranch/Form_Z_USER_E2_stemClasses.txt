@@ -1,0 +1,93 @@
+Option Compare Database
+Option Explicit
+
+Private Sub Command54_Click()
+  'refreshes the screen
+  Call recalcCurrForm(True)
+  'updates tally definitions :
+  getTallyDefnsOnE2Form
+End Sub
+
+Public Function getTallyDefnsOnE2Form()
+  'writes labels for this form
+  Dim rstTemp As New ADODB.Recordset, blnDefault As Boolean, blnDefaultALL As Boolean, _
+    intTemp As Integer, strNewDLabel As String, strNewHLabel As String, strNewFullLabel As String
+  rstTemp.Open "select * FROM move_E2_to_E_getTallyDefns;", CurrentProject.Connection, adOpenForwardOnly, adLockReadOnly, adCmdText
+  With rstTemp
+  If .EOF Then 'set to default values
+    blnDefaultALL = True
+  Else
+    blnDefaultALL = False
+  End If
+    For intTemp = 1 To 15 '@HARDCODE@ number of tally fields
+      'set to specified values if not .eof
+      strNewDLabel = ""
+      
+      If blnDefaultALL Then
+        blnDefault = True
+      Else
+        blnDefault = False 'default
+        'get values
+      'CHECK DBH INFO
+        strNewDLabel = "D" 'start Diameter
+        If IsNull(.Fields("minDBH_tally" & intTemp)) Then
+          'no min dbh
+          strNewDLabel = strNewDLabel & "??"
+        Else
+          'write min
+          strNewDLabel = strNewDLabel & .Fields("minDBH_tally" & intTemp)
+        End If
+        'hyphen between min and max
+        strNewDLabel = strNewDLabel & "-"
+        If IsNull(.Fields("maxDBH_tally" & intTemp)) Then
+          'no max dbh
+          strNewDLabel = strNewDLabel & "??"
+        Else
+          'write min
+          strNewDLabel = strNewDLabel & .Fields("maxDBH_tally" & intTemp)
+        End If
+        If strNewDLabel = "D??-??" Then strNewDLabel = "" 'reset if no data
+     'CHECK HEIGHT INFO
+        strNewHLabel = ",H"
+        If IsNull(.Fields("minHt_tally" & intTemp)) Then
+          'no min Ht
+          strNewHLabel = strNewHLabel & "??"
+        Else
+          'write min
+          strNewHLabel = strNewHLabel & .Fields("minHt_tally" & intTemp)
+        End If
+        'hyphen between min and max
+        strNewHLabel = strNewHLabel & "-"
+        If IsNull(.Fields("maxHt_tally" & intTemp)) Then
+          'no max Ht
+          strNewHLabel = strNewHLabel & "??"
+        Else
+          'write min
+          strNewHLabel = strNewHLabel & .Fields("maxHt_tally" & intTemp)
+        End If
+        If strNewHLabel = ",H??-??" Then strNewHLabel = "" 'reset if no data
+        'compile H and D Labels
+        strNewFullLabel = strNewDLabel & strNewHLabel
+        If strNewFullLabel = "" Then blnDefault = True
+        
+      End If
+      'deal with situation where not known what the info is
+      If blnDefault Then
+        strNewFullLabel = "#" & intTemp
+      End If
+      'update label
+      Me.Controls("label_tally" & intTemp).Caption = strNewFullLabel
+      Me.Controls("tally" & intTemp).StatusBarText = strNewFullLabel & " : number of stems in this size class, D=Diameter (cm), H=Height (m)"
+    Next intTemp
+    End With
+End Function
+
+Public Function editTallyNumber(intWhich As Integer)
+  'this function edits the current definition for a tally.
+  DoCmd.OpenForm "Z_USER_E2_stemClasses_tallyDefn", , , , , acDialog, intWhich
+  getTallyDefnsOnE2Form
+End Function
+
+Private Sub Form_Load()
+  getTallyDefnsOnE2Form
+End Sub

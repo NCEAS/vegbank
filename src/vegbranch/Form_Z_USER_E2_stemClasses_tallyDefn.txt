@@ -1,0 +1,51 @@
+Option Compare Database
+Option Explicit
+
+Private Sub cmdEditAll_Click()
+  Call showTally(0)
+End Sub
+
+Private Sub Form_Load()
+  'check open args
+
+  If Len(Me.OpenArgs) > 0 Then
+    'passed a number?
+    If IsNumeric(Me.OpenArgs) Then
+      'highlight a row
+      Call showTally((Me.OpenArgs))
+    End If
+  Else
+    'nothing special
+    Call showTally((0))
+  End If
+End Sub
+
+Private Function showTally(ByVal intNum As Integer)
+  'shows only one tallies, or all if intNum =0
+  'set focus to safe place
+  Dim intTemp As Integer
+  Me.Command22.SetFocus
+  For intTemp = 1 To 15 '@HARDCODE@ 15 tallies
+      
+      'make or not, depending on what was passed enabled
+      'set label foreColor
+      Me.Controls("label_tally" & intTemp).ForeColor = IIf(intNum = intTemp Or intNum = 0, 10485759, 12632256)
+      'set control enabledNess
+      Me.Controls("tally" & intTemp).Enabled = (intNum = intTemp Or intNum = 0)
+      'set control background color
+      Me.Controls("tally" & intTemp).BorderStyle = IIf(intNum = intTemp Or intNum = 0, 1, 4)
+  Next intTemp
+  
+    'hide/show cmdEditAll
+    Me.cmdEditAll.Visible = (intNum <> 0)
+  If intNum = 0 Then intNum = 1
+  'set focus to good place
+  Me.Controls("tally" & intNum).SetFocus
+End Function
+
+Private Sub Form_Open(Cancel As Integer)
+  'make sure records exist for all 4 min and max so user can fill them in
+  If StemClasses_addDefnsIfMissing() Then
+    Me.Requery
+  End If
+End Sub
