@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: farrell $'
-*  '$Date: 2003-05-12 23:12:03 $'
-*  '$Revision: 1.2 $'
+*  '$Date: 2003-06-09 22:17:23 $'
+*  '$Revision: 1.3 $'
 *
 *
 -->
@@ -39,8 +39,27 @@
   <html:errors/>
 
   <h2>Cover Method Form -- add a new <a href="/vegbank/dbdictionary/dd~table~covermethod~type~tableview.html">Cover method</a></h2>
-  <blockquote><p>Note that you do not need to add the full amount of Cover Indexes.  Only add the number of indexes that are appropriate for the method you are adding.</br>
+  <blockquote>
+  <p>Notes: (1) We encourage use of established cover methods whenever possible so 
+as to maximize the consistency among plot records. <br />(2) The number of cover 
+codes varies between methods; it is not necessary to fill out all of the lines 
+in the form. <br />(3) Cover class ranges should not overlap, although the upper 
+limit of one class should generally equal the lower limit of the next, and the 
+absolute range should generally be 0-100. <br />(4) Some traditional cover methods 
+have one or more low values without  numerical cover limits.  For these it is 
+nonetheless REQUIRED to assign at least a midpoint value; the traditional 
+definition can be provided in the Index Description. <br />(5) The midpoint is used 
+in all between plot comparisons and for conversions between methods in 
+aggregating plots for analysis.  There is no a priori correct definition of 
+the midpoint.  As a default the mean of the upper and lower limits is 
+acceptable, although this does embed a bias in that cover classes generally 
+tend to have more observations from the lower half of the range.  A geometric 
+mean might be better, thought there is at this time no theoretically 
+compelling reason for such a selection. The choice is left to the author of 
+the method.
+  </br>
   <font color="red">*</font>Indicates a required field.</p>
+
   </blockquote>
 
   <html:form action="/AddCoverMethod" onsubmit="return validateAddCoverMethodForm(this)" >
@@ -143,7 +162,7 @@
 	    <td><html:text property='<%= "lowerLimit[" + i + "]" %>' maxlength="10" size="10" /></td>
 	    <td><html:text property='<%= "upperLimit[" + i + "]" %>' maxlength="10" size="10" /></td>
 	    <td><html:text property='<%= "coverPercent[" + i + "]" %>' maxlength="10" size="10" /></td>
-	    <td><html:text property='<%= "indexDescription[" + i + "]" %>' maxlength="10" size="10" /></td>
+	    <td><html:text property='<%= "indexDescription[" + i + "]" %>' maxlength="60" size="60" /></td>
 
 	  </tr>
 	  <%
