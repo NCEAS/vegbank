@@ -5,8 +5,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:12:43 $'
- * 	'$Revision: 1.1 $' 
+ *  '$Date: 2001-10-22 23:59:44 $'
+ * 	'$Revision: 1.2 $' 
  */
 package vegclient.framework;
 
@@ -212,6 +212,40 @@ public class XMLparse
     }
     return result;
   }
+	
+	
+		
+	 /**
+   * Gets the value(s) corresponding to a key string (i.e. the 
+   * value(s) for a named parameter. -- this uses a string representation
+	 * of the fileName
+   * @param fileName
+   * @param key 'key' is element name.
+   * @return Returns a Vector of strings because may have repeated elements
+   */
+  public Vector get(String fileName, String key)
+  {
+		Document doc = getDocument(fileName);
+    NodeList nl = doc.getElementsByTagName(key);
+    Vector result = new Vector();
+    if (nl.getLength() < 1)
+    {
+      return result;
+    }
+    for (int i = 0; i < nl.getLength(); i++)
+    {
+      Node cn = nl.item(i).getFirstChild(); // assume 1st child is text node
+      if ((cn != null) && (cn.getNodeType() == Node.TEXT_NODE))
+      {
+        String temp = cn.getNodeValue();
+        result.addElement(temp.trim());
+      }
+    }
+    return result;
+  }
+	
+	
+	
 	
 	
 	/**
