@@ -58,8 +58,6 @@
 
 
     <plot>
-      <plotId>132</plotId>
-      <plotAccessionNumber>VB.BADL_102.132.test@test.com.19970819</plotAccessionNumber>
       <authorPlotCode>BADL.102</authorPlotCode>
       <latitude>43.51871491</latitude>
       <longitude>-102.31494292</longitude>
@@ -100,7 +98,6 @@
         <obsStartDate>1997-08-19 00:00:00-07</obsStartDate>
         <obsEndDate>1997-08-19 00:00:00-07</obsEndDate>
         <dateAccuracy>day</dateAccuracy>
-        <observationSequence>VB.132.20030109132517.167335-08</observationSequence>
         <stemSizeLimit>0</stemSizeLimit>
         <methodNarrative>Using the TNC PLOTS DB for NPS Mapping</methodNarrative>
         <taxonObservationArea>100</taxonObservationArea>

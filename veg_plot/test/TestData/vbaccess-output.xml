@@ -2,8 +2,8 @@
 <vegPlotPackage> 
  
 <project> 
-  <projectName>null</projectName> 
-  <projectDescription>null</projectDescription> 
+  <projectName></projectName> 
+  <projectDescription></projectDescription> 
   <startDate></startDate> 
   <stopDate></stopDate> 
 
@@ -50,7 +50,7 @@
       <obsEndDate>7/20/2001</obsEndDate> 
       <dateAccuracy></dateAccuracy> 
       <stemSizeLimit>0</stemSizeLimit> 
-      <methodNarrative>null</methodNarrative> 
+      <methodNarrative></methodNarrative> 
       <taxonObservationArea>1000</taxonObservationArea> 
       <coverDispersion>Contiguous</coverDispersion> 
       <autotaxonCover>false</autotaxonCover> 
@@ -113,11 +113,10 @@
 	<classCode></classCode> 
 	<classStartDate>7/24/2002</classStartDate> 
 	<classStopDate>7/24/2002</classStopDate> 
-	<classInspection>true</classInspection> 
-	<classInspection>true</classInspection> 
-	<tableAnalysis>true</tableAnalysis> 
-	<multivariateAnalysis>true</multivariateAnalysis> 
-	<expertSystem>true</expertSystem> 
+	<classInspection>f</classInspection> 
+	<tableAnalysis>f</tableAnalysis> 
+	<multivariateAnalysis>f</multivariateAnalysis> 
+	<expertSystem>f</expertSystem> 
 	<classNotes></classNotes> 
 	<classPublication></classPublication> 
 </communityClassification> 
