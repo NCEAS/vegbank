@@ -19,9 +19,11 @@
 <p>  Sorry, no projects found.</p>
 </logic:empty>
 <logic:notEmpty name="project-BEANLIST">
+<% int countRows = 0 ; %>
 <logic:iterate id="onerowofproject" name="project-BEANLIST">
 <!-- iterate over all records in set : new table for each -->
-<table class="leftrightborders" cellpadding="0">
+<table class="leftrightborders" cellpadding="2">
+<tr><th class="major" colspan="9">Project #<%= countRows = countRows + 1 %></th></tr>
         <%@ include file="autogen/project_detail_data.jsp" %>
         <bean:define id="project_pk" name="onerowofproject" property="project_id" />
 <!-- custom bits:
@@ -49,14 +51,16 @@
    example:   
 
 <vegbankget id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_project_pk" wparam="project_pk" />-->
-<tr><th colspan="2">projectContributors:</th></tr>
+
 <TR><TD COLSPAN="2">
 <vegbank:get id="projectcontributor" select="projectcontributor" beanName="map" pager="false" where="where_project_pk" wparam="project_pk" perPage="-1" />
+<table class="leftrightborders" cellpadding="2" >
+<tr><th colspan="2">Project Contributors:</th></tr>
 <logic:empty name="projectcontributor-BEANLIST">
-<p class="@nextcolorclass@">  Sorry, no projectcontributors found.</p>
+<tr><td class="@nextcolorclass@">  Sorry, no projectcontributors found.</td></tr>
 </logic:empty>
 <logic:notEmpty name="projectcontributor-BEANLIST">
-<table class="leftrightborders" cellpadding="2" >
+
 <tr>
 <%@ include file="autogen/projectcontributor_summary_head.jsp" %>
 </tr>
@@ -65,8 +69,9 @@
 <%@ include file="autogen/projectcontributor_summary_data.jsp" %>
 </tr>
 </logic:iterate>
-</table>
+
 </logic:notEmpty>
+</table>
 </TD></TR>
 </table>
 <p>&nbsp;</p>
