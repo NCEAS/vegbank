@@ -89,17 +89,7 @@
     		</form-bean>
 
 		<form-bean name="PlantQueryForm"
-		           type="org.apache.struts.validator.DynaValidatorForm">
-			<form-property name="plantname"
-			               type="java.lang.String"/>
-			<form-property name="nameType"
-			               type="java.lang.String"/>
-			<form-property name="taxonLevel"
-			               type="java.lang.String"/>
-			<form-property name="nameExistsBeforeDate"
-			               type="java.lang.String"/>
-			<form-property name="accordingToParty"
-			               type="java.lang.String"/>
+		           type="org.vegbank.ui.struts.PlantQueryForm">
 		</form-bean>
 		<form-bean name="PlotQueryForm"
 		           type="org.vegbank.ui.struts.PlotQueryForm"/>
