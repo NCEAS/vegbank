@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-12 22:53:51 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-03-01 23:09:58 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import servlet.multipart.MultipartRequest;
 
 import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.Utility;
 
 /**
  * Handles file uploading / downloading to/from a browser using
@@ -63,7 +64,7 @@ import org.vegbank.common.utility.ServletUtility;
 public class DataFileExchange
 {
 
-	private String originalDataStore = "/usr/vegbank/originalDataStore";
+	private String originalDataStore = Utility.VB_HOME_DIR + "/originalDataStore";
 	private ServletUtility util = new ServletUtility();
 	private MultipartRequest multi;
 
