@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: anderson $'
-* '$Date: 2004-01-22 01:02:23 $'
-* '$Revision: 1.84 $'
+* '$Author: mlee $'
+* '$Date: 2004-02-04 23:24:12 $'
+* '$Revision: 1.85 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -140,11 +140,11 @@
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
   <target name="hdrftr" depends="tokenfiles" description="=&gt; sets tokens to be replaced by those in hdrfooter file and other files">
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
-	<!--    
+    <!--    
 	<filter filtersfile="${style_server}/closedlist-tokens.properties"/>
 	-->
     <!-- set the properties file as a filtersfile to distribute headers and footers -->
-	<!--    
+    <!--    
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
     <filter filtersfile="${style_server}/url2get_data.properties"/>
     <filter filtersfile="${style_server}/manual_filters.properties"/>
@@ -199,7 +199,7 @@
       <fileset dir="${lrg_binary_src}" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf TDWG2003_Peet.pdf TDWG2003_Peet.ppt"/>
     </copy>
   </target>
-  <target name="help" depends="manual" description="=&gt; dist the help pages to server">
+  <target name="help" depends="includes" description="=&gt; dist the help pages to server">
     <copy overwrite="true" todir="${help_server}" filtering="yes">
       <fileset dir="${help_src}">
         <include name="*.html"/>
@@ -208,12 +208,12 @@
       </fileset>
     </copy>
   </target>
-  <target name="manual" depends="includes" description="=&gt; build and dist the manual pages to server">
+  <target name="manual" depends="init" description="=&gt; build and dist the manual pages to server">
     <antcall target="manual-sub-clean"/>
     <antcall target="manual-sub-build"/>
     <antcall target="manual-sub-dist"/>
-    <antcall target="tokenfiles"/>
-    <antcall target="hdrftr"/>
+  <!--  <antcall target="tokenfiles"/>
+    <antcall target="hdrftr"/> -->
   </target>
   <target name="manual-sub-build" depends="hdrftr">
     <echo>starting to style...</echo>
@@ -303,8 +303,8 @@
 -->
   <target name="general" depends="forms" description="=&gt; dist the general dir to server">
     <copy overwrite="true" todir="${general_server}" filtering="yes">
-		<fileset dir="${general_src}"  includes="**.html *jsp" excludes="**/CVS* vbsummary.html get_vb_stats_temp.html"/>
-	</copy>
+      <fileset dir="${general_src}" includes="**.html *jsp" excludes="**/CVS* vbsummary.html get_vb_stats_temp.html"/>
+    </copy>
   </target>
   <!--
 	* TARGET TO PUT THE DESIGN HTML DOCS INTO THE CORRECT PLACE
@@ -351,17 +351,15 @@
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
     <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
     <copy file="${sharedhtml_src}/filters.properties" tofile="${style_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>
-			<!-- set the properties file that replaces tokens with closed list values in picklists -->
-			<filter filtersfile="${style_server}/filters_detokened.properties"/>
+    <!-- set the properties file that replaces tokens with closed list values in picklists -->
+    <filter filtersfile="${style_server}/filters_detokened.properties"/>
     <copy file="${sharedhtml_src}/url2get_data.properties" tofile="${style_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
-			<filter filtersfile="${style_server}/url2get_data.properties"/>
+    <filter filtersfile="${style_server}/url2get_data.properties"/>
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
     <copy file="${manual_src}/manual_filters.properties" tofile="${style_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
-			<filter filtersfile="${style_server}/manual_filters.properties"/>
-    <ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
-			<filter filtersfile="${style_server}/closedlist-tokens.properties"/>
-
-
+    <filter filtersfile="${style_server}/manual_filters.properties"/>
+    <!--<ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
+    <filter filtersfile="${style_server}/closedlist-tokens.properties"/> -->
   </target>
   <target name="vbsummary" depends="design" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
@@ -379,9 +377,8 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="deploy" depends="news"
-  		description="=&gt; All files that dynamic code depends on">
-  	<!-- Deployment uses a dependency chain:
+  <target name="deploy" depends="news" description="=&gt; All files that dynamic code depends on">
+    <!-- Deployment uses a dependency chain:
 		init
 		tokenfiles
 		hdrftr
@@ -405,6 +402,9 @@
 MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
   </target>
+  <target name="deploy-all" depends="deploy" description="=&gt; all in deploy plus slow rarely updated stuff">
+     <antcall target="manual" />
+   </target>
   <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
     <property name="webapp" value="vegtest"/>
     <antcall target="deploy"/>
