@@ -363,6 +363,21 @@ THESE are all just normal styles.  The sizes have been changed to size[thesize]
 .evenrow {background-color : #DDDDDD }
 
 
+/* groups of rows, in roughly ascening, coordinated colors : */
+.group1 {background-color: #FFFEBF }
+.group2 {background-color: #FFFD80 }
+.group3 {background-color: #BFBE60 }
+.group4 {background-color: #FFD9BF }
+.group5 {background-color: #FFB380 }
+.group6 {background-color: #BF8660 }
+.group7 {background-color: #BFFFBF }
+.group8 {background-color: #80FF80 }
+.group9 {background-color: #60BF60 }
+.group10 {background-color: #BFE8FF }
+.group11 {background-color: #80D0FF }
+.group12 {background-color: #609CBF }
+
+
 
 /* used in forms/DisplayResults.jsp
 forms/TaxonInterpretationAnnotateData.jsp
