@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2004-12-16 10:02:57 $'
-* '$Revision: 1.142 $'
+* '$Date: 2005-01-14 22:55:58 $'
+* '$Revision: 1.143 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -473,9 +473,9 @@
     <filter filtersfile="${includes_server}/filters_detokened.properties"/>
     <copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/placeurl_detokened.properties"/>
-    <!--style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="true"/-->
-    <!--copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/-->
-    <!--filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/-->
+    <style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="true"/>
+    <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/>
+    <filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/>
     <!-- set the properties file that replaces tokens with closed list values in picklists -->
     <copy file="${includes_src}/url2get_data.properties" tofile="${includes_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/url2get_data.properties"/>
