@@ -1,12 +1,3 @@
- /**
- *  Authors: @author@
- *  Release: @release@
- *	
- *  '$Author: harris $'
- *  '$Date: 2002-01-11 01:15:20 $'
- * 	'$Revision: 1.5 $'
- */
-
 import java.sql.*;
 import java.awt.*;
 import java.io.*;
@@ -16,11 +7,20 @@ import java.net.URL;
 import java.util.Date;
 
 /**
- * this class represents an 'exetrnal' data source -- a data source which
+ * this class represents an 'exeternal' data source -- a data source which
  * is not the vegbank databases or the vegbank native xml type document
  * at the inception of this class exteranl sources include: tnc plots, 
  * turbo veg plots and the structured data set.  In the future this class
- * will also contain local 'vegbank' data sources
+ * will also contain local 'vegbank' data sources.  This class facilitates
+ * the access to vegbank-alternative data sources via both public variables
+ * and methods
+ *
+ *  Authors: @author@
+ *  Release: @release@
+ *	
+ *  '$Author: harris $'
+ *  '$Date: 2002-01-31 19:51:51 $'
+ * 	'$Revision: 1.6 $'
  */
 public class PlotDataSource 
 {
@@ -88,7 +88,11 @@ public class PlotDataSource
 	}
 	
 	
-	//constructor method
+	/**
+	 * constructor method that uses a plugin class as an 
+	 * input to make a datasource available to class that
+	 * call this class (e.g., plot loaders, or xml writers)
+	 */
 	public PlotDataSource(String pluginClass )
 	{
 		try
@@ -98,7 +102,7 @@ public class PlotDataSource
 		}
 		catch(Exception e)
 		{
-			System.out.println("Error getting plugin: " + e.getMessage());
+			System.out.println("PlotDataSource > Error getting plugin: " + e.getMessage());
 		}
 	}
 	
@@ -115,57 +119,66 @@ public class PlotDataSource
 	 }
 	
 	/**
-	 * method that populates this class with all the data representing a 
-	 * plot using the plugin defined in the constructor method
+	 * method that populates class vaiables with all the data representing a 
+	 * plot using the plugin defined in the constructor method.  This is kinda
+	 * a cheat because the public methods should actually be accessed to obtain 
+	 * data b/c it is a more explicit direction.
+	 *
+	 * @param plotName -- the id of the plot desired by the caller
+	 * @return result -- whether the method call was successful
 	 */
 	public boolean getPlot( String plotName )
 	{
 		try
 		{
-			System.out.println("source  start");
+
 			projectName = ((PlotDataSourceInterface)pluginObj).getProjectName(plotName);
-			System.out.println("source  desc");
 			projectDescription = ((PlotDataSourceInterface)pluginObj).getProjectDescription(plotName);
-	    System.out.println("source  contr");
 			projectContributors = ((PlotDataSourceInterface)pluginObj).getProjectContributors(plotName);
-			System.out.println("source  startdate");
 			projectStartDate = ((PlotDataSourceInterface)pluginObj).getProjectStartDate(plotName);
-			System.out.println("source  stopdate");
 			projectStopDate = ((PlotDataSourceInterface)pluginObj).getProjectStopDate(plotName);
-			System.out.println("source  plotcode");
 			plotCode = ((PlotDataSourceInterface)pluginObj).getPlotCode(plotName);
-			System.out.println("source  named");
 			namedPlaces = ((PlotDataSourceInterface)pluginObj).getPlaceNames(plotName); 
-			System.out.println("source  state");
 			state = ((PlotDataSourceInterface)pluginObj).getState(plotName);
-			System.out.println("source  shape");
 			plotShape =  ((PlotDataSourceInterface)pluginObj).getPlotShape(plotName);
-			System.out.println("source  gradient");
 			slopeGradient = ((PlotDataSourceInterface)pluginObj).getSlopeGradient(plotName);
-			System.out.println("source  aspect");
 			slopeAspect = ((PlotDataSourceInterface)pluginObj).getSlopeAspect(plotName);
-			System.out.println("source  geology");
 			surfGeo = ((PlotDataSourceInterface)pluginObj).getSurfGeo(plotName);
-			System.out.println("source  hydro");
 			hydrologicRegime = ((PlotDataSourceInterface)pluginObj).getHydrologicRegime(plotName);
-			System.out.println("source  topop");
 			topoPosition = ((PlotDataSourceInterface)pluginObj).getTopoPosition(plotName);
-			System.out.println("source  area");
 			plotArea = ((PlotDataSourceInterface)pluginObj).getPlotArea(plotName);
-			System.out.println("source  count");
 			country = ((PlotDataSourceInterface)pluginObj).getCountry(plotName);
-			System.out.println("source  xco");
 			xCoord = ((PlotDataSourceInterface)pluginObj).getXCoord(plotName);
-			System.out.println("source  yco");
 			yCoord = ((PlotDataSourceInterface)pluginObj).getYCoord(plotName);
-			System.out.println("source  utm");
 			utmZone = ((PlotDataSourceInterface)pluginObj).getUTMZone(plotName);
-			System.out.println("source  stan");
 			standSize = ((PlotDataSourceInterface)pluginObj).getStandSize(plotName);
-			 System.out.println("source  lat");
 			latitude = ((PlotDataSourceInterface)pluginObj).getLatitude(plotName);
-			System.out.println("source  long");
 			longitude = ((PlotDataSourceInterface)pluginObj).getLongitude(plotName);
+			
+			//NEXT LINES FOR DEBUGGING W/IN SERVLETS
+			System.out.println("PlotDataSource >   start: " + this.projectName);
+			System.out.println("PlotDataSource >   desc: " + this.projectDescription);
+	    System.out.println("PlotDataSource >   contr: " + this.projectContributors.toString() );
+			System.out.println("PlotDataSource >   startdate: " + this.projectStartDate);
+			System.out.println("PlotDataSource >   stopdate: " + this.projectStopDate);
+			System.out.println("PlotDataSource >   plotcode: " + plotCode);
+			System.out.println("PlotDataSource >   named: " + namedPlaces.toString() );
+			System.out.println("PlotDataSource >   state: " + state);
+			System.out.println("PlotDataSource >   shape: " + plotShape);
+			System.out.println("PlotDataSource >   gradient: " + slopeGradient);
+			System.out.println("PlotDataSource >   aspect: " + slopeAspect);
+			System.out.println("PlotDataSource >   geology: " + surfGeo);
+			System.out.println("PlotDataSource >   hydro: " + hydrologicRegime);
+			System.out.println("PlotDataSource >   topop: " + topoPosition );
+			System.out.println("PlotDataSource >   area: " + plotArea );
+			System.out.println("PlotDataSource >   count: " + country );
+			System.out.println("PlotDataSource >   xco: " + xCoord );
+			System.out.println("PlotDataSource >   yco: " + yCoord );
+			System.out.println("PlotDataSource >   utm: " + utmZone );
+			System.out.println("PlotDataSource >   stan: " + standSize );
+			System.out.println("PlotDataSource >   lat: " + latitude );
+			System.out.println("PlotDataSource >   long: " + longitude );
+			
 			
 			confidentialityReason = ((PlotDataSourceInterface)pluginObj).getConfidentialityReason(plotName);
 			confidentialityStatus = ((PlotDataSourceInterface)pluginObj).getConfidentialityStatus(plotName);
@@ -179,7 +192,7 @@ public class PlotDataSource
 			uniqueStrataNames = ((PlotDataSourceInterface)pluginObj).getUniqueStrataNames(plotName);
 			plantTaxaNames = ((PlotDataSourceInterface)pluginObj).getPlantTaxaNames(plotCode);
 			uniquePlantTaxaNumber =  plantTaxaNames.size();
-			System.out.println("source  end");
+			System.out.println("PlotDataSource >  end");
 		}
 		catch (Exception e)
 		{
@@ -467,7 +480,7 @@ public class PlotDataSource
 	 */
 	private void printDBVariables(String pluginClass, String plotName)
 	{
-		System.out.println(" getting info for: " + plotName );
+		System.out.println("PlotDataSource > getting info for: " + plotName );
 		try
 		{
 			//rectify tis damn variable -- use a consistent name
