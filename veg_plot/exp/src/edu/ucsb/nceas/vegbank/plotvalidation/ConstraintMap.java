@@ -6,8 +6,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-12-19 23:40:20 $'
- * '$Revision: 1.1 $'
+ *     '$Date: 2002-12-23 15:19:26 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -190,8 +190,8 @@ public class ConstraintMap
         this.method.put("methodName", methodName);
         this.method.put("methodParams", methodParams);
         this.mapValues.addElement(method);
-        this.method.put("dbTable", dbTable);
-        this.method.put("dbAttribute", dbAttribute);
+        this.database.put("dbTable", dbTable);
+        this.database.put("dbAttribute", dbAttribute);
         this.mapValues.addElement(database);
         this.mapInstance.put(attributeName, mapValues);
         this.map.addElement(mapInstance);
@@ -215,14 +215,8 @@ public class ConstraintMap
 				for (Enumeration e = mapInstance.keys() ; e.hasMoreElements() ;) 
 				{
 				  String cName = (String)e.nextElement();
-				///	System.out.println("%%%%%: " + cName);
-				
 				  Vector mapVals = (Vector)mapInstance.get(cName);
-				  method = (Hashtable)mapVals.elementAt( 0 );
 				  database = (Hashtable)mapVals.elementAt( 1 );
-				  ///methodName = (String)method.get("methodName");
-				 /// methodParams = (String)method.get("methodParams");
-				 // dbTable = (String)database.get("dbTable");
 				  dbAttribute = (String)database.get("dbAttribute");
           rval = dbAttribute;
          }
@@ -248,15 +242,9 @@ public class ConstraintMap
 				for (Enumeration e = mapInstance.keys() ; e.hasMoreElements() ;) 
 				{
 				  String cName = (String)e.nextElement();
-				///	System.out.println("%%%%%: " + cName);
-				
 				  Vector mapVals = (Vector)mapInstance.get(cName);
-				  method = (Hashtable)mapVals.elementAt( 0 );
 				  database = (Hashtable)mapVals.elementAt( 1 );
-				  ///methodName = (String)method.get("methodName");
-				 /// methodParams = (String)method.get("methodParams");
 				  dbTable = (String)database.get("dbTable");
-				  ///dbAttribute = (String)database.get("dbAttribute");
           rval = dbTable;
          }
 
@@ -281,15 +269,9 @@ public class ConstraintMap
 				for (Enumeration e = mapInstance.keys() ; e.hasMoreElements() ;) 
 				{
 				  String cName = (String)e.nextElement();
-				///	System.out.println("%%%%%: " + cName);
-				
 				  Vector mapVals = (Vector)mapInstance.get(cName);
 				  method = (Hashtable)mapVals.elementAt( 0 );
-				  ///database = (Hashtable)mapVals.elementAt( 1 );
-				  ///methodName = (String)method.get("methodName");
 				  methodParams = (String)method.get("methodParams");
-				  ///dbTable = (String)database.get("dbTable");
-				  ///dbAttribute = (String)database.get("dbAttribute");
           rval = methodParams;
          }
 
@@ -314,15 +296,10 @@ public class ConstraintMap
 				for (Enumeration e = mapInstance.keys() ; e.hasMoreElements() ;) 
 				{
 				  String cName = (String)e.nextElement();
-				///	System.out.println("%%%%%: " + cName);
 				
 				  Vector mapVals = (Vector)mapInstance.get(cName);
 				  method = (Hashtable)mapVals.elementAt( 0 );
-				  ///database = (Hashtable)mapVals.elementAt( 1 );
 				  methodName = (String)method.get("methodName");
-				  ///methodParams = (String)method.get("methodParams");
-				  ///dbTable = (String)database.get("dbTable");
-				  ///dbAttribute = (String)database.get("dbAttribute");
           rval = methodName;
          }
 
@@ -342,6 +319,9 @@ public class ConstraintMap
    {
       ConstraintMap map = new ConstraintMap(); 
       System.out.println("method name element 1: " + map.getMethodName(0) );
+      System.out.println("method params element 1: " + map.getMethodParams(0) );
+      System.out.println("table element 1: " + map.getDBTable(0) );
+      System.out.println("attribute element 1: " + map.getDBAttribute(0) );
    }
 
 }
