@@ -6,38 +6,15 @@
   * scripts from one place 
   *
   *     '$Author: farrell $'
-  *     '$Date: 2002-11-22 19:22:23 $'
-  *     '$Revision: 1.1 $'
+  *     '$Date: 2002-11-26 19:06:32 $'
+  *     '$Revision: 1.2 $'
 --> 
-<project name="veg_plot" default="init" basedir=".">
-        
-        <!-- INITIATION -->
-        <target name="init">
-  
-                <!-- RELEVANT DIRECTORIES -->
-                <property name="current_dir" value="./" />
-                <!--
-			<property name="src" value="./src" />
-                	<property name="html" value="./html" />
-                
-                	<property name="build" value="./build" />
-                	<property name="lib" value="./lib" />
-                	<property name="bin" value="./bin" />
-                	<property name="data" value="./data" />
-                	<property name="jardist" value="/usr/local/devtools/jakarta-tomcat/webapps/mapplotter/WEB-INF/lib/" />
-          		<property name="htmldist" value="/usr/local/devtools/jakarta-tomcat/webapps/forms" />
-                
-                	<property name="ant" value="./lib/ant.jar" /> 
-                	<property name="xerces" value="./lib/xerces_1_3_1.jar" />
-                	<property name="xalan" value="./lib/xalan_1_2_2.jar" />
-                	<property name="glue" value="lib/GLUE-STD.jar" />
-                	<property name="servlet" value="lib/servlet.jar" />
-                
-                	<property name="cpath" value="${servlet}:${glue}:${utilities}:${xmlresource}:${ant}:${servlet_api}:${xerces}:${xalan}:${xml_editor}:${db_access_module}:${build}"/>
-		-->
-        </target>
-        
-	<target name="compile">
+<project name="veg_plot" default="compile" basedir=".">
+
+	<property name="servlet_lib" value="/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib//" />
+    <property name="target" value="${target}" />
+      
+	<target name="compile" description="Compiles all code in veg_plot module">
 		<echo message="Compiling all of ${ant.project.name}"/>
 		<ant dir="exp/client_installer" target="compile"/>
 		<ant dir="exp/database_access" target="compile"/>
@@ -45,10 +22,44 @@
 		<ant dir="exp/rmidatasource" target="compile"/> 
 		<ant dir="exp/services" target="compile"/>
 		<ant dir="exp/servlet" target="compile"/>
-		<!--<ant dir="exp/vegbank_web" target="compile"/>-->
 		<ant dir="exp/vegclient" target="compile"/>
 		<ant dir="exp/xml-resource" target="compile"/>
 		<ant dir="exp/xml_to_sql" target="compile"/>
 	</target>
+	
+	<target name="jar" description="Generates all jars in veg_plot module">
+		<echo message="Creating all of jars in ${ant.project.name}"/>
+		<ant dir="exp/database_access" target="dist"/> <!-- Change this target name -->
+		<ant dir="exp/data-translators" target="jar"/>
+		<ant dir="exp/rmidatasource" target="jar"/> 
+		<ant dir="exp/services" target="jar"/>
+		<ant dir="exp/servlet" target="jar"/>
+		<!--<ant dir="exp/vegbank_web" target="jar"/>-->
+		<ant dir="exp/vegclient" target="jar"/>
+		<ant dir="exp/xml-resource" target="jar"/>
+		<ant dir="exp/xml_to_sql" target="jar"/>
+	</target>
+	
+	<target name="deploy" description="Deploys jars in veg_plot module to servlet container">
+		<echo message="Distr all of jars in ${ant.project.name}"/>
+		<ant dir="exp/database_access" target="dist-web"/> 
+		<ant dir="exp/data-translators" target="dist"/>
+		<ant dir="exp/rmidatasource" target="dist"/> 
+		<!-- <ant dir="exp/services" target="jar"/> No dist target -->
+		<ant dir="exp/servlet" target="dist"/>
+		<ant dir="exp/vegbank_web" target="dist"/>
+		<!-- FIXME <ant dir="exp/vegclient" target="dist"/>  target fails to build -->
+		<!-- <ant dir="exp/xml-resource" target="dist"/> No dist target -->
+		<!-- <ant dir="exp/xml_to_sql" target="jar"/> No dist target -->
+	</target>
+
+
+	<!-- Want to pass command line variables in ant but no working yet	
+	<target name="database_access">
+		<echo message="Going to call ${target} "/>
+		<ant dir="exp/database_access" target="${target}"/>		
+	</target>
+	-->
+	
 </project>
 
