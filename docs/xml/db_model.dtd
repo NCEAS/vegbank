@@ -14,7 +14,7 @@
 <!ELEMENT attNulls (#PCDATA)>
 <!ELEMENT attReferences (#PCDATA)>
 <!ELEMENT attType (#PCDATA)>
-<!ELEMENT attribute (attName, attModel, attNulls, attType, attKey, attReferences, attListType, attList, attNotes, attDefinition)>
+<!ELEMENT attribute (attName, attModel, attNulls, attType, javaType?, attKey, attReferences, attListType, attList, attNotes, attDefinition)>
 <!ELEMENT author (#PCDATA)>
 <!ELEMENT contributor (#PCDATA)>
 <!ELEMENT dataModel (title, version, versionDesc, author, institution, contributor, description, date, entity+)>
@@ -25,7 +25,11 @@
 <!ELEMENT entityName (#PCDATA)>
 <!ELEMENT entitySummary (#PCDATA)>
 <!ELEMENT institution (#PCDATA)>
+<!ELEMENT javaType (#PCDATA)>
 <!ELEMENT module (#PCDATA)>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT version (#PCDATA)>
 <!ELEMENT versionDesc (#PCDATA)>
+
+<!ATTLIST javaType type CDATA #IMPLIED>
+<!ATTLIST javaType relation CDATA #IMPLIED>
