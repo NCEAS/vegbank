@@ -1,0 +1,9 @@
+
+xmloperator.jar -- the library that includes an xml editor
+xalan.jar -- the processor that came with the xmloperator (probably newer than xalan_1_2_2.jar)
+xerces_1_4.jar -- the parser that came with the xmloperator and is newer than the one that I was
+	using
+xalan_merge.jar -- the results of unjarring the 2 xalan jar files then re-archiving them so that my 
+	code will work with the xml operator code.
+
+
