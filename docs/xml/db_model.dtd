@@ -48,3 +48,7 @@
   type CDATA #IMPLIED
   name CDATA #IMPLIED
 >
+<!ATTLIST formPKTranslate
+  prefix CDATA #IMPLIED
+  suffix CDATA #IMPLIED
+>

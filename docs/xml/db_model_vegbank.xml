@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dataModel SYSTEM "db_model.dtd">
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-schema.xsl"?>
+<?xml-stylesheet type="text/xsl" href="model2_url2getStrings.xsl"?>
 <dataModel>
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>beta.2</version>
@@ -1181,7 +1181,7 @@
       <attDefinition>Database assigned value to each unique record in the commConcept table.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>5</formAustere>
         <formSummary>113</formSummary>
         <formDetail>114</formDetail>
       </attForms>
@@ -1202,7 +1202,7 @@
       <attDefinition>This is a foreign key into the plant name list, the entery in which when combined wiht a reference constitutes a concept.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>6</formAustere>
         <formSummary>115</formSummary>
         <formDetail>116</formDetail>
       </attForms>
@@ -1223,7 +1223,7 @@
       <attDefinition>This is a foreign key to the reference in which the name was used, thereby defining a concept.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>7</formAustere>
         <formSummary>117</formSummary>
         <formDetail>118</formDetail>
       </attForms>
@@ -1244,7 +1244,7 @@
       <attDefinition/>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>119</formAustere>
+        <formAustere>-1</formAustere>
         <formSummary>120</formSummary>
         <formDetail>121</formDetail>
       </attForms>
@@ -1265,7 +1265,7 @@
       <attDefinition/>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>122</formAustere>
+        <formAustere>-1</formAustere>
         <formSummary>123</formSummary>
         <formDetail>124</formDetail>
       </attForms>
@@ -1335,7 +1335,7 @@ change through time.</entitySummary>
       <attDefinition>This is the foreign key into the plantStatus table "pointing" to a concept no longer viewed as standard by the party.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>5</formAustere>
         <formSummary>130</formSummary>
         <formDetail>131</formDetail>
       </attForms>
@@ -1356,7 +1356,7 @@ change through time.</entitySummary>
       <attDefinition>This is the foreign key into the plantConcept table "pointing" to a concept recognized by the party as a "standard" concept.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>6</formAustere>
         <formSummary>132</formSummary>
         <formDetail>133</formDetail>
       </attForms>
@@ -1578,7 +1578,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>The plant name.</attDefinition>
       <attForms>
-        <formPKTranslate>-1</formPKTranslate>
+        <formPKTranslate>5</formPKTranslate>
         <formAustere>151</formAustere>
         <formSummary>152</formSummary>
         <formDetail>153</formDetail>
@@ -1668,7 +1668,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Salutation preceding one's given name.</attDefinition>
       <attForms>
-        <formPKTranslate>-1</formPKTranslate>
+        <formPKTranslate>8</formPKTranslate>
         <formAustere>161</formAustere>
         <formSummary>162</formSummary>
         <formDetail>163</formDetail>
@@ -1689,7 +1689,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>One's first name.</attDefinition>
       <attForms>
-        <formPKTranslate>-1</formPKTranslate>
+        <formPKTranslate>9</formPKTranslate>
         <formAustere>164</formAustere>
         <formSummary>165</formSummary>
         <formDetail>166</formDetail>
@@ -1710,7 +1710,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>One's middle name or initial, if any.</attDefinition>
       <attForms>
-        <formPKTranslate>-1</formPKTranslate>
+        <formPKTranslate>10</formPKTranslate>
         <formAustere>167</formAustere>
         <formSummary>168</formSummary>
         <formDetail>169</formDetail>
@@ -1731,7 +1731,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Name shared in common to identify the members of a family, as distinguished from each member's given name.</attDefinition>
       <attForms>
-        <formPKTranslate>-1</formPKTranslate>
+        <formPKTranslate suffix=", ">5</formPKTranslate>
         <formAustere>170</formAustere>
         <formSummary>171</formSummary>
         <formDetail>172</formDetail>
@@ -1752,7 +1752,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Name of an organization.</attDefinition>
       <attForms>
-        <formPKTranslate>-1</formPKTranslate>
+        <formPKTranslate prefix="(org:" suffix=")">12</formPKTranslate>
         <formAustere>173</formAustere>
         <formSummary>174</formSummary>
         <formDetail>175</formDetail>
@@ -1906,7 +1906,7 @@ change through time.</entitySummary>
       <attDefinition>Link to a reference where the status was reported</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>250</formAustere>
         <formSummary>190</formSummary>
         <formDetail>191</formDetail>
       </attForms>
@@ -1964,7 +1964,7 @@ change through time.</entitySummary>
       <attDefinition>This is the date for which the status assignment by the party started.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>195</formAustere>
+        <formAustere>-1</formAustere>
         <formSummary>196</formSummary>
         <formDetail>197</formDetail>
       </attForms>
@@ -1985,7 +1985,7 @@ change through time.</entitySummary>
       <attDefinition>This is the date for which the status assignment by the party ended.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>198</formAustere>
+        <formAustere>-1</formAustere>
         <formSummary>199</formSummary>
         <formDetail>200</formDetail>
       </attForms>
@@ -2027,7 +2027,7 @@ change through time.</entitySummary>
       <attDefinition>Foreign key that identifies the party that made the status assignment</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>210</formAustere>
         <formSummary>204</formSummary>
         <formDetail>205</formDetail>
       </attForms>
@@ -2048,7 +2048,7 @@ change through time.</entitySummary>
       <attDefinition/>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>206</formAustere>
+        <formAustere>-1</formAustere>
         <formSummary>207</formSummary>
         <formDetail>208</formDetail>
       </attForms>
@@ -2069,7 +2069,7 @@ change through time.</entitySummary>
       <attDefinition/>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>209</formAustere>
+        <formAustere>-1</formAustere>
         <formSummary>210</formSummary>
         <formDetail>211</formDetail>
       </attForms>
@@ -2090,7 +2090,7 @@ change through time.</entitySummary>
       <attDefinition>The plantParent is a recursive key to the concept of the parent level in the classification hierarchy.  For example if this plantConcept were at the genus level the plantParent would be the plantConcept that is the family level (or subfamily level).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>212</formAustere>
         <formSummary>212</formSummary>
         <formDetail>213</formDetail>
       </attForms>
@@ -2260,7 +2260,7 @@ change through time.</entitySummary>
       <attDefinition>This field is the foreign key into the plantName table.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>5</formAustere>
         <formSummary>219</formSummary>
         <formDetail>220</formDetail>
       </attForms>
@@ -2302,7 +2302,7 @@ change through time.</entitySummary>
       <attDefinition>This is the date on which the party applied the name to the concept.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>223</formAustere>
+        <formAustere>-1</formAustere>
         <formSummary>224</formSummary>
         <formDetail>225</formDetail>
       </attForms>
@@ -2323,7 +2323,7 @@ change through time.</entitySummary>
       <attDefinition>This is the date on which the party ceased to apply the name to the concept.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>226</formAustere>
+        <formAustere>-1</formAustere>
         <formSummary>227</formSummary>
         <formDetail>228</formDetail>
       </attForms>
@@ -2402,7 +2402,7 @@ change through time.</entitySummary>
       <attDefinition>Foreign key that identifies  the party that uses the concept with the name.</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>-1</formAustere>
+        <formAustere>230</formAustere>
         <formSummary>235</formSummary>
         <formDetail>236</formDetail>
       </attForms>
@@ -2459,7 +2459,7 @@ change through time.</entitySummary>
       <attDefinition>This is the name of the classification system wherein the name is applied (e.g., EnglishCommon or Scientific).</attDefinition>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>237</formAustere>
+        <formAustere>6</formAustere>
         <formSummary>238</formSummary>
         <formDetail>239</formDetail>
       </attForms>
@@ -2480,7 +2480,7 @@ change through time.</entitySummary>
       <attDefinition/>
       <attForms>
         <formPKTranslate>-1</formPKTranslate>
-        <formAustere>240</formAustere>
+        <formAustere>-1</formAustere>
         <formSummary>241</formSummary>
         <formDetail>242</formDetail>
       </attForms>
@@ -4879,7 +4879,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Name of the coverclass method (e.g., Braun-Blanquet, Barkman, Domin, Daubenmire, Carolina Vegetation Survey, etc.).</attDefinition>
       <attForms>
-        <formPKTranslate>-1</formPKTranslate>
+        <formPKTranslate>1</formPKTranslate>
         <formAustere>526</formAustere>
         <formSummary>527</formSummary>
         <formDetail>528</formDetail>
