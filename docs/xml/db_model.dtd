@@ -18,7 +18,7 @@
 <!ELEMENT attReferences (#PCDATA)>
 <!ELEMENT attRelType (#PCDATA)>
 <!ELEMENT attType (#PCDATA)>
-<!ELEMENT attribute (attName, attLabel, attModel, attNulls, attType, javaType?, attKey, attRelType?, attReferences, attListType, attList, attNotes, attDefinition, archive?, attForms?)>
+<!ELEMENT attribute (attName, attLabel, attModel, attNulls, attType, javaType?, attKey, attRelType, attReferences, attListType, attList, attNotes, attDefinition, archive?, attForms?, update?)>
 <!ELEMENT author (#PCDATA)>
 <!ELEMENT contributor (#PCDATA)>
 <!ELEMENT dataModel (title, version, versionDesc, author, institution, contributor, description, date, entity+)>
@@ -37,6 +37,7 @@
 <!ELEMENT javaType (#PCDATA)>
 <!ELEMENT module (#PCDATA)>
 <!ELEMENT title (#PCDATA)>
+<!ELEMENT update (#PCDATA)>
 <!ELEMENT version (#PCDATA)>
 <!ELEMENT versionDesc (#PCDATA)>
 <!ATTLIST javaType
