@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
+
+<dataModel>	
+<title>Prototype Veg Plots Database Component Description: 
+    projectContributor</title>
+<author>John Harris </author>
+<institution>NCEAS </institution>
+<contributor> </contributor>
+<description> </description>
+<date>Tue Sep 26 14:55:08 PDT 2000 </date>
+
+<entity>
+	<entityName>vegPlot.PROJECTCONTRIBUTOR</entityName>
+	<entitySummary>This table stores information about a party contributing to a project where vegetation plots are described</entitySummary>
+	<entityDescription>This table serves as an interesection entity used to 'link' a party with
+a specific project where vegetation plots are described. </entityDescription>
+	<attribute> 
+		<attName>projectContributor_id </attName>
+		<attNulls>No </attNulls>	
+		<attType>NUMBER </attType>
+		<attKey>P </attKey>
+		<attNotes> </attNotes>
+		<attDefinition>Database assigned value for a party contributing to a 
+            project. </attDefinition>
+	</attribute>
+
+
+
+	<attribute>
+                <attName>project_id </attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>F </attKey>
+                <attReferences>PROJECT</attReferences>
+                <attNotes> </attNotes>
+                <attDefinition>Database assigned value for a given project &#150; this is 
+            a link to the project entity. </attDefinition>
+        </attribute>
+
+	<attribute>
+                <attName> party_id</attName>
+                <attNulls>No </attNulls>
+                <attType>NUMBER </attType>
+                <attKey>F </attKey>
+                <attReferences>PARTY </attReferences>
+                <attNotes> </attNotes>
+                <attDefinition>Database assigned value for a given party this is a link to 
+            the party entity. </attDefinition>
+        </attribute>
+
+	<attribute>
+                <attName>roleCode </attName>
+                <attNulls>No </attNulls>
+                <attType>VARCHAR2 </attType>
+                <attKey> </attKey>
+                <attReferences> </attReferences>
+                <attNotes> </attNotes>
+                <attDefinition>The role that a specific party (party_id) had in the 
+            project (project_id) - this can include such roles as 
+            PI, contact, author, etc.  This will be linked to an 
+            entity named: </attDefinition>
+        </attribute>
+
+
+	<children> PARTY </children>
+</entity>
+</dataModel>	

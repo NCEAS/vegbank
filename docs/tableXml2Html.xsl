@@ -20,15 +20,16 @@
 </a>
 </p>
 
-
-<p>
-<b><FONT SIZE="+2" FACE="arial"><xsl:value-of select="entity/entityName"/></FONT></b> 
-</p>
-
-
 <p>
 <b><FONT SIZE="-1" FACE="arial">Vegetation Plots Database Model 2000</FONT></b>
 </p>
+
+
+<b><FONT SIZE="+2" FACE="arial"><xsl:value-of select="entity/entityName"/></FONT></b> 
+<p>
+<i><FONT SIZE="-1" FACE="arial"><xsl:value-of select="entity/entitySummary"/></FONT></i>
+</p>
+
 
 
 <TABLE BORDER="1" CELLPADDING="0" CELLSPACING="0" WIDTH="650">
@@ -64,15 +65,20 @@
 </TABLE>
 
 
+<p>
+</p>
+
+<p>
+<i><FONT SIZE="-2" FACE="arial"><xsl:value-of select="entity/entityDescription"/></FONT></i>
+</p>
+
+
 <P>
 <B><FONT SIZE="-1" FACE="arial">Child tables: </FONT></B><FONT
  SIZE="-1" FACE="arial"> <xsl:value-of select="entity/entityName"/> serves as the parent of the 
-following tables:</FONT> </P>
+following tables: <xsl:value-of select="entity/children"/> </FONT> </P>
 <P>
-<A><FONT SIZE="-1" FACE="arial">party</FONT></A> 
-</P>
-<P>
-<FONT SIZE="-1">last updated: <xsl:value-of select="date"/>  by: <xsl:value-of select="author"/> at: <xsl:value-of select="institution"/>  </FONT></P>
+<FONT SIZE="-2">last updated: <xsl:value-of select="date"/>  by: <xsl:value-of select="author"/> at: <xsl:value-of select="institution"/>  </FONT></P>
 
 
 </body>
