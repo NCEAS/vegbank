@@ -4,8 +4,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:12:41 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-10-11 13:00:03 $'
+ * 	'$Revision: 1.2 $'
  */
  
 package vegclient.framework;
@@ -115,6 +115,7 @@ public void fileCopy (String inFile, String outFile, String appendFlag)
    */
   public static void debug(int severity, String message)
   {
+		
 //    if (debug) {
 //      if (debug_level > 0 && severity <= debug_level) {
         // Show a dialog for severe errors
@@ -141,7 +142,12 @@ public void fileCopy (String inFile, String outFile, String appendFlag)
 		*/
 		 public String fileChooser()
 	 {
-			JFileChooser fc = new JFileChooser();
+		 //get the current directory
+			String dir = System.getProperty("user.dir");
+			System.out.println("currebt dir: " + dir);
+			File directory = new File(dir);
+		
+			JFileChooser fc = new JFileChooser(directory);
       fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
       int r = fc.showOpenDialog(ClientFramework.this); 
      // while (r != JFileChooser.APPROVE_OPTION) 
