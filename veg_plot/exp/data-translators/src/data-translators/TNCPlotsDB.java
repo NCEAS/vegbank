@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 18:34:22 $'
- * 	'$Revision: 1.10 $'
+ *  '$Date: 2002-03-27 21:14:39 $'
+ * 	'$Revision: 1.11 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -803,7 +803,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			{
 				System.out.println("Exception: " + x.getMessage() );
 			}
-		return(this.plotShape);
+			return(this.plotShape);
 	}
 	
 // see the interface for method descriptions
@@ -812,6 +812,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		Statement stmt = null;
 		String xDim = null;
 		String yDim = null;
+		String area = "";
 			try 
 			{
 				
@@ -827,13 +828,27 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 					yDim = rs.getString(2);
 				}
 				rs.close();
-			stmt.close();
+				stmt.close();
+				//multiply the x and y dimensions
+				try
+				{
+					double x = (new Double(xDim)).doubleValue();
+					double y = (new Double(yDim)).doubleValue();
+					double a = x * y;
+					area = ""+a;
+				}
+				catch (Exception x) 
+				{
+					System.out.println("Exception: " + x.getMessage() );
+					System.out.println("Exception:  could not parse the integers " );
+					return("");
+				}
 			}
 			catch (Exception x) 
 			{
 				System.out.println("Exception: " + x.getMessage() );
 			}
-		return("1000");
+		return(area);
 	}
 	
 	
