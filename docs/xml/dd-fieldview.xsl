@@ -20,7 +20,7 @@
     @vegbank_header_html_normal@
 
       <h2>
-        <a class="blk" href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
+        <a  href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
       </h2>
             <p>Table:<xsl:value-of select="../entityName"/>  (<a href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">Click for table view</a>)
               <br/>
@@ -35,7 +35,7 @@
               <tr bgcolor="#FFFFFF">
                 <td class="normal">
                   <b>
-                    <a class="blk" href="dd-guide.html#field-name">field name:</a>
+                    <a href="dd-guide.html#field-name">field name:</a>
                   </b>
                 </td>
                 <td class="normal">
@@ -54,7 +54,7 @@
               <tr bgcolor="#FFFFCC">
                 <td class="normal">
                   <b>
-                    <a class="blk" href="dd-guide.html#nulls">nulls:</a>
+                    <a  href="dd-guide.html#nulls">nulls:</a>
                   </b>
                 </td>
                 <td class="normal">
@@ -64,7 +64,7 @@
               <tr bgcolor="#FFFFFF">
                 <td class="normal">
                   <b>
-                    <a class="blk" href="dd-guide.html#type">type:</a>
+                    <a  href="dd-guide.html#type">type:</a>
                   </b>
                 </td>
                 <td class="normal">
@@ -74,7 +74,7 @@
               <tr bgcolor="#FFFFCC">
                 <td class="normal">
                   <b>
-                    <a class="blk" href="dd-guide.html#key">key:</a>
+                    <a  href="dd-guide.html#key">key:</a>
                   </b>
                 </td>
                 <td class="normal">
@@ -84,14 +84,14 @@
               <tr bgcolor="#FFFFFF">
                 <td class="normal">
                   <b>
-                   <a class="blk" href="dd-guide.html#references">references:</a>
+                   <a  href="dd-guide.html#references">references:</a>
                   </b>
                 </td>
                 <td class="normal">
                   <!-- references can be split so that it doesn't make the column too wide in output -->
 <xsl:choose>
                     <xsl:when test="contains(attReferences,'.')">
-                      <a class="blk" href="{$htmlPrefix}~table~{translate(substring-before(attReferences,'.'),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(substring-after(attReferences,'.'),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">
+                      <a  href="{$htmlPrefix}~table~{translate(substring-before(attReferences,'.'),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(substring-after(attReferences,'.'),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">
                         <xsl:value-of select="substring-before(attReferences,'.')"/>. <xsl:value-of select="substring-after(attReferences,'.')"/>
                       </a>
                     </xsl:when>
@@ -105,7 +105,7 @@
               <tr bgcolor="#FFFFCC">
                 <td class="normal">
                   <b>
-                    <a class="blk" href="dd-guide.html#list">list:</a>
+                    <a  href="dd-guide.html#list">list:</a>
                   </b>
                 </td>
                 <td class="normal">
@@ -115,7 +115,7 @@
               <tr bgcolor="#FFFFFF">
                 <td class="normal">
                   <b>
-                <a class="blk" href="dd-guide.html#field-notes">field notes:</a>
+                <a  href="dd-guide.html#field-notes">field notes:</a>
                   </b>
                 </td>
                 <td class="normal">
@@ -125,7 +125,7 @@
               <tr bgcolor="#FFFFCC">
                 <td class="normal">
                   <b>
-                 <a class="blk" href="dd-guide.html#field-definition">field definition:</a>
+                 <a  href="dd-guide.html#field-definition">field definition:</a>
                   </b>
                 </td>
                 <td class="normal">

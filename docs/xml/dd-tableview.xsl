@@ -42,43 +42,43 @@
             <tr class="greenbkgrd">
               <th>
                 <b>
-                  <a class="brightyellow" href="dd-guide.html#field-name">field name</a>
+                  <a href="dd-guide.html#field-name">field name</a>
                 </b>
               </th>
               <th>
                 <b>
-                  <a  class="brightyellow" href="dd-guide.html#nulls">nulls</a>
+                  <a   href="dd-guide.html#nulls">nulls</a>
                 </b>
               </th>
               <th>
                 <b>
-                  <a  class="brightyellow"  href="dd-guide.html#type">type</a>
+                  <a  href="dd-guide.html#type">type</a>
                 </b>
               </th>
               <th>
                 <b>
-                  <a  class="brightyellow" href="dd-guide.html#key">key</a>
+                  <a  href="dd-guide.html#key">key</a>
                 </b>
               </th>
               <th>
                 <b>
-                  <a  class="brightyellow" href="dd-guide.html#references">references</a>
+                  <a   href="dd-guide.html#references">references</a>
                 </b>
               </th>
               <th>
                 <b>
-                  <a class="brightyellow" href="dd-guide.html#list">list</a>
+                  <a href="dd-guide.html#list">list</a>
                 </b>
               </th>
               <!-- <td class="normal"><b><font size="+1">List Values</font></b></td> -->
               <th>
                 <b>
-                  <a  class="brightyellow" href="dd-guide.html#field-notes">field notes</a>
+                  <a   href="dd-guide.html#field-notes">field notes</a>
                 </b>
               </th>
               <th>
                 <b>
-                  <a  class="brightyellow" href="dd-guide.html#field-definition">field definition</a>
+                  <a   href="dd-guide.html#field-definition">field definition</a>
                 </b>
               </th>
             </tr>
@@ -105,13 +105,13 @@
                   <xsl:choose>
                     <xsl:when test="attNulls='no'">
                       <b>
-                        <a class="blk" href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
+                        <a  href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
                           <xsl:value-of select="attName"/>
                         </a>
                       </b>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a class="blk" href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
+                      <a  href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
                         <xsl:value-of select="attName"/>
                       </a>
                     </xsl:otherwise>
@@ -130,7 +130,7 @@
                   <!-- references can be split so that it doesn't make the column too wide in output -->
                   <xsl:choose>
                     <xsl:when test="contains(attReferences,'.')">
-                      <a class="blk" href="{$htmlPrefix}~table~{translate(substring-before(attReferences,'.'),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(substring-after(attReferences,'.'),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">
+                      <a  href="{$htmlPrefix}~table~{translate(substring-before(attReferences,'.'),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(substring-after(attReferences,'.'),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">
                         <xsl:value-of select="substring-before(attReferences,'.')"/>. <xsl:value-of select="substring-after(attReferences,'.')"/>
                       </a>
                     </xsl:when>
@@ -145,7 +145,7 @@
                       <xsl:value-of select="attListType"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      <a class="blk" href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
+                      <a  href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
                         <xsl:value-of select="attListType"/>
                       </a>
                       <font size="-1">: 
