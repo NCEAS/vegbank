@@ -3,7 +3,6 @@
 <title>
 Plots Database = plant taxa
 </title>
-
 </head>
 
 <body bgcolor=#FFFFFF>
@@ -18,7 +17,7 @@ Plots Database = plant taxa
 <td bgcolor=DFE5FA>
 
 <img align=center border=0 height=144 
- src="/images/owlogoBev.jpg" alt = "Veg plots logo">
+ src="@image-path@/owlogoBev.jpg" alt = "Veg plots logo">
 
 
 <!-- title of page -->
@@ -27,7 +26,8 @@ Plots Database = plant taxa
     <table border=0 cellpadding=5>
     <tr>
     <td align=left valign=bottom>
-    <font face="Helvetica,Arial,Verdana" size=6 color=23238E> PlotQuery
+    <font face="Helvetica,Arial,Verdana" size=6 color=23238E> Plant Taxonomy
+		Lookup
     </font><br>
     &nbsp;&nbsp;
     <font face="Helvetica,Arial,Verdana" size=2 color=000000>
@@ -107,8 +107,8 @@ see also:
 <td align=center>
 
 <table border=0 cellspacing=5 cellpadding=5>
-<FORM ACTION="http://beta.nceas.ucsb.edu:8080/examples/servlet/plotQuery" METHOD="POST">
-<input type=hidden name=orderby value=taxon>
+<FORM ACTION="http://dev.nceas.ucsb.edu/harris/servlet/DataRequestServlet" METHOD="GET">
+<input type="hidden" name="requestDataType" value="plantTaxon">
 
 
 <tr valign=top>
@@ -117,8 +117,7 @@ see also:
 <font face="Helvetica,Arial,Verdana" size=2 color=209020>
 
 <b>
-To query the National Plots database, containing 20 plots, complete one or more of the fields below 
-and then click on the "search" button. 
+Enter the plant taxon below and toggle the correct type of name. 
 <!--put instructions here later -->
 </b>
 
@@ -129,239 +128,40 @@ and then click on the "search" button.
 </small>
 
 <tr>
-<td  align=right valign=top>
+<td  align=left valign=top>
 <font face="Helvetica,Arial,Verdana" size=3 color=23238E>
 <b>plant taxon</b>
 </td>
 
+<!-- 	PLANT TAXON INPUT-->
 <td  align=left valign=top>
-<input type=hidden name=rel-namesoup value=contains>
-<input size=35 name=taxon>
+<input size=35 name=taxonName>
 <b>
 <font face="Helvetica,Arial,Verdana" size=1>
-
-
-<br>
-type all or part of a name into the box above, or choose a name from a list:
-<p>
-<b>index of taxon names:</b>
-<br>
-
-<a href = "/com-A.html">A</a><b>&#183;</b>
-<a href = "/com-B.html">B</a><b>&#183;</b>
-<a href = "/com-C.html">C</a><b>&#183;</b>
-<a href = "/com-D.html">D</a><b>&#183;</b>
-<a href = "/com-E.html">E</a><b>&#183;</b>
-<a href = "/com-F.html">F</a><b>&#183;</b>
-<a href = "/com-G.html">G</a><b>&#183;</b>
-<a href = "/com-H.html">H</a><b>&#183;</b>
-<a href = "/com-I.html">I</a><b>&#183;</b>
-<a href = "/com-J.html">J</a><b>&#183;</b>
-<a href = "/com-K.html">K</a><b>&#183;</b>
-<a href = "/com-L.html">L</a><b>&#183;</b>
-<a href = "/com-M.html">M</a><b>&#183;</b>
-<a href = "/com-N.html">N</a><b>&#183;</b>
-<a href = "/com-O.html">O</a><b>&#183;</b>
-<a href = "/com-P.html">P</a><b>&#183;</b>
-<a href = "/com-Q.html">Q</a><b>&#183;</b>
-<a href = "/com-R.html">R</a><b>&#183;</b>
-<a href = "/com-S.html">S</a><b>&#183;</b>
-<a href = "/com-T.html">T</a><b>&#183;</b>
-<a href = "/com-U.html">U</a><b>&#183;</b>
-<a href = "/com-V.html">V</a><b>&#183;</b>
-<a href = "/com-W.html">W</a><b>&#183;</b>
-<a href = "/com-Y.html">Y</a><b>&#183;</b>
-<a href = "/com-Z.html">Z</a> <br>
-<br>
-
-<!-- This to come later
-<b>index of scientific names:</b><br>
-
-<a href = "/sci-A.html">A</a><b>&#183;</b>
-<a href = "/sci-B.html">B</a><b>&#183;</b>   
-<a href = "/sci-C.html">C</a><b>&#183;</b>
-<a href = "/sci-D.html">D</a><b>&#183;</b>
-<a href = "/sci-E.html">E</a><b>&#183;</b>
-etc..
--->
-
-<br>
 </font>
 </small>
 </font>
+
+</tr>
 
 <tr>
 <td  colspan=2 rowspan=1 align=left valign=middle>
 <hr size=.5>
+</tr>
 
 <tr>
-<td  align=right valign=top>
-<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-<b>State</b>
-
-</td>
-<td  align=left valign=top>
-<select name="state" multiple size=5>
-        
-        <option selected>%
-	<option>Minnesota
-        <option>Alaska
-        <option>North Carolina
-        <option>California
-
-</select><br clear=left>
-<!--  put map here later
-<small><small><a href=/images/statemap.gif target=_blank>reference map</a></small></small>
--->
-</p>
-
-
-</td>
-
-<tr>
-<td colspan=2 align=left valign=middle>
-<hr size=.5>
-</td>
-
-<tr>
-<td align=right valign=top>
-<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-<b>elevation</b>
-</td>
-
 <td align=left valign=top>
-<font face="Helvetica,Arial,Verdana" size=2>
-occurs between:<br>
-<INPUT TYPE="HIDDEN" NAME="minElevation?" VALUE=contains>
-<input size=10 name="minElevation"> ft. (lower)
-and <br>
-<INPUT TYPE="HIDDEN" NAME="maxElevation?" VALUE=contains>
-<input size=10 name="maxElevation"> ft. (upper)
-elevation.
-</td>
-
-
-
-<tr>
-<td colspan=2 align=left valign=middle>
-<hr size=.5>
-
-<tr>
-<td align=right valign=top>
-<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-<b>surface geology</b>
-</td>
-</font>
-
-<td align=left valign=top>
-
-<select name="surfGeo" multiple size=4>
-<font face="Helvetica,Arial,Verdana" size=2 color=000000>
-
-<option selected>%
-<option value="glacial">Glacial till
-<option value="Ign">Igneous rock
-<option value="Sed">Sedimentry rock
-<option value="Meta"> Metamorphic rock
-<option value="Aluvia">Aluvial sediments
-</select>
-</td>
-
-<tr>
-<td colspan=2 align=left valign=middle>
-<hr size=.5>
-
-<tr>
-<td align=right valign=top>
-<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-<b>multiple <br>
-observations</b>
-</td>
-<font face="Helvetica,Arial,Verdana" size=2 color=000000>
-<td align=left valign=top>
-        <input type = "radio" checked name="multipleObs" value = "%"> Either single or multiple observations<br>
-        <input type = "radio" name="multipleObs" value = "T"> Single observation only<br>
-        <input type = "radio" name="multipleObs" value = "F"> Multiple observations only<br>
-</font>
-</td>
-
-<tr>
-<td colspan=2 align=left valign=middle>
-<hr size=.5>
-</td>
-
-
-
-<tr>
-<td align=right valign=top>
-<font face="Helvetica,Arial,Verdana" size=3 color=23238E>
-<b>plant<br>
-community</b>
-</td>
-
-
-<td align=left valign=top colspan=2>
-<select name="community" multiple size=5>
-<option selected>%
-<option>Coastal Strand
-<option>Coastal Salt Marsh
-<option>Freshwater Wetlands
-<option>Northern Coastal Scrub
-<option>Coastal Sage Scrub
-<option>Sagebrush Scrub
-<option>Shadscale Scrub
-<option>Creosote Bush Scrub
-<option>Alkali Sink
-<option>North Coastal Coniferous Forest
-<option>Closed-cone Pine Forest
-<option>Redwood Forest
-<option>Douglas-Fir Forest
-<option>Yellow Pine Forest
-<option>Red Fir Forest
-<option>Lodgepole Forest
-<option>Subalpine Forest
-<option>Bristle-cone Pine Forest
-<option>Mixed Evergreen Forest
-<option>Northern Oak Woodland
-<option>Southern Oak Woodland
-<option>Foothill Woodland
-<option>Chaparral
-<option>Coastal Prairie
-<option>Valley Grassland
-<option>Alpine Fell-fields
-<option>Northern Juniper Woodland
-<option>Pinyon-Juniper Woodland
-<option>Joshua Tree Woodland
-<option>weed, species characteristic of disturbed places
-<option>agricultural weed
-<option>escaped cultivar
-<option>introduced plant which is becoming naturalized
-<option>agricultural plant
-<option>many plant communities
-<option>community not given, species associated with a peculiar habitat
-<option>Desert dunes
-<option>Inland dunes
-<option>Vernal pools
-<option>Meadows and seeps
-<option>Pebble (Pavement) plain
-<option>Bogs and Fens
-<option>Marshes and swamps
-<option>Riparian forest
-<option>Riparian woodland
-<option>Riparian scrub
-</select>
+ <!-- to choose the compound query option-->
+ <small>
+  <font face="Helvetica,Arial,Verdana" color=000000>
+   <td align=left valign=top>
+   <input type = "radio" checked name="taxonNameType" value = "scientificName">scientific name<br>
+   <input type = "radio" name="taxonNameType" value = "commonName"> common name<br>
+   <input type = "radio" name="taxonNameType" value = "symbolCode">symbol <br>
+  </font>
+ </small>
 </td>
 </tr>
-<tr>
-<td align=left valign=middle colspan=2>
-<small>
-<font face="Helvetica,Arial,Verdana">
-<input type=checkbox name=compoundQuery value=1> Multi-component query.
-</font>
-</small>
-</td></tr>
-
-
 
 <tr>
 <td  align=left valign=middle colspan=2>
