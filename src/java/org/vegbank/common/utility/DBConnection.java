@@ -7,8 +7,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *   '$Date: 2003-11-25 19:24:01 $'
- *   '$Revision: 1.2 $'
+ *   '$Date: 2004-02-27 17:09:30 $'
+ *   '$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,8 +57,7 @@ public class DBConnection
 	private String checkOutMethodName;
 
 	private static String DBDriver = DatabaseUtility.getOption("driverClass");
-	private static String DBConnectedJDBC =
-		DatabaseUtility.getOption("connectString");
+	private static String DBConnectedJDBC = DatabaseUtility.getOption("connectString");
 	private static String userName = DatabaseUtility.getOption("user");
 	private static String passWord = DatabaseUtility.getOption("password");
 
@@ -88,6 +87,11 @@ public class DBConnection
 	public Connection getConnections()
 	{
 		return conn;
+	}
+	
+	public boolean isClosed() throws SQLException
+	{
+		return conn.isClosed();
 	}
 
 	/**
@@ -336,7 +340,6 @@ public class DBConnection
 		String password)
 		throws SQLException
 	{
-		// Load the Oracle JDBC driver
 		try
 		{
 			Class.forName(dbDriver);
@@ -349,6 +352,7 @@ public class DBConnection
 			return null;
 		}
 		// Connect to the database
+		//LogUtility.log("Get a connection using " + connection + ", " + user + ", " + password);
 		Connection connLocal = null;
 		connLocal = DriverManager.getConnection(connection, user, password);
 		return connLocal;
@@ -403,5 +407,10 @@ public class DBConnection
 	{
 		return conn.getMetaData();
 	} //getMetaData
+	
+	public void setReadOnly(boolean readOnly) throws SQLException
+	{
+		conn.setReadOnly(readOnly);
+	}
 
 } //DBConnection class
