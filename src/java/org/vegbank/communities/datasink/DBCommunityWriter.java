@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-04-16 00:16:45 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2003-04-16 19:11:06 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -197,7 +197,7 @@ public class DBCommunityWriter
 						conn.prepareStatement(
 				" insert into COMMSTATUS (COMMCONCEPT_ID, REFERENCE_ID,  "
 			+ " COMMPARTY_ID, COMMCONCEPTSTATUS,  startdate, COMMLEVEL, " 
-			+ "commstatus_id, commparent)"
+			+ "commstatus_id, commparent_id)"
 			+ " values (?,?,?,?,?,?,?,?)");
 		
 			pstmt.setInt(1, conceptId);
