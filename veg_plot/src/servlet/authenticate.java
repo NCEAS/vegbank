@@ -95,7 +95,6 @@ public class authenticate extends HttpServlet
 						Thread.currentThread().sleep(500);
 						response.sendRedirect("/harris/servlet/pageDirector?pageType=login");
 					}
-					
 				}
 				// CREATE A NEW USER
 				else if ( requestParams.get("authType").toString().equals("createUser")  )
