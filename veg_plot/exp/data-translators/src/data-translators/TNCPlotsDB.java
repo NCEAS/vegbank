@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-28 23:07:24 $'
- * 	'$Revision: 1.15 $'
+ *  '$Date: 2002-04-02 19:03:20 $'
+ * 	'$Revision: 1.16 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -1125,7 +1125,10 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getAuthorObsCode(String plotName)
 	{
-		return("");
+		// there is always one observation per plot
+		// so make a simple string that represents this
+		String obsCode = plotName+".001";
+		return( obsCode );
 	}
 	
 	/**
@@ -1134,7 +1137,10 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getObsStartDate(String plotName)
 	{
-		return("02-JAN-2001");
+		//because these are all one day sampling sessions 
+		// the start date is the same as the end date
+		String date = this.getObsStopDate(plotName);
+		return( date );
 	}
 	
 	/**
@@ -1143,8 +1149,32 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	 */
 	public String getObsStopDate(String plotName)
 	{
-		return("02-JAN-2001");
+		String date = "";
+		Statement stmt = null;
+		try 
+		{
+			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("select "
+			+" ([Survey Date]) "
+			+" from ([Plots]) where ([Plot Code]) like '"+plotName+"'");
+			//there should only be one
+			while (rs.next()) 
+			{
+				date = rs.getString(1);
+			}
+			rs.close();
+			stmt.close();
+		}
+		catch( Exception e)
+		{
+			System.out.println("Exception: " + e.getMessage() );
+			e.printStackTrace();
+		}
+		return(date);
 	}
+	
+	
 	
 	/**
 	 * returns the soil depth of a plot
