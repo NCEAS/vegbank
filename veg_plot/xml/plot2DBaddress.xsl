@@ -123,6 +123,11 @@
 <xsl:text>plot.soilDrainage|</xsl:text> <xsl:value-of select="project/plot/soilDrainage"/>
 <xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 <xsl:text>plot.surfGeo|</xsl:text> <xsl:value-of select="project/plot/surfGeo"/>
+<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+<xsl:text>plot.state|</xsl:text> <xsl:value-of select="project/plot/state"/>
+<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+<xsl:text>plot.currentCommunity|</xsl:text> <xsl:value-of select="project/plot/currentCommunity"/>
+
 
 <!-- next block transforms the attributes for the plotObservationTable-->
 <xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>

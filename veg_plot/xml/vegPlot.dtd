@@ -42,10 +42,11 @@
 			<!ELEMENT country (#PCDATA)>
 			<!ELEMENT currentFlag (#PCDATA)>
 
-<!ELEMENT plot (authorPlotCode, parentPlot, plotType, samplingMethod, coverScale, plotOriginLat,
+<!ELEMENT plot (plotId, authorPlotCode, parentPlot, plotType, samplingMethod, coverScale, plotOriginLat,
 	 plotOriginLong, plotShape, plotSize, plotSizeAcc, altValue, altPosAcc, slopeAspect, slopeGradient,
 	 slopePosition, hydrologicRegime, soilDrainage, surfGeo, plotObservation, namedPlace, stand, 
 	graphic, plotContributor)>
+	<!ELEMENT plotId (#PCDATA)>
  	<!ELEMENT authorPlotCode (#PCDATA)>
 	 <!ELEMENT parentPlot (#PCDATA)>
 	 <!ELEMENT plotType (#PCDATA)>
@@ -64,6 +65,8 @@
 	 <!ELEMENT hydrologicRegime (#PCDATA)>
 	 <!ELEMENT soilDrainage (#PCDATA)>
 	 <!ELEMENT surfGeo (#PCDATA)>
+	<!ELEMENT state (#PCDATA)>
+	<!ELEMENT currentCommunity  (#PCDATA)>
 
 	<!ELEMENT plotObservation (parentPlot, previousObs, authorObsCode, plotStartDate, plotStopDate, 
 	dateAccuracy, effortLevel,  strata, taxonObservations, communityType, citation)>

@@ -21,6 +21,11 @@
 
 </xsl:for-each>
 
+<!--desired requested data type-->
+<xsl:text>requestDataType|</xsl:text> <xsl:value-of select="requestDataType"/>
+<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+
+
 <!--desired output type-->
 <xsl:text>resultType|</xsl:text> <xsl:value-of select="resultType"/>
 <xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>

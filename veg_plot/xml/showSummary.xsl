@@ -1,75 +1,212 @@
 <?xml version="1.0"?> 
+<!--
+  * resultset.xsl
+  *
+  *      Authors: John Harris
+  *    Copyright: 2000 Regents of the University of California and the 
+  *               National Center for Ecological Analysis and Synthesis
+  *  For Details: http://www.nceas.ucsb.edu/
+  *      Created: 2000 December
+  * 
+  * This is an XSLT (http://www.w3.org/TR/xslt) stylesheet designed to
+  * convert an XML file showing the resultset of a query
+  * into an HTML format suitable for rendering with modern web browsers.
+-->
+
 
 <!--Style sheet for transforming plot xml files, specifically
 	for the servlet transformation to show summary results
 	to the web browser-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+ <xsl:output method="html"/>
+  <xsl:template match="/vegPlot">
 
-<!--capture the information to be put in the name table-->	
-<xsl:output method="html"/>
-<xsl:template match="/vegPlot">
-
-
-<!-- There may be multiple project contributors so do a for-each select-->
-<xsl:for-each select="project/plot">
-
-<!-- Next block corresponds to the plot table ~ there will only be one attribute here-->
-<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
-<xsl:text>  </xsl:text> <xsl:value-of select="authorPlotCode"/> <xsl:text>  </xsl:text>
-
-</xsl:for-each>
-
-</xsl:template>
-
-<!--     **********************************************************   -->
+  
+  <html>
+      <head>
+      <!--
+             <link rel="stylesheet" type="text/css" 
+              href="@web-base-url@/default.css" />
+        -->
+	</head>
+  	
+	<body>
 
 
-<head>
-	<title>"Results page"</title>
+	</body>
+ </html>
+
+
+
+<html>
+      <head>
+      <!--
+             <link rel="stylesheet" type="text/css" 
+              href="@web-base-url@/default.css" />
+        -->
+	<script LANGUAGE="JavaScript">
+<!-- Modified By:  Steve Robison, Jr. (stevejr@ce.net) -->
+
+<!-- This script and many more are available free online at -->
+<!-- The JavaScript Source!! http://javascript.internet.com -->
+<xsl:text disable-output-escaping="yes">
+&lt;!-- Begin
+var checkflag = "false";
+function check(field) {
+if (checkflag == "false") {
+for (i = 0; i &lt; field.length; i++) {
+field[i].checked = true;}
+checkflag = "true";
+return "Uncheck All"; }
+else {
+for (i = 0; i &lt; field.length; i++) {
+field[i].checked = false; }
+checkflag = "false";
+return "Check All"; }
+}
+//  End -->
+</xsl:text>
+</script>
+
+  
+<script language="javascript" alt="JavaScript not enabled!">
+ <xsl:text disable-output-escaping="yes">
+   &lt;!-- 
+    today = new Date()
+    document.write("(Accessed: " + today +" to: ")
+    document.write(location.host.toLowerCase()+") \n")
+   //--&gt;
+   </xsl:text>
+ </script>
+
+ 
 </head>
 
 
-<body BGCOLOR="#white">
-
-<p>
-</p>
-
-<p>
-<b><FONT SIZE="-1" FACE="arial">Query Results</FONT></b>
-</p>
-
-<xsl:template match="/vegPlot">
-<xsl:for-each select="project/plot">
-
-<b><FONT SIZE="+1" FACE="arial">  <xsl:text>plot name: </xsl:text> <xsl:value-of select="authorPlotCode"/></FONT></b> 
-
-<i><FONT SIZE="-1" FACE="arial"> <xsl:text>Surficial Geology : </xsl:text> <xsl:value-of select="surfGeo"/></FONT></i>
-<i><FONT SIZE="-1" FACE="arial"> <xsl:text>Plot Type : </xsl:text> <xsl:value-of select="plotType"/></FONT></i>
-<i><FONT SIZE="-1" FACE="arial"> <xsl:text>Origin Latitude : </xsl:text> <xsl:value-of select="plotOriginLat"/></FONT></i>
-<i><FONT SIZE="-1" FACE="arial"> <xsl:text>Origin Longitude : </xsl:text> <xsl:value-of select="plotOriginLong"/></FONT></i>
 
 
-<!--List of all the unique taxon names in small green astericked text -->
-<i><FONT SIZE="-1" FACE="arial"> <xsl:text>list of taxon names included in this plot </xsl:text></FONT></i>
-<i><FONT SIZE="-1" COLOR="GREEN" FACE="Times"> 
-<xsl:for-each select="plotObservation/taxonObservations">
-	<!--<xsl:value-of select="authNameId"/><xsl:text
-	disable-output-escaping="yes"> &#xA; </xsl:text> -->
+<body bgcolor="FFFFFF">
+
+
+
+<br></br>
+<xsl:number value="count(project/plot)" /> documents found.
+
+
+<!-- set up the form which is required by netscape 4.x browsers -->
+<form name="myform" action="viewData" method="post">
+
+<!-- set up a table -->
+<table width="100%">
+
+
+           <tr colspan="1" bgcolor="CCCCFF" align="left" valign="top">
+             <th class="tablehead">Identification</th>
+             <th class="tablehead">Location</th>
+             <th class="tablehead">Community</th>
+             <th class="tablehead">Species</th>
+           </tr>
+
+	<!-- Header and row colors -->
+        <xsl:variable name="evenRowColor">#C0D3E7</xsl:variable>
+        <xsl:variable name="oddRowColor">#FFFFFF</xsl:variable>
 	
-	<xsl:value-of select="authNameId"/><xsl:text disable-output-escaping="yes">;      </xsl:text>
+	   
+	<xsl:for-each select="project/plot">
+	<xsl:sort select="authorPlotCode"/>
 	
-</xsl:for-each>
-</FONT></i>
+	<tr valign="top">
+             
+     
+     <!--if even row -->
+     <xsl:if test="position() mod 2 = 1">
+			
+             		<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
+			
+			<!--grab the plot name and store as a varibale for later-->
+			<xsl:variable name="PLOT">
+  			<xsl:value-of select="authorPlotCode"/>
+			</xsl:variable>
+			
+			<xsl:variable name="PLOTID">
+  			<xsl:value-of select="plotId"/>
+			</xsl:variable>
 
-
-</xsl:for-each>
-</xsl:template>
-
+               		<a>author code: <xsl:value-of select="authorPlotCode"/></a>
+			<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
+			<xsl:number value="position()"/>
+			</td>
+        	
+	     		<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
+             		<a>State: <xsl:value-of select="state"/>;  </a>
+	     		<a>latitude: <xsl:value-of select="plotOriginLat"/>;  </a>
+             		<a>longitide: <xsl:value-of select="plotOriginLong"/>;  </a>
+	     		</td>
+	     
+	     		<td colspan="1"  bgcolor="{$evenRowColor}" align="left" valign="top">
+               		Alliance: <xsl:value-of select="currentCommunity"/>
+             		</td>
+	 
+	    		<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
+               		<i><FONT SIZE="-1" FACE="arial">
+			Top species: <xsl:for-each select="plotObservation/taxonObservations">
+	       		<xsl:value-of select="authNameId"/>; </xsl:for-each>
+	 		</FONT></i> 
+             		</td>
+	 	</xsl:if>
+	 
+	 <!--if odd row-->
+	 	<xsl:if test="position() mod 2 = 0">
+             		<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
+               		
+			<!--grab the plot name and store as a varibale for later-->
+			<xsl:variable name="PLOT">
+  			<xsl:value-of select="authorPlotCode"/>
+			</xsl:variable>
+			
+			<xsl:variable name="PLOTID">
+  			<xsl:value-of select="plotId"/>
+			</xsl:variable>
+			
+			<a>author code: <xsl:value-of select="authorPlotCode"/></a>
+             		<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
+			<xsl:number value="position()"/>
+			</td>
+        	
+	     		<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
+             		<a>State: <xsl:value-of select="state"/>;  </a>
+	     		<a>latitude: <xsl:value-of select="plotOriginLat"/>;  </a>
+             		<a>longitide: <xsl:value-of select="plotOriginLong"/>;  </a>
+	     		</td>
+	     
+	     		<td colspan="1"  bgcolor="{$oddRowColor}" align="left" valign="top">
+               		Alliance: <xsl:value-of select="currentCommunity"/>
+             		</td>
+	 		
+	    		<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
+               		<i><FONT SIZE="-1" FACE="arial">
+			Top species: <xsl:for-each select="plotObservation/taxonObservations">
+	       		<xsl:value-of select="authNameId"/>; </xsl:for-each>
+             		</FONT></i>
+			</td>
+	
+	 	</xsl:if>
+	 
+	 </tr>    
+	</xsl:for-each>
+<input type="button" value="Check All" onClick="this.value=check(this.form.plotName)">
+</input> 
+</table>
+<input type="submit" name="downLoadAction" value="start downLoad" /> 
+</form>
+	
 
 
 </body>
+</html> 
 
+</xsl:template>
 
 
 </xsl:stylesheet>
