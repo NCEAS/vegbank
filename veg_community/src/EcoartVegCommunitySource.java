@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-07 18:06:38 $'
- * '$Revision: 1.9 $'
+ *     '$Date: 2002-03-07 18:25:38 $'
+ * '$Revision: 1.10 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -233,13 +233,32 @@ import java.sql.*;
 			String dateEntered = null;
 			try
 			{
-				dateEntered = "1997-11-26";
+				System.out.println("EcoartVegCommunity > level: " + level);
+				// Create a Statement so we can submit SQL statements to the driver
+				Statement stmt = con.createStatement();
+				String query = null;
+				if ( level.equals("alliance") )
+				{
+					query = "select ([AllianceOriginDate]) from ALLIANCE where ([AllianceKey]) like '"+communityCode+"'";
+				}
+				else
+				{
+					query = "select ([AssocOriginDate]) from ETC where ([Elcode]) like '"+communityCode+"'";
+				}
+				ResultSet rs = stmt.executeQuery(query);
+				while (rs.next()) 
+				{
+					dateEntered = rs.getString(1);
+				}
+				rs.close();
+				stmt.close();
 			}
 			 catch (Exception e)
 		 {
 			 System.out.println("EcoartVegCommunity > Exception: " + e.getMessage() );
 			 e.printStackTrace();
 		 }
+		 System.out.println("EcoartVegCommunity > date: " + dateEntered);
 		 return(dateEntered);
 		}
 	 
@@ -272,6 +291,8 @@ import java.sql.*;
  			{
  				 communities.addElement(rs.getString(1));
  			}
+			rs.close();
+			stmt.close();
  		 }
  		 catch (Exception e)
  		 {

@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-07 18:06:38 $'
- * '$Revision: 1.8 $'
+ *     '$Date: 2002-03-07 18:25:38 $'
+ * '$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -582,7 +582,7 @@ public class VegCommunityLoader
 			}
 			if (cnt > 0)
 			{
-				System.out.println("VegCommunityLoader > matching reference:  " + cnt  );
+				//System.out.println("VegCommunityLoader > matching reference:  " + cnt  );
 				exists = true;
 			}
 			else
@@ -623,7 +623,7 @@ public class VegCommunityLoader
 			}
 			if (cnt > 0)
 			{
-				System.out.println("VegCommunityLoader > matching partyId:  " + cnt  );
+				//System.out.println("VegCommunityLoader > matching partyId:  " + cnt  );
 				exists = true;
 			}
 			else
@@ -662,7 +662,7 @@ public class VegCommunityLoader
 			}
 			if (cnt > 0)
 			{
-				System.out.println("VegCommunityLoader > matching NAME:  " + cnt  );
+				//System.out.println("VegCommunityLoader > matching NAME:  " + cnt  );
 				exists = true;
 			}
 			else
@@ -758,7 +758,7 @@ public class VegCommunityLoader
 					String allianceTransName = source.getAllianceNameTrans(communityCode);
 					String level = "alliance";
 					//pass the code and the level to the method below
-					String dateEntered = source.getDateEntered(communityCode, "allinace");
+					String dateEntered = source.getDateEntered(communityCode, "alliance");
 					String parentCommunity = null; //this means top level
 					if (commName != null)
 					{
