@@ -401,6 +401,10 @@ public void doGet(HttpServletRequest request,
 			composePlantTaxonomyQuery(params);
 			issueQuery("simplePlantTaxonomyQuery");
 			out.println("Number of taxa returned: "+queryOutputNum+"<br><br>");
+			
+			servletUtility l =new servletUtility();  
+ 			l.getViewOption(requestDataType);
+ 			out.println(l.outString);
 		}
 	}
 	
