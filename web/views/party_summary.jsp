@@ -15,7 +15,7 @@
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
         
-<vegbank:get id="party" select="party" beanName="map" pager="true"/>
+<vegbank:get id="party" select="party" beanName="map" pager="true" xwhereEnable="true"/>
 <!--Where statement removed from preceding: -->
 <logic:empty name="party-BEANLIST">
 <p>  Sorry, no parties found.</p>

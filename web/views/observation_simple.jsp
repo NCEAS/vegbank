@@ -15,7 +15,7 @@
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
  <vegbank:get id="observation" select="plotandobservation" whereNumeric="where_observation_pk" 
-     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
+     whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true"/>
 
 
 <vegbank:pager /><logic:empty name="observation-BEANLIST">

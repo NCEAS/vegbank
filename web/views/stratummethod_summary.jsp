@@ -13,7 +13,7 @@
 <h2>View VegBank Stratum Methods</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
-        <vegbank:get id="stratummethod" select="stratummethod" beanName="map" pager="true" />
+        <vegbank:get id="stratummethod" select="stratummethod" beanName="map" pager="true"  xwhereEnable="true"/>
 <!--Where statement removed from preceding: -->
 
 <vegbank:pager />

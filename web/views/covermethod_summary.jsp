@@ -13,7 +13,7 @@
 <h2>View VegBank Cover Methods</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
-        <vegbank:get id="covermethod" select="covermethod" beanName="map" pager="true" />
+        <vegbank:get id="covermethod" select="covermethod" beanName="map" pager="true"  xwhereEnable="true"/>
 <!--Where statement removed from preceding: -->
 
 <vegbank:pager />

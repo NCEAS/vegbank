@@ -14,9 +14,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2004-10-12 15:31:34 $'
-*  '$Revision: 1.22 $'
+*  '$Author: anderson $'
+*  '$Date: 2004-10-21 15:08:57 $'
+*  '$Revision: 1.23 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@
  @possibly_center@  
   <h2>View Plot-Observations</h2>
   <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
-    whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
+    whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true"/>
 
 <vegbank:pager />
 
