@@ -1,0 +1,11 @@
+BACKUP_DIR=/usr/local/backup/vegbank
+TS=`date +%d%b%G`
+BACKUP_FILE_PATH=$BACKUP_DIR/vegbank$TS.sql
+PG_DUMP=pg_dump
+SCP_USER=anderson
+REMOTE_DEST=$SCP_USER@hyperion.nceas.ucsb.edu:vbdumps
+
+PG_DUMP -U datauser --no-owner --no-privileges vegbank > $BACKUP_FILE_PATH
+
+bzip2 -f --best $BACKUP_FILE_PATH
+su -c "scp $BACKUP_FILE_PATH.bz2 $REMOTE_DEST" $SCP_USER
