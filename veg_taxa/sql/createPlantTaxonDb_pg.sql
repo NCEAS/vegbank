@@ -35,6 +35,8 @@ CREATE TABLE plantStatus
     stopDate timestamp,
     plantPartyComments varchar (22),
     PLANTPARTY_ID integer NOT NULL,
+    plantParentName varchar (200),
+plantParentConcept_id integer,
     PRIMARY KEY(PLANTSTATUS_ID)
 );
 
