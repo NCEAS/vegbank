@@ -82,6 +82,8 @@ public class DataRequestServlet extends HttpServlet
 	public ServletUtility su = new ServletUtility();
 	public dbAccess dba =new dbAccess();
 	
+	private String communityQueryPage = "http://vegbank.nceas.ucsb.edu/forms/community-query.html";
+	
 	
 	/**
 	 * constructor method
@@ -552,7 +554,7 @@ public class DataRequestServlet extends HttpServlet
 	{
 		try
 		{
-			//get the parameters needed for retuning the results
+			// get the parameters needed for retuning the results
 			String clientType = params.get("clientType").toString();
 			String requestDataFormatType  = params.get("requestDataFormatType").toString();
 			if (requestDataType.trim().equals("vegCommunity")) 
@@ -562,15 +564,10 @@ public class DataRequestServlet extends HttpServlet
 				composeCommunityQuery(params);
 				issueQuery("simpleCommunityQuery");
 				System.out.println("DataRequestServlet > Number of communities returned: "+queryOutputNum+"<br><br>");
-	
-
-		
-//				servletUtility l =new servletUtility();  
- 				//the requestDataType 'plantTaxon' specifies the style sheet
-//				l.getViewOption(requestDataType); 
-// 				out.println(l.outString);
 				
-				//use the method that handles the response	
+				// use the method that handles the response if there are any results 
+				// from the DB otherwise just return either a request for another
+				// query or nothing
 				if (queryOutputNum>=1) 
 				{
 					handleQueryResultsResponse(clientType, requestDataFormatType, out, 
@@ -578,9 +575,13 @@ public class DataRequestServlet extends HttpServlet
 				}
 				else 
 				{ 
-					out.println("<br> <b> Please try another query </b> <br>"); 
-					out.println("<a href = \"/harris/servlet/pageDirector?pageType=communityQuery\">"
-					+"return to query page</a><b>&#183;</b>"); //put in rb
+					if ( ! clientType.equals("clientApplication") )
+					{
+						out.println("<br> <b>Please try another query </b> <br>"); 
+						out.println("<a href = \""+this.communityQueryPage+"\">"
+						+"Return to community query page</a>");
+					}
+					System.out.println("DataRequestServlet > no matching communities found");
 				}
 			
 			}
