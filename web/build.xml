@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2004-03-02 21:53:25 $'
-* '$Revision: 1.90 $'
+* '$Author: anderson $'
+* '$Date: 2004-03-02 22:09:12 $'
+* '$Revision: 1.91 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -183,7 +183,7 @@
   <!--
 	* TARGET TO BUILD THE ADMIN PAGES AND DIST
 	-->
-  <target name="admin" depends="news" description="=&gt; dist the admin pages to server">
+  <target name="admin" depends="forms" description="=&gt; dist the admin pages to server">
     <copy overwrite="true" todir="${admin_server}" filtering="yes">
       <fileset dir="${admin_src}"/>
     </copy>
@@ -316,7 +316,7 @@
   <!--
 	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
 -->
-  <target name="general" depends="forms" description="=&gt; dist the general dir to server">
+  <target name="general" depends="admin" description="=&gt; dist the general dir to server">
     <copy overwrite="true" todir="${general_server}" filtering="yes">
       <fileset dir="${general_src}" includes="**.html *jsp" excludes="**/CVS* vbsummary.html get_vb_stats_temp.html"/>
     </copy>
@@ -379,7 +379,7 @@
   <target name="vbsummary" depends="design" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
     <exec dir="./general" executable="psql">
-      <arg line="-U datauser ${webapp} qa -f get_vb_stats_cmds.txt"/>
+      <arg line="-U datauser ${webapp} -f get_vb_stats_cmds.txt"/>
     </exec>
     <!-- copy summary file with filtering to general dir -->
     <copy overwrite="true" tofile="${general_server}/vbsummary.html" filtering="yes" file="./general/get_vb_stats_temp.html"/>
@@ -482,7 +482,7 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="deploy" depends="admin" description="=&gt; All files that dynamic code depends on">
+  <target name="deploy" depends="news" description="=&gt; All files that dynamic code depends on">
     <!-- Deployment uses a dependency chain:
 		init
 		tokenfiles
@@ -493,6 +493,7 @@
 		index
 		images
 		forms
+		admin 
 		general 
 		xsl
 		web
