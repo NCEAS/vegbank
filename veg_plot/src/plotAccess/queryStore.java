@@ -19,19 +19,19 @@ import java.sql.*;
 public class  queryStore
  {
 
+
 public String summaryOutput[] = new String[10000]; 
 public int summaryOutputNum; 
-public int outConnectionUses;
+////public int outConnectionUses;
 
 //hash table to store the cummulative summary results for all the plots
 public Hashtable cumulativeSummaryResultHash = new Hashtable();
 
+public String entireSinglePlotOutput[] = new String[10000];  //should always = 1
+public int entireSinglePlotOutputNum; 
+public String outPlotId[] = new String[30000];  //the output plotIds
+public int outPlotIdNum; //the number of plotId's
 
-
-utility g =new utility(); 
-//g.getDatabaseParameters("database", "query");
-Connection pconn=null; 
-DbConnectionBroker myBroker;
 
 
 
@@ -44,13 +44,11 @@ DbConnectionBroker myBroker;
  * @param conn - database connection
  *
  */
-public void getEntireSinglePlot(String plotId, Connection conn)
+public void getEntireSinglePlot(String plotId)
 {
-//at this point the query is the same as the get summary query - wait till
-//closure on data model before adjusting
 
 String entireResult=null;
-int connectionUses=1;
+
 
 String action="select";
 String statement="select PLOT_ID, AUTHORPLOTCODE, project_id, "+
@@ -83,8 +81,8 @@ int returnFieldLength=19;
 
 /** Issue the statement, and iterate the counter */
 issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
-connectionUses++;
+j.issueSelect(statement, action, returnFields, returnFieldLength);	
+////connectionUses++;
 	
 entireResult=j.outReturnFields[0];
 //System.out.println(entireResult);
@@ -111,8 +109,8 @@ int returnFieldLengthB=1;
 
 /** Issue the statement, and iterate the counter */
 issueStatement k = new issueStatement();
-k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB, conn);	
-connectionUses++;
+k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB);	
+////connectionUses++;
 	
 	
 //take the results from this query and append to the summary line
@@ -125,8 +123,6 @@ entireSinglePlotOutput[0]=entireResult; //cheat here
 entireSinglePlotOutputNum=1; //and here
 
 }//end method
-public String entireSinglePlotOutput[] = new String[10000];  //should always = 1
-public int entireSinglePlotOutputNum; 
 
 
 
@@ -141,28 +137,17 @@ public int entireSinglePlotOutputNum;
  *
  * @param plotId - an array of plotId numbers
  * @param plotIdNum - the number of elements in the above array
- * @param conn - a database connection -- get rid of this and put the conn
- * management here in this class
  */
-public void getPlotSummaryNew(String plotId[], int plotIdNum, Connection conn)
+public void getPlotSummaryNew(String plotId[], int plotIdNum)
 {
 
 //get the database management parameter settings
-g.getDatabaseParameters("database", "query");
+////g.getDatabaseParameters("database", "query");
 
 try {
 
-myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
-	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile+"QueryStore",1.0);
-conn=myBroker.getConnection(); //grab one connection from pool
-
-//this is the number of uses that an input connection has had
-int connectionUses=1;
-
-
-//this array will hold all the results before passing it back to the 
-//calling class
-String summaryResult[] = new String[10000];
+//an array to store the summary results
+String summaryResult[] = new String[30000];
 int summaryResultNum=0;
 
 //iterate through the plot id numbers
@@ -238,17 +223,10 @@ String statement="select PLOT_ID, PROJECT_ID, PLOTTYPE, SAMPLINGMETHOD, "
 	returnFields[38]="PARENTPLOT";
 	returnFields[39]="AUTHOROBSCODE";
 
-	
-	/*
-	* Call the issueSelect method which will return an array with the return
-	*/
-
+	//execute the selection request
 	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength, 
-	summaryResultHash, conn);	
+	j.issueSelect(statement, action, returnFields, returnFieldLength, summaryResultHash);	
 	
-	//iterate the connection use counter
-	connectionUses++;
 	
 	//take the results from the issueSelect and put into the array
 	//note that the j.outReturnFieldsNum should always be = 1 in this case
@@ -257,10 +235,8 @@ String statement="select PLOT_ID, PROJECT_ID, PLOTTYPE, SAMPLINGMETHOD, "
 		summaryResult[i]=j.outReturnFields[ii];
 	}
 	
-///System.out.println(">>>: "+j.outResultHash.toString());
 	
 // make a second query here to get the species specific information 
-
 action="select";
 statement="select AUTHORNAMEID, AUTHORPLOTCODE, STRATUMTYPE, PERCENTCOVER" 
 	+" from PLOTSPECIESSUM where PLOT_ID = "+currentPlotId;
@@ -276,47 +252,21 @@ statement="select AUTHORNAMEID, AUTHORPLOTCODE, STRATUMTYPE, PERCENTCOVER"
 	//issue the select statement
 	issueStatement k = new issueStatement();
 	k.issueSelect(statement, action, returnSpeciesFields, returnSpeciesFieldLength, 
-	summaryResultHash, conn);
+	summaryResultHash);
 	
-//	System.out.println("<<<K: "+k.outResultHash.toString());
+//System.out.println(currentPlotId);
 
-//iterate the connection use counter
-	connectionUses++;
 	
-	//if the connection has been used more than some arbitrary times renew conn
-	if (connectionUses > 90) {
-		
-		System.out.println("queryStore.getPlotSummaryNew - connection uses:"
-		+connectionUses);
-		
-		conn.close(); 
-		myBroker.freeConnection(conn); 
-		conn=myBroker.getConnection();
-		connectionUses=0;
-	}
-	
-	
-	//take the results from this query and append to the summary line
-	//which will ultimately be passed back to the xmlWriter to be tokenized
-	//and writen to xml - againd there should only be one line returned 
-///	for (int ii=0;ii<k.outReturnFieldsNum; ii++) {
-///		summaryResult[i]=summaryResult[i]+k.outReturnFields[ii];
-///	}
-
 // add the individual plots (represented as their own hash) and include in the
 // cumulative hash table
 cumulativeSummaryResultHash.put("plot"+i,k.outResultHash);
-	
 summaryResultNum=i;
-} //end for
-
-//at the end add to the hash the number of plots
 //System.out.println("???????> "+cumulativeSummaryResultHash.toString());
+} //end for
 
 
 summaryOutput=summaryResult;
 summaryOutputNum=summaryResultNum;
-outConnectionUses=connectionUses;
 
 } //end try
 catch (Exception e) {System.out.println("failed in querySrore.getPlotSummaryNew"
@@ -351,20 +301,11 @@ catch (Exception e) {System.out.println("failed in querySrore.getPlotSummaryNew"
  * @param conn - a database connection -- get rid of this and put the conn
  * management here in this class
  */
-public void getPlotSummary(String plotId[], int plotIdNum, Connection conn)
+public void getPlotSummary(String plotId[], int plotIdNum)
 {
 
-//get the database management parameter settings
-g.getDatabaseParameters("database", "query");
 
 try {
-myBroker = new DbConnectionBroker(g.driverClass, g.connectionString,
-	g.login,g.passwd,g.minConnections,g.maxConnections, g.logFile+"QueryStore",1.0);
-conn=myBroker.getConnection(); //grab one connection from pool
-
-//this is the number of uses that an input connection has had
-int connectionUses=1;
-
 
 //this array will hold all the results before passing it back to the 
 //calling class
@@ -409,19 +350,11 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 	
 	int returnFieldLength=19;
 
-	/*
-	* Call the issueSelect method which will return an array with the return
-	*/
 
 	issueStatement j = new issueStatement();
-	j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
+	j.issueSelect(statement, action, returnFields, returnFieldLength);	
 	
-	//iterate the connection use counter
-	connectionUses++;
-	
-	//take the results from the issueSelect and put into the array
-	//note that the j.outReturnFieldsNum should always be = 1 in this case
-	//because we are querying by a plot ID number which should be unique
+
 	for (int ii=0;ii<j.outReturnFieldsNum; ii++) {
 		summaryResult[i]=j.outReturnFields[ii];
 	}
@@ -443,20 +376,7 @@ String currentPlotId=plotId[i].replace('|',' ').trim();
 	
 	//issue the select statement
 	issueStatement k = new issueStatement();
-	k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB, conn);	
-
-	//iterate the connection use counter
-	connectionUses++;
-	System.out.println("queryStore.getPlotSummary - connection uses:"
-		+connectionUses);
-	//if the connection has been used more than some arbitrary times renew conn
-	if (connectionUses > 90) {
-		conn.close(); 
-		myBroker.freeConnection(conn); 
-		conn=myBroker.getConnection();
-		connectionUses=0;
-	}
-	
+	k.issueSelect(statement, action, returnFieldsB, returnFieldLengthB);	
 	
 	//take the results from this query and append to the summary line
 	//which will ultimately be passed back to the xmlWriter to be tokenized
@@ -470,7 +390,7 @@ summaryResultNum=i;
 
 summaryOutput=summaryResult;
 summaryOutputNum=summaryResultNum;
-outConnectionUses=connectionUses;
+////outConnectionUses=connectionUses;
 
 } //end try
 catch (Exception e) {System.out.println("failed in querySrore.getPlotSummary"
@@ -493,7 +413,7 @@ catch (Exception e) {System.out.println("failed in querySrore.getPlotSummary"
  * @param     queryElementType  the type of element used for querying the DB
  * @param     conn  a database connection that was presumedly taken from the pool 
  */
-public void getPlotId(String queryElement, String queryElementType, Connection conn)
+public void getPlotId(String queryElement, String queryElementType)
 {
 
 String queryTableName = null;  //name of the table for which the query to be made
@@ -526,7 +446,7 @@ else {System.out.println("plotQuery.getPlotId: unrecognized queryElementType: "
 //most of the database attributes are denormalized to two tables:
 // 'plotSiteSummary' and 'plotSpeciesSum'
 String action="select";
-String statement="select PLOT_ID from "+queryTableName+" where "+queryElementType
+String statement="select DISTINCT PLOT_ID from "+queryTableName+" where "+queryElementType
 +" like '%"+queryElement+"%'";
 
 
@@ -535,7 +455,7 @@ returnFields[0]="PLOT_ID";
 int returnFieldLength=1;
 
 issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
+j.issueSelect(statement, action, returnFields, returnFieldLength);	
 
 //grab the returned result set and transfer to a public array
 //ultimately these results are passed to the calling class -- if for some reason
@@ -558,7 +478,7 @@ outPlotIdNum=j.outReturnFieldsNum;
  * @param     conn  a database connection that was presumedly taken from the pool 
  */
 public void getPlotId(String queryElement, String queryElement2, 
-	String queryElementType, Connection conn)
+	String queryElementType)
 {
 String action="select";
 String statement="select PLOT_ID from PLOT where ALTVALUE >= "+queryElement+
@@ -569,7 +489,7 @@ int returnFieldLength=1;
 
 
 issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
+j.issueSelect(statement, action, returnFields, returnFieldLength);	
 
 
 //grab the returned result set and transfer to a public array
@@ -581,8 +501,9 @@ outPlotIdNum=j.outReturnFieldsNum;
 
 
 /**
- * Method to query the database to get all the plotId's usinf as input the 
- * following query elements
+ * Method to query the database to get all the plotId's using as input the 
+ * following query elements -- this query is pretty much reserved for compond
+ * queries
  * 
  * @param taxonName
  * @param state
@@ -595,31 +516,34 @@ outPlotIdNum=j.outReturnFieldsNum;
  */
 
 public void getPlotId(String taxonName, String state, String elevationMin, 
-	String elevationMax, String surfGeo, String multipleObs, String community, 
-	Connection conn)
+	String elevationMax, String surfGeo, String community)
 {
-
 
 System.out.println("queryStore.getPlotId - queryElements > \n"
 	+" taxonName: "+taxonName+" \n state: "+state+" \n elevationMin: "
 	+elevationMin+" \n elevationMax: "+elevationMax+" \n surfGeo: "+surfGeo
-	+" \n multipleObs: "+multipleObs+" \n community: "+community);
+	+" \n community: "+community);
 
 
 String action="select";
-String statement="select PLOT.PLOT_ID from PLOT where PLOT.ALTVALUE >="+elevationMin+
-" and PLOT.ALTVALUE <="+elevationMax+" and PLOT.SURFGEO like '%"+surfGeo+"%' and "
-+"PLOT.STATE like '%"+state+"%' and PLOT.CURRENTCOMMUNITY like '%"+community+"%' and PLOT_ID in"+
-	"(select PARENTPLOT  from PLOTOBSERVATION  where OBS_ID in"+
-		"(select OBS_ID from TAXONOBSERVATION where AUTHORNAMEID like '%"+taxonName+"%'))";
+//String statement="select DISTINCT PLOT.PLOT_ID from PLOT where PLOT.ALTVALUE >="+elevationMin+
+//" and PLOT.ALTVALUE <="+elevationMax+" and PLOT.SURFGEO like '%"+surfGeo+"%' and "
+//+"PLOT.STATE like '%"+state+"%' and PLOT.CURRENTCOMMUNITY like '%"+community+"%' and PLOT_ID in"+
+//	"(select PARENTPLOT  from PLOTOBSERVATION  where OBS_ID in"+
+//		"(select OBS_ID from TAXONOBSERVATION where AUTHORNAMEID like '%"+taxonName+"%'))";
+
+String statement="select DISTINCT PLOTSITESUMMARY.PLOT_ID from PLOTSITESUMMARY "
++" WHERE ALTVALUE <="+elevationMax+" and ALTVALUE >="+elevationMin+" and SURFGEO like '%"
++surfGeo+"%' and STATE like '%"+state+"%' and PLOTSITESUMMARY.PLOT_ID in"
++"(SELECT DISTINCT PLOT_ID from PLOTSPECIESSUM where AUTHORNAMEID like '%"+taxonName+"%')";
+
+
 String returnFields[]=new String[1];	
 returnFields[0]="PLOT_ID";
 int returnFieldLength=1;
 
-
-
 issueStatement j = new issueStatement();
-j.issueSelect(statement, action, returnFields, returnFieldLength, conn);	
+j.issueSelect(statement, action, returnFields, returnFieldLength);	
 
 
 //grab the returned result set and transfer to a public array
@@ -629,8 +553,6 @@ outPlotIdNum=j.outReturnFieldsNum;
 	
 } //end method
 
-public String outPlotId[] = new String[10000];  //the output plotIds
-public int outPlotIdNum; //the number of plotId's
 
 
 
