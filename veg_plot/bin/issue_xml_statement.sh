@@ -40,8 +40,8 @@ ACCESSMODULE=../lib/dbAccess.jar
 #postgres jdbc drivers
 PG_JDBC=../lib/jdbc7.0-1.2.jar
 JDBC=../lib/oracleJDBC.jar
-XALAN=../lib/xalan.jar
-XERCES=../lib/xerces.jar
+XALAN=../lib/xalan_1_2_2.jar
+XERCES=../lib/xerces_1_3_1.jar
 
 
 if [ "$OSTYPE" = "cygwin32" ] || [ "$OSTYPE" = "cygwin" ] ; then
