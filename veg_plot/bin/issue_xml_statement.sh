@@ -13,7 +13,8 @@
 if [ "$#" -ne 2 ]
 then
 	echo "USAGE: issue_xml_statement.sh <xmlfile> <action>  "
-	echo "  action may include: query, insert or verify"
+	echo "  action may include: query, insert, insertPlot"
+	echo "  or: compoundQuery, simpleCommunityQuery, verify"
 	exit 1
 fi
 
@@ -25,9 +26,9 @@ then
 	echo "issuing a database query"
 	STYLESHEET=../xml/querySpec.xsl
 else
-	if  test $ACTION = insert
+	if  test $ACTION = insertPlot
 	then
-	echo "issuing a database insert"
+	echo "issuing a database insert -- plot insertion"
 	STYLESHEET=../xml/vegPlot2001DBTrans.xsl
 else
 	echo "unrecognized command"
