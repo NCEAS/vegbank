@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-24 00:50:19 $'
- *	'$Revision: 1.21 $'
+ *	'$Date: 2004-07-28 07:42:38 $'
+ *	'$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -239,7 +239,7 @@ public class PlotQueryAction extends VegbankAction
 			DatabaseAccess da = new DatabaseAccess();
 			
 			// Get all resultsets
-			//log.debug("PLOT QUERY #1: " + query.toString());
+			log.debug("PLOT QUERY #1: " + query.toString());
 			resultSets.add( da.issueSelect(query.toString() ) );		
 			getPlantResultSets(pqForm, resultSets);
 			getCommunitiesResultSets(pqForm, resultSets);
@@ -446,7 +446,7 @@ public class PlotQueryAction extends VegbankAction
 				
 				// Have my query now run it!!
 				DatabaseAccess da = new DatabaseAccess();
-				//log.debug("PLOT QUERY (plants): " + plantQuery.toString());
+				log.debug("PLOT QUERY (plants): " + plantQuery.toString());
 				ResultSet rs2 = da.issueSelect(plantQuery.toString());
 				plantResultSets.add(rs2);
 			}
@@ -510,6 +510,7 @@ public class PlotQueryAction extends VegbankAction
 				
 				// Have my query now run it!!
 				DatabaseAccess da = new DatabaseAccess();
+				log.debug("PLOT QUERY (community): " + communityQuery.toString());
 				ResultSet rs2 = da.issueSelect(communityQuery.toString());
 				resultSets.add(rs2);
 			}

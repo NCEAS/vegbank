@@ -30,13 +30,13 @@ import org.vegbank.common.utility.PleaseWaitThread;
 import org.vegbank.dataload.XML.*;
 
 /*
- * '$Id: PleaseWaitAction.java,v 1.2 2004-07-24 00:50:46 anderson Exp $'
+ * '$Id: PleaseWaitAction.java,v 1.3 2004-07-28 07:42:38 anderson Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-24 00:50:46 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2004-07-28 07:42:38 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ public class PleaseWaitAction extends Action
 			}
 			*/
 
-			log.debug("[#" + strNumLoops + "] Got thread " + threadId + 
+			log.info("[#" + strNumLoops + "] Got thread " + threadId + 
 					" from session");
 
 			//request.setAttribute("threadId",  threadId);

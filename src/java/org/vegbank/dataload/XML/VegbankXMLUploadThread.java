@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-24 00:55:15 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-07-28 07:42:37 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,12 +54,20 @@ import org.xml.sax.XMLReader;
 public class VegbankXMLUploadThread extends PleaseWaitThread 
 {
 	private static Log log = LogFactory.getLog(VegbankXMLUploadThread.class);
+
+	// XML REFRESH rate:  10 sec per 1MB
+	private static final int SEC_PER_DELAY_XML = 10;
+	private static final int BYTES_PER_DELAY_XML = 1048576;
+
+	// ZIP REFRESH rate:  45 sec per 1MB
+	private static final int BYTES_PER_DELAY_ZIP = 1048576;
 	
+	private ActionMessages messages;
 	private VegbankXMLUpload xmlUpload;
 	private String xmlFileName;
 	private String fwdName;
 	private boolean isDone;
-	private ActionMessages messages;
+	private int delayLength = 0;
 
 	/**
 	 * <p>Set all the availible options using this constructor</code>
@@ -77,6 +85,20 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 		xmlUpload.setRectify(rectify);
 		xmlUpload.setValidate(validate);
 		xmlUpload.getXMLReader();  // sets private xr in parent
+
+		// set up the refresh rate, in # seconds delay
+		/*
+		int fileSize = xmlUpload.getUploadFileSize();
+		int fileType = xmlUpload.getUploadFileType();
+
+		if (fileType == VegbankXMLUpload.TYPE_XML) {
+			delayLength = (SEC_PER_DELAY_XML / BYTES_PER_DELAY_XML) * fileSize;
+		} else if (fileType == VegbankXMLUpload.TYPE_ZIP) {
+			delayLength = (SEC_PER_DELAY_ZIP / BYTES_PER_DELAY_ZIP) * fileSize;
+		}
+		*/
+		delayLength = 10;
+		log.debug("Delay: " + delayLength);
 
 
 		// used only in Thread
@@ -140,6 +162,7 @@ public class VegbankXMLUploadThread extends PleaseWaitThread
 	 */
 	public void prepareRequest(HttpServletRequest request) {
 		request.getSession().setAttribute("ErrorsReport",  xmlUpload.getErrors());
+		request.getSession().setAttribute("delayLength",  String.valueOf(delayLength));
 	}
 
 }

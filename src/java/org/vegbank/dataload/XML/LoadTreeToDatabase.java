@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-24 00:53:02 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2004-07-28 07:42:37 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -177,13 +177,12 @@ import org.vegbank.common.utility.Utility;
 				insertObservation(observation);
 			}
 
-			log.debug(
-				"insertion success: " + commit);
+			log.info("insertion success: " + commit);
 
 			if (commit == true && doCommit == true)
 			{				
 				writeConn.commit();
-				log.debug("Adding AccessionCodes to loaded data");
+				log.info("Adding AccessionCodes to loaded data");
 				accessionCodesAdded.addAll(this.addAllAccessionCodes());
 				writeConn.commit();
 			}
@@ -239,7 +238,7 @@ import org.vegbank.common.utility.Utility;
 			{ 
 				this.filterSQLException(se, sb.toString());     
 			}
-			log.debug("Query: '" + sb.toString() + "' got PK = " + PK);
+			//log.debug("Query: '" + sb.toString() + "' got PK = " + PK);
 			return PK;
 		}
 		
@@ -321,7 +320,7 @@ import org.vegbank.common.utility.Utility;
 					   PK = rs.getLong(1);
 			   }
 			   rs.close();
-			   log.debug("Get next PK: SQL: " + sb.toString() + " returned PK =" + PK);
+			   //log.debug("Get next PK: SQL: " + sb.toString() + " returned PK =" + PK);
 			}
 			catch (SQLException se)
 			{
@@ -389,7 +388,7 @@ import org.vegbank.common.utility.Utility;
 			// TODO: Make configurable and add user perms. 
 			if ( ! this.isAllowedToLoad(fieldValueHash) )
 			{
-				log.debug("*** User is not allowed to load " + fieldValueHash.get(TABLENAME));
+				//log.debug("*** User is not allowed to load " + fieldValueHash.get(TABLENAME));
 				return PK; // Even if empty
 			}
 			
@@ -447,16 +446,16 @@ import org.vegbank.common.utility.Utility;
 							long storedPK = inputPKTracker.getAssignedPK(tableName, stringValue.toString());
 							if (storedPK != 0) 
 							{
-								log.debug("Already entered record xmlPK "
-										+ stringValue.toString() + " into " + tableName + " using PK of "
-										+ storedPK);
+								//log.debug("Already entered record xmlPK "
+								//		+ stringValue.toString() + " into " + tableName + " using PK of "
+								//		+ storedPK);
 								return storedPK;
 							}
 							// Need to add this to the datastruture that prevents
 							// the adding duplicate fields
 							inputPKTracker.setAssignedPK(tableName, stringValue.toString(), PK);
-							log.debug("No record added for xmlPK :" + stringValue.toString()
-									+ " for table " + tableName + " adding PK now: " + PK);
+							//log.debug("No record added for xmlPK :" + stringValue.toString()
+							//		+ " for table " + tableName + " adding PK now: " + PK);
 						}
 					}
 				}
@@ -468,8 +467,10 @@ import org.vegbank.common.utility.Utility;
 				sb.append(" (" + Utility.arrayToCommaSeparatedString( fieldNames.toArray() ) + ")" );
 				sb.append(" VALUES (" + Utility.arrayToCommaSeparatedString( fieldValues.toArray() ) +")" );
 				
-				log.info("Running SQL: " + sb.toString());
-				log.info("Loaded Table : " +tableName + " with PK of " + PK);
+				//log.info("Running SQL: " + sb.toString());
+				if (tableName.equals("plot")) {
+					log.info("Loaded Table : " +tableName + " with PK of " + PK);
+				}
 				
 				Statement query = writeConn.createStatement();
 				int rowCount = query.executeUpdate(sb.toString());
@@ -488,7 +489,7 @@ import org.vegbank.common.utility.Utility;
 			
 			this.storeTableNameAndPK(tableName, PK);
 			
-			log.debug("Returning with PK :" + PK + " for table " + tableName);
+			//log.debug("Returning with PK :" + PK + " for table " + tableName);
 			return PK;
 		}
 
@@ -554,7 +555,7 @@ import org.vegbank.common.utility.Utility;
 			
 			if ( Utility.isStringNullOrEmpty( accessionCode ))
 			{
-				log.debug("Found no accessionCode for " + tableName);
+				//log.debug("Found no accessionCode for " + tableName);
 				// do nothing
 			}
 			else 
@@ -565,6 +566,7 @@ import org.vegbank.common.utility.Utility;
 				if ( PK != 0 )
 				{
 					// great got a real PK
+					/*
 					log.debug(
 						"Found PK ("
 							+ PK
@@ -572,22 +574,25 @@ import org.vegbank.common.utility.Utility;
 							+ tableName
 							+ " accessionCode: "
 							+ accessionCode);
+					*/
 				}
 				else
 				{
-					// Problem no accessionCode like that in database -- fail load
-					String errorMessage =
-						"There is no "
-							+ tableName
-							+ " with a accessionCode of value '"
-							+ accessionCode
-							+ "' in the database.";
+					/*
+					// Problem no accessionCode like that in database 
+					StringBuffer emSb = new StringBuffer(256)
+						.append("Can't find ")
+						.append(tableName)
+						.append(" with accessionCode ")
+						.append(accessionCode);
 							
-					log.debug(": " + errorMessage);
+					String errorMessage = emSb.toString();
+					log.error(": " + errorMessage);
 					//commit = false;
-					//errors.AddError(
-					//	LoadingErrors.DATABASELOADINGERROR,
-					//	errorMessage);
+					errors.AddError(
+						LoadingErrors.DATABASELOADINGERROR,
+						errorMessage);
+					*/
 				}
 			}
 //			else
@@ -602,9 +607,8 @@ import org.vegbank.common.utility.Utility;
 //				fieldValueHash.remove(Constants.ACCESSIONCODENAME);
 //			}
 			
-			log.debug(
-					"Using accessionCode " + accessionCode + " in table "
-						+ tableName + " got DB PK of " + PK);
+			//log.debug("Using accessionCode " + accessionCode + " in table "
+			//			+ tableName + " got DB PK of " + PK);
 			return PK;
 		}
 
@@ -956,7 +960,7 @@ import org.vegbank.common.utility.Utility;
 			}
 			else if ( o == null)
 			{
-				log.debug("Could not find table.. " + tableName + " as child of  table " + parentHash.get("TableName"));
+				//log.debug("Could not find table.. " + tableName + " as child of  table " + parentHash.get("TableName"));
 			}
 			else
 			{
@@ -1855,7 +1859,7 @@ import org.vegbank.common.utility.Utility;
 			if ( FKValue > 0 )
 			{
 				table.put(FKName, ""+FKValue);
-				log.debug("Set FK: " + FKName + " to: " + FKValue);
+				//log.debug("Set FK: " + FKName + " to: " + FKValue);
 			}
 		}
 
@@ -1971,7 +1975,7 @@ import org.vegbank.common.utility.Utility;
 				result = true;
 			}
 			
-			log.debug("Check allowed to load " + tableName + ": " + result);
+			//log.debug("Check allowed to load " + tableName + ": " + result);
 			return result;
 		}
 	}

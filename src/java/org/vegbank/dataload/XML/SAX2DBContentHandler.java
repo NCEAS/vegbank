@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-24 00:55:15 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-07-28 07:42:37 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 		try
 		{
 			if (keepRunning()) {
-				log.debug("inserting vegbank package...");
+				log.info("inserting vegbank package...");
 				ltdb.insertVegbankPackage( (Hashtable) ( (Vector) tmpStore.get("VegBankPackage")).firstElement());
 			}
 		}
