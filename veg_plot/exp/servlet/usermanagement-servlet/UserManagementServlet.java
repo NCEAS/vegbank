@@ -6,8 +6,8 @@ package servlet.usermanagement;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-26 18:15:59 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-04-04 03:29:39 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ public class UserManagementServlet extends HttpServlet
 	
 	//this is the html paget that will get edited by this servlet so that is
 	//appers to be a custom page for the correponding client
-	private String actionFile = "/usr/local/devtools/jakarta-tomcat_dev/webapps/vegbank/general/actions.html";
+	private String actionFile = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/general/actions.html";
 	//this is the modified page that is to be sent back to the client
 	private String outFile ="/tmp/actions_dev.html";
 	
@@ -348,7 +348,7 @@ public class UserManagementServlet extends HttpServlet
     return(htmlResults);
 	 }
 	 
-		/**
+	/**
 	 * method that takes tabular data and retuns the data in an html table 
 	 * with the appropriate markup -- this function is specific to tabularizing
 	 * the files which the user uploaded to the file system
