@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dataModel SYSTEM "db_model.dtd">
 <!-- <?xml-stylesheet type="text/xsl" href="dbmodel_2csv_5flds_version.xsl"?> -->
 <!-- <?xml-stylesheet type="text/xsl" href="model2_url2getStrings.xsl"?> -->
-<dataModel>
+<dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>1.0.1</version>
   <versionDesc>TaxonInterpretations can now be applied to stemLocation records to track taxonomy of individual stems.  Voucher fields added to TaxonInterpretation.  Irregular taxa handled in taxonObservation and taxonInterpretation, without using plant taxonomy module.</versionDesc>
   <author>M. Lee</author>
   <institution>NCEAS</institution>
   <contributor>M. Lee</contributor>
-  <description/>
+  <description>This file describes the vegbank database structure.</description>
   <date>2003-10-035T17:28:00-08:00</date>
   <entity>
     <entityName>commConcept</entityName>
@@ -23,6 +22,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -313,6 +313,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -385,6 +386,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -479,6 +481,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -683,6 +686,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -981,6 +985,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -1232,6 +1237,7 @@
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -1387,6 +1393,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -1566,6 +1573,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -1638,6 +1646,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -1732,6 +1741,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -1958,6 +1968,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -2345,6 +2356,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -2623,6 +2635,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -2894,6 +2907,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -3054,6 +3068,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -3703,6 +3718,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -3744,7 +3760,7 @@ change through time.</entitySummary>
       <attName>system</attName>
       <attLabel>System</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -3797,6 +3813,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -3860,7 +3877,7 @@ change through time.</entitySummary>
       <attName>roleType</attName>
       <attLabel>Role Type</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -3901,7 +3918,7 @@ change through time.</entitySummary>
       <attName>position</attName>
       <attLabel>Position</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -3932,6 +3949,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -3951,7 +3969,7 @@ change through time.</entitySummary>
       <attName>type</attName>
       <attLabel>Reference Party Type</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -3973,7 +3991,7 @@ change through time.</entitySummary>
       <attName>positionName</attName>
       <attLabel>Position Name</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -3995,7 +4013,7 @@ change through time.</entitySummary>
       <attName>salutation</attName>
       <attLabel>Salutation</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -4017,7 +4035,7 @@ change through time.</entitySummary>
       <attName>givenName</attName>
       <attLabel>Given Name</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -4039,7 +4057,7 @@ change through time.</entitySummary>
       <attName>surname</attName>
       <attLabel>Surname</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -4061,7 +4079,7 @@ change through time.</entitySummary>
       <attName>suffix</attName>
       <attLabel>Suffix</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -4083,7 +4101,7 @@ change through time.</entitySummary>
       <attName>organizationName</attName>
       <attLabel>Organization Name</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -4105,7 +4123,7 @@ change through time.</entitySummary>
       <attName>currentParty_ID</attName>
       <attLabel>Current Name</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
@@ -4136,6 +4154,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -4177,7 +4196,7 @@ change through time.</entitySummary>
       <attName>issn</attName>
       <attLabel>ISSN</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -4199,7 +4218,7 @@ change through time.</entitySummary>
       <attName>abbreviation</attName>
       <attLabel>Abbreviation</attLabel>
       <attModel>logical</attModel>
-      <attNulls>YES</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (250)</attType>
       <javaType type="String" relation="one"/>
       <attKey>n/a</attKey>
@@ -4230,6 +4249,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -4324,6 +4344,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -4638,6 +4659,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -4928,6 +4950,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -5088,6 +5111,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -5160,6 +5184,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -5254,6 +5279,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -5581,6 +5607,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -5763,6 +5790,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -5979,6 +6007,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -6160,6 +6189,7 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="allfields" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -6256,6 +6286,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -8976,6 +9007,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -9092,6 +9124,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -9275,6 +9308,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -9524,6 +9558,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -9618,6 +9653,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -12563,6 +12599,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -12679,6 +12716,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -12817,6 +12855,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="allfields" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -13000,6 +13039,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -13515,6 +13555,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -13653,6 +13694,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -13835,6 +13877,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -13989,6 +14032,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -14193,6 +14237,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -14331,6 +14376,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -14425,6 +14471,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -14541,6 +14588,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="int" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -14583,7 +14631,8 @@ conditions may change between resampling events.
       <attLabel>Stem Location</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
-      <attType>integer</attType>
+      <attType>Integer</attType>
+      <javaType type="int" relation="one"/>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
       <attReferences>stemLocation.stemLocation_ID</attReferences>
@@ -15151,6 +15200,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="String" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -15190,7 +15240,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>authorPlantName</attName>
-      <attLabel>Plant Name</attLabel>
+      <attLabel>Author Plant Name</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
@@ -15377,6 +15427,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="String" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -15557,6 +15608,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="String" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -15682,6 +15734,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
+      <javaType type="String" relation="one"/>
       <attKey>PK</attKey>
       <attRelType type="alltables" name="n/a"/>
       <attReferences>n/a</attReferences>
