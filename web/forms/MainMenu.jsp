@@ -12,9 +12,9 @@
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2004-10-27 03:43:29 $'
-*  '$Revision: 1.9 $'
+*  '$Author: mlee $'
+*  '$Date: 2004-11-16 01:16:51 $'
+*  '$Revision: 1.10 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -48,12 +48,9 @@
 
   <h1 align="center">
     Welcome to VegBank</h1>
-  <span class="headequiv sizelarge"></span>	
-	         
-           
+
 	<TABLE  cellpadding="0" cellspacing="0" border="0">
-	
-  
+
 		  <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
 	<TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">View Data</span></TD><td/></TR>
 	   
@@ -127,6 +124,23 @@
 		  	  
 	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@info.png" /></TD><TD>
 
+<table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
+      <span class="headequiv sizelarge">See <a href="@forms_link@vbsummary.jsp">an overview of VegBank Data</a> 
+      </span> 
+      </td> </tr>
+	  </table>
+
+<table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
+      <span class="headequiv sizelarge">VegBank <a href="@general_link@info.html">Information</a> 
+      </span> 
+      </td> </tr>
+	  </table>
+	
+	<table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
+      <span class="headequiv sizelarge">ESA Vegetation <a href="@panel_link@panel.html">Panel</a> 
+      </span> 
+      </td> </tr>
+	  </table>
 	  
 	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
@@ -145,10 +159,6 @@
     		
 
     </td> </tr>
-	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
-      <span class="headequiv sizelarge">See <a href="@forms_link@vbsummary.jsp">an overview of VegBank Data</a> 
-      </span> 
-      </td> </tr>
 	  </table>
 	  </TD></TR>
 	<TR valign="middle"><TD align="center" valign="middle">&nbsp;</TD><TD></TD>
