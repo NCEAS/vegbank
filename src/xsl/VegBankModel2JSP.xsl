@@ -4,9 +4,9 @@
  *  Authors: @author@
  *  Release: @release@
  *
- *  '$Author: farrell $'
- *  '$Date: 2004-03-01 04:43:33 $'
- *  '$Revision: 1.3 $'
+ *  '$Author: anderson $'
+ *  '$Date: 2004-04-30 13:07:53 $'
+ *  '$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -224,7 +224,7 @@
      <xsl:call-template name="rowHeader">
        <xsl:with-param name="rowLabel" select="attLabel"/>
      </xsl:call-template>
-     <td class="listRowA" size="100%"> 
+     <td class="listRowA" width="200"> 
        <span class="item">
          <bean:write 
            name='{$lcEntityName}' 
@@ -447,7 +447,7 @@
      <td><xsl:comment>Empty cell for expand contract icon</xsl:comment></td>
      <xsl:for-each select="attribute[attForms/formShow/@name='Summary'  and attForms/formShow[@name = 'Summary'] != -1]">
        <xsl:sort data-type="number" select="attForms/formShow[@name='Summary']" />
-       <th class="grey">
+       <th class="gdAttName">
          <xsl:value-of select="attName"/>
        </th>
      </xsl:for-each>
@@ -461,7 +461,7 @@
  <xsl:template name="SummaryTitleRow">
    <xsl:param name="entityName"/>
    <tr>
-     <th colspan="100" align="left"><xsl:value-of select="$entityName"/></th>
+     <th colspan="100" align="left" class="gdEntityName"><xsl:value-of select="$entityName"/></th>
    </tr>
  </xsl:template>
 
@@ -472,7 +472,7 @@
    <xsl:param name="rowLabel"/>
 
    <xsl:comment>The row label <xsl:value-of select="$rowLabel"/></xsl:comment>
-   <th valign="top" align="left">
+   <th valign="top" align="left" class="gdRowLabel" width="1">
        <xsl:value-of select="$rowLabel"/>
    </th>
  </xsl:template>
