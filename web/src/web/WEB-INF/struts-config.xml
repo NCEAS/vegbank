@@ -131,8 +131,12 @@
 		         path="/forms/AddReference.jsp"/>
 		<forward name="AddStratumMethod"
 		         path="/forms/AddStratumMethod.jsp"/>
+		<forward name="AdminMenu"
+		         path="/admin/admin_menu.jsp"/>
 		<forward name="AuthenticationException"
 		         path="/forms/AuthenticationException.jsp"/>
+		<forward name="CertificationList"
+		         path="/admin/list_certifications.jsp"/>
 		<forward name="Certification"
 		         path="/LoadCertification.do"/>
 		<forward name="CertificationException"
@@ -279,6 +283,16 @@
 			<forward name="success"
 			         path="/index.jsp"/>
 		</action>
+		<action path="/ListCertifications"
+		        type="org.vegbank.ui.struts.admin.CertificationListAction"
+		        forward="CertificationList"
+		        scope="request"
+		        validate="false">
+			<set-property property="authClass"
+			              value="org.vegbank.ui.struts.Authenticate"/>
+			<set-property property="reqRoles"
+			              value="dba"/>
+		</action>
 		<action path="/Logon"
 		        type="org.vegbank.ui.struts.LogonAction"
 		        name="LogonForm"
@@ -314,8 +328,6 @@
 			              value="reg"/>
 			<forward name="success"
 			         path="/forms/certification.jsp"/>
-			<forward name="view"
-			         path="/forms/certification-view.jsp"/>
 		</action>
 		<action path="/LoadUser"
 		        parameter="user"
@@ -398,6 +410,18 @@
 			              value="update"/>
 			<forward name="edit_user"
 			         path="/forms/edit_user.jsp"/>
+		</action>
+		<action path="/ViewCertification"
+		        type="org.vegbank.ui.struts.admin.CertificationViewAction"
+		        name="CertificationForm"
+		        scope="request"
+		        validate="false">
+			<set-property property="authClass"
+			              value="org.vegbank.ui.struts.Authenticate"/>
+			<set-property property="reqRoles"
+			              value="dba"/>
+			<forward name="view"
+			         path="/admin/view_certification.jsp"/>
 		</action>
 	</action-mappings>
 	<controller processorClass="org.vegbank.ui.struts.RequestProcessor">
