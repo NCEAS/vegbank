@@ -1,0 +1,17 @@
+#
+# Makefile for installer C code
+# $Id: Makefile_unix,v 1.1 2001-10-10 20:44:26 harris Exp $
+#
+
+GCC = gcc
+GCC_FLAGS = -mno-cygwin
+all:
+#	$(GCC) $(GCC_FLAGS) -o vegclient.exe  vegclient_nt.c
+#	$(GCC)  -o vegclient_unix.c   vegclient
+	 $(GCC)  -o PostgresManager.exe   PostgresManager.c
+jar:
+        
+
+clean:
+        
+
