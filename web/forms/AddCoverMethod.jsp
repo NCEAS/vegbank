@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2003-07-09 22:33:37 $'
-*  '$Revision: 1.4 $'
+*  '$Date: 2003-07-23 00:19:20 $'
+*  '$Revision: 1.5 $'
 *
 *
 -->
@@ -72,7 +72,7 @@ the method.
 	<font color="red">*</font></span>
 	</p>
       </td>
-      <td><html:text property="coverMethod.coverType" maxlength="30" size="30" /></td>
+      <td><html:text property="covermethod.covertype" maxlength="30" size="30" /></td>
     </tr>
     
     <tr>
@@ -83,7 +83,7 @@ the method.
 	    <td> 
 
 	      <bean:define id="list" name="AddCoverMethodForm" property="references" type="java.util.Vector"/>
-	      <html:select property="coverMethod.reference_ID">
+	      <html:select property="covermethod.reference_id">
         <option value="-1">--select a reference--</option>
 	      <html:options collection="list" labelProperty="title" property="id"/>
 	      </html:select>

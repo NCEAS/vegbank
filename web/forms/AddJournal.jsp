@@ -12,9 +12,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *  Authors: @author@
   *
-  *  '$Author: farrell $'
-  *  '$Date: 2003-05-10 00:08:25 $'
-  *  '$Revision: 1.1 $'
+  *  '$Author: mlee $'
+  *  '$Date: 2003-07-23 00:19:20 $'
+  *  '$Revision: 1.2 $'
   *
   *
 -->
@@ -119,7 +119,7 @@
 		      </p>
 		    </td>
 		    <td>
-		      <html:text property="referenceJournal.journal" size="50"/>
+		      <html:text property="referencejournal.journal" size="50"/>
 		    </td>
 		  </tr>
 		  <tr>
@@ -138,7 +138,7 @@
 		      </p>
 		    </td>
 		    <td>
-		      <html:text property="referenceJournal.issn" size="50"/>
+		      <html:text property="referencejournal.issn" size="50"/>
 		    </td>
 		  </tr>
 		  <tr>
@@ -158,7 +158,7 @@
 
 		    </td>
 		    <td>
-		      <html:text property="referenceJournal.abbreviation" size="50"/>
+		      <html:text property="referencejournal.abbreviation" size="50"/>
 		    </td>
 		  </tr>
 		  <tr>

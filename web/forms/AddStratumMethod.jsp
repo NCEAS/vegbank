@@ -11,9 +11,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: farrell $'
-  *      '$Date: 2003-05-10 00:08:25 $'
-  *  '$Revision: 1.2 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2003-07-23 00:19:20 $'
+  *  '$Revision: 1.3 $'
   *
   *
   -->
@@ -48,13 +48,13 @@
     <tr>
       <td class="formLbl">stratum Method Name:<font color="red">*</font></td>
       <td>
-        <html:text property="stratumMethod.stratumMethodName" maxlength="30" size="30"/>
+        <html:text property="stratummethod.stratummethodname" maxlength="30" size="30"/>
       </td>
     </tr>
     <tr>
       <td class="formLbl">stratum Method Description:<font color="red">*</font></td>
       <td> 
-        <html:textarea property="stratumMethod.stratumMethodDescription"  cols="60"/>
+        <html:textarea property="stratummethod.stratummethoddescription"  cols="60"/>
       </td>
     </tr>
    
@@ -65,7 +65,7 @@
 	    <td class="formLbl">reference:</td>
 	    <td>
 	      <bean:define id="list" name="AddStratumMethodForm" property="references" type="java.util.Vector"/>
-	      <html:select property="stratumMethod.reference_ID">
+	      <html:select property="stratummethod.reference_id">
 	        <option value="-1">--select a reference--</option>
 	        <html:options collection="list" labelProperty="title" property="id"/>
 	      </html:select>

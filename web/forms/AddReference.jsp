@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: farrell $'
-*  '$Date: 2003-06-09 22:34:11 $'
-*  '$Revision: 1.3 $'
+*  '$Author: mlee $'
+*  '$Date: 2003-07-23 00:19:20 $'
+*  '$Revision: 1.4 $'
 *
 *
 -->
@@ -70,7 +70,7 @@
 	    <!-- input -->
 	    <td>
 	      <p>
-	        <html:text property="reference.shortName" size="40"/>
+	        <html:text property="reference.shortname" size="40"/>
 	      </p>
 	    </td>
 	  </tr>
@@ -86,9 +86,9 @@
 	    <td class="formLbl"><p><a href="/vegbank/dbdictionary/dd~table~reference~field~referencetype~type~tableview.html">Type of Reference:</a></p></td>
 	    <td>
         <p>
-          <html:select property="reference.referenceType">
+          <html:select property="reference.referencetype">
             <option value="-1" selected="yes">--pick a referenceType--</option>
-            <html:options property="reference.referenceTypePickList"/>
+            <html:options property="reference.referencetypepicklist"/>
           </html:select>
 	      </p>
       </td>
@@ -114,7 +114,7 @@
 		</a></p></td>
 		<td>
 		  <p>
-		  <html:text property="reference.titleSuperior" size="40"/>
+		  <html:text property="reference.titlesuperior" size="40"/>
 		  </p>
 		</td>
 	      </tr>
@@ -130,7 +130,7 @@
 		</td>
 		<td>
 		  <p>
-		  <html:text property="reference.pubDate" size="40"/>
+		  <html:text property="reference.pubdate" size="40"/>
 		  </p>
 		</td>
 	      </tr>
@@ -143,7 +143,7 @@
 		</td>
 		<td>
 		  <p>
-		  <html:text property="reference.accessDate" size="40"/>
+		  <html:text property="reference.accessdate" size="40"/>
 		  </p>
 		</td>
 	      </tr>
@@ -163,7 +163,7 @@
 		</td>
 		<td>
 		  <p>
-		  <html:text property="reference.conferenceDate" size="40"/>
+		  <html:text property="reference.conferencedate" size="40"/>
 		  </p>
 		</td>
 	      </tr>
@@ -177,7 +177,7 @@
 		<td>
 		  <p>
 		  <bean:define id="list" name="AddReferenceForm" property="journals" type="java.util.Collection"/>
-		  <html:select property="reference.referenceJournal_ID">
+		  <html:select property="reference.referencejournal_id">
 		    <option value="-1" selected>--pick a journal--</option>
 		    <html:options collection="list" labelProperty="name" property="id"/>
 		  </html:select>
@@ -228,7 +228,7 @@
 	      </td>
 	      <td>
 		<p>
-		<html:text property="reference.pageRange" size="40"/>
+		<html:text property="reference.pagerange" size="40"/>
 		</p>
 	      </td>
 	    </tr>
@@ -241,7 +241,7 @@
 	      </td>
 	      <td>
 		<p>
-		<html:text property="reference.totalPages" size="40"/>
+		<html:text property="reference.totalpages" size="40"/>
 		</p>
 	      </td>
 	    </tr>
@@ -263,7 +263,7 @@
 	      </a></p></td>
 	      <td>
 		<p>
-	        <html:text property="reference.publicationPlace" size="40"/>
+	        <html:text property="reference.publicationplace" size="40"/>
 		</p>
 	      </td>
 	    </tr>
@@ -302,7 +302,7 @@
 	      </a></p></td>
 	      <td>
 		<p>
-		<html:text property="reference.numberOfVolumes" size="40"/>
+		<html:text property="reference.numberofvolumes" size="40"/>
 		</p>
 	      </td>
 	    </tr>
@@ -313,7 +313,7 @@
 	      </a></p></td>
 	      <td>
 		<p>
-		<html:text property="reference.chapterNumber" size="40"/>
+		<html:text property="reference.chapternumber" size="40"/>
 		</p>
 	      </td>
 	    </tr>
@@ -324,7 +324,7 @@
 	      </a></p></td>
 	      <td>
 		<p>
-		<html:text property="reference.reportNumber" size="40"/>
+		<html:text property="reference.reportnumber" size="40"/>
 		</p>
 	      </td>
 	    </tr>
@@ -341,7 +341,7 @@
 	      </a></p></td>
 	      <td>
 		<p>
-		<html:text property="reference.communicationType" size="40"/>
+		<html:text property="reference.communicationtype" size="40"/>
 		</p>
 	      </td>
 	    </tr>
@@ -408,7 +408,7 @@
 	      </a></p></td>
 	      <td>
 		<p>
-		<html:textarea property="reference.additionalInfo" rows="4" cols="40"/>
+		<html:textarea property="reference.additionalinfo" rows="4" cols="40"/>
 		</p>
 	      </td>
 	    </tr>
