@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *    '$Date: 2003-05-07 01:41:35 $'
- * 	'$Revision: 1.5 $'
+ *    '$Date: 2003-05-30 22:58:55 $'
+ * 	'$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ package databaseAccess;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import org.vegbank.common.utility.*;
 
 
 /**
@@ -57,7 +59,7 @@ public class  sqlMapper
 	private Hashtable metaQueryHash = new Hashtable();
 	
 	//the class that handles the sql requests
-	private issueStatement is = new issueStatement();
+	private IssueStatement is = new IssueStatement();
 	//class that stores the 'canned' sql queries
 	private queryStore qs = new queryStore();
 	
@@ -123,7 +125,7 @@ public class  sqlMapper
 			}
 			
 			// CREATE AN INSTANCE OF THE ISSUE STATEMENT CLASS
-			issueStatement is = new issueStatement();
+			IssueStatement is = new IssueStatement();
 			StringBuffer sqlBuf = new StringBuffer();
 			sqlBuf.append(nonTaxonSql);
 			

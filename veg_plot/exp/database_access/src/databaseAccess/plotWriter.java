@@ -349,7 +349,7 @@ try {
 	* relaying this
 	*/
 
-	issueStatement j = new issueStatement();
+	IssueStatement j = new IssueStatement();
 	j.issueSelect(statement, returnFields, returnFieldLength, conn);
 	
 	
@@ -393,11 +393,11 @@ try {
 		inputValue[2]=projectDescription;
 
 		//get the valueString from the method
-		issueStatement k = new issueStatement();
+		IssueStatement k = new IssueStatement();
 		k.getValueString(inputValueNum);	
 		String valueString = k.outValueString;
 		//issue the above statement
-		issueStatement l = new issueStatement();
+		IssueStatement l = new IssueStatement();
 		l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue, conn);
 	
 	}
@@ -476,11 +476,11 @@ inputValue[14]=state;
 inputValue[15]=currentCommunity;
 	System.out.println(" currentCommunity: "+currentCommunity);
 //get the valueString from the method
-issueStatement k = new issueStatement();
+IssueStatement k = new IssueStatement();
 k.getValueString(inputValueNum);	
 String valueString = k.outValueString;
 //issue the above statement
-issueStatement l = new issueStatement();
+IssueStatement l = new IssueStatement();
 l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue, conn);	
 
 }
@@ -520,11 +520,11 @@ inputValue[1]=plotId;
 inputValue[2]=plotObservationCode;
 
 //get the valueString from the method
-issueStatement k = new issueStatement();
+IssueStatement k = new IssueStatement();
 k.getValueString(inputValueNum);	
 String valueString = k.outValueString;
 //issue the above statement
-issueStatement l = new issueStatement();
+IssueStatement l = new IssueStatement();
 l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue,
 	conn);	
 	
@@ -563,11 +563,11 @@ inputValue[3]=stratumCover;
 inputValue[4]=stratumHeight;
 
 //get the valueString from the method
-issueStatement k = new issueStatement();
+IssueStatement k = new IssueStatement();
 k.getValueString(inputValueNum);	
 String valueString = k.outValueString;
 //issue the above statement
-issueStatement l = new issueStatement();
+IssueStatement l = new IssueStatement();
 l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
 	inputValue, conn);	
 				
@@ -607,11 +607,11 @@ try {
 	inputValue[3]=originalAuthority;
 
 	//get the valueString from the method
-	issueStatement k = new issueStatement();
+	IssueStatement k = new IssueStatement();
 	k.getValueString(inputValueNum);	
 	String valueString = k.outValueString;
 	//issue the above statement
-	issueStatement l = new issueStatement();
+	IssueStatement l = new IssueStatement();
 	l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
 		inputValue, conn);	
 				
@@ -642,11 +642,11 @@ inputValue[3]=stratumType;
 inputValue[4]=percentCover;
 
 //get the valueString from the method
-issueStatement k = new issueStatement();
+IssueStatement k = new IssueStatement();
 k.getValueString(inputValueNum);	
 String valueString = k.outValueString;
 //issue the above statement
-issueStatement l = new issueStatement();
+IssueStatement l = new IssueStatement();
 l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue, conn);	
 
 }
@@ -680,11 +680,11 @@ inputValue[1]=placeName;
 inputValue[2]=""+placeDesc;
 
 //get the valueString from the method
-issueStatement k = new issueStatement();
+IssueStatement k = new IssueStatement();
 k.getValueString(inputValueNum);	
 String valueString = k.outValueString;
 //issue the above statement
-issueStatement l = new issueStatement();
+IssueStatement l = new IssueStatement();
 l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
 	inputValue, conn);	
 	
@@ -774,7 +774,7 @@ private void getNextId (String projectName, String tableName) {
 	
 	//get a database connection
 	try {
-	dbConnect m = new dbConnect();
+	DBConnect m = new DBConnect();
 	m.makeConnection(conn, query);
 	conn=m.outConn;
 	query=m.outStmt;	
@@ -886,7 +886,7 @@ private void getStrataComposition (int observationId, String stratumType ) {
 	//get a database connection
 	
 	try {
-	dbConnect m = new dbConnect();
+	DBConnect m = new DBConnect();
 	m.makeConnection(conn, query);
 	conn=m.outConn;
 	query=m.outStmt;	

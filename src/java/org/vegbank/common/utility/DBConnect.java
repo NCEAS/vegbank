@@ -1,4 +1,4 @@
-package databaseAccess;
+package org.vegbank.common.utility;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
  * @author John Harris
  */
 
-public class dbConnect
+public class DBConnect
 {
 
 /*Global variables for the database connection*/
@@ -41,7 +41,7 @@ try {
 Connection testConn=null;
 Statement testQuery = null;
 	
-dbConnect m = new dbConnect();
+DBConnect m = new DBConnect();
 m.makeConnection(testConn, testQuery);
 testConn=m.outConn;
 testQuery=m.outStmt;	
@@ -69,7 +69,7 @@ public void makeConnection(Connection conn, Statement query)
 */
 
 
-dbConnect m = new dbConnect();
+DBConnect m = new DBConnect();
 m.getParameters("database.properties"); //assume that the parameters file is local to the class
 
 /*make the database connections*/

@@ -107,11 +107,11 @@ public class AsciiDataLoader
 						getDataValue(dataVector, row, i, delimeterString);
 				}
 				//get the valueString from the method
-				issueStatement k = new issueStatement();
+				IssueStatement k = new IssueStatement();
 				k.getValueString(inputValueNum);
 				String valueString = k.outValueString;
 
-				issueStatement j = new issueStatement();
+				IssueStatement j = new IssueStatement();
 				j.issueInsert(
 					insertString,
 					attributeString,

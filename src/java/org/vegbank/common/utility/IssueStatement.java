@@ -1,4 +1,4 @@
-package databaseAccess;
+package org.vegbank.common.utility;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.vegbank.common.utility.*;
 
 /**
  * This class will take, as input, a sql statement string and an action,
@@ -17,7 +16,7 @@ import org.vegbank.common.utility.*;
  * @author John Harris
  */
 
-public class issueStatement
+public class IssueStatement
 {
 
 	//Global variables for the database connection
@@ -68,7 +67,7 @@ public class issueStatement
 			 * values
 			 */
 
-			issueStatement i = new issueStatement();
+			IssueStatement i = new IssueStatement();
 			i.issueSelect(statement, returnFields, returnFieldLength);
 
 			//grab the returned array and print to the screen
@@ -93,7 +92,7 @@ public class issueStatement
 			inputValue[1] = "VENTURA";
 
 			//String insertString , String attributeString, String valueString int inputValueNum, String[] inputValue)
-			issueStatement j = new issueStatement();
+			IssueStatement j = new IssueStatement();
 			j.issueInsert(
 				insertString,
 				attributeString,
@@ -627,7 +626,7 @@ public class issueStatement
 		*/
 		try
 		{
-			dbConnect m = new dbConnect();
+			DBConnect m = new DBConnect();
 			m.makeConnection(conn, query);
 			//	System.out.println("Opening db connection by calling dbConnect from \n"
 			//	+"issueStatement.issueInsert");

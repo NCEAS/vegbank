@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-05-16 02:46:58 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-05-30 22:58:55 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.vegbank.common.utility.DatabaseAccess;
+import org.vegbank.common.utility.IssueStatement;
 
-import databaseAccess.issueStatement;
 
 
 /**
@@ -104,7 +104,7 @@ public class QueryReferences  implements VegbankCommand
 		String[] fields = {"reference_id", "title"}; 
 		
 		Hashtable references = new Hashtable();
-		issueStatement is = new issueStatement();
+		IssueStatement is = new IssueStatement();
 		is.issueSelect("select reference_id, title from reference", fields, references);
 		
 		return null;

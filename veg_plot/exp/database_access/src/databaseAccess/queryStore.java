@@ -10,8 +10,8 @@
  *
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-05-07 01:41:35 $'
- *  '$Revision: 1.4 $'
+ *  '$Date: 2003-05-30 22:58:55 $'
+ *  '$Revision: 1.5 $'
  *
  *
  */
@@ -21,6 +21,8 @@ package databaseAccess;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import org.vegbank.common.utility.*;
 
 public class queryStore
 {
@@ -195,7 +197,7 @@ public class queryStore
 				returnFields[39]="AUTHOROBSCODE";
 
 				//execute the selection request
-				issueStatement j = new issueStatement();
+				IssueStatement j = new IssueStatement();
 				j.issueSelect(statement, returnFields, summaryResultHash);	
 			
 				
@@ -223,7 +225,7 @@ public class queryStore
 			returnSpeciesFields[3]="PERCENTCOVER";
 	
 			//issue the select statement
-			issueStatement k = new issueStatement();
+			IssueStatement k = new IssueStatement();
 			k.issueSelect(statement, returnSpeciesFields, summaryResultHash);
 	
 
@@ -311,7 +313,7 @@ public void getPlotSummary(String plotId[], int plotIdNum)
 			returnFields[17]="STATE";
 			returnFields[18]="CURRENTCOMMUNITY";
 			int returnFieldLength=19;
-			issueStatement j = new issueStatement();
+			IssueStatement j = new IssueStatement();
 			j.issueSelect(statement, returnFields, returnFieldLength);	
 			
 			for (int ii=0;ii<j.outReturnFieldsNum; ii++) 
@@ -331,7 +333,7 @@ public void getPlotSummary(String plotId[], int plotIdNum)
 			int returnFieldLengthB=1;
 	
 			//issue the select statement
-			issueStatement k = new issueStatement();
+			IssueStatement k = new IssueStatement();
 			k.issueSelect(statement, returnFieldsB, returnFieldLengthB);	
 	
 			//take the results from this query and append to the summary line
@@ -468,7 +470,7 @@ public void getPlotId(String queryElement, String queryElementType)
 	returnFields[0]="PLOT_ID";
 	int returnFieldLength=1;
 	// ISSUE THE STATEMENT TO THE DATABASE
-	issueStatement j = new issueStatement();
+	IssueStatement j = new IssueStatement();
 	j.issueSelect(sb.toString(), returnFields, returnFieldLength);	
 
 	//grab the returned result set and transfer to a public array
@@ -505,7 +507,7 @@ public void getPlotId(String queryElement, String queryElementType)
 			
 			System.out.println("queryStore > " + statement );
 
-			issueStatement j = new issueStatement();
+			IssueStatement j = new IssueStatement();
 			j.issueSelect(statement, returnFields, returnFieldLength);	
 
 
@@ -594,7 +596,7 @@ public void getPlotId(String queryElement, String queryElementType)
 		
 			System.out.println("queryStore statement: > " + statement );
 		
-			issueStatement j = new issueStatement();
+			IssueStatement j = new IssueStatement();
 			j.issueSelect(statement, returnFields, returnFieldLength);	
 
 			//grab the returned result set and transfer to a public array

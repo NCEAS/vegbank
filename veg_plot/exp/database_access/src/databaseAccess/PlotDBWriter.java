@@ -463,7 +463,7 @@ try {
 	int returnFieldLength=1;
 
 
-	issueStatement j = new issueStatement();
+	IssueStatement j = new IssueStatement();
 	j.issueSelect(statement, returnFields, returnFieldLength, conn);
 	
 	
@@ -518,11 +518,11 @@ try {
 		inputValue[2]=projectDescription;
 
 		//get the valueString from the method
-		issueStatement k = new issueStatement();
+		IssueStatement k = new IssueStatement();
 		k.getValueString(inputValueNum);	
 		String valueString = k.outValueString;
 		//issue the above statement
-		issueStatement l = new issueStatement();
+		IssueStatement l = new IssueStatement();
 		l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue, conn);
 	
 	}
@@ -617,11 +617,11 @@ inputValue[22]=slopeAspect;
 	System.out.println(" slopeAspect: "+ slopeAspect );
 
 //get the valueString from the method
-issueStatement k = new issueStatement();
+IssueStatement k = new IssueStatement();
 k.getValueString(inputValueNum);	
 String valueString = k.outValueString;
 //issue the above statement
-issueStatement l = new issueStatement();
+IssueStatement l = new IssueStatement();
 l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue, conn);	
 
 }
@@ -660,11 +660,11 @@ inputValue[1]=plotId;
 inputValue[2]=plotObservationCode;
 
 //get the valueString from the method
-issueStatement k = new issueStatement();
+IssueStatement k = new IssueStatement();
 k.getValueString(inputValueNum);	
 String valueString = k.outValueString;
 //issue the above statement
-issueStatement l = new issueStatement();
+IssueStatement l = new IssueStatement();
 l.issueInsert(insertString, attributeString, valueString, inputValueNum, inputValue,
 	conn);	
 	
@@ -705,11 +705,11 @@ inputValue[3]=stratumCover;
 inputValue[4]=stratumHeight;
 
 //get the valueString from the method
-issueStatement k = new issueStatement();
+IssueStatement k = new IssueStatement();
 k.getValueString(inputValueNum);	
 String valueString = k.outValueString;
 //issue the above statement
-issueStatement l = new issueStatement();
+IssueStatement l = new IssueStatement();
 l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
 	inputValue, conn);	
 				
@@ -753,7 +753,7 @@ private void putTaxonObservation (Connection conn)
   inputValue[3]=originalAuthority;
 
   //get the valueString from the method
-  issueStatement k = new issueStatement();
+  IssueStatement k = new IssueStatement();
   k.getValueString(inputValueNum);	
   String valueString = k.outValueString;
 	
@@ -766,7 +766,7 @@ private void putTaxonObservation (Connection conn)
 	
 	
   //issue the above statement
-  issueStatement l = new issueStatement();
+  IssueStatement l = new IssueStatement();
   l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
 	inputValue, conn);	
  }
@@ -804,11 +804,11 @@ private void putStrataComposition (Connection conn)
 	inputValue[3]=percentCover;
 
 	//get the valueString from the method
-	issueStatement k = new issueStatement();
+	IssueStatement k = new IssueStatement();
 	k.getValueString(inputValueNum);	
 	String valueString = k.outValueString;
 
-	issueStatement l = new issueStatement();
+	IssueStatement l = new IssueStatement();
 	l.issueInsert(insertString, attributeString, valueString, inputValueNum, 
 	inputValue, conn);	
 
@@ -942,7 +942,7 @@ catch (Exception e) {System.out.println("failed in PlotDBWriter.getNextId trying
 		returnFields[0]="STRATA_ID";	
 
 
-		issueStatement j = new issueStatement();
+		IssueStatement j = new IssueStatement();
 		j.issueSelect(statement, returnFields, returnFieldLength, pconn);	
 
 		//return the strataId
