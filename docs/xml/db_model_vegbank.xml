@@ -135,6 +135,21 @@
       </attForms>
       <update>1.0.1</update>
     </attribute>
+    <attribute>
+      <attName>d_obscount</attName>
+      <attLabel>Plot Count</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Number of observations associated with this entity.</attDefinition>
+      <update>1.0.3</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>commCorrelation</entityName>
@@ -1117,6 +1132,21 @@
         <formShow name="csvvegbranch">40</formShow>
       </attForms>
       <update>1.0.1</update>
+    </attribute>
+    <attribute>
+      <attName>d_obscount</attName>
+      <attLabel>Plot Count</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Number of observations associated with this entity.</attDefinition>
+      <update>1.0.3</update>
     </attribute>
   </entity>
   <entity>
@@ -5402,6 +5432,21 @@ change through time.</entitySummary>
       </attForms>
       <update>1.0.2</update>
     </attribute>
+    <attribute>
+      <attName>d_obscount</attName>
+      <attLabel>Plot Count</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Number of observations associated with this entity.</attDefinition>
+      <update>1.0.3</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>namedPlaceCorrelation</entityName>
@@ -9145,6 +9190,21 @@ conditions may change between resampling events.
       <attForms/>
       <update>1.0.2</update>
     </attribute>
+    <attribute>
+      <attName>d_obscount</attName>
+      <attLabel>Plot Count</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Number of observations associated with this entity.</attDefinition>
+      <update>1.0.3</update>
+    </attribute>
   </entity>
   <entity>
     <entityName>partyMember</entityName>
@@ -12341,6 +12401,21 @@ conditions may change between resampling events.
         <formShow name="csvvegbranch">339</formShow>
       </attForms>
       <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>d_obscount</attName>
+      <attLabel>Plot Count</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Number of observations associated with this entity.</attDefinition>
+      <update>1.0.3</update>
     </attribute>
   </entity>
   <entity>

@@ -201,7 +201,7 @@ CREATE VIEW view_project_countobs AS
       accessioncode, 
       startdate, 
       stopdate , 
-      (select count(1) FROM view_notemb_observation AS observation WHERE observation.project_id=project.project_id) as countobs 
+      (d_obscount) as countobs 
        FROM project ORDER BY countObs DESC ;
 
 
@@ -219,9 +219,10 @@ CREATE VIEW view_countspecies_perobs_pre AS
   GROUP BY plantConcept_ID, observation_ID;
   
 CREATE VIEW view_countspecies_perobs AS
-  SELECT plantConcept_ID, count(1) as countObs FROM view_countspecies_perobs_pre
-  GROUP BY plantConcept_ID
-  ORDER BY count(1) DESC;
+  SELECT plantConcept_ID, d_obscount as countObs FROM plantConcept
+  ORDER BY countObs DESC;
+  
+
   
 -- get grouped list of observation and plantConcepts, then group them by plantconcept and order them.
 CREATE VIEW view_countcomms_perobs_pre AS 
@@ -230,6 +231,5 @@ CREATE VIEW view_countcomms_perobs_pre AS
   GROUP BY commConcept_ID, observation_ID;
   
 CREATE VIEW view_countcomms_perobs AS
-  SELECT commConcept_ID, count(1) as countObs FROM view_countcomms_perobs_pre
-  GROUP BY commConcept_ID
-  ORDER BY count(1) DESC;
+  SELECT commConcept_ID, d_obscount as countObs FROM commconcept
+  ORDER BY countObs DESC;
