@@ -33,8 +33,8 @@ import databaseAccess.utility;
  *	
  * <br> <br>
  *  '$Author: harris $'
- *  '$Date: 2003-01-03 18:34:20 $'
- * 	'$Revision: 1.17 $'
+ *  '$Date: 2003-01-04 02:11:17 $'
+ * 	'$Revision: 1.18 $'
  *
  *
  */
@@ -61,8 +61,6 @@ public class DataSourceImpl extends UnicastRemoteObject
 		 super();
 		 try
 		 {
-				
-				
 				System.out.println("DataSourceImpl >  starting the rmi server:  " );
 				// test the vegbank systrem
 				System.out.println("DataSourceImpl >  testing the VegBank services:  " );
