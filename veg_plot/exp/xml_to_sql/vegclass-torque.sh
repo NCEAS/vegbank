@@ -1,33 +1,28 @@
 #!/bin/sh
 
-
-# SHELL SCRIPT TO CONVERT THE XML DOCUMENTATION OF THE 
-# VEGCLASS DATABASE PROJECT INTO HTML THAT WILL BE DISPLAYED 
-# ON THE WEB SERVER
-
- 
-ls -lt vegPlot*.xml | awk '{print $9}' > list
-
-cat list |
-while read line
-do
-
-echo $line | sed 's/.xml/.html/g' > tmp
-read OUTFILE<tmp
-rm tmp
+# SHELL SCRIPT THAT WILL CONVERT THE VEGCLASS-CONSISTENT XML
+# TO KAJARTA-TORQUE CONSISTENT XML FOR CONVERSION TO RDBMS 
+# SPECIFIC SQL
+#
+#     '$Author: harris $'
+#     '$Date: 2001-10-17 17:11:12 $'
+#     '$Revision: 1.2 $'
 
 
-#update the date attribute in the xml and then write it to the rtest file
-#java  updateXML $line test
-cp $line test
+PROJECT=./data/vegclass_doc/vegPlotProject.xml
+PLOT=./data/vegclass_doc/vegPlotPlot.xml
+PLOTDOCDIR=./data/vegclass_doc/
 
-#convert to the html
-java -classpath $CLASSPATH:./lib/xalan_1_2_2.jar:./lib/xerces_1_3_1.jar  org.apache.xalan.xslt.Process -IN test  -XSL vegclass-turbine.xsl  -out $OUTFILE
+java -classpath ./lib/xalan_1_2_2.jar:./lib/xerces_1_4.jar:./lib/xmltosql.jar \
+VegclassXMLDoc  $PLOTDOCDIR
 
 
-#move the html files to their respective directories
-mv $OUTFILE ./turbine/
 
-done
+#java -classpath ./lib/xalan_1_2_2.jar:./lib/xerces_1_4.jar:./lib/xmltosql.jar \
+#VegclassXMLDoc  $PLOT
+#cat test_fix.xml >> ./data/torque_xml/nvc-database.xml
 
-rm list test
+
+cp test_fix.xml ./torque/schema/project-schema.xml
+
+
