@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $' 
- *	'$Date: 2003-10-24 05:27:21 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-11-25 19:34:40 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 package org.vegbank.ui.struts;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,9 +35,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.vegbank.common.model.Stratummethod;
 import org.vegbank.common.model.Stratumtype;
-import org.vegbank.common.utility.ObjectToDB;
+import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.Utility;
-
 
 /**
  * @author farrell
@@ -45,80 +44,83 @@ import org.vegbank.common.utility.Utility;
 
 public class AddStratumMethodAction extends Action
 {
-	
 
-	public ActionForward execute( 
+	public ActionForward execute(
 		ActionMapping mapping,
 		ActionForm form,
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
 		System.out.println(" In action AddStratumMethodAction");
-		
-		ActionErrors errors = new ActionErrors();		
+
+		ActionErrors errors = new ActionErrors();
 
 		// Get the form
 		AddStratumMethodForm stratumForm = (AddStratumMethodForm) form;
-		
+
 		Stratummethod sm = stratumForm.getStratumMethod();
-				
-		
+
 		// handle the StratumType sub form
 		String[] stratumIndex = stratumForm.getStratumIndex();
 		String[] stratumName = stratumForm.getStratumName();
 		String[] stratumDescription = stratumForm.getStratumDescription();
-	
-			
-		for (int i=0; i<stratumIndex.length; i++)
+
+		for (int i = 0; i < stratumIndex.length; i++)
 		{
 			// stratumIndex and stratumName must exist
-			String[] stringstoCheck = {stratumIndex[i], stratumName[i]};
-			if ( ! Utility.isAnyStringNullorEmpty( stringstoCheck ) )
-			{			
-				Stratumtype st =  new Stratumtype();
-				
+			String[] stringstoCheck = { stratumIndex[i], stratumName[i] };
+			if (!Utility.isAnyStringNullorEmpty(stringstoCheck))
+			{
+				Stratumtype st = new Stratumtype();
+
 				st.setStratumdescription(stratumDescription[i]);
 				st.setStratumindex(stratumIndex[i]);
 				st.setStratumname(stratumName[i]);
-				
+
 				sm.addstratummethod_stratumtype(st);
 			}
-      else 
-      {
-        // Check for errors
-        String[] stringsToCheck = {stratumIndex[i], stratumName[i], stratumDescription[i] };
-        if ( Utility.isAnyStringNotNullorEmpty(stringsToCheck) )
-        {
-          errors.add(ActionErrors.GLOBAL_ERROR ,
-            new ActionError("errors.required.whenadding", "stratumType", "stratumName and stratumIndex") 
-          );
-        }
-      }
+			else
+			{
+				// Check for errors
+				String[] stringsToCheck =
+					{ stratumIndex[i], stratumName[i], stratumDescription[i] };
+				if (Utility.isAnyStringNotNullorEmpty(stringsToCheck))
+				{
+					errors.add(
+						ActionErrors.GLOBAL_ERROR,
+						new ActionError(
+							"errors.required.whenadding",
+							"stratumType",
+							"stratumName and stratumIndex"));
+				}
+			}
 		}
-		
+
 		// Write this sucker to the database if all clear        
-    if (errors.isEmpty())
-    {
-		  ObjectToDB sm2db = new ObjectToDB(sm);
-  		try
-	  	{
-		  	sm2db.insert();
-  		}
-	  	catch (Exception e)
-		  {
-			  errors.add(ActionErrors.GLOBAL_ERROR , 
-				  new ActionError("errors.database", e.getMessage()) );
-  			System.out.println("AddJournalAction > Added an error: " + e.getMessage() );
-	  		e.printStackTrace();
-		  }	
-	  }
-    
-		if (!errors.isEmpty()) 
+		if (errors.isEmpty())
+		{
+			try
+			{
+				VBModelBeanToDB sm2db = new VBModelBeanToDB();
+				sm2db.insert(sm);
+			}
+			catch (Exception e)
+			{
+				errors.add(
+					ActionErrors.GLOBAL_ERROR,
+					new ActionError("errors.database", e.getMessage()));
+				System.out.println(
+					"AddJournalAction > Added an error: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		if (!errors.isEmpty())
 		{
 			saveErrors(request, errors);
 			return (mapping.getInputForward());
 		}
-		
-		return mapping.findForward("success");	
+
+		return mapping.findForward("success");
 	}
 }

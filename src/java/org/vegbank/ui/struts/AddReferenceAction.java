@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-24 05:27:21 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-11-25 19:34:40 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ import org.vegbank.common.model.Reference;
 import org.vegbank.common.model.Referenceparty;
 import org.vegbank.common.model.Referencealtident;
 import org.vegbank.common.model.Referencecontributor;
-import org.vegbank.common.utility.ObjectToDB;
+import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.Utility;
 
 /**
@@ -90,11 +90,12 @@ public class AddReferenceAction extends Action
 				Referencecontributor rc =
 					(Referencecontributor) refContribs.elementAt(i);
 
+				long partyId = 0;
 				// Must add rp to database to get pk
-				ObjectToDB rp2db = new ObjectToDB(rp);
 				try
 				{
-					rp2db.insert();
+					VBModelBeanToDB rp2db = new VBModelBeanToDB();
+					partyId = rp2db.insert(rp);
 				}
 				catch (Exception e)
 				{
@@ -107,7 +108,7 @@ public class AddReferenceAction extends Action
 					e.printStackTrace();
 				}
 
-				int partyId = rp2db.getPrimaryKey();
+
 
 				rc.setReferenceparty_id(partyId);
 
@@ -119,10 +120,10 @@ public class AddReferenceAction extends Action
 		if (errors.isEmpty())
 		{
 			// Write the reference to the database
-			ObjectToDB ref2db = new ObjectToDB(ref);
 			try
 			{
-				ref2db.insert();
+				VBModelBeanToDB ref2db = new VBModelBeanToDB();
+				ref2db.insert(ref);
 			}
 			catch (Exception e)
 			{

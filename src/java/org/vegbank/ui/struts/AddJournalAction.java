@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-07-21 17:52:13 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-11-25 19:34:40 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 package org.vegbank.ui.struts;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +34,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.vegbank.common.model.Referencejournal;
-import org.vegbank.common.utility.ObjectToDB;
+import org.vegbank.common.utility.VBModelBeanToDB;
 
 /**
  * @author farrell
@@ -50,34 +50,36 @@ public class AddJournalAction extends Action
 		HttpServletResponse response)
 	{
 		System.out.println(" In action AddJournalAction");
-		ActionErrors errors = new ActionErrors();		
-		
+		ActionErrors errors = new ActionErrors();
+
 		// Get the form
 		AddJournalForm journalForm = (AddJournalForm) form;
-		
+
 		Referencejournal jRef = journalForm.getReferenceJournal();
 
 		// Write this sucker to the database
-		ObjectToDB jRef2db = new ObjectToDB(jRef);
 		try
 		{
-			jRef2db.insert();
+			VBModelBeanToDB jRef2db = new VBModelBeanToDB();
+			jRef2db.insert(jRef);
 		}
 		catch (Exception e)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR , 
-												new ActionError("errors.database", e.getMessage()) );
-			System.out.println("AddJournalAction > Added an error: " + e.getMessage() );
+			errors.add(
+				ActionErrors.GLOBAL_ERROR,
+				new ActionError("errors.database", e.getMessage()));
+			System.out.println(
+				"AddJournalAction > Added an error: " + e.getMessage());
 			e.printStackTrace();
-		}		
-		
-		if (!errors.isEmpty()) 
+		}
+
+		if (!errors.isEmpty())
 		{
 			saveErrors(request, errors);
 			return (mapping.getInputForward());
 		}
-		
-		return mapping.findForward("success");	
+
+		return mapping.findForward("success");
 	}
 
 }

@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-24 05:27:21 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-11-25 19:34:40 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ import org.apache.struts.action.ActionMapping;
 import org.vegbank.common.model.Address;
 import org.vegbank.common.model.Party;
 import org.vegbank.common.model.Telephone;
-import org.vegbank.common.utility.ObjectToDB;
+import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.Utility;
 
 /**
@@ -103,10 +103,10 @@ public class AddPartyAction extends Action
 		// Write to the db if all clear
 		if (errors.isEmpty())
 		{
-			ObjectToDB party2db = new ObjectToDB(party);
 			try
 			{
-				party2db.insert();
+				VBModelBeanToDB party2db = new VBModelBeanToDB();
+				party2db.insert(party);
 			}
 			catch (Exception e)
 			{
