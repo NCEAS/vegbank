@@ -22,13 +22,13 @@
  <xsl:output method="html"/>
   <xsl:template match="/vegPlot">
 
-  
+<!--  
   <html>
       <head>
-      <!--
+      
              <link rel="stylesheet" type="text/css" 
               href="@web-base-url@/default.css" />
-        -->
+        
 	</head>
   	
 	<body>
@@ -36,7 +36,7 @@
 
 	</body>
  </html>
-
+-->
 
 
 <html>
@@ -133,24 +133,27 @@ return "Check All"; }
   			<xsl:value-of select="plotId"/>
 			</xsl:variable>
 
-               		<a>author code: <xsl:value-of select="authorPlotCode"/></a>
+             
+			<a> <b>plot code: </b> <xsl:value-of select="authorPlotCode"/> <br> </br></a>
 			<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
 			<xsl:number value="position()"/>
 			</td>
         	
 	     		<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
-             		<a>State: <xsl:value-of select="state"/>;  </a>
-	     		<a>latitude: <xsl:value-of select="plotOriginLat"/>;  </a>
-             		<a>longitide: <xsl:value-of select="plotOriginLong"/>;  </a>
-	     		</td>
+             	<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
+	     		<a><b>slopeAspect:</b> <xsl:value-of select="slopeAspect"/> <br></br> </a>
+             	<a><b>slopeGradient:</b> <xsl:value-of select="slopeGradient"/>  <br></br></a>
+	     		<a><b>slopePosition:</b> <xsl:value-of select="slopePosition"/> <br> </br> </a>
+				<a><b>hydrologicRegime:</b> <xsl:value-of select="hydrologicRegime"/>  </a>
+				</td>
 	     
 	     		<td colspan="1"  bgcolor="{$evenRowColor}" align="left" valign="top">
-               		Alliance: <xsl:value-of select="currentCommunity"/>
+               		<b>community Name:</b> <xsl:value-of select="currentCommunity"/>
              		</td>
 	 
 	    		<td colspan="1" bgcolor="{$evenRowColor}" align="left" valign="top">
                		<i><FONT SIZE="-1" FACE="arial">
-			Top species: <xsl:for-each select="plotObservation/taxonObservations">
+			<b>Top species:</b> <xsl:for-each select="plotObservation/taxonObservations">
 	       		<xsl:value-of select="authNameId"/>; </xsl:for-each>
 	 		</FONT></i> 
              		</td>
@@ -169,24 +172,26 @@ return "Check All"; }
   			<xsl:value-of select="plotId"/>
 			</xsl:variable>
 			
-			<a>author code: <xsl:value-of select="authorPlotCode"/></a>
-             		<input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
+			<a> <b>plot code: </b> <xsl:value-of select="authorPlotCode"/> <br> </br></a>
+            <input name="plotName" type="checkbox" value="{$PLOTID}" checked="yes">download</input>
 			<xsl:number value="position()"/>
 			</td>
         	
 	     		<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
-             		<a>State: <xsl:value-of select="state"/>;  </a>
-	     		<a>latitude: <xsl:value-of select="plotOriginLat"/>;  </a>
-             		<a>longitide: <xsl:value-of select="plotOriginLong"/>;  </a>
+             	<a><b>State:</b> <xsl:value-of select="state"/>  <br></br> </a>
+	     		<a><b>slopeAspect:</b> <xsl:value-of select="slopeAspect"/> <br></br> </a>
+             	<a><b>slopeGradient:</b> <xsl:value-of select="slopeGradient"/>  <br></br></a>
+	     		<a><b>slopePosition:</b> <xsl:value-of select="slopePosition"/> <br> </br> </a>
+				<a><b>hydrologicRegime:</b> <xsl:value-of select="hydrologicRegime"/>  </a>
 	     		</td>
 	     
 	     		<td colspan="1"  bgcolor="{$oddRowColor}" align="left" valign="top">
-               		Alliance: <xsl:value-of select="currentCommunity"/>
+               		<b>community Name:</b> <xsl:value-of select="currentCommunity"/>
              		</td>
 	 		
 	    		<td colspan="1" bgcolor="{$oddRowColor}" align="left" valign="top">
                		<i><FONT SIZE="-1" FACE="arial">
-			Top species: <xsl:for-each select="plotObservation/taxonObservations">
+			<b>Top species:</b> <xsl:for-each select="plotObservation/taxonObservations">
 	       		<xsl:value-of select="authNameId"/>; </xsl:for-each>
              		</FONT></i>
 			</td>

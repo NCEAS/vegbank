@@ -105,6 +105,15 @@
 <xsl:text>plot.origLong|</xsl:text> <!-- longitude -->
 	<xsl:value-of select="project/plot/origLong"/>
 	<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+<xsl:text>plot.xCoord|</xsl:text> <!-- xCoord -->
+	<xsl:value-of select="project/plot/xCoord"/>
+	<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+<xsl:text>plot.yCoord|</xsl:text> <!-- yCoord -->
+	<xsl:value-of select="project/plot/yCoord"/>
+	<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
+<xsl:text>plot.coordType|</xsl:text> <!-- coordType -->
+	<xsl:value-of select="project/plot/coordType"/>
+	<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
 <xsl:text>plot.plotShape|</xsl:text> <!--plot shape -->
 	<xsl:value-of select="project/plot/plotShape"/>
 	<xsl:text disable-output-escaping="yes"> &#xA; </xsl:text>
