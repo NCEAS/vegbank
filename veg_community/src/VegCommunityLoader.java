@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-22 03:07:51 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-02-22 22:36:46 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,6 +118,11 @@ public class VegCommunityLoader
 			int commStatusId = insertCommunityStatus(commConceptId, "accepted", 
 			"01-JAN-1999", partyId, refId );
 			
+			//insert the usage data
+			insertCommunityUsage( commNameId, commConceptId, partyId, "standard"
+			, "01-JAN-1999");
+			
+			
 			if (this.commit == true)
 			{
 				conn.commit();
@@ -133,6 +138,41 @@ public class VegCommunityLoader
 			 e.printStackTrace();
 		 }
 	 }
+	 
+	   /**
+	  * method to insert data into the commname table
+		*/
+		private int insertCommunityUsage(int commNameId, int commConceptId, 
+		int commPartyId, String commNameStatus, String usageStart)
+	  {
+		 int usageId = 0; 
+		 try
+		 {
+				StringBuffer sb = new StringBuffer();
+				//insert the VALS
+				sb.append("INSERT into COMMUSAGE( commname_id, commconcept_id, "
+				+" commparty_id, commNameStatus, usageStart) "
+				+" values(?,?,?,?,?)"); 
+				PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
+  			// Bind the values to the query and execute it
+  			pstmt.setInt(1, commNameId);
+				pstmt.setInt(2, commConceptId);
+				pstmt.setInt(3, commPartyId);
+				pstmt.setString(4, commNameStatus);
+				pstmt.setString(5, usageStart);
+				//execute the p statement
+  			pstmt.execute();
+  			pstmt.close();
+		 }
+			catch (Exception e)
+		 {
+			 System.out.println("VegCommunityLoader > Exception: " + e.getMessage() );
+			 e.printStackTrace();
+		 }
+		 return(usageId);
+	 }
+	 
+	 
 	 
 	  /**
 	  * method to insert data into the commname table
