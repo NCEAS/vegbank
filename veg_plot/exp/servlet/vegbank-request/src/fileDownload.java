@@ -4,6 +4,9 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import servlet.util.ServletUtility;
+import servlet.util.GetURL;
+
 /**
  * Servlet to perform file downloading operations 
  *
@@ -149,7 +152,7 @@ try
 		//request the plots from the database  
 		dataRequester(plotRequestList, atomicResultSet, cummulativeResultSet, 
 			"entirePlot");
-
+		
 		//transform the data to the appropriate data type 
 
 		//compress the file to the appropriate compression type
@@ -157,7 +160,7 @@ try
 
 		//redirect the user to the appropriate file - if the debugger is off == 0
 		//this has to be fixed
-		response.sendRedirect("/harris/downloads/"+fileName);
+		response.sendRedirect("/downloads/"+fileName);
 	}
 
 	else 
@@ -204,55 +207,61 @@ catch( Exception e )
  *	environmental, or entire plot
  */
 
-	private void dataRequester (String plotList, String atomicResultSet, 
+	private void dataRequester(String plotList, String atomicResultSet, 
 	String cummulativeResultSet, String dataType) 
 	{
-
-		//pass the filename to the fileVectorizer method to make the file a vector
-		servletUtility a =new servletUtility();  
-		a.fileVectorizer(plotList);
-
-		/** Flush the temporary download files */
-		servletUtility c =new servletUtility();  
-		c.flushFile(atomicResultSet);
-		//flush a different way
-		(new File(cummulativeResultSet)).delete();
-
-
-		//for each plotId request the plot from the 
-		//DataRequestServlet
-		for (int i=0; i<a.vecElementCnt; i++) 
+		
+		try
 		{
-			if (a.outVector.elementAt(i) != null )
+		
+			//pass the filename to the fileVectorizer method to make the file a vector
+			ServletUtility a =new ServletUtility();  
+			a.fileVectorizer(plotList);
+
+			/** Flush the temporary download files */
+			ServletUtility c =new ServletUtility();  
+			c.flushFile(atomicResultSet);
+			//flush a different way
+			(new File(cummulativeResultSet)).delete();
+
+
+			//for each plotId request the plot from the 
+			//DataRequestServlet
+			for (int i=0; i<a.vecElementCnt; i++) 
 			{
-				System.out.println("fileDownload.plotRequstor - plotId > "
-				+a.outVector.elementAt(i));
+				if (a.outVector.elementAt(i) != null )
+				{
+					System.out.println("fileDownload.plotRequstor - plotId > "
+					+a.outVector.elementAt(i));
 
-				String plotId = a.outVector.elementAt(i).toString().trim();
-
-				//make the request directly to the DataRequestServlet
-			//	String uri = "http://dev.nceas.ucsb.edu/harris/servlet/"
-			//	+"DataRequestServlet?requestDataType=vegPlot&plotId="+plotId+"&"
-			//	+"resultType=full&queryType=simple";
+					String plotId = a.outVector.elementAt(i).toString().trim();
 			
-			String uri = DataRequestServletURL+"?requestDataType=vegPlot&plotId="
-			+plotId+"&"+"resultType=full&queryType=simple";
-			
-				int port=80;
-				String requestType="POST";
+					String uri = DataRequestServletURL+"?requestDataType=vegPlot&plotId="
+					+plotId+"&"+"resultType=full&queryType=simple&clientType=app&requestDataFormatType=xml";
+					
+					//http://vegbank.nceas.ucsb.edu/framework/servlet/DataRequestServlet?
+					//queryType=simple&requestDataType=vegPlot&plotId=32&resultType=full&
+					//clientType=app&requestDataFormatType=xml
+					int port=80;
+					String requestType="POST";
+					GetURL b =new GetURL();  
+					b.getPost(uri, port, requestType);
 
-				GetURL b =new GetURL();  
-				b.getPost(uri, port, requestType);
-
-				/** Concatenate the resulting file so that it isnt overwritten */
-				servletUtility d =new servletUtility();  
-				d.fileCopy(atomicResultSet, cummulativeResultSet, "concat");
+					/** Concatenate the resulting file so that it isnt overwritten */
+					ServletUtility d =new ServletUtility();  
+					d.fileCopy(atomicResultSet, cummulativeResultSet, "concat");
+				}
+				else
+				{
+					System.out.println("FileDownloadServlet encountered a null value in "
+					+"plot download list");
+				}
 			}
-			else
-			{
-				System.out.println("FileDownloadServlet encountered a null value in "
-				+"plot download list");
-			}
+		}
+		catch( Exception e)
+		{
+				System.out.println("Exception: " + e.getMessage() );
+				e.printStackTrace();
 		}
 	}
 
@@ -293,7 +302,7 @@ catch( Exception e )
 	private void dataCompressor (String inFile, String outFile, 
 	String aggregationType) 
 	{
-		servletUtility a =new servletUtility();  
+		ServletUtility a =new ServletUtility();  
 		a.gzipCompress(inFile, outFile);	
 	}
 
