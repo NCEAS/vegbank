@@ -41,14 +41,13 @@
               <xsl:value-of select="$shadeOfGrey"/>
               <xsl:value-of select="$shadeOfGrey"/>
             </xsl:variable>
-            <xsl:for-each select="field">
-              <xsl:variable name="shadeOfYellow">
-                <xsl:value-of select="translate(translate(string((position() mod 2)),'1','F'),'0','C')"/>
-              </xsl:variable>
-              <xsl:variable name="RowColor">#FFFF<xsl:value-of select="$shadeOfYellow"/><xsl:value-of select="$shadeOfYellow"/>
-              </xsl:variable>
-              <tr>
-                <td bgcolor="{$TableColor}">
+<xsl:for-each select="field">
+<!-- the following vairable is 'F' for even rows, and 'C' for odd rows -->
+<xsl:variable name="shadeOfYellow">
+<xsl:value-of select="translate(translate(string((position() mod 2)),'0','F'),'1','C')"/></xsl:variable>
+<!-- this variable sets the row color for this row -->
+<xsl:variable name="RowColor">#FFFF<xsl:value-of select="$shadeOfYellow"/><xsl:value-of select="$shadeOfYellow"/></xsl:variable>
+<tr>           <td bgcolor="{$TableColor}">
                   <xsl:value-of select="../tableName"/>
                 </td>
                 <td bgcolor="{$RowColor}">
