@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: farrell $'
- *  '$Date: 2003-12-05 22:49:35 $'
- *  '$Revision: 1.1 $'
+ *  '$Date: 2004-01-20 21:17:23 $'
+ *  '$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 import org.apache.struts.util.LabelValueBean;
-
+import org.vegbank.common.utility.LogUtility;
 
 /**
  * &lt;p&gt;<xsl:value-of select="entitySummary"/>&lt;/p&gt;
@@ -91,10 +91,60 @@ public class <xsl:value-of select="$CappedEntityName"/> implements Serializable
   <xsl:variable name="Lists" select="attribute[attList]"/>
 
   <xsl:apply-templates select="$Lists" mode="Lists"/>
-  // Need to contruct 
 
-  // Need a method to get StateNameCodes
+  /* Lookup the name(label) using the value, this is not the most preformant implementation but it allows
+   * a message to be logged if duplicates found.
+   * Returns null if nothing found.
+   */
+  public String getName(String value)
+  {
+    String result = null;
+    Iterator lvbeans = <xsl:value-of select="attribute/attName"/>LabelValueBeans.iterator();
+    while ( lvbeans.hasNext() )
+    {
+      LabelValueBean lvb = (LabelValueBean) lvbeans.next();
+      String beanValue = lvb.getValue();
+      if ( beanValue.equalsIgnoreCase(value) )
+      {
+        if ( result == null )
+        {
+          result = lvb.getLabel();
+        }
+        else
+        {
+          LogUtility.log("WARNING: Non unique value found in <xsl:value-of select="$CappedEntityName"/>");
+        }
+      }   
+    }
+    return result;
+  }
 
+  /* Lookup the value using the name, this is not the most preformant implementation but it allows
+   * a message to be logged if duplicates found.
+   * Returns null if nothing found.
+   */
+  public String getValue(String name)
+  {
+    String result = null;
+    Iterator lvbeans = <xsl:value-of select="attribute/attName"/>LabelValueBeans.iterator();
+    while ( lvbeans.hasNext() )
+    {
+      LabelValueBean lvb = (LabelValueBean) lvbeans.next();
+      String beanLabel = lvb.getLabel();
+      if ( beanLabel.equalsIgnoreCase(name) )
+      {
+        if ( result == null )
+        {
+          result = lvb.getValue();
+        }
+        else
+        {
+          LogUtility.log("WARNING: Non unique name found in <xsl:value-of select="$CappedEntityName"/>");
+        }
+      }   
+    }
+    return result;
+  }
 
 }
 
