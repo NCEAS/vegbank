@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-04-02 19:40:08 $'
- * 	'$Revision: 1.12 $'
+ *  '$Date: 2002-04-03 00:26:56 $'
+ * 	'$Revision: 1.13 $'
  */
 package databaseAccess;
 
@@ -635,8 +635,14 @@ public class DBinsertPlotSource
 	
 	
 	
-	//method to update the strata composition tables --should only be called
-	// from the insert taxonObservation method
+	/**
+	 * method to update the strata composition tables --should only be called
+	 * from the insert taxonObservation method
+	 *
+	 * @param plantName -- the plantName as it is used in the data source
+	 * @param taxonObservationId -- the taxonobservation for this plant
+	 *
+	 */
 	private boolean insertStrataComposition(String plantName, int taxonObservationId)
 	{
 		try 
@@ -822,9 +828,11 @@ public class DBinsertPlotSource
 
 
 	
-	//method to add the taxonObservation data to the database
-	// if the method fails it will return false and the plot will be rolled 
-	//backe
+	/**
+	 * method to add the taxonObservation data to the database
+	 * if the method fails it will return false and the plot will be rolled 
+	 * back
+	 */
 	private boolean insertTaxonObservations()
 	{
 		boolean successfulCommit = true;
@@ -832,19 +840,49 @@ public class DBinsertPlotSource
 		{
 			//get the number of taxonObservations
 			Vector uniqueTaxa = source.plantTaxaNames;
+			//getPlantTaxaNames(String plotName)
 			
 			for (int i =0; i < uniqueTaxa.size(); i++)
 			{
 				StringBuffer sb = new StringBuffer();
-				//get the taxonObservation number
-				taxonObservationId = getNextId("taxonObservation");
-				
+				// get the taxonObservation number which will be used in the 
+				// strata composition insertion method called below too
+				taxonObservationId = getNextId("taxonObservation");	
 				String authorNameId = uniqueTaxa.elementAt(i).toString();
+				// get the code associated with this name
+				String code = source.getPlantTaxonCode(authorNameId);
 				String percentCover = "25";
 				
+				// get the hashtable with the plant name llok up results from the 
+				// web application
+				Hashtable h = getPlantTaxonomyData( code );
+				String level  = "";
+				String conceptId  = "";
+				String name = "";
 			
+				// if the hashtable has a single key then it will have 
+				// all the keys associated with a plant
+				if ( h.containsKey("level") )
+				{
+					level =	(String)h.get("level");	
+					conceptId = (String)h.get("conceptId");
+					name = (String)h.get("name");
+				}
+				
+				
+				//add the taxon name to the debugging
+				debug.append("<taxonObservation> \n");
+				debug.append("<authorTaxonName>"+authorNameId.replace('&', '_')+"</authorTaxonName> \n");
+				debug.append("<authorTaxonCode>"+code+"</authorTaxonCode> \n");
+				debug.append("<vegbankMatch> \n");
+				debug.append("<vegbankLevel>"+level+"</vegbankLevel> \n");
+				debug.append("<vegbankName>"+name+"</vegbankName> \n");
+				debug.append("<vegbankConceptId>"+conceptId+"</vegbankConceptId> \n");
+				debug.append("</vegbankMatch> \n");
+				debug.append("</taxonObservation> \n");
+				
 				//insert the values
-				sb.append("INSERT into TAXONOBSERVATION (taxonObservation_id, observation_id, "
+				sb.append("INSERT into TAXONOBSERVATION (taxonobservation_id, observation_id, "
 					+" cheatplantName ) "
 					+" values(?,?,?) ");
 				
@@ -857,12 +895,8 @@ public class DBinsertPlotSource
 				
 				//execute the p statement
   		  pstmt.execute();
-  		 // pstmt.close();
-			 
-			 //now update the strataComposition table
 			 try
 			 {
-				 
 				 	boolean result = this.insertStrataComposition(authorNameId, taxonObservationId);
 			 		if (result = false)
 					{
@@ -875,19 +909,18 @@ public class DBinsertPlotSource
 					e.printStackTrace();	
 					return(false);
 			 }
-			
-			
 			}
 		}
 		catch (Exception e)
 		{
 			System.out.println("Caught Exception: "+e.getMessage() ); 
 			e.printStackTrace();
-			//System.exit(0);
 			return(false);
 		}
 		return( true );
 	}
+	
+	
 	
 	
 	/**
@@ -901,28 +934,43 @@ public class DBinsertPlotSource
 		try 
 		{
 				StringBuffer sb = new StringBuffer();
+				
 				String name = source.getCommunityName(plotName);
-				//these are place holders for later extension of the plot source
 				String code =  source.getCommunityCode(plotName);
 				String framework = source.getCommunityFramework(plotName);
 				String level = source.getCommunityLevel(plotName);
+				String conceptId = "";
+				
+			
+				// get the appropriate codes for this community via the web service
+				// store the data in a hashtable
+				Hashtable h = new Hashtable();
+				if ( code != null )
+				{
+					h = getCommunityData(code);
+				}
+				else if ( name != null )
+				{
+					h = getCommunityData( name );
+				}
+				
+				// if the hashtable has a sible key then it will have 
+				// all the keys associated with a community
+				if ( h.containsKey("conceptId") )
+				{
+					level =	(String)h.get("level");	
+					code = (String)h.get("code");
+					conceptId = (String)h.get("conceptId");
+					name = (String)h.get("name");
+				}
 				
 				debug.append("<communityName>"+name+"</communityName> \n");
 				debug.append("<communityCode>"+code+"</communityCode> \n");
 				debug.append("<communityLevel>"+level+"</communityLevel> \n");
 				debug.append("<communityFramework>"+framework+"</communityFramework> \n");
-			
-				//get the appropriate codes for this community via the web service
-				if ( code != null )
-				{
-					Hashtable h = getCommunityData(code);
-				}
-				else if ( name != null )
-				{
-					Hashtable h = getCommunityData( name );
-				}
-
-				//insert the strata values
+				debug.append("<communityConceptId>"+conceptId+"</communityConceptId> \n");
+				
+				//insert the values
 				sb.append("INSERT into commclass (observation_id, commName, " 
 				+" commCode, commFramework, commLevel) "
 				+" values(?,?,?,?,?)");
@@ -1282,37 +1330,39 @@ public class DBinsertPlotSource
 			parameters.setProperty("communityLevel","%" );
 			s = gurl.requestURL(servlet, protocol, host, 
 		 	parameters);
-			System.out.println("DBinsertPlotSource > string passed from web service: \n" + s);
+			System.out.println("DBinsertPlotSource > XML string from web app: \n'"+s+"'");
 			
-			// parse the returned xml doc to get the relevant data and 
-			// put it into the hash table
-			parser = new XMLparse();	
-			Document doc = parser.getDocumentFromString(s);
-			Vector levelVec = parser.getValuesForPath(doc, "/vegCommunity/community/classLevel");
-			Vector codeVec = parser.getValuesForPath(doc, "/vegCommunity/community/classCode");
-			Vector conceptIdVec = parser.getValuesForPath(doc, "/vegCommunity/community/commConceptId");
-			
-			
-			String lev = (String)levelVec.elementAt(0);
-			String c = (String)codeVec.elementAt(0);
-			String conceptId = (String)conceptIdVec.elementAt(0);
-			
-			
-			
-			//String lev = parser.getNodeValue(doc, "classLevel");
-			//String c  = parser.getNodeValue(doc, "classCode");
-			//String conceptId = parser.getNodeValue(doc, "commConceptId");
-			System.out.println("DBinsertPlotSource > parsed community xml: " +lev+" "+c+" "+conceptId);
-			
-			if ( lev != null && c != null && conceptId != null)
+			if ( s.length() > 3 && s != null )
 			{
-				h.put("code", c);
-				h.put("level", lev );
-				h.put("conceptId", conceptId );
+				// parse the returned xml doc to get the relevant data and 
+				// put it into the hash table
+				parser = new XMLparse();	
+				Document doc = parser.getDocumentFromString(s);
+				Vector levelVec = parser.getValuesForPath(doc, "/vegCommunity/community/classLevel");
+				Vector codeVec = parser.getValuesForPath(doc, "/vegCommunity/community/classCode");
+				Vector conceptIdVec = parser.getValuesForPath(doc, "/vegCommunity/community/commConceptId");
+				Vector nameVec = parser.getValuesForPath(doc, "/vegCommunity/community/commName");
+				String lev = (String)levelVec.elementAt(0);
+				String c = (String)codeVec.elementAt(0);
+				String conceptId = (String)conceptIdVec.elementAt(0);
+				String name  = (String)nameVec.elementAt(0);
+				System.out.println("DBinsertPlotSource > parsed community xml: " +lev+" "+c+" "+conceptId);
+			
+				if ( lev != null && c != null && conceptId != null)
+				{
+					h.put("code", c);
+					h.put("level", lev );
+					h.put("conceptId", conceptId );
+					h.put("name", name);
+				}
+				else
+				{
+					System.out.println("DBinsertPlotSource > parsed elements returned null: " +lev+" "+c+" "+conceptId);
+				}
 			}
 			else
 			{
-				System.out.println("DBinsertPlotSource > parsed elements returned null: " +lev+" "+c+" "+conceptId);
+				System.out.println("DBinsertPlotSource > no results from web app" );
 			}
 		}
 		catch (Exception e)
@@ -1324,7 +1374,74 @@ public class DBinsertPlotSource
 	}
 	
 
+/**
+	 * utility method to use a webservice to lookup the plant 
+	 * related attributes from the vegbank plant taxonomy archive
+	 * 
+	 * @param code -- the plant taxonomy code used to lookup the related data
+	 * 	that will be returned to from the web service in an xml format
+	 */
+	private Hashtable getPlantTaxonomyData(String code)
+	{
+		Hashtable h = new Hashtable();
+		try
+		{
+			//THIS USES THE REQUESTURL METHOD
+			String protocol = "http://";
+	  	String host = "vegbank.nceas.ucsb.edu";
+			String s = null;		
+			//THIS USES THE OTHER REQUEST URL METHOD
+			String servlet = "/framework/servlet/DataRequestServlet";
+			Properties parameters = new Properties();
+			parameters.setProperty("requestDataType", "plantTaxon");
+			parameters.setProperty("requestDataFormatType", "xml");
+			parameters.setProperty("clientType", "clientApplication");
+			parameters.setProperty("taxonName", code);
+			parameters.setProperty("taxonNameType","%" );
+			parameters.setProperty("taxonLevel","%" );
+			s = gurl.requestURL(servlet, protocol, host, 
+		 	parameters);
+			System.out.println("DBinsertPlotSource > XML string from web app: \n'"+s+"'");
+			
+			if ( s.length() > 3 && s != null )
+			{
+				// parse the returned xml doc to get the relevant data and 
+				// put it into the hash table
+				parser = new XMLparse();	
+				Document doc = parser.getDocumentFromString(s);
+				Vector levelVec = parser.getValuesForPath(doc, "/plantTaxa/taxon/name/plantLevel");
+				Vector conceptIdVec = parser.getValuesForPath(doc, "/plantTaxa/taxon/name/plantConceptId");
+				Vector nameVec = parser.getValuesForPath(doc, "/plantTaxa/taxon/name/plantDescription");
+				String lev = (String)levelVec.elementAt(0);
+				String conceptId = (String)conceptIdVec.elementAt(0);
+				String name  = (String)nameVec.elementAt(0);
+				System.out.println("DBinsertPlotSource > parsed plant taxa xml: " +lev+" "+conceptId);
+			
+				if ( lev != null && conceptId != null)
+				{
+					h.put("level", lev );
+					h.put("conceptId", conceptId );
+					h.put("name", name);
+				}
+				else
+				{
+					System.out.println("DBinsertPlotSource > parsed elements returned null: " +lev+"  "+conceptId);
+				}
 
+			}
+			else
+			{
+				System.out.println("DBinsertPlotSource > no results from web app" );
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println("Exception: "+e.getMessage() ); 
+			e.printStackTrace();
+		}
+		return(h);
+	}
+	
 
 	
 	
