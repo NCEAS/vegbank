@@ -48,7 +48,9 @@ MM_reloadPage(true);
     <TD vAlign=top  class="vegbank" > 
       <P class="vegbank"><FONT size="+2"><B>News</B></FONT></P>
       <UL>
-      <LI class="constsize"><font color="red">NEW!</font> VegBank workshop coming soon at a Portland ESA meeting <a href="@workshop_link@">workshop.</a> 
+      <LI class="constsize"><font color="red">NEW!</font> 7 May 2004: Significant site update brings you the Common Pages selector and other usability features.
+	  </LI> 
+      <LI class="constsize"> VegBank workshop coming soon at a Portland ESA meeting <a href="@workshop_link@">workshop.</a> 
         </LI>
       <LI class="constsize">Users can now view VegBank <a href="@general_link@metadata.html"> metadata.</a> 
         </LI>
@@ -57,9 +59,6 @@ MM_reloadPage(true);
 		has been completed.</LI>
         <LI class="constsize"> 
           Users of VegBank are encouraged to report errors and suggestions to <a href="mailto:help@vegbank.org">help@vegbank.org</a>
-          </LI>
-        <LI class="constsize">
-          <font color="red">NEW!</font> Users may <a href="/vegbank/Logon.do?username=GUESTUSER@VEGBANK.ORG&password=nopassword">log in as guest</a>, so you can search through VegBank without registering.
         </LI>
       </UL>
     </TD>
