@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2004-07-26 16:13:02 $'
-*  '$Revision: 1.3 $'
+*  '$Date: 2004-07-26 16:48:29 $'
+*  '$Revision: 1.4 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -142,7 +142,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 </tr>
 
 <tr>
-	<td class="listhead">Name you call this concept</td>
+	<td class="listhead">Name you call this concept (optional)</td>
 	<td><html:text name="formBean" property="plantName" size="45"/></td>
 </tr>
 <tr>
