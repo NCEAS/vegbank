@@ -476,6 +476,17 @@ UPDATE definedValue SET definedValue = value ;
 --manual require definedvalue.definedvalue--
 ALTER TABLE definedValue ALTER COLUMN definedValue text NOT NULL;
 
+---creating fields ----------------------
+
+ALTER TABLE commUsage ADD COLUMN COMMSTATUS_ID Integer ;
+
+ALTER TABLE commUsage   ADD CONSTRAINT R1commUsage_COMMSTATUS_ID FOREIGN KEY (COMMSTATUS_ID)    REFERENCES commStatus (COMMSTATUS_ID );
+
+ALTER TABLE plantUsage ADD COLUMN PLANTSTATUS_ID Integer ;
+
+ALTER TABLE plantUsage   ADD CONSTRAINT R1plantUsage_PLANTSTATUS_ID FOREIGN KEY (PLANTSTATUS_ID)    REFERENCES plantStatus (PLANTSTATUS_ID );
+
+
 
 --------------------------------------
 ----- DROP ALL TRIGGERS ---------------
@@ -777,3 +788,6 @@ ALTER TABLE userPreference   ADD CONSTRAINT R1userPreference_usr_ID FOREIGN KEY 
 
 ALTER TABLE userRecordOwner   ADD CONSTRAINT R1userRecordOwner_usr_ID FOREIGN KEY (usr_ID)    REFERENCES usr (usr_ID );
 
+ALTER TABLE plantUsage   ADD CONSTRAINT R1plantUsage_PLANTSTATUS_ID FOREIGN KEY (PLANTSTATUS_ID)    REFERENCES plantStatus (PLANTSTATUS_ID );
+
+ALTER TABLE commUsage   ADD CONSTRAINT R1commUsage_COMMSTATUS_ID FOREIGN KEY (COMMSTATUS_ID)    REFERENCES commStatus (COMMSTATUS_ID );
