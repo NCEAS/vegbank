@@ -3,8 +3,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-07 22:38:14 $'
- * 	'$Revision: 1.4 $'
+ *  '$Date: 2002-01-11 01:15:20 $'
+ * 	'$Revision: 1.5 $'
  */
 
 import java.sql.*;
@@ -122,30 +122,49 @@ public class PlotDataSource
 	{
 		try
 		{
+			System.out.println("source  start");
 			projectName = ((PlotDataSourceInterface)pluginObj).getProjectName(plotName);
+			System.out.println("source  desc");
 			projectDescription = ((PlotDataSourceInterface)pluginObj).getProjectDescription(plotName);
-	    projectContributors = ((PlotDataSourceInterface)pluginObj).getProjectContributors(plotName);
+	    System.out.println("source  contr");
+			projectContributors = ((PlotDataSourceInterface)pluginObj).getProjectContributors(plotName);
+			System.out.println("source  startdate");
 			projectStartDate = ((PlotDataSourceInterface)pluginObj).getProjectStartDate(plotName);
+			System.out.println("source  stopdate");
 			projectStopDate = ((PlotDataSourceInterface)pluginObj).getProjectStopDate(plotName);
+			System.out.println("source  plotcode");
 			plotCode = ((PlotDataSourceInterface)pluginObj).getPlotCode(plotName);
-			
+			System.out.println("source  named");
 			namedPlaces = ((PlotDataSourceInterface)pluginObj).getPlaceNames(plotName); 
-			
+			System.out.println("source  state");
 			state = ((PlotDataSourceInterface)pluginObj).getState(plotName);
+			System.out.println("source  shape");
 			plotShape =  ((PlotDataSourceInterface)pluginObj).getPlotShape(plotName);
+			System.out.println("source  gradient");
 			slopeGradient = ((PlotDataSourceInterface)pluginObj).getSlopeGradient(plotName);
+			System.out.println("source  aspect");
 			slopeAspect = ((PlotDataSourceInterface)pluginObj).getSlopeAspect(plotName);
+			System.out.println("source  geology");
 			surfGeo = ((PlotDataSourceInterface)pluginObj).getSurfGeo(plotName);
+			System.out.println("source  hydro");
 			hydrologicRegime = ((PlotDataSourceInterface)pluginObj).getHydrologicRegime(plotName);
+			System.out.println("source  topop");
 			topoPosition = ((PlotDataSourceInterface)pluginObj).getTopoPosition(plotName);
+			System.out.println("source  area");
 			plotArea = ((PlotDataSourceInterface)pluginObj).getPlotArea(plotName);
+			System.out.println("source  count");
 			country = ((PlotDataSourceInterface)pluginObj).getCountry(plotName);
+			System.out.println("source  xco");
 			xCoord = ((PlotDataSourceInterface)pluginObj).getXCoord(plotName);
+			System.out.println("source  yco");
 			yCoord = ((PlotDataSourceInterface)pluginObj).getYCoord(plotName);
+			System.out.println("source  utm");
 			utmZone = ((PlotDataSourceInterface)pluginObj).getUTMZone(plotName);
-			 standSize = ((PlotDataSourceInterface)pluginObj).getStandSize(plotName);
-			 
+			System.out.println("source  stan");
+			standSize = ((PlotDataSourceInterface)pluginObj).getStandSize(plotName);
+			 System.out.println("source  lat");
 			latitude = ((PlotDataSourceInterface)pluginObj).getLatitude(plotName);
+			System.out.println("source  long");
 			longitude = ((PlotDataSourceInterface)pluginObj).getLongitude(plotName);
 			
 			confidentialityReason = ((PlotDataSourceInterface)pluginObj).getConfidentialityReason(plotName);
@@ -160,6 +179,7 @@ public class PlotDataSource
 			uniqueStrataNames = ((PlotDataSourceInterface)pluginObj).getUniqueStrataNames(plotName);
 			plantTaxaNames = ((PlotDataSourceInterface)pluginObj).getPlantTaxaNames(plotCode);
 			uniquePlantTaxaNumber =  plantTaxaNames.size();
+			System.out.println("source  end");
 		}
 		catch (Exception e)
 		{
