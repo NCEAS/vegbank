@@ -1,0 +1,97 @@
+<HTML><!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>Plant Taxon ERD</TITLE>
+<!-- #EndEditable --> 
+<meta http-equiv="Content-Type" content="text/html; charset=">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<table cellspacing="0" cellpadding="0" border="0" width="800">
+  <tr> 
+    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
+    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
+      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
+    </td>
+    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
+    <td width="119" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="../general/login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="../general/info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="../general/help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+    </td>
+  </tr>
+</table>
+<!-- #BeginEditable "Body" --> 
+<p align="center"><font face="Georgia, Times New Roman, Times, serif"><br>
+  <b><font size="5">Plant taxonomy module</font></b><br>
+  </font><font face="Georgia, Times New Roman, Times, serif" size="4"><i><b>Entity 
+  relationship diagram </b></i></font></p>
+<blockquote> 
+  <p><font face="Georgia, Times New Roman, Times, serif">Plant names are stored 
+    in a table called <a href="../dbdictionary/planttaxa/plantTaxaPlantName.html">plantName</a>. 
+    Taxon concepts are stored in <a href="../dbdictionary/planttaxa/plantTaxaPlantConcept.html">plantConcept</a>, 
+    which points to a literature citation (<a href="../dbdictionary/planttaxa/plantTaxaPlantReference.html">plantReference</a>) 
+    and the name (<a href="../dbdictionary/planttaxa/plantTaxaPlantName.html">plantName</a>) 
+    used in the reference. This couplet is sufficient to identify a taxon concept. 
+    The name that currently applies to a concept (in the perception of a <a href="../dbdictionary/planttaxa/plantTaxaPlantParty.html">party</a>) 
+    is mapped in the <a href="../dbdictionary/planttaxa/plantTaxaPlantUsage.html">plantUsage</a> 
+    table, which contains a start and stop data for that name application. A particular 
+    party's view as to the status of a particular taxon concept (e.g., recognized, 
+    nonstandard) and the start and stop dates for that status are recorded in 
+    <a href="../dbdictionary/planttaxa/plantTaxaPlantStatus.html">plantStatus</a>. 
+    The standard taxon concept that a nonstandard concept maps to (in the perspective 
+    of a party) is identified through the contents of <a href="../dbdictionary/planttaxa/plantTaxaPlantCorrelation.html">plantCorrelation</a>, 
+    together with an indication of the degree of convergence (equal, larger, smaller, 
+    overlapping). Predecessor and successor taxa ion the usage of a party can 
+    be tracked via a <a href="../dbdictionary/planttaxa/plantTaxaPlantLineage.html">plantLineage</a> 
+    table. Original descriptions can be provided in <a href="../dbdictionary/planttaxa/plantTaxaPlantDescription.html">plantDescription</a> 
+    for taxa that do not conform to international codes but which are needed for 
+    plot records (e.g., hairy Poaceae, fleshy rosette, <i>Potentilla canadensis-simplex</i> 
+    complex).</font><font face="Arial, Helvetica, sans-serif"><br>
+    </font></p>
+  </blockquote>
+<p align="left"><img src="erd/plant.gif" width="508" height="480" hspace="25"></p>
+<!-- #EndEditable --><br>
+<table cellspacing="0" cellpadding="0" border="0">
+  <tr bgcolor="#EED85B"> 
+    <td colspan="6" height="8" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="-7">&nbsp;</font></td>
+  </tr>
+  <TR> 
+    <td width="43" height="8" valign="top"></td>
+    <td width="326" height="8" valign="top"></td>
+    <td width="47" height="8" valign="top"></td>
+    <td width="154" height="8" valign="top"></td>
+    <td width="91" height="8" valign="top"></td>
+    <td width="131" height="8" valign="top"></td>
+  </tr>
+  <tr> 
+    <td width="800" height="38" colspan="6" valign="top"> 
+      <p align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../index.html">VegBank 
+        Home</a> | <a href="../general/info.html">About VegBank</a> |<a href="../general/instructions.html">Instructions</a> 
+        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="../general/contact.html"> 
+        Contact</a> | <a href="../general/help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
+        <font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../general/register.html">Register</a> 
+        | <a href="../general/login.html">Login</a> |<a href="../general/actions.html"> 
+        use VegBank</a>| <a href="../general/logout.html">Logout</a> |<a href="../general/account.html"> 
+        My VegBank Account</a></font></font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="800" height="24" colspan="6" valign="top"> 
+      <p align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&copy; 
+        2002 Ecological Society of America<br>
+        <a href="../general/terms.html">Terms of use</a> |<a href="../general/privacy.html"> 
+        Privacy policy</a></font></p>
+    </td>
+  </tr>
+</table>
+</BODY>
+<!-- #EndTemplate --></HTML>

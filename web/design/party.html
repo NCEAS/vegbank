@@ -1,0 +1,91 @@
+<HTML><!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>Party ERD</TITLE>
+<!-- #EndEditable --> 
+<meta http-equiv="Content-Type" content="text/html; charset=">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<table cellspacing="0" cellpadding="0" border="0" width="800">
+  <tr> 
+    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
+    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
+      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
+    </td>
+    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
+    <td width="119" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="../general/login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="../general/info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="../general/help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+    </td>
+  </tr>
+</table>
+<!-- #BeginEditable "Body" --> 
+<h2 align="center"><font face="Georgia, Times New Roman, Times, serif"><br>
+  Party relationships</font></h2>
+<blockquote> 
+  <p><font face="Georgia, Times New Roman, Times, serif">1. A <a href="../dbdictionary/vegplot/vegPlotParty.html">party</a> 
+    is a person or organization that contributes to one or more plots. That contribution 
+    can be via a <a href="../dbdictionary/vegplot/vegPlotProjectContributor.html">project</a>, 
+    an <a href="../dbdictionary/vegplot/vegPlotObservationContributor.html">observation</a>, 
+    <a href="../dbdictionary/vegplot/vegPlotClassContributor.html">intepretation 
+    of an observation as belonging to a community</a>, or <a href="../dbdictionary/vegplot/vegPlotTaxonInterpretation.html">interpretation 
+    of a taxon as belonging to a plant concept</a>.</font></p>
+  <p><font face="Georgia, Times New Roman, Times, serif">2. A party (e.g., person) 
+    can belong to a party (e.g. organization). This relationship is recorded through 
+    a recursive foreign key to the parent party. Parties may also have a parent 
+    and child relationship owing to a name change.</font></p>
+  <p><font face="Georgia, Times New Roman, Times, serif">3. Parties have multiple 
+    <a href="../dbdictionary/vegplot/vegPlotAddress.html">addresses</a> and <a href="../dbdictionary/vegplot/vegPlotTelephone.html">telephone 
+    numbers</a>. Obsolete but archival addresses are retained, with the current 
+    address indicated via a currency flag.</font></p>
+  <p><font face="Georgia, Times New Roman, Times, serif">4. A party contributes 
+    to projects in various ways via specific <a href="../dbdictionary/vegplot/vegPlotAux_Role.html">roles</a>.</font> 
+  </p>
+</blockquote>
+<p align="left"><img src="erd/party.gif" width="640" height="404" hspace="25"></p>
+<!-- #EndEditable --><br>
+<table cellspacing="0" cellpadding="0" border="0">
+  <tr bgcolor="#EED85B"> 
+    <td colspan="6" height="8" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="-7">&nbsp;</font></td>
+  </tr>
+  <TR> 
+    <td width="43" height="8" valign="top"></td>
+    <td width="326" height="8" valign="top"></td>
+    <td width="47" height="8" valign="top"></td>
+    <td width="154" height="8" valign="top"></td>
+    <td width="91" height="8" valign="top"></td>
+    <td width="131" height="8" valign="top"></td>
+  </tr>
+  <tr> 
+    <td width="800" height="38" colspan="6" valign="top"> 
+      <p align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../index.html">VegBank 
+        Home</a> | <a href="../general/info.html">About VegBank</a> |<a href="../general/instructions.html">Instructions</a> 
+        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="../general/contact.html"> 
+        Contact</a> | <a href="../general/help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
+        <font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../general/register.html">Register</a> 
+        | <a href="../general/login.html">Login</a> |<a href="../general/actions.html"> 
+        use VegBank</a>| <a href="../general/logout.html">Logout</a> |<a href="../general/account.html"> 
+        My VegBank Account</a></font></font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="800" height="24" colspan="6" valign="top"> 
+      <p align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&copy; 
+        2002 Ecological Society of America<br>
+        <a href="../general/terms.html">Terms of use</a> |<a href="../general/privacy.html"> 
+        Privacy policy</a></font></p>
+    </td>
+  </tr>
+</table>
+</BODY>
+<!-- #EndTemplate --></HTML>

@@ -1,0 +1,143 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><!-- #BeginTemplate "/Templates/VegBank_Master.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>Plots Module Design</TITLE>
+<!-- #EndEditable --> 
+<meta http-equiv="Content-Type" content="text/html; charset=">
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">
+<table cellspacing="0" cellpadding="0" border="0" width="800">
+  <tr> 
+    <td width="41" height="54" rowspan="2" valign="top" bgcolor="#336633">&nbsp;</td>
+    <td width="308" height="54" rowspan="2" valign="top" bgcolor="#336633"> 
+      <div align="left"><font face="Georgia, Times New Roman, Times, serif" size="7"><b><font color="#FFFFFF" size="6">VegBank</font></b></font></div>
+    </td>
+    <td height="28" colspan="4" valign="top" bgcolor="#336633">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="97" height="26" valign="top" bgcolor="#336633"><font face="Georgia, Times New Roman, Times, serif"><b><!-- #BeginEditable "button_1" --><!-- #EndEditable --></b></font></td>
+    <td width="119" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="../general/login.html" style="text-decoration:none; color:#FFFF80">Login</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b> 
+        <a href="../general/info.html" style="text-decoration:none; color:#FFFF80">Information</a></b></font></div>
+    </td>
+    <td width="114" height="26" valign="top" bgcolor="#336633"> 
+      <div align="center"><font face="Georgia, Times New Roman, Times, serif"><b><a href="../general/help.html" style="text-decoration:none; color:#FFFF80">Help</a></b></font></div>
+    </td>
+  </tr>
+</table>
+<!-- #BeginEditable "Body" --> 
+<p>&nbsp; </p>
+<p align="center"> <b><font face="Georgia, Times New Roman, Times, serif"> <font size="5">Vegetation 
+  plots module</font></font></b><font face="Georgia, Times New Roman, Times, serif"><br>
+  <b><font size="4"><i>Table attributes and fields</i></font></b> </font></p>
+<blockquote> 
+  <p>&nbsp;</p>
+  <p><font face="Georgia, Times New Roman, Times, serif"><b><a href="../dbdictionary/vegplot/vegPlotPlot.html">Plot</a><br>
+    <a href="../dbdictionary/vegplot/vegPlotNamedPlace.html">- NamedPlace</a><br>
+    <a href="../dbdictionary/vegplot/vegPlotPlace.html">- Place</a><br>
+    <a href="../dbdictionary/vegplot/vegPlotSoilTaxon.html">- SoilTaxon</a></b> 
+    </font></p>
+  <p><font face="Georgia, Times New Roman, Times, serif"><a href="../dbdictionary/vegplot/vegPlotObservation.html"><b>Observation</b></a><br>
+    <b><a href="../dbdictionary/vegplot/vegPlotDisturbanceObs.html">- DisturbanceObs</a> 
+    <br>
+    </b><a href="../dbdictionary/vegplot/vegPlotProject.html"><b></b></a><b><a href="../dbdictionary/vegplot/vegPlotGraphic.html">- 
+    Graphic</a></b> <a href="../dbdictionary/vegplot/vegPlotProjectContributor.html"><b><br>
+    </b></a><a href="../dbdictionary/vegplot/vegPlotProject.html"><b></b></a><b><a href="../dbdictionary/vegplot/vegPlotObservationContributor.html">- 
+    ObservationContributor<br>
+    </a></b></font><font face="Georgia, Times New Roman, Times, serif"><b><a href="../dbdictionary/vegplot/vegPlotObservationSynonym.html">- 
+    ObservationSynonym<br>
+    </a></b></font><font face="Georgia, Times New Roman, Times, serif"><a href="../dbdictionary/vegplot/vegPlotProject.html"><b>- 
+    Project</b></a> <a href="../dbdictionary/vegplot/vegPlotProjectContributor.html"><b><br>
+    - ProjectContributor</b></a> <br>
+    <b><a href="../dbdictionary/vegplot/vegPlotObservationContributor.html"></a></b><a href="../dbdictionary/vegplot/vegPlotSoilObs.html"><b>- 
+    SoilObs</b></a> <a href="../dbdictionary/vegplot/vegPlotProjectContributor.html"><b> 
+    <br>
+    </b></a><b><a href="../dbdictionary/vegplot/vegPlotStratum.html">- Stratum</a></b> 
+    <b> <br>
+    </b><a href="../dbdictionary/vegplot/vegPlotProject.html"><b></b></a><br>
+    <a href="../dbdictionary/vegplot/vegPlotCommClass.html"><b>CommClass</b></a> 
+    <b><a href="../dbdictionary/vegplot/vegPlotCommInterpretation.html"><br>
+    - CommInterpretation</a><br>
+    <a href="../dbdictionary/vegplot/vegPlotClassContributor.html">- ClassContributor</a> 
+    <br>
+    <a href="../dbdictionary/vegplot/vegPlotDisturbanceObs.html">- DisturbanceObs</a><a href="../dbdictionary/vegplot/vegPlotUserDefined.html"><br>
+    </a> </b></font></p>
+  <p><font face="Georgia, Times New Roman, Times, serif"><b>Methods<a href="../dbdictionary/vegplot/vegPlotStratum.html"><br>
+    </a><a href="../dbdictionary/vegplot/vegPlotCoverMethod.html">- CoverMethod</a></b> 
+    <a href="../dbdictionary/vegplot/vegPlotParty.html"><br>
+    </a><b><a href="../dbdictionary/vegplot/vegPlotCoverIndex.html">- CoverIndex</a></b> 
+    <b><a href="../dbdictionary/vegplot/vegPlotStratumMethod.html"><br>
+    - StratumMethod</a></b> <br>
+    <b><a href="../dbdictionary/vegplot/vegPlotStratumType.html">- StratumType</a><a href="../dbdictionary/vegplot/vegPlotStratumComposition.html"><br>
+    </a></b><a href="../dbdictionary/vegplot/vegPlotSoilObs.html"><b><br>
+    </b></a><a href="../dbdictionary/vegplot/vegPlotTaxonObservation.html"><b>TaxonObservation</b></a> 
+    <br>
+    </font><font face="Georgia, Times New Roman, Times, serif"><b><a href="../dbdictionary/vegplot/vegPlotStratumComposition.html">- 
+    StratumComposition</a></b> <b><a href="../dbdictionary/vegplot/vegPlotCoverMethod.html"><br>
+    </a></b><b><a href="../dbdictionary/vegplot/vegPlotStemCount.html">- StemCount<br>
+    </a></b></font><font face="Georgia, Times New Roman, Times, serif"><b><a href="../dbdictionary/vegplot/vegPlotStemLocation.html">- 
+    StemLocation<br>
+    </a></b></font><font face="Georgia, Times New Roman, Times, serif"><b><a href="../dbdictionary/vegplot/vegPlotTaxonInterpretation.html">- 
+    TaxonInterpretation<br>
+    </a></b></font><font face="Georgia, Times New Roman, Times, serif"><b><a href="../dbdictionary/vegplot/vegPlotStratumComposition.html"></a></b></font></p>
+  <p> <font face="Georgia, Times New Roman, Times, serif"><a href="../dbdictionary/vegplot/vegPlotParty.html"><b>Party</b></a> 
+    <b><a href="../dbdictionary/vegplot/vegPlotTelephone.html"><br>
+    </a><a href="../dbdictionary/vegplot/vegPlotAddress.html">- Address</a><br>
+    <a href="../dbdictionary/vegplot/vegPlotAux_Role.html">- Aux_role</a></b> 
+    <b><a href="../dbdictionary/vegplot/vegPlotCitation.html"><br>
+    </a><a href="../dbdictionary/vegplot/vegPlotTelephone.html">- Telephone</a></b> 
+    <b><a href="../dbdictionary/vegplot/vegPlotAddress.html"><br>
+    </a></b></font></p>
+  <p><b><font face="Georgia, Times New Roman, Times, serif">Supplementary<br>
+    - </font></b><font face="Georgia, Times New Roman, Times, serif"><b><a href="../dbdictionary/vegplot/vegPlotCitation.html">Citation<br>
+    </a><a href="../dbdictionary/vegplot/vegPlotRevision.html">- </a><a href="../dbdictionary/vegplot/vegPlotNoteLink.html">NoteLink 
+    </a><a href="../dbdictionary/vegplot/vegPlotDisturbanceObs.html"><br>
+    </a><a href="../dbdictionary/vegplot/vegPlotNote.html">- Note<br>
+    </a><a href="../dbdictionary/vegplot/vegPlotCitation.html">- </a><a href="../dbdictionary/vegplot/vegPlotRevision.html">Revision<br>
+    </a><a href="../dbdictionary/vegplot/vegPlotNote.html">- </a></b></font><font face="Georgia, Times New Roman, Times, serif"><b><a href="../dbdictionary/vegplot/vegPlotUserDefined.html">UserDefined</a></b> 
+    <b><br>
+    <a href="../dbdictionary/vegplot/vegPlotDefinedValue.html">- DefinedValue</a></b> 
+    </font> </p>
+  </blockquote>
+<!-- #EndEditable --><br>
+<table cellspacing="0" cellpadding="0" border="0">
+  <tr bgcolor="#EED85B"> 
+    <td colspan="6" height="8" valign="top"><font face="Georgia, Times New Roman, Times, serif" size="-7">&nbsp;</font></td>
+  </tr>
+  <TR> 
+    <td width="43" height="8" valign="top"></td>
+    <td width="326" height="8" valign="top"></td>
+    <td width="47" height="8" valign="top"></td>
+    <td width="154" height="8" valign="top"></td>
+    <td width="91" height="8" valign="top"></td>
+    <td width="131" height="8" valign="top"></td>
+  </tr>
+  <tr> 
+    <td width="800" height="38" colspan="6" valign="top"> 
+      <p align="center"><font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../index.html">VegBank 
+        Home</a> | <a href="../general/info.html">About VegBank</a> |<a href="../general/instructions.html">Instructions</a> 
+        | <a href="../panel/panel.html">ESA Vegetation Panel</a> |<a href="../general/contact.html"> 
+        Contact</a> | <a href="../general/help.html">Help</a></font><font size="2" face="Georgia, Times New Roman, Times, serif"><br>
+        <font size="2" face="Georgia, Times New Roman, Times, serif"><a href="../general/register.html">Register</a> 
+        | <a href="../general/login.html">Login</a> |<a href="../general/actions.html"> 
+        use VegBank</a>| <a href="../general/logout.html">Logout</a> |<a href="../general/account.html"> 
+        My VegBank Account</a></font></font></p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="800" height="24" colspan="6" valign="top"> 
+      <p align="center"><font size="1" face="Georgia, Times New Roman, Times, serif" color="#808000">&copy; 
+        2002 Ecological Society of America<br>
+        <a href="../general/terms.html">Terms of use</a> |<a href="../general/privacy.html"> 
+        Privacy policy</a></font></p>
+    </td>
+  </tr>
+</table>
+</BODY>
+<!-- #EndTemplate --></HTML>
