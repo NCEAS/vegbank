@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-27 19:10:32 $'
- *	'$Revision: 1.16 $'
+ *	'$Date: 2004-03-05 22:26:12 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -187,7 +187,7 @@ public class DBModelBeanReader
 		HashMap parsedAC = Utility.parseAccessionCode(accessionCode);
 		String entityCode = (String) parsedAC.get("ENTITYCODE");
 		
-		LogUtility.log("Got an entity code of " + entityCode + " from " + accessionCode, LogUtility.TRACE);
+		LogUtility.log("Got an entity code of " + entityCode + " from " + accessionCode, LogUtility.DEBUG);
 		
 		// TODO: Get the entity name from AccessionGen & co when stable
 		//AccessionGen ag = new AccessionGen();
@@ -502,7 +502,7 @@ public class DBModelBeanReader
 		}
 		
 		String sqlStatement = this.getSQLSelectStatement(fieldNames, className, PKName, PKValue);
-		LogUtility.log("BDModelBeanReader: " + sqlStatement, LogUtility.TRACE);
+		LogUtility.log("BDModelBeanReader: " + sqlStatement, LogUtility.DEBUG);
 		
 		try
 		{
@@ -545,11 +545,11 @@ public class DBModelBeanReader
 						VBModelBean newObject = (VBModelBean) Utility.createObject(fullyQualifiedClassName);
 						try
 						{
-							LogUtility.log("DBModelBeanReader: Getting "  + propertyName + " for " + className, LogUtility.TRACE);
+							LogUtility.log("DBModelBeanReader: Getting "  + propertyName + " for " + className, LogUtility.DEBUG);
 							
 							fieldName = Utility.getPKNameFromFKName(fieldName);
 							
-							//LogUtility.log("]]]" + hmap, LogUtility.TRACE);
+							//LogUtility.log("]]]" + hmap, LogUtility.DEBUG);
 							//	Fill out this object  --- RECURSIVE carefull
 							//LogUtility.log("this.getObjectFromDB( " + newObject + "," + fieldName+ ", " +  new Integer(value).intValue() + ")" );
 							this.getObjectFromDB(newObject, fieldName, new Integer(value).intValue() );
@@ -585,7 +585,7 @@ public class DBModelBeanReader
 			else
 			{
 				// No observation found
-				LogUtility.log("DBModelBeanReader: Did not find any results for " + PKName  + " = " + PKValue, LogUtility.TRACE);
+				LogUtility.log("DBModelBeanReader: Did not find any results for " + PKName  + " = " + PKValue, LogUtility.DEBUG);
 			}
 			rs.close();
 	
@@ -759,7 +759,7 @@ public class DBModelBeanReader
 		{
 			if (null == instance)
 			{
-				LogUtility.log("ModelBeanCache: Creating Instance" , LogUtility.TRACE);
+				LogUtility.log("ModelBeanCache: Creating Instance" , LogUtility.DEBUG);
 				instance = new ModelBeanCache();
 			}
 			return instance;
@@ -789,13 +789,13 @@ public class DBModelBeanReader
 						String  fileName = cachedFiles[i].getName();
 						if ( fileName.startsWith( Utility.getAccessionPrefix() + ".") )
 						{
-							LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName, LogUtility.TRACE);
+							LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName, LogUtility.DEBUG);
 							// Add all the names to diskCacheKeys
 							diskCacheKeys.add( fileName );
 						}
 						else 
 						{
-							LogUtility.log("ModelBeanCache: Not adding to Disk Cache: " + fileName, LogUtility.TRACE);
+							LogUtility.log("ModelBeanCache: Not adding to Disk Cache: " + fileName, LogUtility.DEBUG);
 						}
 					}
 				}
@@ -819,13 +819,13 @@ public class DBModelBeanReader
 				
 				// Remove item from memory cache
 				memoryCache.removeElementAt(0);
-				LogUtility.log("ModelBeanCache: Removed oldest bean from cache Memory Cache", LogUtility.TRACE);
+				LogUtility.log("ModelBeanCache: Removed oldest bean from cache Memory Cache", LogUtility.DEBUG);
 			}
 			Vector newElement = new Vector ();
 			newElement.add(accessionCode);
 			newElement.add(bean);
 			memoryCache.add( newElement );
-			LogUtility.log("ModelBeanCache: Added to Memory Cache: " + accessionCode, LogUtility.TRACE);
+			LogUtility.log("ModelBeanCache: Added to Memory Cache: " + accessionCode, LogUtility.DEBUG);
 			
 			// Also add to diskCache
 			addToDiskCache(accessionCode, bean);
@@ -861,10 +861,10 @@ public class DBModelBeanReader
 						String fileNameToAxe = (String) diskCacheKeys.firstElement();
 						File fileToAxe = new File(CACHE_DIR, fileNameToAxe);
 						fileToAxe.delete();
-						LogUtility.log("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe, LogUtility.TRACE);
+						LogUtility.log("ModelBeanCache: Deleted from Disk Cache: " + fileNameToAxe, LogUtility.DEBUG);
 					}
 					saveToDisk(beanToSave, fileName);			
-					LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName, LogUtility.TRACE);
+					LogUtility.log("ModelBeanCache: Added to Disk Cache: " + fileName, LogUtility.DEBUG);
 				
 					// Put the fileName is the diskCache
 					diskCacheKeys.add(fileName);
@@ -888,7 +888,7 @@ public class DBModelBeanReader
 			for ( int i=0 ; i < memoryCache.size() ; i++)
 			{
 				Vector currentElement = (Vector) memoryCache.elementAt(i);
-				LogUtility.log( "ModelBeanCache: accessionCode" + currentElement.elementAt(0) + " = " + currentElement.elementAt(1), LogUtility.TRACE);
+				LogUtility.log( "ModelBeanCache: accessionCode" + currentElement.elementAt(0) + " = " + currentElement.elementAt(1), LogUtility.DEBUG);
 				if ( accessionCode.equalsIgnoreCase( (String) currentElement.elementAt(0) ) )
 				{
 					LogUtility.log("ModelBeanCache: Retrived from memory Cache: " + accessionCode, LogUtility.INFO);

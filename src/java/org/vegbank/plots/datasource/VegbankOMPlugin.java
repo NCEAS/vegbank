@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-03-02 19:04:37 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2004-03-05 22:26:12 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -940,7 +940,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 
 			String plantName = MBReadHelper.getPlantName(to);
 
-			LogUtility.log(plantName + " added "+ to.getAccessioncode(), LogUtility.TRACE);
+			LogUtility.log(plantName + " added "+ to.getAccessioncode(), LogUtility.DEBUG);
 			taxonObs.put(plantName, to);
 			nameList.add(plantName);
 		}
@@ -964,7 +964,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 	public String getPlantTaxonCover(String plantName, String plotName)
 	{
 		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
-		LogUtility.log("Found   " +  to.getAccessioncode() + " for " + plantName, LogUtility.TRACE);
+		LogUtility.log("Found   " +  to.getAccessioncode() + " for " + plantName, LogUtility.DEBUG);
 		return MBReadHelper.getStrataTaxonCover(to, null);
 	}
 
@@ -1570,7 +1570,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 		String stratumName)
 	{
 		Taxonobservation to = (Taxonobservation) taxonObs.get(plantName);
-		//LogUtility.log("Found   " +  to.getAccessioncode() + " for " + plantName, LogUtility.TRACE);
+		//LogUtility.log("Found   " +  to.getAccessioncode() + " for " + plantName, LogUtility.DEBUG);
 		return MBReadHelper.getStrataTaxonCover(to, stratumName );
 	}
 
@@ -1594,7 +1594,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 				stratumName = this.getStratumName(stratum);
 				strataList.add(stratumName);
 				taxonImportances.put(stratumName, ti);
-				LogUtility.log("Adding stratum " +  stratumName + " for " + plantName, LogUtility.TRACE);
+				LogUtility.log("Adding stratum " +  stratumName + " for " + plantName, LogUtility.DEBUG);
 			}
 		}
 		return strataList;
@@ -1649,7 +1649,7 @@ public class VegbankOMPlugin implements PlotDataSourceInterface
 			}
 			uniqueStrataNames.add(stratumName);
 			strataNames.put(stratumName, stratum);
-			LogUtility.log("Adding " + stratum.getStratum_id() +  " for " + stratumName ,LogUtility.TRACE);
+			LogUtility.log("Adding " + stratum.getStratum_id() +  " for " + stratumName ,LogUtility.DEBUG);
 		}
 		return uniqueStrataNames;
 	}
