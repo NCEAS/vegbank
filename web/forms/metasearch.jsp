@@ -27,6 +27,7 @@ if (xwhereGlue == null) {
 	xwhereGlue = "or";
 }
 
+String blackBoxText = "Search Results";
 String xwhereParams = request.getParameter("xwhereParams");
 String searchString = xwhereParams;
 if (xwhereParams == null) {
@@ -38,6 +39,10 @@ if (xwhereParams == null) {
 String clearSearch = request.getParameter("clearSearch");
 if (clearSearch != null && clearSearch.equals("1")) {
 	searchString = "";
+}
+
+if (searchString ==  null || searchString.equals("")) {
+	blackBoxText = "Browse All Data";
 }
 %>
 
@@ -110,7 +115,7 @@ if (clearSearch != null && clearSearch.equals("1")) {
 	<table bgcolor="#333333" cellspacing="0" cellpadding="1" border="0" align="center">
 	<tr><td><table bgcolor="#FFFFFF" border="0" cellspacing="0" cellpadding="10" width="250">
 	<tr align="center">
-		<td class="major" colspan="2">Search Results</td>
+		<td class="major" colspan="2"><%= blackBoxText %></td>
 	</tr>
 	<tr align="center">
 		<th>Category</th>
@@ -174,11 +179,14 @@ String getURL = "@get_link@" + getView + "/" + getName + "/" + params +
 </blockquote>
 	<center>
 <span class="vegbank_small" align="center">
+<% if (searchString !=  null && !searchString.equals("")) { %>
 You searched for 
 <logic:equal name="regexOp" value="and">all words in</logic:equal>
 <logic:equal name="regexOp" value="or">any word in</logic:equal>
-'<i><%= xwhereParams %></i>'
+'<i><%= searchString %></i>'
 <br>
+<% } %>
+
 Click here to <a href="javascript:viewAllMetadata()">view all metadata</a>
 </span>
 </center>
