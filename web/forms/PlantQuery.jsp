@@ -1,7 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+@stdvegbankget_jspdeclarations@
 
 
 <html>
@@ -13,15 +10,13 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-07-28 07:41:25 $'
-  *  '$Revision: 1.6 $'
+  *      '$Date: 2004-12-13 06:46:26 $'
+  *  '$Revision: 1.7 $'
   *
   *
   -->
 
 <head>@defaultHeadToken@
-  <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st November 2003), see www.w3.org">
 
   <title>PLANT CONCEPT LOOKUP</title>
   <link rel="stylesheet" href="@stylesheet@" type="text/css">
@@ -39,12 +34,30 @@
   span.c2 {color: #209020; font-family: Helvetica,Arial,Verdana; font-size: 80%}
   span.c1 {color: #23238E; font-family: Helvetica,Arial,Verdana; font-size: 200%}
   </style>
+
+<script language="javascript">
+function setPlantDate() {
+	month = document.queryform.ebMonth.value;
+	date = document.queryform.ebDate.value;
+	year = document.queryform.ebYear.value;
+
+	document.queryform.xwhereParams_date_0.value = null;
+
+	if (month != null && date != null && year != null &&
+			month != "" && date != "" && year != "") {
+
+		document.queryform.xwhereParams_date_0.value = 
+			date + "-" + month + "-" + year;
+	}
+
+}
+
+</script>
+
 </head>
 
 <body>
   @vegbank_header_html_normal@ <!-- SECOND TABLE -->
-
-  <html:errors/>
 
   <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
     <tr>
@@ -65,149 +78,222 @@
       <td width="15%" bgcolor="white" align="left" valign="top">
 
       <td align="left">
-        <html:form action="/PlantQuery" method="get">
+
+        <form action="@web_context@views/plantconcept_detail.jsp" method="get" name="queryform" onsubmit="setPlantDate()">
+			<input type="hidden" name="where" value="where_plantconcept_mpq"/>
+
           <table>
             <tr valign="top">
               <td align="left" valign="middle" colspan="2">
-                <span class="c2"><b>Enter the taxon name below and toggle the
-                correct type and level of the taxon.</b></span>
-
-                <p>
-			<small>
-				<html:submit value="search for plants"/>
-                		&nbsp;&nbsp; 
-				<html:reset value="reset"/>
-			</small>
-		</p>
+                <span class="c2">
+				<b>All search criteria are optional.</b>
+				<br>
+				There are many plants to search, so please 
+				<br>
+				have patience if your query seems slow.
+				</span>
               </td>
             </tr>
           </table>
 
-          <p>&nbsp;</p><br>
-          <br>
+          <br/>
 
           <table border="0" width="722">
             <!--TAXON NAME -->
 
-            <tr align="left">
+            <tr align="left" valign="top">
               <td width="156"><b>Taxon name:</b></td>
-              <!--        PLANT TAXON INPUT-->
 
               <td width="556">
-		<html:text size="35" property="plantname"/>
-              	&nbsp;
+		<input type="text" size="35" name="xwhereParams_plantname_0"/>
+		<input type="hidden" name="xwhereParams_plantname_1" value="pu.plantname"/>
+		<input type="hidden" name="xwhereKey_plantname" value="xwhere_match"/>
+				&nbsp; <span class="normal">e.g. maple, acer rubrum
+				</span>
+				<br>
+		<input type="hidden" name="xwhereSearch_plantname" value="true"/>
+		<input type="checkbox" name="xwhereMatchAny_plantname" value="true" checked="true"/>
+			  <span class="sizetiny">
+				Match ANY word (uncheck to match ALL words)
+				</span>
+
 	      </td>
             </tr><!-- IGNORE CASE -->
 
-            <tr align="left">
-              <td width="156"></td>
-
-              <td width="556"><span class="c3">(wildcard = '%')<br>
-                * All Queries are Case Insensitive
-                <!--<input type = "checkbox" name="ignoreCase" value = "true"> Ignore Case<br>-->
-	      </td>
-            </tr><!-- HORIZONTAL LINE -->
-
             <tr>
               <td colspan="2" rowspan="1" align="left" valign="middle">
-                <hr size=".5">
-              </td>
-            </tr><!-- TAXON TYPE -->
-
-            <tr>
-              <td width="156" align="left" valign="top"><b>Taxon type:</b></td>
-              <td class="c4" align="left" valign="top" width="556">
-	        <html:select property="nameType" size="6" multiple="true">
-		   <option value="ANY" selected>--ANY--</option>
-		   <html:options property="plantClassSystems"/>
-	      	 </html:select>
-		<!-- 
-		<html:radio property="nameType" value=""/>Any<br/>
-                <html:radio property="nameType" value="Scientific"/>Scientific name<br/>
-                <html:radio property="nameType" value="English Common"/>Common name<br/>
-                <html:radio property="nameType" value="Code"/>Code<br/>
-		-->
+                <hr size=".1">
               </td>
             </tr>
+	    
+	    <!-- Taxon level -->	    
+            <tr>
+              <td width="156" align="left" valign="top"><b>Taxon level:</b>
+			  <br><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
+			  </td>
+
+		<td width="556" class="c4" align="left" valign="top" width="556">
+	    <select name="xwhereParams_plantlevel_0" size="5" multiple="true">
+			<option value="" selected>--ANY--</option>
+
+<vegbank:get id="plantlevel" select="plantstatus_plantlevel" where="where"/>
+<logic:notEmpty name="plantlevel-BEANLIST">
+	<logic:iterate id="onerow" name="plantlevel-BEANLIST">
+		<logic:notEmpty name="onerow" property="plantlevel">
+		  	<option value="<bean:write name="onerow" property="plantlevel"/>">
+				<bean:write name="onerow" property="plantlevel"/></option>
+		</logic:notEmpty>
+	</logic:iterate>
+</logic:notEmpty>
+
+		</select>
+
+		<input type="hidden" name="xwhereParams_plantlevel_1" value="ps.plantlevel"/>
+		<input type="hidden" name="xwhereKey_plantlevel" value="xwhere_in"/>
+              </td>
+            </tr>
+	    
 	    <!-- HORIZONTAL LINE -->
             <tr>
               <td colspan="2" rowspan="1" align="left" valign="middle">
-                <hr size=".5">
+                <hr size=".1">
               </td>
-            </tr><!-- TAXON LEVEL -->
-
+            </tr>
+		<!-- Name ClassSystem -->
             <tr>
-              <td width="156" align="left" valign="top"><b>Taxon level:</b></td>
-	    
-	      <!-- picklist values to select -->               
-	      <td class="c4" align="left" valign="top" width="556">
-	      	 <html:select property="taxonLevel" size="6" multiple="true">
-		   <option value="ANY" selected>--ANY--</option>
-		   <html:options property="plantLevels"/>
-	      	 </html:select>
-	      </td>
+              <td width="156" align="left" valign="top"><b>Name type:</b>
+			  <br><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
+			  </td>
+              <td class="c4" align="left" valign="top" width="556">
+	        <!--html:select property="xwhereParams_classsystem_0" size="6" multiple="true"-->
+	        <select name="xwhereParams_classsystem_0" size="5" multiple="true">
+			   <option value="" selected>--ANY--</option>
+			   <!--html:options property="plantClassSystems"/-->
 
+<vegbank:get id="classsystem" select="plantusage_classsystem" where="where"/>
+<logic:notEmpty name="classsystem-BEANLIST">
+	<logic:iterate id="onerow" name="classsystem-BEANLIST">
+	<option value="<bean:write name="onerow" property="classsystem"/>">
+			<bean:write name="onerow" property="classsystem"/></option>
+	</logic:iterate>
+</logic:notEmpty>
+
+	      	 <!--/html:select-->
+	      	 </select>
+			<input type="hidden" name="xwhereParams_classsystem_1" value="pu.classsystem"/>
+			<input type="hidden" name="xwhereKey_classsystem" value="xwhere_in"/>
+	      </td>
+	    </tr>
+		
+	    
             <!-- HORIZONTAL LINE -->
             <tr>
               <td colspan="2" rowspan="1" align="left" valign="middle">
-                <hr size=".5">
+                <hr size=".1">
               </td>
             </tr>
 
             <tr>
               <td width="156" align="left" valign="top" height="20">
-              <b>Date:</b></td>
+              <b>As of date:</b></td>
 
               <td class="c4" align="left" valign="top" height="20" width="556">
-               <html:text property="nameExistsBeforeDate"/> 
-                 <span class="itemsmall">
-                   -- If left blank, today's date will be used 
-                   <a href="@help-for-concept-date-href@"><img height="14" width="14" border="0" src="@image_server@question.gif"></a>
-                 </span>
+				<select name="ebDate"> 
+					<option value=""></option> <option value="1">1</option>
+					<option value="2">2</option> <option value="3">3</option>
+					<option value="4">4</option> <option value="5">5</option>
+					<option value="6">6</option> <option value="7">7</option>
+					<option value="8">8</option> <option value="9">9</option>
+					<option value="10">10</option> <option value="11">11</option>
+					<option value="12">12</option> <option value="13">13</option>
+					<option value="14">14</option> <option value="15">15</option>
+					<option value="16">16</option> <option value="17">17</option>
+					<option value="18">18</option> <option value="19">19</option>
+					<option value="20">20</option> <option value="21">21</option>
+					<option value="22">22</option> <option value="23">23</option>
+					<option value="24">24</option> <option value="25">25</option>
+					<option value="26">26</option> <option value="27">27</option>
+					<option value="28">28</option> <option value="29">29</option>
+					<option value="30">30</option> <option value="31">31</option>
+				</select>
+				-
+				<select name="ebMonth"> 
+					<option value=""></option> <option value="JAN">JAN</option>
+					<option value="FEB">FEB</option> <option value="MAR">MAR</option>
+					<option value="APR">APR</option> <option value="MAY">MAY</option>
+					<option value="JUN">JUN</option> <option value="JUL">JUL</option>
+					<option value="AUG">AUG</option> <option value="SEP">SEP</option>
+					<option value="OCT">OCT</option> <option value="NOV">NOV</option>
+					<option value="DEC">DEC</option> 
+				</select>
+				-
+				<input type="text" name="ebYear" size="4"/>
+				<input type="hidden" name="xwhereParams_date_0"/> 
+				<!--input type="hidden" name="xwhereParams_date_1" value="ps.startdate"/-->
+				<input type="hidden" name="xwhereKey_date" value="where_plantstatus_daterange"/>
+                   <a href="@help-for-concept-date-href@"><img 
+				   height="14" width="14" border="0" src="@image_server@question.gif"></a>
               </td>
-            </tr>
-
-            <tr>
-              <td width="156"></td>
-              <td class="c4" width="556" align="left" valign="top" height="20" colspan="2">
-		<span class="itemsmall">
-			(Format: DD-MMM-YYYY, like 12-AUG-2002)
-		</span>
-		</td>
             </tr>
 
             <tr>
               <td colspan="2" rowspan="1" align="left" valign="middle">
-                <hr size=".5">
+                <hr size=".1">
               </td>
             </tr><!-- PARTY -->
 
-            <tr>
-              <td width="156" align="left" valign="top" height="54">
-              <b>Party:</b></td>
 
+            <tr>
+              <td width="156" align="left" valign="top">
+              <b>Party:</b></td>
+            
               <td class="c4" align="left" valign="top" height="54" width="556">
-                <html:select property="accordingToParty">
-                  <option value="">All</option>
-                  <html:optionsCollection property="partyNameIds"/>
-                </html:select>
+                <!--html:select property="xwhereParams_accordingtoparty_0"-->
+                <select name="xwhereParams_accordingtoparty_0">
+                  <option value="">--ANY--</option>
+<vegbank:get id="party" select="plantstatus_party" where="where"/>
+<logic:notEmpty name="party-BEANLIST">
+	<logic:iterate id="onerow" name="party-BEANLIST">
+	<option value="<bean:write name="onerow" property="party_id"/>">
+			<bean:write name="onerow" property="party_id_transl"/></option>
+	</logic:iterate>
+</logic:notEmpty>
+
+                </select>
+				<input type="hidden" name="xwhereParams_accordingtoparty_1" value="ps.party_id"/>
+				<input type="hidden" name="xwhereKey_accordingtoparty" value="xwhere_eq"/>
               </td>
             </tr>
+
+            <tr>
+              <td colspan="2" rowspan="1" align="left" valign="middle">
+                <hr size=".1">
+              </td>
+            </tr>
+			<!-- AND / OR -->
 
             <tr>
               <td align="left" valign="middle" colspan="2">
-                <small>
-                  <html:submit value="search for plants"/> &nbsp;&nbsp; 
-                  <html:reset value="reset"/>
-                </small>
+                <blockquote>
+		      <input type="radio" name="xwhereGlue" value="AND" checked="checked"/>match ALL criteria<br/>
+		      <input type="radio" name="xwhereGlue" value="OR"/>match ANY criteria<br/>
+                </blockquote>
               </td>
             </tr>
-
+	    
+            <tr>
+              <td align="left" valign="middle" colspan="2">
+			  <br>
+					<input type="submit" value="search for plants"/>
+              </td>
+            </tr>
+	    
             <tr>
               <td width="156"></td>
             </tr>
           </table>
-        </html:form>
+        <!--/html:form-->
+        </form>
 
         <table border="0" cellspacing="5" cellpadding="5">
           <tr>

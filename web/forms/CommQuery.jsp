@@ -9,8 +9,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2004-12-12 18:50:32 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2004-12-13 06:46:26 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
@@ -126,8 +126,7 @@ function setCommDate() {
 			  </td>
 
 		<td width="556" class="c4" align="left" valign="top" width="556">
-	    <!--html:select property="xwhereParams_commlevel_0" size="6" multiple="true"-->
-	    <select name="xwhereParams_commlevel_0" size="6" multiple="true">
+	    <select name="xwhereParams_commlevel_0" size="5" multiple="true">
 			<option value="" selected>--ANY--</option>
 			<!--html:options property="commLevels"/-->
 
@@ -159,8 +158,7 @@ function setCommDate() {
 			  <br><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
 			  </td>
               <td class="c4" align="left" valign="top" width="556">
-	        <!--html:select property="xwhereParams_classsystem_0" size="6" multiple="true"-->
-	        <select name="xwhereParams_classsystem_0" size="6" multiple="true">
+	        <select name="xwhereParams_classsystem_0" size="5" multiple="true">
 			   <option value="" selected>--ANY--</option>
 			   <!--html:options property="commClassSystems"/-->
 
