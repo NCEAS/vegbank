@@ -14,8 +14,8 @@
 	* dependencies
 	*
 	* 		'$Author: harris $'
- 	*     '$Date: 2002-02-05 02:03:39 $'
- 	*     '$Revision: 1.4 $'
+ 	*     '$Date: 2002-03-20 21:38:03 $'
+ 	*     '$Revision: 1.5 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -30,11 +30,12 @@
 		<property name="bin" value="./" />
 		<property name="rmiregistry" value="./server" />
 		<property name="translators" value="./lib/datatranslator.jar" />
+		<property name="dbaccess" value="./lib/database_access.jar" />
 
 		
 		<filter token="release" value="alpha-20020120"/>
 		<filter token="authors" value="HARRIS"/>
-		<property name="cpath" value="${translators}:${xerces}:${xalan}:${build}"/>
+		<property name="cpath" value="${dbaccess}:${translators}:${xerces}:${xalan}:${build}"/>
 </target>
 
 	
