@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-09 00:58:44 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2004-12-13 06:44:59 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,18 +37,20 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.taglib.bean.WriteTag;
 
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.DatabaseUtility;
 import org.vegbank.common.utility.CompositeRequestParamUtil;
 
 /**
  * 
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.5 $ $Date: 2004-12-09 00:58:44 $
+ * @version $Revision: 1.6 $ $Date: 2004-12-13 06:44:59 $
  */
 
 public class Xwhere {
 
 	private static final Log log = LogFactory.getLog(Xwhere.class);
+	private static final String PARAM_DELIM = CompositeRequestParamUtil.PARAM_DELIM;
 
 	private static ResourceBundle sqlResources = 
 			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
@@ -93,18 +95,25 @@ public class Xwhere {
 
 				String id = (String)ids.next();
 				appendToClause(getXwhereKeySQL(id), 
-						(String[])((Map)xwParams).get(id), 
+						(Object[])((Map)xwParams).get(id), 
 						getXwhereGlue(id),
 						getXwhereSearch(id),
 						getXwhereMatchAny(id));
 			}
 
-		} else if (xwParams instanceof String[]) {
+		} else if (xwParams instanceof Object[]) {
 			log.debug("xwp is an ARRAY");
 			// An array is used with the xwKey directly
 			// It is one dimensional
-			appendToClause(getXwhereKeySQL(), (String[])xwParams, 
+			appendToClause(getXwhereKeySQL(), (Object[])xwParams, 
 					getXwhereGlue(), getXwhereSearch(), getXwhereMatchAny());
+		}
+
+		if (Utility.isStringNullOrEmpty(this.xwhereClause) ||
+				this.xwhereClause.equals("null")) {
+			this.xwhereClause = "";
+		} else {
+			this.xwhereClause = "(" + this.xwhereClause + ")";
 		}
 	}
 
@@ -198,7 +207,7 @@ public class Xwhere {
 		log.debug("about to parse composite xwhereParams. . .");
 		boolean hasCompositeParams = (composUtil.getMap("XWHEREPARAMS") != null);
 
-		String[] arr;
+		Object[] arr;
 		if (!hasCompositeParams) {
 			arr = new String[1];
 			arr[0] = normalXwhereParams;
@@ -209,7 +218,8 @@ public class Xwhere {
 			// look for any properties on the first level
 			// e.g.  xwhereParams.0, xwhereParams.1
 			log.debug("has composite xwhereParams");
-			arr = composUtil.getStringArray("xwhereParams");
+			arr = composUtil.getObjectArray("xwhereParams");
+
 			if (Utility.isArrayNullOrEmpty(arr)) {
 
 				// try digging one level deeper
@@ -227,8 +237,9 @@ public class Xwhere {
 				while (keys.hasNext()) {
 
 					String keyName = (String)keys.next();
-					log.debug("getting string array for xwhereParams." + keyName);
-					arr = composUtil.getStringArray("xwhereParams." + keyName);
+					//log.debug("getting string array for xwhereParams" + PARAM_DELIM + keyName);
+					//arr = composUtil.getObjectArray("xwhereParams" + PARAM_DELIM + keyName);
+					arr = getXwhereParams(keyName);
 
 					if (!Utility.isArrayNullOrEmpty(arr)) {
 						log.debug("adding string array for key: " + keyName);
@@ -255,7 +266,7 @@ public class Xwhere {
 	 * @param xwParams One dimensional array of strings.  If first 
 	 *  index is empty, doSwap returns "".
 	 */
-	private String doSwap(String xwKeySQL, String[] xwParams, 
+	private String doSwap(String xwKeySQL, Object[] xwParams, 
 			boolean xwSearch, boolean xwMatchAny) {
 
 		// TODO: watch out for ; delimited strings
@@ -263,23 +274,50 @@ public class Xwhere {
 		// record IDs or something.  Not terribly important now.
 
 		if (Utility.isStringNullOrEmpty(xwKeySQL)) {
-			log.error("Can't swap into empty template.");
+			log.error("Can't swap into empty template.  params: " + xwParams.toString());
 			return "";
 		}
 
-		log.debug("swap params: " + Arrays.asList(xwParams).toString());
-		if (Utility.isStringNullOrEmpty(xwParams[0])) {
-			// first param must not be empty
-			return "";
+		String[] strXwParams = new String[xwParams.length];
+
+		// first index might contain a String[]
+		Object o = xwParams[0];
+
+		// first param must not be empty
+		if (o == null) { return ""; }
+
+		if (o.getClass().isArray()) {
+			String[] sarr = (String[])o;
+
+			if (Utility.isStringNullOrEmpty(sarr[0])) { return ""; }
+
+			StringBuffer sb = new StringBuffer(sarr.length*10);
+			for (int j=0; j<sarr.length; j++) {
+				// implode the array values
+				if (j>0) { sb.append(","); }
+				sb.append(DatabaseUtility.makeSQLSafe(sarr[j], !xwSearch));
+			}
+			strXwParams[0] = sb.toString();
+
+		} else {
+			if (Utility.isStringNullOrEmpty(o.toString())) { return ""; }
+			strXwParams[0] = DatabaseUtility.makeSQLSafe(o.toString(), !xwSearch);
 		}
 
+		// make SQL safe
+		for (int i=1; i<xwParams.length; i++) {
+			strXwParams[i] = DatabaseUtility.removeSemicolons((String)xwParams[i]);
+		}
+
+
+		log.debug("swap params: " + Arrays.asList(strXwParams).toString());
 		if (xwSearch) {
 			// only the first string in index [0] is searchable
 			log.debug("doing searchable swap");
-			return doSwapSearchable(xwKeySQL, xwParams, xwMatchAny);
+			return doSwapSearchable(xwKeySQL, strXwParams, xwMatchAny);
 		}
 
-		return (new MessageFormat(xwKeySQL)).format(xwParams);
+		return (new MessageFormat(xwKeySQL)).format(strXwParams);
 	}
 
 
@@ -289,12 +327,12 @@ public class Xwhere {
 	 * @param xwParams One dimensional array of strings
 	 * @param xwGlue to paste this fragment to the extant clause
 	 */
-	private void appendToClause(String xwKeySQL, String[] xwParams, 
+	private void appendToClause(String xwKeySQL, Object[] xwParams, 
 			String xwGlue, boolean xwSearch, boolean xwMatchAny) {
 
 		String swapped = doSwap(xwKeySQL, xwParams, xwSearch, xwMatchAny);
 		if (!Utility.isStringNullOrEmpty(swapped)) {
-			log.debug("APPENDING TO xwCLAUSE: " + swapped);
+			log.info("appending to xwClause: " + swapped);
 
 			if (this.xwhereClause == null) { 
 				this.xwhereClause = swapped;
@@ -338,16 +376,16 @@ public class Xwhere {
 
 
 	//////////////////////// xwhereParams /////////////////////////
-	private String[] getXwhereParams() {
+	private Object[] getXwhereParams() {
 		String[] xwParams = new String[1];
 		xwParams[0] = getTag.getXwhereParams();
 		return xwParams;
 	}
 
-	private String[] getXwhereParams(String parent) {
-		String[] xwParams = null;
+	private Object[] getXwhereParams(String parent) {
+		Object[] xwParams = null;
 		try {
-			xwParams = composUtil.getStringArray("xwhereParams." + parent);
+			xwParams = composUtil.getObjectArray("xwhereParams" + PARAM_DELIM + parent);
 		} catch (Exception ex) {
 			log.error("Problem getting xwhereParam for " + 
 					parent + ": " + ex.getMessage());
@@ -356,10 +394,10 @@ public class Xwhere {
 
 	}
 
-	private String[] getXwhereParams(String grandParent, String parent) {
-		String[] xwParams = null;
+	private Object[] getXwhereParams(String grandParent, String parent) {
+		Object[] xwParams = null;
 		try {
-			xwParams = composUtil.getStringArray("xwhereParams." + grandParent + "." + parent);
+			xwParams = composUtil.getObjectArray("xwhereParams" + PARAM_DELIM + grandParent + PARAM_DELIM + parent);
 		} catch (Exception ex) {
 			log.error("Problem getting xwhereParam for " + grandParent +
 					" -> " + parent + ": " + ex.getMessage());
@@ -416,13 +454,13 @@ public class Xwhere {
 				if (!Utility.isStringNullOrEmpty(parent)) {
 					// use both
 					//xwv = (String)((Map)(composUtil.getMap(xwName).get(grandParent))).get(parent);
-					path = xwName + "." + grandParent;
-					log.debug("getting " + path + "." + parent.toLowerCase());
+					path = xwName + PARAM_DELIM + grandParent;
+					log.debug("getting " + path + PARAM_DELIM + parent.toLowerCase());
 					xwv = (String)(composUtil.getMap(path)).get(parent.toLowerCase());
 
 				} else {
 					// use just the grandparent
-					log.debug("getting " + xwName + "." + grandParent.toLowerCase());
+					log.debug("getting " + xwName + PARAM_DELIM + grandParent.toLowerCase());
 					xwv = (String)(composUtil.getMap(xwName).get(grandParent.toLowerCase()));
 				}
 			} 
@@ -456,7 +494,7 @@ public class Xwhere {
 		if (Utility.isArrayNullOrEmpty(tmp)) {
 
 			// try getting xwhereParams.0, etc.
-			tmp = composUtil.getStringArray("xwhereParams");
+			tmp = composUtil.getObjectArray("xwhereParams");
 			if (Utility.isArrayNullOrEmpty(tmp)) {
 
 				// try getting xwhereParam.identifier.0, etc.
@@ -466,9 +504,9 @@ public class Xwhere {
 				Iterator keys = m.keySet().iterator();
 				while (keys.hasNext()) {
 					String keyName = (String)keys.next();
-					tmp = composUtil.getStringArray("xwhereParams." + keyName);
+					tmp = composUtil.getObjectArray("xwhereParams" + PARAM_DELIM + keyName);
 					if (Utility.isArrayNullOrEmpty(tmp)) {
-						log.debug("Found 2nd level xwhereParams." + keyName);
+						log.debug("Found 2nd level xwhereParams" + PARAM_DELIM + keyName);
 						l.add(tmp);
 					}
 				}
@@ -485,13 +523,13 @@ public class Xwhere {
 	/**
 	 * Only the first index, [0], is searchable.
 	 */
-	private String doSwapSearchable(String tpl, String[] params, boolean matchAny) {
+	private String doSwapSearchable(String tpl, Object[] params, boolean matchAny) {
 		if (Utility.isStringNullOrEmpty(tpl)) {
-			log.error("Can't swap into empty template.");
+			log.error("Can't (searchable) swap into empty template.");
 			return "";
 		}
 
-		StringTokenizer stWords = new StringTokenizer(params[0], " ");
+		StringTokenizer stWords = new StringTokenizer((String)params[0], " ");
 		int numWords = stWords.countTokens();
 
 		MessageFormat format = new MessageFormat(tpl);
@@ -499,7 +537,7 @@ public class Xwhere {
 
 		// special handling for AND
 		if (numWords > 1 && !matchAny) {
-			StringBuffer sb = new StringBuffer(numWords * params[0].length() * 2);
+			StringBuffer sb = new StringBuffer(numWords * ((String)params[0]).length() * 2);
 
 			// repeat the swapped tpl for each word in order to match all words
 			boolean first = true;
@@ -507,9 +545,9 @@ public class Xwhere {
 				if (first) { first = false;
 				} else { sb.append(" AND "); }
 
-				params[0] = stWords.nextToken();
+				params[0] = DatabaseUtility.makeSQLSafe(stWords.nextToken(), true);
 				log.debug("==-----formatting with: " + params[0]);
-				sb.append(format.format(params));
+				sb.append(format.format((String[])params));
 			}
 
 			return sb.toString();
@@ -517,9 +555,25 @@ public class Xwhere {
 		} else {
 			// matching any word (OR) is easy
 			log.debug("Just one word or ANY match");
-			params[0] = params[0].replace(' ', '|');
-			return format.format(params);
+			params[0] = DatabaseUtility.makeSQLSafe(((String)params[0]).replace(' ', '|'), true);
+			return format.format((String[])params);
 		}
 	}
 
+	/**
+	 *
+	 */
+	private String addSingleQuotes(String orig) {
+		String str = "";
+		if (orig.charAt(0) != '\'') {
+			str = "'";
+		}
+
+		str += orig;
+
+		if (orig.charAt(orig.length()-1) != '\'') {
+			str += "'";
+		}
+		return str;
+	}
 }
