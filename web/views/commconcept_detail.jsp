@@ -15,15 +15,15 @@
 
 <h2>View Community Concepts - Detail</h2>
 
-<vegbank:get id="concept" select="commconcept" beanName="map" where="where_commconcept_pk" pager="true"/>
+<vegbank:get id="concept" select="commconcept" beanName="map" pager="true"/>
 <vegbank:pager />
 <logic:empty name="concept-BEANLIST">
              <p>Sorry, no community concepts match your criteria.</p>
           </logic:empty>
 <logic:notEmpty name="concept-BEANLIST"><!-- set up table -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0"><!--each field, only write when HAS contents-->
+<table class="outsideborder" width="100%" cellpadding="0" cellspacing="0"><!--each field, only write when HAS contents-->
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
-
+<tr><th class="major_smaller" colspan="4"><bean:write name="onerow" property="commname_id_transl"/> | <bean:write name="onerow" property="reference_id_transl"/></th></tr>
 <tr>
 <td colspan="4">
 <span class="datalabelsmall">Name: </span><bean:write name="onerow" property="commname_id_transl"/><br/>
@@ -99,7 +99,7 @@
 
 
 
-<tr><td colspan="4"><hr /></td></tr>
+<tr><td colspan="4">&nbsp;<!--<hr />--></td></tr>
 </logic:iterate>
 </table>
 
