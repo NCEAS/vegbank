@@ -1,18 +1,18 @@
 #*
-  $Id: dataload-success.vm,v 1.1 2005-02-01 21:39:17 anderson Exp $
+  $Id: dataload-success.vm,v 1.2 2005-02-10 21:16:34 anderson Exp $
 *#
 VEGBANK DATA SUBMISSION RECEIPT
 
 result:  SUCCESS
-dataset:  $datasetURL
-file:  $fileName
-when:  $timestamp
-user:  $username
+#if( $datasetURL )
+dataset: $!datasetURL
+#end
+file:    $!fileName
 
 
-#if ($entityCounts.size() > 0)
-Loaded item counts
-#foreach ($entity in $entityCounts.keySet())
+#if( $entityCounts.size() > 0 )
+LOADED ITEM COUNTS
+#foreach( $entity in $entityCounts.keySet() )
     $entity:  $entityCounts.get($entity)
 #end
 #end
