@@ -8,8 +8,8 @@
   *  % echo "[build.context]" | ant [target]
   *
   *     '$Author: anderson $'
-  *     '$Date: 2005-01-24 18:25:54 $'
-  *     '$Revision: 1.58 $'
+  *     '$Date: 2005-01-25 01:20:41 $'
+  *     '$Revision: 1.59 $'
 -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
@@ -285,7 +285,7 @@
     <echo>deploying properties files to ${web.classes.dir}</echo>
     <unjar src="${build.lib.dir}/vegbank.jar" dest="${web.classes.dir}">
       <patternset>
-        <include name="**.properties"/>
+		  <include name="**/*.properties"/>
       </patternset>
     </unjar>
     <echo>copying ${build.java.src.dir}/velocity.properties to web context base</echo>
