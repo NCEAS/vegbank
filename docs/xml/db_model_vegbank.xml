@@ -540,12 +540,12 @@
         <attListItem>
           <attListValue>other</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>9</attListSortOrd>
+          <attListSortOrd>11</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>phase</attListValue>
           <attListValueDesc/>
-          <attListSortOrd>8</attListSortOrd>
+          <attListSortOrd>9</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Physiognomic subclass</attListValue>
@@ -553,9 +553,19 @@
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
+          <attListValue>subassociation</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>8</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>subgroup</attListValue>
           <attListValueDesc/>
           <attListSortOrd>4</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>order</attListValue>
+          <attListValueDesc/>
+          <attListSortOrd>10</attListSortOrd>
         </attListItem>
       </attList>
       <attNotes>closed list</attNotes>
