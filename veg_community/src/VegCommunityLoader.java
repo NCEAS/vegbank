@@ -3,9 +3,9 @@
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2002-12-18 22:29:25 $'
- * '$Revision: 1.19 $'
+ *   '$Author: farrell $'
+ *     '$Date: 2002-12-19 00:52:53 $'
+ * '$Revision: 1.20 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public class VegCommunityLoader
 		private String refTitle = null;
 		private String refPubDate = null;
 		private String partyOrgName = null;
-	
+		private static String host = "localhost";
 		
 		//constructor
 		public VegCommunityLoader()
@@ -75,7 +75,8 @@ public class VegCommunityLoader
 			Class.forName("org.postgresql.Driver");
 			//the framework database
 			//c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/communities_dev", "datauser", "");
-			c = DriverManager.getConnection("jdbc:postgresql://dhcp87.nceas.ucsb.edu/communities_dev", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://"+host+"/framework", "datauser", "");
+			//c = DriverManager.getConnection("jdbc:postgresql://beta.nceas.ucsb.edu/communities_dev", "datauser", "");
 		}
 		catch ( Exception e )
 		{
@@ -1625,11 +1626,10 @@ public class VegCommunityLoader
 		{
 			try
 			{
-				VegCommunityLoader loader = new VegCommunityLoader();
-				
-				
-				if (args.length == 1) 
+				if (args.length == 2) 
 				{
+					host = args[1];
+				  VegCommunityLoader loader = new VegCommunityLoader();
 					String dataset = args[0];
 					if ( dataset.trim().equals("ecoart") )
 					{
@@ -1644,6 +1644,7 @@ public class VegCommunityLoader
 					else if ( dataset.trim().equals("test") )
 					{
 						System.out.println("VegCommunityLoader > loading test data ");
+						System.out.println("VegCommunityLoader > host: " + host);					
 						String conceptCode = "";
 						String conceptLevel = "level1";
 						String commName = "Grassy Coastal Terrace";
@@ -1652,19 +1653,19 @@ public class VegCommunityLoader
 						String otherName = "";
 						String partyName = "John Harris";
 						//laod the community
-						loader.insertGenericCommunity(conceptCode, conceptLevel, commName, 
-					 	dateEntered, parentCommunity, otherName, 
-						partyName );
+						//loader.insertGenericCommunity(conceptCode, conceptLevel, commName, 
+					 	//													dateEntered, parentCommunity, otherName,
+						//													partyName );
 					}
 					else
 					{
-						System.out.println(" usage  > inputs {ecoart | test}"); 
+						System.out.println(" usage  > inputs {ecoart | test} hostname"); 
 					}
 					
 				}
 				else
 				{
-					System.out.println(" usage  > inputs {ecoart | test}"); 
+					System.out.println(" usage  > inputs {ecoart | test} hostname"); 
 				}
 				
 				
