@@ -4,8 +4,8 @@
  *    Release: @release@
  *
  *   '$Author: farrell $'
- *     '$Date: 2002-12-31 00:16:50 $'
- * '$Revision: 1.21 $'
+ *     '$Date: 2003-01-02 21:35:19 $'
+ * '$Revision: 1.22 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,21 +174,34 @@ public class VegCommunityLoader
 	 *
 	 *
 	 */
-	 public StringBuffer insertGenericCommunity(String partySalutation, String
-	 partyGivenName, String partySurName, String partyMiddleName, String orgName,
-	 String contactInstructions,
-	 
-	 String conceptReferenceTitle, String conceptReferenceAuthor,
-	 String conceptReferenceDate,
-	 
-	 String nameReferenceTitle, String nameReferenceAuthor,
-	 String nameReferenceDate,
-	
-	 String conceptCode, String conceptLevel, 
-	 String commName, String dateEntered, String parentCommunity, 
-	 String otherName  )
+	 public StringBuffer insertGenericCommunity(String partySalutation, 
+                                              String partyGivenName, 
+                                              String partySurName, 
+                                              String partyMiddleName, 
+                                              String orgName,
+	                                            String contactInstructions, 
+	                                            String conceptReferenceTitle, 
+                                              String conceptReferenceAuthor,
+	                                            String conceptReferenceDate,
+	                                            String nameReferenceTitle, 
+                                              String nameReferenceAuthor,
+	                                            String nameReferenceDate,
+	                                            String conceptCode, 
+                                              String conceptLevel, 
+	                                            String commName, 
+                                              String dateEntered, 
+                                              String parentCommunity, 
+	                                            String otherName  )
 	 {
 	 	StringBuffer sb = new StringBuffer();
+    System.out.println( "VegCommunityLoader > conceptCode = '" + conceptCode + 
+                        "' conceptLevel = '" + conceptLevel+ 
+                        "' commName= '" + commName+
+                        "' dateEntered= '" + dateEntered+
+                        "' parentCommunity= '" + parentCommunity+
+                        "' nameReferenceTitle = '" + nameReferenceTitle +
+                        "' partyName= '" + partySalutation + partyGivenName + partyMiddleName + partySurName + "'");
+ 
 		 try
 		 {
 		 	
@@ -274,14 +287,26 @@ public class VegCommunityLoader
 	 *
 	 * @param conceptCode -- the code associated with a new concept
 	 *
-	 *
+	 * FIXME: No longer used???
 	 *
 	 */
-	 public StringBuffer insertGenericCommunity(String conceptCode, String conceptLevel, 
-	 String commName, String dateEntered, String parentCommunity, 
-	 String allianceTransName, String partyName )
+	 public StringBuffer insertGenericCommunity(String conceptCode, 
+                                              String conceptLevel, 
+	                                            String commName, 
+                                              String dateEntered, 
+                                              String parentCommunity, 
+	                                            String allianceTransName, 
+                                              String partyName )
 	 {
 	 	StringBuffer sb = new StringBuffer();
+
+    System.out.println("conceptCode = '" + conceptCode + "' conceptLevel = '" + conceptLevel+ 
+                        "' commName= '" + commName+
+                        "' dateEntered= '" + dateEntered+
+                        "' parentCommunity= '" + parentCommunity+
+                        "' allianceTransName= '" + allianceTransName+
+                        "' partyName= '" + partyName+ "'");
+    
 		 try
 		 {
 		 	//this is kinda a hack but will work for now
