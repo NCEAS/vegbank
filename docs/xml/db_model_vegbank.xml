@@ -9554,7 +9554,7 @@ conditions may change between resampling events.
     <entityDescription/>
     <module>plot</module>
     <attribute>
-      <attName>PLACE_ID</attName>
+      <attName>PLOTPLACE_ID</attName>
       <attLabel>ID</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
