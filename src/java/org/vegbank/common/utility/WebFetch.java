@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-04 20:58:50 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2004-08-06 23:00:06 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 //import sun.misc.*;
-import com.sun.*;
+//import com.sun.*;
 
 
 public class WebFetch {
