@@ -5,8 +5,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-12-16 19:31:30 $'
- * 	'$Revision: 1.5 $' 
+ *  '$Date: 2003-01-02 21:45:32 $'
+ * 	'$Revision: 1.6 $' 
  */
 
 package xmlresource.utils; 
@@ -910,7 +910,8 @@ public class XMLparse
 		}
 		catch (Exception e) 
 		{
-			System.out.println("Exception: " + e.getMessage());
+			System.out.print("XMLparse > Exception parsing node: " + node);
+			System.out.println(" message: " + e.getMessage());
 		}
 		return(valString);
 	}
