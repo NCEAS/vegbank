@@ -22,14 +22,14 @@ import java.util.regex.Pattern;
 import org.vegbank.common.dbAdapter.*;
 import org.vegbank.common.model.*;
 
-/**
+/*
  * '$RCSfile: Utility.java,v $'
  * 
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2004-02-27 19:10:32 $'
- * '$Revision: 1.28 $'
+ * '$Date: 2004-02-29 22:34:55 $'
+ * '$Revision: 1.29 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -463,6 +463,10 @@ public class Utility
 		if ( table.equalsIgnoreCase("place"))
 		{
 			PKname = Place.PKNAME;
+		}
+		else if ( table.equalsIgnoreCase("aux_role") )
+		{
+			PKname = Aux_role.PKNAME;
 		}
 		else
 		{

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2004-02-18 02:04:44 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2004-02-29 22:34:55 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -235,8 +235,7 @@ public class AccessionGen {
 	}
 
 	/**
-	 * Updates a given table.  Make sure that tableName_id is the
-	 * primary key of each table.
+	 * Updates a given table. 
 	 *
 	 * @return true if updates were all successful
 	 */
@@ -421,7 +420,9 @@ public class AccessionGen {
 	private PreparedStatement getUpdatePreparedStatement(String tableName) throws SQLException
 	{
 		// prepare the update statement
-		String update = "UPDATE " + tableName + " SET accessioncode = ? WHERE " + tableName + "_id = ?";
+		String pKName = Utility.getPKNameFromTableName(tableName);
+		
+		String update = "UPDATE " + tableName + " SET accessioncode = ? WHERE " + pKName + " = ?";
 		PreparedStatement pstmt = conn.prepareStatement(update);
 		return pstmt;
 	}
@@ -446,7 +447,8 @@ public class AccessionGen {
 
 		String query = null;
 		String confirmField = res.getString("confirm." + tableName);
-
+		String pKName = Utility.getPKNameFromTableName(tableName);
+		
 		if (confirmField == null || confirmField.equals("")) {
 			return null;
 		}
@@ -456,12 +458,12 @@ public class AccessionGen {
 
 		if (confirmType.equals("BASIC")) {
 			// select from same table
-			query = "SELECT " + tableName + "_id," + confirmField + " FROM " + tableName;
+			query = "SELECT " + pKName + "," + confirmField + " FROM " + tableName;
 
 		} else if (confirmType.equals("DUAL")) {
 			// if value exists, use it, else use secondary field
 			String confirmField2 = res.getString("confirm." + tableName + ".2");
-			query  = "SELECT " + tableName + "_id," + confirmField + "," + 
+			query  = "SELECT " + pKName + "," + confirmField + "," + 
 					confirmField2 + " FROM " + tableName;
 
 		} else if (confirmType.equals("JOIN")) {
@@ -469,7 +471,7 @@ public class AccessionGen {
 			// SELECT c.commconcept_id, n.commname 
 			// FROM commname n, commconcept c 
 			// WHERE c.commname_id=n.commname_id;
-			query = "SELECT c." + tableName + "_id, n." + confirmField +
+			query = "SELECT c." +pKName + ", n." + confirmField +
 					" FROM " + tableName + " c, " + confirmField + " n WHERE c." + 
 					confirmField + "_id=n." + confirmField + "_id";
 		}
