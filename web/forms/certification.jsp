@@ -13,8 +13,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2004-11-16 06:19:24 $'
-  *  '$Revision: 1.17 $'
+  *      '$Date: 2004-11-16 06:34:20 $'
+  *  '$Revision: 1.18 $'
   *
   *
   -->
@@ -498,13 +498,14 @@
     </tr>
 </html:form>
   </table>
-          <font color="red">*</font> 
+       <p>
+       <font color="red">*</font> 
 		  <span class="sizesmall"> Required fields</span>
 		  <br/>
           <font color="blue" size=-1>#</font>
 		  <span class="sizesmall"> Field listed in the public registry of certified users</span>
           <br/> &nbsp;
-
+        </p>
 
 @vegbank_footer_html_tworow@
 </BODY>

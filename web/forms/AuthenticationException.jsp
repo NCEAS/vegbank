@@ -11,8 +11,8 @@
 *     Authors: @author@
 *
 *    '$Author: mlee $'
-*      '$Date: 2004-11-16 06:19:24 $'
-*  '$Revision: 1.5 $'
+*      '$Date: 2004-11-16 06:34:20 $'
+*  '$Revision: 1.6 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -48,11 +48,10 @@
 	<br>
 	<br/>
     <%@ include file="../includes/Logon.jsp" %>
-	<br>
-	<span class="sizenormal">
+	<p class="sizenormal">
 		Thank you<br>
 		<a href="mailto:help@vegbank.org">help@vegbank.org</a>
-	</span>	
+	</p>	
 </p>
 </blockquote>
 <br>
