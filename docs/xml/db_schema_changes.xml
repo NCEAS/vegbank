@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <!-- This stylesheet is a rough beginning and not checked into cvs initially: -->
-<?xml-stylesheet type="text/xsl" href="changedoc_2ALTER.xsl"?>
-<!--<?xml-stylesheet type="text/xsl" href="checkSchema.xsl"?>-->
+<!--<?xml-stylesheet type="text/xsl" href="changedoc_2XMLtoMerge.xsl"?>-->
+<?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
 <!-- <?xml-stylesheet type="text/xsl" href="dbmodel_2csv_5flds_version.xsl"?> -->
 <!-- <?xml-stylesheet type="text/xsl" href="changedoc_2dbdoc.xsl"?> -->
-<modelChangeDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="C:\vegbank\sandbox\vegbank\docs\xml\db_schema_changes_schema.xsd">
+<modelChangeDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_schema_changes_schema.xsd">
   <modelChange>
     <modelChangeID>1</modelChangeID>
     <modelChangeName>New Permissions schema</modelChangeName>
@@ -13,257 +13,6 @@
     <modelChangeVersion>unknown</modelChangeVersion>
     <modelChangeComments>not yet implemented -- 2.0.0 ? -- may need some revision of this proposed new model in that plot-level embargoes may not be the only embargoes desired - project level or observation level embargoes may also be required.</modelChangeComments>
     <modelChangeBugID>836</modelChangeBugID>
-    <change type="create table">
-      <entity>
-        <entityName>embargo</entityName>
-        <entitySummary/>
-        <entityDescription/>
-        <module>user</module>
-        <attribute>
-          <attName>embargo_ID</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Integer</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>PK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>n/a</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>n/a</attNotes>
-          <attDefinition>primary key for table</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>plot_ID</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Integer</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>plot.plot_ID</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>n/a</attNotes>
-          <attDefinition>references the plot that this embargo applies to</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>embargoReason</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>varchar (80)</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>n/a</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>n/a</attReferences>
-          <attListType>closed</attListType>
-          <attList>
-            <attListItem>
-              <attListValue>Author stipulation</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>Rare species</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>Landownership</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>Bad data</attListValue>
-            </attListItem>
-          </attList>
-          <attNotes>n/a</attNotes>
-          <attDefinition>reason for embargo</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>embargoStart</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Date</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>n/a</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>n/a</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>n/a</attNotes>
-          <attDefinition>datetime of start of embargo</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>embargoStop</attName>
-          <attModel>logical</attModel>
-          <attNulls>yes</attNulls>
-          <attType>Date</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>n/a</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>n/a</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>n/a</attNotes>
-          <attDefinition>datetime of end of embargo</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>embargoOwner</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Integer</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>party.party_ID</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>n/a</attNotes>
-          <attDefinition>party who owns this embargo and can change related permissions in permission table</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>defaultStatus</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Integer</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>n/a</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>n/a</attReferences>
-          <attListType>closed</attListType>
-          <attList>
-            <attListItem>
-              <attListValue>0</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>1</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>2</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>3</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>4</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>5</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>6</attListValue>
-            </attListItem>
-          </attList>
-          <attNotes>default values for field: Public if no embargo, 10km radius for if landowner or rare species, Public embargo if reason=author</attNotes>
-          <attDefinition>permission level for default user, who is not granted different permission in the permission table</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-      </entity>
-      <entity>
-        <entityName>permission</entityName>
-        <entitySummary/>
-        <entityDescription/>
-        <module>user</module>
-        <attribute>
-          <attName>permission_ID</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Integer</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>PK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>n/a</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>n/a</attNotes>
-          <attDefinition>primary key for table</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>embargo_ID</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Integer</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>embargo.embargo_ID</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>n/a</attNotes>
-          <attDefinition>references the embargo to which the permission applies</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>party_ID</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Integer</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>party.party_ID</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>n/a</attNotes>
-          <attDefinition>party who receives permission in this permission record</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>permissionStatus</attName>
-          <attModel>logical</attModel>
-          <attNulls>no</attNulls>
-          <attType>Integer</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>n/a</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>n/a</attReferences>
-          <attListType>closed</attListType>
-          <attList>
-            <attListItem>
-              <attListValue>0</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>1</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>2</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>3</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>4</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>5</attListValue>
-            </attListItem>
-            <attListItem>
-              <attListValue>6</attListValue>
-            </attListItem>
-          </attList>
-          <attNotes>n/a</attNotes>
-          <attDefinition>permission level for party of this record with regard to the embargo referenced here.</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-        <attribute>
-          <attName>permissionNotes</attName>
-          <attModel>logical</attModel>
-          <attNulls>yes</attNulls>
-          <attType>text</attType>
-          <javaType type="int" relation="one"/>
-          <attKey>n/a</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>n/a</attReferences>
-          <attListType>no</attListType>
-          <attList/>
-          <attNotes>n/a</attNotes>
-          <attDefinition>notes about the permission</attDefinition>
-          <update>0.0.0</update>
-        </attribute>
-      </entity>
-    </change>
   </modelChange>
   <modelChange>
     <modelChangeID>2</modelChangeID>
@@ -2626,7 +2375,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
             <formSummary>1154</formSummary>
             <formDetail>1155</formDetail>
           </attForms>
-          <update>1.0.0</update>
+          <update>1.0.2</update>
         </attribute>
       </entity>
     </change>
@@ -2957,7 +2706,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
+          <attRelType type="inverted" name="n/a"/>
           <attReferences>plot.PLOT_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
@@ -2976,7 +2725,33 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
           <attListType>closed</attListType>
-          <attList/>
+          <attList>
+            <attListItem>
+              <attListValue>Author stipulation</attListValue>
+              <attListValueDesc>Plot Author requires that plot be embargoed</attListValueDesc>
+              <attListSortOrd>1</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Rare Species</attListValue>
+              <attListValueDesc>There are rare species on this plot whose exact location should not be revealed to all users.</attListValueDesc>
+              <attListSortOrd>2</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Land Ownership</attListValue>
+              <attListValueDesc>Land owner requires plot data to be embargoed</attListValueDesc>
+              <attListSortOrd>3</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Bad Data</attListValue>
+              <attListValueDesc>The data pertaining to this plot have been determined to have errors.</attListValueDesc>
+              <attListSortOrd>4</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>Other</attListValue>
+              <attListValueDesc>None of the above reasons.</attListValueDesc>
+              <attListSortOrd>99</attListSortOrd>
+            </attListItem>
+          </attList>
           <attNotes>Author stipulation,Rare species,Landownership,Bad data,Other</attNotes>
           <attDefinition>Reason why the plot is embargoed.  This field, as all fields in this table, are private and cannot be viewed or downloaded by VegBank users.</attDefinition>
           <update>1.0.2</update>
@@ -3024,20 +2799,56 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
           <attListType>closed</attListType>
-          <attList/>
-          <attNotes>1-7, according to confidStatus values</attNotes>
+          <attList>
+            <attListItem>
+              <attListValue>0</attListValue>
+              <attListValueDesc>Public</attListValueDesc>
+              <attListSortOrd>1</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>1</attListValue>
+              <attListValueDesc>1 km radius</attListValueDesc>
+              <attListSortOrd>2</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>2</attListValue>
+              <attListValueDesc>10 km radius</attListValueDesc>
+              <attListSortOrd>3</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>3</attListValue>
+              <attListValueDesc>100 km radius</attListValueDesc>
+              <attListSortOrd>4</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>4</attListValue>
+              <attListValueDesc>Location embargo</attListValueDesc>
+              <attListSortOrd>5</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>5</attListValue>
+              <attListValueDesc>Public embargo on data</attListValueDesc>
+              <attListSortOrd>6</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>6</attListValue>
+              <attListValueDesc>Full embargo on data</attListValueDesc>
+              <attListSortOrd>7</attListSortOrd>
+            </attListItem>
+          </attList>
+          <attNotes>0-6, according to confidStatus values</attNotes>
           <attDefinition>Level of embargo for users that do not have special permission found in userPermission table.</attDefinition>
           <update>1.0.2</update>
         </attribute>
       </entity>
       <entity>
-        <entityName>user</entityName>
+        <entityName>usr</entityName>
         <entityLabel>User</entityLabel>
         <entitySummary>Information about VegBank users.</entitySummary>
         <entityDescription/>
         <module>user</module>
         <attribute>
-          <attName>user_ID</attName>
+          <attName>usr_ID</attName>
           <attLabel>User ID</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
@@ -3060,7 +2871,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
+          <attRelType type="inverted" name="n/a"/>
           <attReferences>party.PARTY_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
@@ -3091,10 +2902,10 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attNulls>no</attNulls>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
-          <attKey>FK</attKey>
+          <attKey>n/a</attKey>
           <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
-          <attListType>no</attListType>
+          <attListType>closed</attListType>
           <attList>
             <attListItem>
               <attListValue>0</attListValue>
@@ -3246,15 +3057,15 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>user_ID</attName>
+          <attName>usr_ID</attName>
           <attLabel>User ID</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>user.user_ID</attReferences>
+          <attRelType type="inverted" name="n/a"/>
+          <attReferences>usr.usr_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
           <attNotes>n/a</attNotes>
@@ -3269,7 +3080,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>n/a</attKey>
-          <attRelType type="normal" name="n/a"/>
+          <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
           <attListType>closed</attListType>
           <attList>
@@ -3311,7 +3122,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>n/a</attKey>
-          <attRelType type="normal" name="n/a"/>
+          <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
           <attListType>closed</attListType>
           <attList>
@@ -3938,15 +3749,15 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>user_ID</attName>
+          <attName>usr_ID</attName>
           <attLabel>User ID</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>user.user_ID</attReferences>
+          <attRelType type="inverted" name="n/a"/>
+          <attReferences>usr.usr_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
           <attNotes>n/a</attNotes>
@@ -4043,9 +3854,9 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attKey>n/a</attKey>
           <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
-          <attListType>open</attListType>
+          <attListType>no</attListType>
           <attList/>
-          <attNotes>don't know what values might be here, but category seems useful</attNotes>
+          <attNotes>n/a</attNotes>
           <attDefinition>Type of dataset.</attDefinition>
           <update>1.0.2</update>
         </attribute>
@@ -4060,7 +3871,23 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
           <attListType>closed</attListType>
-          <attList/>
+          <attList>
+            <attListItem>
+              <attListValue>public</attListValue>
+              <attListValueDesc>anyone can view this dataset - it is listed among public datasets</attListValueDesc>
+              <attListSortOrd>1</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>private</attListValue>
+              <attListValueDesc>no one can view this dataset except the user who created it</attListValueDesc>
+              <attListSortOrd>2</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>password</attListValue>
+              <attListValueDesc>no one may view this dataset except with a password, as specified in this table.</attListValueDesc>
+              <attListSortOrd>3</attListSortOrd>
+            </attListItem>
+          </attList>
           <attNotes>public, private, password</attNotes>
           <attDefinition>OK to share this dataset with others?  Note that the dataset must be public or password-protected to be accessed via the accessionCode.</attDefinition>
           <update>1.0.2</update>
@@ -4112,7 +3939,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
+          <attRelType type="inverted" name="n/a"/>
           <attReferences>userDataset.userDataset_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
@@ -4224,15 +4051,15 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>user_ID</attName>
+          <attName>usr_ID</attName>
           <attLabel>User ID</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>user.user_ID</attReferences>
+          <attRelType type="inverted" name="n/a"/>
+          <attReferences>usr.usr_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
           <attNotes>n/a</attNotes>
@@ -4366,7 +4193,7 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
+          <attRelType type="inverted" name="n/a"/>
           <attReferences>embargo.embargo_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
@@ -4375,15 +4202,15 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>user_ID</attName>
+          <attName>usr_ID</attName>
           <attLabel>User ID</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>user.user_ID</attReferences>
+          <attRelType type="normal" name="n/a"/>
+          <attReferences>usr.usr_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
           <attNotes>n/a</attNotes>
@@ -4433,7 +4260,43 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
           <attListType>closed</attListType>
-          <attList/>
+          <attList>
+            <attListItem>
+              <attListValue>0</attListValue>
+              <attListValueDesc>Public</attListValueDesc>
+              <attListSortOrd>1</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>1</attListValue>
+              <attListValueDesc>1 km radius</attListValueDesc>
+              <attListSortOrd>2</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>2</attListValue>
+              <attListValueDesc>10 km radius</attListValueDesc>
+              <attListSortOrd>3</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>3</attListValue>
+              <attListValueDesc>100 km radius</attListValueDesc>
+              <attListSortOrd>4</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>4</attListValue>
+              <attListValueDesc>Location embargo</attListValueDesc>
+              <attListSortOrd>5</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>5</attListValue>
+              <attListValueDesc>Public embargo on data</attListValueDesc>
+              <attListSortOrd>6</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>6</attListValue>
+              <attListValueDesc>Full embargo on data</attListValueDesc>
+              <attListSortOrd>7</attListSortOrd>
+            </attListItem>
+          </attList>
           <attNotes>0-6, according to confidStatus values</attNotes>
           <attDefinition>Status granted to the user for viewing.</attDefinition>
           <update>1.0.2</update>
@@ -4478,15 +4341,15 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>user_ID</attName>
+          <attName>usr_ID</attName>
           <attLabel>User ID</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>user.user_ID</attReferences>
+          <attRelType type="inverted" name="n/a"/>
+          <attReferences>usr.usr_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
           <attNotes>n/a</attNotes>
@@ -4599,10 +4462,10 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attKey>n/a</attKey>
           <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
-          <attListType>closed</attListType>
+          <attListType>no</attListType>
           <attList/>
           <attNotes>plot query, plant query, party query, etc.</attNotes>
-          <attDefinition>Type of query that this is.</attDefinition>
+          <attDefinition>Type of query that this is - user specified.</attDefinition>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -4615,8 +4478,24 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attKey>n/a</attKey>
           <attRelType type="n/a" name="n/a"/>
           <attReferences>n/a</attReferences>
-          <attListType>no</attListType>
-          <attList/>
+          <attListType>closed</attListType>
+          <attList>
+            <attListItem>
+              <attListValue>public</attListValue>
+              <attListValueDesc>anyone can view this query- it is listed among public queries</attListValueDesc>
+              <attListSortOrd>1</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>private</attListValue>
+              <attListValueDesc>no one can view this query except the user who created it</attListValueDesc>
+              <attListSortOrd>2</attListSortOrd>
+            </attListItem>
+            <attListItem>
+              <attListValue>password</attListValue>
+              <attListValueDesc>no one may view this query except with a password, as specified in this table.</attListValueDesc>
+              <attListSortOrd>3</attListSortOrd>
+            </attListItem>
+          </attList>
           <attNotes>n/a</attNotes>
           <attDefinition>type of sharing, if any allowed.</attDefinition>
           <update>1.0.2</update>
@@ -4661,15 +4540,15 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>user_ID</attName>
+          <attName>usr_ID</attName>
           <attLabel>User ID</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>user.user_ID</attReferences>
+          <attRelType type="inverted" name="n/a"/>
+          <attReferences>usr.usr_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
           <attNotes>n/a</attNotes>
@@ -4706,6 +4585,22 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <attList/>
           <attNotes>n/a</attNotes>
           <attDefinition>Value of the preference.</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+        <attribute>
+          <attName>preferencePriority</attName>
+          <attLabel>Preference Priority</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Float</attType>
+          <javaType type="String" relation="one"/>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>The priority rank of this preference if there are more than one preference with the same value.  Useful if options are not always available.  For example, the first rank priority could instruct VegBank to show plantConcept with common Name system.  A second preference could specify that if the first pref is unavailable, use Scientitic Name.</attDefinition>
           <update>1.0.2</update>
         </attribute>
         <attribute>
@@ -4762,15 +4657,15 @@ observation.COVERMETHOD_ID</modelChangeComments>
           <update>1.0.2</update>
         </attribute>
         <attribute>
-          <attName>user_ID</attName>
+          <attName>usr_ID</attName>
           <attLabel>User ID</attLabel>
           <attModel>implementation</attModel>
           <attNulls>no</attNulls>
           <attType>Integer</attType>
           <javaType type="int" relation="one"/>
           <attKey>FK</attKey>
-          <attRelType type="n/a" name="n/a"/>
-          <attReferences>user.user_ID</attReferences>
+          <attRelType type="inverted" name="n/a"/>
+          <attReferences>usr.usr_ID</attReferences>
           <attListType>no</attListType>
           <attList/>
           <attNotes>n/a</attNotes>
@@ -6083,6 +5978,327 @@ observation.COVERMETHOD_ID</modelChangeComments>
             <formDetail>1111</formDetail>
           </attForms>
           <update>1.0.2</update>
+        </attribute>
+      </entity>
+    </change>
+  </modelChange>
+  <modelChange>
+    <modelChangeID>33</modelChangeID>
+    <modelChangeName>standardize accessioncode field name</modelChangeName>
+    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeVersion>1.0.2</modelChangeVersion>
+    <modelChangeComments>add accessionCode to some tables that may need it later, also change obs and plot for this.</modelChangeComments>
+    <change type="create field">
+      <entity>
+        <entityName>observation</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>plot</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>referenceJournal</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>stratumMethod</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>coverMethod</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>taxonObservation</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>project</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>namedPlace</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>soilTaxon</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>commClass</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>userDefined</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>referenceParty</entityName>
+        <entitySummary/>
+        <entityDescription/>
+        <module>plot</module>
+        <attribute>
+          <attName>accessionCode</attName>
+          <attLabel>Accession Code</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (100)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Code that uniquely references this record, allowing reference to this record for this version of this database.  Better than a primary key, which is automatically generated by a database and not globally unique.  VegBank Accession codes are only generated by VegBank, and therefore data integrity can be guaranteed, unlike with a primary key (number).</attDefinition>
+          <update>1.0.2</update>
+        </attribute>
+      </entity>
+    </change>
+    <change type="drop field">
+      <entity>
+        <entityName>plot</entityName>
+        <entityLabel>Plot</entityLabel>
+        <entitySummary>This table stores general, constant information about the a given plot</entitySummary>
+        <entityDescription>plot contains Plot location, dimension, and similarly constant site data, plus metadata that need be stored only once.   Transient observational information (procured during the first or subsequent observation events) are stored separately in observation or its children.</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>accession_number</attName>
+          <attLabel>Accession Number</attLabel>
+          <attModel>implementation</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (200)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition/>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>1025</formAustere>
+            <formSummary>1026</formSummary>
+            <formDetail>1027</formDetail>
+          </attForms>
+          <update>1.0.0</update>
+        </attribute>
+      </entity>
+      <entity>
+        <entityName>observation</entityName>
+        <entityLabel>Observation</entityLabel>
+        <entitySummary>This table stores plot observation results that might vary between official observation events.</entitySummary>
+        <entityDescription>Observation is a child of plot in recognition of the fact that a plot may be re-sampled and that some of the environmental
+conditions may change between resampling events.
+	</entityDescription>
+        <module>plot</module>
+        <attribute>
+          <attName>obsaccessionnumber</attName>
+          <attLabel>Observation Accession Number</attLabel>
+          <attModel>logical</attModel>
+          <attNulls>yes</attNulls>
+          <attType>varchar (200)</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Accession code that uniquely identifies this observation publicly.</attDefinition>
+          <attForms>
+            <formPKTranslate>-1</formPKTranslate>
+            <formAustere>635</formAustere>
+            <formSummary>636</formSummary>
+            <formDetail>637</formDetail>
+          </attForms>
+          <update>1.0.0</update>
         </attribute>
       </entity>
     </change>
