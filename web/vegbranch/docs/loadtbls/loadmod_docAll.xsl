@@ -99,7 +99,7 @@
       <link rel="stylesheet" href="@stylesheet@" type="text/css"/>
       <style type="text/css">
           
-          td.color9 {background-color: FFFFFF}
+          td.color9 {background-color: CC99CC}
           td.color1 {background-color: FF6666}
           td.color2 {background-color: FFCC99}
           td.color3 {background-color: FFFF99}
