@@ -67,6 +67,17 @@
 
 <vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_party_pk" wparam="party_pk" />-->
 
+ <tr><td colspan="9">
+
+
+        <vegbank:get id="browseparty" select="browseparty" 
+        beanName="map" pager="false" perPage="-1"  xwhereEnable="false" />
+<!-- don't show party name as is already shown on this view-->
+<bean:define id="partyShown" value="yes" />
+
+<%@ include file="includeviews/sub_party_plotcount.jsp" %>
+
+</td></tr>
 
 <vegbank:get perPage="-1" wparam="party_pk" where="where_party_pk" pager="false" beanName="map" select="address" id="address"/>
 
