@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:31:34 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-02-07 06:44:13 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -433,7 +433,7 @@ public class VBModelBeanToDB
 
 			if ( VBObjectUtils.isGetMethod(method, "java.util.List") )
 			{
-				LogUtility.log("VBModelBeanToDB : Handling a list");
+				//LogUtility.log("VBModelBeanToDB : Handling a list");
 				// Need to Loop throught all elements and insert them into the DB
 				List objList = (List) method.invoke( currentBean, null);
 				Iterator it = objList.iterator();
@@ -537,7 +537,7 @@ public class VBModelBeanToDB
 					sb.append(key);
 					parameters.append(value );
 				}
-				LogUtility.log(" found a Long " );
+				//LogUtility.log(" found a Long " );
 			}
 			else if ( value instanceof VBModelBean )
 			{
@@ -547,7 +547,7 @@ public class VBModelBeanToDB
 			else
 			{
 				// ????
-				LogUtility.log(" found a ???? " );
+				//LogUtility.log(" found a ???? " );
 			}
 		}
 
@@ -625,7 +625,6 @@ public class VBModelBeanToDB
 		Hashtable nameValue = new Hashtable();
 		
 		StringBuffer sql = new StringBuffer();
-		sql.append("select " + classNameList.lastElement() + "_id from " + ( (String) classNameList.lastElement()).toLowerCase() +" where ");
 		
 		// Get the current bean
 		//VBModelBean currentBean = (VBModelBean) beans.lastElement();
@@ -634,11 +633,41 @@ public class VBModelBeanToDB
 		Iterator it = keys.iterator();
 
 		boolean firstPass = true;
+		boolean foundACField = false;
 		while (it.hasNext())
 		{
-			Object key = it.next();
-			Object value = nameValues.get(key);
+			// looking for an accession code
+			// that's the only field we use to check for a duplicate
+			String key = (String)it.next();
+			if (key.equalsIgnoreCase("accessioncode")) {
+				// found an accession code field in this table (entity/object)
+				foundACField = true;
+
+				String value = (String)nameValues.get(key);
+
+				if (value == null || !value.equals("")) {
+					// there is no AC to check
+					LogUtility.log("VBMBTDB.isObjectInDatabase(): no AC value");
+					return 0;
+				}
+
+				LogUtility.log("VBMBTDB.isObjectInDatabase(): got AC: " + value);
+				String table = ((String)classNameList.lastElement()).toLowerCase();
+				sql.append("SELECT ")
+					.append(table)
+					.append("_id FROM ")
+					.append(table)
+					.append(" WHERE ")
+					.append(key)
+					.append(" = '")
+					.append(Utility.encodeForDB(value))
+					.append("'");
+
+				// b-b-break!!
+				break;
+			}
 			
+			/*
 			if ( value instanceof String )
 			{
 				// Cast to String for now
@@ -696,6 +725,13 @@ public class VBModelBeanToDB
 				// ????
 				LogUtility.log(" found a ???? " );
 			}
+			*/
+		}
+
+		if (!foundACField) {
+			// there is no AC field in this table
+			LogUtility.log("VBMBTDB.isObjectInDatabase(): no AC field");
+			return 0;
 		}
 		///////////////////////////////////////////
 		
