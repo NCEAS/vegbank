@@ -23,7 +23,7 @@
       <head>@defaultHeadToken@
         <title>VegBank -- <xsl:copy-of select="$pageTitle"/>
         </title>
-        <link rel="stylesheet" type="text/css" href="http://vegbank.nceas.ucsb.edu/vegbank/includes/default.css"/>
+        <link rel="stylesheet" type="text/css" href="http://vegbank.org/vegbank/includes/default.css"/>
         <!--
              <link rel="stylesheet" type="text/css" 
               href="@web-base-url@/default.css" />
@@ -104,6 +104,20 @@ return "Check All"; }
                     </p>
                   </td>
                 </tr>
+				<!--
+				<tr align="left" valign="center">
+					<td class="category" colspan="2">
+						<p>
+							<font face="Arial, Helvetica, sans-serif" size="-1"><b>
+							   <font color="red">ACTIONS: </font>
+							   <a href="">Interpret Plot To Community</a> |
+						   <a href="@web_context@InterpretPlant.do">Interpret Plant on This Plot</a> |
+								<a href="">Add a Note about something here</a>
+								</b></font>
+						</p>
+					</td>
+				</tr>
+				-->
                 <tr valign="center" align="left" colspan="1">
                   <td class="tablehead" width="35%" bgcolor="#336633">
                     <font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">
@@ -715,6 +729,20 @@ return "Check All"; }
                     </p>
                   </td>
                 </tr>
+				<!--
+				<tr align="left" valign="center">
+					<td class="category" colspan="2">
+						<p>
+							<font face="Arial, Helvetica, sans-serif" size="-1"><b>
+							   <font color="red">ACTIONS: </font>
+							   <a href="">Interpret Plot To Community</a> |
+						   	<a href="@web_context@InterpretPlant.do">Interpret Plant on This Plot</a> | 
+								<a href="">Add a Note about something here</a>
+								</b></font>
+						</p>
+					</td>
+				</tr>
+				-->
                 <tr valign="center" align="left" colspan="1">
                   <td class="tablehead" width="35%" bgcolor="#336633">
                     <font color="#ffff80" face="Arial, Helvetica, sans-serif" size="-1">
