@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-02-28 15:21:15 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2002-02-28 15:23:20 $'
+ * '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ import databaseAccess.*;
 					sqlBuf.append(" plantDescription, plantNameStatus, classsystem, ");
 					sqlBuf.append(" plantlevel, parentName, acceptedsynonym,  ");
 					sqlBuf.append(" startDate, stopDate  ");
-					sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '%"+taxonName+"%'");
+					sqlBuf.append(" from VEG_TAXA_SUMMARY where plantName like '"+taxonName+"'");
 				///}
 				///else if ( taxonNameType.trim().equals("commonName")  ) 
 				///{
