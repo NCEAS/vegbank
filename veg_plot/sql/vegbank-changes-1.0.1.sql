@@ -65,3 +65,5 @@ ALTER TABLE party   ADD COLUMN accessionCode varchar (100) ;
 ALTER TABLE reference   ADD COLUMN accessionCode varchar (100) ;
 
 ALTER TABLE reference   ADD COLUMN fulltext text ;
+
+UPDATE observation SET dateentered=(SELECT plot.dateentered from plot where plot.plot_ID=observation.plot_ID);
