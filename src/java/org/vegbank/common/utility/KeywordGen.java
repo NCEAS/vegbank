@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-25 21:18:13 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-10-25 23:45:46 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -153,20 +153,20 @@ public class KeywordGen {
 		while (it.hasNext()) {
 			entityName = (String)it.next();
 
-			/*
 			if (!insertMainKeywords(entityName)) {
 				throw new SQLException("Problem inserting keywords for " + entityName);
 			}
-			*/
 
 			if (extraQueries.get(entityName) != null) {
 				if (!insertExtraKeywords(entityName)) {
 					throw new SQLException("Problem inserting extras for " + entityName);
 				}
 
+				/*
 				if (!appendExtraKeywords(entityName)) {
 					throw new SQLException("Problem inserting extras for " + entityName);
 				}
+				*/
 			}
 		}
 	}
@@ -216,7 +216,8 @@ public class KeywordGen {
 			}
 
 			System.out.println("\n\n## Inserting extras: " + extraName);
-			temporarySuccess = buildKeywordTable("keywords_extra", entityQuery, entityName, false);
+			temporarySuccess = buildKeywordTable("keywords", entityQuery, entityName, true);
+			//temporarySuccess = buildKeywordTable("keywords_extra", entityQuery, entityName, false);
 
 			if (!temporarySuccess) {
 				// if any failed, success = false
@@ -253,6 +254,7 @@ public class KeywordGen {
 		StringBuffer sbTmpKw = null;
 		HashMap kwIdMap = new HashMap();
 		String tmpId;
+		long lTmpId;
 		long count=0;
 		int numFields;
 		ResultSet rs;
@@ -305,6 +307,7 @@ public class KeywordGen {
 			try {
 				// first column MUST be PK for parent entity table
 				tmpId = rs.getString(1);
+				lTmpId = rs.getLong(1);
 			} catch (Exception ex) {
 				System.err.println("ERROR: PK field is not valid");
 				conn.rollback();
@@ -317,11 +320,17 @@ public class KeywordGen {
 				tmpValue = rs.getString(i);
 
 				if (tmpValue != null && !tmpValue.equals("null")) {
-					sbKeywords.append(KW_DELIM).append(tmpValue);
+					//sbKeywords.append(KW_DELIM).append(tmpValue);
+					try {
+						insertRow(pstmt, lTmpId, entityName, tmpValue);
+					} catch (SQLException sex) {
+						// oh well.  we tried
+					}
 				}
 
 			}
 		
+			/*
 			if (isUpdate) {
 				// collect all keywords for same tmpId
 				sbTmpKw = (StringBuffer)kwIdMap.get(tmpId);
@@ -336,10 +345,12 @@ public class KeywordGen {
 				insertRow(pstmt, Long.parseLong(tmpId), entityName, sbKeywords.toString());
 				sb.updateStatusBar();
 			}
+			*/
 
 
 		} // end while all results 
 
+		/*
 		if (isUpdate) {
 			// update each record en masse
 			long l=0;
@@ -355,7 +366,7 @@ public class KeywordGen {
 				}
 			}
 		}
-
+		*/
 
 
 		// tidy up the end of the status bar
