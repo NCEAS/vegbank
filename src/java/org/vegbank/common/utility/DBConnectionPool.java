@@ -9,8 +9,8 @@
  * Synthesis Authors: Jing Tao Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2004-03-18 02:06:14 $'
- * '$Revision: 1.8 $'
+ * '$Date: 2004-04-12 17:09:24 $'
+ * '$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -292,21 +292,21 @@ public class DBConnectionPool implements Runnable
 		//Check if the DBConnection usageCount if it is too many
 		if (dbConn.getUsageCount() >= MAXIMUMUSAGENUMBER)
 		{
-			log.warn("DBConnectionPool: Connection usageCount is too high: "
+			log.debug("DBConnectionPool: Connection usageCount is too high: "
 					+ dbConn.getUsageCount());
 			return false;
 		}
 		//Check if the DBConnection has too much connection time
 		if (dbConn.getConnectionTime() >= MAXIMUMCONNECTIONTIME)
 		{
-			log.warn("DBConnectionPool: Connection surpassed max time in database: "
+			log.debug("DBConnectionPool: Connection surpassed max time in database: "
 							+ dbConn.getConnectionTime());
 			return false;
 		}
 		//Check if the DBConnection is too old
 		if (dbConn.getAge() >= MAXIMUMAGE)
 		{
-			log.warn("DBConnectionPool: Connection is too old: "+ dbConn.getAge());
+			log.debug("DBConnectionPool: Connection is too old: "+ dbConn.getAge());
 			return false;
 		}
 		
