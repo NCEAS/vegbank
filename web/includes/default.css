@@ -242,13 +242,15 @@ P, .normal, TD, UL, OL, DL, LI	{
 .sizelarger { font-size: 18pt }
 .sizehuge   { font-size: 24pt }
 
+/*
+THESE are all just normal styles.  The sizes have been changed to size[thesize]
 .vegbank		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; }
 .vegbank_tiny	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 8pt}
 .vegbank_small	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 10pt}
 .vegbank_normal	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 12pt}
 .vegbank_large	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 14pt}
 .sansserif		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif ; color : #531100}
-
+*/
 
 
 /*   SIZES OF TEXT */
@@ -400,6 +402,9 @@ forms/TaxonObservationAnnotateData.jsp
 	background-color: #DDDDDD;
 }
 
+.bright { color: red }
+
+.error { font-weight: bold; color: red;}
 /*
 -----------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------
@@ -543,7 +548,6 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .iform { color: #000000; font-family: Arial; background: #cccc99; font-weight: normal; font-size: 11px; }
 .irform { color: #000000; background: #cccc99; font-weight: normal; font-size: 8pt; }
 
-.error { font-weight: bold; color: red;}
 
 
 .verticaltext { layout-flow: vertical-ideographic }
