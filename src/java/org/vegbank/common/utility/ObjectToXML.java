@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 20:22:12 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-04-16 00:19:51 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,28 +37,15 @@ import java.util.Vector;
  * @author farrell
  */
 
-public class ObjectToXML
+public class ObjectToXML extends VegBankObjectWriter
 {
-	private Object object = null;
-	private Method[] methods = null;
-	private String className = null;
+	
 	private int indentCount = 0;
 	private String indent = "  ";
 	
 	public ObjectToXML(Object object)
 	{
-		this.object = object;
-		
-		Class theClass = object.getClass();
-		methods = theClass.getDeclaredMethods();
-		
-		// Get qualified name
-		className = theClass.getName();
-		// Get unqualified name
-		if (className.lastIndexOf('.') > 0) 
-		{
-			className = className.substring(className.lastIndexOf('.')+1);  
-		}
+		super(object);
 	}
 	
 	public ObjectToXML(Object object, int indentCount)
@@ -83,7 +70,7 @@ public class ObjectToXML
 				if ( isGetMethod(method, "java.lang.String") )
 				{
 					indentCount++;
-					String fieldName = this.getFieldName(methodName);
+					String fieldName = this.getFieldName(methodName, "");
 					String fieldValue = (String) method.invoke(object, null);
 					String xmlNodeString = "<" + fieldName + ">" + fieldValue + "</" + fieldName + ">\n";				
 					result.append( getIndent()  + xmlNodeString);	
@@ -106,9 +93,12 @@ public class ObjectToXML
 				{
 					indentCount++;
 					Object obj = (Object) method.invoke(object, null);
-					ObjectToXML o2x = new ObjectToXML(obj, indentCount);
-					result.append( o2x.getXML() );
-					indentCount--;
+					if (obj != null)
+					{
+						ObjectToXML o2x = new ObjectToXML(obj, indentCount);
+						result.append( o2x.getXML() );
+						indentCount--;
+					}
 				}
 				else 
 				{
@@ -122,48 +112,6 @@ public class ObjectToXML
 		}
 		result.append( getIndent() + "</" + className + ">\n");	
 		return result.toString();	
-	}
-	
-	/**
-	 * Gets the fieldname from a get method
-	 * i.e. getFieldName returns FieldName
-	 * 
-	 * @param methodName
-	 * @return String
-	 */
-	private String getFieldName(String methodName)
-	{
-			return methodName.substring(3);
-	}
-
-	/**
-	 * @param method
-	 * @return boolean
-	 */
-	private boolean isGetMethod(Method method, String returnType ) 
-		throws ClassNotFoundException
-	{
-		boolean result = false;
-		// Check for the get method naming convention
-		if ( isGetMethod(method))
-		{
-			if ( method.getReturnType().equals( Class.forName(returnType))  )
-			{
-				result = true;
-			}
-		}
-		return result;
-	}
-	
-	private boolean isGetMethod(Method method) throws ClassNotFoundException
-	{
-		boolean result = false;
-		// Check for the get method naming convention
-		if ( method.getName().startsWith("get"))
-		{
-				result = true;
-		}
-		return result;
 	}
 	
 	private String getIndent()

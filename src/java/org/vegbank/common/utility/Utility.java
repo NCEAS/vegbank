@@ -1,5 +1,7 @@
 package org.vegbank.common.utility;
 
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,8 +14,8 @@ import org.vegbank.common.dbAdapter.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: farrell $'
- * '$Date: 2003-03-22 01:31:07 $'
- * '$Revision: 1.7 $'
+ * '$Date: 2003-04-16 00:19:51 $'
+ * '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -114,31 +116,6 @@ public class Utility
 		return(c);
 	}
 	
-	/*
-		private Connection getConnection()
-	{
-		Connection c = null;
-		try
-		{
-			// FIXME: Pull in from Properties files
-			Class.forName("org.postgresql.Driver");
-			c =
-				DriverManager.getConnection(
-					"jdbc:postgresql://127.0.0.1/plants_dev",
-					"datauser",
-					"");
-		}
-		catch (Exception e)
-		{
-			commit = false;
-			System.out.println("Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return (c);
-	}
-
-	*/
-		
 	/**
 	 * Thin wrapper around setting a date field in a PreparedStatement to handle
 	 * adding nulls when needed, e.g. empty string.
@@ -162,6 +139,30 @@ public class Utility
 			psmnt.setString(i, date);
 		}
 	}	
+	
+	/**
+	 * Retrieves the content of a URL as a string
+	 * 
+	 * @param u - the URL
+	 * @return	String - the content of the URL
+	 * @throws java.io.IOException
+	 */
+	public static String getURLContent(URL u) throws java.io.IOException
+	{
+			//System.out.println("url: " + u.toString());
+			char istreamChar;
+			int istreamInt;
+			InputStreamReader istream = new InputStreamReader(u.openStream());
+			StringBuffer serverResponse = new StringBuffer();
+			while((istreamInt = istream.read()) != -1)
+			{
+				istreamChar = (char)istreamInt;
+				serverResponse.append(istreamChar);
+			}
+    
+			return serverResponse.toString();
+		}
+
 	
 	/**
 	 * Instantiate a class using the name of the class at runtime

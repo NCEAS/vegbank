@@ -3,8 +3,8 @@
  * Purpose: An adapter class for PostgreSQL RDBMS.
  *
  * '$Author: farrell $'     
- * '$Date: 2003-03-22 01:31:07 $' 
- * '$Revision: 1.4 $'
+ * '$Date: 2003-04-16 00:19:51 $' 
+ * '$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,13 +53,13 @@ public class PostgresqlAdapter extends AbstractDatabase
 	 *            during the db operation
 	 * @return return the generated unique id as a long type
 	 */
-	public long getNextUniqueID(
+	public int getNextUniqueID(
 		Connection conn,
 		String tableName,
 		String primaryKeyName)
 		throws SQLException
 	{
-		long uniqueid = 0;
+		int uniqueid = 0;
 		Statement stmt = conn.createStatement();
 		// constructing the name of the seq to call...
 		stmt.execute(
@@ -67,7 +67,7 @@ public class PostgresqlAdapter extends AbstractDatabase
 		ResultSet rs = stmt.getResultSet();
 		if (rs.next())
 		{
-			uniqueid = rs.getLong(1);
+			uniqueid = rs.getInt(1);
 		}
 		stmt.close();
 

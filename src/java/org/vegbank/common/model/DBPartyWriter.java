@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-03-20 19:34:16 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-04-16 00:19:51 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -202,7 +202,7 @@ public class DBPartyWriter
 			PreparedStatement pstmt;
 
 			sb.append("INSERT into " + tableName + " (givenName, surName, middleName, salutation,");
-			sb.append(" currentName, organizationName, contactInstructions, owner, ");
+			sb.append(" currentName_id, organizationName, contactInstructions, owner_id, ");
 			sb.append( pKName + ") values(?,?,?,?,?,?,?,?,?)");
 			
 			pstmt = conn.prepareStatement(sb.toString());
