@@ -112,6 +112,7 @@ public class DataSubmitServlet extends HttpServlet
 				String orgName =  (String)params.get("orgName");
 				String commName = (String)params.get("communityName");
 				String correlationTaxon = (String)params.get("correlationTaxon");
+				String correlationTaxonLevel = (String)params.get("correlationTaxonLevel");
 				String status = "accepted";
 				String nameRefAuthor = salutation+" "+firstName+" "+lastName;
 				String nameRefTitle = "vegbank";
@@ -125,7 +126,8 @@ public class DataSubmitServlet extends HttpServlet
 				//get a vector that contains hashtables with all the possible 
 				//correlation ( name, recognizing party, system, status, level)
 				qs = new CommunityQueryStore( );
-				Vector correlationTargets = qs.getCorrelationTargets(correlationTaxon, "natureserve");
+				Vector correlationTargets = qs.getCorrelationTargets(correlationTaxon, 
+				"natureserve", correlationTaxonLevel);
 						
 				for (int i=0; i<correlationTargets.size(); i++) 
 				{
@@ -143,6 +145,11 @@ public class DataSubmitServlet extends HttpServlet
 					sb.append(" <input type=hidden name=action value=submit> ");
 					sb.append(" <input type=hidden name=statusId value="+statusId+"> ");
 					sb.append(" <input type=hidden name=conceptId value="+commConceptId+"> ");
+					
+					sb.append(" <input type=hidden name=commName value=\""+commName+"\"> ");
+					sb.append(" <input type=hidden name=correlationTargetName value="+correlationName+"> ");
+					sb.append(" <input type=hidden name=correlationTargetLevel value="+level+"> ");
+					
 					sb.append("commName: " +correlationName + "<br> ");
 					sb.append("party: " +recognizingParty + "<br> ");
 					sb.append("level: " +level + "<br> ");
@@ -170,17 +177,27 @@ public class DataSubmitServlet extends HttpServlet
 				String statusId =  (String)params.get("statusId");
 				int status = Integer.parseInt(statusId);
 				String correlation =  (String)params.get("correlation");
+				
+				String communityName = (String)params.get("commName");
+				String correlationTargetName = (String)params.get("correlationTargetName");
+				String correlationTargetLevel = (String)params.get("correlationTargetLevel");
+				
 				String startDate = null;
 				String stopDate = null;
 				commLoader = new VegCommunityLoader();
 				commLoader.insertCommunityCorrelation(status, concept, correlation
 				, startDate, stopDate);
-				
 				//UPDATE THE DATABASE SUMMARY TABLE
 				sqlFile.issueSqlFile(commUpdateScript);
 				
+				//assume that all went ok and return a recipt
+				System.out.println("DataSubmitServlet > preparing results page");
+				
+				String resultPage = getCorrelationResultsPage(true, communityName, 
+				correlationTargetName, correlationTargetLevel, correlation);
+				
+				sb.append( resultPage );
 			}
-			
 		}
 		catch( Exception e ) 
 		{
@@ -191,6 +208,29 @@ public class DataSubmitServlet extends HttpServlet
 	}
 	
 	
+	/**
+	 * method to prepare the results page 
+	 */
+	 private String getCorrelationResultsPage(boolean result, String communityName, 
+	 String correlationTargetName, String correlationTargetLevel, String correlation)
+	 {
+		 StringBuffer sb = new StringBuffer();
+		 sb.append("<html> \n");
+		 sb.append("<b> CORRELATION SUBMITAL <b> \n");
+		 sb.append("<br> \n");
+		 sb.append("Community Name: " + communityName +" <br> \n");
+		 sb.append("Correlation Target Name: " + correlationTargetName +" <br> \n");
+		 sb.append("Correlation Target Level: " + correlationTargetLevel +" <br> \n");
+		 sb.append("Convergence: " + correlation +" <br> \n");
+		 sb.append("<a href=/forms/community-submit.html> Add a new community  </a> \n");
+		 sb.append("");
+		 sb.append("");
+		 sb.append("");
+		 sb.append("</html> \n");
+		 return(sb.toString() );
+	 }
+	 
+	 
 	/**
 	 * this method handles the submital of community data to the 
 	 * vegbank database.  The return from this method is a StrinBuffer 

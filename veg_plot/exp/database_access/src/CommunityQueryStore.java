@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-03-13 17:57:17 $'
- * '$Revision: 1.7 $'
+ *     '$Date: 2002-03-14 16:09:22 $'
+ * '$Revision: 1.8 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -166,7 +166,8 @@ public class  CommunityQueryStore
 	//get a vector that contains hashtables with all the possible 
 	//correlation ( name, recognizing party, system, status, level)
 	//as input use the authors and the commname
-	public Vector getCorrelationTargets(String commName, String nameRefAuthors)
+	public Vector getCorrelationTargets(String commName, String nameRefAuthors, 
+	String classLevel)
 	{
 		Vector v = new Vector();
 		try
@@ -178,7 +179,8 @@ public class  CommunityQueryStore
 			statement.append(" commconcept_id, usage_id ");
 			statement.append("from commSummary where upper(commName) like '");
 			statement.append(commName.toUpperCase()+"' and upper(nameRefAuthors) ");
-			statement.append(" like '"+nameRefAuthors.toUpperCase()+"'");
+			statement.append(" like '"+nameRefAuthors.toUpperCase()+"' and ");
+			statement.append(" upper(classlevel) like '"+classLevel.toUpperCase()+"'");
 			//gather the responses
 			System.out.println("CommunityQueryStore > "+ statement.toString()  );
 			PreparedStatement pstmt;
