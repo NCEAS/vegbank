@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-24 05:27:21 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2003-11-03 22:41:23 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 package org.vegbank.common.utility;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -97,12 +98,19 @@ public class VBObjectUtils
 	}
 
 	/**
-		 * @param method
-		 * @return boolean
-		 */
+	 * @param method
+	 * @return boolean
+	 */
 	public static boolean isGetMethod(Method method, String returnType)
 	{
 		boolean result = false;
+		
+		if ( Modifier.isPrivate(method.getModifiers()) )
+		{
+			// ignore private fields
+			return false;
+		}
+
 		//System.out.println("++++++>>>> " + returnType + " & " + method.getReturnType() );
 		// Check for the get method naming convention
 		try
@@ -129,6 +137,12 @@ public class VBObjectUtils
 
 	public static boolean isGetMethod(Method method) 
 	{
+		if ( Modifier.isPrivate(method.getModifiers()) )
+		{
+			// ignore private fields
+			return false;
+		}
+		
 		return method.getName().startsWith("get");
 	}
 	

@@ -7,8 +7,8 @@
   *     Authors: @author@
   *
   *    '$Author: farrell $'
-  *      '$Date: 2003-11-03 16:55:03 $'
-  *  '$Revision: 1.1 $'
+  *      '$Date: 2003-11-03 22:41:23 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
@@ -43,7 +43,7 @@ Reference--Status--Check and Submit</font></p>
 
 <form action="/vegbank/servlet/DataSubmitServlet" method="get">
 <input type="hidden" name="submitDataType" value="plantTaxa">
-<input type="hidden" name="action" value="namereference">		
+<input type="hidden" name="action" value="references">		
 <small>
 <INPUT TYPE="submit" VALUE="continue loading plant">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
 </small>
@@ -80,8 +80,11 @@ Reference--Status--Check and Submit</font></p>
 		</td>
 		<td align="left">
 			<!-- THIS TOKEN IS TO BE REPLACED BY THE SERVLET WITH ALL THE REF INFO OR INPUTS-->
-			 <span CLASS="item">	 
+			<span CLASS="item">	 
+			<select name="scientific.reference_id">
 				@longNameReference@ 
+				<option value="none">none</option>
+			</select>
 			</span>
 		</td>
 	</tr>
@@ -107,7 +110,12 @@ Reference--Status--Check and Submit</font></p>
 		</td>
 		<td align="left">
 			<!-- THIS TOKEN IS TO BE REPLACED BY THE SERVLET WITH ALL THE REF INFO OR INPUTS-->
-		<span CLASS="item">	@shortNameReference@ </span>
+			<span CLASS="item">
+			<select name="common.reference_id">
+				@shortNameReference@ 
+				<option value="none">none</option>
+			</select>
+			</span>
 		</td>
 	</tr>
 </table>
@@ -133,10 +141,47 @@ Reference--Status--Check and Submit</font></p>
 		</td>
 		<td align="left">
 			<!-- THIS TOKEN IS TO BE REPLACED BY THE SERVLET WITH ALL THE REF INFO OR INPUTS-->
-				<span CLASS="item">	@codeNameReference@ </span>
+			<span CLASS="item">	
+			<select name="code.reference_id">
+				@codeNameReference@ 
+				<option value="none">none</option>
+			</select>
+			</span>
 		</td>
 	</tr>
 </table>
+
+<br/>
+<br/>
+
+<!-- CONCEPT  REFERENCE and DESCRIPTION -->
+<table border="0" class="category">
+	<tr>
+		<td align="left" width="20%">
+			<font  size="2">
+			Concept Reference<font color="#F90000"><b>*</b></font>:</font>
+		</td>
+
+		<td align="left">
+			<!-- THIS TOKEN IS TO BE REPLACED BY THE SERVLET WITH ALL THE REF INFO OR INPUTS-->
+			<span CLASS="item">	
+			<select name="concept.reference_id">
+				@longNameReference@ 
+				<option value="none">none</option>
+			</select>
+			</span>
+		</td>
+	</tr>
+
+
+        <tr>
+                <td width="9%">Concept Description:</td>
+                <td colspan="2">
+                        <textarea name="conceptDescription" rows="6" cols="50"></textarea>
+		</td>
+	</tr>
+</table>
+
 
     <!-- required = red * -->
 			<font size="2" >
