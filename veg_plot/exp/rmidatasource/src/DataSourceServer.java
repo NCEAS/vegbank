@@ -27,6 +27,9 @@ public class DataSourceServer
 			{
 				//this is the name (or IP addy) of the server to bind to
 				String server = "127.0.0.1";
+				int port = 1099;
+				System.out.print("DataSourceServer > binding to host: " + server);
+				System.out.println(" on port: " + port);
         
 				DataSourceServerInterface fi = new DataSourceImpl("TNCPlotsDB");
         //DataSourceServerInterface fi = new DataSourceImpl("TestPlotSourcePlugin");
@@ -39,7 +42,7 @@ public class DataSourceServer
 					+ remoteObjects[c]  );
 				}
 
-				 Naming.rebind("//"+server+"/DataSourceServer", fi);
+				 Naming.rebind("//"+server+":"+port+"/DataSourceServer", fi);
       } 
 			catch(Exception e) 
 			{
