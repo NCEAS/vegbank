@@ -8,8 +8,8 @@ import java.util.LinkedHashMap;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:52:24 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2005-02-17 22:31:59 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
  */
 
 import org.apache.commons.betwixt.XMLUtils;
+import org.vegbank.common.Constants;
  
 /**
  * @author farrell
@@ -114,7 +115,7 @@ public abstract class VBModelBean
 	}
 
     public String getAccessioncode() {
-        return "";
+        return Constants.NO_AC;
     }
 
 }

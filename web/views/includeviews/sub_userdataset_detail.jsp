@@ -12,6 +12,7 @@
 <logic:notEmpty name="BEANLIST"><!-- set up table -->
 
 <logic:iterate id="onerow" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
+<br>
 <table class="leftrightborders" cellpadding="3"><!--each field, only write when HAS contents-->
 
 <tr class='@nextcolorclass@'><th colspan="2">Dataset :

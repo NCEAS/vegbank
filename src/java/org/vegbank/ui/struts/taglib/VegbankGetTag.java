@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-16 20:12:18 $'
- *	'$Revision: 1.19 $'
+ *	'$Date: 2005-02-17 22:31:59 $'
+ *	'$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ import org.vegbank.common.utility.DatabaseUtility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.19 $ $Date: 2005-02-16 20:12:18 $
+ * @version $Revision: 1.20 $ $Date: 2005-02-17 22:31:59 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -159,18 +159,17 @@ public class VegbankGetTag extends VegbankTag {
 				} else {
 					// use an AC
 					where = getWhereNonNumeric();
-					log.debug("got non-numeric where: " + where);
 
 					if (Utility.isStringNullOrEmpty(where)) {
 						// still null, set default non-numeric
-						where = "where_accessioncode";
-						////////where = "where_ac";  // this one uses IN ({0})
-						log.debug("where was null so is now: " + where);
+						//where = "where_accessioncode";  // this one uses IN ('{0}')
+						where = "where_ac";  // this one uses IN ({0})
+						//log.debug("using default where clause since not specified");
 					}
+					log.debug("got non-numeric where: " + where);
 				}
 
 				request.setAttribute("where", where);
-
 			}
 
 		} catch (Exception ex) {

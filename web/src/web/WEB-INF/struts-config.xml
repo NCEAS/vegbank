@@ -133,6 +133,10 @@
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="cert" />
 		</action>
+		<action path="/DisplayDatasets" forward="/views/userdataset_detail.jsp">
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="reg" />
+		</action>
 		<action path="/CommQuery" type="org.vegbank.ui.struts.DummyAction" name="CommQueryForm" scope="request" validate="true" input="CommQuery">
 			<forward name="default" path="/views/commconcept_detail.jsp" />
 		</action>

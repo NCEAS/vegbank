@@ -14,8 +14,8 @@
   *     Authors: @author@
   *
   *    '$Author: anderson $'
-  *      '$Date: 2005-01-20 14:26:22 $'
-  *  '$Revision: 1.2 $'
+  *      '$Date: 2005-02-17 22:31:59 $'
+  *  '$Revision: 1.3 $'
   *
   *
   -->
@@ -41,7 +41,7 @@
 <p>
 <br/>
 <span class="vegbank_normal">
-Upload Received<br/>
+&raquo; <a href="@get_link@std/userdataset">Go to your datasets</a><br/>
 
 <p>Thanks for contributing your work to the project.
 <br>
