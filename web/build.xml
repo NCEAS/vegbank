@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: farrell $'
-* '$Date: 2003-05-10 00:08:25 $'
-* '$Revision: 1.42 $'
+* '$Date: 2003-05-28 23:56:59 $'
+* '$Revision: 1.43 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -89,6 +89,7 @@
     <filter token="authenticationservlet" value="/vegbank/servlet/authenticate"/>
     <!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/vegbank/"/>
+    <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
   </target>
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
@@ -253,7 +254,7 @@
   <target name="vbsummary" depends="hdrftr" description="=&gt; dist a summary of data in vegbank to the appropriate page">
     <!-- create summary based on current VegBank database status -->
     <exec dir="./general" executable="psql">
-      <arg line="plots_dev qa -f get_vb_stats_cmds.txt"/>
+      <arg line="vegbank qa -f get_vb_stats_cmds.txt"/>
     </exec>
     <!-- copy summary file with filtering to general dir -->
     <copy tofile="${general_server}/vbsummary.html" filtering="yes">

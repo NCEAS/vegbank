@@ -6,9 +6,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2003-02-01 18:21:52 $'
-  *  '$Revision: 1.10 $'
+  *    '$Author: farrell $'
+  *      '$Date: 2003-05-28 23:57:00 $'
+  *  '$Revision: 1.11 $'
   *
   *
   -->
@@ -27,8 +27,7 @@
 <!-- WHERE YOU ARE indicates to user what step in the process she or he is in-->
 
 <p><font size="2" face="Helvetica,Arial,Verdana">	Where you are in the loading process:<br>
-	Enter Names--Match Names--Name References--Concept 
-	Reference--Status--<font color="336633" size="3"><b><i>Check and Submit</i></b></font></font></p>
+	Enter Names--Match Names--References--Status--<font color="336633" size="3"><b><i>Check and Submit</i></b></font></font></p>
 
 <font face="Helvetica,Arial,Verdana" size="2" color="336633">
 				<b>Please check the data for your new Plant Concept then submit.</b>
@@ -38,20 +37,9 @@
 <input type="hidden" name="submitDataType" value="plantTaxa">
 <input type="hidden" name="action" value="plantsubmittalreceipt">		
 <small>
-<INPUT TYPE="submit" VALUE="continue">&nbsp;&nbsp;<INPUT TYPE="reset" VALUE=reset>
+<input type="submit" VALUE="continue">
 </small>
 
-<!-- PARTY DATA TABLE WITH DESCRIPTIONS-->
-<table border="0" width="100%" bgcolor="#DFE5FA">
-	<tr>
-		<td  align=left valign=top  width="5%" >
-			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
-			<b>VegBank User:</b>
-		</td>
-		</font>
-	</tr>
-</table>
-&nbsp;
 &nbsp;
 <span class="itemsmall">
 <table>
@@ -104,85 +92,20 @@ Code Name: </td><td><input type="text" readonly  size="40" maxlength="50"  name=
 
 
 <table border="0" >
-<span class="itemsmall">
-<tr>
-<td>&nbsp;</td>
-     <td><b>Scientific Name</b></td>
-     <td><b>Common Name</b></td>
-     <td><b>Code</b></td>
-</tr>
-<tr>
-<td>Author:
-</td><td><input type="text" readonly  size="40"  name="longNameRefAuthors" value="@longNameRefAuthors@"> 
-</td><td><input type="text" readonly  size="40"  name="shortNameRefAuthors" value="@shortNameRefAuthors@"> 
-</td><td><input type="text" readonly  size="40"  name="codeRefAuthors" value="@codeRefAuthors@"> 
-</td>
-</tr>
-<tr>
-<td>Title: 
-</td><td><input type="text" readonly  size="40"   name="longNameRefTitle" value="@longNameRefTitle@"> 
-</td><td><input type="text" readonly  size="40"   name="shortNameRefTitle" value="@shortNameRefTitle@"> 
-</td><td><input type="text" readonly  size="40"   name="codeRefTitle" value="@codeRefTitle@"> 
-</td>
-</tr>
-<tr>
-<td>Date: 
-</td><td><input type="text" readonly  size="40"   name="longNameRefDate" value="@longNameRefDate@"> 
-</td><td><input type="text" readonly  size="40"   name="shortNameRefDate" value="@shortNameRefDate@"> 
-</td><td><input type="text" readonly  size="40"   name="codeRefDate" value="@codeRefDate@"> 
-</td>
-</tr>
-<tr>
-<td>Edition:        
-</td><td><input type="text" readonly  size="40"   name="longNameRefEdition" value="@longNameRefEdition@"> 
-</td><td><input type="text" readonly  size="40"   name="shortNameRefEdition" value="@shortNameRefEdition@"> 
-</td><td><input type="text" readonly  size="40"   name="codeRefEdition" value="@codeRefEdition@"> 
-</td>
-</tr>
-<tr>
-<td>Series Name:
-</td><td><input type="text" readonly  size="40"   name="longNameRefSeriesName" value="@longNameRefSeriesName@"> 
-</td><td><input type="text" readonly  size="40"   name="shortNameRefSeriesName" value="@shortNameRefSeriesName@"> 
-</td><td><input type="text" readonly  size="40"   name="codeRefSeriesName" value="@codeRefSeriesName@"> 
-</td>
-</tr>
-<tr>
-<td>Volume:         
-</td><td><input type="text" readonly  size="40"   name="longNameRefVolume" value="@longNameRefVolume@"> 
-</td><td><input type="text" readonly  size="40"   name="shortNameRefVolume" value="@shortNameRefVolume@"> 
-</td><td><input type="text" readonly  size="40"   name="codeRefVolume" value="@codeRefVolume@"> 
-</td>
-</tr>
-<tr>
-<td>Page:           
-</td><td><input type="text" readonly  size="40"   name="longNameRefPage" value="@longNameRefPage@"> 
-</td><td><input type="text" readonly  size="40"   name="shortNameRefPage" value="@shortNameRefPage@"> 
-</td><td><input type="text" readonly  size="40"   name="codeRefPage" value="@codeRefPage@"> 
-</td>
-</tr>
-<tr>
-<td>ISSN:           
-</td><td><input type="text" readonly  size="40"   name="longNameRefISSN" value="@longNameRefISSN@"> 
-</td><td><input type="text" readonly  size="40"   name="shortNameRefISSN" value="@shortNameRefISSN@"> 
-</td><td><input type="text" readonly  size="40"   name="codeRefISSN" value="@codeRefISSN@"> 
-</td>
-</tr>
-<tr>
-<td>ISBN:           
-</td><td><input type="text" readonly  size="40"   name="longNameRefISBN" value="@longNameRefISBN@"> 
-</td><td><input type="text" readonly  size="40"   name="shortNameRefISBN" value="@shortNameRefISBN@"> 
-</td><td><input type="text" readonly  size="40"   name="codeRefISBN" value="@codeRefISBN@"> 
-</td>
-</tr>
-<tr>
-<td>Other Details:
-</td><td><input type="text" readonly  size="40"   name="longNameRefOtherCitDetails" value="@longNameRefOtherCitDetails@"> 
-</td><td><input type="text" readonly  size="40"   name="shortNameRefOtherCitDetails" value="@shortNameRefOtherCitDetails@"> 
-</td><td><input type="text" readonly  size="40"   name="codeRefOtherCitDetails" value="@codeRefOtherCitDetails@"> 
-</td>
-</tr>
-
-</span>
+  <span class="itemsmall">
+  <tr>
+    <td>Scientific Name</td>
+    <td>@scientificReferenceLink@</td>
+  </tr>
+  <tr>
+    <td>Common Name</td>
+    <td>@commonReferenceLink@</td>
+  </tr>
+  <tr>
+    <td>Code</td>
+    <td>@codeReferenceLink@</td>
+  </tr>
+  </span>
 </table>
 
 <!-- PLANT CONCEPT-->
@@ -200,35 +123,14 @@ Code Name: </td><td><input type="text" readonly  size="40" maxlength="50"  name=
 <table border="0" >
 <span class="itemsmall">
 <tr>
-<td>Concept Description:</td><td><input type="text" readonly  size="25" maxlength="50"  name="conceptDescription" value="@conceptDescription@"> 
-</td></tr>
+  <td>Concept Description:</td>
+  <td><input type="text" readonly  size="25" maxlength="50"  name="conceptDescription" value="@conceptDescription@"></td>
+</tr>
 <tr>
-<td>Title:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefTitle" value="@conceptRefTitle@"> 
-</td></tr>
-<tr>
-<td>Authors:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefAuthors" value="@conceptRefAuthors@"> 
-</td></tr>
-<tr>
-<td>Pub. Date:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefDate" value="@conceptRefDate@"> 
-</td></tr>
-<tr>
-<td>Edition:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefEdition" value="@conceptRefEdition@"> 
-</td></tr>
-<tr>
-<td>SeriesName:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefSeriesName" value="@conceptRefSeriesName@"> 
-</td></tr>
-<tr>
-<td>Volume:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefVolume" value="@conceptRefVolume@">
-</td></tr>
-<tr>
-<td>Page:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefPage" value="@conceptRefPage@"> 
-</td></tr>
-<tr>
-<td>ISBN:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefISBN" value="@conceptRefISBN@"> 
-</td></tr>
-<tr>
-<td>Other Citation Details:</td><td><input type="text" readonly  size="50" maxlength="50"  name="conceptRefOtherCitDetails" value="@conceptRefOtherCitDetails@"> 
-</td></tr>
+  <td>Concept Reference</td>
+  <td>@conceptReferenceLink@</td>
+</tr>
+
 </span>
 </table>
 <!-- PLANT STATUS -->
@@ -236,9 +138,9 @@ Code Name: </td><td><input type="text" readonly  size="40" maxlength="50"  name=
 	<tr>
 		<td  align=left valign=top  width="5%" >
 			<font face="Helvetica,Arial,Verdana" size="3" color="23238E">
-			<b>Plant Status:</b>
+			  <b>Plant Status:</b>
+		  </font>
 		</td>
-		</font>
 	</tr>
 </table>
 &nbsp;
@@ -262,12 +164,6 @@ Plant Level: </td><td><input type="text" readonly  size="50" maxlength="50"  nam
 </td></tr>
 <tr><td>
 Plant Parent Name: </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@plantParentName@"> 
-</td></tr>
-<tr><td>
-Parent Ref Title : </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@plantParentRefTitle@"> 
-</td></tr>
-<tr><td>
-Parent Ref Authors: </td><td><input type="text" readonly  size="50" maxlength="50"  name="" value="@plantParentRefAuthors@"> 
 </td></tr>
 </span>
 </table>

@@ -34,6 +34,9 @@
     <form-bean  name="AddPartyForm"
                 type="org.vegbank.ui.struts.AddPartyForm"/>
 
+    <form-bean  name="PlotQueryForm"
+                type="org.vegbank.ui.struts.PlotQueryForm"/>
+
   </form-beans>
 
 
@@ -47,6 +50,8 @@
     <forward   name="AddCoverMethod"	path="/forms/AddCoverMethod.jsp"/>
     <forward   name="AddStratumMethod"	path="/forms/AddStratumMethod.jsp"/>
     <forward   name="AddParty"	path="/forms/AddParty.jsp"/>
+    <forward   name="PlotQuery"	path="/forms/plot-query.jsp"/>
+    <forward   name="DisplayResults" path="/forms/DisplayResults.jsp"/>
   </global-forwards>
 
 
@@ -94,6 +99,16 @@
       	validate="true"
       	input="AddParty">
     </action>
+
+
+    <action path="/PlotQuery"
+    	  type="org.vegbank.ui.struts.PlotQueryAction"
+     	  name="PlotQueryForm"
+      	scope="request"
+      	validate="true"
+      	input="PlotQuery">
+    </action>
+
 
   </action-mappings>
 

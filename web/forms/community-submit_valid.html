@@ -7,9 +7,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: mlee $'
-  *      '$Date: 2003-02-01 18:21:48 $'
-  *  '$Revision: 1.8 $'
+  *    '$Author: farrell $'
+  *      '$Date: 2003-05-28 23:57:00 $'
+  *  '$Revision: 1.9 $'
   *
   *
   -->
@@ -125,42 +125,30 @@ Name Status:  <input name="nameStatus"   size="25"   value="@nameStatus@"> <br>
 
 <br>
 <table>
-<tr>
-<td>
-Name Reference <br>
-<span class="category">
-<font size="2">
-Authors: <input name="nameRefAuthors"   size="25" value="@nameRefAuthors@"  > <br>
-Title: <input name="nameRefTitle"   size="40" value="@nameRefTitle@"  > <br>
-Publised Date: <input name="nameRefPubDate"   size="25" value="@nameRefPubDate@"  > <br>
-Edition: <input name="nameRefEdition"   size="25" value="@nameRefEdition@"  > <br>
-Series Name <input name="nameRefSeries"   size="25" value="@nameRefSeriesName@"  > <br>
-Issue Id: <input name="nameRefIssueId"   size="25" value="@nameRefIssueId@"  > <br>
-Other Citation Details <input name="nameRefOtherCitationDetails"   size="25" value="@nameRefOtherCitationDetails@"  > <br>
-Page Number: <input name="nameRefPageNumber"   size="25" value="@nameRefPageNumber@"  > <br>
-ISBN: <input name="nameRefISBN"   size="25" value="@nameRefISBN@"  > <br>
-ISSN: <input name="nameRefISSN"   size="25" value="@nameRefISSN@"  > <br>
-</font>
-</span>
-</td>
-<td>
-<span class="category">
-<font size="2">
-Concept Reference <br>
-Authors: <input name="conceptRefAuthors"   size="25" value="@conceptRefAuthors@"  > <br>
-Title: <input name="conceptRefTitle"   size="40" value="@conceptRefTitle@"  > <br>
-Publised Date: <input name="conceptRefPubDate"   size="25" value="@conceptRefPubDate@"  > <br>
-Edition: <input name="conceptRefEdition"   size="25" value="@conceptRefEdition@"  > <br>
-Series Name <input name="conceptRefSeries"   size="25" value="@conceptRefSeriesName@"  > <br>
-Issue Id: <input name="conceptRefIssueId"   size="25" value="@conceptRefIssueId@"  > <br>
-Other Citation Details <input name="conceptRefOtherCitationDetails"   size="25" value="@conceptRefOtherCitationDetails@"  > <br>
-Page Number: <input name="conceptRefPageNumber"   size="25" value="@conceptRefPageNumber@"  > <br>
-ISBN: <input name="conceptRefISBN"   size="25" value="@conceptRefISBN@"  > <br>
-ISSN: <input name="conceptRefISSN"   size="25" value="@conceptRefISSN@"  > <br>
-</font>
-</span>
-</td>
-</tr>
+  <tr>
+    <td>
+      Name Reference <br>
+      <!-- THIS TOKEN IS TO BE REPLACED BY THE SERVLET WITH ALL THE REF INFO OR INPUTS-->
+      <select name="name.reference_id">
+        @referencesDropDown@
+      </select>
+    </td>
+    <td>
+      <a href="/vegbank/forms/AddReference.jsp" target="_blank">Add a new reference</a>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Concept Reference <br>
+      <!-- THIS TOKEN IS TO BE REPLACED BY THE SERVLET WITH ALL THE REF INFO OR INPUTS-->
+      <select name="concept.reference_id">
+        @referencesDropDown@
+      </select>
+    </td>
+    <td>
+      <a href="/vegbank/forms/AddReference.jsp" target="_blank">Add a new reference</a>
+    </td>
+  </tr>
 </table>
 
 <br>
