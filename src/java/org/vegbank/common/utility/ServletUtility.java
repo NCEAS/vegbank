@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: anderson $'
- *  '$Date: 2004-03-02 22:33:43 $'
- *  '$Revision: 1.11 $'
+ *  '$Date: 2004-04-15 02:04:11 $'
+ *  '$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,12 +39,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -53,6 +48,8 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.upload.FormFile;
 import org.apache.tools.ant.filters.ReplaceTokens;
 import org.vegbank.common.Constants;
@@ -67,9 +64,11 @@ import javax.mail.internet.*;
 
 public class ServletUtility 
 {
+	private static Log log = LogFactory.getLog(ServletUtility.class); 
 	private GetURL gurl = new GetURL();	
 	
 	static final int BUFFER = 2048; 
+	static final String SMTP_SERVER = "hyperion.nceas.ucsb.edu"; 
 	
 	/**
 	 * method that takes a Hashtable containing fileContent and desired fileName 
@@ -151,6 +150,43 @@ public class ServletUtility
 			usrId = (Long) session.getAttribute(Constants.USER_KEY);	
 		}
 		return usrId;
+	}
+
+	/**
+	 * Send an email from a template.
+	 * 
+	 * @param templateName
+	 * @param tagTable
+	 * @param from
+	 * @param to
+	 * @param cc
+	 * @param subject
+	 * @param plainText=true
+	 * @throws AddressException
+	 * @throws MessagingException
+	 */
+	public static void sendEmailTemplate(String templateName, Map tagTable, 
+			String from, String to, String cc,
+			String subject, boolean plainText) 
+			throws AddressException, MessagingException
+	{
+		// load the email template
+		VelocityParser velo = new VelocityParser(templateName);
+		velo.putAll(tagTable);
+
+		// set up the email header
+		String body = velo.processTemplate(); 
+
+		if (to == null || to.equals("")) {
+			throw new AddressException("no email address given");
+		}
+
+		log.debug("Sending email from " + from + " to " + to);
+		if (plainText) {
+			sendPlainTextEmail(SMTP_SERVER, from, to, cc, subject, body);
+		} else {
+			sendHTMLEmail(SMTP_SERVER, from, to, cc, subject, body);
+		}
 	}
 
 	/**
