@@ -6,14 +6,15 @@ import java.sql.*;
 
 
 /**
- * Test plugin class for the PlotDataSource Interface
+ * Test plugin class for the PlotDataSource Interface this class contains a 
+ * plot called 'test-plot'
  *
- *  Authors: 
- *  Release: 
+ *  Authors:
+ *  Release:
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-12-06 02:07:58 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2002-01-05 19:12:34 $'
+ * 	'$Revision: 1.2 $'
  */
 public class TestPlotSourcePlugin implements PlotDataSourceInterface
 {
@@ -89,6 +90,14 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 		}
 	}
 	
+	//returns all the plots stored in the access file
+	public Vector getPlotNames()
+	{
+		Vector v = new Vector();
+		v.addElement("test-plot");
+		return(v);
+	}
+	
 	//returns the project name 
 	public String getProjectName(String plotName)
 	{ return(projectName); }
@@ -102,6 +111,148 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 		return(v);
 	}
 	
+	//retuns the person's salutation based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorSalutation(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("Dr.");
+		else
+			return("Mr.");
+	}
+	//retuns the person's given based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorGivenName(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("Robert");
+		else
+			return("John");
+	}
+	//retuns the person's middle name based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorMiddleName(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("");
+		else
+			return("Howland");
+	}
+	//retuns the person's surName based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorSurName(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("Peet");
+		else
+			return("Harris");
+	}
+	//retuns the name of an org. that a person is associated with based on 
+	//their full name which is the concatenated givename and surname of the 
+	//user like 'bob peet'
+	public String getProjectContributorOrganizationName(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("University of North Carolina Chapel Hill");
+		else
+			return("University of California Santa Barbara");
+	}
+	
+	//retuns the person's contactinstructions based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorContactInstructions(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("email at peet@unc.edu");
+		else
+			return("email at harris@nceas.ucsb.edu");
+	}
+	//retuns the person's phone number based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorPhoneNumber(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("919 945-0788");
+		else
+			return("805 123-4523");
+	}
+	//retuns the person's cellPhone based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCellPhoneNumber(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("949 222-4555");
+		else
+			return("805 222-3434");
+	}
+	//retuns the person's fax phone number based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorFaxPhoneNumber(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("949 456-7856");
+		else
+			return("805 456-6576");
+	}
+	//retuns the party's position within an organization based on their full 
+	// name which is the concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorOrgPosition(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("Professor");
+		else
+			return("Software Developer");
+	}
+	//retuns the person's email based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorEmailAddress(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("peet@unc.edu");
+		else
+			return("harris@nceas.ucsb.edu");
+	}
+	//retuns the person's address line based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorDeliveryPoint(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("Department of Biology, CB#3280");
+		else
+			return("735 State Street, Suite 300");
+	}
+	//retuns the person's city based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCity(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("Chapel Hill");
+		else
+			return("Santa Barbara");
+	}
+	//retuns the person's country based on their full name which is the
+	//concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCountry(String contributorWholeName)
+	{
+			return("USA");
+	}
+	//retuns a boolean 'true' if it is a party's current address based on their 
+	//full name which is the concatenated givename and surname of the user like 'bob peet'
+	public String getProjectContributorCurrentFlag(String contributorWholeName)
+	{
+		return("true");
+	}
+	//retuns the date that the address became current for a party based on 
+	//their full name which is the concatenated givename and surname of the 
+	//user like 'bob peet'
+	public String getProjectContributorAddressStartDate(String contributorWholeName)
+	{
+		if (contributorWholeName.startsWith("Bob"))
+			return("01-JAN-1977");
+		else
+			return("01-JAN-2000");
+	}
+	
 	//returns the start date for the project
 	public String getProjectStartDate(String plotName )
 	{
@@ -113,6 +264,49 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 	{
 		return("01-JAN-2002");
 	}
+	
+	//returns the placeNames each name can be used to retrieve
+	//other information about a place
+	public Vector getPlaceNames(String plotName)
+	{
+		Vector placeNames = new Vector();
+		placeNames.addElement("Marina Park");
+		placeNames.addElement("Ventura Harbor Area");
+		return(placeNames);
+	}
+	//retuns a description of a place based on a placeName
+	public String getPlaceDescription(String placeName)
+	{
+		if ( placeName.startsWith("Marina") )
+			return("marina park by the sunken ship imitation");
+		else if (placeName.startsWith("Ventura"))
+			return("the ventura harbor on the north side");
+		else return("");
+	}
+	//returns a placeCode based on a placeName
+	public String getPlaceCode(String placeName)
+	{
+		if ( placeName.startsWith("Marina") )
+			return("MarinePrk");
+		else if (placeName.startsWith("Ventura"))
+			return("VenHbr");
+		else return("");
+	}
+	//returns a place system based on a placeName
+	public String getPlaceSystem(String placeName)
+	{
+		return("unknown system");
+	}
+	//returns the owner of a place based on the name of a place
+	public String getPlaceOwner(String placeName)
+	{
+		if ( placeName.startsWith("Marina") )
+			return("Ventura county");
+		else if (placeName.startsWith("Ventura"))
+			return("State of California");
+		else return("");
+	}
+	
 	
 	//returns the project description
 	public String getProjectDescription(String plotName )
@@ -197,7 +391,7 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 		return("by the ventura river mouth");
 	}
 	//returns the landForm
-	public String getlandForm(String plotName)
+	public String getLandForm(String plotName)
 	{
 		return("aluvial fan");
 	}
@@ -344,8 +538,14 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 		 }
 	 }
 	 
-
-	
+	/**
+	 * method that retuns the cummulative cover accoss all strata for a given 
+	 * plant taxa in a given plot
+	 */
+	public String getCummulativeStrataCover( String plantName, String plotName )
+	{
+		return("7");
+	}
 
 
 
