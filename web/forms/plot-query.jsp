@@ -14,9 +14,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: farrell $'
-*      '$Date: 2003-11-25 19:59:48 $'
-*  '$Revision: 1.17 $'
+*    '$Author: mlee $'
+*      '$Date: 2003-11-26 23:59:59 $'
+*  '$Revision: 1.18 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -41,15 +41,7 @@
 <title>
 VEGBANK - Simple Plots Query
 </title>
- <script type="text/javascript">
-<!--
-function getHelp()
-{
-return "@manualFrameFor-search-for-plots@"
-}
 
--->
-</script>
 </head>
 
 <body>

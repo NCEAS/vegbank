@@ -15,9 +15,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: farrell $'
-  *      '$Date: 2003-11-25 20:04:17 $'
-  *  '$Revision: 1.1 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2003-11-26 23:59:59 $'
+  *  '$Revision: 1.2 $'
   *
   *
   -->
@@ -27,15 +27,7 @@
 <head>
 		<title>VegBank Retrieve your lost password</title>
 		<link REL=STYLESHEET HREF="@stylesheet@" TYPE="text/css">
- <script type="text/javascript">
-<!--
-function getHelp()
-{
-return "@manualFrameFor-forgot-my-password@"
-}
-
--->
-</script>
+ 
 
 	</head>
 

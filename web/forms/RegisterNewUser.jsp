@@ -11,9 +11,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: farrell $'
-*  '$Date: 2003-11-25 20:04:17 $'
-*  '$Revision: 1.1 $'
+*  '$Author: mlee $'
+*  '$Date: 2003-11-26 23:59:59 $'
+*  '$Revision: 1.2 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -37,15 +37,7 @@
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
  
 <meta http-equiv="Content-Type" content="text/html; charset=">
-<script type="text/javascript">
-<!--
-function getHelp()
-{
-return "@manualFrameFor-register-as-new-user@"
-}
 
--->
-</script>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" TEXT="#531100" link="#0033CC" vlink="#005680" alink="#0066FF">@vegbank_header_html_normal@
 
