@@ -23,6 +23,7 @@
 	<property name="build_lib" value="build/lib" />
 	<property name="build_html" value="build/html" />
 	<property name="build_bin" value="build/bin" />
+	<property name="build_data" value="build/data" />
 	
 	<property name="build_communication" value="./build/src/client/communication" />
 	<property name="build_interface" value="./build/src/client/interface" />
@@ -31,20 +32,22 @@
 	<property name="src_interface" value="./interface" />
 	<property name="src_embedded_db" value="./embeddedDB" />
 	<property name="src_bin" value="../bin" />
+	<property name="src_lib" value="../lib" />
 	
 	<property name="src_xml" value="../xml"/>
 	<property name="utility_src" value="./utilities" />
-	<property name="embeddedDB_src" value="./embeddedDB" /> 
+	<property name="src_embedded_db" value="./embeddedDB" /> 
 
 	<property name="release" value="development"/>
 	<property name="dbAccess_src" value="./plotAccess"/>
 	<property name="database_access_module" value="build/lib/dbAccess.jar" />
-	
+	<property name="jdbc_drivers" value="build/lib/idb.jar" />
+
 	<filter token="version" value="development"/>
 	
 	
 	<property name="cpath" 
-		value="${database_access_module}:${build_communication}:${build_interface}:./"/>
+		value="${jdbc_drivers}:${database_access_module}:${build_communication}:${build_interface}:./"/>
 </target>
 
 <target name="prepare" depends="init">
@@ -63,7 +66,7 @@
 	<copydir src="${src_embedded_db}"
 		dest="${build_embedded_db}"
     filtering="yes"
-		includes="LocalDatabaseManager.java database.properties"
+		includes="**.java **.properties"
 		excludes="**/CVS* "
 	/>
 
@@ -73,6 +76,20 @@
 		includes="vegclient.sh vegclient.bat"
 		excludes="**/CVS* "
 	/>
+
+
+<!--
+	* copy the Enhydra / InstantDb properties file (*.prp) into 
+	* the build_data file - this is the location for the 
+	* embedded database
+	-->
+
+
+	<copyfile src="${src_lib}/nvc.prp"
+  	filtering="yes"
+	  dest="${build_data}/nvc.prp"
+	/>
+			
 
 <!-- 
 	* client library src which contains the classes 
@@ -148,6 +165,7 @@
 		basedir="${build_communication}"
 		includes="${build_communication}/ ** "
 	/>
+	
 	<!-- 
 		* copy this archive into the inteface dir
 		* so that is incorporated into the interface 
@@ -157,13 +175,20 @@
 		filtering="no" 
 		dest="${build_interface}/clientcommunication.jar" 
 	/>
-	<!-- now archive that jar file into the main interface-->
 	
+	<!-- now archive that jar file into the main interface-->
 	<jar jarfile ="${build_lib}/interface.jar"
 		basedir="${build_interface}"
 		manifest="${build_interface}/manifest"
 		includes="${build_interface}/ ** ${src_interface}/test.gif"
 	/>
+
+	<!-- jar the embedded database classes into a jar file -->
+	<jar jarfile ="${build_lib}/embedded_db.jar"
+		basedir="${build_embedded_db}"
+		includes="${build_embedded_db}/ ** "
+	/>
+								
 	
 	
 </target>
