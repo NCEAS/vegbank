@@ -6,8 +6,8 @@ package databaseAccess;
  *    Release: @release@
  *
  *   '$Author: harris $'
- *     '$Date: 2002-07-11 16:17:39 $'
- * '$Revision: 1.17 $'
+ *     '$Date: 2002-07-25 02:07:42 $'
+ * '$Revision: 1.18 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -194,6 +194,8 @@ import databaseAccess.*;
 				}
 			
 				//remember to close the connections etc..
+				query.close();
+				conn.close();
 			}
 			catch (Exception e) 
 			{
@@ -298,6 +300,9 @@ import databaseAccess.*;
 				}
 			
 				//remember to close the connections etc..
+				results.close();
+				query.close();
+				conn.close();
 			}
 			catch (Exception e) 
 			{
