@@ -1,13 +1,4 @@
-import java.sql.*; 
-import java.awt.*; 
-import java.io.*; 
-import java.util.*;
-import java.math.*; 
-import java.net.URL;
-
-                               
-public class LocalDatabaseManager { 
-
+	
 /**
  * this class is to be used to manage the local embedded database and will
  * perform such tasks as creating the database tables, updateing the summary
@@ -20,24 +11,40 @@ public class LocalDatabaseManager {
 
 
 
+import java.sql.*; 
+import java.awt.*; 
+import java.io.*; 
+import java.util.*;
+import java.math.*; 
+import java.net.URL;
 
+                               
+public class LocalDatabaseManager 
+{
+
+	
 public static void main(String args[]) {
+ResourceBundle rb = ResourceBundle.getBundle("LocalDatabaseManager");
+String database=rb.getString("database");
+String baseTables=rb.getString("baseTables");
+String summaryTables=rb.getString("summaryTables");
 
-if (args.length < 1) {
-System.out.println("Wrong number of arguments passed to LocalDatabaseManager\n");
-System.out.println("USAGE: java LocalDatabaseManager <action>");
-System.out.println(	"where action may be createBaseTables, createSummaryTables, updateSummary \n"
-	+" \n"
-	+" createBaseTables: creates the base tables which consist of the normalized \n"
-	+" database structure \n \n"
-	+" createSummaryTables: creates the summary tables which are often used by \n"
-	+" the database access module for querying \n \n"
-	+" updateSummary: updates the summary tables from the base tables -- this \n"
-	+" must be run before querying the embedded database b/c the query modules \n"
-	+" relies heavily on the summary tables \n \n"
-	+" drop: to drop the database just recreate the base tables");
-	System.exit(0);}
-
+if (args.length < 1) 
+	{
+		System.out.println("Wrong number of arguments passed to LocalDatabaseManager\n");
+		System.out.println("USAGE: java LocalDatabaseManager <action>");
+		System.out.println(	"where action may be createBaseTables, createSummaryTables, updateSummary \n"
+		+" \n"
+		+" createBaseTables: creates the base tables which consist of the normalized \n"
+		+" database structure \n \n"
+		+" createSummaryTables: creates the summary tables which are often used by \n"
+		+" the database access module for querying \n \n"
+		+" updateSummary: updates the summary tables from the base tables -- this \n"
+		+" must be run before querying the embedded database b/c the query modules \n"
+		+" relies heavily on the summary tables \n \n"
+		+" drop: to drop the database just recreate the base tables");
+		System.exit(0);
+	}
 String action=args[0];
 
 
@@ -45,7 +52,7 @@ String action=args[0];
 if (action.trim().equals("createBaseTables"))
 {
 	LocalDatabaseManager cld = new LocalDatabaseManager();
-	cld.createLocalDatabase("embeddedSQL.txt");	
+	cld.createLocalDatabase(baseTables);	
 }
 
 else if (action.trim().equals("createSummaryIndexes"))
@@ -59,7 +66,7 @@ else if (action.trim().equals("createSummaryIndexes"))
 else if (action.trim().equals("createSummaryTables"))
 {
 	LocalDatabaseManager cld = new LocalDatabaseManager();
-	cld.createLocalDatabase("buildSummary.txt");	
+	cld.createLocalDatabase(summaryTables);	
 }
 
 
@@ -83,33 +90,34 @@ else {System.out.println("unrecognized command");}
  * local database
  *
  */
-
-
 public void updateSummary (String someVariable)
 {
+	ResourceBundle rb = ResourceBundle.getBundle("LocalDatabaseManager");
+	String database=rb.getString("database");
+	System.out.println("testing -- updateSummary");
+	String driver_class = "org.enhydra.instantdb.jdbc.idbDriver"; 
 
-ResourceBundle rb = ResourceBundle.getBundle("LocalDatabaseManager");
-System.out.println("testing");
-String driver_class = "org.enhydra.instantdb.jdbc.idbDriver"; 
- 
-Connection conn=null; 
-Statement query = null;
-ResultSet results = null;
-Statement stmt = null;                       
+	Connection conn=null; 
+	Statement query = null;
+	ResultSet results = null;
+	Statement stmt = null;                       
 
-try{ 
-Class.forName(driver_class); 
-System.out.println("Trying to connect..."); 
-if( conn == null) 
-
-	//assume that the idb database is alwas in the following relative directory
-	conn = DriverManager.getConnection("jdbc:idb:../../lib/idb/Examples/sample.prp");
-	query = conn.createStatement ();
-	System.out.println("Connected."); 
-} 
-catch( Exception e ) {  
-System.out.println("did not connect "+e.getMessage());  
-}
+	try
+	{ 
+		Class.forName(driver_class); 
+		System.out.println("Trying to connect..."); 
+		if( conn == null)
+		{
+			//assume that the idb database is alwas in the following relative directory
+			conn = DriverManager.getConnection("jdbc:idb:"+database);
+			query = conn.createStatement ();
+			System.out.println("Connected.");
+		}
+	}
+	catch( Exception e ) 
+	{  
+		System.out.println("did not connect -- updateSummary"+e.getMessage());  
+	}
 
 
 //get the site summary information
@@ -406,77 +414,81 @@ System.exit(1);
  * instantDB from Enhydra.org)
  *
  */
-
-
 public void createLocalDatabase (String sqlFile)
 {
-ResourceBundle rb = ResourceBundle.getBundle("LocalDatabaseManager");
-System.out.println("testing");
-String driver_class = "org.enhydra.instantdb.jdbc.idbDriver"; 
- 
-Connection conn=null; 
-Statement query = null;
-Statement stmt = null;                       
-
-try{ 
-Class.forName(driver_class); 
-System.out.println("Trying to connect..."); 
-if( conn == null) 
-
-	//assume that the idb database is alwas in the following relative directory
-	conn = DriverManager.getConnection("jdbc:idb:../../lib/idb/Examples/sample.prp");
+	ResourceBundle rb = ResourceBundle.getBundle("LocalDatabaseManager");
+	String database=rb.getString("database");
+	String baseTables=rb.getString("baseTables");
+	String summaryTables=rb.getString("summaryTables");
 	
-	query = conn.createStatement ();
-	System.out.println("Connected."); 
-} 
-catch( Exception e ) {  
-System.out.println("did not connect "+e.getMessage());  
-}
+	System.out.println("testing -- createLocalDatabase");
+	String driver_class = "org.enhydra.instantdb.jdbc.idbDriver"; 
+	Connection conn=null; 
+	Statement query = null;
+	Statement stmt = null; 
+	try
+	{ 
+		//System.out.println(">Current conn status: ");
+		System.out.println("Trying to connect...");
+		Class.forName(driver_class); 
+		//assume that the idb database is alwas in the following relative directory
+		conn = DriverManager.getConnection("jdbc:idb:"+database);
+		//conn = DriverManager.getConnection("jdbc:idb:../../../data/sample.prp");
+		query = conn.createStatement ();
+		System.out.println("Connected.");
+	} 
+	catch( Exception e ) 
+	{  
+		System.out.println("did not connect createBase "+e.getMessage());  
+	}
 
 //first make a table
 
-try{
-ResultSet results = null;
-//System.out.println("making a temporary table");
-String resultString = null;
+	try
+	{
+		ResultSet results = null;
+		//System.out.println("making a temporary table");
+		String resultString = null;
 
-//read the sql to create the local database into a vector
-String s = null;
-StringBuffer sb = new StringBuffer();
-BufferedReader inSql = new BufferedReader(new FileReader(sqlFile));
-//BufferedReader inSql = new BufferedReader(new FileReader("buildSummary.txt"));
+		//read the sql to create the local database into a vector
+		String s = null;
+		StringBuffer sb = new StringBuffer();
+		BufferedReader inSql = new BufferedReader(new FileReader(sqlFile));
+		//BufferedReader inSql = new BufferedReader(new FileReader("buildSummary.txt"));
 
 
-while((s = inSql.readLine()) != null) {
-//	System.out.println(s);
+		while((s = inSql.readLine()) != null) 
+		{
+			//	System.out.println(s);
 	
-	if ( !s.startsWith("end") ) { 
-		sb.append(s);
+			if ( !s.startsWith("end") ) 
+			{ 
+				sb.append(s);
+			}
+	
+			else  
+			{
+				query.executeUpdate(sb.toString());
+				sb = new StringBuffer();
+			}
+		}
+		//now execute the table creation statement
+		query.executeUpdate(sb.toString());
+	
+		//results = query.executeQuery(sb.toString());
+		//System.out.println(results.getWarnings() );
+		//results.close();
+		query.close();
+		conn.close();
+		System.out.println("ending now");
+		//System.exit(1);
 	}
-	
-	else  {
-		results = query.executeQuery(sb.toString());
-		sb = new StringBuffer();
+	catch (Exception ex) 
+	{
+		System.out.println("Error creating the table. "+ex+" "+ex.getMessage());
+		ex.printStackTrace();
+		System.exit(1);
 	}
-	
-}
-
- results = query.executeQuery(sb.toString());
-
-
-query.close();
-conn.close();
-System.out.println("ending now");
-//System.exit(1);
-
-}
-catch (Exception ex) {
-System.out.println("Error creating the table. "+ex+" "+ex.getMessage());
-ex.printStackTrace();
-System.exit(1);
-}
 } 
-
-
 
 } 
