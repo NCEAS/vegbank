@@ -2,15 +2,15 @@
 <!-- xsl takes the vegbank database model xml and transforms into xsd that can be used to validate xml that is compliant with our model.  Written by Michael Lee (mikelee@unc.edu) 05-JUN-2003 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" >
   <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
-  <xsl:param name="validLevel">1</xsl:param>
+  <xsl:param name="validLevel">1</xsl:param><!-- 1 is for regular xsd: reqd fields, 2 is for extra strict xsd: closed list values, 0 is for very loose xsd such as for vegbank importing from vegbranch -->
   <xsl:template match="/">
 <xsl:comment>
  this document validates VegBank data xml documents, for version 1.0.0 
 
   *
-  *     '$Author: farrell $'
-  *     '$Date: 2004-02-27 16:41:47 $'
-  *     '$Revision: 1.6 $'
+  *     '$Author: mlee $'
+  *     '$Date: 2004-07-10 23:20:13 $'
+  *     '$Revision: 1.7 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -220,7 +220,7 @@
     </xsl:choose>
   </xsl:template>
   <xsl:template name="handleNullz">
-    <xsl:attribute name="minOccurs"><xsl:choose><xsl:when test="attNulls='no'">1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:attribute>
+    <xsl:attribute name="minOccurs"><xsl:choose><xsl:when test="attNulls='no' and $validLevel!=0"><!-- here we have reqd field, but if level of xsd is 0, then still dont require-->1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:attribute>
   </xsl:template>
   <xsl:template name="addFieldAtts">
     <xsl:for-each select="/dataModel/entity/attribute[attRelType/attribute::type='allfields'][attModel='logical']">
