@@ -5,9 +5,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: harris $'
-  * '$Date: 2002-09-12 01:05:12 $'
-  * '$Revision: 1.21 $'
+  * '$Author: mlee $'
+  * '$Date: 2002-10-07 19:55:29 $'
+  * '$Revision: 1.22 $'
   *
   *	Authors: John Harris
   *	Copyright: 2002 Regents of the University of California and the
@@ -96,7 +96,12 @@
 				<include name="index.html"/>    
         </fileset>
   </copy>
-	
+  <!-- add to second webpage at root/vegbank/index.html -->
+  <copy todir="${server_root}vegbank/" filtering="yes" >
+          <fileset dir="./" >
+          <include name="index.html"/>    
+          </fileset>
+  </copy>
 
 </target>
 
