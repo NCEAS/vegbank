@@ -155,7 +155,8 @@
 			plant-query.html
 			plant-name-lookup.html
 			utilities.html
-			stylesheet-generator.html"
+			stylesheet-generator.html
+			community-query.html"
 		excludes="**/CVS* "
 	/>
 </target>
