@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- 
+  * build.xml
+  *
+  * build script for projectmanaging files
+    *
+  *     '$Author: mlee $'
+  *     '$Date: 2004-09-27 21:15:18 $'
+  *     '$Revision: 1.1 $'
+-->
+<project name="projectmanage" default="copy" basedir=".">
+  <!-- ================================================================= -->
+  <!-- Initialize simple properties, no context handling                 -->
+  <!-- ================================================================= -->
+  <target name="copy">
+    <tstamp/>
+     <copy todir="/home/lee/public_html/progress">
+        <fileset dir="." includes="*.png"/>
+     </copy>
+  </target>
+</project>
