@@ -1,8 +1,8 @@
 /**
  *  '$RCSfile: PlantTaxaLoader.java,v $'
  *   '$Author: harris $'
- *     '$Date: 2002-05-30 20:56:47 $'
- * '$Revision: 1.5 $'
+ *     '$Date: 2002-05-31 03:55:55 $'
+ * '$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -148,7 +148,7 @@ public class PlantTaxaLoader
 			{
 				int uid = loadPlantUsageInstance(longName, longNameId, conceptId, "STANDARD", 
 				dateEntered, usageStopDate,  "LONGNAME", partyId);
-				System.out.println("uid: " + uid);
+				System.out.println("PlantTaxonomyLoader > uid: " + uid);
 				usageVec.addElement(""+uid);
 			}
 			
@@ -157,7 +157,7 @@ public class PlantTaxaLoader
 			{
 				int uid = 	loadPlantUsageInstance(shortName, shortNameId, conceptId, "STANDARD", 
 				dateEntered, usageStopDate,  "SHORTNAME", partyId);
-				System.out.println("uid: " + uid);
+				System.out.println("PlantTaxonomyLoader > uid: " + uid);
 				usageVec.addElement(""+uid);
 			}
 
@@ -166,7 +166,7 @@ public class PlantTaxaLoader
 			{
 				int uid = loadPlantUsageInstance(code, codeId, conceptId, "STANDARD", 
 				dateEntered, usageStopDate,  "CODE", partyId);
-				System.out.println("uid: " + uid);
+				System.out.println("PlantTaxonomyLoader > uid: " + uid);
 				usageVec.addElement(""+uid);
 			}
 
@@ -179,12 +179,12 @@ public class PlantTaxaLoader
 			// decide on the transaction
 			if (commit == true )
 			{
-				System.out.println("commiting transaction");
+				System.out.println("PlantTaxonomyLoader > commiting transaction");
 				conn.commit();
 			}
 			else
 			{
-				System.out.println("not commiting transaction");
+				System.out.println("PlantTaxonomyLoader >  not commiting transaction");
 				conn.rollback();
 			}
 			
@@ -195,7 +195,7 @@ public class PlantTaxaLoader
 			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return(true);
+		return(commit);
 	}
 	
 	/**
@@ -208,36 +208,15 @@ public class PlantTaxaLoader
 	 	try
 		{
 			//get the max usage in the summary table
-			sb.append("select max( PLANTUSAGE_ID ) from veg_taxa_summary ");
-			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
-			ResultSet rs = pstmt.executeQuery();
-			int usageId = 0;
-			while	( rs.next() )
-			{	
-				usageId = rs.getInt(1);
-			}
-			System.out.println("usages in sum table: " + usageId);	
-
-			sb = new StringBuffer();
-			pstmt.close();
-			sb.append("select max( PLANTUSAGE_ID ) from plantusage ");
-			pstmt = conn.prepareStatement( sb.toString() );
-			rs = pstmt.executeQuery();
-			while ( rs.next() )
-			{
-			  usageId = rs.getInt(1);
-			}
-			System.out.println("usages in usage table: " + usageId);
-		
 			//get the usageId's to be used for updating the summary table 
 			// from the usageVec vector
 
-			System.out.println("updating summary with usage Ids: " + usageVec.toString() );
+			System.out.println("PlantTaxonomyLoader > updating summary with usage Ids: " + usageVec.toString() );
 		 	if ( usageVec.size() > 0 )
 			{
 			
 				int minUsageId  = Integer.parseInt( usageVec.elementAt(0).toString() );
-				System.out.println("min usage id: " + minUsageId );
+				System.out.println("PlantTaxonomyLoader > min usage id: " + minUsageId );
 
 			//insert the data into the summary table
 			sb = new StringBuffer();
@@ -247,7 +226,7 @@ public class PlantTaxaLoader
 			sb.append(" SELECT plantusage_id, plantname_id, plantconcept_id, plantname, ");
 			sb.append(" classsystem, plantnamestatus, usagestart, usagestop, acceptedSynonym ");
 			sb.append(" from plantusage where plantusage_id >= " + minUsageId );
-			pstmt = conn.prepareStatement( sb.toString() );
+			PreparedStatement pstmt = conn.prepareStatement( sb.toString() );
 			pstmt.execute();
 			pstmt.close();	
 
@@ -320,7 +299,7 @@ public class PlantTaxaLoader
 			}
 			if ( cnt >= 1 )
 			{
-				System.out.println("usage key exists");
+				System.out.println("PlantTaxonomyLoader > usage key exists");
 				exists = true;
 			}
 			//if there are no returned results
@@ -501,7 +480,7 @@ public class PlantTaxaLoader
 			}
 			if ( cnt >= 1 )
 			{
-				System.out.println("status key exists");
+				System.out.println("PlantTaxonomyLoader > status key exists");
 				exists = true;
 			}
 			//if there are no returned results

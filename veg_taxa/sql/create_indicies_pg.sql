@@ -5,6 +5,7 @@
 
 create index plantparentname_idx on plantstatus (plantparentname);
 create index plantconcept_id_idx on plantstatus (plantconcept_id);
+--create index plantusage_id_idx on veg_taxa_summary (plantusage_id);
 
 --create index partyusagestatus_id_idx on plantusage (partyusagestatus_id);
 --create index plantconcept_id_idx on plantusage (plantconcept_id);

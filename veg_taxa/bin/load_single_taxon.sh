@@ -14,10 +14,10 @@ PLANTTAXONMODULE=../lib/planttaxonomy.jar
 
 
 CLASSPATH=$JDBC:$XALAN:$XERCES:$PLANTTAXONMODULE
-longname="Big Tree"
-shortname="B. Tree"
-code="BT"
-taxondescription="A tree that was seen by the pacific ocean"
+longname="Verry Big Tree"
+shortname="V B. Tree"
+code="VBT"
+taxondescription="A Very tree that was seen by the pacific ocean"
 salutation="Mr."
 givename="John"
 surname="Harris"
