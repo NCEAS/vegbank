@@ -1,7 +1,7 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-<!-- $Id: userdataset_detail.jsp,v 1.10 2005-03-15 06:57:08 mlee Exp $ -->
+<!-- $Id: userdataset_detail.jsp,v 1.11 2005-03-17 13:33:51 mlee Exp $ -->
 <!-- purpose : show user's datasets, either all of them (mode=all in URL) or only certain ones:
 
   mode=ac is to show accessioncodes
@@ -22,7 +22,7 @@
 <!-- get user ID -->
 <%@ include file="includeviews/sub_getwebuserid.jsp" %>
 
-<!-- see what mode to be in-- what scope of datasets to show -->
+<!-- see what mode to be in- what scope of datasets to show -->
 <bean:parameter id="mode" name="mode" value="all" /> <!-- default value of all --> 
 
 <!-- only allow datasets that user IS owner of (if private, and those that are public) -->
