@@ -13,6 +13,11 @@
 		<xsl:text>&#010;</xsl:text>
 		
 		<!--concatenated name-->
+		<xsl:text>concatenatedLongName|</xsl:text>
+		<xsl:value-of select="concatenatedLongName"/>
+		<xsl:text>&#010;</xsl:text>
+		
+		<!--concatenated name-->
 		<xsl:text>concatenatedName|</xsl:text>
 		<xsl:value-of select="concatenatedName"/>
 		<xsl:text>&#010;</xsl:text>
