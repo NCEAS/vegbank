@@ -85,3 +85,6 @@ UPDATE observation set topTaxon1Cover =
 
 UPDATE observation set topTaxon1Name = 
 (SELECT authorPlantName  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 0) where topTaxon1Name is null;
+
+
+update party set partypublic=true where party_ID in (select party_ID from view_party_public);
