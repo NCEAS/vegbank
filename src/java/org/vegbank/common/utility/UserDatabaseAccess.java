@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-15 02:03:31 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2004-04-17 02:53:20 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,17 +33,15 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-04-15 02:03:31 $'
- *     '$Revision: 1.13 $'
+ *     '$Date: 2004-04-17 02:53:20 $'
+ *     '$Revision: 1.14 $'
  */
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.vegbank.common.model.Address;
@@ -353,7 +351,7 @@ public class UserDatabaseAccess
 	 * @param uniqueClause - part of SQL WHERE that gets user
 	 * @return WebUser or null if none found
 	 */
-	 private WebUser getAllUserData(String uniqueClause) throws Exception
+	 private WebUser getAllUserData(String uniqueClause) throws SQLException
 	 {
 		//get the connections etc
 		DBConnection conn = getConnection();
@@ -421,7 +419,7 @@ public class UserDatabaseAccess
 	 * @param comment
 	 */
 	 public void updateCertificationStatus(int usercertification_id, String status, String comment) 
-		 	throws Exception
+		 	throws SQLException
 	 {
 		DBConnection conn = getConnection();
 		Statement stmt = conn.createStatement();
@@ -442,13 +440,69 @@ public class UserDatabaseAccess
 	 }
 
 	/**
+	 * Returns List of all header CertificationForms in the system.
+	 * 
+	 * @return List of partially complete CertificationForms
+	 */
+	 public List getAllCertificationAppHeaders() 
+		 	throws java.sql.SQLException
+	 {
+	 	return getAllCertificationApps(true);
+	 }
+
+
+	/**
+	 * Returns List of all CertificationForms in the system.
+	 * 
+	 * @return List of CertificationForms
+	 */
+	 public List getAllCertificationApps()
+		 	throws java.sql.SQLException
+	 {
+	 	return getAllCertificationApps(false);
+	 }
+
+	 /**
+	  * The private method that actually gets the cert. apps.
+	  * @return List of CertificationForms
+	  */
+	 private List getAllCertificationApps(boolean headersOnly)
+		 	throws java.sql.SQLException
+	 {
+		List allApps = new ArrayList();
+		DBConnection conn = getConnection();
+		CertificationForm tmpCertForm;
+		 
+		Statement query = conn.createStatement();
+		StringBuffer sb = new StringBuffer();
+		sb.append("SELECT ");
+		sb.append(CertificationForm.getDBFieldNames(headersOnly));
+		sb.append(" FROM usercertification ORDER BY certificationstatus ");
+	
+		//issue the query
+		ResultSet results = query.executeQuery(sb.toString());
+
+		while (results.next()) {
+			tmpCertForm = new CertificationForm();
+			tmpCertForm.initFromResultSet(results, headersOnly);
+
+			// fill in the blanks
+			fillInCertUserInfo(tmpCertForm);
+			allApps.add(tmpCertForm);
+		}
+
+		return allApps;
+	 }
+		
+	/**
 	 * Private method to return the user info for a user in the user database.  The
 	 * user data will be returned as a WebUser bean.
 	 * 
 	 * @param usercertification_id
 	 * @return CertificationForm or null if none found
 	 */
-	 public CertificationForm getCertificationApp(int usercertification_id) throws Exception
+	 public CertificationForm getCertificationApp(int usercertification_id) 
+		 	throws SQLException
 	 {
 		//get the connections etc
 		DBConnection conn = getConnection();
@@ -456,16 +510,7 @@ public class UserDatabaseAccess
 		Statement query = conn.createStatement();
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT ")
-			.append(" current_cert_level, requested_cert_level, ")
-			.append(" highest_degree, degree_year, degree_institution, current_org, ")
-			.append(" current_pos, esa_member, prof_exp, relevant_pubs, veg_sampling_exp, ")
-			.append(" veg_analysis_exp, usnvc_exp, vb_exp, tools_exp, vb_intention,")
-			.append(" exp_region_a, exp_region_a_veg, exp_region_a_flor, exp_region_a_nvc, ")
-			.append(" exp_region_b, exp_region_b_veg, exp_region_b_flor, exp_region_b_nvc, ")
-			.append(" exp_region_c, exp_region_c_veg, exp_region_c_flor, exp_region_c_nvc, ")
-			.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ")
-			.append(" esa_sponsor_name_b,  esa_sponsor_email_b, ")
-			.append(" peer_review, addl_stmt, usr_id ")
+			.append(CertificationForm.getDBFieldNames(false))
 			.append(" FROM usercertification ")
 			.append(" WHERE usercertification_id = ").append(usercertification_id);
 	
@@ -475,45 +520,8 @@ public class UserDatabaseAccess
 		
 		//get the results -- assumming 0 or 1 rows returned
 		CertificationForm certForm = new CertificationForm();
-		if (results.next()) 
-		{
-			certForm.setCurrentCertLevel( results.getInt(1) );
-			certForm.setRequestedCert( results.getString(2) );
-			certForm.setHighestDegree( results.getString(3) );
-			certForm.setDegreeYear( results.getString(4) );
-			certForm.setDegreeInst( results.getString(5) );
-			certForm.setCurrentOrg( results.getString(6) );
-			certForm.setCurrentPos( results.getString(7) );
-			certForm.setEsaMember( results.getString(8) );
-			certForm.setProfExp( results.getString(9) );
-			certForm.setRelevantPubs( results.getString(10) );
-			certForm.setVegSamplingExp( results.getString(11) );
-			certForm.setVegAnalysisExp( results.getString(12) );
-			certForm.setUsnvcExp( results.getString(13) );
-			certForm.setVbExp( results.getString(14) );
-			certForm.setToolsExp( results.getString(15) );
-			certForm.setVbIntention( results.getString(16) );
-			certForm.setExpRegionA( results.getString(17) );
-			certForm.setExpRegionAVeg( results.getString(18) );
-			certForm.setExpRegionAFlor( results.getString(19) );
-			certForm.setExpRegionANVC( results.getString(20) );
-			certForm.setExpRegionB( results.getString(21) );
-			certForm.setExpRegionBVeg( results.getString(22) );
-			certForm.setExpRegionBFlor( results.getString(23) );
-			certForm.setExpRegionBNVC( results.getString(24) );
-			certForm.setExpRegionC( results.getString(25) );
-			certForm.setExpRegionCVeg( results.getString(26) );
-			certForm.setExpRegionCFlor( results.getString(27) );
-			certForm.setExpRegionCNVC( results.getString(28) );
-			certForm.setEsaSponsorNameA( results.getString(29) );
-			certForm.setEsaSponsorEmailA( results.getString(30) );
-			certForm.setEsaSponsorNameB( results.getString(31) );
-			certForm.setEsaSponsorEmailB( results.getString(32) );
-			certForm.setPeerReview( results.getString(33) );
-			certForm.setAddlStmt( results.getString(34) );
-			certForm.setUsrId( results.getInt(35) );
-
-
+		if (results.next()) {
+			certForm.initFromResultSet(results, false);
 		} else {
 			log.debug("UDA.getCert: NOT FOUND # " + usercertification_id);
 			return null;
@@ -522,13 +530,31 @@ public class UserDatabaseAccess
 		conn.close();
 		DBConnectionPool.returnDBConnection(conn);
 
-		WebUser user = getUser(certForm.getUsrId());
-		certForm.setEmailAddress( user.getEmail() );
-		certForm.setSurName( user.getSurname() );
-		certForm.setGivenName( user.getGivenname() );
-		certForm.setPhoneNumber( user.getDayphone() );
+		// fill in the blanks
+		fillInCertUserInfo(certForm);
 
 		return certForm;
+	 }
+
+	 /**
+	  *
+	  */
+	 private void fillInCertUserInfo(CertificationForm certForm) 
+		 	throws SQLException
+	{
+		WebUser user = getUser(certForm.getUsrId());
+		if (Utility.isStringNullOrEmpty( certForm.getEmailAddress() )) {
+			certForm.setEmailAddress( user.getEmail() );
+		}
+		if (Utility.isStringNullOrEmpty( certForm.getSurName() )) {
+			certForm.setSurName( user.getSurname() );
+		}
+		if (Utility.isStringNullOrEmpty( certForm.getGivenName() )) {
+			certForm.setGivenName( user.getGivenname() );
+		}
+		if (Utility.isStringNullOrEmpty( certForm.getPhoneNumber() )) {
+			certForm.setPhoneNumber( user.getDayphone() );
+		}
 	 }
 	 
 	/**
@@ -538,7 +564,7 @@ public class UserDatabaseAccess
 	 * @param usrId -- the usr.usr_id of the user
 	 * @return WebUser or null if none found
 	 */
-	 public WebUser getUser(long usrId) throws Exception
+	 public WebUser getUser(long usrId) throws SQLException
 	 {
 		log.debug("UserDatabaseAccess.getUser: usr_id= " + usrId);
 		return getAllUserData(" usr_id=" + usrId);
@@ -551,7 +577,7 @@ public class UserDatabaseAccess
 	 * @param usrId -- the usr.usr_id of the user
 	 * @return WebUser or null if none found
 	 */
-	 public WebUser getUser(Long usrId) throws Exception
+	 public WebUser getUser(Long usrId) throws SQLException
 	 {
 		return getUser(usrId.longValue());
 	 }
@@ -563,7 +589,7 @@ public class UserDatabaseAccess
 	 * @param user -- the email address of the user
 	 * @return WebUser or null if none found
 	 */
-	 public WebUser getUser(String emailAddress ) throws Exception
+	 public WebUser getUser(String emailAddress ) throws SQLException
 	 {
 		log.debug("UDA.getUser: email_address= " + emailAddress);
 		return getAllUserData(" LOWER(email_address)='" + emailAddress.toLowerCase() + "'");
@@ -722,7 +748,7 @@ public class UserDatabaseAccess
 	 * @param usrId -- the usr.usr_id of the user
 	 * @return sum of permissions
 	 */
-	 public int getUserPermissionSum(long usrId) throws Exception
+	 public int getUserPermissionSum(long usrId) throws SQLException
 	 {
 		DBConnection conn = getConnection();
 		Statement query = conn.createStatement();

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-04-15 02:08:05 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2004-04-17 02:53:20 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,9 +38,7 @@ import org.vegbank.common.utility.PermComparison;
 public class CertificationForm extends ValidatorForm 
 			implements java.io.Serializable
 {
-
 	// prepopulated fields
-	private long certId;
 	private long usrId;
 	private String emailAddress;
 	private String surName;
@@ -48,6 +46,11 @@ public class CertificationForm extends ValidatorForm
 	private String phoneNumber;
 	private int currentCertLevel;
 	private String currentCertLevelName;
+
+	// admin fields
+	private long certId;
+	private String certificationstatus;
+	private String certificationstatuscomments;
 	
 	// user enters these fields
 	private String requestedCert;
@@ -724,4 +727,117 @@ public class CertificationForm extends ValidatorForm
 		this.addlStmt = addlStmt;
 	}
 
+	/**
+	 * Get value of 'certificationstatuscomments' property.
+	 */
+	public String getCertificationstatuscomments() {
+		return this.certificationstatuscomments;
+	}
+
+	/**
+	 * Set the 'certificationstatuscomments' property.
+	 */
+	public void setCertificationstatuscomments(String certificationstatuscomments) {
+		this.certificationstatuscomments = certificationstatuscomments;
+	}
+
+
+	/**
+	 * Get value of 'certificationstatus' property.
+	 */
+	public String getCertificationstatus() {
+		return this.certificationstatus;
+	}
+
+	/**
+	 * Set the 'certificationstatus' property.
+	 */
+	public void setCertificationstatus(String certificationstatus) {
+		this.certificationstatus = certificationstatus;
+	}
+
+	/**
+	 *
+	 */
+	public static String getDBFieldNames(boolean headersOnly) {
+		StringBuffer sb = new StringBuffer(512);
+		if (headersOnly) {
+			sb.append(" current_cert_level, requested_cert_level, usr_id, ")
+				.append(" certificationstatus, certificationstatuscomments, usercertification_id");
+		} else {
+			sb.append(" current_cert_level, requested_cert_level, ")
+				.append(" highest_degree, degree_year, degree_institution, current_org, ")
+				.append(" current_pos, esa_member, prof_exp, relevant_pubs, veg_sampling_exp, ")
+				.append(" veg_analysis_exp, usnvc_exp, vb_exp, tools_exp, vb_intention,")
+				.append(" exp_region_a, exp_region_a_veg, exp_region_a_flor, exp_region_a_nvc, ")
+				.append(" exp_region_b, exp_region_b_veg, exp_region_b_flor, exp_region_b_nvc, ")
+				.append(" exp_region_c, exp_region_c_veg, exp_region_c_flor, exp_region_c_nvc, ")
+				.append(" esa_sponsor_name_a,  esa_sponsor_email_a, ")
+				.append(" esa_sponsor_name_b,  esa_sponsor_email_b, ")
+				.append(" peer_review, addl_stmt, usr_id, ")
+				.append(" certificationstatus, certificationstatuscomments, usercertification_id");
+		}
+
+		return sb.toString();
+	}
+
+	/**
+	 * 
+	 */
+	public void initFromResultSet(ResultSet results, boolean headersOnly) 
+			throws SQLException
+	{
+		if (results == null) {
+			return;
+		}
+
+		if (headersOnly) {
+			this.setCurrentCertLevel( results.getInt(1) );
+			this.setRequestedCert( results.getString(2) );
+			this.setUsrId( results.getInt(3) );
+			this.setCertificationstatus( results.getString(4) );
+			this.setCertificationstatuscomments( results.getString(5) );
+			this.setCertId( results.getInt(6) );
+
+		} else {
+			this.setCurrentCertLevel( results.getInt(1) );
+			this.setRequestedCert( results.getString(2) );
+			this.setHighestDegree( results.getString(3) );
+			this.setDegreeYear( results.getString(4) );
+			this.setDegreeInst( results.getString(5) );
+			this.setCurrentOrg( results.getString(6) );
+			this.setCurrentPos( results.getString(7) );
+			this.setEsaMember( results.getString(8) );
+			this.setProfExp( results.getString(9) );
+			this.setRelevantPubs( results.getString(10) );
+			this.setVegSamplingExp( results.getString(11) );
+			this.setVegAnalysisExp( results.getString(12) );
+			this.setUsnvcExp( results.getString(13) );
+			this.setVbExp( results.getString(14) );
+			this.setToolsExp( results.getString(15) );
+			this.setVbIntention( results.getString(16) );
+			this.setExpRegionA( results.getString(17) );
+			this.setExpRegionAVeg( results.getString(18) );
+			this.setExpRegionAFlor( results.getString(19) );
+			this.setExpRegionANVC( results.getString(20) );
+			this.setExpRegionB( results.getString(21) );
+			this.setExpRegionBVeg( results.getString(22) );
+			this.setExpRegionBFlor( results.getString(23) );
+			this.setExpRegionBNVC( results.getString(24) );
+			this.setExpRegionC( results.getString(25) );
+			this.setExpRegionCVeg( results.getString(26) );
+			this.setExpRegionCFlor( results.getString(27) );
+			this.setExpRegionCNVC( results.getString(28) );
+			this.setEsaSponsorNameA( results.getString(29) );
+			this.setEsaSponsorEmailA( results.getString(30) );
+			this.setEsaSponsorNameB( results.getString(31) );
+			this.setEsaSponsorEmailB( results.getString(32) );
+			this.setPeerReview( results.getString(33) );
+			this.setAddlStmt( results.getString(34) );
+			this.setUsrId( results.getInt(35) );
+			this.setCertificationstatus( results.getString(36) );
+			this.setCertificationstatuscomments( results.getString(37) );
+			this.setCertId( results.getInt(38) );
+		}
+	}
 }

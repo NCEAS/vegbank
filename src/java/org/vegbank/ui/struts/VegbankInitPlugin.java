@@ -6,8 +6,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-24 17:16:04 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2004-04-17 02:53:20 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import org.vegbank.common.Constants;
 import org.vegbank.common.model.utility.Countrylist;
 import org.vegbank.common.model.utility.Statelist;
 import org.vegbank.common.model.utility.Regionlist;
+import org.vegbank.common.model.utility.Certstatuslist;
 
 /**
  * Set up beans in application scope for the vegbank webapp.
@@ -69,6 +70,7 @@ public class VegbankInitPlugin implements PlugIn
 		sc.setAttribute(Constants.STATELISTBEAN_KEY, new Statelist());
 		sc.setAttribute(Constants.COUNTRYLISTBEAN_KEY, new Countrylist());
 		sc.setAttribute(Constants.REGIONLISTBEAN_KEY, new Regionlist());
+		sc.setAttribute(Constants.CERTSTATUSLISTBEAN_KEY, new Certstatuslist());
 		log.info("Watching log4j.properties");
 		PropertyConfigurator.configureAndWatch("log4j.properties", 20 * 1000);
 	}
