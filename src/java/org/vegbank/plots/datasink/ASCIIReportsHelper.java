@@ -7,15 +7,17 @@ import java.util.List;
 
 import org.vegbank.common.model.*;
 import org.vegbank.common.utility.MBReadHelper;
+import org.vegbank.common.utility.LogUtility;
+import org.vegbank.common.utility.Utility;
 
 /*
  * '$RCSfile: ASCIIReportsHelper.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:33:24 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2004-01-08 23:46:14 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,60 +75,64 @@ public class ASCIIReportsHelper
 		Iterator pos = plotObservations.iterator();
 		while (pos.hasNext())
 		{
+			LogUtility.log("ASCIIReportsHelper: getting next plot");
+			
 			Plot plot = (Plot) pos.next();
+			
 
-		// Get the values of interest
-		long plotObservationId = 0;
-		String commName = null;
-		String accNumber = null;
-		String collectionDate = null;
-		String latitude = plot.getLatitude();
-		String longitude = plot.getLongitude();
-		String elevatation = plot.getElevation();
-		String slopeAspect = plot.getSlopeaspect();
-		String slopeGradient = plot.getSlopegradient();
-						
-		List observations = plot.getplot_observations();
-		if ( ! observations.isEmpty() )
-		{
-			//Get the observation ( should just be one ) 
-			Observation obs = (Observation) observations.get(0);
+			// Get the values of interest
+			long plotObservationId = 0;
+			String commName = null;
+			String accNumber = null;
+			String collectionDate = null;
+			String latitude = plot.getLatitude();
+			String longitude = plot.getLongitude();
+			String elevation = plot.getElevation();
+			String slopeAspect = plot.getSlopeaspect();
+			String slopeGradient = plot.getSlopegradient();
 							
-			plotObservationId = obs.getObservation_id();
-			accNumber = obs.getAccessioncode();
-			collectionDate = obs.getObsenddate();
-							
-			// Get commName
-			List commclasses = obs.getobservation_commclasss();
-			if ( ! commclasses.isEmpty() )
+			List observations = plot.getplot_observations();
+			if ( ! observations.isEmpty() )
 			{
-				// Just get the first one FIXME: Can be more than one
-				Commclass commclass = (Commclass) commclasses.get(0);
-				commName = commclass.getCommname();
+				//Get the observation ( should just be one ) 
+				Observation obs = (Observation) observations.get(0);
+								
+				plotObservationId = obs.getObservation_id();
+				accNumber = obs.getAccessioncode();
+				collectionDate = obs.getObsenddate();
+								
+				// Get commName
+				List commclasses = obs.getobservation_commclasss();
+				if ( ! commclasses.isEmpty() )
+				{
+					// Just get the first one FIXME: Can be more than one
+					Commclass commclass = (Commclass) commclasses.get(0);
+					commName = commclass.getCommname();
+				}
 			}
-		}
 
+			LogUtility.log("ASCIIReportsHelper: appending values");
+	
 			// Put them in the String
 			environmentalData.append(
-				""
 					+ plotObservationId
-					+ ","
-					+ accNumber
-					+ ","
-					+ commName
-					+ ","
-					+ collectionDate
-					+ ","
+					+ ",\""
+					+ escapeString(accNumber)
+					+ "\",\""
+					+ escapeString(commName)
+					+ "\",\""
+					+ escapeString(collectionDate)
+					+ "\","
 					+ latitude
 					+ ","
 					+ longitude
 					+ ","
-					+ elevatation
+					+ elevation
 					+ ","
 					+ slopeAspect
 					+ ","
 					+ slopeGradient
-					+"\n");
+					+ "\n");
 		}
 		return environmentalData.toString();
 	}
@@ -212,18 +218,18 @@ public class ASCIIReportsHelper
 								stratumName = stratumType.getStratumname();
 								
 								// Put them in the StringBuffer
+								
 								speciesData.append(
-									""
 										+ plotObservationId
-										+ ","
-										+ plantName
-										+ ","
+										+ ",\""
+										+ escapeString(plantName)
+										+ "\","
 										+ stratumCover
-										+ ","
-										+ stratumName
-										+ ","
+										+ ",\""
+										+ escapeString(stratumName)
+										+ "\","
 										+ taxonCover
-										+"\n");
+										+ "\n");
 							}
 						}	
 					}
@@ -232,5 +238,45 @@ public class ASCIIReportsHelper
 		}
 		return speciesData.toString();
 	}
+	
+	/**
+	 * Adds escape chars where needed for proper imports.
+	 * TO DO: read export options from user prefs 
+	 * TO DO: so that more than the MS way is supported.
+	 * @param line an unescaped line
+	 * @return a properly escaped line
+	 */
+	public static String escapeString(String line) {
+		if (Utility.isStringNullOrEmpty(line)) {
+			return "";
+		}
+		
+		// correct an already-escaped string
+		// by reducing it to being unescaped
+		while (line.indexOf("\"\"") != -1) {
+			line = line.replaceAll("\"\"", "\"");
+		}
+		
+		// replace " with ""
+		return line.replaceAll("\"", "\"\"");
+	}
 
+	/**
+	 * Used for testing only.
+	 */
+	public static void main(String args[]) {
+		String line;
+		line = "Has no quotes.";
+		System.out.println(ASCIIReportsHelper.escapeString(line));
+		
+		line = "Has \"some\" quotes.";
+		System.out.println(ASCIIReportsHelper.escapeString(line));
+		
+		line = "Has \"\"more\"\" quotes.";
+		System.out.println(ASCIIReportsHelper.escapeString(line));
+		
+		line = "Has \"\"\"lots more\"\"\" quotes.";
+		System.out.println(ASCIIReportsHelper.escapeString(line));
+		
+	}
 }
