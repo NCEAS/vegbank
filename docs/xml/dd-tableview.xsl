@@ -1,93 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <!-- <xsl:param name="CurrentTable" />
-<xsl:param name="CurrentField" /> -->
-  <xsl:param name="CurrentTable">plot</xsl:param>
-  <xsl:param name="CurrentField"></xsl:param>
-  <xsl:param name="htmlPrefix">ddr</xsl:param>
-  <xsl:param name="positionAdj">-1</xsl:param>
-  <xsl:output method="html"/>
-  <xsl:template match="/dataModel">
-    <head>
-      <style type="text/css">
-  td , th , p
-  {
-  font-family: verdana, arial, sans-serif  ;
-  font-size:smaller
-  }
-  tr.greenbkgrd {
-  font-color : #FFFF80 ; background-color: #336633
-  }
-  h2
-  {
-  font-family:georgia, Times New Roman,  times, serif 
-  }
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect">
+<xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/>
+  <xsl:param name="htmlPrefix" />
 
-</style>
+  <xsl:output method="html"/>
+
+   <xsl:template match="/dataModel">
+  <xsl:for-each select="entity" >
+      <!-- table view nothing highlighted -->
+      <xsl:for-each select="attribute[position()=1]"> <!-- get one attribute, which will be ignored : position at att node is important -->
+      <xsl:call-template name="StartTable"><xsl:with-param name="CurrentField"></xsl:with-param></xsl:call-template>
+      </xsl:for-each>
+      <xsl:for-each select="attribute">
+            <xsl:call-template name="StartTable"><xsl:with-param name="CurrentField" select="attName" /></xsl:call-template>
+      </xsl:for-each>
+    </xsl:for-each>
+</xsl:template>
+<xsl:template name="StartTable"><xsl:param name="CurrentField" />
+   <xsl:variable name="CurrEnt" select="../entityName" />
+   <xsl:variable name="fieldhtmlpart"><xsl:if test="string-length($CurrentField)&gt;0">~field~<xsl:value-of select="translate($CurrentField,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" /></xsl:if></xsl:variable>
+  <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}{$fieldhtmlpart}~type~tableview.html"> 
+ <head>
     <link rel="stylesheet" href="@stylesheet@" type="text/css"/> 
-       <title>VegBank Data Dictionary - table view</title>
+       <title>VegBank Data Dictionary - table view: <xsl:value-of select="../entityName" /></title>
     </head>
     <body>
     @vegbank_header_html_normal@
       <h2>
         <a  href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
       </h2>
-      <xsl:for-each select="entity">
-        <xsl:if test="entityName=$CurrentTable">
-          <p>Table:<xsl:value-of select="entityName"/>
+          <p>Table:<xsl:value-of select="../entityName"/>
             <br/>
             <blockquote>
               <p>
-                <xsl:value-of select="entitySummary"/>
+                <xsl:value-of select="../entitySummary"/>
               </p>
             </blockquote>
           </p>
           <xsl:if test="string-length($CurrentField)&gt;0"><p>The field:<xsl:value-of select="$CurrentField" /> is highlighted below.  Click <a href="#this_field">here</a> to jump there.</p></xsl:if>
           <table border="1" cellpadding="0" cellspacing="0" width="100%">
             <tr class="greenbkgrd">
-              <td>
+              <th>
                 <b>
                   <a class="brightyellow" href="dd-guide.html#field-name">field name</a>
                 </b>
-              </td>
-              <td>
+              </th>
+              <th>
                 <b>
                   <a  class="brightyellow" href="dd-guide.html#nulls">nulls</a>
                 </b>
-              </td>
-              <td>
+              </th>
+              <th>
                 <b>
                   <a  class="brightyellow"  href="dd-guide.html#type">type</a>
                 </b>
-              </td>
-              <td>
+              </th>
+              <th>
                 <b>
                   <a  class="brightyellow" href="dd-guide.html#key">key</a>
                 </b>
-              </td>
-              <td>
+              </th>
+              <th>
                 <b>
                   <a  class="brightyellow" href="dd-guide.html#references">references</a>
                 </b>
-              </td>
-              <td>
+              </th>
+              <th>
                 <b>
                   <a class="brightyellow" href="dd-guide.html#list">list</a>
                 </b>
-              </td>
-              <!-- <td><b><font size="+1">List Values</font></b></td> -->
-              <td>
+              </th>
+              <!-- <td class="normal"><b><font size="+1">List Values</font></b></td> -->
+              <th>
                 <b>
                   <a  class="brightyellow" href="dd-guide.html#field-notes">field notes</a>
                 </b>
-              </td>
-              <td>
+              </th>
+              <th>
                 <b>
                   <a  class="brightyellow" href="dd-guide.html#field-definition">field definition</a>
                 </b>
-              </td>
+              </th>
             </tr>
-            <xsl:for-each select="attribute">
+            <xsl:for-each select="../../entity[entityName=$CurrEnt]/attribute">
               <!-- <xsl:if test="attribute/attModel='logical'"> -->
               <!-- the following variable is 0 for the matching field, and otherwise alternates 1 and 2 - these will be converted into colors orange, yellow, and white -->
               <!-- the variables are made uppercase by the translate function so that plot_ID = PLOT_ID -->
@@ -103,7 +98,7 @@
                 <xsl:value-of select="$BlueAmt"/>
               </xsl:variable>
               <tr bgcolor="#{$RowColor}">
-                <td>
+                <td class="normal">
                   <xsl:if test="$RowType=0">
                   <a name="this_field" />
                   </xsl:if>
@@ -122,16 +117,16 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attNulls"/>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attType"/>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attKey"/>
                 </td>
-                <td>
+                <td class="normal">
                   <!-- references can be split so that it doesn't make the column too wide in output -->
                   <xsl:choose>
                     <xsl:when test="contains(attReferences,'.')">
@@ -144,7 +139,7 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:choose>
                     <xsl:when test="attListType='no'">
                       <xsl:value-of select="attListType"/>
@@ -157,6 +152,7 @@
     <select>
                           <option selected="yes">See values</option>
                           <xsl:for-each select="attList/attListItem">
+                          <xsl:sort data-type="number" select="attListSortOrd"/>
                             <option>
                               <xsl:value-of select="substring(attListValue,1,27)"/>
                               <xsl:if test="string-length(attListValue)>27">...</xsl:if>
@@ -167,23 +163,28 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attNotes"/>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attDefinition"/>
                 </td>
               </tr>
+
+
               <!-- </xsl:if>  -->
             </xsl:for-each>
           </table>
-        </xsl:if>
-      </xsl:for-each>
+
       <p>
         <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
       </p> 
 @vegbank_footer_html_onerow@
 
     </body>
+</redirect:write> 
+
   </xsl:template>
+
+     
 </xsl:stylesheet>

@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="vegbank_xml" default="init" basedir=".">
   <!-- buildlimit.xml build the main VegBank xml to just a certain type of field, i.e. logical model fields or implementation fields
-    If you dont want to limit the xml this way, then target=skip -->
+    If you dont want to limit the xml this way, then target=allfields-->
   <target name="init">
     <echo>
-  	Targets: {init} allfields logical implementation clean-local-html clean-dest-html  dist-closedlist-tokenfile  dist-dataxml **buildnewbuild **distdatadic **dd-index **dd-guide
+  	Targets: {init} allfields logical implementation clean-local-html clean-dest-html  dist-closedlist-tokenfile  dist-dataxml **dictionary2html **distdatadic **dd-index **dd-guide
   	  ** indicates targets that are referenced automatically by selected one of the first three targets
   </echo>
     <!-- freely editable variables -->
     <property name="origData" value="db_model_vegbank.xml"/>
     <property name="htmlPrefix" value="dd"/>
-    <property name="newbuildname" value="buildto_dd_html.xml"/>
     <property name="limitData" value="db_model_vegbank_limited.xml"/>
     <!-- do not edit the following variables unless you have replaced with new xsl file -->
     <property name="limitstyle" value="db_model_limit.xsl"/>
-    <property name="stylenewbuild" value="db_model_newbuild.xsl"/>
     <property name="styleTableView" value="dd-tableview.xsl"/>
     <property name="styleFieldView" value="dd-fieldview.xsl"/>
     <property name="style-index" value="dd-index.xsl"/>
@@ -27,7 +25,7 @@
     <property name="static_xmlserver" value="/var/www/html/xml"/>
     <!-- filters -->
     <filter filtersfile="${style_server}/filters_detokened.properties"/>
-        <filter filtersfile="${style_server}/manual_filters.properties"/>
+    <filter filtersfile="${style_server}/manual_filters.properties"/>
     <filter token="stylesheet" value="/vegbank/includes/default.css"/>
   </target>
   <target name="logical" depends="init">
@@ -35,30 +33,30 @@
     <style out="${limitData}" in="${origData}" extension=".xml" style="${limitstyle}" force="true">
       <param name="whichModel" expression="logical"/>
     </style>
-    <antcall target="buildnewbuild"/>
+    <antcall target="dictionary2html"/>
   </target>
   <target name="implementation" depends="init">
     <echo>Limiting fields to implementation</echo>
     <style out="${limitData}" in="${origData}" extension=".xml" style="${limitstyle}" force="true">
       <param name="whichModel" expression="implementation"/>
     </style>
-    <antcall target="buildnewbuild"/>
+    <antcall target="dictionary2html"/>
   </target>
   <target name="allfields" depends="init">
     <echo>No Limit on fields</echo>
     <copy file="${origData}" tofile="${limitData}" overwrite="true"/>
-    <antcall target="buildnewbuild"/>
+    <antcall target="dictionary2html"/>
   </target>
-  <!-- builds new build file to distribute html -->
-  <target name="buildnewbuild" depends="init">
+  <target name="dictionary2html" depends="init">
     <!-- create new build file to run ant on -->
-    <echo>Writing new build file</echo>
-    <style out="${newbuildname}" in="${limitData}" extension=".xml" style="${stylenewbuild}" force="true">
+    <echo>Writing field views</echo>
+    <style out="BOGUSFld.txt" in="${limitData}" extension=".xml" style="${styleFieldView}" force="true">
       <!-- file for html to be built from -->
-      <param name="infile" expression="${limitData}"/>
-      <!-- stylesheet for html to be made from  -->
-      <param name="style" expression="${styleTableView}"/>
-      <param name="styleField" expression="${styleFieldView}"/>
+      <param name="htmlPrefix" expression="${htmlPrefix}"/>
+    </style>
+    <echo>Writing table views</echo>
+    <style out="BOGUSTbl.txt" in="${limitData}" extension=".xml" style="${styleTableView}" force="true">
+      <!-- file for html to be built from -->
       <param name="htmlPrefix" expression="${htmlPrefix}"/>
     </style>
     <antcall target="dd-index"/>
@@ -79,8 +77,6 @@
   </target>
   <!-- distributes html -->
   <target name="distdatadic" depends="init">
-    <echo>Writing new html datadictionary files</echo>
-    <ant antfile="${newbuildname}"/>
     <echo>Copying new files to server, filtering tokens</echo>
     <copy todir="${dictionary_server}" filtering="yes">
       <fileset dir=".">

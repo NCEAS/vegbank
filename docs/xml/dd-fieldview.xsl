@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect"> 
+  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/> 
   <!-- <xsl:param name="CurrentTable" />
 <xsl:param name="CurrentField" /> -->
-  <xsl:param name="CurrentTable">observation</xsl:param>
-  <xsl:param name="CurrentField">PLOT_ID</xsl:param>
-    <xsl:param name="htmlPrefix">drr</xsl:param>
+  <!-- not needed : <xsl:param name="CurrentTable">observation</xsl:param>
+  <xsl:param name="CurrentField">PLOT_ID</xsl:param> -->
+
+    <xsl:param name="htmlPrefix" />
+
   <xsl:output method="html"/>
   <xsl:template match="/dataModel">
+  <xsl:for-each select="entity/attribute" >
+ <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">
     <head>
-      <style type="text/css">
-  td , th , p
-  {
-  font-family: verdana, arial, sans-serif  ;
-  font-size:smaller
-  }
-  h2
-  {
-  font-family:georgia, Times New Roman,  times, serif 
-  }
-</style>
-<title>VegBank Data Dictionary - field view</title>
+ <title>VegBank Data Dictionary - field view : <xsl:value-of select="../entityName" />.<xsl:value-of select="attName" /></title>
 <link rel="stylesheet" href="@stylesheet@" type="text/css" />
     </head>
     <body>
@@ -28,9 +22,6 @@
       <h2>
         <a class="blk" href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
       </h2>
-      <xsl:for-each select="entity/attribute">
-        <xsl:if test="(../entityName=$CurrentTable)">
-          <xsl:if test="attName=$CurrentField">
             <p>Table:<xsl:value-of select="../entityName"/>  (<a href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">Click for table view</a>)
               <br/>
               <blockquote>
@@ -41,13 +32,13 @@
              
             </p>
             <table border="1" cellpadding="0" cellspacing="0" width="100%">
-              <tr bgcolor="#FF9900">
-                <td>
+              <tr bgcolor="#FFFFFF">
+                <td class="normal">
                   <b>
                     <a class="blk" href="dd-guide.html#field-name">field name:</a>
                   </b>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:choose>
                     <xsl:when test="attNulls='no'">
                       <b>
@@ -61,42 +52,42 @@
                 </td>
               </tr>
               <tr bgcolor="#FFFFCC">
-                <td>
+                <td class="normal">
                   <b>
                     <a class="blk" href="dd-guide.html#nulls">nulls:</a>
                   </b>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attNulls"/>
                 </td>
               </tr>
               <tr bgcolor="#FFFFFF">
-                <td>
+                <td class="normal">
                   <b>
                     <a class="blk" href="dd-guide.html#type">type:</a>
                   </b>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attType"/>
                 </td>
               </tr>
               <tr bgcolor="#FFFFCC">
-                <td>
+                <td class="normal">
                   <b>
                     <a class="blk" href="dd-guide.html#key">key:</a>
                   </b>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attKey"/>
                 </td>
               </tr>
               <tr bgcolor="#FFFFFF">
-                <td>
+                <td class="normal">
                   <b>
                    <a class="blk" href="dd-guide.html#references">references:</a>
                   </b>
                 </td>
-                <td>
+                <td class="normal">
                   <!-- references can be split so that it doesn't make the column too wide in output -->
 <xsl:choose>
                     <xsl:when test="contains(attReferences,'.')">
@@ -112,32 +103,32 @@
                 </td>
               </tr>
               <tr bgcolor="#FFFFCC">
-                <td>
+                <td class="normal">
                   <b>
                     <a class="blk" href="dd-guide.html#list">list:</a>
                   </b>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attListType"/>
                 </td>
               </tr>
               <tr bgcolor="#FFFFFF">
-                <td>
+                <td class="normal">
                   <b>
                 <a class="blk" href="dd-guide.html#field-notes">field notes:</a>
                   </b>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attNotes"/>
                 </td>
               </tr>
               <tr bgcolor="#FFFFCC">
-                <td>
+                <td class="normal">
                   <b>
                  <a class="blk" href="dd-guide.html#field-definition">field definition:</a>
                   </b>
                 </td>
-                <td>
+                <td class="normal">
                   <xsl:value-of select="attDefinition"/>
                 </td>
               </tr>
@@ -150,13 +141,13 @@
                     <br/>
                     <table border="1" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td>
+                        <td class="normal">
                           <b>value</b>
                         </td>
-                        <td>
+                        <td class="normal">
                           <b>description</b>
                         </td>
-                        <td>
+                        <td class="normal">
                           <b>sorting</b>
                         </td>
                       </tr>
@@ -177,10 +168,10 @@
                           <xsl:value-of select="$BlueAmt"/>
                         </xsl:variable>
                         <tr bgcolor="#{$RowColor}">
-                          <td>
+                          <td class="normal">
                             <xsl:value-of select="attListValue"/>
                           </td>
-                          <td>
+                          <td class="normal">
                             <xsl:choose>
                               <xsl:when test="string-length(attListValueDesc)&gt;0">
                                 <xsl:value-of select="attListValueDesc"/>
@@ -188,7 +179,7 @@
                               <xsl:otherwise>--</xsl:otherwise>
                             </xsl:choose>
                           </td>
-                          <td>
+                          <td class="normal">
                             <xsl:value-of select="attListSortOrd"/>
                           </td>
                         </tr>
@@ -199,12 +190,11 @@
               </tr>
               <!--        <tr bgcolor="#{$RowColor}"> -->
             </table>
-          </xsl:if>
-        </xsl:if>
-      </xsl:for-each>
       <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
 @vegbank_footer_html_onerow@
 
     </body>
+</redirect:write>
+</xsl:for-each> <!-- table -->
   </xsl:template>
 </xsl:stylesheet>
