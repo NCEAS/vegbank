@@ -43,15 +43,34 @@ public void developPlotQuery(String[] transformedString, int transformedStringNu
 /**
 * First set up a pool of connections that can be passed to the queryStore class
 */
-Connection pconn=null; //this is a connection that is opened from within the pool
+//get the database parameters from the database.parameters file
+utility g =new utility(); 
+g.getDatabaseParameters("database", "query");
+
+/*		
+System.out.println(g.driverClass+" "
+	+"driverClass: "+g.driverClass+" \n"
+	+"connectionString: "+g.connectionString+" \n"
+	+"login: "+g.login+" \n"
+	+"password: "+g.passwd+" \n"
+	+"minConnection: "+g.minConnections+" \n"
+	+"maxConnections: "+g.maxConnections+" \n"
+	+"pooling logFile: "+g.logFile);
+*/
+	
+Connection pconn=null; //this is a connection that is taken from within the pool
 
 DbConnectionBroker myBroker;
 
 try {
-myBroker = new DbConnectionBroker("oracle.jdbc.driver.OracleDriver",
-                                         "jdbc:oracle:thin:@dev.nceas.ucsb.edu:1521:exp",
-                                         "harris","use4dev",3,8,
-                                         "queryPool.log",1.0);
+
+myBroker = new DbConnectionBroker(g.driverClass,
+                                  g.connectionString,
+                                  g.login,g.passwd,
+				  g.minConnections,g.maxConnections,
+                                  g.logFile,1.0);
+
+				  
 // Get a DB connection from the Broker
 int thisConnection;
 pconn= myBroker.getConnection(); //grab one connectionfrom pool
@@ -117,6 +136,7 @@ for (int i=0;i<transformedStringNum; i++) {
 			System.out.println("number of uses of this connection: "
 				+connectionUses);
 			if (connectionUses>12) {
+				System.out.println("reseting the current connection");
 				try {
 				pconn.close(); //close it - it is no good anymore
 				myBroker.freeConnection(pconn); //not sure if this should be 

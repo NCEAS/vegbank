@@ -61,14 +61,38 @@ Connection pconn1=null; //this is a connection that is opened from within the po
 Statement query = null;
 ResultSet results = null;
 	
+//get the database parameters from the database.parameters file
+utility g2 =new utility(); 
+g2.getDatabaseParameters("database", "insert");
+
+		
+System.out.println(g2.driverClass+" "
+	+"driverClass: "+g2.driverClass+" \n"
+	+"connectionString: "+g2.connectionString+" \n"
+	+"login: "+g2.login+" \n"
+	+"password: "+g2.passwd+" \n"
+	+"minConnection: "+g2.minConnections+" \n"
+	+"maxConnections: "+g2.maxConnections+" \n"
+	+"pooling logFile: "+g2.logFile);
+
+
 DbConnectionBroker myBroker;
 try {
-//initial settings that worked well: 2, 10
-myBroker = new DbConnectionBroker("oracle.jdbc.driver.OracleDriver",
-                                         "jdbc:oracle:thin:@dev.nceas.ucsb.edu:1521:exp",
-                                         "harris","use4dev",8,20,
-                                         "DCB_Example1.log",1.0);
-// Get a DB connection from the Broker
+
+myBroker = new DbConnectionBroker(g2.driverClass,
+                                  g2.connectionString,
+                                  g2.login,g2.passwd,
+				  g2.minConnections,g2.maxConnections,
+                                  g2.logFile,1.0);
+
+
+//myBroker = new DbConnectionBroker("oracle.jdbc.driver.OracleDriver",
+//                                  "jdbc:oracle:thin:@dev.nceas.ucsb.edu:1521:exp",
+//                                  "harris","use4dev",8,20,
+//                                  "DCB_Example1.log",1.0);
+
+				  
+//Get a DB connection from the Broker
 int thisConnection;
 pconn= myBroker.getConnection();
 pconn1=myBroker.getConnection();
@@ -164,7 +188,7 @@ for (int ii=0; ii<addressNum; ii++)
 	String taxonObservation=g.outTaxonObservationId;
 
 	
-//insert the strataComposition too  -- from the same if statement
+	//insert the strataComposition too  -- from the same if statement
 	
 	//get the strataId and strataCompositionId needed for this insertion
 	//by calling the method below
