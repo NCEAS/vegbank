@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: anderson $'
- *	'$Date: 2003-10-18 01:32:01 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2003-10-20 22:59:34 $'
+ *	'$Revision: 1.6 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,28 +24,10 @@
  */
 package org.vegbank.common.utility;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLWarning;
-import java.sql.Statement;
-import java.util.MissingResourceException;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.*;
+import java.net.*;
+import java.sql.*;
+import java.util.*;
 /**
  * This class contains multi-purpose utilities for dealing with plot data, 
  * and the VegBank database at this point these may include utilities to 
@@ -75,13 +57,13 @@ public class DatabaseUtility
 	public String outString[] =new String[100000];
 	public int outStringNum;
 	
-	private Connection conn = null;
-	private ResourceBundle defaultPropFile = ResourceBundle.getBundle("database");
-	
 	private static PropertyResourceBundle options = null;
 	private static String propertiesFile = "database";
+
+	private ResourceBundle defaultPropFile = ResourceBundle.getBundle("database");
+	private Connection conn = null;
 	
-	private static final Log _logger = LogFactory.getLog(DatabaseUtility.class);
+	
 	/**
 	 * due to problems connecting to the various vegbank databases and vegbank 
 	 * url-based services at runtime  'test' connection methods have been 
@@ -427,6 +409,29 @@ public class DatabaseUtility
 	}
 	
 	/**
+	 * Drop multiple plots.
+	 * @param plotIds -- the PK values of the plots that should be deleted
+	 */
+	public void dropPlots( String[] plotIds ) throws java.sql.SQLException {
+
+		if (plotIds ==  null)
+			return;
+	
+		this.conn = this.getPlotDBConnection("localhost");
+		this.conn.setAutoCommit(false);
+
+		for (int i=0; i < plotIds.length; i++) {
+			if (plotIds[i].equals("")) {
+				continue;
+			}
+			dropSinglePlot(plotIds[i]);
+			this.conn.commit();
+		}
+
+		this.conn.close();
+	}
+
+	/**
 	 * method for droping a plot from the vegbank database.  The data that
 	 * are deleted from the database are really the minimal that are required 
 	 * for removal of the plot from the plot table -- thus there are some data
@@ -435,144 +440,240 @@ public class DatabaseUtility
 	 * @param plotId -- the PK value of the plot that should be dropped
 	 * @param dbHost -- the host machine onwhich the database is running
 	 */
-	public void dropPlot( int plotId, String dbHost )
+	public void dropPlot( String plotId ) throws java.sql.SQLException {
+		dropPlot(plotId, "localhost");
+	}
+	public void dropPlot( String plotId, String dbHost )
 				throws java.sql.SQLException {
 
-		StringBuffer sb;
+		this.conn = this.getPlotDBConnection(dbHost);
+		this.conn.setAutoCommit(false);
+
+		dropSinglePlot(plotId);
+
+		this.conn.commit();
+		this.conn.close();
+	}
+
+	/**
+	 *
+	 */
+	private void dropSinglePlot(String plotId) throws java.sql.SQLException {
+
+		System.out.println("DatabaseUtility.dropSinglePlot > ID=" + plotId);
 		String obsIds;
 		boolean results = true;
-		PreparedStatement pstmt = null;
-
-		sb = new StringBuffer(256);
-		this.conn = this.getPlotDBConnection(dbHost);
-
-		// check that the plot exists if not then bail
-		sb.append("select count(plot_id) from plot where plot_id = ")
-				.append(plotId);
+		StringBuffer sb = new StringBuffer(256)
+			.append("select count(plot_id) from plot where plot_id = ")
+			.append(plotId);
 		Statement query = conn.createStatement();
 		ResultSet dbresults = query.executeQuery( sb.toString() );
 
-		//retrieve the results
+		// check for extant plot
 		int res = 0; 
 		while (dbresults.next()) {
 			res = dbresults.getInt(1);
 		}
 
-		// if the res -- number of plots is 0 then alert 
 		if ( res == 0 ) {
-			System.out.println("DatabaseUtility > cannot remove plot #" + 
-					plotId + " because it does not exist.");
-			this.conn.close();
-			return;
+			System.out.println("DatabaseUtility.dropSinglePlot > no plot");
+			return; 
 		}
-
-		// do the deletions
-		System.out.println("DatabaseUtility > This plot exists in the database and will be removed");
-		this.conn.setAutoCommit(false);
 
 		// get all obs. IDs for this plot; use them later 
 		obsIds = getPlotObservationIds(plotId);
-		System.out.println("DatabaseUtility > got obs IDs: " + obsIds);
 
-		// precompile SQL statements
-		stmtSingle = conn.prepareStatement("DELETE FROM ? WHERE ? = ?");
+		// build and execute SQL statements
+		List values;
+		String stmtSingle = "DELETE FROM ? WHERE ? IN (?)";
+		String stmtMultiP = "DELETE FROM ? WHERE ? IN ( SELECT ? from ? where plot_id = ? )";
+		String stmtMultiO = "DELETE FROM ? WHERE ? IN ( SELECT ? from ? where observation_id IN (?) )";
+		String stmtMulti8 = "DELETE FROM ? WHERE ? IN ( SELECT ? from ? where ? IN " +
+			"( SELECT ? from ? where observation_id IN (?) ) )";
 
-		stmtMulti = conn.prepareStatement("DELETE FROM ? WHERE ? IN " +
-			"( SELECT ? from ? where observation_id IN ? )");
-		
-		// STRATUMCOMPOSITION
-		stmtMulti.setString(1, "stratumcomposition");  
-		stmtMulti.setString(2, "taxonobservation_id");  
-		stmtMulti.setString(3, "taxonobservation_id");  
-		stmtMulti.setString(4, "taxonobservation");  
-		stmtMulti.setString(5, obsIds);  
-		execStatement(stmtMulti);
+		if (obsIds != null && !obsIds.equals("")) {
+			System.out.println("DatabaseUtility.dropSinglePlot > got obs IDs: " + obsIds);
+			
+			// TAXONALT
+			values = new ArrayList(8);
+			values.add("taxonalt");
+			values.add("taxoninterpretation_id");  
+			values.add("taxoninterpretation_id");  
+			values.add("taxoninterpretation");  
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation");  
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtMulti8, values) );
 
-		// COMMINTERPRETATION
-		stmtMulti.setString(1, "comminterpretation"); 
-		stmtMulti.setString(2, "commclass_id"); 
-		stmtMulti.setString(3, "commclass_id"); 
-		stmtMulti.setString(4, "commclass"); 
-		stmtMulti.setString(5, obsIds);
-		execStatement(stmtMulti);
+			// STEMLOCATION
+			values = new ArrayList(8);
+			values.add("stemlocation");
+			values.add("stemcount_id");  
+			values.add("stemcount_id");  
+			values.add("stemcount");  
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation");  
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtMulti8, values) );
 
-		// CLASSCONTRIBUTOR
-		stmtMulti.setString(1, "classcontributor"); 
-		stmtMulti.setString(2, "commclass_id"); 
-		stmtMulti.setString(3, "commclass_id"); 
-		stmtMulti.setString(4, "commclass"); 
-		stmtMulti.setString(5, obsIds);
-		execStatement(stmtMulti);
+			// STEMCOUNT
+			values = new ArrayList(5);
+			values.add("stemcount");
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation");  
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
 
-		// COMMCLASS
-		stmtSingle.setString(1, "commclass"); 
-		stmtSingle.setString(2, "observation_id");
-		stmtSingle.setString(3, obsIds);
-		execStatement(stmtSingle);
+			// TAXONINTERPRETATION
+			values = new ArrayList(5);
+			values.add("taxoninterpretation");
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation");  
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
 
-		// STRATUM
-		stmtSingle.setString(1, "stratum"); 
-		stmtSingle.setString(2, "observation_id");
-		stmtSingle.setString(3, obsIds);
-		execStatement(stmtSingle);
+			// STRATUMCOMPOSITION
+			values = new ArrayList(5);
+			values.add("stratumcomposition");
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation");  
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
 
-		// TAXONOBSERVATION
-		stmtSingle.setString(1, "taxonobservation"); 
-		stmtSingle.setString(2, "observation_id");
-		stmtSingle.setString(3, obsIds);
-		execStatement(stmtSingle);
+			// STRATUM
+			values = new ArrayList(3);
+			values.add("stratum"); 
+			values.add("observation_id"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
 
-		// OBSERVATION
-		stmtSingle.setString(1, "observation"); 
-		stmtSingle.setString(2, "plot_id");
-		stmtSingle.setInt(3, plotId);
-		execStatement(stmtSingle);
+			// TAXONOBSERVATION
+			values = new ArrayList(3);
+			values.add("taxonobservation"); 
+			values.add("observation_id"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
 
-		// PLOT
-		stmtSingle.setString(1, "plot"); 
-		stmtSingle.setString(2, "plot_id");
-		stmtSingle.setInt(3, plotId);
-		execStatement(stmtSingle);
+			// CLASSCONTRIBUTOR
+			values = new ArrayList(5);
+			values.add("classcontributor"); 
+			values.add("commclass_id"); 
+			values.add("commclass_id"); 
+			values.add("commclass"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
 
-		// DROP ALSO FROM THE SUMMARY TABLES
+			// COMMINTERPRETATION
+			values = new ArrayList(5);
+			values.add("comminterpretation");
+			values.add("commclass_id"); 
+			values.add("commclass_id"); 
+			values.add("commclass"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtMultiO, values) );
+
+			// COMMCLASS
+			values = new ArrayList(3);
+			values.add("commclass"); 
+			values.add("observation_id"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+
+			// DISTURBANCEOBS
+			values = new ArrayList(3);
+			values.add("disturbanceobs"); 
+			values.add("observation_id"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+
+			// SOILOBS
+			values = new ArrayList(3);
+			values.add("soilobs"); 
+			values.add("observation_id"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+
+			// OBSERVATIONSYNONYM
+			values = new ArrayList(3);
+			values.add("observationsynonym"); 
+			values.add("primaryobservation_id"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+
+			// OBSERVATIONSYNONYM
+			values = new ArrayList(3);
+			values.add("observationsynonym"); 
+			values.add("synonymobservation_id"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+
+			// OBSERVATIONCONTRIBUTOR
+			values = new ArrayList(3);
+			values.add("observationcontributor"); 
+			values.add("observation_id"); 
+			values.add(obsIds);
+			conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+		}
+
+		// PLACE
+		values = new ArrayList(3);
+		values.add("place"); 
+		values.add("plot_id"); 
+		values.add(plotId);
+		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+
 		// PLOTSPECIESSUM
-		stmtSingle.setString(1, "plotspeciessum");
-		stmtSingle.setString(2, "plot_id");
-		stmtSingle.setInt(3, plotId);
-		execStatement(stmtSingle);
+		values = new ArrayList(3);
+		values.add("plotspeciessum"); 
+		values.add("plot_id"); 
+		values.add(plotId);
+		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
 
 		// PLOTSITESUMMARY
-		stmtSingle.setString(1, "plotsitesummary");
-		stmtSingle.setString(2, "plot_id");
-		stmtSingle.setInt(3, plotId);
-		execStatement(stmtSingle);
+		values = new ArrayList(3);
+		values.add("plotsitesummary"); 
+		values.add("plot_id"); 
+		values.add(plotId);
+		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
 
-		stmtSingle.close();
-		stmtMulti.close();
+		// OBSERVATION
+		values = new ArrayList(3);
+		values.add("observation"); 
+		values.add("plot_id"); 
+		values.add(plotId);
+		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
 
-		conn.commit();
-		conn.close();
+		// PLOT
+		values = new ArrayList(3);
+		values.add("plot"); 
+		values.add("plot_id"); 
+		values.add(plotId);
+		conn.createStatement().executeUpdate( constructQuery(stmtSingle, values) );
+
+		System.out.println("DatabaseUtility.dropSinglePlot: DONE");
 	}
 
 	/**
-	 *  Executes 
-	 *  @param pstmt -- contains the SQL PreparedStatment to execute
-	 *  @return int -- number of records updated or deleted
-	 */
-	private int	execStatement(PreparedStatment pstmt) throws SQLException {
-
-		int updateCount = 0;
-		pstmt = conn.prepareStatement( sb.toString() );
-		warnings = pstmt.getWarnings();
-		if ( warnings == null ) {
-			if (pstmt.execute() == false) {
-				updateCount = pstmt.getUpdateCount();
+	 *
+	 */ 
+	private String constructQuery(String base, List values) {
+		String tmp = base;
+		try {
+			Iterator vit = values.iterator();
+			while (vit.hasNext()) {
+				tmp = tmp.replaceFirst("\\?", (String)vit.next());
 			}
-		} else {
-			System.out.println("DatabaseUtility > WARNINGS: " + warnings.toString());
-		}			 
 
-		return updateCount;
+		} catch (java.util.regex.PatternSyntaxException pse) {
+			System.err.println("DatabaseUtility.constructQuery: bad syntax, " 
+					+ pse.getMessage());
+		}
+		return tmp;
 	}
 
 	/**
@@ -580,16 +681,16 @@ public class DatabaseUtility
 	 *  @return Commas separated String of observation_id values in the form
 	 * 	"1,2,3,4,5" which can easily be appended to SQL statements.
 	 */
-	private String getPlotObservationIds(int plotId) 
+	private String getPlotObservationIds(String plotId) 
 				throws SQLException {
 
 		boolean first = true;
-		StringBuffer plotIds = new StringBuffer(128).append("(");
+		StringBuffer plotIds = new StringBuffer(128);
 		StringBuffer sb = new StringBuffer(256)
 			.append("select observation_id from observation where plot_id=")
 			.append(plotId);
 
-		ResultSet dbresults = conn.createStatement().query.executeQuery( sb.toString() );
+		ResultSet dbresults = conn.createStatement().executeQuery( sb.toString() );
 		while (dbresults.next()) {
 			if (first) {
 				first = false;
@@ -599,7 +700,6 @@ public class DatabaseUtility
 
 			plotIds.append(dbresults.getString(1));
 		}
-		plotIds.append(")");
 
 		return plotIds.toString();
 	}
@@ -743,7 +843,7 @@ public class DatabaseUtility
 	 */
 	public static void main(String[] args)
 	{
-		if (args.length >= 1)
+		if (args.length > 1)
 		{
 			//get the plugin named
 			String action = args[0];
@@ -752,9 +852,9 @@ public class DatabaseUtility
 			{
 				String inPlot = args[1];
 				String host = args[2];
-				int plotid = Integer.parseInt(inPlot);
+				//int plotid = Integer.parseInt(inPlot);
 				try {
-					dplot.dropPlot(plotid, host);
+					dplot.dropPlot(inPlot, host);
 				} catch (java.sql.SQLException sex) {
 					System.out.println(sex.getMessage());
 					sex.printStackTrace();
@@ -784,6 +884,18 @@ public class DatabaseUtility
 			{
 				System.out.println("unknown action: " + action);
 			}
+		}
+		else if (args.length == 1) 
+		{
+			DatabaseUtility du = new DatabaseUtility();
+			ArrayList values = new ArrayList(5);
+			values.add("stratumcomposition");
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation_id");  
+			values.add("taxonobservation");  
+			values.add("5");
+			String stmtMultiO = "DELETE FROM ? WHERE ? IN ( SELECT ? from ? where observation_id IN ? )";
+			du.constructQuery(stmtMultiO, values);
 		}
 		else
 		{

@@ -15,8 +15,8 @@
 *   Authors: @author@
 *
 *  '$Author: anderson $'
-*  '$Date: 2003-10-17 01:22:12 $'
-*  '$Revision: 1.1 $'
+*  '$Date: 2003-10-20 22:59:34 $'
+*  '$Revision: 1.2 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -61,7 +61,8 @@
 
 <br/> 
 <font face="Helvetica,Arial,Verdana" size="2" color="209020">
-	<b>Enter the VegBank plot_id values for each field to delete. </b>
+	<b>Enter the VegBank plot_id values for each field to delete.<br/>
+	Separate IDs by SPACES or NEW LINES.</b>
 </font>
 
 <br/>&nbsp;
