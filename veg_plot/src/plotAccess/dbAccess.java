@@ -33,8 +33,10 @@ public class dbAccess {
 
 public static void main(String[] args) {
 if (args.length != 3) {
-	System.out.println("Usage: java dbQuery  [XML] [XSL] [action]");
-        System.exit(0);
+	System.out.println("Usage: java dbAccess  [XML] [XSL] [action] \n"
+		+"version: Feb 2001 \n \n"
+		+"actions:  query compoundQuery insert insertPlot verify simpleCommunityQuery");
+		System.exit(0);
 }  //end if
 
 
@@ -118,15 +120,24 @@ if (action.equals("compoundQuery")) {
 
 
 
-//insert action
+//insert action -- to insert a plot to the last database
 if (action.equals("insert")) {
 
-	
 	//pass the array to the plot writer to be inserted into the database
 	plotWriter w =new plotWriter();
 	w.insertPlot(transformedString, transformedStringNum);
 
 }
+
+
+//insertPlot action -- this is to insert a plot to the most recent DB
+if (action.equals("insertPlot")) {
+
+	//pass the array to the plot writer to be inserted into the database
+	PlotDBWriter w =new PlotDBWriter();
+	w.insertPlot(transformedString, transformedStringNum, "entirePlot");
+}
+
 
 
 //verify action
@@ -151,7 +162,6 @@ if (action.equals("simpleCommunityQuery")) {
 		queryOutput=w.queryOutput;
 		queryOutputNum=w.queryOutputNum;
 		
-	
 	}
 
 }
@@ -162,7 +172,10 @@ else {System.out.println("dbAccess.accessDatabase: unrecognized action: "
 	+action);}
 	
 } //end try
-catch( Exception e ) {System.out.println(" failed in: dbAccess.main  "+e.getMessage());}
+catch( Exception e ) {System.out.println(" failed in: dbAccess.accessDatabase "
+	+e.getMessage() );
+	e.printStackTrace();
+	}
 }
 
 
