@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2004-10-01 20:38:02 $'
-* '$Revision: 1.122 $'
+* '$Author: anderson $'
+* '$Date: 2004-10-28 00:41:29 $'
+* '$Revision: 1.123 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -375,6 +375,7 @@
   </target>
   <target name="views" depends="tokenfiles" description="&gt; dist the views to server (outside chain, but included in forms)">
     <!-- first overwrite any autogen views with any custom ones-->
+    <mkdir dir="${views}/custom"/>
     <copy overwrite="true" todir="${views}/autogen" filtering="no">
       <fileset dir="${views}/custom" includes="*jsp" excludes="**/CVS* "/>
     </copy>
