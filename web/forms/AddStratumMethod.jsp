@@ -12,8 +12,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2003-07-23 00:19:20 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2003-07-23 18:41:11 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -48,13 +48,13 @@
     <tr>
       <td class="formLbl">stratum Method Name:<font color="red">*</font></td>
       <td>
-        <html:text property="stratummethod.stratummethodname" maxlength="30" size="30"/>
+        <html:text property="stratumMethod.stratummethodname" maxlength="30" size="30"/>
       </td>
     </tr>
     <tr>
       <td class="formLbl">stratum Method Description:<font color="red">*</font></td>
       <td> 
-        <html:textarea property="stratummethod.stratummethoddescription"  cols="60"/>
+        <html:textarea property="stratumMethod.stratummethoddescription"  cols="60"/>
       </td>
     </tr>
    
@@ -65,7 +65,7 @@
 	    <td class="formLbl">reference:</td>
 	    <td>
 	      <bean:define id="list" name="AddStratumMethodForm" property="references" type="java.util.Vector"/>
-	      <html:select property="stratummethod.reference_id">
+	      <html:select property="stratumMethod.reference_id">
 	        <option value="-1">--select a reference--</option>
 	        <html:options collection="list" labelProperty="title" property="id"/>
 	      </html:select>

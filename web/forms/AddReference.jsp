@@ -12,8 +12,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2003-07-23 00:19:20 $'
-*  '$Revision: 1.4 $'
+*  '$Date: 2003-07-23 18:41:11 $'
+*  '$Revision: 1.5 $'
 *
 *
 -->
@@ -88,7 +88,7 @@
         <p>
           <html:select property="reference.referencetype">
             <option value="-1" selected="yes">--pick a referenceType--</option>
-            <html:options property="reference.referencetypepicklist"/>
+            <html:options property="reference.referencetypePickList"/>
           </html:select>
 	      </p>
       </td>

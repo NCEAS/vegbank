@@ -13,8 +13,8 @@
   *  Authors: @author@
   *
   *  '$Author: mlee $'
-  *  '$Date: 2003-07-23 00:19:20 $'
-  *  '$Revision: 1.2 $'
+  *  '$Date: 2003-07-23 18:41:11 $'
+  *  '$Revision: 1.3 $'
   *
   *
 -->
@@ -119,7 +119,7 @@
 		      </p>
 		    </td>
 		    <td>
-		      <html:text property="referencejournal.journal" size="50"/>
+		      <html:text property="referenceJournal.journal" size="50"/>
 		    </td>
 		  </tr>
 		  <tr>
@@ -138,7 +138,7 @@
 		      </p>
 		    </td>
 		    <td>
-		      <html:text property="referencejournal.issn" size="50"/>
+		      <html:text property="referenceJournal.issn" size="50"/>
 		    </td>
 		  </tr>
 		  <tr>
@@ -158,7 +158,7 @@
 
 		    </td>
 		    <td>
-		      <html:text property="referencejournal.abbreviation" size="50"/>
+		      <html:text property="referenceJournal.abbreviation" size="50"/>
 		    </td>
 		  </tr>
 		  <tr>
