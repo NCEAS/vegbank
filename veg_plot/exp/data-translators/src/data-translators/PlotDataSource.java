@@ -19,8 +19,8 @@ import java.util.Date;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-31 19:51:51 $'
- * 	'$Revision: 1.6 $'
+ *  '$Date: 2002-01-31 22:35:24 $'
+ * 	'$Revision: 1.7 $'
  */
 public class PlotDataSource 
 {
@@ -473,6 +473,163 @@ public class PlotDataSource
 		plantName, plotName);	
 		return(s);
 	}
+	
+	//returns the easting
+	String getXCoord(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getXCoord(plotName);
+		return(s);
+	}
+	//returns the northing
+	String getYCoord(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getYCoord(plotName);
+		return(s);
+	}
+	
+	//returns the latitude
+	String getLatitude(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getLatitude(plotName);
+		return(s);
+	}
+	
+	//returns the longitude
+	String getLongitude(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getLongitude(plotName);
+		return(s);
+	}
+	
+	//returns the geographic zone
+	String getUTMZone(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getUTMZone(plotName);
+		return(s);
+	}
+	
+	//returns the plot shape
+	String getPlotShape(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPlotShape(plotName);
+		return(s);
+	}
+	
+	//returns the plot area
+	String getPlotArea(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getPlotArea(plotName);
+		return(s);
+	}
+	
+	//returns the state for the current plot
+	String getCommunityName(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCommunityName(plotName);
+		return(s);
+	}
+	
+	
+
+	//returns the state in which the plot exists
+	String getState(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getState(plotName);
+		return(s);
+	}
+	
+	//retuns the hydrologic regime
+	String getHydrologicRegime(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getHydrologicRegime(plotName);
+		return(s);
+	}
+	
+	//returns the topo position
+	String getTopoPosition(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getTopoPosition(plotName);
+		return(s);
+	}
+	
+	//returns the slope aspect
+	String getSlopeAspect(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSlopeAspect(plotName);
+		return(s);
+	}
+	
+	//returns yje slope gradient
+	String getSlopeGradient(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSlopeGradient(plotName);
+		return(s);
+	}
+	
+	//returns the surficial geology
+	String getSurfGeo(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getSurfGeo(plotName);
+		return(s);
+	}
+	
+	//retuns the country
+	String getCountry(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getCountry(plotName);
+		return(s);
+	}
+	
+	//returns the size of the stand -- extensive etc..
+	String getStandSize(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getStandSize(plotName);
+		return(s);
+	}
+	
+	//returns the location as described by the author
+	String getAuthorLocation(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getAuthorLocation(plotName);
+		return(s);
+	}
+	
+	//returns the landForm
+	String getLandForm(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getLandForm(plotName);
+		return(s);
+	}
+	
+	//retuns the elevation
+	String getElevation(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getElevation(plotName);
+		return(s);
+	}
+	
+	//returns the elevation accuracy
+	String getElevationAccuracy(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getElevationAccuracy(plotName);
+		return(s);
+	}
+	
+	//return the confidentiality reason -- not null
+	String	getConfidentialityReason(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getConfidentialityReason(plotName);
+		return(s);
+	}
+	
+	//return the confidentiality status -- not null 0-6
+	String getConfidentialityStatus(String plotName)
+	{
+		String s = ((PlotDataSourceInterface)pluginObj).getConfidentialityStatus(plotName);
+		return(s);
+	}
+	
+
 	
 	/**
 	 * method that prints the variables for a given plot to the 
