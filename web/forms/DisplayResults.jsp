@@ -12,9 +12,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *     Authors: @author@
 *
-*    '$Author: anderson $'
-*      '$Date: 2004-07-27 20:09:37 $'
-*  '$Revision: 1.25 $'
+*    '$Author: mlee $'
+*      '$Date: 2004-10-11 17:32:58 $'
+*  '$Revision: 1.26 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -158,11 +158,11 @@
 	    <th  class="<%= rowClass %>" align="center" valign="middle" nowrap colspan="2">
 	     
 	      <!-- THE LINK TO THE SUMMARY-->
-             <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=summary&amp;queryType=simple&amp;accessionCode=<bean:write property="accessionCode" name="row"/>" title="summary report"><img align="center" border="0" 
+             <a href='@get_link@summary/observation/<bean:write property="accessionCode" name="row"/>' title="summary report"><img align="center" border="0" 
 	     	src="@image_server@report_sm.gif" alt="Summary view"></img></a>
 
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
-	      <a href="@datarequestservlet@?requestDataType=vegPlot&amp;resultType=full&amp;queryType=simple&amp;accessionCode=<bean:write property="accessionCode" name="row"/>" title="comprehensive report"><img align="center" border="0" 
+	      <a href='@get_link@detail/observation/<bean:write property="accessionCode" name="row"/>' title="comprehensive report"><img align="center" border="0" 
 	      	src="@image_server@comprehensive_sm.gif" alt="Comprehensive view"></img></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
