@@ -7,8 +7,8 @@
 * Release: @release@-t
 *
 *   '$Author: farrell $'
-*   '$Date: 2003-10-11 21:20:10 $'
-*   '$Revision: 1.4 $'
+*   '$Date: 2003-10-14 17:35:26 $'
+*   '$Revision: 1.5 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -1987,7 +1987,8 @@ public class DBinsertPlotSource {
 		// Also insert the community interpretation data if we can correllate
 		
 		//Need to get the conceptId
-		int commConceptId = RectificationUtility.getCommConceptId(name, conn);
+	    
+		int commConceptId = RectificationUtility.getForiegnKey(conn, RectificationUtility.GETCOMMCONCEPTID, name );
 		
 		if (commConceptId == 0)
 		{
