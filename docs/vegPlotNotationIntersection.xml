@@ -8,18 +8,23 @@
 <author>J. Harris </author>
 <institution>NCEAS </institution>
 <contributor> </contributor>
-<description>This table stores information linking a notation to a specific attribute associated with a plot.</description>
+<description>This table stores information linking a notation to a specific 
+attribute associated with a plot.</description>
 <date></date>
 
 <entity>
 	<entityName>vegPlot.notationIntersection </entityName>
-	<entitySummary>This table stores the email addresses of the various parties involved in the collection of plots. </entitySummary>
-	<entityDescription>This table was developed with the goal of keeping all the notes associated with 
-	the plots in a sigle table rather than disseminated thoughout the database.  Generally this table will point a note to a 
-	plot record and specifically to a discreet attribute associated with that plot.</entityDescription>
+	<entitySummary>This links a note made by a database user to a specific element 
+	in the database. 
+	</entitySummary>
+	<entityDescription>This table was developed with the goal of keeping 
+	all the notes associated with the plots in a sigle table rather than 
+	disseminated thoughout the database.  Generally this table will point 
+	a note to a plot record and specifically to a discreet attribute 
+	associated with that plot.</entityDescription>
 
         <attribute>
-                <attName>notationIntersectionId</attName>
+                <attName>NOTATIONINTERSECTION_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
@@ -30,7 +35,7 @@
 
 
 	<attribute> 
-		<attName>obsId</attName>
+		<attName>OBS_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
 		<attKey>FK </attKey>
@@ -64,7 +69,7 @@
 		<attNotes>Name of the attribute in the table (stored in tableName) that the notation is associated with.</attNotes>
 		<attDefinition>This column stores the name of the attribute in the table (stored in tableName) 
 		that the notation is associated with.  Business rules maintain that if the tableName equals 'plotObservation' then 
-		then this field must be null.</attDefinition>
+		this field must be null.</attDefinition>
 	</attribute>
 	
 	
@@ -83,7 +88,7 @@
 	
 	
 	<attribute> 
-		<attName>notationId</attName>
+		<attName>NOTATION_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
 		<attKey>FK</attKey>

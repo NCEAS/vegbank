@@ -19,7 +19,7 @@
 	as specific types, such as environmental or vegetation.</entityDescription>
 
         <attribute>
-                <attName>definedValueId</attName>
+                <attName>DEFINEDVALUE_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>PK </attKey>
@@ -28,37 +28,38 @@
                 <attDefinition>Primary key in the definedValue table.</attDefinition>
         </attribute>
 
-
-	<attribute> 
-		<attName>userDefinedId</attName>
-		<attNulls>No</attNulls>	
-		<attType>NUMBER</attType>
-		<attKey>FK </attKey>
-		<attReferences>userDefined </attReferences>
-		<attNotes>Foreign key into the userDefined table.</attNotes>
-		<attDefinition>This key links a user defined attribute to a specific plot observation and catagory.</attDefinition>
-	</attribute>
+	<attribute>
+                <attName>USERDEFINED_ID</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>FK</attKey>
+		<attReferences>userDefined</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Foreign key into the userDefined table.</attDefinition>
+        </attribute>
 
 
 
 	<attribute>
-                <attName>definedValueName </attName>
+                <attName>value</attName>
                 <attNulls>No</attNulls>
-                <attType>VARCHAR2 </attType>
-                <attKey>n/a </attKey>
-                <attReferences>n/a </attReferences>
+                <attType>TEXT</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>The name of the user defined value.</attDefinition>
+                <attDefinition>The value of the user defined value.</attDefinition>
         </attribute>
 
 <attribute>
-                <attName>definedValueType </attName>
+                <attName>tableRecord</attName>
                 <attNulls>No</attNulls>
-                <attType>VARCHAR2 </attType>
-                <attKey>n/a </attKey>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
                 <attReferences>n/a </attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>The data type of the user defined value.</attDefinition>
+                <attDefinition>The numeric value of the primary key that this user 
+		defined value is associated with as specified in the userDefined.tableName 
+		attribute.</attDefinition>
 </attribute>
 
 <attribute>
@@ -73,6 +74,6 @@
 
 	
 	
-	<children> </children>
+	<children>userDefined</children>
 </entity>
 </dataModel>	

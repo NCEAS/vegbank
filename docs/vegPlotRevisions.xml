@@ -36,7 +36,7 @@
 		<attKey>n/a</attKey>
 		<attReferences>n/a</attReferences>
 		<attNotes>n/a</attNotes>
-		<attDefinition>Name of the table where the changes have occured.</attDefinition>
+		<attDefinition>Name of the table where the changes have occurred.</attDefinition>
 	</attribute>
 
 
@@ -48,7 +48,7 @@
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>The name of the attribute where the changes occured. </attDefinition>
+                <attDefinition>The name of the attribute where the changes occurred. </attDefinition>
         </attribute>
 
 	<attribute>
@@ -58,7 +58,7 @@
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>The row level that the change occured.</attDefinition>
+                <attDefinition>The row level that the change occurred.</attDefinition>
         </attribute>
 	
 	<attribute>

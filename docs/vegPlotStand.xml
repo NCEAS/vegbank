@@ -13,10 +13,11 @@
 	<entityName>vegPlot.STAND </entityName>
 	<entitySummary>This table stores information about the stand from which a plot was sampled. </entitySummary>
 	<entityDescription>A stand is a spatially continuous distribution of vegetation.  The goal
-	of many plot collections is to sample vegetation thought to reflect a stand and thus plots
-	are usually recorded within a stand.  Information in this table is intended to describe the
-	stand from which plots are taken.  A general problem with this table is the potential for a single
-	stand to be represented twice - each by a unique identifier.</entityDescription>
+	of many plot collections is to sample vegetation thought to reflect a stand and thus plots 
+	are usually recorded from within a stand, as opposed to the perimeter of the stand.  
+	Information in this table is intended to describe the
+	stand from which plots are taken.  A problem with this table is the potential for a single
+	stand to be represented twice - because stands are not named.</entityDescription>
 	<attribute> 
 		<attName>stand_id </attName>
 		<attNulls>No</attNulls>	

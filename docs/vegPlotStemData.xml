@@ -4,7 +4,7 @@
 <dataModel>	
 
 
-<title> Prototype Veg Plots Database Component Description: stem data</title>
+<title> Prototype Veg Plots Database Component Description: treeStem</title>
 <author>J. Harris </author>
 <institution>NCEAS </institution>
 <contributor> </contributor>
@@ -12,7 +12,7 @@
 <date></date>
 
 <entity>
-	<entityName>vegPlot.stemData</entityName>
+	<entityName>vegPlot.treeStem</entityName>
 	<entitySummary>This table is intended to store information about the tree stem data collected while 
 	sampling a plot.</entitySummary>
 	<entityDescription>This table was added after the September meeting at NCEAS 
@@ -58,8 +58,13 @@
 		<attType>NUMBER</attType>
 		<attKey>n/a </attKey>
 		<attReferences>n/a </attReferences>
-		<attNotes>n/a</attNotes>
-		<attDefinition>This column stores the measured diameter of the stem in meters.</attDefinition>
+		<attNotes>Business rules will dictate that if a worker collects diameter 
+		by class, the value of the mid-point between the low end and high 
+		end for the class will be positioned here and the offset between 
+		this and the endpoints will be stored in the stemDiameterAccuracy 
+		attribute.</attNotes>
+		<attDefinition>This column stores the diameter of the 
+		stem in meters.</attDefinition>
 </attribute>
 
 <attribute> 
@@ -68,8 +73,12 @@
 		<attType>NUMNBER</attType>
 		<attKey>n/a </attKey>
 		<attReferences>n/a </attReferences>
-		<attNotes>Diameter accuracy in meteres.</attNotes>
-		<attDefinition>This column stores the accuracy of the stem diameter measurements.</attDefinition>
+		<attNotes>Business rules maintain that the if the plot collector 
+		uses classes for collecting stem diameter data then the class 
+		midpoint is stored in the stemDiameter attribute and the difference 
+		between this midpoint and an endpoint is stored in this field.</attNotes>
+		<attDefinition>This column stores the accuracy of the stem 
+		diameter measurements.</attDefinition>
 </attribute>
 
 <attribute> 
@@ -78,8 +87,13 @@
 		<attType>TEXT</attType>
 		<attKey>n/a</attKey>
 		<attReferences>n/a </attReferences>
-		<attNotes>see the dsgpoly attribute in the plot table - the format is the same.</attNotes>
-		<attDefinition>This column stores the position (lat., long.) of the stem.</attDefinition>
+		<attNotes>See the dsgpoly attribute in the plot table - the 
+		format is the same.  The user interface to the prototype system 
+		will allow the user to enter relative the relative position 
+		of stems (wrt the plot origin) but will convert the data to latitude 
+		and longitude.</attNotes>
+		<attDefinition>This column stores the position (lat., long.) 
+		of the stem.</attDefinition>
 </attribute>
 
 
@@ -89,8 +103,13 @@
 		<attType>NUMBER</attType>
 		<attKey>n/a </attKey>
 		<attReferences>n/a </attReferences>
-		<attNotes>Height in meters</attNotes>
-		<attDefinition>This column stores the measured height of the stem in meters..</attDefinition>
+		<attNotes>Business rules maintain that the if the plot collector 
+		uses classes for collecting stem heights then the class 
+		midpoint is stored in the stemHeight attribute and the difference 
+		between this midpoint and an endpoint is stored in the stemHeightAccuracy 
+		field.</attNotes>
+		<attDefinition>This column stores the measured height of the 
+		stem in meters.</attDefinition>
 </attribute>
 
 
@@ -104,6 +123,18 @@
 		<attDefinition>This column stores the measured height of a stem.</attDefinition>
 </attribute>
 
+
+<attribute> 
+		<attName>stemCount</attName>
+		<attNulls>Yes</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>n/a </attKey>
+		<attReferences>n/a </attReferences>
+		<attNotes>The number of stems of a single species of plant 
+		that have common stem height, stem diameter, and no position or
+		code data.</attNotes>
+		<attDefinition>This column stores the measured height of a stem.</attDefinition>
+</attribute>
 
 	<children> </children>
 </entity>

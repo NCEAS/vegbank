@@ -4,41 +4,51 @@
 <dataModel>	
 
 
-<title> Prototype Veg Plots Database Component Description: cover method</title>
+<title> Prototype Veg Plots Database Component Description: Plot Place</title>
 <author>J. Harris </author>
 <institution>NCEAS </institution>
 <contributor> </contributor>
-<description>This table specifies the cover scale recognized by the plot data collectors.</description>
+<description>This table is an intersection which resolves a plot to one or many named places..</description>
 <date></date>
 
 <entity>
-	<entityName>vegPlot.CoverMethod </entityName>
-	<entitySummary>This table links the cover scale recognized by the plot data collectors
-	to a cover scale specified in the coverIndicies table. </entitySummary>
+	<entityName>vegPlot.plotPlace</entityName>
+	<entitySummary>This table is the intersection between the plot table and the namedPlace table 
+	and will be used for querying either plots located in a named place (including State Park, National Forests etc..) 
+	or a the named places in which a plot or group of plots are located. </entitySummary>
 	<entityDescription> </entityDescription>
 
         <attribute>
-                <attName>coverMethodId</attName>
+                <attName>PLOTPLACE_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
 		<attReferences>n/a</attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>Primary Key for the coverMethod table.</attDefinition>
+                <attDefinition>Primary Key for the plotPlace table.</attDefinition>
         </attribute>
 
 
 	<attribute> 
-		<attName>coverType</attName>
+		<attName>PLOT_ID</attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
-		<attKey>n/a </attKey>
-		<attReferences>n/a </attReferences>
-		<attNotes>n/a</attNotes>
-		<attDefinition>Cover scale type (examples may include: Braun-Blanquet scale, the Barkman et al., Franklin et al., Pfister-Arnold etc..</attDefinition>
+		<attKey>FK</attKey>
+		<attReferences>plot </attReferences>
+		<attNotes>Foreign key into the plot table.</attNotes>
+		<attDefinition>This is the foreign key into the plot table.</attDefinition>
 	</attribute>
 
 
+<attribute> 
+		<attName>NAMEDPLACE_ID</attName>
+		<attNulls>No</attNulls>	
+		<attType>NUMBER</attType>
+		<attKey>FK</attKey>
+		<attReferences>namedPlace </attReferences>
+		<attNotes>Foreign key into the namedPlace table</attNotes>
+		<attDefinition>This is the foreign key into the namedPlace table.</attDefinition>
+</attribute>
 
 	<children> </children>
 </entity>

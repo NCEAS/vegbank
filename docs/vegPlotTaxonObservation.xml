@@ -14,8 +14,15 @@
 
 <entity>
 	<entityName>vegPlot.TAXONOBSERVATION </entityName>
-	<entitySummary>This table stores information about cummulative coverage (coverage accross all strata) of all the taxon recognized within a plot observation.</entitySummary>
-	<entityDescription>At the working group meeting at NCEAS in September 2000, it was recognized that this table would store the cummulative coverages of the taxa recognized by the author of the plot.  Also recognized was the importance of maintaining an entity for interpretations of the originak taxa recognized by the plot author, and therefore the entity interpretation was added.</entityDescription>
+	<entitySummary>This table stores information about cumulative coverage 
+	(coverage across all strata) of all the taxon recognized within a plot 
+	observation.</entitySummary>
+	
+	<entityDescription>At the working group meeting at NCEAS in September 2000, it was 
+	recognized that this table would store the cummulative coverages of the taxa 
+	recognized by the author of the plot.  Also recognized was the importance of 
+	maintaining an entity for interpretations of the original taxa recognized by the plot author, 
+	and therefore the entity interpretation was added.</entityDescription>
 
 
 <attribute>
@@ -25,7 +32,8 @@
                 <attKey>PK</attKey>
 		<attReferences>n/a</attReferences>
                 <attNotes>Primary key of the table.</attNotes>
-                <attDefinition>Database assigned value for a unique taxa within a given plot observation.</attDefinition>
+                <attDefinition>Database assigned value for a unique taxa within 
+		a given plot observation.</attDefinition>
         </attribute>
 
 
@@ -40,7 +48,7 @@
 	</attribute>
 
 
-
+<!--  Get rid of the following attributes
 	<attribute>
                 <attName>authorNameId</attName>
                 <attNulls>No</attNulls>
@@ -52,7 +60,7 @@
         </attribute>
 
 
- <attribute>
+ 	<attribute>
                 <attName>originalAuthority</attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2</attType>
@@ -67,10 +75,21 @@
 		</attNotes>
                 <attDefinition>This is the authority for the taxon that was used by the plot 
 		author to describe a population.  If the originalAuthority is unknown then the 
-		author if the plot is the originalAuthority</attDefinition>
+		author of the plot is the originalAuthority</attDefinition>
         </attribute>
 
+	 <attribute>
+                <attName>originalAuthorityRef</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>FK</attKey>
+                <attReferences>citation</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the foreign key into the citation table 
+		to link an authority to potentially many citations</attDefinition>
+        </attribute>
 
+-->
 
         <attribute>
                 <attName>cumStrataCoverage</attName>

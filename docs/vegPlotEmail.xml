@@ -17,17 +17,18 @@
 	<entityDescription> </entityDescription>
 
         <attribute>
-                <attName>email_id </attName>
+                <attName>EMAIL_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
+		<attReferences>n/a</attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition> </attDefinition>
+                <attDefinition>Email Address</attDefinition>
         </attribute>
 
 
 	<attribute> 
-		<attName>party_id </attName>
+		<attName>PARTY_ID </attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
 		<attKey>FK </attKey>

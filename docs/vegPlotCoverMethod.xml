@@ -18,7 +18,7 @@
 	<entityDescription> </entityDescription>
 
         <attribute>
-                <attName>coverMethodId</attName>
+                <attName>COVERMETHOD_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
@@ -27,6 +27,17 @@
                 <attDefinition>Primary Key for the coverMethod table.</attDefinition>
         </attribute>
 
+	
+        <attribute>
+                <attName>CITATION_ID</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER </attType>
+                <attKey>FK</attKey>
+		<attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Foreign Key into the citation table, linking a reference
+		to a cover method.</attDefinition>
+        </attribute>
 
 	<attribute> 
 		<attName>coverType</attName>
@@ -34,7 +45,7 @@
 		<attType>NUMBER </attType>
 		<attKey>n/a </attKey>
 		<attReferences>n/a </attReferences>
-		<attNotes>n/a</attNotes>
+		<attNotes>Name of the cover method.</attNotes>
 		<attDefinition>Cover scale type (examples may include: Braun-Blanquet scale, the Barkman et al., Franklin et al., Pfister-Arnold etc..</attDefinition>
 	</attribute>
 

@@ -19,7 +19,7 @@
 	aforementioned observation) through the notationIntersectionTable. </entityDescription>
 
         <attribute>
-                <attName>notationId</attName>
+                <attName>NOTATION_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK</attKey>
@@ -53,14 +53,14 @@
 
 	
 <attribute>
-                <attName>notationPartyId</attName>
+                <attName>PARTY_ID</attName>
                 <attNulls>NO</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>FK</attKey>
                 <attReferences>vegPlotParty</attReferences>
                 <attNotes>Foreign key into the vegPlotParty table.</attNotes>
-                <attDefinition>The column stores the reference to the party (vegPlotParty) table that is 
-		is associated with the note.</attDefinition>
+                <attDefinition>The column stores the reference to the party 
+		(vegPlotParty) table that is associated with the note.</attDefinition>
 </attribute>
 
 <attribute>

@@ -30,41 +30,69 @@
         </attribute>
 
 
-	<attribute> 
-		<attName>OBS_ID</attName>
-		<attNulls>No </attNulls>	
-		<attType>NUMBER </attType>
-		<attKey>FK </attKey>
-		<attReferences>plotObservation </attReferences>
-		<attNotes>Foreign key into the plotObservation table.</attNotes>
-		<attDefinition>This key relates a user defined attribute with a specific plot observation. </attDefinition>
-	</attribute>
-
 
 
 	<attribute>
-                <attName>DEFINEDVALUE_ID </attName>
+                <attName>userDefinedName</attName>
                 <attNulls>No</attNulls>
-                <attType>NUMBER</attType>
-                <attKey>FK</attKey>
-                <attReferences>definedValue</attReferences>
+                <attType>VARCHAR</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>Foreign key into the definedValue table.</attDefinition>
+                <attDefinition>Name of the used defined element.</attDefinition>
         </attribute>
 
 	
 	<attribute>
-                <attName>category</attName>
-                <attNulls>Yes</attNulls>
+                <attName>userDefinedMetadata</attName>
+                <attNulls>No</attNulls>
+                <attType>TEXT</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This attribute stores metadata about this user defined 
+		attribute.</attDefinition>
+        </attribute>
+
+	
+	<attribute>
+                <attName>userDefinedCategory</attName>
+                <attNulls>No</attNulls>
                 <attType>VARCHAR2</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
                 <attNotes>n/a</attNotes>
-                <attDefinition>This is the catagory for the associateion between the plot observation and the user defined 
-		attribute stored in this table.  Business rules will lock the vocabulary used in this collumn to specific 
-		catagories such as environmental and vegetation.</attDefinition>
+                <attDefinition>This is the category for the association between 
+		the plot observation and the user defined attribute stored in this 
+		table.  Business rules will lock the vocabulary used in this column to specific 
+		categories such as environmental and vegetation.</attDefinition>
         </attribute>
 
+	
+	<attribute>
+                <attName>userDefinedType</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Database data type of the user defined element.</attDefinition>
+        </attribute>
+	
+	
+	<attribute>
+                <attName>tableName</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>Name of table that this element is most closely associated 
+		with, an attribute that will be infered by the interface tools.  For 
+		example soilColor may be an attribute defined by the user an would be 
+		associated with the plot table.</attDefinition>
+        </attribute>
+	
 	
 	<children> </children>
 </entity>

@@ -18,7 +18,7 @@ describing that sampling method.</description>
 	<entityDescription> </entityDescription>
 
         <attribute>
-                <attName>sampleMethodId </attName>
+                <attName>SAMPLEMETHOD_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
@@ -51,11 +51,11 @@ describing that sampling method.</description>
         </attribute>
 
 	<attribute>
-                <attName>sampleMethodCitation </attName>
-                <attNulls>No </attNulls>
-                <attType>NUMBER </attType>
-                <attKey>n/a </attKey>
-                <attReferences>n/a </attReferences>
+                <attName>CITATION_ID</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>FK</attKey>
+                <attReferences>citation</attReferences>
                 <attNotes>n/a </attNotes>
                 <attDefinition>Foreign Key into the citation table identifying the reference used to describe the sampling method.</attDefinition>
         </attribute>

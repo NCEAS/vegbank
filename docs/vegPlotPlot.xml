@@ -11,14 +11,18 @@
 
 <entity>
 	<entityName>vegPlot.PLOT </entityName>
-	<entitySummary>This table stores general information about the a given plot loaction</entitySummary>
-	<entityDescription>This table initially stored all the environmental/conditional data that had a one-to-one relationship
-with the plot.  During the September meeting at NCEAS, it was decided that this entity should be disemminated to two 
-tables: one for data that is static over the period of which sampling events are carried out and a second table (called
-plotObservation) to store time-dependent data.  Following this structure a single plot position is stored only once
-and observational information (procured during one or multiple sampling events) will be stored separately. </entityDescription>
+	<entitySummary>This table stores general information about the a given plot location</entitySummary>
+	<entityDescription>This table initially stored all the environmental/conditional data that had a 
+	one-to-one relationship with the plot.  During the September meeting at NCEAS, it was decided 
+	that this entity should be disemminated to two tables: one for data that is static over the 
+	period of which sampling events are carried out and a second table (called plotObservation) 
+	to store time-dependent data.  Following this structure a single plot position is stored only 
+	once and observational information (procured during one or multiple sampling events) will be 
+	stored separately. 
+	</entityDescription>
+	
 	<attribute> 
-		<attName>plot_id</attName>
+		<attName>PLOT_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
 		<attKey>PK</attKey>
@@ -27,29 +31,19 @@ and observational information (procured during one or multiple sampling events) 
 	</attribute>
 
 	<attribute>
-                <attName>project_id</attName>
-                <attNulls>No </attNulls>
+                <attName>PROJECT_ID</attName>
+                <attNulls>Yes</attNulls>
                 <attType>NUMBER </attType>
                 <attKey>FK</attKey>
                 <attReferences>Project</attReferences>
                 <attNotes>Foreign key to the project table.</attNotes>
                 <attDefinition>Database assigned value for a given project.</attDefinition>
         </attribute>
-<attribute>
-                <attName>stand_id</attName>
-                <attNulls>Yes</attNulls>
-                <attType>NUMBER</attType>
-                <attKey>FK</attKey>
-                <attReferences>stand</attReferences>
-                <attNotes>Foreign key into the stand table.</attNotes>
-                <attDefinition>The attribute used to identify which stand from which 
-the plot was sampled. </attDefinition>
-        </attribute>
+	
 
 
-
-<attribute>
-                <attName>authorPlotCode</attName>
+	<attribute>
+                <attName>authorCode</attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2</attType>
                 <attKey>n/a </attKey>
@@ -60,188 +54,152 @@ the plot was sampled. </attDefinition>
         </attribute>
 
 
-<attribute>
-                <attName>parentPlot</attName>
+	<attribute>
+                <attName>PARENT</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>FK</attKey>
                 <attReferences>plot</attReferences>
-                <attNotes>This attribute has a recursive relationship with the plot_id attribute</attNotes>
-                <attDefinition>Attribute refers to a parent plot - which is the plot_id for which this plot is a sub-plot.</attDefinition>
+                <attNotes>This attribute has a recursive relationship with the 
+		plot_id attribute</attNotes>
+                <attDefinition>Attribute refers to a parent plot - which is the 
+		plot_id for which this plot is a sub-plot.</attDefinition>
         </attribute>
 
+	
 
-<attribute>
-                <attName>namedPlace </attName>
-                <attNulls> Yes</attNulls>
-                <attType>NUMBER</attType>
-                <attKey>FK</attKey>
-                <attReferences>namedPlace</attReferences>
-                <attNotes>Foreign key into the namedPlace table.</attNotes>
-                <attDefinition>Attribute to track if the plot was collected with an
-area corresponding to a 'named place'.</attDefinition>
-        </attribute>
-
-<attribute>
-                <attName> plotType</attName>
-                <attNulls>No </attNulls>
-                <attType>NARCHAR2</attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>Possibly the database will determine this based on the number of fields
-            in which data are entered. If the database determines
-            the plot to be 'ancillary' the person entering the data will be warned. </attNotes>
-                <attDefinition>Type of plot (vegetation/ancillary).</attDefinition>
-        </attribute>
-
-<attribute>
-                <attName>sampleMethod</attName>
-                <attNulls>No </attNulls>
-                <attType>VARCHAR2 </attType>
-                <attKey>n/a</attKey>
-                <attReferences>n/a</attReferences>
-                <attNotes>Each method will have its own metadata record with more descriptive detail about sampling method, especially if it is not a                            standard method. This will include dimensions, number and arrangement of subplots (quadrats, microplots, etc.) in stand, etc. Each combination of method and cover scale will have its own (external) application to convert cover data to the database standard.</attNotes>
-                <attDefinition>Sampling method used to describe the plot.  
-This will be a pick list with standard plot description methods, such as Daubenmire, modified Daubenmire, Zurich-Montpellier, North Carolina Vegetation Survey and TNC (I am not sure whether TNC should be listed separately or should be considered a ZM sampling approach using a different cover scale). Other methods can be added to pick list as needed.</attDefinition>
-        </attribute>
-
-<attribute>
-                <attName>coverScale</attName>
-                <attNulls>No </attNulls>
-                <attType>VARCHAR2</attType>
-                <attKey>n/a </attKey>
-                <attReferences>n/a </attReferences>
-                <attNotes> A note should be attached
-                            to this field describing the
-                            cover classes if a
-                            non-standard cover scale
-                            or a modification of a
-                            standard scale is used. 
-                            Alternatively, a separate
-                            field could be used to
-                            describe the cover scale,
-                            and the system could fill in
-                            this information
-                            automatically for the
-                            scales in the picklist. </attNotes>
-                <attDefinition> Scale used to estimate species
-                                                cover. This does not follow
-                                                necessarily from the sampling
-                                                method in the previous field. For
-                                                instance, the ZM method can use
-                                                the standard Braun-Blanquet
-                                                scale, the Barkman et al. cover
-                                                scale, or some other modified
-                                                BB scale. Similarly, the
-                                                modified Daubenmire method
-                                                can use the Franklin et al. or the
-                                                Pfister-Arnold cover scale. The
-                                                pick list will include the
-                                                following categories: several
-                                                frequently used standard cover
-                                                scales, and a choice of "absolute
-                                                cover and "non-standard cover
-                                                scale.
-		</attDefinition>
-        </attribute>
-
-<attribute>
-                <attName>plotOrigLat</attName>
+	<attribute>
+                <attName>origLat</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
-                <attNotes>I suggest we use
-                                Lat./Long. rather than
-                                the UTM grid reference,
-                                because the latter cannot
-                                be used in polar regions.
-                                Our input tools will need
-                                converters between
-                                UTM and Lat/Long.</attNotes>
-                <attDefinition>Original latitude of the plot origin. </attDefinition>
+                <attNotes>Lat./Long. rather than the UTM grid reference,
+		because the latter cannot be used in polar regions.  Our input tools 
+		will need converters between UTM and Lat/Long.
+		</attNotes>
+                <attDefinition>Latitude of the plot origin. </attDefinition>
         </attribute>
 
-<attribute>
-                <attName>plotOrigLong </attName>
+	<attribute>
+                <attName>origLong </attName>
                 <attNulls> No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
                 <attNotes>See notes above</attNotes>
-                <attDefinition>Original longitude of the plot origin. </attDefinition>
+                <attDefinition>Longitude of the plot origin. </attDefinition>
         </attribute>
+	
+	<attribute>
+                <attName>azimuth </attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Azimuth of the long axis of plot in degrees 0-360</attNotes>
+                <attDefinition>This element stores the azimuth of the x-axis used to 
+		describe relative coordinate system for plot shape (dsgpoly) and other 
+		spatial information about the plot. Typically the azimuth is parallel 
+		to the long axis of the plot (in the case of a rectangle).</attDefinition>
+        	</attribute>
 <!-- added Oct 19th -->
 
-<attribute>
-                <attName>horizPosAcc </attName>
+	<attribute>
+                <attName>horizPosAccuracy </attName>
                 <attNulls> No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes>n/a</attNotes>
+                <attNotes>A set of accuracy codes will be provided, perhaps 1 10m 
+			,2 100m, 3 1km, 4 10km, 5 100km, 6 100km.</attNotes>
                 <attDefinition>This attribute is the estimated accuracy of the lateral position of the plot. </attDefinition>
         </attribute>
 	
 	
 	
-<attribute>
-                <attName>plotShape</attName>
+	<attribute>
+                <attName>shape</attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes>This will be used to calculate the Lat/Long points stored within the
-            attribute dsgpolyo </attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>Shape of the plot area. </attDefinition>
         </attribute>
 
-<attribute>
-                <attName> plotSize</attName>
+	<attribute>
+                <attName>area</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes>Plot size is an aggregate of noncontiguous plots,
-            we need to flag this in someway or we will get inflated estimates of
-            species density. </attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>Area over which all species were identified and their cover
-            was estimated in meters-squared. </attDefinition>
+            	was estimated in meters-squared. 
+		</attDefinition>
         </attribute>
-
-<attribute>
-                <attName>plotSizeAcc </attName>
+	
+	<attribute>
+                <attName>dsgpoly</attName>
+                <attNulls>Yes</attNulls>
+                <attType>TEXT</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
+                <attDefinition>This field is a text String containing 
+		the points circumscribing a plot area.  These points 
+		are anticipated to have been collected using a GPS 
+		instrument or calculated from the plot shape and area.
+		</attDefinition>
+	</attribute>
+	
+	<attribute>
+                <attName>subPlotInferenceArea</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
+                <attDefinition>This is the area which the plot 
+		collector(s) used to infer plot properties from.</attDefinition>
+	</attribute>
+	
+	<attribute>
+                <attName>subPlotDispersion</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
+                <attDefinition>If the species list is based on a set of subplots, 
+		dispersion of the subplots is reported in this restricted domain 
+		variable.  (e.g. contiguous, dispersed/regular, dispersed/random).</attDefinition>
+	</attribute>
+	
+	
+	<attribute>
+                <attName>areaAccuracy</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a</attKey>
                 <attReferences>na/</attReferences>
-                <attNotes>Initially we were thinking of measuring this value in meters and using the following criteria: 1 = GPS within 10-20 m  
-                                2 = GPS within 25 50 m 
-                                3 = Determined by map;
-                                within 200 m 
-                                4 = Weak guess from map;
-                                within 1 km 
-                                5 = General locality; within
-                                10 km 
-                                6 = Region only; within 100
-                                km 
-                                7=user entered numeric
-                                value</attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>The accuracy of the plotSize in percentage of the plotSize. </attDefinition>
         </attribute>
 
-<attribute>
-                <attName>altValue</attName>
+	<attribute>
+                <attName>elevationValue</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a </attKey>
                 <attReferences>n/a</attReferences>
                 <attNotes>n/a</attNotes>
-                <attDefinition>The altitude of the plot origin in meters. </attDefinition>
+                <attDefinition>The elevation of the plot origin in meters above sea level.</attDefinition>
         </attribute>
 
-<attribute>
-                <attName>altPosAcc</attName>
+	<attribute>
+                <attName>elevationAccuracy</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a</attKey>
@@ -250,71 +208,65 @@ This will be a pick list with standard plot description methods, such as Daubenm
                 <attDefinition>The accuracy of the altValue in percentage of the altValue.</attDefinition>
         </attribute>
 
-<attribute>
+	<attribute>
                 <attName>slopeAspect</attName>
                 <attNulls>Yes </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
                 <attNotes>User to enter general values like: NE which would be
-            translated via the interface to 045 degrees, or allow user to enter
-            exact coordinates. </attNotes>
+            	translated via the interface to 045 degrees, or allow user to enter
+            	exact coordinates.</attNotes>
                 <attDefinition> Azimuth of slope gradient (0-360 degrees).</attDefinition>
         </attribute>
 
-<attribute>
+	<attribute>
                 <attName>slopeGradient</attName>
                 <attNulls>Yes</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a </attReferences>
-                <attNotes>
-Provide user with categories to choose from such as: Flat; slope less than 1% (less than 0deg  34')  Gentle; slope 1-10% (0deg 34'-5deg 43')  Moderately sloping; slope 10-25% (5deg 43'-13deg 59') Steep; slope 25-50% (13deg 59'-26deg 34') Very steep; slope 50-100% (26deg 34'-45deg  0')  Cliff; slope greater than 100% (greater than 45 deg) 
-		</attNotes>
+                <attNotes>Slope recorded to the closest degree, 
+		but will accept with the interface tool classes that can
+		be converted during submission.</attNotes>
                 <attDefinition>Inclination of slope in degrees. </attDefinition>
         </attribute>
 
-<attribute>
-                <attName>slopePosition </attName>
+	
+	<attribute>
+                <attName>topoPosition </attName>
                 <attNulls> Yes</attNulls>
                 <attType>VARCHAR2</attType>
                 <attKey>n/a </attKey>
                 <attReferences> n/a </attReferences>
-                <attNotes>Categories may include: Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no
-            slope. </attNotes>
+                <attNotes>Categories may include: Summit, shoulder, upper slope, 
+		middle slope, lower slope, toeslope, no slope, channel bed, dune swale, pond. </attNotes>
                 <attDefinition>Position of the plot on slope. </attDefinition>
         </attribute>
 
-<attribute>
+	<attribute>
                 <attName> hydrologicRegime</attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-<attNotes> 
-Non-Tidal  
-                                 1) Permanently flooded 
-                                2) Intermittently exposed 
-                                3) Semi-permanently
-                                flooded 
-                                4) Seasonally flooded 
-                                5) Saturated 
-                                6) Temporarily flooded 
-                                7) Intermittently flooded 
-                                8) Artificially flooded 
-                                9) Unknown 
-                                 Tidal  
-                                 1)  Subtidal 
-                                 2) Irregularly exposed 
-                                1) Regularly exposed  
-                                2) Irregularly flooded 
-                                3) Unknown
-</attNotes>
-                <attDefinition>FGDC hydrologic regime (follows Cowardin et al. 1979.) </attDefinition>
-</attribute>
+		<attNotes>n/a</attNotes>
+                <attDefinition>FGDC hydrologic regime (following Cowardin et al. 1979.) </attDefinition>
+	</attribute>
+	
+	<attribute>
+                <attName>soilDrainage</attName>
+                <attNulls>Yes</attNulls>
+                <attType>UNKNOWN</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+		<attNotes>n/a</attNotes>
+                <attDefinition>n/a</attDefinition>
+	</attribute>
+	
 
-<attribute>
-                <attName>geoSurf</attName>
+	<attribute>
+                <attName>surfGeo</attName>
                 <attNulls>No</attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a</attKey>
@@ -323,20 +275,183 @@ Non-Tidal
                 <attDefinition>Surface geology type. </attDefinition>
         </attribute>
 
-<attribute>
-                <attName>userDefined</attName>
-                <attNulls>Yes</attNulls>
-                <attType>n/a</attType>
+<!--Added attributes on November 20th-->
+	<attribute>
+                <attName>USGSquad</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes>The number of user defined fields must be determined.  
-As of the Septemeber 2000 working group meeting at NCEAS the actual number has yet to be defined.</attNotes>
-                <attDefinition>User defined field </attDefinition>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Name of the USGS quad on which the origin 
+		of the plot is located.</attDefinition>
+        </attribute>
+	
+	
+	<attribute>
+                <attName>state</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>State in which the plot was sampled.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>county</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>County in which the plot was sampled.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>country</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Country in which the plot was sampled.</attDefinition>
         </attribute>
 
+	<attribute>
+                <attName>ownerConfidentiality</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This field contains an index which represents
+		the degree of land owner confidentiality.  Depending on the 
+		value of this index, the plot location will be generalized to 
+		50 km.</attDefinition>
+        </attribute>
 
-
-
+	
+	<attribute>
+                <attName>layoutNarative</attName>
+                <attNulls>Yes</attNulls>
+                <attType>TEXT</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Textual description of the rationale for deciding 
+		on the layout of a given plot.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>placementMethod</attName>
+                <attNulls>Yes</attNulls>
+                <attType>TEXT</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Description of the method used determining the 
+		placement of a plot.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>sourceCitation</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>FK</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Link between a plot and a citation.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>sensitivity</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>FK</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Field containing and index which indicates whether
+		a location should be generalized to the nearest 50 km owing 
+		to the sensitive species or similar issues.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>landFormIndex</attName>
+                <attNulls>Yes</attNulls>
+                <attType>UNKNOWN</attType>
+                <attKey>FK</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Land form index.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>terrainShapeIndex</attName>
+                <attNulls>Yes</attNulls>
+                <attType>UNKNOWN</attType>
+                <attKey>FK</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Terrain shape index.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>soilSeries</attName>
+                <attNulls>Yes</attNulls>
+                <attType>UNKNOWN</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>USDA soil series.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>soilGreatGroup</attName>
+                <attNulls>Yes</attNulls>
+                <attType>UNKNOWN</attType>
+                <attKey>FK</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>USDA soil Great Group.</attDefinition>
+        </attribute>
+	
+	<attribute>
+                <attName>PREVIOUSPLOTVERS</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>FK</attKey>
+                <attReferences>plot</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the plot id number associated with the previous 
+		record for this plot.  The ideas is that at times and author will 
+		need to update or replace the data for a plot other than species 
+		related plot data, and this would be a way to track such changes.</attDefinition>
+        </attribute>
+	
+	
+	<attribute>
+                <attName>plotVersion</attName>
+                <attNulls>Yes</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>This is the version number associated with this version.</attDefinition>
+        </attribute>
+	
+	
+	<attribute>
+                <attName>locationNarrative</attName>
+                <attNulls>Yes</attNulls>
+                <attType>TEXT</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Text description that provides information useful 
+		for plot relocation.</attDefinition>
+        </attribute>
+	
 	<children>plotObservation, namedPlace, graphic, plotContributor </children>
 </entity>
 </dataModel>	

@@ -13,7 +13,10 @@
 
 <entity>
 	<entityName>vegPlot.COMMUNITYTYPE </entityName>
-	<entitySummary>This table stores the information responsible for the relationship between a plot observation and a community type. </entitySummary>
+	<entitySummary>This table stores the information responsible for the 
+	representing the relationship between a plot observation and a community 
+	type. 
+	</entitySummary>
 	<entityDescription>There is still some debate whether or not this entity actually belongs here.  
 	The issues here are the same as those surrounding the plant taxa database.  Do we store all the 
 	plant taxa, or in this case all the community types, in a database local to the plots datbase or is 
@@ -25,7 +28,7 @@
 
 
 <attribute>
-                <attName>communityType_id </attName>
+                <attName>COMMUNITYTYPE_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>PK </attKey>
@@ -37,62 +40,37 @@
 
 
         <attribute>
-                <attName>OBS_ID </attName>
-                <attNulls>N </attNulls>
-                <attType>NUMBER </attType>
-                <attKey>FK </attKey>
-                <attReferences>plotObservation </attReferences>
-                <attNotes>Foreign key into the plotObservation table. </attNotes>
-                <attDefinition>This key provides a link between comminity type(s) with a specific plot observation. </attDefinition>
-        </attribute>
-<attribute>
-                <attName>classAssociation </attName>
-                <attNulls>No </attNulls>
-                <attType>VARCHAR2 </attType>
-                <attKey>n/a </attKey>
-		<attReferences> n/a </attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>This is the class_association from the National Vegetaion Classification Standard. </attDefinition>
-        </attribute>
-
-
-
-        <attribute>
-                <attName>classificationQuality</attName>
-                <attNulls>Yes </attNulls>
-                <attType>VARCHAR2 </attType>
+                <attName>communityName</attName>
+                <attNulls>No</attNulls>
+                <attType>VARCHAR2</attType>
                 <attKey>n/a </attKey>
                 <attReferences>n/a </attReferences>
-                <attNotes>This is a very subjective attribute, and may be removed later. </attNotes>
-                <attDefinition>This is the quality of the classification assignment. </attDefinition>
+                <attNotes>Name assigned to the community.</attNotes>
+                <attDefinition>This is the name assigned to the vegetation community.</attDefinition>
         </attribute>
 
-
-
-
-	<attribute> 
-		<attName>startDate </attName>
-		<attNulls>No </attNulls>	
-		<attType>DATE </attType>
-		<attKey>n/a </attKey>
-		<attReferences> n/a </attReferences>
-		<attNotes>n/a </attNotes>
-		<attDefinition>Start date for the classification assignment of the plot observation. </attDefinition>
-	</attribute>
-
-
-
-	<attribute>
-                <attName>stopDate </attName>
-                <attNulls>No </attNulls>
-                <attType>DATE </attType>
-                <attKey>n/a </attKey>
-                <attReferences>n/a </attReferences>
-                <attNotes>n/a </attNotes>
-                <attDefinition>Stop date for the classification assignment of the plot observation.</attDefinition>
+	 <attribute>
+                <attName>CEGLCode</attName>
+                <attNulls>Yes</attNulls>
+                <attType>UNKNOWN</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>Dependent on the HDMS Model.</attNotes>
+                <attDefinition>This a unique element identifier used in the HDMS 
+		database.</attDefinition>
         </attribute>
 
-
+	
+	 <attribute>
+                <attName>classificationCode</attName>
+                <attNulls>Yes</attNulls>
+                <attType>UNKNOWN</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>A hierarchical code to indicate membership at each 
+		level in the classification hierarchy.</attDefinition>
+        </attribute>
 	<children> </children>
 </entity>
 </dataModel>	

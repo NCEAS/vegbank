@@ -20,7 +20,7 @@ attribute was added.  This attribute will hold the name of the institution at wh
 the collection of the plot.  The addition of this attribute replaced the link between the plotContributor table
 and the address table. </entityDescription>
 	<attribute> 
-		<attName>plotContributor_id </attName>
+		<attName>PLOTCONTRIBUTOR_ID </attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
 		<attKey>P</attKey>
@@ -33,7 +33,7 @@ and the address table. </entityDescription>
 
 
 	<attribute>
-                <attName>plot_id </attName>
+                <attName>PLOT_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>F</attKey>
@@ -44,7 +44,7 @@ this is a link to the project entity. </attDefinition>
         </attribute>
 
 	<attribute>
-                <attName>party_id</attName>
+                <attName>PARTY_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>F </attKey>

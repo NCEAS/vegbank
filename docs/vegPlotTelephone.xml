@@ -16,10 +16,11 @@
 	<entitySummary>This table stores telephone numbers for the various entries in the PARTY table.</entitySummary>
 	<entityDescription> </entityDescription>
 	<attribute> 
-		<attName>telephone_id</attName>
+		<attName>TELEPHONE_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
 		<attKey>P</attKey>
+		<attReferences>n/a</attReferences>
 		<attNotes>Primary key for the telephone table.</attNotes>
 		<attDefinition>Database assigned value for a uniquely associated telephone number.</attDefinition>
 	</attribute>
@@ -27,7 +28,7 @@
 
 
 	<attribute>
-                <attName>party_id</attName>
+                <attName>PARTY_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>F </attKey>
@@ -42,7 +43,7 @@
                 <attType>VARCHAR2</attType>
                 <attKey>n/a</attKey>
 		<attReferences>n/a</attReferences>
-                <attNotes></attNotes>
+                <attNotes>n/a</attNotes>
                 <attDefinition>Telephone number.</attDefinition>
         </attribute>
 

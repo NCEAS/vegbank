@@ -68,15 +68,26 @@
 <p>
 </p>
 
+<!--
 <p>
 <i><b><FONT SIZE="-1" COLOR="GREEN" FACE="arial"><xsl:value-of select="entity/entityDescription"/></FONT></b></i>
 </p>
+-->
 
-
+<!--
 <P>
 <B><FONT SIZE="-1" FACE="arial">Child tables: </FONT></B><FONT
- SIZE="-1" FACE="arial"> <xsl:value-of select="entity/entityName"/> serves as the parent of the 
-following tables: <xsl:value-of select="entity/children"/> </FONT> </P>
+ SIZE="-1" FACE="arial"> <xsl:value-of select="entity/entityName"/> serves as 
+ the parent of the following tables : <xsl:value-of select="entity/children"/>  
+</FONT>
+</P>
+ -->
+ 
+ <!--Below is an attempt to stick the reference into the html page
+ <TD><A HREF= ""  ><B><FONT SIZE="-1" FACE="arial"> <xsl:value-of select="entity/children"/> </FONT></B></A></TD>
+ -->
+ 
+
 <P>
 <FONT SIZE="-2">last updated: <xsl:value-of select="date"/>  by: <xsl:value-of select="author"/> at: <xsl:value-of select="institution"/>  </FONT></P>
 

@@ -20,8 +20,8 @@
 	Expected values may include links between a citation and the author, publisher and/or editor.</entityDescription>
 
  <attribute>
-                <attName>citationContributor_id </attName>
-                <attNulls>No </attNulls>
+                <attName>CITATIONCONTRIBUTOR_ID </attName>
+                <attNulls>No</attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
 		<attReferences> n/a </attReferences>
@@ -32,7 +32,7 @@
 
 
         <attribute>
-                <attName>citation_id </attName>
+                <attName>CITATION_ID </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>FK </attKey>
@@ -42,7 +42,7 @@
         </attribute>
 
 	<attribute> 
-		<attName>party_id </attName>
+		<attName>PARTY_ID</attName>
 		<attNulls>No </attNulls>	
 		<attType>NUMBER </attType>
 		<attKey>FK </attKey>

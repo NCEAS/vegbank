@@ -24,8 +24,8 @@
 
 
 <attribute>
-                <attName>citation_id </attName>
-                <attNulls>No </attNulls>
+                <attName>CITATION_ID</attName>
+                <attNulls>No</attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
 		<attReferences> n/a </attReferences>
@@ -37,7 +37,7 @@
 
 
         <attribute>
-                <attName>OBS_ID </attName>
+                <attName>OBS_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>FK </attKey>
@@ -48,7 +48,7 @@
                                          plots. </attDefinition>
         </attribute>
 <attribute>
-                <attName>title </attName>
+                <attName>title</attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
@@ -114,7 +114,8 @@
                 <attNotes>n/a </attNotes>
                 <attDefinition>Name of a series. </attDefinition>
         </attribute>
-<attribute>
+	
+	<attribute>
                 <attName>issueIdentification </attName>
                 <attNulls>Yes </attNulls>
                 <attType>VARCHAR2 </attType>
@@ -137,7 +138,8 @@
                 <attDefinition>Other information required to complete the
                                          citation, like a URL. </attDefinition>
         </attribute>
-<attribute>
+
+	<attribute>
                 <attName>page </attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
@@ -170,17 +172,6 @@
 		<attDefinition>International Standard Serial Number. </attDefinition>
 	</attribute>
 
-
-
-	<attribute>
-                <attName> </attName>
-                <attNulls> </attNulls>
-                <attType> </attType>
-                <attKey> </attKey>
-                <attReferences> </attReferences>
-                <attNotes> </attNotes>
-                <attDefinition> </attDefinition>
-        </attribute>
 
 
 	<children> </children>

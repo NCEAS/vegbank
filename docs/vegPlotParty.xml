@@ -14,22 +14,20 @@
 
 	<entity>
 	<entityName>vegPlot.vegPlotParty </entityName>
-	<entitySummary>This table stores information relevent to a party which may be either an individual or an organization.</entitySummary>
+	<entitySummary>This table stores information relevant to a party which may be either an individual or an organization.</entitySummary>
 	<entityDescription>After the September NCEAS meeting, this table was renamed from: party to: vegPlotParty
 	because there was a table in the plant taxa database also named party.</entityDescription>
 	
 
 <attribute>
-                <attName>party_id</attName>
+                <attName>PARTY_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>P</attKey>
 		<attReferences> n/a </attReferences>
                 <attNotes>Primary key for PARTY table.</attNotes>
                 <attDefinition> Database assigned value that is
-                                                 unique to each party
-                                                 contributing in the collection of
-                                                 plots.
+                 unique to each party contributing in the collection of plots.
 		</attDefinition>
 
         </attribute>
@@ -113,6 +111,6 @@
 
 
 
-	<children> </children>
+	<children>email, addrress, onlineResource, telephone </children>
 </entity>
 </dataModel>	

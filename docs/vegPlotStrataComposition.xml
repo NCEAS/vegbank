@@ -2,7 +2,7 @@
 <!DOCTYPE dataModel SYSTEM "tableStructure.dtd">
 
 <dataModel>	
-<title> Prototype Veg Plots Database Component Description: plotObservation</title>
+<title> Prototype Veg Plots Database Component Description: stratumComposition</title>
 <author>J. Harris </author>
 <institution>NCEAS </institution>
 <contributor> </contributor>
@@ -11,16 +11,16 @@
 
 
 <entity>
-	<entityName>vegPlot.STRATACOMPOSITION </entityName>
+	<entityName>vegPlot.STRATUMCOMPOSITION </entityName>
 	<entitySummary>This table stores information about the coverage of a single taxon within a specific stratum.</entitySummary>
 	<entityDescription>Recognizing that a given taxon may exist within multiople strata, this entity was included as an intersection between the taxonObservation and strata tables to provide a location of lateral percent coverage of a given taxon within a specific stratum.</entityDescription>
 	
 
 	<attribute>
-                <attName>strataCompositionId</attName>
+                <attName>STRATUMCOMPOSITION_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>P</attKey>
+                <attKey>PK</attKey>
                 <attReferences>n/a</attReferences>
                 <attNotes>n/a</attNotes>
                 <attDefinition>Database assigned value for a unique existence of a given taxon within a strata defined to be within a plot.</attDefinition>
@@ -29,10 +29,11 @@
 
 
 	<attribute> 
-		<attName>taxonObservationId</attName>
+		<attName>TAXONOBSERVATION_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
-		<attKey>F</attKey>
+		<attKey>FK</attKey>
+		<attReferences>taxonObservation</attReferences>
 		<attNotes>Foreign key into the taxonObservation table that points to a specific taxon recognized within the plot observation.</attNotes>
 		<attDefinition>Database assigned value for a given taxon within a plot observation.</attDefinition>
 	</attribute>
@@ -40,17 +41,15 @@
 
 
 	<attribute>
-                <attName>stratType</attName>
+                <attName>STRATA_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
-                <attKey>F</attKey>
+                <attKey>FK</attKey>
                 <attReferences>STRATA</attReferences>
                 <attNotes>Foreign key into the STRATA table.</attNotes>
-                <attDefinition>Name of the stratum in which the
-                                           species occurs.  Because a single species
-                                           may occur in more than one stratum this
-                                           attribute has a many to one relationship
-                                           with a single species.</attDefinition>
+                <attDefinition>Name of the stratum in which the species occurs.  
+		Because a single species may occur in more than one stratum this 
+		attribute has a many to one relationship with a single species.</attDefinition>
         </attribute>
 
 
@@ -59,9 +58,12 @@
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>n/a</attKey>
-                <attNotes>Because workers use various coverage classification schemes, there will have to either be a 'metadata table' or 'normalization alogrythm' inorder to relate percent coverages using the various classification schemes.</attNotes>
-                <attDefinition> Percent coverage of a given species
-                                           within the given stratum.</attDefinition>
+		<attReferences>n/a</attReferences>
+                <attNotes>Because workers use various coverage classification schemes, 
+		there will have to either be a 'metadata table' or 'normalization 
+		alogrithm' in order to relate percent coverage's using the various 
+		classification schemes.</attNotes>
+                <attDefinition> Percent coverage of a given species within the given stratum.</attDefinition>
         </attribute>
 
 

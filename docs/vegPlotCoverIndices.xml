@@ -12,32 +12,30 @@
 <date></date>
 
 <entity>
-	<entityName>vegPlot.CoverIndices</entityName>
+	<entityName>vegPlot.CoverIndex</entityName>
 	<entitySummary>This table stores data related to various cover scales</entitySummary>
 	<entityDescription> </entityDescription>
 
         <attribute>
-                <attName>coverIndexId</attName>
-                <attNulls>No </attNulls>
-                <attType>NUMBER </attType>
-                <attKey>PK </attKey>
+                <attName>COVERINDEX_ID</attName>
+                <attNulls>No</attNulls>
+                <attType>NUMBER</attType>
+                <attKey>PK</attKey>
 		<attReferences>n/a</attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>Primary Key for the coverIndices table.</attDefinition>
+                <attDefinition>Primary Key for the coverIndex table.</attDefinition>
         </attribute>
 
 
 	<attribute> 
-		<attName>coverMethodId </attName>
-		<attNulls>No </attNulls>	
+		<attName>COVERMETHOD_ID</attName>
+		<attNulls>No</attNulls>	
 		<attType>NUMBER </attType>
 		<attKey>FK </attKey>
 		<attReferences>coverMethod</attReferences>
 		<attNotes>Foreign key into the coverMethod table.</attNotes>
 		<attDefinition>This key links an index with a specific cover scale. </attDefinition>
 	</attribute>
-
-
 
 	<attribute>
                 <attName>indexCode </attName>
@@ -69,6 +67,17 @@
                 <attDefinition>This is the lower limit, in percent, associated with a specific indexCode</attDefinition>
         </attribute>
 
+	<attribute>
+                <attName>indexDescription</attName>
+                <attNulls>Yes</attNulls>
+                <attType>VARCHAR2</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a </attNotes>
+                <attDefinition>This is a description of the index, in the 
+		case that there is not a numeric 
+		value that can be applied to it.</attDefinition>
+        </attribute>
 	
 	<children> </children>
 </entity>

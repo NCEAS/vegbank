@@ -21,24 +21,22 @@
 	entries are not being stored, instead the institution at which the plot contributor was 
 	working while contributing to the plot/project/citation is stored in the plotContributor table.</entityDescription>
 <attribute>
-                <attName>address_id </attName>
+                <attName>ADDRESS_ID</attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>PK </attKey>
 		<attReferences>n/a </attReferences>
                 <attNotes>Primary key for the address table. </attNotes>
-                <attDefinition>Database assigned value unique
-                                                to each address for a given party
-                                                (note that a single party may have
-                                                numerous addresses but that only
-                                                one may be 'current').
+                <attDefinition>Database assigned value unique to each address for a 
+		given party (note that a single party may have numerous addresses 
+		but that only one may be 'current').
 		 </attDefinition>
         </attribute>
 
 
 
         <attribute>
-                <attName>party_id </attName>
+                <attName>PARTY_ID </attName>
                 <attNulls>No </attNulls>
                 <attType>NUMBER </attType>
                 <attKey>FK </attKey>
@@ -47,17 +45,18 @@
                 <attDefinition>Database assigned value that is
                                                 unique to each contributing party. </attDefinition>
         </attribute>
-<attribute>
+	
+	<attribute>
                 <attName>deliveryPoint </attName>
                 <attNulls>No </attNulls>
                 <attType>VARCHAR2 </attType>
                 <attKey>n/a </attKey>
 		<attReferences>n/a </attReferences>
                 <attNotes>n/a </attNotes>
-                <attDefinition>
-                                                Address line for the location
-                                                (Street name, box number, suite). </attDefinition>
-        </attribute>
+                <attDefinition>Address line for the location
+                (Street name, box number, suite).
+		</attDefinition>
+	</attribute>
 
 
 

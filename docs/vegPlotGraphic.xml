@@ -20,24 +20,24 @@
 	meeting, it was decided that a URL pointing to the image file would not work unless we controlled the
 	web address.</entityDescription>
 	<attribute> 
-		<attName>graphic_id</attName>
+		<attName>GRAPHIC_ID</attName>
 		<attNulls>No</attNulls>	
 		<attType>NUMBER</attType>
 		<attKey>PK </attKey>
 		<attReferences>n/a</attReferences>
 		<attNotes>n/a </attNotes>
-		<attDefinition>This is an internal database identifier assigned to each unique grapical file.</attDefinition>
+		<attDefinition>This is an internal database identifier assigned to each unique graphical file.</attDefinition>
 	</attribute>
 
 
 
 	<attribute>
-                <attName>plot_id</attName>
+                <attName>PLOT_ID</attName>
                 <attNulls>No</attNulls>
                 <attType>NUMBER</attType>
                 <attKey>FK</attKey>
                 <attReferences>PLOT</attReferences>
-                <attNotes>Foregin key into the plot table.</attNotes>
+                <attNotes>Foreign key into the plot table.</attNotes>
                 <attDefinition>This represents the link between a graphical file and a specific plot.</attDefinition>
         </attribute>
 
@@ -48,7 +48,7 @@
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
                 <attNotes>n/a</attNotes>
-                <attDefinition>Name of the grapical file.</attDefinition>
+                <attDefinition>Name of the graphical file.</attDefinition>
         </attribute>
 	
 	<attribute>
@@ -67,10 +67,23 @@
                 <attType>VARCHAR</attType>
                 <attKey>n/a</attKey>
                 <attReferences>n/a</attReferences>
-                <attNotes>This may, in later versions, become domain locked to a few specif types of 
-		graphical files.  Currently any file type can be stored.</attNotes>
+                <attNotes>This may, in later versions, become domain locked to a few 
+		specific types of graphical files.  Currently any file type can 
+		be stored.</attNotes>
                 <attDefinition>The type of the graphical file format.</attDefinition>
         </attribute>
+	
+	
+	<attribute>
+                <attName>graphicDate</attName>
+                <attNulls>Yes</attNulls>
+                <attType>DATE</attType>
+                <attKey>n/a</attKey>
+                <attReferences>n/a</attReferences>
+                <attNotes>n/a</attNotes>
+                <attDefinition>Date that the graphic was produced.</attDefinition>
+        </attribute>
+	
 	
 	<attribute>
                 <attName>graphicData</attName>
