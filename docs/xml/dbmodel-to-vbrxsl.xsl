@@ -9,7 +9,7 @@
      <xsl:element name="xsl:apply-templates" />
   </xsl:template>
   
-  <xsl:template name="DoCSV"><xsl:param name="nodeName" /><xsl:param name="literalText" /><xsl:param name="nodeAlt" />
+  <xsl:template name="DoCSV"><xsl:param name="nodeName" /><xsl:param name="literalText" /><xsl:param name="nodeAlt" /><xsl:param name="nodeAlt2" />
     <xsl:element name="xsl:call-template">
       <xsl:attribute name="name">csvIt</xsl:attribute>
       <xsl:element name="xsl:with-param">
@@ -25,8 +25,17 @@
                      <xsl:attribute name="select"><xsl:value-of select="$nodeName" /></xsl:attribute>
                    </xsl:element>
                </xsl:element><!-- when normal one is there -->
-               <xsl:element name="xsl:otherwise"> <!-- get alt -->
-                  <xsl:element name="xsl:value-of">
+                   <!-- possible second element location to check: -->
+<xsl:if test="string-length($nodeAlt2)&gt;0">
+<!-- add another when statement -->
+               <xsl:element name="xsl:when">
+                 <xsl:attribute name="test">string-length(<xsl:value-of select="$nodeAlt2" />)&gt;0</xsl:attribute><!-- have normal att -->
+                   <xsl:element name="xsl:value-of">
+                     <xsl:attribute name="select"><xsl:value-of select="$nodeAlt2" /></xsl:attribute>
+                   </xsl:element>
+               </xsl:element><!-- /when -->
+</xsl:if>
+               <xsl:element name="xsl:otherwise"><!-- get alt --><xsl:element name="xsl:value-of">
                     <xsl:attribute name="select"><xsl:value-of select="$nodeAlt" /></xsl:attribute>
                   </xsl:element>
                </xsl:element><!-- /otherwise -->
@@ -70,8 +79,8 @@
 
   *
   *     '$Author: mlee $'
-  *     '$Date: 2004-04-27 00:32:29 $'
-  *     '$Revision: 1.4 $'
+  *     '$Date: 2004-04-27 01:21:10 $'
+  *     '$Revision: 1.5 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -132,7 +141,15 @@
 <xsl:with-param name="nodeAlt">
  <xsl:choose>
   <xsl:when test="(attName='OBSERVATION_ID') and (../entityName='stratum')">../../../../observation.OBSERVATION_ID</xsl:when>
+  <xsl:when test="(attName='STRATUMMETHOD_ID') and (../entityName='stratumType')">../../../../../../observation.STRATUMMETHOD_ID/stratumMethod/stratumMethod.STRATUMMETHOD_ID</xsl:when>
+  <xsl:when test="(attName='TAXONOBSERVATION_ID') and (../entityName='taxonInterpretation')">../../../../taxonObservation.TAXONOBSERVATION_ID</xsl:when>
 </xsl:choose>
+</xsl:with-param>
+<xsl:with-param name="nodeAlt2">
+ <xsl:choose>
+  <xsl:when test="(attName='STRATUMMETHOD_ID') and (../entityName='stratumType')">../../../observation.STRATUMMETHOD_ID/stratumMethod/stratumMethod.STRATUMMETHOD_ID</xsl:when>
+</xsl:choose>
+
 </xsl:with-param>
     <xsl:with-param name="nodeName">
     <!-- 3 cases to consider: normal data (easy), normal FK (downstream), inverted FK (upstream) --><!-- can add parenthetical field name here (<xsl:value-of select="attName" />) -->
