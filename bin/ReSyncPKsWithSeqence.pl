@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# $Id: ReSyncPKsWithSeqence.pl,v 1.6 2004-02-27 01:52:41 anderson Exp $
 
 # This is a utility to resync the sequence value to to the max pk value to 
 # prevent the duplicate Primary Key value being returned from the sequence.
@@ -20,7 +21,7 @@ $username = $ARGV[1];
 
   # Get the list of tables in database
   print "#################\n# Get tables for $database\n##################\n";
-  @tables = `psql $database -t -c  "select tablename from pg_tables"`;
+  @tables = `psql -U $username $database -t -c  "select tablename from pg_tables"`;
 
   foreach $table (@tables) {
     $table =~ m/^\s*$/ and next; # Skip empty strings
