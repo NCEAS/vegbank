@@ -2,8 +2,8 @@
  * 
  *
  *		 '$Author: harris $'
- *     '$Date: 2001-10-11 17:54:14 $'
- *     '$Revision: 1.2 $'
+ *     '$Date: 2001-10-11 20:35:57 $'
+ *     '$Revision: 1.3 $'
  *
  */
 package vegclient.framework;
@@ -140,8 +140,7 @@ public class TurboVegConverter
 				System.out.println("processing plot: " + plotNames.elementAt(i).toString() );
 				Node curPlot = getPlot( plotNames.elementAt(i).toString() );
 				
-				//System.out.println( curPlot.toString() );
-				
+				System.out.println("current plot being proccessed:" + curPlot.toString() );
 				fixedPlot = convertDate(curPlot);
 				
 				//this is mearly a test
@@ -252,8 +251,8 @@ public class TurboVegConverter
 		{
 		//	System.out.println( "node Names: "+ nl.item(i).getNodeName());
 			Node checker = nl.item(i);
-		//	System.out.println("val: "+ checker.getNodeValue());
-			if ( checker.getNodeName().equals("date") &&  checker.getNodeValue() != null)
+			//System.out.println("looking for date val: "+ checker.getNodeValue());
+			if ( checker.getNodeName().equals("date") &&  checker.getNodeName() != null)
 			{
 				System.out.println("raw val: "+ checker.getFirstChild().getNodeValue().trim() );
 				if ((checker.hasChildNodes()) ) 
@@ -302,7 +301,7 @@ public class TurboVegConverter
 					//	" month: "+month+" day: "+day+" good date: " + day+"-"+month+"-"+year);
 					checker.getFirstChild().setNodeValue(day+"-"+month+"-"+year);
 					String valString = checker.getFirstChild().getNodeValue();
-					//System.out.println("desired value: "+ valString );	
+					System.out.println("desired value: "+ valString );	
 				}
 				else 
 				{  
@@ -453,9 +452,10 @@ public class TurboVegConverter
 			for (int i =0; i < plotNames.size(); i++)
 			{
 				String currentPlot = plotNames.elementAt(i).toString().trim();
-				//System.out.println("currentPlot: " + currentPlot +" > "+ releve_nr);
+				System.out.println("currentPlot: " + currentPlot +" > "+ releve_nr);
 				if ( currentPlot.equals(releve_nr) )
 				{
+					System.out.println("index val: " + i);
 					//assign the index
 					index = i;
 				}
