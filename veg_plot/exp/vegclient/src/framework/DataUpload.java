@@ -8,8 +8,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:12:41 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-10-11 12:37:23 $'
+ * 	'$Revision: 1.2 $'
  */
  
 package vegclient.framework;

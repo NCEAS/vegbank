@@ -7,8 +7,8 @@
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:12:42 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-10-11 12:37:24 $'
+ * 	'$Revision: 1.2 $'
  */
 package vegclient.framework;
 
@@ -32,8 +32,8 @@ import vegclient.datarequestor.DataRequestClient;
  *  Release: @release@
  *	
  *  '$Author: harris $'
- *  '$Date: 2001-10-10 18:12:42 $'
- * 	'$Revision: 1.1 $'
+ *  '$Date: 2001-10-11 12:37:24 $'
+ * 	'$Revision: 1.2 $'
  */
 public class QueryModule extends javax.swing.JFrame 
 {

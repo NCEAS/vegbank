@@ -2,15 +2,16 @@
  * This utility will read a file containing a sql statement and issue that statemet 
  * to a database
  * JHH 8/2000 - pass a file containing sql command(s) to a database
- *  -currently this works with Oracle 8i
+ *        -currently this works with Oracle 8i
  *	-currently this only allows for update commands (add function for query)
  *
- *    Authors: @author@
- *    Release: @release@
  *
- *   '$Author: harris $'
- *     '$Date: 2001-10-10 18:12:43 $'
- * '$Revision: 1.1 $'
+  *  Authors: @author@
+ *  Release: @release@
+ *	
+ *  '$Author: harris $'
+ *  '$Date: 2001-10-11 12:37:24 $'
+ * 	'$Revision: 1.2 $'
  */
 package vegclient.framework;
 
@@ -20,9 +21,9 @@ import java.io.*;
 import java.util.*;
 import java.math.*;
 import java.net.URL;
+import java.util.Date;
 
 import vegclient.framework.*;
-
 
         
 public class sql2db 
@@ -44,6 +45,7 @@ public class sql2db
 	public sql2db(String fileName)
 	{
 		sqlFileName = fileName;
+		System.out.println("issuing SQL file: "+ fileName);
 	}
 	
 	
@@ -94,7 +96,7 @@ public void insertStatement(String fileName)
 			//query=m.outStmt;
 	
 			BufferedReader in = new BufferedReader(new FileReader(fileName), 8192);
-			System.out.println("loading the sql file\n");
+			System.out.println("loading the sql file: "+fileName+"\n");
 
 			String s = null;
 			String property_string="";
@@ -157,8 +159,9 @@ public void insertStatement(String fileName)
 				catch (SQLException sqle)
 				{
 					System.out.println("Caught SQL Exception: "+sqle.getMessage() ); 
-					sqle.printStackTrace();
+					//sqle.printStackTrace();
 					conn.rollback();
+					//System.exit(0);
 				}
 				conn.commit();
 		
@@ -168,8 +171,8 @@ public void insertStatement(String fileName)
 		catch (Exception ex) 
 		{
   		System.out.println("Exception. "+ex.getMessage());
-			ex.printStackTrace();
-  		//System.exit(1);
+			//ex.printStackTrace();
+  		//System.exit(0);
 		}
 		
 		//close down the connection pooling
