@@ -35,8 +35,8 @@ import org.vegbank.plots.datasource.DBModelBeanReader;
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-11-03 03:53:46 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2003-11-03 04:22:19 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -216,8 +216,8 @@ public class DownLoadAction extends Action
 						}
 
 					}
-					else if (dataType.equalsIgnoreCase(SPECIES_DATA_TYPE)
-								|| dataType.equalsIgnoreCase(ALL_DATA_TYPE))
+					if (dataType.equalsIgnoreCase(SPECIES_DATA_TYPE)
+						|| dataType.equalsIgnoreCase(ALL_DATA_TYPE))
 					{
 						// Do species
 						speciesData = new StringBuffer();
