@@ -1,4 +1,4 @@
-<!-- 
+<!--
   *   '$RCSfile: metadata.html,v $'
   *     Purpose: view metadata (methods, projects, reference party) on vegbank 
   *   Copyright: 2000 Regents of the University of California and the
@@ -6,8 +6,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2003-10-24 19:20:34 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2003-10-29 18:20:31 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -17,7 +17,7 @@
 
 <HEAD>
  
-<TITLE>View VegBank Supplemental Data - Methods, Projects, People, References</TITLE>
+<TITLE>VegBank Supplemental Data - Methods, Projects, People, References</TITLE>
 
 <link rel="stylesheet" href="@stylesheet@" type="text/css">
 
@@ -27,46 +27,63 @@
 <BODY>
 
 @vegbank_header_html_normal@
- 
+<table cellspacing="0" border="0" cellpadding="0" width="799"><tr><td> 
 
   <h2 align="center"><br>
-    View VegBank Supplemental Data</h2>
+    VegBank Supplemental Data</h2>
+<p>You may view the different kinds of supplemental data in VegBank from the links listed below.
+Summary views are concise views of each type of data.  A more extensive detail view is often
+available from this page, and always available from each summary page.<br />
+To add new supplemental data to VegBank, please view the data first to make sure you aren't adding
+a redundant piece of data.  Then, if you are <a href="@forms_link@certification.html">certified</a>, you may submit new supplemental data with the
+"Submit New" links.</p>
+<h4>Cover Methods  </h4>
+<ul>
+    
+  <li>View: <a href="/vegbank@url2get_covermethod_v_summ@">Summary</a> |
+  <a href="/vegbank@url2get_covermethod_v_dtl@">Detail</a> <br />
+  <li><a href="@forms_url@AddCoverMethod.jsp">Submit New</a>  
+    
+</ul>
 
-<blockquote class="vegbank">
-  View Cover Methods <br />
-  --<a href="/vegbank@url2get_covermethod_v_summ@">Summary</a> |
-  <a href="/vegbank@url2get_covermethod_v_dtl@">Detail</a>
-</blockquote>
+<h4>Stratum Methods  </h4>
+<ul>
+   
+  <li>View: <a href="/vegbank@url2get_stratummethod_v_summ@">Summary</a> |
+  <a href="/vegbank@url2get_stratummethod_v_dtl@">Detail</a> <br />
 
-<blockquote class="vegbank">
-  View Stratum Methods <br />
-  --<a href="/vegbank@url2get_stratummethod_v_summ@">Summary</a> |
-  <a href="/vegbank@url2get_stratummethod_v_dtl@">Detail</a>
-</blockquote>
+  <li><a href="@forms_url@AddStratumMethod.jsp">Submit New</a>
+</ul>
 
-<blockquote class="vegbank">
-  View Parties <br />
-  --<a href="/vegbank@url2get_party_v_summ@">Summary</a>* |
+<h4> Parties </h4>
+<ul>
+   
+  <li>View: <a href="/vegbank@url2get_party_v_summ@">Summary</a>* |
   <a href="/vegbank@url2get_party_v_dtl@">Detail</a>* <br/>
-  
-</blockquote>
-
-<blockquote class="vegbank">
-  View Projects <br />
-  --<a href="/vegbank@url2get_project_v_summ@">Summary</a> 
-</blockquote>
+    	
+  <li><a href="@forms_url@AddParty.jsp">Submit New</a>
+ </ul>
 
 
-<blockquote class="vegbank">
-  View References <br />
-  --<a href="/vegbank@url2get_reference_v_summ@">Summary</a> 
-</blockquote>
+<h4> Projects </h4>
+<ul>
+   
+  <li>View: <a href="/vegbank@url2get_project_v_summ@">Summary</a> 
 
-<p class="vegbank">  
+</ul>
+
+<h4> References </h4>
+<ul>
+   
+  <li>View: <a href="/vegbank@url2get_reference_v_summ@">Summary</a> <br />
+      	<li><a href="@forms_url@AddReference.jsp">Submit New</a>
+</ul>
+<p>&nbsp;</p>
+<p>  
 *Note that not all parties in VegBank are displayed, but only those that have been referenced as observation contributor, plot submitter, classifier, etc.
 </p>
-<br/>
-<br />
+<p>&nbsp;</p>
+</td></tr></table>
 @vegbank_footer_html_tworow@
 </BODY>
 </HTML>
