@@ -13,9 +13,9 @@
 	* embedded database(s) etc.  Before building this check the 
 	* dependencies
 	*
-	* 		'$Author: farrell $'
- 	*     '$Date: 2002-12-06 18:40:54 $'
- 	*     '$Revision: 1.15 $'
+	* 		'$Author: harris $'
+ 	*     '$Date: 2003-01-02 16:41:07 $'
+ 	*     '$Revision: 1.16 $'
 --> 
 <project name="rmi-datasource" default="jar" basedir=".">
 	
@@ -56,7 +56,8 @@
 	
 	
 	<!-- COMPILE -->
-	<target name="compile" depends="prepare">
+	<target name="compile" depends="prepare" description=">> compile the java src
+  code, excluding the RMI stubs and skeletons ">
 
 		<echo message="Compiling the RMI Code"/>
 		
@@ -74,14 +75,16 @@
 	</target>	
 	
 	<!-- RMI COMPILE -->
-	<target name="rmic" depends="compile">
+	<target name="rmic" depends="compile" description=">> compile the RMI stubs and
+  skeletons">
 
 		<echo message="Compiling the RMI Stubs and Skeletons"/>
 		<rmic classname="DataSourceImpl" base="${build}" />
 	</target>	
 	
 	<!-- JAR -->
-	<target name="jar" depends="rmic">
+	<target name="jar" depends="rmic" description=">> create a jar archive containing
+  the rmi bytecode">
 		<jar jarfile ="${lib}/rmidatasource.jar"
 			basedir="${build}"
 			includes="** "
@@ -90,7 +93,8 @@
 	
 		
 	<!-- DIST  - this will put the package into the db access lib -->
-	<target name="dist" depends="jar">
+	<target name="dist" depends="jar" description=">> creates the rmi 'server'
+  directory and tars it into the file ./lib/rmiserver.tar">
 		<copy todir="${rmiregistry}" filtering="no" >
 			<fileset dir="${build}" >
   	    			<include name="DataSourceImpl_Skel.class"/>
@@ -126,13 +130,14 @@
 	
 	
 <!-- CLEAN UP -->
-	<target name="clean" depends="init">
+	<target name="clean" depends="init" description=">> removes the build
+  directory">
 		<delete dir="${build}" />
 	</target>
 	
 
 <!-- JAVA DOC -->
-<target name="jdoc">                                                                                                                                
+<target name="jdoc" description=">> creates the javadoc documentation">                                                                                                                                
  <javadoc 
  	
 	sourcefiles="src/DataSourceImpl.java,src/DataSourceClient.java,src/DataSourceServerInterface.java,src/Proxy.java,src/DataSourceServer.java"
