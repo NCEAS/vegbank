@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: mlee $'
-* '$Date: 2003-10-14 00:46:19 $'
-* '$Revision: 1.52 $'
+* '$Author: anderson $'
+* '$Date: 2003-10-24 01:52:43 $'
+* '$Revision: 1.53 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -115,7 +115,9 @@
   <!-- DISTRIBUTES THE INCLUDES (STYLESHHETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="init" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
     <copy overwrite="true" todir="${style_server}" filtering="no">
-      <fileset dir="${style_src}" includes="**.css **/*jsp"/>
+	<!-- <fileset dir="${style_src}" includes="**.css **/*jsp **.js"/> -->
+	<!-- Why not just copy all? -->
+      <fileset dir="${style_src}" includes="**.* **/*jsp"/>
     </copy>
   </target>
   <target name="index" depends="hdrftr" description="=&gt; target to dist. the index.html file">
@@ -293,23 +295,27 @@
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
 -->
-  <target name="dist" depends="tokenfiles, 
-                              index, 
-                              design, 
-                              forms, 
-                              general, 
-                              images,
-			                        vbsummary,	 
-			                        history, 
-                              includes, 
-                              init, 
-                              news, 
-                              panel, 
-                              pubs,
-                              xsl,
-                              web,
- robot,
-                              workshop" description="=&gt; Distribute all web files"/>
+	<target name="dist" description="=&gt; Distribute all web files">
+		<antcall target="tokenfiles" />
+		<antcall target="index" />
+		<antcall target="design" />
+		<antcall target="forms" />
+		<antcall target="general" />
+		<antcall target="images" />
+		<antcall target="vbsummary" />
+		<antcall target="history" />
+		<antcall target="includes" />
+		<antcall target="init" />
+		<antcall target="news" />
+		<antcall target="panel" />
+		<antcall target="pubs" />
+		<antcall target="xsl" />
+		<antcall target="web" />
+		<antcall target="robot" />
+		<antcall target="workshop" />
+	</target>
+
+
   <target name="dist-bins" depends="init, panel-big-bin " description="=&gt; dist. all targets that require access to big binary storage "/>
   <target name="dist-everything" depends="dist, dist-bins, dictionary" description="=&gt; dist all targets in the dist target and dist-bins target : DIST EVERYTHING! "/>
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->

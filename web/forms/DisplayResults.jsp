@@ -14,8 +14,8 @@
 *     Authors: @author@
 *
 *    '$Author: anderson $'
-*      '$Date: 2003-10-23 23:27:38 $'
-*  '$Revision: 1.4 $'
+*      '$Date: 2003-10-24 01:52:43 $'
+*  '$Revision: 1.5 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -43,6 +43,7 @@
   @vegbank_header_html_normal@
 
 
+  <script src="/vegbank/includes/utils.js"></script>
 
   <!-- format the word plot to be plural if not 1 plot -->
 
@@ -68,7 +69,7 @@
       </span>
 
       <!-- set up the form which is required by netscape 4.x browsers -->
-      <form name="myform" action="@viewdataservlet@" method="post">
+      <form name="listform" action="@viewdataservlet@" method="post">
 
 	 Choose plots to download from the search results below.
 	<br/>
@@ -78,13 +79,22 @@
     <table cellspacing="0" cellpadding="1">
 	<tr><td>&nbsp; &nbsp; &nbsp; &nbsp; </td>
 	<td bgcolor="#000000">
-    <table width="550" cellspacing="0" cellpadding="3">
+    <table width="550" cellspacing="0" cellpadding="0">
 
 
-	 <tr colspan="1" bgcolor="#336633" align="left" valign="top">
+	 <tr bgcolor="#336633" align="left" valign="top">
 	   <th align="center" nowrap> SEARCH RESULTS </th>
 	   <th align="center"> Vegbank Accession Code </th>
 	   <th align="center"> Author Accession Code </th>
+	 </tr>
+
+	 <tr bgcolor="#333333" align="center">
+	   <td class="whitetext" nowrap>
+	   	check +<a class="whitetext" href="#" onclick="checkAll('plotName')">all</a>
+		&nbsp; 
+		-<a class="whitetext" href="#" onclick="clearAll('plotName')">none</a>
+	   </td>
+	   <td colspan="2"> &nbsp; </td>
 	 </tr>
 
 
@@ -94,7 +104,7 @@
 	 //  Set up alternating row colors
 	 //**************************************************************************************
 	 boolean toggle = true;
-	 String bgColor, marginBgColor;
+	 String rowClass, marginBgColor;
 	 %>
 	
 	 <logic:iterate id="row" name="PlotsResults" >
@@ -104,17 +114,17 @@
 	 //  Set up alternating row colors
 	 //**************************************************************************************
 	 if (toggle) {
-		 bgColor = "#FFFFCC";
+		 rowClass = "listRowA";
 		 marginBgColor = "#CCCCCC";
 	 } else {
-		 bgColor = "#FFFFFF";
+		 rowClass = "listRowB";
 		 marginBgColor = "#EEEEEE";
 	 }
 	 toggle = !toggle;
 
 	 %>
 	 
-     <tr valign="top" bgcolor="<%= bgColor %>" >
+     <tr class="<%= rowClass %>" valign="top">
 
 	    <!-- First Cell-->
 	    <td width="20%" bgcolor="<%= marginBgColor %>" align="center">
@@ -144,22 +154,26 @@
 	      	src="/vegbank/images/small_globe.gif" alt="Location"></img></a>
 	      
 		<br/>
-              <input name="plotName" type="checkbox" value="<bean:write property="plotId" name="row"/>" checked="yes"> 
+              <input name="plotName" type="checkbox" value="<bean:write property="plotId" name="row"/>" 
+			  	 onclick="toggle(this)"> 
                 <span class="item"> <font color="#0000CC"> download</font> </span> 
               </input>
 
 	    </td>
 
-	    <td bgcolor="<%= bgColor %>" align="center" valign="middle">
+	    <td align="center" valign="middle">
 	        <span class="category">
 	          <bean:write name="row" property="vegbankAccessionNumber"/>   
 	        </span>
          </td>		 
-	    <td bgcolor="<%= bgColor %>" align="center" valign="middle">
+	    <td align="center" valign="middle">
 	        <span class="category">
 	          <bean:write name="row" property="authorObservationCode"/>   
 	        </span>
          </td>		 
+	  </tr>
+	  <tr bgcolor="#666666">
+         <td colspan="3"><img src="transparent.gif" height="1" width="1"></td>		 
 	  </tr>
 
   
@@ -183,6 +197,7 @@
   </font>
   </span>
   
+  <script language="javascript">refreshHighlight('plotName');</script>
   <!-- VEGBANK FOOTER -->
   @vegbank_footer_html_tworow@
   </body>
