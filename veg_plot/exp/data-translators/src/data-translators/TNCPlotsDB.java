@@ -17,8 +17,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-27 21:14:39 $'
- * 	'$Revision: 1.11 $'
+ *  '$Date: 2002-03-27 22:24:49 $'
+ * 	'$Revision: 1.12 $'
  */
 public class TNCPlotsDB implements PlotDataSourceInterface
 //public class TNCPlotsDB
@@ -892,6 +892,36 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	return( cn);	
 	}
 	
+	
+	/**
+	 * returns the community code for the named plot
+	 */
+	public String getCommunityCode(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 * returns the community level of the framework for the named plot
+	 */
+	public String getCommunityLevel(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 * returns the community framework for the named plot
+	 */
+	public String getCommunityFarmework(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	
+	
 	/**
 	 * method that returns the provisional community 
 	 * name based on a plot
@@ -1006,14 +1036,62 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 			System.out.println("Exception: " + e.getMessage() );
 			e.printStackTrace();
 		}
-			//System.out.println("hydroregime: "+ this.hydrologicRegime);
-		 return(this.hydrologicRegime);
+		//System.out.println("hydroregime: "+ this.hydrologicRegime);
+		return(this.hydrologicRegime);
+	}
+
+	/**
+	 * returns the soil drainage of a plot
+	 * @param plotName -- the plot
+	 */
+	public String getSoilDrainage(String plotName)
+	{
+		return("");
 	}
 	
+	/**
+	 * returns the author's observation code
+	 * @param plotName -- the plot
+	 */
+	public String getAuthorObsCode(String plotName)
+	{
+		return("");
+	}
+	
+	/**
+	 * returns the start date for the plot observation
+	 * @param plotName -- the plot
+	 */
+	public String getObsStartDate(String plotName)
+	{
+		return("");
+	}
+	
+	/**
+	 * returns the stop date for the plot observation
+	 * @param plotName -- the plot
+	 */
+	public String getObsStopDate(String plotName)
+	{
+		return("");
+	}
+	
+	/**
+	 * returns the soil depth of a plot
+	 * @param plotName -- the plot
+	 */
+	public String getSoilDepth(String plotName) 
+	{
+		return("");
+	}
+
+	
+
+
 		// see the interface for method descriptions
 	public String getTopoPosition(String plotName)
 	{
-		 Statement stmt = null;
+		Statement stmt = null;
 		try 
 		{
 			//System.out.println("plant name: "+ plantName +" plot name: " + plotName);
@@ -1037,7 +1115,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		 return(this.topoPosition);
 	}
 	
-		// see the interface for method descriptions
+	// see the interface for method descriptions
 	public String getSlopeAspect(String plotName)
 	{
 		 Statement stmt = null;
@@ -1076,7 +1154,7 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 		 return(this.slopeAspect );
 	}
 	
-		// see the interface for method descriptions
+	// see the interface for method descriptions
 	public String getSlopeGradient(String plotName)
 	{
 		 Statement stmt = null;
@@ -1235,7 +1313,36 @@ public class TNCPlotsDB implements PlotDataSourceInterface
 	{
 		return("land form");
 	}
+
+	/**
+	 * returns true if the plot is a permanent plot or false if not
+	 * @param plotName -- the plot
+	 */
+	 public boolean isPlotPermanent(String plotName)
+	 {
+	 	return(true);
+	 }
+ 
+ /**
+	* returns the soil taxon for the plot -- this is the USDA class
+	* heirarchy (eg., Order, Group, Family, Series etc..)
+	* @param plotName -- the plot
+	*/
+	public String getSoilTaxon(String plotName)
+	{
+		return("");
+	}
 	
+	/**
+	 * returns how the soil taxon was determined (eg., field observation
+	 * mapping, other ...)
+	 * @param plotName -- the plot
+	 */
+	public String getSoilTaxonSource(String plotName)
+	{
+		return("");
+	}
+
 		 
 	 /**
 	 * method to return the cover for a given strata for a given 

@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-11 01:09:53 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2002-03-27 22:24:49 $'
+ * 	'$Revision: 1.4 $'
  */
 public class NCVSDataSource implements PlotDataSourceInterface
 //public class NCVSDataSource
@@ -838,6 +838,37 @@ public class NCVSDataSource implements PlotDataSourceInterface
 	{
 		return("vegcommunity");
 	}
+	
+	
+	/**
+	 * returns the community code for the named plot
+	 */
+	public String getCommunityCode(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 * returns the community level of the framework for the named plot
+	 */
+	public String getCommunityLevel(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 * returns the community framework for the named plot
+	 */
+	public String getCommunityFarmework(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	
+	
 	
 		// see the interface for method descriptions
 	public String getState(String plotName)

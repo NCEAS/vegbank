@@ -13,8 +13,8 @@ import java.sql.*;
  *  Release:
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-01-06 04:26:17 $'
- * 	'$Revision: 1.3 $'
+ *  '$Date: 2002-03-27 22:24:49 $'
+ * 	'$Revision: 1.4 $'
  */
 public class TestPlotSourcePlugin implements PlotDataSourceInterface
 {
@@ -89,6 +89,89 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 			System.out.println( e.getMessage() );
 		}
 	}
+	
+
+
+	/**
+ 	 * returns the soil drainage of a plot
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getSoilDrainage(String plotName)
+ 	{
+ 		return("");
+ 	}
+ 	
+ 	/**
+ 	 * returns the author's observation code
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getAuthorObsCode(String plotName)
+ 	{
+ 		return("");
+ 	}
+ 	
+ 	/**
+ 	 * returns the start date for the plot observation
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getObsStartDate(String plotName)
+ 	{
+ 		return("");
+ 	}
+ 	
+ 	/**
+ 	 * returns the stop date for the plot observation
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getObsStopDate(String plotName)
+ 	{
+ 		return("");
+ 	}
+
+
+
+	/**
+ 	 * returns the soil depth of a plot
+ 	 * @param plotName -- the plot
+	 */
+ 	public String getSoilDepth(String plotName) 
+ 	{
+ 		return("");
+ 	}
+ 
+ 	/**
+ 	 * returns true if the plot is a permanent plot or false if not
+ 	 * @param plotName -- the plot
+ 	 */
+ 	 public boolean isPlotPermanent(String plotName)
+ 	 {
+ 	 	return(true);
+ 	 }
+  
+  /**
+ 	* returns the soil taxon for the plot -- this is the USDA class
+ 	* heirarchy (eg., Order, Group, Family, Series etc..)
+ 	* @param plotName -- the plot
+ 	*/
+ 	public String getSoilTaxon(String plotName)
+ 	{
+ 		return("");
+ 	}
+ 	
+ 	/**
+ 	 * returns how the soil taxon was determined (eg., field observation
+ 	 * mapping, other ...)
+ 	 * @param plotName -- the plot
+ 	 */
+ 	public String getSoilTaxonSource(String plotName)
+ 	{
+ 		return("");
+ 	}
+
+
+
+
+
 	
 	//returns all the plots stored in the access file
 	public Vector getPlotNames()
@@ -372,6 +455,36 @@ public class TestPlotSourcePlugin implements PlotDataSourceInterface
 	//returns the state for the current plot
 	public String getCommunityName(String plotName)
 	{ return("ice-plant community"); }
+	
+	
+	/**
+	 * returns the community code for the named plot
+	 */
+	public String getCommunityCode(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 * returns the community level of the framework for the named plot
+	 */
+	public String getCommunityLevel(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 * returns the community framework for the named plot
+	 */
+	public String getCommunityFarmework(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	
 	
 	//retuns the topo position
 	public String getTopoPosition(String plotName)

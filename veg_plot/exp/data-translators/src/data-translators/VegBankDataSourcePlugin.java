@@ -12,8 +12,8 @@ import java.sql.*;
  *  Release: 
  *	
  *  '$Author: harris $'
- *  '$Date: 2002-03-15 19:23:13 $'
- * 	'$Revision: 1.5 $'
+ *  '$Date: 2002-03-27 22:24:49 $'
+ * 	'$Revision: 1.6 $'
  */
  
 //public class VegBankDataSourcePlugin
@@ -697,6 +697,35 @@ public class VegBankDataSourcePlugin implements PlotDataSourceInterface
 	//returns the state for the current plot
 	public String getCommunityName(String plotName)
 	{ return("ice-plant community"); }
+	
+	
+	/**
+	 * returns the community code for the named plot
+	 */
+	public String getCommunityCode(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 * returns the community level of the framework for the named plot
+	 */
+	public String getCommunityLevel(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
+	/**
+	 * returns the community framework for the named plot
+	 */
+	public String getCommunityFarmework(String plotName)
+	{
+		String s = "";
+		return(s);
+	}
+	
 	
 	//retuns the topo position
 	public String getTopoPosition(String plotName)
