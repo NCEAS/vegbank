@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: farrell $'
- *	'$Date: 2003-10-29 20:17:52 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2004-02-19 17:39:03 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,13 +29,13 @@ package org.vegbank.plots.datasource;
  */
 
 import java.io.File;
-import java.util.ResourceBundle;
 
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.vegbank.common.utility.Utility;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -47,11 +47,6 @@ public class NativeXMLReader
 {	
 	private XMLReader reader = null;
 	private boolean validate = false;
-	private static ResourceBundle defaultPropFile = ResourceBundle.getBundle("vegbank");
-	private static final String VEGBANK_XML_SCHEMA= 
-		defaultPropFile.getString("schemaLocation") + "/" + defaultPropFile.getString("vegbankSchemaName");
-
-
 	public NativeXMLReader( boolean validating ) throws Exception
 	{
 		try 
@@ -160,20 +155,20 @@ public class NativeXMLReader
 				b);
 				
 			// Sanity check -- can the schema be found
-			File schema = new File(VEGBANK_XML_SCHEMA);
+			File schema = new File(Utility.VEGBANK_XML_SCHEMA);
 			if ( ! schema.exists() || ! schema.canRead() )
 			{
 				// Cannot find or work with this file
-				throw new Exception("Cannot find the schema file at '" + VEGBANK_XML_SCHEMA + "'.");
+				throw new Exception("Cannot find the schema file at '" + Utility.VEGBANK_XML_SCHEMA + "'.");
 			}
 			else
 			{
-				System.out.println("NativeXMLReader > Found the schema file: '" + VEGBANK_XML_SCHEMA + "'.");
+				System.out.println("NativeXMLReader > Found the schema file: '" + Utility.VEGBANK_XML_SCHEMA + "'.");
 			}
 			
 			reader.setProperty(
 				"http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation",
-				VEGBANK_XML_SCHEMA);	
+				Utility.VEGBANK_XML_SCHEMA);	
 		}
 		catch (SAXException e) 
 		{
