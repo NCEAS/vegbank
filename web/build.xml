@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: farrell $'
-* '$Date: 2003-10-29 19:49:07 $'
-* '$Revision: 1.64 $'
+* '$Author: mlee $'
+* '$Date: 2003-10-30 10:37:58 $'
+* '$Revision: 1.65 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -33,21 +33,23 @@
 		* building the vegbank web site
 	-->
     <condition property="webapp" value="vegbank">
-    	<not><isset	property="webapp"/></not>
-	</condition>
-	<echo>init webapp '${webapp}'</echo>
-
-	<!-- The webapp that contains copy, images and other
+      <not>
+        <isset property="webapp"/>
+      </not>
+    </condition>
+    <echo>init webapp '${webapp}'</echo>
+    <!-- The webapp that contains copy, images and other
 		resources is defined by web.context_uri and
 		makes the first part of the URI. -->
     <property name="web.context_uri" value="vegbank"/>
-
     <property name="forms" value="./forms"/>
     <property name="general_src" value="./general"/>
     <property name="design_src" value="./design"/>
     <property name="dictionary_src" value="./dbdictionary"/>
     <property name="news_src" value="./news"/>
     <property name="help_src" value="./help"/>
+    <property name="manual_src" value="./help/manual"/>
+    <property name="manual_src_temp" value="./help/manual/build"/>
     <property name="src.dir" value="./src"/>
     <property name="web.src.dir" value="${src.dir}/web"/>
     <property name="xsl.src.dir" value="${web.src.dir}/xsl"/>
@@ -81,6 +83,7 @@
     <property name="vegbank_server" value="${tomcat.home.dir}/webapps/${webapp}/"/>
     <property name="workshop_server" value="${tomcat.home.dir}/webapps/${webapp}/workshop/"/>
     <property name="help_server" value="${apache.document.root}/help/"/>
+    <property name="manual_server" value="${apache.document.root}/help/manual/"/>
     <property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
     <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/${webapp}/WEB-INF/lib"/>
     <!-- WEB SERVER LOCATIONS -->
@@ -95,6 +98,8 @@
     <filter token="forms_url" value="/${web.context_uri}/forms/"/>
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="/${web.context_uri}/forms/"/>
+    <!-- add link for page name that links to help frame jsp -->
+    <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp" />
     <filter token="design_link" value="/${web.context_uri}/design/"/>
     <filter token="panel_link" value="/${web.context_uri}/panel/"/>
     <filter token="help_link" value="/help/"/>
@@ -111,14 +116,14 @@
     <filter token="filedownloadservlet" value="/${web.context_uri}/servlet/fileDownload"/>
     <!-- Struts -->
     <filter token="DisplayUploadPlotAction" value="/${web.context_uri}/DisplayUploadPlotAction.do"/>
-	<!-- FIXME: Should be in a prepare target -->
+    <!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/${webapp}/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
     <mkdir dir="${apache.document.root}/plot/"/>
     <mkdir dir="${help_server}"/>
-    <mkdir dir="${help_server}manual/"/>
+    <mkdir dir="${manual_server}"/>
+    <mkdir dir="${manual_src_temp}"/>
   </target>
-
   <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
   <!-- this copy stays local on the machine that it is on - not needed on webserver -->
   <target name="hdrftr" depends="init" description="=&gt; sets tokens to be replaced by those in hdrfooter file and other files">
@@ -173,10 +178,34 @@
   <target name="help" depends="hdrftr" description="=&gt; dist the help pages to server">
     <copy overwrite="true" todir="${help_server}" filtering="yes">
       <fileset dir="${help_src}">
-        <include name="**/*.html"/>
-        <!-- manual, copied too -->
-        <exclude name="**/template.html"/>
+        <include name="*.html"/>
+        <exclude name="template.html"/>
         <!-- don't copy the template file -->
+      </fileset>
+    </copy>
+  </target>
+  <target name="manual" depends="hdrftr" description="=&gt; build and dist the manual pages to server">
+    <antcall target="manual-sub-clean"/>
+    <antcall target="manual-sub-build"/>
+    <antcall target="manual-sub-dist"/>
+  </target>
+  <target name="manual-sub-build" depends="hdrftr">
+    <echo>starting to style...</echo>
+    <style in="${manual_src}/manual_src.xml" out="${manual_src_temp}/BOGUS.htm" style="${manual_src}/manual2html.xsl" force="true">
+      <param name="directory" expression="./"/>
+    </style>
+  </target>
+  <target name="manual-sub-clean" depends="hdrftr">
+    <delete>
+      <fileset dir="${manual_src_temp}">
+        <include name="*.htm*"/>
+      </fileset>
+    </delete>
+  </target>
+  <target name="manual-sub-dist" depends="hdrftr">
+    <copy overwrite="true" todir="${manual_server}" filtering="yes">
+      <fileset dir="${manual_src_temp}">
+        <include name="*.html"/>
       </fileset>
     </copy>
   </target>
@@ -325,18 +354,15 @@
     <antcall target="web"/>
     <antcall target="robot"/>
   </target>
-
   <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
-  	<property name="webapp" value="vegtest"/>
+    <property name="webapp" value="vegtest"/>
     <antcall target="deploy"/>
   </target>
-
   <target name="dist-vegtest" description="=&gt; (vegtest) Distribute all web files">
-  	<property name="webapp" value="vegtest"/>
+    <property name="webapp" value="vegtest"/>
     <antcall target="dist"/>
   </target>
-
   <target name="dist-bins" depends="init, panel-big-bin " description="=&gt; dist. all targets that require access to big binary storage "/>
-  <target name="dist" depends="deploy, help, design, news, panel, vbsummary, history, pubs, workshop, dictionary, dist-bins" description="=&gt; dist all targets : DIST EVERYTHING! "/>
+  <target name="dist" depends="deploy, help, manual, design, news, panel, vbsummary, history, pubs, workshop, dictionary, dist-bins" description="=&gt; dist all targets : DIST EVERYTHING! "/>
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
 </project>
