@@ -172,23 +172,23 @@ VegBank - Advanced Plot Search
           <!-- copy params in case there is an error, you'll need these params to show these on 
                the next screen: -->
         
-          <logic:present parameter="show_0"><input type="hidden" name="show_0" value="on" />State and Country<br/></logic:present>
-		  <logic:present parameter="show_2"><input type="hidden" name="show_2" value="on" />Elevation<br/></logic:present>
-		  <logic:present parameter="show_3"><input type="hidden" name="show_3" value="on" />Aspect<br/></logic:present>
-		  <logic:present parameter="show_4"><input type="hidden" name="show_4" value="on" />Slope Gradient<br/></logic:present>
-		  <logic:present parameter="show_5"><input type="hidden" name="show_5" value="on" />Rock Type<br/></logic:present>
-		  <logic:present parameter="show_6"><input type="hidden" name="show_6" value="on" />Surficial Deposits<br/></logic:present>
-		  <logic:present parameter="show_7"><input type="hidden" name="show_7" value="on" />Hydrologic Regime<br/></logic:present>
-		  <logic:present parameter="show_8"><input type="hidden" name="show_8" value="on" />Topographic Position<br/></logic:present>
-		  <logic:present parameter="show_9"><input type="hidden" name="show_9" value="on" />Landform Type<br/></logic:present>
-		  <logic:present parameter="show_A"><input type="hidden" name="show_A" value="on" />Date Sampled<br/></logic:present>
-		  <logic:present parameter="show_B"><input type="hidden" name="show_B" value="on" />Date Entered<br/></logic:present>
-		  <logic:present parameter="show_C"><input type="hidden" name="show_C" value="on" />Plots Size<br/></logic:present>
-		  <logic:present parameter="show_D"><input type="hidden" name="show_D" value="on" />Cover Method<br/></logic:present>
-		  <logic:present parameter="show_E"><input type="hidden" name="show_E" value="on" />Stratum Method<br/></logic:present>
-		  <logic:present parameter="show_F"><input type="hidden" name="show_F" value="on" />Project<br/></logic:present>
-		  <logic:present parameter="show_G"><input type="hidden" name="show_G" value="on" />Plants within the Plot<br/></logic:present>
-	      <logic:present parameter="show_H"><input type="hidden" name="show_H" value="on" />Community Classification<br/></logic:present>
+          <logic:present parameter="show_0"><input type="hidden" name="show_0" value="on" /></logic:present>
+		  <logic:present parameter="show_2"><input type="hidden" name="show_2" value="on" /></logic:present>
+		  <logic:present parameter="show_3"><input type="hidden" name="show_3" value="on" /></logic:present>
+		  <logic:present parameter="show_4"><input type="hidden" name="show_4" value="on" /></logic:present>
+		  <logic:present parameter="show_5"><input type="hidden" name="show_5" value="on" /></logic:present>
+		  <logic:present parameter="show_6"><input type="hidden" name="show_6" value="on" /></logic:present>
+		  <logic:present parameter="show_7"><input type="hidden" name="show_7" value="on" /></logic:present>
+		  <logic:present parameter="show_8"><input type="hidden" name="show_8" value="on" /></logic:present>
+		  <logic:present parameter="show_9"><input type="hidden" name="show_9" value="on" /></logic:present>
+		  <logic:present parameter="show_A"><input type="hidden" name="show_A" value="on" /></logic:present>
+		  <logic:present parameter="show_B"><input type="hidden" name="show_B" value="on" /></logic:present>
+		  <logic:present parameter="show_C"><input type="hidden" name="show_C" value="on" /></logic:present>
+		  <logic:present parameter="show_D"><input type="hidden" name="show_D" value="on" /></logic:present>
+		  <logic:present parameter="show_E"><input type="hidden" name="show_E" value="on" /></logic:present>
+		  <logic:present parameter="show_F"><input type="hidden" name="show_F" value="on" /></logic:present>
+		  <logic:present parameter="show_G"><input type="hidden" name="show_G" value="on" /></logic:present>
+	      <logic:present parameter="show_H"><input type="hidden" name="show_H" value="on" /></logic:present>
           <logic:equal parameter="hidelist" value="true"><input type="hidden" name="hidelist" value="true" /></logic:equal>
    
    
