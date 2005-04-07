@@ -44,12 +44,35 @@ VegBank - Advanced Plot Search
   <!-- values of params don't matter.  Just checks to see if they are there -->
   
     <!-- using a table for formatting, I know it's bad, but it works and I don't know how to otherwise -->
-   <p>You can check or uncheck boxes below and press the "change fields shown" button to change the fields shown on this form.  <br/><a href="javascript:showorhidediv('changeCriteria')">Click Here</a> to show/hide the list of fields. </p>
-   <div id="changeCriteria" >
-    <form name="changeCriteriaShown" action="@plotquery_page@"> <!-- action is self -->
-    <table class="noborders"><tr><td>
+   <h2>Fields you wish to query:</h2>
+   <p class="instructions">This section is OPTIONAL.  Scroll down or <a href="#plotqueryfields">click here</a> to start 
+   your plot query from this page. 
+   
+   You can check or uncheck boxes below and press the "change fields shown" button to change the fields 
+   shown on this form.   </p>
+   <!-- this tag defines whether to intially hide this list of criteria -->
+   <bean:define id="initliststatus" value="display:block" />
+   <bean:define id="inithidestatus" value="display:none" />
+   <logic:equal parameter="hidelist" value="true">
+     <bean:define id="initliststatus" value="display:none" />
+     <bean:define id="inithidestatus" value="display:block" />
+   </logic:equal>
+   <div id="CriteriaHidden" style="<bean:write name='inithidestatus' />">
+     <table class="noborders">
+     <tr class="grey"><td>List of fields hidden.  <a href="javascript:showorhidediv('changeCriteria');showorhidediv('CriteriaHidden');">Click Here to show</a>  list of fields</td></tr></table>
+   </div>
+   
+   <div id="changeCriteria" style="<bean:write name='initliststatus' />" >
+     <a href="javascript:showorhidediv('changeCriteria');showorhidediv('CriteriaHidden');">Click Here To Hide</a> 
+    the following list of fields.
+    <form name="changeCriteriaShown" action="@plotquery_page@#plotqueryfields"> <!-- action is self -->
+    <input type="hidden" name="hidelist" value="true" />
+    <table class="noborders" >
+    <tr class="grey"><th>Shown Fields:</th><th>Additional Fields Available:</th></tr>
+  
+    <tr class="grey"><td valign="top">
       
-      <strong>Shown Fields</strong>: <br/>
+      
       <logic:present parameter="show_0"><input type="checkbox" name="show_0" checked="checked" />State and Country<br/></logic:present>
 	  <logic:present parameter="show_2"><input type="checkbox" name="show_2" checked="checked" />Elevation<br/></logic:present>
 	  <logic:present parameter="show_3"><input type="checkbox" name="show_3" checked="checked" />Aspect<br/></logic:present>
@@ -68,32 +91,54 @@ VegBank - Advanced Plot Search
 	  <logic:present parameter="show_G"><input type="checkbox" name="show_G" checked="checked" />Plants within the Plot<br/></logic:present>
       <logic:present parameter="show_H"><input type="checkbox" name="show_H" checked="checked" />Community Classification<br/></logic:present>
     </td>
-    <td>
-      <strong>Additional Fields Available</strong>: <br/>
-      <logic:notPresent parameter="show_0"><input type="checkbox" name="show_0"  />State and Country<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_2"><input type="checkbox" name="show_2"  />Elevation<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_3"><input type="checkbox" name="show_3"  />Aspect<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_4"><input type="checkbox" name="show_4"  />Slope Gradient<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_5"><input type="checkbox" name="show_5"  />Rock Type<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_6"><input type="checkbox" name="show_6"  />Surficial Deposits<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_7"><input type="checkbox" name="show_7"  />Hydrologic Regime<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_8"><input type="checkbox" name="show_8"  />Topographic Position<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_9"><input type="checkbox" name="show_9"  />Landform Type<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_A"><input type="checkbox" name="show_A"  />Date Sampled<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_B"><input type="checkbox" name="show_B"  />Date Entered<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_C"><input type="checkbox" name="show_C"  />Plots Size<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_D"><input type="checkbox" name="show_D"  />Cover Method<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_E"><input type="checkbox" name="show_E"  />Stratum Method<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_F"><input type="checkbox" name="show_F"  />Project<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_G"><input type="checkbox" name="show_G"  />Plants within the Plot<br/></logic:notPresent>
-	  <logic:notPresent parameter="show_H"><input type="checkbox" name="show_H"  />Community Classification<br/></logic:notPresent>
+    <td  valign="top">
+      
+      <% int intAdditionalWritten = 1 ; %>
+      <logic:notPresent parameter="show_0"><input type="checkbox" name="show_0"  />State and Country<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_2"><input type="checkbox" name="show_2"  />Elevation<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_3"><input type="checkbox" name="show_3"  />Aspect<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_4"><input type="checkbox" name="show_4"  />Slope Gradient<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_5"><input type="checkbox" name="show_5"  />Rock Type<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_6"><input type="checkbox" name="show_6"  />Surficial Deposits<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_7"><input type="checkbox" name="show_7"  />Hydrologic Regime<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_8"><input type="checkbox" name="show_8"  />Topographic Position<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_9"><input type="checkbox" name="show_9"  />Landform Type<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_A"><input type="checkbox" name="show_A"  />Date Sampled<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_B"><input type="checkbox" name="show_B"  />Date Entered<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_C"><input type="checkbox" name="show_C"  />Plots Size<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_D"><input type="checkbox" name="show_D"  />Cover Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_E"><input type="checkbox" name="show_E"  />Stratum Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_F"><input type="checkbox" name="show_F"  />Project<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_G"><input type="checkbox" name="show_G"  />Plants within the Plot<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_H"><input type="checkbox" name="show_H"  />Community Classification<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <% if ( intAdditionalWritten == 1 ) { %>
+	    -none-
+	  <% } %>
 	  
 
     </td>
     </tr>
+    
+   <tr class="grey"><td colspan="2"> 
+    <input type="submit" value="change fields shown" /> Please note that clicking this button will reset the plot-query form below. <br/ >
+    Tip: You can bookmark this page to return to it with the current fields shown.
+    </td></tr>
+      <tr  class="grey"><td colspan="2">
+		  <script type="text/javascript" language="JavaScript">
+		  <!-- 
+		  var numelements = document.forms.changeCriteriaShown.elements.length;
+		  function SetCheckboxes(value) {
+		      var item;
+		      for (var i=0 ; i<numelements ; i++) {
+		          item = document.forms.changeCriteriaShown.elements[i];
+		          item.checked = value;
+		      }
+		  }
+		  -->
+		</script> 
+		  <input value="Check All" onclick="SetCheckboxes(true);" type="button" /> | <input value="Uncheck All" onclick="SetCheckboxes(false);" type="button" /> 
+  </td></tr>
     </table>
-    <input type="submit" value="change fields shown" /> Please note that clicking this button will reset the plot-query form below.
-    <p>Tip: You can bookmark this page to return to it with the current fields shown.</p>
     </form>
     </div>
    <!-- 
@@ -119,7 +164,34 @@ VegBank - Advanced Plot Search
    -->
    
    <!-- the real form -->
+   
+   <h2><a name="plotqueryfields"></a>Plot Query:</h2>
+   
    <html:form action="/PlotQuery" method="get">
+   
+          <!-- copy params in case there is an error, you'll need these params to show these on 
+               the next screen: -->
+        
+          <logic:present parameter="show_0"><input type="hidden" name="show_0" value="on" />State and Country<br/></logic:present>
+		  <logic:present parameter="show_2"><input type="hidden" name="show_2" value="on" />Elevation<br/></logic:present>
+		  <logic:present parameter="show_3"><input type="hidden" name="show_3" value="on" />Aspect<br/></logic:present>
+		  <logic:present parameter="show_4"><input type="hidden" name="show_4" value="on" />Slope Gradient<br/></logic:present>
+		  <logic:present parameter="show_5"><input type="hidden" name="show_5" value="on" />Rock Type<br/></logic:present>
+		  <logic:present parameter="show_6"><input type="hidden" name="show_6" value="on" />Surficial Deposits<br/></logic:present>
+		  <logic:present parameter="show_7"><input type="hidden" name="show_7" value="on" />Hydrologic Regime<br/></logic:present>
+		  <logic:present parameter="show_8"><input type="hidden" name="show_8" value="on" />Topographic Position<br/></logic:present>
+		  <logic:present parameter="show_9"><input type="hidden" name="show_9" value="on" />Landform Type<br/></logic:present>
+		  <logic:present parameter="show_A"><input type="hidden" name="show_A" value="on" />Date Sampled<br/></logic:present>
+		  <logic:present parameter="show_B"><input type="hidden" name="show_B" value="on" />Date Entered<br/></logic:present>
+		  <logic:present parameter="show_C"><input type="hidden" name="show_C" value="on" />Plots Size<br/></logic:present>
+		  <logic:present parameter="show_D"><input type="hidden" name="show_D" value="on" />Cover Method<br/></logic:present>
+		  <logic:present parameter="show_E"><input type="hidden" name="show_E" value="on" />Stratum Method<br/></logic:present>
+		  <logic:present parameter="show_F"><input type="hidden" name="show_F" value="on" />Project<br/></logic:present>
+		  <logic:present parameter="show_G"><input type="hidden" name="show_G" value="on" />Plants within the Plot<br/></logic:present>
+	      <logic:present parameter="show_H"><input type="hidden" name="show_H" value="on" />Community Classification<br/></logic:present>
+          <logic:equal parameter="hidelist" value="true"><input type="hidden" name="hidelist" value="true" /></logic:equal>
+   
+   
     <bean:define id="hideCurr" value="show" />
     <logic:notPresent parameter="show_0">
         <bean:define id="hideCurr" value="hidden" />
@@ -441,7 +513,7 @@ VegBank - Advanced Plot Search
 	    <p class="instructions">
 	      Enter date ranges or plot size ranges that apply to plots of interest.  
 	      Enter dates in the format: 
-	      "M-D-YYYY" where M is the number of the month 
+	      "M/D/YYYY" where M is the number of the month 
 	      (e.g. June is 6), D is day of the month, 
 	      and YYYY is the four digit year.
 	    </p>
@@ -462,13 +534,13 @@ VegBank - Advanced Plot Search
 	  <tr class='<bean:write name="hideCurr" />'><!-- date --> 
 	    <td>&nbsp;</td>
 		<td colspan="2" class="item" align="center">from 
-            <dt:format pattern="MM-dd-yyyy">
+            <dt:format pattern="MM/dd/yyyy">
                 <dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS">
                     <bean:write name="minmaxbean-BEAN" property="curminobsstartdate"/>
                 </dt:parse>
             </dt:format>
             to
-            <dt:format pattern="MM-dd-yyyy">
+            <dt:format pattern="MM/dd/yyyy">
                 <dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS">
                     <bean:write name="minmaxbean-BEAN" property="curmaxobsenddate"/>
                 </dt:parse>
@@ -478,7 +550,7 @@ VegBank - Advanced Plot Search
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr class='<bean:write name="hideCurr" />'>
-	    <td>Date Sampled <br/> <span class="instructions">M-D-YYYY</span></td>
+	    <td>Date Sampled <br/> <span class="instructions">M/D/YYYY</span></td>
 	    <td>
 	      <html:text property="minObsStartDate" size="20"/>
 	    </td>
@@ -498,11 +570,11 @@ VegBank - Advanced Plot Search
 	  <tr class='<bean:write name="hideCurr" />'><!-- date2 --> 
 	    <td>&nbsp;</td>
 		<td colspan="2" class="item" align="center">from 
-            <dt:format pattern="MM-dd-yyyy">
+            <dt:format pattern="MM/dd/yyyy">
                 <dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS"><bean:write name="minmaxbean-BEAN" property="curmindateentered"/></dt:parse>
             </dt:format>
             to
-            <dt:format pattern="MM-dd-yyyy">
+            <dt:format pattern="MM/dd/yyyy">
                 <dt:parse pattern="yyyy-MM-dd hh:mm:ss.SS-z"><bean:write name="minmaxbean-BEAN" property="curmaxdateentered"/></dt:parse>
             </dt:format>
          </td>
@@ -510,7 +582,7 @@ VegBank - Advanced Plot Search
 	    <td>&nbsp;</td>
 	  </tr>
 	  <tr class='<bean:write name="hideCurr" />'>
-	    <td>Date Entered into VegBank <br/> <span class="instructions">M-D-YYYY</span></td>
+	    <td>Date Entered into VegBank <br/> <span class="instructions">M/D/YYYY</span></td>
 	    <td>
 	      <html:text property="minDateEntered" size="20"/>
 	    </td>
