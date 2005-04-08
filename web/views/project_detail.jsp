@@ -8,7 +8,7 @@
 <h2>View VegBank Projects</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
-        <vegbank:get id="project" select="project" beanName="map" pager="true"  xwhereEnable="true"/>
+        <vegbank:get id="project" select="project" beanName="map" pager="true" xwhereEnable="true" orderBy="orderby_projectname" />
 <!--Where statement removed from preceding: -->
 <vegbank:pager />
 <logic:empty name="project-BEANLIST">
