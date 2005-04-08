@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-11 21:55:06 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-04-08 00:01:10 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,9 +86,10 @@ select (subquery stuff goes here as stuff) as somename from...
 		String selectClauseKey = request.getParameter("SQL");
 		String whereClauseKey = request.getParameter("WHERE");
 		String beanName = request.getParameter("BeanName");
+		String orderBy = request.getParameter("orderBy");
 		String[] whereParams = request.getParameterValues("wparam");
 
-		return execute(request, selectClauseKey, whereClauseKey, beanName, whereParams);
+		return execute(request, selectClauseKey, whereClauseKey, beanName, orderBy, whereParams);
 	}
 
 	/**
@@ -101,11 +102,12 @@ select (subquery stuff goes here as stuff) as somename from...
 			String selectClauseKey, 
 			String whereClauseKey, 
 			String beanName, 
-			Object whereParam) 
+            String orderBy,
+			Object whereParam)
 			///////String whereParam) 
 			throws Exception {
 
-		log.debug("execute(req, select, where, bean, (String)where): " + whereParam);
+		log.debug("execute(req, select, where, bean, orderBy, (String)where): " + whereParam);
 		String[] arr;
 		arr = new String[1];
 		if (whereParam != null) {
@@ -132,7 +134,7 @@ select (subquery stuff goes here as stuff) as somename from...
 		///////////////////////////////////////////////////////////////////
 		
 
-		return execute(request, selectClauseKey, whereClauseKey, beanName, arr);
+		return execute(request, selectClauseKey, whereClauseKey, beanName, orderBy, arr);
 	}
 
 	/**
@@ -158,18 +160,18 @@ select (subquery stuff goes here as stuff) as somename from...
 
 
 	public static List execute(String selectClauseKey, String whereClauseKey, 
-				String beanName, String whereParam) throws Exception {
+				String beanName, String orderBy, String whereParam) throws Exception {
 
 		log.debug("execute(select, where, bean, (Object)where)");
-		return execute(null, selectClauseKey, whereClauseKey, beanName, whereParam);
+		return execute(null, selectClauseKey, whereClauseKey, beanName, orderBy, whereParam);
 	}
 
 
 	public static List execute(String selectClauseKey, String whereClauseKey, 
-				String beanName, String[] whereParams ) throws Exception
+				String beanName, String orderBy, String[] whereParams ) throws Exception
 	{
 		log.debug("execute(select, where, bean, (String[])where)");
-		return execute(null, selectClauseKey, whereClauseKey, beanName, whereParams);
+		return execute(null, selectClauseKey, whereClauseKey, beanName, orderBy, whereParams);
 	}
 
 
@@ -183,12 +185,13 @@ select (subquery stuff goes here as stuff) as somename from...
 			String selectClauseKey, 
 			String whereClauseKey,
 			String beanName,
+			String orderBy,
 			String[] whereParams)
 			throws Exception {
 
-		log.debug("execute(req, select, where, bean, (String[])where)");
+		log.debug("execute(req, select, where, bean, orderBy, (String[])where)");
 
-		String SQLStatement = getSQLStatement(selectClauseKey, whereClauseKey,  whereParams);
+		String SQLStatement = getSQLStatement(selectClauseKey, whereClauseKey, orderBy, whereParams);
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( SQLStatement );
 		
@@ -221,20 +224,21 @@ select (subquery stuff goes here as stuff) as somename from...
 	 * @param request
 	 * @return
 	 */
-	private static String getSQLStatement(String selectClauseKey, String whereClauseKey, String[] whereParams)
-{
+	private static String getSQLStatement(String selectClauseKey, String whereClauseKey, String orderByKey, String[] whereParams) {
 		ResourceBundle SQLResources =  ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 		String selectClause = "";
 		String whereClause = "";
+		String orderBy = "";
 		
 		// Don't bother with empty strings
-		if (! selectClauseKey.equals("")) 
-		{
+		if (!selectClauseKey.equals("")) {
 			selectClause = SQLResources.getString(selectClauseKey);
 		}		
-		if (whereClauseKey != null && ! whereClauseKey.equals(""))
-		{
+		if (!Utility.isStringNullOrEmpty(whereClauseKey)) {
 			whereClause = SQLResources.getString(whereClauseKey);
+		}
+		if (!Utility.isStringNullOrEmpty(orderByKey)) {
+			orderBy = SQLResources.getString(orderByKey);
 		}
 		
 		//log.debug(">>>>>>>>>>" + selectClause + whereClause);
@@ -257,8 +261,11 @@ select (subquery stuff goes here as stuff) as somename from...
 			}
 		}
 
+		if (!Utility.isStringNullOrEmpty(orderBy)) {
+	        SQLStatement.append(" ORDER BY " + orderBy);
+        }
 		
-		//log.debug(">>>>>>>>>>" + SQLStatement);
+		log.debug(">>>>>>>>>>" + SQLStatement);
 		return SQLStatement.toString();
 	}
 	

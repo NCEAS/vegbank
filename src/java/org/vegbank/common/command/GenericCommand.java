@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-17 22:22:55 $'
- *	'$Revision: 1.27 $'
+ *	'$Date: 2005-04-08 00:01:10 $'
+ *	'$Revision: 1.28 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,9 +98,10 @@ public class GenericCommand
 		String selectClauseKey = request.getParameter("SQL");
 		String whereClauseKey = request.getParameter("WHERE");
 		String beanName = request.getParameter("BeanName");
+		String orderBy = request.getParameter("orderBy");
 		String[] whereParams = request.getParameterValues("wparam");
 
-		return execute(request, selectClauseKey, whereClauseKey, beanName, whereParams);
+		return execute(request, selectClauseKey, whereClauseKey, beanName, orderBy, whereParams);
 	}
 
 	/**
@@ -113,6 +114,7 @@ public class GenericCommand
 			String selectClauseKey, 
 			String whereClauseKey, 
 			String beanName, 
+			String orderBy, 
 			String whereParam) 
 			throws Exception {
 
@@ -123,17 +125,17 @@ public class GenericCommand
 			arr[0] = whereParam;
 		}
 
-		return execute(request, selectClauseKey, whereClauseKey, beanName, arr);
+		return execute(request, selectClauseKey, whereClauseKey, beanName, orderBy, arr);
 	}
 
 	/**
 	 *
 	 */
 	public List execute(String selectClauseKey, String whereClauseKey, 
-				String beanName, String whereParam) throws Exception {
+				String beanName, String orderBy, String whereParam) throws Exception {
 
 		//log.debug("execute(select, where, bean, (Object)where)");
-		return execute(null, selectClauseKey, whereClauseKey, beanName, whereParam);
+		return execute(null, selectClauseKey, whereClauseKey, beanName, orderBy, whereParam);
 	}
 
 
@@ -141,10 +143,10 @@ public class GenericCommand
 	 *
 	 */
 	public List execute(String selectClauseKey, String whereClauseKey, 
-				String beanName, String[] whereParams ) throws Exception
+				String beanName, String orderBy, String[] whereParams ) throws Exception
 	{
 		//log.debug("execute(select, where, bean, (String[])where)");
-		return execute(null, selectClauseKey, whereClauseKey, beanName, whereParams);
+		return execute(null, selectClauseKey, whereClauseKey, beanName, orderBy, whereParams);
 	}
 
 
@@ -158,13 +160,14 @@ public class GenericCommand
 			String selectClauseKey, 
 			String whereClauseKey,
 			String beanName,
+			String orderBy,
 			String[] whereParams)
 			throws Exception {
 
 		//log.debug("execute(req, select, where, bean, (String[])where)");
 
 		String tmp;
-		String sqlFullQuery = initQuery(selectClauseKey, whereClauseKey, whereParams);
+		String sqlFullQuery = initQuery(selectClauseKey, whereClauseKey, orderBy, whereParams);
 
 
 
@@ -176,7 +179,7 @@ public class GenericCommand
 		// TODO: 
 		// Only count results if they haven't already been counted
 		if (getPager()) {
-			numItems = countResults();
+			numItems = countResults(sqlFullQuery);
 
 			/* 
 			tmp = getNumItems();
@@ -278,12 +281,22 @@ public class GenericCommand
 	/**
 	 * 
 	 */
-	private int countResults() throws Exception {
+	private int countResults(String sqlFullQuery) throws Exception {
+
+/*
+	    int pos = this.whereClauseFormatted.toLowerCase().indexOf("order by ");
+        String cleanWhere;
+        if (pos != -1) {
+            cleanWhere = this.whereClauseFormatted.substring(0, pos);
+        } else {
+            cleanWhere = this.whereClauseFormatted;
+        }
 
 		String sql = "SELECT COUNT(1) " + 
 				this.selectClauseWithSimpleAttribs.substring( 
-						this.selectClauseWithSimpleAttribs.indexOf("from ")) +
-				this.whereClauseFormatted;
+						this.selectClauseWithSimpleAttribs.indexOf("from ")) + cleanWhere;
+*/
+		String sql = "SELECT COUNT(1) FROM (" + sqlFullQuery + ") AS cnt";
 				
 		log.info("::: COUNT QUERY:::\n\t" + sql + "\n=======================================");
 		DatabaseAccess da = new DatabaseAccess();
@@ -306,9 +319,10 @@ public class GenericCommand
 	 * @param request
 	 * @return
 	 */
-	private String initQuery(String selectClauseKey, String whereClauseKey, String[] whereParams) {
+	private String initQuery(String selectClauseKey, String whereClauseKey, String orderByKey, String[] whereParams) {
 		String selectClause = "";
 		String whereClause = "";
+		String orderBy = "";
 		StringBuffer sql = new StringBuffer(1024);
 		
 		// SELECT
@@ -331,7 +345,14 @@ public class GenericCommand
 				log.info("Using non-configured (dangerous) where: " + whereClause);
 			}
 			sql.append(buildFormattedWhereClause(whereClause, whereParams, selectClause));
+		} 
 
+		// ORDER BY
+		if (!Utility.isStringNullOrEmpty(orderByKey)) {
+	        orderBy = sqlResources.getString(orderByKey).toLowerCase();
+		    if (!Utility.isStringNullOrEmpty(orderBy)) {
+			    sql.append(" ORDER BY " + orderBy);
+            }
 		} 
 
 		return sql.toString();
@@ -389,6 +410,7 @@ public class GenericCommand
 		// format the where clause
 		if (hasWhereClause && hasParams) {
 
+            // I know the logic looks funky the way it is --PMA
 			if (hasParams) {
                 //////////////////////////////////////////
                 List wpList = new ArrayList();
@@ -429,7 +451,7 @@ public class GenericCommand
 			}
 
 
-			if ( this.selectClauseWithSimpleAttribs.indexOf("where") == -1 ) {
+			if (this.selectClauseWithSimpleAttribs.indexOf("where") == -1) {
 				whereClause = " where " +  whereClause;
 			} else {
 				whereClause = " and " +  whereClause;
@@ -437,7 +459,7 @@ public class GenericCommand
 
 			log.debug("Adding where clause: " + whereClause);
 			this.whereClauseFormatted = whereClause;
-		}
+        }
 
 		return this.whereClauseFormatted;
 	}
