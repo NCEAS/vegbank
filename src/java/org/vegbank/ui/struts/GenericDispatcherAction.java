@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-13 06:42:59 $'
- *	'$Revision: 1.16 $'
+ *	'$Date: 2005-04-08 00:00:40 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -270,7 +270,8 @@ public class GenericDispatcherAction extends Action
 
 			if ( command.equalsIgnoreCase(GENERIC_CMD)) {
 				log.debug( "GD: executing new gen cmd" );
-				GenericCommandStatic.execute(request, selectKey, whereKey, beanName, wparam);
+		        String orderBy = request.getParameter("orderBy");
+				GenericCommandStatic.execute(request, selectKey, whereKey, beanName, orderBy, wparam);
 				log.debug( "GD: done executing GC" );
 
 

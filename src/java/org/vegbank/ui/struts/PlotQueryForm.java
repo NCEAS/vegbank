@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-08-24 00:42:14 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2005-04-08 00:00:40 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1118,12 +1118,13 @@ public class PlotQueryForm extends ValidatorForm
 			String selectClauseKey = "project";
 			String whereClauseKey = null;
 			String beanName = "Project";
+			String orderBy = "";
 			String[] whereParams = null;
 			// Need to create this object
 			try
 			{
 				Collection projects = GenericCommandStatic.execute(
-						selectClauseKey, whereClauseKey, beanName, whereParams );
+						selectClauseKey, whereClauseKey, beanName, orderBy, whereParams );
 				Iterator projectsIter = projects.iterator();
 				while ( projectsIter.hasNext() )
 				{
@@ -1151,12 +1152,13 @@ public class PlotQueryForm extends ValidatorForm
 			String selectClauseKey = "covermethod";
 			String whereClauseKey = null;
 			String beanName = "Covermethod";
+			String orderBy = "";
 			String[] whereParams = null;
 			// Need to create this object
 			try
 			{
 				Collection cms = GenericCommandStatic.execute(
-						selectClauseKey, whereClauseKey, beanName, whereParams );
+						selectClauseKey, whereClauseKey, beanName, orderBy, whereParams );
 				Iterator cmIter = cms.iterator();
 				while ( cmIter.hasNext() )
 				{
@@ -1184,12 +1186,13 @@ public class PlotQueryForm extends ValidatorForm
 			String selectClauseKey = "stratummethod";
 			String whereClauseKey = null;
 			String beanName = "Stratummethod";
+			String orderBy = "";
 			String[] whereParams = null;
 			// Need to create this object
 			try
 			{
 				Collection stratummethods = GenericCommandStatic.execute(
-						selectClauseKey, whereClauseKey, beanName, whereParams );
+						selectClauseKey, whereClauseKey, beanName, orderBy, whereParams );
 				Iterator stratummethodsIter = stratummethods.iterator();
 				while ( stratummethodsIter.hasNext() )
 				{

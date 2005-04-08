@@ -93,6 +93,16 @@
 	<required>false</required>
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
+<attribute>
+	<name>orderBy</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>allowOrderBy</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
 </tag>
 
 <tag>

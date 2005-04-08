@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-17 22:31:59 $'
- *	'$Revision: 1.20 $'
+ *	'$Date: 2005-04-08 00:00:40 $'
+ *	'$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ import org.vegbank.common.utility.DatabaseUtility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.20 $ $Date: 2005-02-17 22:31:59 $
+ * @version $Revision: 1.21 $ $Date: 2005-04-08 00:00:40 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -111,6 +111,7 @@ public class VegbankGetTag extends VegbankTag {
 					getSelect(), 
 					getWhere(), 
 					getBeanName(),
+					getOrderBy(),
 					getWparamArray());
 
 		} catch (Exception ex) { 
@@ -447,11 +448,9 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     public void setXwhereEnable(String s) {
-		log.debug("setXwhereEnable(string): " + s);
 		this.xwhereEnable = Utility.isStringTrue(s);
     }
     public void setXwhereEnable(boolean b) {
-		log.debug("setXwhereEnable(boolean): " + b);
 		this.xwhereEnable = b;
     }
 
@@ -512,6 +511,46 @@ public class VegbankGetTag extends VegbankTag {
     public void setXwhereGlue(String s) {
         this.xwhereGlue = s;
     }
+
+    /**
+     * 
+     */
+	protected String orderBy;
+
+    public String getOrderBy() {
+        if (getAllowOrderBy()) {
+		    return findAttribute("orderBy", this.orderBy);
+        } else {
+            return null;
+        }
+    }
+
+    public void setOrderBy(String s) {
+        this.orderBy = s;
+    }
+
+    /**
+     * 
+     */
+	protected boolean allowOrderBy = false;
+
+    public boolean getAllowOrderBy() {
+		if (this.allowOrderBy) {
+			return true;
+		}
+
+        setXwhereEnable(findAttribute("allowOrderBy"));
+        return this.xwhereEnable;
+    }
+
+    public void setAllowOrderBy(String s) {
+        setAllowOrderBy(Utility.isStringTrue(s));
+    }
+
+    public void setAllowOrderBy(boolean b) {
+        this.allowOrderBy = b;
+    }
+
 
 	/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 

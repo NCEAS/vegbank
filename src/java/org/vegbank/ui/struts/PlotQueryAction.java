@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2005-03-17 19:56:45 $'
- *	'$Revision: 1.27 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-04-08 00:00:40 $'
+ *	'$Revision: 1.28 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -173,12 +173,13 @@ public class PlotQueryAction extends VegbankAction
 
 		// Date Entered
 		dynamicQuery.append(
-			DatabaseUtility.handleMaxMinNull(
-				pqForm.getMaxDateEntered(),
+			DatabaseUtility.handleMaxMinNullDateRange(
 				pqForm.getMinDateEntered(),
-				false,
-				"plot." + Plot.DATEENTERED,
-				conjunction));
+				pqForm.getMaxDateEntered(),
+				"observation." + Observation.DATEENTERED,
+				"observation." + Observation.DATEENTERED,
+                false,
+				" AND "));
 
 		// Plot Area
 		dynamicQuery.append(
