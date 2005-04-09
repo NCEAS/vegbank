@@ -18,7 +18,7 @@
  </p>
  <h3>By Hierarchy</h3>
  <p>You may select the top of the hierarchy to start browsing: </p>
-  <p><blockquote> <a href="@get_link@std/plantconcept/'VB.PC.92206.PLANTAE'">Plantae</a></blockquote></p>
+  <p><blockquote> <a href="@get_link@std/plantconcept/VB.PC.92206.PLANTAE">Plantae</a></blockquote></p>
  
  <p>Or you may start browing by choosing a family from this list:</p>
    <blockquote>
@@ -26,7 +26,8 @@
       <input type="hidden" value="where_plantconcept_pk" name="where" />
     <select size="10" name="wparam">
       <vegbank:get id="plantconcept" select="plantconcept" 
-        pager="false" perPage="-1" beanName="map" where="where_plantconcept_isfamily_ord" wparam="1" />
+        pager="false" perPage="-1" beanName="map" where="where_plantconcept_isfamily" 
+        allowOrderBy="true" orderBy="orderby_plantname" wparam="1" />
         <logic:iterate id="onerowofplantconcept" name="plantconcept-BEANLIST">
           <option value='<bean:write name="onerowofplantconcept" property="plantconcept_id" />'><bean:write name="onerowofplantconcept" property="plantname_id_transl" /></option>        
         
