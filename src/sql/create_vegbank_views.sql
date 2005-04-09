@@ -98,6 +98,7 @@ CREATE VIEW view_emb_embargo_complete AS
 -- END EMBARGO VIEWS 
 -------------------
 
+DROP VIEW view_plantconcept_transl;
 DROP VIEW  view_reference_transl ;
  CREATE VIEW view_reference_transl AS 
    SELECT CASE WHEN shortName IS NULL 
@@ -114,7 +115,17 @@ DROP VIEW  view_reference_transl ;
                ELSE shortName 
                END 
              AS reference_id_transl, reference_id from reference;
-             
+
+--DROP VIEW view_plantconcept_transl;
+CREATE VIEW view_plantconcept_transl AS 
+  SELECT plantconcept_id, plantname_id, plantname, reference_id, 
+    plantname || ' [' || (select reference_id_transl 
+                           FROM view_reference_transl 
+                           where view_reference_transl.reference_id=plantconcept.reference_id) || ']' as plantconcept_id_transl 
+    FROM plantconcept;
+
+
+
              
 DROP VIEW view_party_transl ;
  CREATE VIEW view_party_transl AS 
