@@ -42,7 +42,7 @@
   
   <logic:match name="writetops" value="<%= currentNum %>">
   <vegbank:get id="namedplace" select="browsenamedplacebystate" beanName="map" 
-    pager="true" />
+    pager="true" where="empty" wparam="" allowOrderBy="true" orderBy="orderby_dobscount_desc"/>
   <logic:notEmpty name="namedplace-BEANLIST">
 
   <TABLE cellpadding="5" cellspacing="3">
@@ -105,13 +105,14 @@
   <logic:match name="writetops" value="<%= currentNum %>">
   <!-- projects -->
   <h3>Data Projects:</h3>
-    <vegbank:get id="project" select="project" beanName="map" pager="true" xwhereEnable="false" /> 
+    <vegbank:get id="project" select="project" beanName="map" pager="true" xwhereEnable="false" 
+      allowOrderBy="true" orderBy="orderby_dobscount_desc" /> 
     <table class="thinlines" cellpadding="2">
       <tr><th>Project</th><th>Plots</th></tr>
       <logic:iterate id="onerowofproject" name="project-BEANLIST">
         <tr  class='@nextcolorclass@'>
           <td><a href='@get_link@std/project/<bean:write name="onerowofproject" property="project_id" />'><bean:write name="onerowofproject" property="projectname" /></a></td>
-          <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofproject' property='project_id' />?where=where_project_pk"><bean:write name="onerowofproject" property="countobs" /></a></td>
+          <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofproject' property='project_id' />?where=where_project_pk"><bean:write name="onerowofproject" property="d_obscount" /></a></td>
         </tr>
       </logic:iterate>
       
@@ -131,13 +132,14 @@
   <!-- spp -->
  <h3>Common Species:</h3>
    <vegbank:get id="browsecommonplants" select="browsecommonplants" 
-          beanName="map" pager="true"  xwhereEnable="false" />
+          beanName="map" pager="true"  xwhereEnable="false" 
+          allowOrderBy="true" orderBy="orderby_dobscount_desc" />
      <table class="thinlines" cellpadding="2">
       <tr><th>Plant</th><th>Plots</th></tr>
       <logic:iterate id="onerowofbrowsecommonplants" name="browsecommonplants-BEANLIST">
 	          <tr class='@nextcolorclass@'>
 	            <td><a href="@get_link@std/plantconcept/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />"><bean:write name="onerowofbrowsecommonplants" property="plantconcept_id_transl" /></td>
-	            <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />?where=where_plantconcept_observation_complex"><bean:write name="onerowofbrowsecommonplants" property="countobs" /></a></td>
+	            <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />?where=where_plantconcept_observation_complex"><bean:write name="onerowofbrowsecommonplants" property="d_obscount" /></a></td>
 	          </tr>
       </logic:iterate>
      
@@ -156,13 +158,14 @@
    <!-- comms -->
    <h3>Common Communities:</h3>
    <vegbank:get id="browsecommoncomms" select="browsecommoncomms" 
-             beanName="map" pager="true"  xwhereEnable="false" />
+             beanName="map" pager="true"  xwhereEnable="false" 
+             allowOrderBy="true" orderBy="orderby_dobscount_desc" />
         <table class="thinlines" cellpadding="2">
          <tr><th>Community</th><th>Plots</th></tr>
          <logic:iterate id="onerowofbrowsecommoncomms" name="browsecommoncomms-BEANLIST">
    	          <tr class='@nextcolorclass@'>
    	            <td><a href="@get_link@std/commconcept/<bean:write name='onerowofbrowsecommoncomms' property='commconcept_id' />"><bean:write name="onerowofbrowsecommoncomms" property="commconcept_id_transl" /></a></td>
-   	            <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofbrowsecommoncomms' property='commconcept_id' />?where=where_commconcept_observation_complex"><bean:write name="onerowofbrowsecommoncomms" property="countobs" /></a></td>
+   	            <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofbrowsecommoncomms' property='commconcept_id' />?where=where_commconcept_observation_complex"><bean:write name="onerowofbrowsecommoncomms" property="d_obscount" /></a></td>
    	          </tr>
          </logic:iterate>
         

@@ -30,13 +30,13 @@
  <!-- plot count -->
 		  <td>
 		    
-		   <logic:empty name="onerowofproject" property="countobs">0</logic:empty>
-		   <logic:notEmpty name="onerowofproject" property="countobs">
+		   <logic:empty name="onerowofproject" property="d_obscount">0</logic:empty>
+		   <logic:notEmpty name="onerowofproject" property="d_obscount">
 		   
-		   <logic:notEqual name="onerowofproject" property="countobs" value="0">
-		   <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="onerowofproject" property="countobs" /></a>
+		   <logic:notEqual name="onerowofproject" property="d_obscount" value="0">
+		   <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="onerowofproject" property="d_obscount" /></a>
 		   </logic:notEqual>
-		   <logic:equal name="onerowofproject" property="countobs" value="0">0</logic:equal>
+		   <logic:equal name="onerowofproject" property="d_obscount" value="0">0</logic:equal>
 		   </logic:notEmpty>
           </td></tr>
 

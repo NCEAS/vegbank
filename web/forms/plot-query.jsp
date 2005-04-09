@@ -681,7 +681,7 @@ VegBank - Advanced Plot Search
 		        <!--xx html:options property="projectNames"/-->
 		        <vegbank:get id="project" select="project" beanName="map" pager="false" perPage="-1" />
 		        <logic:iterate id="onerowofproject" name="project-BEANLIST">
-		          <option value='<bean:write name="onerowofproject" property="projectname" />'><bean:write name="onerowofproject" property="projectname" /> (<bean:write name="onerowofproject" property="countobs" />)</option>
+		          <option value='<bean:write name="onerowofproject" property="projectname" />'><bean:write name="onerowofproject" property="projectname" /> (<bean:write name="onerowofproject" property="d_obscount" />)</option>
 		        </logic:iterate>
 		        
 		        <option value="IS NOT NULL">--NOT NULL--</option>

@@ -10,7 +10,15 @@
 <h2>View VegBank Projects</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
-        <vegbank:get id="project" select="project" beanName="map" pager="true"  xwhereEnable="true"/>
+
+ <logic:notPresent parameter="orderBy">
+          <!-- set default sorting by project name? -->
+          <bean:define id="orderBy" value="orderby_projectname" />
+     </logic:notPresent>
+         <vegbank:get id="project" select="project" beanName="map" pager="true"
+     xwhereEnable="true" allowOrderBy="true"/>
+
+
 <!--Where statement removed from preceding: -->
 <logic:empty name="project-BEANLIST">
 <p>  Sorry, no projects found.</p>
@@ -19,11 +27,21 @@
 <table class="leftrightborders" cellpadding="2" id="projectsummarytable">
 <tr>
 <th>More</th>
-                  <%@ include file="autogen/project_summary_head.jsp" %>
-                <!-- a few extra columns: -->
-          <th>Plots</th>
-          <th>Classified Plots</th>
-          <th>States / Provinces</th>
+                  <!-- %@ include file="autogen/project_summary_head.jsp" %-->
+				               <th>Project Name 
+				 <a href="/get/summary/project/?orderBy=orderby_projectname" >&uarr;</a>
+				 <a href="/get/summary/project/?orderBy=orderby_projectname_desc" >&darr;</a></th>
+				 <th>Start Date 
+				 <a href="/get/summary/project/?orderBy=orderby_startdate" >&uarr;</a>
+				 <a href="/get/summary/project/?orderBy=orderby_startdate_desc" >&darr;</a></th>
+				 <th>Stop Date</th>
+				                 <!-- a few extra columns: -->
+				           <th>Plots 
+				 <a href="/get/summary/project/?orderBy=orderby_countobs" >&uarr;</a>
+				 <a href="/get/summary/project/?orderBy=orderby_countobs_desc" >&darr;</a></th>
+				           <th>Classified Plots</th>
+				           <th>States / Provinces</th>
+
                 
                   
                   </tr>
@@ -44,13 +62,13 @@
 		  <!-- plot count -->
 		  <td class="numeric">
 		    
-		   <logic:empty name="onerowofproject" property="countobs">0</logic:empty>
-		   <logic:notEmpty name="onerowofproject" property="countobs">
+		   <logic:empty name="onerowofproject" property="d_obscount">0</logic:empty>
+		   <logic:notEmpty name="onerowofproject" property="d_obscount">
 		   
-		   <logic:notEqual name="onerowofproject" property="countobs" value="0">
-		   <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="onerowofproject" property="countobs" /></a>
+		   <logic:notEqual name="onerowofproject" property="d_obscount" value="0">
+		   <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="onerowofproject" property="d_obscount" /></a>
 		   </logic:notEqual>
-		   <logic:equal name="onerowofproject" property="countobs" value="0">0</logic:equal>
+		   <logic:equal name="onerowofproject" property="d_obscount" value="0">0</logic:equal>
 		   </logic:notEmpty>
           </td>
           <!-- classified plot count -->

@@ -1,4 +1,4 @@
-DROP VIEW view_browsenamedplace_bystate;
+
 DROP VIEW view_browseparty_all_count_combined;
 
 DROP VIEW view_browseparty_classcontrib_count;
@@ -11,13 +11,6 @@ DROP VIEW view_browseparty_obscontrib;
 DROP VIEW view_browseparty_classcontrib;
 DROP VIEW view_browseparty_projectcontrib;
 
-DROP VIEW view_project_countobs;
-
-DROP VIEW view_countcomms_perobs;
-DROP VIEW view_countcomms_perobs_pre;
-
-DROP VIEW view_countspecies_perobs;
-DROP VIEW view_countspecies_perobs_pre;
 
 DROP VIEW view_notemb_classContributor;
 DROP VIEW view_notemb_commInterpretation;
@@ -104,10 +97,7 @@ CREATE VIEW view_emb_embargo_complete AS
 ------------------
 -- END EMBARGO VIEWS 
 -------------------
- 
-DROP VIEW view_plantConcept_ordered;
- create view view_plantConcept_ordered AS select * from plantConcept order by upper(plantName);
- 
+
 DROP VIEW  view_reference_transl ;
  CREATE VIEW view_reference_transl AS 
    SELECT CASE WHEN shortName IS NULL 
@@ -195,46 +185,6 @@ CREATE VIEW view_browseparty_all_count_combined AS
   FROM ((view_browseparty_all_count LEFT JOIN view_browseparty_classcontrib_count ON view_browseparty_all_count.party_ID = view_browseparty_classcontrib_count.party_ID) LEFT JOIN view_browseparty_obscontrib_count ON view_browseparty_all_count.party_ID = view_browseparty_obscontrib_count.party_ID) LEFT JOIN view_browseparty_projectcontrib_count ON view_browseparty_all_count.party_ID = view_browseparty_projectcontrib_count.party_ID
   ORDER BY countallcontrib DESC;
 
-CREATE VIEW view_project_countobs AS 
-   SELECT project_id, 
-      projectname, 
-      projectdescription, 
-      accessioncode, 
-      startdate, 
-      stopdate , 
-      (d_obscount) as countobs 
-       FROM project ORDER BY countObs DESC ;
 
 
-
----------------------------------------------
----CREATE COMMON Species/Community Views ----
----------------------------------------------
-
-
-
--- get grouped list of observation and plantConcepts, then group them by plantconcept and order them.
-CREATE VIEW view_countspecies_perobs_pre AS 
-  SELECT plantConcept_ID, observation_ID FROM taxoninterpretation, view_notemb_taxonobservation as taxonobservation
-  WHERE taxonobservation.taxonobservation_ID=taxoninterpretation.taxonobservation_id
-  GROUP BY plantConcept_ID, observation_ID;
-  
-CREATE VIEW view_countspecies_perobs AS
-  SELECT plantConcept_ID, d_obscount as countObs FROM plantConcept
-  ORDER BY countObs DESC;
-  
-
-  
--- get grouped list of observation and plantConcepts, then group them by plantconcept and order them.
-CREATE VIEW view_countcomms_perobs_pre AS 
-  SELECT commConcept_ID, observation_ID FROM comminterpretation, view_notemb_commclass as commclass
-  WHERE commclass.commclass_ID=comminterpretation.commclass_id
-  GROUP BY commConcept_ID, observation_ID;
-  
-CREATE VIEW view_countcomms_perobs AS
-  SELECT commConcept_ID, d_obscount as countObs FROM commconcept
-  ORDER BY countObs DESC;
-  
-CREATE VIEW view_browsenamedplace_bystate AS 
-  SELECT * from namedplace WHERE placeSystem='region|state|province' AND d_obscount>0 ORDER BY d_obscount DESC;
   
