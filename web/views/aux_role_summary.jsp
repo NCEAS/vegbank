@@ -17,11 +17,11 @@
 
 <h2>VegBank Roles</h2>
 <p>You can view roles for: <!-- this gets the current URL and appends proper where and wparam parameters to get requested info -->
-<a href="<%= request.getRequestURI() %>">all tables</a> | 
-<a href="<%= request.getRequestURI() %>?where=where_aux_role_project&wparam=1">Project Contributor</a> | 
-<a href="<%= request.getRequestURI() %>?where=where_aux_role_observation&wparam=1">Observation Contributor</a> | 
-<a href="<%= request.getRequestURI() %>?where=where_aux_role_taxonint&wparam=1">Taxon Interpreters</a> | 
-<a href="<%= request.getRequestURI() %>?where=where_aux_role_classint&wparam=1">Community Interpreters</a> </p>
+<a href="@get_link@summary/aux_role/">all tables</a> | 
+<a href="@get_link@summary/aux_role/?where=where_aux_role_project&wparam=1">Project Contributor</a> | 
+<a href="@get_link@summary/aux_role/?where=where_aux_role_observation&wparam=1">Observation Contributor</a> | 
+<a href="@get_link@summary/aux_role/?where=where_aux_role_taxonint&wparam=1">Taxon Interpreters</a> | 
+<a href="@get_link@summary/aux_role/?where=where_aux_role_classint&wparam=1">Community Interpreters</a> </p>
 <vegbank:get id="MY_ROLES" select="aux_role" beanName="map" pager="true"/>
 <vegbank:pager />
         <p>
