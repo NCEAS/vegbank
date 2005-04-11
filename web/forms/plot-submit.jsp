@@ -29,7 +29,7 @@ function selectRadio(radioIndex) {
 <table  border="0"  >
 	<tr>
 		<td bgcolor="white">
-			<img align="center" border="0" height="100" src="@image_server@owlogoBev.jpg" alt = "Veg plots logo">
+			
 		</td>
 		<td align="left" valign="middle">
 			<font face="Helvetica,Arial,Verdana" size="6" color="23238E">

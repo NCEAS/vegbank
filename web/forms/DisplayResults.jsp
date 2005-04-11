@@ -124,15 +124,7 @@
 	      
 	      <!-- THE LINK TO THE LOCATION -->
 	      <!-- Removing link to map until is works -->
-		  <!--
-		  a href="http://68.171.138.181:8000/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" 
-		  property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report"><img align="center" 
-		  border="0" src="@image_server@small_globe.gif" alt="Location"></img></a>
-		  -->
-		  <!--
-	      <a href="/mapplotter/servlet/mapplotter?action=mapsinglecoordinate&amp;longitude=<bean:write name="row" 
-		  	property="longitude"/>&amp;latitude=<bean:write name="row" property="latitude"/>" title="location report">
-		  -->
+		  
 	      
 	      <!-- Checkbox for action selection -->
 	      <br/>

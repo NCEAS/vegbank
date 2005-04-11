@@ -9,8 +9,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-03-15 12:35:28 $'
-*  '$Revision: 1.18 $'
+*  '$Date: 2005-04-11 18:19:43 $'
+*  '$Revision: 1.19 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@
 		  <TR valign="middle"><TD valign="middle" colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
 	<TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">View Data</span></TD><td/></TR>
 	   
-	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@magnglas.png" /> </TD><TD>	       
+	<TR valign="middle"><TD align="center" valign="middle"> </TD><TD>	       
   <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
       <span class=" sizelarger">Search for <a href="@general_link@plots.html">Plots</a></span>
@@ -104,7 +104,7 @@
 
 	 <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
 		  	   <TR><TD colspan="1" bgcolor="#CCCCCC" align="center"><span class="greytext">My Preferences</span></TD><td/></TR>
-	 <TR valign="middle"><TD align="center"><img src="@images_link@users.png" /></TD><TD>
+	 <TR valign="middle"><TD align="center"></TD><TD>
 	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
     
@@ -132,7 +132,7 @@
 	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Info</span></TD><td/></TR>
 	   
 		  	  
-	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@info.png" /></TD><TD>
+	<TR valign="middle"><TD align="center" valign="middle"></TD><TD>
 
 <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
       <span class=" sizelarge">See <a href="@forms_link@vbsummary.jsp">an overview of VegBank Data</a> and Map 
@@ -181,7 +181,7 @@
 	  	<TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
 		 <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Add Data</span></TD><td/></TR>
  
-	  <TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@upload.png" /></TD><TD>
+	  <TR valign="middle"><TD align="center" valign="middle"></TD><TD>
 	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
       <span class=" sizelarge">Load <a href="@DisplayUploadPlotAction@">Plot Data</a></span>
@@ -226,7 +226,7 @@
 	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Tools</span></TD><td/></TR>
 	   
 		  	  
-	<TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@tools.png" /></TD><TD>
+	<TR valign="middle"><TD align="center" valign="middle"></TD><TD>
 
 <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
       <span class=" sizelarge">VegBank <a href="@searchplugins_link@install-search.html">Mozilla/Firefox Search Engine Toolbar</a> 
@@ -260,7 +260,7 @@
 	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Admin</span></TD><td/></TR>
 
     
-     <TR valign="middle"><TD align="center" valign="middle"><img src="@images_link@saw.png" /></TD><TD>
+     <TR valign="middle"><TD align="center" valign="middle"></TD><TD>
       
       <span class=" sizelarge">ADMINISTRATION</span>
 	  

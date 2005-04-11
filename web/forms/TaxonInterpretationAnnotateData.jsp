@@ -145,7 +145,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 		</tr>
 		<tr>
 		<td></td>
-		<td bgcolor="#AAAAAA"><img src="@image_server@pix_clear.gif"></td>
+		<td bgcolor="#AAAAAA"><img src="@image_server@transparent.gif"></td>
 		</tr>
 			
 		<tr class="sizetiny">
@@ -157,7 +157,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 		</tr>
 		<tr>
 		<td></td>
-		<td bgcolor="#AAAAAA"><img src="@image_server@pix_clear.gif"></td>
+		<td bgcolor="#AAAAAA"><img src="@image_server@transparent.gif"></td>
 		</tr>
 			
 			
@@ -171,7 +171,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 			
 		<tr>
 		<td></td>
-		<td bgcolor="#AAAAAA"><img src="@image_server@pix_clear.gif"></td>
+		<td bgcolor="#AAAAAA"><img src="@image_server@transparent.gif"></td>
 		</tr>
 			
 		<tr class="sizetiny">

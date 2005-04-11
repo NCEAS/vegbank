@@ -11,9 +11,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *  Authors: @author@
   *
-  *  '$Author: anderson $'
-  *  '$Date: 2005-03-16 00:04:18 $'
-  *  '$Revision: 1.10 $'
+  *  '$Author: mlee $'
+  *  '$Date: 2005-04-11 18:19:43 $'
+  *  '$Revision: 1.11 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@
 	  <table align="left" border="0" width="90%" cellspacing="0" cellpadding="0">
 	    <tr>
 	      <td colspan="2" bgcolor="white">
-		<img align="center" border="0" height="144" src="@image_server@owlogoBev.jpg" alt="[VegBank logo]" />
+		
 	      </td>
 	      <td align="left" valign="middle">
 		<table border="0" cellpadding="5">
