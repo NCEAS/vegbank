@@ -136,6 +136,27 @@
 </attribute>
 </tag>
 
+<tag>
+<name>changeParam</name>
+<tagclass>org.vegbank.ui.struts.taglib.VegbankChangeParamTag</tagclass>
+<bodycontent>empty</bodycontent>
+<attribute>
+	<name>paramName</name>
+	<required>true</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>paramValue</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>absolute</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+</tag>
+
 
 </taglib>
 
