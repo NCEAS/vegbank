@@ -12307,7 +12307,7 @@ conditions may change between resampling events.
       <attDefinition>Project name as defined by the principal investigator.</attDefinition>
       <attForms>
         <formShow name="Austere">1042</formShow>
-        <formShow name="Summary">1043</formShow>
+        <formShow name="Summary" addSort="true">1043</formShow>
         <formShow name="Detail">1044</formShow>
         <formShow name="csvvegbranch">335</formShow>
       </attForms>
@@ -12347,7 +12347,7 @@ conditions may change between resampling events.
       <attDefinition>Project start date.</attDefinition>
       <attForms>
         <formShow name="Austere">1048</formShow>
-        <formShow name="Summary">1049</formShow>
+        <formShow name="Summary"  addSort="true">1049</formShow>
         <formShow name="Detail">1050</formShow>
         <formShow name="csvvegbranch">337</formShow>
       </attForms>
@@ -12372,7 +12372,7 @@ conditions may change between resampling events.
       <attDefinition>Project stop date.</attDefinition>
       <attForms>
         <formShow name="Austere">1051</formShow>
-        <formShow name="Summary">1052</formShow>
+        <formShow name="Summary"  addSort="true">1052</formShow>
         <formShow name="Detail">1053</formShow>
         <formShow name="csvvegbranch">338</formShow>
       </attForms>
