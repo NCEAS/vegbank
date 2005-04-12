@@ -1,3 +1,196 @@
+/* FROM old basic.css:
+ * body
+ * --container
+ * -- --wrapper
+ * -- -- --maincontent
+ * -- -- --footer
+ * -- --postfooter
+ */
+/* hide this part from IE-mac \*/
+html,body {
+    height: 100%;
+}
+/* end hide */
+
+body {
+    padding: 0;
+	margin: 0;
+	font: 11px/1.6em "Lucida Grande", LucidaGrande, Lucida, Helvetica, Arial, sans-serif;
+    color: #333;
+    text-align: center;
+	background: #dfdfdf url(@images_link@bg_texture.jpg);
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    voice-family: "\"}\"";
+    voice-family: inherit;
+    height: auto;
+}
+html>body #container {
+    height: auto;
+}
+
+#wrapper {
+    width: 752px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+    padding: 0;
+}
+#body > #wrapper {
+    width: 750px;
+}
+
+#maincontent {
+    float: left;
+    min-height: 50%;
+    width: 752px;
+    padding: 0 0 15px 0;
+    margin: 0;
+    text-align: left;
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;
+}
+#wrapper > #maincontent {
+    width: 750px;
+}
+#footer {
+    /* only footer positioning goes here */
+    float: left;
+    clear: both;
+}
+#postfooter {
+
+    /* only postfooter positioning goes here */
+}
+
+
+
+
+/*-------------------------------------------------
+GENERAL CLASSES
+-------------------------------------------------*/
+.show{
+  visibility: visible;
+  display: visible;
+}
+
+.invisible{
+  visibility: hidden;
+}
+
+.hidden{
+  /* still takes up space as an element */
+  display: none;
+}
+
+.error{
+  display: inline;
+  color: black;
+  background-color: pink;
+}
+
+.left {
+  clear: left;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: 70%;
+  float: left;
+}
+
+.right {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  float: left;
+  width: 30%;
+}
+
+.full {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+  clear: both;
+}
+
+.red {
+  color: #900;
+}
+
+.blue {
+  color: #06c;
+  }
+
+.green {
+  color: #390;
+  }
+
+.highlight {
+  background-color: #ffc;
+}
+
+.new {
+  background-color: #cfc;
+}
+
+.sentence {
+  text-transform: none;
+}
+
+.horizmenu a {
+    float: left;
+    width: 8em;
+    text-decoration: none;
+    color: #999;
+    padding: 0.2em 0.6em;
+    border-right: 1px solid #cdcdcd;
+    background: #444;
+}
+.horizmenu a:hover {
+    background: #000;
+    color: #fff;
+}
+
+
+/*-------------------------------------------------
+CSS HACK EXAMPLES
+-------------------------------------------------*/
+
+/*/*/
+.someclass { /* invisible to NN4 */ }
+/* */
+/* <style type="text/css" media="all"> also hides from NN4 */
+
+
+/* --------------- */
+body>.someclass {
+    /* invisible to IE */
+}
+
+
+/* --------------- */
+.someclass {
+    width: 15em;
+    voice-family: "\"}\""; voice-family:inherit;
+    /* invisible to IE5 */
+    width: 10em;
+}
+
+
+/* --------------- */
+.noiemac {display: none}
+/* Hide from IE-Mac \*/
+.noiemac {display: block}
+/* End hide */
+
+
+
 
 /* body element, present in all pages */
 /*BODY			{ background-color: #FFFFFF;
@@ -19,71 +212,58 @@
 -----------------------------------------------------------------------------------------------------
 */
 
-
-/* typical links: */
-/*A:Link			{ color: #005680; text-decoration: underline }
-A:Visited		{ color: #003366; text-decoration: underline } */
-/* A:Visited		{ color: #6699CC; } */
-/*A:hover			{ color: #3399FF;} */
-
-/* links in green backgroun header they are currently white, no underline, and background highlights on hover: */
-  /*A.headlink         {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt}
-  A:Link.headlink    {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} /* same as prev */
- /* A:Visited.headlink {font-variant: small-caps ; text-decoration:none ; color:#FFFFFF ; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} /* same as prev */
-  /* A:hover.headlink   {font-variant: small-caps ; background-color: #FFFFCC ; color: #336633; font-family: Georgia, Times New Roman, Times, serif; font-size:8pt} */
+a {text-decoration: underline; padding: 1px; }
+a.external { padding-left: 9px; background: url(@images_link@external.gif) no-repeat; }
+a:link { color: #04d; }
+a:visited { color: #04d; }
+a:hover { color: #fff; background-color: #04d; text-decoration: none; }
 
 
-/* style removed by MTL 11/15/04:  A.blk { color:#000000 }
-A.brightyellow { color:#FFFF80 }  */
+a:Link.sortlink { color: #336600; text-decoration: underline ; }
+a:Visited.sortlink { color: #336600; text-decoration: underline ; }
+a:hover.sortlink { color: #fff; background-color: #336600; text-decoration: none; }
 
-
-/* yellow colored links... doubtful this exists anywhere */
-/* .headerLink,
-a.headerLink:link,
-a.headerLink:visited,
-a.headerLink:hover {
-	color: #FFFF80;
-	text-decoration: underline;
-} */
-
-
-
-
-/* actions user can take from this form: ie interpret plant.*/
-td.useraction  {font-weight: bold; color: #FF0000 ; background: #ffffcc }
-td.useraction A:Link {color: #FF0000}
-td.useraction A:Visited {color: #BB0000 }
-td.useraction A:hover {color: #FF9999 }
-
-
-/* the following were for the new homepage, but images that swapped on rollover were used instead :
-.featureLink {
-	font-family:  sans-serif;
-	color: #3399FF;
-	text-decoration: none;
-	font-size: 14pt;
-}
-.featureLink2 {
-	font-family:  sans-serif;
-	color: #3399FF;
-	text-decoration: none;
-	font-size: 14pt;
-}
-a.featureLink:visited,
-a.featureLink:link {
-	color: #336633;
-	text-decoration: none;
-}
-a.featureLink2:link {
-	color: #3399FF;
-	text-decoration: none;
-}
-a.featureLink:hover {
-	color: #003366;
-	text-decoration: none;
+a.image:link, a.image:visited, a.image:hover {
+  background: none;
+  padding: 0;
+  margin: 0;
 }
 
-*/
+a.admin:link, a.admin:visited {
+  color: #f00;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+a.admin:hover { color: #fff; background: #f00; }
+
+a.black:link, a.black:visited {
+  color: #000;
+}
+
+a.black:hover {
+  color: #fff;
+  background: #000;
+}
+
+a.white:link, a.white:visited {
+  color: #fff;
+}
+
+a.white:hover {
+  color: #000;
+  background: #fff;
+}
+
+a.anchor:link, a.anchor:visited, a.anchor:hover {
+  color: #fff;
+  background: #fff;
+  font-size: 0px;
+  text-decoration: none;
+  padding: 0;
+}
+
+
 
 
 /*
@@ -96,9 +276,20 @@ a.featureLink:hover {
 -----------------------------------------------------------------------------------------------------
 */
 
-/* header and footer in filters.properties : */
-/*.headerTable {background-color:#336633}
-.footerTable {background-color:#eed85b} */
+/* default table */
+table tr td{
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+/* actions user can take from this form: ie interpret plant.*/
+td.useraction  {font-weight: bold; color: #FF0000 ; background: #ffffcc }
+td.useraction A:Link {color: #FF0000}
+td.useraction A:Visited {color: #BB0000 }
+td.useraction A:hover {color: #FF9999 }
+
+
 .clearTable {background-color:#FFFFFF} /* same as BODY background */
 
 /*thin lines for your table gets you a grid of thin lines:
@@ -164,11 +355,24 @@ table.noborder {border-style: none; border-width:0px ; border-collapse: collapse
 table.noborder th {border-style: none; border-width:0px }
 table.noborder td {border-style: none; border-width:0px }
 
-TH	{
+TH, TH.normal	{
 	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
 	font-size: 10pt;
 	background-color : #e6e6cf;
 	}
+
+TD.sorted, TH.sorted {
+	background-color : #a9a95a;
+    }
+
+TD.sorteddesc, TH.sorteddesc {
+	background-color : #a9a95a;
+    }
+
+/* SEE ALSO .sortarrow style  and A:link.sortlink  */
+
+
+
 
 .major	{
 	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
@@ -196,37 +400,42 @@ td.numeric
 -----------------------------------------------------------------------------------------------------
 */
 
+h1 {
+  padding: 0;
+  border-bottom: 0;
+  margin: 0;
+  font-family: "Lucida Grande", arial, sans-serif;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+h2 {
+  margin: 20px 0 5px 0px;
+  color: #000;
+  font-family: "Lucida Grande", arial, sans-serif;
+  font-size: 14px;
+  padding: 0;
+}
+
+h3 {
+  margin: 20px 0 0 0;
+  color: #666;
+  font-family: "Lucida Grande", arial, sans-serif;
+  font-size: 14px;
+  padding: 0;
+}
+
+h4 {
+  margin: 20px 0 0 0;
+  color: #666;
+  font-family: "Lucida Grande", arial, sans-serif;
+  font-size: 13px;
+  padding: 0;
+}
 
 
-/*H1, H2 {
-							font-family: Georgia, Times New Roman, Times, serif;
-							color: #333333;
-							text-align: center;
-						}
 
-H3, H4, H5, H6	{
-							font-family: Georgia, Times New Roman, Times, serif;
-							color: #333333;
-							text-align: left;
-						} */
-/* allow to manually style left and right */
-/*H1.left, H2.left, H3.left, H4.left, H5.left, H6.left { 					font-family: Georgia, Times New Roman, Times, serif;
-							color: #333333;
-                        	 text-align: left; }
-
-H1.center, H2.center, H3.center, H4.center, H5.center, H6.center { 					font-family: Georgia, Times New Roman, Times, serif;
-							color: #333333;
-                        	 text-align: center; }
-*/
-/* text that is equivalent to headers in color and font.  used in main menu and anywhere where headers can't be block level.
-should be combined with a size style as space delimited, ie class="headequiv sizelarge"
-*/
-/*.headequiv	{
-							font-family: Georgia, Times New Roman, Times, serif;
-							color: #333333;
-							font-weight: bold;
-						}
-*/
 
 /*
 -----------------------------------------------------------------------------------------------------
@@ -240,15 +449,36 @@ should be combined with a size style as space delimited, ie class="headequiv siz
 
 
 
-/*P, .normal, TD, UL, OL, DL, LI	{
-					font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-					font-size: 10pt;
-					color: #000000
-				}
-*/
+p {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+small {
+  font-size: 10px;
+  line-height: 13px;
+}
+
+
+ol.noindent, ul.noindent, li.noindent {
+  margin: 0;
+  padding: 0;
+}
+
+ul.noindent li {
+  list-style-type: none;
+}
+
+
+li.small {
+  font-size: 10px;
+}
+
+
 ul.compact   {
 	             list-style-type:none;  padding-left: 10px; margin-left: 10px;
              }
+
 
 
 .psmall	        {
@@ -269,18 +499,9 @@ ul.compact   {
 .sizelarger { font-size: 18pt }
 .sizehuge   { font-size: 24pt }
 
-/*
-THESE are all just normal styles.  The sizes have been changed to size[thesize]
-.vegbank		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; }
-.vegbank_tiny	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 8pt}
-.vegbank_small	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 10pt}
-.vegbank_normal	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 12pt}
-.vegbank_large	{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif; color : #531100; font-size: 14pt}
-.sansserif		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif ; color : #531100}
-*/
+.sortarrow { font-size: 14pt }
 
 
-/*   SIZES OF TEXT */
 
 /* the following 3 are used in views */
 .datalabel { font-size: 10pt ; font-weight: bold;} /* data label in autogenerated and other views */
@@ -364,6 +585,34 @@ THESE are all just normal styles.  The sizes have been changed to size[thesize]
 		font-size: 11pt;
 		color: #000000
 	}
+
+
+strike {
+  color: #999;
+}
+
+code, pre       {
+  font-family: "Bitstream Vera Sans Mono", monaco, "Courier New", courier, monospace;
+  background: inherit;
+  color: #333;
+  font-size: 80%
+}
+
+/*  Work around IE/Win code size bug - courtesy Jesper, waffle.wootest.net  */
+* html code     {
+  font-size : 105%;
+}
+
+
+
+img {
+  border: none;
+}
+
+
+form {
+  margin: 0; padding: 0;
+}
 
 
 /* VegBranch field/table names styles */
