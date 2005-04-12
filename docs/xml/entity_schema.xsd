@@ -221,6 +221,7 @@
         <xs:extension base="xs:decimal">
           <xs:attribute name="name" type="xs:string"/>
           <xs:attribute name="useClass" type="xs:string"/>
+          <xs:attribute name="addSort" type="xs:boolean"/>
           <xs:attribute name="suffix" type="xs:string"/>
           <xs:attribute name="prefix" type="xs:string"/>
         </xs:extension>
