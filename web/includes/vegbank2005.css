@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.7 2005-03-22 00:41:11 anderson Exp $
+ * $Id: vegbank2005.css,v 1.8 2005-04-12 00:00:46 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -32,23 +32,6 @@ MAINCONTENT
     text-align: left;
     overflow: visible;
 }
-#centercontent fieldset ul li {
-  margin: 0;
-  padding-left: 0;
-  list-style-type: none;
-}
-
-#centercontent ol, #centercontent ul, #centercontent li {
-  margin: 0;
-  padding-left: 8px;
-}
-
-#centercontent ul li {
-  list-style-type: disc;
-  list-style-position: outside;
-}
-
-
 
 #maincontent > #centercontent {
     padding: 0 18px 0 18px;
@@ -63,26 +46,35 @@ body>#wrapper {
     /* IE-free zone */
 }
 
-#centercontent ul {
-/*
-    padding-left: 27px;
-*/
+#content-3col-a ul,
+#content-3col-b ul,
+#content-3col-c ul {
+  margin: 0;
+  padding-left: 22px;
 }
-#maincontent > #centercontent ul {
-    padding-left: 22px;
+
+#content-3col-a ul li,
+#content-3col-b ul li,
+#content-3col-c ul li {
+  margin: 0;
+  padding-left: 0;
+  list-style-type: none;
 }
 
 #content-3col-a {
+    font-size: 12px;
     width: 220px;
     clear: left;
     float: left;
 }
 #content-3col-b {
+    font-size: 12px;
     width: 220px;
     float: left;
     margin-left: 27px;
 }
 #content-3col-c {
+    font-size: 12px;
     width: 220px;
     clear: right;
     float: right;
@@ -98,12 +90,6 @@ body>#wrapper {
     padding: 5px 2px 5px 5px;
     width: 210px;
     display: block;
-}
-
-#content-3col-a ul li,
-#content-3col-b ul li,
-#content-3col-c ul li {
-    font-size: 12px;
 }
 
 #content-3col-a legend,
