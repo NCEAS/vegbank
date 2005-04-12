@@ -1,4 +1,9 @@
  <!-- include: -->
+  <% // you must pass thisfield and fieldlabel as defined beans to this !! %>
+          <logic:empty name="fieldlabel">
+            <!-- if no label passed, use name -->
+            <bean:define id="fieldlabel" name="thisfield" />
+          </logic:empty>
           <!-- default sort asc, this field -->
 		<bean:define id="offer" >orderby_<bean:write name="thisfield" /></bean:define>
 		  <!-- default, not sorted by this col -->
