@@ -26,6 +26,11 @@
         <br/> 2) <a href="/vegbank/LoadPlotQuery.do"> a more complex query</a> with many options for searching, allowing multiple plants, places, and communities to be specified.  It also allows you to search by other fields, like elevation.</atxt>
     </question>
     <question>
+      <qname>howdownload</qname>
+      <qtxt>How do I download VegBank data to my computer?</qtxt>
+      <atxt>Currently, you must use the plot query to start the download process.  You can access the plot query using the links at the top of any page in VegBank.  Once you have queried plots, you can select which plots you want to download, then download the data in several different file formats.  We are working on improving this functionality by allowing you to build <b>Datasets</b> while viewing any plot in VegBank.  A Dataset is a group of plots you are interested in.  Then, you will be able to download an entire dataset.  We also will improve the speed of downloads, which are now somewhat slow.  Try downloading fewer plots (around 150) at a time if you have problems with downloading.  We apologize for the inconvenience.</atxt>
+    </question>
+    <question>
       <qname>whyregister</qname>
       <qtxt>Why do I need to register?  Why do I need to log in?</qtxt>
       <atxt>You don't need to register to use most of VegBank's features.  Registration is only required when you want to use features that apply to just one user.  For example, if you want to compile a dataset and have VegBank remember it when you come back, you'll need to register (this feature is coming soon).  If you want to add data to the archive, or to annotate data, you'll also need to register and be certified.</atxt>
