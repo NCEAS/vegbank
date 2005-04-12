@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:vegbank="http://vegbank.org" xmlns:logic="http://vegbank.org" xmlns:bean="http://vegbank.org" xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:vegbank="http://vegbank.org" xmlns:logic="http://vegbank.org" xmlns:bean="http://vegbank.org" xmlns:redirect="http://xml.apache.org/xalan/redirect" xmlns:jsp="http://vegbank.org" extension-element-prefixes="redirect">
   <!--  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/> -->
   <!-- comment out extenstion-elemtn ... though this comment to run locally without xalan -->
   <xsl:param name="pathToWrite"/>
@@ -41,13 +41,29 @@
             <redirect:write file="{$pathToWrite}{$currEnt}_{$view}_head.jsp">
               <xsl:for-each select="attribute/attForms/formShow[translate(@name,$alphahigh,$alphalow)=$view]">
                 <xsl:sort select="node()" data-type="number"/>
-                <th>
+                <!-- add sort ? -->
+                <xsl:choose>
+                  <xsl:when test="@addSort='true'">
+                    <!-- when sorting, just pass info to include -->
+                        <xsl:element name="bean:define">
+                          <xsl:attribute name="id">thisfield</xsl:attribute>
+                          <xsl:attribute name="value"><xsl:value-of select="translate(../../attName,$alphahigh,$alphalow)" /><xsl:if test="string-length(../../attFKTranslationSQL)&gt;0">_transl</xsl:if></xsl:attribute>
+                        </xsl:element>
+                      
+                        <bean:define id="fieldlabel"><xsl:value-of  select="../../attLabel"/></bean:define>
+                      @subst_lt@%@ include file="/includes/orderbythisfield.jsp"  %@subst_gt@
+                  </xsl:when>
+                  <xsl:otherwise><!-- no sort -->
+                    <th>
                   <xsl:call-template name="labelField">
                     <xsl:with-param name="currEnt" select="$currEnt"/>
                     <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                     <xsl:with-param name="currLbl" select="../../attLabel"/>
                   </xsl:call-template>
-                </th>
+                  </th>
+                  </xsl:otherwise>
+                </xsl:choose>
+                
               </xsl:for-each>
             </redirect:write>
             <xsl:comment>END WRITE FILE: <xsl:value-of select="$currEnt"/>_<xsl:value-of select="$view"/>_head.jsp</xsl:comment>
