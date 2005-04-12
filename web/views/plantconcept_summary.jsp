@@ -19,7 +19,7 @@
 <table width="100%" cellpadding="2" class="leftrightborders" ><!--each field, only write when HAS contents-->
 <!-- header -->
 <tr>
-  <th>More</th><th width="40%">Name</th><th width="20%">Reference</th><th>Description</th><th>Accession Code</th>
+  <th>More</th><th width="40%">Name</th><th width="20%">Reference</th><th>Plots</th><th>Description</th><th>Accession Code</th>
 </tr>
    <%
 		       //**************************************************************************************
@@ -33,6 +33,12 @@
 <td><a href='@get_link@detail/plantconcept/<bean:write name="onerow" property="plantconcept_id"/>'>details</a></td>
 <td><bean:write name="onerow" property="plantname_id_transl"/>&nbsp;</td>
 <td><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
+<td class='numeric'>
+<logic:notEqual name="onerow" property="d_obscount" value="0">
+<a href="@get_link@summary/observation/<bean:write name='onerow' property='plantconcept_id' />?where=where_plantconcept_observation_complex"><bean:write name="onerow" property="d_obscount" /></a>
+</logic:notEqual>
+<logic:equal name="onerow" property="d_obscount" value="0">0</logic:equal>
+</td>
 <td class="largefield"><bean:write name="onerow" property="plantdescription"/>&nbsp;</td>
 <td class="largefield"><bean:write name="onerow" property="accessioncode"/>&nbsp;</td>
 </td>
