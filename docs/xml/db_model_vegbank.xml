@@ -4528,6 +4528,7 @@ change through time.</entitySummary>
       <attDefinition>Foreign Key into the reference table, linking the defining reference to a cover method.</attDefinition>
       <attForms>
         <formShow name="Detail">528</formShow>
+        <formShow name="Summary" addSort="true">528</formShow>
         <formShow name="csvvegbranch">155</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -4546,7 +4547,7 @@ change through time.</entitySummary>
       <attNotes>n/a</attNotes>
       <attDefinition>Name of the coverclass method (e.g., Braun-Blanquet, Barkman, Domin, Daubenmire, Carolina Vegetation Survey, etc.).</attDefinition>
       <attForms>
-        <formShow name="Summary">527</formShow>
+        <formShow name="Summary" addSort="true">527</formShow>
         <formShow name="Detail">527</formShow>
         <formShow name="csvvegbranch">156</formShow>
       </attForms>
@@ -12347,7 +12348,7 @@ conditions may change between resampling events.
       <attDefinition>Project start date.</attDefinition>
       <attForms>
         <formShow name="Austere">1048</formShow>
-        <formShow name="Summary"  addSort="true">1049</formShow>
+        <formShow name="Summary" addSort="true">1049</formShow>
         <formShow name="Detail">1050</formShow>
         <formShow name="csvvegbranch">337</formShow>
       </attForms>
@@ -12372,7 +12373,7 @@ conditions may change between resampling events.
       <attDefinition>Project stop date.</attDefinition>
       <attForms>
         <formShow name="Austere">1051</formShow>
-        <formShow name="Summary"  addSort="true">1052</formShow>
+        <formShow name="Summary" addSort="true">1052</formShow>
         <formShow name="Detail">1053</formShow>
         <formShow name="csvvegbranch">338</formShow>
       </attForms>

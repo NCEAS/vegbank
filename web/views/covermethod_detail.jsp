@@ -16,7 +16,13 @@
 <h2>View VegBank Cover Methods</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
-        <vegbank:get id="covermethod" select="covermethod" beanName="map" pager="true"  xwhereEnable="true"/>
+          <logic:notPresent parameter="orderBy">
+                    <!-- set default sorting -->
+                    <bean:define id="orderBy" value="xorderby_covertype" />
+          </logic:notPresent>
+        
+        <vegbank:get id="covermethod" select="covermethod" beanName="map" pager="true"  
+          allowOrderBy="true" xwhereEnable="true"/>
 <!--Where statement removed from preceding: -->
 
 <vegbank:pager />
@@ -34,29 +40,25 @@
 -->
 
 
-<vegbank:get id="observation" select="observation_count" beanName="map" pager="false" perPage="-1" 
-  where="where_covermethod_pk" wparam="covermethod_pk" />
-
 <tr class='@nextcolorclass@'><td class="datalabel">Count of Observations using this method</td>
 <td>
-<logic:empty name="observation-BEAN">
--none-
-</logic:empty>
-<logic:notEmpty name="observation-BEAN">
-<bean:write name="observation-BEAN" property="count_observations" />
-<logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-<a href="@get_link@summary/observation/<bean:write name='covermethod_pk' />?where=where_covermethod_pk">View observations</a>
-</logic:notEqual>
-</logic:notEmpty>
-
+ <logic:empty name="onerowofcovermethod" property="d_obscount">0</logic:empty>
+                  <logic:notEmpty name="onerowofcovermethod" property="d_obscount">
+                     <logic:equal name="onerowofcovermethod" property="d_obscount" value="0">0</logic:equal>
+                     <logic:notEqual name="onerowofcovermethod" property="d_obscount" value="0">
+                      <a href="@get_link@summary/observation/<bean:write name='onerowofcovermethod' property='covermethod_id' />?where=where_covermethod_pk"><bean:write name="onerowofcovermethod" property="d_obscount" /></a>
+                     </logic:notEqual>
+                  </logic:notEmpty>
+</td>
+</tr>
 <!--Insert a nested get statement here:
    example:   
 
 <vegbankget id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_covermethod_pk" wparam="covermethod_pk" />-->
+<TR><TD colspan="2" class="datalabel">Cover Indexes:</TD></TR>
 <TR><TD COLSPAN="2">
 <vegbank:get id="coverindex" select="coverindex" beanName="map" pager="false" where="where_covermethod_pk" wparam="covermethod_pk" perPage="-1" />
-<table class="leftrightborders" cellpadding="2">
-<tr><th colspan="8">Cover Indexes:</th></tr>
+<table class="leftrightborders sortable" cellpadding="2" id="coverclassesfor_<bean:write name='covermethod_pk' />">
 <logic:empty name="coverindex-BEANLIST">
 <tr><td class="@nextcolorclass@">  Sorry, no cover indexes found.</td></tr>
 </logic:empty>
