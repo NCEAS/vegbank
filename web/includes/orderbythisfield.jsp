@@ -43,7 +43,7 @@
 		<%  }  %>
 
                                                                               
-        <th class="<bean:write name='thclass' />"><a class="sortlink" href="<vegbank:changeParam paramName='orderBy' paramValue='<%= offer %>' absolute='true' />" ><bean:write name="fieldlabel" filter="false" /></a><span class="sortarrow"><bean:write name="showsort" filter="false"/></span>
+        <th class="<bean:write name='thclass' />"><a title="Click to sort by this field" class="sortlink" href="<vegbank:changeParam paramName='orderBy' paramValue='<%= offer %>' absolute='true' />" ><bean:write name="fieldlabel" filter="false" /></a><span class="sortarrow"><bean:write name="showsort" filter="false"/></span>
 				 </th>
 		
         <!-- end of include -->	
