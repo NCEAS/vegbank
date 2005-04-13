@@ -42,8 +42,25 @@
 				  <bean:define id="thclass" value="sorteddesc" />
 		<%  }  %>
 
-                                                                              
-        <th class="<bean:write name='thclass' />"><a title="Click to sort by this field" class="sortlink" href="<vegbank:changeParam paramName='orderBy' paramValue='<%= offer %>' absolute='true' />" ><bean:write name="fieldlabel" filter="false" /></a><span class="sortarrow"><bean:write name="showsort" filter="false"/></span>
-				 </th>
+        <logic:notPresent name="thatts">
+          <!-- thatts not passed, assign to empty string -->
+          <bean:define id="thatts" value="" />
+        </logic:notPresent>
+        <logic:empty name="th_or_td">
+          <bean:define id="th_or_td" value="th" />
+        </logic:empty>
+        
+        <<bean:write name='th_or_td'/> <bean:write name='thatts'/>  class="<bean:write name='thclass' />"><a title="Click to sort by this field" class="sortlink" href="<vegbank:changeParam paramName='orderBy' paramValue='<%= offer %>' absolute='true' />" ><bean:write name="fieldlabel" filter="false" /></a><span class="sortarrow"><bean:write name="showsort" filter="false"/></span>
+                 </<bean:write name='th_or_td'/>>
 		
+        <!-- set to empty string all fields (so they don't get used again!) -->
+        <bean:define value="" id="thatts" />
+        <bean:define value="" id="thclass" />
+        <bean:define value="" id="thisfield" />
+        <bean:define value="" id="fieldlabel" />
+        <bean:define value="" id="offer" />
+        <bean:define value="" id="showsort" />
+        <bean:define value="" id="th_or_td" />
+        
+        
         <!-- end of include -->	
