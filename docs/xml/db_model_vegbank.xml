@@ -3722,7 +3722,7 @@ change through time.</entitySummary>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
-      <attFKTranslationSQL>(SELECT rolecode from aux_role where aux_role.role_id=classcontributor.role_id)</attFKTranslationSQL>
+      <attFKTranslationSQL addLink="false">(SELECT rolecode from aux_role where aux_role.role_id=classcontributor.role_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the aux_Role table</attNotes>
@@ -8715,7 +8715,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
-      <attFKTranslationSQL>(select roleCode from aux_role where aux_role.role_id=observationContributor.role_id)</attFKTranslationSQL>
+      <attFKTranslationSQL addLink="false">(select roleCode from aux_role where aux_role.role_id=observationContributor.role_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>This is the foreign key into the aux_Role table</attNotes>
@@ -12492,7 +12492,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
-      <attFKTranslationSQL>(select roleCode from aux_role where aux_role.role_id=projectcontributor.role_id)</attFKTranslationSQL>
+      <attFKTranslationSQL addLink="false">(select roleCode from aux_role where aux_role.role_id=projectcontributor.role_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into aux_Role table</attNotes>
@@ -14529,7 +14529,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>aux_Role.ROLE_ID</attReferences>
-      <attFKTranslationSQL>(SELECT rolecode from aux_role where aux_role.role_id=taxoninterpretation.role_id)</attFKTranslationSQL>
+      <attFKTranslationSQL addLink="false">(SELECT rolecode from aux_role where aux_role.role_id=taxoninterpretation.role_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into aux_Role table</attNotes>
