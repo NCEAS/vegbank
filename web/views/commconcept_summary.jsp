@@ -16,8 +16,14 @@
   @possibly_center@ 
 
 <h2>View Community Concepts - Summary</h2>
+    
+  <logic:notPresent parameter="orderBy">
+         <!-- set default sorting -->
+         <bean:define id="orderBy" value="xorderby_dobscount_desc" />
+  </logic:notPresent>
+    
   <vegbank:get id="concept" select="commconcept" beanName="map" pager="true" xwhereEnable="true" 
-     allowOrderBy="true" orderBy="xorderby_dobscount_desc" />
+     allowOrderBy="true" />
 
 <vegbank:pager />
 <logic:empty name="concept-BEANLIST">
@@ -27,7 +33,23 @@
 <table width="100%" cellpadding="2" class="leftrightborders" ><!--each field, only write when HAS contents-->
 <!-- header -->
 <tr>
-  <th width="30%">Name</th><th width="7%">Reference</th><th width="5%">Plots</th><th width="58%">Description</th>
+  
+     <bean:define id="thisfield" value="commname" />
+      <bean:define id="fieldlabel">Name</bean:define>
+      <bean:define id="thatts">width="30%"</bean:define>
+    <%@ include file="../includes/orderbythisfield.jsp" %>
+  
+     <bean:define id="thisfield" value="reference_id_transl" />
+      <bean:define id="fieldlabel">Reference</bean:define>
+      <bean:define id="thatts">width="7%"</bean:define>
+    <%@ include file="../includes/orderbythisfield.jsp" %>
+  
+     <bean:define id="thisfield" value="dobscount" />
+      <bean:define id="fieldlabel">Plots</bean:define>
+      <bean:define id="thatts">width="5%"</bean:define>
+    <%@ include file="../includes/orderbythisfield.jsp" %>
+  
+  <th width="58%">Description</th>
 </tr>
    <%
 		       //**************************************************************************************
