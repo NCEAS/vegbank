@@ -24,7 +24,8 @@
 <logic:equal parameter="where" value="where_observation_nsuid">
   <p>Welcome to VegBank.  You've clicked a link from <a href="http://natureserve.org/explorer">NatureServe Explorer</a>
   requesting to see the plots in VegBank that our users have linked to a particular community, which is: <br/>
-    <vegbank:get id="commconcept" select="commconcept" where="where_commconcept_nsuid" beanName="map" pager="false" xwhereEnable="false" perPage="-1" />
+    <vegbank:get id="commconcept" select="commconcept" where="where_commconcept_nsuid" 
+     beanName="map" pager="false" xwhereEnable="false" perPage="-1"/>
     <logic:notEmpty name="commconcept-BEANLIST">
       <logic:iterate id="onerowofcommconcept" name="commconcept-BEANLIST">
         <a href='@get_link@std/commconcept/<bean:write name="onerowofcommconcept" property="commconcept_id" />'><bean:write name="onerowofcommconcept" property="commname" /></a>
@@ -39,7 +40,8 @@
 </logic:equal>
 
 <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
-    whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true"/>
+    whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true" 
+    allowOrderBy="true"/>
 
 <vegbank:pager />
 
@@ -49,8 +51,30 @@
 <logic:notEmpty name="plotobs-BEANLIST"><!-- set up table -->
 
 <TABLE width="100%" class="leftrightborders" cellpadding="2">
-<tr><th>More</th><th>Location</th><th>Author Code</th><th>Size</th><th>Elev</th>
-<th>Year</th><th>Community</th><th colspan="3">Some Plants</th></tr>
+<tr><th>More</th>
+
+<bean:define id="thisfield" value="stateprovince" />
+<bean:define id="fieldlabel">Location</bean:define>
+<%@ include file="../includes/orderbythisfield.jsp" %>
+
+<bean:define id="thisfield" value="authorobscode" />
+<bean:define id="fieldlabel">Author Code</bean:define>
+<%@ include file="../includes/orderbythisfield.jsp" %>
+
+<bean:define id="thisfield" value="area" />
+<bean:define id="fieldlabel">Size</bean:define>
+<%@ include file="../includes/orderbythisfield.jsp" %>
+
+<bean:define id="thisfield" value="elevation" />
+<bean:define id="fieldlabel">Elev</bean:define>
+<%@ include file="../includes/orderbythisfield.jsp" %>
+
+<bean:define id="thisfield" value="obsstartdate" />
+<bean:define id="fieldlabel">Year</bean:define>
+<%@ include file="../includes/orderbythisfield.jsp" %>
+
+
+<th>Community</th><th colspan="3">Some Plants</th></tr>
 <logic:iterate id="onerowofobservation" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
 <bean:define id="onerowofplot" name="onerowofobservation" />
 <bean:define id="obsId" name="onerowofplot" property="observation_id"/>
