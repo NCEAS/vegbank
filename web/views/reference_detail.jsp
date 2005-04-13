@@ -9,7 +9,7 @@
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
         
-<vegbank:get id="reference" select="reference" beanName="map" pager="true"/>
+<vegbank:get id="reference" select="reference" beanName="map" pager="true" xwhereEnable="true" allowOrderBy="true"/>
 <!--Where statement removed from preceding: -->
 <vegbank:pager/>
 <logic:empty name="reference-BEANLIST">

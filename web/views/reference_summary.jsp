@@ -10,7 +10,7 @@
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
         
-<vegbank:get id="reference" select="reference" beanName="map" pager="true"/>
+<vegbank:get id="reference" select="reference" beanName="map" pager="true" xwhereEnable="true" allowOrderBy="true"/>
 <!--Where statement removed from preceding: -->
 <vegbank:pager/>
 <logic:empty name="reference-BEANLIST">
@@ -31,10 +31,7 @@
                        <%@ include file="autogen/reference_summary_data.jsp" %>
                        </tr>
 <bean:define property="reference_id" name="onerowofreference" id="reference_pk"/>
-<!--Insert a nested get statement here:
-   example:   
 
-<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_reference_pk" wparam="reference_pk" />-->
 </logic:iterate>
 </table>
 </logic:notEmpty>
@@ -43,10 +40,7 @@
 
 
           @webpage_footer_html@
-<!-- ____________________________@END:  reference _______________________________________ 
 
-
--->
   
   
   

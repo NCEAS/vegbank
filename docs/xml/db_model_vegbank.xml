@@ -2552,7 +2552,7 @@ change through time.</entitySummary>
       <attDefinition>The 'shortName' field provides a concise or abbreviated name that describes the resource that is being documented.</attDefinition>
       <attForms>
         <formShow name="Austere">298</formShow>
-        <formShow name="Summary">299</formShow>
+        <formShow name="Summary" addSort="true">299</formShow>
         <formShow name="Detail">300</formShow>
         <formShow name="csvvegbranch">85</formShow>
       </attForms>
@@ -2674,7 +2674,7 @@ change through time.</entitySummary>
       <attDefinition>The formal title given to the work by its author or publisher.  The 'title' field provides a description of the resource that is being documented that is long enough to differentiate it from other similar resources.</attDefinition>
       <attForms>
         <formShow name="Austere">304</formShow>
-        <formShow name="Summary">305</formShow>
+        <formShow name="Summary" addSort="true">305</formShow>
         <formShow name="Detail">306</formShow>
         <formShow name="csvvegbranch">88</formShow>
       </attForms>
@@ -13975,7 +13975,6 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Name of the stratum method (e.g., Braun-Blanquet, TNC-ABI, NC Vegetation Survey #1, NC Vegetation Survey #2, etc.)</attDefinition>
       <attForms>
-
         <formShow name="Summary" addSort="true">1225</formShow>
         <formShow name="Detail">1225</formShow>
         <formShow name="csvvegbranch">385</formShow>
