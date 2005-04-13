@@ -26,7 +26,23 @@
 <table width="100%" cellpadding="2" class="leftrightborders" ><!--each field, only write when HAS contents-->
 <!-- header -->
 <tr>
-  <th>More</th><th width="40%">Name</th><th width="20%">Reference</th><th>Plots</th><th>Description</th><th>Accession Code</th>
+  <th>More</th>
+  
+  <bean:define id="thisfield" value="plantname" />
+  <bean:define id="fieldlabel">Name</bean:define>
+  <bean:define id="thatts">width="40%"</bean:define>
+  <%@ include file="../includes/orderbythisfield.jsp" %>
+  
+  <bean:define id="thisfield" value="reference_id_transl" />
+    <bean:define id="fieldlabel">Reference</bean:define>
+    <bean:define id="thatts">width="20%"</bean:define>
+    <%@ include file="../includes/orderbythisfield.jsp" %>
+  
+  <bean:define id="thisfield" value="dobscount" />
+      <bean:define id="fieldlabel">Plots</bean:define>
+      <%@ include file="../includes/orderbythisfield.jsp" %>
+  
+  <th>Description</th><th>Accession Code</th>
 </tr>
    <%
 		       //**************************************************************************************
