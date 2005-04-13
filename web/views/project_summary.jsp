@@ -13,7 +13,7 @@
 
      <logic:notPresent parameter="orderBy">
           <!-- set default sorting by project name? -->
-          <bean:define id="orderBy" value="orderby_projectname" />
+          <bean:define id="orderBy" value="xorderby_projectname" />
      </logic:notPresent>
      <vegbank:get id="project" select="project" beanName="map" pager="true"
      xwhereEnable="true" allowOrderBy="true"/>

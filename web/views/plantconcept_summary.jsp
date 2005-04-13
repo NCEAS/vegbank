@@ -12,7 +12,7 @@
 
        <logic:notPresent parameter="orderBy">
             <!-- set default sorting -->
-            <bean:define id="orderBy" value="orderby_plantname" />
+            <bean:define id="orderBy" value="xorderby_plantname" />
        </logic:notPresent>
        
   <vegbank:get id="concept" select="plantconcept" beanName="map" pager="true" xwhereEnable="true"

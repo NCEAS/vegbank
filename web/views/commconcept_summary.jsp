@@ -17,7 +17,7 @@
 
 <h2>View Community Concepts - Summary</h2>
   <vegbank:get id="concept" select="commconcept" beanName="map" pager="true" xwhereEnable="true" 
-     allowOrderBy="true" orderBy="orderby_dobscount_desc" />
+     allowOrderBy="true" orderBy="xorderby_dobscount_desc" />
 
 <vegbank:pager />
 <logic:empty name="concept-BEANLIST">

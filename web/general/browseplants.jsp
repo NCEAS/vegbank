@@ -27,7 +27,7 @@
     <select size="10" name="wparam">
       <vegbank:get id="plantconcept" select="plantconcept" 
         pager="false" perPage="-1" beanName="map" where="where_plantconcept_isfamily" 
-        allowOrderBy="true" orderBy="orderby_plantname" wparam="1" />
+        allowOrderBy="true" orderBy="xorderby_plantname" wparam="1" />
         <logic:iterate id="onerowofplantconcept" name="plantconcept-BEANLIST">
           <option value='<bean:write name="onerowofplantconcept" property="plantconcept_id" />'><bean:write name="onerowofplantconcept" property="plantname_id_transl" /></option>        
         

@@ -9,7 +9,7 @@
 
 <h2>View Plant Concepts</h2>
   <vegbank:get id="concept" select="plantconcept" beanName="map" pager="true" xwhereEnable="true"
-   allowOrderBy="true" orderBy="orderby_plantname"
+   allowOrderBy="true" orderBy="xorderby_plantname"
     />
 
 

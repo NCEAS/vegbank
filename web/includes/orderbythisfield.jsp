@@ -23,20 +23,20 @@
             <bean:define id="fieldlabel"><bean:write name="thisfield" /></bean:define>
           </logic:empty>
           <!-- default sort asc, this field -->
-		<bean:define id="offer" >orderby_<bean:write name="thisfield" /></bean:define>
+		<bean:define id="offer" >xorderby_<bean:write name="thisfield" /></bean:define>
 		  <!-- default, not sorted by this col -->
 		<bean:define id="showsort" value="" />
 		<bean:define id="thclass" value="normal" />
 		
 		<bean:define id="dupl_orderby"><bean:write name="orderBy" /></bean:define>
-		<% if ( dupl_orderby.equals("orderby_" + thisfield) ) { %>
+		<% if ( dupl_orderby.equals("xorderby_" + thisfield) ) { %>
 	        	  <!-- is sorted asc -->
 		  <bean:define id="showsort" value="&uarr;" />
-		  <bean:define id="offer" >orderby_<bean:write name="thisfield" />_desc</bean:define>
+		  <bean:define id="offer" >xorderby_<bean:write name="thisfield" />_desc</bean:define>
 		  <bean:define id="thclass" value="sorted" />
 		<%  }  %>
 		
-		<% if ( dupl_orderby.equals("orderby_" + thisfield + "_desc") ) { %>
+		<% if ( dupl_orderby.equals("xorderby_" + thisfield + "_desc") ) { %>
 			        	  <!-- is sorted desc -->
 				  <bean:define id="showsort" value="&darr;" />
 				  <bean:define id="thclass" value="sorteddesc" />
