@@ -46,16 +46,13 @@
            <!-- classified plot count -->
            <tr  class='@nextcolorclass@'><td class="datalabel">Classified Plots</td>
            <td>
-		  		    <vegbank:get id="classobservation" select="observation_count" beanName="map" pager="false" perPage="-1" 
-		  		     where="where_project_pk_and_observationclassified" wparam="project_pk" />
-		  		   <logic:empty name="classobservation-BEAN">0</logic:empty>
-		  		   <logic:notEmpty name="classobservation-BEAN">
-		  		   <logic:notEqual name="classobservation-BEAN" property="count_observations" value="0">
-		  		   <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk_and_observationclassified"><bean:write name="classobservation-BEAN" property="count_observations" /></a>
-		  		   </logic:notEqual>
-                   <!-- write 0 with no link -->
-                   <logic:equal name="classobservation-BEAN" property="count_observations" value="0">0</logic:equal>
-		  		   </logic:notEmpty>
+             <logic:empty name="onerowofproject" property="countclassplots">0</logic:empty>
+                         <logic:notEmpty name="onerowofproject" property="countclassplots">
+                           <logic:notEqual name="onerowofproject" property="countclassplots" value="0">
+                              <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk_and_observationclassified"><bean:write name="onerowofproject" property="countclassplots" /></a>
+                           </logic:notEqual>
+                           <logic:equal name="onerowofproject" property="countclassplots" value="0">0</logic:equal>
+             </logic:notEmpty>
           </td>
           </tr>
           <!-- state/province list -->
