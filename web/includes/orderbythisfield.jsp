@@ -1,4 +1,22 @@
- <!-- include: -->
+ <!-- include: orderbythisfield.jsp -->
+  
+    <!-- the orderby wasn't defined yet -->
+    <logic:notPresent name="orderBy">
+       <!-- orderBy not present as bean --> 
+        <logic:notPresent parameter="orderBy">
+           <!-- not present as param, either.  no sort is specified: -->
+           <bean:define id="orderBy" >notsorted</bean:define> 
+        </logic:notPresent>
+
+        <logic:present parameter="orderBy">
+            <!-- order by is on parameter line -->
+		    <bean:parameter id="orderBy" name="orderBy" />
+        </logic:present>
+    </logic:notPresent>
+    
+  </logic:notPresent>
+  
+
   <% // you must pass thisfield and fieldlabel as defined beans to this !! %>
           <logic:empty name="fieldlabel">
             <!-- if no label passed, use name -->
@@ -10,7 +28,7 @@
 		<bean:define id="showsort" value="" />
 		<bean:define id="thclass" value="normal" />
 		
-		
+		<bean:define id="dupl_orderby"><bean:write name="orderBy" /></bean:define>
 		<% if ( dupl_orderby.equals("orderby_" + thisfield) ) { %>
 	        	  <!-- is sorted asc -->
 		  <bean:define id="showsort" value="&uarr;" />
