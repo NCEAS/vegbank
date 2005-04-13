@@ -10,7 +10,8 @@
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
         
-<vegbank:get id="party" select="party" beanName="map" pager="true" xwhereEnable="true"/>
+<vegbank:get id="party" select="party" beanName="map" pager="true" 
+  allowOrderBy="true" xwhereEnable="true"/>
 <!--Where statement removed from preceding: -->
 <vegbank:pager/>
 <logic:empty name="party-BEANLIST">
@@ -75,15 +76,13 @@
 
 <vegbank:get perPage="-1" wparam="party_pk" where="where_party_pk" pager="false" beanName="map" select="address" id="address"/>
 
+
+
+<logic:notEmpty name="address-BEANLIST">
 <tr>
 <th colspan="9">CONTACT</th>
 </tr>
-<logic:empty name="address-BEANLIST">
-<tr>
-<td colspan="9" class="@nextcolorclass@">  No address information on file.</td>
-</tr>
-</logic:empty>
-<logic:notEmpty name="address-BEANLIST">
+
 <logic:iterate name="address-BEANLIST" id="onerowofaddress">
 <tr class="@nextcolorclass@">
 <%@ include file="autogen/address_detail_data.jsp" %>
@@ -95,16 +94,11 @@
 
 
 <vegbank:get perPage="-1" wparam="party_pk" where="where_party_pk" pager="false" beanName="map" select="telephone" id="telephone"/>
+
+<logic:notEmpty name="telephone-BEANLIST">
 <tr>
 <th colspan="9">PHONE</th>
 </tr>
-<logic:empty name="telephone-BEANLIST">
-<tr>
-<td colspan="9" class="@nextcolorclass@">  No telephone information on file.</td>
-</tr>
-</logic:empty>
-<logic:notEmpty name="telephone-BEANLIST">
-
 <logic:iterate name="telephone-BEANLIST" id="onerowoftelephone">
 <tr class="@nextcolorclass@">
 <%@ include file="autogen/telephone_summary_data.jsp" %>

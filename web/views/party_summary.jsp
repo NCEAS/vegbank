@@ -9,8 +9,15 @@
 <h2>View VegBank Parties</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
+
+       <logic:notPresent parameter="orderBy">
+            <!-- set default sorting -->
+            <bean:define id="orderBy" value="xorderby_surname" />
+       </logic:notPresent>
         
-<vegbank:get id="party" select="party" beanName="map" pager="true" xwhereEnable="true"/>
+<vegbank:get id="party" select="party" beanName="map" pager="true" 
+ allowOrderBy="true" xwhereEnable="true"/>
+
 <!--Where statement removed from preceding: -->
 <logic:empty name="party-BEANLIST">
 <p>  Sorry, no parties found.</p>
@@ -19,7 +26,13 @@
 <table cellpadding="2" class="leftrightborders">
 <tr>
 <th>More</th>
-                  <%@ include file="autogen/party_summary_head.jsp" %></tr>
+                  <%@ include file="autogen/party_summary_head.jsp" %>
+          <bean:define id="thisfield" value="dobscount" />
+      <bean:define id="fieldlabel">Plots</bean:define>
+      <%@ include file="../includes/orderbythisfield.jsp" %>
+    
+                  
+                  </tr>
 <logic:iterate name="party-BEANLIST" id="onerowofparty">
 <tr class="@nextcolorclass@">
 <td class="largefield">
@@ -28,7 +41,17 @@
                             </a>
 </td>
                        <%@ include file="autogen/party_summary_data.jsp" %>
-                       </tr>
+      <!-- plots -->
+      <td>
+       <logic:empty name="onerowofparty" property="d_obscount">0</logic:empty>
+       <logic:notEmpty name="onerowofparty" property="d_obscount">
+        <logic:equal name="onerowofparty" property="d_obscount" value="0">0</logic:equal>
+        <logic:notEqual name="onerowofparty" property="d_obscount" value="0">
+         <a href='@get_link@summary/observation/<bean:write name="onerowofparty" property="party_id" />?where=where_obs_allparty' ><bean:write name="onerowofparty" property="d_obscount" /></a>
+        </logic:notEqual>
+       </logic:notEmpty> 
+      </td>
+     </tr>
 <bean:define property="party_id" name="onerowofparty" id="party_pk"/>
 <!--Insert a nested get statement here:
    example:   

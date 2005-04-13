@@ -8979,7 +8979,7 @@ conditions may change between resampling events.
       <archive>true</archive>
       <attForms>
         <formShow name="Austere">868</formShow>
-        <formShow name="Summary">869</formShow>
+        <formShow name="Summary" addSort="true">869</formShow>
         <formShow name="csvvegbranch">278</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9020,7 +9020,7 @@ conditions may change between resampling events.
       <archive>true</archive>
       <attForms>
         <formShow name="Austere">874</formShow>
-        <formShow name="Summary">875</formShow>
+        <formShow name="Summary" addSort="true">875</formShow>
         <formShow name="csvvegbranch">280</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -9041,7 +9041,7 @@ conditions may change between resampling events.
       <archive>true</archive>
       <attForms>
         <formShow name="Austere">877</formShow>
-        <formShow name="Summary">878</formShow>
+        <formShow name="Summary" addSort="true">878</formShow>
         <formShow name="Detail">879</formShow>
         <formShow name="csvvegbranch">281</formShow>
       </attForms>
@@ -9104,7 +9104,7 @@ conditions may change between resampling events.
       <archive>true</archive>
       <attForms>
         <formShow name="Austere">887</formShow>
-        <formShow name="Summary">888</formShow>
+        <formShow name="Summary" addSort="true">888</formShow>
         <formShow name="Detail">889</formShow>
         <formShow name="csvvegbranch">284</formShow>
       </attForms>
