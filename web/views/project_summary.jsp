@@ -15,16 +15,8 @@
           <!-- set default sorting by project name? -->
           <bean:define id="orderBy" value="orderby_projectname" />
      </logic:notPresent>
-     <logic:present parameter="orderBy">
-	        <bean:parameter id="orderBy" name="orderBy" />
-     </logic:present>
-     <!-- define extra bean to copy orderBy.  For some reason the .jsp cannot find orderBy, but can find this. -->
-    <bean:define id="dupl_orderby" name="orderBy" />
-
- 
-    <vegbank:get id="project" select="project" beanName="map" pager="true"
+     <vegbank:get id="project" select="project" beanName="map" pager="true"
      xwhereEnable="true" allowOrderBy="true"/>
-
  
 <!--Where statement removed from preceding: -->
 <logic:empty name="project-BEANLIST">
