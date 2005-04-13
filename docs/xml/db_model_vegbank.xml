@@ -13955,7 +13955,7 @@ conditions may change between resampling events.
       <attNotes>Foreign key into the reference table</attNotes>
       <attDefinition>Link to a publication defining the stratum method.</attDefinition>
       <attForms>
-        <formShow name="Summary">1227</formShow>
+        <formShow name="Summary" addSort="true">1227</formShow>
         <formShow name="Detail">1228</formShow>
         <formShow name="csvvegbranch">388</formShow>
       </attForms>
@@ -13975,10 +13975,10 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Name of the stratum method (e.g., Braun-Blanquet, TNC-ABI, NC Vegetation Survey #1, NC Vegetation Survey #2, etc.)</attDefinition>
       <attForms>
-        <formShow name="Austere">1229</formShow>
-        <formShow name="Summary">1230</formShow>
-        <formShow name="Detail">1231</formShow>
-        <formShow name="csvvegbranch">389</formShow>
+
+        <formShow name="Summary" addSort="true">1225</formShow>
+        <formShow name="Detail">1225</formShow>
+        <formShow name="csvvegbranch">385</formShow>
       </attForms>
       <update>1.0.0</update>
     </attribute>

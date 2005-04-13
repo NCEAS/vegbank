@@ -16,8 +16,8 @@
 <h2>View VegBank Stratum Methods</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
-        <vegbank:get id="stratummethod" select="stratummethod" beanName="map" pager="true"  xwhereEnable="true"/>
-<!--Where statement removed from preceding: -->
+        <vegbank:get id="stratummethod" select="stratummethod" beanName="map" pager="true"  
+          allowOrderBy="true" xwhereEnable="true"/>
 
 <vegbank:pager />
 <logic:empty name="stratummethod-BEANLIST">
@@ -34,34 +34,25 @@
 -->
 
 
-<vegbank:get id="observation" select="observation_count" beanName="map" pager="false" perPage="-1" 
-  where="where_stratummethod_pk" wparam="stratummethod_pk" />
-
 <tr  class='@nextcolorclass@'><td class="datalabel">Count of Observations using this method</td>
 <td>
-<logic:empty name="observation-BEAN">
--none-
-</logic:empty>
-<logic:notEmpty name="observation-BEAN">
-<bean:write name="observation-BEAN" property="count_observations" />
-<logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-<a href="@get_link@summary/observation/<bean:write name='stratummethod_pk' />?where=where_stratummethod_pk">View observations</a>
-</logic:notEqual>
+<logic:empty name="onerowofstratummethod" property="d_obscount">0</logic:empty>
+<logic:notEmpty name="onerowofstratummethod" property="d_obscount">
+  <logic:equal value="0" name="onerowofstratummethod" property="d_obscount">0</logic:equal>
+  <logic:notEqual value="0" name="onerowofstratummethod" property="d_obscount">
+    <a href="@get_link@summary/observation/<bean:write name='stratummethod_pk' />?where=where_stratummethod_pk"><bean:write  name="onerowofstratummethod" property="d_obscount" /></a>
+  </logic:notEqual>
 </logic:notEmpty>
 
-  
+</td></tr>  
 
-<!--Insert a nested get statement here:
-   example:   
 
-<vegbankget id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_stratummethod_pk" wparam="stratummethod_pk" />-->
-
+<TR><TD colspan="2" class="datalabel">Stratum Types:</TD></TR>
 <TR><TD COLSPAN="2">
-<table class="leftrightborders" cellpadding="2">
-<tr><th colspan="8">Stratum Types:</th></tr>
+<table class="leftrightborders sortable" cellpadding="2" id="stratumTypesFor_<bean:write name='stratummethod_pk' />">
 <vegbank:get id="stratumtype" select="stratumtype" beanName="map" pager="false" where="where_stratummethod_pk" wparam="stratummethod_pk" perPage="-1" />
 <logic:empty name="stratumtype-BEANLIST">
-<tr><td class='@nextcolorclass@'>  Sorry, no Stratum Types found.</td></tr>
+<tr><td class='@nextcolorclass@'> There are no stratum Types associated with this method.</td></tr>
 </logic:empty>
 <logic:notEmpty name="stratumtype-BEANLIST">
 

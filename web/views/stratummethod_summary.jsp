@@ -15,8 +15,8 @@
 <h2>View VegBank Stratum Methods</h2>
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
-        <vegbank:get id="stratummethod" select="stratummethod" beanName="map" pager="true"  xwhereEnable="true"/>
-<!--Where statement removed from preceding: -->
+        <vegbank:get id="stratummethod" select="stratummethod" beanName="map" pager="true"  
+          allowOrderBy="true" xwhereEnable="true"/>
 
 <vegbank:pager />
 <logic:empty name="stratummethod-BEANLIST">
@@ -26,7 +26,13 @@
 <table class="leftrightborders" cellpadding="2">
 <tr>
 <th>More</th>
-                  <%@ include file="autogen/stratummethod_summary_head.jsp" %></tr>
+                  <%@ include file="autogen/stratummethod_summary_head.jsp" %>
+                 
+                 
+                  <bean:define id="thisfield" value="dobscount" />
+                                   <bean:define id="fieldlabel">Plots</bean:define>
+                    <%@ include file="../includes/orderbythisfield.jsp" %>
+                  </tr>
 <logic:iterate id="onerowofstratummethod" name="stratummethod-BEANLIST">
 <tr class="@nextcolorclass@">
 <td class="largefield">
@@ -35,12 +41,22 @@
                             </a>
 </td>
                        <%@ include file="autogen/stratummethod_summary_data.jsp" %>
-                       </tr>
+                      
 <bean:define id="stratummethod_pk" name="onerowofstratummethod" property="stratummethod_id" />
-<!--Insert a nested get statement here:
-   example:   
+<td>
+<logic:empty name="onerowofstratummethod" property="d_obscount">0</logic:empty>
+<logic:notEmpty name="onerowofstratummethod" property="d_obscount">
+  <logic:equal value="0" name="onerowofstratummethod" property="d_obscount">0</logic:equal>
+  <logic:notEqual value="0" name="onerowofstratummethod" property="d_obscount">
+    <a href="@get_link@summary/observation/<bean:write name='stratummethod_pk' />?where=where_stratummethod_pk"><bean:write  name="onerowofstratummethod" property="d_obscount" /></a>
+  </logic:notEqual>
+</logic:notEmpty>
 
-<vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_stratummethod_pk" wparam="stratummethod_pk" />-->
+</td>
+
+ </tr>
+ 
+ 
 </logic:iterate>
 </table>
 </logic:notEmpty>
