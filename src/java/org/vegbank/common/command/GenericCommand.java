@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-15 07:10:33 $'
- *	'$Revision: 1.29 $'
+ *	'$Date: 2005-04-15 18:55:57 $'
+ *	'$Revision: 1.30 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -349,26 +349,23 @@ public class GenericCommand
 
 		// ORDER BY
 		if (!Utility.isStringNullOrEmpty(orderByKey)) {
+            log.debug("order by value: " + orderByKey);
+            String sortDir = " ASC";
+
+            // strip the sort direction if it's there
+            if (orderByKey.endsWith("_desc")) {
+                sortDir = " DESC";
+                orderByKey = orderByKey.substring(0, orderByKey.length() - "_desc".length());
+            } else if (orderByKey.endsWith("_asc")) {
+                orderByKey = orderByKey.substring(0, orderByKey.length() - "_asc".length());
+            }
+
             if (orderByKey.startsWith("xorderby_")) {
-                // parse it out
-
-                //log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
-                //log.debug("========== ORIGINAL QUERY: " + selectClause);
-                
+                // remove any chars other than A-Za-z0-9_
                 String field = orderByKey.substring("xorderby_".length()).toLowerCase();
-                String sortDir = " ASC";
-
-                // strip the sort direction if it's there
-                if (field.endsWith("_desc")) {
-                    sortDir = " DESC";
-                    field = field.substring(0, field.length() - "_desc".length());
-                } else if (field.endsWith("_asc")) {
-                    field = field.substring(0, field.length() - "_asc".length());
-                }
-
 	            Pattern badCharsPattern = Pattern.compile("\\W");
                 Matcher m = badCharsPattern.matcher(field);
-		        orderBy = m.replaceAll("") + sortDir;
+		        orderBy = m.replaceAll("");
 
             } else {
                 // look it up from SQLStore
@@ -376,7 +373,13 @@ public class GenericCommand
             }
 
             if (!Utility.isStringNullOrEmpty(orderBy)) {
-                sql.append(" ORDER BY " + orderBy);
+                sql.append(" ORDER BY ").append(orderBy);
+
+                if (orderBy.indexOf(" desc") == -1 &&
+                        orderBy.indexOf(" asc") == -1) {
+                    // no sorting specified yet, so add it
+                    sql.append(" ").append(sortDir);
+                }
             }
 		} 
 
