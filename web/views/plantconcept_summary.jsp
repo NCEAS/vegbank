@@ -38,7 +38,7 @@
     <bean:define id="thatts">width="20%"</bean:define>
     <%@ include file="../includes/orderbythisfield.jsp" %>
   
-  <bean:define id="thisfield" value="dobscount" />
+  <bean:define id="thisfield" value="d_obscount" />
       <bean:define id="fieldlabel">Plots</bean:define>
       <%@ include file="../includes/orderbythisfield.jsp" %>
   

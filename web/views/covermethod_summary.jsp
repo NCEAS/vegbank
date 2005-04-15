@@ -35,7 +35,7 @@
 <th>More</th>
                   <%@ include file="autogen/covermethod_summary_head.jsp" %>
                   <!-- extra -->
-                  <bean:define id="thisfield" value="dobscount" />
+                  <bean:define id="thisfield" value="d_obscount" />
                   <bean:define id="fieldlabel">Plots</bean:define>
                     <%@ include file="../includes/orderbythisfield.jsp" %>
                   </tr>

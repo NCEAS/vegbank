@@ -19,7 +19,7 @@
     
   <logic:notPresent parameter="orderBy">
          <!-- set default sorting -->
-         <bean:define id="orderBy" value="xorderby_dobscount_desc" />
+         <bean:define id="orderBy" value="xorderby_d_obscount_desc" />
   </logic:notPresent>
     
   <vegbank:get id="concept" select="commconcept" beanName="map" pager="true" xwhereEnable="true" 
@@ -44,7 +44,7 @@
       <bean:define id="thatts">width="7%"</bean:define>
     <%@ include file="../includes/orderbythisfield.jsp" %>
   
-     <bean:define id="thisfield" value="dobscount" />
+     <bean:define id="thisfield" value="d_obscount" />
       <bean:define id="fieldlabel">Plots</bean:define>
       <bean:define id="thatts">width="5%"</bean:define>
     <%@ include file="../includes/orderbythisfield.jsp" %>

@@ -42,7 +42,7 @@
   
   <logic:match name="writetops" value="<%= currentNum %>">
   <vegbank:get id="namedplace" select="browsenamedplacebystate" beanName="map" 
-    pager="true" where="empty" wparam="" allowOrderBy="true" orderBy="xorderby_dobscount_desc"/>
+    pager="true" where="empty" wparam="" allowOrderBy="true" orderBy="xorderby_d_obscount_desc"/>
   <logic:notEmpty name="namedplace-BEANLIST">
 
   <TABLE cellpadding="5" cellspacing="3">
@@ -106,7 +106,7 @@
   <!-- projects -->
   <h3>Data Projects:</h3>
     <vegbank:get id="project" select="project" beanName="map" pager="true" xwhereEnable="false" 
-      allowOrderBy="true" orderBy="xorderby_dobscount_desc" /> 
+      allowOrderBy="true" orderBy="xorderby_d_obscount_desc" /> 
     <table class="thinlines" cellpadding="2">
       <tr><th>Project</th><th>Plots</th></tr>
       <logic:iterate id="onerowofproject" name="project-BEANLIST">
@@ -133,7 +133,7 @@
  <h3>Common Species:</h3>
    <vegbank:get id="browsecommonplants" select="browsecommonplants" 
           beanName="map" pager="true"  xwhereEnable="false" 
-          allowOrderBy="true" orderBy="xorderby_dobscount_desc" />
+          allowOrderBy="true" orderBy="xorderby_d_obscount_desc" />
      <table class="thinlines" cellpadding="2">
       <tr><th>Plant</th><th>Plots</th></tr>
       <logic:iterate id="onerowofbrowsecommonplants" name="browsecommonplants-BEANLIST">
@@ -159,7 +159,7 @@
    <h3>Common Communities:</h3>
    <vegbank:get id="browsecommoncomms" select="browsecommoncomms" 
              beanName="map" pager="true"  xwhereEnable="false" 
-             allowOrderBy="true" orderBy="xorderby_dobscount_desc" />
+             allowOrderBy="true" orderBy="xorderby_d_obscount_desc" />
         <table class="thinlines" cellpadding="2">
          <tr><th>Community</th><th>Plots</th></tr>
          <logic:iterate id="onerowofbrowsecommoncomms" name="browsecommoncomms-BEANLIST">
