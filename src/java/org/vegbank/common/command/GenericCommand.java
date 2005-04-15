@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-08 00:01:10 $'
- *	'$Revision: 1.28 $'
+ *	'$Date: 2005-04-15 07:10:33 $'
+ *	'$Revision: 1.29 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -349,9 +349,34 @@ public class GenericCommand
 
 		// ORDER BY
 		if (!Utility.isStringNullOrEmpty(orderByKey)) {
-	        orderBy = sqlResources.getString(orderByKey).toLowerCase();
-		    if (!Utility.isStringNullOrEmpty(orderBy)) {
-			    sql.append(" ORDER BY " + orderBy);
+            if (orderByKey.startsWith("xorderby_")) {
+                // parse it out
+
+                //log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
+                //log.debug("========== ORIGINAL QUERY: " + selectClause);
+                
+                String field = orderByKey.substring("xorderby_".length()).toLowerCase();
+                String sortDir = " ASC";
+
+                // strip the sort direction if it's there
+                if (field.endsWith("_desc")) {
+                    sortDir = " DESC";
+                    field = field.substring(0, field.length() - "_desc".length());
+                } else if (field.endsWith("_asc")) {
+                    field = field.substring(0, field.length() - "_asc".length());
+                }
+
+	            Pattern badCharsPattern = Pattern.compile("\\W");
+                Matcher m = badCharsPattern.matcher(field);
+		        orderBy = m.replaceAll("") + sortDir;
+
+            } else {
+                // look it up from SQLStore
+                orderBy = sqlResources.getString(orderByKey).toLowerCase();
+            }
+
+            if (!Utility.isStringNullOrEmpty(orderBy)) {
+                sql.append(" ORDER BY " + orderBy);
             }
 		} 
 
@@ -416,6 +441,7 @@ public class GenericCommand
                 List wpList = new ArrayList();
                 log.debug("checking for ; delimited wparams");
                 for (int i=0; i<whereParams.length; i++) {
+                    log.debug("whereParams: " + whereParams[i]);
                     StringTokenizer st = new StringTokenizer(whereParams[i], Utility.PARAM_DELIM);
                     //whereParams = new String[st.countTokens()];
                     //int j=0;
