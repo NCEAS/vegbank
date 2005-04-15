@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-08 00:00:40 $'
- *	'$Revision: 1.21 $'
+ *	'$Date: 2005-04-15 07:11:53 $'
+ *	'$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ import org.vegbank.common.utility.DatabaseUtility;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.21 $ $Date: 2005-04-08 00:00:40 $
+ * @version $Revision: 1.22 $ $Date: 2005-04-15 07:11:53 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -539,8 +539,8 @@ public class VegbankGetTag extends VegbankTag {
 			return true;
 		}
 
-        setXwhereEnable(findAttribute("allowOrderBy"));
-        return this.xwhereEnable;
+        setAllowOrderBy(findAttribute("allowOrderBy"));
+        return this.allowOrderBy;
     }
 
     public void setAllowOrderBy(String s) {
