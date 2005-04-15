@@ -30,6 +30,10 @@ CREATE INDEX plantconcept_plantname_id_x on plantconcept ( plantname_id ); -- t
 DROP INDEX  plantconcept_reference_id_x ;
 CREATE INDEX plantconcept_reference_id_x ON plantconcept (reference_id);
 
+DROP INDEX  plantconcept_dobscount_x ;
+CREATE INDEX plantconcept_dobscount_x ON plantconcept (d_obscount);
+
+
 -- plantstatus
 DROP INDEX  plantstatus_plantlevel_x ;
 CREATE INDEX plantstatus_plantlevel_x ON plantstatus (plantlevel); -- t
@@ -295,6 +299,10 @@ DROP INDEX  commconcept_commname_id_x ;
 CREATE INDEX commconcept_commname_id_x ON commconcept (commname_id);
 DROP INDEX  commconcept_reference_id_x ;
 CREATE INDEX commconcept_reference_id_x ON commconcept (reference_id);
+
+DROP INDEX  commconcept_dobscount_x ;
+CREATE INDEX commconcept_dobscount_x ON commconcept (d_obscount);
+
 
 -- comminterpretation 
 DROP INDEX  comminterpretation_commclass_id_x ;
