@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-13 18:54:20 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-04-15 17:22:43 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -154,9 +154,9 @@ public class InterpretPlantAction extends VegbankAction {
 				// Get plantconcept_id
 				// 
 				log.debug("getting plantconcept_id with: " + ipForm.getPcAC());
-				rs = da.issueSelect(
-						"SELECT plantconcept_id FROM plantconcept WHERE lower(accessioncode)='" +
-						ipForm.getPcAC().toLowerCase() + "'");
+				String query = "SELECT plantconcept_id FROM plantconcept WHERE lower(accessioncode)='" +
+						ipForm.getPcAC().toLowerCase().trim() + "'";
+				rs = da.issueSelect(query);
 
 
 				if (rs.next()) {
@@ -203,7 +203,8 @@ public class InterpretPlantAction extends VegbankAction {
 				//
 				tint.setOriginalinterpretation("false");
 				tint.setCurrentinterpretation("false");
-				tint.setInterpretationtype("Other");
+				tint.setCurrentinterpretation("false");
+				tint.setEmb_taxoninterpretation("0");
 
 				//log.debug("tint:\n" + tint.toXML());
 				rs.close();
