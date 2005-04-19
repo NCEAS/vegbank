@@ -26,26 +26,12 @@ function selectRadio(radioIndex) {
 <html:form action="/UploadPlot"  enctype="multipart/form-data">
 
 
-<table  border="0"  >
-	<tr>
-		<td bgcolor="white">
 			
-		</td>
-		<td align="left" valign="middle">
-			<font face="Helvetica,Arial,Verdana" size="6" color="23238E">
-				Vegetation Plot Submission
-			</font>
-		</td>
-	</tr>
-</table>
+			<h1>	Vegetation Plot Submission </h1>
+			
+	
 
 
-
-<br> 
-
-<table border="0" >
-	<tr>
-		<td colspan="2">
 			<p>In order to share your plot observation data, it must be contained 
 			in a VegBank native XML file.  
 			<a href="/vegdocs/vegbranch/vbr-overview.html">VegBranch</a>
@@ -58,92 +44,49 @@ function selectRadio(radioIndex) {
 			sample XML documents and schemas.  Although the schema is still evolving, that 
 			page will be updated.
 
-		</td>
-	</tr>
-</table>
-
-&nbsp;
-
+		
 
 
 <!-- PLOT FILE  -->
-<table border="0"  class="on_page_help">
+<p class="instructions">
 	
-	<tr>
-		<td colspan="2">
+	
 			<b>Plot Data File Location:</b>
-		</td>
-	</tr>
-	<tr>
-		<td width="5%" align="center">
-			<img src="@image_server@icon_cat31.gif" alt="exclamation" width="15" height="15" >
-		</td>
-		<td class="on_page_help_text">
-			Specify the location of a VegBank XML data file.
-		</td>
-	</tr>
+		
+	  <br/>
+			Please specify the location of a VegBank XML data file.</p>
+		
+         <p>
 
-</table>
-&nbsp;
-
-<table>
-	
-	<!-- LOCAL UPLOAD -->
-	<tr>
-		<td colspan="2" class="category">
 			<html:radio value="local" property="dataFileLocation"/>
 				Upload from your computer
-		</td>
-	</tr>
-	<tr>
-		<td class="sizesmall">
-			&nbsp; &nbsp; &nbsp; Local data file path:
-		</td>
-		<td>
+        <br/>&nbsp;&nbsp; Local data file path:
+		
 			<html:file property="plotFile" size="50" onclick="selectRadio(0)"/>
-		</td>
-	</tr>
-
-	<tr>
-		<td colspan="2"><br> &nbsp; </td>
-	</tr>
-
-	<!-- REMOTE DOWNLOAD -->
-	<tr>
-		<td colspan="2" class="category">
+		
+        </p>
+        <p>
+	
 			<html:radio value="remote" property="dataFileLocation"/>
-				Download from web address
-		</td>
-	</tr>
-	<tr>
-		<td class="sizesmall">
-			&nbsp; &nbsp; &nbsp; Data file URL:
-		</td>
-		<td>
+				Download from web address <br/>
+        &nbsp;&nbsp; Data file URL:
+		
 			<html:text property="plotFileURL" size="50" value="http://" 
 				onclick="if(this.value=='http://'){this.value='';} selectRadio(1);" 
 				onblur="if(this.value==''){this.value='http://';}"/>
-		</td>
-	</tr>
+		
+     </p>
+     <p>
 
 
-</table>
-
-
-<table border="0">
-	<tr>
-	 <td>
-     <br>
-After your data is loaded, an email will be sent to <bean:write name="email"/> containing load results.  
+After your data is loaded, an email will be sent to <u><i><bean:write name="email"/></i></u> containing load results.  
 <br>
 &nbsp;&raquo; <html:link action="/LoadUser.do">update email address</html:link>
 	 	<br>
 	 	<br>
 		<html:submit property="submit" value="continue"/>
-	 </td>
-	</tr>	
-</table>
-
+	
+ </p>
 </html:form>
 
 <!-- VEGBANK FOOTER -->
