@@ -11,11 +11,11 @@
 
 <blockquote>
 <p class="sizelarge">
-	<br>
-	Please login to your VegBank account.<br>
-	<span class="sizesmall">The page you tried to access requires special permissions.
-	</span>
-	<br>
+	
+	Please login to your VegBank account.</p>
+	<p class="sizesmall">The page you tried to access requires special permissions.
+	</p>
+	
 	<br/>
     <%@ include file="../includes/Logon.jsp" %>
 	<p class="sizenormal">

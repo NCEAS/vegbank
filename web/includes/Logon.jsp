@@ -9,7 +9,7 @@
     <td colSpan="2" class="category">
      Login to VegBank
     </td>
-
+  </tr>
   <!-- Username -->
   <tr>
     <td>
