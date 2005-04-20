@@ -16980,7 +16980,6 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign key pointing to the user to whom this dataset belongs.</attDefinition>
       <attForms>
-        <formShow name="Summary">2</formShow>
         <formShow name="Detail">2</formShow>
         <formShow name="csvvegbranch">483</formShow>
       </attForms>
@@ -17020,7 +17019,6 @@ conditions may change between resampling events.
       <attNotes>maybe we don't need</attNotes>
       <attDefinition>Date of end of dataset, if deemed no longer active.</attDefinition>
       <attForms>
-        <formShow name="Summary">4</formShow>
         <formShow name="Detail">4</formShow>
         <formShow name="csvvegbranch">485</formShow>
       </attForms>
@@ -17059,8 +17057,8 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Name of Dataset, should be unique for each user.</attDefinition>
       <attForms>
-        <formShow name="Summary">6</formShow>
-        <formShow name="Detail">6</formShow>
+        <formShow name="Summary">1</formShow>
+        <formShow name="Detail">1</formShow>
         <formShow name="csvvegbranch">487</formShow>
       </attForms>
       <update>1.0.2</update>
