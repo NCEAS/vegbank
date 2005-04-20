@@ -272,7 +272,7 @@
         <xs:enumeration value="plant"/>
         <xs:enumeration value="plot"/>
         <xs:enumeration value="user"/>
-        <xs:enumeration value="extra" />
+        <xs:enumeration value="extra"/>
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
@@ -283,4 +283,6 @@
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
+  <xs:element name="updateSQLFile" type="xs:string" />
+ 
 </xs:schema>

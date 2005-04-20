@@ -17201,7 +17201,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>itemAccessionCode</attName>
-      <attLabel>Accession Code</attLabel>
+      <attLabel>Item's Accession Code</attLabel>
       <attModel>implementation</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (100)</attType>
@@ -17218,6 +17218,60 @@ conditions may change between resampling events.
         <formShow name="csvvegbranch">491</formShow>
       </attForms>
       <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>itemDatabase</attName>
+      <attLabel>Item's Source Database</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>closed</attListType>
+      <attList>
+        <attListItem>
+          <attListValue>vegbank</attListValue>
+          <attListValueDesc>VegBank database at vegbank.org</attListValueDesc>
+          <attListSortOrd>1</attListSortOrd>
+        </attListItem>
+      </attList>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The source database name where the dataset item is stored.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>throwAways/add_datasetItem_denorms.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>itemTable</attName>
+      <attLabel>Item's Table</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+      <update>1.0.3</update>
+      <updateSQLFile>throwAways/add_datasetItem_denorms.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>itemRecord</attName>
+      <attLabel>Item's Primary Key</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>no</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+      <update>1.0.3</update>
+      <updateSQLFile>throwAways/add_datasetItem_denorms.sql</updateSQLFile>
     </attribute>
     <attribute>
       <attName>externalAccessionCode</attName>
