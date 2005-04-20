@@ -11,45 +11,46 @@
           </logic:empty>
 <logic:notEmpty name="userdataset-BEANLIST"><!-- set up table -->
 
-<logic:iterate id="onerowofuserdataset" name="userdataset-BEANLIST"><!-- iterate over all records in set : new table for each -->
-<br>
-<table class="leftrightborders" cellpadding="3"><!--each field, only write when HAS contents-->
+<table class="leftrightborders" cellpadding="1"><!--each field, only write when HAS contents-->
+<tr>
+<%@ include file="../autogen/userdataset_summary_head.jsp" %>
+<th>ITEMS</th>
+</tr>
 
-<%@ include file="../autogen/userdataset_detail_data.jsp" %>
+<logic:iterate id="onerowofuserdataset" name="userdataset-BEANLIST"><!-- iterate over all records in set : new table for each -->
+
+
+<tr  class="@nextcolorclass@">
+<%@ include file="../autogen/userdataset_summary_data.jsp" %>
 
 <!-- show dataset items -->
-<TR><TD colspan="2">
-Items in this dataset:
+<TD class="largefield">
 <bean:define id="ud_id" name="onerowofuserdataset" property="userdataset_id" />
  
-<vegbank:get id="userdatasetitem" select="userdatasetitem" beanName="map" 
-  where="where_userdataset_pk" wparam="ud_id" perPage="-1"/>
+<vegbank:get id="userdatasetitem" select="userdatasetitem_counts" beanName="map" 
+  where="where_userdataset_pk" wparam="ud_id" perPage="-1" />
    <logic:empty name="userdatasetitem-BEANLIST">
-                Sorry, no userDatasetItem(s) are in the dataset!
+                Nothing is in this dataset!
    </logic:empty>
 
 <logic:notEmpty name="userdatasetitem-BEANLIST">
-<table class="leftrightborders" cellpadding="2" >
-<tr>
-<th>item</th>
-<%@ include file="../autogen/userdatasetitem_summary_head.jsp" %>
-</tr>
+
 <logic:iterate id="onerowofuserdatasetitem" name="userdatasetitem-BEANLIST">
-<tr class='@nextcolorclass@'>
-<td class="largefield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
-<%@ include file="../autogen/userdatasetitem_summary_data.jsp" %>
+
+<bean:write name="onerowofuserdatasetitem" property="itemtable" /> (<bean:write name="onerowofuserdatasetitem" property="countudi" />)<br/>
+
+</logic:iterate>
+
+</logic:notEmpty>
+</TD>
 
 </tr>
 </logic:iterate>
 </table>
-</logic:notEmpty>
-</TD></TR>
-
-</table>
 
 
 
-</logic:iterate>
+
 </logic:notEmpty>
 
 <vegbank:pager />

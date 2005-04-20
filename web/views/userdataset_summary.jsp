@@ -1,7 +1,7 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-<!-- $Id: userdataset_detail.jsp,v 1.12 2005-04-20 21:43:59 mlee Exp $ -->
+<!-- $Id: userdataset_summary.jsp,v 1.1 2005-04-20 21:43:59 mlee Exp $ -->
 <!-- purpose : show user's datasets, either all of them (mode=all in URL) or only certain ones:
 
   mode=ac is to show accessioncodes
@@ -10,13 +10,14 @@
  
 
  
-<TITLE>View Your VegBank Datasets - Detail</TITLE>
+<TITLE>View Your VegBank Datasets - Summary</TITLE>
 
   
  @webpage_masthead_html@ 
   @possibly_center@  
-  
-<h1>View Your VegBank Datasets - Detail</h1>
+<br/>  
+<h1>View Your VegBank Datasets - Summary</h1>
+<br/>
 <!-- get user ID -->
 <%@ include file="includeviews/sub_getwebuserid.jsp" %>
 
@@ -64,7 +65,7 @@ String paramDelim = Utility.PARAM_DELIM ;
 </logic:equal>
 
 
-<%@ include file="includeviews/sub_userdataset_detail.jsp" %>
+<%@ include file="includeviews/sub_userdataset_summary.jsp" %>
 
 <br>
 
