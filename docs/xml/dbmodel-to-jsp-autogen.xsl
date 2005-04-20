@@ -160,11 +160,19 @@
               <xsl:if test="$currentAtt/attType='text' or (contains($currentAtt/attType,'varchar (') and string-length($currentAtt/attType)&gt;12)">
                 <xsl:attribute name="class">largefield</xsl:attribute>
               </xsl:if>
+              <xsl:if test="$currentAtt/attType='Date'"><!-- write exact date in a title att -->
+                <xsl:attribute name="title"><xsl:text disable-output-escaping="yes">&lt;</xsl:text>bean:write name='onerowof<xsl:value-of select="$currEnt"/>' property='<xsl:value-of select="$currFld"/>' /<xsl:text disable-output-escaping="yes">&gt;</xsl:text></xsl:attribute>
+              </xsl:if>
             </xsl:when>
             <xsl:otherwise>
               <xsl:attribute name="class"><xsl:value-of select="@useClass"/></xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
+        <!-- parse date: -->
+        <xsl:if test="$currentAtt/attType='Date'">
+          @subst_lt@dt:format pattern="dd-MMM-yyyy"@subst_gt@
+          @subst_lt@dt:parse pattern="yyyy-MM-dd"@subst_gt@
+        </xsl:if>
                   <!-- extra stuff before something : -->
         <xsl:if test="string-length($currentAtt/attFormsHTMLpre)&gt;0">
           <!-- insert extra stuff -->
@@ -176,6 +184,7 @@
           <xsl:variable name="currFldMaybeTransl">
             <xsl:value-of select="$currFld"/>
             <xsl:if test="string-length($currentAtt/attFKTranslationSQL)&gt;0">_transl</xsl:if>
+            <xsl:if test="$currentAtt/attType='Date'">_datetrunc</xsl:if>
           </xsl:variable>
           <xsl:choose>
             <xsl:when test="string-length($currentAtt/attFKTranslationSQL)&gt;0 and $currentAtt/attKey='FK' and ($currentAtt/attFKTranslationSQL/@addLink='true' or string-length($currentAtt/attFKTranslationSQL/@addLink)=0)">
@@ -203,13 +212,17 @@
                     <span class="units"><xsl:value-of select="$currentAtt/attUnits"/></span></logic:notEqual>
         </xsl:if></xsl:if>
         <!-- extra -->
-      
+
+         <!-- date extra stuff -->
+         <xsl:if test="$currentAtt/attType='Date'">
+           @subst_lt@/dt:parse@subst_gt@
+           @subst_lt@/dt:format@subst_gt@
+         </xsl:if>      
         <xsl:if test="string-length($currentAtt/attFormsHTMLpost)&gt;0">
           <!-- insert extra stuff -->
           <!--logic:notEqual parameter="textoutput" value="true"-->          
              <xsl:value-of select="$currentAtt/attFormsHTMLpost"/>
           <!--/logic:notEqual-->
-
         </xsl:if>
         
         </xsl:element>

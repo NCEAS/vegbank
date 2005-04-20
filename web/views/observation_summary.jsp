@@ -94,9 +94,9 @@
 <td class="numeric"><bean:write name="onerowofobservation" property="area" />&nbsp;</td>
 <td class="numeric"><bean:write name="onerowofobservation" property="elevation" />&nbsp;</td>
 
-<td class="numeric"><dt:format pattern="yyyy">
-                <dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS">
-                    <bean:write name="onerowofobservation" property="obsstartdate"/>
+<td class="numeric" title='<bean:write name="onerowofobservation" property="obsstartdate"/>'><dt:format pattern="yyyy">
+                <dt:parse pattern="yyyy-MM-dd">
+                    <bean:write name="onerowofobservation" property="obsstartdate_datetrunc"/>
                 </dt:parse>
             </dt:format>&nbsp;</td>
 

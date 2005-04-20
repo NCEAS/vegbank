@@ -12352,10 +12352,7 @@ conditions may change between resampling events.
         <formShow name="Detail">1050</formShow>
         <formShow name="csvvegbranch">337</formShow>
       </attForms>
-      <attFormsHTMLpre>@subst_lt@dt:format pattern="dd-MMM-yyyy"@subst_gt@
-  @subst_lt@dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS"@subst_gt@</attFormsHTMLpre>
-      <attFormsHTMLpost>  @subst_lt@/dt:parse@subst_gt@
-@subst_lt@/dt:format@subst_gt@</attFormsHTMLpost>
+      <attFormsHTMLpost/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -12377,10 +12374,6 @@ conditions may change between resampling events.
         <formShow name="Detail">1053</formShow>
         <formShow name="csvvegbranch">338</formShow>
       </attForms>
-      <attFormsHTMLpre>@subst_lt@dt:format pattern="dd-MMM-yyyy"@subst_gt@
-  @subst_lt@dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS"@subst_gt@</attFormsHTMLpre>
-      <attFormsHTMLpost>  @subst_lt@/dt:parse@subst_gt@
-@subst_lt@/dt:format@subst_gt@</attFormsHTMLpost>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -16981,6 +16974,7 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
       <attReferences>usr.usr_ID</attReferences>
+      <attFKTranslationSQL addLink="false">(select party_id_transl from view_party_transl, usr where view_party_transl.party_id=usr.party_id and usr.usr_id=userdataset.usr_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -17213,8 +17207,6 @@ conditions may change between resampling events.
       <attNotes>accessionCode for observation that is part of dataset: used instead of observation_ID to allow observations from any database</attNotes>
       <attDefinition>Accession Code for the observation which is a member of the dataset referenced in userDataset_ID.  Accession codes are used so that observations from any VegBank database can be included in the dataset.</attDefinition>
       <attForms>
-        <formShow name="Summary">3</formShow>
-        <formShow name="Detail">3</formShow>
         <formShow name="csvvegbranch">491</formShow>
       </attForms>
       <update>1.0.2</update>
@@ -17287,8 +17279,6 @@ conditions may change between resampling events.
       <attNotes>accessionCode for an incoming piece of data</attNotes>
       <attDefinition>Accession Code for an incoming piece of data.</attDefinition>
       <attForms>
-        <formShow name="Summary">3</formShow>
-        <formShow name="Detail">3</formShow>
         <formShow name="csvvegbranch">491</formShow>
       </attForms>
       <update>1.0.2</update>

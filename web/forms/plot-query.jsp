@@ -535,13 +535,13 @@ VegBank - Advanced Plot Search
 	    <td>&nbsp;</td>
 		<td colspan="2" class="item" align="center">from 
             <dt:format pattern="MM/dd/yyyy">
-                <dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS">
+                <dt:parse pattern="yyyy-MM-dd">
                     <bean:write name="minmaxbean-BEAN" property="curminobsstartdate"/>
                 </dt:parse>
             </dt:format>
             to
             <dt:format pattern="MM/dd/yyyy">
-                <dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS">
+                <dt:parse pattern="yyyy-MM-dd">
                     <bean:write name="minmaxbean-BEAN" property="curmaxobsenddate"/>
                 </dt:parse>
             </dt:format>
@@ -571,11 +571,11 @@ VegBank - Advanced Plot Search
 	    <td>&nbsp;</td>
 		<td colspan="2" class="item" align="center">from 
             <dt:format pattern="MM/dd/yyyy">
-                <dt:parse pattern="yyyy-MM-dd hh:mm:ss-SS"><bean:write name="minmaxbean-BEAN" property="curmindateentered"/></dt:parse>
+                <dt:parse pattern="yyyy-MM-dd"><bean:write name="minmaxbean-BEAN" property="curmindateentered"/></dt:parse>
             </dt:format>
             to
             <dt:format pattern="MM/dd/yyyy">
-                <dt:parse pattern="yyyy-MM-dd hh:mm:ss.SS-z"><bean:write name="minmaxbean-BEAN" property="curmaxdateentered"/></dt:parse>
+                <dt:parse pattern="yyyy-MM-dd"><bean:write name="minmaxbean-BEAN" property="curmaxdateentered"/></dt:parse>
             </dt:format>
          </td>
 		<td>&nbsp;</td>
