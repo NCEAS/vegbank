@@ -3742,7 +3742,7 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -4050,7 +4050,7 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -4329,7 +4329,7 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -5032,7 +5032,7 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -8635,7 +8635,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -12261,7 +12261,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13219,7 +13219,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13560,7 +13560,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13721,7 +13721,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -14358,7 +14358,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -14959,7 +14959,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -15106,7 +15106,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -15292,7 +15292,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      <attFKTranslationSQL>n/a</attFKTranslationSQL>
+      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
