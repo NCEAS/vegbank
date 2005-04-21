@@ -3,8 +3,8 @@
   <xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
   <xsl:param name="view">Detail</xsl:param>
-  <xsl:param name="oneTbl">taxonImportance</xsl:param>
-  <xsl:param name="detailAdd">stemCount</xsl:param>
+  <xsl:param name="oneTbl">observation</xsl:param>
+  <xsl:param name="detailAdd"></xsl:param>
   
   <xsl:param name="more">no</xsl:param><!-- yes if you want a link to details for each summary row -->
   <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
@@ -22,11 +22,27 @@ Copy from after the START: comment to the END: comment for contents of the file!
       <xsl:comment> ____________________________START  SQL for:  <xsl:value-of select="entityName"/> _______________________________________ 
 <xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>=SELECT <xsl:for-each select="attribute">
           <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>
-          <xsl:if test="string-length(attFKTranslationSQL)&gt;0">, <xsl:value-of select="attFKTranslationSQL"/> AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_transl</xsl:if>
+          <xsl:if test="string-length(attFKTranslationSQL)&gt;0">, <xsl:value-of select="attFKTranslationSQL"/> AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_transl</xsl:if><xsl:if test="attType='Date'">,<!-- add truncated date: -->  date(<xsl:value-of select="attName" />) AS <xsl:value-of select="attName" />_datetrunc</xsl:if>
           <xsl:if test="position()!=last()">,</xsl:if> \
-      </xsl:for-each>           FROM <xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>  WHERE true
+      </xsl:for-each>           <xsl:if test="count(attribute[substring(attName,1,4)='emb_'])&gt;0">view_notemb_<xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/> AS </xsl:if><xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>  WHERE true
 where_<xsl:value-of select="$currEnt"/>_pk=<xsl:value-of select="$currPK" /> IN ({0})
       </xsl:comment>
+      <xsl:comment> ____________________________START CSV (encoded!)  SQL for:  <xsl:value-of select="entityName"/> _______________________________________ 
+csv_<xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>=SELECT <xsl:for-each select="attribute">
+          <xsl:choose>
+            <xsl:when test="attType='text' or substring(attType,1,7)='varchar'">'"' || replace(<xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>,'"','""') || '"' AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_</xsl:when>
+            <xsl:when test="attType='Date'">'"' || <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/> || '"' AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_</xsl:when>
+            <xsl:when test="attType='Boolean'">'"' ||  (CASE WHEN <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/> THEN 'true' ELSE 'false' END) || '"' AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_</xsl:when>
+          <xsl:when test="string-length(attFKTranslationSQL)&gt;0">'"' || replace(<xsl:value-of select="attFKTranslationSQL"/>,'"','""') || '"' AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_name</xsl:when>
+            <xsl:otherwise><xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/></xsl:otherwise>
+          </xsl:choose>
+
+          <xsl:if test="position()!=last()">,</xsl:if> \
+      </xsl:for-each>           FROM <xsl:if test="count(attribute[substring(attName,1,4)='emb_'])&gt;0">view_notemb_<xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/> AS </xsl:if><xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>  WHERE true
+
+      </xsl:comment>
+
+      
       <xsl:comment> ____________________________START:  <xsl:value-of select="entityName"/> _______________________________________ 
 </xsl:comment> 
 
