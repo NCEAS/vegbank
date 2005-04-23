@@ -133,7 +133,7 @@
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="cert" />
 		</action>
-		<action path="/DisplayDatasets" forward="/views/userdataset_detail.jsp">
+		<action path="/DisplayDatasets" forward="/views/userdataset_summary.jsp">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
 		</action>
