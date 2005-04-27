@@ -1226,7 +1226,7 @@ ALTER TABLE userCertification   ADD CONSTRAINT R1userCertification_usr_ID FOREIG
 
 ALTER TABLE userRegionalExp   ADD CONSTRAINT R1userRegionalExp_userCertification_ID FOREIGN KEY (userCertification_ID)    REFERENCES userCertification (userCertification_ID );
 
-ALTER TABLE userDataset   ADD CONSTRAINT R1userDataset_usr_ID FOREIGN KEY (usr_ID)    REFERENCES usr (usr_ID );
+--ALTER TABLE userDataset   ADD CONSTRAINT R1userDataset_usr_ID FOREIGN KEY (usr_ID)    REFERENCES usr (usr_ID );
 
 ALTER TABLE userDatasetItem   ADD CONSTRAINT R1userDatasetItem_userDataset_ID FOREIGN KEY (userDataset_ID)    REFERENCES userDataset (userDataset_ID );
 
