@@ -1,0 +1,1 @@
+ALTER TABLE userdataset ALTER COLUMN usr_id DROP NOT NULL;
