@@ -31,11 +31,14 @@ Items in this dataset:
 <logic:notEmpty name="userdatasetitem-BEANLIST">
 <table class="leftrightborders" cellpadding="2" >
 <tr>
+<th><img src="@images_link@cart1.gif" border="0" /></th>
 <th>item</th>
 <%@ include file="../autogen/userdatasetitem_summary_head.jsp" %>
 </tr>
 <logic:iterate id="onerowofuserdatasetitem" name="userdatasetitem-BEANLIST">
 <tr class='@nextcolorclass@'>
+<bean:define id="delta_ac" name="onerowofuserdatasetitem" property="itemaccessioncode" />
+<td><%@ include file="/includes/datacart_checkbox.jsp" %></td>
 <td class="largefield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
 <%@ include file="../autogen/userdatasetitem_summary_data.jsp" %>
 
