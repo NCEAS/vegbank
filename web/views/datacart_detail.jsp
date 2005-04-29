@@ -21,7 +21,7 @@
 
 
  <% Long lngDatacartID = DatasetUtility.getDatacartId(request.getSession());  ; %>
- <!-- this is guaranteed not to be null, so we can use .toString() with it -->
+ <!-- this is guaranteed not to be null, so we can use .toString() with it : your datacart ID is: <%= lngDatacartID %> -->
   <vegbank:get id="userdataset" select="userdataset" beanName="map" 
   where="where_userdataset_pk" wparam="<%= lngDatacartID.toString() %>" pager="false"/>
     
