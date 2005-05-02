@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-15 07:12:03 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2005-05-02 11:08:31 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ import org.vegbank.common.utility.ServletUtility;
  * address with the new parameter value.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.1 $ $Date: 2005-04-15 07:12:03 $
+ * @version $Revision: 1.2 $ $Date: 2005-05-02 11:08:31 $
  */
 
 public class VegbankChangeParamTag extends VegbankTag {
@@ -80,16 +80,27 @@ public class VegbankChangeParamTag extends VegbankTag {
             boolean first = true;
             Iterator kit = urlParams.keySet().iterator();
             while (kit.hasNext()) {
-                if (first) {
-                    first = false;
-                } else {
-                    newLinkHTML.append("&");
-                }
 
                 String key = (String)kit.next();
-                newLinkHTML.append(key)
-                    .append("=")
-				    .append(java.net.URLEncoder.encode((String)urlParams.get(key), "UTF-8"));
+                Object paramValue = urlParams.get(key);
+
+                if (paramValue instanceof String) {
+                    newLinkHTML.append(key).append("=")
+                        .append(java.net.URLEncoder.encode((String)paramValue, "UTF-8"));
+                } else if (paramValue instanceof String[]) {
+                    String[] paramArr = request.getParameterValues(key);
+
+                    for (int i=0; i<paramArr.length; i++) {
+                        if (first) { first = false;
+                        } else { newLinkHTML.append("&"); }
+                        newLinkHTML.append(key).append("=")
+                            .append(java.net.URLEncoder.encode(paramArr[i], "UTF-8"));
+                    }
+                }
+
+                if (first) { first = false;
+                } else { newLinkHTML.append("&"); }
+
             }
 
 			pageContext.getOut().println(newLinkHTML.toString());
