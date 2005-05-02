@@ -17385,7 +17385,7 @@ conditions may change between resampling events.
       <attName>usr_ID</attName>
       <attLabel>User ID</attLabel>
       <attModel>implementation</attModel>
-      <attNulls>yes</attNulls>
+      <attNulls>no</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="inverted" name="n/a"/>
