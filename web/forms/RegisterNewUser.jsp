@@ -9,9 +9,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2005-03-15 18:59:59 $'
-*  '$Revision: 1.15 $'
+*  '$Author: anderson $'
+*  '$Date: 2005-05-02 13:28:05 $'
+*  '$Revision: 1.16 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -53,7 +53,7 @@
 
 
 <!-- FORM -->
- <html:form action="RegisterNewUser.do" onsubmit="return validateRegisterNewUserForm(this)">
+ <html:form action="RegisterNewUser.do">
 
 <tr>
 <td valign="top">
