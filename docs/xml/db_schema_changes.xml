@@ -6534,4 +6534,10 @@ conditions may change between resampling events.
       </entity>
     </change>
   </modelChange>
+  <modelChange>
+    <modelChangeID>45</modelChangeID>
+    <modelChangeName>add project purpose field</modelChangeName>
+    <modelChangeStatus>false</modelChangeStatus>
+    <modelChangeComments>to help users know WHY data was collected, which impact collection.  Suggested on 2005-May-02 Conference call with NatureServe folks.</modelChangeComments>
+  </modelChange>
 </modelChangeDocument>
