@@ -50,6 +50,7 @@
     <li><a href="@get_link@std/covermethod">Cover Methods</a></li>
     <li><a href="@get_link@std/project">Projects</a></li>
     <li><a href="@get_link@std/reference">References</a></li>
+    <li><a href="@general_link@metadata.html">More Data</a></li>
     </ul>
     </fieldset>
 
