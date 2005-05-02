@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:11:06 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-05-02 13:58:04 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,8 +112,10 @@ public class DatasetUtility
         dsBean.setDatasetdescription(dsDescription);
         dsBean.setDatasettype(dsType);
         dsBean.setDatasetsharing(dsSharing);
-        if (usrId != null) {
+        if (usrId != null && usrId.longValue() != 0) {
             dsBean.setUsr_id(usrId.longValue());
+        } else {
+            log.debug("CREATING userdataset WITHOUT A usr_id");
         }
 
         if (beanList != null) {
@@ -345,10 +347,15 @@ public class DatasetUtility
                     if (Utility.canBeDatasetItem(beanClassName)) {
                         // make a new dsi out of the normal bean
                         // TODO: implement VBModelBean.toUserdatasetitem()
+                        AccessionCode dsiAC = new AccessionCode(dsiBean.getAccessioncode());
                         dsiBean = new Userdatasetitem();
                         dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
                         dsiBean.setItemtype(beanClassName);
-                        dsiBean.setItemaccessioncode(dsiBean.getAccessioncode());
+                        dsiBean.setItemaccessioncode(dsiAC.toString());
+                        dsiBean.setItemdatabase(dsiAC.getDatabaseId());
+                        dsiBean.setItemtable(dsiAC.getEntityName());
+                        dsiBean.setItemrecord(dsiAC.getEntityId().toString());
+
                         dsiList.add(dsiBean);
                     }
                 }
@@ -593,15 +600,16 @@ public class DatasetUtility
         Userdataset ds = null;
         try {
             if (usrId == null) { 
-                ds = getDatacartByUser(usrId);
-            } else {
                 // get the anon datacart using sessionId
                 ds = getDatasetByName(sessionId, usrId);
+            } else {
+                // a real user can only have one datacart
+                ds = getDatacartByUser(usrId);
             }
 
             if (ds == null) {
-                log.debug("creating new empty datacart");
-                ds = createDataset(null, DATACART_NAME, DATACART_DESC, 
+                log.debug("+ + + creating new empty datacart + + + usr_id: " + usrId);
+                ds = createDataset(null, sessionId, sessionId, 
                         DATACART_NAME, SHARING_PRIVATE, usrId);
             }
         } catch (SQLException ex) {
