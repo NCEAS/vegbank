@@ -13,9 +13,6 @@
    </div>
 
     <div id="permanav">
-        <a href="@web_context@DisplayDatasets.do" class="nobg"><img src="@images_link@cart1.jpg" border="0" /></a><a 
-            href="@web_context@DisplayDatasets.do">Datacart</a> &middot;
-	<a href="@general_link@account.html">My Account</a>
 
     <br>
     <select class="input-box" name="vegbankNav" onChange="window.location=this.value"><option value="#">Jump to...</option>
@@ -51,7 +48,7 @@
 	<input type="hidden" name="clearSearch" value="0" />
 
    find 
-   <select class="input-box" name="selEntity" id="selEntity" value="entity" />
+   <select class="input-box" name="selEntity" id="selEntity" value="entity" >
     <option value="anything">anything</option>
     <option value="community">communities</option>
     <option value="party">people</option>
@@ -67,6 +64,21 @@
    <input class="input-button" type="submit" value="go" style="width: 35px" />
    </form>
 
+    <!-- DATACART -->
+    <div id="datacart">
+ <%= DatasetUtility.getDatacartId(request.getSession()) %>
+        <a href="@web_context@views/datacart_detail.jsp" class="nobg"><img src="@images_link@cart1.gif" border="0" /></a>
+        <p>
+        <logic:equal name="Boolean.false" value="true">
+        <!-- non JSP page -->
+        <a href="@web_context@views/datacart_detail.jsp"><span id="datacart-count">datacart</span></a> 
+        </logic:equal>
+
+        <a href="@web_context@views/datacart_detail.jsp">download <span id="datacart-count"><vegbank:datacart display="true" /></span></a>
+        </p>
+    </div>
+
+
     <div id="header-data-links">
         <a href="@web_context@LoadPlotQuery.do">advanced search</a> 
         &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -79,7 +91,7 @@
 
   <div id="header-right">
 
-    <ul id="navmenu-left"><li><a href="@web_context@">HOME</a></li><li><a href="@web_context@DisplayUploadPlotAction.do">SUBMIT DATA</a></li><li><a href="@general_link@metadata.html">MORE DATA</a></li></ul>
+    <ul id="navmenu-left"><li><a href="@web_context@">HOME</a></li><li><a href="@web_context@DisplayUploadPlotAction.do">SUBMIT DATA</a></li><li><a href="@general_link@account.html">MY ACCOUNT</a></li></ul>
 
     <ul id="navmenu-right"><li><a href="@general_link@instructions.html">HELP</a></li><li><a href="@general_link@info.html">ABOUT</a></li><li><a href="@general_link@sitemap.html">SITE MAP</a></li></ul>
 
