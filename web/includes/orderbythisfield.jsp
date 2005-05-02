@@ -14,7 +14,6 @@
         </logic:present>
     </logic:notPresent>
     
-  </logic:notPresent>
   
 
   <% // you must pass thisfield and fieldlabel as defined beans to this !! %>
