@@ -116,7 +116,7 @@ DROP VIEW  view_reference_transl ;
                END 
              AS reference_id_transl, reference_id from reference;
 
---DROP VIEW view_plantconcept_transl;
+DROP VIEW view_plantconcept_transl;
 CREATE VIEW view_plantconcept_transl AS 
   SELECT plantconcept_id, plantname_id, plantname, reference_id, 
     plantname || ' [' || (select reference_id_transl 
