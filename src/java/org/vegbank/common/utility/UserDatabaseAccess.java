@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-10 02:36:37 $'
- *	'$Revision: 1.18 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: anderson $'
- *     '$Date: 2004-06-10 02:36:37 $'
- *     '$Revision: 1.18 $'
+ *     '$Date: 2005-05-02 11:11:06 $'
+ *     '$Revision: 1.19 $'
  */
 
 import java.sql.PreparedStatement;
@@ -105,6 +105,8 @@ public class UserDatabaseAccess
 			{
      			s = rs.getString(1);
     		}
+            rs.close();
+            query.close();
 			DBConnectionPool.returnDBConnection(conn);
 		}
 		catch (Exception e) 
@@ -135,9 +137,11 @@ public class UserDatabaseAccess
 		ResultSet rs = query.getResultSet();
 		
 		int resultCnt = 0;
-		while (rs.next() ) 
+		if (rs.next() ) 
 		{
 			s = rs.getLong(1);
+            rs.close();
+            query.close();
 			return (s > 0);
 		}
 
@@ -231,6 +235,7 @@ public class UserDatabaseAccess
 			certId = rs.getInt(1);
 		}
 
+        rs.close();
 		pstmt.close();
 		idStmt.close();
 
@@ -263,6 +268,8 @@ public class UserDatabaseAccess
 		if (rs.next()) {
 			usrId = rs.getInt(1);
 		}
+        rs.close();
+        query.close();
 
 		DBConnectionPool.returnDBConnection(conn);
 		return(usrId);
@@ -283,6 +290,7 @@ public class UserDatabaseAccess
 			Statement query = conn.createStatement();
 			query.execute("UPDATE usr set password='" + password + 
 					"' WHERE email_address='"+emailAddress+"' ");	
+            query.close();
 			DBConnectionPool.returnDBConnection(conn);
 		}
 		catch (SQLException e)
@@ -317,6 +325,7 @@ public class UserDatabaseAccess
 					
 		//issue the query
 		query.executeUpdate(sb.toString());
+        query.close();
 		DBConnectionPool.returnDBConnection(conn);
 	}
  
@@ -408,6 +417,8 @@ public class UserDatabaseAccess
 		}
 		
 		conn.close();
+        results.close();
+        query.close();
 		DBConnectionPool.returnDBConnection(conn);
 		return userBean;
 	 }
@@ -439,6 +450,7 @@ public class UserDatabaseAccess
 
 		log.debug("setting cert status: " + sb.toString());
 		stmt.executeUpdate(sb.toString());
+        stmt.close();
 		conn.close();
 		DBConnectionPool.returnDBConnection(conn);
 	 }
@@ -504,6 +516,8 @@ public class UserDatabaseAccess
 			fillInCertUserInfo(tmpCertForm);
 			allApps.add(tmpCertForm);
 		}
+        results.close();
+        query.close();
 
 		return allApps;
 	 }
@@ -538,9 +552,14 @@ public class UserDatabaseAccess
 			certForm.initFromResultSet(results, false);
 		} else {
 			log.debug("UDA.getCert: NOT FOUND # " + usercertification_id);
+            results.close();
+            query.close();
+            conn.close();
 			return null;
 		}
 
+        query.close();
+        results.close();
 		conn.close();
 		DBConnectionPool.returnDBConnection(conn);
 
@@ -662,6 +681,8 @@ public class UserDatabaseAccess
 						log.debug("UDA.updateUserInfo: NEW address: " + sb.toString());
 						stmt.executeUpdate(sb.toString());
 				}
+                rs.close();
+                stmt.close();
 
 			} 
 
@@ -730,6 +751,8 @@ public class UserDatabaseAccess
 		if (rs.next()) {
 			result = false;
 		}
+        rs.close();
+        query.close();
 		
 		DBConnectionPool.returnDBConnection(conn);
 		return result;

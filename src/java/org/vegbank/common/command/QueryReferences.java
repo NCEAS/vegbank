@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-23 01:12:51 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2005-05-02 11:11:05 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,6 +73,8 @@ public class QueryReferences  implements VegbankCommand
 			refsum.setReferenceType( rs.getString(4));
 			col.add(refsum);
 		}
+        da.closeStatement();
+        rs.close();
 		return col;
 	}
 

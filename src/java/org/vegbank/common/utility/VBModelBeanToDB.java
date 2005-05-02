@@ -3,8 +3,8 @@
  * Authors: @author@ Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2005-02-16 20:19:03 $' 
- * '$Revision: 1.7 $'
+ * '$Date: 2005-05-02 11:11:06 $' 
+ * '$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -206,6 +206,7 @@ public class VBModelBeanToDB
 			String SQL = this.getStatement(bean);
 			Statement stmt = conn.createStatement();
 			stmt.execute(SQL);
+            stmt.close();
 
 			HashMap foreignKeys = new HashMap();
 
@@ -246,7 +247,7 @@ public class VBModelBeanToDB
 			//log.debug("Committed AccessionCode updates: " + accessionCodesAdded);
 
 			// All finished with the database connection
-			DBConnectionPool.returnDBConnection(conn);
+            returnConnection();
 		}
 
 		// if we get here
@@ -460,47 +461,38 @@ public class VBModelBeanToDB
 		Iterator it = keys.iterator();
 
 		boolean firstPass = true;
-		while (it.hasNext())
-		{
+		while (it.hasNext()) {
 			Object key = it.next();
 			Object value = nameValues.get(key);
 
-			if (value instanceof String)
-			{
+			if (value == null) {
+                continue;
+            } else if (value instanceof String) {
 				// Cast to String for now
 				String stringValue = value.toString();
-				if (Utility.isStringNullOrEmpty(stringValue))
-				{
+				if (Utility.isStringNullOrEmpty(stringValue)) {
 					// Do nothing
-				} else
-				{
+				} else {
 					firstPass = this.handleCommas(sb, parameters, firstPass);
 
 					sb.append(key);
 					parameters.append("'" + Utility.encodeForDB(stringValue) + "'");
 				}
-			} else if (value instanceof Long)
-			{
+			} else if (value instanceof Long) {
 				long longValue = ((Long) value).longValue();
-				if (longValue == 0 || longValue == -1)
-				{
+				if (longValue == 0 || longValue == -1) {
 					// Do nothing
 					//pstmt.setNull( jdbcCounter, java.sql.Types.INTEGER );
-				} else
-				{
+				} else {
 					firstPass = this.handleCommas(sb, parameters, firstPass);
 					sb.append(key);
 					parameters.append(value);
 				}
 				//LogUtility.log(" found a Long " );
-			} else if (value instanceof VBModelBean)
-			{
-				// Nothing for now
-				//LogUtility.log(" found a ???? " );
-			} else
-			{
-				// ????
-				//LogUtility.log(" found a ???? " );
+			} else if (value instanceof VBModelBean) {
+				log.debug("value of key " + key + " is an unsupported VBModelBean");
+			} else {
+				log.debug("value of key " + key + " is not supported: " + value);
 			}
 		}
 
@@ -803,6 +795,7 @@ public class VBModelBeanToDB
 			{
 				PK = rs.getInt(1);
 			}
+			query.close();
 			rs.close();
 		}
 		catch ( SQLException se ) 
@@ -905,5 +898,12 @@ public class VBModelBeanToDB
             return null;
         }
         return l.get(l.size()-1);
+    }
+
+    /**
+     *
+     */
+	public void returnConnection() {
+        DBConnectionPool.returnDBConnection(conn);
     }
 }

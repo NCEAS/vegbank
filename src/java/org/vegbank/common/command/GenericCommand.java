@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-15 18:55:57 $'
- *	'$Revision: 1.30 $'
+ *	'$Date: 2005-05-02 11:11:05 $'
+ *	'$Revision: 1.31 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -251,6 +251,8 @@ public class GenericCommand
 		
 		Vector propNames = getPropertyNames(sqlFullQuery);
 		List list = getBeanList(beanName, rs, propNames);
+        da.closeStatement();
+        rs.close();
 
 		if (request != null) {
 			String id = getId();
@@ -306,6 +308,9 @@ public class GenericCommand
 		if (rs.next()) {
 			numItems = rs.getString(1);
 		}
+
+        da.closeStatement();
+        rs.close();
 
 		return Integer.parseInt(numItems);
 	}

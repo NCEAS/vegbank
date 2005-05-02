@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-13 06:39:30 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -613,6 +613,8 @@ public class DatabaseUtility
 		 {
 			usrId = rs.getLong(1);
 		 }
+         getUserId.close();
+         rs.close();
 		return usrId;
 	}
 
@@ -665,12 +667,13 @@ public class DatabaseUtility
 		 */
 		public static void getPartyValueLabelBeans(Vector partyIdNames, StringBuffer partyQuery)
 		{
-			try
-			{
-				DatabaseAccess da = new DatabaseAccess();
+		    DatabaseAccess da = null;
+	        ResultSet rs = null;
+			try {
+		        da = new DatabaseAccess();
 		
 				// hit the DB, plot
-				ResultSet rs = da.issueSelect(partyQuery.toString());		
+				rs = da.issueSelect(partyQuery.toString());		
 		
 				while (rs.next())
 				{		
@@ -716,12 +719,16 @@ public class DatabaseUtility
 					LabelValueBean partyNameId = new LabelValueBean(partyName.toString(), partyId);
 					partyIdNames.add(partyNameId);
 				}
-			}
-			catch (SQLException e1)
-			{
+
+                if (da != null) {
+                    da.closeStatement();
+                }
+                rs.close();
+
+			} catch (SQLException e1) {
 				LogUtility.log("org.vegbank.ui.struts.CommQueryForm:: " +
 					"findPartyNameIdsInDB() ERROR: " + e1.getMessage(), e1);
-			}
+            }
 		}
 	 
 	 
@@ -1038,7 +1045,7 @@ public class DatabaseUtility
 	 * 
 	 */
 	public static String removeSemicolons(String unsafe) {
-		return unsafe.replaceAll(";", "");
+		return unsafe.replaceAll(";", "\\;");
 	}
 
 

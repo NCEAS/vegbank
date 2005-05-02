@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:27:09 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,10 +51,10 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	private List tallyIgnoreList = null;
     private DataloadLog dlog = null;
     private String xmlFileName = null;
-    private long usrId = 0;
+    private Long usrId = null;
 	
 	public SAX2DBContentHandler(LoadingErrors errors, List accessionCodes, boolean load, 
-            String xmlFileName, long usrId, DataloadLog dlog)
+            String xmlFileName, Long usrId, DataloadLog dlog)
 	{
 		this.errors = errors;
 		this.load = load;

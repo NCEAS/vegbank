@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-03-02 22:34:33 $'
- *	'$Revision: 1.17 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,7 +183,8 @@ public class AccessionGen {
 				
 		query += conjunction + Utility.getPKNameFromTableName(table) + " =" + pk;
 		//log.debug("confirmation query ===> " + query);
-		ResultSet rs = conn.createStatement().executeQuery(query);
+        Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
 
 		if (rs.next()) {
 			tmpConfirm = rs.getString(2);
@@ -200,6 +201,9 @@ public class AccessionGen {
                 tmpConfirm = formatConfirmCode(tmpConfirm);
             }
 		}
+        
+        stmt.close();
+        rs.close();
 
 		return tmpConfirm;
 	}
@@ -354,9 +358,11 @@ public class AccessionGen {
 		if (rs.next()) {
 			count = rs.getLong("count");
 		}
+        stmt.close();
 
 		if (count == 0) {
 			System.out.println("No records found.");
+            rs.close();
 			return true;
 		}
 
@@ -400,6 +406,7 @@ public class AccessionGen {
 		//	log.debug("Problem updating " + tableName +"'s accession code to " + tmpConfirm);
 		//}
 
+        stmt.close();
 		rs.close();
 		conn.commit();
 

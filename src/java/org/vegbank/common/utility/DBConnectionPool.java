@@ -9,8 +9,8 @@
  * Synthesis Authors: Jing Tao Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2004-04-12 17:09:24 $'
- * '$Revision: 1.9 $'
+ * '$Date: 2005-05-02 11:11:06 $'
+ * '$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -93,10 +93,8 @@ public class DBConnectionPool implements Runnable
 	 * Returns the single instance, creating one if it's the first time this
 	 * method is called.
 	 */
-	public static synchronized DBConnectionPool getInstance() throws SQLException
-	{
-		if (instance == null)
-		{
+	public static synchronized DBConnectionPool getInstance() throws SQLException {
+		if (instance == null) {
 			instance = new DBConnectionPool();
 		}
 		return instance;
@@ -105,18 +103,15 @@ public class DBConnectionPool implements Runnable
 	/**
 	 * This is a private constructor since it is singleton
 	 */
-	private DBConnectionPool() throws SQLException
-	{
+	private DBConnectionPool() throws SQLException {
 		connectionPool = new Vector();
 		initialDBConnectionPool();
 		//running the thread to recycle DBConnection
-		if (DBCONNECTIONRECYCLETHREAD.equals("on"))
-		{
+		if (DBCONNECTIONRECYCLETHREAD.equals("on")) {
 			runner = new Thread(this);
 			runner.start();
 		}
-		if ( log.isInfoEnabled() )
-		{
+		if ( log.isInfoEnabled() ) {
 			log.info("DBConnectionPool: MaximumConnectionNumber: "+ MAXIMUMCONNECTIONNUMBER);
 			log.info("DBConnectionPool: Intial connection number: " + INITIALCONNECTIONNUMBER);
 			log.info("DBConnectionPool: Increated connection Number: " + INCREASECONNECTIONNUMBER);
@@ -177,37 +172,37 @@ public class DBConnectionPool implements Runnable
 		int index = 0; //index
 		int size =  connectionPool.size(); //size of connection pool
 		
-		if ( log.isDebugEnabled() )
-		{
-			log.debug("DBConnectionPool: Try to check out connection...");
-			log.debug("DBConnectionPool: size of connection pool: " + size);
+		if ( log.isInfoEnabled() ) {
+			log.info("Checking out connection.  Size: " + size);
 		}
 
 		//try every DBConnection in the pool
-
 		//every DBConnection will be tried LIMIT times
 		for (int j = 0; j < LIMIT; j++)
 		{
 			//create a random number as the started index for connection pool
 			//so that the connection of index of 0 won't get bombed
 			random = (new Double(Math.random() * 100)).intValue();
+            //log.debug("CHECK CONN: j=" + j + ", random="+random);
+
 			for (int i = 0; i < size; i++)
 			{
-				index = (i + random) % size;
+                index = (i + random) % size;
+
+                //log.debug(":::::::::::: i=" + i+", index=" + index);
 				db = (DBConnection) connectionPool.elementAt(index);
 
-				if ( log.isDebugEnabled() )
-				{
-					log.debug("DBConnectionPool: Index: " + index);
-					log.debug("DBConnectionPool: Status: " + db.getStatus());
-				}
-				
 				//check if the connection is free
-				if (db.getStatus() == FREE)
+                int dbStatus = db.getStatus();
+				if (dbStatus == FREE)
 				{
-					//If this connection is good, return this DBConnection
-					if (validateDBConnection(db))
-					{
+                    if ( log.isDebugEnabled() ) {
+                        //log.debug("connection[" + index + "]: " + ((dbStatus == FREE) ? "FREE": "BUSY"));
+                    }
+				
+					// if this connection is good, return it
+					if (validateDBConnection(db)) {
+
 						//set this DBConnection status
 						db.setStatus(BUSY);
 						//increase checkout serial number
@@ -218,63 +213,70 @@ public class DBConnectionPool implements Runnable
 						db.setCheckOutMethodName(methodName);
 						db.setAutoCommit(true);
 
-						if ( log.isDebugEnabled() )
-						{
-							log.debug("DBConnectionPool: The connection is checked out: "+ db.getTag());
+						if ( log.isDebugEnabled() ) {
+							//log.debug("checked out connection: "+ db.getTag());
 						}
 
 						//set check out time
 						db.setCheckOutTime(System.currentTimeMillis());
-						//check it out
+						
+                        //log.debug("returning VALID connection");
+                        log.debug("------------ OUT [" + index + "]");
 						return db;
-					} //if
-					else
-					//The DBConnection has some problem
-					{
+
+					} else {
+                        log.debug("************ INVALID CONNECTION...repairing");
+					    //the DBConnection has some problem
 						//close this DBConnection
 						db.close();
-						//remove it form connection pool
+						//remove it from connection pool
 						connectionPool.remove(index);
 						//insert a new DBConnection to same palace
 						db = new DBConnection();
 						connectionPool.insertElementAt(db, index);
-					} //else
-				} //if
+
+                        // PMA: 29apr2005: returning db
+                        log.debug("------------ (repaired) OUT [" + index + "]");
+                        return db;
+
+					} 
+				} else {
+                    log.debug("------------ BUSY [" + index + "]");
+                }
 			} //for
 		} //for
+
 		//if couldn't get a connection, we should increase DBConnection pool
 		//if the connection pool size is less than maximum connection number
 		if (size < MAXIMUMCONNECTIONNUMBER)
 		{
-			if ((size + INCREASECONNECTIONNUMBER) < MAXIMUMCONNECTIONNUMBER)
+			if ((size + INCREASECONNECTIONNUMBER) <= MAXIMUMCONNECTIONNUMBER)
 			{
 				//if we can create INCREASECONNECTIONNUMBER of new DBConnection
 				//add to connection pool
-				for (int i = 0; i < INCREASECONNECTIONNUMBER; i++)
-				{
+				for (int i = 0; i < INCREASECONNECTIONNUMBER; i++) {
 					DBConnection dbConn = new DBConnection();
 					connectionPool.add(dbConn);
-				} //for
-			} //if
-			else
-			{
-				//There is no enough room to increase INCREASECONNECTIONNUMBER
-				//we create new DBCoonection to Maximum connection number
-				for (int i = size + 1; i <= MAXIMUMCONNECTIONNUMBER; i++)
-				{
+				} 
+
+			} else {
+				//There is not enough room to increase INCREASECONNECTIONNUMBER
+				//we create new DBConnection to Maximum connection number
+				for (int i = size + 1; i <= MAXIMUMCONNECTIONNUMBER; i++) {
 					DBConnection dbConn = new DBConnection();
 					connectionPool.add(dbConn);
-				} //for
-			} //else
-		} //if
-		else
-		{
-			log.error("DBConnectionPool: The maximum of "
-					+ MAXIMUMCONNECTIONNUMBER + " open db connections has been reached."
-					+ " New db connection to Vegbank" + " cannot be established.");
+				} 
+			} 
+
+            log.debug("Added connections.  Current size: " + connectionPool.size());
+
+		} else {
+			log.error("ERROR: DB pool is maxed out at " + MAXIMUMCONNECTIONNUMBER);
 			return null;
-		} //else
+		} 
+
 		//recursive to get new connection
+        log.debug("getDBConnection(): RECURSE");
 		return getDBConnection(methodName);
 	} //getDBConnection
 
@@ -315,12 +317,12 @@ public class DBConnectionPool implements Runnable
 			return false;
 		}
 
-		//Try to run a simple query
+		//Confirm connection is open
 		try
 		{
 			if ( dbConn.isClosed() )
 			{
-				log.debug("DBConnectionPool: Connection is already closed");
+				log.debug("validateDBConnection(): Connection is closed");
 				return false;
 			}
 			
@@ -333,11 +335,11 @@ public class DBConnectionPool implements Runnable
 			//increase connection time
 			dbConn.setConnectionTime(stopTime - startTime);
 
-			log.debug("DBConnectionPool.validateDBConnection:  conn. appears valid");
+			//log.debug("DBConnectionPool.validateDBConnection:  conn. appears valid");
 		}
 		catch (Exception e)
 		{
-			log.error("DBConnectionPool: Error in validateDBConnection: "+ e);
+			log.error("DBConnectionPool: Error in validateDBConnection: "+ e.toString());
 			return false;
 		}
 		return true;
@@ -355,26 +357,22 @@ public class DBConnectionPool implements Runnable
 		int index = -1;
 		DBConnection dbConn = null;
 		index = getIndexOfPoolForConnection(conn);
-		if (index == -1)
-		{
-			log.debug("DBConnectionPool: Couldn't find a DBConnection in the pool"
-				+ " which have same tag to the returned DBConnetion object");
+		if (index == -1) {
+			log.debug("Couldn't find a DBConnection in the pool"
+				+ " which has same tag of the returned DBConnetion object");
 			return;
-		} //if
-		else
-		{
+
+		} else {
 			//check the paramter - serialNumber which will be keep in calling method
 			//if it is as same as the object's checkoutserial number.
 			//if it is same return it. If it is not same, maybe the connection
 			// already
 			// was returned ealier.
-			if ( log.isDebugEnabled() )
-			{
-				log.debug("DBConnectionPool: serial number in Connection: "+ conn.getCheckOutSerialNumber());
-				log.debug("DBConnectionPool: serial number in local: " + serialNumber);
-			}
-			if (conn.getCheckOutSerialNumber() == serialNumber)
-			{
+			if (conn.getCheckOutSerialNumber() == serialNumber) {
+                if ( log.isDebugEnabled() ) {
+                    log.debug("------------ IN [" + index + "]");
+                }
+
 				dbConn = (DBConnection) connectionPool.elementAt(index);
 				//set status to free
 				dbConn.setStatus(FREE);
@@ -383,14 +381,11 @@ public class DBConnectionPool implements Runnable
 						- dbConn.getCheckOutTime());
 				//set check out time to 0
 				dbConn.setCheckOutTime(0);  
-				log.debug("DBConnectionPool: Connection: " + dbConn.getTag()
-						+ " checked in.");
-			} //if
-			else
-			{
-				log.error("DBConnectionPool: This DBConnection couldn't be return as the serial number is not recognized" );
-			} //else
-		} //else
+				//log.debug("** CHECK-IN SUCCESS ** " + dbConn.getTag());
+			} else {
+				log.error("!!CHECK-IN FAILURE!!  serial number mismatch");
+			} 
+		} 
 	} //returnConnection
 
 	/**
@@ -406,27 +401,23 @@ public class DBConnectionPool implements Runnable
 		int index = -1;
 		String info = null;
 		//if conn is null return -1 too
-		if (conn == null)
-		{
+		if (conn == null) {
 			return -1;
 		}
 		//get tag of this returned DBConnection
 		info = conn.getTag();
 		//if the tag is null or empty, -1 will be returned
-		if (info == null || info.equals(""))
-		{
+		if (info == null || info.equals("")) {
 			return index;
 		}
 		//compare this info to the tag of every DBConnection in the pool
-		for (int i = 0; i < connectionPool.size(); i++)
-		{
+		for (int i = 0; i < connectionPool.size(); i++) {
 			DBConnection dbConn = (DBConnection) connectionPool.elementAt(i);
-			if (info.equals(dbConn.getTag()))
-			{
+			if (info.equals(dbConn.getTag())) {
 				index = i;
 				break;
-			} //if
-		} //for
+			} 
+		} 
 		return index;
 	} //getIndexOfPoolForConnection
 
@@ -436,52 +427,41 @@ public class DBConnectionPool implements Runnable
 	public static void release()
 	{
 		//shut down the backgroud recycle thread
-		if (DBCONNECTIONRECYCLETHREAD.equals("on"))
-		{
+		if (DBCONNECTIONRECYCLETHREAD.equals("on")) {
 			runner.interrupt();
 		}
+
 		//close every dbconnection in the pool
-		synchronized (connectionPool)
-		{
-			for (int i = 0; i < connectionPool.size(); i++)
-			{
-				try
-				{
+		synchronized (connectionPool) {
+			for (int i = 0; i < connectionPool.size(); i++) {
+				try {
 					DBConnection dbConn = (DBConnection) connectionPool.elementAt(i);
 					dbConn.close();
-				} //try
-				catch (SQLException e)
-				{
+				} catch (SQLException e) {
 					log.error("DBConnectionPool: Error in releasing connection: " + e);
-				} //catch
-			} //for
-		} //synchronized
+				} 
+			} 
+		} 
 	} //release()
 
 	/**
 	 * periodically to recycle the connection
 	 */
-	public void run()
-	{
+	public void run() {
 		DBConnection dbConn = null;
 		//keep the thread running
-		log.info("DBConnectionPool: Maintenance tread started.");
-		while (true)
-		{
+		while (true) {
+		    log.info("(((((((( DBConnectionPool: Maintenance thread activating ))))))))");
 			//check every dbconnection in the pool
-			synchronized (connectionPool)
-			{
+			synchronized (connectionPool) {
 				int numberCheckedOut = 0;
-				for (int i = 0; i < connectionPool.size(); i++)
-				{
+				for (int i = 0; i < connectionPool.size(); i++) {
 					dbConn = (DBConnection) connectionPool.elementAt(i);
 					//if a DBConnection conncectioning time for one check out is greater
 					//than 30000 milliseconds print it out
-					if (dbConn.getStatus() == BUSY)
-					{
+					if (dbConn.getStatus() == BUSY) {
 						numberCheckedOut++;
-						if ((System.currentTimeMillis() - dbConn.getCheckOutTime()) >= 30000)
-						{
+						if ((System.currentTimeMillis() - dbConn.getCheckOutTime()) >= 30000) {
 							log.info("DBConnectionPool: This DBConnection is checked out for: "
 											+ (System.currentTimeMillis() - dbConn.getCheckOutTime())
 											/ 1000
@@ -491,21 +471,19 @@ public class DBConnectionPool implements Runnable
 											+ dbConn.getCheckOutMethodName());
 						}
 					}
+
 					// validate the free connection in the pool
-					if (dbConn.getStatus() == FREE)
-					{
-						try
-						{
+					if (dbConn.getStatus() == FREE) {
+						try {
 							//try to print out the warning message for every connection
-							if (dbConn.getWarningMessage() != null)
-							{
+							if (dbConn.getWarningMessage() != null) {
 								log.warn("DBConnectionPool: Warning for connection "
 										+ dbConn.getTag() + " : " + dbConn.getWarningMessage());
 							}
+
 							//check if it is valiate, if not create new one and replace old
 							// one
-							if (!validateDBConnection(dbConn))
-							{
+							if (!validateDBConnection(dbConn)) {
 								log.debug("DBConnectionPool: Recyle it: "+ dbConn.getTag());
 								//close this DBConnection
 								dbConn.close();
@@ -514,26 +492,20 @@ public class DBConnectionPool implements Runnable
 								//insert a new DBConnection to same palace
 								dbConn = new DBConnection();
 								connectionPool.insertElementAt(dbConn, i);
-							} //if
-						} //try
-						catch (SQLException e)
-						{
+							} 
+						} catch (SQLException e) {
 							log.error("DBConnectionPool: Error in DBConnectionPool.run: ", e);
-						} //catch
-					} //if
-				} //for
-				log.debug(numberCheckedOut + " out of " + connectionPool.size()
-						+ ", checked out");
+						} 
+					}
+				}
+				log.debug(numberCheckedOut + " out of " + connectionPool.size() + " checked out");
 			} //synchronize
 			shrinkConnectionPoolSize();
 			//Thread sleep
 
-			try
-			{
+			try {
 				Thread.sleep(CYCLETIMEOFDBCONNECTION);
-			} 
-			catch (InterruptedException e)
-			{
+			} catch (InterruptedException e) {
 				log.info("DBConnectionPool: DBConnectionPool.run was interupped: " + e.getMessage());
 				return;
 			}	
@@ -656,6 +628,10 @@ public class DBConnectionPool implements Runnable
 	 */
 	public static void returnDBConnection(DBConnection conn)
 	{ 
-		DBConnectionPool.returnDBConnection(conn, conn.getCheckOutSerialNumber());
+        if (conn != null) {
+		    DBConnectionPool.returnDBConnection(conn, conn.getCheckOutSerialNumber());
+        } else {
+            log.error("MAJOR ERROR while returning DBConnection:\nconnection was null\n");
+        }
 	}
 } 

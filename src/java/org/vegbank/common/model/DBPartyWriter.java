@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:40:56 $'
- *	'$Revision: 1.9 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-05-02 11:11:05 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,6 +133,7 @@ public class DBPartyWriter
 					if (rs.first() == true)
 					{
 						partyId = rs.getInt(1);
+                        rs.close();
 						exists = true;
 					}	
 				}
@@ -166,6 +167,7 @@ public class DBPartyWriter
 					partyId = rs.getInt(1);
 					cnt++;
 				}
+                rs.close();
 			}
 			catch (Exception e)
 			{

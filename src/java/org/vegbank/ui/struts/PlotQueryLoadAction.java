@@ -1,11 +1,11 @@
 /*
- *	'$Id: PlotQueryLoadAction.java,v 1.2 2004-06-14 22:16:51 anderson Exp $'
+ *	'$Id: PlotQueryLoadAction.java,v 1.3 2005-05-02 11:11:06 anderson Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-14 22:16:51 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,6 +140,7 @@ public class PlotQueryLoadAction extends VegbankAction {
 			if ( ! rs.wasNull() )
 				pqform.setCurMaxArea(Integer.toString( (int)Math.ceil(Double.parseDouble(pqform.getCurMaxArea()))));
 		}
+        da.closeStatement();
 
 		// hit the DB, obs
 		rs = da.issueSelect(obsQuery.toString());		
@@ -149,5 +150,8 @@ public class PlotQueryLoadAction extends VegbankAction {
 			pqform.setCurMinObsStartDate(rs.getString(1));
 			pqform.setCurMaxObsEndDate(rs.getString(2));
 		}
+
+        da.closeStatement();
+        rs.close();
 	}
 }

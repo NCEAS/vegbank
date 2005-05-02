@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-08 00:00:40 $'
- *	'$Revision: 1.28 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.29 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,7 @@
 
 package org.vegbank.ui.struts;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -64,6 +63,8 @@ public class PlotQueryAction extends VegbankAction
 		" SELECT DISTINCT(observation.accessioncode), observation.authorobscode, " +
 		" plot.latitude, plot.longitude, observation.observation_id";
 
+    private DatabaseAccess da = null;
+
 
 	// add sql to get the top taxa
 	static {
@@ -85,6 +86,7 @@ public class PlotQueryAction extends VegbankAction
 		log.debug(" In action PlotQueryAction");
 		ActionErrors errors = new ActionErrors();
 
+        da = new DatabaseAccess();
 		StringBuffer query = new StringBuffer(1024);
 		query.append(selectClause)
 				.append(" FROM view_notemb_plot as plot, project, observation, covermethod, stratummethod ")
@@ -238,16 +240,17 @@ public class PlotQueryAction extends VegbankAction
 		try
 		{
 			Vector resultSets = new Vector();
-			DatabaseAccess da = new DatabaseAccess();
 
 			// Get all resultsets
 			log.debug("PLOT QUERY #1: " + query.toString());
 			resultSets.add( da.issueSelect(query.toString() ) );
+			Statement stmt1 = da.getLastStatement();  // so you can close it later
 			getPlantResultSets(pqForm, resultSets);
 			getCommunitiesResultSets(pqForm, resultSets);
 
 			// Save the Collection of Summaries into the session
 			request.getSession().setAttribute("PlotsResults", getPlotSummaries(conjunction, resultSets));
+            stmt1.close();
 		}
 		catch (Exception e1)
 		{
@@ -352,6 +355,7 @@ public class PlotQueryAction extends VegbankAction
 					}
 				}
 			}
+            rs.close();
 			isFirstResultSet = false;
 		}
 		Collection col = (Collection) workspace.values();
@@ -463,10 +467,10 @@ public class PlotQueryAction extends VegbankAction
 				appendWhereClause(plantQuery, "", plantQueryConditions );
 
 				// Have my query now run it!!
-				DatabaseAccess da = new DatabaseAccess();
 				log.debug("PLOT QUERY (plants): " + plantQuery.toString());
 				ResultSet rs2 = da.issueSelect(plantQuery.toString());
 				plantResultSets.add(rs2);
+                rs2.close();
 			}
 			// I've got all my resultSets
 		}
@@ -527,10 +531,11 @@ public class PlotQueryAction extends VegbankAction
 				appendWhereClause(communityQuery, "", communityQueryConditions );
 
 				// Have my query now run it!!
-				DatabaseAccess da = new DatabaseAccess();
 				log.debug("PLOT QUERY (community): " + communityQuery.toString());
 				ResultSet rs2 = da.issueSelect(communityQuery.toString());
 				resultSets.add(rs2);
+                da.closeStatement();
+                rs2.close();
 			}
 			// I've got all my resultSets
 		}

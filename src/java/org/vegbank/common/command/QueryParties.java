@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-07-23 01:12:51 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-05-02 11:11:05 $'
+ *	'$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,6 +86,8 @@ public class QueryParties  implements VegbankCommand
 			partysum.setContactInstructions( rs.getString(7));
 			col.add(partysum);
 		}
+        da.closeStatement();
+        rs.close();
 		return col;
 	}
 

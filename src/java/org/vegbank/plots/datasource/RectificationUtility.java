@@ -11,9 +11,9 @@ import org.vegbank.common.utility.DBConnection;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,6 +84,8 @@ public class RectificationUtility
 				// Just return 0 here and let the client handle it
 				result = 0;
 			}
+            rs.close();
+            stmt.close();
 		}
 		catch (SQLException e)
 		{ 

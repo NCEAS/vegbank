@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-03-17 23:24:06 $'
- *	'$Revision: 1.21 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,6 +78,7 @@ import org.vegbank.common.utility.DatasetUtility;
 import org.vegbank.common.utility.KeywordGen;
 import org.vegbank.common.utility.DataloadLog;
 import org.vegbank.common.utility.VBModelBeanToDB;
+import org.vegbank.common.utility.AccessionCode;
 
 
 /**
@@ -112,7 +113,7 @@ public class LoadTreeToDatabase
     private AccessionGen ag = null;
     private VBModelBeanToDB bean2db = null;
     private String xmlFileName = null;
-    private long usrId = 0;
+    private Long usrId = new Long(0);
 
 	
 	// This holds the name of the current concept
@@ -137,7 +138,7 @@ public class LoadTreeToDatabase
 	 * 
 	 * @param vegbankPackage -- the root of the dataset 
 	 */
-	public void insertVegbankPackage(Hashtable vbPkg, String xmlFileName, long usrId)
+	public void insertVegbankPackage(Hashtable vbPkg, String xmlFileName, Long usrId)
 		    throws SQLException
 	{
 		this.vegbankPackage = vbPkg;
@@ -208,7 +209,7 @@ public class LoadTreeToDatabase
 
 		//log.info("commit new data?: " + commit);
 
-        String dsAC = "";
+        AccessionCode dsAC = null;
         String receiptTpl, subject;
 		if (commit == true && doCommit == true) {
             //////////////////////////////////////////////////////////////////
@@ -222,7 +223,7 @@ public class LoadTreeToDatabase
                 log.debug("====================== DATASET CREATION"); 
                 dsAC = createDataset();
                 dlog.addTag("datasetURL", vbResources.getString("serverAddress") + 
-                        "/get/std/userdataset/" + dsAC);
+                        "/get/std/userdataset/" + dsAC.toString());
             } catch (Exception ex) {
                 log.error("problem creating dataset or dataset items", ex);
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
@@ -2223,7 +2224,7 @@ public class LoadTreeToDatabase
      * along with all of its userdatasetitem children records.
      * @return new userdataset's accession code
      */
-    private String createDataset() throws SQLException, Exception {
+    private AccessionCode createDataset() throws SQLException, Exception {
 
         // create a userdatasetitem for each appropriate record
         String tableName;
@@ -2255,10 +2256,10 @@ public class LoadTreeToDatabase
 
         // insert the dataset items as a new dataset
         DatasetUtility dsu = new DatasetUtility();
-        String dsAC = dsu.insertDataset(dsiBeanList, xmlFileName, 
+        AccessionCode dsAC = dsu.insertDataset(dsiBeanList, xmlFileName, 
                 "Created via XML upload", "load", "private", usrId);
 
-        log.debug("ADDED userdataset " + dsAC);
+        log.debug("ADDED userdataset " + dsAC.toString());
         return dsAC;
     }
 

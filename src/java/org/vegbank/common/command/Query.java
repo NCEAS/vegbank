@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-11-25 19:21:06 $'
- *	'$Revision: 1.4 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-05-02 11:11:05 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,6 +68,8 @@ public class Query
 		if ( rs.next() )
 		{
 			plantConceptId = rs.getInt(1);
+            da.closeStatement();
+            rs.close();
 		}
 		else
 		{
@@ -99,6 +101,8 @@ public class Query
 		if ( rs.next() )
 		{
 			plantStatusId = rs.getInt(1);
+            da.closeStatement();
+            rs.close();
 		}
 		else
 		{
@@ -129,6 +133,8 @@ public class Query
 		if ( rs.next() )
 		{
 			commConceptId = rs.getInt(1);
+            da.closeStatement();
+            rs.close();
 		}
 		else
 		{
@@ -161,6 +167,8 @@ public class Query
 		if ( rs.next() )
 		{
 			commStatustId = rs.getInt(1);
+            da.closeStatement();
+            rs.close();
 		}
 		else
 		{

@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:27:09 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,7 +138,7 @@ public class VegbankXMLUpload
 
 		errorHandler = new SAXValidationErrorHandler(errors);
 		contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load, 
-                xmlFileNameNoPath, webUser.getUserid(), dlog);
+                xmlFileNameNoPath, webUser.getUseridLong(), dlog);
 		contentHandler.setController(controller);
 		log.debug("set ConditionalContentHandlerController");
 

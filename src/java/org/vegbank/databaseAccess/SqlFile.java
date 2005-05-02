@@ -5,9 +5,9 @@ package org.vegbank.databaseAccess;
  *    Authors: @authors@
  *    Release: @release@
  *
- *   '$Author: farrell $'
- *     '$Date: 2003-07-11 23:14:04 $'
- * '$Revision: 1.1 $'
+ *   '$Author: anderson $'
+ *     '$Date: 2005-05-02 11:11:06 $'
+ * '$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,6 +141,7 @@ public class SqlFile
 							sb.append(s);
 							System.out.println("statement: " + sb.toString() );
 							stmt.executeUpdate( sb.toString() );
+                            stmt.close();
 						}
 						catch (Exception x) 
 						{

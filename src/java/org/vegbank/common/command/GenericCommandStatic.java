@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-08 00:01:10 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2005-05-02 11:11:05 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -197,6 +197,8 @@ select (subquery stuff goes here as stuff) as somename from...
 		
 		Vector propNames = getPropertyNames(SQLStatement);
 		List list = getBeanList(beanName, rs, propNames);
+        da.closeStatement();
+        rs.close();
 
 		if (request != null) {
 			log.debug("Setting genericBean");

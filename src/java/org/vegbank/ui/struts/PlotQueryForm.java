@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-08 00:00:40 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@ package org.vegbank.ui.struts;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.struts.validator.ValidatorForm;

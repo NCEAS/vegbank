@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-15 17:22:43 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -141,6 +141,7 @@ public class InterpretPlantAction extends VegbankAction {
 					// use the extant plantName 
 					log.debug("using extant plantName");
 					tint.setPlantname_id(rs.getLong(1));
+                    da.closeStatement();
 
 				} else {
 					// plantName does not yet exist, so store it
@@ -162,6 +163,7 @@ public class InterpretPlantAction extends VegbankAction {
 				if (rs.next()) {
 					log.debug("setting plantconcept_id");
 					tint.setPlantconcept_id(rs.getLong(1));
+                    da.closeStatement();
 
 				} else {
 					log.error("Can't find plantconcept_id for given AC: " + ipForm.getPcAC());
@@ -188,6 +190,7 @@ public class InterpretPlantAction extends VegbankAction {
 				rs = da.issueSelect("SELECT role_id FROM aux_role WHERE LOWER(rolecode)='not specified'");
 				if (rs.next()) {
 					tint.setRole_id(rs.getLong(1));
+                    da.closeStatement();
 				} else {
 					log.error("Can't find role_id for rolecode: 'Not specified'");
 					errors.add(Globals.ERROR_KEY, new ActionMessage(

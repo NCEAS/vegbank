@@ -8,13 +8,14 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.DateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.servlet.http.*;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.dbAdapter.AbstractDatabase;
@@ -22,7 +23,9 @@ import org.vegbank.common.model.Aux_role;
 import org.vegbank.common.model.Place;
 import org.vegbank.common.model.Plantconcept;
 import org.vegbank.common.model.Plantstatus;
+import org.vegbank.common.model.VBModelBean;
 import org.vegbank.common.utility.mail.*;
+import org.vegbank.common.Constants;
 
 /*
  * '$RCSfile: Utility.java,v $'
@@ -30,8 +33,8 @@ import org.vegbank.common.utility.mail.*;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-03-23 01:25:28 $'
- * '$Revision: 1.46 $'
+ * '$Date: 2005-05-02 11:11:06 $'
+ * '$Revision: 1.47 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,6 +88,8 @@ public class Utility
 	public static String VB_EMAIL_ADMIN_FROM;
 	public static List DS_CANDIDATES;
 	public static String PARAM_DELIM = ";"; 
+	public static String DATACART_KEY = "datacart";   // found in session
+	public static String DATACART_COUNT_KEY = "datacart-count";   // found in session
 
 
 	static { try {
@@ -331,6 +336,39 @@ public class Utility
 		return object;
 	}
 	
+    /**
+     * Generates a VBModelBean from the field names in a ResultSet.
+     */
+    public static VBModelBean buildBean(ResultSetMetaData meta, ResultSet rs, String beanName) {
+
+        Object bean = null;
+        try {
+            if (rs == null || !rs.first()) { return null; }
+
+            int colCount = meta.getColumnCount();
+            bean = Utility.createObject(VBObjectUtils.DATA_MODEL_PACKAGE + beanName);
+
+            // use DB column names to set properties
+            for (int i=1; i<=colCount; i++) {
+                String propName = meta.getColumnName(i);
+                Object value = rs.getObject(i);
+                //String value = rs.getString(i);
+                try {
+                    if (value != null) {
+                        BeanUtils.copyProperty(bean, propName, value);	
+                    }
+                } catch (Exception ex) {
+                    log.debug("unable to set " + propName + " in bean " + beanName);
+                }
+            }
+        } catch (Exception ex) {
+            log.error("Problem building bean from DB results.", ex);
+        }
+
+        return (VBModelBean)bean;
+    }
+
+
 	/**
 	 * <p>
 	 * Utility Method to check for nulls and empty String
@@ -518,7 +556,7 @@ public class Utility
 	 *   
 	 * @return Date-- current Date
 	 */
-	public static Date getNow( ) 
+	public static java.util.Date getNow( ) 
 	{
 		// TODO: not tested yet
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -534,7 +572,7 @@ public class Utility
 	 public static String getCurrentDate()
 	 {
 	 	// TODO: use getNow() when it has been tested
-		Date now = new Date();  //Set Date variable now to the current date and time
+		java.util.Date now = new java.util.Date();  //Set Date variable now to the current date and time
 		DateFormat med = DateFormat.getDateInstance (DateFormat.MEDIUM);
 		return med.format(now);
 	 }
@@ -881,4 +919,12 @@ public class Utility
             return src;
         }
     }
+
+    /**
+     * Returns usr_id of authenticated user, or null if not logged in.
+     */
+    public static Long getAuthenticatedUsrId(HttpSession session) {
+        return (Long)session.getAttribute(Constants.USER_KEY);
+    }
+
 }

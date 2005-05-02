@@ -90,6 +90,8 @@ public class LoadBeansToCache
 				accessionCodes.add(accessionCode);
 			}
 		}
+        da.closeStatement();
+        rs.close();
 		
 		// Now retrive all these AC's from db thus populating the cache
 		this.FetchMBsByAC(accessionCodes);

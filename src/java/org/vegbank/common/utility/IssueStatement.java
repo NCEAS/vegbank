@@ -5,9 +5,9 @@ package org.vegbank.common.utility;
  *
  * Purpose: 
  *
- * '$Author: farrell $'
- * '$Date: 2003-11-25 19:31:34 $'
- * '$Revision: 1.6 $'
+ * '$Author: anderson $'
+ * '$Date: 2005-05-02 11:11:06 $'
+ * '$Revision: 1.7 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -153,6 +153,7 @@ public class IssueStatement
 					returnedValues.addElement(results.getString(1));
 				}
 			}
+            results.close();
 		}
 		catch (Exception e)
 		{

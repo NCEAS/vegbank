@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-10-17 22:09:14 $'p
- *	'$Revision: 1.4 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-05-02 11:11:05 $'p
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -133,6 +133,7 @@ public class DBReferenceWriter
 				{
 					cnt++;
 				}
+                rs.close();
 				if (cnt > 0)
 				{
 					exists = true;

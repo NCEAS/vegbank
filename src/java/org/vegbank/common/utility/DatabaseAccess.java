@@ -5,8 +5,8 @@
  *             			National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-03-25 06:42:06 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2005-05-02 11:11:06 $'
+ *	'$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ import org.apache.commons.logging.LogFactory;
 public class DatabaseAccess
 {
 	private static Log log = LogFactory.getLog(DatabaseAccess.class);
+	private Statement lastStmt = null;
 
 	//Global variables for the database connection
 	
@@ -54,22 +55,21 @@ public class DatabaseAccess
 	{
 		DBConnection dbConn = null;//DBConnection
 		int serialNumber = -1;//DBConnection serial number
-		PreparedStatement pstmt = null;
 		ResultSet results = null;
+		Statement query = null;
 		//	Get DBConnection
-		try
-		{
+		try {
 			dbConn=DBConnectionPool.getInstance().getDBConnection("Select from database");
-			serialNumber=dbConn.getCheckOutSerialNumber();
+			//serialNumber=dbConn.getCheckOutSerialNumber();
 			
-			log.debug("DatabaseAccess > Running query: " + inputStatement);
+			log.debug(":*: " + inputStatement);
 			
-			Statement query = dbConn.createStatement();
+			query = dbConn.createStatement();
 			results = query.executeQuery(inputStatement);
-		}
-		finally
-		{
+		} finally {
 			//Return dbconnection too pool
+            //log.debug("@ calling returnDBConnection()");
+            lastStmt = query;
 			DBConnectionPool.returnDBConnection(dbConn);
 		}
 		return results;
@@ -84,26 +84,47 @@ public class DatabaseAccess
 	 */
 	public int issueUpdate(String inputStatement) throws SQLException 
 	{
-		DBConnection dbConn = null;//DBConnection
-		int serialNumber = -1;//DBConnection serial number
-		PreparedStatement pstmt = null;
+		DBConnection dbConn = null;
+		int serialNumber = -1;
 		int results = -1;
-		//	Get DBConnection
-		try
-		{
+		Statement query = null;
+
+		try {
 			dbConn=DBConnectionPool.getInstance().getDBConnection("This is an empty string");
-			serialNumber=dbConn.getCheckOutSerialNumber();
+			//serialNumber=dbConn.getCheckOutSerialNumber();
 			
-			log.debug("DatabaseAccess > Running update query: " + inputStatement);
+			log.debug(":+: " + inputStatement);
 			
-			Statement query = dbConn.createStatement();
+			query = dbConn.createStatement();
 			results = query.executeUpdate(inputStatement);
-		}
-		finally
-		{
-			//Return dbconnection too pool
+		} finally {
+			//Return dbconnection to pool
+            query.close();
+            log.debug("@ calling returnDBConnection()");
 			DBConnectionPool.returnDBConnection(dbConn);
 		}
 		return results;
-	} //end method
+	}
+
+
+    /**
+     * Closes most recent query.
+     */
+    public void closeStatement() {
+        try {
+            if (lastStmt != null) {
+                lastStmt.close();
+            }
+        } catch (SQLException ex) {
+            log.debug("Unable to close previous statment: " + ex.toString());
+        }
+    }
+
+    /**
+     * Returns recent query.
+     */
+    public Statement getLastStatement() {
+        return lastStmt;
+    }
+
 }
