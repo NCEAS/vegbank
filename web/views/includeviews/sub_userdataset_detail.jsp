@@ -7,7 +7,7 @@
     %>
 <vegbank:pager />
 <logic:empty name="userdataset-BEANLIST">
-                <p>Sorry, no Datasets found! <% if ( strWebUserId == "-1" ) {  %> you are not logged on. <% } %></p>
+                <p>Sorry, no datasets found. <% if ( strWebUserId == "-1" ) {  %> you are not logged on. <% } %></p>
           </logic:empty>
 <logic:notEmpty name="userdataset-BEANLIST"><!-- set up table -->
 
@@ -29,6 +29,7 @@ Items in this dataset:
    </logic:empty>
 
 <logic:notEmpty name="userdatasetitem-BEANLIST">
+<form action="" method="GET" id="cartable">
 <table class="leftrightborders" cellpadding="2" >
 <tr>
 <th><img src="@images_link@cart1.gif" border="0" /></th>
@@ -45,6 +46,8 @@ Items in this dataset:
 </tr>
 </logic:iterate>
 </table>
+</form>
+@mark_datacart_items@
 </logic:notEmpty>
 </TD></TR>
 

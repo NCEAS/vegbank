@@ -1,6 +1,7 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
+  @ajax_js_include@
 
   
    <%
@@ -11,6 +12,7 @@
      int inttemp=0 ; 
 
     %>
+
 
 
 <title>VegBank Plots</title>
@@ -49,9 +51,12 @@
                 Sorry, no plot-observations are available.
           </logic:empty>
 <logic:notEmpty name="plotobs-BEANLIST"><!-- set up table -->
-
+<form action="" method="GET" id="cartable">
 <TABLE width="100%" class="leftrightborders" cellpadding="2">
-<tr><th>More</th>
+<tr>
+<th><a href="#" alt="select all/none" class="nobg"><img src="@images_link@cart1.gif" border="0" /></a></th>
+
+<th>More</th>
 
 <bean:define id="thisfield" value="stateprovince" />
 <bean:define id="fieldlabel">Location</bean:define>
@@ -84,6 +89,10 @@
 <!-- start of plot & obs fields-->
 
 <tr class='@nextcolorclass@'>
+<td>
+<bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
+<%@ include file="../includes/datacart_checkbox.jsp" %>
+    </td>
 <td><a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>details</a></td>
 
 <!-- plot data -->
@@ -153,6 +162,9 @@
 </tr>
 </logic:iterate><!-- plot -->
 </TABLE>
+</form>
+@mark_datacart_items@
+
 <vegbank:pager />
 
 </logic:notEmpty>
