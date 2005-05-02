@@ -17,7 +17,7 @@
   
 <h1>Your Datacart</h1>
 <p class="instructions">
-  Your datacart is the dataset that follows you around VegBank and holds plots and other items.<br />
+  Your datacart is the dataset that follows you around VegBank collecting plots and other items.<br />
   Add or remove datacart items by checking or unchecking their datacart checkboxes.</p>
 
 
