@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.8 2005-04-12 00:00:46 anderson Exp $
+ * $Id: vegbank2005.css,v 1.9 2005-05-02 10:17:33 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -242,6 +242,7 @@ HEADER
     font-weight: normal;
 }
 
+/* ======================
 #header-data-links {
     position: relative;
     top: 12px;
@@ -253,6 +254,21 @@ HEADER
 }
 #header-left>#header-data-links {
     left: 220px;
+}
+========================= */
+#header-data-links {
+    position: relative;
+    float: left;
+    top: 14px;
+    left: 28px;
+    font-size: 11px;
+    font-weight: normal;
+    color: #000;
+    width: 190px;
+}
+#header-left>#header-data-links {
+    top: 14px;
+    left: 28px;
 }
 #header-data-links a {
 	font-size: 11px;
@@ -381,47 +397,26 @@ FOOTER
 DATACART
 -------------------------------------------------*/
 #datacart {
-    display: none;
+  display: block;
   position: relative;
-  top: 8em;
+  top: 13px;
+  left: 0px;
+  float: left;
   text-align: left;
-  border: 1px solid #bcbcbc;
-  float: left;
-  width: 12em;
-  font-weight: normal;
-  color: #333;
-  line-height: 14px;
-  font-size: 11px;
-  overflow: visible;
-  background: url(@images_link@cart1.jpg) #fff top right no-repeat;
-
-  -moz-border-radius: 8px;
-}
-
-#datacart a {text-decoration: none; padding: 1px; }
-
-#datacart h2 {
-  margin: 0;
-  font-size: 12px;
-  padding: 2px 0 2px 8px;
+  width: 190px;
   font-weight: bold;
-  border-bottom: 1px dashed #cdcdcd;
   color: #333;
+  font-size: 14px;
 }
 
-#datacart ul {
-  float: left;
-  list-style-type: none;
-  padding: 6px 3px 6px 15px;
-}
+#datacart a {text-decoration: none; padding: 1px; font-size: 14px; }
+#datacart p {position: relative; top: -2px; padding:0px; margin:0; display:inline;}
 
-#datacart li {
-  padding: 0;
+/*
+html>body #datacart {
+  font-weight: normal;
 }
-
-#datacart li:before {
-  content:"-";
-}
+*/
 
 .input-box {
     color: #000;
