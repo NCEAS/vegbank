@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:11:06 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2005-05-02 13:57:20 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,24 +67,14 @@ public class AccessionCode
      * Gets the database ID, the prefix.
      */
     public String getDatabaseId() {
-        /*
-        if (Utility.isStringNullOrEmpty(ac)) { return null; }
-        return ac.substring(0, ac.indexOf("."));
-        */
-        return dbId;
+        return (dbId == null ? "": dbId);
     }
 
     /**
      * Gets the entity code, the second field.
      */
     public String getEntityCode() {
-        /*
-        if (Utility.isStringNullOrEmpty(ac)) { return null; }
-        int p1 = ac.indexOf(".");
-        int p2 = ac.indexOf(".", p1);
-        return ac.substring(p1, p2-p1);
-        */
-        return entityCode;
+        return (entityCode == null ? "": entityCode);
     }
 
     /**
@@ -99,25 +89,14 @@ public class AccessionCode
      * Gets the record ID, the PK, the third field.
      */
     public Long getEntityId() {
-        /*
-        if (Utility.isStringNullOrEmpty(ac)) { return 0; }
-        int p1 = ac.indexOf(".");
-        p1 = ac.indexOf(".", p1);
-        int p2 = ac.indexOf(".", p1);
-        return Long.parseLong(ac.substring(p1, p2-p1));
-        */
-        return entityId;
+        return (entityId == null ? new Long(0): entityId);
     }
 
     /**
      * Gets the confirmation code, the suffix.
      */
     public String getConfirmation() {
-        /*
-        if (Utility.isStringNullOrEmpty(ac)) { return null; }
-        return ac.substring(ac.lastIndexOf(".")+1);
-        */
-        return confirmation;
+        return (confirmation == null ? "": confirmation);
     }
 
     /**
