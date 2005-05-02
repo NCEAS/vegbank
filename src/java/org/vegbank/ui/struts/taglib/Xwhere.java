@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-17 22:23:25 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2005-05-02 14:00:23 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  * 
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.7 $ $Date: 2005-02-17 22:23:25 $
+ * @version $Revision: 1.8 $ $Date: 2005-05-02 14:00:23 $
  */
 
 public class Xwhere {
@@ -274,8 +274,8 @@ public class Xwhere {
 		// record IDs or something.  Not terribly important now.
 
 		if (Utility.isStringNullOrEmpty(xwKeySQL)) {
-			log.error("Can't swap into empty SQL template >> params: " + 
-                    Utility.arrayToCommaSeparatedString(xwParams));
+			//log.error("Can't swap into empty SQL template >> params: " + 
+             //       Utility.arrayToCommaSeparatedString(xwParams));
 			return "";
 		}
 
