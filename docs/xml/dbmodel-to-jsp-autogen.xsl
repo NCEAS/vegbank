@@ -153,7 +153,9 @@
     <xsl:param name="view" /><!-- name of this view -->
     <!--    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
     </xsl:comment>-->
-    <xsl:element name="{$container}"><logic:notEmpty name="onerowof{$currEnt}" property="{$currFld}"><xsl:element name="span"><xsl:choose>
+          <!-- this is what gets written on cell -->
+          <xsl:variable name="currFldMaybeTransl"><xsl:value-of select="$currFld"/><xsl:if test="string-length($currentAtt/attFKTranslationSQL)&gt;0">_transl</xsl:if><xsl:if test="$currentAtt/attType='Date'">_datetrunc</xsl:if></xsl:variable>    
+             <xsl:element name="{$container}"><logic:notEmpty name="onerowof{$currEnt}" property="{$currFldMaybeTransl}"><xsl:element name="span"><xsl:choose>
             <xsl:when test="string-length(@useClass)=0">
               <!-- no specific class for this data -->
               <!-- fill in different class for long text fields: -->
@@ -180,12 +182,7 @@
             <xsl:value-of select="$currentAtt/attFormsHTMLpre"/>
           <!--/logic:notEqual-->
         </xsl:if>
-          <!-- this is what gets written on cell -->
-          <xsl:variable name="currFldMaybeTransl">
-            <xsl:value-of select="$currFld"/>
-            <xsl:if test="string-length($currentAtt/attFKTranslationSQL)&gt;0">_transl</xsl:if>
-            <xsl:if test="$currentAtt/attType='Date'">_datetrunc</xsl:if>
-          </xsl:variable>
+
           <xsl:choose>
             <xsl:when test="string-length($currentAtt/attFKTranslationSQL)&gt;0 and $currentAtt/attKey='FK' and ($currentAtt/attFKTranslationSQL/@addLink='true' or string-length($currentAtt/attFKTranslationSQL/@addLink)=0)">
               <!-- only do this if translation criteria AND FK! -->
