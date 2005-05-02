@@ -1,3 +1,4 @@
+/*
 var loadFrom = false;
 function include(aFile)
 {
@@ -7,6 +8,29 @@ function include(aFile)
     loadFrom=document.createElement("script");
     loadFrom.setAttribute("src",aFile);
     document.getElementsByTagName('head').item(0).appendChild(loadFrom);
+}
+*/
+var hIncludes = null;
+function include(sURI)
+{
+  if (document.getElementsByTagName)
+  {
+    if (!hIncludes)
+    {
+      hIncludes = {};
+      var cScripts = document.getElementsByTagName("script");
+      for (var i=0,len=cScripts.length; i < len; i++)
+        if (cScripts[i].src) hIncludes[cScripts[i].src] = true;
+    }
+    if (!hIncludes[sURI])
+    {
+      var oNew = document.createElement("script");
+      oNew.type = "text/javascript";
+      oNew.src = sURI;
+      hIncludes[sURI]=true;
+      document.getElementsByTagName("head")[0].appendChild(oNew);
+    }
+  }
 }
 
 function toggle(e) {
@@ -378,3 +402,113 @@ function getURLParam(strParamName) {
     }
     return strReturn;
 }
+
+
+
+//
+// Initialize the ajax engine
+//
+function initAjax() {
+    var ajax = new XHConn();
+    if (!ajax) {
+        // this client lacks XMLHttp support
+        alert("Sorry, there was a problem using VegBank. " +
+                "Please upgrade your browser to take advantage of many features on the Web.");
+    }
+	return ajax;
+}
+
+
+/**
+ * Uses AJaX and <vegbank:datacart> to update the datacart items.
+ */
+function updateCartItem(elem, curClass) {
+	ajax = initAjax();
+
+    var fnWhenDone = function(oXML) { 
+        //alert("pong");
+        document.getElementById("datacart-count").innerHTML = oXML.responseText;
+    };
+
+    var params;
+
+    if (elem.checked) { 
+        params = "delta=add";
+        elem.parentNode.className = 'highlight';
+    } else { 
+        params = "delta=drop"; 
+        elem.parentNode.className = curClass;
+    }
+
+    params += "&deltaItems="+encodeURIComponent(elem.value);
+    var url = "@web_context@general/get_datacart_count.ajax.jsp";
+
+    //alert(url + "?" + params);
+    ajax.connect(url, "POST", params, fnWhenDone);
+}
+
+
+
+//
+// Mark all items already in datacart
+//
+function markDatacartItems(dsId) {
+	var nodeList = document.getElementById('cartable').getElementsByTagName('input');
+
+	if (nodeList.length > 0) {
+		var first = true;
+		var acString = "'";
+		var i, node;
+		for (i=0; i<nodeList.length; i++) {
+			node = nodeList.item(i);
+			if (node.type == 'checkbox') {
+				// add to list
+				if (first) { first = false;
+				} else { acString += "','"; }
+				acString += node.value;
+			} // end if checkbox
+		}
+		acString += "'";
+
+		// run query through AJaX
+		// can't use jsp since the page is already loaded at this point.  
+		findSelectedDatacartItems(dsId, acString);
+	}
+}
+
+
+//
+// Uses AJaX to connect to getDatacartACs.ajax.jsp
+//
+function findSelectedDatacartItems(dsId, acString) {
+	ajax = initAjax();
+
+    var fnWhenDone = function(oXML) { 
+		// oXML.responseText contains a CSV of accession codes 
+		// found on this page and in the datacart
+		var nodeList = document.getElementById('cartable').getElementsByTagName('input');
+
+		datacartACs = oXML.responseText.toLowerCase();
+		//alert("response: " + datacartACs);
+
+		// mark the right boxes
+		for (var i=0; i<nodeList.length; i++) {
+			var node = nodeList.item(i);
+			if (node.type == 'checkbox') {
+				if (datacartACs.indexOf(node.value.toLowerCase()) != -1) { 
+					// mark it
+					node.checked = true;
+					node.parentNode.className = 'highlight';
+				} 
+			} 
+		}
+    };
+
+    var url = "@web_context@general/get_datacart_acs.ajax.jsp";
+    var params = "wparam="+encodeURIComponent(dsId);
+    params += "&wparam="+encodeURIComponent(acString);
+
+    //alert(url + params);
+    ajax.connect(url, "POST", params, fnWhenDone);
+}
+
