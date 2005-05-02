@@ -1,4 +1,4 @@
-/* $Id: header_search.js,v 1.6 2005-03-22 01:00:00 anderson Exp $ */
+/* $Id: header_search.js,v 1.7 2005-05-02 10:15:46 anderson Exp $ */
 
 function doSubmit() {
     var ent = document.quicksearch_form.selEntity.value;
@@ -31,7 +31,7 @@ function doSubmit() {
 				getPk = "observation";
 				getName = "observation";
 				getView = "summary";
-				getExtra += getExtra + "&perPage=3";
+				getExtra += getExtra + "&perPage=7";
                 break;
             case 'plant': 
 				getPk = "plantconcept";
@@ -46,7 +46,7 @@ function doSubmit() {
             case 'community': 
 				getPk = "commconcept";
 				getName = "commconcept";
-				getExtra += getExtra + "&perPage=5";
+				getExtra += getExtra + "&perPage=7";
                 break;
         }
 
