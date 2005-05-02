@@ -158,6 +158,28 @@
 </tag>
 
 
+<tag>
+<name>datacart</name>
+<tagclass>org.vegbank.ui.struts.taglib.VegbankDatacartTag</tagclass>
+<bodycontent>empty</bodycontent>
+<attribute>
+	<name>delta</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>deltaItems</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>display</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+</tag>
+
+
 </taglib>
 
 
