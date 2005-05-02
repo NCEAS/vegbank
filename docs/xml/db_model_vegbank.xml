@@ -3742,7 +3742,6 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -4050,7 +4049,6 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -4329,7 +4327,6 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -5032,7 +5029,6 @@ change through time.</entitySummary>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -6147,7 +6143,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>autoTaxonCover</attName>
-      <attLabel>Taxon Cover Automatically Calculated?</attLabel>
+      <attLabel>Overall Taxon Cover Values are Automatically Calculated?</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Boolean</attType>
@@ -8635,7 +8631,6 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -12261,7 +12256,6 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13219,7 +13213,6 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13560,7 +13553,6 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -13721,7 +13713,6 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -14358,7 +14349,6 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -14959,7 +14949,6 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -15106,7 +15095,6 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -15292,7 +15280,6 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
-      
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
