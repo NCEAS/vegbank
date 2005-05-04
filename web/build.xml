@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-03-22 20:34:11 $'
-* '$Revision: 1.160 $'
+* '$Date: 2005-05-04 01:18:52 $'
+* '$Revision: 1.161 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -158,7 +158,7 @@
     <filter token="images_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/images/"/>
     <filter token="stylesheet" value=""/>
     <!-- this is handled in default head token -->
-    <filter token="plotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/LoadPlotQuery.do"/>
+    <filter token="plotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/plot-query.jsp"/>
     <filter token="nestedplotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/nested-plot-query.html"/>
     <filter token="uploaddata_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/uploadFile.html"/>
     <filter token="browseplotspage" value="${machine_url}${eighty_eighty}/browse" />
@@ -544,8 +544,9 @@
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
     <copy file="${manual_src}/manual_filters.properties" tofile="${includes_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/manual_filters.properties"/>
-    <!--<ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
-    <filter filtersfile="${includes_server}/closedlist-tokens.properties"/> -->
+    <ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
+    <copy file="${includes_src}/closedlist-tokens.properties" tofile="${includes_server}/closedlist-tokens.properties" filtering="yes" overwrite="yes"/>
+    <filter filtersfile="${includes_server}/closedlist-tokens.properties"/> 
    <copy todir="${includes_server}" filtering="yes" overwrite="yes">
      <fileset dir="${includes_src}">
        <include name="webpage_*.html" />
