@@ -68,12 +68,13 @@
     <div id="datacart">
         <a href="@web_context@views/datacart_detail.jsp" class="nobg"><img src="@images_link@cart1.gif" border="0" /></a>
         <p>
+        <a href="@web_context@views/datacart_detail.jsp">download <span id="datacart-count"><vegbank:datacart display="true" /></span></a>
+
         <logic:equal name="Boolean.false" value="true">
         <!-- non JSP page -->
         <a href="@web_context@views/datacart_detail.jsp"><span id="datacart-count">datacart</span></a> 
         </logic:equal>
 
-        <a href="@web_context@views/datacart_detail.jsp">download <span id="datacart-count"><vegbank:datacart display="true" /></span></a>
         </p>
     </div>
 
@@ -99,6 +100,9 @@
 
  <!-- end header -->
  </div>
+
+<bean:include id="lr_link" page="/includes/last_results_link.jsp" />
+<bean:write name="lr_link" filter="false" />
 
  <div id="centercontent">
 

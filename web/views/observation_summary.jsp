@@ -41,9 +41,18 @@
   </p>
 </logic:equal>
 
-<vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
-    whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true" 
-    allowOrderBy="true"/>
+<logic:equal parameter="lr" value="true">
+    <!-- load results from disk -->
+    <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
+        whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true" 
+        allowOrderBy="true" load="plot-search-results" />
+</logic:equal>
+<logic:notEqual parameter="lr" value="true">
+    <!-- save results to disk -->
+    <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
+        whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true" 
+        allowOrderBy="true" save="plot-search-results" />
+</logic:notEqual>
 
 <vegbank:pager />
 
@@ -80,7 +89,9 @@
 
 
 <th>Community</th><th colspan="3">Some Plants</th></tr>
-<logic:iterate id="onerowofobservation" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
+
+<logic:iterate id="onerowofobservation" name="BEANLIST">
+<!-- iterate over all records in set : new table for each -->
 <bean:define id="onerowofplot" name="onerowofobservation" />
 <bean:define id="obsId" name="onerowofplot" property="observation_id"/>
 <bean:define id="plot_pk" name="onerowofplot" property="plot_id"/>
