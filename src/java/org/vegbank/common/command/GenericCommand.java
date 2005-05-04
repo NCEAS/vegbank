@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:11:05 $'
- *	'$Revision: 1.31 $'
+ *	'$Date: 2005-05-04 09:52:37 $'
+ *	'$Revision: 1.32 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
  
 package org.vegbank.common.command;
 
+import java.io.*;
 import java.sql.ResultSet;
 import java.text.MessageFormat;
 import java.util.*;
@@ -31,6 +32,7 @@ import java.util.regex.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
@@ -39,6 +41,7 @@ import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.DatabaseUtility;
 import org.vegbank.common.utility.VBObjectUtils;
+import org.vegbank.common.utility.QueryParameters;
 
 /**
  * Uses parameters passed in via the request to construct the SQL query,
@@ -47,7 +50,7 @@ import org.vegbank.common.utility.VBObjectUtils;
  * availible for use by a JSP.  If the query returns only one result, an additional
  * attribute called BEAN is stored in the request, containing the only BEANLIST item.
  * 
- * @author farrell
+ * @author anderson, farrell 
  */
 
 public class GenericCommand 
@@ -61,6 +64,8 @@ public class GenericCommand
 	private static final String BEANLIST_KEY = "BEANLIST";
 	private static final String BEAN_KEY = "BEAN";
 	private static final String MAP_KEY = "MAP";
+	private static final String LAST_RESULTS_KEY = "LAST_RESULTS";
+	private QueryParameters queryParameters = null;
 
 	//// THIS WORKS 
 	// Caveat: Can't put (parens) in subqueries, or within other (parens)
@@ -168,115 +173,178 @@ public class GenericCommand
 
 		String tmp;
 		String sqlFullQuery = initQuery(selectClauseKey, whereClauseKey, orderBy, whereParams);
+            HttpSession session = request.getSession();
 
 
 
-		////////////////////////////////////////////////////
-		// Count results
-		////////////////////////////////////////////////////
-		int numItems = 0;
-		
-		// TODO: 
-		// Only count results if they haven't already been counted
-		if (getPager()) {
-			numItems = countResults(sqlFullQuery);
+            ////////////////////////////////////////////////////
+            // Count results
+            ////////////////////////////////////////////////////
+            int numItems = 0;
+            
+            // TODO: 
+            // Only count results if they haven't already been counted
+            if (getPager()) {
+                numItems = countResults(sqlFullQuery);
 
-			/* 
-			tmp = getNumItems();
-			if (Utility.isStringNullOrEmpty(tmp)) {
-				// run a query
-				numItems = countResults(sqlFullQuery);
+                /* 
+                tmp = getNumItems();
+                if (Utility.isStringNullOrEmpty(tmp)) {
+                    // run a query
+                    numItems = countResults(sqlFullQuery);
 
-			} else {
-				// use the preset numItems
-				numItems = Integer.parseInt(tmp);
-			}
-			*/
+                } else {
+                    // use the preset numItems
+                    numItems = Integer.parseInt(tmp);
+                }
+                */
 
-			if (request != null) {
-				log.info("Count found " + numItems);
-				request.setAttribute("numItems", Integer.toString(numItems));
-			} 
-		}
-
-
-
-		////////////////////////////////////////////////////
-		// Set up the pager
-		////////////////////////////////////////////////////
-		tmp = getPerPage();
-		float pp = 0;
-		if (Utility.isStringNullOrEmpty(tmp) && numItems > 1) {
-			// set default items per page
-			setPerPage(null);
-
-		} else if (numItems == 1) {
-			//setPerPage("1");
-			setPageNumber("0");
-			if (Utility.isStringNullOrEmpty(tmp)) {
-				pp = DEFAULT_PER_PAGE;
-			} else {
-				pp = Float.parseFloat(tmp);
-			}
-		} 
-
-		// page number
-		tmp = getPageNumber();
-		int pn;
-		if (Utility.isStringNullOrEmpty(tmp)) {
-			pn = 1;
-		} else {
-			pn = Integer.parseInt(tmp);
-		}
-
-		int numTotalPages = (int)Math.ceil((float)numItems / pp);
-		if (pn < 1) { 
-			pn = 1; 
-		} else if (pn * pp > numItems) { 
-			pn = numTotalPages; 
-		} 
-		setPageNumber(Integer.toString(pn));
+                if (request != null) {
+                    log.info("Count found " + numItems);
+                    request.setAttribute("numItems", Integer.toString(numItems));
+                } 
+            }
 
 
 
-		////////////////////////////////////////////////////
-		// Run the query
-		////////////////////////////////////////////////////
-		sqlFullQuery += buildLimitClause();
+            ////////////////////////////////////////////////////
+            // Set up the pager
+            ////////////////////////////////////////////////////
+            tmp = getPerPage();
+            float pp = 0;
+            if (Utility.isStringNullOrEmpty(tmp) && numItems > 1) {
+                // set default items per page
+                setPerPage(null);
 
-		log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlFullQuery 
-				+ "\n=======================================");
-		DatabaseAccess da = new DatabaseAccess();
-		ResultSet rs = da.issueSelect( sqlFullQuery );
-		
-		Vector propNames = getPropertyNames(sqlFullQuery);
-		List list = getBeanList(beanName, rs, propNames);
-        da.closeStatement();
-        rs.close();
+            } else if (numItems == 1) {
+                //setPerPage("1");
+                setPageNumber("0");
+                if (Utility.isStringNullOrEmpty(tmp)) {
+                    pp = DEFAULT_PER_PAGE;
+                } else {
+                    pp = Float.parseFloat(tmp);
+                }
+            } 
 
-		if (request != null) {
-			String id = getId();
+            // page number
+            tmp = getPageNumber();
+            int pn;
+            if (Utility.isStringNullOrEmpty(tmp)) {
+                pn = 1;
+            } else {
+                pn = Integer.parseInt(tmp);
+            }
 
-			log.debug("Setting " + BEANLIST_KEY + " and " + beanName.toUpperCase() + " as lists");
-			request.setAttribute(BEANLIST_KEY, list);
-			request.setAttribute(beanName.toUpperCase(), list);
+            int numTotalPages = (int)Math.ceil((float)numItems / pp);
+            if (pn < 1) { 
+                pn = 1; 
+            } else if (pn * pp > numItems) { 
+                pn = numTotalPages; 
+            } 
+            setPageNumber(Integer.toString(pn));
 
-			if (!Utility.isStringNullOrEmpty(id)) {
-				request.setAttribute(id + "-" + BEANLIST_KEY, list);
-			}
 
-			if (list.size() == 1) {
-				log.debug("One item, so setting " + BEAN_KEY + " and " + beanName.toUpperCase() + " as beans");
-				request.setAttribute(BEAN_KEY, list.get(0));
-				request.setAttribute(beanName.toUpperCase(), list.get(0));
 
-				if (!Utility.isStringNullOrEmpty(id)) {
-					request.setAttribute(id + "-" + BEAN_KEY, list.get(0));
-				}
-			}
-		} 
+            ////////////////////////////////////////////////////////////////////////
+            // Get the search results
+            ////////////////////////////////////////////////////////////////////////
 
-		return list;
+            ////////////////////////////////////////////////////
+            // Load from disk
+            ////////////////////////////////////////////////////
+            List searchResultList = null;
+            boolean skipQuery = false;
+            if (queryParameters != null) {
+                String sessionLoadName = queryParameters.getString("load");
+                if (!Utility.isStringNullOrEmpty(sessionLoadName)) {
+                    try {
+                        // use the given load value as a session key to get filename
+                        if (sessionLoadName.equals("true")) {
+                            // get the last results key from session
+                            sessionLoadName = (String)session.getAttribute(LAST_RESULTS_KEY);
+                        }
+                        log.debug("checking for last results key: " + sessionLoadName);
+                        String loadFileName = (String)session.getAttribute(sessionLoadName);
+                        log.debug("loading last results file: " + loadFileName);
+                        searchResultList = loadSearchResults(loadFileName); 
+
+                        request.setAttribute(sessionLoadName, searchResultList);
+                        skipQuery = true;
+
+                    } catch (IOException ioe) {
+                        log.error("could not load results from disk: " + ioe.toString());
+                    }
+                }
+            }
+
+            if (!skipQuery) {
+                ////////////////////////////////////////////////////
+                // Run the query
+                ////////////////////////////////////////////////////
+                sqlFullQuery += buildLimitClause();
+
+                log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlFullQuery 
+                        + "\n=======================================");
+                DatabaseAccess da = new DatabaseAccess();
+                ResultSet rs = da.issueSelect( sqlFullQuery );
+                
+                Vector propNames = getPropertyNames(sqlFullQuery);
+                searchResultList = getBeanList(beanName, rs, propNames);
+                da.closeStatement();
+                rs.close();
+		    }
+
+            if (request != null) {
+                if (queryParameters != null) {
+                    // comes from <vegbank:get save="whatever" ... />
+                    String sessionSaveName = queryParameters.getString("save");
+
+                    if (Utility.isStringNullOrEmpty(sessionSaveName)) {
+                        // if empty, check the "load" attrib
+                        log.debug("session save value was empty...using load");
+                        sessionSaveName = queryParameters.getString("load");
+                    }
+                    log.debug("save <vegbank:get> results?: " + sessionSaveName);
+
+                    if (!Utility.isStringNullOrEmpty(sessionSaveName)) {
+                        log.debug("Saving page of results to disk in session as " + sessionSaveName);
+                        try {
+                            String saveFileName = session.getId();
+                            saveSearchResults(saveFileName, searchResultList);
+                            log.debug("Saved results to file named: " + saveFileName);
+                            session.setAttribute(LAST_RESULTS_KEY, sessionSaveName);
+                            log.debug("setting " + sessionSaveName + " to " + saveFileName);
+                            session.setAttribute(sessionSaveName, saveFileName);
+                            Utility.setLastSearchURL(request);
+                        } catch (IOException ioe) {
+                            log.error("could not save results to disk", ioe);
+                        }
+                    }
+                }
+
+                if (log.isDebugEnabled()) {
+                    log.debug("Setting " + BEANLIST_KEY + " and " + beanName.toUpperCase() + " as lists");
+                }
+                request.setAttribute(BEANLIST_KEY, searchResultList);
+                request.setAttribute(beanName.toUpperCase(), searchResultList);
+
+                if (!Utility.isStringNullOrEmpty(id)) {
+                    request.setAttribute(id + "-" + BEANLIST_KEY, searchResultList);
+                }
+
+                if (searchResultList.size() == 1) {
+                    log.debug("One item, so setting " + BEAN_KEY + " and " + beanName.toUpperCase() + " as beans");
+                    request.setAttribute(BEAN_KEY, searchResultList.get(0));
+                    request.setAttribute(beanName.toUpperCase(), searchResultList.get(0));
+
+                    if (!Utility.isStringNullOrEmpty(id)) {
+                        request.setAttribute(id + "-" + BEAN_KEY, searchResultList.get(0));
+                    }
+                }
+            } // end if request not null
+
+
+		return searchResultList;
 	}
 
 
@@ -300,7 +368,7 @@ public class GenericCommand
 */
 		String sql = "SELECT COUNT(1) FROM (" + sqlFullQuery + ") AS cnt";
 				
-		log.info("::: COUNT QUERY:::\n\t" + sql + "\n=======================================");
+		//log.info("::: COUNT QUERY:::\n\t" + sql + "\n=======================================");
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( sql );
 		
@@ -821,7 +889,36 @@ public class GenericCommand
 	*/
 
 
-	
+	/**
+	 * Easy way to set up a query.
+     * First used with <vegbank:get>.
+     * @see VegbankGetTag.
+	 */ 
+    public void setQueryParameters(QueryParameters qp) {
+        queryParameters = qp;
+    }
+
+    /**
+     *
+     */
+    private void saveSearchResults(String fileName, List l) throws IOException {
+        Utility.saveBinaryFile(getCacheDir() + fileName, l);
+    }
+
+    /**
+     *
+     */
+    private List loadSearchResults(String fileName) throws IOException {
+        return (List)Utility.loadBinaryFile(getCacheDir() + fileName);
+    }
+
+    public static String getCacheDir() {
+        String path = Utility.VB_HOME_DIR;
+        if (!path.endsWith(File.separator)) { path += File.separator; }
+        return path + "cache" + File.separator;
+    }
+
+
 	/**
 	 * Just for testing.
 	 * 

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-15 07:11:53 $'
- *	'$Revision: 1.22 $'
+ *	'$Date: 2005-05-04 09:52:37 $'
+ *	'$Revision: 1.23 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,13 +52,14 @@ import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.CompositeRequestParamUtil;
 import org.vegbank.common.utility.DatabaseUtility;
+import org.vegbank.common.utility.QueryParameters;
 
 /**
  * Tag that queries the DB and puts a map or bean in the 
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.22 $ $Date: 2005-04-15 07:11:53 $
+ * @version $Revision: 1.23 $ $Date: 2005-05-04 09:52:37 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -106,6 +107,7 @@ public class VegbankGetTag extends VegbankTag {
 			setupWhereClause( (HttpServletRequest)pageContext.getRequest() );
 
 			log.debug("Calling gc.execute()");
+            gc.setQueryParameters(new QueryParameters(this));
 			gc.execute(
 					(HttpServletRequest)pageContext.getRequest(), 
 					getSelect(), 
@@ -527,6 +529,33 @@ public class VegbankGetTag extends VegbankTag {
 
     public void setOrderBy(String s) {
         this.orderBy = s;
+    }
+
+    /**
+     *  Does NOT search scopes.
+     * 
+     */
+	protected String save;
+
+    public String getSave() {
+        return this.save;
+    }
+
+    public void setSave(String s) {
+        this.save = s;
+    }
+
+    /**
+     *  Does NOT search scopes.
+     */
+	protected String load;
+
+    public String getLoad() {
+        return this.load;
+    }
+
+    public void setLoad(String s) {
+        this.load = s;
     }
 
     /**

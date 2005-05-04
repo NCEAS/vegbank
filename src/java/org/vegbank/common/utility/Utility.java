@@ -1,12 +1,6 @@
 package org.vegbank.common.utility;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URL;
 import java.sql.*;
 import java.text.DateFormat;
@@ -33,8 +27,8 @@ import org.vegbank.common.Constants;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-05-02 11:11:06 $'
- * '$Revision: 1.47 $'
+ * '$Date: 2005-05-04 09:52:37 $'
+ * '$Revision: 1.48 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +45,7 @@ import org.vegbank.common.Constants;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-public class Utility
+public class Utility implements Constants
 {
 	/**
 	 * Handle for logging
@@ -812,6 +806,40 @@ public class Utility
 	}
 
 
+    /**
+     * Serialize a file.
+     * 
+     * @param fileName
+     * @param the Object
+     * @throws IOException
+     */
+    public static void saveBinaryFile(String fileName, Object o) throws IOException {
+        FileOutputStream fileOut = new FileOutputStream(new File(fileName));
+        ObjectOutputStream objectOut = new ObjectOutputStream (fileOut);
+        objectOut.writeObject(o);
+    }
+    
+
+    /**
+     * Deserialize a file.
+     * 
+     * @param fileName
+     * @param the Object
+     * @throws IOException
+     */
+    public static Object loadBinaryFile(String fileName) throws IOException {
+        FileInputStream fileIn = new FileInputStream(new File(fileName));
+        ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+        try {
+            return objectIn.readObject();
+        } catch (Exception ex) {
+            log.error("couldn't load binary file " + fileName, ex);
+        }
+        return null;
+    }
+    
+
+
 	/**
 	 *
 	 */
@@ -924,7 +952,32 @@ public class Utility
      * Returns usr_id of authenticated user, or null if not logged in.
      */
     public static Long getAuthenticatedUsrId(HttpSession session) {
-        return (Long)session.getAttribute(Constants.USER_KEY);
+        return (Long)session.getAttribute(USER_KEY);
+    }
+
+    /**
+     * Returns path and parameters for last search.
+     */
+    public static String getLastSearchURL(HttpSession session) {
+        String url = (String)session.getAttribute(LAST_SEARCH_URL);
+        if (url == null) {
+            url = "";
+        }
+        log.debug("GOT " + LAST_SEARCH_URL + ": " + url);
+        return url;
+    }
+
+    /**
+     * Saves path and parameters for last search.
+     */
+    public static void setLastSearchURL(HttpServletRequest request) {
+        StringBuffer url = request.getRequestURL();
+        String qs = request.getQueryString();
+        if (qs != null) {
+            url.append("?").append(qs);
+        }
+        log.debug("setting " + LAST_SEARCH_URL + " to " + url.toString());
+        request.getSession().setAttribute(LAST_SEARCH_URL, url.toString());
     }
 
 }
