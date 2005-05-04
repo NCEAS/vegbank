@@ -35,6 +35,7 @@ Items in this dataset:
 <th><img src="@images_link@cart1.gif" border="0" /></th>
 <th>item</th>
 <%@ include file="../autogen/userdatasetitem_summary_head.jsp" %>
+<th>More info</th>
 </tr>
 <logic:iterate id="onerowofuserdatasetitem" name="userdatasetitem-BEANLIST">
 <tr class='@nextcolorclass@'>
@@ -42,7 +43,18 @@ Items in this dataset:
 <td><%@ include file="/includes/datacart_checkbox.jsp" %></td>
 <td class="largefield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
 <%@ include file="../autogen/userdatasetitem_summary_data.jsp" %>
-
+<td class="largefield">
+  <logic:equal name="onerowofuserdatasetitem" property="itemtable" value="observation">
+    <!-- add some info about observations if this is an observation -->  
+      <bean:define id="obs_pk" name="onerowofuserdatasetitem" property="itemrecord" />
+      <!--bean:write name="obs_pk" /-->
+      <vegbank:get id="obs" select="plotandobservation" beanName="map"
+        where="where_observation_pk" wparam="obs_pk" perPage="-1" pager="false" />
+        <logic:notEmpty name="BEAN">
+            <bean:write name="BEAN" property="authorplotcode" />: <bean:write name="BEAN" property="stateprovince" />
+        </logic:notEmpty>
+  </logic:equal>
+&nbsp; </td>
 </tr>
 </logic:iterate>
 </table>
