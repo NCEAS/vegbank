@@ -9,9 +9,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2005-05-02 13:28:05 $'
-*  '$Revision: 1.16 $'
+*  '$Author: mlee $'
+*  '$Date: 2005-05-05 22:36:29 $'
+*  '$Revision: 1.17 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,10 @@
 @webpage_masthead_html@
 
   <br/>
-<!-- table that limits width of text -->
+<!-- FORM -->
+ <html:form action="RegisterNewUser.do">
+ 
+ <!-- table that limits width of text -->
 <table cellspacing="2" cellpadding="0" border="0" >
 <tr>
  <td colspan="8">
@@ -52,12 +55,11 @@
 </tr>
 
 
-<!-- FORM -->
- <html:form action="RegisterNewUser.do">
+
 
 <tr>
 <td valign="top">
-<span class="sizelarge">Register here.</h3>
+<span class="sizelarge">Register here.</span>
   <br/>
   <br/>
   <span class="sizesmall">
@@ -74,7 +76,7 @@
     <TR> 
       <TD>
 	  	<font color="#FF0000">*</font>
-	  	<span class="sizesmall">e-Mail Address (login name): 
+	  	<span class="sizesmall">e-Mail Address (login name): </span>
 		<br/>
 	  	<html:text property="usr.email_address" size="30"/>
       </TD>
@@ -87,7 +89,7 @@
 		<br/>
 		<html:password property="password1" size="30" redisplay="true"/>
       </TD>
-      </TD>
+      
     </TR>
 
     <TR> 
@@ -166,23 +168,23 @@
 		<html:submit property="submit" value="Register Now" />
 
 	</td>
-</html:form>
+
 
 <!-- SPACER -->
-<td bgcolor="#AAAAAA" width="1"><img src="@image_server@pix_clear" width="1" height="1"></td>
-<td bgcolor="#DDDDDD" width="1"><img src="@image_server@pix_clear" width="1" height="1"></td>
-<td width="1"><img src="@image_server@pix_clear" width="8" height="1"></td>
+<td bgcolor="#AAAAAA" width="1"><img src="@image_server@pix_clear" width="1" height="1" /></td>
+<td bgcolor="#DDDDDD" width="1"><img src="@image_server@pix_clear" width="1" height="1" /></td>
+<td width="1"><img src="@image_server@pix_clear" width="8" height="1" /></td>
 
 <!-- TEXT -->
 <td valign="top">
 <h3>Learn more here.</h3>
-  <br/>
+  
 <p>Although you may 
  use VegBank freely without registration, registered users are able to...</p>
 
 <ul>
   <li class="sizesmall">add your data and annotate extant data (certification required)</li>
-  <li class="sizesmall">build personal datasets and queries (coming soon)
+  <li class="sizesmall">build personal datasets and queries (coming soon)</li>
   <li class="sizesmall">request permission to view non-public data (coming soon)</li>
 </ul>
 
@@ -202,9 +204,11 @@ registration and <html:link action="LoadCertification.do">certification</html:li
 	</td>
 </tr>
 </table>
+</html:form>
 
-<br>
-<br>
+<br />
+<br />
+
 
 
 @webpage_footer_html@

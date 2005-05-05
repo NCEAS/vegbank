@@ -97,7 +97,7 @@ function setNameMatchType() {
 			  <br/>
 
 		
-	    <select name="xwhereParams_commlevel_0" size="5" multiple="true">
+	    <select name="xwhereParams_commlevel_0" size="5" multiple="multiple">
 			<option value="" selected>--ANY--</option>
 			<!--html:options property="commLevels"/-->
 
@@ -118,14 +118,14 @@ function setNameMatchType() {
 			  <br/><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
 			  <br/>
             
-	        <select name="xwhereParams_classsystem_0" size="5" multiple="true">
+	        <select name="xwhereParams_classsystem_0" size="5" multiple="multiple">
 			   <option value="" selected>--ANY--</option>
 			   <!--html:options property="commClassSystems"/-->
 
 <vegbank:get id="classsystem" select="commusage_classsystem" where="where" pager="false" perPage="-1"/>
 <logic:notEmpty name="classsystem-BEANLIST">
 	<logic:iterate id="onerow" name="classsystem-BEANLIST">
-	<option value="<bean:write name="onerow" property="classsystem"/>">
+	<option value='<bean:write name="onerow" property="classsystem"/>'>
 			<bean:write name="onerow" property="classsystem"/></option>
 	</logic:iterate>
 </logic:notEmpty>
@@ -156,7 +156,7 @@ function setNameMatchType() {
 				<!--input type="hidden" name="xwhereParams_date_1" value="cs.startdate"/-->
 				<input type="hidden" name="xwhereKey_date" value="where_commstatus_daterange"/>
                    <a href="@help-for-concept-date-href@"><img 
-				   height="14" width="14" border="0" src="@image_server@question.gif"></a>
+				   height="14" width="14" border="0" src="@image_server@question.gif" /></a>
               </p>
 
             <!-- PARTY -->
@@ -172,7 +172,7 @@ function setNameMatchType() {
 <vegbank:get id="party" select="commstatus_party" where="where" pager="false" perPage="-1"/>
 <logic:notEmpty name="party-BEANLIST">
 	<logic:iterate id="onerow" name="party-BEANLIST">
-	<option value="<bean:write name="onerow" property="party_id"/>">
+	<option value='<bean:write name="onerow" property="party_id"/>'>
 			<bean:write name="onerow" property="party_id_transl"/></option>
 	</logic:iterate>
 </logic:notEmpty>

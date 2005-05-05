@@ -21,7 +21,7 @@ function selectRadio(radioIndex) {
 
 <html:errors/>
 
-<br> 
+<br /> 
 
 <html:form action="/UploadPlot"  enctype="multipart/form-data">
 
@@ -32,18 +32,18 @@ function selectRadio(radioIndex) {
 	
 
 
-			<p>In order to share your plot observation data, it must be contained 
+	      <p>In order to share your plot observation data, it must be contained 
 			in a VegBank native XML file.  
 			<a href="/vegdocs/vegbranch/vbr-overview.html">VegBranch</a>
 			is a Microsoft Access tool which you can use to generate this XML file.
-
-			<p>Please see the 
+          </p>
+		  <p>Please see the 
 			<a href="/vegbank/general/faq.html#catg_loading">FAQ</a>
 			to learn more about how to submit plots.  See the 
 			<a href="@NativeXMLIndexPage@">VegBank native XML</a> page for more information, 
 			sample XML documents and schemas.  Although the schema is still evolving, that 
 			page will be updated.
-
+          </p>
 		
 
 
@@ -80,10 +80,10 @@ function selectRadio(radioIndex) {
 
 
 After your data is loaded, an email will be sent to <u><i><bean:write name="email"/></i></u> containing load results.  
-<br>
+<br />
 &nbsp;&raquo; <html:link action="/LoadUser.do">update email address</html:link>
-	 	<br>
-	 	<br>
+	 	<br />
+	 	<br />
 		<html:submit property="submit" value="continue"/>
 	
  </p>

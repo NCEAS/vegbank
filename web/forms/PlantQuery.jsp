@@ -100,7 +100,7 @@ function setNameMatchType() {
 			  <br/>
 
 		
-	    <select name="xwhereParams_plantlevel_0" size="5" multiple="true">
+	    <select name="xwhereParams_plantlevel_0" size="5" multiple="multiple">
 			<option value="" selected>--ANY--</option>
 
 <!--vegbank:get id="plantlevel" select="plantstatus_plantlevel" where="where" pager="false" perPage="-1"/-->
@@ -119,8 +119,8 @@ function setNameMatchType() {
 			  <br/><span class="sizetiny">Choose multiple with CTRL-click or Apple-click</span>
 			  <br/>
               
-	        <!--html:select property="xwhereParams_classsystem_0" size="6" multiple="true"-->
-	        <select name="xwhereParams_classsystem_0" size="5" multiple="true">
+	        <!--html:select property="xwhereParams_classsystem_0" size="6" multiple="multiple"-->
+	        <select name="xwhereParams_classsystem_0" size="5" multiple="multiple">
 			   <option value="" selected>--ANY--</option>
 			   <!--html:options property="plantClassSystems"/-->
 
@@ -157,7 +157,7 @@ function setNameMatchType() {
 				<!--input type="hidden" name="xwhereParams_date_1" value="ps.startdate"/-->
 				<input type="hidden" name="xwhereKey_date" value="where_plantstatus_daterange"/>
                    <a href="@help-for-concept-date-href@"><img 
-				   height="14" width="14" border="0" src="@image_server@question.gif"></a>
+				   height="14" width="14" border="0" src="@image_server@question.gif" /></a>
               </p>
 
              <!-- PARTY -->
@@ -173,7 +173,7 @@ function setNameMatchType() {
 <vegbank:get id="party" select="plantstatus_party" where="where" pager="false" perPage="-1"/>
 <logic:notEmpty name="party-BEANLIST">
 	<logic:iterate id="onerow" name="party-BEANLIST">
-	<option value="<bean:write name="onerow" property="party_id"/>">
+	<option value='<bean:write name="onerow" property="party_id"/>'>
 			<bean:write name="onerow" property="party_id_transl"/></option>
 	</logic:iterate>
 </logic:notEmpty>

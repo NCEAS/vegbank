@@ -74,7 +74,7 @@
         computers have: a decompression software like <a href="http://www.winzip.com">WinZip</a> 
         (Windows XP has its own decompression utility built in). </p>
         
-        <input name="actionDownload" type="image" value="download" border="0" height="19" src="@image_server@btn_download.gif" width="99">
+        <input name="actionDownload" type="image" value="download" border="0" height="19" src="@image_server@btn_download.gif" width="99" />
       
    
   </html:form>

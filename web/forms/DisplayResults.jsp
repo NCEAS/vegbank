@@ -40,18 +40,19 @@
   </p>
       <!-- SOME NOTES ABOUT THE USE OF ICONS-->
       <br/>
+      <form name="theform" action="" method="post">
 	<TABLE class="noborder" cellpadding="10"><TR><TD valign="top">
 	<p class="category">
 	<logic:notEmpty name="PlotsResults">
       Available Reports:
 		</p>
       <p class="item">
-        <img src="@image_server@report_sm.gif"></img>=Summary 
+        <img src="@image_server@report_sm.gif"/>=Summary 
 		&nbsp; &nbsp; &nbsp; &nbsp;
-        <img src="@image_server@comprehensive_sm.gif"></img>=Comprehensive
+        <img src="@image_server@comprehensive_sm.gif"/>=Comprehensive
       </p>
 	
-      <form name="theform" action="" method="post">
+
 	 <p class="item">Choose plots from the search results below, then...</p>
 	
 	 
@@ -71,11 +72,11 @@
 	       <td bgcolor="#000000">
        <table cellspacing="0" cellpadding="0">
 	 <tr bgcolor="#336633" align="left" valign="middle">
-	   <th align="center" nowrap> SEARCH<br>RESULTS </th> <!-- black dividing bar --><td bgcolor="#000000" width="1px"></td>
+	   <th align="center" nowrap> SEARCH<br />RESULTS </th> <!-- black dividing bar --><td bgcolor="#000000" width="1"></td>
 	   
-	   <th align="center" valign="middle" nowrap> Author's Plot Name <br /> &amp; Accession Code</th><!-- black dividing bar --><td bgcolor="#000000" width="1px"></td>
-	   <th align="center" valign="middle" nowrap> Latitude &amp; <br/> Longitude</th><!-- black dividing bar --><td bgcolor="#000000" width="1px"></td>
-	   <th width="8px">&nbsp;<!-- a little space before dominant species --></th>
+	   <th align="center" valign="middle" nowrap> Author's Plot Name <br /> &amp; Accession Code</th><!-- black dividing bar --><td bgcolor="#000000" width="1"></td>
+	   <th align="center" valign="middle" nowrap> Latitude &amp; <br/> Longitude</th><!-- black dividing bar --><td bgcolor="#000000" width="1"></td>
+	   <th width="8">&nbsp;<!-- a little space before dominant species --></th>
 	   <th align="left" valign="middle" nowrap>  Dominant Taxa (with % cover)  </th>
 	 </tr>
 	 <tr bgcolor="#333333" align="center">
@@ -110,17 +111,17 @@
 	 toggle = !toggle;
 	 %>
 	 
-     <tr class="<%= rowClass %>" valign="top">
+     <tr class="@nextcolorclass@" valign="top">
 	    <!-- First Cell-->
-	    <th  class="<%= rowClass %>" align="center" valign="middle" nowrap colspan="2">
+	    <th class="@nextcolorclass@" align="center" valign="middle" nowrap colspan="2">
 	     
 	      <!-- THE LINK TO THE SUMMARY-->
 	      <!--  %27 (' char) was wrapped around AC but not anymore -->
              <a href='@get_link@simple/observation/<bean:write property="accessionCode" name="row"/>' title="summary report"><img align="center" border="0" 
-	     	src="@image_server@report_sm.gif" alt="Summary view"></img></a>
+	     	src="@image_server@report_sm.gif" alt="Summary view"/></a>
 	      <!-- THE LINK TO THE COMPREHENSIVE REPORT-->
 	      <a href='@get_link@comprehensive/observation/<bean:write property="accessionCode" name="row"/>' title="comprehensive report"><img align="center" border="0" 
-	      	src="@image_server@comprehensive_sm.gif" alt="Comprehensive view"></img></a>
+	      	src="@image_server@comprehensive_sm.gif" alt="Comprehensive view"/></a>
 	      
 	      <!-- THE LINK TO THE LOCATION -->
 	      <!-- Removing link to map until is works -->
@@ -178,7 +179,7 @@
          </td>		 
 	  </tr>
 	  <tr bgcolor="#666666">
-         <td colspan="20"><img src="transparent.gif" height="1" width="1"></td>		 
+         <td colspan="20"><img src="transparent.gif" height="1" width="1" /></td>		 
 	  </tr>
   
 	</logic:iterate>
@@ -220,8 +221,7 @@
 	
      </form>      
   
-  </font>
-  </span>
+
 	</logic:notEmpty>
   
   <script language="javascript">refreshHighlight('plotName');</script>
