@@ -12,8 +12,8 @@
   *  Authors: @author@
   *
   *  '$Author: mlee $'
-  *  '$Date: 2005-04-11 18:19:43 $'
-  *  '$Revision: 1.11 $'
+  *  '$Date: 2005-05-05 23:54:52 $'
+  *  '$Revision: 1.12 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -64,8 +64,8 @@
 		      <blockquote>
 		      <font color="#23238E" face="Helvetica,Arial,Verdana" size="2">
 		      <b>
-		      <frm_instr>Use this form to add a new journal to VegBank. <br />
-		      <font color="red">*</font> Indicates a required field.</frm_instr>
+		      <p class="instructions" >Use this form to add a new journal to VegBank. <br />
+		      <font color="red">*</font> Indicates a required field.</p>
 		      </b>
 		      </font>
 		      </blockquote>
@@ -76,8 +76,8 @@
 	      </td>
 	    </tr>
 	    <tr>
-	      <td width="10%" bgcolor="white" align="left" valign="top" />
-	      <td width="5%" bgcolor="white" align="left" valign="top" />
+	      <td width="10%" bgcolor="white" align="left" valign="top"></td>
+          <td width="5%" bgcolor="white" align="left" valign="top"></td>
 	      <td align="left">
 		<!--variables that are used by the servlet to figure out which query(s) to issue -->
 		<input name="requestDataFormatType" type="hidden" value="html" />
@@ -182,7 +182,7 @@
 		    </td>
 		  </tr>
 		</table>
-		<hr size="0.5" />
+		<hr />
 		<table border="0" width="100%" bgcolor="#DFE5FA">
 		  <tr>
 		    <td align="left" valign="top" width="5%" colspan="2">

@@ -9,9 +9,9 @@
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: anderson $'
-  *      '$Date: 2005-03-16 00:04:18 $'
-  *  '$Revision: 1.10 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2005-05-05 23:54:52 $'
+  *  '$Revision: 1.11 $'
   * This program is free software; you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
   * the Free Software Foundation; either version 2 of the License, or
@@ -46,7 +46,7 @@
 @webpage_masthead_html@ 
 
 
-<br>
+<br />
 <h2>Stratum Method Form -- add a new stratum method</h2>
 
 <html:errors/>

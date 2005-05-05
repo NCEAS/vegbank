@@ -19,7 +19,7 @@
 	<br/>
     <%@ include file="../includes/Logon.jsp" %>
 	<p class="sizenormal">
-		Thank you<br>
+		Thank you<br />
 		<a href="mailto:help@vegbank.org">help@vegbank.org</a>
 	</p>	
 </p>
