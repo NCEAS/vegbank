@@ -163,7 +163,7 @@ if (searchString ==  null || searchString.equals("")) {
 			</logic:equal>
 
 <% 
-String params = getPk + ";" + entity;
+String params = getPk + "__" + entity;
 String getURL = "@get_link@" + getView + "/" + getName + "/" + params + 
 		"?where=where_keywords_pk_in&xwhereKey=xwhere_kw_match&xwhereSearch=true&xwhereParams=" + xwhereParams;
 %>
