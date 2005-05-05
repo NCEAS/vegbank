@@ -159,7 +159,7 @@
 	            <td class="numeric">
                     <bean:define id='plantconcept_pk' name='onerowofbrowsecommonplants' property='plantconcept_id' />
                     <bean:define id="critAsTxt">
-                    With the plant: <bean:write name="onerowofcommonplants" property="plantname_id_transl"/> [<bean:write name="onerowofcommonplants" property="reference_id_transl"/>]
+                    With the plant: <bean:write name="onerowofbrowsecommonplants" property="plantname_id_transl"/> [<bean:write name="onerowofbrowsecommonplants" property="reference_id_transl"/>]
                     </bean:define>
                     <%  
                         /* create a map of parameters to pass to the new link: */
@@ -171,7 +171,7 @@
                     %>
                     
                     <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
-                      <bean:write name="onerowofcommonplants" property="d_obscount" />
+                      <bean:write name="onerowofbrowsecommonplants" property="d_obscount" />
                     </html:link>
 
                 </td>
@@ -233,5 +233,55 @@
    
  
 
+   <logic:match name="writetops" value="<%= allNums %>">
+      <!-- show summary of all data in the system: -->
+      <h3>Overview of Data in VegBank:</h3>
+      <table class="leftrightborders" cellpadding="2">
+      <vegbank:get select="observation_summ" beanName="map" />
+      <tr><th>Type of Data</th><th>Count</th></tr>
+       <logic:empty name="BEANLIST">
+        <tr class="@nextcolorclass@"><td colspan="2">ERROR! There are no observations!</td></tr>
+       </logic:empty>
+       <logic:notEmpty name="BEANLIST">
+         <tr class="@nextcolorclass@">
+           <td>Plot-Observations:</td>
+           <td  align="right">&nbsp;<bean:write name="BEAN" property="count_observation"/></td>
+         </tr> 
+       </logic:notEmpty>
+      
+      <vegbank:get select="plantconcept_summ" beanName="map"/>
+       <logic:notEmpty name="BEANLIST">
+         <tr class="@nextcolorclass@">
+           <td>Plant Concepts:</td>
+           <td align="right">&nbsp;<bean:write name="BEAN" property="count_plantconcept"/></td>
+         </tr> 
+       </logic:notEmpty> 
+      
+      
+      <vegbank:get select="commconcept_summ" beanName="map"/>
+       <logic:notEmpty name="BEANLIST">
+         <tr class="@nextcolorclass@">
+           <td>Community Concepts:</td>
+           <td align="right">&nbsp;<bean:write name="BEAN" property="count_commconcept"/></td>
+         </tr> 
+       </logic:notEmpty> 
+      
+      <vegbank:get select="party_summ" beanName="map"/>
+       <logic:notEmpty name="BEANLIST">
+         <tr class="@nextcolorclass@">
+           <td>Parties:</td>
+           <td align="right">&nbsp;<bean:write name="BEAN" property="count_party"/></td>
+         </tr> 
+       </logic:notEmpty>
+      
+      <vegbank:get select="taxonobservation_summ" beanName="map"/>
+       <logic:notEmpty name="BEANLIST">
+         <tr class="@nextcolorclass@">
+           <td>Taxa observed on plots:</td>
+           <td align="right">&nbsp;<bean:write name="BEAN" property="count_taxonobservation"/></td>
+         </tr> 
+       </logic:notEmpty>
+      </table>
+   </logic:match>
 
 @webpage_footer_html@
