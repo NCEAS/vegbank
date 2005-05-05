@@ -48,10 +48,10 @@ whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
      	  for (int k=1; k<=commnum ; k++)
     	  {
 	   %>
-	        <td/>
-	        <td/>
-	        <td/>
-	        <td/>  
+	        <td></td>
+	        <td></td>
+	        <td></td>
+	        <td></td>  
 	  <%
       	  }
        %>
@@ -71,10 +71,10 @@ whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
          for (int j2=j; j2<=commnum ; j2++)
          {
        %>
-         <td/><!-- extra row -->
-         <td/>
-         <td/>
-         <td/>
+         <td></td><!-- extra row -->
+         <td></td>
+         <td></td>
+         <td></td>
        <%
          }
        %>

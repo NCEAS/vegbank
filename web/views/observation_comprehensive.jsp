@@ -11,8 +11,8 @@
     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
 <vegbank:pager />
 <logic:empty name="plotobs-BEANLIST"> Sorry, no plot-observations are available. </logic:empty>
-<NOPE logic:notEmpty name="plotobs-BEANLIST" ><!-- set up table -->
-<NOPE logic:iterate id="onerowofobservation" name="BEANLIST"><!-- iterate over all records in set : new table for each -->
+<!--NOPE logic:notEmpty name="plotobs-BEANLIST" --><!-- set up table -->
+<!--NOPE logic:iterate id="onerowofobservation" name="BEANLIST"--><!-- iterate over all records in set : new table for each -->
 <bean:define id="onerowofobservation" name="plotobs-BEAN" />
 <bean:define id="onerowofplot" name="plotobs-BEAN" />
 <bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
@@ -136,9 +136,9 @@
 </logic:notEmpty>
 </TD>
 </TR>
-<TR><TD colspan="2"><hr noshade="true"/><br/></TD></TR>
+<TR><TD colspan="2"><hr /><br/></TD></TR>
 </TABLE>
-<NOPE /logic:iterate NOPE>
+<!--NOPE /logic:iterate NOPE-->
 <vegbank:pager/>
-<NOPE /logic:notEmpty NOPE><br>
+<!--NOPE /logic:notEmpty NOPE--><br />
 @webpage_footer_html@

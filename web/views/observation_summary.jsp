@@ -77,7 +77,7 @@
 <form action="" method="GET" id="cartable">
 <TABLE width="100%" class="leftrightborders" cellpadding="2">
 <tr>
-<th><a href="#" alt="select all/none" class="nobg"><img src="@images_link@cart1.gif" border="0" /></a></th>
+<th><a href="#" title="select all/none" class="nobg"><img src="@images_link@cart1.gif" border="0" /></a></th>
 
 <th>More</th>
 
@@ -194,7 +194,7 @@
 
 </logic:notEmpty>
 
-<br>
+<br />
 @webpage_footer_html@
 
 
