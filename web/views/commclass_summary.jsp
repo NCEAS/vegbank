@@ -20,5 +20,5 @@
 
 <%@ include file="includeviews/sub_commclass_summary.jsp" %>
 
-<br><vegbank:pager />
+<br /><vegbank:pager />
           @webpage_footer_html@

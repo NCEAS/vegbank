@@ -84,7 +84,7 @@
 
 </logic:notEqual></td>
 <td class="largefield"><bean:write name="onerow" property="commdescription"/>&nbsp;</td>
-</td>
+
 </tr>
 
 </logic:iterate>

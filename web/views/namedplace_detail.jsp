@@ -72,10 +72,10 @@
 <table class="leftrightborders"><tr><th>parent places</th><th>convergence</th></tr>
  <logic:iterate id="onerowofnamedplacecorrelation_a" name="namedplacecorrelation_a-BEANLIST">
    <tr class='@nextcolorclass@'><td>
-   <a href='@get_link@std/namedplace/<bean:write name="onerowofnamedplacecorrelation_a" property="parentplace_id" />'><bean:write name="onerowofnamedplacecorrelation_a" property="parentplace_id_transl" /></td>
+   <a href='@get_link@std/namedplace/<bean:write name="onerowofnamedplacecorrelation_a" property="parentplace_id" />'><bean:write name="onerowofnamedplacecorrelation_a" property="parentplace_id_transl" /></a></td>
    <td><bean:write name="onerowofnamedplacecorrelation_a" property="placeconvergence" /></td>
- </logic:iterate>
    </tr>
+ </logic:iterate>
 </table>
 
 </TD></TR>

@@ -115,8 +115,8 @@ Interpreted as the community: <bean:write name="onerow" property="commname_id_tr
       wparam="<%= concId + Utility.PARAM_DELIM + thispartyid %>" 
       perPage="-1" pager="false" beanName="map" />
     <logic:notEmpty name="commchildren-BEANLIST">  
-      
-     <span class="datalabelsmall"> <a href="javascript:showorhidediv('commchildren-for-<bean:write name="statusbean" property="commstatus_id" />')">Show/Hide</a> </span> </br>
+      <bean:define id="thisdivid">commchildren-for-<bean:write name="statusbean" property="commstatus_id" /></bean:define>
+     <span class="datalabelsmall"> <a href="javascript:showorhidediv('<%= thisdivid %>')">Show/Hide</a> </span> <br/>
    <div id='commchildren-for-<bean:write name="statusbean" property="commstatus_id" />'>
     <logic:iterate id="onerowofcommchildren" name="commchildren-BEANLIST">
       <ul class="compact">
@@ -175,7 +175,7 @@ Interpreted as the community: <bean:write name="onerow" property="commname_id_tr
 </tr>
 <!-- spacer b/t perspectives -->
 <tr>
-<td/><td colspan="3" bgcolor="#222222"><img src="@images_link@transparent.gif" height="1"/></td>
+<td></td><td colspan="3" bgcolor="#222222"><img src="@images_link@transparent.gif" height="1"/></td>
 </tr>
 </logic:iterate>
 </logic:notEmpty> <!-- status -->

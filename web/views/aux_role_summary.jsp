@@ -25,13 +25,13 @@
 <vegbank:get id="MY_ROLES" select="aux_role" beanName="map" pager="true"/>
 <vegbank:pager />
         <p>
-        <br>
+
 
         <logic:empty name="MY_ROLES-BEANLIST">
                 No roles were found.
                 
         </logic:empty>
-
+        </p>
         <logic:notEmpty name="MY_ROLES-BEANLIST">
           <table class="leftrightborders" cellpadding="3">
            <tr>
@@ -50,7 +50,7 @@
 	 </logic:equal>		     
            </tr>
            <%      String rowClass = "evenrow";   %>
-          <logic:iterate id="onerowofaux_role" name="MY_ROLES-BEANLIST" >     
+          <logic:iterate id="onerowofaux_role" name="MY_ROLES-BEANLIST">     
            
            <tr class='@nextcolorclass@'>
            
@@ -75,7 +75,8 @@
         </logic:notEmpty>
 
 		<p>
-		<br>
+		<br />
+        </p>
 		  <vegbank:pager id="MY_ROLES"/>
 
 @webpage_footer_html@
