@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-04-08 00:00:40 $'
- *	'$Revision: 1.17 $'
+ *	'$Date: 2005-05-05 00:36:33 $'
+ *	'$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -185,6 +185,11 @@ public class GenericDispatcherAction extends Action
 					// VIEWS: detail or summary or catch-all
 					//////////////////////////////////////////
 					command = FORWARD;
+					wparam = buildWparamArray(params);
+                    if (Utility.isArrayNullOrEmpty(wparam)) {
+                        log.debug("no wparam, so using summary view");
+                        view = "summary";
+                    }
 
 					fwdURL = "/views/" + entity + "_" + view + ".jsp";
 
@@ -208,10 +213,9 @@ public class GenericDispatcherAction extends Action
 					}
 					
 
-					wparam = buildWparamArray(params);
 
 					if (!Utility.isStringNullOrEmpty(params)) {
-						if (params.indexOf(";") == -1) {
+						if (params.indexOf(Utility.PARAM_DELIM) == -1) {
 							// not an aggregate
 							// add the delimited list as one wparam
 							String wparamList = "";
@@ -380,6 +384,8 @@ public class GenericDispatcherAction extends Action
 
 
 	/**
+	 * Simply splits the given params into an array using
+     * Utility.PARAM_DELIM, if it exists in the string.
 	 * @return a List of values
 	 */
 	private String[] buildWparamArray(String delimitedParams) {
@@ -387,16 +393,23 @@ public class GenericDispatcherAction extends Action
 			return null;
 		}
 
-		StringTokenizer st = new StringTokenizer(delimitedParams, ";");
-		String param;
-		int i=0;
+        String[] arr = delimitedParams.split(Utility.PARAM_DELIM);
+
+        for (int j=0; j<arr.length; j++) {
+            arr[j] = arr[j].toLowerCase();
+        }
+
+        /*
+		//StringTokenizer st = new StringTokenizer(delimitedParams, Utility.PARAM_DELIM);
 		int numTokens = st.countTokens();
 		String[] arr = new String[numTokens];
-
+		String param;
+		int i=0;
 		while (st.hasMoreTokens()) {
 			param = st.nextToken(); 
 			arr[i++] = param.toLowerCase();
 		}
+        */
 
 		/*
 		if (numTokens > 1) {
