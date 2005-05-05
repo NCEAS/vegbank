@@ -1,4 +1,4 @@
-/* $Id: header_search.js,v 1.8 2005-05-04 23:02:36 anderson Exp $ */
+/* $Id: header_search.js,v 1.9 2005-05-05 20:22:16 anderson Exp $ */
 
 function doSubmit() {
     var ent = document.quicksearch_form.selEntity.value;
@@ -51,7 +51,7 @@ function doSubmit() {
         }
 
         // this delimiter is Utility.PARAM_DELIM
-        var params = getPk + "##" + ent;
+        var params = getPk + "__" + ent;
         var getURL = "@get_link@" + getView + "/" + getName + "/" + params + 
                 "?where=where_keywords_pk_in&xwhereKey=xwhere_kw_match&xwhereSearch=true&" +
                 xwp + getExtra + "&" + qsent;
