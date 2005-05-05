@@ -123,8 +123,9 @@
  	       wparam="<%= concId + Utility.PARAM_DELIM + thispartyid %>"
  	       perPage="-1" pager="false" beanName="map" />
  	     <logic:notEmpty name="plantchildren-BEANLIST">  
- 	       
- 	      <span class="datalabelsmall"> <a href="javascript:showorhidediv('plantchildren-for-<bean:write name="statusbean" property="plantstatus_id" />')">Show/Hide</a> </span> </br>
+ 	      
+          <bean:define id="thisdivid">plantchildren-for-<bean:write name="statusbean" property="plantstatus_id" /></bean:define>
+          <span class="datalabelsmall"> <a href="javascript:showorhidediv('<%= thisdivid %>')">Show/Hide</a> </span> <br/>
  	    <div id='plantchildren-for-<bean:write name="statusbean" property="plantstatus_id" />'>
  	     <logic:iterate id="onerowofplantchildren" name="plantchildren-BEANLIST">
  	       <ul class="compact">
@@ -145,7 +146,7 @@
 <!-- end status -->
 </td>
 <!-- spacer grey -->
-<td width="1px" bgcolor="#222222"><img src="@images_link@transparent.gif" width="1px" height="1px"/></td>
+<td width="1" bgcolor="#222222"><img src="@images_link@transparent.gif" width="1" height="1"/></td>
 <td class="grey" valign="top"><!--usage -->
   <!-- nested :get #3 -->
   <bean:define id="statId" name="statusbean" property="plantstatus_id"/>
@@ -190,7 +191,7 @@
 </tr>
 <!-- spacer b/t perspectives -->
 <tr>
-<td/><td colspan="3" bgcolor="#222222"><img src="@images_link@transparent.gif" height="1"/></td>
+<td></td><td colspan="3" bgcolor="#222222"><img src="@images_link@transparent.gif" height="1"/></td>
 </tr>
 </logic:iterate>
 </logic:notEmpty> <!-- status -->

@@ -143,7 +143,9 @@
    example:   
 
 <NOT vegbank@_colon_@get id="related_table" select="related_table" beanName="map" pager="false" perPage="-1" where="where_project_pk" wparam="project_pk" />-->
+</tr>
 </logic:iterate>
+
 </table>
 </logic:notEmpty>
 <br />

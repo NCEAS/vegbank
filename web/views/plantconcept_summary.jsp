@@ -79,7 +79,6 @@
 </td>
 <td class="largefield"><bean:write name="onerow" property="plantdescription"/>&nbsp;</td>
 <td class="largefield"><bean:write name="onerow" property="accessioncode"/>&nbsp;</td>
-</td>
 </tr>
 
 </logic:iterate>
