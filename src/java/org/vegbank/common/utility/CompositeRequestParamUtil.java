@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-13 06:39:12 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2005-05-05 20:22:31 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,12 +35,12 @@ import org.apache.commons.logging.LogFactory;
  * servlet request parameters.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.6 $ $Date: 2004-12-13 06:39:12 $
+ * @version $Revision: 1.7 $ $Date: 2005-05-05 20:22:31 $
  */
 
 public class CompositeRequestParamUtil {
 
-	public static final String PARAM_DELIM = "_";
+	public static final String CRP_PARAM_DELIM = "_";
 
 	private static final Log log = LogFactory.getLog(CompositeRequestParamUtil.class);
 	private ServletRequest request = null;
@@ -109,7 +109,7 @@ public class CompositeRequestParamUtil {
 			try {
 				fullPath = (String)theFields.nextElement();
 
-				firstDot = fullPath.indexOf(PARAM_DELIM);
+				firstDot = fullPath.indexOf(CRP_PARAM_DELIM);
 				if (firstDot == -1) {
 					// this param has no children
 					log.debug("skipping single parent: " + fullPath);
@@ -147,8 +147,8 @@ public class CompositeRequestParamUtil {
 		}
 
 		Map m;
-		log.debug("Searching for delim " + PARAM_DELIM + " in " + fullPath);
-		int firstDot = fullPath.indexOf(PARAM_DELIM);
+		log.debug("Searching for delim " + CRP_PARAM_DELIM + " in " + fullPath);
+		int firstDot = fullPath.indexOf(CRP_PARAM_DELIM);
 		if (firstDot == -1) {
 			// this param has no children
 			log.debug("non-composite param: " + fullPath);
@@ -192,7 +192,7 @@ public class CompositeRequestParamUtil {
 
 		log.debug("parseChildren: " + childKey);
 
-		int firstDot = childKey.indexOf(PARAM_DELIM);
+		int firstDot = childKey.indexOf(CRP_PARAM_DELIM);
 		Map childMap;
 
 		if (firstDot != -1 && childKey.length() > firstDot+1) {
@@ -256,7 +256,7 @@ public class CompositeRequestParamUtil {
 	 * If child key is numeric, type is ArrayList, else HashMap.
 	 */
 	private void addTopLevelParent(String fullPath, Map newParentMap) {
-		int dotPos = fullPath.indexOf(PARAM_DELIM);
+		int dotPos = fullPath.indexOf(CRP_PARAM_DELIM);
 		if (dotPos == -1) {
 			log.debug("Not adding top level for: " + fullPath);
 			return;
@@ -272,7 +272,7 @@ public class CompositeRequestParamUtil {
 
 		/*
 		String childKey = fullPath.substring(dotPos+1);
-		dotPos = childKey.indexOf(PARAM_DELIM);
+		dotPos = childKey.indexOf(CRP_PARAM_DELIM);
 		if (dotPos != -1) {
 			// this child is a parent, so make it upper case
 			childKey = childKey.substring(0, dotPos).toUpperCase();
@@ -389,7 +389,7 @@ public class CompositeRequestParamUtil {
 			return null;
 		}
 
-		int dotPos = canon.indexOf(PARAM_DELIM);
+		int dotPos = canon.indexOf(CRP_PARAM_DELIM);
 		if (dotPos == -1 || canon.length() < dotPos+2) {
 			//log.debug("getting top level map");
 			return (Map)composParams.get(canon.toUpperCase());
@@ -411,7 +411,7 @@ public class CompositeRequestParamUtil {
 		do {
 			rhs = rhs.substring(dotPos+1);
 
-			dotPos = rhs.indexOf(PARAM_DELIM);
+			dotPos = rhs.indexOf(CRP_PARAM_DELIM);
 
 			if (dotPos == -1) {
 				childKey = rhs;

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 14:00:23 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2005-05-05 20:22:31 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,13 +44,13 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  * 
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.8 $ $Date: 2005-05-02 14:00:23 $
+ * @version $Revision: 1.9 $ $Date: 2005-05-05 20:22:31 $
  */
 
 public class Xwhere {
 
 	private static final Log log = LogFactory.getLog(Xwhere.class);
-	private static final String PARAM_DELIM = CompositeRequestParamUtil.PARAM_DELIM;
+	private static final String CRP_PARAM_DELIM = CompositeRequestParamUtil.CRP_PARAM_DELIM;
 
 	private static ResourceBundle sqlResources = 
 			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
@@ -237,8 +237,8 @@ public class Xwhere {
 				while (keys.hasNext()) {
 
 					String keyName = (String)keys.next();
-					//log.debug("getting string array for xwhereParams" + PARAM_DELIM + keyName);
-					//arr = composUtil.getObjectArray("xwhereParams" + PARAM_DELIM + keyName);
+					//log.debug("getting string array for xwhereParams" + CRP_PARAM_DELIM + keyName);
+					//arr = composUtil.getObjectArray("xwhereParams" + CRP_PARAM_DELIM + keyName);
 					arr = getXwhereParams(keyName);
 
 					if (!Utility.isArrayNullOrEmpty(arr)) {
@@ -386,7 +386,7 @@ public class Xwhere {
 	private Object[] getXwhereParams(String parent) {
 		Object[] xwParams = null;
 		try {
-			xwParams = composUtil.getObjectArray("xwhereParams" + PARAM_DELIM + parent);
+			xwParams = composUtil.getObjectArray("xwhereParams" + CRP_PARAM_DELIM + parent);
 		} catch (Exception ex) {
 			log.error("Problem getting xwhereParam for " + 
 					parent + ": " + ex.getMessage());
@@ -398,7 +398,7 @@ public class Xwhere {
 	private Object[] getXwhereParams(String grandParent, String parent) {
 		Object[] xwParams = null;
 		try {
-			xwParams = composUtil.getObjectArray("xwhereParams" + PARAM_DELIM + grandParent + PARAM_DELIM + parent);
+			xwParams = composUtil.getObjectArray("xwhereParams" + CRP_PARAM_DELIM + grandParent + CRP_PARAM_DELIM + parent);
 		} catch (Exception ex) {
 			log.error("Problem getting xwhereParam for " + grandParent +
 					" -> " + parent + ": " + ex.getMessage());
@@ -455,13 +455,13 @@ public class Xwhere {
 				if (!Utility.isStringNullOrEmpty(parent)) {
 					// use both
 					//xwv = (String)((Map)(composUtil.getMap(xwName).get(grandParent))).get(parent);
-					path = xwName + PARAM_DELIM + grandParent;
-					log.debug("getting " + path + PARAM_DELIM + parent.toLowerCase());
+					path = xwName + CRP_PARAM_DELIM + grandParent;
+					log.debug("getting " + path + CRP_PARAM_DELIM + parent.toLowerCase());
 					xwv = (String)(composUtil.getMap(path)).get(parent.toLowerCase());
 
 				} else {
 					// use just the grandparent
-					log.debug("getting " + xwName + PARAM_DELIM + grandParent.toLowerCase());
+					log.debug("getting " + xwName + CRP_PARAM_DELIM + grandParent.toLowerCase());
 					xwv = (String)(composUtil.getMap(xwName).get(grandParent.toLowerCase()));
 				}
 			} 
@@ -505,9 +505,9 @@ public class Xwhere {
 				Iterator keys = m.keySet().iterator();
 				while (keys.hasNext()) {
 					String keyName = (String)keys.next();
-					tmp = composUtil.getObjectArray("xwhereParams" + PARAM_DELIM + keyName);
+					tmp = composUtil.getObjectArray("xwhereParams" + CRP_PARAM_DELIM + keyName);
 					if (Utility.isArrayNullOrEmpty(tmp)) {
-						log.debug("Found 2nd level xwhereParams" + PARAM_DELIM + keyName);
+						log.debug("Found 2nd level xwhereParams" + CRP_PARAM_DELIM + keyName);
 						l.add(tmp);
 					}
 				}

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-04 09:52:37 $'
- *	'$Revision: 1.32 $'
+ *	'$Date: 2005-05-05 20:22:30 $'
+ *	'$Revision: 1.33 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -499,7 +499,7 @@ public class GenericCommand
 			log.debug("new whereClause: " + whereClause);
 
 			log.debug("Expanding wparams");
-			StringTokenizer st = new StringTokenizer(whereParams[0], Utility.PARAM_DELIM);
+			//StringTokenizer st = new StringTokenizer(whereParams[0], Utility.PARAM_DELIM);
 			whereParams = new String[st.countTokens()];
 			int j=0;
 			while (st.hasMoreTokens()) {
@@ -515,15 +515,15 @@ public class GenericCommand
 			if (hasParams) {
                 //////////////////////////////////////////
                 List wpList = new ArrayList();
-                log.debug("checking for ; delimited wparams");
+                log.debug("checking for delimited wparams: " + Utility.PARAM_DELIM);
                 for (int i=0; i<whereParams.length; i++) {
                     log.debug("whereParams: " + whereParams[i]);
-                    StringTokenizer st = new StringTokenizer(whereParams[i], Utility.PARAM_DELIM);
-                    //whereParams = new String[st.countTokens()];
-                    //int j=0;
-                    while (st.hasMoreTokens()) {
-                        //whereParams[j++] = st.nextToken();
-                        wpList.add(st.nextToken());
+                    //StringTokenizer st = new StringTokenizer(whereParams[i], Utility.PARAM_DELIM);
+                    //while (st.hasMoreTokens()) {
+
+                    String[] paramTokens = whereParams[i].split(Utility.PARAM_DELIM);
+                    for (int j=0; j<paramTokens.length; j++) {
+                        wpList.add(paramTokens[j]);
                     }
                 }
 

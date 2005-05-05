@@ -5,8 +5,8 @@
  *             National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:11:06 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2005-05-05 20:22:31 $'
+ *	'$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1088,7 +1088,8 @@ public class DatabaseUtility
 			unsafe = unsafe.replaceAll("\'", "\'\'");
 		}
 
-		if (wasWrapped || (wrap && (firstChar != '(' && lastChar != ')'))) {
+        boolean isInParens = (firstChar == '(' && lastChar == ')');
+		if (wasWrapped || (wrap && !isInParens)) {
 			// (parenthesized) strings don't count
 			return "'" + unsafe + "'";
 		} else {

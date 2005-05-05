@@ -27,8 +27,8 @@ import org.vegbank.common.Constants;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-05-04 09:52:37 $'
- * '$Revision: 1.48 $'
+ * '$Date: 2005-05-05 20:22:31 $'
+ * '$Revision: 1.49 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ public class Utility implements Constants
 	public static String VB_EMAIL_ADMIN_TO;
 	public static String VB_EMAIL_ADMIN_FROM;
 	public static List DS_CANDIDATES;
-	public static String PARAM_DELIM = ";"; 
+	public static String PARAM_DELIM = "__"; 
 	public static String DATACART_KEY = "datacart";   // found in session
 	public static String DATACART_COUNT_KEY = "datacart-count";   // found in session
 
