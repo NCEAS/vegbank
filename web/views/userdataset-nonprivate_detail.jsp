@@ -17,5 +17,5 @@
 
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>
 
-<br>
+<br />
           @webpage_footer_html@

@@ -155,7 +155,7 @@
       <tr><th>Plant</th><th>Plots</th></tr>
       <logic:iterate id="onerowofbrowsecommonplants" name="browsecommonplants-BEANLIST">
 	          <tr class='@nextcolorclass@'>
-	            <td><a href="@get_link@std/plantconcept/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />"><bean:write name="onerowofbrowsecommonplants" property="plantconcept_id_transl" /></td>
+	            <td><a href="@get_link@std/plantconcept/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />"><bean:write name="onerowofbrowsecommonplants" property="plantconcept_id_transl" /></a></td>
 	            <td class="numeric">
                     <bean:define id='plantconcept_pk' name='onerowofbrowsecommonplants' property='plantconcept_id' />
                     <bean:define id="critAsTxt">

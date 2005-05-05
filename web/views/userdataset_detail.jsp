@@ -1,7 +1,7 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-<!-- $Id: userdataset_detail.jsp,v 1.12 2005-04-20 21:43:59 mlee Exp $ -->
+<!-- $Id: userdataset_detail.jsp,v 1.13 2005-05-05 22:12:37 mlee Exp $ -->
 <!-- purpose : show user's datasets, either all of them (mode=all in URL) or only certain ones:
 
   mode=ac is to show accessioncodes
@@ -66,7 +66,7 @@ String paramDelim = Utility.PARAM_DELIM ;
 
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>
 
-<br>
+<br />
 
 
 

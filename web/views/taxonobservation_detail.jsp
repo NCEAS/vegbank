@@ -147,7 +147,7 @@ Interpret This Plant</a>
   </table>
 
 </TD>
-
+</TR>
 </TABLE>
 <p>&nbsp;</p>
 </logic:iterate>
