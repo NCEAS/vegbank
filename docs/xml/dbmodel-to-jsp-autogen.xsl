@@ -59,6 +59,7 @@
                     <xsl:with-param name="currEnt" select="$currEnt"/>
                     <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                     <xsl:with-param name="currLbl" select="../../attLabel"/>
+                    <xsl:with-param name="currDefn" select="../../attDefinition" />
                   </xsl:call-template>
                   </th>
                   </xsl:otherwise>
@@ -92,6 +93,7 @@
                         <xsl:with-param name="currEnt" select="$currEnt"/>
                         <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                         <xsl:with-param name="currLbl" select="../../attLabel"/>
+                        <xsl:with-param name="currDefn" select="../../attDefinition" />
                       </xsl:call-template>: </span>
                 <xsl:call-template name="writeField">
                   <xsl:with-param name="currEnt" select="$currEnt"/>
@@ -117,6 +119,7 @@
                         <xsl:with-param name="currEnt" select="$currEnt"/>
                         <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                         <xsl:with-param name="currLbl" select="../../attLabel"/>
+                        <xsl:with-param name="currDefn" select="../../attDefinition" />
                       </xsl:call-template>
                     </td>
                     <xsl:call-template name="writeField">
@@ -244,6 +247,8 @@
     <xsl:param name="currEnt"/>
     <xsl:param name="currFld"/>
     <xsl:param name="currLbl"/>
+    <xsl:param name="currDefn" />
+    <span title="{$currDefn}">
     <xsl:choose>
       <xsl:when test="string-length($currLbl)&gt;0">
         <xsl:value-of select="$currLbl"/>
@@ -253,8 +258,11 @@
         <xsl:value-of select="$currFld"/>
       </xsl:otherwise>
     </xsl:choose>
-    <!-- <a href="@get_link@dd/{$currEnt}/{$currFld}">
+    </span>
+     <logic:equal parameter="showHelp"  value="true">
+     <a href="/dd/{$currEnt}/{$currFld}">
       <img src="@images_link@question.gif" alt="?" border="0"/>
-    </a>-->
+    </a>
+    </logic:equal>
   </xsl:template>
 </xsl:stylesheet>
