@@ -34,6 +34,7 @@
                   
                   </tr>
 <logic:iterate name="party-BEANLIST" id="onerowofparty">
+<bean:define property="party_id" name="onerowofparty" id="party_pk"/>
 <tr class="@nextcolorclass@">
 <td class="largefield">
 <a href="@get_link@detail/party/@subst_lt@bean:write name='onerowofparty' property='party_id' /@subst_gt@">
@@ -47,12 +48,28 @@
        <logic:notEmpty name="onerowofparty" property="d_obscount">
         <logic:equal name="onerowofparty" property="d_obscount" value="0">0</logic:equal>
         <logic:notEqual name="onerowofparty" property="d_obscount" value="0">
-         <a href='@get_link@summary/observation/<bean:write name="onerowofparty" property="party_id" />?where=where_obs_allparty' ><bean:write name="onerowofparty" property="d_obscount" /></a>
+
+          <bean:define id="critAsTxt">
+          with <bean:write name="onerowofparty" property="party_id_transl"/> as Contributor.
+          </bean:define>
+          <%  
+              /* create a map of parameters to pass to the new link: */
+              java.util.HashMap params = new java.util.HashMap();
+              params.put("wparam", party_pk);
+              params.put("where", "where_obs_allparty");
+              params.put("criteriaAsText", critAsTxt);
+              pageContext.setAttribute("paramsName", params);
+          %>
+
+          <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+            <bean:write name="onerowofparty" property="d_obscount" />
+          </html:link>
+
         </logic:notEqual>
        </logic:notEmpty> 
       </td>
      </tr>
-<bean:define property="party_id" name="onerowofparty" id="party_pk"/>
+
 <!--Insert a nested get statement here:
    example:   
 

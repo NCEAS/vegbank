@@ -112,7 +112,24 @@
       <logic:iterate id="onerowofproject" name="project-BEANLIST">
         <tr  class='@nextcolorclass@'>
           <td><a href='@get_link@std/project/<bean:write name="onerowofproject" property="project_id" />'><bean:write name="onerowofproject" property="projectname" /></a></td>
-          <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofproject' property='project_id' />?where=where_project_pk"><bean:write name="onerowofproject" property="d_obscount" /></a></td>
+          <td class="numeric">
+              <bean:define id="project_pk" name="onerowofproject" property="project_id" />
+              <bean:define id="critAsTxt">
+              In Project: <bean:write name="onerowofproject" property="projectname"/>
+              </bean:define>
+              <%  
+                  /* create a map of parameters to pass to the new link: */
+                  java.util.HashMap params = new java.util.HashMap();
+                  params.put("wparam", project_pk);
+                  params.put("where", "where_project_pk");
+                  params.put("criteriaAsText", critAsTxt);
+                  pageContext.setAttribute("paramsName", params);
+              %>
+              
+              <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+                  <bean:write name="onerowofproject" property="d_obscount" />
+              </html:link>
+          </td>
         </tr>
       </logic:iterate>
       
@@ -139,7 +156,25 @@
       <logic:iterate id="onerowofbrowsecommonplants" name="browsecommonplants-BEANLIST">
 	          <tr class='@nextcolorclass@'>
 	            <td><a href="@get_link@std/plantconcept/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />"><bean:write name="onerowofbrowsecommonplants" property="plantconcept_id_transl" /></td>
-	            <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofbrowsecommonplants' property='plantconcept_id' />?where=where_plantconcept_observation_complex"><bean:write name="onerowofbrowsecommonplants" property="d_obscount" /></a></td>
+	            <td class="numeric">
+                    <bean:define id='plantconcept_pk' name='onerowofbrowsecommonplants' property='plantconcept_id' />
+                    <bean:define id="critAsTxt">
+                    With the plant: <bean:write name="onerowofcommonplants" property="plantname_id_transl"/> [<bean:write name="onerowofcommonplants" property="reference_id_transl"/>]
+                    </bean:define>
+                    <%  
+                        /* create a map of parameters to pass to the new link: */
+                        java.util.HashMap params = new java.util.HashMap();
+                        params.put("wparam", plantconcept_pk);
+                        params.put("where", "where_plantconcept_observation_complex");
+                        params.put("criteriaAsText", critAsTxt);
+                        pageContext.setAttribute("paramsName", params);
+                    %>
+                    
+                    <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+                      <bean:write name="onerowofcommonplants" property="d_obscount" />
+                    </html:link>
+
+                </td>
 	          </tr>
       </logic:iterate>
      
@@ -164,8 +199,25 @@
          <tr><th>Community</th><th>Plots</th></tr>
          <logic:iterate id="onerowofbrowsecommoncomms" name="browsecommoncomms-BEANLIST">
    	          <tr class='@nextcolorclass@'>
-   	            <td><a href="@get_link@std/commconcept/<bean:write name='onerowofbrowsecommoncomms' property='commconcept_id' />"><bean:write name="onerowofbrowsecommoncomms" property="commconcept_id_transl" /></a></td>
-   	            <td class="numeric"><a href="@get_link@summary/observation/<bean:write name='onerowofbrowsecommoncomms' property='commconcept_id' />?where=where_commconcept_observation_complex"><bean:write name="onerowofbrowsecommoncomms" property="d_obscount" /></a></td>
+                <td><a href="@get_link@std/commconcept/<bean:write name='onerowofbrowsecommoncomms' property='commconcept_id' />"><bean:write name="onerowofbrowsecommoncomms" property="commconcept_id_transl" /></a></td>
+                <td class="numeric">
+                   <bean:define id='commconcept_pk'  name='onerowofbrowsecommoncomms' property='commconcept_id'  />
+                   <bean:define id="critAsTxt">
+                    Interpreted as the community: <bean:write name="onerowofbrowsecommoncomms" property="commname_id_transl"/> [<bean:write name="onerowofbrowsecommoncomms" property="reference_id_transl"/>]
+                   </bean:define>
+                    <%  
+                      /* create a map of parameters to pass to the new link: */
+                      java.util.HashMap params = new java.util.HashMap();
+                      params.put("wparam", commconcept_pk);
+                      params.put("where", "where_commconcept_observation_complex");
+                      params.put("criteriaAsText", critAsTxt);
+                      pageContext.setAttribute("paramsName", params);
+                    %>
+                  <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+                    <bean:write name="onerowofbrowsecommoncomms" property="d_obscount" />
+                  </html:link>
+                
+              </td>
    	          </tr>
          </logic:iterate>
         

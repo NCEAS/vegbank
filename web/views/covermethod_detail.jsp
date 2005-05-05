@@ -46,7 +46,20 @@
                   <logic:notEmpty name="onerowofcovermethod" property="d_obscount">
                      <logic:equal name="onerowofcovermethod" property="d_obscount" value="0">0</logic:equal>
                      <logic:notEqual name="onerowofcovermethod" property="d_obscount" value="0">
-                      <a href="@get_link@summary/observation/<bean:write name='onerowofcovermethod' property='covermethod_id' />?where=where_covermethod_pk"><bean:write name="onerowofcovermethod" property="d_obscount" /></a>
+                          <bean:define id="critAsTxt">
+                            with Cover Method: <bean:write name="onerowofcovermethod" property="covertype"/>
+                          </bean:define>
+                          <%  
+                              /* create a map of parameters to pass to the new link: */
+                              java.util.HashMap params = new java.util.HashMap();
+                              params.put("wparam", covermethod_pk);
+                              params.put("where", "where_covermethod_pk");
+                              params.put("criteriaAsText", critAsTxt);
+                              pageContext.setAttribute("paramsName", params);
+                          %>
+                          
+                          <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" ><bean:write name="onerowofcovermethod" property="d_obscount" /></html:link>
+
                      </logic:notEqual>
                   </logic:notEmpty>
 </td>

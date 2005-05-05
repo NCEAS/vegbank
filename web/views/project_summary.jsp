@@ -59,8 +59,23 @@
 		   <logic:notEmpty name="onerowofproject" property="d_obscount">
 		   
 		   <logic:notEqual name="onerowofproject" property="d_obscount" value="0">
-		   <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk"><bean:write name="onerowofproject" property="d_obscount" /></a>
-		   </logic:notEqual>
+              <bean:define id="critAsTxt">
+              In Project: <bean:write name="onerowofproject" property="projectname"/>
+              </bean:define>
+              <%  
+                  /* create a map of parameters to pass to the new link: */
+                  java.util.HashMap params = new java.util.HashMap();
+                  params.put("wparam", project_pk);
+                  params.put("where", "where_project_pk");
+                  params.put("criteriaAsText", critAsTxt);
+                  pageContext.setAttribute("paramsName", params);
+              %>
+              
+              <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+                  <bean:write name="onerowofproject" property="d_obscount" />
+              </html:link>
+           
+           </logic:notEqual>
 		   <logic:equal name="onerowofproject" property="d_obscount" value="0">0</logic:equal>
 		   </logic:notEmpty>
           </td> 
@@ -71,7 +86,22 @@
              <logic:empty name="onerowofproject" property="countclassplots">0</logic:empty>
              <logic:notEmpty name="onerowofproject" property="countclassplots">
                <logic:notEqual name="onerowofproject" property="countclassplots" value="0">
-                  <a href="@get_link@summary/observation/<bean:write name='project_pk' />?where=where_project_pk_and_observationclassified"><bean:write name="onerowofproject" property="countclassplots" /></a>
+                    <bean:define id="critAsTxt">
+                    In Project: <bean:write name="onerowofproject" property="projectname"/> AND are classified to a community.
+                    </bean:define>
+                    <%  
+                        /* create a map of parameters to pass to the new link: */
+                        java.util.HashMap params = new java.util.HashMap();
+                        params.put("wparam", project_pk);
+                        params.put("where", "where_project_pk_and_observationclassified");
+                        params.put("criteriaAsText", critAsTxt);
+                        pageContext.setAttribute("paramsName", params);
+                    %>
+                    
+                    <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+                       <bean:write name="onerowofproject" property="countclassplots" />
+                    </html:link>
+               
                </logic:notEqual>
                <logic:equal name="onerowofproject" property="countclassplots" value="0">0</logic:equal>
              </logic:notEmpty>
@@ -82,16 +112,27 @@
           <vegbank:get id="places" select="place_summ" beanName="map" perPage="-1" pager="false" 
            where="where_group_place_summ_project" wparam="project_pk"/>
 		   <logic:notEmpty name="places-BEANLIST">
-		       <bean:define id="firstplace" value="true" />
 		       <logic:iterate id="oneplace" name="places-BEANLIST" >
 		         <!-- loop over list of states -->
-		        <logic:notEqual name="firstplace" value="true">; 
-		        <!-- add semicolon before states that aren't the first one -->
-		        </logic:notEqual>
-		        <bean:define id="firstplace" value="false" /> 
-		        <a href='@get_link@summary/observation/<bean:write name="project_pk" />;<bean:write name="oneplace" property="namedplace_id" />?where=where_project_place'><bean:write name="oneplace" property="region_name"/>
-		         (<bean:write name="oneplace" property="count_obs"/>)</a>
-		       </logic:iterate>
+                    <bean:define id="critAsTxt">
+                    In Project: <bean:write name="onerowofproject" property="projectname"/> AND In <bean:write name="oneplace" property="region_name"/>.
+                    </bean:define>
+                    <bean:define id="complexwparam"><bean:write name="project_pk" /><%= Utility.PARAM_DELIM %><bean:write name="oneplace" property="namedplace_id" /></bean:define>
+                    <%  
+                        /* create a map of parameters to pass to the new link: */
+                        java.util.HashMap params = new java.util.HashMap();
+                        params.put("wparam", complexwparam);
+                        params.put("where", "where_project_place");
+                        params.put("criteriaAsText", critAsTxt);
+                        pageContext.setAttribute("paramsName", params);
+                    %>
+                    
+                    <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+                       <bean:write name="oneplace" property="region_name"/>
+                       (<bean:write name="oneplace" property="count_obs"/>)
+                    </html:link>    
+            
+            </logic:iterate>
 		    
 			 </logic:notEmpty>
           

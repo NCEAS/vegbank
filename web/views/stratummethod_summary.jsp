@@ -43,12 +43,27 @@
                        <%@ include file="autogen/stratummethod_summary_data.jsp" %>
                       
 <bean:define id="stratummethod_pk" name="onerowofstratummethod" property="stratummethod_id" />
-<td>
+<td class="numeric">
 <logic:empty name="onerowofstratummethod" property="d_obscount">0</logic:empty>
 <logic:notEmpty name="onerowofstratummethod" property="d_obscount">
   <logic:equal value="0" name="onerowofstratummethod" property="d_obscount">0</logic:equal>
   <logic:notEqual value="0" name="onerowofstratummethod" property="d_obscount">
-    <a href="@get_link@summary/observation/<bean:write name='stratummethod_pk' />?where=where_stratummethod_pk"><bean:write  name="onerowofstratummethod" property="d_obscount" /></a>
+    <bean:define id="critAsTxt">
+    With Stratum Method: <bean:write name="onerowofstratummethod" property="stratummethodname"/>
+    </bean:define>
+    <%  
+        /* create a map of parameters to pass to the new link: */
+        java.util.HashMap params = new java.util.HashMap();
+        params.put("wparam", stratummethod_pk);
+        params.put("where", "where_stratummethod_pk");
+        params.put("criteriaAsText", critAsTxt);
+        pageContext.setAttribute("paramsName", params);
+    %>
+    
+    <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+      <bean:write  name="onerowofstratummethod" property="d_obscount" />
+    </html:link>
+
   </logic:notEqual>
 </logic:notEmpty>
 

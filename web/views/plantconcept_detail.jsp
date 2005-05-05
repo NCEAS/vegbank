@@ -32,7 +32,7 @@
 <vegbank:pager />
 <table class="outsideborder" width="100%" cellpadding="0" cellspacing="0"><!--each field, only write when HAS contents-->
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
-<tr><th class="major_smaller" colspan="4"><bean:write name="onerow" property="plantname_id_transl"/> | <bean:write name="onerow" property="reference_id_transl"/></th></tr>
+<tr><th class="major_smaller" colspan="4"><bean:write name="onerow" property="plantname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]</th></tr>
 
 <tr>
 <td colspan="4">
@@ -56,8 +56,21 @@
 <logic:notEmpty name="observation-BEAN">
 <bean:write name="observation-BEAN" property="count_observations" />
 <logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-<a href="@get_link@summary/observation/<bean:write name='concId' />?where=where_plantconcept_observation_complex">View 
-  observation(s)</a>
+    <bean:define id="critAsTxt">
+    With the plant: <bean:write name="onerow" property="plantname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]
+    </bean:define>
+    <%  
+        /* create a map of parameters to pass to the new link: */
+        java.util.HashMap params = new java.util.HashMap();
+        params.put("wparam", concId);
+        params.put("where", "where_plantconcept_observation_complex");
+        params.put("criteriaAsText", critAsTxt);
+        pageContext.setAttribute("paramsName", params);
+    %>
+    
+    <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >View 
+      observation(s)</html:link>
+
 </logic:notEqual>
 </logic:notEmpty>
 

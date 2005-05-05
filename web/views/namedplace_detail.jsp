@@ -43,7 +43,21 @@
 <logic:notEmpty name="plot-BEAN">
 <bean:write name="plot-BEAN" property="count_places" />
 <logic:notEqual name="plot-BEAN" property="count_places" value="0">
-<a href="@get_link@summary/observation/<bean:write name='namedplace_pk' />?where=where_place_complex">View observations</a>
+  <bean:define id="critAsTxt">
+  In the <bean:write name="onerowofnamedplace" property="placesystem"/>: <bean:write name="onerowofnamedplace" property="placename"/>
+  </bean:define>
+  <%  
+      /* create a map of parameters to pass to the new link: */
+      java.util.HashMap params = new java.util.HashMap();
+      params.put("wparam", namedplace_pk);
+      params.put("where", "where_place_complex");
+      params.put("criteriaAsText", critAsTxt);
+      pageContext.setAttribute("paramsName", params);
+  %>
+  
+  <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >View 
+  observation(s)</html:link>
+
 </logic:notEqual>
 </logic:notEmpty>
 </td></tr>

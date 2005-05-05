@@ -22,7 +22,7 @@
  </tr>
 
 <logic:iterate id="onerowofbrowseparty" name="browseparty-BEANLIST">
-
+  <bean:define property="party_id" name="onerowofbrowseparty" id="party_pk"/>
 <tr class="@nextcolorclass@">
 <!-- don't show party name if already shown on master view -->
 <logic:notEqual name="partyShown" value="yes">
@@ -32,7 +32,23 @@
 </logic:notEqual>
 <td class="numeric">
   <logic:notEmpty name="onerowofbrowseparty" property="countallcontrib">
-    <a href='@get_link@summary/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_allparty' ><bean:write name="onerowofbrowseparty" property="countallcontrib" /></a>
+          <bean:define id="critAsTxt">
+            with <bean:write name="onerowofbrowseparty" property="party_id_transl"/> as Contributor.
+          </bean:define>
+          <%  
+              /* create a map of parameters to pass to the new link: */
+              java.util.HashMap params = new java.util.HashMap();
+              params.put("wparam", party_pk);
+              params.put("where", "where_obs_allparty");
+              params.put("criteriaAsText", critAsTxt);
+              pageContext.setAttribute("paramsName", params);
+          %>
+
+          <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+            <bean:write name="onerowofbrowseparty" property="countallcontrib" />
+          </html:link>
+
+
   </logic:notEmpty>
   <logic:empty name="onerowofbrowseparty" property="countallcontrib">
     0
@@ -45,7 +61,22 @@
 
 <td class="numeric">
   <logic:notEmpty name="onerowofbrowseparty" property="countobscontrib">
-    <a href='@get_link@summary/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_obscontrib' ><bean:write name="onerowofbrowseparty" property="countobscontrib" /></a>
+          <bean:define id="critAsTxt">
+            with <bean:write name="onerowofbrowseparty" property="party_id_transl"/> was Observation Contributor.
+          </bean:define>
+          <%  
+              /* create a map of parameters to pass to the new link: */
+              java.util.HashMap params = new java.util.HashMap();
+              params.put("wparam", party_pk);
+              params.put("where", "where_obs_obscontrib");
+              params.put("criteriaAsText", critAsTxt);
+              pageContext.setAttribute("paramsName", params);
+          %>
+
+          <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+            <bean:write name="onerowofbrowseparty" property="countobscontrib" />
+          </html:link>    
+  
   </logic:notEmpty>
   <logic:empty name="onerowofbrowseparty" property="countobscontrib">
     0
@@ -54,7 +85,22 @@
 
 <td class="numeric">
   <logic:notEmpty name="onerowofbrowseparty" property="countclasscontrib">
-    <a href='@get_link@summary/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_classcontrib' ><bean:write name="onerowofbrowseparty" property="countclasscontrib" /></a>
+          <bean:define id="critAsTxt">
+            with <bean:write name="onerowofbrowseparty" property="party_id_transl"/> was Classifier.
+          </bean:define>
+          <%  
+              /* create a map of parameters to pass to the new link: */
+              java.util.HashMap params = new java.util.HashMap();
+              params.put("wparam", party_pk);
+              params.put("where", "where_obs_classcontrib");
+              params.put("criteriaAsText", critAsTxt);
+              pageContext.setAttribute("paramsName", params);
+          %>
+
+          <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+            <bean:write name="onerowofbrowseparty" property="countclasscontrib" />
+          </html:link> 
+
   </logic:notEmpty>
   <logic:empty name="onerowofbrowseparty" property="countclasscontrib">
     0
@@ -63,7 +109,22 @@
 
 <td class="numeric">
   <logic:notEmpty name="onerowofbrowseparty" property="countprojectcontrib">
-    <a href='@get_link@summary/observation/<bean:write name="onerowofbrowseparty" property="party_id" />?where=where_obs_projcontrib' ><bean:write name="onerowofbrowseparty" property="countprojectcontrib" /></a>
+          <bean:define id="critAsTxt">
+            with <bean:write name="onerowofbrowseparty" property="party_id_transl"/> was Project Contributor.
+          </bean:define>
+          <%  
+              /* create a map of parameters to pass to the new link: */
+              java.util.HashMap params = new java.util.HashMap();
+              params.put("wparam", party_pk);
+              params.put("where", "where_obs_projcontrib");
+              params.put("criteriaAsText", critAsTxt);
+              pageContext.setAttribute("paramsName", params);
+          %>
+
+          <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+            <bean:write name="onerowofbrowseparty" property="countprojectcontrib" />
+          </html:link> 
+
   </logic:notEmpty>
   <logic:empty name="onerowofbrowseparty" property="countprojectcontrib">
     0

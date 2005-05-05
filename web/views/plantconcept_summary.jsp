@@ -51,14 +51,29 @@
 		       String rowClass = "evenrow";
     %>
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
-
+  <bean:define id="concId" name="onerow" property="plantconcept_id"/>
 <tr class='@nextcolorclass@'>
 <td><a href='@get_link@detail/plantconcept/<bean:write name="onerow" property="plantconcept_id"/>'>details</a></td>
 <td><bean:write name="onerow" property="plantname_id_transl"/>&nbsp;</td>
 <td><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
 <td class='numeric'>
 <logic:notEqual name="onerow" property="d_obscount" value="0">
-<a href="@get_link@summary/observation/<bean:write name='onerow' property='plantconcept_id' />?where=where_plantconcept_observation_complex"><bean:write name="onerow" property="d_obscount" /></a>
+      <bean:define id="critAsTxt">
+      With the plant: <bean:write name="onerow" property="plantname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]
+      </bean:define>
+      <%  
+          /* create a map of parameters to pass to the new link: */
+          java.util.HashMap params = new java.util.HashMap();
+          params.put("wparam", concId);
+          params.put("where", "where_plantconcept_observation_complex");
+          params.put("criteriaAsText", critAsTxt);
+          pageContext.setAttribute("paramsName", params);
+      %>
+      
+      <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >
+        <bean:write name="onerow" property="d_obscount" />
+      </html:link>
+  
 </logic:notEqual>
 <logic:equal name="onerow" property="d_obscount" value="0">0</logic:equal>
 </td>

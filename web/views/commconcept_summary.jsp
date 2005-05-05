@@ -64,9 +64,24 @@
 <td><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a></td>
 <td><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
 <td class="numeric">
+<bean:define id="concId" name="onerow" property="commconcept_id"/>
 <logic:equal name="onerow" property="d_obscount" value="0">0</logic:equal>
 <logic:notEqual name="onerow" property="d_obscount" value="0">
-<a href="@get_link@summary/observation/<bean:write name='onerow' property='commconcept_id' />?where=where_commconcept_observation_complex"><bean:write name="onerow" property="d_obscount" />
+
+ <bean:define id="critAsTxt">
+  Interpreted as the community: <bean:write name="onerow" property="commname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]
+ </bean:define>
+  <%  
+    /* create a map of parameters to pass to the new link: */
+    java.util.HashMap params = new java.util.HashMap();
+    params.put("wparam", concId);
+    params.put("where", "where_commconcept_observation_complex");
+    params.put("criteriaAsText", critAsTxt);
+    pageContext.setAttribute("paramsName", params);
+  %>
+
+<html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" ><bean:write name="onerow" property="d_obscount" /></html:link>
+
 </logic:notEqual></td>
 <td class="largefield"><bean:write name="onerow" property="commdescription"/>&nbsp;</td>
 </td>

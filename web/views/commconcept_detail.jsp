@@ -51,8 +51,22 @@
 <logic:notEmpty name="observation-BEAN">
 <bean:write name="observation-BEAN" property="count_observations" />
 <logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-<a href="@get_link@summary/observation/<bean:write name='concId' />?where=where_commconcept_observation_complex">View 
-  observation(s)</a>
+
+<bean:define id="critAsTxt">
+Interpreted as the community: <bean:write name="onerow" property="commname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]
+</bean:define>
+<%  
+    /* create a map of parameters to pass to the new link: */
+    java.util.HashMap params = new java.util.HashMap();
+    params.put("wparam", concId);
+    params.put("where", "where_commconcept_observation_complex");
+    params.put("criteriaAsText", critAsTxt);
+    pageContext.setAttribute("paramsName", params);
+%>
+
+<html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >View 
+  observation(s)</html:link>
+
 </logic:notEqual>
 </logic:notEmpty>
 
