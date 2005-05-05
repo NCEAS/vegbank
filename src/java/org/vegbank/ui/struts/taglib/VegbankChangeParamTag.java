@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:08:31 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-05-05 00:31:54 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ import org.vegbank.common.utility.ServletUtility;
  * address with the new parameter value.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.2 $ $Date: 2005-05-02 11:08:31 $
+ * @version $Revision: 1.3 $ $Date: 2005-05-05 00:31:54 $
  */
 
 public class VegbankChangeParamTag extends VegbankTag {
@@ -65,8 +65,10 @@ public class VegbankChangeParamTag extends VegbankTag {
 
 		try {
             if (getAbsolute()) {
+                // url
                 newLinkHTML.append(request.getRequestURL()).append("?");
             } else {
+                // uri
                 newLinkHTML.append(request.getRequestURI()).append("?");
             }
 
@@ -84,22 +86,25 @@ public class VegbankChangeParamTag extends VegbankTag {
                 String key = (String)kit.next();
                 Object paramValue = urlParams.get(key);
 
+
                 if (paramValue instanceof String) {
+                    if (first) { first = false;
+                    } else { newLinkHTML.append("&"); }
+
                     newLinkHTML.append(key).append("=")
                         .append(java.net.URLEncoder.encode((String)paramValue, "UTF-8"));
+
                 } else if (paramValue instanceof String[]) {
                     String[] paramArr = request.getParameterValues(key);
 
                     for (int i=0; i<paramArr.length; i++) {
                         if (first) { first = false;
                         } else { newLinkHTML.append("&"); }
+
                         newLinkHTML.append(key).append("=")
                             .append(java.net.URLEncoder.encode(paramArr[i], "UTF-8"));
                     }
                 }
-
-                if (first) { first = false;
-                } else { newLinkHTML.append("&"); }
 
             }
 
