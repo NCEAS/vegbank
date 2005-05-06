@@ -51,7 +51,7 @@
      <xsl:for-each select="detailFields/field">
  
    <tr><td><xsl:value-of select="node()" /></td><td>
-   <bean:write name="onerowof{../../sqlSrc}" property="{node()}" />  <xsl:if test="@get='true'"><a href="@machine_url@/get/std/{substring-before(node(),'_')}/@subst_lt@bean:write name='onerowof{../../sqlSrc}' property='{node()}' /@subst_gt@">Details</a></xsl:if></td></tr>
+   <bean:write name="onerowof{../../sqlSrc}" property="{node()}" />  <xsl:if test="@get='true'"><a href="@get_link@std/{substring-before(node(),'_')}/@subst_lt@bean:write name='onerowof{../../sqlSrc}' property='{node()}' /@subst_gt@">Details</a></xsl:if></td></tr>
  
    </xsl:for-each>
    <tr><td>Notes:</td><td>
