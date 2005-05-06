@@ -2,8 +2,21 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
 
+<bean:define id="searchType" value="Advanced" />
+<bean:define id="simpleHide" value="show" /><!-- show by default -->
+<bean:define id="selectMult">multiple="multiple"</bean:define>
+<bean:define id="stateListSize">5</bean:define>
+<bean:define id="countryListSize">3</bean:define>
+<logic:present parameter="simplemode">
+  <bean:define id="searchType" value="Simple" />
+  <bean:define id="simpleHide" value="hidden" /><!-- hide some things. -->
+  <bean:define id="selectMult"></bean:define> <!-- make picklists only size 1 when simple mode -->
+  <bean:define id="stateListSize">1</bean:define>
+  <bean:define id="countryListSize">1</bean:define>
+</logic:present>
+
 <title>
-VegBank - Advanced Plot Search
+VegBank - <bean:write name="searchType" /> Plot Search
 </title>
 <% int howmanytaxa = 5; %>
 <% int howmanycomms = 4; %>
@@ -230,7 +243,7 @@ function setQueryText() {
 @webpage_masthead_html@
 
 <% if ( request.getQueryString() == null ) { %>
-<!-- redirect user to default if no query parameters passed. -->
+<!-- redirect user to default if no query parameters passed, but this should not be needed, as links should go to plotquery_page_advanced token. -->
   <script type="text/javascript">
     window.location="@plotquery_page@?show_0=on&show_G=on&show_H=on" ;
   </script>
@@ -243,21 +256,22 @@ function setQueryText() {
    pager="false" perPage="-1" where="empty" wparam="" />
  
  
-	      <h1>Advanced Plot Search</h1>
+	      <h1><bean:write name="searchType" /> Plot Search</h1>
 	   
     <!-- Instructions Row -->
    <p class="instructions">
-		   This form can be used to find plots in VegBank. 
+		   Use this form to find plots in VegBank. 
 		 
 	      Each section allows querying of different types of attributes.  Leave
-	      fields blank to ignore these fields in the query.  Make sure you select whether the query
-	      should match ALL or ANY criteria you specify at the <a href="#typeOfQuery">end of this form</a>.
-		
-	      For more information about this form, see the <a href="@help-for-plot-query-href@">help section</a>.
+	      fields blank to ignore them.  		
+	      For more information, see the <a href="@help-for-plot-query-href@">help section</a>.
 		 
 	    </p>
     <!-- ERROR DISPLAY -->
     
+    
+    <!-- dont do this if simple: -->
+    <logic:notEqual name="searchType" value="Simple" >
 <!-- start custom -->
   <!-- using parameters like show_0 - show_Z -->
   <!-- values of params don't matter.  Just checks to see if they are there -->
@@ -284,7 +298,7 @@ function setQueryText() {
    <div id="changeCriteria" style="<bean:write name='initliststatus' />" >
      <a href="javascript:showorhidediv('changeCriteria');showorhidediv('CriteriaHidden');">Click Here To Hide</a> 
     the following list of fields.
-    <form name="changeCriteriaShown" action="@plotquery_page@#plotqueryfields"> <!-- action is self -->
+    <form name="changeCriteriaShown" action="#plotqueryfields"> <!-- action is self -->
     <input type="hidden" name="hidelist" value="true" />
     <table class="noborders" >
     <tr class="grey"><th>Shown Fields:</th><th>Additional Fields Available:</th></tr>
@@ -303,7 +317,7 @@ function setQueryText() {
 	  <logic:present parameter="show_9"><input type="checkbox" name="show_9" checked="checked" />Landform Type<br/></logic:present>
 	  <logic:present parameter="show_A"><input type="checkbox" name="show_A" checked="checked" />Date Sampled<br/></logic:present>
 	  <logic:present parameter="show_B"><input type="checkbox" name="show_B" checked="checked" />Date Entered<br/></logic:present>
-	  <logic:present parameter="show_C"><input type="checkbox" name="show_C" checked="checked" />Plots Size<br/></logic:present>
+	  <logic:present parameter="show_C"><input type="checkbox" name="show_C" checked="checked" />Plot Size<br/></logic:present>
 	  <logic:present parameter="show_D"><input type="checkbox" name="show_D" checked="checked" />Cover Method<br/></logic:present>
 	  <logic:present parameter="show_E"><input type="checkbox" name="show_E" checked="checked" />Stratum Method<br/></logic:present>
 	  <logic:present parameter="show_F"><input type="checkbox" name="show_F" checked="checked" />Project<br/></logic:present>
@@ -324,7 +338,7 @@ function setQueryText() {
 	  <logic:notPresent parameter="show_9"><input type="checkbox" name="show_9"  />Landform Type<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent parameter="show_A"><input type="checkbox" name="show_A"  />Date Sampled<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent parameter="show_B"><input type="checkbox" name="show_B"  />Date Entered<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_C"><input type="checkbox" name="show_C"  />Plots Size<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent parameter="show_C"><input type="checkbox" name="show_C"  />Plot Size<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent parameter="show_D"><input type="checkbox" name="show_D"  />Cover Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent parameter="show_E"><input type="checkbox" name="show_E"  />Stratum Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent parameter="show_F"><input type="checkbox" name="show_F"  />Project<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
@@ -339,24 +353,25 @@ function setQueryText() {
     </tr>
     
    <tr class="grey"><td colspan="2"> 
+          <script type="text/javascript" language="JavaScript">
+          <!-- 
+          var numelements = document.forms.changeCriteriaShown.elements.length;
+          function SetCheckboxes(value) {
+              var item;
+              for (var i=0 ; i<numelements ; i++) {
+                  item = document.forms.changeCriteriaShown.elements[i];
+                  item.checked = value;
+              }
+          }
+          -->
+        </script> 
+             <a href="javascript:SetCheckboxes(true);" >check all</a> 
+          | <a href="javascript:SetCheckboxes(false);" >uncheck all</a> <br/>
+   
     <input type="submit" value="change fields shown" /> Please note that clicking this button will reset the plot-query form below. <br/ >
     Tip: You can bookmark this page to return to it with the current fields shown.
     </td></tr>
-      <tr  class="grey"><td colspan="2">
-		  <script type="text/javascript" language="JavaScript">
-		  <!-- 
-		  var numelements = document.forms.changeCriteriaShown.elements.length;
-		  function SetCheckboxes(value) {
-		      var item;
-		      for (var i=0 ; i<numelements ; i++) {
-		          item = document.forms.changeCriteriaShown.elements[i];
-		          item.checked = value;
-		      }
-		  }
-		  -->
-		</script> 
-		  <input value="Check All" onclick="SetCheckboxes(true);" type="button" /> | <input value="Uncheck All" onclick="SetCheckboxes(false);" type="button" /> 
-  </td></tr>
+
     </table>
     </form>
     </div>
@@ -381,13 +396,13 @@ function setQueryText() {
    H plots by comm (all 4)
    
    -->
-   
+   </logic:notEqual> <!-- simple mode -->
    <!-- the real form -->
    
-   <h2><a name="plotqueryfields"></a>Plot Query:</h2>
+   <h2 class="<bean:write name='simpleHide' />"><a name="plotqueryfields"></a>Plot Query:</h2>
    
    <form name="plotqueryform" action="@views_link@observation_summary.jsp" method="get" onsubmit="prepareForm()">
-     <input type="submit" value="submit"/>
+     
      <input name="where" type="hidden" value="where_simple" />
      <input name="xwhereGlue" type="hidden" value="AND" />  
      
@@ -423,21 +438,55 @@ function setQueryText() {
     <div class='<bean:write name="hideCurr" />'>
     <!-- Header Location -->
     
-	<h3>Find Plots based on Location</h3>
-      
-    
-	      <h4>Country, State:</h4>
+    <h3 class="<bean:write name='simpleHide' />">Find Plots based on Location</h3>
+        
+          <h4>State/Province, Country:</h4>
 	    <p class="instructions">
-	      Please select the state/province and/or country in which the plot was sampled. <br />
-	      Note that you may select more than one value at a time.  To select multiple choices, hold down the ctrl key and then select each state/province/country you want to query.
+	      Choose a state, province, and/or country to find plots located there. <br />
+        <span  class="<bean:write name='simpleHide' />">  Note that you may select more than one value at a time.
+        To select multiple choices, hold down the ctrl or apple key and then 
+        select each state/province/country you want to query. </span>
 	    </p>
-	 
+	    <table class="noborders"><tr><td valign="top">
+         <p class="item">
+                  State/Province (plot count)<br/>
+                 <input type="hidden" name="xwhereParams_state_1" value="stateprovince" />
+                  <input type="hidden" name="xwhereKey_state" value="xwhere_in" />
+          <!-- make picklists only size 1 when simple mode -->
+                <select name="xwhereParams_state_0" size="<bean:write name='stateListSize' />" <bean:write name='selectMult' />>
+         
+         
+                    
+                <option value="" selected="selected"><%= strAny %></option>
+               
+                <vegbank:get id="plotstatelist" select="plotstatelist" 
+                  beanName="map" pager="false" where="empty" 
+                  wparam="" perPage="-1" />
+                <logic:empty name="plotstatelist-BEANLIST">
+                  <option value="No states found">Error: no states found</option>
+                </logic:empty>
+                <logic:notEmpty name="plotstatelist-BEANLIST">
+                  <logic:iterate id="onerowofplotstatelist" name="plotstatelist-BEANLIST">
+                     <option value='<bean:write name="onerowofplotstatelist" property="stateprovince" />' >  
+           <bean:write name="onerowofplotstatelist" property="stateprovince" />
+           (<bean:write name="onerowofplotstatelist" property="countstate" />)
+                      
+                     </option>
+                  </logic:iterate>
+                </logic:notEmpty>
+           
+                  </select>
+        </p>
+        
+        </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td valign="top">
+        
+       
 		<p class="item">
 	      Country (plot count)<br/>
             <input type="hidden" name="xwhereParams_country_1" value="country" />
             <input type="hidden" name="xwhereKey_country" value="xwhere_in" />
-       
-          <select name="xwhereParams_country_0" size="3" multiple="multiple">
+      <!-- make picklists only size 1 when simple mode -->
+          <select name="xwhereParams_country_0" size="<bean:write name='countryListSize' />" <bean:write name='selectMult' />>
               <option value="" selected="selected"><%= strAny %></option>
        	
      <!-- 	<option value="Canada">Canada</option>
@@ -468,35 +517,10 @@ function setQueryText() {
 		      
 	      </select>
 	    </p>	 
-	    <p class="item">
-	      State (plot count)<br/>
-         <input type="hidden" name="xwhereParams_state_1" value="stateprovince" />
-          <input type="hidden" name="xwhereKey_state" value="xwhere_in" />
-        <select name="xwhereParams_state_0" size="6" multiple="multiple">
-         
-		<option value="" selected="selected"><%= strAny %></option>
-  	   
-  	    <vegbank:get id="plotstatelist" select="plotstatelist" 
-		  beanName="map" pager="false" where="empty" 
-		  wparam="" perPage="-1" />
-		<logic:empty name="plotstatelist-BEANLIST">
-		  <option value="No states found">Error: no states found</option>
-		</logic:empty>
-		<logic:notEmpty name="plotstatelist-BEANLIST">
-		  <logic:iterate id="onerowofplotstatelist" name="plotstatelist-BEANLIST">
-		     <option value='<bean:write name="onerowofplotstatelist" property="stateprovince" />' >  
-   <bean:write name="onerowofplotstatelist" property="stateprovince" />
-   (<bean:write name="onerowofplotstatelist" property="countstate" />)
-		      
-		     </option>
-		  </logic:iterate>
-        </logic:notEmpty>
-   
-	      </select>
-	    </p>
+        </td></tr></table>
      
 	  
-	<hr/>
+    <hr  class="<bean:write name='simpleHide' />" />
 	</div>
       
     
@@ -959,26 +983,26 @@ function setQueryText() {
 	  	  	    
 	    <DIV id="groupG" class='<bean:write name="hideCurr" />'>
     
-	<h3>Find Plots based on Vegetation</h3>
+    <h3  class="<bean:write name='simpleHide' />">Find Plots based on Vegetation</h3>
 	
 	  <!-- PLANT TAXON -->
 	  	<h4>Plant Taxa:</h4> 
+          
 	      <p class="instructions">
-		Please enter names for plants that you wish to query.  You may also include
+        Enter a plant name to find plots with that plant.  <span class="<bean:write name='simpleHide' />" >  You may also include
 		criteria about other attributes that apply to that plant.  Plots will be returned that match ALL criteria for a row. 
-		Plots will be returned that match all rows, or any row, based on the settings
-		for <a href="#typeOfQuery">"Type of Query" setting at the end of this form.</a>
-		<br />                <font color="red"><b>Use % for the wildcard.</b></font>
+		Plots will be returned that match all rows. </span>
+		<br />                <font color="red"><b>Use % for the wildcard.</b></font>  Examples: White oak, Carex%
 	      </p>
 	   
 <table>
-  <tr>
+  <tr class="<bean:write name='simpleHide' />">
     <th rowspan="2">Row</th>
     <th rowspan="2">Plant Name <a target="_blank" href="@forms_link@PlantQuery.jsp">search</a></th>
     <th colspan="2">Cover (%)</th>
     
   </tr>
-  <tr>
+  <tr class="<bean:write name='simpleHide' />">
     <th>Min</th>
     <th>Max</th>
     
@@ -990,27 +1014,31 @@ function setQueryText() {
           <input name="xwhereParams_mxxindateentered_0" size="20"/>
   --> 
   
-
+  <bean:define id="simpleHide_special">show</bean:define> 
+  <!-- special bean that gets rewritten to hide latter rows -->
   
   <%
   for (int i=0; i<howmanytaxa ; i++)
   {
   %>
-  <tr>
-    <td><span class="item"><%= i+1 %></span>
+  <!-- if simple mode, only show one row -->
+  
+  <tr class="<bean:write name='simpleHide_special' />">
+    <td class="<bean:write name='simpleHide' />"><span class="item"><%= i+1 %></span>
      <input type="hidden" name="xwhereKey_taxon<%= alph.substring(i,i + 1) %>" value="xwhere_taxacover" />
     </td>    
     <td><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_2" %>' size="30"/></td>
-    <td><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_0" %>' size="5"/></td>
-    <td><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_1" %>' size="5"/></td>
-   
-        
+    <td class="<bean:write name='simpleHide' />"><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_0" %>' size="5"/></td>
+    <td class="<bean:write name='simpleHide' />"><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_1" %>' size="5"/></td>
+     <logic:equal name="simpleHide" value="hidden">
+       <bean:define id="simpleHide_special" value="hidden" />     
+     </logic:equal> <!-- show no more rows -->
   </tr>
   <%
   }
   %>
 </table>
-<hr/> 
+<hr class="<bean:write name='simpleHide' />"/> 
       </DIV>
       <bean:define id="hideCurr" value="show" />
 	  	  	  		         <logic:notPresent parameter="show_H">
@@ -1022,21 +1050,20 @@ function setQueryText() {
       
       <!-- FIND USING COMMUNITIES -->
       
-	<h3>Find Plots based on Community Classfication</h3>
+    <h3 class="<bean:write name='simpleHide' />">Find Plots based on Community Classfication</h3>
 	
     
 	  <!-- VEG COMMUNITY -->
 		<h4>Vegetation Community:</h4> 
 	      <p class="instructions">
-		Use this section to query for plots that have been assigned to a community based on the criteria you specify here.  
-		This section functions much like the plant section above.
-		Plots will be returned that match ALL criteria for a row.  Plots will be returned that match all rows, or any row, based on the settings
-		for <a href="#typeOfQuery">"Type of Query" setting at the end of this form.</a>
-		<br /><font color="red"><b>Use % for the wildcard.</b></font>
+		Enter part of a community name to find plots classified to that community.
+    <span class="<bean:write name='simpleHide' />" >    This section functions much like the plant section above.
+		Plots will be returned that match ALL criteria for a row.  Plots will be returned that match all rows. </span>
+		<br /><font color="red"><b>Use % for the wildcard.</b></font> Example: Acer%Forest
 	      </p>
 	  
 	  <table border="0" cellspacing="1" cellpadding="1">
-	    <tr>
+        <tr  class="<bean:write name='simpleHide' />">
 	      <th rowspan="1">Row</th>
 	      <th rowspan="1">Community Name <a target="_blank" href="@forms_link@CommQuery.jsp">search</a></th>
 	      <!-- TODO:
@@ -1053,15 +1080,22 @@ function setQueryText() {
 	      <th>Max</th>
 	    </tr>-->
 	    
+        <bean:define id="simpleHide_special">show</bean:define> 
+          <!-- special bean that gets rewritten to hide latter rows -->
+  
+        
 	      <%
 	      for (int i=0; i<howmanycomms ; i++)
 	      {
 	      %>
-	      <tr>
-        <td><span class="item"><%= i+1 %></span>
+          <tr  class="<bean:write name='simpleHide_special' />">
+        <td class="<bean:write name='simpleHide' />"><span class="item"><%= i+1 %></span>
      <input type="hidden" name="xwhereKey_community<%= alph.substring(i,i + 1) %>" value="xwhere_communityname" /></td>    
         <td><input name='<%= "xwhereParams_community" + alph.substring(i,i + 1) + "_0" %>' size="50"/></td>
-        
+           
+           <logic:equal name="simpleHide" value="hidden">
+                  <bean:define id="simpleHide_special" value="hidden" />     
+           </logic:equal> <!-- show no more rows -->
 	      <!--td><input name='<%= "maxCommStartDate[" + i + "]" %>' size="10"/></td>
 	      <td><input name='<%= "minCommStopDate[" + i + "]" %>' size="10"/></td-->
 	    
@@ -1072,7 +1106,7 @@ function setQueryText() {
 	    </table>
         </DIV>
 	    <!-- SUBMIT THE FORM -->
-	      <h3><a name="typeOfQuery" > </a>Submit Query to VegBank</h3>
+          <h3  class="<bean:write name='simpleHide' />">Submit Query to VegBank</h3>
 	       
 		      <input type="submit" value="search"/>&nbsp;&nbsp;
 		      <html:reset value="reset"/>
