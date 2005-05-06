@@ -9,8 +9,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-05-06 06:39:13 $'
-*  '$Revision: 1.20 $'
+*  '$Date: 2005-05-06 07:43:49 $'
+*  '$Revision: 1.21 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@
         <br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 		&raquo; <a href="@plotquery_page_advanced@">Advanced query</a>
         <br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        &raquo; <a href="@plotquery_page_simple@">Simple 3-in-1 search</a>
+        &raquo; <a href="@plotquery_page_simple@">Simple search</a>
       </td></tr>
 	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
