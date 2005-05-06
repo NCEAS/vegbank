@@ -22,8 +22,8 @@
       <qname>howsearch</qname>
       <qtxt>How do I find plots in VegBank?</qtxt>
       <atxt>You can search for plots with two different forms in VegBank.  <br/>
-        <br/> 1) <a href="@forms_link@plot-query-simple.jsp"> a very simple search</a>, where you can specify one or more of the following: plant found on the plot, community to which the plot is interpreted, state/province in which the plot is located.  <br/>
-        <br/> 2) <a href="/vegbank/LoadPlotQuery.do"> a more complex query</a> with many options for searching, allowing multiple plants, places, and communities to be specified.  It also allows you to search by other fields, like elevation.</atxt>
+        <br/> 1) <a href="@plotquery_page_simple@"> a very simple search</a>, where you can specify one or more of the following: plant found on the plot, community to which the plot is interpreted, state/province in which the plot is located.  <br/>
+        <br/> 2) <a href="@plotquery_page_advanced@"> a more complex query</a> with many options for searching, allowing multiple plants, places, and communities to be specified.  It also allows you to search by other fields, like elevation.</atxt>
     </question>
     <question>
       <qname>howdownload</qname>
@@ -50,7 +50,7 @@
     <question>
       <qname>whycertification</qname>
       <qtxt>What is certification?  When do I need to be certified?</qtxt>
-      <atxt>Certification is required for VegBank features that allow you to add data to the database.  You can become a certified user by <a href="@forms_link@RegisterNewUser.jsp">registering </a> to be a VegBank user, then filling out a <a href="@forms_link@certification.html">certification application</a>.  This means that your user profile will be public, as well as some of your certification questions (the application tells you what will be made public).  This helps users understand who you are and what credentials are behind your opinions and plots in VegBank.</atxt>
+      <atxt>Certification is required for VegBank features that allow you to add data to the database.  You can become a certified user by <a href="@forms_link@RegisterNewUser.jsp">registering </a> to be a VegBank user, then filling out a <a href="@forms_link@certification.jsp">certification application</a>.  This means that your user profile will be public, as well as some of your certification questions (the application tells you what will be made public).  This helps users understand who you are and what credentials are behind your opinions and plots in VegBank.</atxt>
     </question>
     <question>
       <qname>whatcommunity</qname>
