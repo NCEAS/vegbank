@@ -543,6 +543,16 @@ function getValuesFromList(thelist, getValueOrText) {
     /* window.alert("value is:>" + listvalues.substring(strSeparator.length) + "<"); */
     return(listvalues.substring(strSeparator.length));  /* remove initial strSeparator if there */
   } else {
+      /* return nothing, but should edit list to selected something with value = "" .  This just helps the xwhere_query.  */
+        fixednull = "false";
+        for (var i=0;i<thelist.length;i++) {
+          if (thelist.options[i].value=="" && fixednull == "false" ) {
+            thelist.options[i].selected = true;
+            fixednull = "true" ;
+          }
+        }
+      
       return("");
-    }
+  
+  }
 }
