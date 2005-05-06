@@ -649,8 +649,7 @@ form {
 
 
 
-/* used in forms/DisplayResults.jsp
-forms/TaxonInterpretationAnnotateData.jsp
+/* used in forms/TaxonInterpretationAnnotateData.jsp
 white text with links that work with it:
 */
 .whitetext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
