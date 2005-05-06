@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-05-06 03:25:59 $'
-* '$Revision: 1.162 $'
+* '$Date: 2005-05-06 05:57:00 $'
+* '$Revision: 1.163 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -92,7 +92,6 @@
     <property name="web.context_uri" value="vegbank"/>
     <property name="forms" value="./forms"/>
     <property name="views" value="./views"/>
-    <property name="tiles" value="./tiles"/>
     <property name="admin_src" value="./admin"/>
     <property name="email_templates_src" value="./email_templates"/>
     <property name="general_src" value="./general"/>
@@ -126,7 +125,6 @@
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
     <property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
     <property name="views_server" value="${tomcat.home.dir}/webapps/${webapp}/views"/>
-    <property name="tiles_server" value="${tomcat.home.dir}/webapps/${webapp}/tiles"/>
     <property name="admin_server" value="${tomcat.home.dir}/webapps/${webapp}/admin"/>
     <property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
     <property name="general_server" value="${tomcat.home.dir}/webapps/${webapp}/general/"/>
@@ -224,7 +222,7 @@
     <!-- set the properties file as a filtersfile to distribute headers and footers -->
     <!--    
     <filter filtersfile="${includes_server}/filters_detokened.properties"/>
-    <filter filtersfile="${includes_server}/url2get_data.properties"/>
+
     <filter filtersfile="${includes_server}/manual_filters.properties"/>
 	-->
   </target>
@@ -399,9 +397,9 @@
     <copy overwrite="true" todir="${forms_server}" filtering="yes">
       <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* *.xsl *.xsd businessrules.xml "/>
     </copy>
-    <copy overwrite="true" todir="${tiles_server}" filtering="yes">
-      <fileset dir="${tiles}" includes="**/*jsp **/*html" excludes="**/CVS* "/>
-    </copy>
+    
+    
+    
     <antcall target="views"/>
   </target>
   <target name="views-autogen" depends="init" description="&gt; create files from db_model.xml, using another build.xml file">
@@ -539,9 +537,9 @@
     <style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="true"/>
     <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/>
-    <!-- set the properties file that replaces tokens with closed list values in picklists -->
-    <copy file="${includes_src}/url2get_data.properties" tofile="${includes_server}/url2get_data.properties" filtering="yes" overwrite="yes"/>
-    <filter filtersfile="${includes_server}/url2get_data.properties"/>
+    
+    
+    
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
     <copy file="${manual_src}/manual_filters.properties" tofile="${includes_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
     <filter filtersfile="${includes_server}/manual_filters.properties"/>
