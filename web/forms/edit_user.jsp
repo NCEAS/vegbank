@@ -10,8 +10,8 @@
   * Authors: @author@
   *
   * '$Author: mlee $'
-  * '$Date: 2005-03-15 18:59:59 $'
-  * '$Revision: 1.7 $'
+  * '$Date: 2005-05-06 06:38:16 $'
+  * '$Revision: 1.8 $'
   *
   *
   -->
@@ -28,8 +28,8 @@
 
 @webpage_masthead_html@
 
-<br>
-<br>
+<br />
+<br />
 <h2 align="center" class="vegbank">Edit Your Profile</h2>
 
 <html:errors/>

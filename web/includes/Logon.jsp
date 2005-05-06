@@ -49,7 +49,7 @@
         <br/>
         &raquo; <a href="@forms_link@EmailPassword.jsp">Lost your password?</a>
          <br/>
-        &raquo; <a href="@web_context@">Go home</a>
+        &raquo; <a href="@web_context@">VegBank home</a>
       </p>
     </td>
   </tr>

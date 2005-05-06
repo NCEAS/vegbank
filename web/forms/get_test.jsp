@@ -10,8 +10,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-03-15 12:35:28 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2005-05-06 06:38:16 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
@@ -41,7 +41,7 @@ if (request.getParameter("action") != null) {
 <bean:define id="bl" name="BEANLIST"/>
 <%
 out.println(bl.toString());
-out.println("<BR><BR>");
+out.println("<br /><br />");
 %>
 </logic:notEmpty>
 
@@ -59,7 +59,7 @@ out.println("<BR><BR>");
 		xwhereGlue: 
 		<input type="text" name="xwhereGlue" value="AND"/><br/>
 
-		<br>
+		<br />
 
 		<!-- FIRST PARAM -->
 		<b>FIRST PARAM</b>
@@ -68,15 +68,15 @@ out.println("<BR><BR>");
 		<input type="text" name="xwhereParams_commname_1" value="cu.commname"/>
 		=
 		<input type="text" name="xwhereParams_commname_0" value="tidal"/>
-		<br>
+		<br />
 		xwhereKey_commname: <input type="text" name="xwhereKey_commname" value="xwhere_match"/>
-		<br>
+		<br />
 		xwhereSearch_commname: 
 			<select name="xwhereSearch_commname">
 				<option value="false" SELECTED>false</option>
 				<option value="true">true</option>
 			</select>
-		<br>
+		<br />
 		xwhereMatchAny_commname: 
 			<select name="xwhereMatchAny_commname">
 				<option value="false" SELECTED>false</option>
@@ -91,15 +91,15 @@ out.println("<BR><BR>");
 		<input type="text" name="xwhereParams_party_1" value="cs.party_id"/>
 		=
 		<input type="text" name="xwhereParams_party_0" value="512"/>
-		<br>
+		<br />
 		xwhereKey_party: <input type="text" name="xwhereKey_party" value="xwhere_eq"/>
-		<br>
+		<br />
 		xwhereSearch_party: 
 			<select name="xwhereSearch_party">
 				<option value="false" SELECTED>false</option>
 				<option value="true">true</option>
 			</select>
-		<br>
+		<br />
 		xwhereMatchAny_party: 
 			<select name="xwhereMatchAny_party">
 				<option value="false" SELECTED>false</option>
@@ -120,7 +120,7 @@ out.println("<BR><BR>");
 			<option value="Association" selected>Association</option>
 			<option value="Class" selected>Class</option>
 		</select>
-		<br>
+		<br />
 		xwhereKey_commlevel: <input type="op" name="xwhereKey_commlevel" value="xwhere_in"/>
 	</blockquote>
 		<br/>
@@ -129,7 +129,7 @@ out.println("<BR><BR>");
 		<input type="submit" value="submit"/>
     </form>
 	
-	<br>
+	<br />
 	<p>
 
             

@@ -10,9 +10,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2005-03-16 00:04:18 $'
-*  '$Revision: 1.12 $'
+*  '$Author: mlee $'
+*  '$Date: 2005-05-06 06:38:15 $'
+*  '$Revision: 1.13 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -69,7 +69,7 @@ tend to have more observations from the lower half of the range.  A geometric
 mean might be better, though there is at this time no theoretically 
 compelling reason for such a selection. The choice is left to the author of 
 the method.
-  </br>
+  <br />
   <font color="red">*</font>Indicates a required field.</p>
 
   </blockquote>
