@@ -1,4 +1,4 @@
-<!DOCTYPE form-validation PUBLIC "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN" "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd">
+<!DOCTYPE form-validation PUBLIC "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN" "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd"> 
 <form-validation>
 	<formset>
 		<form name="AddCoverMethodForm">
@@ -145,18 +145,18 @@
 				<arg0 key="Retyped password" resource="false" />
 			</field>
 		</form>
-		<form name="CommQueryForm">
+	<!--	<form name="CommQueryForm">
 			<field property="commname" depends="required">
 				<arg0 key="The community name " resource="false" />
-			</field>
-		</form><form name="DisplayEntityForm">
+			</field> -->
+	<!--	</form><form name="DisplayEntityForm">
 			<field property="resultType" depends="required">
 				<arg0 key="The type of result requested" resource="false" />
 			</field>
 			<field property="accessionCode" depends="required">
 				<arg0 key="The accessionCode of the entity" resource="false" />
 			</field>
-		</form>
+		</form> -->
 		<form name="DownLoadForm">
 			<field property="dataType" depends="required">
 				<arg0 key="The desired type" resource="false" />
@@ -202,11 +202,12 @@
 				</var>
 			</field>
 		</form>
-		<form name="PlantQueryForm">
+	<!--	<form name="PlantQueryForm">
 			<field property="plantname" depends="required">
 				<arg0 key="The plant name " resource="false" />
 			</field>
-		</form><form name="PlotQueryForm">
+		</form> -->
+		<!--        <form name="PlotQueryForm">
 			<field property="minElevation" depends="integer">
 				<arg0 key="min. elevation" resource="false" />
 			</field>
@@ -252,7 +253,7 @@
 					<var-name>datePattern</var-name>
 					<var-value>MM/dd/yyyy</var-value>
 				</var>
-			</field>
+			</field> -->
 			<!--field property="minPlotArea"
 			       depends="integer">
 				<arg0 key="min. plot area"
@@ -301,7 +302,7 @@
 					<var-value>100</var-value>
 				</var>
 			</field-->
-		</form>
+		<!--</form> -->
 		<form name="RegisterNewUserForm">
 			<field property="usr.email_address" depends="required,email">
 				<arg0 key="Email address" resource="false" />
@@ -365,4 +366,4 @@
 		
 		
 	</formset>
-</form-validation>
+</form-validation> 
