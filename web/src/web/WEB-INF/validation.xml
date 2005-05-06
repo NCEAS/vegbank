@@ -1,4 +1,5 @@
 <!DOCTYPE form-validation PUBLIC "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN" "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd"> 
+
 <form-validation>
 	<formset>
 		<form name="AddCoverMethodForm">
