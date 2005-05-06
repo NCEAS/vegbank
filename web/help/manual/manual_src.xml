@@ -126,9 +126,9 @@ more specific instructions on each search page.
         <br/>You can also just provide a plant name and press the button to the right of that field to search for plants that have the name you entered.  Similarly, you can search for communities by filling in a community name and pressing the button next to that field.  If you search for plants or communities, the state/province field is ignored.  Also, the community name field is ignored for a plant search and the plant name field is ignored for a community search.  The colored boxes behind the fields and buttons should guide you in knowing which fields are part of which search.
       </manualHTML>
     </manualItem>
-    <manualItem refURL="@web_context@LoadPlotQuery.do" name="search-for-plots" topic="Search for Plots">
+    <manualItem refURL="@plotquery_page_advanced@" name="search-for-plots" topic="Search for Plots">
       <manualHTML>
-        <a href="@web_context@LoadPlotQuery.do">Plot Query</a> 
+        <a href="@plotquery_page_advanced@">Plot Query</a> 
      - search for plots by location, species present, community type, 
   plot collectors, and other plot criteria. <br/>
         <br/>More help is available from that form (click the link here to see the plot-query form).  
@@ -282,7 +282,7 @@ with each taxon interpretation, similar as above in the community interpretation
         <!--<p>
           <font color="red">Coming very soon!</font>
         </p>-->
-        <p>Interpret a taxon by: <a href="@web_context@LoadPlotQuery.do">Searching for plots</a>, then viewing a <img src="@image_server@report_sm.gif"/> summary of the plot from the query results.  Select the "Interpret Plant..." link near the top of the page in the "ACTIONS" section.  Note that you must be certified to interpret a taxon.</p>
+        <p>Interpret a taxon by: <a href="@plotquery_page_advanced@">Searching for plots</a>, then viewing a <img src="@image_server@report_sm.gif"/> summary of the plot from the query results.  Select the "Interpret Plant..." link near the top of the page in the "ACTIONS" section.  Note that you must be certified to interpret a taxon.</p>
       </manualHTML>
     </manualItem>
     <manualItem refURL="" name="add-a-note" topic="Add a Note">
