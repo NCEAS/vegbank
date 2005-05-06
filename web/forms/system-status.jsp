@@ -30,7 +30,7 @@
 	if (isAdmin != null) {
 		if (isAdmin.booleanValue()) {
 %>
-    <hr true/>
+    <hr />
     <p>Admin is logged in.</p>
       <h3>System Status</h3>
       <h4>Results of Deploy Props:</h4>
@@ -66,6 +66,5 @@
 
 <br/>
 
-</div>
 
 @webpage_footer_html@

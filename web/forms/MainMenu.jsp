@@ -9,8 +9,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-04-11 18:19:43 $'
-*  '$Revision: 1.19 $'
+*  '$Date: 2005-05-06 06:39:13 $'
+*  '$Revision: 1.20 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@
 
   <h1 align="center">
     Welcome to VegBank</h1>
-<tABLE with="100%"  cellspacing="8" border="0">
+<tABLE width="100%"  cellspacing="8" border="0">
 <tR>
 <!-- 2 column overall layout: -->
 
@@ -54,18 +54,18 @@
 	<TABLE  cellpadding="0" cellspacing="0" border="0">
 
 		  <TR valign="middle"><TD valign="middle" colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
-	<TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">View Data</span></TD><td/></TR>
+	<TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">View Data</span></TD><td></td></TR>
 	   
 	<TR valign="middle"><TD align="center" valign="middle"> </TD><TD>	       
   <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
 
-      <span class=" sizelarger">Search for <a href="@general_link@plots.html">Plots</a></span>
-        <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      <span class=" sizelarger">Search for Plots</span>
+        <br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 		&raquo; <a href="@forms_link@metasearch.jsp">Metasearch</a>
-        <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-		&raquo; <a href="@plotquery_page@">Advanced query</a>
-        <br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-		&raquo; <a href="@forms_link@plot-query-simple.jsp">Simple 3-in-1 search</a>
+        <br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+		&raquo; <a href="@plotquery_page_advanced@">Advanced query</a>
+        <br /> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &raquo; <a href="@plotquery_page_simple@">Simple 3-in-1 search</a>
       </td></tr>
 	  </table><table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
@@ -94,7 +94,7 @@
 
     <tr valign="middle"><td valign="middle"> 
       <span class=" sizelarge">
-        View <a href="@web_context@DisplayDatasets.do">Your Datasets</a>
+        View <a href="@web_context@DisplayDatasets.do">Your Datasets</a></span>
 	  </TD></TR>
 
 
@@ -103,16 +103,12 @@
 	<TR valign="middle"><TD align="center" valign="middle">&nbsp;</TD><TD></TD></TR><!--spacer -->
 
 	 <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
-		  	   <TR><TD colspan="1" bgcolor="#CCCCCC" align="center"><span class="greytext">My Preferences</span></TD><td/></TR>
+		  	   <TR><TD colspan="1" bgcolor="#CCCCCC" align="center"><span class="greytext">My Preferences</span></TD><td></td></TR>
 	 <TR valign="middle"><TD align="center"></TD><TD>
 	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
     
     
-	<!--li> 
-		<span class=" sizelarge">Access or submit <a href="@general_link@parties.html">Parties</a> data</span>
-		<span class=" sizelarge">Access or Submit Parties data 
-		<font color="#F90000"> <b> Coming soon! </b></font> </span>
-    </li-->
+	
 <!--
      
       <span class=" sizelarge">
@@ -129,14 +125,13 @@
 	<TR valign="middle"><TD align="center" valign="middle">&nbsp;</TD><TD></TD></TR><!--spacer -->
 
 	        <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
-	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Info</span></TD><td/></TR>
+	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Info</span></TD><td></td></TR>
 	   
 		  	  
 	<TR valign="middle"><TD align="center" valign="middle"></TD><TD>
 
 <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
-      <span class=" sizelarge">See <a href="@forms_link@vbsummary.jsp">an overview of VegBank Data</a> and Map 
-      </span> 
+ 
       </td> </tr>
 	  </table>
 
@@ -179,7 +174,7 @@
 
 
 	  	<TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
-		 <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Add Data</span></TD><td/></TR>
+		 <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Add Data</span></TD><td></td></TR>
  
 	  <TR valign="middle"><TD align="center" valign="middle"></TD><TD>
 	  <table cellpadding="4" cellspacing="4" border="0"><tr valign="middle"><td valign="middle"> 
@@ -223,7 +218,7 @@
 	<TR valign="middle"><TD align="center" valign="middle">&nbsp;</TD><TD></TD></TR><!--spacer -->
 
 	        <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
-	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Tools</span></TD><td/></TR>
+	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Tools</span></TD><td></td></TR>
 	   
 		  	  
 	<TR valign="middle"><TD align="center" valign="middle"></TD><TD>
@@ -257,7 +252,7 @@
     <TR valign="middle"><TD align="center" valign="middle">&nbsp;</TD><TD></TD></TR><!--spacer -->
 
 	        <TR><TD colspan="2" bgcolor="#CCCCCC"><img src="@images_link@transparent.gif" height="2" /></TD></TR>
-	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Admin</span></TD><td/></TR>
+	   <TR><TD colspan="1" bgcolor="#CCCCCC"  align="center"><span class="greytext">Admin</span></TD><td></td></TR>
 
     
      <TR valign="middle"><TD align="center" valign="middle"></TD><TD>

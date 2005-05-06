@@ -64,7 +64,7 @@ if (searchString ==  null || searchString.equals("")) {
 <logic:empty name="meta-BEANLIST">
 <logic:notEmpty name="search">
 <p>
-	Nothing in the database matches your keywords.<br>
+	Nothing in the database matches your keywords.<br />
 	Please try again.
 </p>
 </logic:notEmpty>
@@ -86,7 +86,7 @@ if (searchString ==  null || searchString.equals("")) {
 			&nbsp; Find anything in VegBank:
 			</span>  
 
-			<br>
+			<br />
 			 <input type="text" name="xwhereParams" size="30" value="<%= searchString %>"/>
 		 	 <html:submit value="search" onclick="javascript:preSubmit()"/>
 		</td>
@@ -187,7 +187,7 @@ You searched for
 <logic:equal name="matchAny" value="true">any word in</logic:equal>
 <logic:notEqual name="matchAny" value="true">all words in</logic:notEqual>
 '<i><%= searchString %></i>'
-<br>
+<br />
 
 Click here to <a href="javascript:viewAllMetadata()">view all metadata</a>
 <% } else { %>

@@ -11,8 +11,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-03-15 12:35:28 $'
-  *  '$Revision: 1.5 $'
+  *      '$Date: 2005-05-06 06:40:39 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
@@ -41,7 +41,7 @@
 &raquo; <a href="@get_link@std/userdataset">Go to your datasets</a><br/>
 
 <p>Thanks for contributing your work to the project.
-<br>
+<br />
 An email will be sent to <bean:write name="email"/> containing load results.
 
 <!--
@@ -95,14 +95,14 @@ while (kit.hasNext()) {
 	</span>
 </p>
 </blockquote>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 
 @webpage_footer_html@

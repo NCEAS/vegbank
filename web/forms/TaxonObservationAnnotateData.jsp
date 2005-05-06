@@ -10,8 +10,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-03-15 12:35:28 $'
-*  '$Revision: 1.4 $'
+*  '$Date: 2005-05-06 06:41:57 $'
+*  '$Revision: 1.5 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@
 
   <logic:empty name="Taxonobservation">
   <blockquote>
-    <p>This plot does not have any taxon observations.<br>
+    <p>This plot does not have any taxon observations.<br />
   	<a href="javascript:history.go(-1)">Go back</a></p>
   </blockquote>
   </logic:empty>
