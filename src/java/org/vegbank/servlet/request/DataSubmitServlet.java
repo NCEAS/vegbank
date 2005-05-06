@@ -3,10 +3,10 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
- *	'$Author: anderson $'
- *  '$Date: 2004-05-05 22:53:18 $'
- *  '$Revision: 1.29 $'
- * 
+ *	'$Author: mlee $'
+ *  '$Date: 2005-05-06 00:01:35 $'
+ *  '$Revision: 1.30 $'
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -61,7 +61,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	private static String commUpdateScript = "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/update_community_summary.sql";
 	private static String communityValidationTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/community-submit_valid.html";
 	//private static String communityValidationForm = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/valid.html";
-	
+
 	private static String plotSelectTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/plot-submit-select.html";
 	private static String plotSelectForm  = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/plot_select.html";
 	private static String genericTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/generic_form.html";
@@ -69,26 +69,26 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	private static String plotSubmittalInitForm = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/plot-valid.html";
 	private static String plotSubmittalInitTemplate = "/usr/local/devtools/jakarta-tomcat/webapps/vegbank/forms/plot-submit.html";
 	// END FIXME: Should be in properties
-				
+
 	// Construct Objects
 	private static final ServletUtility su = new ServletUtility();
-	private static final XMLparse parser = new XMLparse();	
-	
+	private static final XMLparse parser = new XMLparse();
+
 	// ResourceBundle properties
 	private static ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	private static final String rmiServer= rb.getString("rmiserver");
 	private static final String mailHost = rb.getString("mailHost");
-	private static final String cc = rb.getString("systemEmail");	
+	private static final String cc = rb.getString("systemEmail");
 	private static final int rmiServerPort = 1099;
 	private static String uploadDir = rb.getString("uploadDir");
 	private static String plotsArchiveFile =  uploadDir + "/input.data";
-	
+
 
 
 	//private String browserType = "";
 	// THESE VARIBLES ARE USED BY THE VARIOUS SUBMITTAL ROUTINES
 
-	
+
 	/**
 	 * constructor method
 	 */
@@ -97,7 +97,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		try
 		{
 			System.out.println("init: DataSubmitServlet");
-			
+
 			// If the name of the RMI Server is false then don't try to connect ...
 			if ( rmiServer.equals("false") )
 			{
@@ -105,7 +105,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					+" to run without an RMIServer, any functions dependant on"
 					+ " RMI will fail. The \"vegbank/build.properties file can be"
 					+ " used to set an RMIServer\"");
-				
+
 			}
 			else
 			{
@@ -120,18 +120,18 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 
 	/** Handle "POST" method requests from HTTP clients */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
- 	 throws IOException, ServletException 	
+ 	 throws IOException, ServletException
 		{
 			System.out.println("IN DoPost");
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
-			try 
-			{	
+			try
+			{
 				Long usrId = ServletUtility.getUsrIdFromSession(request);
 				//Long usrId = (Long)request.getSession().getAttribute(Constants.USER_KEY);
 				String userName = null;
@@ -141,8 +141,8 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				String organizationname = null;
 				long permissionType = 0;
 				WebUser user = null;
-				
-				if (usrId != null && usrId.longValue() != 0) 
+
+				if (usrId != null && usrId.longValue() != 0)
 				{
 					user = (new UserDatabaseAccess()).getUser(usrId);
 					userName = user.getUsername();
@@ -152,7 +152,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					organizationname = user.getOrganizationname();
 					permissionType = user.getPermissiontype();
 				}
-				
+
 				System.out.println("DataSubmitServlet > current user email: " + user);
 				System.out.println("DataSubmitServlet > current user salutation: " + salutation);
 				System.out.println("DataSubmitServlet > current user surName: " + surName);
@@ -172,7 +172,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					if (contentType != null && contentType.startsWith("multi") )
 					{
 						DataFileExchange dfe = new DataFileExchange(request);
-						
+
             String action = dfe.getMultiPartParameter("action");
             String submitDataType = dfe.getMultiPartParameter("submitDataType");
             System.out.println("DataSubmitServlet > action: " + action);
@@ -189,12 +189,12 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 						  {
 							  // FAIL
 							  System.out.println("DataSubmitServlet > file  FAILED to load ... oh oh");
-						  }		
+						  }
               // Get the plotsArchiveType from the session
               String plotsArchiveType = (String) request.getSession().getAttribute("plotsArchiveType");
               System.out.println("DataSubmitServlet > plotsArchiveType: " + plotsArchiveType);
 
-						  
+
               StringBuffer sb = handleVegPlotUpload(plotsArchiveType, request);
 						  out.println( sb.toString() );
             }
@@ -202,7 +202,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
             {
               // I do not expext this
               System.out.println(
-                "DataSubmitServlet > a mutipart request with action: " + action 
+                "DataSubmitServlet > a mutipart request with action: " + action
                 +" and submitDataType: " + submitDataType);
             }
 					}
@@ -210,15 +210,15 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					{
 						//Hashtable params = new Hashtable();
 						//params = su.parameterHash(request);
-						// there will be cases where there will be multiple parameters 
-						// with the same name and they all need to be accessed so 
+						// there will be cases where there will be multiple parameters
+						// with the same name and they all need to be accessed so
 						// capture an ennumeration here
 						Enumeration enum = request.getParameterNames();
-				
-						//get the browser type 
-						String browserType = su.getBrowserType(request); 
-				
-	
+
+						//get the browser type
+						String browserType = su.getBrowserType(request);
+
+
 						System.out.println("DataSubmitServlet > IN PARAMETERS: "+ su.printParameters(request) );
 						System.out.println("DataSubmitServlet > IN ATTRIBUTES: "+ su.printAttributes(request) );
 						submitDataType = request.getParameter("submitDataType");
@@ -226,9 +226,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 						System.out.println("DataSubmitServlet > browserType: " + browserType);
 						System.out.println("DataSubmitServlet > submit data type: " + submitDataType);
 						System.out.println("DataSubmitServlet >> action : '" + action + "'");
-					
 
-					
+
+
 						// FIGURE OUT WHAT TO DO WITH THE REQUEST
 						if ( submitDataType.trim().equals("vegCommunity") )
 						{
@@ -261,7 +261,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					}
 				}
 			}
-			catch( Exception e ) 
+			catch( Exception e )
 			{
 				System.out.println("Exception:  " + e.getMessage() );
 				e.printStackTrace();
@@ -269,22 +269,22 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		}
 
 
-	/** Handle "GET" method requests from HTTP clients */ 
-	public void doGet(HttpServletRequest request, 
+	/** Handle "GET" method requests from HTTP clients */
+	public void doGet(HttpServletRequest request,
 		HttpServletResponse response)
-		throws IOException, ServletException  
+		throws IOException, ServletException
 	{
 		System.out.println("GET Method called !!!");
 		doPost(request, response);
 	}
-	
-	
+
+
 	/**
-	 * method that retuns a page to the browser that explains to the user 
-	 * that he/she does not have the appropritate priveleges to load data 
+	 * method that retuns a page to the browser that explains to the user
+	 * that he/she does not have the appropritate priveleges to load data
 	 * to the system and that they should fill in the certification page
-	 * and submit that 
-	 * 
+	 * and submit that
+	 *
 	 * @param response -- the http response object
 	 */
 	 private void handleInvalidPermissions(HttpServletResponse response, String user)
@@ -295,21 +295,21 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			  message.append("<span class=\"category\"> INVALID PERMISSIONS ERROR </span> <br> <br> \n");
 				message.append("<span class=\"item\"> User: "+user+" Does Not Have Permission to Load Data To Vegbank <br> \n");
 				message.append("In order to attain this privilege, please fill out the certification form at: \n");
-				message.append("<a href=\"/vegbank/forms/certification.html\">Certification Form</a>");
+				message.append("<a href=\"/vegbank/forms/certification.jsp\">Certification Form</a>");
 				message.append("</span>");
-				
+
 				Hashtable replaceHash = new Hashtable();
 				// party-related attributes
 				replaceHash.put("messages", message.toString() );
-				
+
 				StringWriter output = new StringWriter();
 				su.filterTokenFile(genericTemplate, output, replaceHash);
 
 				PrintWriter out = response.getWriter();
 				out.println( output.toString() );
-			
+
 		 }
-		 catch( Exception e ) 
+		 catch( Exception e )
 		 {
 			System.out.println("Exception:  " + e.getMessage() );
 			e.printStackTrace();
@@ -317,19 +317,19 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	 }
 
 	 /**
-	  * mrthod to read, format and return as a string the plot submittal 
+	  * mrthod to read, format and return as a string the plot submittal
 		* initaition page.
 		*/
 		private String updatePlotInitPage(
-			String user, 
-			String salutation, 
-			String givenName, 
+			String user,
+			String salutation,
+			String givenName,
 			String surName,
 			String organizationname)
 		{
 			StringWriter output = new StringWriter();
 			try
-			{		
+			{
 				// set up the filter tokens
 				Hashtable replaceHash = new Hashtable();
 				replaceHash.put("emailAddress", ""+user);
@@ -339,7 +339,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				replaceHash.put("organizationname", ""+organizationname);
 				su.filterTokenFile(plotSubmittalInitTemplate, output, replaceHash);
 			}
-			catch( Exception e ) 
+			catch( Exception e )
 			{
 				System.out.println("Exception:  " + e.getMessage() );
 				e.printStackTrace();
@@ -348,10 +348,10 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		}
 
 	/**
-	 * this method is used to handle the submittal of a vegplot into the 
-	 * VegBank database using for the insertion of either an MS access file 
-	 * or an XML document, using the rmi datasource client / server system 
-	 * where the server is running on a  win-nt machine.  Steps handeled by 
+	 * this method is used to handle the submittal of a vegplot into the
+	 * VegBank database using for the insertion of either an MS access file
+	 * or an XML document, using the rmi datasource client / server system
+	 * where the server is running on a  win-nt machine.  Steps handeled by
 	 * this method include <br> <br>
 	 *
 	 * 1] validating the user <br>
@@ -366,34 +366,34 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	 * @param params -- a hashtable with the unique parameters sent to the servlet
 	 * @param request -- http request sent to the servlet
 	 * @param response -- http reponse sent to the servlet
-	 * 
+	 *
 	 */
 	 private StringBuffer handleVegPlotSubmittal(
 	 	Enumeration enum,
-	 	HttpServletRequest request, 
-	 	HttpServletResponse response, 
+	 	HttpServletRequest request,
+	 	HttpServletResponse response,
 	 	String user,
 	 	WebUser userBean)
 	{
 		StringBuffer sb = new StringBuffer();
-		
+
 		String salutation = userBean.getSalutation();
 		String surName = userBean.getSurname();
 		String givenName = userBean.getGivenname();
 		String organizationname = userBean.getOrganizationname();
-		
+
 		try
 		{
 			String inputEmail = "";
 			String action = request.getParameter("action");
 			System.out.println("DataSubmitServlet > action: " + action);
-			
+
 			PrintWriter out = response.getWriter();
 			String htmlContents = "";
-			
-			// THE FIRST STEP IS THE PREINIT STEP WHICH TAKES PLACE WHEN THE USER 
-			// HITS THE LINK TO UPLOAD PLOT DATA, THIS STEP LOOKS UP THE 
-			// USERS INFO AND RETURNS A FORM WITH THEIR INFO AND THE FORM 
+
+			// THE FIRST STEP IS THE PREINIT STEP WHICH TAKES PLACE WHEN THE USER
+			// HITS THE LINK TO UPLOAD PLOT DATA, THIS STEP LOOKS UP THE
+			// USERS INFO AND RETURNS A FORM WITH THEIR INFO AND THE FORM
 			// TO SELECT THE PLOT TYPE
 			if ( action.equals("preinit") )
 			{
@@ -402,20 +402,20 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				htmlContents = updatePlotInitPage(user, salutation, givenName, surName, organizationname);
 				out.println(htmlContents);
 			}
-			
+
 			else if ( action.equals("init") )
 			{
 				//get the paramter refering to the plot archive type (ie tnc, vbaccess, nativexml)
 				String plotFileType = request.getParameter("plotFileType");
-				
+
 				//quick hack to cahnge the type of plots archive
 				String plotsArchiveType = plotFileType;
 				System.out.println("DataSubmitServlet > plotsArchiveType: " + plotsArchiveType);
 			  // put this into the users session for retrival latter
         request.getSession().setAttribute("plotsArchiveType", plotsArchiveType);
-      
-				// check that the uer has valid priveleges to load a data 
-				// file to the database and if so give the use a window 
+
+				// check that the uer has valid priveleges to load a data
+				// file to the database and if so give the use a window
 				// to upload some data
 				if ( request.getParameter("emailAddress") != null )
 				{
@@ -423,9 +423,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					//make sure that the login email matches the passed here
 					if ( inputEmail.equals(user) )
 					{
-						//redirect the user to the data selection form to either                                            
-						//upload or choose from a previosly uploaded file                                                   
-						response.sendRedirect("/vegbank/forms/plot-upload.html"); 
+						//redirect the user to the data selection form to either
+						//upload or choose from a previosly uploaded file
+						response.sendRedirect("/vegbank/forms/plot-upload.html");
 					}
 					// if not then send the user to a login
 					else
@@ -443,26 +443,26 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					}
 				}
 			}
-			// this is the actual submittal of one or many plots from the 
+			// this is the actual submittal of one or many plots from the
 			// uploaded archive
 			else if ( action.equals("submit") )
 			{
 				String receiptType  = request.getParameter("receiptType");
 				//the plot file can only be tnc, vbaccess, nativexml
 				//String plotFileType = request.getParameter("plotFileType");
-				
+
 				System.out.println("DataSubmitServlet > requesting a receipt type: "+receiptType );
 				//sleep so that admin can see the debugging
-				
+
 				DataSourceClient rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
-				
-				while (enum.hasMoreElements()) 
+
+				while (enum.hasMoreElements())
 				{
 					String name = (String) enum.nextElement();
 					if ( name.toUpperCase().equals("PLOTID") )
 					{
 						String values[] = request.getParameterValues(name);
-						if (values != null) 
+						if (values != null)
 						{
 							for (int i = 0; i < values.length; i++)
 							{
@@ -511,7 +511,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				System.out.println("DataSubmitServlet > emailing the receipt to the user: " + user);
 				this.emailPlotSubmitalReceipt(user, sb.toString() );
 				// Remove the lock
-				String location = 
+				String location =
 					(String) request.getSession().getAttribute("rmiFileUploadLocation");
 				rmiClient.releaseFileUploadLocation(location);
 			}
@@ -520,23 +520,23 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				System.out.println("DataSubmitServlet > unknown plot submital task ");
 			}
 		}
-		catch( Exception e ) 
+		catch( Exception e )
 		{
 			System.out.println("Exception:  " + e.getMessage() );
 			e.printStackTrace();
 		}
 		return(sb);
 	}
-	
-	
+
+
   private StringBuffer handleVegPlotUpload(String plotsArchiveType, HttpServletRequest request)
   {
     StringBuffer sb = new StringBuffer();
 		DataSourceClient rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
-		    
+
 	  System.out.println("DataSubmitServlet > file type: " +  plotsArchiveType);
 	  Vector plots = new Vector();
-				
+
 	  //take the file that was just deposited via the data exchange servlet
 		//and pass it onto the winnt machine if it is an mdb file
 		if ( ! plotsArchiveType.equals("nativexml") )
@@ -544,13 +544,13 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		  System.out.println("DataSubmitServlet > using RMI client to pass file: " + plotsArchiveFile );
 			System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
 
-      // Need to use the RMIServer to read a mdb file 
+      // Need to use the RMIServer to read a mdb file
       rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
-      
-      // Is the RMI Server free 
+
+      // Is the RMI Server free
       String location = rmiClient.getFileUploadLocation();
-      
-      
+
+
       if (location == null)
       {
       	System.out.println("DataSubmitServlet > The RMI server is busy, no location to save file");
@@ -565,39 +565,39 @@ public class DataSubmitServlet extends HttpServlet implements Constants
       else
       {
 				boolean sendResults = rmiClient.putMDBFile(plotsArchiveFile, plotsArchiveType, location);
-				
+
 				System.out.println("DataSubmitServlet > RMI file send results: " + sendResults);
-				
+
 				//validate that the plot archive is real
 				boolean fileValidityResults = rmiClient.isMDBFileValid(location);
 				System.out.println("DataSubmitServlet > file validity at RMI server: " + fileValidityResults);
-				
+
 				// get the name of the plots and update the selection form and redircet
 				// the browser there
 				System.out.println("DataSubmitServlet > instantiating an rmi client on: " + rmiServer);
 				rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 				plots = rmiClient.getPlotNames(plotsArchiveType);
-				
+
 				request.getSession().setAttribute("rmiFileUploadLocation", location );
       }
 
 		}
-		else 
+		else
 		{
-			// TODO: Remove hard coding                    
+			// TODO: Remove hard coding
 			PlotDataSource pds = new PlotDataSource("VegbankXMLPlugin");
 			plots = pds.getPlotNames();
 		}
-			
+
 		System.out.println("DataSubmitServlet > number of plots in archive: " + plots.size() );
 		// prepare the plots element
 		StringBuffer sb2 = new StringBuffer();
-		for (int i=0; i<plots.size(); i++) 
+		for (int i=0; i<plots.size(); i++)
 		{
 			sb2.append("<option>" + (String)plots.elementAt(i) + "</option> \n");
 			System.out.println("DataSubmitServlet > add plot: " + (String)plots.elementAt(i) );
 		}
-				
+
 		//create the form
 		StringWriter output = new StringWriter();
 		try
@@ -612,10 +612,10 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		sb.append( output.toString() );
     return sb;
   }
-  
+
   /**
 	  * this method takes the xml report from the from the plot validation module
-		* and then returns an html receipt that can be presented to the user attemplting 
+		* and then returns an html receipt that can be presented to the user attemplting
 		* to load the plot
 		* @param report -- the plot validation report from the plot validation module:
 		*  <plotValidationReport>
@@ -627,8 +627,8 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		*				<failedTarget>
 		*				<constraints>
 		*					<constraint>
-		*				</constraints>					
-		* @return html -- the html receipt 
+		*				</constraints>
+		* @return html -- the html receipt
 		*/
 		private String getPlotValidationReceipt(String plotValidationRept)
 		{
@@ -638,7 +638,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				System.out.println("receipt: " + plotValidationRept);
 				transformXML trans  = new transformXML();
 				String tr = trans.getTransformedFromString(plotValidationRept.replace('&', '_' ), "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/validation-report.xsl");
-				sb.append(tr);		
+				sb.append(tr);
 			}
 			catch (Exception e)
 			{
@@ -646,16 +646,16 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			}
 			return(sb.toString() );
 		}
-	
-	
-	
+
+
+
 	/**
-	 * this method will email the plot submital receipt form to the 
+	 * this method will email the plot submital receipt form to the
 	 * user who has uploaded the plot archive file to the server
 	 *
 	 * @param inputEmail -- the email address of the user
 	 * @param receipt -- string representation of the insertion receipt
-	 * @see ServletUtility -- the class that handles the email process.  the 
+	 * @see ServletUtility -- the class that handles the email process.  the
 	 * method is called 'sendEmail'
 	 */
 	 private void emailPlotSubmitalReceipt(String inputEmail, String receipt) throws MessagingException
@@ -667,13 +667,13 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		//su.sendEmail(this.mailHost, from, to, this.cc, subject, body);
 		su.sendHTMLEmail(mailHost, from, to, cc, subject, body);
 	 }
-		
-	
+
+
 	/**
-	 * method that for a given plot will grab some of the salient stats for that 
+	 * method that for a given plot will grab some of the salient stats for that
 	 * plot into an html table that can be used elsehere.  Also the loading results
-	 * from the rmi client are passed into this method so that they can elso be 
-	 * embedded into the table the table will look somethink like what is below for each 
+	 * from the rmi client are passed into this method so that they can elso be
+	 * embedded into the table the table will look somethink like what is below for each
 	 * plot:
 	 *
 	 *  <table>
@@ -681,7 +681,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	 * 		<tr> <td> state </td> <td> $state </td>
 	 * 		<tr> <td> named place </td> <td> $named place </td>
 	 * 		<tr> <td> community  </td> <td> $community </td>
-	 *	</table> 
+	 *	</table>
 	 *
 	 * @see DataSourceClient
 	 * @param plot  -- the string name of the plot as it used in the users archive
@@ -695,10 +695,10 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	 *  will be requested for
 	 */
 	 private String getPlotInsertionReceipt(
-	 	String plot, 
-	 	String results, 
-	 	String receiptType, 
-	 	int curPlotNumber, 
+	 	String plot,
+	 	String results,
+	 	String receiptType,
+	 	int curPlotNumber,
 	 	int totalPlotNumber,
 	 	String browserType)
 	 {
@@ -706,7 +706,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			System.out.println("DataSubmitServlet > currentPlot: " + curPlotNumber +" total number: "+ totalPlotNumber );
 	 		try
 			{
-				if (receiptType.equals("extensive") ) 
+				if (receiptType.equals("extensive") )
 				{
 					if ( browserType.equals("msie") )
 					{
@@ -737,21 +737,21 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					}
 					else
 					{
-						//the loading results 
+						//the loading results
 						// first transform the xml that is returned as the results string
 						// into an html body
 						transformXML trans  = new transformXML();
 						String tr = trans.getTransformedFromString(results, "/usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/ascii-treeview.xsl");
 						sb.append("<table> \n");
-						sb.append(" <tr> \n");	
-						sb.append(" 	<td> Loading Results </td> \n");	
-						sb.append(" </tr> \n");	
+						sb.append(" <tr> \n");
+						sb.append(" 	<td> Loading Results </td> \n");
+						sb.append(" </tr> \n");
 						sb.append("</table> \n");
 						sb.append(tr);
 						sb.append("<br>");
 					}
 				}
-				else if (receiptType.equals("minimal") ) 
+				else if (receiptType.equals("minimal") )
 				{
 					//System.out.println("DataSubmitServlet > Get minimal receipt from results ='" + results + "'");
 					String s = getMinimalInsertionReceipt(plot, results);
@@ -762,14 +762,14 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					System.out.println("DataSubmitServlet > unrecognized receipt type: " + receiptType );
 				}
 			}
-			catch( Exception e ) 
+			catch( Exception e )
 			{
 				System.out.println("Exception:  " + e.getMessage() );
 				e.printStackTrace();
 			}
 			return( sb.toString() );
 	 }
-	 
+
 	 /**
 	  * method that returns the most salient attributes of a plot that were
 		* loaded to the database as an html table -- this method will be called when
@@ -793,81 +793,81 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				Vector state =  parser.getValuesForPath(doc, "/plotInsertion/state");
 				Vector exceptions = parser.getValuesForPath(doc, "/plotInsertion/exceptionMessage");
 				Vector insertion = parser.getValuesForPath(doc, "/plotInsertion/insert");
-				
+
 			//	String plotName = rmiClient.getAuthorPlotCode(plot);
 			//	String state = rmiClient.getState(plot);
 			//	String community= rmiClient.getCommunityName(plot);
-				
+
 				//plot name
 				sb.append("<table> \n");
-			//	sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
-			//	sb.append(" 	<td> Plot Name: </td> \n");	
+			//	sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");
+			//	sb.append(" 	<td> Plot Name: </td> \n");
 			//	sb.append(" 	<td> "+plotName+" </td> \n");
 			//	sb.append(" </tr> \n");
-				
+
 				//accession number
-				sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
-				sb.append(" 	<td> VegBank Identifier: </td> \n");	
+				sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");
+				sb.append(" 	<td> VegBank Identifier: </td> \n");
 				sb.append(" 	<td> "+accessionNumber.toString()+" </td> \n");
 				sb.append(" </tr> \n");
-				
+
 				//Authors Identifier
-				sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");	
-				sb.append(" 	<td> Author Identifier: </td> \n");	
+				sb.append(" <tr bgcolor=\"#DFE5FA\"> \n");
+				sb.append(" 	<td> Author Identifier: </td> \n");
 				sb.append(" 	<td> "+authorPlotCode.toString()+" </td> \n");
-				sb.append(" </tr> \n");				
+				sb.append(" </tr> \n");
 
 				//the state
-				sb.append(" <tr> \n");	
-				sb.append(" 	<td> State </td> \n");	
-				sb.append(" 	<td> "+state+" </td> \n");	
-				sb.append(" </tr> \n");	
-			
+				sb.append(" <tr> \n");
+				sb.append(" 	<td> State </td> \n");
+				sb.append(" 	<td> "+state+" </td> \n");
+				sb.append(" </tr> \n");
+
 				//the locations
-				sb.append(" <tr> \n");	
-				sb.append(" 	<td> Latitude:  </td> \n");	
-				sb.append(" 	<td> "+latitude+" </td> \n");	
-				sb.append(" </tr> \n");	
-				sb.append(" <tr> \n");	
-				sb.append(" 	<td> Longitude:  </td> \n");	
-				sb.append(" 	<td> "+longitude+" </td> \n");	
-				sb.append(" </tr> \n");	
-			
+				sb.append(" <tr> \n");
+				sb.append(" 	<td> Latitude:  </td> \n");
+				sb.append(" 	<td> "+latitude+" </td> \n");
+				sb.append(" </tr> \n");
+				sb.append(" <tr> \n");
+				sb.append(" 	<td> Longitude:  </td> \n");
+				sb.append(" 	<td> "+longitude+" </td> \n");
+				sb.append(" </tr> \n");
+
 				//the community
-			//	sb.append(" <tr> \n");	
-			//	sb.append(" 	<td> Commmunity: </td> \n");	
-			//	sb.append(" 	<td> "+community+" </td> \n");	
+			//	sb.append(" <tr> \n");
+			//	sb.append(" 	<td> Commmunity: </td> \n");
+			//	sb.append(" 	<td> "+community+" </td> \n");
 			//	sb.append(" </tr> \n");
 
-				// the exceptions 
-				sb.append(" <tr> \n");                                                                                             
-				sb.append("   <td> Errors: </td> \n");                                                                         
-				sb.append("   <td> "+exceptions+" </td> \n");                                                                       
+				// the exceptions
+				sb.append(" <tr> \n");
+				sb.append("   <td> Errors: </td> \n");
+				sb.append("   <td> "+exceptions+" </td> \n");
 				sb.append(" </tr> \n");
 
 				// insertions results
-				sb.append(" <tr> \n");                                                                                             
-				sb.append("   <td> Insert: </td> \n");                                                                         
-				sb.append("   <td> "+insertion+" </td> \n");                                                                       
+				sb.append(" <tr> \n");
+				sb.append("   <td> Insert: </td> \n");
+				sb.append("   <td> "+insertion+" </td> \n");
 				sb.append(" </tr> \n");
-				
+
 				sb.append("</table> \n");
 			}
-			catch( Exception e ) 
+			catch( Exception e )
 			{
 				System.out.println("Exception:  " + e.getMessage() );
 				e.printStackTrace();
 			}
 			return( sb.toString() );
 		}
-	
-	
+
+
 	/**
 	 * this method is used to handle the coorrelation of communities
-	 * 
+	 *
 	 */
 	 private StringBuffer handleVegCommunityCorrelation(
-	 	HttpServletRequest request, 
+	 	HttpServletRequest request,
 	 	HttpServletResponse response)
 	{
 		StringBuffer sb = new StringBuffer();
@@ -877,7 +877,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			if ( action.equals("init") )
 			{
 				sb.append("<html>");
-				
+
 				System.out.println("DataSubmitServlet > init vegCommunityCorrelation");
 				String salutation = request.getParameter("salutation");;
 				String firstName =  request.getParameter("firstName");
@@ -892,12 +892,12 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				String nameRefTitle = "vegbank";
 				sb.append("<b> communityName: " + commName + " </b> <br>" );
 				//HERE NEED TO GET THE STATUS ID ASSOCIATED WITH THIS Community
-				
+
 				Query query = new Query();
 				int statusId = query.getCommStatusId(commName);
-				
-				
-				//get a vector that contains hashtables with all the possible 
+
+
+				//get a vector that contains hashtables with all the possible
 				//correlation ( name, recognizing party, system, status, level)
 				CommunityQueryStore qs = new CommunityQueryStore();
 				Vector correlationTargets =
@@ -905,8 +905,8 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 						correlationTaxon,
 						"natureserve",
 						correlationTaxonLevel);
-						
-				for (int i=0; i<correlationTargets.size(); i++) 
+
+				for (int i=0; i<correlationTargets.size(); i++)
 				{
 					//get the hashtables form the vector
 					Hashtable hash = (Hashtable)correlationTargets.elementAt(i);
@@ -916,23 +916,23 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					String conceptStatus  = (String)hash.get("conceptStatus");
 					String commConceptId  = (String)hash.get("commConceptId");
 					String usageId  = (String)hash.get("usageId");
-						
+
 					sb.append("<form action=\"/vegbank/servlet/DataSubmitServlet\" method=\"get\" >");
 					sb.append(" <input type=hidden name=submitDataType value=vegCommunityCorrelation> ");
 					sb.append(" <input type=hidden name=action value=submit> ");
 					sb.append(" <input type=hidden name=statusId value="+statusId+"> ");
 					sb.append(" <input type=hidden name=conceptId value="+commConceptId+"> ");
-					
+
 					sb.append(" <input type=hidden name=commName value=\""+commName+"\"> ");
 					sb.append(" <input type=hidden name=correlationTargetName value="+correlationName+"> ");
 					sb.append(" <input type=hidden name=correlationTargetLevel value="+level+"> ");
-					
+
 					sb.append("commName: " +correlationName + "<br> ");
 					sb.append("party: " +recognizingParty + "<br> ");
 					sb.append("level: " +level + "<br> ");
 					sb.append("status: "+conceptStatus + "<br> ");
 					sb.append("concept: "+commConceptId + "<br> ");
-						
+
 					sb.append("<select class=item name=correlation multiple size=3>");
 					sb.append("<option selected>unknown");
 					sb.append("<option>gt");
@@ -941,7 +941,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					sb.append("</select>");
 					sb.append("<br> <input type=\"submit\" VALUE=\"submit correlation\">");
 					sb.append("<br>");
-					
+
 					sb.append("</form>");
 				}
 				sb.append("</html>");
@@ -954,11 +954,11 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 				String statusId =  request.getParameter("statusId");
 				int status = Integer.parseInt(statusId);
 				String correlation =  request.getParameter("correlation");
-				
+
 				String communityName = request.getParameter("commName");
 				String correlationTargetName = request.getParameter("correlationTargetName");
 				String correlationTargetLevel = request.getParameter("correlationTargetLevel");
-				
+
 				String startDate = null;
 				String stopDate = null;
 				VegCommunityLoader commLoader = new VegCommunityLoader();
@@ -968,17 +968,17 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 					correlation,
 					startDate,
 					stopDate);
-				
+
 				//assume that all went ok and return a recipt
 				System.out.println("DataSubmitServlet > preparing results page");
-				
-				String resultPage = getCorrelationResultsPage(true, communityName, 
+
+				String resultPage = getCorrelationResultsPage(true, communityName,
 				correlationTargetName, correlationTargetLevel, correlation);
-				
+
 				sb.append( resultPage );
 			}
 		}
-		catch( Exception e ) 
+		catch( Exception e )
 		{
 			System.out.println("Exception:  " + e.getMessage() );
 			e.printStackTrace();
@@ -986,12 +986,12 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		}
 		return(sb);
 	}
-	
-	
+
+
 	/**
-	 * method to prepare the results page 
+	 * method to prepare the results page
 	 */
-	 private String getCorrelationResultsPage(boolean result, String communityName, 
+	 private String getCorrelationResultsPage(boolean result, String communityName,
 	 String correlationTargetName, String correlationTargetLevel, String correlation)
 	 {
 		 StringBuffer sb = new StringBuffer();
@@ -1009,9 +1009,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 		 sb.append("</html> \n");
 		 return(sb.toString() );
 	 }
-	 
-	 
 
-	
+
+
+
 
 }
