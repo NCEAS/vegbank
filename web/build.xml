@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-05-04 01:18:52 $'
-* '$Revision: 1.161 $'
+* '$Date: 2005-05-06 03:25:59 $'
+* '$Revision: 1.162 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -26,7 +26,7 @@
     <echo message="############ ${ant.project.name} ##############"/>
     <echo>
 	Targets:  {init} {hdrftr} includes, news, panel, history, pubs, forms, general, design,
-	vbsummary, dictionary
+	 dictionary
 	</echo>
     <!-- 
 		* Below are the basic propoerties and tokens for
@@ -158,8 +158,12 @@
     <filter token="images_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/images/"/>
     <filter token="stylesheet" value=""/>
     <!-- this is handled in default head token -->
+      <!-- NO PARAMS on next token -->
     <filter token="plotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/plot-query.jsp"/>
-    <filter token="nestedplotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/nested-plot-query.html"/>
+     <!-- params allowed and encouraged on next 2 tokens -->
+    <filter token="plotquery_page_simple" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/plot-query.jsp?simplemode=true&amp;show_0=on&amp;show_G=on&amp;show_H=on"/>
+    <filter token="plotquery_page_advanced" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/plot-query.jsp?show_0=on&amp;show_G=on&amp;show_H=on"/>
+
     <filter token="uploaddata_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/uploadFile.html"/>
     <filter token="browseplotspage" value="${machine_url}${eighty_eighty}/browse" />
     <filter token="general_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/general/"/>
@@ -203,8 +207,6 @@
     <!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/${webapp}/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
-    <mkdir dir="${apache.document.root}/plot/"/>
-    <!-- what is this for, the cache?? -mtl -->
     <mkdir dir="${vegdocs_server}"/>
     <mkdir dir="${help_server}"/>
     <mkdir dir="${manual_server}"/>
@@ -239,7 +241,6 @@
     <!-- add to second webpage at root/${webapp}/index.html -->
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
     <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.jsp"/>
-    <copy todir="${apache.document.root}/plot/" filtering="yes" file="${basedir}/plot/.htaccess"/>
     <copy todir="${apache.document.root}/" filtering="yes" file="${basedir}/.htaccess"/>
   </target>
   <!-- DISTRIBUTE THE IMAGES -->
@@ -264,7 +265,7 @@
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 	-->
-  <target name="stuff" depends="vbsummary" description="=&gt; dist other static content">
+  <target name="stuff" depends="email_templates" description="=&gt; dist other static content">
     <!-- no more news: Nov17,2004 MTL : could be added back if we wanted to : <copy overwrite="true" todir="${news_server}" filtering="yes">
       <fileset dir="${news_src}"/>
     </copy> -->
@@ -575,9 +576,6 @@
    
     
   </target>
-  <target name="vbsummary" depends="email_templates" description="=&gt; DEPRECATED : does nothing!">
-    <!-- create summary based on current VegBank database status -->
-  </target>
   <target name="email_templates" depends="design" description="=&gt; dist email templates">
     <copy overwrite="true" todir="${email_templates_server}" filtering="yes">
       <fileset dir="${email_templates_src}"/>
@@ -747,7 +745,6 @@
 		pubs
 		design
 		email_templates
-		vbsummary
 		searchplugins
 		stuff   {news, upload}
 		
