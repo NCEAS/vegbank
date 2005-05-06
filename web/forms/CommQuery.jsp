@@ -54,7 +54,7 @@ function setNameMatchType() {
 			
     
          <form action="@web_context@views/commconcept_summary.jsp" method="get" name="queryform" onsubmit="prepareForm()">
-        <!--html:form action="/CommQuery"-->
+        
 			<input type="hidden" name="where" value="where_commconcept_mpq" size="40"/>
 
         <p class="instructions">
