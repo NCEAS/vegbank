@@ -12,7 +12,7 @@
 <logic:notEmpty name="userdataset-BEANLIST"><!-- set up table -->
 
 <logic:iterate id="onerowofuserdataset" name="userdataset-BEANLIST"><!-- iterate over all records in set : new table for each -->
-<br>
+<br />
 <table class="leftrightborders" cellpadding="3"><!--each field, only write when HAS contents-->
 
 <%@ include file="../autogen/userdataset_detail_data.jsp" %>

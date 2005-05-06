@@ -133,7 +133,7 @@
 
 </logic:notEqual>  <!-- only total -->
 
-
+</tr>
 </logic:iterate>
 </table>
 </logic:notEmpty>
