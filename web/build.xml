@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-05-06 07:22:10 $'
-* '$Revision: 1.164 $'
+* '$Date: 2005-05-06 07:39:53 $'
+* '$Revision: 1.165 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -112,7 +112,7 @@
     <property name="image_src" value="./images"/>
     <property name="hostname" value="vegbank"/>
     <property name="workshop_src" value="./workshop"/>
-    <property name="vegdocs.dir" value="${machine_url}/vegdocs"/>
+    <property name="vegdocs.dir" value="/vegdocs"/>
     <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
     <property name="static_xmlserver" value="${vegdocs_server}/xml"/>
     <property name="vegbranch_src" value="./vegbranch"/>
@@ -146,37 +146,37 @@
     <!-- WEB SERVER LOCATIONS -->
     <filter token="base_url" value=""/>
     <filter token="server_address" value="${machine_url}${eighty_eighty}"/>
-    <filter token="web_context" value="${machine_url}${eighty_eighty}/${web.context_uri}/"/>
-    <filter token="get_link" value="${machine_url}/get/"/>
-    <filter token="cite_link" value="${machine_url}/cite/"/>
-    <filter token="image_server" value="${machine_url}${eighty_eighty}/${web.context_uri}/images/"/>
+    <filter token="web_context" value="/${web.context_uri}/"/>
+    <filter token="get_link" value="/get/"/>
+    <filter token="cite_link" value="/cite/"/>
+    <filter token="image_server" value="/${web.context_uri}/images/"/>
     <filter token="minimumwidth" value="650"/>
     <!-- this is the minimum value for width of header and footer -->
     <!-- the following is a duplicate : -->
-    <filter token="images_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/images/"/>
+    <filter token="images_link" value="/${web.context_uri}/images/"/>
     <filter token="stylesheet" value=""/>
     <!-- this is handled in default head token -->
       <!-- NO PARAMS on next token -->
-    <filter token="plotquery_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/plot-query.jsp"/>
+    <filter token="plotquery_page" value="/${web.context_uri}/forms/plot-query.jsp"/>
      <!-- params allowed and encouraged on next 2 tokens -->
-    <filter token="plotquery_page_simple" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/plot-query.jsp?simplemode=true&amp;show_0=on&amp;show_G=on&amp;show_H=on"/>
-    <filter token="plotquery_page_advanced" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/plot-query.jsp?show_0=on&amp;show_G=on&amp;show_H=on"/>
+    <filter token="plotquery_page_simple" value="/${web.context_uri}/forms/plot-query.jsp?simplemode=true&amp;show_0=on&amp;show_G=on&amp;show_H=on"/>
+    <filter token="plotquery_page_advanced" value="/${web.context_uri}/forms/plot-query.jsp?show_0=on&amp;show_G=on&amp;show_H=on"/>
 
-    <filter token="uploaddata_page" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/uploadFile.html"/>
-    <filter token="browseplotspage" value="${machine_url}${eighty_eighty}/browse" />
-    <filter token="general_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/general/"/>
-    <filter token="forms_url" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/"/>
-    <filter token="views_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/views/"/>
-    <filter token="admin_url" value="${machine_url}${eighty_eighty}/${web.context_uri}/admin/"/>
+    <filter token="uploaddata_page" value="/${web.context_uri}/forms/uploadFile.html"/>
+    <filter token="browseplotspage" value="/browse" />
+    <filter token="general_link" value="/${web.context_uri}/general/"/>
+    <filter token="forms_url" value="/${web.context_uri}/forms/"/>
+    <filter token="views_link" value="/${web.context_uri}/views/"/>
+    <filter token="admin_url" value="/${web.context_uri}/admin/"/>
     <!-- add second token for forms, which is similarly named as other links -->
-    <filter token="forms_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/"/>
+    <filter token="forms_link" value="/${web.context_uri}/forms/"/>
     <filter token="dbdictionary_link" value="${vegdocs.dir}/dbdictionary/"/>
-    <filter token="includes_link" value="${machine_url}${eighty_eighty}/${web.context_uri}/includes/"/>
+    <filter token="includes_link" value="/${web.context_uri}/includes/"/>
     <filter token="pubs_link" value="${vegdocs.dir}/pubs/"/>
     <filter token="history_link" value="${vegdocs.dir}/history/"/>
     <filter token="news_link" value="${vegdocs.dir}/news/"/>
     <!-- add link for page name that links to help frame jsp -->
-    <filter token="jspHelpPage" value="${machine_url}${eighty_eighty}/${web.context_uri}/forms/getHelp.jsp"/>
+    <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
     <!-- location and filename of xml index page -->
     <filter token="design_link" value="${vegdocs.dir}/design/"/>
     <filter token="panel_link" value="${vegdocs.dir}/panel/"/>
@@ -190,18 +190,18 @@
     <filter token="help" value="${vegdocs.dir}/help/"/>
     <filter token="manual_link" value="${vegdocs.dir}/help/manual/"/>
     <!-- SERVLETS -->
-    <filter token="framework_servlet" value="${machine_url}${eighty_eighty}/${web.context_uri}/servlet/framework"/>
-    <filter token="usermanagement_servlet" value="${machine_url}${eighty_eighty}/${web.context_uri}/servlet/usermanagement"/>
-    <filter token="datarequestservlet" value="${machine_url}${eighty_eighty}/${web.context_uri}/servlet/DataRequestServlet"/>
-    <filter token="datasubmitservlet" value="${machine_url}${eighty_eighty}/${web.context_uri}/servlet/DataSubmitServlet"/>
-    <filter token="nestedquerybuilder" value="${machine_url}${eighty_eighty}/${web.context_uri}/servlet/QueryBuilderServlet"/>
-    <filter token="authenticationservlet" value="${machine_url}${eighty_eighty}/${web.context_uri}/servlet/authenticate"/>
+    <filter token="framework_servlet" value="/${web.context_uri}/servlet/framework"/>
+    <filter token="usermanagement_servlet" value="/${web.context_uri}/servlet/usermanagement"/>
+    <filter token="datarequestservlet" value="/${web.context_uri}/servlet/DataRequestServlet"/>
+    <filter token="datasubmitservlet" value="/${web.context_uri}/servlet/DataSubmitServlet"/>
+    <filter token="nestedquerybuilder" value="/${web.context_uri}/servlet/QueryBuilderServlet"/>
+    <filter token="authenticationservlet" value="/${web.context_uri}/servlet/authenticate"/>
    <!-- listserv -->
     <filter token="listservinfo_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
     <filter token="listservarchive_link" value="http://mercury.nceas.ucsb.edu/vegbank/pipermail/"/>
     <filter token="listservuser_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/options/" />
     <!-- Struts -->
-    <filter token="DisplayUploadPlotAction" value="${machine_url}${eighty_eighty}/${web.context_uri}/DisplayUploadPlotAction.do"/>
+    <filter token="DisplayUploadPlotAction" value="/${web.context_uri}/DisplayUploadPlotAction.do"/>
     <!-- FIXME: Should be in a prepare target -->
     <mkdir dir="${tomcat.home.dir}/webapps/${webapp}/"/>
     <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
