@@ -3,10 +3,10 @@ package org.vegbank.servlet.request;
 /*
  *  '$RCSfile: DataRequestServlet.java,v $'
  *
- *	'$Author: anderson $'
- *  '$Date: 2004-10-14 09:44:37 $'
- *  '$Revision: 1.31 $'
- * 
+ *	'$Author: mlee $'
+ *  '$Date: 2005-05-06 05:55:31 $'
+ *  '$Revision: 1.32 $'
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -58,19 +58,19 @@ import org.vegbank.xmlresource.transformXML;
 
 
 /**
- * Servlet to compose XML documents containg query information and then send the 
+ * Servlet to compose XML documents containg query information and then send the
  * information to the dataAccess module, where that XML document will be
  * transformed and analyzed - a process resulting in a query being issued to the
  * plots database
  *
  * <p>Valid parameters are:<br><br>
- * 
+ *
  * REQUIRED PARAMETERS
  * @param queryType -- includes: simple, compound and extended
  * @param requestDataType -- includes: vegPlot, plantTaxon, vegCommunity
  * @param resultType -- includes: summary, full
- * 
- * 
+ *
+ *
  * ADDITIONAL PARAMETERS
  * @param taxonName - name of a taxon occuring in a plot <br>
  * @param communityName - name of a vegetaion community <br>
@@ -82,16 +82,16 @@ import org.vegbank.xmlresource.transformXML;
  * @param compoundQuery - descriptor of the query type, which may include simple
  * @param - where only one criteria is used or compound where multiple criteria
  * 		may be used the flag for siple is '0' and the flag for compound is '1'<br>
- * @param plotId - database plot identification number <br> 
+ * @param plotId - database plot identification number <br>
  * @param resultFormatType - mak be either xml or html depending on the client tools<br>
- * 
- *	'$Author: anderson $'
- *  '$Date: 2004-10-14 09:44:37 $'
- *  '$Revision: 1.31 $'
- * 
+ *
+ *	'$Author: mlee $'
+ *  '$Date: 2005-05-06 05:55:31 $'
+ *  '$Revision: 1.32 $'
+ *
  */
 
-public class DataRequestServlet extends HttpServlet 
+public class DataRequestServlet extends HttpServlet
 {
 
 	private static Log log = LogFactory.getLog(DataRequestServlet.class);
@@ -99,19 +99,19 @@ public class DataRequestServlet extends HttpServlet
 	static ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	private  ServletUtility su = new ServletUtility();
 	private transformXML transformer = new transformXML();
-	
+
 	private static final String GENERICFORM = rb.getString("genericform");
 	private static final String DEFAULT_PLOT_STYLESHEET = rb.getString("defaultplotidentitystylesheet");
 	private static final Boolean QUERYCACHING = new Boolean ( (String) rb.getObject("querycaching") );
 	private static final String SERVLET_DIR = rb.getString("requestparams.servletDir");
-	
+
 	// TODO: This need to taken out of here !!
 	private static final String summaryViewStyleSheet = SERVLET_DIR + "transformPlotSummary.xsl";
 	private static final String comprehensiveViewStyleSheet = SERVLET_DIR + "transformFullPlot.xsl";
 	private static final String returnXMLStyleSheet = SERVLET_DIR + "copy.xsl";
-	private static final String communityQueryPage = "/vegbank/forms/community-query.html";
-	
-	
+	private static final String communityQueryPage = "/vegbank/forms/CommQuery.jsp";
+
+
 	/**
 	 * constructor method
 	 */
@@ -132,7 +132,7 @@ public class DataRequestServlet extends HttpServlet
 			//e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Initialize the servlet by creating appropriate database connections
 	 */
@@ -162,7 +162,7 @@ public class DataRequestServlet extends HttpServlet
 
 	/** Handle "POST" method requests from HTTP clients */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
- 	 throws IOException, ServletException 	
+ 	 throws IOException, ServletException
 		{
 			log.debug(" GET");
 			doPost(request, response);
@@ -182,14 +182,14 @@ public class DataRequestServlet extends HttpServlet
 		{
 			Long usrId = ServletUtility.getUsrIdFromSession(request);
 			String userName = null;
-			if (usrId == null || usrId.longValue() == 0) 
+			if (usrId == null || usrId.longValue() == 0)
 			{
 				userName = Constants.GUEST_USER_KEY;
 			} else {
 				WebUser user = (new UserDatabaseAccess()).getUser(usrId);
 				userName = user.getUsername();
 			}
-			
+
 
 			log.debug("DataRequstServlet > current user: " + userName);
 
@@ -199,7 +199,7 @@ public class DataRequestServlet extends HttpServlet
 			String accessionCode = request.getParameter("accessionCode");
 			String communityName = request.getParameter("communityName");
 			String communityLevel = request.getParameter("communityLevel");
-			
+
 			//get the variables privately held in the properties file
 			String clientLog = (rb.getString("requestparams.clientLog"));
 			String remoteHost = request.getRemoteHost();
@@ -216,7 +216,7 @@ public class DataRequestServlet extends HttpServlet
 			{
 				log.debug(
 					"DataRequstServlet > determining query type: " + queryType);
-				
+
 				if (queryType.equalsIgnoreCase("simple"))
 				{
 					handleSimpleQuery(
@@ -245,7 +245,7 @@ public class DataRequestServlet extends HttpServlet
 					response,
 					resultType,
 					userName,
-					communityName, 
+					communityName,
 					communityLevel);
 			}
 			//UNKNOWN QUERY
@@ -264,14 +264,14 @@ public class DataRequestServlet extends HttpServlet
 
 
 	/**
-	 * this method is to be used for passing the results from the 
-	 * servlet to the client that has accessed the client.  Depending 
-	 * on the client type and the data format type that the client has 
-	 * requested, either text, html, or xml will be passed back to the 
+	 * this method is to be used for passing the results from the
+	 * servlet to the client that has accessed the client.  Depending
+	 * on the client type and the data format type that the client has
+	 * requested, either text, html, or xml will be passed back to the
 	 * client
-	 * 
+	 *
 	 * @param out -- PrintWriter back to the client
-	 * @param response -- the servlet response to the client 
+	 * @param response -- the servlet response to the client
 	 * @param params -- the parameters passed to the servlet
 	 */
 	private void handleQueryResultsResponse(
@@ -286,8 +286,8 @@ public class DataRequestServlet extends HttpServlet
 			File outputfile = new File("/usr/vegbank/currentXML.xml");
 			PrintWriter fileOut = new PrintWriter(new FileOutputStream(outputfile));
 			fileOut.println(qr.getXMLString());
-			fileOut.close(); 
-			
+			fileOut.close();
+
 			//pass back the summary of parameters passed to the servlet
 			//returnQueryElementSummary(out, params, response);
 			if (requestDataType.equals("vegPlot"))
@@ -298,7 +298,7 @@ public class DataRequestServlet extends HttpServlet
 				{
 					out.println(this.getPlotIdentityResults( qr.getXMLString() ));
 				}
-				// THE USER WANTS TO SEE THE COMPREHENSIVE VIEW 
+				// THE USER WANTS TO SEE THE COMPREHENSIVE VIEW
 				// OF A PLOT
 				else
 					if (resultType.equalsIgnoreCase("full"))
@@ -340,7 +340,7 @@ public class DataRequestServlet extends HttpServlet
 			//e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * method that returns an html form that contains the veg community results
 	 * by transforming the result-sets xml document with the appropriate stylesheet
@@ -356,22 +356,22 @@ public class DataRequestServlet extends HttpServlet
 			 //log.debug(" xml document: '" + xmlResult +"'" );
 			 log.debug(" stylesheet name: '" + styleSheet +"'" );
 		         log.debug(" XML input: '" + xmlResult+ "'");
-	
+
 			sb.append( transformer.getTransformedFromString( xmlResult, styleSheet ) );
 		 }
-		 catch( Exception e ) 
+		 catch( Exception e )
 		 {
 			log.debug("DataRequestServlet", e);
 			//e.printStackTrace();
 		 }
 		return( sb.toString() );
 	 }
-	 
 
-	 
+
+
 	/**
 	 *  Shows a view of the plot
-	 * 
+	 *
 	 * @param  String  - the full filename of the stylesheet to use
 	 */
 	private String getPlotView(String styleSheet, String xmlResult)
@@ -393,9 +393,9 @@ public class DataRequestServlet extends HttpServlet
 		return (sb.toString());
 	}
 
-	 
+
 	/**
-	 * returns the identity page containing all the plots that 
+	 * returns the identity page containing all the plots that
 	 * were in the result set ( or a range of plots )
 	 */
 	 private String getPlotIdentityResults( String xmlResult)
@@ -407,10 +407,10 @@ public class DataRequestServlet extends HttpServlet
 			 String styleSheet = DEFAULT_PLOT_STYLESHEET;
 			 //log.debug("xml document: '" + xmlResult +"'" );
 			 log.debug("stylesheet name: '" + styleSheet +"'" );
-			 
+
 			sb.append( transformer.getTransformedFromString( xmlResult, styleSheet ) );
 		 }
-		 catch( Exception e ) 
+		 catch( Exception e )
 		 {
 			log.debug("DataRequestServlet", e);
 			//e.printStackTrace();
@@ -418,9 +418,9 @@ public class DataRequestServlet extends HttpServlet
 		return( sb.toString() );
 	 }
 
-	 	
+
 	/**
-	 *  this method will take, as input a StringWriter object and 
+	 *  this method will take, as input a StringWriter object and
 	 *  return a Vector containing the contents of the StringWriter
 	 * @param inputStringWriter -- the input StringWriter (in this cas probably
 	 * from an xslt transform
@@ -429,26 +429,26 @@ public class DataRequestServlet extends HttpServlet
 	public Vector convertStringWriter(StringWriter inputStringWriter)
 	{
 		Vector v = new Vector();
-		try 
+		try
 		{
 			// a string inwhich to convert the String Writer to
-			String transformedString=null;  
+			String transformedString=null;
 			//do the conversion to the string
-			transformedString  = inputStringWriter.toString().trim();  
+			transformedString  = inputStringWriter.toString().trim();
 			//the buffered reader
 			BufferedReader br = new BufferedReader(new StringReader(transformedString)); //speed up the string parsing with a buffered reader
 
 			//read each line
-			String line; // temporary string to contain the lines from the transformedData 
+			String line; // temporary string to contain the lines from the transformedData
 			int lineCnt=0; //running line counter
-			while ((line = br.readLine()) !=null ) 
+			while ((line = br.readLine()) !=null )
 			{
 				v.addElement( line.trim() );
 				lineCnt++;  //increment the line
 			}
 
-		} 
-		catch( Exception e ) 
+		}
+		catch( Exception e )
 		{
 			log.debug("DataRequestServlet", e);
 			//e.printStackTrace();
@@ -456,12 +456,12 @@ public class DataRequestServlet extends HttpServlet
 		return(v);
 	}
 
-	
+
 	/**
-	 * method that presents the number of results returned from the VegBank 
-	 * application layer and the options that the user has to interact 
-	 * with those data.  These options should include: view plot id's 
-	 * view plot summaries, view plot locations.  There should also be a message 
+	 * method that presents the number of results returned from the VegBank
+	 * application layer and the options that the user has to interact
+	 * with those data.  These options should include: view plot id's
+	 * view plot summaries, view plot locations.  There should also be a message
 	 * that tells the user what is going to happen depending on the selection
 	 * criteria and also provide the user with some tips -- this method
 	 * was written to replace the ServletUtility getViewOption method that
@@ -488,7 +488,7 @@ public class DataRequestServlet extends HttpServlet
 			su.append("	</td> \n");
 			su.append("	</font> \n");
 			su.append("</tr> \n");
-	
+
 			su.append("<tr> \n");
 			su.append("	<td align=\"center\" width=\"5%\"> \n");
 			su.append("		<img src=\"/vegbank/images/icon_cat31.gif\" alt=\"exclamation\" width=\"15\" height=\"15\" > \n");
@@ -500,10 +500,10 @@ public class DataRequestServlet extends HttpServlet
 			su.append("	</td> \n");
 			su.append("</tr> \n");
 			su.append("</table> \n");
-			
+
 			su.append("<br>");
 			su.append("<br>");
-				
+
 			su.append("<form action=\"/vegbank/servlet/viewData\" method=\"GET\"> \n");
 			// the options to view summaries or identifiers -- either way the user
 			// can get to the download option
@@ -518,17 +518,17 @@ public class DataRequestServlet extends HttpServlet
 			su.append("</form> \n");
 			su.append("</html> \n");
 		}
-		catch( Exception e ) 
+		catch( Exception e )
 		{
 			log.debug("DataRequestServlet", e);
 			//e.printStackTrace();
 		}
 		return(su.toString() );
 	}
-	
-	
+
+
 /**
- * Handles simple queries which are those queries where there is only one 
+ * Handles simple queries which are those queries where there is only one
  * queryElemnt such as taxon or community name this is in contrast to a compound
  * query which has multiple query elements and is handled by the
  * 'handleCompoundQuery' method
@@ -536,7 +536,7 @@ public class DataRequestServlet extends HttpServlet
  * @param params - the Hashtable of parameters that should be included in the
  * 		query
  * @param out - the output stream to the client
- * @param response - the response object linked to the client 
+ * @param response - the response object linked to the client
  */
 	private void handleSimpleQuery(
 		PrintWriter out,
@@ -562,7 +562,7 @@ public class DataRequestServlet extends HttpServlet
 			{
 				log.debug("DataRequestServlet > This request is not understood");
 			}
-			// if there are results returned to the servlet from the database in the form 
+			// if there are results returned to the servlet from the database in the form
 			// of a file returned then grab the summary viewer then let the user know
 			if (qr.getResultsTotal() >= 1)
 			{
@@ -585,10 +585,10 @@ public class DataRequestServlet extends HttpServlet
 			//e.printStackTrace();
 		}
 	}
-	
-	/** 
-	 * This method retuns an html form containing a message that the 
-	 * issued query did not return any results 
+
+	/**
+	 * This method retuns an html form containing a message that the
+	 * issued query did not return any results
 	 * @param params -- the parameters passed to the servlet
 	 * @return contents -- the contents of the empty result set page
 	 *
@@ -629,22 +629,22 @@ public class DataRequestServlet extends HttpServlet
 		}
 		return (output.toString());
 	}
-	 
+
 	/**
 	 * This method takes the hashtable that stores the input parameters passed to
 	 * the servlet -- which in this case refer to the community that the user wants
 	 * data about and builds the query xml file that is passed then to the database
 	 * access module
-	 * 
+	 *
 	 * @param params --
 	 *          all the params passed to the servlet that contains attributes used
 	 *          for, in this care, query the community database
-	 *  
+	 *
 	 */
 	private String composeCommunityQuery(
 		String resultType,
 		String requestDataType,
-		String communityName, 
+		String communityName,
 		String communityLevel)
 	{
 		StringBuffer output = new StringBuffer();
@@ -691,16 +691,16 @@ public class DataRequestServlet extends HttpServlet
 	}
 
 /**
- * logs the use of this servlet, the date and the remote host of the client in 
- * log file 
+ * logs the use of this servlet, the date and the remote host of the client in
+ * log file
  *
  * @param clientLog - the name of the client log file
  * @param remoteHost - the name of the remote host using this client
- * 
+ *
  */
-private void updateClientLog (String clientLog, String remoteHost) 
-{ 
- try 
+private void updateClientLog (String clientLog, String remoteHost)
+{
+ try
  {
  		PrintWriter clientLogger = new PrintWriter(new FileOutputStream(clientLog, true));
  		SimpleDateFormat formatter = new SimpleDateFormat ("yy-MM-dd HH:mm:ss");
@@ -709,7 +709,7 @@ private void updateClientLog (String clientLog, String remoteHost)
  		//Date date = new Date();
 		clientLogger.println(remoteHost+", "+dateString);
 	}
-	catch (Exception e) 
+	catch (Exception e)
 	{
 		log.debug("DataRequestServlet", e);
 		//e.printStackTrace();
@@ -724,15 +724,15 @@ private void updateClientLog (String clientLog, String remoteHost)
  * @param plotId - internal database plot identification number
  * @param resultType - the type of data expected from the query full/summary
  */
-	private String composeSinglePlotQuery (String plotId, String resultType, String outFile) 
+	private String composeSinglePlotQuery (String plotId, String resultType, String outFile)
 	{
 		StringBuffer query = new StringBuffer();
-		try 
+		try
 		{
 
 			//print the query instructions in the xml document
-			query.append("<?xml version=\"1.0\"?> \n"+       
-				"<!DOCTYPE dbQuery> \n"+     
+			query.append("<?xml version=\"1.0\"?> \n"+
+				"<!DOCTYPE dbQuery> \n"+
 				"<dbQuery> \n"+
 				"<query> \n"+
 				"	<queryElement>plotId</queryElement> \n"+
@@ -743,7 +743,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 				"</dbQuery>"
 			);
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			log.debug("DataRequestServlet", e);
 			//e.printStackTrace();
@@ -751,24 +751,24 @@ private void updateClientLog (String clientLog, String remoteHost)
 		return query.toString();
 	}
 
-	
+
 /**
  *  Method to compose and print to a file an xml document that can be passed to
- *  the dbAccess class to perform a query on a vegetation database this 
+ *  the dbAccess class to perform a query on a vegetation database this
  * 	particular method is for extended queries, those queries comprised of
  * 	a series of criteria, values and operators;
  *
  * @param
  * @param
  */
-	private String composeExtendedQuery ( Hashtable extendedParamsHash ) 
+	private String composeExtendedQuery ( Hashtable extendedParamsHash )
 	{
-		try 
+		try
 		{
-			//set up the output query file called query.xml	using append mode to build  
+			//set up the output query file called query.xml	using append mode to build
 			PrintWriter outFile  = new PrintWriter(new FileOutputStream(
-			SERVLET_DIR+"query.xml", false)); 
-			
+			SERVLET_DIR+"query.xml", false));
+
 			StringBuffer sb = new StringBuffer();
 			sb.append("<?xml version=\"1.0\"?> \n");
 			sb.append("<dbQuery> \n");
@@ -780,7 +780,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 				Vector criteriaVec = (Vector)extendedParamsHash.get("criteria");
 				Vector operatorVec = (Vector)extendedParamsHash.get("operator");
 				Vector valueVec = (Vector)extendedParamsHash.get("value");
-				for (int i=0; i<criteriaVec.size(); i++) 
+				for (int i=0; i<criteriaVec.size(); i++)
 				{
 					sb.append("  <queryTriple> \n");
 					sb.append("  	<queryCriteria>"+criteriaVec.elementAt(i)+"</queryCriteria> \n");
@@ -789,7 +789,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 					sb.append("  </queryTriple> \n");
 				}
 			}
-			else 
+			else
 			{
 				//print the error found
 				log.debug("cannot compose extended query");
@@ -801,8 +801,8 @@ private void updateClientLog (String clientLog, String remoteHost)
 			sb.append("</dbQuery>"+"\n");
 			outFile.println( sb.toString() );
 		}
-		
-		catch (Exception e) 
+
+		catch (Exception e)
 		{
 			log.debug("DataRequestServlet", e);
 			//e.printStackTrace();
@@ -817,20 +817,20 @@ private void updateClientLog (String clientLog, String remoteHost)
  *  the dbAccess class to perform the query and print the results to a file
  *  that is currently hard-wired as summary.xml
  *
- * @param queryElement - name of the element being used to query the database, 
+ * @param queryElement - name of the element being used to query the database,
  *	such as taxonName, plotId etc.
  * @param elementString - value of the queryElement
  * @param resultType -- the result type of desired may be: full, identity, or summary
  */
-	private String composeQuery(String queryElement, String elementString, String resultType) 
+	private String composeQuery(String queryElement, String elementString, String resultType)
 	{
 		StringBuffer query = new StringBuffer();
-		try 
+		try
 		{
 
 			//print the query instructions in the xml document
-			query.append("<?xml version=\"1.0\"?> \n"+       
-				"<!DOCTYPE dbQuery> \n"+     
+			query.append("<?xml version=\"1.0\"?> \n"+
+				"<!DOCTYPE dbQuery> \n"+
 				"<dbQuery> \n"+
 				"<query> \n"+
 				"<queryElement>"+queryElement+"</queryElement> \n"+
@@ -841,7 +841,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 				"</dbQuery>"
 			);
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			log.debug("DataRequestServlet", e);
 			//e.printStackTrace();
@@ -865,19 +865,19 @@ private void updateClientLog (String clientLog, String remoteHost)
  * @param resultType -- the result type of desired may be: full, identity, or summary
  */
 	private String composeQuery (
-		String minElement, 
-		String minValue, 
-		String maxElement, 
-		String maxValue, 
-		String resultType) 
+		String minElement,
+		String minValue,
+		String maxElement,
+		String maxValue,
+		String resultType)
 	{
 		StringBuffer query = new StringBuffer();
-		try 
+		try
 		{
 
 			//print the query instructions in the xml document
-			query.append("<?xml version=\"1.0\"?> \n"+       
-				"<!DOCTYPE dbQuery> \n"+     
+			query.append("<?xml version=\"1.0\"?> \n"+
+				"<!DOCTYPE dbQuery> \n"+
 				"<dbQuery> \n"+
 				"<query> \n"+
 				"<queryElement>"+minElement+"</queryElement> \n"+
@@ -893,7 +893,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 			);
 
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			log.debug("DataRequestServlet", e);
 			//e.printStackTrace();
@@ -906,7 +906,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 /**
  *  Method to compose and print to a file an xml document that can be passed to
  *  the dbAccess class to perform the query and print the results to a file
- *  that is currently hard-wired as summary.xml  - an overloaded version of the 
+ *  that is currently hard-wired as summary.xml  - an overloaded version of the
  *  above.
  *
  * @param taxonName - taxon name
@@ -934,15 +934,15 @@ private void updateClientLog (String clientLog, String remoteHost)
 		String resultType)
 	{
 		StringBuffer query = new StringBuffer();
-		try 
+		try
 		{
 			// SET THE RESULT TYPE TO IDENTITY SO THAT THE RESULTS ARE RETURNED
 			// QUICKLY, THIS CAN BE IDENTITY OR SUMMARY
 			resultType = "identity";
-			
+
 			//print the query instructions in the xml document
- 			query.append("<?xml version=\"1.0\"?> \n"+       
-			"<!DOCTYPE dbQuery> \n"+     
+ 			query.append("<?xml version=\"1.0\"?> \n"+
+			"<!DOCTYPE dbQuery> \n"+
 			"<dbQuery> \n"+
 			"<query> \n"+
 			"<queryElement>taxonName</queryElement> \n"+
@@ -977,25 +977,25 @@ private void updateClientLog (String clientLog, String remoteHost)
 			"</dbQuery>"
 		);
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			log.debug("DataRequestServlet", e);
 			//e.printStackTrace();
 		}
 		return query.toString();
 	}
-	
-	/**	 
-	 * method to handle queries that are meant to be issued against 	 
-	 * the vegetation community database	 
-	 *	 
-	 *        @param params -- the prameters that are passed to the method	 
-	 *         @param out -- the printwriter back to the client	 
-	 *         @param requestDataType -- the data type requested by the client	 
-	 *          used to check that the query was diercted to the correct method	 
-	 *                {plantTaxon}	 
-	 *         @param response - the response object linked to the client 	 
-	 */	 
+
+	/**
+	 * method to handle queries that are meant to be issued against
+	 * the vegetation community database
+	 *
+	 *        @param params -- the prameters that are passed to the method
+	 *         @param out -- the printwriter back to the client
+	 *         @param requestDataType -- the data type requested by the client
+	 *          used to check that the query was diercted to the correct method
+	 *                {plantTaxon}
+	 *         @param response - the response object linked to the client
+	 */
 	private void handleVegCommunityQuery(
 		HttpServletRequest request,
 		PrintWriter out,
@@ -1003,12 +1003,12 @@ private void updateClientLog (String clientLog, String remoteHost)
 		HttpServletResponse response,
 		String resultType,
 		String userName,
-		String communityName, 
+		String communityName,
 		String communityLevel)
 	{
 		try
 		{
-			// get the parameters needed for retuning the results	 
+			// get the parameters needed for retuning the results
 			if (requestDataType.trim().equals("vegCommunity"))
 			{
 				log.debug(
@@ -1025,9 +1025,9 @@ private void updateClientLog (String clientLog, String remoteHost)
 						+ qr.getResultsTotal()
 						+ "<br><br>");
 
-				// use the method that handles the response if there are any results 	 
-				// from the DB otherwise just return either a request for another	 
-				// query or nothing	 
+				// use the method that handles the response if there are any results
+				// from the DB otherwise just return either a request for another
+				// query or nothing
 				if (qr.getResultsTotal() >= 1)
 				{
 					handleQueryResultsResponse(
@@ -1049,14 +1049,14 @@ private void updateClientLog (String clientLog, String remoteHost)
 			//e.printStackTrace();
 		}
 	}
-	
-	/**	 
-	 *  Method to use dbAccess to issue the query to the database from the xml file	 
-	 *  created in the DataRequestServlet 	 
-	 *	 
-	 * @param queryType - the type of query to be sent through the dataAccess module	 
-	 * including simpleQuery (one attribute) and compoundQuery (multiple attributes) 	 
-	 */	 
+
+	/**
+	 *  Method to use dbAccess to issue the query to the database from the xml file
+	 *  created in the DataRequestServlet
+	 *
+	 * @param queryType - the type of query to be sent through the dataAccess module
+	 * including simpleQuery (one attribute) and compoundQuery (multiple attributes)
+	 */
 	private QueryResult issueQuery(
 		String queryType,
 		String userName,
@@ -1064,8 +1064,8 @@ private void updateClientLog (String clientLog, String remoteHost)
 	{
 		log.debug("QUERY TYPE  " + queryType);
 
-		// IF IT IS A BROWSER QUERY THEN REGISTER THE DOCUMENT -- IF 	 
-		// CACHING IS TURNED ON	 
+		// IF IT IS A BROWSER QUERY THEN REGISTER THE DOCUMENT -- IF
+		// CACHING IS TURNED ON
 		if (QUERYCACHING.booleanValue())
 		{
 			log.debug(
@@ -1077,7 +1077,7 @@ private void updateClientLog (String clientLog, String remoteHost)
 				"Not caching the query doc");
 		}
 
-		//call the plot access module	 
+		//call the plot access module
 		dbAccess dba = new dbAccess();
 		String xmlResult =
 			dba.accessDatabase(
