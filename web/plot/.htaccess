@@ -1,4 +1,0 @@
-RewriteEngine  on
-# Need to get the prefix (VB) as a parameter
-RewriteRule    ^([0-9]+)$  @datarequestservlet@?requestDataType=vegPlot&resultType=summary&queryType=simple&vegbankAccessionNumber=VB.$1 [L]
-RewriteRule    ^([a-zA-Z][a-zA-Z])(.+)\.(.*)$   @datarequestservlet@?requestDataType=vegPlot&resultType=summary&queryType=simple&vegbankAccessionNumber=VB.$2&vbi=$1&date=$3   [R,L]
