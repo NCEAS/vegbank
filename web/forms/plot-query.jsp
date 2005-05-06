@@ -4,12 +4,14 @@
 
 <bean:define id="searchType" value="Advanced" />
 <bean:define id="simpleHide" value="show" /><!-- show by default -->
+<bean:define id="simpleHideReverse" value="hidden" /><!-- hide by default -->
 <bean:define id="selectMult">multiple="multiple"</bean:define>
 <bean:define id="stateListSize">5</bean:define>
 <bean:define id="countryListSize">3</bean:define>
 <logic:present parameter="simplemode">
   <bean:define id="searchType" value="Simple" />
   <bean:define id="simpleHide" value="hidden" /><!-- hide some things. -->
+  <bean:define id="simpleHideReverse" value="show" /><!-- show some only for simple, like more options -->
   <bean:define id="selectMult"></bean:define> <!-- make picklists only size 1 when simple mode -->
   <bean:define id="stateListSize">1</bean:define>
   <bean:define id="countryListSize">1</bean:define>
@@ -257,7 +259,11 @@ function setQueryText() {
  
  
 	      <h1><bean:write name="searchType" /> Plot Search</h1>
-	   
+       <p class="psmall <bean:write name='simpleHideReverse' />">
+       <a href="@plotquery_page_advanced@">more options...</a></p>
+     
+       <p class="psmall <bean:write name='simpleHide' />">
+       <a href="@plotquery_page_simple@">simpler search...</a></p>
     <!-- Instructions Row -->
    <p class="instructions">
 		   Use this form to find plots in VegBank. 
@@ -267,6 +273,8 @@ function setQueryText() {
 	      For more information, see the <a href="@help-for-plot-query-href@">help section</a>.
 		 
 	    </p>
+        <!-- only show this on simple view -->
+        
     <!-- ERROR DISPLAY -->
     
     
