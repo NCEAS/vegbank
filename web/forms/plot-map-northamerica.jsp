@@ -94,7 +94,7 @@
 <a href="@web_context@forms/metasearch.jsp">Try the keyword search</a>.
 <br />
 
-<a href="@web_context@LoadPlotQuery.do">Try the advanced plot query</a>.
+<a href="@plotquery_page_advanced@">Try the advanced plot query</a>.
 </span>
 </p>
 

@@ -11,8 +11,8 @@
     <legend>Find Plots</legend>
     <ul>
     <li><a href="@browseplotspage@">Browse plots</a></li>
-    <li><a href="@forms_link@plot-query-simple.jsp">Simple search</a></li>
-    <li><a href="@plotquery_page@">Advanced plot search</a></li>
+    <li><a href="@plotquery_page_simple@">Simple search</a></li>
+    <li><a href="@plotquery_page_advanced@">Advanced plot search</a></li>
     </ul>
      <%@ include file="includes/plot-map-northamerica-home.jsp" %>
      <%@ include file="includes/plot-map-northamerica-key.jsp" %>
