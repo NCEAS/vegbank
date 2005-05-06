@@ -31,7 +31,7 @@
     </ul>
     </fieldset>
 
-    <br>
+    <br />
     <fieldset>
     <legend>Plant Communities</legend>
     <ul>
@@ -41,7 +41,7 @@
     </ul>
     </fieldset>
 
-    <br>
+    <br />
     <fieldset>
     <legend>Supplemental Data</legend>
     <ul>
@@ -72,7 +72,7 @@
     </ul>
     </fieldset>
 
-    <br>
+    <br />
     <fieldset>
     <legend>Contribute Plot Data</legend>
     <ul>
@@ -82,7 +82,7 @@
     </ul>
     </fieldset>
 
-    <br>
+    <br />
     <fieldset>
     <legend>Tools</legend>
     <ul>
@@ -92,7 +92,7 @@
     </ul>
     </fieldset>
 
-    <br>
+    <br />
     <fieldset>
     <legend>My VegBank Account</legend>
     <ul>
