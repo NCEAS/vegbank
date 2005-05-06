@@ -23,37 +23,10 @@ VegBank - <bean:write name="searchType" /> Plot Search
 <% int howmanytaxa = 5; %>
 <% int howmanycomms = 4; %>
   <%   String alph = "abcdefghijklmnopqrstuvwxyz" ; %>
-  <% String strAny = "--ANY--" ; %>
+  
 <script language="javascript">
 function prepareForm() {
     setQueryText();
-}
-
-function getValuesFromList(thelist, getValueOrText) {
-  listvalues = "";
-  hasvalues = "false"; /*default*/
-  strSeparator = ", ";
-  for (var i=0;i<thelist.length;i++) {
-    if (thelist.options[i].selected==true) {
-      hasvalues = "true"; /* has some values, make sure to return something */
-      if ( getValueOrText == "value" ) {
-        listvalues = listvalues + strSeparator + thelist.options[i].value ;
-      }  
-      if ( getValueOrText == "text" ) {
-        if ( thelist.options[i].text != "<%= strAny %>" ) 
-          {
-            listvalues = listvalues + strSeparator + thelist.options[i].text ;
-          }
-      }  
-      
-    }
-  }
-  if ( hasvalues == "true" ) {
-    /* window.alert("value is:>" + listvalues.substring(strSeparator.length) + "<"); */
-    return(listvalues.substring(strSeparator.length));  /* remove initial strSeparator if there */
-  } else {
-      return("");
-    }
 }
 
 function setQueryText() {
@@ -174,9 +147,10 @@ function setQueryText() {
                       text = text + strSep + " rocktype is " + therocktype;
                    }
                    
-                  thecovermethod = getValuesFromList(document.plotqueryform.xwhereParams_covermethod_0,"text") ;
-            /* picklists that have different values (PKs) rather than text, take text */
             
+            /* picklists that have different values (PKs) rather than text, take text */
+           
+            thecovermethod = getValuesFromList(document.plotqueryform.xwhereParams_covermethod_0,"text") ;
             if ( thecovermethod != "" &&  thecovermethod != null )
                      {
                         text = text + strSep + " Cover Method is " + thecovermethod;
@@ -465,7 +439,7 @@ function setQueryText() {
          
          
                     
-                <option value="" selected="selected"><%= strAny %></option>
+                <option value="" selected="selected">--ANY--</option>
                
                 <vegbank:get id="plotstatelist" select="plotstatelist" 
                   beanName="map" pager="false" where="empty" 
@@ -495,7 +469,7 @@ function setQueryText() {
             <input type="hidden" name="xwhereKey_country" value="xwhere_in" />
       <!-- make picklists only size 1 when simple mode -->
           <select name="xwhereParams_country_0" size="<bean:write name='countryListSize' />" <bean:write name='selectMult' />>
-              <option value="" selected="selected"><%= strAny %></option>
+              <option value="" selected="selected">--ANY--</option>
        	
      <!-- 	<option value="Canada">Canada</option>
       		<option value="Mexico">Mexico</option>
@@ -668,7 +642,7 @@ function setQueryText() {
 	
 	      <h4>Picklist fields:</h4> 
 	    <p class="instructions">
-	      Please select values for VegBank fields that are constrained to limited vocabulary.  You do not need to select values for all fields.  Select "<%= strAny %>" to ignore the field in the query.
+	      Please select values for VegBank fields that are constrained to limited vocabulary.  You do not need to select values for all fields.  Select "--ANY--" to ignore the field in the query.
 	    </p>
 
 	 <bean:define id="hideCurr" value="show" />
@@ -682,7 +656,7 @@ function setQueryText() {
           <input type="hidden" name="xwhereParams_rocktype_1" value="rocktype" />
                     
           <select name="xwhereParams_rocktype_0" size="6" multiple="multiple">
-		<option value="" selected><%= strAny %></option>
+		<option value="" selected>--ANY--</option>
         @VB_INSERT_CLOSEDLIST_plot.rocktype@
 		</select>
 	    </p>
@@ -697,7 +671,7 @@ function setQueryText() {
             <input type="hidden" name="xwhereKey_surficialdeposits" value="xwhere_in" />
             <input type="hidden" name="xwhereParams_surficialdeposits_1" value="surficialdeposits" />
             <select name="xwhereParams_surficialdeposits_0" size="6" multiple="multiple">
-	        <option value="" selected><%= strAny %></option>
+	        <option value="" selected>--ANY--</option>
          @VB_INSERT_CLOSEDLIST_plot.surficialdeposits@
 
 	      </select> 
@@ -713,7 +687,7 @@ function setQueryText() {
         <input type="hidden" name="xwhereKey_hydrologicregime" value="xwhere_in" />
         <input type="hidden" name="xwhereParams_hydrologicregime_1" value="hydrologicregime" />
         <select name="xwhereParams_hydrologicregime_0" size="6" multiple="multiple">
-	        <option value="" selected><%= strAny %></option>
+	        <option value="" selected>--ANY--</option>
         @VB_INSERT_CLOSEDLIST_observation.hydrologicregime@
 
 	      </select> 
@@ -732,7 +706,7 @@ function setQueryText() {
         <input type="hidden" name="xwhereKey_topoposition" value="xwhere_in" />
         <input type="hidden" name="xwhereParams_topoposition_1" value="topoposition" />
         <select name="xwhereParams_topoposition_0" size="6" multiple="multiple">
-		<option value="" selected><%= strAny %></option>                    
+		<option value="" selected>--ANY--</option>                    
 		
           @VB_INSERT_CLOSEDLIST_plot.topoposition@
 	      </select> 
@@ -748,7 +722,7 @@ function setQueryText() {
          <input type="hidden" name="xwhereKey_landform" value="xwhere_in" />
          <input type="hidden" name="xwhereParams_landform_1" value="landform" />
          <select name="xwhereParams_landform_0" size="6" multiple="multiple">
-		<option value="" selected><%= strAny %></option>                    
+		<option value="" selected>--ANY--</option>                    
 		<option>alluvial fan</option><option>alluvial flat</option><option>alluvial terrace</option><option>backshore terrace</option><option>backwater</option><option>badlands</option><option>bajada</option><option>bald</option><option>bank</option><option>bar</option><option>barrier beach</option><option>barrier flat</option><option>barrier island(s)</option><option>barrier reef</option><option>basin</option><option>basin floor</option><option>bay</option><option>bayou</option><option>beach</option><option>beach ridge</option><option>bench</option><option>blowout</option><option>bottomlands</option><option>butte</option><option>caldera</option><option>canyon</option><option>carolina bay</option><option>channel</option><option>chenier</option><option>chenier plain</option><option>cirque</option><option>cirque floor</option><option>cirque headwall</option><option>cliff</option><option>coast</option><option>coastal plain</option><option>col</option><option>collapse sinkhole</option><option>colluvial shoulder</option><option>colluvial slope</option><option>cove</option><option>cuesta</option><option>debris slide</option><option>delta</option><option>delta plain</option><option>depositional levee</option><option>depositional stream terrace</option><option>depression</option><option>desert pavement</option><option>dike</option><option>doline</option><option>dome</option><option>drainage</option><option>drainage channel (undifferentiated)</option><option>draw</option><option>drumlin</option><option>dune (undifferentiated)</option><option>dune field</option><option>earth flow</option><option>earth hummock</option><option>eroded bench</option><option>eroding stream channel system</option><option>erosional stream terrace</option><option>escarpment</option><option>esker</option><option>estuary</option><option>exogenous dome</option><option>fan piedmont</option><option>fault scarp</option><option>fault terrace</option><option>fissure</option><option>fissure vent</option><option>flood plain</option><option>fluvial</option><option>foothills</option><option>foredune</option><option>frost creep slope</option><option>frost mound</option><option>frost scar</option><option>gap</option><option>glaciated uplands</option><option>glacier</option><option>gorge</option><option>graben</option><option>ground moraine</option><option>gulch</option><option>hanging valley</option><option>headland</option><option>highland</option><option>hills</option><option>hillslope bedrock outcrop</option><option>hogback</option><option>hoodoo</option><option>hummock</option><option>inlet</option><option>inselberg</option><option>interdune flat</option><option>interfluve</option><option>island</option><option>kame</option><option>kame moraine</option><option>kame terrace</option><option>karst</option><option>karst tower</option><option>karst window</option><option>kegel karst</option><option>kettle</option><option>kettled outwash plain</option><option>knob</option><option>knoll</option><option>lagoon</option><option>lake</option><option>lake bed</option><option>lake plain</option><option>lake terrace</option><option>lateral moraine</option><option>lateral scarp (undifferentiated)</option><option>lava flow (undifferentiated)</option><option>ledge</option><option>levee</option><option>loess deposit (undifferentiated)</option><option>longshore bar</option><option>lowland</option><option>marine terrace (undifferentiated)</option><option>meander belt</option><option>meander scar</option><option>mesa</option><option>mid slope</option><option>mima mound</option><option>monadnock</option><option>moraine (undifferentiated)</option><option>mound</option><option>mountain valley</option><option>mountain(s)</option><option>mountain-valley fan</option><option>mud flat</option><option>noseslope</option><option>outwash fan</option><option>outwash plain</option><option>outwash terrace</option><option>oxbow</option><option>patterned ground (undifferentiated)</option><option>peat dome</option><option>periglacial boulderfield</option><option>piedmont</option><option>pimple mounds</option><option>pingo</option><option>pinnacle</option><option>plain</option><option>plateau</option><option>playa</option><option>polygon (high-centered)</option><option>polygon (low-centered)</option><option>pothole</option><option>raised beach</option><option>raised estuary</option><option>raised mudflat</option><option>raised tidal flat</option><option>ravine</option><option>relict coastline</option><option>ridge</option><option>ridge and valley</option><option>ridgetop bedrock outcrop</option><option>rift valley</option><option>rim</option><option>riverbed</option><option>rock fall avalanche</option><option>saddle</option><option>sag pond</option><option>sandhills</option><option>scarp</option><option>scarp slope</option><option>scour</option><option>scoured basin</option><option>sea cliff</option><option>seep</option><option>shoal</option><option>shoreline</option><option>sinkhole (undifferentiated)</option><option>slide</option><option>slope</option><option>slough</option><option>slump and topple prone slope</option><option>slump pond</option><option>soil creep slope</option><option>solution sinkhole</option><option>spit</option><option>splay</option><option>stone circle</option><option>stone stripe</option><option>stream terrace (undifferentiated)</option><option>streambed</option><option>subjacent karst collapse sinkhole</option><option>subsidence sinkhole</option><option>swale</option><option>talus</option><option>tarn</option><option>tidal flat</option><option>tidal gut</option><option>till plain</option><option>toe slope</option><option>toe zone (undifferentiated)</option><option>transverse dune</option><option>trench</option><option>trough</option><option>valley</option><option>valley floor</option><option>wave-built terrace</option><option>wave-cut platform</option>
 
 	      </select> 
@@ -926,7 +900,7 @@ function setQueryText() {
                 <input type="hidden" name="xwhereParams_covermethod_1" value="covermethod_id" />
                 <select name="xwhereParams_covermethod_0" size="6" multiple="multiple">
         
-		        <option value="" selected><%= strAny %></option>
+		        <option value="" selected>--ANY--</option>
                 <vegbank:get id="covermethod" select="covermethod" 
                     beanName="map" pager="false" perPage="-1" 
                     allowOrderBy="true" orderBy="xorderby_covertype_asc" />
@@ -946,7 +920,7 @@ function setQueryText() {
                 <input type="hidden" name="xwhereParams_stratummethod_1" value="stratummethod_id" />
                 <select name="xwhereParams_stratummethod_0" size="6" multiple="multiple">
         
-                 <option value="" selected><%= strAny %></option>
+                 <option value="" selected>--ANY--</option>
                  <vegbank:get id="stratummethod" select="stratummethod" 
                      beanName="map" pager="false" perPage="-1" 
                      allowOrderBy="true" orderBy="xorderby_stratummethodname_asc" />
@@ -968,7 +942,7 @@ function setQueryText() {
                 <input type="hidden" name="xwhereParams_project_1" value="project_id" />
                 <select name="xwhereParams_project_0" size="6" multiple="multiple">
         
-              <option value="" selected><%= strAny %></option>
+              <option value="" selected>--ANY--</option>
 		        <!--xx htmlxoptions property="projectNames"/-->
 		        <vegbank:get id="project" select="project" beanName="map" pager="false" perPage="-1" 
                   allowOrderBy="true" orderBy="xorderby_projectname" />

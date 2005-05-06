@@ -512,3 +512,37 @@ function findSelectedDatacartItems(dsId, acString) {
     ajax.connect(url, "POST", params, fnWhenDone);
 }
 
+
+//
+// Use this to get the items in a list
+//
+function getValuesFromList(thelist, getValueOrText) {
+  //the list is the form object that is a <select>
+  // getValueOrText is either "value" or "text"
+  //  -- if "value" then the values are listed (i.e. <option value="THIS">not this</option> )
+  //  -- if "text"  then the text shown are listed (i.e. <option value="not this">BUT THIS</option> )
+  listvalues = "";
+  hasvalues = "false"; /*default*/
+  strSeparator = ", ";
+  for (var i=0;i<thelist.length;i++) {
+    if (thelist.options[i].selected==true) {
+      hasvalues = "true"; /* has some values, make sure to return something */
+      if ( getValueOrText == "value" ) {
+        listvalues = listvalues + strSeparator + thelist.options[i].value ;
+      }  
+      if ( getValueOrText == "text" ) {
+        if ( thelist.options[i].text != "--ANY--" ) 
+          {
+            listvalues = listvalues + strSeparator + thelist.options[i].text ;
+          }
+      }  
+      
+    }
+  }
+  if ( hasvalues == "true" ) {
+    /* window.alert("value is:>" + listvalues.substring(strSeparator.length) + "<"); */
+    return(listvalues.substring(strSeparator.length));  /* remove initial strSeparator if there */
+  } else {
+      return("");
+    }
+}

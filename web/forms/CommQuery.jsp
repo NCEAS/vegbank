@@ -33,16 +33,75 @@ function setNameMatchType() {
 		document.queryform.xwhereKey_commname.value = "xwhere_match";
 		document.queryform.xwhereSearch_commname.value = "true";
 		document.queryform.xwhereMatchAny_commname.value = "true";
+        qexplain = " contains any words of "; /* this used later in building criteriaAsText */
 	} else if (matchType[2].checked) {
 		document.queryform.xwhereKey_commname.value = "xwhere_ilike";
 		document.queryform.xwhereSearch_commname.value = "false";
 		document.queryform.xwhereMatchAny_commname.value = "false";
+        qexplain = " is "; /* this used later in building criteriaAsText */
 	} else {
 		document.queryform.xwhereKey_commname.value = "xwhere_match";
 		document.queryform.xwhereSearch_commname.value = "true";
 		document.queryform.xwhereMatchAny_commname.value = "false";
+        qexplain = " contains ALL words of "; /* this used later in building criteriaAsText */
 	}
+
+    /* this part of the function sets the criteriaAsText field which the next form displays as: You searched for this and that... */
+    /* var to store building string */
+    text = "" ;
+    strSep = " AND" ;
+    /* get relevant fields into variables */
+        thecommname = document.queryform.xwhereParams_commname_0.value ;
+         if ( thecommname != "" &&  thecommname != null )
+              {
+                  text = text + strSep + " Community Name " + qexplain + "\"" + thecommname + "\"" ;
+              }
+        
+    
+       /* value picklists, not PK */
+         
+              thelevel = getValuesFromList(document.queryform.xwhereParams_commlevel_0,"value") ;
+              if ( thelevel != "" &&  thelevel != null )
+                   {
+                      text = text + strSep + " Community Level is " + thelevel;
+               }
+               
+              theclasssystem = getValuesFromList(document.queryform.xwhereParams_classsystem_0,"value") ;
+              if ( theclasssystem != "" &&  theclasssystem != null )
+                   {
+                      text = text + strSep + " Type of Name is " + theclasssystem;
+                   }
+              
+            
+              thedate = document.queryform.xwhereParams_date_0.value ;
+                  if ( thedate != "" &&  thedate != null )
+                           {
+                              text = text + strSep + " On the Date: " + thedate ;
+                       }
+                  else { /* tell user all dates are being looked at, special case */
+                           text = text + strSep + " On ALL DATES " ;
+                  }
+              
+               theparty = getValuesFromList(document.queryform.xwhereParams_accordingtoparty_0,"text") ;
+                          if ( theparty != "" &&  theparty != null )
+                                   {
+                                      text = text + strSep + " Party is " + theparty;
+                               }
+
+              
+              
+              theplotcount = document.queryform.xwhereParams_obscount_0.value ;
+                   if ( theplotcount != "" &&  theplotcount != null )
+                               {
+                                  text = text + strSep + " with at least " + theplotcount + " plot(s)" ;
+                           }
+
+     
+    text=text + "                   "; /* ensures substring will not fail */
+    document.queryform.criteriaAsText.value =  text.substring(strSep.length)
+    
 }
+
 </script>
 
 
@@ -56,7 +115,7 @@ function setNameMatchType() {
          <form action="@web_context@views/commconcept_summary.jsp" method="get" name="queryform" onsubmit="prepareForm()">
         
 			<input type="hidden" name="where" value="where_commconcept_mpq" size="40"/>
-
+            <input name="criteriaAsText" type="hidden" value="" /> <!-- text to show user what they searched for --> 
         <p class="instructions">
 				<strong>All search criteria are optional.</strong>
 				<br/>

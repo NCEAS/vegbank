@@ -8,7 +8,15 @@
   @possibly_center@ 
 
 <h2>View Plant Concepts - Summary</h2>
-
+  <!-- tell the user what was searched for, if criteriaAsText is passed here : -->
+  <logic:present parameter="criteriaAsText">
+    <bean:parameter id="bean_criteriaAsText" name="criteriaAsText" />
+    <logic:notEmpty name="bean_criteriaAsText">
+      <p class="psmall">You searched for plants: <bean:write name="bean_criteriaAsText" /></p>
+  
+  
+    </logic:notEmpty>
+  </logic:present>  
 
        <logic:notPresent parameter="orderBy">
             <!-- set default sorting -->
