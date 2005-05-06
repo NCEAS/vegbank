@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.12 2005-05-04 17:49:53 mlee Exp $
+# $Id: .htaccess,v 1.13 2005-05-06 03:26:14 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -10,7 +10,7 @@ RewriteEngine  on
 # NC = No Case match, so case insensitive match
 # QSA = Query String Append
 # L = Last rewrite rule to do, so stop here
-RewriteRule ^plotsearch$      /vegbank/LoadPlotQuery.do   [NC,QSA,L]
+RewriteRule ^plotsearch$      @plotquery_page_advanced@   [NC,QSA,L]
 
 #### Vegdocs Links
 ## The cool general case one doesn't work yet
