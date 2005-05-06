@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-05-06 05:57:00 $'
-* '$Revision: 1.163 $'
+* '$Date: 2005-05-06 07:22:10 $'
+* '$Revision: 1.164 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -751,7 +751,7 @@ MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
   </target>
   <target name="deploy-all" depends="views-autogen, deploy, dictionary, manual, vegbranch-dist-all, dataxml" description="=&gt; all in deploy plus slow rarely updated stuff"/>
-  <target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
+  <!--<target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
     <property name="webapp" value="vegtest"/>
     <antcall target="deploy"/>
   </target>
@@ -762,11 +762,12 @@ MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
   <target name="dist-vegtest" description="=&gt; (vegtest) Distribute all web files">
     <property name="webapp" value="vegtest"/>
     <antcall target="dist"/>
-  </target>
+  </target>--> <!-- vegtest is no more -->
   <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
   <target name="getContextName">
-    <!-- prompt -->
-    <input message="Please enter the context you are acting on (e.g. vegbank, vegtest ) : " addproperty="webapp"/>
+    <!-- no more prompt -->
+    
+    <!--<input message="Please enter the context you are acting on (e.g. vegbank, vegtest ) : " addproperty="webapp"/>
     <condition property="noContextName">
       <equals arg1="" arg2="${webapp}"/>
     </condition>
@@ -779,8 +780,9 @@ MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
           <equals arg1="vegtest" arg2="${webapp}"/>
         </not>
       </and>
-    </condition>
-    <fail if="noContextName">
+    </condition> -->
+    <property name="webapp" value="vegbank" />
+<!--    <fail if="noContextName">
 *******************************************************************************
 ERROR: You did not enter a context name.
 *******************************************************************************
@@ -790,6 +792,6 @@ ERROR: You did not enter a context name.
 ERROR: An invalid context name entered: '${webapp}' 
 	Only vegbank and vegtest contexts currently supported.
 *******************************************************************************
-    </fail>
+    </fail>-->
   </target>
 </project>
