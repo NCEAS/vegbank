@@ -4,18 +4,18 @@
 <TITLE>VegBank Web Site Map</TITLE>
   @webpage_masthead_html@
   <table border="1" cellspacing="1"  cellpadding="1" >
-  <tr valign="top"><td colspan="2" class="vegbank" border="1">
-  <h2 align="center"><br><span class="vegbank">VegBank Web Site Map</span></h2>
+  <tr valign="top"><td colspan="2" class="vegbank">
+  <h2 align="center"><br /><span class="vegbank">VegBank Web Site Map</span></h2>
   <p class="vegbank"><b>Click on a link below to jump directly to a page:</b><br />
   <span class="bright">(Warning: This sitemap shows the functionality we expect to build.
     Some of the links below are not activated, meaning that that particular functionality
     is not yet completed.  Thanks for your patience!)</span></p>
   </td></tr>
-  <tr valign="top" border="1">
-  <td colspan="2" class="vegbank" border="1">
+  <tr valign="top">
+  <td colspan="2" class="vegbank">
       <p class="vegbank"><a href="/index.html">VegBank Home</a></p>
   </td></tr>
-  <tr valign="top"><td class="vegbank" >
+  <tr valign="top"><td class="vegbank">
       <ul class="constsize">
        
         <li><a href="@general_link@login.jsp">Login</a></li>
@@ -148,7 +148,7 @@
 	   		<li><a href="@general_link@acknowledgements.html">Acknowledgements</a></li>
 	   </ul>
         </ul>
-  </ul></td>
+  </ul></ul></td>
   <td class="vegbank" >
   
     <p><a href="@web_context@DisplayMainMenu.do">VegBank - Main Menu</a></p>
@@ -156,7 +156,7 @@
 	    <li>Access or submit Plot data</li>
 	      <ul class="constsize">
             <li><a href="@plotquery_page_simple@">Simple Query</a> 
-              |  <a href="@web_context@LoadPlotQuery.do">Advanced Plot Query</a>
+              |  <a href="@plotquery_page_advanced@">Advanced Plot Query</a>
               </li>
             <li><a href="@general_link@metadata.html">View Metadata</a></li>
             <li>View plot : 
@@ -165,7 +165,7 @@
             <a href="@get_link@comprehensive/observation/3546">
             extended</a></li>
             <ul class="constsize">
-              <li><a href="@forms_link@getHelp.jsp?mainPage=@web_context@LoadPlotQuery.do&helpPage=@manual_link@interpret-taxon-on-plot.html">Add interpretation of plant in plot</a></li>
+              <li><a href="@forms_link@getHelp.jsp?mainPage=@plotquery_page_advanced@&helpPage=@manual_link@interpret-taxon-on-plot.html">Add interpretation of plant in plot</a></li>
               <li>Assign a plot to a community<font color="darkSalmon">(v1.1)</font></li>
               <li>Create a note about a field in a plot<font color="darkSalmon">(v2.0)</font></li>
             </ul>
@@ -174,6 +174,7 @@
 
               <li>Formats: ASCII, HTML, XML <font color="darkSalmon">(redesign v2.0)</font>,
                 VegBranch <font color="darkSalmon">(v3.0)</font>, User specified <font color="darkSalmon">(v2.0)</font>, TurboVeg <font color="darkSalmon">(v3.0)</font>
+                </li>
             </ul>
             <li><a href="/vegbank/DisplayUploadPlotAction.do">Load
               Plot Data</a></li>
@@ -226,10 +227,10 @@
 	</ul>
 
    </td>
-   <tr>
+   </tr>
    </table>
 <!-- VegBank Footer -->
-<br>
+<br />
 @webpage_footer_html@
 
 
