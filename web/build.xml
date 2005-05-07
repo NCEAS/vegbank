@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-05-06 07:39:53 $'
-* '$Revision: 1.165 $'
+* '$Date: 2005-05-07 05:46:20 $'
+* '$Revision: 1.166 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -159,8 +159,8 @@
       <!-- NO PARAMS on next token -->
     <filter token="plotquery_page" value="/${web.context_uri}/forms/plot-query.jsp"/>
      <!-- params allowed and encouraged on next 2 tokens -->
-    <filter token="plotquery_page_simple" value="/${web.context_uri}/forms/plot-query.jsp?simplemode=true&amp;show_0=on&amp;show_G=on&amp;show_H=on"/>
-    <filter token="plotquery_page_advanced" value="/${web.context_uri}/forms/plot-query.jsp?show_0=on&amp;show_G=on&amp;show_H=on"/>
+    <filter token="plotquery_page_simple" value="/${web.context_uri}/forms/plot-query.jsp?simplemode=true"/>
+    <filter token="plotquery_page_advanced" value="/${web.context_uri}/forms/plot-query.jsp"/>
 
     <filter token="uploaddata_page" value="/${web.context_uri}/forms/uploadFile.html"/>
     <filter token="browseplotspage" value="/browse" />
