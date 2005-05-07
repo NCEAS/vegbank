@@ -284,7 +284,9 @@ function setQueryText() {
    your plot query from this page. 
    
    You can check or uncheck boxes below and press the "change fields shown" button to change the fields 
-   shown on this form.   </p>
+   shown on this form.   <br/>
+   Tip: the fields that are shown on this form will also be shown on the results page.  So, show fields
+   that you want to see on the results page, even if you are not querying by those fields.</p>
    <!-- this tag defines whether to intially hide this list of criteria -->
    <bean:define id="initliststatus" value="display:block" />
    <bean:define id="inithidestatus" value="display:none" />
@@ -377,27 +379,7 @@ function setQueryText() {
     </table>
     </form>
     </div>
-   <!-- 
-     DEFINE the values of showCrit parameter:
-   0 is state, country   \
-   2 is elevation  \
-   3 is aspect      \
-   4 is slope       /
-   5 rock type   \
-   6 surificial   \
-   7 hydrologic    \
-   8 topoPos        \
-   9 Landform       /
-   A date sampled \
-   B date entered  \
-   C plots size    /
-   D coverMethod \
-   E stratumMethod \
-   F project       /
-   G plots by Veg (all 5)
-   H plots by comm (all 4)
-   
-   -->
+ 
    </logic:notEqual> <!-- simple mode -->
    <!-- the real form -->
    
