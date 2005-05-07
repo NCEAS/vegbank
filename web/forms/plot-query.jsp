@@ -218,14 +218,34 @@ function setQueryText() {
 
 @webpage_masthead_html@
 
-<% if ( request.getQueryString() == null ) { %>
-<!-- redirect user to default if no query parameters passed, but this should not be needed, as links should go to plotquery_page_advanced token. -->
-  <script type="text/javascript">
-    window.location="@plotquery_page@?show_0=on&show_G=on&show_H=on" ;
-  </script>
 
-<%  }  %>
-  
+<!-- If nothing is set to be shown, then show some things anyway. -->
+<bean:define id="hasshowparams" value="false" />
+<logic:present parameter="show_statecountry"><bean:define id="show_statecountry" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_elev"><bean:define id="show_elev" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_aspect"><bean:define id="show_aspect" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_slope"><bean:define id="show_slope" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_rocktype"><bean:define id="show_rocktype" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_surficial"><bean:define id="show_surficial" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_hydrologic"><bean:define id="show_hydrologic" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_topo"><bean:define id="show_topo" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_landform"><bean:define id="show_landform" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_datesampled"><bean:define id="show_datesampled" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_dateentered"><bean:define id="show_dateentered" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_area"><bean:define id="show_area" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_covermeth"><bean:define id="show_covermeth" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_stratummeth"><bean:define id="show_stratummeth" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_project"><bean:define id="show_project" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_plants"><bean:define id="show_plants" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_comms"><bean:define id="show_comms" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:equal name="hasshowparams" value="false">
+  <!-- set default to show here : -->
+  <!-- didn't have any params, so defining the defaults here -->
+  <bean:define id="show_plants" value="on" />
+  <bean:define id="show_comms" value="on" />
+  <bean:define id="show_statecountry" value="on" />
+</logic:equal>
+
  
  <!-- get min max now, no longer use struts action! -->
  <vegbank:get id="minmaxbean" select="plotandobservationminmax" beanName="map" 
@@ -255,7 +275,7 @@ function setQueryText() {
     <!-- dont do this if simple: -->
     <logic:notEqual name="searchType" value="Simple" >
 <!-- start custom -->
-  <!-- using parameters like show_0 - show_Z -->
+  <!-- using parameters like show_statecountry - show_Z -->
   <!-- values of params don't matter.  Just checks to see if they are there -->
   
     <!-- using a table for formatting, I know it's bad, but it works and I don't know how to otherwise -->
@@ -288,44 +308,44 @@ function setQueryText() {
     <tr class="grey"><td valign="top">
       
       
-      <logic:present parameter="show_0"><input type="checkbox" name="show_0" checked="checked" />State and Country<br/></logic:present>
-	  <logic:present parameter="show_2"><input type="checkbox" name="show_2" checked="checked" />Elevation<br/></logic:present>
-	  <logic:present parameter="show_3"><input type="checkbox" name="show_3" checked="checked" />Aspect<br/></logic:present>
-	  <logic:present parameter="show_4"><input type="checkbox" name="show_4" checked="checked" />Slope Gradient<br/></logic:present>
-	  <logic:present parameter="show_5"><input type="checkbox" name="show_5" checked="checked" />Rock Type<br/></logic:present>
-	  <logic:present parameter="show_6"><input type="checkbox" name="show_6" checked="checked" />Surficial Deposits<br/></logic:present>
-	  <logic:present parameter="show_7"><input type="checkbox" name="show_7" checked="checked" />Hydrologic Regime<br/></logic:present>
-	  <logic:present parameter="show_8"><input type="checkbox" name="show_8" checked="checked" />Topographic Position<br/></logic:present>
-	  <logic:present parameter="show_9"><input type="checkbox" name="show_9" checked="checked" />Landform Type<br/></logic:present>
-	  <logic:present parameter="show_A"><input type="checkbox" name="show_A" checked="checked" />Date Sampled<br/></logic:present>
-	  <logic:present parameter="show_B"><input type="checkbox" name="show_B" checked="checked" />Date Entered<br/></logic:present>
-	  <logic:present parameter="show_C"><input type="checkbox" name="show_C" checked="checked" />Plot Size<br/></logic:present>
-	  <logic:present parameter="show_D"><input type="checkbox" name="show_D" checked="checked" />Cover Method<br/></logic:present>
-	  <logic:present parameter="show_E"><input type="checkbox" name="show_E" checked="checked" />Stratum Method<br/></logic:present>
-	  <logic:present parameter="show_F"><input type="checkbox" name="show_F" checked="checked" />Project<br/></logic:present>
-	  <logic:present parameter="show_G"><input type="checkbox" name="show_G" checked="checked" />Plants within the Plot<br/></logic:present>
-      <logic:present parameter="show_H"><input type="checkbox" name="show_H" checked="checked" />Community Classification<br/></logic:present>
+      <logic:present name="show_statecountry"><input type="checkbox" name="show_statecountry" checked="checked" />State and Country<br/></logic:present>
+	  <logic:present name="show_elev"><input type="checkbox" name="show_elev" checked="checked" />Elevation<br/></logic:present>
+	  <logic:present name="show_aspect"><input type="checkbox" name="show_aspect" checked="checked" />Aspect<br/></logic:present>
+	  <logic:present name="show_slope"><input type="checkbox" name="show_slope" checked="checked" />Slope Gradient<br/></logic:present>
+	  <logic:present name="show_rocktype"><input type="checkbox" name="show_rocktype" checked="checked" />Rock Type<br/></logic:present>
+	  <logic:present name="show_surficial"><input type="checkbox" name="show_surficial" checked="checked" />Surficial Deposits<br/></logic:present>
+	  <logic:present name="show_hydrologic"><input type="checkbox" name="show_hydrologic" checked="checked" />Hydrologic Regime<br/></logic:present>
+	  <logic:present name="show_topo"><input type="checkbox" name="show_topo" checked="checked" />Topographic Position<br/></logic:present>
+	  <logic:present name="show_landform"><input type="checkbox" name="show_landform" checked="checked" />Landform Type<br/></logic:present>
+	  <logic:present name="show_datesampled"><input type="checkbox" name="show_datesampled" checked="checked" />Date Sampled<br/></logic:present>
+	  <logic:present name="show_dateentered"><input type="checkbox" name="show_dateentered" checked="checked" />Date Entered<br/></logic:present>
+	  <logic:present name="show_area"><input type="checkbox" name="show_area" checked="checked" />Plot Size<br/></logic:present>
+	  <logic:present name="show_covermeth"><input type="checkbox" name="show_covermeth" checked="checked" />Cover Method<br/></logic:present>
+	  <logic:present name="show_stratummeth"><input type="checkbox" name="show_stratummeth" checked="checked" />Stratum Method<br/></logic:present>
+	  <logic:present name="show_project"><input type="checkbox" name="show_project" checked="checked" />Project<br/></logic:present>
+	  <logic:present name="show_plants"><input type="checkbox" name="show_plants" checked="checked" />Plants within the Plot<br/></logic:present>
+      <logic:present name="show_comms"><input type="checkbox" name="show_comms" checked="checked" />Community Classification<br/></logic:present>
     </td>
     <td  valign="top">
       
       <% int intAdditionalWritten = 1 ; %>
-      <logic:notPresent parameter="show_0"><input type="checkbox" name="show_0"  />State and Country<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_2"><input type="checkbox" name="show_2"  />Elevation<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_3"><input type="checkbox" name="show_3"  />Aspect<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_4"><input type="checkbox" name="show_4"  />Slope Gradient<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_5"><input type="checkbox" name="show_5"  />Rock Type<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_6"><input type="checkbox" name="show_6"  />Surficial Deposits<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_7"><input type="checkbox" name="show_7"  />Hydrologic Regime<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_8"><input type="checkbox" name="show_8"  />Topographic Position<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_9"><input type="checkbox" name="show_9"  />Landform Type<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_A"><input type="checkbox" name="show_A"  />Date Sampled<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_B"><input type="checkbox" name="show_B"  />Date Entered<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_C"><input type="checkbox" name="show_C"  />Plot Size<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_D"><input type="checkbox" name="show_D"  />Cover Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_E"><input type="checkbox" name="show_E"  />Stratum Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_F"><input type="checkbox" name="show_F"  />Project<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_G"><input type="checkbox" name="show_G"  />Plants within the Plot<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
-	  <logic:notPresent parameter="show_H"><input type="checkbox" name="show_H"  />Community Classification<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+      <logic:notPresent name="show_statecountry"><input type="checkbox" name="show_statecountry"  />State and Country<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_elev"><input type="checkbox" name="show_elev"  />Elevation<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_aspect"><input type="checkbox" name="show_aspect"  />Aspect<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_slope"><input type="checkbox" name="show_slope"  />Slope Gradient<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_rocktype"><input type="checkbox" name="show_rocktype"  />Rock Type<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_surficial"><input type="checkbox" name="show_surficial"  />Surficial Deposits<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_hydrologic"><input type="checkbox" name="show_hydrologic"  />Hydrologic Regime<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_topo"><input type="checkbox" name="show_topo"  />Topographic Position<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_landform"><input type="checkbox" name="show_landform"  />Landform Type<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_datesampled"><input type="checkbox" name="show_datesampled"  />Date Sampled<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_dateentered"><input type="checkbox" name="show_dateentered"  />Date Entered<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_area"><input type="checkbox" name="show_area"  />Plot Size<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_covermeth"><input type="checkbox" name="show_covermeth"  />Cover Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_stratummeth"><input type="checkbox" name="show_stratummeth"  />Stratum Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_project"><input type="checkbox" name="show_project"  />Project<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_plants"><input type="checkbox" name="show_plants"  />Plants within the Plot<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  <logic:notPresent name="show_comms"><input type="checkbox" name="show_comms"  />Community Classification<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <% if ( intAdditionalWritten == 1 ) { %>
 	    -none-
 	  <% } %>
@@ -392,28 +412,28 @@ function setQueryText() {
           <!-- copy params in case there is an error, you'll need these params to show these on 
                the next screen: -->
         
-          <logic:present parameter="show_0"><input type="hidden" name="show_0" value="on" /></logic:present>
-		  <logic:present parameter="show_2"><input type="hidden" name="show_2" value="on" /></logic:present>
-		  <logic:present parameter="show_3"><input type="hidden" name="show_3" value="on" /></logic:present>
-		  <logic:present parameter="show_4"><input type="hidden" name="show_4" value="on" /></logic:present>
-		  <logic:present parameter="show_5"><input type="hidden" name="show_5" value="on" /></logic:present>
-		  <logic:present parameter="show_6"><input type="hidden" name="show_6" value="on" /></logic:present>
-		  <logic:present parameter="show_7"><input type="hidden" name="show_7" value="on" /></logic:present>
-		  <logic:present parameter="show_8"><input type="hidden" name="show_8" value="on" /></logic:present>
-		  <logic:present parameter="show_9"><input type="hidden" name="show_9" value="on" /></logic:present>
-		  <logic:present parameter="show_A"><input type="hidden" name="show_A" value="on" /></logic:present>
-		  <logic:present parameter="show_B"><input type="hidden" name="show_B" value="on" /></logic:present>
-		  <logic:present parameter="show_C"><input type="hidden" name="show_C" value="on" /></logic:present>
-		  <logic:present parameter="show_D"><input type="hidden" name="show_D" value="on" /></logic:present>
-		  <logic:present parameter="show_E"><input type="hidden" name="show_E" value="on" /></logic:present>
-		  <logic:present parameter="show_F"><input type="hidden" name="show_F" value="on" /></logic:present>
-		  <logic:present parameter="show_G"><input type="hidden" name="show_G" value="on" /></logic:present>
-	      <logic:present parameter="show_H"><input type="hidden" name="show_H" value="on" /></logic:present>
+          <logic:present name="show_statecountry"><input type="hidden" name="show_statecountry" value="on" /></logic:present>
+		  <logic:present name="show_elev"><input type="hidden" name="show_elev" value="on" /></logic:present>
+		  <logic:present name="show_aspect"><input type="hidden" name="show_aspect" value="on" /></logic:present>
+		  <logic:present name="show_slope"><input type="hidden" name="show_slope" value="on" /></logic:present>
+		  <logic:present name="show_rocktype"><input type="hidden" name="show_rocktype" value="on" /></logic:present>
+		  <logic:present name="show_surficial"><input type="hidden" name="show_surficial" value="on" /></logic:present>
+		  <logic:present name="show_hydrologic"><input type="hidden" name="show_hydrologic" value="on" /></logic:present>
+		  <logic:present name="show_topo"><input type="hidden" name="show_topo" value="on" /></logic:present>
+		  <logic:present name="show_landform"><input type="hidden" name="show_landform" value="on" /></logic:present>
+		  <logic:present name="show_datesampled"><input type="hidden" name="show_datesampled" value="on" /></logic:present>
+		  <logic:present name="show_dateentered"><input type="hidden" name="show_dateentered" value="on" /></logic:present>
+		  <logic:present name="show_area"><input type="hidden" name="show_area" value="on" /></logic:present>
+		  <logic:present name="show_covermeth"><input type="hidden" name="show_covermeth" value="on" /></logic:present>
+		  <logic:present name="show_stratummeth"><input type="hidden" name="show_stratummeth" value="on" /></logic:present>
+		  <logic:present name="show_project"><input type="hidden" name="show_project" value="on" /></logic:present>
+		  <logic:present name="show_plants"><input type="hidden" name="show_plants" value="on" /></logic:present>
+	      <logic:present name="show_comms"><input type="hidden" name="show_comms" value="on" /></logic:present>
           <logic:equal parameter="hidelist" value="true"><input type="hidden" name="hidelist" value="true" /></logic:equal>
    
    
     <bean:define id="hideCurr" value="show" />
-    <logic:notPresent parameter="show_0">
+    <logic:notPresent name="show_statecountry">
         <bean:define id="hideCurr" value="hidden" />
     </logic:notPresent>
     
@@ -510,9 +530,9 @@ function setQueryText() {
 	<!-- ELEVATION, slope, aspect -->
 	 
 	 <bean:define id="hideCurr" value="show" />
-	    <logic:notPresent parameter="show_2">
-	      <logic:notPresent parameter="show_3">
-	        <logic:notPresent parameter="show_4">
+	    <logic:notPresent name="show_elev">
+	      <logic:notPresent name="show_aspect">
+	        <logic:notPresent name="show_slope">
      	        <bean:define id="hideCurr" value="hidden" />
 	        </logic:notPresent>
 	      </logic:notPresent>
@@ -537,7 +557,7 @@ function setQueryText() {
 	
 	  <!-- elev -->
 	  <bean:define id="hideCurr" value="show" />
-		    <logic:notPresent parameter="show_2">
+		    <logic:notPresent name="show_elev">
 		            <bean:define id="hideCurr" value="hidden" />
 		     </logic:notPresent>  
 		
@@ -565,7 +585,7 @@ function setQueryText() {
 	  </tr>
 
 	  <bean:define id="hideCurr" value="show" />
-		    <logic:notPresent parameter="show_3">
+		    <logic:notPresent name="show_aspect">
 		            <bean:define id="hideCurr" value="hidden" />
 		     </logic:notPresent> 	  
 	  
@@ -591,7 +611,7 @@ function setQueryText() {
 	  
 	  </tr>
 	  <bean:define id="hideCurr" value="show" />
-	  		    <logic:notPresent parameter="show_4">
+	  		    <logic:notPresent name="show_slope">
 	  		            <bean:define id="hideCurr" value="hidden" />
 	  		     </logic:notPresent> 	  
 	 
@@ -625,11 +645,11 @@ function setQueryText() {
 	</div><!-- ranges -->
 	<!-- closed list fields -->
 	 <bean:define id="hideCurr" value="show" />
-		    <logic:notPresent parameter="show_5">
-		      <logic:notPresent parameter="show_6">
-		        <logic:notPresent parameter="show_7">
-		          <logic:notPresent parameter="show_8">
-		            <logic:notPresent parameter="show_9">
+		    <logic:notPresent name="show_rocktype">
+		      <logic:notPresent name="show_surficial">
+		        <logic:notPresent name="show_hydrologic">
+		          <logic:notPresent name="show_topo">
+		            <logic:notPresent name="show_landform">
 	     	          <bean:define id="hideCurr" value="hidden" />
 		            </logic:notPresent>
 		          </logic:notPresent>
@@ -646,7 +666,7 @@ function setQueryText() {
 	    </p>
 
 	 <bean:define id="hideCurr" value="show" />
-		    <logic:notPresent parameter="show_5">
+		    <logic:notPresent name="show_rocktype">
 	     	          <bean:define id="hideCurr" value="hidden" />
 		    </logic:notPresent> 
 
@@ -662,7 +682,7 @@ function setQueryText() {
 	    </p>
 	    
 		 <bean:define id="hideCurr" value="show" />
-			    <logic:notPresent parameter="show_6">
+			    <logic:notPresent name="show_surficial">
 		     	          <bean:define id="hideCurr" value="hidden" />
 		    </logic:notPresent> 
 	    
@@ -678,7 +698,7 @@ function setQueryText() {
 	    </p>
 	    
 	    	 <bean:define id="hideCurr" value="show" />
-				    <logic:notPresent parameter="show_7">
+				    <logic:notPresent name="show_hydrologic">
 			     	          <bean:define id="hideCurr" value="hidden" />
 		    </logic:notPresent> 
 	    
@@ -698,7 +718,7 @@ function setQueryText() {
 	
 	    <!-- picklist values to select -->    
 	    	 <bean:define id="hideCurr" value="show" />
-				    <logic:notPresent parameter="show_8">
+				    <logic:notPresent name="show_topo">
 			     	          <bean:define id="hideCurr" value="hidden" />
 		    </logic:notPresent> 
 	    
@@ -713,7 +733,7 @@ function setQueryText() {
 	    </p>
 	    
 	    	 <bean:define id="hideCurr" value="show" />
-				    <logic:notPresent parameter="show_9">
+				    <logic:notPresent name="show_landform">
 			     	          <bean:define id="hideCurr" value="hidden" />
 		    </logic:notPresent> 
 	    
@@ -734,9 +754,9 @@ function setQueryText() {
     
     <!-- FIND BASED ON SAMPLING METHODS -->
     <bean:define id="hideCurr" value="show" />
-  		    <logic:notPresent parameter="show_A">
-  		      <logic:notPresent parameter="show_B">
-  		        <logic:notPresent parameter="show_C">
+  		    <logic:notPresent name="show_datesampled">
+  		      <logic:notPresent name="show_dateentered">
+  		        <logic:notPresent name="show_area">
   	     	          <bean:define id="hideCurr" value="hidden" />
   		        </logic:notPresent>
   		      </logic:notPresent>
@@ -769,7 +789,7 @@ function setQueryText() {
 	    
 	  </tr>
 	   <bean:define id="hideCurr" value="show" />
-	    		    <logic:notPresent parameter="show_A">
+	    		    <logic:notPresent name="show_datesampled">
 	    		              <bean:define id="hideCurr" value="hidden" />
          	        </logic:notPresent> 
 	  
@@ -808,7 +828,7 @@ function setQueryText() {
 	  </tr>
 	  
 	  <bean:define id="hideCurr" value="show" />
-	  	    		    <logic:notPresent parameter="show_B">
+	  	    		    <logic:notPresent name="show_dateentered">
 	  	    		              <bean:define id="hideCurr" value="hidden" />
          	        </logic:notPresent> 
 	  <tr class='<bean:write name="hideCurr" />'><!-- date2 --> 
@@ -842,7 +862,7 @@ function setQueryText() {
 	  </tr>
 	 
 	 <bean:define id="hideCurr" value="show" />
-	 	    		    <logic:notPresent parameter="show_C">
+	 	    		    <logic:notPresent name="show_area">
 	 	    		              <bean:define id="hideCurr" value="hidden" />
          	        </logic:notPresent> 
 	  <tr class='<bean:write name="hideCurr" />'><!-- plot size -->
@@ -875,9 +895,9 @@ function setQueryText() {
 	
 	
 	  <bean:define id="hideCurr" value="show" />
-	  		    <logic:notPresent parameter="show_D">
-	  		      <logic:notPresent parameter="show_E">
-	  		        <logic:notPresent parameter="show_F">
+	  		    <logic:notPresent name="show_covermeth">
+	  		      <logic:notPresent name="show_stratummeth">
+	  		        <logic:notPresent name="show_project">
 	  	     	          <bean:define id="hideCurr" value="hidden" />
 	  		        </logic:notPresent>
 	  		      </logic:notPresent>
@@ -892,7 +912,7 @@ function setQueryText() {
 	   </p>
 	
 	<bean:define id="hideCurr" value="show" />
-		  		    <logic:notPresent parameter="show_D">
+		  		    <logic:notPresent name="show_covermeth">
 		  		             <bean:define id="hideCurr" value="hidden" />
        	  	        </logic:notPresent>
 	<p class='<bean:write name="hideCurr" />'>Cover Method Name:<br/>
@@ -911,7 +931,7 @@ function setQueryText() {
 		      </select>
 	    </p>
 	    <bean:define id="hideCurr" value="show" />
-				  		    <logic:notPresent parameter="show_E">
+				  		    <logic:notPresent name="show_stratummeth">
 				  		             <bean:define id="hideCurr" value="hidden" />
        	  	        </logic:notPresent>
 	      <p class='<bean:write name="hideCurr" />'>Stratum Method Name:<br/>
@@ -933,7 +953,7 @@ function setQueryText() {
 	    
 	   
 	    <bean:define id="hideCurr" value="show" />
-				  		    <logic:notPresent parameter="show_F">
+				  		    <logic:notPresent name="show_project">
 				  		             <bean:define id="hideCurr" value="hidden" />
        	  	        </logic:notPresent>
 	      <p class='<bean:write name="hideCurr" />'>Project Name:<br/>
@@ -958,7 +978,7 @@ function setQueryText() {
 	  
 	  <!-- FIND USING VEGATATION -->
        <bean:define id="hideCurr" value="show" />
-	  	  		         <logic:notPresent parameter="show_G">
+	  	  		         <logic:notPresent name="show_plants">
 	  	  	     	          <bean:define id="hideCurr" value="hidden" />
 	  	  		        </logic:notPresent>
 	  	  		     
@@ -1023,7 +1043,7 @@ function setQueryText() {
 <hr class="<bean:write name='simpleHide' />"/> 
       </DIV>
       <bean:define id="hideCurr" value="show" />
-	  	  	  		         <logic:notPresent parameter="show_H">
+	  	  	  		         <logic:notPresent name="show_comms">
 	  	  	  	     	          <bean:define id="hideCurr" value="hidden" />
 	  	  	  		        </logic:notPresent>
 	  	  	  		     
