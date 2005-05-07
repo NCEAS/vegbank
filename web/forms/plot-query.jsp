@@ -26,8 +26,13 @@ VegBank - <bean:write name="searchType" /> Plot Search
   
 <script language="javascript">
 function prepareForm() {
-    setQueryText();
+    var blnOK = validateThisForm(document.forms.plotqueryform);
+    if ( blnOK ) {
+      setQueryText();
+    }  
+    return blnOK;
 }
+
 
 function setQueryText() {
     /* this function sets the criteriaAsText field which the next form displays as: You searched for this and that... */
@@ -359,9 +364,10 @@ function setQueryText() {
    <tr class="grey"><td colspan="2"> 
           <script type="text/javascript" language="JavaScript">
           <!-- 
-          var numelements = document.forms.changeCriteriaShown.elements.length;
+          
           function SetCheckboxes(value) {
-              var item;
+            var numelements = document.forms.changeCriteriaShown.elements.length;
+            var item;
               for (var i=0 ; i<numelements ; i++) {
                   item = document.forms.changeCriteriaShown.elements[i];
                   item.checked = value;
@@ -385,7 +391,7 @@ function setQueryText() {
    
    <h2 class="<bean:write name='simpleHide' />"><a name="plotqueryfields"></a>Plot Query:</h2>
    
-   <form name="plotqueryform" action="@views_link@observation_summary.jsp" method="get" onsubmit="prepareForm()">
+   <form name="plotqueryform" action="@views_link@observation_summary.jsp" method="get" onsubmit="javascript:return prepareForm()">
      
      <input name="where" type="hidden" value="where_simple" />
      <input name="xwhereGlue" type="hidden" value="AND" />  
@@ -556,12 +562,12 @@ function setQueryText() {
 	    <td>
           <input type="hidden" name="xwhereKey_minelevation" value="xwhere_gteq" />
           <input type="hidden" name="xwhereParams_minelevation_1" value="elevation" />
-          <input name="xwhereParams_minelevation_0" size="20"/>
+          <input name="xwhereParams_minelevation_0" class="number" size="20"/>
 	    </td>
 	    <td>
           <input type="hidden" name="xwhereKey_maxelevation" value="xwhere_lteq" />
           <input type="hidden" name="xwhereParams_maxelevation_1" value="elevation" />
-          <input name="xwhereParams_maxelevation_0" size="20"/>
+          <input name="xwhereParams_maxelevation_0" class="number" size="20"/>
 	    </td>
 	    <td class="units">meters</td>
 	  </tr>
@@ -582,12 +588,12 @@ function setQueryText() {
 	    <td>
           <input type="hidden" name="xwhereKey_minslopeaspect" value="xwhere_gteq" />
           <input type="hidden" name="xwhereParams_minslopeaspect_1" value="slopeaspect" />
-          <input name="xwhereParams_minslopeaspect_0" size="20"/>
+          <input name="xwhereParams_minslopeaspect_0" class="number" size="20"/>
 	    </td>
 	    <td>
           <input type="hidden" name="xwhereKey_maxslopeaspect" value="xwhere_lteq" />
           <input type="hidden" name="xwhereParams_maxslopeaspect_1" value="slopeaspect" />
-          <input name="xwhereParams_maxslopeaspect_0" size="20"/>
+          <input name="xwhereParams_maxslopeaspect_0" class="number" size="20"/>
 	    </td>
 	    <td  class="units">degrees</td>
 	  
@@ -610,12 +616,12 @@ function setQueryText() {
         <td>
           <input type="hidden" name="xwhereKey_minslopegradient" value="xwhere_gteq" />
           <input type="hidden" name="xwhereParams_minslopegradient_1" value="slopegradient" />
-          <input name="xwhereParams_minslopegradient_0" size="20"/>
+          <input name="xwhereParams_minslopegradient_0" class="number" size="20"/>
         </td>
         <td>
           <input type="hidden" name="xwhereKey_maxslopegradient" value="xwhere_lteq" />
           <input type="hidden" name="xwhereParams_maxslopegradient_1" value="slopegradient" />
-          <input name="xwhereParams_maxslopegradient_0" size="20"/>
+          <input name="xwhereParams_maxslopegradient_0" class="number" size="20"/>
         </td>
 	    <td  class="units">degrees</td>
 	   
@@ -798,12 +804,12 @@ function setQueryText() {
 	    <td>
           <input type="hidden" name="xwhereKey_minobsstartdate" value="xwhere_gteq" />
           <input type="hidden" name="xwhereParams_minobsstartdate_1" value="obsstartdate" />
-          <input name="xwhereParams_minobsstartdate_0" size="20"/>
+          <input name="xwhereParams_minobsstartdate_0" class="date" size="20"/>
 	    </td>
 	    <td>
           <input type="hidden" name="xwhereKey_maxobsstartdate" value="xwhere_lteq" />
           <input type="hidden" name="xwhereParams_maxobsstartdate_1" value="obsstartdate" />
-          <input name="xwhereParams_maxobsstartdate_0" size="20"/>
+          <input name="xwhereParams_maxobsstartdate_0" class="date" size="20"/>
 	    </td>
 	    <td class="units">date</td>
 	   
@@ -832,12 +838,12 @@ function setQueryText() {
         <td>
           <input type="hidden" name="xwhereKey_mindateentered" value="xwhere_gteq" />
           <input type="hidden" name="xwhereParams_mindateentered_1" value="observation.dateentered" />
-          <input name="xwhereParams_mindateentered_0" size="20"/>
+          <input name="xwhereParams_mindateentered_0" class="date" size="20"/>
         </td>
         <td>
           <input type="hidden" name="xwhereKey_maxdateentered" value="xwhere_lteq" />
           <input type="hidden" name="xwhereParams_maxdateentered_1" value="observation.dateentered" />
-          <input name="xwhereParams_maxdateentered_0" size="20"/>
+          <input name="xwhereParams_maxdateentered_0" class="date" size="20"/>
         </td>
 	    <td class="units">date</td>
 	  
@@ -859,12 +865,12 @@ function setQueryText() {
         <td>
           <input type="hidden" name="xwhereKey_minarea" value="xwhere_gteq" />
           <input type="hidden" name="xwhereParams_minarea_1" value="plot.area" />
-          <input name="xwhereParams_minarea_0" size="20"/>
+          <input name="xwhereParams_minarea_0" class="number" size="20"/>
         </td>
         <td>
           <input type="hidden" name="xwhereKey_maxarea" value="xwhere_lteq" />
           <input type="hidden" name="xwhereParams_maxarea_1" value="plot.area" />
-          <input name="xwhereParams_maxarea_0" size="20"/>
+          <input name="xwhereParams_maxarea_0" class="number" size="20"/>
         </td>
 	    <td class="units">square meters</td>
 	   
@@ -992,12 +998,7 @@ function setQueryText() {
     
   </tr>
   
- <!-- MODEL:
-   <input type="hidden" name="xwhereKey_mxxindateentered" value="xwhere_gteq" />
-            <input type="hidden" name="xwhereParams_mxxindateentered_1" value="observation.dateentered" />
-          <input name="xwhereParams_mxxindateentered_0" size="20"/>
-  --> 
-  
+
   <bean:define id="simpleHide_special">show</bean:define> 
   <!-- special bean that gets rewritten to hide latter rows -->
   
@@ -1012,8 +1013,8 @@ function setQueryText() {
      <input type="hidden" name="xwhereKey_taxon<%= alph.substring(i,i + 1) %>" value="xwhere_taxacover" />
     </td>    
     <td><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_2" %>' size="30"/></td>
-    <td class="<bean:write name='simpleHide' />"><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_0" %>' size="5"/></td>
-    <td class="<bean:write name='simpleHide' />"><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_1" %>' size="5"/></td>
+    <td class="<bean:write name='simpleHide' />"><input class='number' name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_0" %>' size="5"/></td>
+    <td class="<bean:write name='simpleHide' />"><input class='number' name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_1" %>' size="5"/></td>
      <logic:equal name="simpleHide" value="hidden">
        <bean:define id="simpleHide_special" value="hidden" />     
      </logic:equal> <!-- show no more rows -->
