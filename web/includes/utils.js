@@ -556,3 +556,128 @@ function getValuesFromList(thelist, getValueOrText) {
   
   }
 }
+
+
+/** * @(#)isNumeric.js * * Copyright (c) 2000 by Sundar Dorai-Raj
+  * * @author Sundar Dorai-Raj
+  * * Email: sdoraira@vt.edu
+  * * This program is free software; you can redistribute it and/or
+  * * modify it under the terms of the GNU General Public License 
+  * * as published by the Free Software Foundation; either version 2 
+  * * of the License, or (at your option) any later version, 
+  * * provided that any use properly credits the author. 
+  * * This program is distributed in the hope that it will be useful,
+  * * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  * * GNU General Public License for more details at http://www.gnu.org * * */
+
+  var numbers=".0123456789";
+  function isNumeric(y) {
+    // is x a String or a character?
+     var x = y+"";
+    if(x.length>1) {
+      // remove negative sign
+      x=Math.abs(x)+"";
+      for(j=0;j<x.length;j++) {
+        // call isNumeric recursively for each character
+        number=isNumeric(x.substring(j,j+1));
+        if(!number) return number;
+      }
+      return number;
+    }
+    else {
+      // if x is number return true
+      if(numbers.indexOf(x)>=0) return true;
+      return false;
+    }
+  }
+  
+  
+  
+
+  
+  
+  function VB_isDate(y) {
+      // function written by Michael Lee 2005-05-07 (and that IS a valid date)
+      // is this a valid date?
+     blnFine=false;
+     var x = y+"";
+       var mytool_array=x.split("/"); 
+       
+       if ( mytool_array.length = 3 ) 
+       {
+         if  ( isNumeric(mytool_array[0]) && isNumeric(mytool_array[1]) && isNumeric(mytool_array[2]) )                
+         {  
+  
+           if ( mytool_array[0]>0 && mytool_array[0]<13 &&  mytool_array[1]>0 && mytool_array[1]<32  &&  mytool_array[2]>0 && mytool_array[2]<10000) {
+           // assume ok
+           blnFine = true;
+                if ( mytool_array[1]==31 && ( mytool_array[0]==6 || mytool_array[0]==4 ||mytool_array[0]==9 ||mytool_array[0]==11  ) ) {
+                // not ok for 31 in these months
+                blnFine = false;
+                }
+                if (mytool_array[1]>29 && mytool_array[0]==2) {
+                //not ok in Feb
+                blnFine = false;
+                }
+                if (mytool_array[1]==29 && ( (mytool_array[2])/4 != Math.floor(mytool_array[2]/4) ) ) {
+                   blnFine = false ; //not leap year
+                }
+  
+           }
+  
+  
+         }
+  
+       }   
+    return blnFine;
+  }
+  
+
+//******** JAVASCRIPT  FOR  FORM  VALIDATION ***********************//
+
+
+function validateThisForm(thisform) {
+       /* This function validates this form as best it can, for now that means checking to see
+       if numeric fields are numeric (based on className=number) and dates are in right format, too */
+              blnIsValid = true;
+              var numelements = thisform.elements.length;
+              var item;
+              for (var i=0 ; i<numelements ; i++) {
+                  item = thisform.elements[i];
+                  if ( (item.className == "number" || item.className == "errNumber" ) && blnIsValid ) {
+                  // should be number and only check until there is one error
+                        // check to see if numeric:
+                        if( isNumeric( item.value) || item.value == null || item.value == "" ) {
+                            //is ok if numeric, null or empty string
+                            item.className = "number";
+                          }
+                          else
+                          {
+                        item.className = "errNumber" ;
+                        item.focus();
+                        alert("You entered an invalid number: " + item.value + " Please fix this and try again.");  
+                        
+                        blnIsValid = false;
+                        }  
+                  } 
+                  //check dates:
+                  if ( (item.className == "date" || item.className == "errDate" ) && blnIsValid ) {
+                         // should be number and only check until there is one error
+                            // check to see if date:
+                            if( VB_isDate(item.value) || item.value == null || item.value == "" ) {
+                                //is ok if numeric, null or empty string
+                                item.className = "date";
+                              }
+                              else
+                              {
+                            item.className = "errDate" ;
+                            item.focus();
+                            alert("You entered an invalid date: " + item.value + " Please format like MM/DD/YYYY, example: 06/30/1977.");  
+                            
+                            blnIsValid = false;
+                            }  
+                  }
+              }
+        return blnIsValid;    
+}
