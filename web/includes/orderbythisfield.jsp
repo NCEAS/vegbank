@@ -14,9 +14,7 @@
         </logic:present>
     </logic:notPresent>
     
-  
-
-  <% // you must pass thisfield and fieldlabel as defined beans to this !! %>
+  <!-- // you must pass thisfield and fieldlabel as defined beans to this !! -->
           <logic:empty name="fieldlabel">
             <!-- if no label passed, use name -->
             <bean:define id="fieldlabel"><bean:write name="thisfield" /></bean:define>
@@ -28,8 +26,7 @@
 		<bean:define id="thclass" value="normal" />
 		
 		<bean:define id="dupl_orderby"><bean:write name="orderBy" /></bean:define>
-		<% if ( dupl_orderby.equals("xorderby_" + thisfield) ) { %>
-	        	  <!-- is sorted asc -->
+        <% if ( dupl_orderby.equals("xorderby_" + thisfield) ) { %><!-- is sorted asc -->
 		  <bean:define id="showsort" value="&uarr;" />
 		  <bean:define id="offer" >xorderby_<bean:write name="thisfield" />_desc</bean:define>
 		  <bean:define id="thclass" value="sorted" />
@@ -59,7 +56,7 @@
         <bean:define value="" id="fieldlabel" />
         <bean:define value="" id="offer" />
         <bean:define value="" id="showsort" />
-        <bean:define value="" id="th_or_td" />
+        <!--bean:define value="" id="th_or_td" /--> <!-- ok to reuse th_or_td -->
         
         
         <!-- end of include -->	
