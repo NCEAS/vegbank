@@ -10,7 +10,8 @@
                        //**************************************************************************************
                        String rowClass = "evenrow";
      int inttemp=0 ; 
-
+     String howManyPlantsComplex="3"; // this many plants if complex query
+     String howManyPlantsDefault="5"; // this many plants if default query (overrides above)
     %>
 
 
@@ -20,6 +21,37 @@
 
 
 @webpage_masthead_html@
+<!-- If nothing is set to be shown, then show some things anyway. -->
+<bean:define id="hasshowparams" value="false" />
+<logic:present parameter="show_statecountry"><bean:define id="show_statecountry" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_elev"><bean:define id="show_elev" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_aspect"><bean:define id="show_aspect" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_slope"><bean:define id="show_slope" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_rocktype"><bean:define id="show_rocktype" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_surficial"><bean:define id="show_surficial" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_hydrologic"><bean:define id="show_hydrologic" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_topo"><bean:define id="show_topo" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_landform"><bean:define id="show_landform" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_datesampled"><bean:define id="show_datesampled" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_dateentered"><bean:define id="show_dateentered" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_area"><bean:define id="show_area" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_covermeth"><bean:define id="show_covermeth" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_stratummeth"><bean:define id="show_stratummeth" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_project"><bean:define id="show_project" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_plants"><bean:define id="show_plants" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_comms"><bean:define id="show_comms" value="show" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:equal name="hasshowparams" value="false">
+  <!-- set default to show here : -->
+  <!-- didn't have any params, so defining the defaults here -->
+  <bean:define id="show_plants" value="show" />
+  <bean:define id="show_comms" value="show" />
+  <bean:define id="show_statecountry" value="show" />
+  <% howManyPlantsComplex =  howManyPlantsDefault ; %>
+  
+  
+</logic:equal>
+
+
  @possibly_center@  
   <h2>VegBank Plots</h2>
   
@@ -77,32 +109,62 @@
 <form action="" method="GET" id="cartable">
 <TABLE width="100%" class="leftrightborders" cellpadding="2">
 <tr>
-<th><a href="#" title="select all/none" class="nobg"><img src="@images_link@cart1.gif" border="0" /></a></th>
+<th valign="bottom" align="center"><a href="#" title="select all/none" class="nobg"><img src="@images_link@cart1.gif" border="0" /></a></th>
 
-<th>More</th>
+<th valign="bottom" align="center">
+  <table class="horizborders">
+    <tr><td class='horizborders'>Author Code  </td></tr>
+    <!-- the following is a bit of a hack.  The class will be hidden, unless show_statecountry is something, in 
+    this case "show", and the class "showhidden" isn't anything, so displays normally.  MTL May 6, 2005 -->
+    <tr class='horizborders <bean:write name="show_statecountry" ignore="true" />hidden'><td> Location    </td></tr>
+  </table>
+</th>
+<th class='<bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden' valign="bottom" align="center">
+  <table class="horizborders">
+    <tr><td class='horizborders <bean:write name="show_elev" ignore="true" />hidden'>Elev</td></tr>
+    <tr><td class='horizborders <bean:write name="show_slope" ignore="true" />hidden'>Slope</td></tr>
+    <tr><td class='horizborders <bean:write name="show_aspect" ignore="true" />hidden'>Aspect</td></tr>
+  </table>
+</th>
 
-<bean:define id="thisfield" value="stateprovince" />
-<bean:define id="fieldlabel">Location</bean:define>
-<%@ include file="../includes/orderbythisfield.jsp" %>
+<th valign="bottom" align="center" class='<bean:write name="show_rocktype" ignore="true" /><bean:write name="show_surficial" ignore="true" /><bean:write name="show_hydrologic" ignore="true" /><bean:write name="show_topo" ignore="true" /><bean:write name="show_landform" ignore="true" />hidden'>
+  <table class="horizborders">
+    <tr><td class='horizborders <bean:write name="show_rocktype" ignore="true" />hidden'>Rock Type</td></tr>
+    <tr><td class='horizborders <bean:write name="show_surficial" ignore="true" />hidden'>Surficial Deposits</td></tr>
+    <tr><td class='horizborders <bean:write name="show_hydrologic" ignore="true" />hidden'>Hydrologic Regime</td></tr>
+    <tr><td class='horizborders <bean:write name="show_topo" ignore="true" />hidden'>Topo Position</td></tr>
+    <tr><td class='horizborders <bean:write name="show_landform" ignore="true" />hidden'>Landform</td></tr>
+  </table>
+</th>
 
-<bean:define id="thisfield" value="authorobscode" />
-<bean:define id="fieldlabel">Author Code</bean:define>
-<%@ include file="../includes/orderbythisfield.jsp" %>
+<th valign="bottom" align="center" class='<bean:write name="show_datesampled" ignore="true" /><bean:write name="show_dateentered" ignore="true" /><bean:write name="show_area" ignore="true" />hidden'>
+  <table class="horizborders">
+    <tr><td class='<bean:write name="show_datesampled" ignore="true" />hidden'>Sampled</td></tr>
+    <tr><td class='<bean:write name="show_dateentered" ignore="true" />hidden'>Entered</td></tr>
+    <tr><td class='<bean:write name="show_area" ignore="true" />hidden'>Size</td></tr>
+  </table>
+</th>
+<th valign="bottom" align="center" class='<bean:write name="show_covermeth" ignore="true" /><bean:write name="show_stratummeth" ignore="true" /><bean:write name="show_project" ignore="true" />hidden'>
+  <table class="horizborders">
+    <tr><td class='<bean:write name="show_covermeth" ignore="true" />hidden'>Cover Method</td></tr>
+    <tr><td class='<bean:write name="show_stratummeth" ignore="true" />hidden'>Stratum Method</td></tr>
+    <tr><td class='<bean:write name="show_project" ignore="true" />hidden'>Project</td></tr>
+  </table>
+</th>
 
-<bean:define id="thisfield" value="area" />
-<bean:define id="fieldlabel">Size</bean:define>
-<%@ include file="../includes/orderbythisfield.jsp" %>
+<th valign="bottom" align="center" class='<bean:write name="show_plants" ignore="true" />hidden'>
+  <table class="horizborders">
+    <tr><td>Some Plants</td></tr>
+  </table>
+</th>
 
-<bean:define id="thisfield" value="elevation" />
-<bean:define id="fieldlabel">Elev</bean:define>
-<%@ include file="../includes/orderbythisfield.jsp" %>
+<th valign="bottom" align="center" class='<bean:write name="show_comms" ignore="true" />hidden'>
+  <table class="horizborders">
+    <tr><td>Community</td></tr>
+  </table>
+</th>
 
-<bean:define id="thisfield" value="obsstartdate" />
-<bean:define id="fieldlabel">Year</bean:define>
-<%@ include file="../includes/orderbythisfield.jsp" %>
-
-
-<th>Community</th><th colspan="3">Some Plants</th></tr>
+</tr>
 
 <logic:iterate id="onerowofobservation" name="BEANLIST">
 <!-- iterate over all records in set : new table for each -->
@@ -114,61 +176,90 @@
 <!-- start of plot & obs fields-->
 
 <tr class='@nextcolorclass@'>
-<td>
+<td><!-- that td cannot have a class, it gets overwritten -->
 <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
 <%@ include file="../includes/datacart_checkbox.jsp" %>
+<br/><a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>more 
+     <br/>details</a>
     </td>
-<td><a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>details</a></td>
+
 
 <!-- plot data -->
-<td><bean:write name="onerowofobservation" property="stateprovince" />,<br/>
-    <bean:write name="onerowofobservation" property="country" /></td>
-<td><bean:write name="onerowofobservation" property="authorobscode" /><!--<br/>
-    <bean:write name="onerowofobservation" property="observationaccessioncode" />--></td>
-<td class="numeric"><bean:write name="onerowofobservation" property="area" />&nbsp;</td>
-<td class="numeric"><bean:write name="onerowofobservation" property="elevation" />&nbsp;</td>
-
-<td class="numeric" title='<bean:write name="onerowofobservation" property="obsstartdate"/>'><dt:format pattern="yyyy">
-                <dt:parse pattern="yyyy-MM-dd">
-                    <bean:write name="onerowofobservation" property="obsstartdate_datetrunc"/>
-                </dt:parse>
-            </dt:format>&nbsp;</td>
-
-<!-- community info -->
-<vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
-  where="where_observation_pk" wparam="obsId" perPage="-1" pager="false"/>
-  <logic:empty name="comminterpretation-BEANLIST">
-    <td>No data.</td>
-  </logic:empty>
-  <logic:notEmpty name="comminterpretation-BEANLIST">
-    <td>
-      
-        <logic:iterate length="3" id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
-          <logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
-            
-            &raquo;  <a href='@get_link@std/commclass/<bean:write name="onerowofcomminterpretation" property="commclass_id" />'><bean:write name="onerowofcomminterpretation" property="commconcept_id_transl" /></a>
-            
-          <br/></logic:notEmpty><!-- concept -->
-        </logic:iterate>
-      
-    </td>
-  </logic:notEmpty>
+<td><bean:write name="onerowofobservation" property="authorobscode" /><br/>
+<span class='<bean:write name="show_statecountry" ignore="true" />hidden'><bean:write name="onerowofobservation" property="stateprovince" />,<br/>
+    <bean:write name="onerowofobservation" property="country" /></span></td>
+<td class='numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
+<span class='<bean:write name="show_elev" ignore="true" />hidden'>E: <bean:write name="onerowofobservation" property="elevation" /><br/></span>
+<span class='<bean:write name="show_slope" ignore="true" />hidden'>S: <bean:write name="onerowofobservation" property="slopegradient" /><br/></span>
+<span class='<bean:write name="show_aspect" ignore="true" />hidden'>A: <bean:write name="onerowofobservation" property="slopeaspect" /></span>
+</td>
 
 
+<td class='<bean:write name="show_rocktype" ignore="true" /><bean:write name="show_surficial" ignore="true" /><bean:write name="show_hydrologic" ignore="true" /><bean:write name="show_topo" ignore="true" /><bean:write name="show_landform" ignore="true" />hidden'>
+<span class='<bean:write name="show_rocktype" ignore="true" />hidden'>R: <bean:write name="onerowofobservation" property="rocktype" /><br/></span>
+<span class='<bean:write name="show_surficial" ignore="true" />hidden'>S: <bean:write name="onerowofobservation" property="surficialdeposits" /><br/></span>
+<span class='<bean:write name="show_hydrologic" ignore="true" />hidden'>H: <bean:write name="onerowofobservation" property="hydrologicregime" /><br/></span>
+<span class='<bean:write name="show_topo" ignore="true" />hidden'>T: <bean:write name="onerowofobservation" property="topoposition" /><br/></span>
+<span class='<bean:write name="show_landform" ignore="true" />hidden'>L: <bean:write name="onerowofobservation" property="landform" /></span>
+</td>
+
+ 
+ 
+ 
+<td class='numeric <bean:write name="show_datesampled" ignore="true" /><bean:write name="show_dateentered" ignore="true" /><bean:write name="show_area" ignore="true" />hidden'>
+ <span title='<bean:write name="onerowofobservation" property="obsstartdate"/>' class='<bean:write name="show_datesampled" ignore="true" />hidden'>
+   S: <dt:format pattern="MMM-yy">
+       <dt:parse pattern="yyyy-MM-dd">
+           <bean:write name="onerowofobservation" property="obsstartdate_datetrunc"/>
+       </dt:parse>
+   </dt:format> 
+   <br/> 
+ </span>
+ 
+ <span title='<bean:write name="onerowofobservation" property="observationdateentered"/>' class='<bean:write name="show_dateentered" ignore="true" />hidden'>
+  E:  <dt:format pattern="MMM-yy">
+          <dt:parse pattern="yyyy-MM-dd">
+              <bean:write name="onerowofobservation" property="observationdateentered_datetrunc"/>
+          </dt:parse>
+      </dt:format> 
+   <br/>
+ </span>
+ <span class='<bean:write name="show_area" ignore="true" />hidden'>   
+   Sz: <bean:write name="onerowofobservation" property="area" />
+ </span>  
+</td>
+
+<!-- methods -->
+<td nowrap="nowrap" class='<bean:write name="show_covermeth" ignore="true" /><bean:write name="show_stratummeth" ignore="true" /><bean:write name="show_project" ignore="true" />hidden'>
+   <!-- PLEASE trim strings to < 25 chars -->
+    <bean:define id="cvr_trunc"><bean:write name="onerowofobservation" property="covermethod_id_transl" /></bean:define>
+    <% if ( cvr_trunc.length() > 25 ) { cvr_trunc = cvr_trunc.substring(0,22) + "..." ; } %>
+    
+    <bean:define id="str_trunc"><bean:write name="onerowofobservation" property="stratummethod_id_transl" /></bean:define>
+    <% if ( str_trunc.length() > 25 ) { str_trunc = str_trunc.substring(0,22) + "..." ; } %>
+    
+    <bean:define id="prj_trunc"><bean:write name="onerowofobservation" property="project_id_transl" /></bean:define>
+    <% if ( prj_trunc.length() > 25 ) { prj_trunc = prj_trunc.substring(0,22) + "..." ; } %>
+    
+    
+ <span class='<bean:write name="show_covermeth" ignore="true" />hidden'>   Cvr: <a href='@get_link@std/covermethod/<bean:write name="onerowofobservation" property="covermethod_id" />'><%= cvr_trunc %></a><br/></span>
+ <span class='<bean:write name="show_stratummeth" ignore="true" />hidden'>   Str: <a href='@get_link@std/stratummethod/<bean:write name="onerowofobservation" property="stratummethod_id" />'><%= str_trunc %></a><br/></span>
+ <span class='<bean:write name="show_project" ignore="true" />hidden'>   Prj: <a href='@get_link@std/project/<bean:write name="onerowofobservation" property="project_id" />'><%= prj_trunc %></a></span>
+</td>
 <!-- plants in this plot -->
-
+ <td class='<bean:write name="show_plants" ignore="true" />hidden'>
 <vegbank:get id="taxonobservation" select="taxonobservation_maxcover" where="where_taxonobservation_maxcover" wparam="observation_pk"
   pager="false" perPage="-1" beanName="map" />
   <logic:empty name="taxonobservation-BEANLIST">
-    <td>Error! No data.</td>
+   Error! No data.
   </logic:empty>
   <logic:notEmpty name="taxonobservation-BEANLIST">
-    <td>
+    
      
          <% inttemp = 0 ;%>
        
          <!-- iterate over all records in set : new table for each -->
-         <logic:iterate length="5" id="onerowoftaxonobservation" name="taxonobservation-BEANLIST">
+         <logic:iterate length="<%= howManyPlantsComplex %>" id="onerowoftaxonobservation" name="taxonobservation-BEANLIST">
 		   <% if (inttemp!=0) { %> ; <% }  %>
 		   
 		    <%  inttemp ++ ;  %>
@@ -180,10 +271,30 @@
 				</a>
          </logic:iterate><!-- tax obs -->
       
-    </td>
+    
   </logic:notEmpty><!-- concept -->
-
-
+</td>
+<td class='<bean:write name="show_comms" ignore="true" />hidden'>
+<!-- community info -->
+<vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
+  where="where_observation_pk" wparam="obsId" perPage="-1" pager="false"/>
+  <logic:empty name="comminterpretation-BEANLIST">
+    No data.
+  </logic:empty>
+  <logic:notEmpty name="comminterpretation-BEANLIST">
+    
+      
+        <logic:iterate length="3" id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
+          <logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
+            
+            &raquo;  <a href='@get_link@std/commclass/<bean:write name="onerowofcomminterpretation" property="commclass_id" />'><bean:write name="onerowofcomminterpretation" property="commconcept_id_transl" /></a>
+            
+          <br/></logic:notEmpty><!-- concept -->
+        </logic:iterate>
+      
+   
+  </logic:notEmpty>
+ </td>
 </tr>
 </logic:iterate><!-- plot -->
 </TABLE>
