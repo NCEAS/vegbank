@@ -94,7 +94,7 @@ GENERAL CLASSES
   display: none;
 }
 
-.error{
+.error, .errNumber, .errDate {
   display: inline;
   color: black;
   background-color: pink;
