@@ -156,7 +156,7 @@ if (searchString ==  null || searchString.equals("")) {
 				<bean:define id="getPk" value="observation"/>
 				<bean:define id="getName" value="observation"/>
 				<bean:define id="getView" value="summary"/>
-				<% getExtra = getExtra + "&perPage=3"; %>
+				<% getExtra = getExtra + "&perPage=7"; %>
 				<bean:define id="qsent" value="5"/>
 			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="covermethod">
