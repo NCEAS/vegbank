@@ -140,20 +140,24 @@ if (searchString ==  null || searchString.equals("")) {
 			<logic:equal name="onerow" property="entity" value="community">
 				<bean:define id="getPk" value="commconcept"/>
 				<bean:define id="getName" value="commconcept"/>
+				<bean:define id="qsent" value="1"/>
 			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="place">
 				<bean:define id="getPk" value="namedplace"/>
 				<bean:define id="getName" value="namedplace"/>
+				<bean:define id="qsent" value="3"/>
 			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="plant">
 				<bean:define id="getPk" value="plantconcept"/>
 				<bean:define id="getName" value="plantconcept"/>
+				<bean:define id="qsent" value="4"/>
 			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="plot">
 				<bean:define id="getPk" value="observation"/>
 				<bean:define id="getName" value="observation"/>
 				<bean:define id="getView" value="summary"/>
 				<% getExtra = getExtra + "&perPage=3"; %>
+				<bean:define id="qsent" value="5"/>
 			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="covermethod">
 				<bean:define id="category" value="cover method"/>
@@ -161,13 +165,20 @@ if (searchString ==  null || searchString.equals("")) {
 			<logic:equal name="onerow" property="entity" value="stratummethod">
 				<bean:define id="category" value="stratum method"/>
 			</logic:equal>
+			<logic:equal name="onerow" property="entity" value="party">
+				<bean:define id="qsent" value="2"/>
+			</logic:equal>
+			<logic:equal name="onerow" property="entity" value="project">
+				<bean:define id="qsent" value="6"/>
+			</logic:equal>
 
 <% 
 String params = getPk + Utility.PARAM_DELIM + entity;
 String getURL = "@get_link@" + getView + "/" + getName + "/" + params + 
-		"?where=where_keywords_pk_in&xwhereKey=xwhere_kw_match&xwhereSearch=true&xwhereParams=" + xwhereParams;
+		"?where=where_keywords_pk_in&xwhereKey=xwhere_kw_match&xwhereSearch=true&xwhereParams=" +
+        xwhereParams;
 %>
-				<a href="<%=getURL%><%=getExtra%>"><bean:write name="category"/></a>
+				<a href="<%=getURL%><%=getExtra%>&qsent=<bean:write name="qsent" />"><bean:write name="category" /></a>
 
 			</td>
 			<td>
