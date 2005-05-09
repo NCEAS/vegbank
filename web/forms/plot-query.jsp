@@ -391,7 +391,7 @@ function setQueryText() {
    
    <h2 class="<bean:write name='simpleHide' />"><a name="plotqueryfields"></a>Plot Query:</h2>
    
-   <form name="plotqueryform" action="@views_link@observation_summary.jsp" method="get" onsubmit="javascript:return prepareForm()">
+   <form name="plotqueryform" action="@views_link@observation_summary.jsp" method="post" onsubmit="javascript:return prepareForm()">
      
      <input name="where" type="hidden" value="where_simple" />
      <input name="xwhereGlue" type="hidden" value="AND" />  
