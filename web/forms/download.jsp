@@ -3,11 +3,28 @@
   @webpage_head_html@
  
   <title>
-   VegBank: Download Plots
+   Dataset Download
   </title>
  
 <!-- VegBank Header -->
   @webpage_masthead_html@
+
+
+
+        <h1>Dataset Download</h1> 
+
+<%  	
+String datasetId = (String)request.getAttribute("dsId"); 
+boolean ok = true;
+if (Utility.isStringNullOrEmpty(datasetId)) {
+    // error: must be given dataset ID
+    ok = true;
+%>  
+    <ul><li class="error">ERROR: dataset ID must be given</li></ul>
+
+<%
+}
+%>  
 
 
   <logic:messagesPresent message="false">
@@ -19,22 +36,15 @@
   </logic:messagesPresent>
 
 
-<html:form action="/DownLoad">
-
-<!-- Need to pass the list of plots choosen in the previous screen -->
 <%  	
-	String[] selectedPlots = (String[]) request.getAttribute("selectedPlots"); 
-	for(int i=0; i < selectedPlots.length; i++)
-	{
-		// print out the hidden attribute
-%>
- 		<input type="hidden" name="selectedPlots" value="<%= selectedPlots[i] %>"/>
-<%  	
-	}   
+if (ok) {
 %>  
 
+
+<html:form action="/Download">
+ 		<input type="hidden" name="dsId" value="<%= datasetId %>"/>
+
       
-        <h1>Download Plots</h1> 
     
    <p class="instructions"> 
       Please choose a data format for downloaded plots:</p>
@@ -79,6 +89,10 @@
    
   </html:form>
      
+<%  	
+}
+%>  
+
  
 @webpage_footer_html@
 

@@ -27,12 +27,12 @@
 		<!--<form-bean name="DisplayQueryResultsForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="selectedPlots" type="java.lang.String[]" />
 		</form-bean>-->
-		<form-bean name="DownLoadForm" type="org.apache.struts.validator.DynaValidatorForm">
+		<form-bean name="DownloadForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="dataType" type="java.lang.String" initial="all" />
 			<form-property name="formatType" type="java.lang.String" initial="xml" />
 			<form-property name="selectedPlots" type="java.lang.String[]" />
 		</form-bean>
-		<form-bean name="DownLoadManagerForm" type="org.apache.struts.validator.DynaValidatorForm">
+		<form-bean name="DownloadManagerForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="selectedPlots" type="java.lang.String[]" />
 		</form-bean>
 		<form-bean name="DropPlotForm" type="org.apache.struts.action.DynaActionForm">
@@ -80,8 +80,8 @@
 		<forward name="ChangePassword" path="/forms/change_pwd.jsp" redirect="false" />
 		<forward name="InterpretTaxonObservation" path="/InterpretTaxonObservation.do" redirect="false" />
 		<forward name="InterpretCommObservation" path="/InterpretCommObservation.do" redirect="false" />
-		<forward name="DownLoad" path="/forms/DownLoad.jsp" />
-		<forward name="DownLoadManager" path="/DownLoadManager.do" />
+		<forward name="Download" path="/forms/download.jsp" />
+		<forward name="DownloadManager" path="/DownloadManager.do" />
 		<forward name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp" redirect="true" />
 		<forward name="DisplayLoadSummary" path="/forms/plot-upload-summary.jsp" redirect="true" />
 		<!--forward name="DisplayResults" path="/forms/DisplayResults.jsp" /-->
@@ -142,9 +142,11 @@
 		<!--action path="/CommQuery" type="org.vegbank.ui.struts.DummyAction" name="CommQueryForm" scope="request" validate="true" input="CommQuery">
 			<forward name="default" path="/views/commconcept_detail.jsp" />
 		</action-->
-		<action path="/DownLoad" type="org.vegbank.ui.struts.DownLoadAction" name="DownLoadForm" scope="request" validate="true" input="DownLoad" />
-		<action path="/DownLoadManager" type="org.vegbank.ui.struts.DownLoadManagerAction" name="DownLoadManagerForm" scope="request" validate="true" input="DisplayResults">
-			<forward name="success" path="/forms/DownLoad.jsp" />
+		<action path="/Download" type="org.vegbank.ui.struts.DownloadAction" name="DownloadForm" scope="request" validate="true" input="Download" >
+			<forward name="success" path="/forms/download.jsp" />
+		</action>
+		<action path="/DownloadManager" type="org.vegbank.ui.struts.DownloadManagerAction" name="DownloadManagerForm" scope="request" validate="true" input="DisplayResults">
+			<forward name="success" path="/forms/download.jsp" />
 		</action>
 		<action path="/DropPlot" type="org.vegbank.ui.struts.DropPlotAction" name="DropPlotForm" scope="request" validate="true" input="DropPlotAction">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />

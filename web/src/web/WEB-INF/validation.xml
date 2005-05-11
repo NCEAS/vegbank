@@ -158,7 +158,7 @@
 				<arg0 key="The accessionCode of the entity" resource="false" />
 			</field>
 		</form> -->
-		<form name="DownLoadForm">
+		<form name="DownloadForm">
 			<field property="dataType" depends="required">
 				<arg0 key="The desired type" resource="false" />
 			</field>
