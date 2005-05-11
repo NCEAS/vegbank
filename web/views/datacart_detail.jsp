@@ -10,22 +10,28 @@
  @webpage_masthead_html@ 
   @possibly_center@  
   
-  <!-- get user ID -->
+  <!-- get user Id -->
 <%@ include file="includeviews/sub_getwebuserid.jsp" %>
+<% Long lngDatacartId = DatasetUtility.getDatacartId(request.getSession()); %>
   
 <h1>Your Datacart</h1>
 <p class="instructions">
   Your datacart is the dataset that follows you around VegBank collecting plots and other items.<br />
   Add or remove datacart items by checking or unchecking their datacart checkboxes.</p>
 
-<p><strong>COMING SOON: download items in this dataset.</strong>
+<br />
+<div style="display: block;">
+<strong>
+    <a href="@web_context@forms/download.jsp?dsId=<%=lngDatacartId%>">DOWNLOAD this dataset to a file</a> 
+</strong>
+</div>
+<a href="@web_context@forms/download.jsp?dsId=<%=lngDatacartId%>" class="nobg"><img src="@images_link@downarrow_green.gif" border="0"></a>
+
 <br />
 
-
- <% Long lngDatacartID = DatasetUtility.getDatacartId(request.getSession()); %>
- <!-- this is guaranteed not to be null, so we can use .toString() with it : your datacart ID is: <%= lngDatacartID %> -->
+ <!-- this is guaranteed not to be null, so we can use .toString() with it : your datacart ID is: <%= lngDatacartId %> -->
   <vegbank:get id="userdataset" select="userdataset" beanName="map" 
-  where="where_userdataset_pk" wparam="<%= lngDatacartID.toString() %>" pager="false"/>
+  where="where_userdataset_pk" wparam="<%= lngDatacartId.toString() %>" pager="false"/>
     
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>
 
