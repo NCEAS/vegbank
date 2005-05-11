@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:09:01 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2005-05-11 21:12:05 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,10 +45,14 @@ import org.vegbank.common.model.Userdatasetitem;
  * manages changes to the datacart.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.1 $ $Date: 2005-05-02 11:09:01 $
+ * @version $Revision: 1.2 $ $Date: 2005-05-11 21:12:05 $
  */
 
 public class VegbankDatacartTag extends VegbankTag {
+
+    public static final String DELTA_ADD = "add";
+    public static final String DELTA_DROP = "drop";
+    public static final String DELTA_FINDADD = "findadd";
 
 	private static final Log log = LogFactory.getLog(VegbankDatacartTag.class);
     private Long usrId;
@@ -72,6 +76,7 @@ public class VegbankDatacartTag extends VegbankTag {
 
 		try {
             // get all items involved in a change
+            String d = getDelta();
             List deltaItems = null;
             Object oItems = getDeltaItems();
             if (oItems != null) {
@@ -82,16 +87,17 @@ public class VegbankDatacartTag extends VegbankTag {
 
                     deltaItems = new ArrayList();
                     if (!Utility.isStringNullOrEmpty(items)) {
-                        if (items.indexOf(",") != -1) {
+                        if (d.startsWith(DELTA_FINDADD) ||
+                                items.indexOf(",") == -1) {
+                            // add the single value
+                            deltaItems.add(items);
+                        } else {
                             //log.debug("parsing CSV");
                             StringTokenizer st = new StringTokenizer(items, ",");
                             while (st.hasMoreTokens()) {
                                 // add each CSV 
                                 deltaItems.add(st.nextToken());
                             }
-                        } else {
-                            // add the single value
-                            deltaItems.add(items);
                         }
                     }
 
@@ -124,13 +130,19 @@ public class VegbankDatacartTag extends VegbankTag {
                     log.debug("handling delta");
                     // handle delta.  add by default
                     dsu.setCurDataset(datacart);
-                    String d = getDelta();
-                    if (d.equals("drop")) { 
+                    if (d.equals(DELTA_DROP)) { 
                         log.debug("setting up drop items: " + deltaItems.size());
                         dsu.dropItemsByAC(deltaItems);
-                    } else { 
+                    } else if (d.equals(DELTA_ADD)) { 
                         log.debug("setting up add items: " + deltaItems.size());
                         dsu.addItemsByAC(deltaItems); 
+                    } else if (d.startsWith(DELTA_FINDADD)) { 
+                        if (deltaItems != null && deltaItems.size() > 0) {
+                            log.debug("adding items with findadd query");
+                            dsu.addItemsByQuery((String)deltaItems.get(0), d.substring(DELTA_FINDADD.length()+1));
+                        } else {
+                            log.debug("no findadd query given");
+                        }
                     }
 
                     log.debug("updating dataset...");
