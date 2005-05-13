@@ -431,6 +431,39 @@ function updateCartItem(elem, curClass) {
     };
 
     var params;
+    var isSelected = (elem.src == "@images_link@cart_add_one.gif");
+
+    if (isSelected) { 
+        params = "delta=add";
+        elem.parentNode.className = 'highlight';
+        elem.src = "@images_link@cart_add_one.gif";
+    } else { 
+        params = "delta=drop"; 
+        elem.parentNode.className = curClass;
+        elem.src = "@images_link@cart_drop_one.gif";
+    }
+
+    params += "&deltaItems="+encodeURIComponent(elem.value);
+    var url = "@web_context@general/get_datacart_count.ajax.jsp";
+
+    //alert(url + "?" + params);
+    ajax.connect(url, "POST", params, fnWhenDone);
+}
+
+
+
+/**
+ * Uses AJaX and <vegbank:datacart> to update the datacart items.
+ */
+function updateCartItemViaCheckbox(elem, curClass) {
+	ajax = initAjax();
+
+    var fnWhenDone = function(oXML) { 
+        //alert("pong");
+        document.getElementById("datacart-count").innerHTML = oXML.responseText;
+    };
+
+    var params;
 
     if (elem.checked) { 
         params = "delta=add";

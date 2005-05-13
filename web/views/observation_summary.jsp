@@ -119,7 +119,7 @@
 <th valign="bottom" align="center">
 <a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true" title="add all results">add all results</a>
 <br />
-<a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true" title="add all results" class="nobg"><img src="@images_link@cart1.gif" border="0" /></a>
+<a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true" title="add all results" class="nobg"><img src="@images_link@cart_star_on_blue2.gif" id="datacart-results-icon" border="0" /></a>
 </th>
 
 <th valign="bottom" align="center">

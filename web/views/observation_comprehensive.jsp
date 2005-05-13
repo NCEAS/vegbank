@@ -21,7 +21,7 @@
 <!-- insert quick datacart: -->
 <form action="" method="GET" id="cartable">
 <table class="thinlines"><tr>
-  <th><img src="@images_link@cart1.gif" border="0" />:</th>
+  <th><img src="@images_link@cart_dark.gif" border="0" id="datacart-results-icon" />:</th>
   <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
   <td><%@ include file="../includes/datacart_checkbox.jsp" %></td>
  </tr>

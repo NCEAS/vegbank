@@ -32,7 +32,7 @@ Items in this dataset:
 <form action="" method="GET" id="cartable">
 <table class="leftrightborders" cellpadding="2" >
 <tr>
-<th><img src="@images_link@cart1.gif" border="0" /></th>
+<th><img src="@images_link@cart_dark.gif" border="0" id="datacart-results-icon"/></th>
 <th>item</th>
 <%@ include file="../autogen/userdatasetitem_summary_head.jsp" %>
 <th>More info</th>
