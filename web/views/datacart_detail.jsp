@@ -2,6 +2,7 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
   @ajax_js_include@
+  @datacart_js_include@
 <!-- purpose : show datacart (singular selected dataset) for the user -->
  
 <TITLE>Your Datacart</TITLE>

@@ -654,6 +654,12 @@ form {
 .oddrow { background-color : #FFFFFF }
 .evenrow {background-color : #DDDDDD }
 .highlight {background-color : #FF9933 }
+.mouseover_bright {background-color : #acf }
+.mouseover_dark {background-color : #d72 }
+/*
+.mouseover_bright {background-color : #ff9 }
+.mouseover_dark {background-color : #c63 }
+*/
 
 /* groups of rows, in roughly ascening, coordinated colors : */
 .group1 {background-color: #FFFEBF }

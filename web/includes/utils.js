@@ -419,133 +419,6 @@ function initAjax() {
 }
 
 
-/**
- * Uses AJaX and <vegbank:datacart> to update the datacart items.
- */
-function updateCartItem(elem, curClass) {
-	ajax = initAjax();
-
-    var fnWhenDone = function(oXML) { 
-        //alert("pong");
-        document.getElementById("datacart-count").innerHTML = oXML.responseText;
-    };
-
-    var params;
-    var isSelected = (elem.src == "@images_link@cart_add_one.gif");
-
-    if (isSelected) { 
-        params = "delta=add";
-        elem.parentNode.className = 'highlight';
-        elem.src = "@images_link@cart_add_one.gif";
-    } else { 
-        params = "delta=drop"; 
-        elem.parentNode.className = curClass;
-        elem.src = "@images_link@cart_drop_one.gif";
-    }
-
-    params += "&deltaItems="+encodeURIComponent(elem.value);
-    var url = "@web_context@general/get_datacart_count.ajax.jsp";
-
-    //alert(url + "?" + params);
-    ajax.connect(url, "POST", params, fnWhenDone);
-}
-
-
-
-/**
- * Uses AJaX and <vegbank:datacart> to update the datacart items.
- */
-function updateCartItemViaCheckbox(elem, curClass) {
-	ajax = initAjax();
-
-    var fnWhenDone = function(oXML) { 
-        //alert("pong");
-        document.getElementById("datacart-count").innerHTML = oXML.responseText;
-    };
-
-    var params;
-
-    if (elem.checked) { 
-        params = "delta=add";
-        elem.parentNode.className = 'highlight';
-    } else { 
-        params = "delta=drop"; 
-        elem.parentNode.className = curClass;
-    }
-
-    params += "&deltaItems="+encodeURIComponent(elem.value);
-    var url = "@web_context@general/get_datacart_count.ajax.jsp";
-
-    //alert(url + "?" + params);
-    ajax.connect(url, "POST", params, fnWhenDone);
-}
-
-
-
-//
-// Mark all items already in datacart
-//
-function markDatacartItems(dsId) {
-	var nodeList = document.getElementById('cartable').getElementsByTagName('input');
-
-	if (nodeList.length > 0) {
-		var first = true;
-		var acString = "'";
-		var i, node;
-		for (i=0; i<nodeList.length; i++) {
-			node = nodeList.item(i);
-			if (node.type == 'checkbox') {
-				// add to list
-				if (first) { first = false;
-				} else { acString += "','"; }
-				acString += node.value;
-			} // end if checkbox
-		}
-		acString += "'";
-
-		// run query through AJaX
-		// can't use jsp since the page is already loaded at this point.  
-		findSelectedDatacartItems(dsId, acString);
-	}
-}
-
-
-//
-// Uses AJaX to connect to getDatacartACs.ajax.jsp
-//
-function findSelectedDatacartItems(dsId, acString) {
-	ajax = initAjax();
-
-    var fnWhenDone = function(oXML) { 
-		// oXML.responseText contains a CSV of accession codes 
-		// found on this page and in the datacart
-		var nodeList = document.getElementById('cartable').getElementsByTagName('input');
-
-		datacartACs = oXML.responseText.toLowerCase();
-		//alert("response: " + datacartACs);
-
-		// mark the right boxes
-		for (var i=0; i<nodeList.length; i++) {
-			var node = nodeList.item(i);
-			if (node.type == 'checkbox') {
-				if (datacartACs.indexOf(node.value.toLowerCase()) != -1) { 
-					// mark it
-					node.checked = true;
-					node.parentNode.className = 'highlight';
-				} 
-			} 
-		}
-    };
-
-    var url = "@web_context@general/get_datacart_acs.ajax.jsp";
-    var params = "wparam="+encodeURIComponent(dsId);
-    params += "&wparam="+encodeURIComponent(acString);
-
-    //alert(url + params);
-    ajax.connect(url, "POST", params, fnWhenDone);
-}
-
-
 //
 // Use this to get the items in a list
 //
@@ -578,9 +451,9 @@ function getValuesFromList(thelist, getValueOrText) {
   } else {
       /* return nothing, but should edit list to selected something with value = "" .  This just helps the xwhere_query.  */
         fixednull = "false";
-        for (var i=0;i<thelist.length;i++) {
-          if (thelist.options[i].value=="" && fixednull == "false" ) {
-            thelist.options[i].selected = true;
+        for (var j=0;j<thelist.length;j++) {
+          if (thelist.options[j].value=="" && fixednull == "false" ) {
+            thelist.options[j].selected = true;
             fixednull = "true" ;
           }
         }
@@ -637,7 +510,7 @@ function getValuesFromList(thelist, getValueOrText) {
      var x = y+"";
        var mytool_array=x.split("/"); 
        
-       if ( mytool_array.length = 3 ) 
+       if ( mytool_array.length == 3 ) 
        {
          if  ( isNumeric(mytool_array[0]) && isNumeric(mytool_array[1]) && isNumeric(mytool_array[2]) )                
          {  

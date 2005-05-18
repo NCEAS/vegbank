@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.10 2005-05-06 04:05:45 mlee Exp $
+ * $Id: vegbank2005.css,v 1.11 2005-05-18 03:48:16 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -483,5 +483,37 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit
     line-height: 0;
     background: url(@images_link@rs-bottomright.png) bottom right no-repeat;
     content: url(rs-bottomleft.png)
+}
+
+
+/* Off state for a ARC checkbox */
+.cbOff {
+	display: inline;
+	margin: 0px;
+	padding: 2px; /* NS 6 problem */
+	padding-left: 20px;
+	color: #666;
+	line-height: 22px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 22px;
+	background-image: url(@images_link@cart_add_one.gif);
+	background-repeat: no-repeat;
+	background-position: 0% 50%;
+	border: 1px;
+}
+/* On state for a ARC checkbox */
+.cbOn {
+	display: inline;
+	margin: 0px;
+	padding: 2px; /* NS 6 problem */
+	padding-left: 20px;
+	color: #000;
+	line-height: 22px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 22px;
+	background-image: url(@images_link@cart_drop_one.gif);
+	background-repeat: no-repeat;
+	background-position: 0% 50%;
+	border: 0px;
 }
 

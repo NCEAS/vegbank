@@ -2,6 +2,7 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
   @ajax_js_include@
+  @datacart_js_include@
 
    <%     String rowClass = "evenrow";  %>
 <title>VegBank Comprehensive Plot View</title>
@@ -18,22 +19,23 @@
 <bean:define id="onerowofplot" name="plotobs-BEAN" />
 <bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
 <bean:define id="plot_pk" name="onerowofplot" property="plot_id"/>
-<!-- insert quick datacart: -->
-<form action="" method="GET" id="cartable">
-<table class="thinlines"><tr>
-  <th><img src="@images_link@cart_dark.gif" border="0" id="datacart-results-icon" />:</th>
-  <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
-  <td><%@ include file="../includes/datacart_checkbox.jsp" %></td>
- </tr>
-</table> 
-</form>
-  @mark_datacart_items@
 
 <!-- start of plot & obs fields-->
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="2">
 <TR><TD width="55%" valign="top"><!-- plot level info -->
 <table class="leftrightborders" cellpadding="2"><!--each field, only write when HAS contents-->
-<tr><th class="major" colspan="2">Plot Level Data: <bean:write name="onerowofplot" property="authorplotcode"/></th></tr>
+
+  <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
+  <% rowClass = ""; %>
+    <tr><th class="major" colspan="2">
+        <form action="" method="GET" id="cartable">
+           <%@ include file="../includes/datacart_checkbox.jsp" %>
+            <bean:write name="onerowofplot" property="authorplotcode"/>
+        </form>
+    </th></tr>
+
+  @mark_datacart_items@
+
 <tr><td colspan="2">Cite this plot with URL: <a href='/cite/<bean:write name="onerowofplot" property="observationaccessioncode" />'>http://vegbank.org/cite/<bean:write name="onerowofplot" property="observationaccessioncode" /></a>, more <a href="@general_link@cite.html">info</a></td></tr>
 <tr><th>Plot ID Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> 

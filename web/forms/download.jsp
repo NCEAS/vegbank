@@ -14,11 +14,11 @@
         <h1>Dataset Download</h1> 
 
 <%  	
-String datasetId = (String)request.getAttribute("dsId"); 
+String datasetId = (String)request.getParameter("dsId"); 
 boolean ok = true;
 if (Utility.isStringNullOrEmpty(datasetId)) {
     // error: must be given dataset ID
-    ok = true;
+    ok = false;
 %>  
     <ul><li class="error">ERROR: dataset ID must be given</li></ul>
 
@@ -45,11 +45,12 @@ if (ok) {
  		<input type="hidden" name="dsId" value="<%= datasetId %>"/>
 
       
+<bean:define id="formatType" value="flat" />
     
    <p class="instructions"> 
       Please choose a data format for downloaded plots:</p>
 			<ul class="compact">		
-              <li> <html:radio value="flat" property="formatType"/><img src="@images_link@csv_icon.gif" alt="a csv icon" />Comma-Separated Values file
+              <li> <input type="radio" value="flat" name="formatType" checked="checked" /><img src="@images_link@csv_icon.gif" alt="csv format" />Comma-Separated Values file
                 <UL class="compact">
                   <LI> 
                     CSV files are generic spreadsheet files that can be imported into virtually any spreadsheet or database
@@ -60,14 +61,14 @@ if (ok) {
                  </UL>
               </li>  
 
-              <li> <html:radio value="vegbranch" property="formatType"/><img src="@vegbranch_link@images/vegbranch_logo_med.jpg" alt="VegBranch icon"/>VegBranch import</li>
+              <li> <input type="radio" value="vegbranch" name="formatType" /><img src="@vegbranch_link@images/vegbranch_logo_med.jpg" alt="VegBranch format"/>VegBranch import</li>
                  <UL class="compact">
                    <LI> 
                      VegBranch downloads are for taking data from VegBank on the web and adding them to your 
                      local <a href="@vegbranch_link@vegbranch.html">VegBranch</a> database.
                    </LI>
                  </UL>
-              <li> <html:radio value="xml" property="formatType"/><img src="@images_link@xml_icon.gif" alt="XML icon" /> XML 
+              <li> <input type="radio" value="xml" name="formatType" /><img src="@images_link@xml_icon.gif" alt="XML format" /> XML 
                  <UL class="compact">
                    <LI> XML documents are for advanced users.  VegBank has an XML standard
                    that allows complete description of plots and other elements in our database.  Please 

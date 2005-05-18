@@ -1,2 +1,1 @@
-<input type="checkbox" onclick="javascript:updateCartItemViaCheckbox(this, '<%= rowClass %>')" name="deltaItems" value="<bean:write name="delta_ac" />">
-
+&nbsp; <input type="checkbox" id="cb-<bean:write name="delta_ac" />"  name="deltaItems" value="<bean:write name="delta_ac" />" class="<%=rowClass%>" /><label for="cb-<bean:write name="delta_ac" />">&nbsp;</label>

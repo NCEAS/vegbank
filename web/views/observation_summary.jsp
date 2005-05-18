@@ -2,6 +2,7 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
   @ajax_js_include@
+  @datacart_js_include@
 
   
    <%
@@ -116,18 +117,18 @@
 <form action="" method="GET" id="cartable">
 <TABLE width="100%" class="leftrightborders" cellpadding="2">
 <tr>
-<th valign="bottom" align="center">
-<a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true" title="add all results">add all results</a>
-<br />
-<a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true" title="add all results" class="nobg"><img src="@images_link@cart_star_on_blue2.gif" id="datacart-results-icon" border="0" /></a>
+<th valign="bottom" align="center" nowrap="true">
+    <a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true" alt="add all results to datacart" class="nobg"><img src="@images_link@cart_star_on_blue2.gif" id="datacart-results-icon" border="0" /></a>
+    <br />
+<a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true" title="add all results to datacart">add all</a>
 </th>
 
 <th valign="bottom" align="center">
-  <table class="horizborders">
-    <tr><td class='horizborders'>Author Code  </td></tr>
+  <table class="noborder">
+    <tr><td class="noborder" style="border-bottom: 1px solid black">Author Code</td></tr>
     <!-- the following is a bit of a hack.  The class will be hidden, unless show_statecountry is something, in 
     this case "show", and the class "showhidden" isn't anything, so displays normally.  MTL May 6, 2005 -->
-    <tr class='horizborders <bean:write name="show_statecountry" ignore="true" />hidden'><td> Location    </td></tr>
+    <tr <bean:write name="show_statecountry" ignore="true" />hidden'><td class="noborder">Location</td></tr>
   </table>
 </th>
 <th class='<bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden' valign="bottom" align="center">
@@ -163,14 +164,14 @@
   </table>
 </th>
 
-<th valign="bottom" align="center" class='<bean:write name="show_plants" ignore="true" />hidden'>
-  <table class="horizborders">
+<th valign="bottom" align="center" class='<bean:write name="show_plants" ignore="true" />hidden' nowrap="true">
+  <table class="noborder">
     <tr><td>Some Plants</td></tr>
   </table>
 </th>
 
-<th valign="bottom" align="center" class='<bean:write name="show_comms" ignore="true" />hidden'>
-  <table class="horizborders">
+<th valign="bottom" align="center" class='<bean:write name="show_comms" ignore="true" />hidden' width="30%">
+  <table class="noborder">
     <tr><td>Community</td></tr>
   </table>
 </th>
@@ -186,19 +187,20 @@
 
 <!-- start of plot & obs fields-->
 
-<tr class='@nextcolorclass@'>
-<td><!-- that td cannot have a class, it gets overwritten -->
+<tr class='@nextcolorclass@' align="left">
+<td align="center"><!-- that td cannot have a class, it gets overwritten -->
 <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
-<%@ include file="../includes/datacart_checkbox.jsp" %>
-<br/><a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>more 
-     <br/>details</a>
-    </td>
+<%@ include file="../includes/datacart_checkbox.jsp" %><br/>
+<a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>details</a>
+</td>
 
 
 <!-- plot data -->
 <td><bean:write name="onerowofobservation" property="authorobscode" /><br/>
+<i>
 <span class='<bean:write name="show_statecountry" ignore="true" />hidden'><bean:write name="onerowofobservation" property="stateprovince" />,<br/>
-    <bean:write name="onerowofobservation" property="country" /></span></td>
+<bean:write name="onerowofobservation" property="country" /></span></td>
+</i>
 <td class='numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
 <span class='<bean:write name="show_elev" ignore="true" />hidden'>E: <bean:write name="onerowofobservation" property="elevation" /><br/></span>
 <span class='<bean:write name="show_slope" ignore="true" />hidden'>S: <bean:write name="onerowofobservation" property="slopegradient" /><br/></span>
@@ -262,7 +264,7 @@
 <vegbank:get id="taxonobservation" select="taxonobservation_maxcover" where="where_taxonobservation_maxcover" wparam="observation_pk"
   pager="false" perPage="-1" beanName="map" />
   <logic:empty name="taxonobservation-BEANLIST">
-   Error! No data.
+   No data
   </logic:empty>
   <logic:notEmpty name="taxonobservation-BEANLIST">
     
@@ -271,15 +273,15 @@
        
          <!-- iterate over all records in set : new table for each -->
          <logic:iterate length="<%= howManyPlantsComplex %>" id="onerowoftaxonobservation" name="taxonobservation-BEANLIST">
-		   <% if (inttemp!=0) { %> ; <% }  %>
+		   <% if (inttemp!=0) { %> <br /> <% }  %>
 		   
 		    <%  inttemp ++ ;  %>
-		        <a href='@get_link@std/taxonobservation/<bean:write name="onerowoftaxonobservation" property="taxonobservation_id" />'>
+		        &raquo; <a href='@get_link@std/taxonobservation/<bean:write name="onerowoftaxonobservation" property="taxonobservation_id" />'>
 				  <bean:write name="onerowoftaxonobservation" property="authorplantname" />
+				</a>
 					<logic:notEmpty name="onerowoftaxonobservation" property="maxcover">
 					  (<bean:write name="onerowoftaxonobservation" property="maxcover" />%)
 					</logic:notEmpty>
-				</a>
          </logic:iterate><!-- tax obs -->
       
     
@@ -290,7 +292,7 @@
 <vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
   where="where_observation_pk" wparam="obsId" perPage="-1" pager="false"/>
   <logic:empty name="comminterpretation-BEANLIST">
-    No data.
+    No data
   </logic:empty>
   <logic:notEmpty name="comminterpretation-BEANLIST">
     
@@ -298,7 +300,7 @@
         <logic:iterate length="3" id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
           <logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
             
-            &raquo;  <a href='@get_link@std/commclass/<bean:write name="onerowofcomminterpretation" property="commclass_id" />'><bean:write name="onerowofcomminterpretation" property="commconcept_id_transl" /></a>
+            &raquo; <a href='@get_link@std/commclass/<bean:write name="onerowofcomminterpretation" property="commclass_id" />'><bean:write name="onerowofcomminterpretation" property="commconcept_id_transl" /></a>
             
           <br/></logic:notEmpty><!-- concept -->
         </logic:iterate>
