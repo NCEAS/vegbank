@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 13:58:04 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2005-05-19 01:29:44 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,14 @@ public class DatasetUtility
 
     private void initBeanInserter() {
         try {
-            this.bean2db = new VBModelBeanToDB();
+            if (bean2db == null) { 
+                this.bean2db = new VBModelBeanToDB();
+            }
+
+            if (bean2db.getDBConnection().isClosed()) {
+                bean2db.initDB();
+            }
+
             this.ag = new AccessionGen(bean2db.getDBConnection());
         } catch (Exception ex) {
             log.error("Problem initializing VBModelBeanToDB", ex);
@@ -94,7 +101,7 @@ public class DatasetUtility
 
     /**
      * Creates a new userdataset record optionally with its datasetitem children.
-     * Does not touch the DB.
+     * Does not update the DB.
      * @param beanList List of VBModelBean objects (could be Userdatasetitems) to store as
      * the items in this new dataset
      * @return new Userdataset instance
@@ -177,15 +184,17 @@ public class DatasetUtility
 
             // handle adds
             if (newItemsToAdd.size() > 0) {
+                initBeanInserter();
                 kit = newItemsToAdd.keySet().iterator();
                 while (kit.hasNext()) {
                     // new items are stored in a hash
                     String key = (String)kit.next();
                     Userdatasetitem dsi = (Userdatasetitem)newItemsToAdd.get(key);
-                    if (!datasetItemExists(dsi)) {
-                        insertItem(dsi);
-                    }
+                    //if (!datasetItemExists(dsi)) {
+                        bean2db.addBean(dsi);
+                    //}
                 }
+                insertItem(null);
             }
 
             // handle drops: send the dataset ID and a list of ACs
@@ -211,7 +220,7 @@ public class DatasetUtility
 
         String newAC = null;
         try {
-            if (bean2db == null) { initBeanInserter(); }
+            initBeanInserter();
 
             long dsPK = bean2db.insert(dsBean);
             newAC = ag.buildAccession("userdataset", Long.toString(dsPK), dsBean.getDatasetname());
@@ -231,19 +240,18 @@ public class DatasetUtility
      * Inserts a new datasetitem.
      * @return new userdatasetitem_id
      */
-    public long insertItem(Userdatasetitem dsi) throws SQLException {
+    public long insertItem(Userdatasetitem dsi) {
 
         long dsiPK = -1;
 
         try {
-            if (bean2db == null) { initBeanInserter(); }
+            initBeanInserter();
 
             dsiPK = bean2db.insert(dsi);
-            bean2db.returnConnection();
             log.debug("inserted new userdatasetitem: " + dsiPK);
+            bean2db.returnConnection();
         } catch (Exception ex) {
-            log.error("Exception while inserting dataset item", ex);
-            throw new SQLException("Problem inserting dataset item: " + ex.toString());
+            log.debug("Exception while inserting dataset item: " + ex.toString());
         }
 
         return dsiPK;
@@ -367,21 +375,23 @@ public class DatasetUtility
 
     /**
      * Add a Userdatasetitem to the current dataset.
-     * Does not touch the DB.
+     * Does not update the DB.
      */
     public void addItem(AccessionCode ac) {
+        //log.debug("adding " + ac.toString());
         addItem(ac.getEntityName(), ac.getEntityId(), ac.toString());
     }
 
 
     /**
      * Add a Userdatasetitem to the current dataset.
-     * Does not touch the DB.
+     * Does not update the DB.
      */
     public void addItem(String tableName, Long PK, String ac) {
 
         Userdatasetitem dsiBean = new Userdatasetitem();
         dsiBean.setUserdataset_id(curDataset.getUserdataset_id()); 
+        dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
         dsiBean.setItemtype(tableName);
         dsiBean.setItemaccessioncode(ac);
         dsiBean.setItemdatabase(ITEM_DB);
@@ -396,7 +406,7 @@ public class DatasetUtility
     /**
      * Adds items to the current dataset which will be
      * inserted on the next call to saveDataset().
-     * Does not touch the DB.
+     * Does not update the DB.
      */
     public void addItemsByAC(List items) {
         String ac = null;
@@ -415,9 +425,37 @@ public class DatasetUtility
 
 
     /**
+     * Adds items to the current dataset which will be
+     * inserted on the next call to saveDataset().
+     * Runs a query that must select accessioncode so
+     * that all results can be added.
+     * @param query SQL to run
+     * @param acField the name of the field containing the AC to add
+     */
+    public void addItemsByQuery(String query, String acField) {
+
+        ResultSet rs = null;
+        ResultSetMetaData meta = null;
+        Userdataset ds = null;
+        log.debug("adding items with query: " + query);
+
+        try {
+            rs = da.issueSelect(DatabaseUtility.removeSemicolons(query));
+            while (rs.next()) {
+                addItem(new AccessionCode(rs.getString(acField)));
+            }
+            da.closeStatement();
+            rs.close();
+        } catch (SQLException ex) {
+            log.error("Problem adding items by query", ex);
+        }
+    }
+
+
+    /**
      * Drop a Userdatasetitem from the current dataset.
      * Make sure curDataset has been set first.
-     * Does not touch the DB.
+     * Does not update the DB.
      */
     public void dropItem(String ac) {
         // use a hash so that there are no duplicates
@@ -429,7 +467,7 @@ public class DatasetUtility
     /**
      * Drop a Userdatasetitem to the current dataset.
      * Make sure curDataset has been set first.
-     * Does not touch the DB.
+     * Does not update the DB.
      */
     /*
     public void dropItem(String tableName, Long PK, String ac) throws SQLException {
@@ -672,7 +710,7 @@ public class DatasetUtility
      */
     public boolean datasetItemExists(Userdatasetitem dsi) {
         StringBuffer query = new StringBuffer(64)
-            .append("SELECT count(*) FROM userdatasetitem WHERE userdataset_id='")
+            .append("SELECT count(1) FROM userdatasetitem WHERE userdataset_id='")
             .append(dsi.getUserdataset_id()).append("' AND (");
 
         long l = dsi.getUserdatasetitem_id();

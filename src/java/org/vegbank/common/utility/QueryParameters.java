@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-04 09:52:37 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2005-05-19 01:29:44 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public class QueryParameters extends HashMap {
         this.put("perPage", getTag.getPerPage());
         this.put("wparam", getTag.getWparam());
         this.put("id", getTag.getId());
-        this.put("pager", getTag.getPager());
+        this.put("pager", new Boolean(getTag.getPager()));
         this.put("whereNumeric", getTag.getWhereNumeric());
         this.put("whereNonNumeric", getTag.getWhereNonNumeric());
         this.put("xwhereSearch", new Boolean(getTag.getXwhereSearch()));
@@ -56,6 +56,7 @@ public class QueryParameters extends HashMap {
         this.put("xwhereGlue", getTag.getXwhereGlue());
         this.put("orderBy", getTag.getOrderBy());
         this.put("allowOrderBy", new Boolean(getTag.getAllowOrderBy()));
+        this.put("showQuery", new Boolean(getTag.getShowQuery()));
         this.put("save", getTag.getSave());
         this.put("load", getTag.getLoad());
     }
