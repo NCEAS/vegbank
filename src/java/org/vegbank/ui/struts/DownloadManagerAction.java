@@ -1,12 +1,12 @@
 package org.vegbank.ui.struts;
 /*
- * '$RCSfile: DownLoadManagerAction.java,v $'
+ * '$RCSfile: DownloadManagerAction.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-14 22:16:51 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-05-19 01:27:47 $'
+ *	'$Revision: 1.1 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.LogUtility;
  * display a download options page.
  * 
  */
-public class DownLoadManagerAction extends Action
+public class DownloadManagerAction extends Action
 {
 	public ActionForward execute(
 		ActionMapping mapping,
@@ -52,7 +52,7 @@ public class DownLoadManagerAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		LogUtility.log(" In DownLoadManagerAction ");
+		LogUtility.log(" In DownloadManagerAction ");
 		ActionErrors errors = new ActionErrors();
 		String fwd = "success";
 		
@@ -61,7 +61,7 @@ public class DownLoadManagerAction extends Action
 		String[] observationAccessions = (String[]) thisForm.get("selectedPlots");
 		for ( int i = 0 ; i < observationAccessions.length ; i++)
 		{
-			LogUtility.log("DownLoadManagerAction: " + observationAccessions[i]);
+			LogUtility.log("DownloadManagerAction: " + observationAccessions[i]);
 		}
 		
 		if ( observationAccessions.length < 1 )

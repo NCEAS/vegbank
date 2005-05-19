@@ -27,13 +27,13 @@ import org.vegbank.xmlresource.transformXML;
 import com.Ostermiller.util.LineEnds;
 
 /*
- * '$RCSfile: DownLoadAction.java,v $'
+ * '$RCSfile: DownloadAction.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-14 22:16:51 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2005-05-19 01:27:47 $'
+ *	'$Revision: 1.1 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,9 +54,9 @@ import com.Ostermiller.util.LineEnds;
  *
  * Struts action to download file(s) based on id
  */
-public class DownLoadAction extends Action
+public class DownloadAction extends Action
 {
-	private static Log log = LogFactory.getLog(DownLoadAction.class);
+	private static Log log = LogFactory.getLog(DownloadAction.class);
 
 	// Supported FormatTypes
 	private static final String XML_FORMAT_TYPE = "xml";
@@ -85,7 +85,7 @@ public class DownLoadAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		log.debug(" In DownLoadAction ");
+		log.debug(" In DownloadAction ");
 		ActionErrors errors = new ActionErrors();
 		String fwd = null; // Do not go forward if successfull, download file
 		
@@ -110,13 +110,13 @@ public class DownLoadAction extends Action
 				String xml = XMLUtil.getVBXML(plotObservations);
 				
 				// Place into file for download
-				//this.initResponseForFileDownLoad( response, "VegbankDownload.xml", DOWNLOAD_CONTENT_TYPE);
+				//this.initResponseForFileDownload( response, "VegbankDownload.xml", DOWNLOAD_CONTENT_TYPE);
 				//this.sendFileToBrowser(xml, response);
 
 				/////////////////
 				// ZIP the XML doc
 				/////////////////
-				this.initResponseForFileDownLoad(response, "VegbankPlotsXML.zip", ZIP_CONTENT_TYPE);
+				this.initResponseForFileDownload(response, "VegbankPlotsXML.zip", ZIP_CONTENT_TYPE);
 				
 				Hashtable nameContent = new Hashtable();
 				nameContent.put("vb_plot_observation.xml", xml);
@@ -168,7 +168,7 @@ public class DownLoadAction extends Action
 					// Place generated file in ZIP archive
 					if ( dataType.equalsIgnoreCase(ALL_DATA_TYPE) )
 					{
-						this.initResponseForFileDownLoad(response, "VegbankPlotsFlat.zip", ZIP_CONTENT_TYPE);
+						this.initResponseForFileDownload(response, "VegbankPlotsFlat.zip", ZIP_CONTENT_TYPE);
 						
 						Hashtable nameContent = new Hashtable();
 						nameContent.put("environmentalData.txt",environmentalData);
@@ -184,7 +184,7 @@ public class DownLoadAction extends Action
 					// Just downLoad the generated file
 					else 
 					{
-						this.initResponseForFileDownLoad( response, "VegbankDownload.txt", DOWNLOAD_CONTENT_TYPE);
+						this.initResponseForFileDownload( response, "VegbankDownload.txt", DOWNLOAD_CONTENT_TYPE);
 						if ( environmentalData != null )
 						{
 							this.sendFileToBrowser( environmentalData.toString() , response);
@@ -237,7 +237,7 @@ public class DownLoadAction extends Action
 					/////////////////
 					// ZIP the XML doc
 					/////////////////
-					this.initResponseForFileDownLoad(response, "VegbranchImport.zip", VEGBRANCH_ZIP_CONTENT_TYPE);
+					this.initResponseForFileDownload(response, "VegbranchImport.zip", VEGBRANCH_ZIP_CONTENT_TYPE);
 					
 					Hashtable nameContent = new Hashtable();
 					nameContent.put("vegbranch_import.csv", vegbranchCSV);
@@ -251,7 +251,7 @@ public class DownLoadAction extends Action
 					/////////////////
 
 				} else {
-					this.initResponseForFileDownLoad( response, "VegbranchImport.csv", VEGBRANCH_CONTENT_TYPE);
+					this.initResponseForFileDownload( response, "VegbranchImport.csv", VEGBRANCH_CONTENT_TYPE);
 					//response.setCharacterEncoding("UTF-16");
 					this.sendFileToBrowser( vegbranchCSV , response);
 
@@ -269,7 +269,7 @@ public class DownLoadAction extends Action
 		}
 		catch (Exception e)
 		{
-			log.debug("DownLoadAction: " + e.getMessage(), e);
+			log.debug("DownloadAction: " + e.getMessage(), e);
 			e.printStackTrace();
 			errors.add(
 				Globals.ERROR_KEY,
@@ -300,7 +300,7 @@ public class DownLoadAction extends Action
 		// Get the plots
 		for ( int i = 0; i < selectedPlots.length ; i++ )
 		{
-			log.debug("DownLoadAction : DownLoading " + selectedPlots[i]);
+			log.debug("DownloadAction : Downloading " + selectedPlots[i]);
 			Observation observation = (Observation) dbmbReader.getVBModelBean( selectedPlots[i]  );
 			plotObsersevations.add(observation);
 		}
@@ -308,7 +308,7 @@ public class DownLoadAction extends Action
 		return plotObsersevations;
 	}
 	
-	private void initResponseForFileDownLoad(HttpServletResponse response, String downloadFileName , String contentType) 
+	private void initResponseForFileDownload(HttpServletResponse response, String downloadFileName , String contentType) 
 	{
 		response.setContentType(contentType);
 		response.setHeader("Content-Disposition","attachment; filename="+downloadFileName+";"); 
