@@ -587,3 +587,13 @@ function validateThisForm(thisform) {
               }
         return blnIsValid;    
 }
+
+
+function delay(ms) {
+    var d = new Date(), mill, diff;
+    while (1) {
+        mill = new Date();
+        diff = mill - d;
+        if(diff > ms) { break; }
+    }
+}
