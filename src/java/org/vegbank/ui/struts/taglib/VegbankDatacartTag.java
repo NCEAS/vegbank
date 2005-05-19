@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-11 21:12:05 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-05-19 01:27:02 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ import org.vegbank.common.model.Userdatasetitem;
  * manages changes to the datacart.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.2 $ $Date: 2005-05-11 21:12:05 $
+ * @version $Revision: 1.3 $ $Date: 2005-05-19 01:27:02 $
  */
 
 public class VegbankDatacartTag extends VegbankTag {
@@ -67,6 +67,7 @@ public class VegbankDatacartTag extends VegbankTag {
 
         long count = 0;
 		HttpSession session = ((HttpServletRequest)pageContext.getRequest()).getSession();
+		session.setMaxInactiveInterval(-1);  // never timeout
         usrId = Utility.getAuthenticatedUsrId(session);
         if (usrId == null || usrId.longValue() == 0) {
             usrId = DatasetUtility.ANON_USR_ID;
@@ -183,6 +184,7 @@ public class VegbankDatacartTag extends VegbankTag {
                 } else { datacartHTML = count + " items"; }
 
                 // return the count of items in the datacart
+                log.debug("returning HTML: " + datacartHTML);
                 pageContext.getOut().println(datacartHTML);
             }
 

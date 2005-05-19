@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-04 09:52:37 $'
- *	'$Revision: 1.23 $'
+ *	'$Date: 2005-05-19 01:27:02 $'
+ *	'$Revision: 1.24 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ import org.vegbank.common.utility.QueryParameters;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.23 $ $Date: 2005-05-04 09:52:37 $
+ * @version $Revision: 1.24 $ $Date: 2005-05-19 01:27:02 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -98,9 +98,7 @@ public class VegbankGetTag extends VegbankTag {
 			gc.setPageNumber(getPageNumber());
 			gc.setNumItems(findAttribute("numItems"));
 			gc.setPerPage(getPerPage());
-
-			try { gc.setPager(Boolean.valueOf(getPager()).booleanValue()); 
-			} catch (Exception ex) { gc.setPager(false); }
+			gc.setPager(getPager());
 
 
 			log.debug("Setting up WHERE clause");
@@ -232,11 +230,19 @@ public class VegbankGetTag extends VegbankTag {
 	protected String pageNumber;
 
 	/**
-	 * Returns pageNumber that has been set,
-	 * or finds pageNumber attribute in any scope.
-	 */
+     * If pager is enabled, find value for pageNumber.
+     * Else, return explicitely set attribute value or 1.
+     */
     public String getPageNumber() {
-        return findAttribute("pageNumber", this.pageNumber);
+        if (getPager()) {
+		    return findAttribute("pageNumber", this.pageNumber);
+        } else {
+            if (Utility.isStringNullOrEmpty(this.pageNumber)) {
+                return "1";
+            } else {
+                return this.pageNumber;
+            }
+        }
     }
 
     public void setPageNumber(String s) {
@@ -248,8 +254,20 @@ public class VegbankGetTag extends VegbankTag {
      */
 	protected String perPage;
 
+    /**
+     * If pager is enabled, find value for perPage.
+     * Else, return explicitely set attribute value or default.
+     */
     public String getPerPage() {
-		return findAttribute("perPage", this.perPage);
+        if (getPager()) {
+		    return findAttribute("perPage", this.perPage);
+        } else {
+            if (Utility.isStringNullOrEmpty(this.perPage)) {
+                return Integer.toString(GenericCommand.DEFAULT_PER_PAGE);
+            } else {
+                return this.perPage;
+            }
+        }
     }
 
     public void setPerPage(String s) {
@@ -353,14 +371,23 @@ public class VegbankGetTag extends VegbankTag {
     /**
      * 
      */
-	protected String pager;
+	protected boolean pager = false;
 
-    public String getPager() {
-		return findAttribute("pager", this.pager);
+    public boolean getPager() {
+		if (this.pager) { 
+            return true; 
+        }
+
+        setPager(findAttribute("pager"));
+        return this.pager;
     }
 
     public void setPager(String s) {
-        this.pager = s;
+        this.pager = Utility.isStringTrue(s);
+    }
+
+    public void setPager(boolean b) {
+        this.pager = b;
     }
 
     /**
@@ -392,7 +419,7 @@ public class VegbankGetTag extends VegbankTag {
     /**
      * 
      */
-	protected boolean xwhereSearch;
+	protected boolean xwhereSearch = false;
 
     public boolean getXwhereSearch() {
 		log.debug("get xwhereSearch: " + xwhereSearch);
@@ -415,7 +442,7 @@ public class VegbankGetTag extends VegbankTag {
     /**
      * 
      */
-	protected boolean xwhereMatchAny;
+	protected boolean xwhereMatchAny = false;
 
     public boolean getXwhereMatchAny() {
 		log.debug("get xwhereMatchAny: " + xwhereMatchAny);
@@ -556,6 +583,30 @@ public class VegbankGetTag extends VegbankTag {
 
     public void setLoad(String s) {
         this.load = s;
+    }
+
+    /**
+     * If true, put getQuery in request scope
+     * as a String containing the full SQL used to
+     * generate the results.
+     */
+	protected boolean showQuery = false;
+
+    public boolean getShowQuery() {
+		if (this.showQuery) {
+			return true;
+		}
+
+        setShowQuery(findAttribute("showQuery"));
+        return this.showQuery;
+    }
+
+    public void setShowQuery(String s) {
+        setShowQuery(Utility.isStringTrue(s));
+    }
+
+    public void setShowQuery(boolean b) {
+        this.showQuery = b;
     }
 
     /**

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:54:08 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2005-05-19 01:27:02 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.ServletUtility;
  * Tag that builds a page selector in HTML.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.6 $ $Date: 2005-02-11 00:54:08 $
+ * @version $Revision: 1.7 $ $Date: 2005-05-19 01:27:02 $
  */
 
 public class VegbankPagerTag extends VegbankTag {
@@ -84,7 +84,7 @@ public class VegbankPagerTag extends VegbankTag {
 		int lastPageInBatch;
 		boolean hasMoreBatchesBefore, hasMoreBatchesAfter;
 
-		String pagerHTML = "<p align='center'><table border='0' cellspacing='20' cellpadding='2'><tr>";
+		String pagerHTML = "<div align='center' style='clear: both; display: block;'><table border='0' cellspacing='20' cellpadding='2'><tr>";
 		String queryString;
 
 		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
@@ -277,7 +277,7 @@ public class VegbankPagerTag extends VegbankTag {
 			}
 
 
-			pagerHTML += "</tr></table></p>\n";
+			pagerHTML += "</tr></table></div>\n";
 			pageContext.getOut().println(pagerHTML);
 
 		} catch (Exception ex) {
