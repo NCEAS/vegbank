@@ -21,19 +21,23 @@
   Add or remove datacart items by checking or unchecking their datacart checkboxes.</p>
 
 <br />
-<div style="display: block;">
-<strong>
-    <a href="@web_context@forms/download.jsp?dsId=<%=lngDatacartId%>">DOWNLOAD this dataset to a file</a> 
-</strong>
-</div>
-<a href="@web_context@forms/download.jsp?dsId=<%=lngDatacartId%>" class="nobg"><img src="@images_link@downarrow_green.gif" border="0"></a>
-
-<br />
-
  <!-- this is guaranteed not to be null, so we can use .toString() with it : your datacart ID is: <%= lngDatacartId %> -->
   <vegbank:get id="userdataset" select="userdataset" beanName="map" 
   where="where_userdataset_pk" wparam="<%= lngDatacartId.toString() %>" pager="false"/>
-    
+
+<logic:notEmpty name="userdataset-BEANLIST">
+    <table style="display: block; clear: both;">
+    <tr>
+        <td>
+            <a href="@web_context@forms/download.jsp?dsId=<%=lngDatacartId%>" class="nobg"><img src="@images_link@downarrow_green.gif" border="0"></a>
+        </td>
+        <td>
+            <strong><a href="@web_context@forms/download.jsp?dsId=<%=lngDatacartId%>">DOWNLOAD this dataset to a file</a></strong>
+        </td>
+    </tr>
+    </table>
+</logic:notEmpty>
+
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>
 
 <br/><hr/><br/>

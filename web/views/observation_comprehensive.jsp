@@ -20,23 +20,30 @@
 <bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
 <bean:define id="plot_pk" name="onerowofplot" property="plot_id"/>
 
+
+<!-- datacart item -->
+  <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
+  <% rowClass = ""; %>
+<div style="clear:both; display: block; float: left; width: 55%; text-align: left;">
+    <form action="" method="GET" id="cartable">
+       <%@ include file="../includes/datacart_checkbox.jsp" %> click to update datacart
+    </form>
+</div>
+
+
 <!-- start of plot & obs fields-->
-<TABLE width="100%" border="0" cellpadding="2" cellspacing="2">
+<TABLE width="100%" border="0" cellpadding="2" cellspacing="2" style="clear: both; display: block;">
 <TR><TD width="55%" valign="top"><!-- plot level info -->
 <table class="leftrightborders" cellpadding="2"><!--each field, only write when HAS contents-->
 
-  <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
-  <% rowClass = ""; %>
     <tr><th class="major" colspan="2">
-        <form action="" method="GET" id="cartable">
-           <%@ include file="../includes/datacart_checkbox.jsp" %>
             <bean:write name="onerowofplot" property="authorplotcode"/>
-        </form>
     </th></tr>
 
   @mark_datacart_items@
 
-<tr><td colspan="2">Cite this plot with URL: <a href='/cite/<bean:write name="onerowofplot" property="observationaccessioncode" />'>http://vegbank.org/cite/<bean:write name="onerowofplot" property="observationaccessioncode" /></a>, more <a href="@general_link@cite.html">info</a></td></tr>
+<tr><td colspan="2">&raquo; Citation URL: <a href='/cite/<bean:write name="onerowofplot" property="observationaccessioncode" />'>http://vegbank.org/cite/<bean:write name="onerowofplot" property="observationaccessioncode" /></a>
+<br/>&raquo; <a href="@general_link@cite.html">Citing info</a></td></tr>
 <tr><th>Plot ID Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> 
 <%@ include file="autogen/plot_plotidlong_data.jsp" %>         

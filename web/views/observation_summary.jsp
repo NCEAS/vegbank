@@ -17,7 +17,7 @@
 
 
 
-<title>VegBank Plots</title>
+<title>VegBank Plot Query Results</title>
 
 
 
@@ -104,6 +104,42 @@
 
 
 <vegbank:pager />
+<div style="clear:both; display: block;">
+                                                                                                                                                                                                  
+   <table class="noborder">
+    <tr>
+    <!-- add all results -->
+    <td>
+        <a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true"
+            alt="add all results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" /></a>
+    </td>
+    <td>
+        <a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true"
+            title="add all results to datacart">add all plot query results</a> to datacart, &nbsp; &nbsp;
+    </td>
+                                                                                                                                                                                                  
+    <!-- add page -->
+    <td>
+        <a href="javascript:addAllOnPage()" alt="add all on page to datacart" class="nobg"><img src="/vegbank/images/cart_add_one.gif" border="0" /></a>
+    </td>
+    <td>
+        <a href="javascript:addAllOnPage()" title="add all on page">add plots on page</a> to datacart, &nbsp; &nbsp;
+    </td>
+                                                                                                                                                                                                  
+    <!-- drop page -->
+    <td>
+        <a href="javascript:dropAllOnPage()" alt="drop all on page from datacart" class="nobg"><img src="/vegbank/images/cart_drop_one.gif" border="0" /></a>
+    </td>
+    <td>
+        <a href="javascript:dropAllOnPage()" title="drop all on page">drop plots on page</a> from datacart
+    </td>
+    </tr>
+                                                                                                                                                                                                  
+  </table>
+</div>
+
+
+<%@ include file="../includes/setup_rowindex.jsp" %>
 
 <logic:empty name="plotobs-BEANLIST">
                 Sorry, no plot-observations are available.
@@ -114,21 +150,20 @@
         <vegbank:datacart delta="findadd-observationaccessioncode" deltaItems="getQuery" display="false" />
     </logic:equal>
 
+
 <form action="" method="GET" id="cartable">
 <TABLE width="100%" class="leftrightborders" cellpadding="2">
 <tr>
 <th valign="bottom" align="center" nowrap="true">
-    <a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true" alt="add all results to datacart" class="nobg"><img src="@images_link@cart_star_on_blue2.gif" id="datacart-results-icon" border="0" /></a>
-    <br />
-<a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true" title="add all results to datacart">add all</a>
+    Add/Drop
 </th>
 
 <th valign="bottom" align="center">
   <table class="noborder">
-    <tr><td class="noborder" style="border-bottom: 1px solid black">Author Code</td></tr>
+    <tr><td class="noborder" style="border-bottom: 1px solid black" nowrap="true">Author Code</td></tr>
     <!-- the following is a bit of a hack.  The class will be hidden, unless show_statecountry is something, in 
     this case "show", and the class "showhidden" isn't anything, so displays normally.  MTL May 6, 2005 -->
-    <tr <bean:write name="show_statecountry" ignore="true" />hidden'><td class="noborder">Location</td></tr>
+    <tr <bean:write name="show_statecountry" ignore="true" />hidden'><td class="noborder" nowrap="true">Plot Location</td></tr>
   </table>
 </th>
 <th class='<bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden' valign="bottom" align="center">
@@ -166,13 +201,13 @@
 
 <th valign="bottom" align="center" class='<bean:write name="show_plants" ignore="true" />hidden' nowrap="true">
   <table class="noborder">
-    <tr><td>Some Plants</td></tr>
+    <tr><td>Plants Found on Plot</td></tr>
   </table>
 </th>
 
 <th valign="bottom" align="center" class='<bean:write name="show_comms" ignore="true" />hidden' width="30%">
   <table class="noborder">
-    <tr><td>Community</td></tr>
+    <tr><td>Plot Communities</td></tr>
   </table>
 </th>
 
@@ -190,17 +225,23 @@
 <tr class='@nextcolorclass@' align="left">
 <td align="center"><!-- that td cannot have a class, it gets overwritten -->
 <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
-<%@ include file="../includes/datacart_checkbox.jsp" %><br/>
-<a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>details</a>
+Plot #<%= rowIndex++ %>
+<br/>
+<%@ include file="../includes/datacart_checkbox.jsp" %>
 </td>
 
 
 <!-- plot data -->
-<td><bean:write name="onerowofobservation" property="authorobscode" /><br/>
+<td>
+<strong><bean:write name="onerowofobservation" property="authorobscode" /></strong>
+<br/>
 <i>
 <span class='<bean:write name="show_statecountry" ignore="true" />hidden'><bean:write name="onerowofobservation" property="stateprovince" />,<br/>
-<bean:write name="onerowofobservation" property="country" /></span></td>
+<bean:write name="onerowofobservation" property="country" /></span>
 </i>
+<br/>
+&raquo; <a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>plot detail</a>
+</td>
 <td class='numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
 <span class='<bean:write name="show_elev" ignore="true" />hidden'>E: <bean:write name="onerowofobservation" property="elevation" /><br/></span>
 <span class='<bean:write name="show_slope" ignore="true" />hidden'>S: <bean:write name="onerowofobservation" property="slopegradient" /><br/></span>
@@ -315,6 +356,7 @@
 @mark_datacart_items@
 
 <vegbank:pager />
+
 
 </logic:notEmpty>
 

@@ -1,6 +1,13 @@
-// $Id: datacart.js,v 1.1 2005-05-18 03:48:16 anderson Exp $
+// $Id: datacart.js,v 1.2 2005-05-19 01:26:10 anderson Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
+
+
+/////////////// GLOBALS
+
+var dc_formId = null;
+var dc_onClassCheckbox = null;
+var dc_offClassCheckbox = null;
 
 
 
@@ -34,6 +41,36 @@ function updateCartItem(elem, add) {
 
 
 /**
+ * Adds all on page.
+ */
+function addAllOnPage() {
+    changeCheckboxStates(true);
+}
+
+/**
+ * Drops all on page.
+ */
+function dropAllOnPage() {
+    changeCheckboxStates(false);
+}
+
+/**
+ * Turns on or off all checkboxes on page.
+ */
+function changeCheckboxStates(isChecked) {
+    var form = document.getElementById("cartable");
+	var inputs = form.getElementsByTagName("input");
+
+    for (var i=0; i<inputs.length; i++) {
+        if (inputs[i].type == "checkbox" && inputs[i].checked != isChecked) {
+            delay(100);
+			changeItemState(inputs[i], isChecked);
+        }
+    }
+}
+
+
+/**
  * 
  */
 function setCheckboxParentHighlight(elem, on) {
@@ -55,14 +92,14 @@ function markDatacartItems(dsId) {
 	if (nodeList.length > 0) {
 		var first = true;
 		var acString = "'";
-		var i, node;
+		var i, elem;
 		for (i=0; i<nodeList.length; i++) {
-			node = nodeList.item(i);
-			if (node.type == 'checkbox') {
+			elem = nodeList.item(i);
+			if (elem.type == 'checkbox') {
 				// add to list
 				if (first) { first = false;
 				} else { acString += "','"; }
-				acString += node.value;
+				acString += elem.value;
 			} // end if checkbox
 		}
 		acString += "'";
@@ -90,13 +127,13 @@ function findSelectedDatacartItems(dsId, acString) {
 
 		// mark the right boxes
 		for (var i=0; i<nodeList.length; i++) {
-			var node = nodeList.item(i);
-			if (node.type == 'checkbox') {
-				if (datacartACs.indexOf(node.value.toLowerCase()) != -1) { 
+			var elem = nodeList.item(i);
+			if (elem.type == 'checkbox') {
+				if (datacartACs.indexOf(elem.value.toLowerCase()) != -1) { 
 					// mark it
-					node.checked = true;
-					node.parentNode.className = 'highlight';
-                    toggleLabelStyle('cartable', node.label, 'cbOn', 'cbOff');
+					elem.checked = true;
+					elem.parentNode.className = 'highlight';
+                    toggleLabelStyle(elem.label);
 				} 
 			} 
 		}
@@ -141,8 +178,12 @@ function initARC(formId,onClassCheckbox,offClassCheckbox) {
     this.ie4    = (this.ie && (this.major == 4) && (agt.indexOf("msie 4")!=-1) );
 	this.iemac  = (this.ie && (agt.indexOf("mac")!=-1));
 
+	dc_formId = formId;
+	dc_onClassCheckbox = onClassCheckbox;
+	dc_offClassCheckbox = offClassCheckbox;
+
 	if( !(this.iemac || ie3 || ie4) ){
-		customiseInputs(formId,onClassCheckbox,offClassCheckbox);
+		customiseInputs();
 	}
 }
 
@@ -204,10 +245,10 @@ PARAMS:
  onClass  - The CSS class name for the checkbox's on style
  offClass - The CSS class name for the checkbox's off style
 */
-function toggleLabelStyle(formId, label, onClass, offClass){
+function toggleLabelStyle(label) {
 	if(!document.getElementById || !label) return;
 		
-	var form = document.getElementById(formId); //label.form;
+	var form = document.getElementById(dc_formId); //label.form;
 	if(!form) return;
 	
 	//find checkbox associated with label (if in htmlFor form)
@@ -215,8 +256,8 @@ function toggleLabelStyle(formId, label, onClass, offClass){
 		var e = document.getElementById(label.htmlFor);
 		
 		if(e.type=="checkbox"){
-			e.label.className = (e.label.className==onClass) ? offClass : onClass;
-			e.checked = (e.label.className==onClass);
+			e.label.className = (e.label.className==dc_onClassCheckbox) ? dc_offClassCheckbox : dc_onClassCheckbox;
+			e.checked = (e.label.className==dc_onClassCheckbox);
 		} 
 	}
 }
@@ -241,14 +282,14 @@ PARAMS:
  onClass  - The CSS class name for the checkbox's on style
  offClass - The CSS class name for the checkbox's off style
 */
-function customiseInputs(formId, onClassCheckbox, offClassCheckbox) {
+function customiseInputs() {
 	if(!document.getElementById) return;
 
-	var prettyForm = document.getElementById(formId);
+	var prettyForm = document.getElementById(dc_formId);
 	if(!prettyForm) return;
 		
 	//onReset, reset to initial values
-	prettyForm.onreset = function() { customiseInputs(formId, onClassCheckbox, offClassCheckbox); }
+	prettyForm.onreset = function() { customiseInputs(); }
 	
 	//attach an easy to access .label reference to form elements
 	addLabelProperties(prettyForm);
@@ -257,11 +298,11 @@ function customiseInputs(formId, onClassCheckbox, offClassCheckbox) {
 	for (var i=0; i < inputs.length; i++) {
 		
 		//CHECKBOX ONLY
-		if( (inputs[i].type=="checkbox") && inputs[i].label && onClassCheckbox && offClassCheckbox){
+		if( (inputs[i].type=="checkbox") && inputs[i].label && dc_onClassCheckbox && dc_offClassCheckbox){
 			//hide element
 			inputs[i].style.position="absolute"; inputs[i].style.left = "-1000px";
 			//initialise element
-			inputs[i].label.className=offClassCheckbox;
+			inputs[i].label.className=dc_offClassCheckbox;
 
                 /*
             //when the label is clicked..
@@ -269,7 +310,7 @@ function customiseInputs(formId, onClassCheckbox, offClassCheckbox) {
                 var elem = document.getElementById(this.htmlFor);
                 setCheckboxParentHighlight(elem, !elem.checked);
                 updateCartItem(elem, !elem.checked);
-                toggleLabelStyle(formId, this, onClassCheckbox, offClassCheckbox); 
+                toggleLabelStyle(this);
                 return false; 
             };
 
@@ -278,7 +319,7 @@ function customiseInputs(formId, onClassCheckbox, offClassCheckbox) {
                 var elem = document.getElementById(this.label.htmlFor);
                 setCheckboxParentHighlight(elem, !elem.checked);
                 updateCartItem(elem, !elem.checked);
-                toggleLabelStyle(formId, this.label, onClassCheckbox, offClassCheckbox);
+                toggleLabelStyle(this.label);
                 return false; 
             };
                 */
@@ -286,9 +327,10 @@ function customiseInputs(formId, onClassCheckbox, offClassCheckbox) {
             //enable whole-box clicking
             inputs[i].parentNode.onclick = function () {
                 var elem = this.getElementsByTagName("input")[0];
-                setCheckboxParentHighlight(elem, !elem.checked);
-                updateCartItem(elem, !elem.checked);
-                toggleLabelStyle(formId, elem.label, onClassCheckbox, offClassCheckbox);
+				changeItemState(elem, !elem.checked);
+                //setCheckboxParentHighlight(elem, !elem.checked);
+                //updateCartItem(elem, !elem.checked);
+                //toggleLabelStyle(elem.label);
                 return false; 
             };
 
@@ -312,7 +354,7 @@ function customiseInputs(formId, onClassCheckbox, offClassCheckbox) {
 
 			//if the checkbox was checked by default, change this label's style to checked
 			if(inputs[i].defaultChecked || inputs[i].checked) {
-                toggleLabelStyle(formId, inputs[i].label, onClassCheckbox, offClassCheckbox);
+                toggleLabelStyle(inputs[i].label);
             }
 		}
 
@@ -328,4 +370,11 @@ function customiseInputs(formId, onClassCheckbox, offClassCheckbox) {
 			}
 		}
     }
+}
+
+
+function changeItemState(elem, isChecked) {
+	setCheckboxParentHighlight(elem, isChecked);
+	updateCartItem(elem, isChecked);
+	toggleLabelStyle(elem.label);
 }

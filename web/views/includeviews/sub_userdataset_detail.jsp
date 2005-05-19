@@ -5,9 +5,8 @@
 		       //**************************************************************************************
 		       String rowClass = "evenrow";
     %>
-<vegbank:pager />
 <logic:empty name="userdataset-BEANLIST">
-                <p>Sorry, no datasets found. <% if ( strWebUserId == "-1" ) {  %> you are not logged on. <% } %></p>
+                <p>Sorry, no dataset found.</p>
           </logic:empty>
 <logic:notEmpty name="userdataset-BEANLIST"><!-- set up table -->
 
@@ -23,9 +22,9 @@ Items in this dataset:
 <bean:define id="ud_id" name="onerowofuserdataset" property="userdataset_id" />
  
 <vegbank:get id="userdatasetitem" select="userdatasetitem" beanName="map" 
-  where="where_userdataset_pk" wparam="ud_id" perPage="-1"/>
+  where="where_userdataset_pk" wparam="ud_id" pager="true" />
    <logic:empty name="userdatasetitem-BEANLIST">
-                Sorry, no userDatasetItem(s) are in the dataset!
+                No dataset items are in the dataset.
    </logic:empty>
 
 <logic:notEmpty name="userdatasetitem-BEANLIST">
@@ -37,10 +36,15 @@ Items in this dataset:
 <%@ include file="../autogen/userdatasetitem_summary_head.jsp" %>
 <th>More Info</th>
 </tr>
+
+<%@ include file="../../includes/setup_rowindex.jsp" %>
 <logic:iterate id="onerowofuserdatasetitem" name="userdatasetitem-BEANLIST">
 <tr class='@nextcolorclass@'>
 <bean:define id="delta_ac" name="onerowofuserdatasetitem" property="itemaccessioncode" />
-<td><%@ include file="/includes/datacart_checkbox.jsp" %></td>
+<td>
+<%@ include file="/includes/datacart_checkbox.jsp" %>
+<%= rowIndex++ %>.&nbsp;
+</td>
 <td class="largefield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
 <%@ include file="../autogen/userdatasetitem_summary_data.jsp" %>
 <td class="largefield">
@@ -49,7 +53,7 @@ Items in this dataset:
       <bean:define id="obs_pk" name="onerowofuserdatasetitem" property="itemrecord" />
       <!--bean:write name="obs_pk" /-->
       <vegbank:get id="obs" select="plotandobservation" beanName="map"
-        where="where_observation_pk" wparam="obs_pk" perPage="-1" pager="false" />
+        where="where_observation_pk" wparam="obs_pk" pager="false" />
         <logic:notEmpty name="BEAN">
             <bean:write name="BEAN" property="authorplotcode" />: <bean:write name="BEAN" property="stateprovince" />
         </logic:notEmpty>
