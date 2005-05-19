@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-05 20:22:30 $'
- *	'$Revision: 1.33 $'
+ *	'$Date: 2005-05-19 01:31:10 $'
+ *	'$Revision: 1.34 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -276,6 +276,12 @@ public class GenericCommand
                     }
                 }
             }
+
+            if (((Boolean)queryParameters.get("showQuery")).booleanValue()) {
+                log.debug("showQuery ON:  setting getQuery to full SQL query"); 
+                request.setAttribute("getQuery", sqlFullQuery);
+            }
+
 
             if (!skipQuery) {
                 ////////////////////////////////////////////////////
