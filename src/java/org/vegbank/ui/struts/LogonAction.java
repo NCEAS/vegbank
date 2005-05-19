@@ -26,8 +26,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-12 00:30:21 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2005-05-19 01:27:31 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -150,6 +150,7 @@ public class LogonAction extends VegbankAction
 		// Save the logged-in user's ID in session
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.USER_KEY, user.getUseridLong());
+		session.setMaxInactiveInterval(-1);  // never timeout
 
 		log.debug("LogonAction: User '"+ user.getUsername() + 
 				"' authenticated in session " + session.getId());
