@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.2 2005-05-19 01:26:10 anderson Exp $
+// $Id: datacart.js,v 1.3 2005-05-23 15:52:53 anderson Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -325,32 +325,35 @@ function customiseInputs() {
                 */
 
             //enable whole-box clicking
-            inputs[i].parentNode.onclick = function () {
-                var elem = this.getElementsByTagName("input")[0];
-				changeItemState(elem, !elem.checked);
-                //setCheckboxParentHighlight(elem, !elem.checked);
-                //updateCartItem(elem, !elem.checked);
-                //toggleLabelStyle(elem.label);
-                return false; 
-            };
+            addEvent(inputs[i].parentNode, "click", 
+                function () {
+                    var elem = this.getElementsByTagName("input")[0];
+                    changeItemState(elem, !elem.checked);
+                    //setCheckboxParentHighlight(elem, !elem.checked);
+                    //updateCartItem(elem, !elem.checked);
+                    //toggleLabelStyle(elem.label);
+                    return false; 
+                });
 
             //mouseover
-            inputs[i].parentNode.onmouseover = function () {
-                if (this.className == 'highlight') {
-                    this.className = 'mouseover_dark';
-                } else {
-                    this.className = 'mouseover_bright';
-                }
-            };
+            addEvent(inputs[i].parentNode, "mouseover", 
+                function () {
+                    if (this.className == 'highlight') {
+                        this.className = 'mouseover_dark';
+                    } else {
+                        this.className = 'mouseover_bright';
+                    }
+                });
 
             //mouseout
-            inputs[i].parentNode.onmouseout = function () {
-                if (this.className == 'mouseover_dark') {
-                    this.className = 'highlight';
-                } else if (this.className != 'highlight') {
-                    this.className = this.getElementsByTagName("input")[0].className;
-                }
-            };
+            addEvent(inputs[i].parentNode, "mouseout", 
+                function () {
+                    if (this.className == 'mouseover_dark') {
+                        this.className = 'highlight';
+                    } else if (this.className != 'highlight') {
+                        this.className = this.getElementsByTagName("input")[0].className;
+                    }
+                });
 
 			//if the checkbox was checked by default, change this label's style to checked
 			if(inputs[i].defaultChecked || inputs[i].checked) {
@@ -365,8 +368,19 @@ function customiseInputs() {
 				//do something a bit more interesting for keyboard states. But for now the
 				//generic dotted outline will do for most elements.
 				inputs[i].label.style.margin = "1px";
-				inputs[i].onfocus = function (){ this.label.style.border = "1px dotted #333"; this.label.style.margin="0px"; return false; };
-				inputs[i].onblur  = function (){ this.label.style.border = "none"; this.label.style.margin="1px"; return false; };
+				addEvent(inputs[i], "focus", 
+                    function () {
+                        this.label.style.border = "1px dotted #333";
+                        this.label.style.margin="0px";
+                        return false; 
+                    });
+
+				addEvent(inputs[i], "blur", 
+                    function () {
+                        this.label.style.border = "none";
+                        this.label.style.margin="1px";
+                        return false; 
+                    });
 			}
 		}
     }
