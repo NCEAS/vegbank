@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-05-07 05:46:20 $'
-* '$Revision: 1.166 $'
+* '$Date: 2005-05-23 17:37:37 $'
+* '$Revision: 1.167 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -69,16 +69,20 @@
         <isset property="eighty_eighty"/>
       </not>
     </condition>
-    <condition property="headerImageMachine" value="">
-      <not>
-        <isset property="headerImageMachine"/>
-      </not>
-    </condition>
-    
+
+
+
     <filter token="machine_url" value="${machine_url}"/>
     <filter token="eighty_eighty" value="${eighty_eighty}"/>
-    <filter token="headerImageMachine" value="${headerImageMachine}"/>
-    <echo>BASE URL:  ${machine_url}(${eighty_eighty})
+   
+        <!-- set forceoverwrite to false if not already set -->
+      <condition property="forceoverwrite" value="false">
+      <not>
+        <isset property="forceoverwrite"/>
+      </not>
+      </condition> 
+      <echo>FORCING OVERWRITE: ${forceoverwrite}</echo>
+      <echo>BASE URL:  ${machine_url}(${eighty_eighty})
     </echo>
     <!-- set the apache doc root -->
     <condition property="apache.document.root" value="/usr/www/${webapp}/htdocs">
@@ -228,22 +232,22 @@
   </target>
   <!-- DISTRIBUTES THE INCLUDES (STYLESHEETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
   <target name="includes" depends="hdrftr" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
-    <copy overwrite="true" todir="${includes_server}" filtering="true">
+    <copy overwrite="${forceoverwrite}" todir="${includes_server}" filtering="true">
       <!-- <fileset dir="${includes_src}" includes="**.css **/*jsp **.js"/> -->
       <!-- Why not just copy all? -->
       <fileset dir="${includes_src}" includes="**.* **/*jsp"/>
     </copy>
   </target>
   <target name="index" depends="help" description="=&gt; target to dist. the index.html file">
-    <copy overwrite="true" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
+    <copy overwrite="${forceoverwrite}" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/${webapp}/index.html -->
-    <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
-    <copy overwrite="true" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.jsp"/>
+    <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
+    <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.jsp"/>
     <copy todir="${apache.document.root}/" filtering="yes" file="${basedir}/.htaccess"/>
   </target>
   <!-- DISTRIBUTE THE IMAGES -->
   <target name="images" depends="index" description="=&gt; dist. the images to server">
-    <copy overwrite="true" todir="${image_server}" filtering="no">
+    <copy overwrite="${forceoverwrite}" todir="${image_server}" filtering="no">
       <fileset dir="${image_src}">
         <include name="**"/>
         <exclude name="*.psf"/>
@@ -255,7 +259,7 @@
 	* TARGET TO BUILD THE ADMIN PAGES AND DIST
 	-->
   <target name="admin" depends="forms" description="=&gt; dist the admin pages to server">
-    <copy overwrite="true" todir="${admin_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${admin_server}" filtering="yes">
       <fileset dir="${admin_src}"/>
     </copy>
   </target>
@@ -264,21 +268,21 @@
 	* WEB SERVER
 	-->
   <target name="stuff" depends="email_templates" description="=&gt; dist other static content">
-    <!-- no more news: Nov17,2004 MTL : could be added back if we wanted to : <copy overwrite="true" todir="${news_server}" filtering="yes">
+    <!-- no more news: Nov17,2004 MTL : could be added back if we wanted to : <copy overwrite="${forceoverwrite}" todir="${news_server}" filtering="yes">
       <fileset dir="${news_src}"/>
     </copy> -->
-    <copy overwrite="true" todir="${apache.document.root}/upload" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${apache.document.root}/upload" filtering="yes">
       <fileset dir="upload"/>
     </copy>
   </target>
   <target name="searchplugins" depends="stuff" description="=&gt; dist search plugin info to website">
     <mkdir dir="${vegdocs_server}/searchplugins"/>
-    <copy overwrite="true" todir="${vegdocs_server}/searchplugins" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${vegdocs_server}/searchplugins" filtering="yes">
       <fileset dir="searchplugins">
         <include name="*.html"/>
       </fileset>
     </copy>
-    <copy overwrite="true" todir="${vegdocs_server}/searchplugins" filtering="no">
+    <copy overwrite="${forceoverwrite}" todir="${vegdocs_server}/searchplugins" filtering="no">
       <fileset dir="searchplugins">
         <exclude name="*.html"/>
         <!-- everything else dist without filtering -->
@@ -290,18 +294,18 @@
 	* WEB SERVER
 	-->
   <target name="panel" depends="robot" description="=&gt; dist the panel pages to server">
-    <copy overwrite="true" todir="${panel_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${panel_server}" filtering="yes">
       <fileset dir="${panel_src}">
         <include name="*.html"/>
       </fileset>
     </copy>
-    <copy overwrite="true" todir="${panel_server}" filtering="no">
+    <copy overwrite="${forceoverwrite}" todir="${panel_server}" filtering="no">
       <fileset dir="${lrg_binary_src}/panel" includes="**/*"/>
       <!--  <fileset dir="${lrg_binary_src}/panel" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf  NVC_guidelines_v4.pdf  TDWG2003_Peet.pdf TDWG2003_Peet.ppt"/> -->
     </copy>
   </target>
   <target name="help" depends="includes" description="=&gt; dist the help pages to server">
-    <copy overwrite="true" todir="${help_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${help_server}" filtering="yes">
       <fileset dir="${help_src}">
         <include name="*.html"/>
         <exclude name="template.html"/>
@@ -318,7 +322,7 @@
   </target>
   <target name="manual-sub-build" depends="hdrftr">
     <echo>starting to style...</echo>
-    <style in="${manual_src}/manual_src.xml" out="${manual_src_temp}/BOGUS.htm" style="${manual_src}/manual2html.xsl" force="true">
+    <style in="${manual_src}/manual_src.xml" out="${manual_src_temp}/BOGUS.htm" style="${manual_src}/manual2html.xsl" force="${forceoverwrite}">
       <param name="directory" expression="./"/>
     </style>
   </target>
@@ -330,7 +334,7 @@
     </delete>
   </target>
   <target name="manual-sub-dist" depends="hdrftr">
-    <copy overwrite="true" todir="${manual_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${manual_server}" filtering="yes">
       <fileset dir="${manual_src_temp}">
         <include name="*.html"/>
       </fileset>
@@ -341,13 +345,13 @@
 	* WEB SERVER
 -->
   <target name="history" depends="panel" description="=&gt; dist the history pages to server ">
-    <style basedir="${history_src}" destdir="${history_src}" style="${history_src}/normalhtml.xsl" force="yes" includes=" development.xml"/>
-    <copy overwrite="true" todir="${history_server}" filtering="yes">
+    <style basedir="${history_src}" destdir="${history_src}" style="${history_src}/normalhtml.xsl" force="${forceoverwrite}" includes=" development.xml"/>
+    <copy overwrite="${forceoverwrite}" todir="${history_server}" filtering="yes">
       <fileset dir="${history_src}">
         <exclude name="**/**.gif"/>
       </fileset>
     </copy>
-    <copy overwrite="true" todir="${history_server}" filtering="no">
+    <copy overwrite="${forceoverwrite}" todir="${history_server}" filtering="no">
       <fileset dir="${history_src}">
         <exclude name="**/**.html"/>
       </fileset>
@@ -359,31 +363,31 @@
 -->
   <!-- dist workshop files to server : NEW as of 02-MAY-2003, not sure how these files were dist to server before.  -->
   <target name="workshop" depends="history" description="=&gt; dist the workshop pages to server ">
-    <copy overwrite="true" todir="${workshop_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="yes">
       <fileset dir="${workshop_src}">
         <include name="**/*.html"/>
         <exclude name="**/CVS*"/>
       </fileset>
     </copy>
-    <copy overwrite="true" todir="${workshop_server}" filtering="no">
+    <copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="no">
       <fileset dir="${workshop_src}">
         <exclude name="**/*.html"/>
         <exclude name="**/CVS*"/>
       </fileset>
     </copy>
-    <copy overwrite="true" todir="${workshop_server}" filtering="no">
+    <copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="no">
       <fileset dir="${lrg_binary_src}/workshop" includes="**/*"/>
       <!--  <fileset dir="${lrg_binary_src}" includes="  VegBank_NVC.pdf  VegBank_NVC.ppt  VegBank_tutorial_model.pdf  VegBank_tutorial_model.ppt VegBank_tutorial_why.pdf  VegBank_tutorial_why.ppt whittaker.pdf plot_form.pdf data_entry.xls  arizona_plants.xls  arizona_nvc.xls "/> -->
     </copy>
   </target>
   <target name="pubs" depends="workshop" description="=&gt; dist the pubs pages to server">
-    <copy overwrite="true" todir="${pubs_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${pubs_server}" filtering="yes">
       <!-- dist html and htm too -->
       <fileset dir="${pubs_src}">
         <include name="**/*.htm*"/>
       </fileset>
     </copy>
-    <copy overwrite="true" todir="${pubs_server}" filtering="no">
+    <copy overwrite="${forceoverwrite}" todir="${pubs_server}" filtering="no">
       <fileset dir="${lrg_binary_src}/pubs" includes="**/*"/>
     </copy>
   </target>
@@ -393,8 +397,8 @@
 -->
   <target name="forms" depends="images" description="=&gt; dist the forms to server ">
     <!-- style business rules to create .jsp -->
-    <style in="${forms}/businessrules.xml" style="${forms}/businessrules.xsl" out="${forms}/businessrules.jsp" force="yes"/>
-    <copy overwrite="true" todir="${forms_server}" filtering="yes">
+    <style in="${forms}/businessrules.xml" style="${forms}/businessrules.xsl" out="${forms}/businessrules.jsp" force="${forceoverwrite}"/>
+    <copy overwrite="${forceoverwrite}" todir="${forms_server}" filtering="yes">
       <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* *.xsl *.xsd businessrules.xml "/>
     </copy>
     
@@ -408,10 +412,10 @@
   <target name="views" depends="tokenfiles" description="&gt; dist the views to server (outside chain, but included in forms)">
     <!-- first overwrite any autogen views with any custom ones-->
     <mkdir dir="${views}/custom"/>
-    <copy overwrite="true" todir="${views}/autogen" filtering="no">
+    <copy overwrite="${forceoverwrite}" todir="${views}/autogen" filtering="no">
       <fileset dir="${views}/custom" includes="*jsp" excludes="**/CVS* "/>
     </copy>
-    <copy overwrite="true" todir="${views_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${views_server}" filtering="yes">
       <fileset dir="${views}" includes="**/*jsp **/*html" excludes="**/CVS* "/>
     </copy>
   </target>
@@ -421,7 +425,7 @@
   <target name="general" depends="admin" description="=&gt; dist the general dir to server">
     <!-- style must be run before copy to get the faq.html document -->
     <style in="${general_src}/faq.xml" out="${general_src}/faq.html" style="${general_src}/faq.xsl"/>
-    <copy overwrite="true" todir="${general_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${general_server}" filtering="yes">
       <fileset dir="${general_src}" includes="**.html *jsp" excludes="**/CVS*  *.xml *.xsl"/>
     </copy>
   </target>
@@ -429,13 +433,13 @@
 	* TARGET TO PUT THE DESIGN HTML DOCS INTO THE CORRECT PLACE
 -->
   <target name="design" depends="pubs" description="=&gt; dist the design (info) files to server">
-    <copy overwrite="true" todir="${design_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${design_server}" filtering="yes">
       <fileset dir="${design_src}">
         <include name="**/**.html"/>
       </fileset>
     </copy>
     <!-- non-html files -->
-    <copy overwrite="true" todir="${design_server}" filtering="no">
+    <copy overwrite="${forceoverwrite}" todir="${design_server}" filtering="no">
       <fileset dir="${design_src}">
         <exclude name="**/**.html"/>
       </fileset>
@@ -445,7 +449,7 @@
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
 -->
   <target name="xsl" depends="general" description="=&gt; dist the xsl dir to server">
-    <copy overwrite="true" todir="${vegbank.lib.dir}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${vegbank.lib.dir}" filtering="yes">
       <fileset dir="${xsl.src.dir}"/>
     </copy>
   </target>
@@ -456,12 +460,12 @@
     <xmlvalidate file="${web.src.dir}/WEB-INF/struts-config.xml" failonerror="true">
       <dtd publicId="-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" location="http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd"/>
     </xmlvalidate>
-    <copy overwrite="true" todir="${vegbank_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes">
       <fileset dir="${web.src.dir}"/>
     </copy>
   </target>
   <target name="robot" depends="web" description="==&gt; Distribute robots.txt">
-    <copy overwrite="true" todir="${apache.document.root}" file="./robots.txt"/>
+    <copy overwrite="${forceoverwrite}" todir="${apache.document.root}" file="./robots.txt"/>
   </target>
   <!--
 	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
@@ -524,29 +528,29 @@
    <filter token="vegbank_footer_html_help" value="${vegbank_footer_html_help}" />
    -->
    <!-- dist relavent includes to server and filter tokens while doing so -->
-   <copy todir="${includes_server}" filtering="yes" overwrite="yes">
+   <copy todir="${includes_server}" filtering="yes" overwrite="${forceoverwrite}">
      <fileset dir="${includes_src}">
        <include name="*.properties" />
      </fileset>
    </copy>
    
-    <!--<copy file="${includes_src}/filters.properties" tofile="${includes_server}/filters_detokened.properties" filtering="yes" overwrite="yes"/>-->
+    <!--<copy file="${includes_src}/filters.properties" tofile="${includes_server}/filters_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>-->
     <filter filtersfile="${includes_server}/filters.properties"/>
-    <!--<copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="yes"/>-->
+    <!--<copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>-->
     <filter filtersfile="${includes_server}/placeurl.properties"/>
-    <style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="true"/>
-    <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="yes"/>
+    <style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="${forceoverwrite}"/>
+    <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>
     <filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/>
     
     
     
-    <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="true"/>
-    <copy file="${manual_src}/manual_filters.properties" tofile="${includes_server}/manual_filters.properties" filtering="yes" overwrite="yes"/>
+    <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="${forceoverwrite}"/>
+    <copy file="${manual_src}/manual_filters.properties" tofile="${includes_server}/manual_filters.properties" filtering="yes" overwrite="${forceoverwrite}"/>
     <filter filtersfile="${includes_server}/manual_filters.properties"/>
     <ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
-    <copy file="${includes_src}/closedlist-tokens.properties" tofile="${includes_server}/closedlist-tokens.properties" filtering="yes" overwrite="yes"/>
+    <copy file="${includes_src}/closedlist-tokens.properties" tofile="${includes_server}/closedlist-tokens.properties" filtering="yes" overwrite="${forceoverwrite}"/>
     <filter filtersfile="${includes_server}/closedlist-tokens.properties"/> 
-   <copy todir="${includes_server}" filtering="yes" overwrite="yes">
+   <copy todir="${includes_server}" filtering="yes" overwrite="${forceoverwrite}">
      <fileset dir="${includes_src}">
        <include name="webpage_*.html" />
      </fileset>
@@ -575,7 +579,7 @@
     
   </target>
   <target name="email_templates" depends="design" description="=&gt; dist email templates">
-    <copy overwrite="true" todir="${email_templates_server}" filtering="yes">
+    <copy overwrite="${forceoverwrite}" todir="${email_templates_server}" filtering="yes">
       <fileset dir="${email_templates_src}"/>
     </copy>
   </target>
@@ -640,7 +644,7 @@
   <!-- images -->
   <target name="vegbranch-dist-updatelists" depends="vegbranch-init" description="dist vegbranch update closed/open lists file">
     <ant dir="../docs/xml" target="vegbranch-update-lists"/>
-    <copy todir="${vegbranch_server}" filtering="no" overwrite="yes">
+    <copy todir="${vegbranch_server}" filtering="no" overwrite="${forceoverwrite}">
       <fileset dir="${vegbranch_src}">
         <include name="current-closed-list.zip"/>
       </fileset>
@@ -653,17 +657,17 @@
   </target>
   <!-- docs -->
   <target name="vegbranch-dist-docs" depends="vegbranch-init" description="dist vegbranch docs to server">
-    <copy todir="${vegbranch_server}/docs" filtering="yes" overwrite="yes">
+    <copy todir="${vegbranch_server}/docs" filtering="yes" overwrite="${forceoverwrite}">
       <fileset dir="${vegbr_dir}/docs" includes="${vegbr_docs_include}"/>
     </copy>
-    <copy todir="${vegbranch_server}" filtering="yes" overwrite="yes">
+    <copy todir="${vegbranch_server}" filtering="yes" overwrite="${forceoverwrite}">
       <fileset dir="${vegbr_dir}" includes="${vegbr_htmlfile}"/>
     </copy>
   </target>
   <!-- dist the loading table documentation, similar to data dictionary -->
   <target name="vegbranch-dist-docs-loadtbls" depends="vegbranch-init" description="not needed any longer">
     <!-- <ant antfile="loadbuild.xml" dir="./vegbranch/docs/loadtbls/" target="dist-loaddoc"/> -->
-    <!--<style in="${vegbr_dir}/docs/loadtbls/loadmodule_doc.xml" out="${vegbr_dir}/docs/loadtbls/BOGUS.txt" style="${vegbr_dir}/docs/loadtbls/loadmod_docAll.xsl" force="true"/> -->
+    <!--<style in="${vegbr_dir}/docs/loadtbls/loadmodule_doc.xml" out="${vegbr_dir}/docs/loadtbls/BOGUS.txt" style="${vegbr_dir}/docs/loadtbls/loadmod_docAll.xsl" force="${forceoverwrite}"/> -->
   </target>
   <target name="vegbranch-clean-locfiles" depends="vegbranch-init" description="clean local html files from vegbranch dir">
     <delete>
@@ -688,7 +692,7 @@
         <exclude name="*/custom/*"/>
       </fileset>
     </copy>
-    <copy todir="${vegbranch_server}/help" filtering="yes" overwrite="yes">
+    <copy todir="${vegbranch_server}/help" filtering="yes" overwrite="${forceoverwrite}">
       <fileset dir="${vegbr_dir}/help/custom">
         <include name="**/*.html"/>
       </fileset>
@@ -750,7 +754,14 @@
 MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
 	-->
   </target>
-  <target name="deploy-all" depends="views-autogen, deploy, dictionary, manual, vegbranch-dist-all, dataxml" description="=&gt; all in deploy plus slow rarely updated stuff"/>
+  <target name="setoverwrite" description="=&gt; sets overwrite to true, could also do same with commandLine&gt; ant -Dforceoverwrite=true" >
+      <property name="forceoverwrite" value="true" /> <!-- this should always be true if deploying all -->
+  </target>
+  <target name="deploy-all" description="=&gt; all in deploy plus slow rarely updated stuff">
+    <antcall target="setoverwrite" />
+    <antcall target="deploy-all-doesit" />
+  </target>
+  <target name="deploy-all-doesit" depends="views-autogen, deploy, dictionary, manual, vegbranch-dist-all, dataxml" description="internal target, use deploy-all instead"/>
   <!--<target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
     <property name="webapp" value="vegtest"/>
     <antcall target="deploy"/>
