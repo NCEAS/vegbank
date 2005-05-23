@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2005-05-23 20:45:43 $'
- *	'$Revision: 1.8 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-05-23 22:57:48 $'
+ *	'$Revision: 1.9 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ import org.apache.struts.util.RequestUtils;
 import org.apache.struts.util.ResponseUtils;
 import org.apache.struts.taglib.bean.WriteTag;
 
+import org.vegbank.common.Constants;
 import org.vegbank.common.command.GenericCommand;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.ServletUtility;
@@ -56,7 +57,7 @@ import org.vegbank.common.utility.ServletUtility;
  * Tag that builds a page selector in HTML.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.8 $ $Date: 2005-05-23 20:45:43 $
+ * @version $Revision: 1.9 $ $Date: 2005-05-23 22:57:48 $
  */
 
 public class VegbankPagerTag extends VegbankTag {
@@ -200,7 +201,7 @@ public class VegbankPagerTag extends VegbankTag {
 				//urlParams.put("curBatch", Integer.toString(iCurBatch - 1));
 				queryString = ServletUtility.buildQueryString(urlParams);
 				fullHref = request.getRequestURI() +  queryString;
-				if ( fullHref.length() > 1000 ) {
+				if ( fullHref.length() > Constants.MAX_URL_LENGTH ) {
 					fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
 				}
 				pagerHTML += "<td><p>&laquo;&laquo;<a href='" + fullHref + "'>more pages</a></td>";
@@ -219,7 +220,7 @@ public class VegbankPagerTag extends VegbankTag {
 				urlParams.put("pageNumber", pageNumberToLink);
 				queryString = ServletUtility.buildQueryString(urlParams);
 				fullHref = request.getRequestURI() +  queryString;
-				if ( fullHref.length() > 1000 ) {
+				if ( fullHref.length() > Constants.MAX_URL_LENGTH ) {
 				  fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
 				}
 				pagerHTML += "&laquo;<a href='" + fullHref + "'>previous</a>&nbsp; <font color='#AAAAAA'>|</font> ";
@@ -241,7 +242,7 @@ public class VegbankPagerTag extends VegbankTag {
 					urlParams.put("pageNumber", pageNumberToLink);
 					queryString = ServletUtility.buildQueryString(urlParams);
 					fullHref = request.getRequestURI() +  queryString;
-				    if ( fullHref.length() > 1000 ) {
+				    if ( fullHref.length() > Constants.MAX_URL_LENGTH ) {
 				    	fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
 				    }
 				    pagerHTML += "<a href='" + fullHref + "'>" + i + "</a>";
@@ -260,7 +261,7 @@ public class VegbankPagerTag extends VegbankTag {
 				urlParams.put("pageNumber", pageNumberToLink);
 				queryString = ServletUtility.buildQueryString(urlParams);
 				fullHref = request.getRequestURI() +  queryString;
-				if ( fullHref.length() > 1000 ) {
+				if ( fullHref.length() > Constants.MAX_URL_LENGTH ) {
 									fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
 				}
 				pagerHTML += " <font color='#AAAAAA'>|</font> &nbsp;<a href='" +
@@ -291,7 +292,7 @@ public class VegbankPagerTag extends VegbankTag {
 				urlParams.put("pageNumber", pageNumberToLink);
 				queryString = ServletUtility.buildQueryString(urlParams);
 				fullHref = request.getRequestURI() +  queryString;
-				if ( fullHref.length() > 1000 ) {
+				if ( fullHref.length() > Constants.MAX_URL_LENGTH ) {
 					fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
 				}
 				pagerHTML += "<td><p><a href='" + fullHref + "'>more pages</a>&raquo;&raquo;</td>";
