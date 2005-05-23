@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-04 09:52:37 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2005-05-23 23:00:55 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,4 +70,6 @@ public interface Constants
 	public static final String ACCESSIONCODENAME = "accessionCode";
 	public static final String NO_AC = "-1";
 	public static final String LAST_SEARCH_URL = "last-search-url";
+
+	public static final String MAX_URL_LENGTH = "1000";
 }
