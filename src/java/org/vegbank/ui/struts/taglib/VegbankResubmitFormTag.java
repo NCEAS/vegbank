@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2005-05-23 20:44:17 $'
- *	'$Revision: 1.1 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-05-23 23:00:20 $'
+ *	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ import org.vegbank.common.utility.ServletUtility;
  * this allows us to link to the same form, changing one parameter by using this form rather than a <a href="">
  *
  * @author Michael Lee
- * @version $Revision: 1.1 $ $Date: 2005-05-23 20:44:17 $
+ * @version $Revision: 1.2 $ $Date: 2005-05-23 23:00:20 $
  */
 
 public class VegbankResubmitFormTag extends VegbankTag {
@@ -66,15 +66,16 @@ public class VegbankResubmitFormTag extends VegbankTag {
 		try {
             if (getAbsolute()) {
                 // url
-                newLinkHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURL() + "'>");
+                newLinkHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURL() + "' class='hidden'>");
             } else {
                 // uri
-                newLinkHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURI() + "'>");
+                newLinkHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURI() + "' class='hidden'>");
             }
 
 			urlParams = ServletUtility.parameterHash(request);
 
             Iterator kit = urlParams.keySet().iterator();
+            String str;
             while (kit.hasNext()) {
 
                 String key = (String)kit.next();
@@ -82,16 +83,22 @@ public class VegbankResubmitFormTag extends VegbankTag {
 
                 if (paramValue instanceof String) {
                     //is not an array, just a simple value
-                    newLinkHTML.append("<input type='hidden' name='" + key + "'").append("value='")
-					                        .append((String)paramValue).append("' />");
+                    str = (String)paramValue;
+                    newLinkHTML.append("<textarea name='")
+                            .append(key).append("'>")
+                            .append(str)
+                            .append("</textarea>");
 
                 } else if (paramValue instanceof String[]) {
                     //is part of array of values
                     String[] paramArr = request.getParameterValues(key);
 
                     for (int i=0; i<paramArr.length; i++) {
-                       newLinkHTML.append("<input type='hidden' name='" + key + "'").append("value='")
-					                        .append((String)paramArr[i]).append("' />");
+                        str = (String)paramValue;
+                        newLinkHTML.append("<textarea name='")
+                                .append(key).append("'>")
+                                .append(str)
+                                .append("</textarea>");
                     }
                 }
 
