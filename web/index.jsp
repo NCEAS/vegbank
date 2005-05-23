@@ -17,7 +17,12 @@
      <%@ include file="includes/plot-map-northamerica-home.jsp" %>
      <%@ include file="includes/plot-map-northamerica-key.jsp" %>
     </fieldset>
-
+    <br />
+    <fieldset>
+      <legend>Recently Added Plots</legend>
+      <bean:include id="recentprojects" page="/views/raw/raw_recentprojects.jsp" />
+      <bean:write name="recentprojects" filter="false" />
+    </fieldset>
     </div>
 
 
@@ -53,7 +58,15 @@
     <li><a href="@general_link@metadata.html">More Data</a></li>
     </ul>
     </fieldset>
-
+     <br/>
+    <fieldset>
+      <legend>Data in Vegbank</legend> 
+      <ul><li><bean:include id="countdata" page="/views/raw/raw_countdata.jsp" />
+      <bean:write name="countdata" filter="false" />
+      </li></ul>
+    </fieldset>
+     
+     
     </div>
 
 
@@ -86,6 +99,7 @@
     <fieldset>
     <legend>Tools</legend>
     <ul>
+    <li><a href="http://152.2.14.231/nvcrs/">Vegetation Classification</a></li>
     <li><a href="@searchplugins_link@install-search.html">Firefox toolbar</a></li>
     <li><a href="@vegbranch_link@vegbranch.html">VegBranch client database</a></li>
     <li><a href="@vegbranch_link@docs/normalizer/normalizer.html">Data matrix normalizer</a></li>
