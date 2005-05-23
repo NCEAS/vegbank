@@ -24,7 +24,7 @@ function include(sURI)
     }
     if (!hIncludes[sURI])
     {
-      var oNew = document.createElement("script");
+      var oNew = createElement("script");
       oNew.type = "text/javascript";
       oNew.src = sURI;
       hIncludes[sURI]=true;
@@ -325,27 +325,44 @@ function ts_sort_default(a,b) {
 }
 
 
-function addEvent(elm, evType, fn, useCapture)
 // addEvent and removeEvent
 // cross-browser event handling for IE5+,  NS6 and Mozilla
 // By Scott Andrew
+function addEvent(elm, evType, fn)
 {
-  if (elm.addEventListener){
-    elm.addEventListener(evType, fn, useCapture);
-    return true;
-  } else if (elm.attachEvent){
-    var r = elm.attachEvent("on"+evType, fn);
-    return r;
-  } else {
-    alert("Handler could not be removed");
-  }
-  return false;
+    if (evType.substring(0,2) == "on") {
+        evType = evType.substring(2);
+    }
+
+    if (elm.addEventListener){
+        elm.addEventListener(evType, fn, true);
+        return true;
+    } else if (elm.attachEvent){
+        var r = elm.attachEvent("on"+evType, fn);
+        return r;
+    } else {
+        alert("Handler could not be removed");
+    }
+
+    return false;
 }
 
 
 /****************************************************************************/
 /*  the preceding from http://www.kryogenix.org/code/browser/sorttable/     */
 /****************************************************************************/
+
+function removeEvent(obj, evType, fn, useCapture){
+  if (obj.removeEventListener){
+    obj.removeEventListener(evType, fn, useCapture);
+    return true;
+  } else if (obj.detachEvent){
+    var r = obj.detachEvent("on"+evType, fn);
+    return r;
+  } else {
+    alert("Handler could not be removed");
+  }
+}
 
 
 
@@ -597,3 +614,18 @@ function delay(ms) {
         if(diff > ms) { break; }
     }
 }
+
+/*
+createElement function found at http://simon.incutio.com/archive/2003/06/15/javascriptWithXML
+*/
+function createElement(element) {
+    if (typeof document.createElementNS != 'undefined') {
+        return document.createElementNS('http://www.w3.org/1999/xhtml', element);
+    }
+    if (typeof document.createElement != 'undefined') {
+        return document.createElement(element);
+    }
+    return false;
+}
+
+
