@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-16 20:14:52 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2005-05-23 07:50:52 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ import java.io.*;
 public class WebUser
 {
     public static final String DEFAULT_VB_DATA_DIR = "/usr/vegbank/upload";
-    public static final String DEFAULT_VB_EXPORT_DIR = "/usr/vegbank/export";
+    public static final String DEFAULT_VB_EXPORT_DIR = "/usr/www/vegbank/htdocs/export";
 
 	private String givenname = "";
 	private String middlename = "";
@@ -532,5 +532,4 @@ public class WebUser
 
         return dir;
 	}
-
 }
