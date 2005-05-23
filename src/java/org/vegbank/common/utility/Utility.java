@@ -27,8 +27,8 @@ import org.vegbank.common.Constants;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-05-05 20:22:31 $'
- * '$Revision: 1.49 $'
+ * '$Date: 2005-05-23 07:50:16 $'
+ * '$Revision: 1.50 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,9 @@ public class Utility implements Constants
 	public static String VB_HOME_DIR;
 	public static String VB_DATA_DIR;
 	public static String VB_EXPORT_DIR;
+	public static String VB_EXPORT_DIRNAME;
 	public static String WEBAPP_DIR;
+	public static String WEB_DIR;
 	public static String MODELBEAN_CACHING;
 	public static String VB_EMAIL_FROM;
 	public static String VB_EMAIL_ADMIN_TO;
@@ -106,10 +108,12 @@ public class Utility implements Constants
 		VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
 		VEGBANK_XML_SCHEMA = VEGBANK_SCHEMA_LOCATION + VEGBANK_SCHEMA_NAME;
 
+		WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");
+		WEB_DIR = vegbankPropFile.getString("vegbank.web.dir");
 		VB_HOME_DIR = vegbankPropFile.getString("vegbank.home.dir");
 		VB_DATA_DIR = vegbankPropFile.getString("vegbank.data.dir");
-		VB_EXPORT_DIR = vegbankPropFile.getString("vegbank.export.dir");
-		WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");
+		VB_EXPORT_DIRNAME = vegbankPropFile.getString("vegbank.export.dirname");
+		VB_EXPORT_DIR = WEB_DIR + VB_EXPORT_DIRNAME;
 		MODELBEAN_CACHING = vegbankPropFile.getString("modelbean.caching");
 		
 		SMTP_SERVER = vegbankPropFile.getString("mailHost");
@@ -783,6 +787,30 @@ public class Utility implements Constants
 	}
 	
 	/**
+	 * Create and write a temp file in the system tmp dir (/tmp).
+	 * 
+	 * @param in
+	 *          Reader to write out to filesystem
+	 * @throws IOException
+	 * @return path to temp file
+	 */
+	public static String writeTempFile(Reader in) throws IOException
+	{
+        File outputFile = File.createTempFile(Integer.toString(in.hashCode()), null);
+
+        FileWriter out = new FileWriter(outputFile);
+        int c;
+
+        while ((c = in.read()) != -1)
+            out.write(c);
+
+        out.close();
+        in.close();
+        return outputFile.getAbsolutePath();
+	}
+
+
+	/**
 	 * Tool to save a file to the filesystem.
 	 * 
 	 * @param in
@@ -795,14 +823,32 @@ public class Utility implements Constants
 	{
 		File outputFile = new File(filename);
 
-    FileWriter out = new FileWriter(outputFile);
-    int c;
+        if (!outputFile.exists()) {
+            // create the file
+            outputFile.createNewFile();
+        }
 
-    while ((c = in.read()) != -1)
-    	out.write(c);
+        FileWriter out = new FileWriter(outputFile);
+        int c;
 
-    out.close();
-    in.close();
+        while ((c = in.read()) != -1)
+            out.write(c);
+
+        out.close();
+        in.close();
+	}
+
+
+	/**
+	 * Tool to delete a file from the filesystem.
+	 * 
+	 * @param filename
+	 *          The name of the file to write to
+	 * @throws IOException
+	 */
+	public static void deleteFile(String filename) throws IOException
+	{
+		(new File(filename)).delete();
 	}
 
 
@@ -980,4 +1026,10 @@ public class Utility implements Constants
         request.getSession().setAttribute(LAST_SEARCH_URL, url.toString());
     }
 
+    /**
+     *
+     */
+    public static String getVegBankProperty(String key) {
+        return vegbankPropFile.getString(key);
+    }
 }
