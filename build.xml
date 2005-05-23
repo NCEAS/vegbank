@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--    * build.xml   *   * Global build script for vegbank.   * The build.context must be entered for all task, to avoid this hassle you    * can call ant like this:   *  % echo "[build.context]" | ant [target]   *   *     '$Author: anderson $'   *     '$Date: 2005-05-23 07:48:58 $'   *     '$Revision: 1.66 $' -->
+<!--    * build.xml   *   * Global build script for vegbank.   * The build.context must be entered for all task, to avoid this hassle you    * can call ant like this:   *  % echo "[build.context]" | ant [target]   *   *     '$Author: mlee $'   *     '$Date: 2005-05-23 20:01:32 $'   *     '$Revision: 1.67 $' -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
   <!-- Initialize simple properties, no context handling                 -->
@@ -40,7 +40,13 @@
     <property name="vegbankVersion" value="1.0.2"/>
     <filter token="subst_lt" value="&lt;"/>
     <filter token="subst_gt" value="&gt;"/>
-  </target>
+      <!-- set forceoverwrite to false if not already set -->
+      <condition property="forceoverwrite" value="false">
+      <not>
+        <isset property="forceoverwrite"/>
+      </not>
+      </condition> 
+ </target>
   <!-- ================================================================= -->
   <!-- Read properties file, Setup filters, etc.                         -->
   <!-- ================================================================= -->
@@ -288,12 +294,14 @@
     <echo>*********After set-deploy.target: ${deploy.target}, ${build.context}, ${hostname}</echo>
     <ant dir="web" target="${deploy.target}" inheritAll="false">
       <property name="hostname" value="${hostname}"/>
+      <property name="forceoverwrite" value="${forceoverwrite}" />
     </ant>
   </target>
   <target name="deploy-web-all" depends="deploy-prepare, set-deploy.target">
     <echo>*********After set-deploy.target: ${deploy.target}-all, ${build.context}, ${hostname}</echo>
     <ant dir="web" target="${deploy.target}-all" inheritAll="false">
       <property name="hostname" value="${hostname}"/>
+      <property name="forceoverwrite" value="true" />
     </ant>
   </target>
   <!-- ================================================================= -->
@@ -565,4 +573,7 @@
     <fail if="invalidContextName"> ******************************************************************************* ERROR: An invalid context name entered: '${build.context}'  	Only vegbank and vegtest contexts currently supported. *******************************************************************************     </fail>
     -->
   </target>
+     <target name="setoverwrite" description="=&gt; sets overwrite to true, could also do same with commandLine&gt; ant -Dforceoverwrite=true" >
+         <property name="forceoverwrite" value="true" /> <!-- this should always be true if deploying all -->
+   </target>
 </project>
