@@ -34,8 +34,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-23 07:50:52 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-05-23 18:23:45 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -388,8 +388,6 @@ public class DownloadAction extends Action
 		    sb.append(line);
         }
 
-        in.flush();
-        in.close();
 
         return sb.toString();
 	}
