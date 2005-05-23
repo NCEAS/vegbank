@@ -5,9 +5,14 @@
   <title>
    Dataset Download
   </title>
- 
+
+<style> 
+li { padding: 6px; }
+</style> 
+
 <!-- VegBank Header -->
   @webpage_masthead_html@
+  
 
 
 
@@ -48,32 +53,39 @@ if (ok) {
 <bean:define id="formatType" value="flat" />
     
    <p class="instructions"> 
-      Please choose a data format for downloaded plots:</p>
-			<ul class="compact">		
-              <li> <input type="radio" value="flat" name="formatType" checked="checked" /><img src="@images_link@csv_icon.gif" alt="csv format" />Comma-Separated Values file
-                <UL class="compact">
-                  <LI> 
+      Please choose a download file data format, then click the download button.</p>
+			<ul class="compact">
+              <li class="evenrow padded"> <input type="radio" value="flat" name="formatType" checked="checked" /><img src="@images_link@csv_icon.gif" alt="csv format" />
+              <strong>Comma-Separated Values</strong>
+
+                  <blockquote> 
                     CSV files are generic spreadsheet files that can be imported into virtually any spreadsheet or database
-                    program, such as Microsoft Excel or Works, IBM Lotus 1-2-3, Microsoft Access, and many others. <br/>
-                    This download will consist of two files, one for general plot data (location, name, ID, community, etc.)
+                    program, such as Microsoft Excel, Works, Access, Lotus 1-2-3 and many others.
+
+                    This download consists of two files: one for general plot data (location, name, ID, community, etc.)
                     and one for plants occurring on each plot (plant name, stratum, plot ID, cover percent).
-                  </LI>
-                 </UL>
+                  </blockquote>
               </li>  
 
-              <li> <input type="radio" value="vegbranch" name="formatType" /><img src="@vegbranch_link@images/vegbranch_logo_med.jpg" alt="VegBranch format"/>VegBranch import</li>
-                 <UL class="compact">
-                   <LI> 
-                     VegBranch downloads are for taking data from VegBank on the web and adding them to your 
-                     local <a href="@vegbranch_link@vegbranch.html">VegBranch</a> database.
-                   </LI>
-                 </UL>
-              <li> <input type="radio" value="xml" name="formatType" /><img src="@images_link@xml_icon.gif" alt="XML format" /> XML 
-                 <UL class="compact">
-                   <LI> XML documents are for advanced users.  VegBank has an XML standard
-                   that allows complete description of plots and other elements in our database.  Please 
-                   see <a href="@NativeXMLIndexPage@">our xml index</a> for more sample XML files and schema files.</LI>
-                 </UL>
+              <li class="oddrow padded">
+                <input type="radio" value="vegbranch" name="formatType" />
+                <img src="@vegbranch_link@images/vegbranch_logo_med.jpg" alt="VegBranch format"/>
+                <strong>VegBranch Import</strong>
+                   <blockquote> 
+                     Use this format to transfer data from the vegbank.org web site into your local 
+                     <a href="@vegbranch_link@vegbranch.html">VegBranch</a> database.
+                   </blockquote>
+               </li>
+
+              <li class="evenrow padded">
+                <input type="radio" value="xml" name="formatType" />
+                <img src="@images_link@xml_icon.gif" alt="XML format" />
+                <strong>XML</strong>
+                <blockquote>XML documents are for advanced users.  VegBank's XML format
+                   describes plots, plants, communities and other entities found in our database.  
+                   Please see <a href="@NativeXMLIndexPage@">our XML index</a> for more sample XML 
+                   files and schema files.
+                </blockquote>
               </li>
               </ul>
                 <input type="hidden" name="dataType" value="all" />
@@ -82,10 +94,12 @@ if (ok) {
         <!-- download action -->
         <p class="instructions">Please note that all downloads will be "zipped" in a .zip file archive.  To 
         "unzip" the downloaded file, you'll need what most
-        computers have: a decompression software like <a href="http://www.winzip.com">WinZip</a> 
+        computers have: a decompression program like <a href="http://www.winzip.com">WinZip</a> 
         (Windows XP has its own decompression utility built in). </p>
         
-        <input name="actionDownload" type="image" value="download" border="0" height="19" src="@image_server@btn_download.gif" width="99" />
+        <input name="actionDownload" type="image" value="download" border="0" src="@image_server@btn_download.gif" />
+
+        <p>&nbsp; </p>
       
    
   </html:form>

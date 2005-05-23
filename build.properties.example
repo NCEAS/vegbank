@@ -34,7 +34,8 @@ headerImageMachine=aldo
 # Vegbank Directories
 vegbank.home.dir=/usr/vegbank
 vegbank.data.dir=/usr/vegbank/upload
-apache.document.root=/var/www/html
+apache.document.root=/usr/www/vegbank/htdocs
+vegbank.export.dir=export
 
 # XML Schema
 vegbank.schema.data=vegbank-data-ver1.0.2usage.xsd

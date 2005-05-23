@@ -26,7 +26,9 @@
   where="where_userdataset_pk" wparam="<%= lngDatacartId.toString() %>" pager="false"/>
 
 <logic:notEmpty name="userdataset-BEANLIST">
-    <table style="display: block; clear: both;">
+
+<div style="clear:both; display: block;">
+    <table class="noborder">
     <tr>
         <td>
             <a href="@web_context@forms/download.jsp?dsId=<%=lngDatacartId%>" class="nobg"><img src="@images_link@downarrow_green.gif" border="0"></a>
@@ -36,6 +38,7 @@
         </td>
     </tr>
     </table>
+    </div>
 </logic:notEmpty>
 
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>

@@ -28,6 +28,7 @@
 			<form-property name="selectedPlots" type="java.lang.String[]" />
 		</form-bean>-->
 		<form-bean name="DownloadForm" type="org.apache.struts.validator.DynaValidatorForm">
+			<form-property name="dsId" type="java.lang.Long" initial="0" />
 			<form-property name="dataType" type="java.lang.String" initial="all" />
 			<form-property name="formatType" type="java.lang.String" initial="xml" />
 			<form-property name="selectedPlots" type="java.lang.String[]" />
