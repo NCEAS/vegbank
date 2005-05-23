@@ -27,8 +27,6 @@ machine_url=http://gyro.msi.ucsb.edu
 eighty_eighty=:8080
 mail_host=mail.msi.ucsb.edu
 
-# New value to indicate what image to use: valid options: (none)=vegbank, gyro, aldo
-headerImageMachine=aldo
 
 
 # Vegbank Directories
