@@ -3,10 +3,10 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-05-19 01:27:02 $'
- *	'$Revision: 1.7 $'
- * 
+ *	'$Author: mlee $'
+ *	'$Date: 2005-05-23 20:45:43 $'
+ *	'$Revision: 1.8 $'
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -56,7 +56,7 @@ import org.vegbank.common.utility.ServletUtility;
  * Tag that builds a page selector in HTML.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.7 $ $Date: 2005-05-19 01:27:02 $
+ * @version $Revision: 1.8 $ $Date: 2005-05-23 20:45:43 $
  */
 
 public class VegbankPagerTag extends VegbankTag {
@@ -82,10 +82,12 @@ public class VegbankPagerTag extends VegbankTag {
 		int numTotalBatches;
 		int firstPageInBatch;
 		int lastPageInBatch;
+		String pageNumberToLink;
 		boolean hasMoreBatchesBefore, hasMoreBatchesAfter;
 
 		String pagerHTML = "<div align='center' style='clear: both; display: block;'><table border='0' cellspacing='20' cellpadding='2'><tr>";
 		String queryString;
+        String fullHref;
 
 		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
 		Map urlParams;
@@ -115,7 +117,7 @@ public class VegbankPagerTag extends VegbankTag {
 			//iCurBatch = convStringToInt(findAttribute("curBatch"), 1);
 			//log.debug("curBatch: " + iCurBatch);
 
-		
+
 			// calculate shit
 			numTotalPages = (int)Math.ceil((float)iNumItems / (float)iPerPage);
 			numTotalBatches = (int)Math.ceil((float)numTotalPages / (float)iPerBatch);
@@ -193,11 +195,15 @@ public class VegbankPagerTag extends VegbankTag {
 			////////////////
 			if (hasMoreBatchesBefore) {
 				// render the "get last batch" link
-				urlParams.put("pageNumber", Integer.toString(firstPageInBatch - 1));
+				pageNumberToLink = Integer.toString(firstPageInBatch - 1);
+				urlParams.put("pageNumber", pageNumberToLink);
 				//urlParams.put("curBatch", Integer.toString(iCurBatch - 1));
 				queryString = ServletUtility.buildQueryString(urlParams);
-				pagerHTML += "<td><p>&laquo;&laquo;<a href='" + request.getRequestURI() + 
-						queryString + "'>more pages</a></td>";
+				fullHref = request.getRequestURI() +  queryString;
+				if ( fullHref.length() > 1000 ) {
+					fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
+				}
+				pagerHTML += "<td><p>&laquo;&laquo;<a href='" + fullHref + "'>more pages</a></td>";
 			} else if (hasMoreBatchesAfter) {
 				pagerHTML += "<td class='greytext'>&laquo;&laquo;more pages</td>";
 			}
@@ -209,10 +215,14 @@ public class VegbankPagerTag extends VegbankTag {
 			// PREVIOUS
 			////////////////
 			if (iPageNumber > 1) {
-				urlParams.put("pageNumber", Integer.toString(iPageNumber - 1));
+				pageNumberToLink= Integer.toString(iPageNumber - 1) ;
+				urlParams.put("pageNumber", pageNumberToLink);
 				queryString = ServletUtility.buildQueryString(urlParams);
-				pagerHTML += "&laquo;<a href='" + request.getRequestURI() +
-						queryString + "'>previous</a>&nbsp; <font color='#AAAAAA'>|</font> ";
+				fullHref = request.getRequestURI() +  queryString;
+				if ( fullHref.length() > 1000 ) {
+				  fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
+				}
+				pagerHTML += "&laquo;<a href='" + fullHref + "'>previous</a>&nbsp; <font color='#AAAAAA'>|</font> ";
 			} else {
 				pagerHTML += "<span class='greytext'>&laquo;previous&nbsp; </span><font color='#AAAAAA'>|</font> ";
 			}
@@ -227,9 +237,14 @@ public class VegbankPagerTag extends VegbankTag {
 					pagerHTML += " page <font color='red' size='+1'>" + i + "</font> ";
 
 				} else {
-					urlParams.put("pageNumber", Integer.toString(i));
+					pageNumberToLink = Integer.toString(i);
+					urlParams.put("pageNumber", pageNumberToLink);
 					queryString = ServletUtility.buildQueryString(urlParams);
-					pagerHTML += "<a href='" + request.getRequestURI() + queryString + "'>" + i + "</a>";
+					fullHref = request.getRequestURI() +  queryString;
+				    if ( fullHref.length() > 1000 ) {
+				    	fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
+				    }
+				    pagerHTML += "<a href='" + fullHref + "'>" + i + "</a>";
 				}
 
 				if (i < lastPageInBatch) {
@@ -241,10 +256,15 @@ public class VegbankPagerTag extends VegbankTag {
 			// NEXT
 			////////////////
 			if (iPageNumber < numTotalPages) {
-				urlParams.put("pageNumber", Integer.toString(iPageNumber + 1));
+				pageNumberToLink =Integer.toString(iPageNumber + 1);
+				urlParams.put("pageNumber", pageNumberToLink);
 				queryString = ServletUtility.buildQueryString(urlParams);
+				fullHref = request.getRequestURI() +  queryString;
+				if ( fullHref.length() > 1000 ) {
+									fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
+				}
 				pagerHTML += " <font color='#AAAAAA'>|</font> &nbsp;<a href='" +
-						request.getRequestURI() + queryString + "'>next</a>&raquo;";
+						fullHref + "'>next</a>&raquo;";
 			} else {
 				pagerHTML += " <font color='#AAAAAA'>|</font> <span class='greytext'>&nbsp; next&raquo;</span>";
 			}
@@ -258,7 +278,7 @@ public class VegbankPagerTag extends VegbankTag {
 				lastItemNumber = firstItemNumber + iPerPage - 1;
 			}
 
-			pagerHTML += "</strong><br/><span class='greytext'>records " + firstItemNumber + " through " 
+			pagerHTML += "</strong><br/><span class='greytext'>records " + firstItemNumber + " through "
 					+ lastItemNumber + " of " + iNumItems + "</span></p></td>";
 
 
@@ -267,10 +287,14 @@ public class VegbankPagerTag extends VegbankTag {
 			////////////////
 			if (hasMoreBatchesAfter) {
 				// render the "get next batch" link
-				urlParams.put("pageNumber", Integer.toString(lastPageInBatch + 1));
+				pageNumberToLink = Integer.toString(lastPageInBatch + 1) ;
+				urlParams.put("pageNumber", pageNumberToLink);
 				queryString = ServletUtility.buildQueryString(urlParams);
-				pagerHTML += "<td><p><a href='" + request.getRequestURI() + 
-						queryString + "'>more pages</a>&raquo;&raquo;</td>";
+				fullHref = request.getRequestURI() +  queryString;
+				if ( fullHref.length() > 1000 ) {
+					fullHref= "javascript:postNewParam(\"pageNumber\",\"" +  pageNumberToLink + "\")" ;
+				}
+				pagerHTML += "<td><p><a href='" + fullHref + "'>more pages</a>&raquo;&raquo;</td>";
 			} else if (hasMoreBatchesBefore) {
 				// invalid link
 				pagerHTML += "<td class='greytext'>more pages&raquo;&raquo;</td>";
@@ -284,13 +308,13 @@ public class VegbankPagerTag extends VegbankTag {
 			log.error("Error while creating pager", ex);
 		}
 
-		
+
         return SKIP_BODY;
     }
 
 
     /**
-     * 
+     *
      */
 	protected String id;
 
@@ -304,7 +328,7 @@ public class VegbankPagerTag extends VegbankTag {
 
 
     /**
-     * 
+     *
      */
 	protected String numItems;
 
@@ -318,7 +342,7 @@ public class VegbankPagerTag extends VegbankTag {
 
 
     /**
-     * 
+     *
      */
 	protected String pageNumber;
 
@@ -335,7 +359,7 @@ public class VegbankPagerTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String perPage;
 
@@ -348,7 +372,7 @@ public class VegbankPagerTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String perBatch;
 
