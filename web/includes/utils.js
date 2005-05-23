@@ -615,6 +615,30 @@ function delay(ms) {
     }
 }
 
+
+function postNewParam(theName,theVal) {
+  // this uses the resubmitForm Form in the page that should be put there by vegbank(colon)resubmitForm
+  // to send user to new location, but using the posted instead of URL parameters.
+  resubmitform = document.forms.resubmitForm ;
+  var numelements = resubmitform.elements.length;
+  
+  var wasDone = "false" ;
+    for (var i=0 ; i<numelements ; i++) {
+      if (resubmitform.elements[i].name == theName ) {
+        resubmitform.elements[i].value = theVal ;
+        wasDone = "true" ;
+      }
+    }
+    
+  if ( wasDone == "false") {
+    //didnt get done, add new input to form (tricky)
+    resubmitform.placeholder.name = theName ;
+    resubmitform.placeholder.value = theVal ;
+  }
+  resubmitform.submit();
+
+}
+
 /*
 createElement function found at http://simon.incutio.com/archive/2003/06/15/javascriptWithXML
 */

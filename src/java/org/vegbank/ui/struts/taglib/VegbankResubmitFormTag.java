@@ -1,11 +1,11 @@
 /*
- *	'$RCSfile: VegbankChangeParamTag.java,v $'
+ *	'$RCSfile: VegbankResubmitFormTag.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: mlee $'
  *	'$Date: 2005-05-23 20:44:17 $'
- *	'$Revision: 1.4 $'
+ *	'$Revision: 1.1 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,17 +37,17 @@ import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.ServletUtility;
 
 /**
- * Tag that replaces one request parameter value with another
- * and returns an absolute or relative URL back to the current
- * address with the new parameter value.
+ * this inserts into the current page a form called resubmitForm that takes all of the parameters as hidden inputs with values
+ * and sets the submit action as the current URI
+ * this allows us to link to the same form, changing one parameter by using this form rather than a <a href="">
  *
- * @author P. Mark Anderson
- * @version $Revision: 1.4 $ $Date: 2005-05-23 20:44:17 $
+ * @author Michael Lee
+ * @version $Revision: 1.1 $ $Date: 2005-05-23 20:44:17 $
  */
 
-public class VegbankChangeParamTag extends VegbankTag {
+public class VegbankResubmitFormTag extends VegbankTag {
 
-	private static final Log log = LogFactory.getLog(VegbankChangeParamTag.class);
+	private static final Log log = LogFactory.getLog(VegbankResubmitFormTag.class);
 
 
     /**
@@ -58,7 +58,7 @@ public class VegbankChangeParamTag extends VegbankTag {
     public int doStartTag() throws JspException {
 
 
-		StringBuffer newLinkHTML = new StringBuffer(128);
+		StringBuffer newLinkHTML = new StringBuffer(6028);
 
 		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
 		Map urlParams;
@@ -66,90 +66,56 @@ public class VegbankChangeParamTag extends VegbankTag {
 		try {
             if (getAbsolute()) {
                 // url
-                newLinkHTML.append(request.getRequestURL()).append("?");
+                newLinkHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURL() + "'>");
             } else {
                 // uri
-                newLinkHTML.append(request.getRequestURI()).append("?");
+                newLinkHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURI() + "'>");
             }
 
 			urlParams = ServletUtility.parameterHash(request);
 
-
-            String n = getParamName();
-            String v = getParamValue();
-            urlParams.put(n, v);
-
-            boolean first = true;
             Iterator kit = urlParams.keySet().iterator();
             while (kit.hasNext()) {
 
                 String key = (String)kit.next();
                 Object paramValue = urlParams.get(key);
 
-
                 if (paramValue instanceof String) {
-                    if (first) { first = false;
-                    } else { newLinkHTML.append("&"); }
-
-                    newLinkHTML.append(key).append("=")
-                        .append(java.net.URLEncoder.encode((String)paramValue, "UTF-8"));
+                    //is not an array, just a simple value
+                    newLinkHTML.append("<input type='hidden' name='" + key + "'").append("value='")
+					                        .append((String)paramValue).append("' />");
 
                 } else if (paramValue instanceof String[]) {
+                    //is part of array of values
                     String[] paramArr = request.getParameterValues(key);
 
                     for (int i=0; i<paramArr.length; i++) {
-                        if (first) { first = false;
-                        } else { newLinkHTML.append("&"); }
-
-                        newLinkHTML.append(key).append("=")
-                            .append(java.net.URLEncoder.encode(paramArr[i], "UTF-8"));
+                       newLinkHTML.append("<input type='hidden' name='" + key + "'").append("value='")
+					                        .append((String)paramArr[i]).append("' />");
                     }
                 }
 
+
+
+
+
+
+
             }
-            if ( getPostParams()  ) {
-				//use javascript to post form
-				pageContext.getOut().println("javascript:postNewParam(\"" + n + "\",\"" + v + "\")");
-			} else {
-				// use href with params
-				pageContext.getOut().println(newLinkHTML.toString());
-			}
+            newLinkHTML.append("<input name='placeholder' type='hidden' />") ;
+            newLinkHTML.append("</form>") ;
+
+			pageContext.getOut().println(newLinkHTML.toString());
+
 
 		} catch (Exception ex) {
-			log.error("Error while changing params", ex);
+			log.error("Error while writing form to change params via method='post'", ex);
 		}
 
         return SKIP_BODY;
     }
 
-
-    /**
-     *
-     */
-	protected String paramName;
-
-    public String getParamName() {
-		return this.paramName;
-    }
-
-    public void setParamName(String s) {
-        this.paramName = s;
-    }
-
-    /**
-     *
-     */
-	protected String paramValue;
-
-    public String getParamValue() {
-		return findAttribute("paramValue", this.paramValue);
-    }
-
-    public void setParamValue(String s) {
-        this.paramValue = s;
-    }
-
-    /**
+  /**
      *
      */
 	protected boolean absolute = false;
@@ -171,22 +137,5 @@ public class VegbankChangeParamTag extends VegbankTag {
         this.absolute = b;
     }
 
-	protected boolean postParams = false;
-
-    public boolean getPostParams() {
-		if (this.postParams) {
-			return true;
-		}
-        setPostParams(findAttribute("postParams"));
-        return this.postParams;
-    }
-
-    public void setPostParams(String s) {
-        setPostParams(Utility.isStringTrue(s));
-    }
-
-    public void setPostParams(boolean b) {
-        this.postParams = b;
-    }
 
 }

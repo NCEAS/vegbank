@@ -170,6 +170,17 @@
 	<required>false</required>
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
+<attribute>
+	<name>postParams</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+</tag>
+
+<tag>
+<name>resubmitForm</name>
+<tagclass>org.vegbank.ui.struts.taglib.VegbankResubmitFormTag</tagclass>
+<bodycontent>empty</bodycontent>
 </tag>
 
 
