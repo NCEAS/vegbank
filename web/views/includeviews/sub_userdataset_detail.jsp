@@ -31,7 +31,7 @@ Items in this dataset:
 <form action="" method="GET" id="cartable">
 <table class="leftrightborders" cellpadding="2" >
 <tr>
-<th><img src="@images_link@cart_star_off_dark.gif" border="0" id="datacart-results-icon"/></th>
+<th>Drop</th>
 <th>Item</th>
 <%@ include file="../autogen/userdatasetitem_summary_head.jsp" %>
 <th>More Info</th>
