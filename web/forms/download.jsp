@@ -68,9 +68,9 @@ if (ok) {
               </li>  
 
               <li class="oddrow padded">
-                <input type="radio" value="vegbranch" name="formatType" />
+                <input type="radio" value="vegbranch" name="formatType" disabled="disabled"/>
                 <img src="@vegbranch_link@images/vegbranch_logo_med.jpg" alt="VegBranch format"/>
-                <strong>VegBranch Import</strong>
+                <strong>VegBranch Import</strong> - Coming soon!
                    <blockquote> 
                      Use this format to transfer data from the vegbank.org web site into your local 
                      <a href="@vegbranch_link@vegbranch.html">VegBranch</a> database.
@@ -78,9 +78,9 @@ if (ok) {
                </li>
 
               <li class="evenrow padded">
-                <input type="radio" value="xml" name="formatType" />
+                <input type="radio" value="xml" name="formatType" disabled="disabled"/>
                 <img src="@images_link@xml_icon.gif" alt="XML format" />
-                <strong>XML</strong>
+                <strong>XML</strong> - future development
                 <blockquote>XML documents are for advanced users.  VegBank's XML format
                    describes plots, plants, communities and other entities found in our database.  
                    Please see <a href="@NativeXMLIndexPage@">our XML index</a> for more sample XML 
