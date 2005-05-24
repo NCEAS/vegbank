@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-23 23:00:20 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-05-24 04:32:04 $'
+ *	'$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ import org.vegbank.common.utility.ServletUtility;
  * this allows us to link to the same form, changing one parameter by using this form rather than a <a href="">
  *
  * @author Michael Lee
- * @version $Revision: 1.2 $ $Date: 2005-05-23 23:00:20 $
+ * @version $Revision: 1.3 $ $Date: 2005-05-24 04:32:04 $
  */
 
 public class VegbankResubmitFormTag extends VegbankTag {
@@ -58,7 +58,7 @@ public class VegbankResubmitFormTag extends VegbankTag {
     public int doStartTag() throws JspException {
 
 
-		StringBuffer newLinkHTML = new StringBuffer(6028);
+		StringBuffer outputHTML = new StringBuffer(6028);
 
 		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
 		Map urlParams;
@@ -66,10 +66,10 @@ public class VegbankResubmitFormTag extends VegbankTag {
 		try {
             if (getAbsolute()) {
                 // url
-                newLinkHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURL() + "' class='hidden'>");
+                outputHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURL() + "' class='hidden'>");
             } else {
                 // uri
-                newLinkHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURI() + "' class='hidden'>");
+                outputHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURI() + "' class='hidden'>");
             }
 
 			urlParams = ServletUtility.parameterHash(request);
@@ -84,7 +84,7 @@ public class VegbankResubmitFormTag extends VegbankTag {
                 if (paramValue instanceof String) {
                     //is not an array, just a simple value
                     str = (String)paramValue;
-                    newLinkHTML.append("<textarea name='")
+                    outputHTML.append("<textarea name='")
                             .append(key).append("'>")
                             .append(str)
                             .append("</textarea>");
@@ -94,25 +94,19 @@ public class VegbankResubmitFormTag extends VegbankTag {
                     String[] paramArr = request.getParameterValues(key);
 
                     for (int i=0; i<paramArr.length; i++) {
-                        str = (String)paramValue;
-                        newLinkHTML.append("<textarea name='")
+                        str = (String)paramArr[i];
+                        outputHTML.append("<textarea name='")
                                 .append(key).append("'>")
                                 .append(str)
                                 .append("</textarea>");
                     }
                 }
 
-
-
-
-
-
-
             }
-            newLinkHTML.append("<input name='placeholder' type='hidden' />") ;
-            newLinkHTML.append("</form>") ;
+            outputHTML.append("<input name='placeholder' type='hidden' />") ;
+            outputHTML.append("</form>") ;
 
-			pageContext.getOut().println(newLinkHTML.toString());
+			pageContext.getOut().println(outputHTML.toString());
 
 
 		} catch (Exception ex) {
