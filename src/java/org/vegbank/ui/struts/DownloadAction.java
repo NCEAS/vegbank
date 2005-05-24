@@ -34,8 +34,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-23 18:23:45 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-05-24 04:31:04 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,7 +90,6 @@ public class DownloadAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		log.debug(" In DownloadAction ");
 		ActionErrors errors = new ActionErrors();
 		String fwd = null; // Do not go forward if successfull, download file
 		
@@ -344,15 +343,7 @@ public class DownloadAction extends Action
                 //new InputStreamReader(fileIn, EXPORT_CHARSET));
         PrintWriter out = response.getWriter();
 
-        /*
-        char[] cbuf = new char[1024];
-        while (reader.read(cbuf, 0, 1024) != -1) {
-		    out.write(cbuf);
-        }
-        */
-
         while ((line=reader.readLine()) != null) {
-            log.debug(line);
 		    out.println(line);
         }
 
@@ -385,9 +376,8 @@ public class DownloadAction extends Action
                 //new InputStreamReader(in, EXPORT_CHARSET));
 
         while ((line=reader.readLine()) != null) {
-		    sb.append(line);
+		    sb.append(line).append("\n");
         }
-
 
         return sb.toString();
 	}
@@ -419,8 +409,8 @@ public class DownloadAction extends Action
         log.debug("executing shell command: " + cmd);
         Runtime shell = Runtime.getRuntime();
         Process proc = shell.exec(cmd);
-        log.debug("deleting file: " + inputFilePathTaxa);
-        Utility.deleteFile(inputFilePathTaxa);
+///////////log.debug("deleting file: " + inputFilePathTaxa);
+///////////Utility.deleteFile(inputFilePathTaxa);
 
 					//this.initResponseForFileDownload( response, "vegbank_export.csv", VEGBRANCH_CONTENT_TYPE);
 					//this.sendFileToBrowser(proc.getInputStream(), response);
