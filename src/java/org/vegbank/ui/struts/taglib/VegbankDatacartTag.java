@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-19 01:27:02 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-05-24 04:31:40 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,13 +45,14 @@ import org.vegbank.common.model.Userdatasetitem;
  * manages changes to the datacart.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.3 $ $Date: 2005-05-19 01:27:02 $
+ * @version $Revision: 1.4 $ $Date: 2005-05-24 04:31:40 $
  */
 
 public class VegbankDatacartTag extends VegbankTag {
 
     public static final String DELTA_ADD = "add";
     public static final String DELTA_DROP = "drop";
+    public static final String DELTA_DROPALL = "dropall";
     public static final String DELTA_FINDADD = "findadd";
 
 	private static final Log log = LogFactory.getLog(VegbankDatacartTag.class);
@@ -134,6 +135,18 @@ public class VegbankDatacartTag extends VegbankTag {
                     if (d.equals(DELTA_DROP)) { 
                         log.debug("setting up drop items: " + deltaItems.size());
                         dsu.dropItemsByAC(deltaItems);
+                    } else if (d.equals(DELTA_DROPALL)) { 
+                        long dsId = Long.parseLong((String)deltaItems.get(0));
+                        Long testUsrId = dsu.getOwnerId(dsId);
+                        // check if user is DS owner
+                        log.debug("testusr: " + testUsrId);
+                        log.debug("usr: " + usrId);
+                        if ( (testUsrId == null && usrId == null) ||
+                                (testUsrId != null && testUsrId.equals(usrId)) ) {
+                            dsu.dropAllItems(dsId); 
+                        } else {
+                            log.warn("attempt to delete non-owned dataset by usrId " + usrId);
+                        }
                     } else if (d.equals(DELTA_ADD)) { 
                         log.debug("setting up add items: " + deltaItems.size());
                         dsu.addItemsByAC(deltaItems); 
