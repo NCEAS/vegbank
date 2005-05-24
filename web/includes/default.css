@@ -347,13 +347,21 @@ table.horizborders {border-style:solid; border-color:#333333; border-collapse:co
   border-top-width:0px ;}
 
 
-table.horizborders td, td.horizborders, table.horizborders th ,th.horizborders {border-style:solid;
-  border-bottom-width:1px ;
-  border-left-width:0px ;
-  border-right-width:0px ;
-  border-top-width:0px ;
-  padding: 2px;
-  text-align: center;
+table.horizborders td,
+  td.horizborders,
+  table.horizborders th,
+  th.horizborders
+  {
+	background-image: url(@images_link@greydot.png);
+	background-position:  bottom left;
+	background-repeat:  repeat-x ;
+	border-style:solid;
+    border-bottom-width:0px ;
+    border-left-width:0px ;
+    border-right-width:0px ;
+    border-top-width:0px ;
+    padding: 2px;
+    text-align: center;
   }
 
 /* only an outside border around table:
