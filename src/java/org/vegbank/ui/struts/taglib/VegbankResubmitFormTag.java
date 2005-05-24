@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-05-24 04:32:04 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2005-05-24 17:42:33 $'
+ *	'$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ import org.vegbank.common.utility.ServletUtility;
  * this allows us to link to the same form, changing one parameter by using this form rather than a <a href="">
  *
  * @author Michael Lee
- * @version $Revision: 1.3 $ $Date: 2005-05-24 04:32:04 $
+ * @version $Revision: 1.4 $ $Date: 2005-05-24 17:42:33 $
  */
 
 public class VegbankResubmitFormTag extends VegbankTag {
@@ -71,14 +71,17 @@ public class VegbankResubmitFormTag extends VegbankTag {
                 // uri
                 outputHTML.append("<form method='post' name='resubmitForm' action='" + request.getRequestURI() + "' class='hidden'>");
             }
-
+            //not really just URL Params, but also params posted in body of request.
 			urlParams = ServletUtility.parameterHash(request);
-
+            boolean placeholderwritten = false; // trying to avoid duplication of the placeholder element.
             Iterator kit = urlParams.keySet().iterator();
             String str;
             while (kit.hasNext()) {
 
                 String key = (String)kit.next();
+                if ( key.equals("placeholder") ) {
+					placeholderwritten = true; // dont need to add a new one in this form if already written
+				}
                 Object paramValue = urlParams.get(key);
 
                 if (paramValue instanceof String) {
@@ -100,10 +103,14 @@ public class VegbankResubmitFormTag extends VegbankTag {
                                 .append(str)
                                 .append("</textarea>");
                     }
+
                 }
 
             }
-            outputHTML.append("<input name='placeholder' type='hidden' />") ;
+            if ( placeholderwritten == false ) {
+				// placeholder is not part of URL, so is now no part of this form, add it.
+              outputHTML.append("<input name='placeholder' type='hidden' />") ;
+		    }
             outputHTML.append("</form>") ;
 
 			pageContext.getOut().println(outputHTML.toString());
