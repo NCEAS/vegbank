@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2005-05-23 20:44:17 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2005-05-24 18:07:12 $'
+ *	'$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.util.MessageResources;
 
+import org.vegbank.common.Constants;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.ServletUtility;
 
@@ -42,7 +43,7 @@ import org.vegbank.common.utility.ServletUtility;
  * address with the new parameter value.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.4 $ $Date: 2005-05-23 20:44:17 $
+ * @version $Revision: 1.5 $ $Date: 2005-05-24 18:07:12 $
  */
 
 public class VegbankChangeParamTag extends VegbankTag {
@@ -107,9 +108,18 @@ public class VegbankChangeParamTag extends VegbankTag {
                 }
 
             }
-            if ( getPostParams()  ) {
-				//use javascript to post form
-				pageContext.getOut().println("javascript:postNewParam(\"" + n + "\",\"" + v + "\")");
+
+            boolean usePostParams = getPostParams() ;
+            // a way to DEBUG without logging:
+            // newLinkHTML.append("&lengthOfThisURLBeforeThisParam=").append(newLinkHTML.length());
+            if ( newLinkHTML.length() > Constants.MAX_URL_LENGTH ) {
+               // then we should post these params as the URL is too long
+               usePostParams = true ;
+		    }
+            if ( usePostParams ) {
+				//use javascript to post form : LIMITATION- cannot post value (or named parameter) that contains a quotation mark!
+				// LIMITATION #2: cannot wrap this tag in double quotes, must be single quotes.
+				pageContext.getOut().println("javascript:postNewParam('" + n + "','" + v + "')");
 			} else {
 				// use href with params
 				pageContext.getOut().println(newLinkHTML.toString());
