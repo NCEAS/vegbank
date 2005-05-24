@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.11 2005-05-18 03:48:16 anderson Exp $
+ * $Id: vegbank2005.css,v 1.12 2005-05-24 18:39:27 mlee Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -133,7 +133,7 @@ fieldset > #home-img {
   margin: 1px 0 2px 2px;
   width: 201px;
   clear: left;
-  border-width: 0;
+  /* border-width: 0; */
   z-index: 9;
 }
 #centercontent > #content-3col-a table {
