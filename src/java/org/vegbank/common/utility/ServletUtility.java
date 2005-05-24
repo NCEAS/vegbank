@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: anderson $'
- *  '$Date: 2005-02-11 00:32:01 $'
- *  '$Revision: 1.17 $'
+ *  '$Date: 2005-05-24 04:27:28 $'
+ *  '$Revision: 1.18 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,6 +121,7 @@ public class ServletUtility
 
 			origin.close();	
 		}
+		zipstream.flush();
 		zipstream.close();
 	}
 	
