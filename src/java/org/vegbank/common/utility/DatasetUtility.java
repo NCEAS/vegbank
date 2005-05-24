@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-19 01:29:44 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2005-05-24 04:29:43 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -448,6 +448,55 @@ public class DatasetUtility
             rs.close();
         } catch (SQLException ex) {
             log.error("Problem adding items by query", ex);
+        }
+    }
+
+    /**
+     * Gets the usrId owner of a dataset.
+     * @return Long usrId which could be null, 
+     *   or Long with value -1 if no dataset found.
+     *
+     */
+    public Long getOwnerId(long dsId) {
+        log.debug("getting DS owner for #" + dsId);
+        Long usrId = null;
+        ResultSet rs;
+        try {
+            StringBuffer query = new StringBuffer(96);
+            query.append("SELECT usr_id FROM userdataset WHERE userdataset_id='")
+                .append(dsId).append("'");
+            rs = da.issueSelect(query.toString());
+            if (rs.next()) {
+                 long l = rs.getInt(1);
+                 if (l != 0) {
+                    usrId = new Long(l);
+                 }
+            } else {
+                 usrId = new Long(-1);
+            }
+            rs.close();
+            da.closeStatement();
+        } catch (SQLException ex) {
+            log.error("Problem getting ds owner", ex);
+        }
+
+        return usrId;
+    }
+
+
+    /**
+     * Drops all items from a dataset.
+     */
+    public void dropAllItems(long dsId) {
+        log.debug("dropping all items in " + dsId);
+        try {
+            StringBuffer query = new StringBuffer(96);
+            query.append("DELETE FROM userdatasetitem WHERE userdataset_id='")
+                .append(dsId).append("'");
+            da.issueUpdate(query.toString());
+            da.closeStatement();
+        } catch (SQLException ex) {
+            log.error("Problem dropping all items from ds", ex);
         }
     }
 
