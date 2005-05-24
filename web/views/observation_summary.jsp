@@ -111,7 +111,7 @@
     <!-- add all results -->
     <td>
         <a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true"
-            alt="add all results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" /></a>
+            title="add all results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" /></a>
     </td>
     <td>
         <a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true"
@@ -120,7 +120,7 @@
                                                                                                                                                                                                   
     <!-- add page -->
     <td>
-        <a href="javascript:addAllOnPage()" alt="add all on page to datacart" class="nobg"><img src="/vegbank/images/cart_add_one.gif" border="0" /></a>
+        <a href="javascript:addAllOnPage()" title="add all on page to datacart" class="nobg"><img src="/vegbank/images/cart_add_one.gif" border="0" /></a>
     </td>
     <td>
         <a href="javascript:addAllOnPage()" title="add all on page">add plots on page</a> to datacart, &nbsp; &nbsp;
@@ -128,7 +128,7 @@
                                                                                                                                                                                                   
     <!-- drop page -->
     <td>
-        <a href="javascript:dropAllOnPage()" alt="drop all on page from datacart" class="nobg"><img src="/vegbank/images/cart_drop_one.gif" border="0" /></a>
+        <a href="javascript:dropAllOnPage()" title="drop all on page from datacart" class="nobg"><img src="/vegbank/images/cart_drop_one.gif" border="0" /></a>
     </td>
     <td>
         <a href="javascript:dropAllOnPage()" title="drop all on page">drop plots on page</a> from datacart
@@ -154,16 +154,15 @@
 <form action="" method="GET" id="cartable">
 <TABLE width="100%" class="leftrightborders" cellpadding="2">
 <tr>
-<th valign="bottom" align="center" nowrap="true">
-    Add/Drop
-</th>
+<th valign="bottom" align="center" nowrap="nowrap">Add/Drop</th>
 
 <th valign="bottom" align="center">
-  <table class="noborder">
-    <tr><td class="noborder" style="border-bottom: 1px solid black" nowrap="true">Author Code</td></tr>
+  <table class="horizborders">
+    <tr><td class="horizborders" nowrap="nowrap">Author Code</td></tr>
     <!-- the following is a bit of a hack.  The class will be hidden, unless show_statecountry is something, in 
     this case "show", and the class "showhidden" isn't anything, so displays normally.  MTL May 6, 2005 -->
-    <tr <bean:write name="show_statecountry" ignore="true" />hidden'><td class="noborder" nowrap="true">Plot Location</td></tr>
+    <tr class='horizborders <bean:write name="show_statecountry" ignore="true" />hidden'>
+      <td nowrap="nowrap">Plot Location</td></tr>
   </table>
 </th>
 <th class='<bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden' valign="bottom" align="center">
@@ -199,7 +198,7 @@
   </table>
 </th>
 
-<th valign="bottom" align="center" class='<bean:write name="show_plants" ignore="true" />hidden' nowrap="true">
+<th valign="bottom" align="center" class='<bean:write name="show_plants" ignore="true" />hidden' nowrap="nowrap">
   <table class="noborder">
     <tr><td>Plants Found on Plot</td></tr>
   </table>
