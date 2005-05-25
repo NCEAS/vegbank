@@ -2,12 +2,13 @@
 @stdvegbankget_jspdeclarations@
 @webpage_head_html@
 <title>VegBank</title>
+
 @webpage_masthead_html@
 
     <div class="spacer">&nbsp;</div>
 
     <div id="content-3col-a">
-    <fieldset>
+    <fieldset id="tut_findplots">
     <legend>Find Plots</legend>
     <ul>
     <li><a href="@browseplotspage@">Browse plots</a></li>
@@ -18,7 +19,7 @@
      <%@ include file="includes/plot-map-northamerica-key.jsp" %>
     </fieldset>
     <br />
-    <fieldset>
+    <fieldset id="tut_recentlyaddedplots">
       <legend>Recently Added Plots</legend>
       <bean:include id="recentprojects" page="/views/raw/raw_recentprojects.jsp" />
       <bean:write name="recentprojects" filter="false" />
@@ -27,7 +28,7 @@
 
 
     <div id="content-3col-b">
-    <fieldset>
+    <fieldset id="tut_planttaxa">
     <legend>Plant Taxa</legend>
     <ul>
     <li><a href="@forms_link@PlantQuery.jsp">Search plants</a></li>
@@ -37,7 +38,7 @@
     </fieldset>
 
     <br />
-    <fieldset>
+    <fieldset id="tut_plantcommunities">
     <legend>Plant Communities</legend>
     <ul>
     <li><a href="@forms_link@CommQuery.jsp">Search communities</a></li>
@@ -47,7 +48,7 @@
     </fieldset>
 
     <br />
-    <fieldset>
+    <fieldset id="tut_supplemental">
     <legend>Supplemental Data</legend>
     <ul>
     <li><a href="@get_link@std/party">People</a></li>
@@ -59,7 +60,7 @@
     </ul>
     </fieldset>
      <br/>
-    <fieldset>
+    <fieldset id="tut_datainvegbank">
       <legend>Data in Vegbank</legend> 
       <ul><li><bean:include id="countdata" page="/views/raw/raw_countdata.jsp" />
       <bean:write name="countdata" filter="false" />
@@ -72,7 +73,7 @@
 
 
     <div id="content-3col-c">
-    <fieldset>
+    <fieldset id="tut_learnabout">
     <legend>Learn About VegBank</legend>
     <ul>
     <li><a href="@general_link@info.html">What is VegBank?</a></li>
@@ -86,7 +87,7 @@
     </fieldset>
 
     <br />
-    <fieldset>
+    <fieldset id="tut_contributeplots">
     <legend>Contribute Plot Data</legend>
     <ul>
     <li><a href="@DisplayUploadPlotAction@">Submit plots</a></li>
@@ -97,7 +98,7 @@
 
     <br />
     <fieldset>
-    <legend>Tools</legend>
+    <legend id="tools">Tools</legend>
     <ul>
     <li><a href="http://152.2.14.231/nvcrs/">Vegetation Classification</a></li>
     <li><a href="@searchplugins_link@install-search.html">Firefox toolbar</a></li>
@@ -107,7 +108,7 @@
     </fieldset>
 
     <br />
-    <fieldset>
+    <fieldset id="tut_myaccount">
     <legend>My VegBank Account</legend>
     <ul>
     <li><a href="@web_context@LoadUser.do">Edit profile information</a></li>
