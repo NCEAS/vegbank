@@ -639,9 +639,70 @@ function postNewParam(theName,theVal) {
 
 }
 
-function highlightADiv(divToHighlight) {
-  /* highlights the div */
-  document.getElementById(divToHighlight).className="highlight" ;
+function tut_togglehighlightMainFrameEl(divToHighlight,pageToRedirectTo) {
+ /* this function highlights a section of the other page, and if fails, asks user if ok to redirect to page passed and try again */
+    var blnWorked = parent.upperframe.tut_togglehighlightElement(divToHighlight);
+    if ( blnWorked == false ) {
+      /* ask user if ok to redirect upperframe to correct place */
+      var blnRedirect = confirm("The left window is not on the correct page to highlight this item.  Do you want to change the left window to correct page (then you should press highlight again)?");
+      if ( blnRedirect ) {
+        parent.upperframe.location = pageToRedirectTo ;
+        /* does not work, because page may take a while to load: parent.upperframe.tut_togglehighlightElement(divToHighlight); */
+      }
+    }
+
+}
+
+function tut_unhighlightMainFrame() {
+  parent.upperframe.removeClassFromDoc("tut_highlight");
+}
+
+function tut_togglehighlightElement(divToHighlight) {
+  /* highlights the div but adds tut_highlight to element instead of replacing classname */
+  /* unhighlights if already highlighted */
+  try {
+    theElement = document.getElementById(divToHighlight);
+    var currentclass = theElement.className;
+    var dohighlight = false;
+    if (currentclass.indexOf("tut_highlight")==-1) {
+      /* highlight */
+      dohighlight = true;
+    }
+  
+    /* first remove any extant highlighting: */
+    tut_unhighlight();
+    /* then apply new highlighting , if needs it */
+    if ( dohighlight == true ) {
+        theElement.className = theElement.className + " tut_highlight" ;
+    }
+    
+    return true;
+  
+  } catch (e) {
+    return false;
+  }
+  
+}
+
+function tut_unhighlight() {
+  removeClassFromDoc("tut_highlight");
+}
+
+/* following based loosely on http://www.dynamicdrive.com/dynamicindex1/navigate2_dev.htm with notice required to copy: */
+/***********************************************
+* Contractible Headers script- © Dynamic Drive (www.dynamicdrive.com)
+* This notice must stay intact for legal use. Last updated Oct 21st, 2003.
+* Visit http://www.dynamicdrive.com/ for full source code
+***********************************************/
+
+function removeClassFromDoc(classname) {
+  var inc=0
+  var alltags=document.all? document.all : document.getElementsByTagName("*")
+  for (i=0; i<alltags.length; i++){
+    if (alltags[i].className.indexOf(classname)!=-1)
+    /* remove the requested className.  Does not set entire class to space string b/c there could be 2 classes embedded. */
+    alltags[i].className = alltags[i].className.replace(classname," ");
+   }
 }
 
 
