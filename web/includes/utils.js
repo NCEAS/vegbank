@@ -639,6 +639,12 @@ function postNewParam(theName,theVal) {
 
 }
 
+function highlightADiv(divToHighlight) {
+  /* highlights the div */
+  document.getElementById(divToHighlight).className="highlight" ;
+}
+
+
 /*
 createElement function found at http://simon.incutio.com/archive/2003/06/15/javascriptWithXML
 */
