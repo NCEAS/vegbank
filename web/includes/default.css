@@ -225,6 +225,10 @@ a:Link.sortlink { color: #336600; text-decoration: underline ; }
 a:Visited.sortlink { color: #336600; text-decoration: underline ; }
 a:hover.sortlink { color: #fff; background-color: #336600; text-decoration: none; }
 
+a:Link.tut_link { color: #336600; text-decoration: underline ; }
+a:Visited.tut_link { color: #336600; text-decoration: underline ; }
+a:hover.tut_link { color: #fff; background-color: #336600; text-decoration: none; }
+
 a.image:link, a.image:visited, a.image:hover {
   background: none;
   padding: 0;
