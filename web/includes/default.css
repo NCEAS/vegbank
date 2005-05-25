@@ -404,11 +404,13 @@ TH, TH.normal	{
 	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
 	font-size: 14pt;
 	background-color : #e6e6cf;
+	text-align:center;
 	}
 .major_smaller	{
 	font-family:  Arial, Tahoma, Helvetica, Geneva, sans-serif;
 	font-size: 12pt;
 	background-color : #e6e6cf;
+	text-align:center;
 	}
 
 td.numeric
@@ -662,6 +664,8 @@ form {
 .oddrow { background-color : #FFFFFF }
 .evenrow {background-color : #DDDDDD }
 .highlight {background-color : #FF9933 }
+.tut_highlight {background-color : #FF9933 }
+
 .mouseover_bright {background-color : #acf }
 .mouseover_dark {background-color : #d72 }
 /*
