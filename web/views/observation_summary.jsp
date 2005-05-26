@@ -55,7 +55,7 @@
 
  @possibly_center@  
   <h2>VegBank Plots</h2>
-  
+  <div id="tut_plotcriteriamessages">
   <!-- special case for linking from NatureServeExplorer : -->
 <logic:equal parameter="where" value="where_observation_nsuid">
   <p>Welcome to VegBank.  You've clicked a link from <a href="http://natureserve.org/explorer">NatureServe Explorer</a>
@@ -86,7 +86,7 @@
 
   </logic:notEmpty>
 </logic:present>  
-
+</div>
 
 
 <logic:equal parameter="lr" value="true">

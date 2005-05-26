@@ -285,8 +285,9 @@ function setQueryText() {
   <!-- values of params don't matter.  Just checks to see if they are there -->
   
     <!-- using a table for formatting, I know it's bad, but it works and I don't know how to otherwise -->
-   <h2>Choose Query Fields:</h2>
-   <div style="background-color: #EEE; width: 70%; padding: 2px;">
+  <div style="background-color: #EEE; width: 70%; padding: 2px;">
+   <h2>Configure Your Search:</h2>
+   <div id="tut_configurequery">
    <strong>OPTIONAL:</strong>  
    You can scroll down or <a href="#plotqueryfields">skip field selection</a> now.<br/>
 
@@ -399,7 +400,7 @@ function setQueryText() {
     </div>
 
     </div>
-
+  </div>
  
    </logic:notEqual> <!-- simple mode -->
    <!-- the real form -->
