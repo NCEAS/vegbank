@@ -705,6 +705,12 @@ function removeClassFromDoc(classname) {
    }
 }
 
+function getHelpFor(helpTopic) {
+  document.forms.getHelpForm.elements.helpPage.value = "@manual_link@" + helpTopic + ".html";
+  document.forms.getHelpForm.elements.mainPage.value = window.location;
+  document.forms.getHelpForm.submit();
+}
+
 
 /*
 createElement function found at http://simon.incutio.com/archive/2003/06/15/javascriptWithXML

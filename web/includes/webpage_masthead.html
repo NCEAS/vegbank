@@ -109,3 +109,8 @@
  <div id="centercontent">
 
 <vegbank:resubmitForm/><!-- this form is used to resumbit the current page, which is necessary if using posted params -->
+
+<form target="_top" name="getHelpForm" method="post" action="@forms_link@getHelp.jsp">
+  <input type="hidden" name="mainPage" />
+  <input type="hidden" name="helpPage" />
+</form> <!-- this form is for getting help by posting mainPage and helpPage as encoded URLs -->
