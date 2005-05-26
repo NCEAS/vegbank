@@ -157,12 +157,12 @@
 <th valign="bottom" align="center" nowrap="nowrap">Add/Drop</th>
 
 <th valign="bottom" align="center">
-  <table class="noborder">
-    <tr><td nowrap="nowrap" style="border-bottom: 1px solid #000">Author Code</td></tr>
+  <table class="horizborders">
+    <tr><td class="horizborders">Author Code</td></tr>
     <!-- the following is a bit of a hack.  The class will be hidden, unless show_statecountry is something, in 
     this case "show", and the class "showhidden" isn't anything, so displays normally.  MTL May 6, 2005 -->
-    <tr class='<bean:write name="show_statecountry" ignore="true" />hidden'>
-      <td nowrap="nowrap">Plot Location</td></tr>
+    <tr class='horizborders <bean:write name="show_statecountry" ignore="true" />hidden'>
+      <td>Plot Location</td></tr>
   </table>
 </th>
 <th class='<bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden' valign="bottom" align="center">
@@ -199,13 +199,13 @@
 </th>
 
 <th valign="bottom" align="center" class='<bean:write name="show_plants" ignore="true" />hidden' nowrap="nowrap">
-  <table class="noborder">
+  <table class="horizborders">
     <tr><td>Plants Found on Plot</td></tr>
   </table>
 </th>
 
 <th valign="bottom" align="center" class='<bean:write name="show_comms" ignore="true" />hidden' width="30%">
-  <table class="noborder">
+  <table class="horizborders">
     <tr><td>Plot Communities</td></tr>
   </table>
 </th>
@@ -231,7 +231,7 @@ Plot #<%= rowIndex++ %>
 
 
 <!-- plot data -->
-<td>
+<td class="largefield">
 <strong><bean:write name="onerowofobservation" property="authorobscode" /></strong>
 <br/>
 <i>
@@ -241,14 +241,14 @@ Plot #<%= rowIndex++ %>
 <br/>
 &raquo; <a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>plot detail</a>
 </td>
-<td class='numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
+<td class='largefield numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
 <span class='<bean:write name="show_elev" ignore="true" />hidden'>E: <bean:write name="onerowofobservation" property="elevation" /><br/></span>
 <span class='<bean:write name="show_slope" ignore="true" />hidden'>S: <bean:write name="onerowofobservation" property="slopegradient" /><br/></span>
 <span class='<bean:write name="show_aspect" ignore="true" />hidden'>A: <bean:write name="onerowofobservation" property="slopeaspect" /></span>
 </td>
 
 
-<td class='<bean:write name="show_rocktype" ignore="true" /><bean:write name="show_surficial" ignore="true" /><bean:write name="show_hydrologic" ignore="true" /><bean:write name="show_topo" ignore="true" /><bean:write name="show_landform" ignore="true" />hidden'>
+<td class='largefield <bean:write name="show_rocktype" ignore="true" /><bean:write name="show_surficial" ignore="true" /><bean:write name="show_hydrologic" ignore="true" /><bean:write name="show_topo" ignore="true" /><bean:write name="show_landform" ignore="true" />hidden'>
 <span class='<bean:write name="show_rocktype" ignore="true" />hidden'>R: <bean:write name="onerowofobservation" property="rocktype" /><br/></span>
 <span class='<bean:write name="show_surficial" ignore="true" />hidden'>S: <bean:write name="onerowofobservation" property="surficialdeposits" /><br/></span>
 <span class='<bean:write name="show_hydrologic" ignore="true" />hidden'>H: <bean:write name="onerowofobservation" property="hydrologicregime" /><br/></span>
@@ -259,7 +259,7 @@ Plot #<%= rowIndex++ %>
  
  
  
-<td class='numeric <bean:write name="show_datesampled" ignore="true" /><bean:write name="show_dateentered" ignore="true" /><bean:write name="show_area" ignore="true" />hidden'>
+<td class='largefield numeric <bean:write name="show_datesampled" ignore="true" /><bean:write name="show_dateentered" ignore="true" /><bean:write name="show_area" ignore="true" />hidden'>
  <span title='<bean:write name="onerowofobservation" property="obsstartdate"/>' class='<bean:write name="show_datesampled" ignore="true" />hidden'>
    S: <dt:format pattern="MMM-yy">
        <dt:parse pattern="yyyy-MM-dd">
@@ -283,7 +283,7 @@ Plot #<%= rowIndex++ %>
 </td>
 
 <!-- methods -->
-<td nowrap="nowrap" class='<bean:write name="show_covermeth" ignore="true" /><bean:write name="show_stratummeth" ignore="true" /><bean:write name="show_project" ignore="true" />hidden'>
+<td nowrap="nowrap" class='largefield <bean:write name="show_covermeth" ignore="true" /><bean:write name="show_stratummeth" ignore="true" /><bean:write name="show_project" ignore="true" />hidden'>
    <!-- PLEASE trim strings to < 25 chars -->
     <bean:define id="cvr_trunc"><bean:write name="onerowofobservation" property="covermethod_id_transl" /></bean:define>
     <% if ( cvr_trunc.length() > 25 ) { cvr_trunc = cvr_trunc.substring(0,22) + "..." ; } %>
@@ -300,7 +300,7 @@ Plot #<%= rowIndex++ %>
  <span class='<bean:write name="show_project" ignore="true" />hidden'>   Prj: <a href='@get_link@std/project/<bean:write name="onerowofobservation" property="project_id" />'><%= prj_trunc %></a></span>
 </td>
 <!-- plants in this plot -->
- <td class='<bean:write name="show_plants" ignore="true" />hidden'>
+ <td class='largefield <bean:write name="show_plants" ignore="true" />hidden'>
 <vegbank:get id="taxonobservation" select="taxonobservation_maxcover" where="where_taxonobservation_maxcover" wparam="observation_pk"
   pager="false" perPage="-1" beanName="map" />
   <logic:empty name="taxonobservation-BEANLIST">
@@ -327,7 +327,7 @@ Plot #<%= rowIndex++ %>
     
   </logic:notEmpty><!-- concept -->
 </td>
-<td class='<bean:write name="show_comms" ignore="true" />hidden'>
+<td class='largefield <bean:write name="show_comms" ignore="true" />hidden'>
 <!-- community info -->
 <vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
   where="where_observation_pk" wparam="obsId" perPage="-1" pager="false"/>
