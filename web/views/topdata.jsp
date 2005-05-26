@@ -45,7 +45,7 @@
     pager="true" where="empty" wparam="" allowOrderBy="true" orderBy="xorderby_d_obscount_desc"/>
   <logic:notEmpty name="namedplace-BEANLIST">
 
-  <TABLE cellpadding="5" cellspacing="3">
+  <TABLE cellpadding="5" cellspacing="3" id="tut_whereplotsare">
   <TR><TD colspan="3"><h3>Where Plots Are:</h3></TD></TR>
   <TR valign="top"><TD>
 
@@ -83,6 +83,7 @@
  <!-- section 2 who -->
  <%  currentNum = "2"; %>
  <logic:match name="writetops" value="<%= currentNum %>">
+  <div id="tut_browsepeople">
   <h3>Who contributed plots:</h3>
    
      <vegbank:get id="browseparty" select="browseparty" 
@@ -96,7 +97,7 @@
     <logic:equal name="writetops" value="<%= currentNum %>">
       <vegbank:pager />
     </logic:equal>
-   
+  </div> 
    
   
   </logic:match>
@@ -104,10 +105,11 @@
   <%  currentNum = "3"; %>
   <logic:match name="writetops" value="<%= currentNum %>">
   <!-- projects -->
+  <div id="tut_browseproject">
   <h3>Data Projects:</h3>
     <vegbank:get id="project" select="project" beanName="map" pager="true" xwhereEnable="false" 
       allowOrderBy="true" orderBy="xorderby_d_obscount_desc" /> 
-    <table class="thinlines" cellpadding="2">
+    <table class="thinlines" cellpadding="2" >
       <tr><th>Project</th><th>Plots</th></tr>
       <logic:iterate id="onerowofproject" name="project-BEANLIST">
         <tr  class='@nextcolorclass@'>
@@ -141,17 +143,18 @@
         <vegbank:pager />
     </logic:equal>
   
-  
+  </div>
   </logic:match>
   
   <%  currentNum = "4"; %>
   <logic:match name="writetops" value="<%= currentNum %>">
   <!-- spp -->
+  <div id="tut_browseplants">
  <h3>Common Species:</h3>
    <vegbank:get id="browsecommonplants" select="browsecommonplants" 
           beanName="map" pager="true"  xwhereEnable="false" 
           allowOrderBy="true" orderBy="xorderby_d_obscount_desc" />
-     <table class="thinlines" cellpadding="2">
+     <table class="thinlines" cellpadding="2" >
       <tr><th>Plant</th><th>Plots</th></tr>
       <logic:iterate id="onerowofbrowsecommonplants" name="browsecommonplants-BEANLIST">
 	          <tr class='@nextcolorclass@'>
@@ -186,11 +189,13 @@
 	       <logic:equal name="writetops" value="<%= currentNum %>">
 	         <vegbank:pager />
            </logic:equal>
+    </div>
     </logic:match>
    
    <%  currentNum = "5"; %>
    <logic:match name="writetops" value="<%= currentNum %>">
    <!-- comms -->
+   <div id="tut_browsecomms">
    <h3>Common Communities:</h3>
    <vegbank:get id="browsecommoncomms" select="browsecommoncomms" 
              beanName="map" pager="true"  xwhereEnable="false" 
@@ -229,15 +234,18 @@
 	       <logic:equal name="writetops" value="<%= currentNum %>">
 	         <vegbank:pager />
            </logic:equal>
+    </div>
     </logic:match>
    
  
 
    <logic:match name="writetops" value="<%= allNums %>">
       <!-- show summary of all data in the system: -->
+     <div id="tut_overviewofdata">
       <h3>Overview of Data in VegBank:</h3>
           <bean:include id="countdata" page="/views/raw/raw_countdata.jsp" />
           <bean:write name="countdata" filter="false" />
+     </div>
    </logic:match>
 
 @webpage_footer_html@
