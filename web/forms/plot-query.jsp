@@ -266,8 +266,11 @@ function setQueryText() {
 
     <!-- Instructions Row -->
    <p class="instructions">
+
 		  Enter search criteria, submit the query, then choose plots to view or download.<br/>
-	      Leave fields blank to ignore them.  For more information, see the <a href="@help-for-plot-query-href@">help section</a>.
+	      Leave fields blank to ignore them.  
+          <!-- For more information, see the <a href="@help-for-plot-query-href@">help section</a>. -->
+
 		 
 	    </p>
         <!-- only show this on simple view -->
@@ -440,8 +443,9 @@ function setQueryText() {
     <div class='<bean:write name="hideCurr" />'>
     <!-- Header Location -->
     
+
     <h3 class="<bean:write name='simpleHide' />">Find Plots Based on Location</h3>
-        
+        <div id="tut_stateprovincecountry">
           <h4>State/Province, Country:</h4>
 	    <p class="instructions">
 	      Choose a state, province, and/or country to find plots located there. <br />
@@ -449,8 +453,9 @@ function setQueryText() {
         To select multiple choices, hold down the ctrl or apple key and then 
         select each state/province/country you want to query. </span>
 	    </p>
-	    <table class="noborders"><tr><td valign="top">
-         <p class="item">
+        
+        <table class="noborders"><tr><td valign="top">
+         
                   State/Province (plot count)<br/>
                  <input type="hidden" name="xwhereParams_state_1" value="stateprovince" />
                   <input type="hidden" name="xwhereKey_state" value="xwhere_in" />
@@ -478,12 +483,12 @@ function setQueryText() {
                 </logic:notEmpty>
            
                   </select>
-        </p>
+       
         
         </td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td valign="top">
         
        
-		<p class="item">
+		
 	      Country (plot count)<br/>
             <input type="hidden" name="xwhereParams_country_1" value="country" />
             <input type="hidden" name="xwhereKey_country" value="xwhere_in" />
@@ -518,9 +523,9 @@ function setQueryText() {
 		      
 		      
 	      </select>
-	    </p>	 
+	    	 
         </td></tr></table>
-     
+     </div><!-- tut div -->
 	  
     <hr  class="<bean:write name='simpleHide' />" />
 	</div>
@@ -988,6 +993,7 @@ function setQueryText() {
     <h3  class="<bean:write name='simpleHide' />">Find Plots Based on Vegetation</h3>
 	
 	  <!-- PLANT TAXON -->
+      <div id="tut_plants">
 	  	<h4>Plant Taxa:</h4> 
           
 	      <p class="instructions">
@@ -1035,6 +1041,7 @@ function setQueryText() {
   }
   %>
 </table>
+</div> <!-- tutorial div -->
 <hr class="<bean:write name='simpleHide' />"/> 
       </DIV>
       <bean:define id="hideCurr" value="show" />
@@ -1044,7 +1051,7 @@ function setQueryText() {
 	  	  	  		     
 	  	  	  	    
 	    <DIV id="groupH" class='<bean:write name="hideCurr" />'>
-      
+      <div id="tut_comms">
       <!-- FIND USING COMMUNITIES -->
       
     <h3 class="<bean:write name='simpleHide' />">Find Plots Based on Community Classfication</h3>
@@ -1101,6 +1108,7 @@ function setQueryText() {
 	      }
 	      %>
 	    </table>
+        </div><!-- tutorial div -->
         </DIV>
 	    <!-- SUBMIT THE FORM -->
           <h3  class="<bean:write name='simpleHide' />">Search VegBank Plots</h3>
