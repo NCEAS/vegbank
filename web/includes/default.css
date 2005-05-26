@@ -481,7 +481,7 @@ h4 {
 
 
 
-p {
+p, .normal {
   font-size: 12px;
   line-height: 16px;
 }
@@ -866,9 +866,7 @@ forms/TaxonObservationAnnotateData.jsp
 
 
 
-CODE	{
-			color: red;
-		}
+
 
 VAR		{
 			color: green;
