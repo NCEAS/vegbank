@@ -62,9 +62,8 @@
      <br/>
     <fieldset id="tut_datainvegbank">
       <legend>Data in Vegbank</legend> 
-      <ul><li><bean:include id="countdata" page="/views/raw/raw_countdata.jsp" />
+      <bean:include id="countdata" page="/views/raw/raw_countdata.jsp" />
       <bean:write name="countdata" filter="false" />
-      </li></ul>
     </fieldset>
      
      

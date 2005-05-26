@@ -258,18 +258,16 @@ function setQueryText() {
  
  
 	      <h1><bean:write name="searchType" /> Plot Search</h1>
-       <p class="psmall <bean:write name='simpleHideReverse' />">
-       <a href="@plotquery_page_advanced@">more options...</a></p>
+       <p class="<bean:write name='simpleHideReverse' />">
+       Also try the <a href="@plotquery_page_advanced@">advanced plot search</a>.</p>
      
-       <p class="psmall <bean:write name='simpleHide' />">
-       <a href="@plotquery_page_simple@">simpler search...</a></p>
+       <p class="<bean:write name='simpleHide' />">
+       Also try the <a href="@plotquery_page_simple@">simple plot search</a>.</p>
+
     <!-- Instructions Row -->
    <p class="instructions">
-		   Use this form to find plots in VegBank. 
-		 
-	      Each section allows querying of different types of attributes.  Leave
-	      fields blank to ignore them.  		
-	      For more information, see the <a href="@help-for-plot-query-href@">help section</a>.
+		  Enter search criteria, submit the query, then choose plots to view or download.<br/>
+	      Leave fields blank to ignore them.  For more information, see the <a href="@help-for-plot-query-href@">help section</a>.
 		 
 	    </p>
         <!-- only show this on simple view -->
@@ -284,14 +282,16 @@ function setQueryText() {
   <!-- values of params don't matter.  Just checks to see if they are there -->
   
     <!-- using a table for formatting, I know it's bad, but it works and I don't know how to otherwise -->
-   <h2>Fields you wish to query:</h2>
-   <p class="instructions">This section is OPTIONAL.  Scroll down or <a href="#plotqueryfields">click here</a> to start 
-   your plot query from this page. 
-   
-   You can check or uncheck boxes below and press the "change fields shown" button to change the fields 
-   shown on this form.   <br/>
-   Tip: the fields that are shown on this form will also be shown on the results page.  So, show fields
-   that you want to see on the results page, even if you are not querying by those fields.</p>
+   <h2>Choose Query Fields:</h2>
+   <div style="background-color: #EEE; width: 70%; padding: 2px;">
+   <strong>OPTIONAL:</strong>  
+   You can scroll down or <a href="#plotqueryfields">skip field selection</a> now.<br/>
+
+   <p class="instructions">
+   Choose fields from below then click the "change query fields" button.<br/>
+   Chosen fields also appear on the results page, even if not used in the query.
+   </p>
+
    <!-- this tag defines whether to intially hide this list of criteria -->
    <bean:define id="initliststatus" value="display:block" />
    <bean:define id="inithidestatus" value="display:none" />
@@ -301,16 +301,19 @@ function setQueryText() {
    </logic:equal>
    <div id="CriteriaHidden" style="<bean:write name='inithidestatus' />">
      <table class="noborders">
-     <tr class="grey"><td>List of fields hidden.  <a href="javascript:showorhidediv('changeCriteria');showorhidediv('CriteriaHidden');">Click Here to show</a>  list of fields</td></tr></table>
+     <tr class="grey"><td>
+        <strong>FIELDS ARE HIDDEN</strong> 
+        &raquo; <a href="javascript:showorhidediv('changeCriteria');showorhidediv('CriteriaHidden');">show fields</a>
+      </td></tr></table>
    </div>
    
    <div id="changeCriteria" style="<bean:write name='initliststatus' />" >
-     <a href="javascript:showorhidediv('changeCriteria');showorhidediv('CriteriaHidden');">Click Here To Hide</a> 
-    the following list of fields.
+     &raquo; <a href="javascript:showorhidediv('changeCriteria');showorhidediv('CriteriaHidden');">hide fields</a> 
+
     <form name="changeCriteriaShown" action="#plotqueryfields"> <!-- action is self -->
     <input type="hidden" name="hidelist" value="true" />
-    <table class="noborders" >
-    <tr class="grey"><th>Shown Fields:</th><th>Additional Fields Available:</th></tr>
+    <table class="noborders" width="100%">
+    <tr class="grey"><th>Selected Fields:</th><th>Available Fields:</th></tr>
   
     <tr class="grey"><td valign="top">
       
@@ -375,16 +378,25 @@ function setQueryText() {
           }
           -->
         </script> 
-             <a href="javascript:SetCheckboxes(true);" >check all</a> 
-          | <a href="javascript:SetCheckboxes(false);" >uncheck all</a> <br/>
-   
-    <input type="submit" value="change fields shown" /> Please note that clicking this button will reset the plot-query form below. <br/ >
-    Tip: You can bookmark this page to return to it with the current fields shown.
+
+    <center>
+        <a href="javascript:SetCheckboxes(true);" >check all</a> 
+        | <a href="javascript:SetCheckboxes(false);" >uncheck all</a>
+        <br/>
+        <input type="submit" value="change query fields" />
+    </center>
+
+    <br/>
     </td></tr>
 
     </table>
     </form>
+    <strong>WARNING:</strong> Changing fields will reset any form data below.<br/ >
+    <strong>TIP:</strong> Bookmark this page to save your selected fields.
     </div>
+
+    </div>
+
  
    </logic:notEqual> <!-- simple mode -->
    <!-- the real form -->
@@ -428,7 +440,7 @@ function setQueryText() {
     <div class='<bean:write name="hideCurr" />'>
     <!-- Header Location -->
     
-    <h3 class="<bean:write name='simpleHide' />">Find Plots based on Location</h3>
+    <h3 class="<bean:write name='simpleHide' />">Find Plots Based on Location</h3>
         
           <h4>State/Province, Country:</h4>
 	    <p class="instructions">
@@ -648,7 +660,7 @@ function setQueryText() {
 	    <div id="group56789" class='<bean:write name="hideCurr" />'>
 	
 	
-	      <h4>Picklist fields:</h4> 
+	      <h4>Picklist Fields:</h4> 
 	    <p class="instructions">
 	      Please select values for VegBank fields that are constrained to limited vocabulary.  You do not need to select values for all fields.  Select "--ANY--" to ignore the field in the query.
 	    </p>
@@ -759,7 +771,7 @@ function setQueryText() {
 	
 	  <!-- sampling methodology -->
 	
-	      <h4>Plot Date / Size:</h4> 
+	      <h4>Plot Date &amp; Size:</h4> 
 	    <p class="instructions">
 	      Enter date ranges or plot size ranges that apply to plots of interest.  
 	      Enter dates in the format: 
@@ -973,7 +985,7 @@ function setQueryText() {
 	  	  	    
 	    <DIV id="groupG" class='<bean:write name="hideCurr" />'>
     
-    <h3  class="<bean:write name='simpleHide' />">Find Plots based on Vegetation</h3>
+    <h3  class="<bean:write name='simpleHide' />">Find Plots Based on Vegetation</h3>
 	
 	  <!-- PLANT TAXON -->
 	  	<h4>Plant Taxa:</h4> 
@@ -1035,7 +1047,7 @@ function setQueryText() {
       
       <!-- FIND USING COMMUNITIES -->
       
-    <h3 class="<bean:write name='simpleHide' />">Find Plots based on Community Classfication</h3>
+    <h3 class="<bean:write name='simpleHide' />">Find Plots Based on Community Classfication</h3>
 	
     
 	  <!-- VEG COMMUNITY -->
@@ -1091,8 +1103,7 @@ function setQueryText() {
 	    </table>
         </DIV>
 	    <!-- SUBMIT THE FORM -->
-          <h3  class="<bean:write name='simpleHide' />">Submit Query to VegBank</h3>
-	       
+          <h3  class="<bean:write name='simpleHide' />">Search VegBank Plots</h3>
 		      <input type="submit" value="search"/>&nbsp;&nbsp;
 		      <html:reset value="reset"/>
 		      

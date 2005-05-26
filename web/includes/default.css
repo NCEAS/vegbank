@@ -15,7 +15,7 @@ html,body {
 body {
     padding: 0;
 	margin: 0;
-	font: 11px/1.6em "Lucida Grande", LucidaGrande, Lucida, Helvetica, Arial, sans-serif;
+	font: 10pt "Lucida Grande", LucidaGrande, Lucida, Helvetica, Arial, sans-serif;
     color: #333;
     text-align: center;
 	background: #dfdfdf url(@images_link@bg_texture.jpg);
@@ -264,7 +264,7 @@ a.white:hover {
 a.anchor:link, a.anchor:visited, a.anchor:hover {
   color: #fff;
   background: #fff;
-  font-size: 0px;
+  font-size: 0;
   text-decoration: none;
   padding: 0;
 }
@@ -287,6 +287,7 @@ table tr td{
   padding: 0;
   margin: 0;
   border: 0;
+  font-size: 10pt;
 }
 
 /* actions user can take from this form: ie interpret plant.*/
@@ -438,7 +439,7 @@ h1 {
   margin: 0;
   font-family: "Lucida Grande", arial, sans-serif;
   color: #333;
-  font-size: 16px;
+  font-size: 16pt;
   font-weight: bold;
 }
 
@@ -446,7 +447,7 @@ h2 {
   margin: 20px 0 5px 0px;
   color: #000;
   font-family: "Lucida Grande", arial, sans-serif;
-  font-size: 14px;
+  font-size: 14pt;
   padding: 0;
 }
 
@@ -454,7 +455,7 @@ h3 {
   margin: 20px 0 0 0;
   color: #666;
   font-family: "Lucida Grande", arial, sans-serif;
-  font-size: 14px;
+  font-size: 14pt;
   padding: 0;
 }
 
@@ -462,7 +463,7 @@ h4 {
   margin: 20px 0 0 0;
   color: #666;
   font-family: "Lucida Grande", arial, sans-serif;
-  font-size: 13px;
+  font-size: 13pt;
   padding: 0;
 }
 
@@ -481,14 +482,14 @@ h4 {
 
 
 
-p, .normal {
-  font-size: 12px;
-  line-height: 16px;
+.normal {
+  font-size: 10pt;
+  /*line-height: 1.35em;*/
 }
 
 small {
-  font-size: 10px;
-  line-height: 13px;
+  font-size: 9pt;
+  line-height: 1.1em;
 }
 
 
@@ -503,7 +504,7 @@ ul.noindent li {
 
 
 li.small {
-  font-size: 10px;
+  font-size: 9pt;
 }
 
 
@@ -614,7 +615,7 @@ ul.compact   {
 
 .label_small	{
 		font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-		font-size: 11pt;
+		font-size: 9pt;
 		color: #000000
 	}
 

@@ -157,11 +157,11 @@
 <th valign="bottom" align="center" nowrap="nowrap">Add/Drop</th>
 
 <th valign="bottom" align="center">
-  <table class="horizborders">
-    <tr><td class="horizborders" nowrap="nowrap">Author Code</td></tr>
+  <table class="noborder">
+    <tr><td nowrap="nowrap" style="border-bottom: 1px solid #000">Author Code</td></tr>
     <!-- the following is a bit of a hack.  The class will be hidden, unless show_statecountry is something, in 
     this case "show", and the class "showhidden" isn't anything, so displays normally.  MTL May 6, 2005 -->
-    <tr class='horizborders <bean:write name="show_statecountry" ignore="true" />hidden'>
+    <tr class='<bean:write name="show_statecountry" ignore="true" />hidden'>
       <td nowrap="nowrap">Plot Location</td></tr>
   </table>
 </th>
