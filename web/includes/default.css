@@ -12,6 +12,8 @@ html,body {
 }
 /* end hide */
 
+
+
 body {
     padding: 0;
 	margin: 0;
@@ -672,6 +674,9 @@ form {
 .evenrow {background-color : #DDDDDD }
 .highlight {background-color : #FF9933 }
 .tut_highlight {background-color : #FF9933 }
+tr.tut_highlight th, tr.tut_highlight td, td.tut_highlight, th.tuthighlight {
+	 background-color : #FF9933;
+ }
 
 .mouseover_bright {background-color : #acf }
 .mouseover_dark {background-color : #d72 }
