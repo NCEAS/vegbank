@@ -42,6 +42,7 @@
 
  <div id="maincontent">
  <div id="header">
+  
   <div id="header-left">
 
    <form action="@forms_link@metasearch.jsp" method="post" 
@@ -67,18 +68,20 @@
    </form>
 
     <!-- DATACART -->
-    <div id="datacart">
-        <a href="@web_context@views/datacart_detail.jsp" class="nobg"><img src="@images_link@cart_dark.gif" id="datacart-count-icon" border="0" /></a>
+    
+      <div id="datacart">
+    <div id="tut_datacart">
+        <a href="@views_link@datacart_detail.jsp" class="nobg"><img src="@images_link@cart_dark.gif" id="datacart-count-icon" border="0" /></a>
         <p>
-        <a href="@web_context@views/datacart_detail.jsp">download <span id="datacart-count"><vegbank:datacart display="true" /></span>
+        <a href="@views_link@datacart_detail.jsp">download <span id="datacart-count"><vegbank:datacart display="true" /></span>
         <!--<logic:equal name="Boolean.false" value="true">-->
         <span id="datacart-count">datacart</span>
         <!--</logic:equal>-->
         </a>
 
         </p>
+      </div>
     </div>
-
 
     <div id="header-data-links">
         <a href="@plotquery_page_advanced@">advanced search</a> 
