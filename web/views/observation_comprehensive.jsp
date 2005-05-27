@@ -24,17 +24,22 @@
 <!-- datacart item -->
   <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
   <% rowClass = ""; %>
-<div style="clear:both; display: block; float: left; width: 55%; text-align: left;">
+<div style="display: block; float: left; width: 55%; text-align: left;">
     <form action="" method="GET" id="cartable">
        <%@ include file="../includes/datacart_checkbox.jsp" %> click to update datacart
     </form>
 </div>
 
+<div style="display: block; float: right; width: 45%; text-align: right;" id="tut_showhidefieldinfo">
+   <a href="<vegbank:changeParam paramName='showHelp' paramValue='true' />">Show</a>
+   | <a href="<vegbank:changeParam paramName='showHelp' paramValue='false' />">Hide</a> Field Info
+</div>
+
 
 <!-- start of plot & obs fields-->
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="2" style="clear: both; display: block;">
-<TR><TD width="55%" valign="top"><!-- plot level info -->
-<table class="leftrightborders" cellpadding="2"><!--each field, only write when HAS contents-->
+<TR><TD width="55%" align="center" valign="top" id="tut_plotdetailleft"><!-- plot level info -->
+<table width="98%" class="leftrightborders" cellpadding="2"><!--each field, only write when HAS contents-->
 
     <tr><th class="major" colspan="2">
             <bean:write name="onerowofplot" property="authorplotcode"/>
@@ -42,7 +47,7 @@
 
   @mark_datacart_items@
 
-<tr><td colspan="2">&raquo; Citation URL: <a href='/cite/<bean:write name="onerowofplot" property="observationaccessioncode" />'>http://vegbank.org/cite/<bean:write name="onerowofplot" property="observationaccessioncode" /></a>
+<tr class="@nextcolorclass@"><td colspan="2">&raquo; Citation URL: <a href='/cite/<bean:write name="onerowofplot" property="observationaccessioncode" />'>http://vegbank.org/cite/<bean:write name="onerowofplot" property="observationaccessioncode" /></a>
 <br/>&raquo; <a href="@general_link@cite.html">Citing info</a></td></tr>
 <tr><th>Plot ID Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> 
@@ -87,19 +92,20 @@
 <%@ include file="includeviews/sub_haddata.jsp" %>
 <!-- end of plot/obs fields -->
 </table>
-</TD><TD valign="top"><!-- plants in this plot -->
+</TD><TD valign="top" align="center" id="tut_plotdetailplants"><!-- plants in this plot -->
+
 <%@ include file="includeviews/sub_taxonobservation.jsp" %>
 
 
 </TD>
 </TR>
 <!-- obs contrib -->
-<TR><TD COLSPAN="2">
+<TR><TD COLSPAN="2" align="left">
 <vegbank:get id="observationcontributor" select="observationcontributor" beanName="map" pager="false" where="where_observation_pk" wparam="observation_pk" perPage="-1" />
 <table class="leftrightborders" cellpadding="2">
 <tr><th colspan="9">Observation Contributors:</th></tr>
 <logic:empty name="observationcontributor-BEANLIST">
-<tr><td class="@nextcolorclass@">  Sorry, no Observation Contributors found.</td></tr>
+<tr><td class="@nextcolorclass@">  No Observation Contributors found.</td></tr>
 </logic:empty>
 <logic:notEmpty name="observationcontributor-BEANLIST">
 <tr>
@@ -117,7 +123,8 @@
 
 <TR><TD colspan="2" valign="top" align="left">
 <!-- community info -->
-<bean:include id="commclass_page" page='<%= "/views/raw/raw_commclass.jsp?observation_pk=" + observation_pk %>' />
+<bean:parameter id="showHelpBean" name="showHelp" value="false" />
+<bean:include id="commclass_page" page='<%= "/views/raw/raw_commclass.jsp?observation_pk=" + observation_pk  + "&showHelp=" + showHelpBean%>' />
 <bean:write name="commclass_page" filter="false" />
 
 <!--vegbank:get id="commclass" select="commclass" beanName="map" 
