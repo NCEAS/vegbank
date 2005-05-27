@@ -28,7 +28,7 @@
 
 <div style="clear:both; display: block;">
     <table class="noborder">
-    <tr>
+    <tr id="tut_downloadcart">
         <td align="center">
             <a href="@web_context@forms/download.jsp?dsId=<%=lngDatacartId%>" class="nobg"><img src="@images_link@downarrow_green.gif" border="0"></a>
         </td>
