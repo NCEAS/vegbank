@@ -9,7 +9,7 @@
   lett = alph.substring(i,i + 1);
   %>
   <!-- URL of plant link -->
-  <a href="@get_link@std/plantconcept/<%= lett %>&where=where_plantconcept_firstletter"><%= lett.toUpperCase() %></a> <% if (i<25) { %> | <% }  %>
+  <a href="@get_link@summary/plantconcept/<%= lett %>&where=where_plantconcept_firstletter&perPage=25"><%= lett.toUpperCase() %></a> <% if (i<25) { %> | <% }  %>
         
  
   <%
