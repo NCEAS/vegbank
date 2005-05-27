@@ -11,6 +11,7 @@
     <fieldset id="tut_findplots">
     <legend>Find Plots</legend>
     <ul>
+    <li><a href="@general_link@faq.html#whatisplot">What is a plot?</a></li>
     <li><a href="@browseplotspage@">Browse plots</a></li>
     <li><a href="@plotquery_page_simple@">Simple search</a></li>
     <li><a href="@plotquery_page_advanced@">Advanced plot search</a></li>
@@ -31,8 +32,9 @@
     <fieldset id="tut_planttaxa">
     <legend>Plant Taxa</legend>
     <ul>
-    <li><a href="@forms_link@PlantQuery.jsp">Search plants</a></li>
+    <li><a href="@general_link@faq.html#whatconcept">What is a Plant Concept?</a></li>
     <li><a href="@general_link@browseplants.jsp">Browse plants</a></li>
+    <li><a href="@forms_link@PlantQuery.jsp">Search plants</a></li>
     <li><a href="@DisplayUploadPlotAction@">Submit plants</a></li>
     </ul>
     </fieldset>
@@ -41,6 +43,7 @@
     <fieldset id="tut_plantcommunities">
     <legend>Plant Communities</legend>
     <ul>
+    <li><a href="@general_link@faq.html#whatcommunity">What is a Community?</a></li>
     <li><a href="@forms_link@CommQuery.jsp">Search communities</a></li>
     <!--li><a href="xxx">Browse communities</a></li-->
     <li><a href="@DisplayUploadPlotAction@">Submit communities</a></li>
