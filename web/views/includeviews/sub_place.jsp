@@ -2,7 +2,7 @@
 
 
 <logic:notEmpty name="place-BEANLIST">
-<TR><TD class="datalabel">Named Places</TD><TD>
+<TR class="@nextcolorclass@"><TD class="datalabel">Named Places</TD><TD>
 <table class="leftrightborders" cellpadding="2" width="100%">
 
 <logic:iterate id="onerowofplace" name="place-BEANLIST">

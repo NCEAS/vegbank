@@ -31,7 +31,7 @@
     </bean:define>
 		 <!-- this is the last stratum- attempting to shade according to stratum values -->
 
-     <TABLE cellpadding="0" class="thinlines">
+     <TABLE cellpadding="0" class="thinlines" width="98%">
   <logic:equal name="smallheader" value="yes">
      <TR><TH colspan="9">-Taxa-
      
