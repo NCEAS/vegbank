@@ -362,6 +362,7 @@ function removeEvent(obj, evType, fn, useCapture){
   } else {
     alert("Handler could not be removed");
   }
+  return false;
 }
 
 
