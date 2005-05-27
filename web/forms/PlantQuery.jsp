@@ -120,7 +120,7 @@ function setNameMatchType() {
 				Try the <a href="@forms_link@CommQuery.jsp">community query</a> too.
 				</p>
              
-          
+          <div id="tut_plantquerynamefield">
              <p><b>Taxon name:</b><br/>
 
              
@@ -137,6 +137,8 @@ function setNameMatchType() {
 				(use % as a wildcard: e.g. maple%)
 				</span>
 				<br/>
+                <!-- end of tutorial div : -->
+                </div> 
 		<input type="hidden" name="xwhereKey_plantname" value="xwhere_match"/>
 		<input type="hidden" name="xwhereSearch_plantname" value="true"/>
 		<input type="hidden" name="xwhereMatchAny_plantname" value="false"/>
@@ -236,7 +238,7 @@ function setNameMatchType() {
               </p>
 
             <!-- return only plants that are on some number of plots? -->
-          <p>
+          <p id="tut_minplots">
             <b>Show plants that occur on at least this many plots:</b><br/>
             <input name="xwhereParams_obscount_0" value="1" />
             <input type="hidden" name="xwhereParams_obscount_1" value="pc.d_obscount"/>
@@ -244,12 +246,13 @@ function setNameMatchType() {
           </p>
 
            <!-- AND / OR -->
-
+           <!-- the AND / OR doesn't work because date and # of plots are prefilled 2005-May-27 MTL -->
+           <!--
                  <blockquote>
 		      <input type="radio" name="xwhereGlue" value="AND" checked="checked"/>match ALL criteria<br/>
 		      <input type="radio" name="xwhereGlue" value="OR"/>match ANY criteria<br/>
                 </blockquote>
-            
+             -->      <input type="hidden" name="xwhereGlue" value="AND" />      
             			<input type="submit" value="search for plants"/>
               
         <!--/html:form-->
