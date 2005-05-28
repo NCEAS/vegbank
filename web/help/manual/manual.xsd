@@ -123,7 +123,7 @@
     </xs:sequence>
     <xs:attribute name="finish" type="xs:boolean" use="optional"/>
     <xs:attribute name="refURL" type="xs:string" use="optional"/>
-    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="validManualNamesType" use="required"/>
     <xs:attribute name="topic" type="xs:string" use="required"/>
   </xs:complexType>
   <xs:complexType name="pType" mixed="true">
@@ -142,4 +142,9 @@
     </xs:choice>
     <xs:attribute name="class" type="xs:string" use="required"/>
   </xs:complexType>
+    <xs:simpleType name="validManualNamesType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-z\-]+"/>
+    </xs:restriction>
+  </xs:simpleType>
 </xs:schema>
