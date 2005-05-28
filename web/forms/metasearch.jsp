@@ -43,7 +43,7 @@ if (searchString ==  null || searchString.equals("")) {
 }
 %>
 
-<title>VegBank Metasearch: <%= searchString %></title>
+<title>VegBank General Search: <%= searchString %></title>
 
 
 
@@ -51,7 +51,7 @@ if (searchString ==  null || searchString.equals("")) {
 
 
 @webpage_masthead_html@
-<h2 class='center'>VegBank Metasearch</h2>
+<h2 class='center'>VegBank General Search</h2>
 
 <center>
 
@@ -69,7 +69,7 @@ if (searchString ==  null || searchString.equals("")) {
 </p>
 </logic:notEmpty>
 </logic:empty>
-
+<form action="@forms_link@metasearch.jsp" method="get" name="metasearch_form">
 	<table align="center" cellpadding="0" cellspacing="0" border="0" bgcolor="#DDDDDD">
 	<tr>
     	<td><img src="@image_server@uplt3.gif"/></td>
@@ -80,8 +80,8 @@ if (searchString ==  null || searchString.equals("")) {
 	<tr>
 		<td></td>
 		<td>
-		<form action="@web_context@forms/metasearch.jsp" method="get" name="metasearch_form">
-			<input type="hidden" name="clearSearch" value="">
+		
+			<input type="hidden" name="clearSearch" value="" />
 			<span class="greytext">
 			&nbsp; Find anything in VegBank:
 			</span>  
@@ -104,9 +104,9 @@ if (searchString ==  null || searchString.equals("")) {
 		<td></td>
 		<td><img src="@image_server@lwrt3.gif"/></td>
 	</tr>
-	<form> 
+	
 	</table>
-
+</form> 
 <br/>
 <logic:notEmpty name="meta-BEANLIST">
 <!-- start metasearch results --> <!-- this tag needed for Mozilla Search Plugin -->
@@ -200,15 +200,15 @@ You searched for
 '<i><%= searchString %></i>'
 <br />
 
-Click here to <a href="javascript:viewAllMetadata()">view all metadata</a>
+Click here to <a href="javascript:viewAllMetadata()">view all data</a>
 <% } else { %>
-Showing all metadata</a>
+Showing all data
 <% } %>
 </span>
 
 </logic:notEmpty>
 
-
+<p><a href="javascript:getHelpFor('general-search');">How does this work?</a></p>
 
 <p>@newPlotQueryLink@</p>
 
