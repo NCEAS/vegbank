@@ -491,7 +491,7 @@ h4 {
   /*line-height: 1.35em;*/
 }
 
-small {
+small, .small {
   font-size: 9pt;
   line-height: 1.1em;
 }
@@ -521,7 +521,7 @@ ul.compactdots   {
              }
 
 .psmall	        {
-				    font-size: 8pt;
+				    font-size: 9pt;
 
 				}
 
@@ -532,11 +532,11 @@ ul.compactdots   {
 
 /* standard sizes for normal text */
 .sizetiny   { font-size: 8pt }
-.sizesmall  { font-size: 10pt }
-.sizenormal { font-size: 12pt } /* note that normal is currently a bit larger than regular <p> */
-.sizelarge  { font-size: 14pt }
-.sizelarger { font-size: 18pt }
-.sizehuge   { font-size: 24pt }
+.sizesmall  { font-size: 9pt }
+.sizenormal { font-size: 10pt }
+.sizelarge  { font-size: 12pt }
+.sizelarger { font-size: 14pt }
+.sizehuge   { font-size: 18pt }
 
 .sortarrow { font-size: 14pt }
 
@@ -548,7 +548,7 @@ ul.compactdots   {
 .largefield  { font-size: 8pt } /* for DATA fields that are larger, thus font is smaller so they are more compressed */
 /* instructions on forms */
 .instructions {
-								font-size: 9pt;
+								font-size: 8pt;
 	                            font-style: italic ;
 
 		  }
@@ -634,7 +634,7 @@ code, pre       {
   font-family: "Bitstream Vera Sans Mono", monaco, "Courier New", courier, monospace;
   background: inherit;
   color: #333;
-  font-size: 80%
+ /* font-size: 80% */
 }
 
 /*  Work around IE/Win code size bug - courtesy Jesper, waffle.wootest.net  */
