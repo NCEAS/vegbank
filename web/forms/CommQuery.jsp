@@ -122,7 +122,7 @@ function setNameMatchType() {
 				Try the <a href="@web_context@forms/PlantQuery.jsp">plant query</a> too.
 				</p>
             
-
+         <div id="tut_commquerynamefield">
          <p><b>Community name:</b><br/>
               <!-- COMM TAXON INPUT--> 
 
@@ -148,6 +148,7 @@ function setNameMatchType() {
 					<input type="submit" value="search for communities"/>
 
 	      </p>
+          </div>
                 <hr/>
            
 	    <!-- Community level -->	    
@@ -241,7 +242,7 @@ function setNameMatchType() {
 				<input type="hidden" name="xwhereKey_accordingtoparty" value="xwhere_eq"/>
               </p>
     <!-- return only comms that are on some number of plots? -->
-          <p>
+          <p id="tut_minplots">
             <b>Show communities representing at least this many plots:</b><br/>
                           <input name="xwhereParams_obscount_0" value="1" />
             <input type="hidden" name="xwhereParams_obscount_1" value="cc.d_obscount"/>
@@ -252,12 +253,13 @@ function setNameMatchType() {
 
 
            <!-- AND / OR -->
-
+             <!-- doesn't work with date 
                 <blockquote>
 		      <input type="radio" name="xwhereGlue" value="AND" checked="checked"/>match ALL criteria<br/>
 		      <input type="radio" name="xwhereGlue" value="OR"/>match ANY criteria<br/>
-                </blockquote>
-           
+                 </blockquote>
+                 -->
+                <input type="hidden" name="xwhereGlue" value="AND" />
             
 					<input type="submit" value="search for communities"/>
               
