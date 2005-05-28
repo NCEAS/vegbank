@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.4 2005-05-23 16:38:58 anderson Exp $
+// $Id: datacart.js,v 1.5 2005-05-28 00:25:49 anderson Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -9,6 +9,23 @@ var dc_formId = null;
 var dc_onClassCheckbox = null;
 var dc_offClassCheckbox = null;
 
+
+
+/**
+ * Uses AJaX and <vegbank:datacart> to count the datacart items.
+ */
+function refreshCartCount() {
+	var ajax = initAjax();
+
+    var fnWhenDone = function(oXML) { 
+        //alert("pong");
+        document.getElementById("datacart-count").innerHTML = oXML.responseText;
+    };
+
+    var params = "delta=drop"; 
+    var url = "@web_context@general/get_datacart_count.ajax.jsp";
+    ajax.connect(url, "POST", params, fnWhenDone);
+}
 
 
 /**
@@ -41,30 +58,39 @@ function updateCartItem(elem, add) {
 
 
 /**
+ * Adds all search results.
+ */
+function addAllResults(itemType) {
+    document.resubmitform.action = "@web_context@general/findadd_" + itemType + "_datacart.ajax.jsp";
+    document.resubmitform.submit();
+    changePageItemStates(true, false);
+}
+
+/**
  * Adds all on page.
  */
 function addAllOnPage() {
-    changeCheckboxStates(true);
+    changePageItemStates(true, true);
 }
 
 /**
  * Drops all on page.
  */
 function dropAllOnPage() {
-    changeCheckboxStates(false);
+    changePageItemStates(false, true);
 }
 
 /**
  * Turns on or off all checkboxes on page.
  */
-function changeCheckboxStates(isChecked) {
+function changePageItemStates(isChecked, doCartUpdate) {
     var form = document.getElementById("cartable");
 	var inputs = form.getElementsByTagName("input");
 
     for (var i=0; i<inputs.length; i++) {
         if (inputs[i].type == "checkbox" && inputs[i].checked != isChecked) {
             delay(100);
-			changeItemState(inputs[i], isChecked);
+			changeItemState(inputs[i], isChecked, doCartUpdate);
         }
     }
 }
@@ -328,7 +354,7 @@ function customiseInputs() {
             inputs[i].parentNode.onclick =
                 function () {
                     var elem = this.getElementsByTagName("input")[0];
-                    changeItemState(elem, !elem.checked);
+                    changeItemState(elem, !elem.checked, true);
                     //setCheckboxParentHighlight(elem, !elem.checked);
                     //updateCartItem(elem, !elem.checked);
                     //toggleLabelStyle(elem.label);
@@ -387,8 +413,10 @@ function customiseInputs() {
 }
 
 
-function changeItemState(elem, isChecked) {
+function changeItemState(elem, isChecked, doCartUpdate) {
 	setCheckboxParentHighlight(elem, isChecked);
-	updateCartItem(elem, isChecked);
+    if (doCartUpdate) {
+        updateCartItem(elem, isChecked);
+    }
 	toggleLabelStyle(elem.label);
 }

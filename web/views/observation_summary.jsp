@@ -89,18 +89,9 @@
 </div>
 
 
-<logic:equal parameter="lr" value="true">
-    <!-- load results from disk -->
-    <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
-        whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true" 
-        allowOrderBy="true" load="plot-search-results" />
-</logic:equal>
-<logic:notEqual parameter="lr" value="true">
-    <!-- save results to disk -->
-    <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
-        whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true" 
-        allowOrderBy="true" save="plot-search-results" />
-</logic:notEqual>
+<vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
+    whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true" 
+    allowOrderBy="true" />  <!-- save="plot-search-results" /-->
 
 
 <vegbank:pager />
@@ -110,7 +101,7 @@
     <tr>
     <!-- add all results -->
     <td>
-        <a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true"
+        <a href="javascript:addAllResults('observation')"
             title="add all results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" /></a>
     </td>
     <td>
@@ -147,7 +138,7 @@
 <logic:notEmpty name="plotobs-BEANLIST"><!-- set up table -->
 
     <logic:equal parameter="delta" value="findadd-observationaccessioncode">
-        <vegbank:datacart delta="findadd-observationaccessioncode" deltaItems="getQuery" display="false" />
+        <vegbank:datacart delta="findadd:observation:observation:observation_id:observationaccessioncode" deltaItems="getQuery" display="false" />
     </logic:equal>
 
 

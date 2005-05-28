@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-24 04:29:43 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2005-05-28 00:25:48 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -166,43 +166,30 @@ public class DatasetUtility
             newItemsToAdd.remove(str);
         }
 
-        Long dsId = null;
-
         // handle new dataset
-        if (!datasetExists(curDataset)) {
-            if (newItemsToAdd.size() > 0) {
-                curDataset.setuserdataset_userdatasetitems(new ArrayList(newItemsToAdd.values()));
+        Long dsId = getOrCreateCurrentDataset();
+
+        // handle adds
+        if (newItemsToAdd.size() > 0) {
+
+            initBeanInserter();
+            kit = newItemsToAdd.keySet().iterator();
+            while (kit.hasNext()) {
+                // new items are stored in a hash
+                String key = (String)kit.next();
+                Userdatasetitem dsi = (Userdatasetitem)newItemsToAdd.get(key);
+                //if (!datasetItemExists(dsi)) {
+                    bean2db.addBean(dsi);
+                //}
             }
-
-            AccessionCode dsAC = insertDataset(curDataset);
-            log.debug("inserted new dataset: " + dsAC.toString());
-            dsId = dsAC.getEntityId();
-            curDataset.setUserdataset_id(dsId.longValue());
-
-        } else {
-            dsId = new Long(curDataset.getUserdataset_id());
-
-            // handle adds
-            if (newItemsToAdd.size() > 0) {
-                initBeanInserter();
-                kit = newItemsToAdd.keySet().iterator();
-                while (kit.hasNext()) {
-                    // new items are stored in a hash
-                    String key = (String)kit.next();
-                    Userdatasetitem dsi = (Userdatasetitem)newItemsToAdd.get(key);
-                    //if (!datasetItemExists(dsi)) {
-                        bean2db.addBean(dsi);
-                    //}
-                }
-                insertItem(null);
-            }
-
-            // handle drops: send the dataset ID and a list of ACs
-            if (dropKeySet.size() > 0) {
-                log.debug("dropping...");
-                deleteItems(dsId, new ArrayList(dropKeySet));
-            } 
+            insertItem(null);
         }
+
+        // handle drops: send the dataset ID and a list of ACs
+        if (dropKeySet.size() > 0) {
+            log.debug("dropping...");
+            deleteItems(dsId, new ArrayList(dropKeySet));
+        } 
 
         // clean up
         newItemsToAdd = new HashMap();
@@ -448,6 +435,38 @@ public class DatasetUtility
             rs.close();
         } catch (SQLException ex) {
             log.error("Problem adding items by query", ex);
+        }
+    }
+
+    /**
+     * Insert items now using the given query and current dataset.
+     * Runs a query that must select accessioncode so
+     * that all results can be added. Query must contain
+     *  pk
+     *  AC
+     *  
+     * @param query SQL to run
+     * @param acField the name of the field containing the AC to add
+     */
+    public void insertItemsByQuery(String query, String itemType, String itemTable, String pkField, String acField) {
+
+
+        try {
+            Long dsId = getOrCreateCurrentDataset();
+            String insert = 
+                "INSERT INTO userdatasetitem (userdataset_id,itemtype,itemdatabase,itemtable,itemrecord,itemaccessioncode) " + 
+                "SELECT '" + curDataset.getUserdataset_id() + "','" + itemType + "','" + Utility.DATABASE_NAME + "','" + itemTable + 
+                "', observation_id, observationaccessioncode FROM (" + DatabaseUtility.removeSemicolons(query) +
+                ") AS findadd_selection WHERE findadd_selection.observationaccessioncode NOT IN " +
+                "(SELECT udi.itemaccessioncode FROM userdatasetitem udi WHERE userdataset_id='" + 
+                curDataset.getUserdataset_id() + "')";
+
+            //log.debug("inserting items with query: " + insert);
+
+            da.issueUpdate(insert);
+            da.closeStatement();
+        } catch (SQLException ex) {
+            log.error("Problem inserting items by query", ex);
         }
     }
 
@@ -822,4 +841,27 @@ public class DatasetUtility
         Long l = (Long)session.getAttribute(Utility.DATACART_KEY);
         return (l == null) ? new Long(0): l;
     }
+
+
+    /**
+     * @return userdataset_id
+     */
+    private Long getOrCreateCurrentDataset() throws SQLException {
+        Long dsId = null;
+
+        if (datasetExists(curDataset)) {
+            // use extant
+            dsId = new Long(curDataset.getUserdataset_id());
+        } else {
+            // create new
+            AccessionCode dsAC = insertDataset(curDataset);
+            if (dsAC == null) { return null; }
+            log.debug("inserted new dataset: " + dsAC.toString());
+            dsId = dsAC.getEntityId();
+            curDataset.setUserdataset_id(dsId.longValue());
+
+        }
+        return dsId;
+    }
+
 }

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-24 04:31:40 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2005-05-28 00:25:49 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,11 +45,13 @@ import org.vegbank.common.model.Userdatasetitem;
  * manages changes to the datacart.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.4 $ $Date: 2005-05-24 04:31:40 $
+ * @version $Revision: 1.5 $ $Date: 2005-05-28 00:25:49 $
  */
 
 public class VegbankDatacartTag extends VegbankTag {
 
+    public static final String DELTA_DELIM = ":";
+    public static final String DELTA_COUNT = "count";
     public static final String DELTA_ADD = "add";
     public static final String DELTA_DROP = "drop";
     public static final String DELTA_DROPALL = "dropall";
@@ -79,6 +81,15 @@ public class VegbankDatacartTag extends VegbankTag {
 		try {
             // get all items involved in a change
             String d = getDelta();
+            String arrDelta[];
+
+            if (Utility.isStringNullOrEmpty(d)) {
+                arrDelta = new String[1];
+                arrDelta[0] = "";
+            } else {
+                arrDelta = d.split(DELTA_DELIM);
+            }
+
             List deltaItems = null;
             Object oItems = getDeltaItems();
             if (oItems != null) {
@@ -89,9 +100,8 @@ public class VegbankDatacartTag extends VegbankTag {
 
                     deltaItems = new ArrayList();
                     if (!Utility.isStringNullOrEmpty(items)) {
-                        if (d.startsWith(DELTA_FINDADD) ||
-                                items.indexOf(",") == -1) {
-                            // add the single value
+                        if (arrDelta[0].equals(DELTA_FINDADD) || items.indexOf(",") == -1) {
+                            // add the single value for findadd or no CSV style
                             deltaItems.add(items);
                         } else {
                             //log.debug("parsing CSV");
@@ -132,10 +142,11 @@ public class VegbankDatacartTag extends VegbankTag {
                     log.debug("handling delta");
                     // handle delta.  add by default
                     dsu.setCurDataset(datacart);
-                    if (d.equals(DELTA_DROP)) { 
+                    if (arrDelta[0].equals(DELTA_DROP)) { 
                         log.debug("setting up drop items: " + deltaItems.size());
                         dsu.dropItemsByAC(deltaItems);
-                    } else if (d.equals(DELTA_DROPALL)) { 
+
+                    } else if (arrDelta[0].equals(DELTA_DROPALL)) { 
                         long dsId = Long.parseLong((String)deltaItems.get(0));
                         Long testUsrId = dsu.getOwnerId(dsId);
                         // check if user is DS owner
@@ -147,13 +158,23 @@ public class VegbankDatacartTag extends VegbankTag {
                         } else {
                             log.warn("attempt to delete non-owned dataset by usrId " + usrId);
                         }
-                    } else if (d.equals(DELTA_ADD)) { 
+
+                    } else if (arrDelta[0].equals(DELTA_ADD)) { 
                         log.debug("setting up add items: " + deltaItems.size());
                         dsu.addItemsByAC(deltaItems); 
-                    } else if (d.startsWith(DELTA_FINDADD)) { 
+
+                    } else if (arrDelta[0].equals(DELTA_FINDADD)) { 
                         if (deltaItems != null && deltaItems.size() > 0) {
                             log.debug("adding items with findadd query");
-                            dsu.addItemsByQuery((String)deltaItems.get(0), d.substring(DELTA_FINDADD.length()+1));
+                            String query = (String)deltaItems.get(0);
+
+                            // FORM delta=findadd:itemType:itemTable:pkField:acField
+                            // EXAMPLE delta=findadd:observation:observation:observation_id:observationaccessioncode
+                            // EXAMPLE delta=findadd:plantconcept:plant:plantconcept_id:accessioncode
+
+                            // query, itemType, itemTable, pkField, acField
+                            dsu.insertItemsByQuery(query, arrDelta[1], arrDelta[2], arrDelta[3], arrDelta[4]);
+
                         } else {
                             log.debug("no findadd query given");
                         }
@@ -175,12 +196,12 @@ public class VegbankDatacartTag extends VegbankTag {
                     log.error("ERROR getting/creating datacart for usr_id: " + usrId);
                 }
 
+            } else if (arrDelta[0].equals(DELTA_COUNT)) {
             } else {
                 // no delta items, so get count from session (for efficiency)
-                log.debug("no deltaItems");
                 Long datacartCount = (Long)session.getAttribute(Utility.DATACART_COUNT_KEY);
                 if (datacartCount == null) { 
-                    // hasn't been set in session, so set it
+                    // hasn't been set in session, so initialize it
                     count = 0;
                     session.setAttribute(Utility.DATACART_COUNT_KEY, new Long(0));
                 } else { 
