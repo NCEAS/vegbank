@@ -68,7 +68,7 @@
 <xsl:template match="question">
   <div id="{qname}">
   <p class="sizenormal">
-  <a name="{qname}"><xsl:copy-of select="qtxt" /></a></p>
+  <a name="{qname}"></a><xsl:copy-of select="qtxt" /></p>
   <blockquote>
   <p class="sizesmall">
     <xsl:copy-of select="atxt" />
