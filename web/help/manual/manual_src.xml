@@ -1,78 +1,555 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="manual2tokens.xsl"?>
-<manualDoc>
-  <manualItem refURL="@web_context@" name="quick-intro" topic="Quick Introduction">
-    <manualHTML>VegBank is the first publicly available, perfectly archived vegetation plots database.  You can search for and view plots in VegBank, as well as share your own data by adding plots to the archive (requires certification). <br/>
+<?xml-stylesheet type="text/xsl" href="manual2html.xsl"?>
+<manualDoc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="manual.xsd">
+  <manualItem finish="true" refURL="@web_context@" name="quick-intro" topic="Tutorial Instructions">
+    <manualHTML>
+Tutorial text will be displayed here, where you are reading these words, in the right frame, while the VegBank content stays in the left frame.  If you click a blue link like <a href="@general_link@info.html">this info page</a> or <a href="@general_link@faq.html">this faq</a>, the link will open in the left frame.  If you click a green link like the ones at the bottom of this frame, it opens a new tutorial topic here on the right.<br/>
       <br/>
-This tutorial works here in the right frame, while the VegBank content stays in the left frame.  If you click a blue link here, like <a href="@general_link@info.html">this info page</a> or <a href="@general_link@faq.html">this faq</a>, it will open to the left.  If you click a navigation button (i.e. next, previous, or tutorial menu items), they open here on the right.  This allows you to read help here and independently control VegBank on the left.  Press next to start finding plots in VegBank!
+Click the header link to see the page that this help topic applies to (this topic will take you to the homepage).  Click a green navigation link (next, previous, or tutorial menu), to see a new tutorial topic here on the right.  All of this allows you to view the tutorial here and independently control VegBank on the left.  <br/>
+      <br/>
+Highlighting is available for browsers with javascript enabled.  Click a <highlight id="tut_findplots"/> link (like that one) to highlight a portion of the screen in the left frame.  Click the link again if you want to unhighlight it.  If you have moved to a different page in the left frame, then highlighting won't work, and will prompt you if you'd like to go to the page that the tutorial is talking about.  Then you can try to highlighting again. Clear all highlighting with the unhighlight link at the bottom of all tutorial windows.<br/>
+      <br/>
+To close this tutorial, use the close or exit links at the bottom of each tutorial window.  If close doesn't work, press exit.  Javascript is required for closing and highlighting. <br/>
+      <br/>
+Press <a href="homepage">next</a> to start learning about VegBank!
 </manualHTML>
-    <manualItem refURL="@web_context@" name="index-plot-search" topic="First Plot Search">
+  </manualItem>
+  <manualItem finish="true" refURL="@web_context@" name="find-plots" topic="Find Plots">
+    <manualHTML>To start finding plots in VegBank, go to <a href="@web_context@">The Home Page</a> and look in the Find Plots Section. <highlight id="tut_findplots"/>
+      <br/>
+      <br/>Here, you can <strong>browse</strong> plots, <strong>search</strong> for plots, and view plots by choosing a state or province from a <strong>map</strong>.  Click one of the next help topics to see more on each of these.</manualHTML>
+    <manualItem finish="true" refURL="/browse" name="browse-data" topic="Browse Data">
+      <manualHTML>The Browse Data page shows you a sample of the plots in VegBank, listed in different categories.  Each category lists a small set of values that represent the largest number of plots.  Click the number of plots to see plots, and the values to see more information about it. Under each category, there are links that allow you to see the full set of plots, and hides the other categories.  <br/>
+        <br/>
+        <p>
+          <strong>Where Plots Are</strong>
+          <highlight id="tut_whereplotsare"/>  lists states and provinces which contain VegBank plots.  A map graphically represents the same information, and you can click a state or province in the map to see its plots.  A <a href="@forms_link@plot-map-northamerica.jsp?mapSize=largest">larger map</a> is also available. </p>
+        <p>
+          <strong>People</strong>
+          <highlight id="tut_browsepeople"/>are listed who have contributed to a plot in some way. This could be sampling the plot, being a PI for the project, or classifying the plot to a particular plant community. </p>
+        <p>
+          <strong>Projects</strong>
+          <highlight id="tut_browseproject"/> group plots that are generally collected in similar areas, over short periods of time, and with the same methodology.  </p>
+        <p>
+          <strong>Plants</strong>
+          <highlight id="tut_browseplants"/>that are found on the most plots are listed.  </p>
+        <p>
+          <strong>Communities</strong>
+          <highlight id="tut_browsecomms"/> are listed to which plots have been interpreted.  VegBank users make these interpretations, so each plot <strong>May have multiple communties</strong> assigned to it. </p>
+        <p>
+          <strong>Overview of Data</strong>
+          <highlight id="tut_overviewofdata"/> lists how much data is currently stored in VegBank.  </p>
+      </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@plotquery_page_simple@" name="simple-plot-search" topic="Simple Plot Search">
+      <manualHTML>The simple plot search will find plots based on one or more of the following: 
+      <ul class="compactdots">
+          <li>a state/province name or country in which the plot is found  <highlight id="tut_stateprovincecountry"/>
+          </li>
+          <li>a plant name that is found in the plot <highlight id="tut_plants"/>
+          </li>
+          <li>a community name to which the plot is classified <highlight id="tut_comms"/>
+          </li>
+        </ul>
+    Leave a field blank if you would like ignore one or more of these.  If you fill in more than one box, only plots that match <strong>ALL</strong> criteria will be found.   Case is ignored in this search (<code>Quercus</code> is the same as <code>querus</code>).  Use the percent (%) for a wildcard, meaning that you can write part of the name.  Tip: Queries are faster without wildcards.  Queries that start with a wildcard are slower than those that do not.  (<code>%alba</code> is slower than <code>Quercus%</code>, which is slower than <code>Quercus alba</code>.)<br/>
+      Examples:
+      <ul class="compactdots">
+          <li>Search for plots in <code>Kansas</code>.</li>
+          <li>Search for plots with plant name of <code>Acer rubrum</code>
+          </li>
+          <li>Search for plots with a community name of <code>Quercus%Acer%</code>
+          </li>
+          <li>Search for plots in <code>New York</code> with a plant name of <code>Acer%</code>
+          </li>
+        </ul>
+      For help with plot search results, see <a href="plot-search-results">this topic</a>.
+      </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@plotquery_page_advanced@" name="advanced-plot-search" topic="Advanced Plot Search">
       <manualHTML>
-        <p>This tutorial page will show you how to find your first set of vegetation plots.  If you are unfamiliar with what a plot is, please see our <a href="@general_link@faq.html">FAQ</a>.  Press the above header to return to the VegBank main page to start you search when you are ready.  This help will remain here until you close it with the red "close tutorial" below.  Some browsers (Mozilla Firebird) prevent frames from being closed like this.  If so, please use the right click functions of your browser to close this frame. </p>
-        <p>To start your first plot search, go to the <a href="@web_context@">VegBank Home Page</a>.  There is a searching function from this page that allows you to search for plots with a particular plant in them.  You can use any type of plant name, such as scientific name or common name.  You can also use USDA codes if you like.  Enter a plant name in the search box (an example if you need one is: "Sugar Maple", without quotes) and press the "search" button. </p>
+     This searches for plots by location, species present, community type, 
+methodology, and other plot criteria.  A <a href="@plotquery_page_simple@">simpler search</a> is a good place to start if you're new to VegBank. VegBank will find the plots that match <strong>ALL the criteria</strong> on this form. <br/>
+        <br/>
+  To <strong>configure the search</strong> (optional), check the boxes by the fields you'd like to search in the "Configure Your Search" box <highlight id="tut_configurequery"/> and 
+  press the "change query fields" button. Then, VegBank hides the list of fields to get them out of the way.  You can show them again to adjust which fields are shown (careful, this resets the form).  Scroll down past this box after configuration, or if you'd like to skip this step.<br/>
+        <br/>
+        <strong>Fill in the query</strong> fields that you'd like to search by, using the MM/DD/YYYY format (like 01/15/2005) for dates and percent (%) for wildcard in text fields.  @Tut_StdSearchAdvice@   Press the search 
+button at the bottom of the page to start your search. <br/>
+If plants or communities are part of your search, there are <strong>several rows</strong> of entries for each.  You can use this to specify multiple plants that must be present or multiple community names that you want your plots to match.<br/>
+        <br/>
+        <strong>Validation</strong>: If you enter dates or numbers that are in a format VegBank doesn't recognize, you'll get a popup message saying so.  The problem field will be highlighted. Please fix that entry and press "search" again.<br/>
+        <br/>
+For help with plot search results, see <a href="plot-search-results">this topic</a>.
+      </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@forms_link@plot-map-northamerica.jsp?mapSize=largest" name="map-of-plots" topic="Map of Plots">
+      <manualHTML>
+        A map of plots is available on the <a href="@web_context@">Home Page</a> and a <a href="@forms_link@plot-map-northamerica.jsp?mapSize=largest">larger version</a> exists as well.  The map shows the number of plots in each state or province in North America, grouping by colors.  <br/>
+        <br/>Click a state or province to see the plots in it.  This map is updated regularly, but not automatically.  If the map isn't updated accurately, please <a href="contact">contact</a> us to let us know.
       </manualHTML>
     </manualItem>
   </manualItem>
-  <manualItem refURL="@general_link@info.html" name="vegbank-information" topic="VegBank Information">
-    <manualItem refURL="" name="what-is-a-plot" topic="What is a Plot?">
-      <manualHTML>VegBank is based on vegetation plots.  A <b>plot</b> is a sampling area of defined size and shape on a specific location in the world (e.g. a rectangle that is 50m by 20m at a defined Latitude and Longitude).  Each time someone observes a plot and records information about it, we say an <b>observation</b> (or plot-observation) has occurred.  There may be many observations of one plot, and of course those observations may be quite different from each other.  Three types of data are collected during an observation: 
-<ul>
-          <li>Vegetation Data- what kind of plants are here and how much of each?</li>
-          <li>Environmental Data- what surrounds of the plants?</li>
-          <li>Metadata- how were these data collected?</li>
+  <manualItem finish="true" refURL="@placeURL_MN@" name="plot-search-results" topic="Plot Search Results">
+    <manualHTML>
+        The Plot Search Results (the above link is an example) are displayed any time you search for plots (from the map, the list of plots for a particular plant, project, method, etc.).  If you used the <a href="advanced-plot-search">Advanced Plot Search</a>, then these results will be configured according the the fields shown there.  Otherwise, the default set of fields will appear. <br/>
+      <br/>
+Most of the time, a message <highlight id="tut_plotcriteriamessages"/> will appear at the top of the screen, identifying what search criteria were used to find the plots listed below.  If no message appears, you probably clicked a simple link from a project, plant, etc. to see the plots that are connected to it.  <br/>
+      <br/>
+ The headers on the first row sometimes show more than one field that will appear below.  If so, the headers are separated by a horizontal line.  Each plot is represented by one shaded row under the headers.   This is only a short summary of the plot, click the <a href="view-plot-details">"plot detail"</a> link on a row to see the full details of a plot. Only some plants are listed in this view.  <strong>There are many links</strong> to more detail throughout this and all views of VegBank data.<br/>
+      <br/>
+You can add plots to your datacart, which allows you to collect plots from different query results.  You can also download plots in your <a href="datacart-building">datacart</a>. <br/>
+      <br/>
+If many plots matched your search, the results may be paginated.  Click the different page numbers to move through your results.
+      </manualHTML>
+    <manualItem finish="true" refURL="@get_link@comprehensive/observation/VB.Ob.3801.GRSM261" name="view-plot-details" topic="View Plot Details">
+      <manualHTML>
+  Link to an example plot detail page with the <a href="@get_link@comprehensive/observation/VB.Ob.3801.GRSM261">this link</a>.  This view shows almost all of the information about a plot in VegBank.  There are many fields, and you can show or hide field information <highlight id="tut_showhidefieldinfo"/> to show links to the 
+<a href="data-dictionary">data dictionary</a> which describes each field in detail.  You can also hover over a field name with your cursor and some information is displayed as a tool tip. <br/>
+        <br/>
+The information about the whole plot is listed on the left <highlight id="tut_plotdetailleft"/>, and the plants found on this plot are listed on the right. <highlight id="tut_plotdetailplants"/>
+        <br/>
+        <br/>
+There are <strong> three different options</strong> for viewing plants: by strata, overall cover, and both.  Some plots have species listed only by stratum, some have only listings by overall cover.  Some have both.  VegBank shows strata by default if strata exist for a plot.  If you show both stratum records and overall cover, the overall cover records will have <code>-all-</code> listed as their stratum.  Click a plant name to see more information about it, and/or to interpret the species to a plant concept.
+<br/>
+        <br/> The plant view can be <strong>sorted</strong> by clicking a green header row.  The initial sort order can be recreated by clicking the first "ord" column.  The intial order attempts to list the tallest stratum first, then by decreasing cover values within each stratum. <br/>
+        <br/>
+You can also add or remove this plot from the <a href="datacart-building">datacart</a> by clicking the datacart link in the upper left.
+</manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@placeURL_MN@" name="datacart-building" topic="Datacart Building">
+      <manualHTML>
+          The Datacart is an online shopping cart (without fees!).  You can add or remove plots from the <a href="@placeURL_MN@">plot search results</a> page and the <a href="@get_link@comprehensive/observation/VB.Ob.3801.GRSM261">plot detail view</a>.  Click one of those links as an example.  <br/>
+        <br/>
+        <strong>Add plots</strong> to the datacart that you are interested in by clicking the <img src="@images_link@cart_add_one.gif"/> image.  Then that area is highlighted and the number of items in your datacart increases at the top of the screen.  <highlight id="tut_datacart"/> To remove an item, click the  <img src="@images_link@cart_drop_one.gif"/> image. You can add all plots on a page, or all the search results to the datacart with links at the top of the Plot Search Results page.<br/>
+        <br/>
+To <strong>view or download</strong> the plots in your datacart, press <a href="@views_link@datacart_detail.jsp">download X items</a> on the left side of the header. <highlight id="tut_datacart"/>
+      </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@views_link@datacart_detail.jsp" name="view-datacart" topic="View Datacart">
+      <manualHTML>
+        To <strong>view</strong> the plots in your datacart, press <a href="@views_link@datacart_detail.jsp">download X items</a>
+        <highlight id="tut_datacart"/> on any page in VegBank.  For how to build a datacart (add plots to it), see the <a href="datacart-building">previous topic</a>. <br/>
+        <br/>
+Once you have pressed the download link, you'll see the contents of your datacart.  If you have a many plots in the datacart, it may be displayed over several pages.  When viewing your datacart, you can link to each plot in the datacart, and you can remove (and add back) any plots in the datacart. (But you will permanently remove plots if you click a link after removing a plot.  Removing plots may also confuse the pager.)<br/>
+        <br/>
+If you'd like to download your datacart, press the <strong>Download</strong> link <highlight id="tut_downloadcart"/>at the top of this page.
+        </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="" name="download-datacart" topic="Download Datacart">
+      <manualHTML>
+If you'd like to download your datacart, press the <strong>Download</strong> link <highlight id="tut_downloadcart"/>at the top of the <a href="@views_link@datacart_detail.jsp">datacart page</a>, after <a href="datacart-building">adding some plots</a> to the datacart.
+ <br/>
+        <br/>
+ VegBank plans to offer several different download files formats, which are described on the download page.  Currently, only the most popular and useful file format, the .csv (spreadsheet) download is available.  We have recently greatly increased the speed of this download. <br/>
+        <br/>
+      </manualHTML>
+    </manualItem>
+  </manualItem>
+  <manualItem finish="true" refURL="@web_context@" name="recently-added-plots" topic="Recently Added Plots">
+    <manualHTML>The Home Page shows a list of recently added plots <highlight id="tut_recentlyaddedplots"/>.  Projects with newly added plots are listed, with the most recently added plots listed first.  This is designed to inform VegBank users about the new data that is coming online.</manualHTML>
+  </manualItem>
+  <manualItem finish="true" refURL="@web_context@" name="header" topic="Header">
+    <manualHTML>The VegBank Header is available from all pages in VegBank.  From the header, you can <strong>search</strong> for data, and <strong>link</strong> to our most popular and userful pages.  <br/>
+      <br/>
+To <strong>Search</strong> for data from the header, fill in the form on the left <highlight id="header-left"/>.  You can look for a particular type of data using the drop down menu.  Fill in a word or words that describe what you're looking for (a plant name, person name, method name, location, etc.) and press go.  This search uses the <a href="general-search">General Search Engine</a>, and more about how it works can be seen on that help topic.  <br/>
+      <br/>
+To <strong>Navigate</strong> to popular VegBank pages, use the links next to the header search. <highlight id="header-right"/>.  Also, use the down down menu at the top of the screen. <highlight id="permanav"/>
+    </manualHTML>
+  </manualItem>
+  <manualItem finish="true" refURL="@web_context@" name="plant-taxa" topic="Plant Taxa">
+    <manualHTML>The Plant Taxa <highlight id="tut_planttaxa"/> of the Home Page links you to pages in VegBank that have to do with plants.  Be sure to see the first link, "What is a plant concept?" for information about how VegBank defines plant concepts.  Press next to see more information about the links listed here.</manualHTML>
+    <manualItem finish="true" refURL="@general_link@browseplants.jsp" name="browse-plants" topic="Browse Plants">
+      <manualHTML>
+        This allows you to browse through the plants in VegBank.  You can browse alphabetically, by the first letter of the plant names. <highlight id="tut_browseplantsbyname"/> The plants will be shown in the <a href="view-plant-summary">Plant Summary</a> format.<br/>
+        <br/>
+        You can also browse by hierarchy, starting with the Plantae Kingdom or a family of your choice. <highlight id="tut_browseplantsbyhierarchy"/>  The plants will be shown in the <a href="view-plant-detail">Plant Detail</a> format.
+      </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@forms_url@PlantQuery.jsp" name="search-for-plants" topic="Search for Plants">
+      <manualHTML>
+     This searches for plant concepts in VegBank, by name or some portion of a name, as well as other plant attributes.  
+     <br/>
+        <br/>Please see the <a href="@design_link@planttaxaoverview.html">overview</a> 
+     of plant taxonomy as handled by VegBank. <strong>Note:</strong> assertions are equivalent to concepts in that article. <br/>
+        <br/>
+        Fill in any part of the plant search form and press the search button.  @Tut_StdSearchAdvice@ <br/>
+        <br/>
+     The first (and most important) field is <strong>plant name</strong>
+        <highlight id="tut_plantquerynamefield"/>.  You can search for all words listed, any word listed, or match the string by selecting the equivalent <abbr title="circular check box; only one may be selected at a time">radio button</abbr>.  The wildcard, <code>%</code>, is only valid for the exact match. <br/>
+        <br/>
+  Also note that by default, the minimum number of plots is 1. <highlight id="tut_minplots"/>  Set this to 0 if you want to find all plants, even those that are not on any VegBank plots.
+      <br/>
+        <strong>Examples:</strong>
+        <ul class="compactdots">
+          <li>      plant name = <code>Acer rubrum</code> with an <code>match all words</code>
+          </li>
+          <li>    plant name = <code>Magnolia Quercus</code> with <code>match any word</code> AND type of name=<code>Scientific</code>
+          </li>
+          <li>  plant name = <code>Carex%</code> with <code>exact match</code> AND with a minimum of <code>20</code> plots</li>
+          <li>     plant name = <code>table%pine</code> with <code>exact match</code>
+          </li>
         </ul>
       </manualHTML>
     </manualItem>
-    <manualItem name="what-is-a-plant-concept" topic="What is a Plant Concept?">
-      <manualHTML>Each kind of plant that is found during a plot-observation is recorded as a <b>Taxon Observation</b>, each of which may be interpreted as a particular Plant Concept.  A <b>Plant Concept</b> identifies a kind of plant with the name of the plant and a botanical reference which defines what the name means.  Plant Concepts are critical for an archival database like VegBank because plant names have not meant the same kind of plant at different times or to different taxonomists.  For more on Concept-Based Taxonomy, see this <a href="@design_link@planttaxaoverview.html">overview</a>.</manualHTML>
-    </manualItem>
-    <manualItem name="what-is-a-comm-concept" topic="What is a Community Concept?">
-      <manualHTML>A Community is (1) a combination of plants that are dependent on their environment and influence one another and modify their environment (Mueller-Dombois and Ellenberg 1974), (2) a collection of plant species growing together in a particular location that show a definite association or affinity with each other (Kent and Coker 1992).  A <b>Community Concept</b>, similar to a plant concept (see the previous topic), defines a particular community with a name of a community and an ecological reference which defines what the name means. Community Concepts are critical for an archival database like VegBank because community names have not meant the same community at different times or among different authorities.  For more on Concept-Based Taxonomy, see this <a href="@design_link@planttaxaoverview.html">overview</a>, which mostly describes plant concepts, but the same theories apply to community concepts. </manualHTML>
-    </manualItem>
-    <manualItem name="what-is-a-stratum" topic="What is a Stratum?">
-      <manualHTML>A <b>stratum</b> (or layer) is (1) a structural component of a community consisting of plants of approximately the same height stature (e.g., tree, shrub, and field layer); (2) the aggregate of plants of a given, limited range of heights in a plant community, usually set off by a relative discontinuity from layers above and below it (Gabriel and Talbot 1984).  A <b>Stratum Method</b> defines a set of strata (<b>Stratum Types</b>) that should be used to measure and describe a plot-observation.  Each plant observed on a plot may be described in one or more strata (e.g. with a cover value).</manualHTML>
-    </manualItem>
-    <manualItem name="what-is-a-cover-method" topic="What is a Cover Method?">
-      <manualHTML>To describe the amount of a plant on a plot-observation, one often approximates cover of each taxon.  <b>Cover</b> is an estimate of the percentage of the surface of the earth (within a specified area) covered by biomass of plants of a specified group (from one species to all species, from one horizontal layer [stratum] to all growth).  This can be viewed as the percentage of the sky that would be obscured by the biomass. The total cover cannot exceed 100%.   <br/>Often, percent cannot be estimated to the nearest percent, as it is difficult for a person to distinguish between 62% and 63% cover.  A <b>Cover Index</b> (or cover class) is a range of cover percents which assist the estimation of cover.  For example, five cover classes might be: 0-1%, 1-2%, 2-5%, 5-10%, 10-25%. A <b>Cover Method</b> defines the set of Cover Indexes that are permissible for an observation.</manualHTML>
-    </manualItem>
-    <manualItem refURL="@general_link@sitemap.html" name="sitemap" topic="Sitemap">
-      <manualHTML>The <a href="@general_link@sitemap.html">Sitemap</a> shows most of the features available in VegBank at present.  There are also items that are listed, but not links are available, indicating that this feature has not yet been built.  This is to give users an idea about what functionality we hope to build for VegBank in the near future.  Note that some items on the sitemap may not work completely, because you normally need to complete an earlier step.  For example, you may link to "Export Data," but the downloads from this page will not contain data, as those must first be selected from the results of a simple query.</manualHTML>
-    </manualItem>
-    <manualItem refURL="@dbdictionary_link@dd-index.html" name="data-dictionary" topic="Data Dictionary">
-      <manualHTML>The Data Dictionary provides detailed information about every table and field in the VegBank database.  This is more useful for those who have already gained some experience with VegBank and wish to understand a particular table or field.  The <a href="@dbdictionary_link@dd-index.html">index page</a> of the data dictionary shows a list of tables and fields that one may select.  Once a table or field has been selected, you will see a <a href="@dbdictionary_link@dd~table~plot~type~tableview.html">view</a> of that table, with a <a href="@dbdictionary_link@dd~table~plot~field~authore~type~tableview.html#this_field">field highlighted</a> in orange if you selected a field.  You may click on a field name to see that field in a <a href="@dbdictionary_link@dd~table~plot~field~authore~type~fieldview.html">detailed view</a>.  In that detailed view, you will see the complete list of values for the field, if it is <a href="@dbdictionary_link@dd~table~plot~field~standsize~type~fieldview.html">limited to a closed set of values</a> (or the suggested values if the <a href="@dbdictionary_link@dd~table~plot~field~shape~type~fieldview.html">list is open</a>, meaning this field may contain other values besides these recommended ones).  You can also click on column headers or <a href="@dbdictionary_link@dd~table~observation~field~plot_id~type~tableview.html">referenced fields</a> for foreign keys to find out more about them.</manualHTML>
-    </manualItem>
-    <manualItem refURL="@design_link@erd/vegbank_erd.pdf" name="entity-relationship-diagram" topic="Entity Relationship Diagram">
+    <manualItem finish="true" refURL="@get_link@summary/plantconcept/plantconcept/q&amp;where=where_plantconcept_firstletter" name="view-plant-summary" topic="Plant Summary">
       <manualHTML>
-        An Entity Relationship Diagram (ERD) shows how different tables (entities) in a database are related.  This is quite helpful for visualizing what the database contains and how these data are interconnected.  The <a href="@design_link@erd/vegbank_erd.pdf">VegBank ERD</a> is a PDF file (you will need a reader for this, such as <a target="_new" href="http://www.adobe.com/products/acrobat/readstep2.html">Adobe Acrobat Reader</a>), which allows you to control zooming.  Zooming out (~ 75%) is recommended for getting an overall picture of how all the tables relate; zooming in (120% +) is recommended for understanding how a smaller section of the database works.  Click on a table in the ERD (the "hand" tool may need to be selected on the PDF toolbar in Adobe Acrobat Reader) to see that table in the <a href="@dbdictionary_link@dd-index.html">data dictionary</a> (described in previous topic).
+This page shows brief summaries of one or more plant concepts.  
+The results of most plant searches lead to this page.  Most of the time, a message <highlight id="tut_plantcriteriamessage"/> will appear telling you what you searched for. <br/>
+        <br/>
+        The header row <highlight id="tut_mainheaderrow"/> allows sorting by clicking on any green underlined header.  Click again to sort descending.  <br/>
+        <br/>Each row represents one plant, and you can see more details with the link in the first column.  If you are viewing many plants, they may be paginated across several pages.
       </manualHTML>
     </manualItem>
-    <manualItem refURL="@general_link@info.html" name="how-to-cite-vegbank" topic="How to Cite VegBank">
-      <manualItem refURL="" name="understanding-accession-codes" topic="Understanding Accession Codes">
+    <manualItem finish="true" refURL="@get_link@detail/plantconcept/48532,48533?criteriaAsText=This+is+a+tutorial+example+set+of+plants" name="view-plant-detail" topic="Plant Details">
+      <manualHTML>
+      This page shows details of one or more plant concepts.  
+The results of a few plant searches lead to this page, such as <a href="browse-plants">Browse Plants by Hierarchy</a>.  Sometimes, a message <highlight id="tut_plantcriteriamessage"/> will appear telling you what you searched for. <br/>
+        <br/>
+
+Each area between beige banners <highlight id="tut_fullplant"/> represent one plant.    The area in white <highlight id="tut_plantuniversal"/> represents static information about the plant, which is independent of party.  The <strong>Concept definition</strong> is the name combined with the reference in which the name is described.  These are listed here, as is a <strong>link to plots</strong> in which this plant is observed.
+<br/>
+        <br/>
+  The area in grey <highlight id="tut_plantpartyperspective"/> represents information that is part of one <strong>party perspective</strong>, that is someone's opinion about a plant (whether or not it is accepted, where in the hierarchy it fits, names to call it, and synonyms).  Here, you can navigate throughout the hierarchy (to parents and children) with the parent and children links.  Different people and organizations have different opinions about which plants should be grouped under which, thus the hierarchy is party-dependent.  You can also link to synonyms and the <strong>USDA Plants</strong> website for plants with a USDA Party Perspective and a code.
+<br/>
+        <br/>
+Please note that it is possible for more than one party perspective to be listed per plant.
+      </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@DisplayUploadPlotAction@" name="submit-plants" topic="Submit Plants">
+      <manualHTML>Currently, it is only possible to submit plants to VegBank through the XML Loader.  We plan to implement online forms in the future.  <br/>
+        <br/>Generally, it is not necessary to submit many new plots to VegBank, as the entire USDA Plants dataset has already been loaded.  If you have plants outside North America, or new species to science (or newly defined plant concepts), you will have to add these using <a href="vegbranch">VegBranch</a>.  For instructions on loading XML into VegBank, please see <a href="submit-plots">the Submit Plots</a> topic.  <strong>Please Note</strong> that to add any data to VegBank, or to annotate data, you will need to be registered and <a href="request-certification">certified.</a>
+      </manualHTML>
+    </manualItem>
+  </manualItem>
+  <manualItem finish="true" refURL="@web_context@" name="plant-communities" topic="Plant Communities">
+    <manualHTML>The Plant Communities Section of the Home Page <highlight id="tut_plantcommunities"/> (Plant Communities are also called Community Types) links you to pages in VegBank that have to do with communities.  Be sure to see the first link: <a href="@general_link@faq.html#whatcommunity">What is a community?</a> if you're not familiar with what communities are, or how VegBank defines them. Press next to see more information about the links listed here.</manualHTML>
+    <manualItem finish="true" refURL="@forms_url@CommQuery.jsp" name="search-for-communities" topic="Search for Communities">
+      <manualHTML>
+        This searches for communities in VegBank, by name or some portion of a name, or by other attributes of a community, such as level, name type, or party.
+      <br/>
+        <br/>Please see the <a href="@design_link@planttaxaoverview.html">overview</a> 
+     of plant taxonomy for details about concept-based taxonomy, which applies to both plants and communities in VegBank. <strong>Note:</strong> assertions are equivalent to concepts in that article. <br/>
+        <br/>
+        Fill in any part of this form and press the search button.  @Tut_StdSearchAdvice@ <br/>
+        <br/>
+     The first (and most important) field is <strong>community name</strong>
+        <highlight id="tut_commquerynamefield"/>.  You can search for all words listed, any word listed, or match the string by selecting the equivalent <abbr title="circular check box; only one may be selected at a time">radio button</abbr>.  The wildcard, <code>%</code>, is only valid for the exact match. <br/>
+        <br/>
+  Also note that by default, the minimum number of plots is 1. <highlight id="tut_minplots"/>  Set this to 0 if you want to find all communities, even those without plots associated with them.
+    <br/>
+        <strong>Example searches:</strong>
+        <ul class="compactdots">
+          <li>    community name = <code>Magnolia Quercus</code> with <code>match any word</code> (for all communities with either Magnolia or Quercus in the name</li>
+          <li>    community name = <code>Magnolia Quercus</code> with <code>match all words</code> (for all communities with both Magnolia and Quercus in the name</li>
+          <li>  community name = <code>Quercus</code> with <code>match all words</code> AND Community Level of <code>Alliance</code>AND with a minimum of <code>0</code> plots</li>
+          <li>      community name = <code>Juniper%horizon%</code> with an <code>exact match </code> AND with a minimum of <code>0</code> plots(for all communities starting with Juniper and then containing horizon)</li>
+          <li> Party = <code>Jennings, Michael </code> with at least 1 plot (for all communities which have a party perspective by Michael Jennings )</li>
+        </ul>
+      </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@views_link@commconcept_summary.jsp?where=where_commconcept_mpq&amp;criteriaAsText=+Tutorial+example+communities&amp;xwhereParams_commname_0=quercus&amp;xwhereParams_commname_1=cu.commname&amp;matchType=all&amp;xwhereKey_commname=xwhere_match&amp;xwhereSearch_commname=true&amp;xwhereMatchAny_commname=false&amp;xwhereGlue=AND" name="view-comm-summary" topic="Community Summary">
+      <manualHTML>This page shows brief summaries of one or more community concepts.  
+The results of most community searches lead to this page.  Most of the time, a message <highlight id="tut_commcriteriamessage"/> will appear telling you what you searched for. <br/>
+        <br/>
+        The header row <highlight id="tut_mainheaderrow"/> allows sorting by clicking on any green underlined header.  Click again to sort descending.  <br/>
+        <br/>Each row represents one community, and you can see more details with the link in the first column.  If you are viewing many communities, they may be paginated across several pages.
+      </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@views_link@commconcept_detail.jsp?where=where_commconcept_mpq&amp;criteriaAsText=+Tutorial+example+communities&amp;xwhereParams_commname_0=quercus&amp;xwhereParams_commname_1=cu.commname&amp;matchType=all&amp;xwhereKey_commname=xwhere_match&amp;xwhereSearch_commname=true&amp;xwhereMatchAny_commname=false&amp;xwhereGlue=AND" name="view-comm-detail" topic="Community Details">
+      <manualHTML>
+      This page shows details of one or more community concepts.  
+  Sometimes, a message <highlight id="tut_commcriteriamessage"/> will appear telling you what you searched for. <br/>
+        <br/>
+
+Each area between beige banners <highlight id="tut_fullcomm"/> represent one community concept.    The area in white <highlight id="tut_communiversal"/> represents static information about the community, which is independent of party.  The <strong>Concept definition</strong> is the name combined with the reference in which the name is described.  These are listed here, as is a <strong>link to plots</strong> which have been interpreted as this community.
+<br/>
+        <br/>
+  The area in grey <highlight id="tut_commpartyperspective"/> represents information that is part of one <strong>party perspective</strong>, that is someone's opinion about a community (whether or not it is accepted, where in the hierarchy it fits, names to call it, and synonyms).  Here, you can navigate throughout the hierarchy (to parents and children) with the parent and children links.  Different people and organizations have different opinions about which communities should be grouped under which, thus the hierarchy is party-dependent.  You can also link to synonyms and the <strong>NatureServe Explorer</strong> website for communities originating there.
+<br/>
+        <br/>
+Please note that it is possible for more than one party perspective to be listed per community.
+      </manualHTML>
+    </manualItem>
+    <manualItem finish="true" refURL="@DisplayUploadPlotAction@" name="submit-comms" topic="Submit Communities">
+      <manualHTML>Currently, it is only possible to submit communities to VegBank through the XML Loader.  We plan to implement online forms in the future.  <br/>
+        <br/>Communities in VegBank were loaded from the EcoArt database, then from <a target="_new " href="http://www.natureserve.org/explorer">NatureServe Explorer</a>.  If you have other communities you want in VegBank, you will have to add these using <a href="vegbranch">VegBranch</a>.  For instructions on loading XML into VegBank, please see <a href="submit-plots">the Submit Plots</a> topic.  <strong>Please Note</strong> that to add any data to VegBank, or to annotate data, you will need to be registered and <a href="request-certification">certified.</a>
+      </manualHTML>
+    </manualItem>
+  </manualItem>
+  <manualItem finish="true" refURL="@web_context@" name="supplemental-data" topic="Supplemental Data">
+    <manualHTML>
+      You can <strong>browse</strong> through Supplemental Data (that is data other than plots, plants, and communities) through the Home Page section <highlight id="tut_supplemental"/>.  
+<br/>
+      <br/>
+VegBank views are generally of two types: summary and detail.  Summary views <a href="@get_link@summary/covermethod">example cover method summary</a> are generally one table with a header row.  Detail views offer more information and so each element takes up more rows <a href="@get_link@detail/covermethod">example cover method details</a>.
+<br/>
+      <br/>
+VegBank views are tightly interconnected, with links to related data scattered throughout each view.  Please use the back button on your browser after clicking some links if you'd like to get back to your original search results.  <br/>
+      <br/>
+Currently, only plots can be added to the <a href="datacart-building">datacart</a>.  We plan to add the capacity to add other items to the datacart soon, allowing you to search by groups of data in the datacart and to <strong>download</strong> supplemental data, as well. <br/><br/>
+You can <strong>search</strong> supplemental data with the search in the header <highlight id="header-left"/> or the <a href="general-search">General Search</a>. 
+    </manualHTML>
+    <manualItem finish="true" refURL="@forms_link@metasearch.jsp" name="general-search" topic="General Search">
+      <manualHTML>
+        The General Search works differently from other searches in VegBank.  Other searches require you to search <strong>specific fields</strong> in order to find <strong>a certain kind of data</strong>, like plots, plants, or communities.  The General Search is much less specific.  
+<br/>
+        <br/>
+The General Search looks for keyword(s) in <strong>lots of fields</strong> and <strong>all kinds of data</strong>.  This is a very wide funnel, but is a good starting point to find data.
+There are three places to start a general search: 
+<ul class="compactdots">
+          <li>The Header <highlight id="header-left"/>
+          </li>
+          <li>The <a href="@forms_link@metasearch.jsp">General Search Page</a>
+          </li>
+          <li>The <a href="firefox-toolbar">Firefox Search Plugin</a>
+          </li>
+        </ul>
+Enter a word or words (or even part of a word) into the search box and press the search button ("go" button on the header).  VegBank will search all kinds of data<sup>1</sup> for all<sup>2</sup> the words you specified.  <br/>
+        <br/>  All keywords for related data are included in the search.  So, a plant name or place name will be part of the keywords for a plot. <br/>
+        <br/>
+ To search more specifically, please use <a href="@plotquery_page_advanced@">the advanced plot search</a>, <a href="@forms_link@PlantQuery.jsp">the plant search</a>, or the <a href="@forms_link@CommQuery.jsp">the community search</a>.<br/>
+        <br/>
+This is currently the only way to search <a href="supplemental-data">Supplemental Data</a>.
+<br/>
+        <br/>
+        <sup>1</sup><span class="psmall">You can restrict the General Search in the header, by specifying what kind of data you're looking for, for example, plots or people.  Select "anything" to remove search restrictions. <br/></span>
+        <sup>2</sup><span class="psmall">You can check the "match any word" checkbox in the main General Search page to search for items containing any word (separated by spaces) in the search box.  Note that <code>North Carolina</code> is interpreted as two words, and thus everything that has <code>North</code> or <code>Carolina</code> in it will be found.</span>
+      </manualHTML>
+    </manualItem>
+  </manualItem>
+  <manualItem finish="true" refURL="@web_context@" name="data-in-vegbank" topic="Data in VegBank">
+    <manualHTML>A section of the Home Page <highlight id="tut_datainvegbank"/> shows how much data are currently stored in VegBank, for those who are curious.  If you've just loaded data, and your plots don't seem to be included in the count, it's because this view is cached and has probably just not updated yet.  You'll receive a receipt when you load plots, and that will tell you whether or not they loaded successfully.</manualHTML>
+  </manualItem>
+  <manualItem finish="false" refURL="@web_context@" name="learn-about-vegbank" topic="Learn About VegBank">
+    <manualHTML/>
+    <manualItem finish="false" refURL="@general_link@info.html" name="vegbank-information" topic="VegBank Information">
+      <manualHTML>
+    This section of the tutorial is devoted to Information about VegBank.  You can visit our <a href="@general_link@info.html">Information Page</a> to find out more about VegBank.  If you can't find what you're looking for, you can use the <a href="@general_link@contact.html">contact link</a> on the footer to either email the help desk: help@vegbank.org or to search the <a href="http://mercury.nceas.ucsb.edu/vegbank/pipermail/users/">VegBank Users Listserv</a> for past questions and answers.
+    </manualHTML>
+      <manualItem finish="false" refURL="@dbdictionary_link@dd-index.html" name="data-dictionary" topic="Data Dictionary">
+        <manualHTML>The Data Dictionary provides detailed information about every table and field in the VegBank database.  This is more useful for those who have already gained some experience with VegBank and wish to understand a particular table or field.  The <a href="@dbdictionary_link@dd-index.html">index page</a> of the data dictionary shows a list of tables and fields that one may select.  Once a table or field has been selected, you will see a <a href="@dbdictionary_link@dd~table~plot~type~tableview.html">view</a> of that table, with a <a href="@dbdictionary_link@dd~table~plot~field~authore~type~tableview.html#this_field">field highlighted</a> in orange if you selected a field.  You may click on a field name to see that field in a <a href="@dbdictionary_link@dd~table~plot~field~authore~type~fieldview.html">detailed view</a>.  In that detailed view, you will see the complete list of values for the field, if it is <a href="@dbdictionary_link@dd~table~plot~field~standsize~type~fieldview.html">limited to a closed set of values</a> (or the suggested values if the <a href="@dbdictionary_link@dd~table~plot~field~shape~type~fieldview.html">list is open</a>, meaning this field may contain other values besides these recommended ones).  You can also click on column headers or <a href="@dbdictionary_link@dd~table~observation~field~plot_id~type~tableview.html">referenced fields</a> for foreign keys to find out more about them.</manualHTML>
+      </manualItem>
+      <manualItem finish="false" refURL="@design_link@erd/vegbank_erd.pdf" name="entity-relationship-diagram" topic="Entity Relationship Diagram">
+        <manualHTML>
+        An Entity Relationship Diagram (ERD) shows how different tables (entities) in a database are related.  This is quite helpful for visualizing what the database contains and how these data are interconnected.  The <a href="@design_link@erd/vegbank_erd.pdf">VegBank ERD</a> is a PDF file (you will need a reader for this, such as <a target="_new" href="http://www.adobe.com/products/acrobat/readstep2.html">Adobe Acrobat Reader</a>), which allows you to control zooming.  Zooming out (~ 75%) is recommended for getting an overall picture of how all the tables relate; zooming in (120% +) is recommended for understanding how a smaller section of the database works.  Click on a table in the ERD (the "hand" tool may need to be selected on the PDF toolbar in Adobe Acrobat Reader) to see that table in the <a href="@dbdictionary_link@dd-index.html">data dictionary</a> (described in previous topic).
+      </manualHTML>
+      </manualItem>
+    </manualItem>
+    <manualItem finish="false" refURL="@web_context@" name="faq" topic="FAQ">
+      <manualHTML/>
+      <manualItem finish="false" refURL="" name="what-is-a-plot" topic="What is a Plot?">
+        <manualHTML>VegBank is based on vegetation plots.  A <b>plot</b> is a sampling area of defined size and shape on a specific location in the world (e.g. a rectangle that is 50m by 20m at a defined Latitude and Longitude).  Each time someone observes a plot and records information about it, we say an <b>observation</b> (or plot-observation) has occurred.  There may be many observations of one plot, and of course those observations may be quite different from each other.  Three types of data are collected during an observation: 
+<ul class="compactdots">
+            <li>Vegetation Data- what kind of plants are here and how much of each?</li>
+            <li>Environmental Data- what surrounds of the plants?</li>
+            <li>Metadata- how were these data collected?</li>
+          </ul>
+        </manualHTML>
+      </manualItem>
+      <manualItem finish="false" name="vegbank-data-sources" topic="What are the sources of VegBank Data?">
+        <manualHTML/>
+      </manualItem>
+      <manualItem finish="false" name="what-is-a-plant-concept" topic="What is a Plant Concept?">
+        <manualHTML>Each kind of plant that is found during a plot-observation is recorded as a <b>Taxon Observation</b>, each of which may be interpreted as a particular Plant Concept.  A <b>Plant Concept</b> identifies a kind of plant with the name of the plant and a botanical reference which defines what the name means.  Plant Concepts are critical for an archival database like VegBank because plant names have not meant the same kind of plant at different times or to different taxonomists.  For more on Concept-Based Taxonomy, see this <a href="@design_link@planttaxaoverview.html">overview</a>.</manualHTML>
+      </manualItem>
+      <manualItem finish="false" name="what-is-a-comm-concept" topic="What is a Community Concept?">
+        <manualHTML>A Community is (1) a combination of plants that are dependent on their environment and influence one another and modify their environment (Mueller-Dombois and Ellenberg 1974), (2) a collection of plant species growing together in a particular location that show a definite association or affinity with each other (Kent and Coker 1992).  A <b>Community Concept</b>, similar to a plant concept (see the previous topic), defines a particular community with a name of a community and an ecological reference which defines what the name means. Community Concepts are critical for an archival database like VegBank because community names have not meant the same community at different times or among different authorities.  For more on Concept-Based Taxonomy, see this <a href="@design_link@planttaxaoverview.html">overview</a>, which mostly describes plant concepts, but the same theories apply to community concepts. </manualHTML>
+      </manualItem>
+      <manualItem finish="false" name="what-is-a-stratum" topic="What is a Stratum?">
+        <manualHTML>A <b>stratum</b> (or layer) is (1) a structural component of a community consisting of plants of approximately the same height stature (e.g., tree, shrub, and field layer); (2) the aggregate of plants of a given, limited range of heights in a plant community, usually set off by a relative discontinuity from layers above and below it (Gabriel and Talbot 1984).  A <b>Stratum Method</b> defines a set of strata (<b>Stratum Types</b>) that should be used to measure and describe a plot-observation.  Each plant observed on a plot may be described in one or more strata (e.g. with a cover value).</manualHTML>
+      </manualItem>
+      <manualItem finish="false" name="what-is-a-cover-method" topic="What is a Cover Method?">
+        <manualHTML>To describe the amount of a plant on a plot-observation, one often approximates cover of each taxon.  <b>Cover</b> is an estimate of the percentage of the surface of the earth (within a specified area) covered by biomass of plants of a specified group (from one species to all species, from one horizontal layer [stratum] to all growth).  This can be viewed as the percentage of the sky that would be obscured by the biomass. The total cover cannot exceed 100%.   <br/>Often, percent cannot be estimated to the nearest percent, as it is difficult for a person to distinguish between 62% and 63% cover.  A <b>Cover Index</b> (or cover class) is a range of cover percents which assist the estimation of cover.  For example, five cover classes might be: 0-1%, 1-2%, 2-5%, 5-10%, 10-25%. A <b>Cover Method</b> defines the set of Cover Indexes that are permissible for an observation.</manualHTML>
+      </manualItem>
+    </manualItem>
+    <manualItem finish="false" refURL="@web_context@" name="tutorial" topic="Tutorial">
+      <manualHTML/>
+    </manualItem>
+    <manualItem finish="false" refURL="@general_link@info.html" name="how-to-cite-vegbank" topic="How to Cite VegBank">
+      <manualHTML>
+        VegBank is an archival vegetation ecology database.  Several different kinds of data may be cited.  These are observation, party, reference, plantConcept, and commConcept.  Each of these has stored in VegBank an <b>Accession Code</b>, which uniquely identifies this piece of data.  This Accession Code (also called Accession Number) may be used by you to cite VegBank and make reference to the particular data here.<br/>
+You may wish to reference the exact view of some data in VegBank, so that others may see the data just as you saw them, even if changes are later made.  To do so, the Accession Code contains a date value, which represents the last update to this data.  In the very near future, you will be able to create hyperlinks that link directly to a view of the data, using its Accession Code.<br/>
+To cite VegBank, copy the Accession Code for the data in question. </manualHTML>
+      <manualItem finish="false" refURL="" name="understanding-accession-codes" topic="Understanding Accession Codes">
         <manualHTML>
           <p>Accession Codes for observations* look like this: 'VB.147.2003-04-18T14:43:27'  (without single quotes).  Each code is broken into several parts, using a period (.) to separate the parts.  The first part (VB=VegBank) stands for the database which contains the data in question.  The next part (147) is the number of the observation in VegBank.  The last part (2003-04-18T14:43:27) is the date in standard XML format: CCYY-MM-DDTHH:MM:SS, in UTC (Greenwich/Zulu) time.  The 'T' separates date and time.</p>
           <p>Accession Codes for other data look like this: 'VB.PC.184.ACRU'.  This is the same as above, except the second element refers to which type of data this is (PC=plant concept).  There is also a last value which is not a date (dates will soon be added to these Accession Codes).  This is a confirmation string that confirms that the rest of the accession code is correct.  VegBank checks this confirmation string against the record referenced, and if it doesn't match, the Accession Code is invalid.  This helps reduce the likelihood of getting the wrong data returned in the event of a typo or data alteration in the accession code.</p>
           <p>* Observations are given accession codes, not plots, because the observation of a plot is primarily cited.  To cite a plot, use an observation accession code and mention where you are citing that you wish to reference the entire plot.</p>
         </manualHTML>
       </manualItem>
-      <manualHTML>
-        VegBank is an archival vegetation ecology database.  Several different kinds of data may be cited.  These are observation, party, reference, plantConcept, and commConcept.  Each of these has stored in VegBank an <b>Accession Code</b>, which uniquely identifies this piece of data.  This Accession Code (also called Accession Number) may be used by you to cite VegBank and make reference to the particular data here.<br/>
-You may wish to reference the exact view of some data in VegBank, so that others may see the data just as you saw them, even if changes are later made.  To do so, the Accession Code contains a date value, which represents the last update to this data.  In the very near future, you will be able to create hyperlinks that link directly to a view of the data, using its Accession Code.<br/>
-To cite VegBank, copy the Accession Code for the data in question. </manualHTML>
     </manualItem>
-    <manualHTML>
-    This section of the tutorial is devoted to Information about VegBank.  You can visit our <a href="@general_link@info.html">Information Page</a> to find out more about VegBank.  If you can't find what you're looking for, you can use the <a href="@general_link@contact.html">contact link</a> on the footer to either email the help desk: help@vegbank.org or to search the <a href="http://mercury.nceas.ucsb.edu/vegbank/pipermail/users/">VegBank Users Listserv</a> for past questions and answers.
-    </manualHTML>
+    <manualItem finish="false" refURL="???" name="terms" topic="Terms of Use">
+      <manualHTML/>
+    </manualItem>
+    <manualItem finish="false" refURL="???" name="privacy" topic="Privacy">
+      <manualHTML/>
+    </manualItem>
+    <manualItem finish="false" refURL="@general_link@sitemap.html" name="sitemap" topic="Sitemap">
+      <manualHTML>The <a href="@general_link@sitemap.html">Sitemap</a> shows most of the features available in VegBank at present.  There are also items that are listed, but not links are available, indicating that this feature has not yet been built.  This is to give users an idea about what functionality we hope to build for VegBank in the near future.  Note that some items on the sitemap may not work completely, because you normally need to complete an earlier step.  For example, you may link to "Export Data," but the downloads from this page will not contain data, as those must first be selected from the results of a simple query.</manualHTML>
+    </manualItem>
+    <manualItem finish="false" refURL="@web_context@" name="contact" topic="Contact">
+      <manualHTML/>
+    </manualItem>
   </manualItem>
-  <manualItem refURL="@forms_link@RegisterNewUser.jsp" name="register-as-new-user" topic="Register as New User">
-    <manualItem refURL="@web_context@LoadUser.do" name="update-user-profile" topic="Update User Profile">
+  <manualItem finish="false" refURL="@web_context@" name="contribute-plot-data" topic="Contribute Plot Data">
+    <manualHTML>
+      <p>VegBank users may <a href="@manual_link@search-for-data.html">search for data</a> 
+already in VegBank, but they may also share their own data with other VegBank users
+by submitting data to VegBank.  To do so, one must first 
+<a href="@forms_link@certification.jsp">become a certified user</a>.  Certification helps
+ensure that the data you can view here comes from ecologists who both understand VegBank
+and assure us that their data, as represented in VegBank, are accurate.  For more on why
+certification is necessary, see <a href="@help-for-certification-href@">certification 
+help</a>.</p>
+      <p>The next few pages show the options for submitting data.</p>
+    </manualHTML>
+    <manualItem finish="false" refURL="@DisplayUploadPlotAction@" name="submit-plots" topic="Submit Plots">
+      <manualHTML>Plots are the most common data submission to VegBank.  To submit a plot,
+the user must own the plot data or have permission to share this data online.  
+Plots may be submitted in several different
+formats (click links for more information on each).  See the next few screens for details on each method, or <a href="@DisplayUploadPlotAction@">Click here </a>to start loading plots.
+</manualHTML>
+    </manualItem>
+    <manualItem finish="false" refURL="@vegbranch_link@vegbranch.html" name="submit-with-vegbranch" topic="VegBranch">
+      <manualHTML>You can prepare data uploads to submit plots and other data with <a href="@vegbranch_link@vegbranch.html">VegBranch</a>.  Please <a href="vegbranch">See the VegBranch Tutorial Topic</a> for more on VegBranch.</manualHTML>
+    </manualItem>
+    <manualItem finish="false" refURL="@NativeXMLIndexPage@" name="vegbank-xml" topic="VegBank XML">
+      <manualHTML>
+        <a href="@NativeXMLIndexPage@">XML</a> - VegBank's native XML format can be imported
+    directly into VegBank.  While we recommend VegBranch as a tool to help create this XML
+    file, you may create the file yourself from another program (advanced XML programmers).</manualHTML>
+    </manualItem>
+    <manualItem finish="false" refURL="" name="annotate-data-in-vegbank" topic="Annotate Data in VegBank">
+      <manualHTML>
+    After a Vegbank user <a>submits</a> data to VegBank, other users may <a>search</a> for
+and find this data.  The second user may wish to add information to the first user's data.
+This is called annotation.  One must 
+<a href="@forms_link@certification.jsp">become a certified user</a> in order to annotate
+data in VegBank.  There are a few ways to annotate data in VegBank.  See the next few topics for details.
+    </manualHTML>
+      <manualItem finish="false" refURL="" name="interpret-a-plot" topic="Interpret a Plot">
+        <manualHTML>
+          <p>Once a user has researched a plot-observation in VegBank, he or she may decide that it
+belongs to a certain <a>community type</a>.  Each plot-observation may be interpreted multiple times as
+belonging to different community types.  Each party may have its own opinion about which community a plot-observation
+belongs.  Parties may also assign the plot-observation to more than one community
+as part of the same interpretation.  Each assignment may have its own fit and confidence,
+which are the party's self-assessment of how well the plot-observation matches the community, and how
+sure the party is that such a fit is indeed accurate.
+</p>
+          <p>
+            <span class="bright">Coming very soon!</span>
+          </p>
+        </manualHTML>
+      </manualItem>
+      <manualItem finish="false" refURL="" name="interpret-taxon-on-plot" topic="Interpret Taxon on Plot">
+        <manualHTML>
+          <p>
+Each plot-observation has at least one taxon observation, which is the plot author's record of a plant-taxon that
+occurs on the plot-observation.  The author records his or her name that was used for this plant, as well
+as the reference that s/he used to determine this name.  Each such observation has at least one, and perhaps many,
+interpretations as to which plant concept a taxon observation really is.  If a VegBank user has some knowledge
+of the plot, or perhaps the area, and believes that s/he can interpret what this plant is, differently from
+the interpretations already made, s/he may add a new taxon interpretation.  Reasons for doing so could be that
+taxonomy has changed and the author's taxon has been split.  The VegBank user may have some knowledge of the plot-
+observation or the general area and believe they know what the new taxon should be.  Also, cases exist where
+the plot author was uncertain of what the plant was.  Subsequent users may interpret the taxon, perhaps based 
+on a voucher, to clarify what the taxon is likely to be.  There is also a fit and confidence associated
+with each taxon interpretation, similar as above in the community interpretations.
+</p>
+          <!--<p>
+          <font color="red">Coming very soon!</font>
+        </p>-->
+          <p>Interpret a taxon by: <a href="@plotquery_page_advanced@">Searching for plots</a>, then viewing a <img src="@image_server@report_sm.gif"/> summary of the plot from the query results.  Select the "Interpret Plant..." link near the top of the page in the "ACTIONS" section.  Note that you must be certified to interpret a taxon.</p>
+        </manualHTML>
+      </manualItem>
+      <manualItem finish="false" refURL="" name="add-a-note" topic="Add a Note">
+        <manualHTML>
+          <p>Notes may also be added about any field value.  Users may think that a value is unreasonable, or that 
+they have some knowledge as to what a missing value might be.  Multiple users may make multiple comments about any
+field.  These will be visible in a very detailed view of each plot.  Please limit the notes that you add
+to VegBank to those which may be useful to the community at large.   Helpful notes could be: <br/>
+"Elevation seems way too high for this region, perhaps the units were in feet, not meters." <br/>
+"This is the only known occurrence of this species in our province, to date."<br/>
+"The plot author indicates that fires may have affected this plot in the last 50 years.  Park records show that
+there fires in this national park were 42 years before this plot-observation."
+</p>
+          <p>
+            <span class="bright">Coming in early 2005!</span>
+          </p>
+        </manualHTML>
+      </manualItem>
+    </manualItem>
+  </manualItem>
+  <manualItem finish="false" refURL="@web_context@" name="tools" topic="Tools">
+    <manualHTML/>
+    <manualItem finish="false" refURL="http://152.2.14.231/nvcrs/" name="national-vegetation-classification" topic="Vegetation Classification">
+      <manualHTML/>
+    </manualItem>
+    <manualItem finish="false" refURL="@vegbranch_link@vegbranch.html" name="vegbranch" topic="VegBranch">
+      <manualHTML>
+        <a href="@vegbranch_link@vegbranch.html">VegBranch</a>
+        <span class="category bright">
+          <b> (the recommended way of submitting plots to VegBank)</b>
+        </span> - VegBank's client database,
+    in MS Access, can import data from other formats to prepare for submission to VegBank.
+    Unfortunately, VegBranch requires that you have MS Access 2000 or higher running
+    on your machine.  We hope to create a new version of VegBranch that will be platform independent
+    in the future.</manualHTML>
+      <manualItem finish="false" refURL="" name="vegbranch-overview" topic="VegBranch Overview">
+        <manualHTML/>
+      </manualItem>
+      <manualItem finish="false" refURL="" name="vegbranch-loadingmod" topic="VegBranch Loading Module">
+        <manualHTML/>
+      </manualItem>
+      <manualItem finish="false" refURL="" name="vegbranch-help" topic="VegBranch Help">
+        <manualHTML/>
+      </manualItem>
+      <manualItem finish="false" refURL="" name="normalizer" topic="Normalizer">
+        <manualHTML/>
+      </manualItem>
+      <manualItem finish="false" refURL="" name="nps-plots" topic="NPS PLOTS">
+        <manualHTML>
+          <a href="http://biology.usgs.gov/npsveg/tools/plotsdatabase.html">NPS PLOTS</a> database - We have had the ability to import NPS-PLOTS databases
+    into VegBank and are currently revising this functionality.  We hope to have it running again
+    very soon.  Thanks for your patience while we reengineer this.
+</manualHTML>
+      </manualItem>
+      <manualItem finish="false" refURL="" name="turboveg" topic="TurboVeg">
+        <manualHTML>
+          <a href="http://www.synbiosys.alterra.nl/turboveg/">TurboVeg</a> - We plan to accept TurboVeg databases to be imported into VegBank 
+    sometime in mid-2005.</manualHTML>
+      </manualItem>
+    </manualItem>
+    <manualItem finish="false" refURL="@searchplugins_link@install-search.html" name="firefox-toolbar" topic="Firefox Toolbar">
+      <manualHTML/>
+    </manualItem>
+  </manualItem>
+  <manualItem finish="false" refURL="@web_context@" name="my-vegbank-account" topic="My VegBank Account">
+    <manualHTML/>
+    <manualItem finish="false" refURL="@forms_link@RegisterNewUser.jsp" name="register-as-new-user" topic="Register as New User">
+      <manualHTML>
+    We suggest that users <a href="@forms_link@RegisterNewUser.jsp">register</a>
+  so that we can 
+(1) track use of VegBank 
+    data, (2) maintain user profiles with preferences and use history, and (3) establish appropriate 
+    levels of certification and permissions for advanced functions.  If you choose not to register, you may still use the site as a guest, but this does limit some functionality.
+<br/>
+You will sign onto VegBank using your email account and a password of your choosing.  If your email account has already been registered, simply use the "forgot password" link and the password will be emailed to you. 
+      <br/>
+ To become a Vegbank user, you must read and agree to the <a href="@general_link@terms.html">VegBank 
+  terms of use</a>.
+    </manualHTML>
+    </manualItem>
+    <manualItem finish="false" refURL="@web_context@LoadUser.do" name="update-user-profile" topic="Update User Profile">
       <manualHTML>
 You may <a href="@web_context@LoadUser.do">change information</a> about your personal user account.  There is a link from that page to change your account password, too.  If you forget your password, it can be emailed to you (see the next topic).  Please keep your email address updated, as this will enable us to email you a password, if lost.  We also hope to add features which allow you to receive email updates when data of interest are added to VegBank, or users annotate the data you submitted.  Please see our <a href="@general_link@privacy.html">Privacy Policy</a> to assure you that we will not share this information, except for any information you provide during a <a href="@forms_link@certification.jsp">certification-request</a> which was noted public on that form.
       </manualHTML>
     </manualItem>
-    <manualItem refURL="@forms_link@EmailPassword.jsp" name="forgot-my-password" topic="Forgot my Password">
+    <manualItem finish="false" refURL="@forms_link@EmailPassword.jsp" name="forgot-my-password" topic="Forgot my Password">
       <manualHTML>If you have forgotten your password, use the <a href="@forms_link@EmailPassword.jsp">forgot my password</a> link on the <a href="@general_link@login.jsp">Login</a> page.  Your password will be emailed to the email address you used to register with VegBank.  If the email account you provided at VegBank registration has been closed, please use a different email account to register for a new account.  If you wish to keep your old account due to certification or plots submitted, please contact the help desk using the <a href="@general_link@contact.html">contact link</a> on the footer.</manualHTML>
     </manualItem>
-    <manualItem refURL="@forms_link@certification.jsp" name="request-certification" topic="Request Certification">
+    <manualItem finish="false" refURL="@forms_link@certification.jsp" name="request-certification" topic="Request Certification">
       <manualHTML>
 The 
           ESA Vegetation Panel will provide a certification program for VegBank 
@@ -99,140 +576,13 @@ Click
 
       </manualHTML>
     </manualItem>
-    <manualHTML>
-    We suggest that users <a href="@forms_link@RegisterNewUser.jsp">register</a>
-  so that we can 
-(1) track use of VegBank 
-    data, (2) maintain user profiles with preferences and use history, and (3) establish appropriate 
-    levels of certification and permissions for advanced functions.  If you choose not to register, you may still use the site as a guest, but this does limit some functionality.
-<br/>
-You will sign onto VegBank using your email account and a password of your choosing.  If your email account has already been registered, simply use the "forgot password" link and the password will be emailed to you. 
-      <br/>
- To become a Vegbank user, you must read and agree to the <a href="@general_link@terms.html">VegBank 
-  terms of use</a>.
-    </manualHTML>
-  </manualItem>
-  <manualItem refURL="" name="search-for-data" topic="Search for Data">
-    <manualHTML>
-      <p>VegBank contains many different kinds of vegetation plot data and offers several different search 
-pages to find data of interest.  Each search page is generally called a "query" page,
-because it queries the database for data, based on search criteria you provide on the page.
-The next few pages explain the main search pages.  There will be
-more specific instructions on each search page.
-</p>
-    </manualHTML>
-    <manualItem refURL="@plotquery_page_simple@" name="simple-query" topic="Simple Query">
-      <manualHTML>The simple query is a very simple query that allows you to search for plots, plants, and/or communities, all from one webpage.  You can search for plots based on a plant name that is found in the plot, a community name to which the plot is classified, or a state/province name in which the plot is found.  Leave a field blank if you would like ignore this part.  For example, leave community name blank if you only want the search to consider plant name and state/province.  Press the 'Search for Plots' button below the names and state/province fields to begin your search.<br/>
-        <br/>You can also just provide a plant name and press the button to the right of that field to search for plants that have the name you entered.  Similarly, you can search for communities by filling in a community name and pressing the button next to that field.  If you search for plants or communities, the state/province field is ignored.  Also, the community name field is ignored for a plant search and the plant name field is ignored for a community search.  The colored boxes behind the fields and buttons should guide you in knowing which fields are part of which search.
-      </manualHTML>
-    </manualItem>
-    <manualItem refURL="@plotquery_page_advanced@" name="search-for-plots" topic="Search for Plots">
-      <manualHTML>
-        <a href="@plotquery_page_advanced@">Plot Query</a> 
-     - search for plots by location, species present, community type, 
-  plot collectors, and other plot criteria. <br/>
-        <br/>More help is available from that form (click the link here to see the plot-query form).  
-   Some examples of plot queries  that return a few plot-observations are: <br/>
-   Elevation from 2120 to 2220 <br/>
-   All plots in project: 'ZION Vegetation mapping...'<br/>
-   All plots in South Dakota <br/>
-      </manualHTML>
-    </manualItem>
-    <manualItem refURL="@forms_url@PlantQuery.jsp" name="search-for-plants" topic="Search for Plants">
-      <manualHTML>
-        <a href="@forms_url@PlantQuery.jsp">Plant Query</a>
-     - search for plant concepts in VegBank, by name or some portion of a name.  
-     <br/>
-        <br/>See the <a href="@design_link@planttaxaoverview.html">overview</a> 
-     of plant taxonomy as handled by VegBank. Note: assertions are the same thing as concepts in that article. <br/>
-        <br/>
-     Examples of plant queries are : (without single quotes)<br/>
-     plant name = 'Acer rubrum' <br/>
-     plant name = 'Carex%' (for all plants starting with Carex) <br/>
-     plant name = 'table%pine' (to get Table Mountain Pine, Pinus pungens) <br/>
-      </manualHTML>
-    </manualItem>
-    <manualItem refURL="@forms_url@CommQuery.jsp" name="search-for-communities" topic="Search for Communities">
-      <manualHTML>
-        <a href="@forms_url@CommQuery.jsp">Community Query</a>
-     - search for community concepts in VegBank, by name or some portion of a name. 
-      <br/>
-        <br/>
-      Examples for Community queries: (without single quotes)<br/>
-      community name = 'Juniper%horizon%' (for all communities starting with Juniper and then containing horizon) <br/>
-      community name = 'Pinus%pungens' (for all communities with Pinus pungens in the community name) <br/>
-      </manualHTML>
-    </manualItem>
-    <manualItem refURL="@general_link@metadata.html" name="view-supplemental-data" topic="View Supplemental Data">
-      <manualHTML>
-        <a href="@general_link@metadata.html">Supplemental Data</a> - at this time, searches of supplemental data are not possible,
-     but you can view all supplemental data in VegBank.  This is supporting information,
-     such as methods, people, and references.  Details about viewing these data are on the supplemental data page (use above link to see it).
-     </manualHTML>
+    <manualItem finish="false" refURL="???" name="datasets" topic="Datasets">
+      <manualHTML/>
     </manualItem>
   </manualItem>
-  <manualItem refURL="" name="submit-data-to-vegbank" topic="Submit Data to VegBank">
-    <manualHTML>
-      <p>VegBank users may <a href="@manual_link@search-for-data.html">search for data</a> 
-already in VegBank, but they may also share their own data with other VegBank users
-by submitting data to VegBank.  To do so, one must first 
-<a href="@forms_link@certification.jsp">become a certified user</a>.  Certification helps
-ensure that the data you can view here comes from ecologists who both understand VegBank
-and assure us that their data, as represented in VegBank, are accurate.  For more on why
-certification is necessary, see <a href="@help-for-certification-href@">certification 
-help</a>.</p>
-      <p>The next few pages show the options for submitting data.</p>
-    </manualHTML>
-    <manualItem refURL="@DisplayUploadPlotAction@" name="submit-plots" topic="Submit Plots">
-      <manualHTML>Plots are the most common data submission to VegBank.  To submit a plot,
-the user must own the plot data or have permission to share this data online.  
-Plots may be submitted in several different
-formats (click links for more information on each).  See the next few screens for details on each method, or <a href="@DisplayUploadPlotAction@">Click here </a>to start loading plots.
-</manualHTML>
-      <manualItem refURL="@vegbranch_link@vegbranch.html" name="vegbranch" topic="VegBranch">
-        <manualHTML>
-          <a href="@vegbranch_link@vegbranch.html">VegBranch</a>
-          <span class="category bright">
-            <b> (the recommended way of submitting plots to VegBank)</b>
-          </span> - VegBank's client database,
-    in MS Access, can import data from other formats to prepare for submission to VegBank.
-    Unfortunately, VegBranch requires that you have MS Access 2000 or higher running
-    on your machine.  We hope to create a new version of VegBranch that will be platform independant
-    in the future.</manualHTML>
-      </manualItem>
-      <manualItem refURL="@NativeXMLIndexPage@" name="vegbank-xml" topic="VegBank XML">
-        <manualHTML>
-          <a href="@NativeXMLIndexPage@">XML</a> - VegBank's native XML format can be imported
-    directly into VegBank.  While we recommend VegBranch as a tool to help create this XML
-    file, you may create the file yourself from another program (advanced XML programmers).</manualHTML>
-      </manualItem>
-      <manualItem refURL="" name="nps-plots" topic="NPS PLOTS">
-        <manualHTML>
-          <a href="http://biology.usgs.gov/npsveg/tools/plotsdatabase.html">NPS PLOTS</a> database - We have had the ability to import NPS-PLOTS databases
-    into VegBank and are currently revising this functionality.  We hope to have it running again
-    very soon.  Thanks for your patience while we reengineer this.
-</manualHTML>
-      </manualItem>
-      <manualItem refURL="" name="turboveg" topic="TurboVeg">
-        <manualHTML>
-          <a href="http://www.synbiosys.alterra.nl/turboveg/">TurboVeg</a> - We plan to accept TurboVeg databases to be imported into VegBank 
-    sometime in mid-2005.</manualHTML>
-      </manualItem>
-    </manualItem>
-    <manualItem refURL="" name="submit-plants" topic="Submit Plants">
-      <manualHTML>
-        <p>
-          <!--You may submit new plant concepts directly to VegBank via web forms.-->You may submit new plants via VegBranch.  There are forms and documentation for how to do so in the <a href="@vegbranch_link@vegbranch.html">VegBranch section</a> of the website.  For an explanation of concept-based taxonomy, please see this 
-   <a href="@design_link@planttaxaoverview.html">overview</a>. For most VegBank users in North America, no new plant concepts should be
-   needed.  We have loaded the latest version of USDA plants into VegBank.  If you 
-   require a large number of taxa to be loaded so that your plots may reference the
-   correct taxa, please contact us using the contact link on the VegBank footer.  We
-   can help you decide when and how to best upload the taxa to VegBank.
-</p>
-       
-      </manualHTML>
-    </manualItem>
-    <manualItem refURL="" name="submit-communities" topic="Submit Communities">
+  <manualItem name="unknownbucket" topic="goo">
+    <manualHTML/>
+    <manualItem finish="false" refURL="" name="submit-communities" topic="Submit Communities">
       <manualHTML>
         <p>
           <!--You may submit new community concepts directly to VegBank via
@@ -242,71 +592,10 @@ formats (click links for more information on each).  See the next few screens fo
         </p> -->
       </manualHTML>
     </manualItem>
-    <manualItem refURL="@general_link@metadata.html" name="submit-supplemental-data" topic="Submit Supplemental Data">
+    <manualItem finish="false" refURL="@general_link@metadata.html" name="submit-supplemental-data" topic="Submit Supplemental Data">
       <manualHTML>
         <a href="@general_link@metadata.html">Supplemental Data</a> can be added to VegBank through web forms found on the above link.  Supplemental data may also be added to VegBank through our XML import, which VegBranch can help you create.  VegBranch is the best way to add a lot of supplemental data.  Small amounts can easily be added with these forms.
      </manualHTML>
     </manualItem>
-  </manualItem>
-  <manualItem refURL="" name="annotate-data-in-vegbank" topic="Annotate Data in VegBank">
-    <manualItem refURL="" name="interpret-a-plot" topic="Interpret a Plot">
-      <manualHTML>
-        <p>Once a user has researched a plot-observation in VegBank, he or she may decide that it
-belongs to a certain <a>community type</a>.  Each plot-observation may be interpreted multiple times as
-belonging to different community types.  Each party may have its own opinion about which community a plot-observation
-belongs.  Parties may also assign the plot-observation to more than one community
-as part of the same interpretation.  Each assignment may have its own fit and confidence,
-which are the party's self-assessment of how well the plot-observation matches the community, and how
-sure the party is that such a fit is indeed accurate.
-</p>
-        <p>
-          <span class="bright">Coming very soon!</span>
-        </p>
-      </manualHTML>
-    </manualItem>
-    <manualItem refURL="" name="interpret-taxon-on-plot" topic="Interpret Taxon on Plot">
-      <manualHTML>
-        <p>
-Each plot-observation has at least one taxon observation, which is the plot author's record of a plant-taxon that
-occurs on the plot-observation.  The author records his or her name that was used for this plant, as well
-as the reference that s/he used to determine this name.  Each such observation has at least one, and perhaps many,
-interpretations as to which plant concept a taxon observation really is.  If a VegBank user has some knowledge
-of the plot, or perhaps the area, and believes that s/he can interpret what this plant is, differently from
-the interpretations already made, s/he may add a new taxon interpretation.  Reasons for doing so could be that
-taxonomy has changed and the author's taxon has been split.  The VegBank user may have some knowledge of the plot-
-observation or the general area and believe they know what the new taxon should be.  Also, cases exist where
-the plot author was uncertain of what the plant was.  Subsequent users may interpret the taxon, perhaps based 
-on a voucher, to clarify what the taxon is likely to be.  There is also a fit and confidence associated
-with each taxon interpretation, similar as above in the community interpretations.
-</p>
-        <!--<p>
-          <font color="red">Coming very soon!</font>
-        </p>-->
-        <p>Interpret a taxon by: <a href="@plotquery_page_advanced@">Searching for plots</a>, then viewing a <img src="@image_server@report_sm.gif"/> summary of the plot from the query results.  Select the "Interpret Plant..." link near the top of the page in the "ACTIONS" section.  Note that you must be certified to interpret a taxon.</p>
-      </manualHTML>
-    </manualItem>
-    <manualItem refURL="" name="add-a-note" topic="Add a Note">
-      <manualHTML>
-        <p>Notes may also be added about any field value.  Users may think that a value is unreasonable, or that 
-they have some knowledge as to what a missing value might be.  Multiple users may make multiple comments about any
-field.  These will be visible in a very detailed view of each plot.  Please limit the notes that you add
-to VegBank to those which may be useful to the community at large.   Helpful notes could be: <br/>
-"Elevation seems way too high for this region, perhaps the units were in feet, not meters." <br/>
-"This is the only known occurrence of this species in our province, to date."<br/>
-"The plot author indicates that fires may have affected this plot in the last 50 years.  Park records show that
-there fires in this national park were 42 years before this plot-observation."
-</p>
-        <p>
-          <span class="bright">Coming in early 2005!</span>
-        </p>
-      </manualHTML>
-    </manualItem>
-    <manualHTML>
-    After a Vegbank user <a>submits</a> data to VegBank, other users may <a>search</a> for
-and find this data.  The second user may wish to add information to the first user's data.
-This is called annotation.  One must 
-<a href="@forms_link@certification.jsp">become a certified user</a> in order to annotate
-data in VegBank.  There are a few ways to annotate data in VegBank.  See the next few topics for details.
-    </manualHTML>
   </manualItem>
 </manualDoc>

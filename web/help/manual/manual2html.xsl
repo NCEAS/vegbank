@@ -1,77 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- * '$RCSfile: manual2html.xsl,v $'
- *  Authors: @author@
- *  Release: @release@
- *
- *  '$Author: anderson $'
- *  '$Date: 2005-03-16 06:07:05 $'
- *  '$Revision: 1.11 $'
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
--->
+<!--  * '$RCSfile: manual2html.xsl,v $'  *  Authors: @author@  *  Release: @release@  *  *  '$Author: mlee $'  *  '$Date: 2005-05-28 22:36:55 $'  *  '$Revision: 1.12 $'  *   * This program is free software; you can redistribute it and/or modify  * it under the terms of the GNU General Public License as published by  * the Free Software Foundation; either version 2 of the License, or  * (at your option) any later version.  *  * This program is distributed in the hope that it will be useful,  * but WITHOUT ANY WARRANTY; without even the implied warranty of  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the  * GNU General Public License for more details.  *  * You should have received a copy of the GNU General Public License  * along with this program; if not, write to the Free Software  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  * -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect">
   <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/>
   <xsl:param name="anchorOneFile"/>
   <!-- # if one file made and linking to other areas with # links -->
   <xsl:param name="directory"/>
   <!-- dir to put these files, temporarily -->
-  <xsl:param name="menu_url">manual-index.html</xsl:param>
+  <xsl:param name="menu_url_full">manual-index-full.html</xsl:param>
+  <xsl:param name="menu_url_basic">manual-index-basic.html</xsl:param>
+
   <xsl:param name="heightPerc">96</xsl:param>
   <xsl:output method="html" version="1.0" encoding="UTF-8" indent="yes"/>
   <xsl:template match="/ | manualHTML">
-    <p>
+    
       <xsl:apply-templates/>
-    </p>
+    
   </xsl:template>
   <xsl:template match="manualItem"/>
   <xsl:template match="manualDoc">
+    <xsl:call-template name="writeIndex">
+      <xsl:with-param name="menu_url" select="$menu_url_full" />
+      <xsl:with-param name="maxLevel">100</xsl:with-param>
+      <xsl:with-param name="offerMenuURL" select="$menu_url_basic" />
+      <xsl:with-param name="offerMenuName">short menu</xsl:with-param>
+    </xsl:call-template>
+    <xsl:call-template name="writeIndex">
+      <xsl:with-param name="menu_url" select="$menu_url_basic" />
+      <xsl:with-param name="maxLevel">1</xsl:with-param>
+      <xsl:with-param name="offerMenuURL" select="$menu_url_full" />
+      <xsl:with-param name="offerMenuName">full menu</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template name="writeIndex">
+    <xsl:param name="menu_url" />
+    <xsl:param name="maxLevel" />
+    <xsl:param name="offerMenuURL" />
+    <xsl:param name="offerMenuName" />
     <hr/>
     <redirect:write file="{$directory}{$menu_url}">
-      
-<html><head>
-  @webpage_stylesheets_declaration@
+     @webpage_top_html@
+  
+  @webpage_head_html@
+<title>VegBank--tutorial</title>
 
-  <title>VegBank  -- tutorial</title>
-</head><body>
-            <table width="100%" height="100%">
-            <tr>
-              <td valign="top" align="center">
-                
-                  <h2>VegBank  -- tutorial</h2>
-</td>
-            </tr>
-<tr><td valign="top">          
-          <p>
-            <xsl:call-template name="writeMenu">
-              <xsl:with-param name="level">0</xsl:with-param>
-            </xsl:call-template>
-          </p>
-</td></tr>
-<tr><td valign="bottom">
-<p>
-            <span class="bright">
-              <xsl:call-template name="closeManual" />
-            </span>
-</p>
-</td></tr>
-</table>          
-          
-      </body></html>
-    </redirect:write>
+  @webpage_masthead_small_html@    
+          <table width="100%" height="100%" cellpadding="0" cellspacing="1" border="0">
+        <tr>
+          <td valign="top" align="center">
+            <h1>VegBank Tutorial Menu</h1>
+            <span class="sizetiny"><a class="tut_link" href="{$offerMenuURL}"><xsl:value-of select="$offerMenuName" /></a></span>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+            
+              <xsl:call-template name="writeMenu">
+                <xsl:with-param name="level">0</xsl:with-param>
+                <xsl:with-param name="maxLevel" select="$maxLevel" />
+              </xsl:call-template>
+            
+          </td>
+        </tr>
+        <tr>
+          <td valign="bottom">
+            <xsl:call-template name="closeManual"/>
+          </td>
+        </tr>
+      </table>
+       @webpage_footer_small_html@    </redirect:write>
     <xsl:for-each select="manualItem">
       <xsl:call-template name="runManualItem"/>
     </xsl:for-each>
@@ -79,145 +75,108 @@
   <xsl:template name="runManualItem">
     <xsl:variable name="aFile" select="concat($directory,@name,'.html')"/>
     <redirect:write select="$aFile">
-      <html>
-        <head>
-        @webpage_stylesheets_declaration@
-          <title>VegBank Tutorial -- <xsl:value-of select="@topic"/>
-          </title>
-          
-          
-          
-        </head>
-        <body>
-          <a name="{@name}.html"/>
-          <!-- top row to link places -->
-          <table height="{$heightPerc}%" width="100%">
-            <tr>
-              <td valign="top">
-                <table width="100%">
-                  <tr>
-                    <td>
-                      <table width="100%">
-                        <tr>
-                          <td align="center">
-                            <h2>
-                              VegBank
-                            -- tutorial</h2></td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr valign="top">
-              <td>
-                <table>
-                  <tr>
-                    <td>
-                      <h2>
-                        <xsl:element name="a">
-                          <xsl:if test="string-length(@refURL)&gt;0">
-                            <xsl:attribute name="target">upperframe</xsl:attribute>
-                            <xsl:attribute name="href"><xsl:value-of select="@refURL"/></xsl:attribute>
+      @webpage_top_html@
+  
+  @webpage_head_html@
+<title>VegBank Tutorial -- <xsl:value-of select="@topic"/>
+      </title>
+
+  @webpage_masthead_small_html@<table height="{$heightPerc}%" width="100%" cellpadding="1" cellspacing="0" border="0">
+        <tr>
+          <td valign="top">
+            <p class="major_smaller">VegBank tutorial: <a name="{@name}.html"/>
+              <br/>
+              <xsl:element name="a">
+                <xsl:if test="string-length(@refURL)&gt;0">
+                  <xsl:attribute name="target">upperframe</xsl:attribute>
+                  <xsl:attribute name="href"><xsl:value-of select="@refURL"/></xsl:attribute>
+                </xsl:if>
+                <xsl:value-of select="@topic"/>
+              </xsl:element>
+            </p>
+            <xsl:if test="@finish='false'">
+            <p><strong class="bright">WARNING:</strong> this page is not yet finished.  Sorry for the inconvenience.  Please contact us at help@vegbank.org if you need assistance.</p>
+            </xsl:if>
+            <xsl:apply-templates/>
+            <!-- bottom navigation -->
+          </td>
+        </tr>
+        <tr>
+          <td valign="bottom">
+            <table width="100%">
+              <tr>
+                <td>
+                  <xsl:variable name="empty_url">
+                    <!-- vriable that holds name of link that should be disabled -->
+                    <xsl:call-template name="link-to-man">
+                      <xsl:with-param name="page"/>
+                    </xsl:call-template>
+                  </xsl:variable>
+                  <xsl:variable name="next_url">
+                    <xsl:call-template name="link-to-man">
+                      <xsl:with-param name="page">
+                        <xsl:call-template name="get-nextURL"/>
+                      </xsl:with-param>
+                    </xsl:call-template>
+                  </xsl:variable>
+                  <xsl:variable name="prev_url">
+                    <xsl:call-template name="link-to-man">
+                      <xsl:with-param name="page">
+                        <xsl:call-template name="get-prevURL"/>
+                      </xsl:with-param>
+                    </xsl:call-template>
+                  </xsl:variable>
+                  <table width="100%">
+                    <tr>
+                      <td align="left" class="sizetiny">
+                          <xsl:choose>
+                            <xsl:when test="$empty_url!=$prev_url">
+                              <!-- do a link -->
+                              <a class="tut_link" href="{$prev_url}">&lt;&lt; prev</a>
+                            </xsl:when>
+                            <xsl:otherwise>&lt;&lt; prev</xsl:otherwise>
+                          </xsl:choose>
+                      </td>
+                      <td align="center" class="sizetiny">
+                        <a class="tut_link" href="{$menu_url_basic}">MENU</a>
+                        <br/>
+                        <span class="sizetiny">
+                          <xsl:call-template name="closeManual"/>
+                        </span>
+                      </td>
+                      <td align="right" class="sizetiny">
+                        <xsl:choose >
+                          <xsl:when test="$empty_url!=$next_url"><a class="tut_link" href="{$next_url}">&gt;&gt; next</a></xsl:when>
+                          <xsl:otherwise>&gt;&gt; next</xsl:otherwise>
+                        </xsl:choose>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="3" align="center">
+                        <xsl:variable name="charsPickList">30</xsl:variable>
+                        <select name="nav_picklist" onChange="MM_jumpMenu('window',this,0)">
+                          <xsl:if test="string-length(../@name)&gt;0">
+                            <option value="{$anchorOneFile}{../@name}.html">
+                              <xsl:value-of select="substring(../@topic,1,$charsPickList)"/>
+                            </option>
                           </xsl:if>
-                          <xsl:value-of select="@topic"/>
-                        </xsl:element>
-                      </h2>
-                      <xsl:apply-templates/>
-                      <!-- bottom navigation -->
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td valign="bottom">
-                <table width="100%">
-                  <tr>
-                    <td>
-                      <xsl:variable name="empty_url">
-                        <!-- vriable that holds name of link that should be disabled -->
-                        <xsl:call-template name="link-to-man">
-                          <xsl:with-param name="page"/>
-                        </xsl:call-template>
-                      </xsl:variable>
-                      <xsl:variable name="next_url">
-                        <xsl:call-template name="link-to-man">
-                          <xsl:with-param name="page">
-                            <xsl:call-template name="get-nextURL"/>
-                          </xsl:with-param>
-                        </xsl:call-template>
-                      </xsl:variable>
-                      <xsl:variable name="prev_url">
-                        <xsl:call-template name="link-to-man">
-                          <xsl:with-param name="page">
-                            <xsl:call-template name="get-prevURL"/>
-                          </xsl:with-param>
-                        </xsl:call-template>
-                      </xsl:variable>
-                      <table width="100%">
-                        <tr>
-                          <td align="left">
-                            <!-- long method allows disabling the button -->
-                            <xsl:element name="input">
-                              <xsl:attribute name="value">&lt;&lt;</xsl:attribute>
-                              <xsl:attribute name="type">button</xsl:attribute>
-                              <xsl:attribute name="onclick">window.location='<xsl:value-of select="$prev_url"/>'</xsl:attribute>
-                              <xsl:if test="$empty_url=$prev_url">
-                                <!-- add disabled att -->
-                                <xsl:attribute name="disabled">disabled</xsl:attribute>
-                              </xsl:if>
-                            </xsl:element>
-                            <br/>
-                            <span class="sizetiny">prev</span>
-                          </td>
-                          <td align="center">
-                            <input value="MENU" type="button" onclick="window.location='{$menu_url}'"/><br />
-                            <span class="sizetiny bright"> <xsl:call-template name="closeManual" /></span></td>
-                          <td align="right">
-                            <!--                            <input value="&gt;&gt;" type="button" onclick="window.location='{$next_url}'"/> -->
-                            <xsl:element name="input">
-                              <xsl:attribute name="value">&gt;&gt;</xsl:attribute>
-                              <xsl:attribute name="type">button</xsl:attribute>
-                              <xsl:attribute name="onclick">window.location='<xsl:value-of select="$next_url"/>'</xsl:attribute>
-                              <xsl:if test="$empty_url=$next_url">
-                                <!-- add disabled att -->
-                                <xsl:attribute name="disabled">disabled</xsl:attribute>
-                              </xsl:if>
-                            </xsl:element>
-                            <br/>
-                            <span class="sizetiny">next</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td colspan="3" align="center">
-                            <xsl:variable name="charsPickList">30</xsl:variable>
-                            <select name="nav_picklist" onChange="MM_jumpMenu('window',this,0)">
-                              <xsl:if test="string-length(../@name)&gt;0">
-                                <option value="{$anchorOneFile}{../@name}.html">
-                                  <xsl:value-of select="substring(../@topic,1,$charsPickList)"/>
-                                </option>
-                              </xsl:if>
-                              <option value="#" selected="selected">[current]-<xsl:value-of select="substring(@topic,1,number(($charsPickList) -10))"/>
-                              </option>
-                              <xsl:for-each select="manualItem">
-                                <option value="{$anchorOneFile}{@name}.html">--<xsl:value-of select="substring(@topic,1,number(($charsPickList) -2))"/>
-                                </option>
-                              </xsl:for-each>
-                            </select>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </body>
-      </html>
-      <!-- end of file -->
+                          <option value="#" selected="selected">[current]-<xsl:value-of select="substring(@topic,1,number(($charsPickList) -10))"/>
+                          </option>
+                          <xsl:for-each select="manualItem">
+                            <option value="{$anchorOneFile}{@name}.html">--<xsl:value-of select="substring(@topic,1,number(($charsPickList) -2))"/>
+                            </option>
+                          </xsl:for-each>
+                        </select>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+        @webpage_footer_small_html@      <!-- end of file -->
     </redirect:write>
     <hr/>
     <xsl:for-each select="manualItem">
@@ -227,15 +186,47 @@
   <xsl:template match="*">
     <!-- copy element and all atts -->
     <xsl:element name="{name()}">
-      <xsl:if test="name()='a'">
-        <xsl:if test="string-length(@target)&lt;1">
-          <xsl:attribute name="target">upperframe</xsl:attribute>
-        </xsl:if>
-      </xsl:if>
-      <xsl:for-each select="attribute::*">
-        <xsl:attribute name="{name()}"><xsl:value-of select="current()"/></xsl:attribute>
-      </xsl:for-each>
-      <xsl:apply-templates/>
+      <xsl:choose>
+        <xsl:when test="name()='highlight'">
+          <!--special elements -->
+          <xsl:variable name="pageToRedir">
+            <xsl:for-each select="ancestor::manualItem">
+              <xsl:if test="position()=last()">
+                <xsl:value-of select="@refURL"/>
+              </xsl:if>
+            </xsl:for-each>
+          </xsl:variable>
+          <a href="javascript:tut_togglehighlightMainFrameEl('{@id}','{$pageToRedir}')"><img src="@images_link@highlight.png" alt="highlight" /></a>
+        </xsl:when>
+        <xsl:when test="name()='a'">
+          <!-- see if its a link to manual page -->
+          <xsl:variable name="internalLink" select="contains(@href,'.') or contains(@href,'@') or contains(@href,'/')" />
+          <xsl:if test="string-length(@target)&lt;1">
+            <!-- dont add target if there already is one -->
+            <xsl:if test="$internalLink!=true">
+              <!-- dont add target if there is not a . in the link (signifies help link) -->
+              <xsl:attribute name="target">upperframe</xsl:attribute>
+            </xsl:if>
+          </xsl:if>
+          <xsl:for-each select="attribute::*">
+            <xsl:attribute name="{name()}"><xsl:value-of select="current()"/><xsl:if test="name()='href'"><xsl:if test="$internalLink=true"><!-- add .html as it is in the manual -->.html</xsl:if></xsl:if></xsl:attribute>
+          </xsl:for-each>
+          <xsl:if test="$internalLink=true">
+            <!-- last thing: add class for these to make green -->
+            <xsl:attribute name="class">tut_link</xsl:attribute>
+          </xsl:if>
+          <xsl:apply-templates/>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- normal elements: -->
+          <!-- see if its a link to manual page -->
+         
+          <xsl:for-each select="attribute::*">
+            <xsl:attribute name="{name()}"><xsl:value-of select="current()"/></xsl:attribute>
+          </xsl:for-each>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:element>
   </xsl:template>
   <xsl:template name="get-nextURL">
@@ -275,6 +266,7 @@
     <xsl:value-of select="$page"/>.html</xsl:template>
   <xsl:template name="writeMenu">
     <xsl:param name="level"/>
+    <xsl:param name="maxLevel" />
     <xsl:if test="count(manualItem)&gt;0">
       <!--  <ul class="constsize"> -->
       <xsl:for-each select="manualItem">
@@ -288,14 +280,17 @@
           <xsl:with-param name="count" select="number(2*($level))"/>
         </xsl:call-template>
         <xsl:if test="$level&gt;0">-</xsl:if>
-        <a href="{$currHREF}">
+        <a class="tut_link" href="{$currHREF}">
           <xsl:value-of select="@topic"/>
         </a>
         <br/>
         <!--</li>-->
-        <xsl:call-template name="writeMenu">
-          <xsl:with-param name="level" select="number(($level)+1)"/>
-        </xsl:call-template>
+        <xsl:if test="$maxLevel&gt;$level">
+          <xsl:call-template name="writeMenu">
+            <xsl:with-param name="level" select="number(($level)+1)"/>
+            <xsl:with-param name="maxLevel" select="$maxLevel" />
+          </xsl:call-template>
+        </xsl:if>
       </xsl:for-each>
       <!--  </ul>  -->
     </xsl:if>
@@ -309,8 +304,7 @@
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
-<xsl:template name="closeManual">
-<a style="COLOR: #ff0000" href="javascript:document.top.location=window.upperframe.location">close frame</a> | <a style="COLOR: #ff0000" href="@web_context@" target="_top">exit</a>
-</xsl:template>
-
+  <xsl:template name="closeManual">
+    <a class="tut_link" title="Click here to close the tutorial frame (resets form on the left)" href="javascript:parent.location=parent.upperframe.location;">close</a> | <a  class="tut_link" href="@web_context@" target="_top" title="If closing the tutorial doesn't work, try this to exit the tutorial">exit</a> | <a href="javascript:tut_unhighlightMainFrame()"><img src="@images_link@unhighlight.png" alt="unhighlight" /></a>
+  </xsl:template>
 </xsl:stylesheet>
