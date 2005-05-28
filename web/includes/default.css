@@ -516,7 +516,9 @@ ul.compact   {
 	             list-style-type:none;  padding-left: 10px; margin-left: 10px;
              }
 
-
+ul.compactdots   {
+	               padding-left: 10px; margin-left: 10px;
+             }
 
 .psmall	        {
 				    font-size: 8pt;
