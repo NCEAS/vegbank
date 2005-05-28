@@ -19,6 +19,18 @@
       <atxt>The purpose of plots is to record the vegetation and its environmental context.  A plot may be contained by a single bounded area, such as a 50m x 20m rectangle.  It could also consist of smaller subplots which sample vegetation over a large range.  While we encourage plots to have boundaries and definite size, VegBank also accepts relevés that have no bounds as valid plots.  An observation is a one-time record of vegetation present in a plot.  So multiple observations of a plot could be made at different times, producing different values for both vegetation present (both in which taxa are present and its abundance as well as environmental variables, such as soil characteristics).</atxt>
     </question>
     <question>
+      <qname>whereplotsfrom</qname>
+      <qtxt>Where does VegBank get its plots and other data?</qtxt>
+      <atxt>Plots in VegBank come from the users who decide to <strong>contribute their plots</strong>.  VegBank does not fund plot collection, but see ourselves as a means for those who do collect plots to share their data.  There are two major implications of this: <br/>  
+1) We do not guarantee the accurateness of the data in VegBank.  Users are allowed to annotate (make notes and reinterpret plants and plots) to share with other users their opinions about the data already in VegBank.  [Some of the annotation features are still in development.]<br/>
+2) We need users to share their data.  There are many different reasons users share their data.  
+Some are required to share their data by their grants, but don't want to deal with the hassle of setting up computer servers and software to manage this.  
+Some use VegBank as a means of collaborating with others in data analysis.  
+Others have finished analysis and are eager to find a use for their hard work other than being filed away to collect dust.  
+Still others see the foresight in adding their data to the greater body of knowledge on a public site like VegBank. <br/><br/>
+Other data, like plants and communities, come from VegBank's users, but rely heavily on VegBank users like the organizations <a target="_new" href="http://plants.usda.gov/">USDA Plants</a> and <a href="http://natureserve.org/" target="_new_">NatureServe</a> to provide this data.</atxt>
+    </question>
+    <question>
       <qname>howsearch</qname>
       <qtxt>How do I find plots in VegBank?</qtxt>
       <atxt>You can search for plots with two different forms in VegBank.  <br/>
@@ -55,7 +67,9 @@
     <question>
       <qname>whatcommunity</qname>
       <qtxt>What is a community?</qtxt>
-      <atxt>In overly simple terms, a community is a set of plant taxa that live adjacent to one another within a set of physical conditions.  This community of co-occurring plants may be seen to repeat itself in a predictable pattern.  One may classify (or interpret) a plot as belonging to a certain community type.  <br/><br/>The <a href="@panel_link@NVC_guidelines_v3.pdf">Guidelines of the NVC (National Vegetation Classification) Standards document (version 3)</a> provides more full definitions for two different levels of communities: association and alliance.  It defines an <strong>association</strong> "as the basic unit of vegetation: A vegetation classification unit defined on the bases of a characteristic range of species composition, diagnostic species occurrence, habitat conditions and physiognomy."  (pg. 21)<br/>The broader <strong>alliance</strong> it defines as "A vegetation classification unit containing one or more associations, and defined by a characteristic range of species composition, habitat conditions, physiognomy, and diagnostic species, typically at least one of which is found in the uppermost or dominant stratum of the vegetation." (pg.23) <br/><br/>
+      <atxt>In overly simple terms, a community is a set of plant taxa that live adjacent to one another within a set of physical conditions.  This community of co-occurring plants may be seen to repeat itself in a predictable pattern.  One may classify (or interpret) a plot as belonging to a certain community type.  <br/>
+        <br/>The <a href="@panel_link@NVC_guidelines_v3.pdf">Guidelines of the NVC (National Vegetation Classification) Standards document (version 3)</a> provides more full definitions for two different levels of communities: association and alliance.  It defines an <strong>association</strong> "as the basic unit of vegetation: A vegetation classification unit defined on the bases of a characteristic range of species composition, diagnostic species occurrence, habitat conditions and physiognomy."  (pg. 21)<br/>The broader <strong>alliance</strong> it defines as "A vegetation classification unit containing one or more associations, and defined by a characteristic range of species composition, habitat conditions, physiognomy, and diagnostic species, typically at least one of which is found in the uppermost or dominant stratum of the vegetation." (pg.23) <br/>
+        <br/>
 Communities are Concept-Based in VegBank, meaning they are defined by a combination of a name and a reference.  See the <a href="#whatconcept">What is a Concept?</a> FAQ Topic for more information on Concepts. </atxt>
     </question>
     <question>
