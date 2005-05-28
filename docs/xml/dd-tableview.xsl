@@ -33,11 +33,12 @@
                 <xsl:value-of select="../entitySummary"/>
             </blockquote>
           <xsl:if test="string-length($CurrentField)&gt;0"><p>The field:<xsl:value-of select="$CurrentField" /> is highlighted below.  Click <a href="#this_field">here</a> to jump there.</p></xsl:if>
-          <table class="thinlines">
+          <table class="thinlines psmall">
             <tr>
               <th>
                 
                   <a href="dd-guide.html#field-name">field name</a>
+                
                
               </th>
               <th>
@@ -69,9 +70,9 @@
               <th>
                   <a   href="dd-guide.html#field-notes">field notes</a>
               </th>
-              <th>
+           <!--   <th>
                   <a   href="dd-guide.html#field-definition">field definition</a>
-              </th>
+              </th> -->
             </tr>
             <xsl:for-each select="../../entity[entityName=$CurrEnt]/attribute">
               <!-- <xsl:if test="attribute/attModel='logical'"> -->
@@ -83,7 +84,7 @@
               <xsl:variable name="RowColor"><xsl:call-template name="getClass"><xsl:with-param name="position" select="position()" /><xsl:with-param name="thisField" select="attName" /><xsl:with-param name="highlightField" select="$CurrentField" /></xsl:call-template>
               </xsl:variable>
               <tr class="{$RowColor}">
-                <td>
+                <td rowspan="2">
                   <xsl:if test="$RowType=0">
                   <a name="this_field" />
                   </xsl:if>
@@ -149,8 +150,10 @@
                 <td>
                   <xsl:value-of select="attNotes"/>
                 </td>
-                <td>
-                  <xsl:value-of select="attDefinition"/>
+                </tr>
+                <tr class="{$RowColor}">
+                <td colspan="12">
+                  <strong><a   href="dd-guide.html#field-definition">Field Definition</a>: </strong><xsl:value-of select="attDefinition"/>
                 </td>
               </tr>
 
