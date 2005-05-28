@@ -32,7 +32,7 @@
     <fieldset id="tut_planttaxa">
     <legend>Plant Taxa</legend>
     <ul>
-    <li><a href="@general_link@faq.html#whatconcept">What is a Plant Concept?</a></li>
+    <li><a href="@general_link@faq.html#whatconcept">What is a plant concept?</a></li>
     <li><a href="@general_link@browseplants.jsp">Browse plants</a></li>
     <li><a href="@forms_link@PlantQuery.jsp">Search plants</a></li>
     <li><a href="@DisplayUploadPlotAction@">Submit plants</a></li>
@@ -43,7 +43,7 @@
     <fieldset id="tut_plantcommunities">
     <legend>Plant Communities</legend>
     <ul>
-    <li><a href="@general_link@faq.html#whatcommunity">What is a Community?</a></li>
+    <li><a href="@general_link@faq.html#whatcommunity">What is a community?</a></li>
     <li><a href="@forms_link@CommQuery.jsp">Search communities</a></li>
     <!--li><a href="xxx">Browse communities</a></li-->
     <li><a href="@DisplayUploadPlotAction@">Submit communities</a></li>
