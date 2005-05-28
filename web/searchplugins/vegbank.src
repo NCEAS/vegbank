@@ -17,10 +17,10 @@
 <search 
    version = "7.1"
    name="VegBank"
-   description="VegBank Metasearch"
+   description="VegBank General Search"
    method="GET"
    action="http://vegbank.org/vegbank/forms/metasearch.jsp"
-   searchform="http://vegbank.org"
+   searchform="http://vegbank.org/vegbank/forms/metasearch.jsp"
 
 
 >
@@ -41,7 +41,7 @@
 </search>
 
 <browser
- update="http://mycroft.mozdev.org/plugins/vegbank.src" 
- updateIcon="http://mycroft.mozdev.org/plugins/vegbank.png" 
+ update="http://vegbank.org/vegdocs/searchplugins/vegbank.src" 
+ updateIcon="http://vegbank.org/vegdocs/searchplugins/vegbank.gif" 
  updateCheckDays="3" 
 >
