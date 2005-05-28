@@ -17,6 +17,16 @@
 
 <h2>View Community Concepts - Detail</h2>
 
+ <div id="tut_commcriteriamessage">
+  <logic:present parameter="criteriaAsText">
+    <bean:parameter id="bean_criteriaAsText" name="criteriaAsText" />
+    <logic:notEmpty name="bean_criteriaAsText">
+      <p class="psmall">You searched for communities: 
+      <bean:write name="bean_criteriaAsText" /></p>
+    </logic:notEmpty>
+  </logic:present>  
+ </div>
+
 <vegbank:get id="concept" select="commconcept" beanName="map" pager="true" xwhereEnable="true"/>
 <vegbank:pager />
 <logic:empty name="concept-BEANLIST">
@@ -25,52 +35,47 @@
 <logic:notEmpty name="concept-BEANLIST"><!-- set up table -->
 <table class="outsideborder" width="100%" cellpadding="0" cellspacing="0"><!--each field, only write when HAS contents-->
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
-<tr><th class="major_smaller" colspan="4"><bean:write name="onerow" property="commname_id_transl"/> | <bean:write name="onerow" property="reference_id_transl"/></th></tr>
-<tr>
+
+<!-- tutorial note: here, id's are defined for first iteration only.  After first iteration _iterated is appened to id, those will NOT BE UNIQUE -->
+<tr id="tut_fullcomm<bean:write name='iterated' ignore='true'/>"><th class="major_smaller" colspan="4"><bean:write name="onerow" property="commname_id_transl"/> | <bean:write name="onerow" property="reference_id_transl"/></th></tr>
+<tr id="tut_communiversal<bean:write name='iterated' ignore='true'/>">
 <td colspan="4">
-<span class="datalabelsmall">Name: </span><bean:write name="onerow" property="commname_id_transl"/><br/>
-<span class="datalabelsmall">Reference: </span><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
-<logic:notEmpty name="onerow" property="commdescription">
-<span class="datalabelsmall">Description: </span><span class="largefield"><bean:write name="onerow" property="commdescription"/>&nbsp;</span><br/>
-</logic:notEmpty>
-<span class="datalabelsmall">Accession Code: </span><span class="largefield"><bean:write name="onerow" property="accessioncode"/></span>
+  <span class="datalabelsmall">Name: </span>
+  <bean:write name="onerow" property="commname_id_transl"/><br/>
+  <span class="datalabelsmall">Reference: </span>
+  <a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
+ <logic:notEmpty name="onerow" property="commdescription">
+   <span class="datalabelsmall">Description: </span>
+   <span class="largefield"><bean:write name="onerow" property="commdescription"/>&nbsp;</span><br/>
+ </logic:notEmpty>
+  <span class="datalabelsmall">Accession Code: </span>
+  <span class="largefield"><bean:write name="onerow" property="accessioncode"/></span><br/>
 
-</td>
-</tr>
 
-
-<bean:define id="concId" name="onerow" property="commconcept_id"/>
-
-<tr><td colspan="4"><span class="datalabelsmall">Plot-observations of this Community Concept:</span>
-<vegbank:get id="observation" select="observation_count" 
-  where="where_commconcept_observation_complex" 
-  wparam="concId" perPage="-1" pager="false" beanName="map"  />
-<logic:empty name="observation-BEAN">
--none-
-</logic:empty>
-<logic:notEmpty name="observation-BEAN">
-<bean:write name="observation-BEAN" property="count_observations" />
-<logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-
-<bean:define id="critAsTxt">
-Interpreted as the community: <bean:write name="onerow" property="commname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]
-</bean:define>
-<%  
+ <bean:define id="concId" name="onerow" property="commconcept_id"/>
+ <span class="datalabelsmall">Plot-observations of this Community Concept:</span>
+ <logic:equal name="onerow" property="d_obscount" value="0">
+   <bean:write name="onerow" property="d_obscount" />
+ </logic:equal>
+ <logic:notEqual name="onerow" property="d_obscount" value="0">
+   <bean:define id="newCritAsTxt">
+     Interpreted as the community: <bean:write name="onerow" property="commname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]
+   </bean:define>
+   <%  
     /* create a map of parameters to pass to the new link: */
     java.util.HashMap params = new java.util.HashMap();
     params.put("wparam", concId);
     params.put("where", "where_commconcept_observation_complex");
-    params.put("criteriaAsText", critAsTxt);
+    params.put("criteriaAsText", newCritAsTxt);
     pageContext.setAttribute("paramsName", params);
-%>
+   %>
 
-<html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >View 
-  observation(s)</html:link>
+   <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" > 
+     <bean:write name="onerow" property="d_obscount" />
+   </html:link>
 
-</logic:notEqual>
-</logic:notEmpty>
-
-
+  </logic:notEqual>
+  
 </td></tr>
 
 
@@ -85,7 +90,8 @@ Interpreted as the community: <bean:write name="onerow" property="commname_id_tr
 <span class="datalabelsmall">Party Perspective according to: </span>
 <a href='@get_link@std/party/<bean:write name="thispartyid" />'><bean:write name="statusbean" property="party_id_transl" /></a>
 </td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<tr id="tut_commpartyperspective<bean:write name='iterated' ignore='true'/>">
+<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 
 <td valign="top" class="grey" >
 <ul class="compact">
@@ -177,12 +183,14 @@ Interpreted as the community: <bean:write name="onerow" property="commname_id_tr
 <tr>
 <td></td><td colspan="3" bgcolor="#222222"><img src="@images_link@transparent.gif" height="1"/></td>
 </tr>
+<bean:define id='iterated' value='_iterated'/> <!-- for tutorial -->
 </logic:iterate>
 </logic:notEmpty> <!-- status -->
 
 
 
 <tr><td colspan="4">&nbsp;<!--<hr />--></td></tr>
+<bean:define id='iterated' value='_iterated'/> <!-- for tutorial -->
 </logic:iterate>
 </table>
 

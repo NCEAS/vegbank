@@ -19,6 +19,16 @@
 <logic:notEmpty name="concept-BEANLIST"><!-- set up table -->
 <!-- if special first letter query, then show that it is and show other options: -->
 <bean:parameter id="prm_where" name="where" value="n/a" />
+ <div id="tut_plantcriteriamessage">
+   <logic:present parameter="criteriaAsText">
+     <bean:parameter id="bean_criteriaAsText" name="criteriaAsText" />
+     <logic:notEmpty name="bean_criteriaAsText">
+       <p class="psmall" >You searched for plants: <bean:write name="bean_criteriaAsText" /></p>
+   
+   
+     </logic:notEmpty>
+  </logic:present>  
+ 
 <logic:equal name="prm_where" value="where_plantconcept_firstletter">
   <!-- tell what we are showing: -->
   <bean:parameter id="prm_wparam" name="wparam" value="?" />
@@ -28,13 +38,15 @@
   </p>
 
 </logic:equal>
-
+  </div>
 <vegbank:pager />
 <table class="outsideborder" width="100%" cellpadding="0" cellspacing="0"><!--each field, only write when HAS contents-->
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
-<tr><th class="major_smaller" colspan="4"><bean:write name="onerow" property="plantname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]</th></tr>
 
-<tr>
+<!-- tutorial note: here, id's are defined for first iteration only.  After first iteration _iterated is appened to id, those will NOT BE UNIQUE -->
+<tr id="tut_fullplant<bean:write name='iterated' ignore='true'/>"><th class="major_smaller" colspan="4"><bean:write name="onerow" property="plantname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]</th></tr>
+
+<tr id="tut_plantuniversal<bean:write name='iterated' ignore='true'/>">
 <td colspan="4">
 <span class="datalabelsmall">Name: </span><bean:write name="onerow" property="plantname_id_transl"/><br/>
 <span class="datalabelsmall">Reference: </span><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a><br/>
@@ -42,21 +54,16 @@
 <span class="datalabelsmall">Description: </span><span class="largefield"><bean:write name="onerow" property="plantdescription"/>&nbsp;</span>
 </logic:notEmpty>
 <span class="datalabelsmall">Accession Code: </span><span class="largefield"><bean:write name="onerow" property="accessioncode"/></span>
-</td>
-</tr>
+<br/>
 
 <bean:define id="concId" name="onerow" property="plantconcept_id"/>
-<tr><td colspan="4"><span class="datalabelsmall">Plot-observations with this plant Concept:</span>
-<vegbank:get id="observation" select="observation_count" 
-  where="where_plantconcept_observation_complex" beanName="map" 
-  wparam="concId" perPage="-1" pager="false" />
-<logic:empty name="observation-BEAN">
--none-
-</logic:empty>
-<logic:notEmpty name="observation-BEAN">
-<bean:write name="observation-BEAN" property="count_observations" />
-<logic:notEqual name="observation-BEAN" property="count_observations" value="0">
-    <bean:define id="critAsTxt">
+<span class="datalabelsmall">Plot-observations with this plant Concept:</span>
+  <logic:equal name="onerow" property="d_obscount" value="0">
+    <bean:write name="onerow" property="d_obscount" />
+  </logic:equal>
+
+  <logic:notEqual name="onerow" property="d_obscount" value="0">
+    <bean:define id="newCritAsTxt">
     With the plant: <bean:write name="onerow" property="plantname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]
     </bean:define>
     <%  
@@ -64,16 +71,15 @@
         java.util.HashMap params = new java.util.HashMap();
         params.put("wparam", concId);
         params.put("where", "where_plantconcept_observation_complex");
-        params.put("criteriaAsText", critAsTxt);
+        params.put("criteriaAsText", newCritAsTxt);
         pageContext.setAttribute("paramsName", params);
     %>
     
-    <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page" >View 
-      observation(s)</html:link>
+    <html:link page="/views/observation_summary.jsp" name="paramsName" scope="page">
+      <bean:write name="onerow" property="d_obscount" />
+    </html:link>
 
-</logic:notEqual>
-</logic:notEmpty>
-
+  </logic:notEqual>
 
 </td></tr>
 
@@ -91,7 +97,7 @@
 <a href="@get_link@std/party/<bean:write name='statusbean' property='party_id' />"><bean:write 
   name="statusbean" property="party_id_transl" /></a>
 </td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+<tr id="tut_plantpartyperspective<bean:write name='iterated' ignore='true'/>"><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 <td valign="top" class="grey" >
 <ul class="compact">
 <li><span class="datalabelsmall">Status:</span>
@@ -193,13 +199,16 @@
 <tr>
 <td></td><td colspan="3" bgcolor="#222222"><img src="@images_link@transparent.gif" height="1"/></td>
 </tr>
+<bean:define id='iterated' value='_iterated'/> <!-- for tutorial -->
 </logic:iterate>
 </logic:notEmpty> <!-- status -->
 
 
 
 <tr><td colspan="4">&nbsp;<!--<hr />--></td></tr>
-</logic:iterate>
+<!-- for tutorial -->
+<bean:define id='iterated' value='_iterated'/>
+</logic:iterate> <!-- plant -->
 </table>
 
  <!-- concept -->

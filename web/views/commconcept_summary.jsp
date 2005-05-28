@@ -18,15 +18,14 @@
 <h2>View Community Concepts - Summary</h2>
   
   <!-- tell the user what was searched for, if criteriaAsText is passed here : -->
+ <div id="tut_commcriteriamessage">
   <logic:present parameter="criteriaAsText">
     <bean:parameter id="bean_criteriaAsText" name="criteriaAsText" />
     <logic:notEmpty name="bean_criteriaAsText">
       <p class="psmall">You searched for communities: <bean:write name="bean_criteriaAsText" /></p>
-  
-  
     </logic:notEmpty>
   </logic:present>  
-
+ </div>
   
   <logic:notPresent parameter="orderBy">
          <!-- set default sorting -->
@@ -43,7 +42,7 @@
 <logic:notEmpty name="concept-BEANLIST"><!-- set up table -->
 <table width="100%" cellpadding="2" class="leftrightborders" ><!--each field, only write when HAS contents-->
 <!-- header -->
-<tr>
+<tr id="tut_mainheaderrow">
   
      <bean:define id="thisfield" value="commname" />
       <bean:define id="fieldlabel">Name</bean:define>
@@ -72,9 +71,9 @@
 
 <tr class='@nextcolorclass@'>
 
-<td><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a></td>
-<td><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
-<td class="numeric">
+<td class="largefield"><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a></td>
+<td class="largefield"><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
+<td class="numeric largefield">
 <bean:define id="concId" name="onerow" property="commconcept_id"/>
 <logic:equal name="onerow" property="d_obscount" value="0">0</logic:equal>
 <logic:notEqual name="onerow" property="d_obscount" value="0">
