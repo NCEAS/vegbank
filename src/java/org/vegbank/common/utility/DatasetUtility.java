@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-28 00:25:48 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2005-05-30 02:05:36 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -450,7 +450,6 @@ public class DatasetUtility
      */
     public void insertItemsByQuery(String query, String itemType, String itemTable, String pkField, String acField) {
 
-
         try {
             Long dsId = getOrCreateCurrentDataset();
             String insert = 
@@ -809,29 +808,42 @@ public class DatasetUtility
     }
 
     /**
-     *
+     * Asks the DB how many items are in the dataset.
+     * @return number of items in dataset
      */
     public long countItems(Long dsId) {
-        StringBuffer query = new StringBuffer(64)
-            .append("SELECT count(*) FROM userdatasetitem WHERE userdataset_id='")
-            .append(dsId).append("'");
-
         ResultSet rs = null;
-        long count = 0;
+        long l = 0;
+
+        if (dsId == null) {
+            l = curDataset.getUserdataset_id();
+            if (l == 0) { return 0; }
+            dsId = new Long(l);
+        }
+        if (dsId == null) { 
+            return 0; 
+        }
+
         try {
+            StringBuffer query = new StringBuffer(64)
+                .append("SELECT count(*) FROM userdatasetitem WHERE userdataset_id='")
+                .append(dsId.toString()).append("'");
             rs = da.issueSelect(DatabaseUtility.removeSemicolons(query.toString()));
+
             if (rs.next()) {
-                count = rs.getInt(1);
-            } else {
-                count = 0;
+                l = rs.getInt(1);
             }
+
             da.closeStatement();
             rs.close();
         } catch (SQLException ex) {
-            log.error("Problem counting dataset items in ds: " + dsId, ex);
+            log.error("Problem adding items by query", ex);
         }
-        return count;
+
+        return l;
     }
+
+
 
 
     /**
