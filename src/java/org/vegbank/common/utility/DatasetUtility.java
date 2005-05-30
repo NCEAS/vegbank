@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-30 02:05:36 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2005-05-30 05:06:40 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,7 +122,7 @@ public class DatasetUtility
         if (usrId != null && usrId.longValue() != 0) {
             dsBean.setUsr_id(usrId.longValue());
         } else {
-            log.debug("CREATING userdataset WITHOUT A usr_id");
+            log.debug("CREATING userdataset WITHOUT a usr_id (null)");
         }
 
         if (beanList != null) {
@@ -172,17 +172,18 @@ public class DatasetUtility
         // handle adds
         if (newItemsToAdd.size() > 0) {
 
-            initBeanInserter();
             kit = newItemsToAdd.keySet().iterator();
             while (kit.hasNext()) {
                 // new items are stored in a hash
                 String key = (String)kit.next();
                 Userdatasetitem dsi = (Userdatasetitem)newItemsToAdd.get(key);
-                //if (!datasetItemExists(dsi)) {
-                    bean2db.addBean(dsi);
-                //}
+                log.debug("inserting dsi: " + key);
+                insertItem(dsi);
             }
-            insertItem(null);
+            
+            
+            // PMA: why is this here?
+            ///////////insertItem(null);
         }
 
         // handle drops: send the dataset ID and a list of ACs
@@ -716,7 +717,13 @@ public class DatasetUtility
                 log.debug("+ + + creating new empty datacart + + + usr_id: " + usrId);
                 ds = createDataset(null, sessionId, sessionId, 
                         DATACART_NAME, SHARING_PRIVATE, usrId);
+                AccessionCode dsAC = insertDataset(ds);
+                if (dsAC != null) { 
+                    log.debug("inserted new dataset as datacart: " + dsAC.toString());
+                    ds.setUserdataset_id(dsAC.getEntityId().longValue());
+                }
             }
+
         } catch (SQLException ex) {
             log.error("Problem creating datacart", ex);
         }
