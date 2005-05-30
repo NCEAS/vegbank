@@ -81,7 +81,7 @@
     <ul>
     <li><a href="@general_link@info.html">What is VegBank?</a></li>
     <li><a href="@general_link@faq.html">FAQ</a></li>
-    <li><a href="@forms_link@getHelp.jsp">Tutorial</a></li>
+    <li><a href="@jspHelpPage@">Tutorial</a></li>
     <li><a href="@general_link@cite.html">Cite or link to VegBank</a></li>
     <li><a href="@general_link@terms.html">Terms of use</a></li>
     <li><a href="@general_link@sitemap.html">Site map</a></li>
@@ -94,8 +94,10 @@
     <legend>Contribute Plot Data</legend>
     <ul>
     <li><a href="@DisplayUploadPlotAction@">Submit plots</a></li>
-    <li><a target="_top" href="@forms_link@getHelp.jsp?helpPage=@manual_link@interpret-taxon-on-plot.html">Annotate plots</a></li>
-    <li><a href="@forms_link@getHelp.jsp?helpPage=@manual_link@interpret-a-plot.html">Classify plots</a></li>
+    <li><a  href="@general_link@annotate.html">Annotate plots</a></li>
+   <!--
+    add this back when we can do this -->
+    <!-- <li><a href="???">Classify plots</a></li> -->
     </ul>
     </fieldset>
 

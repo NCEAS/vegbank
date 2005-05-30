@@ -62,7 +62,7 @@ Other data, like plants and communities, come from VegBank's users, but rely hea
     <question>
       <qname>whycertification</qname>
       <qtxt>What is certification?  When do I need to be certified?</qtxt>
-      <atxt>Certification is required for VegBank features that allow you to add data to the database.  You can become a certified user by <a href="@forms_link@RegisterNewUser.jsp">registering </a> to be a VegBank user, then filling out a <a href="@forms_link@certification.jsp">certification application</a>.  This means that your user profile will be public, as well as some of your certification questions (the application tells you what will be made public).  This helps users understand who you are and what credentials are behind your opinions and plots in VegBank.</atxt>
+      <atxt>Certification is required for VegBank features that allow you to add data to the database.  You can become a certified user by <a href="@forms_link@RegisterNewUser.jsp">registering </a> to be a VegBank user, then filling out a <a href="/vegbank/LoadCertification.do">certification application</a>.  This means that your user profile will be public, as well as some of your certification questions (the application tells you what will be made public).  This helps users understand who you are and what credentials are behind your opinions and plots in VegBank.</atxt>
     </question>
     <question>
       <qname>whatcommunity</qname>
@@ -127,7 +127,7 @@ US Geological Survey (USGS)</b>.  We gratefully acknowledge the continuing finan
     <question>
       <qname>tutorial</qname>
       <qtxt>How can I get help with VegBank?  Is there a tutorial?</qtxt>
-      <atxt>Yes!  There is currently a set of instructions that walks the user through the main forms in VegBank.  See  <a target="_top" href="@forms_link@getHelp.jsp"> the instructions page</a>  to start this.</atxt>
+      <atxt>Yes!  There is currently a set of instructions that walks the user through the main forms in VegBank.  See  <a target="_top" href="@jspHelpPage@"> the instructions page</a>  to start this.</atxt>
     </question>
     <question>
       <qname>training</qname>

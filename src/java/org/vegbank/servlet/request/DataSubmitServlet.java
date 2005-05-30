@@ -4,8 +4,8 @@ package org.vegbank.servlet.request;
  *  '$RCSfile: DataSubmitServlet.java,v $'
  *
  *	'$Author: mlee $'
- *  '$Date: 2005-05-06 00:01:35 $'
- *  '$Revision: 1.30 $'
+ *  '$Date: 2005-05-30 17:17:13 $'
+ *  '$Revision: 1.31 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -295,7 +295,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 			  message.append("<span class=\"category\"> INVALID PERMISSIONS ERROR </span> <br> <br> \n");
 				message.append("<span class=\"item\"> User: "+user+" Does Not Have Permission to Load Data To Vegbank <br> \n");
 				message.append("In order to attain this privilege, please fill out the certification form at: \n");
-				message.append("<a href=\"/vegbank/forms/certification.jsp\">Certification Form</a>");
+				message.append("<a href=\"/vegbank/LoadCertification.do\">Certification Form</a>");
 				message.append("</span>");
 
 				Hashtable replaceHash = new Hashtable();
