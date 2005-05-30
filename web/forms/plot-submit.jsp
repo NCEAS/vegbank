@@ -30,14 +30,15 @@ function selectRadio(radioIndex) {
 			<h1>	Vegetation Plot Submission </h1>
 			
 	
+          <p><strong>To submit plots, you must own the plot data 
+          or have permission to share this data online.</strong></p>
 
-
-	      <p>In order to share your plot observation data, it must be contained 
+	      <p class="instructions">In order to share your plot observation data, it must be contained 
 			in a VegBank native XML file.  
 			<a href="/vegdocs/vegbranch/vbr-overview.html">VegBranch</a>
 			is a Microsoft Access tool which you can use to generate this XML file.
           </p>
-		  <p>Please see the 
+          <p class="instructions">Please see the 
 			<a href="/vegbank/general/faq.html#catg_loading">FAQ</a>
 			to learn more about how to submit plots.  See the 
 			<a href="@NativeXMLIndexPage@">VegBank native XML</a> page for more information, 
@@ -48,12 +49,12 @@ function selectRadio(radioIndex) {
 
 
 <!-- PLOT FILE  -->
-<p class="instructions">
+
 	
 	
-			<b>Plot Data File Location:</b>
-		
-	  <br/>
+			<h4>Plot Data File Location:</h4>
+        <p class="instructions">
+	  
 			Please specify the location of a VegBank XML data file.</p>
 		
          <p>
