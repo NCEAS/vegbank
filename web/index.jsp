@@ -102,8 +102,8 @@
     </fieldset>
 
     <br />
-    <fieldset>
-    <legend id="tools">Tools</legend>
+    <fieldset id="tut_tools">
+    <legend>Tools</legend>
     <ul>
     <li><a href="http://152.2.14.231/nvcrs/">Vegetation Classification</a></li>
     <li><a href="@searchplugins_link@install-search.html">Firefox toolbar</a></li>
