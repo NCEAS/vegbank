@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.14 2005-05-26 19:42:50 anderson Exp $
+ * $Id: vegbank2005.css,v 1.15 2005-05-30 02:04:19 anderson Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -436,6 +436,11 @@ DATACART
 #datacart a {text-decoration: none; padding: 1px; font-size: 14px; }
 #datacart p {position: relative; top: -5px; padding:0px; margin:0; display:inline;}
 
+.datacart-icon-normal {
+    background: url(@images_link@cart_dark.gif) top left no-repeat;
+}
+                                                                                                                                                                                                  
+
 /*
 html>body #datacart {
   font-weight: normal;
@@ -529,5 +534,13 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit
 	background-repeat: no-repeat;
 	background-position: 0% 50%;
 	border: 0px;
+}
+
+.busyicon {
+    background: url(@images_link@spinner.gif) top left no-repeat;
+}
+                                                                                                                                                                                                  
+.busyanim {
+    background: url(@images_link@spinner-anim.gif) top left no-repeat;
 }
 

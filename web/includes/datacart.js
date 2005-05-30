@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.5 2005-05-28 00:25:49 anderson Exp $
+// $Id: datacart.js,v 1.6 2005-05-30 02:04:19 anderson Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -15,11 +15,12 @@ var dc_offClassCheckbox = null;
  * Uses AJaX and <vegbank:datacart> to count the datacart items.
  */
 function refreshCartCount() {
+    alert("refreshing");
 	var ajax = initAjax();
 
     var fnWhenDone = function(oXML) { 
         //alert("pong");
-        document.getElementById("datacart-count").innerHTML = oXML.responseText;
+		setDatacartCount(oXML.responseText);
     };
 
     var params = "delta=drop"; 
@@ -32,11 +33,14 @@ function refreshCartCount() {
  * Uses AJaX and <vegbank:datacart> to update the datacart items.
  */
 function updateCartItem(elem, add) {
+    setBusy(true);
 	var ajax = initAjax();
 
     var fnWhenDone = function(oXML) { 
         //alert("pong");
-        document.getElementById("datacart-count").innerHTML = oXML.responseText;
+		setDatacartCount(oXML.responseText);
+        flashDatacart();
+        setBusy(false);
     };
 
     var params;
@@ -58,12 +62,38 @@ function updateCartItem(elem, add) {
 
 
 /**
- * Adds all search results.
+ * Adds all search results to the datacart.
+ * Uses AJaX.
  */
 function addAllResults(itemType) {
-    document.resubmitform.action = "@web_context@general/findadd_" + itemType + "_datacart.ajax.jsp";
-    document.resubmitform.submit();
-    changePageItemStates(true, false);
+  
+    setBusy(true);
+
+	var ajax = initAjax();
+
+    var fnWhenDone = function(oXML) { 
+		setDatacartCount(oXML.responseText);
+        changePageItemStates(true, false);
+        flashDatacart();
+        setBusy(false);
+    };
+
+
+    // combine form elements
+    var params = "";
+    for (var i=0; i < document.resubmitForm.elements.length; i++) {
+        if (i!=0) {
+            params += "&";
+        }
+
+        params += document.resubmitForm.elements[i].name + "=" + 
+                encodeURIComponent(document.resubmitForm.elements[i].value);
+    }
+
+    //alert(params);
+    var url = "@web_context@general/findadd_" + itemType + "_datacart.ajax.jsp";
+    ajax.connect(url, "POST", params, fnWhenDone);
+
 }
 
 /**
@@ -330,34 +360,11 @@ function customiseInputs() {
 			//initialise element
 			inputs[i].label.className=dc_offClassCheckbox;
 
-                /*
-            //when the label is clicked..
-            inputs[i].label.onclick = function () {
-                var elem = document.getElementById(this.htmlFor);
-                setCheckboxParentHighlight(elem, !elem.checked);
-                updateCartItem(elem, !elem.checked);
-                toggleLabelStyle(this);
-                return false; 
-            };
-
-            //enable keyboard navigation
-            inputs[i].onclick = function () {
-                var elem = document.getElementById(this.label.htmlFor);
-                setCheckboxParentHighlight(elem, !elem.checked);
-                updateCartItem(elem, !elem.checked);
-                toggleLabelStyle(this.label);
-                return false; 
-            };
-                */
-
             //enable whole-box clicking
             inputs[i].parentNode.onclick =
                 function () {
                     var elem = this.getElementsByTagName("input")[0];
                     changeItemState(elem, !elem.checked, true);
-                    //setCheckboxParentHighlight(elem, !elem.checked);
-                    //updateCartItem(elem, !elem.checked);
-                    //toggleLabelStyle(elem.label);
                     return false; 
                 };
 
@@ -420,3 +427,21 @@ function changeItemState(elem, isChecked, doCartUpdate) {
     }
 	toggleLabelStyle(elem.label);
 }
+
+
+function setBusy(isBusy) {
+    document.getElementById("datacart-count-icon").className = 
+		(isBusy ? "busyanim" : "datacart-icon-normal");
+}
+                                                                                                                                                                                                  
+
+function setDatacartCount(newCount) {
+	document.getElementById("datacart-count").innerHTML = newCount;
+}
+
+
+function flashDatacart() {
+    Fat.fade_element("datacart", 12, 1500, "#FF9933", "#FFFFFF");
+}
+
+

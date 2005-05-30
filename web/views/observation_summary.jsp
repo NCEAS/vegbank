@@ -101,12 +101,14 @@
     <tr>
     <!-- add all results -->
     <td>
-        <a href="javascript:addAllResults('observation')"
-            title="add all results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" /></a>
+        <a href="javascript:addAllResults('observation');"
+            title="add all results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" id="datacart-addallresults-icon" /></a>
     </td>
     <td>
-        <a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true"
+        <a href="javascript:addAllResults('observation');"
             title="add all results to datacart">add all plot query results</a> to datacart, &nbsp; &nbsp;
+        <!--a href="<vegbank:changeParam paramName='delta' paramValue='findadd-observationaccessioncode' absolute='true' />&lr=true&showQuery=true"
+            title="add all results to datacart">add all plot query results</a> to datacart, &nbsp; &nbsp; -->
     </td>
                                                                                                                                                                                                   
     <!-- add page -->
