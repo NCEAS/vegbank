@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-28 00:25:49 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2005-05-30 02:06:07 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ import org.vegbank.common.model.Userdatasetitem;
  * manages changes to the datacart.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.5 $ $Date: 2005-05-28 00:25:49 $
+ * @version $Revision: 1.6 $ $Date: 2005-05-30 02:06:07 $
  */
 
 public class VegbankDatacartTag extends VegbankTag {
@@ -82,17 +82,23 @@ public class VegbankDatacartTag extends VegbankTag {
             // get all items involved in a change
             String d = getDelta();
             String arrDelta[];
+            boolean hasDelta;
+            DatasetUtility dsu = null;
 
             if (Utility.isStringNullOrEmpty(d)) {
                 arrDelta = new String[1];
                 arrDelta[0] = "";
+                hasDelta = false;
             } else {
                 arrDelta = d.split(DELTA_DELIM);
+                hasDelta = true;
             }
+
+
 
             List deltaItems = null;
             Object oItems = getDeltaItems();
-            if (oItems != null) {
+            if (hasDelta && oItems != null) {
                 if (oItems instanceof String) {
                     // check for CSV
                     String items = oItems.toString();
@@ -123,20 +129,20 @@ public class VegbankDatacartTag extends VegbankTag {
                 }
 
 
+                // get the datacart
                 // get userdataset_id from session
                 log.debug("getting datacart...");
-                DatasetUtility dsu = new DatasetUtility(); 
+                dsu = new DatasetUtility(); 
                 Userdataset datacart = dsu.getDatacart(session);
 
                 if (datacart == null) {
                     // try to get extant datacart for user or create a new one
-                    log.debug("get/create user datacart");
+                    log.debug("get/create user datacart...");
                     datacart = dsu.getOrCreateDatacart(session.getId(), usrId);
                     session.setAttribute(Utility.DATACART_KEY, new Long(datacart.getUserdataset_id()));
-                    log.debug("SSSSSSS  setting datacart ID in session: " + datacart.getUserdataset_id());
-                } else {
-                    log.debug("* got datacart with ID in session");
+                    log.debug("setting datacart ID in session: " + datacart.getUserdataset_id());
                 }
+
 
                 if (datacart != null) {
                     log.debug("handling delta");
@@ -145,6 +151,8 @@ public class VegbankDatacartTag extends VegbankTag {
                     if (arrDelta[0].equals(DELTA_DROP)) { 
                         log.debug("setting up drop items: " + deltaItems.size());
                         dsu.dropItemsByAC(deltaItems);
+                        log.debug("updating dataset...");
+                        count = dsu.saveDataset();
 
                     } else if (arrDelta[0].equals(DELTA_DROPALL)) { 
                         long dsId = Long.parseLong((String)deltaItems.get(0));
@@ -159,9 +167,14 @@ public class VegbankDatacartTag extends VegbankTag {
                             log.warn("attempt to delete non-owned dataset by usrId " + usrId);
                         }
 
+                        log.debug("updating dataset...");
+                        count = dsu.saveDataset();
+
                     } else if (arrDelta[0].equals(DELTA_ADD)) { 
                         log.debug("setting up add items: " + deltaItems.size());
                         dsu.addItemsByAC(deltaItems); 
+                        log.debug("updating dataset...");
+                        count = dsu.saveDataset();
 
                     } else if (arrDelta[0].equals(DELTA_FINDADD)) { 
                         if (deltaItems != null && deltaItems.size() > 0) {
@@ -174,42 +187,39 @@ public class VegbankDatacartTag extends VegbankTag {
 
                             // query, itemType, itemTable, pkField, acField
                             dsu.insertItemsByQuery(query, arrDelta[1], arrDelta[2], arrDelta[3], arrDelta[4]);
+                            count = dsu.countItems(null);
 
                         } else {
                             log.debug("no findadd query given");
                         }
                     }
 
-                    log.debug("updating dataset...");
-                    count = dsu.saveDataset();
-
-                    // count the items
-                    ////////////////// maybe need to do:
-                    ////////////////// datacart = dsu.getCurDataset();
-                    /*
-                    List dcItems = datacart.getuserdataset_userdatasetitems();
-                    if (dcItems != null) {
-                        count = dcItems.size();
-                    }
-                    */
                 } else {
                     log.error("ERROR getting/creating datacart for usr_id: " + usrId);
                 }
 
             } else if (arrDelta[0].equals(DELTA_COUNT)) {
+                // get the datacart size
+                count = dsu.countItems(null);
+
             } else {
                 // no delta items, so get count from session (for efficiency)
                 Long datacartCount = (Long)session.getAttribute(Utility.DATACART_COUNT_KEY);
                 if (datacartCount == null) { 
                     // hasn't been set in session, so initialize it
                     count = 0;
-                    session.setAttribute(Utility.DATACART_COUNT_KEY, new Long(0));
+                    //session.setAttribute(Utility.DATACART_COUNT_KEY, new Long(0));
+                    log.debug("initializing datacart size");
                 } else { 
                     // use the current value
                     count = datacartCount.longValue(); 
+                    log.debug("got datacart size from session: " + count);
                 }
             }
             
+            // update the session
+            log.debug("setting datacart size in session: " + count);
+            session.setAttribute(Utility.DATACART_COUNT_KEY, new Long(count));
 
             log.debug("datacart count is " + count);
             if (getDisplay()) {
