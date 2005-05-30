@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-19 01:31:10 $'
- *	'$Revision: 1.34 $'
+ *	'$Date: 2005-05-30 02:05:08 $'
+ *	'$Revision: 1.35 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -280,6 +280,7 @@ public class GenericCommand
             if (((Boolean)queryParameters.get("showQuery")).booleanValue()) {
                 log.debug("showQuery ON:  setting getQuery to full SQL query"); 
                 request.setAttribute("getQuery", sqlFullQuery);
+                skipQuery = true;
             }
 
 
@@ -289,8 +290,8 @@ public class GenericCommand
                 ////////////////////////////////////////////////////
                 sqlFullQuery += buildLimitClause();
 
-                log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlFullQuery 
-                        + "\n=======================================");
+                //log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlFullQuery 
+                //       + "\n=======================================");
                 DatabaseAccess da = new DatabaseAccess();
                 ResultSet rs = da.issueSelect( sqlFullQuery );
                 
@@ -298,9 +299,15 @@ public class GenericCommand
                 searchResultList = getBeanList(beanName, rs, propNames);
                 da.closeStatement();
                 rs.close();
-		    }
+		    } else {
+                log.debug("SKIPPING QUERY");
+            }
 
             if (request != null) {
+                /*
+                //
+                // SAVE/LOAD RESULTS
+                //
                 if (queryParameters != null) {
                     // comes from <vegbank:get save="whatever" ... />
                     String sessionSaveName = queryParameters.getString("save");
@@ -327,6 +334,7 @@ public class GenericCommand
                         }
                     }
                 }
+                */
 
                 if (log.isDebugEnabled()) {
                     log.debug("Setting " + BEANLIST_KEY + " and " + beanName.toUpperCase() + " as lists");
@@ -338,7 +346,7 @@ public class GenericCommand
                     request.setAttribute(id + "-" + BEANLIST_KEY, searchResultList);
                 }
 
-                if (searchResultList.size() == 1) {
+                if (searchResultList != null && searchResultList.size() == 1) {
                     log.debug("One item, so setting " + BEAN_KEY + " and " + beanName.toUpperCase() + " as beans");
                     request.setAttribute(BEAN_KEY, searchResultList.get(0));
                     request.setAttribute(beanName.toUpperCase(), searchResultList.get(0));
