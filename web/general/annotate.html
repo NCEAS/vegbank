@@ -12,22 +12,22 @@ VegBank receives its data from the <strong>VegBank community of users</strong>.
 
 Once users have loaded data, other users may add comments, or <strong>annotate</strong>
 other users' data.  The VegBank database is set up so that data is never overwritten,
-but new data may be added in certain areas.
+but new data may be added in certain areas.  Please see our 
+<a href="@design_link@planttaxaoverview.html">overview of concept based taxonomy</a>
+if you aren't familiar with what a plant concept or what a community concept is.
 
 </p>
 
 <p>The main ways to annotate data are:</p>
 
 <ul>
-   <li>Adding notes</li>
    <li>Interpreting plants observed on a plot to a 
-    particular <a href="javascript:getHelpFor('plant-taxa');">plant concept 
-      <img src="@images_link@question.gif" alt="?" /></a>
+    particular plant concept 
    </li>
    <li>Classifying plots to a particular 
-     <a href="javascript:getHelpFor('plant-communities');">community concept 
-     <img src="@images_link@question.gif" alt="?" /></a> 
+     community concept 
    </li>
+   <li>Adding notes</li>
 </ul>
 
 <p>When you view a plot, there can be many interpretations of each plot
@@ -46,16 +46,49 @@ view the most recent interpretation, the best fit-confidence pattern interpretat
 the original interpretation.
 </p>
 <h4>To Annotate</h4>
-<p><strong>a plant</strong>, view details of the plant <a href="@get_link@std/taxonobservation/VB.TO.88719.ACERRUBRUML">[example]</a>
+<ul>
+<li><strong>A plant:</strong> View details of the plant 
+<a href="@get_link@std/taxonobservation/VB.TO.88719.ACERRUBRUML">[example]</a>
 on a plot view <a href="@get_link@comprehensive/observation/VB.Ob.3801.GRSM261">[example]</a>.
 Then follow the instructions on the form.  You'll need to know which plant concept you want to
-annotate to.  This can be found using the <a href="@forms_link@PlantQuery.jsp">Plant Query</a>.
-</p>
-<p><strong>a plot</strong>.  The Interpretation of a plot to a community functionality is 
-currently being developed.  Coming soon! </p>
-<p><strong>a note</strong>.  We plan to build the "Adding Notes" functionality sometime in late 2005.
-</p>
+annotate to.  This can be found using the <a href="@forms_link@PlantQuery.jsp">Plant Query</a>. <br/>
+ <strong>How it works and why users annotate.</strong> For each species that occurs on a plot,
+ the plot author records the name that was used for the plant, as well
+as the reference that was used to determine the name.  The author also makes at least <strong>
+one interpretation</strong> of that plant, which is the <strong>original interpretation</strong>.  
+Other users, if they have some knowledge
+of the plot or the region,  can interpret what a plant as a different plant concept.
+Reasons for doing so could be that
+taxonomy has changed and the author's taxon has been split.   Also, cases exist where
+the plot author was uncertain of what the plant was.  Subsequent users may interpret the taxon, perhaps based 
+on a voucher, to clarify what the taxon is likely to be.  Each assignment may have its own fit and confidence,
+which are the party's self-assessment of how well the plant on the plot matches the plant concept, and how
+sure the party is that such a fit is indeed accurate. 
+</li>
+<li><strong>A plot:</strong> The Interpretation of a plot to a community functionality is 
+currently being developed.  Coming soon! <br/>
+  <strong>How it works and why users annotate:</strong>
+  Once a user has viewed a plot in VegBank, he or she may decide that it
+  belongs to a certain community type.  Each observation may be interpreted multiple times as
+  belonging to different community types.  Each party may have its own opinion to which community (or communities) an observation
+  belongs. 
+  Users may interpret plots because <strong>no prior interpretations</strong> exist in VegBank.
+  Also, many different systems of plant communities exist (some maintained at the state/province level,
+  some maintained at the national level), so users may want to interpret to a new system.
+  Similar to plant interpretations, changes in taxonomy may result in the need for reclassification
+  of plots.
+  Each assignment may have its own fit and confidence,
+  which are the party's self-assessment of how well the observation matches 
+  the community, and how sure the party is that such a fit is indeed accurate.  
+  </li>
+<li><strong>A note:</strong>  Users will be able to add notes to any field of a plot (or any
+entity).  These serve primarily to provide other users with comments to increase
+their understanding of the plot.  Notes about values which are likely erroneous are welcomed.
 
+
+We plan to build the "Adding Notes" functionality sometime in late 2005.
+</li>
+</ul>
 
 
 @webpage_footer_html@
