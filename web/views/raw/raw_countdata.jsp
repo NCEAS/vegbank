@@ -1,7 +1,7 @@
   @stdvegbankget_jspdeclarations@
   <% String rowClass = "evenrow" ; %>
   <vegbank:get select="observation_summ" beanName="map" />
-  <table class="leftrightborders" cellpadding="1" align="center">
+  <table class="leftrightborders" cellpadding="1">
        
        <logic:empty name="BEANLIST">
         <tr class="sizetiny @nextcolorclass@"><td colspan="2">ERROR! There are no plots!</td></tr>
