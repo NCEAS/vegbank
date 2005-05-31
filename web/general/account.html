@@ -5,31 +5,43 @@
 
  
 <TITLE>My Vegbank Account</TITLE>
+ <script type="text/javascript">
+ function getHelpPageId() {
+   return "my-vegbank-account";
+ }
  
+ </script>
 
 
  @webpage_masthead_html@
  <center><h1>My VegBank Account </h1></center>
 <blockquote> 
-  <h3><a href="@general_link@login.jsp">Login</a> or <a href="@web_context@Logoff.do">Logout</a></h3>
+  <h4><a href="@forms_link@RegisterNewUser.jsp">Register</a> to become a VegBank User.</h4>
+  <ul><li>If you don't yet have an account and would like to create one, please follow the above link.
+    Please note that you do not need to register to access data in VegBank, but you will have to register
+    and request certification to add data.  You may also want to register to permanently keep
+    datasets (certification not required).
+    </li></ul>
+
+  <h4><a href="@general_link@login.jsp">Login</a> or <a href="@web_context@Logoff.do">Logout</a></h4>
       <ul><li>Logging in allows you to access your account and personal settings, such as datasets.  
       Logging out after you are finished protects your account from being changed by the next user (on your computer).
       Note that VegBank will prompt you to log in if you try to access a feature that requires logging in.
       </li>
 	</ul>
   
-  <h3>
-    <a href="@web_context@LoadUser.do">Edit Personal information</a></h3>
+  <h4>
+    <a href="@web_context@LoadUser.do">Edit Personal information</a></h4>
     <ul><li> View or change your registration information</li>
 	</ul>
 
-  <h3> <a href="@web_context@LoadCertification.do">Request Certification</a></h3>
+  <h4> <a href="@web_context@LoadCertification.do">Request Certification</a></h4>
 
     <ul><li> Request certification to perform advanced functions in VegBank, 
     such as loading plots or annotating data</li>
 	</ul>
  
-  <h3><a href="@web_context@DisplayDatasets.do">Datasets</a></h3>
+  <h4><a href="@web_context@DisplayDatasets.do">Datasets</a></h4>
     <ul>
         <li>View datasets you saved from query results</li>
         <li>View datasets you uploaded</li>
@@ -37,20 +49,20 @@
     </ul>
 
   <br />
-  <h3 class="bright">FUTURE DEVELOPMENT</h3>
+  <h4 class="bright">FUTURE DEVELOPMENT</h4>
 
-  <h3>Profile</h3>
+  <h4>Profile</h4>
     <ul>
         <li>View or edit your default view and output formats</li>
         <li>create a personal view for result sets from the plots database</li>
     </ul>
 		
-  <h3>Queries</h3>
+  <h4>Queries</h4>
     <ul><li>View your queries</li></ul>
     <!--
-  <h3>Deposits</h3>
+  <h4>Deposits</h4>
     <ul><li>View a list of your uploaded datasets</li></ul>
-  <h3>Withdrawals</h3>
+  <h4>Withdrawals</h4>
     <ul><li>View a list of your downloaded datasets</li></ul>
     -->
 
