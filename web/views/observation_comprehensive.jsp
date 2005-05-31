@@ -6,6 +6,12 @@
 
    <%     String rowClass = "evenrow";  %>
 <title>VegBank Comprehensive Plot View</title>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "view-plot-details";
+}
+
+</script>
 
   @webpage_masthead_html@   @possibly_center@  
   <h2>Comprehensive View of a Plot</h2>
@@ -94,8 +100,14 @@
 </table>
 </TD><TD valign="top" align="center" id="tut_plotdetailplants"><!-- plants in this plot -->
 
-<%@ include file="includeviews/sub_taxonobservation.jsp" %>
-
+<!-- %@ include file="includeviews/sub_taxonobservation.jsp" %-->
+<!-- get params to pass if they are here -->
+<bean:parameter id="showHelpBean" name="showHelp" value="false" />
+<bean:parameter id="strataToShowBean" name="strata2Show" value="2" />
+<bean:define id="requestedPageURL"><%= "/views/raw/raw_taxonobservation.jsp?observation_pk=" + observation_pk  + "&showHelp=" + showHelpBean + "&strata2Show=" + strataToShowBean %></bean:define>
+<!-- page requesting :  <bean:write name="requestedPageURL" /> --> 
+<bean:include id="taxonobs_page" page='<%= requestedPageURL %>' />
+<bean:write name="taxonobs_page" filter="false" />
 
 </TD>
 </TR>
@@ -123,7 +135,7 @@
 
 <TR><TD colspan="2" valign="top" align="left">
 <!-- community info -->
-<bean:parameter id="showHelpBean" name="showHelp" value="false" />
+
 <bean:include id="commclass_page" page='<%= "/views/raw/raw_commclass.jsp?observation_pk=" + observation_pk  + "&showHelp=" + showHelpBean%>' />
 <bean:write name="commclass_page" filter="false" />
 

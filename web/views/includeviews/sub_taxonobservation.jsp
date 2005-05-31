@@ -6,10 +6,12 @@
 <!-- logic: check to see if 3, and if so, write all records
        now, if it's not 1, then write strata records (default) unless none are found, then write non-strata records (next)
        
-       otherwise, if no reocrds written do this:, and write the records without any strata if so
+       otherwise, if no records written do this:, and write the records without any strata if so
        -->
 
 <!-- also pass a bean: limitPlantRecs2Show : "yes" if limiting, "no" or blank otherwise  -->
+
+<!-- observation_pk must also be defined for this to work -->
 
 <!-- also CAN pass a bean: showStrataDefn : if "no" then doesn't show strata definitions, else does -->
 <logic:empty name="showStrataDefn">
