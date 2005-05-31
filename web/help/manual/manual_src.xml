@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="manual2html.xsl"?>
+<?xml-stylesheet type="text/xsl" href="manualShowLinks.xsl"?>
 <manualDoc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="manual.xsd">
   <manualItem finish="true" refURL="@web_context@" name="quick-intro" topic="Tutorial Instructions">
     <manualHTML>
@@ -165,7 +165,7 @@ To <strong>Navigate</strong> to popular VegBank pages, use the links next to the
         You can also browse by hierarchy, starting with the Plantae Kingdom or a family of your choice. <highlight id="tut_browseplantsbyhierarchy"/>  The plants will be shown in the <a href="view-plant-detail">Plant Detail</a> format.
       </manualHTML>
     </manualItem>
-    <manualItem finish="true" refURL="@forms_url@PlantQuery.jsp" name="search-for-plants" topic="Search for Plants">
+    <manualItem finish="true" refURL="@forms_link@PlantQuery.jsp" name="search-for-plants" topic="Search for Plants">
       <manualHTML>
      This searches for plant concepts in VegBank, by name or some portion of a name, as well as other plant attributes.  
      <br/>
@@ -191,7 +191,7 @@ To <strong>Navigate</strong> to popular VegBank pages, use the links next to the
         </ul>
       </manualHTML>
     </manualItem>
-    <manualItem finish="true" refURL="@get_link@summary/plantconcept/plantconcept/q&amp;where=where_plantconcept_firstletter" name="view-plant-summary" topic="Plant Summary">
+    <manualItem finish="true" refURL="@get_link@summary/plantconcept/q&amp;where=where_plantconcept_firstletter" name="view-plant-summary" topic="Plant Summary">
       <manualHTML>
 This page shows brief summaries of one or more plant concepts.  
 The results of most plant searches lead to this page.  Most of the time, a message <highlight id="tut_plantcriteriamessage"/> will appear telling you what you searched for. <br/>
@@ -223,7 +223,7 @@ Please note that it is possible for more than one party perspective to be listed
   </manualItem>
   <manualItem finish="true" refURL="@web_context@" name="plant-communities" topic="Plant Communities">
     <manualHTML>The Plant Communities Section of the Home Page <highlight id="tut_plantcommunities"/> (Plant Communities are also called Community Types) links you to pages in VegBank that have to do with communities.  Be sure to see the first link: <a href="@general_link@faq.html#whatcommunity">What is a community?</a> if you're not familiar with what communities are, or how VegBank defines them. Press next to see more information about the links listed here.</manualHTML>
-    <manualItem finish="true" refURL="@forms_url@CommQuery.jsp" name="search-for-communities" topic="Search for Communities">
+    <manualItem finish="true" refURL="@forms_link@CommQuery.jsp" name="search-for-communities" topic="Search for Communities">
       <manualHTML>
         This searches for communities in VegBank, by name or some portion of a name, or by other attributes of a community, such as level, name type, or party.
       <br/>
@@ -528,7 +528,7 @@ and annoate this data.  How this process works is described on the <a href="@gen
   <manualItem finish="true" refURL="@general_link@account.html" name="my-vegbank-account" topic="My VegBank Account">
     <manualHTML>
     If you register with VegBank, you can have your own account, which lets you customize your experience at VegBank.org, similar to many other websites.
-    Links to Your Account features can be found on the header <highlight id="header-right" />.  In your account, you can see
+    Links to Your Account features can be found on the header <highlight id="header-right"/>.  In your account, you can see
     the plots you've submitted, the options you've specified, and can link to forms for loggin in and out, registering, and certification.
     See the next few topics for details.
     </manualHTML>
@@ -540,7 +540,8 @@ and annoate this data.  How this process works is described on the <a href="@gen
 (2) maintain user profiles with preferences and use history, 
 and (3) establish appropriate levels of certification and permissions for advanced functions.  
 If you choose not to register, you may still use the site as a guest, but you will not be able to access certain functions (namely, anything that adds data to the database or adds any annotations).
-<br/><br/>
+<br/>
+        <br/>
 You will sign onto VegBank using your email account and a password of your choosing.  If your email account has already been registered, simply use the "forgot password" link and the password will be emailed to you.  You will be prompted to login if you attempt to access a page in VegBank that requires registration or certification.
       <br/>
  To become a Vegbank user, you must read and agree to the <a href="@general_link@terms.html">VegBank 
@@ -582,7 +583,7 @@ Click
 
       </manualHTML>
     </manualItem>
-  <!--  <manualItem finish="false" refURL="???" name="datasets" topic="Datasets">
+    <!--  <manualItem finish="false" refURL="???" name="datasets" topic="Datasets">
       <manualHTML/>
     </manualItem>-->
   </manualItem>
