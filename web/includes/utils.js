@@ -640,6 +640,11 @@ function postNewParam(theName,theVal) {
 
 }
 
+function tut_close() {
+	parent.location=parent.upperframe.location;
+
+}
+
 function tut_togglehighlightMainFrameEl(divToHighlight,pageToRedirectTo) {
  /* this function highlights a section of the other page, and if fails, asks user if ok to redirect to page passed and try again */
     var blnWorked = parent.upperframe.tut_togglehighlightElement(divToHighlight);
