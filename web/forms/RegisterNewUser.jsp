@@ -10,8 +10,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-05-05 22:36:29 $'
-*  '$Revision: 1.17 $'
+*  '$Date: 2005-05-31 18:40:58 $'
+*  '$Revision: 1.18 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,12 @@
  
 <TITLE>VegBank Registration</TITLE>
 
+ <script type="text/javascript">
+ function getHelpPageId() {
+   return "register-as-new-user";
+ }
  
+ </script>
 
 
 

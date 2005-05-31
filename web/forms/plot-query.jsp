@@ -25,6 +25,18 @@ VegBank - <bean:write name="searchType" /> Plot Search
   <%   String alph = "abcdefghijklmnopqrstuvwxyz" ; %>
   
 <script language="javascript">
+
+
+function getHelpPageId() {
+  var whatQuery = "advanced-plot-search";
+  if ( getURLParam("simplemode") == "true" ) {
+    whatQuery = "simple-plot-search" ;
+  }
+  return whatQuery;
+}
+
+
+
 function prepareForm() {
     var blnOK = validateThisForm(document.forms.plotqueryform);
     if ( blnOK ) {
@@ -380,8 +392,7 @@ function setQueryText() {
                   item.checked = value;
               }
           }
-          -->
-        </script> 
+          </script> 
 
     <center>
         <a href="javascript:SetCheckboxes(true);" >check all</a> 

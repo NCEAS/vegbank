@@ -15,8 +15,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-03-16 20:25:06 $'
-  *  '$Revision: 1.8 $'
+  *      '$Date: 2005-05-31 18:39:18 $'
+  *  '$Revision: 1.9 $'
   *
   *
   -->
@@ -25,7 +25,13 @@
 
 
 		<title>Retrieve a Lost VegBank Password</title>
-		
+
+<script type="text/javascript">
+function getHelpPageId() {
+  return "forgot-my-password";
+}
+
+</script> 
  
 
 	

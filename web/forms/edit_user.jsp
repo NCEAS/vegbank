@@ -10,17 +10,22 @@
   * Authors: @author@
   *
   * '$Author: mlee $'
-  * '$Date: 2005-05-06 06:38:16 $'
-  * '$Revision: 1.8 $'
+  * '$Date: 2005-05-31 18:39:18 $'
+  * '$Revision: 1.9 $'
   *
   *
   -->
   
 
-<!-- #BeginEditable "doctitle" --> 
+
 <TITLE>Edit Your Profile</TITLE>
 
-<!-- #EndEditable --> 
+<script type="text/javascript">
+function getHelpPageId() {
+  return "update-user-profile";
+}
+
+</script>
 
 
 

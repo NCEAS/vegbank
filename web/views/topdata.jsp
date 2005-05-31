@@ -9,6 +9,12 @@
 <% String howManyPerPageMore = "20" ; %> <!-- how many records to show if only showing one item? -->
  
 <TITLE>Browse VegBank Data</TITLE>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "browse-data";
+}
+
+</script>
 
 
 

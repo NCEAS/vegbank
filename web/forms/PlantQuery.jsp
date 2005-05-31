@@ -6,6 +6,15 @@
   
   
 <script language="javascript">
+
+
+function getHelpPageId() {
+  return "search-for-plants";
+}
+
+
+
+
 function prepareForm() {
 	setDate();
 	setNameMatchType();

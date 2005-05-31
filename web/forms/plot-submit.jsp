@@ -7,14 +7,14 @@
 
 
 <script language="javascript">
+
 function selectRadio(radioIndex) {
     document.UploadPlotForm.dataFileLocation[radioIndex].checked = true;
 }
+function getHelpPageId() {
+  return "submit-plots";
+}
 </script>
-
-
-
-
 
 
 @webpage_masthead_html@

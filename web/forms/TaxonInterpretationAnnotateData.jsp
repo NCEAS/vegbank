@@ -7,6 +7,10 @@
 function popupPlantQuery() {
 	window.open('@web_context@forms/PlantQuery.jsp', '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
 }
+
+function getHelpPageId() {
+  return "interpret-taxon-on-plot";
+}
 </script>
 <title>Interpret Plant Taxon</title>
  

@@ -6,6 +6,12 @@
 <!-- purpose : show datacart (singular selected dataset) for the user -->
  
 <TITLE>Your Datacart</TITLE>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "view-datacart";
+}
+
+</script>
 
  @webpage_masthead_html@ 
   @possibly_center@  

@@ -15,7 +15,14 @@
   @webpage_head_html@
 
  <title>VegBank Data Dictionary - field view : <xsl:value-of select="../entityName" />.<xsl:value-of select="attName" /></title>
+<script type="text/javascript">
 
+function getHelpPageId() {
+  return "data-dictionary";
+}
+
+
+</script>
     @webpage_masthead_html@
 
       <h2>

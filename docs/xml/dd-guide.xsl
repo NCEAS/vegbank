@@ -6,6 +6,15 @@
 @webpage_top_html@
   @webpage_head_html@
   <title>VegBank Data Dictionary Key</title>
+<script type="text/javascript">
+
+function getHelpPageId() {
+  return "data-dictionary";
+}
+
+
+</script>
+
   @webpage_masthead_html@ 
 
 

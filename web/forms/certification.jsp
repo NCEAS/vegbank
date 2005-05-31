@@ -5,13 +5,12 @@
 
 
 <TITLE>VegBank Certification</TITLE>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "request-certification";
+}
 
-
-
-
-
-
-
+</script>
 
 @webpage_masthead_html@
 

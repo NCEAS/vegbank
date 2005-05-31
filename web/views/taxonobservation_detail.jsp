@@ -8,6 +8,12 @@
 
  
 <TITLE>View VegBank Data: Taxon Observations - Detail</TITLE>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "interpret-taxon-on-plot";
+}
+
+</script>
 
 
 

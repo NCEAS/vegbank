@@ -15,7 +15,11 @@
      String howManyPlantsDefault="5"; // this many plants if default query (overrides above)
     %>
 
-
+<script type="text/javascript">
+function getHelpPageId() {
+  return "plot-search-results";
+}
+</script>
 
 <title>VegBank Plot Query Results</title>
 
@@ -349,6 +353,8 @@ Plot #<%= rowIndex++ %>
 
 
 </logic:notEmpty>
+
+
 
 <br />
 @webpage_footer_html@

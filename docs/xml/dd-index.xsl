@@ -7,6 +7,12 @@
 
   @webpage_head_html@
   <title>VegBank Data Dictionary Index</title>
+  <script type="text/javascript">
+function getHelpPageId() {
+  return "data-dictionary";
+}
+
+</script>
   @webpage_masthead_html@
     <h2>VegBank Data Dictionary Index</h2>
     <p>See the <a href="{$htmlPrefix}-guide.html">data dictionary guide</a> for more information on how to interpret the information in the data dictionary.</p>

@@ -24,6 +24,12 @@
 
   @webpage_head_html@
    <title>VegBank Data Dictionary - table view: <xsl:value-of select="../entityName" /></title>
+    <script type="text/javascript">
+function getHelpPageId() {
+  return "data-dictionary";
+}
+
+</script>
      @webpage_masthead_html@
       <h2>
         <a  href="{$htmlPrefix}-index.html">VegBank data dictionary</a>

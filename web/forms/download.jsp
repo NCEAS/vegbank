@@ -6,6 +6,13 @@
    Dataset Download
   </title>
 
+<script type="text/javascript">
+function getHelpPageId() {
+  return "download-datacart";
+}
+
+</script>
+
 <style> 
 li { padding: 6px; }
 </style> 
@@ -13,9 +20,6 @@ li { padding: 6px; }
 <!-- VegBank Header -->
   @webpage_masthead_html@
   
-
-
-
         <h1>Dataset Download</h1> 
 
 <%  	

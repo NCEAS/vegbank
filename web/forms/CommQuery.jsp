@@ -5,6 +5,15 @@
   <title>VegBank Community Type Search</title>
  
 <script language="javascript">
+
+
+function getHelpPageId() {
+  return "search-for-communities";
+}
+
+
+
+
 function prepareForm() {
 	setDate();
 	setNameMatchType();

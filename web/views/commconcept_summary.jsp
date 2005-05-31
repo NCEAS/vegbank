@@ -8,6 +8,12 @@
 
  
 <TITLE>View VegBank Community Concepts - Summary</TITLE>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "view-comm-summary";
+}
+
+</script>
 
 
 

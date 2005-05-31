@@ -5,6 +5,13 @@
 
  
 <TITLE>Graphical Overview of Plots in VegBank</TITLE>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "map-of-plots";
+}
+
+</script>
+
 
 @webpage_masthead_html@
 <h1>Current Map of Plots in VegBank</h1>

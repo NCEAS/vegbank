@@ -2,6 +2,7 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
 <script language="javascript">
+
 function viewAllMetadata() {
 	document.metasearch_form.xwhereParams.value="vb";
 	document.metasearch_form.clearSearch.value="1";
@@ -15,6 +16,12 @@ function preSubmit() {
 		document.metasearch_form.clearSearch.value="1";
 	}
 }
+
+
+function getHelpPageId() {
+  return "general-search";
+}
+
 </script>
 
 

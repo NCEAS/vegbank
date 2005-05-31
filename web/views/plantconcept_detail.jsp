@@ -3,6 +3,12 @@
   @webpage_head_html@
  
 <TITLE>View VegBank Plant Concepts</TITLE>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "view-plant-detail";
+}
+
+</script>
 
  @webpage_masthead_html@ 
   @possibly_center@ 

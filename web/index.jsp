@@ -2,6 +2,12 @@
 @stdvegbankget_jspdeclarations@
 @webpage_head_html@
 <title>VegBank</title>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "find-plots";
+}
+
+</script>
 
 @webpage_masthead_html@
 

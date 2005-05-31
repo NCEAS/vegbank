@@ -4,6 +4,12 @@
 
 
 <TITLE>View VegBank Plant Concepts - Summary</TITLE>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "view-plant-summary";
+}
+
+</script>
  @webpage_masthead_html@ 
   @possibly_center@ 
 

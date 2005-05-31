@@ -3,6 +3,12 @@
   @webpage_head_html@
  
 <TITLE>Browse VegBank Plants</TITLE>
+<script type="text/javascript">
+function getHelpPageId() {
+  return "browse-plants";
+}
+
+</script>
 
 
        @webpage_masthead_html@
