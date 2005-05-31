@@ -178,7 +178,7 @@ function ts_makeSortable(table) {
         var firstRow = table.rows[0];
     }
     if (!firstRow) return;
-    
+
     // We have a first row: assume it's the header, and make its contents clickable links
     for (var i=0;i<firstRow.cells.length;i++) {
         var cell = firstRow.cells[i];
@@ -192,7 +192,7 @@ function ts_getInnerText(el) {
 	if (typeof el == "undefined") { return el };
 	if (el.innerText) return el.innerText;	//Not needed but it is faster
 	var str = "";
-	
+
 	var cs = el.childNodes;
 	var l = cs.length;
 	for (var i = 0; i < l; i++) {
@@ -218,7 +218,7 @@ function ts_resortTable(lnk) {
     var td = lnk.parentNode;
     var column = td.cellIndex;
     var table = getParent(td,'TABLE');
-    
+
     // Work out a type for the column
     if (table.rows.length <= 1) return;
     var itm = ts_getInnerText(table.rows[1].cells[column]);
@@ -244,13 +244,13 @@ function ts_resortTable(lnk) {
         ARROW = '&darr;';
         span.setAttribute('sortdir','down');
     }
-    
+
     // We appendChild rows that already exist to the tbody, so it moves them rather than creating new ones
     // don't do sortbottom rows
     for (i=0;i<newRows.length;i++) { if (!newRows[i].className || (newRows[i].className && (newRows[i].className.indexOf('sortbottom') == -1))) table.tBodies[0].appendChild(newRows[i]);}
     // do sortbottom rows only
     for (i=0;i<newRows.length;i++) { if (newRows[i].className && (newRows[i].className.indexOf('sortbottom') != -1)) table.tBodies[0].appendChild(newRows[i]);}
-    
+
     // Delete any other arrows there may be showing
     var allspans = document.getElementsByTagName("span");
     for (ci=0;ci<allspans.length;ci++) {
@@ -260,7 +260,7 @@ function ts_resortTable(lnk) {
             }
         }
     }
-        
+
     span.innerHTML = ARROW;
 }
 
@@ -294,16 +294,16 @@ function ts_sort_date(a,b) {
     return 1;
 }
 
-function ts_sort_currency(a,b) { 
+function ts_sort_currency(a,b) {
     aa = ts_getInnerText(a.cells[SORT_COLUMN_INDEX]).replace(/[^0-9.]/g,'');
     bb = ts_getInnerText(b.cells[SORT_COLUMN_INDEX]).replace(/[^0-9.]/g,'');
     return parseFloat(aa) - parseFloat(bb);
 }
 
-function ts_sort_numeric(a,b) { 
+function ts_sort_numeric(a,b) {
     aa = parseFloat(ts_getInnerText(a.cells[SORT_COLUMN_INDEX]));
     if (isNaN(aa)) aa = 0;
-    bb = parseFloat(ts_getInnerText(b.cells[SORT_COLUMN_INDEX])); 
+    bb = parseFloat(ts_getInnerText(b.cells[SORT_COLUMN_INDEX]));
     if (isNaN(bb)) bb = 0;
     return aa-bb;
 }
@@ -381,7 +381,7 @@ function showorhidediv(theid)
 
 	} else {
 		el.style.display = 'none';
-		
+
 	}
 }
 
@@ -392,10 +392,10 @@ function showorhidediv(theid)
 
 
 function defaultOnLoad() {
-    try { 
+    try {
         // this function must be defined somewhere else
-        customOnLoad(); 
-    } catch (e) { 
+        customOnLoad();
+    } catch (e) {
         // forget about it
     }
 }
@@ -453,14 +453,14 @@ function getValuesFromList(thelist, getValueOrText) {
       hasvalues = "true"; /* has some values, make sure to return something */
       if ( getValueOrText == "value" ) {
         listvalues = listvalues + strSeparator + thelist.options[i].value ;
-      }  
+      }
       if ( getValueOrText == "text" ) {
-        if ( thelist.options[i].text != "--ANY--" ) 
+        if ( thelist.options[i].text != "--ANY--" )
           {
             listvalues = listvalues + strSeparator + thelist.options[i].text ;
           }
-      }  
-      
+      }
+
     }
   }
   if ( hasvalues == "true" ) {
@@ -475,9 +475,9 @@ function getValuesFromList(thelist, getValueOrText) {
             fixednull = "true" ;
           }
         }
-      
+
       return("");
-  
+
   }
 }
 
@@ -486,10 +486,10 @@ function getValuesFromList(thelist, getValueOrText) {
   * * @author Sundar Dorai-Raj
   * * Email: sdoraira@vt.edu
   * * This program is free software; you can redistribute it and/or
-  * * modify it under the terms of the GNU General Public License 
-  * * as published by the Free Software Foundation; either version 2 
-  * * of the License, or (at your option) any later version, 
-  * * provided that any use properly credits the author. 
+  * * modify it under the terms of the GNU General Public License
+  * * as published by the Free Software Foundation; either version 2
+  * * of the License, or (at your option) any later version,
+  * * provided that any use properly credits the author.
   * * This program is distributed in the hope that it will be useful,
   * * but WITHOUT ANY WARRANTY; without even the implied warranty of
   * * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -515,24 +515,24 @@ function getValuesFromList(thelist, getValueOrText) {
       return false;
     }
   }
-  
-  
-  
 
-  
-  
+
+
+
+
+
   function VB_isDate(y) {
       // function written by Michael Lee 2005-05-07 (and that IS a valid date)
       // is this a valid date?
      blnFine=false;
      var x = y+"";
-       var mytool_array=x.split("/"); 
-       
-       if ( mytool_array.length == 3 ) 
+       var mytool_array=x.split("/");
+
+       if ( mytool_array.length == 3 )
        {
-         if  ( isNumeric(mytool_array[0]) && isNumeric(mytool_array[1]) && isNumeric(mytool_array[2]) )                
-         {  
-  
+         if  ( isNumeric(mytool_array[0]) && isNumeric(mytool_array[1]) && isNumeric(mytool_array[2]) )
+         {
+
            if ( mytool_array[0]>0 && mytool_array[0]<13 &&  mytool_array[1]>0 && mytool_array[1]<32  &&  mytool_array[2]>0 && mytool_array[2]<10000) {
            // assume ok
            blnFine = true;
@@ -547,16 +547,16 @@ function getValuesFromList(thelist, getValueOrText) {
                 if (mytool_array[1]==29 && ( (mytool_array[2])/4 != Math.floor(mytool_array[2]/4) ) ) {
                    blnFine = false ; //not leap year
                 }
-  
+
            }
-  
-  
+
+
          }
-  
-       }   
+
+       }
     return blnFine;
   }
-  
+
 
 //******** JAVASCRIPT  FOR  FORM  VALIDATION ***********************//
 
@@ -580,11 +580,11 @@ function validateThisForm(thisform) {
                           {
                         item.className = "errNumber" ;
                         item.focus();
-                        alert("You entered an invalid number: " + item.value + " Please fix this and try again.");  
-                        
+                        alert("You entered an invalid number: " + item.value + " Please fix this and try again.");
+
                         blnIsValid = false;
-                        }  
-                  } 
+                        }
+                  }
                   //check dates:
                   if ( (item.className == "date" || item.className == "errDate" ) && blnIsValid ) {
                          // should be number and only check until there is one error
@@ -597,13 +597,13 @@ function validateThisForm(thisform) {
                               {
                             item.className = "errDate" ;
                             item.focus();
-                            alert("You entered an invalid date: " + item.value + " Please format like MM/DD/YYYY, example: 06/30/1977.");  
-                            
+                            alert("You entered an invalid date: " + item.value + " Please format like MM/DD/YYYY, example: 06/30/1977.");
+
                             blnIsValid = false;
-                            }  
+                            }
                   }
               }
-        return blnIsValid;    
+        return blnIsValid;
 }
 
 
@@ -622,7 +622,7 @@ function postNewParam(theName,theVal) {
   // to send user to new location, but using the posted instead of URL parameters.
   resubmitform = document.forms.resubmitForm ;
   var numelements = resubmitform.elements.length;
-  
+
   var wasDone = "false" ;
     for (var i=0 ; i<numelements ; i++) {
       if (resubmitform.elements[i].name == theName ) {
@@ -630,7 +630,7 @@ function postNewParam(theName,theVal) {
         wasDone = "true" ;
       }
     }
-    
+
   if ( wasDone == "false") {
     //didnt get done, add new input to form (tricky)
     resubmitform.placeholder.name = theName ;
@@ -669,20 +669,20 @@ function tut_togglehighlightElement(divToHighlight) {
       /* highlight */
       dohighlight = true;
     }
-  
+
     /* first remove any extant highlighting: */
     tut_unhighlight();
     /* then apply new highlighting , if needs it */
     if ( dohighlight == true ) {
         theElement.className = theElement.className + " tut_highlight" ;
     }
-    
+
     return true;
-  
+
   } catch (e) {
     return false;
   }
-  
+
 }
 
 function tut_unhighlight() {
@@ -706,10 +706,102 @@ function removeClassFromDoc(classname) {
    }
 }
 
+function helpNeedsNewPage() {
+   /* attempts to determine if help needs to open as new page.  Rules:
+    * DOES NOT need to open new page if this is .html file
+    * DOES NOT need to open new page if this is .jsp file with parameters on URL
+    * does need to if this is .jsp with no params on URL AND there are params on resubmitForm
+    * does need to if .do
+    *****************************************/
+  //get the path name, everything through the filename
+   var pathnm = window.location.pathname ;
+
+  //    alert(pathnm) ;
+  // get where the last dot is
+     var whereLastDot = pathnm.lastIndexOf(".") ;
+  //    alert(whereLastDot);
+   var extens = "" ;
+
+   if ( whereLastDot != -1 ) {
+	   extens = pathnm.substring(whereLastDot,pathnm.length);
+ //     alert(extens);
+   }
+
+   var getNewWindow = true;
+   switch (extens)
+   {
+   	case ".html":
+   		getNewWindow = false;
+   	break
+   	case ".htm":
+   		getNewWindow = false;
+   	break
+   	case "":
+	   		getNewWindow = false; //this is a bit risky, but there are some useful rewrites in place like /browse that dont have periods.
+	   	break
+
+   	case ".jsp":
+   		// are there variables in URL and in postParams form? If so, then false
+   		// are there none in each, also false if so.
+   		   var blnHasParamsURL = ( window.location.search.length > 0 );
+		 //   alert("window has URL params : " + blnHasParamsURL);
+
+		   var blnHasParamsResbmitForm = ( document.forms.resubmitForm.elements.length > 1) ; //>1 b/c of placeholder.
+         //   alert("params is resubmit Form : " + blnHasParamsResbmitForm) ;
+
+        if ( blnHasParamsURL == blnHasParamsResbmitForm) {
+		  // if both of above are true or both are false, then it ISNOT a posted form, otherwise it is.
+		  getNewWindow = false;
+		}
+   	break
+   	default:
+   		getNewWindow = true; //default to new window
+    }
+    // alert(getNewWindow + " is what is for new window");
+   	return getNewWindow;
+
+
+}
+
+function getHelpForMe() {
+	/* This function gets help for the current form.  First it tries function getHelpPageId() and if that fails, uses regular help page */
+	try {
+	        // this function must be defined somewhere else
+	        var strHelpId = getHelpPageId();
+	        getHelpFor(strHelpId);
+	    } catch (e) {
+	        // forget about it
+	        // other function not defined, so go to regular tutorial:
+	        getHelpFor("");
+    }
+
+}
+
 function getHelpFor(helpTopic) {
-  document.forms.getHelpForm.elements.helpPage.value = "@manual_link@" + helpTopic + ".html";
-  document.forms.getHelpForm.elements.mainPage.value = window.location;
-  document.forms.getHelpForm.submit();
+  /* this function calls for a help topic, and attempts to get this page as the left screen
+   * This is only not possible when the current page is a .jsp with posted parameters.
+   * In this case, a new window is opened with the example file on the left
+   * if nothing passed, gets default help tutorial
+   *****************************************************************************/
+
+  if ( helpTopic.length == 0 ) {
+	 // default help topic defined here
+	 helpTopic = "manual-index-basic" ;
+
+  }
+      var needsNew = helpNeedsNewPage();
+      //  alert (needsNew + " in getHelpFor " ) ;
+      document.forms.getHelpForm.elements.helpPage.value = "@manual_link@" + helpTopic + ".html";
+      document.forms.getHelpForm.elements.mainPage.value = window.location;
+
+      if ( needsNew == true ) {
+    	  //  alert("set new target for help form");
+    	  document.forms.getHelpForm.target = "_new" ;
+          document.forms.getHelpForm.elements.mainPage.value = "@forms_link@getHelpNewWindow.jsp?mainPage=" + window.location ;
+      }
+
+      document.forms.getHelpForm.submit();
+
 }
 
 
