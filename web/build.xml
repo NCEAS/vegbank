@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-05-30 17:18:37 $'
-* '$Revision: 1.169 $'
+* '$Date: 2005-05-31 18:26:06 $'
+* '$Revision: 1.170 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -580,7 +580,7 @@
    
    <loadfile srcfile="${includes_server}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration" />
    <filter token="webpage_stylesheets_declaration" value="${webpage_stylesheets_declaration}" />
-   
+   <filter token="webpage_stylesheets_declaration_html" value="${webpage_stylesheets_declaration}" />   <!-- duplicate token that makes more sense according to others -->
    
     
   </target>
