@@ -3,7 +3,7 @@
 <title>VegBank Tutorial</title>
 
 <script type="text/javascript">
-<!-- 
+
 /* dont want to allow nested frames with tutorial */
 function breakoutofframes()
 {
@@ -14,7 +14,7 @@ if (window.top!=window.self)
  window.top.location=window.location ;
  }
 }
--->
+
 </script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
