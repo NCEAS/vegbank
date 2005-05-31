@@ -1,5 +1,6 @@
 @stdvegbankget_jspdeclarations@
 <% String rowClass = "evenrow" ; %>
+<!-- MUST BE passed observation_pk -->
 
 <!-- this is the raw one -->
 <!--  request.getRequestURL() |  request.getQueryString()  -->
