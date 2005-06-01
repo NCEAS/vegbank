@@ -724,7 +724,7 @@ a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 
 
 /* some less frequently used table styles.  More common is evenrow and oddrow: */
-th.grey, td.grey, tr.grey {background-color : #DDDDDD; }
+th.grey, td.grey, tr.grey, .grey {background-color : #DDDDDD; }
 .listRowA {background-color : #FFFFCC; }
 .listRowB {background-color : #FFFFFF }
 .listRowA-Hi {background-color : #FF9933 }
