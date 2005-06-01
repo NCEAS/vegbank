@@ -45,11 +45,19 @@
   
   <div id="header-left">
 
-   <form action="@forms_link@metasearch.jsp" method="post" 
+   <form action="@forms_link@metasearch.jsp" method="get" 
         name="quicksearch_form" onsubmit="javascript:doSubmit()">
 
 	<input type="hidden" name="clearSearch" value="0" />
-
+    <input type="hidden" name="qsent" value="-1" />
+    <input type="hidden" name="xwhereMatchAny" value="false" />
+    <input type="hidden" name="perPage" value="10" />
+    <input type="hidden" name="ignore_where" value="" />
+    <input type="hidden" name="ignore_xwhereKey" value="" />
+    <input type="hidden" name="ignore_xwhereSearch" value="" />
+    <input type="hidden" name="ignore_wparam" value="" />
+    
+    
    find 
    <select class="input-box" name="selEntity" id="selEntity">
     <option value="anything">anything</option>

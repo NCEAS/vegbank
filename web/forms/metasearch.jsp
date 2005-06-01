@@ -9,6 +9,12 @@ function viewAllMetadata() {
 	document.metasearch_form.submit();
 }
 
+function customOnLoad() {
+  // set the metadata value via javascript, b/c quotations interfere with setting in the value = part
+  document.metasearch_form.xwhereParams.value = urlDecode(getURLParam("xwhereParams"));
+  
+}
+
 function preSubmit() {
 	if (document.metasearch_form.xwhereParams.value == null ||
 		document.metasearch_form.xwhereParams.value == "") {
@@ -32,8 +38,10 @@ if (xwhereMatchAny == null) {
 }
 
 String blackBoxText = "Search Results";
-String xwhereParams = request.getParameter("xwhereParams");
-String searchString = xwhereParams;
+String xwhereParams = request.getParameter("xwhereParams");%>
+  <!-- xwhereParams is : <%= xwhereParams %> -->
+<%
+String searchString = request.getParameter("xwhereParams");
 if (xwhereParams == null) {
 	xwhereParams = "vb";
 	searchString = "";
@@ -63,7 +71,7 @@ if (searchString ==  null || searchString.equals("")) {
 <center>
 
 <bean:define id="search" value="<%= searchString %>"/>
-<bean:define id="matchAny" value="<%= xwhereMatchAny %>"/>
+<bean:define id="matchAny" value="<%= xwhereMatchAny %>"/><!-- <bean:write name="matchAny" /> is matchAny -->
 <vegbank:get id="meta" select="keywords_count" where="where_keywords_grouped"
 		xwhereKey="xwhere_kw_match" xwhereEnable="true" xwhereSearch="true" perPage="-1"/>
 
@@ -139,11 +147,9 @@ if (searchString ==  null || searchString.equals("")) {
 			<bean:define id="category" name="onerow" property="entity"/>
 			<bean:define id="getPk" name="onerow" property="entity"/>
 			<bean:define id="getName" name="onerow" property="entity"/>
-			<bean:define id="getView" value="std"/>
-<%
-			String getExtra = "&xwhereMatchAny=" + xwhereMatchAny;
-%>
+			<bean:define id="getView" value="summary"/>
 
+            <bean:define id="qsent" value="-1" />
 			<logic:equal name="onerow" property="entity" value="community">
 				<bean:define id="getPk" value="commconcept"/>
 				<bean:define id="getName" value="commconcept"/>
@@ -163,7 +169,7 @@ if (searchString ==  null || searchString.equals("")) {
 				<bean:define id="getPk" value="observation"/>
 				<bean:define id="getName" value="observation"/>
 				<bean:define id="getView" value="summary"/>
-				<% getExtra = getExtra + "&perPage=7"; %>
+				<!--% getExtra = getExtra + "&perPage=7"; %-->
 				<bean:define id="qsent" value="5"/>
 			</logic:equal>
 			<logic:equal name="onerow" property="entity" value="covermethod">
@@ -179,13 +185,31 @@ if (searchString ==  null || searchString.equals("")) {
 				<bean:define id="qsent" value="6"/>
 			</logic:equal>
 
-<% 
-String params = getPk + Utility.PARAM_DELIM + entity;
-String getURL = "@get_link@" + getView + "/" + getName + "/" + params + 
-		"?where=where_keywords_pk_in&xwhereKey=xwhere_kw_match&xwhereSearch=true&xwhereParams=" +
-        xwhereParams;
-%>
-				<a href="<%=getURL%><%=getExtra%>&qsent=<bean:write name="qsent" />"><bean:write name="category" /></a>
+                
+                 
+ <bean:define id="newqsent" name="qsent" />
+ <% 
+  String getURL = "/views/" + getName + "_" + getView + ".jsp" ;
+ 
+    /* create a map of parameters to pass to the new link: */
+    java.util.HashMap params = new java.util.HashMap();
+    params.put("xwhereMatchAny", matchAny);
+    params.put("qsent", newqsent);
+    params.put("where", "where_keywords_pk_in");
+    params.put("xwhereKey", "xwhere_kw_match");
+    params.put("xwhereSearch", "true");
+    params.put("xwhereParams", searchString);
+    params.put("wparam", getPk + Utility.PARAM_DELIM + entity);
+    if (category.equals("plot")) {
+     params.put("perPage", "7");
+    }
+    pageContext.setAttribute("paramsName", params);
+   %>
+
+   <html:link page="<%= getURL %>" name="paramsName" scope="page" > 
+     <bean:write name="category" />
+   </html:link>
+
 
 			</td>
 			<td>
@@ -204,7 +228,7 @@ String getURL = "@get_link@" + getView + "/" + getName + "/" + params +
 You searched for 
 <logic:equal name="matchAny" value="true">any word in</logic:equal>
 <logic:notEqual name="matchAny" value="true">all words in</logic:notEqual>
-'<i><%= searchString %></i>'
+'<i><span class="grey"><%= searchString %><span></i>'
 <br />
 
 Click here to <a href="javascript:viewAllMetadata()">view all data</a>
