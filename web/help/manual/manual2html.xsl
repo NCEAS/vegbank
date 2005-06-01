@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--  * '$RCSfile: manual2html.xsl,v $'  *  Authors: @author@  *  Release: @release@  *  *  '$Author: mlee $'  *  '$Date: 2005-05-31 19:45:10 $'  *  '$Revision: 1.14 $'  *   * This program is free software; you can redistribute it and/or modify  * it under the terms of the GNU General Public License as published by  * the Free Software Foundation; either version 2 of the License, or  * (at your option) any later version.  *  * This program is distributed in the hope that it will be useful,  * but WITHOUT ANY WARRANTY; without even the implied warranty of  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the  * GNU General Public License for more details.  *  * You should have received a copy of the GNU General Public License  * along with this program; if not, write to the Free Software  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  * -->
+<!--  * '$RCSfile: manual2html.xsl,v $'  *  Authors: @author@  *  Release: @release@  *  *  '$Author: mlee $'  *  '$Date: 2005-06-01 21:35:19 $'  *  '$Revision: 1.15 $'  *   * This program is free software; you can redistribute it and/or modify  * it under the terms of the GNU General Public License as published by  * the Free Software Foundation; either version 2 of the License, or  * (at your option) any later version.  *  * This program is distributed in the hope that it will be useful,  * but WITHOUT ANY WARRANTY; without even the implied warranty of  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the  * GNU General Public License for more details.  *  * You should have received a copy of the GNU General Public License  * along with this program; if not, write to the Free Software  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  * -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect">
   <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/>
   <xsl:param name="anchorOneFile"/>
@@ -213,7 +213,7 @@
             </xsl:if>
           </xsl:if>
           <xsl:for-each select="attribute::*">
-            <xsl:attribute name="{name()}"><xsl:value-of select="current()"/><xsl:if test="name()='href'"><xsl:if test="$internalLink=true"><!-- add .html as it is in the manual -->.html</xsl:if></xsl:if></xsl:attribute>
+            <xsl:attribute name="{name()}"><xsl:value-of select="current()"/><xsl:if test="name()='href'"><xsl:if test="$internalLink=true and contains(current(),'#')=0"><!-- add .html as it is in the manual, but not just a # target -->.html</xsl:if></xsl:if></xsl:attribute>
           </xsl:for-each>
           <xsl:if test="$internalLink=true">
             <!-- last thing: add class for these to make green -->
