@@ -305,7 +305,7 @@ There are three places to start a general search:
           <li>The <a href="firefox-toolbar">Firefox Search Plugin</a>
           </li>
         </ul>
-Enter a word or words (or even part of a word) into the search box and press the search button ("go" button on the header).  VegBank will search all kinds of data<sup>1</sup> for all<sup>2</sup> the words you specified.  <br/>
+<strong>Case is ignored.</strong>  Enter a word or words (or even part of a word<sup><a href="#note1">1</a></sup>) into the search box and press the search button ("go" button on the header).  VegBank will search all kinds of data<sup><a href="#note1">2</a></sup> for all<sup><a href="#note1">3</a></sup> the words you specified.  This search works like most search engines.  Enclose a phrase in quotes to look that phrase, i.e. <code>"North Carolina" Acer</code> could be used to look for plots in North Carolina with Acer mentioned.  Note that <code>North Carolina Acer</code> would find plots in South <i>Carolina</i> that are in <i>North</i> Myrtle Beach, and have Acer mentioned.<br/>
         <br/>  All keywords for related data are included in the search.  So, a plant name or place name will be part of the keywords for a plot. <br/>
         <br/>
  To search more specifically, please use <a href="@plotquery_page_advanced@">the advanced plot search</a>, <a href="@forms_link@PlantQuery.jsp">the plant search</a>, or the <a href="@forms_link@CommQuery.jsp">the community search</a>.<br/>
@@ -313,11 +313,13 @@ Enter a word or words (or even part of a word) into the search box and press the
 This is currently the only way to search <a href="supplemental-data">Supplemental Data</a>.
 <br/>
         <br/>
-        <sup>1</sup>
-        <span class="psmall">You can restrict the General Search in the header, by specifying what kind of data you're looking for, for example, plots or people.  Select "anything" to remove search restrictions. <br/>
+        <a name="note1"></a><sup>1</sup><span class="psmall">By default, searches will match parts of words.  If this becomes problematic, such as when <code>Acerates</code> is being found when you search for <code>Acer</code>, you can check the "Match Whole Words" check box on the General Search Page.</span>
+        <br/><a name="note2"></a><sup>2</sup>
+        <span class="psmall">You can restrict the General Search in the header, by specifying what kind of data you're looking for, for example, plots or people.  Select "anything" to remove search restrictions. 
         </span>
-        <sup>2</sup>
+        <br/><a name="note3"></a><sup>3</sup>
         <span class="psmall">You can check the "match any word" checkbox in the main General Search page to search for items containing any word (separated by spaces) in the search box.  Note that <code>North Carolina</code> is interpreted as two words, and thus everything that has <code>North</code> or <code>Carolina</code> in it will be found.</span>
+       <p> <br/></p>
       </manualHTML>
     </manualItem>
   </manualItem>
