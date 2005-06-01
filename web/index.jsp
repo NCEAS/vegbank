@@ -28,7 +28,7 @@ function getHelpPageId() {
     <br />
     <fieldset id="tut_recentlyaddedplots">
       <legend>Recently Added Plots</legend>
-      <bean:include id="recentprojects" page="/views/raw/raw_recentprojects.jsp" />
+      <bean:include id="recentprojects" page="/cache/views/raw/raw_recentprojects.jsp" />
       <bean:write name="recentprojects" filter="false" />
     </fieldset>
     </div>
@@ -73,7 +73,7 @@ function getHelpPageId() {
     <fieldset id="tut_datainvegbank">
       <legend>Data in Vegbank</legend> 
       <ul><li>
-      <bean:include id="countdata" page="/views/raw/raw_countdata.jsp" />
+      <bean:include id="countdata" page="/cache/views/raw/raw_countdata.jsp" />
       <bean:write name="countdata" filter="false" />
       </li></ul>
     </fieldset>

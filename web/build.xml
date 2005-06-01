@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-05-31 18:26:06 $'
-* '$Revision: 1.170 $'
+* '$Date: 2005-06-01 10:16:37 $'
+* '$Revision: 1.171 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -129,6 +129,7 @@
     <property name="tomcat.home.dir" value="/usr/local/devtools/jakarta-tomcat"/>
     <property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
     <property name="views_server" value="${tomcat.home.dir}/webapps/${webapp}/views"/>
+    <property name="cache_server" value="${tomcat.home.dir}/webapps/${webapp}/cache"/>
     <property name="admin_server" value="${tomcat.home.dir}/webapps/${webapp}/admin"/>
     <property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
     <property name="general_server" value="${tomcat.home.dir}/webapps/${webapp}/general/"/>
@@ -171,6 +172,7 @@
     <filter token="general_link" value="/${web.context_uri}/general/"/>
     <filter token="forms_url" value="/${web.context_uri}/forms/"/>
     <filter token="views_link" value="/${web.context_uri}/views/"/>
+    <filter token="cache_link" value="/${web.context_uri}/cache/"/>
     <filter token="admin_url" value="/${web.context_uri}/admin/"/>
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="/${web.context_uri}/forms/"/>
@@ -238,7 +240,7 @@
       <fileset dir="${includes_src}" includes="**.* **/*jsp"/>
     </copy>
   </target>
-  <target name="index" depends="help" description="=&gt; target to dist. the index.html file">
+  <target name="index" depends="help,cache" description="=&gt; target to dist. the index.html file">
     <copy overwrite="${forceoverwrite}" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/${webapp}/index.html -->
     <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
@@ -418,6 +420,13 @@
     <copy overwrite="${forceoverwrite}" todir="${views_server}" filtering="yes">
       <fileset dir="${views}" includes="**/*jsp **/*html" excludes="**/CVS* "/>
     </copy>
+    <antcall target="cache" />
+  </target>
+  <target name="cache" depends="init" description="&gt; temporary means of getting views (data independent) cached">
+    <property name="cache_raw" value="${cache_server}/views/raw/" />
+    <mkdir dir="${cache_raw}" />
+    <get src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_countdata.jsp" dest="${cache_raw}raw_countdata.jsp"/>
+    <get src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_recentprojects.jsp" dest="${cache_raw}raw_recentprojects.jsp"/>
   </target>
   <!--
 	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
