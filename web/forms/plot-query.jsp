@@ -392,6 +392,7 @@ function setQueryText() {
                   item.checked = value;
               }
           }
+          // -->
           </script> 
 
     <center>
