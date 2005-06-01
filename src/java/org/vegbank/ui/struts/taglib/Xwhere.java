@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2005-06-01 08:43:58 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2005-06-01 09:41:12 $'
+ *	'$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  *
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.10 $ $Date: 2005-06-01 08:43:58 $
+ * @version $Revision: 1.11 $ $Date: 2005-06-01 09:41:12 $
  */
 
 public class Xwhere {
@@ -98,7 +98,8 @@ public class Xwhere {
 						(Object[])((Map)xwParams).get(id),
 						getXwhereGlue(id),
 						getXwhereSearch(id),
-						getXwhereMatchAny(id));
+						getXwhereMatchAny(id),
+						getXwhereMatchWholeWords(id));
 			}
 
 		} else if (xwParams instanceof Object[]) {
@@ -106,7 +107,7 @@ public class Xwhere {
 			// An array is used with the xwKey directly
 			// It is one dimensional
 			appendToClause(getXwhereKeySQL(), (Object[])xwParams,
-					getXwhereGlue(), getXwhereSearch(), getXwhereMatchAny());
+					getXwhereGlue(), getXwhereSearch(), getXwhereMatchAny(), getXwhereMatchWholeWords() );
 		}
 
 		if (Utility.isStringNullOrEmpty(this.xwhereClause) ||
@@ -267,7 +268,7 @@ public class Xwhere {
 	 *  index is empty, doSwap returns "".
 	 */
 	private String doSwap(String xwKeySQL, Object[] xwParams,
-			boolean xwSearch, boolean xwMatchAny) {
+			boolean xwSearch, boolean xwMatchAny, boolean xwMatchWholeWords) {
 
 		// TODO: watch out for ; delimited strings
 		// I think it was supposed to be for entering multiple
@@ -315,7 +316,7 @@ public class Xwhere {
 		if (xwSearch) {
 			// only the first string in index [0] is searchable
 			log.debug("doing searchable swap");
-			return doSwapSearchable(xwKeySQL, strXwParams, xwMatchAny);
+			return doSwapSearchable(xwKeySQL, strXwParams, xwMatchAny, xwMatchWholeWords);
 		}
 
 		return (new MessageFormat(xwKeySQL)).format(strXwParams);
@@ -329,9 +330,9 @@ public class Xwhere {
 	 * @param xwGlue to paste this fragment to the extant clause
 	 */
 	private void appendToClause(String xwKeySQL, Object[] xwParams,
-			String xwGlue, boolean xwSearch, boolean xwMatchAny) {
+			String xwGlue, boolean xwSearch, boolean xwMatchAny, boolean xwMatchWholeWords) {
 
-		String swapped = doSwap(xwKeySQL, xwParams, xwSearch, xwMatchAny);
+		String swapped = doSwap(xwKeySQL, xwParams, xwSearch, xwMatchAny, xwMatchWholeWords);
 		if (!Utility.isStringNullOrEmpty(swapped)) {
 			log.info("appending to xwClause: " + swapped);
 
@@ -440,6 +441,21 @@ public class Xwhere {
 	}
 
 
+	//////////////////////// xwhereMatchWholeWords /////////////////////////
+	private boolean getXwhereMatchWholeWords() {
+		return getTag.getXwhereMatchWholeWords();
+	}
+
+	private boolean getXwhereMatchWholeWords(String parent) {
+		return Utility.isStringTrue(
+				getXwhereValue("xwhereMatchWholeWords", parent, null, false));
+	}
+
+	private boolean getXwhereMatchWholeWords(String grandParent, String parent) {
+		return Utility.isStringTrue(
+				getXwhereValue("xwhereMatchWholeWords", grandParent, parent, false));
+	}
+
 
 	//////////////////////// workhorse /////////////////////////
 	/**
@@ -524,7 +540,7 @@ public class Xwhere {
 	/**
 	 * Only the first index, [0], is searchable.
 	 */
-	private String doSwapSearchable(String tpl, Object[] params, boolean matchAny) {
+	private String doSwapSearchable(String tpl, Object[] params, boolean matchAny, boolean matchWholeWords) {
 		if (Utility.isStringNullOrEmpty(tpl)) {
 			log.error("Can't (searchable) swap into empty template.");
 			return "";
@@ -566,7 +582,13 @@ public class Xwhere {
 										sb.append(" AND ");
 		                     }
 				      }
-					  params[0] = DatabaseUtility.makeSQLSafe(token, true);
+				      if ( matchWholeWords ) {
+					    //only match whole words, by inserting beginning and ending of word reg. expressions,
+					    // e.g. select count(1) from keywords where keywords ~* '[[:<:]]quercus[[:>:]]';
+					    params[0] = DatabaseUtility.makeSQLSafe("[[:<:]]" + token + "[[:>:]]", true);
+					  } else {
+					    params[0] = DatabaseUtility.makeSQLSafe(token, true);
+				      }
 					  log.debug("==-----formatting with: " + params[0]);
 					  sb.append(format.format((String[])params));
 			      }

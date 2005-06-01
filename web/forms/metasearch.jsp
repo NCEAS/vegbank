@@ -37,6 +37,11 @@ if (xwhereMatchAny == null) {
 	xwhereMatchAny = "false";
 }
 
+String xwhereMatchWholeWords = request.getParameter("xwhereMatchWholeWords");
+if (xwhereMatchWholeWords == null) {
+    xwhereMatchWholeWords = "false";
+}
+
 String blackBoxText = "Search Results";
 String xwhereParams = request.getParameter("xwhereParams");%>
   <!-- xwhereParams is : <%= xwhereParams %> -->
@@ -72,6 +77,8 @@ if (searchString ==  null || searchString.equals("")) {
 
 <bean:define id="search" value="<%= searchString %>"/>
 <bean:define id="matchAny" value="<%= xwhereMatchAny %>"/><!-- <bean:write name="matchAny" /> is matchAny -->
+<bean:define id="matchWholeWords" value="<%= xwhereMatchWholeWords %>"/>
+<!-- <bean:write name="matchWholeWords" /> is matchWholeWords -->
 <vegbank:get id="meta" select="keywords_count" where="where_keywords_grouped"
 		xwhereKey="xwhere_kw_match" xwhereEnable="true" xwhereSearch="true" perPage="-1"/>
 
@@ -114,6 +121,14 @@ if (searchString ==  null || searchString.equals("")) {
 		</td>
 		<td></td>
 	</tr>
+            <tr><td></td><td align="right">
+                 <input type="checkbox" name="xwhereMatchWholeWords" value="true" <logic:equal 
+                 name="matchWholeWords" value="true">checked</logic:equal>/>
+                    Match whole words only
+                
+            </td>
+            <td></td>
+    </tr>
 	<tr>
     	<td><img src="@image_server@lwlt3.gif"/></td>
 		<td></td>
@@ -194,6 +209,7 @@ if (searchString ==  null || searchString.equals("")) {
     /* create a map of parameters to pass to the new link: */
     java.util.HashMap params = new java.util.HashMap();
     params.put("xwhereMatchAny", matchAny);
+    params.put("xwhereMatchWholeWords", matchWholeWords);
     params.put("qsent", newqsent);
     params.put("where", "where_keywords_pk_in");
     params.put("xwhereKey", "xwhere_kw_match");
@@ -229,6 +245,7 @@ You searched for
 <logic:equal name="matchAny" value="true">any word in</logic:equal>
 <logic:notEqual name="matchAny" value="true">all words in</logic:notEqual>
 '<i><span class="grey"><%= searchString %><span></i>'
+<logic:equal name="matchWholeWords" value="true"> matching whole words only</logic:equal>
 <br />
 
 Click here to <a href="javascript:viewAllMetadata()">view all data</a>

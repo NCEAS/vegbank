@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2005-06-01 08:04:21 $'
- *	'$Revision: 1.25 $'
+ *	'$Date: 2005-06-01 09:41:12 $'
+ *	'$Revision: 1.26 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ import org.vegbank.common.utility.QueryParameters;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.25 $ $Date: 2005-06-01 08:04:21 $
+ * @version $Revision: 1.26 $ $Date: 2005-06-01 09:41:12 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -460,6 +460,29 @@ public class VegbankGetTag extends VegbankTag {
 
     public void setXwhereMatchAny(boolean b) {
         this.xwhereMatchAny = b;
+    }
+
+    /**
+     *
+     */
+	protected boolean xwhereMatchWholeWords = false;
+
+    public boolean getXwhereMatchWholeWords() {
+		log.debug("get xwhereMatchWholeWords: " + xwhereMatchWholeWords);
+	//	if (xwhereMatchWholeWords) {
+	//		return true;
+	//	}
+
+        setXwhereMatchWholeWords(findAttribute("xwhereMatchWholeWords"));
+		return this.xwhereMatchWholeWords;
+    }
+
+    public void setXwhereMatchWholeWords(String s) {
+        this.xwhereMatchWholeWords = Utility.isStringTrue(s);
+    }
+
+    public void setXwhereMatchWholeWords(boolean b) {
+        this.xwhereMatchWholeWords = b;
     }
 
     /**

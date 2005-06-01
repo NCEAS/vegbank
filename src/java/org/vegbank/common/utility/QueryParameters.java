@@ -3,10 +3,10 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-05-19 01:29:44 $'
- *	'$Revision: 1.2 $'
- * 
+ *	'$Author: mlee $'
+ *	'$Date: 2005-06-01 09:41:12 $'
+ *	'$Revision: 1.3 $'
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 package org.vegbank.common.utility;
 
 import java.util.*;
@@ -50,6 +50,7 @@ public class QueryParameters extends HashMap {
         this.put("whereNonNumeric", getTag.getWhereNonNumeric());
         this.put("xwhereSearch", new Boolean(getTag.getXwhereSearch()));
         this.put("xwhereMatchAny", new Boolean(getTag.getXwhereMatchAny()));
+        this.put("xwhereMatchWholeWords", new Boolean(getTag.getXwhereMatchWholeWords()));
         this.put("xwhereEnable", new Boolean(getTag.getXwhereEnable()));
         this.put("xwhereKey", getTag.getXwhereKey());
         this.put("xwhereParams", getTag.getXwhereParams());
