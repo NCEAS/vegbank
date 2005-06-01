@@ -19,7 +19,7 @@ body {
 	margin: 0;
 	font: 10pt "Lucida Grande", LucidaGrande, Lucida, Helvetica, Arial, sans-serif;
     color: #333;
-    text-align: center;
+    /*  text-align: center; we don't need this.*/
 	background: #dfdfdf url(@images_link@bg_texture.jpg);
 }
 
@@ -125,6 +125,11 @@ GENERAL CLASSES
   text-align: left;
   width: 100%;
   clear: both;
+}
+
+.padded {
+	/* used for giving a little extra space around elements, sometimes needed in tutorial highlighting */
+	padding: 2px;
 }
 
 .red {

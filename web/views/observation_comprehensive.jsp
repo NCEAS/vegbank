@@ -44,8 +44,9 @@ function getHelpPageId() {
 
 <!-- start of plot & obs fields-->
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="2" style="clear: both; display: block;">
-<TR><TD width="55%" align="center" valign="top" id="tut_plotdetailleft"><!-- plot level info -->
-<table width="98%" class="leftrightborders" cellpadding="2"><!--each field, only write when HAS contents-->
+<TR><TD width="55%" valign="top" id="tut_plotdetailleft"><!-- plot level info -->
+<div class="padded">
+<table width="100%" class="leftrightborders" cellpadding="2"><!--each field, only write when HAS contents-->
 
     <tr><th class="major" colspan="2">
             <bean:write name="onerowofplot" property="authorplotcode"/>
@@ -98,7 +99,10 @@ function getHelpPageId() {
 <%@ include file="includeviews/sub_haddata.jsp" %>
 <!-- end of plot/obs fields -->
 </table>
-</TD><TD valign="top" align="center" id="tut_plotdetailplants"><!-- plants in this plot -->
+</div>
+</TD><TD valign="top" id="tut_plotdetailplants">
+<div class="padded">
+<!-- plants in this plot -->
 
 <!-- %@ include file="includeviews/sub_taxonobservation.jsp" %-->
 <!-- get params to pass if they are here -->
@@ -108,7 +112,7 @@ function getHelpPageId() {
 <!-- page requesting :  <bean:write name="requestedPageURL" /> --> 
 <bean:include id="taxonobs_page" page='<%= requestedPageURL %>' />
 <bean:write name="taxonobs_page" filter="false" />
-
+</div>
 </TD>
 </TR>
 <!-- obs contrib -->
