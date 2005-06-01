@@ -3,10 +3,10 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-05-19 01:27:02 $'
- *	'$Revision: 1.24 $'
- * 
+ *	'$Author: mlee $'
+ *	'$Date: 2005-06-01 08:04:21 $'
+ *	'$Revision: 1.25 $'
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -55,18 +55,18 @@ import org.vegbank.common.utility.DatabaseUtility;
 import org.vegbank.common.utility.QueryParameters;
 
 /**
- * Tag that queries the DB and puts a map or bean in the 
+ * Tag that queries the DB and puts a map or bean in the
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.24 $ $Date: 2005-05-19 01:27:02 $
+ * @version $Revision: 1.25 $ $Date: 2005-06-01 08:04:21 $
  */
 
 public class VegbankGetTag extends VegbankTag {
 
 	private static final Log log = LogFactory.getLog(VegbankGetTag.class);
 
-	private static ResourceBundle sqlResources = 
+	private static ResourceBundle sqlResources =
 			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 
     /**
@@ -107,17 +107,17 @@ public class VegbankGetTag extends VegbankTag {
 			log.debug("Calling gc.execute()");
             gc.setQueryParameters(new QueryParameters(this));
 			gc.execute(
-					(HttpServletRequest)pageContext.getRequest(), 
-					getSelect(), 
-					getWhere(), 
+					(HttpServletRequest)pageContext.getRequest(),
+					getSelect(),
+					getWhere(),
 					getBeanName(),
 					getOrderBy(),
 					getWparamArray());
 
-		} catch (Exception ex) { 
+		} catch (Exception ex) {
 			log.error("Problem running GenericCommand", ex);
 		}
-		
+
         // Continue processing this page
         return SKIP_BODY;
     }
@@ -133,7 +133,7 @@ public class VegbankGetTag extends VegbankTag {
 			//
 			// If the URL does not contain 'where' then set it
 			//
-			
+
 			String where = request.getParameter("where");
 			////////String where = getWhere();
 
@@ -225,7 +225,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String pageNumber;
 
@@ -250,7 +250,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String perPage;
 
@@ -275,7 +275,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String wparam = null;
 
@@ -356,7 +356,7 @@ public class VegbankGetTag extends VegbankTag {
 	}
 
     /**
-     * 
+     *
      */
 	protected String id;
 
@@ -369,13 +369,13 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected boolean pager = false;
 
     public boolean getPager() {
-		if (this.pager) { 
-            return true; 
+		if (this.pager) {
+            return true;
         }
 
         setPager(findAttribute("pager"));
@@ -391,7 +391,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String whereNumeric;
 
@@ -404,7 +404,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String whereNonNumeric;
 
@@ -417,7 +417,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected boolean xwhereSearch = false;
 
@@ -440,15 +440,15 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected boolean xwhereMatchAny = false;
 
     public boolean getXwhereMatchAny() {
 		log.debug("get xwhereMatchAny: " + xwhereMatchAny);
-		if (xwhereMatchAny) {
-			return true;
-		}
+	//	if (xwhereMatchAny) {
+	//		return true;
+	//	}
 
         setXwhereMatchAny(findAttribute("xwhereMatchAny"));
 		return this.xwhereMatchAny;
@@ -463,7 +463,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected boolean xwhereEnable = false;
 
@@ -484,7 +484,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String xwhereKey;
 
@@ -505,7 +505,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String xwhereParams;
 
@@ -523,7 +523,7 @@ public class VegbankGetTag extends VegbankTag {
         this.xwhereParams = s;
     }
 
-	
+
     /**
      * default: AND.
      */
@@ -542,7 +542,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String orderBy;
 
@@ -560,7 +560,7 @@ public class VegbankGetTag extends VegbankTag {
 
     /**
      *  Does NOT search scopes.
-     * 
+     *
      */
 	protected String save;
 
@@ -610,7 +610,7 @@ public class VegbankGetTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected boolean allowOrderBy = false;
 
@@ -635,7 +635,7 @@ public class VegbankGetTag extends VegbankTag {
 	/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
 	/**
-	 * @param 
+	 * @param
 	 */
 	/*
 	private String addPosixRegex(String s, String regexOp) {
@@ -645,25 +645,25 @@ public class VegbankGetTag extends VegbankTag {
 		boolean first = true;
 		boolean isAnd = regexOp.equals("");
 		if (isAnd) {
-			// final string will be 
+			// final string will be
 			// abc.*def.*ghi|ghi.*def.*abc
 			// which isn't right
 			regexOp = ".*";
 		}
 
 		while (st.hasMoreTokens()) {
-			if (first) { 
+			if (first) {
 				first = false;
-			} else { 
+			} else {
 				if (isAnd) {
-					appendix.insert(regexOp); 
+					appendix.insert(regexOp);
 				}
-				sb.append(regexOp); 
+				sb.append(regexOp);
 			}
 
 			next = st.nextToken();
 			if (isAnd) {
-				appendix.insert(next); 
+				appendix.insert(next);
 			}
 			sb.append(next);
 		}
