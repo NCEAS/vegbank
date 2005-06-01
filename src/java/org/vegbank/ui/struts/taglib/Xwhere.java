@@ -3,10 +3,10 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-05-05 20:22:31 $'
- *	'$Revision: 1.9 $'
- * 
+ *	'$Author: mlee $'
+ *	'$Date: 2005-06-01 08:43:58 $'
+ *	'$Revision: 1.10 $'
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -41,10 +41,10 @@ import org.vegbank.common.utility.DatabaseUtility;
 import org.vegbank.common.utility.CompositeRequestParamUtil;
 
 /**
- * 
+ *
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.9 $ $Date: 2005-05-05 20:22:31 $
+ * @version $Revision: 1.10 $ $Date: 2005-06-01 08:43:58 $
  */
 
 public class Xwhere {
@@ -52,7 +52,7 @@ public class Xwhere {
 	private static final Log log = LogFactory.getLog(Xwhere.class);
 	private static final String CRP_PARAM_DELIM = CompositeRequestParamUtil.CRP_PARAM_DELIM;
 
-	private static ResourceBundle sqlResources = 
+	private static ResourceBundle sqlResources =
 			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 	private ServletRequest request;
 	private VegbankGetTag getTag;
@@ -94,8 +94,8 @@ public class Xwhere {
 			while (ids.hasNext()) {
 
 				String id = (String)ids.next();
-				appendToClause(getXwhereKeySQL(id), 
-						(Object[])((Map)xwParams).get(id), 
+				appendToClause(getXwhereKeySQL(id),
+						(Object[])((Map)xwParams).get(id),
 						getXwhereGlue(id),
 						getXwhereSearch(id),
 						getXwhereMatchAny(id));
@@ -105,7 +105,7 @@ public class Xwhere {
 			log.debug("xwp is an ARRAY");
 			// An array is used with the xwKey directly
 			// It is one dimensional
-			appendToClause(getXwhereKeySQL(), (Object[])xwParams, 
+			appendToClause(getXwhereKeySQL(), (Object[])xwParams,
 					getXwhereGlue(), getXwhereSearch(), getXwhereMatchAny());
 		}
 
@@ -192,7 +192,7 @@ public class Xwhere {
 	/**
 	 * Gets an array of xwhereParam values, or an array of arrays.
 	 * Allows for composite request params up to two levels deep.
-	 * e.g. xwhereParams.0, xwhereParams.1, xwhereParams.2 or 
+	 * e.g. xwhereParams.0, xwhereParams.1, xwhereParams.2 or
 	 * xwhereParams.something.0, xwhereParams.something.1, etc. and
 	 * xwhereParams.another.0, xwhereParams.something.1 etc.
 	 *
@@ -226,9 +226,9 @@ public class Xwhere {
 				// e.g.  xwhereParams.country.0, xwhereParams.country.1
 				log.debug("nothing found at root; digging deeper...");
 				Map m = composUtil.getMap("xwhereParams");
-				if (m == null) { 
+				if (m == null) {
 					log.debug("no composite mappings for 'xwhereParams'");
-					return null; 
+					return null;
 				}
 
 				Map xwpMap = new HashMap();
@@ -263,10 +263,10 @@ public class Xwhere {
 	/**
 	 * Simple method for swapping params.
 	 * @param xwKeySQL The SQL fragment that has placeholders {0}
-	 * @param xwParams One dimensional array of strings.  If first 
+	 * @param xwParams One dimensional array of strings.  If first
 	 *  index is empty, doSwap returns "".
 	 */
-	private String doSwap(String xwKeySQL, Object[] xwParams, 
+	private String doSwap(String xwKeySQL, Object[] xwParams,
 			boolean xwSearch, boolean xwMatchAny) {
 
 		// TODO: watch out for ; delimited strings
@@ -274,7 +274,7 @@ public class Xwhere {
 		// record IDs or something.  Not terribly important now.
 
 		if (Utility.isStringNullOrEmpty(xwKeySQL)) {
-			//log.error("Can't swap into empty SQL template >> params: " + 
+			//log.error("Can't swap into empty SQL template >> params: " +
              //       Utility.arrayToCommaSeparatedString(xwParams));
 			return "";
 		}
@@ -328,16 +328,16 @@ public class Xwhere {
 	 * @param xwParams One dimensional array of strings
 	 * @param xwGlue to paste this fragment to the extant clause
 	 */
-	private void appendToClause(String xwKeySQL, Object[] xwParams, 
+	private void appendToClause(String xwKeySQL, Object[] xwParams,
 			String xwGlue, boolean xwSearch, boolean xwMatchAny) {
 
 		String swapped = doSwap(xwKeySQL, xwParams, xwSearch, xwMatchAny);
 		if (!Utility.isStringNullOrEmpty(swapped)) {
 			log.info("appending to xwClause: " + swapped);
 
-			if (this.xwhereClause == null) { 
+			if (this.xwhereClause == null) {
 				this.xwhereClause = swapped;
-			} else { 
+			} else {
 				this.xwhereClause += " " + xwGlue + " " + swapped;
 			}
 		}
@@ -356,7 +356,7 @@ public class Xwhere {
 	private String getXwhereKeySQL(String parent) {
 		return getXwhereValue("xwhereKey", parent, null, true);
 	}
-	 
+
 	private String getXwhereKeySQL(String grandParent, String parent) {
 		return getXwhereValue("xwhereKey", grandParent, parent, true);
 	}
@@ -388,7 +388,7 @@ public class Xwhere {
 		try {
 			xwParams = composUtil.getObjectArray("xwhereParams" + CRP_PARAM_DELIM + parent);
 		} catch (Exception ex) {
-			log.error("Problem getting xwhereParam for " + 
+			log.error("Problem getting xwhereParam for " +
 					parent + ": " + ex.getMessage());
 		}
 		return xwParams;
@@ -445,9 +445,9 @@ public class Xwhere {
 	/**
 	 * Workhorse.  Gets the xwhere value.
 	 */
-	private String getXwhereValue(String xwName, String grandParent, 
+	private String getXwhereValue(String xwName, String grandParent,
 			String parent, boolean isProp) {
-	
+
 		String xwv = "";
 		String path;
 		try {
@@ -464,10 +464,10 @@ public class Xwhere {
 					log.debug("getting " + xwName + CRP_PARAM_DELIM + grandParent.toLowerCase());
 					xwv = (String)(composUtil.getMap(xwName).get(grandParent.toLowerCase()));
 				}
-			} 
-			
-		} catch (Exception ex) { 
-			// fiddly dee 
+			}
+
+		} catch (Exception ex) {
+			// fiddly dee
 		}
 
 		if (Utility.isStringNullOrEmpty(xwv)) {
@@ -476,10 +476,10 @@ public class Xwhere {
 			xwv = getTag.findAttribute(xwName);
 		}
 
-		if (isProp && !Utility.isStringNullOrEmpty(xwv)) { 
+		if (isProp && !Utility.isStringNullOrEmpty(xwv)) {
 			return sqlResources.getString(xwv);
-		} else { 
-			return xwv; 
+		} else {
+			return xwv;
 		}
 	}
 
@@ -530,35 +530,61 @@ public class Xwhere {
 			return "";
 		}
 
-		StringTokenizer stWords = new StringTokenizer((String)params[0], " ");
-		int numWords = stWords.countTokens();
+        //this is where the multiple words get split into different clauses:
+        // idea here is to parse based on whitespace and quotes, but once you start parsing by quotes,
+        // ignore whitespace until you hit another quote.  nextToken(string) is used to put a new delimiter in to flip them.
+
+         String currentDelims = fWHITESPACE_AND_QUOTES;
+		 StringTokenizer stWords = new StringTokenizer((String)params[0], currentDelims, true);
+
+	    int numWords = stWords.countTokens();
 
 		MessageFormat format = new MessageFormat(tpl);
 		//String[] arr = new String[1];
 
-		// special handling for AND
-		if (numWords > 1 && !matchAny) {
+        //MTL : easier to do AND and OR using the same loop, instead of replacing " " with "|".  Hope performance is ok.
+
+		//if (numWords > 1 && !matchAny) {
 			StringBuffer sb = new StringBuffer(numWords * ((String)params[0]).length() * 2);
 
-			// repeat the swapped tpl for each word in order to match all words
 			boolean first = true;
+			String token = null;
 			while (stWords.hasMoreTokens()) {
-				if (first) { first = false;
-				} else { sb.append(" AND "); }
+				token = stWords.nextToken(currentDelims);
+				if ( !isDoubleQuote(token) ) {
+				  if (textHasContent(token)) {
+				      // if it doesn't have content, don't worry about it
+	   				  // repeat the swapped tpl for each word in order to match all words
 
-				params[0] = DatabaseUtility.makeSQLSafe(stWords.nextToken(), true);
-				log.debug("==-----formatting with: " + params[0]);
-				sb.append(format.format((String[])params));
+					  if (first) { first = false;
+					  } else {
+						    //MTL : must do AND and OR the same way for sanity's sake.  Hope performance is ok.
+						    // this could be handled by string defined before this loop.
+						    if ( matchAny )  {
+										sb.append(" OR ");
+									} else {
+										sb.append(" AND ");
+		                     }
+				      }
+					  params[0] = DatabaseUtility.makeSQLSafe(token, true);
+					  log.debug("==-----formatting with: " + params[0]);
+					  sb.append(format.format((String[])params));
+			      }
+				} else {
+				  // flip delimiters, b/c delim is quote
+				  currentDelims = flipDelimiters(currentDelims);
+                }
+
 			}
 
 			return sb.toString();
 
-		} else {
+		//} else {
 			// matching any word (OR) is easy
-			log.debug("Just one word or ANY match");
-			params[0] = DatabaseUtility.makeSQLSafe(((String)params[0]).replace(' ', '|'), true);
-			return format.format((String[])params);
-		}
+		//	log.debug("Just one word or ANY match");
+		//	params[0] = DatabaseUtility.makeSQLSafe(((String)params[0]).replace(' ', '|'), true);
+		//	return format.format((String[])params);
+		//}
 	}
 
 	/**
@@ -577,4 +603,53 @@ public class Xwhere {
 		}
 		return str;
 	}
+
+/*****************************************************************************************************
+* Adapted the following from (as well as bit above about flipping delimiters):
+* http://www.javapractices.com/Topic87.cjp
+* Thanks.  MTL 31-May-2005
+*****************************************************************************************************/
+
+  /// PRIVATE /////
+  private String fSearchText;
+  private static final String fDOUBLE_QUOTE = "\"";
+
+  //the parser flips between these two sets of delimiters
+  private static final String fWHITESPACE_AND_QUOTES = " \t\r\n\"";
+  private static final String fQUOTES_ONLY ="\"";
+
+  /**
+  * Use to determine if a particular word entered in the
+  * search box should be discarded from the search.
+  */
+
+  private boolean textHasContent(String aText) {
+    return (aText != null) && (!aText.trim().equals(""));
+  }
+
+  private boolean addNonTrivialWordToResult( String aToken ){
+    return  ( textHasContent(aToken) ) ;
+  }
+
+  private boolean isDoubleQuote( String aToken ){
+    return aToken.equals(fDOUBLE_QUOTE);
+  }
+
+  private String flipDelimiters( String aCurrentDelims ) {
+    String result = null;
+    if ( aCurrentDelims.equals(fWHITESPACE_AND_QUOTES) ) {
+      result = fQUOTES_ONLY;
+    }
+    else {
+      result = fWHITESPACE_AND_QUOTES;
+    }
+    return result;
+  }
+
+  /*****************************************************************************************************/
+  /*           END of 31-May-2005 MTL adaptation from http://www.javapractices.com/Topic87.cjp         */
+  /*****************************************************************************************************/
+
+
+
 }
