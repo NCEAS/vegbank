@@ -1,7 +1,7 @@
 #!/bin/sh 
 #
-# Takes a database name and a database create script name as parameters.
-# Drops the database and rebuilds it using the sql script specified.
+# takes a date and database (and optionally a second date) and finds differences in db records over time
+# but, dba_current-table-stats.sql must be run regularly for it to work
 #
 # Currently Postgres specific.
 #
