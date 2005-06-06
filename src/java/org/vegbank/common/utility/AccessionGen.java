@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2005-06-06 18:55:34 $'
- *	'$Revision: 1.19 $'
+ *	'$Date: 2005-06-06 19:28:44 $'
+ *	'$Revision: 1.20 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -171,6 +171,7 @@ public class AccessionGen {
 		// get the confirm type
 		String confirmType = res.getString("confirm.type." + table).toUpperCase();
 		// This is either WHERE or AND depending on if where is used in the SQL already
+		// revised, always uses AND
 		String conjunction = "";
 		if (confirmType.equals("JOIN") )
 		{
@@ -178,7 +179,7 @@ public class AccessionGen {
 		}
 		else
 		{
-			conjunction = " WHERE ";
+			conjunction = " AND ";
 		}
 
 		query += conjunction + Utility.getPKNameFromTableName(table) + " =" + pk;
@@ -351,6 +352,13 @@ public class AccessionGen {
 		if (query == null) {
 			return false;
 		}
+
+		// do not need to wait to filter out non-null accessionCode records if overwriteExtant is false
+		if (!overwriteExtant) {
+			// preserve extant codes: WHERE is always part of SQL.
+			query = query + " AND accessioncode IS NULL";
+		}
+
 
 		// count records
 		String sqlFrom = query.substring( query.indexOf("FROM") );
@@ -536,16 +544,16 @@ public class AccessionGen {
 
 		// get the confirm type
 		String confirmType = res.getString("confirm.type." + tableName).toUpperCase();
-
+        //WHERE clause always appended to make other criteria easier to post, use " AND " + criteria.
 		if (confirmType.equals("BASIC")) {
 			// select from same table
-			query = "SELECT " + pKName + "," + confirmField + " FROM " + tableName;
+			query = "SELECT " + pKName + "," + confirmField + " FROM " + tableName + " WHERE true ";
 
 		} else if (confirmType.equals("DUAL")) {
 			// if value exists, use it, else use secondary field
 			String confirmField2 = res.getString("confirm." + tableName + ".2");
 			query  = "SELECT " + pKName + "," + confirmField + "," +
-					confirmField2 + " FROM " + tableName;
+					confirmField2 + " FROM " + tableName + " WHERE true ";
 
 		} else if (confirmType.equals("JOIN")) {
 			// EXAMPLE QUERY:
