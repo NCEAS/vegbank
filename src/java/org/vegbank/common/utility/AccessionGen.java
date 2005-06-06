@@ -3,10 +3,10 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:11:06 $'
- *	'$Revision: 1.18 $'
- * 
+ *	'$Author: mlee $'
+ *	'$Date: 2005-06-06 18:55:34 $'
+ *	'$Revision: 1.19 $'
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -64,24 +64,24 @@ public class AccessionGen {
 		init();
         setDbCode(null);
 	}
-	
+
 	public AccessionGen(DBConnection dbconn) {
 		init();
 		this.conn = dbconn;
         dbCode = Utility.getAccessionPrefix();
 	}
-	
+
 	/**
 	 * Hit some problems using this class regarding the connection
 	 * not being initialized.
-	 * Allowing it to be passed in via the constructor if need be. * 
+	 * Allowing it to be passed in via the constructor if need be. *
 	 */
 	public AccessionGen( DBConnection dbconn, String dbCode) {
 		init();
 		this.conn = dbconn;
 		this.dbCode = dbCode;
 	}
-	
+
 	private void init()
 	{
 		res = ResourceBundle.getBundle("accession");
@@ -92,7 +92,7 @@ public class AccessionGen {
 		for (Enumeration e = res.getKeys(); e.hasMoreElements() ;) {
 			key = (String)e.nextElement();
 			if (key.startsWith("abbr.")) {
-				tableCodes.put(key.substring(5).toLowerCase(), 
+				tableCodes.put(key.substring(5).toLowerCase(),
                         res.getString(key));
 			}
 		}
@@ -108,7 +108,7 @@ public class AccessionGen {
 	/**
 	 * Generates an accession code. DB.Tbl.PK#.Confirm  ex:  VB.TC.126.AKMP
 	 * @param db - database code
-	 * @param table - full name of the table to be abbreviated  
+	 * @param table - full name of the table to be abbreviated
 	 * @param pk - primary key
 	 */
 	public String getAccession(String table, long pk) throws SQLException {
@@ -155,8 +155,8 @@ public class AccessionGen {
 	}
 
 	/**
-	 * Generates a confirmation code. 
-	 * @param table - full name of the table 
+	 * Generates a confirmation code.
+	 * @param table - full name of the table
 	 * @param pk - primary key from given table
 	 */
 	public String getConfirmation(String table, String pk) throws SQLException {
@@ -167,7 +167,7 @@ public class AccessionGen {
 		if (query == null) {
 			return null;
 		}
-		
+
 		// get the confirm type
 		String confirmType = res.getString("confirm.type." + table).toUpperCase();
 		// This is either WHERE or AND depending on if where is used in the SQL already
@@ -180,7 +180,7 @@ public class AccessionGen {
 		{
 			conjunction = " WHERE ";
 		}
-				
+
 		query += conjunction + Utility.getPKNameFromTableName(table) + " =" + pk;
 		//log.debug("confirmation query ===> " + query);
         Statement stmt = conn.createStatement();
@@ -201,7 +201,7 @@ public class AccessionGen {
                 tmpConfirm = formatConfirmCode(tmpConfirm);
             }
 		}
-        
+
         stmt.close();
         rs.close();
 
@@ -253,7 +253,7 @@ public class AccessionGen {
 				}
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -328,7 +328,7 @@ public class AccessionGen {
 	}
 
 	/**
-	 * Updates a given table. 
+	 * Updates a given table.
 	 *
 	 * @return true if updates were all successful
 	 */
@@ -336,13 +336,13 @@ public class AccessionGen {
 		System.out.println("Updating accession codes in " + tableName);
 
 		long count=0, tmpId;
-		
+
 
 		String baseAC, tmpConfirm;
 		StringBuffer tmpAC = null;
 		Statement stmt = conn.createStatement();
 		ResultSet rs;
-			
+
 		// select the proper value to use as a confirmation code
 		tableName = tableName.toLowerCase();
 
@@ -377,7 +377,7 @@ public class AccessionGen {
 
 		PreparedStatement pstmt = getUpdatePreparedStatement(tableName);
 		baseAC = getBaseAccessionCode(tableName);
-		
+
 		// update!
 		conn.setAutoCommit(false);
 		//try {
@@ -393,6 +393,11 @@ public class AccessionGen {
 				if (tmpConfirm == null) {
 					tmpConfirm = rs.getString(3);
 				}
+
+               //if STILL null, then get default (MTL Jun 6 2005)
+               	if (tmpConfirm == null) {
+               		tmpConfirm = CONFIRM_DEFAULT;
+               	}
 
 				// format
 				tmpConfirm = formatConfirmCode(tmpConfirm);
@@ -414,13 +419,13 @@ public class AccessionGen {
 	}
 
 
-	
+
 	/**
 	 * Utility that updates a discrete set of rows with AccessionCodes.
 	 * It takes a HashMap of tableNames.
-	 * Each tableName is associated with a List of primary keys for the 
+	 * Each tableName is associated with a List of primary keys for the
 	 * specific rows to be updated with newly generated AccessionCodes.
-	 * 
+	 *
 	 * @param tablesAndKeys
 	 * @return List of AccessionCodes for root entities
 	 * @throws SQLException
@@ -434,24 +439,24 @@ public class AccessionGen {
 		Iterator it = tablesAndKeys.keySet().iterator();
 		while (it.hasNext()) {
 			tableName = (String)it.next();
-	
+
 			// Only deal with tableNames that are defined in the property file
 			// i.e. filter junk and tables without accessionCode rules
             // Loop through all so that cases match
             if (hasAccessionCode(tableName)) {
 
                 List keys = (List)tablesAndKeys.get(tableName);
-        
+
                 if (keys != null) {
                     // Add an AccessionCode for each Key
                     PreparedStatement pstmt = this.getUpdatePreparedStatement(tableName);
-            
+
                     Iterator kit = keys.iterator();
                     while (kit.hasNext()) {
                         Long key = (Long)kit.next();
                         String baseAC = this.getBaseAccessionCode(tableName);
                         String confirmCode = getConfirmation(tableName, key.toString());
-                
+
                         String accessionCode = this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt);
                         log.debug("updated accessionCode: " + accessionCode);
                         accessionCodeList.add(accessionCode);
@@ -486,8 +491,8 @@ public class AccessionGen {
 
 		// prepare the update statement
 		String pKName = Utility.getPKNameFromTableName(tableName);
-		
-		String update = "UPDATE " + tableName + " SET accessioncode = ? WHERE " + 
+
+		String update = "UPDATE " + tableName + " SET accessioncode = ? WHERE " +
 				pKName + " = ?";
 
 		if (!overwriteExtant) {
@@ -524,7 +529,7 @@ public class AccessionGen {
 		String query = null;
 		String confirmField = res.getString("confirm." + tableName);
 		String pKName = Utility.getPKNameFromTableName(tableName);
-		
+
 		if (confirmField == null || confirmField.equals("")) {
 			return null;
 		}
@@ -539,16 +544,16 @@ public class AccessionGen {
 		} else if (confirmType.equals("DUAL")) {
 			// if value exists, use it, else use secondary field
 			String confirmField2 = res.getString("confirm." + tableName + ".2");
-			query  = "SELECT " + pKName + "," + confirmField + "," + 
+			query  = "SELECT " + pKName + "," + confirmField + "," +
 					confirmField2 + " FROM " + tableName;
 
 		} else if (confirmType.equals("JOIN")) {
 			// EXAMPLE QUERY:
-			// SELECT c.commconcept_id, n.commname 
-			// FROM commname n, commconcept c 
+			// SELECT c.commconcept_id, n.commname
+			// FROM commname n, commconcept c
 			// WHERE c.commname_id=n.commname_id;
 			query = "SELECT c." +pKName + ", n." + confirmField +
-					" FROM " + tableName + " c, " + confirmField + " n WHERE c." + 
+					" FROM " + tableName + " c, " + confirmField + " n WHERE c." +
 					confirmField + "_id=n." + confirmField + "_id";
 		}
 
@@ -612,7 +617,7 @@ public class AccessionGen {
 		if (args.length < 1) {
 			ag.usage("Database name is required to run.");
 			System.exit(0);
-		} 
+		}
 
 		if (args.length < 2) { // dbCode
 			dbCode = "VB";
