@@ -41,50 +41,6 @@ update plantUsage SET party_ID = (select plantstatus.party_ID from plantStatus w
      
      
 
--- UPDATE to observation.topTaxon#[Name|cover]
--- MTL : 11/11/04: updates only when topTaxon1Name is null, must be done in this order
--- rationale being that we don't want to ever update part of an observaiton, only the whole observation or nothing
--- this is why 2 3 4 5 1 is the order of updating
-
-UPDATE observation set topTaxon2Name = 
-(SELECT authorPlantName  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 1) ;
-
-UPDATE observation set topTaxon2Cover = 
-(SELECT cover  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 1) ;
-
---
-
-UPDATE observation set topTaxon3Name = 
-(SELECT authorPlantName  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 2) ;
-
-UPDATE observation set topTaxon3Cover = 
-(SELECT cover  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 2) ;
-
---
-
-UPDATE observation set topTaxon4Name = 
-(SELECT authorPlantName  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 3) ;
-
-UPDATE observation set topTaxon4Cover = 
-(SELECT cover  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 3) ;
-
---
-
-UPDATE observation set topTaxon5Name = 
-(SELECT authorPlantName  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 4) ;
-
-UPDATE observation set topTaxon5Cover = 
-(SELECT cover  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 4) ;
-
-
-
-
-UPDATE observation set topTaxon1Cover = 
-(SELECT cover  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 0) ;
-
-UPDATE observation set topTaxon1Name = 
-(SELECT authorPlantName  FROM taxonObservation as tob,  taxonImportance as ti WHERE tob.taxonObservation_ID=ti.taxonObservation_ID and stratum_id  is null and cover is not null and authorPlantName is not null AND  tob.observation_ID=observation.observation_ID order by cover DESC limit 1 OFFSET 0) ;
-
 update party set partypublic=false;
 update party set partypublic=true where party_ID in (select party_ID from view_party_public);
 
