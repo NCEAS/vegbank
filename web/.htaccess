@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.13 2005-05-06 03:26:14 mlee Exp $
+# $Id: .htaccess,v 1.14 2005-06-13 23:51:41 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -30,6 +30,14 @@ RewriteRule ^forgotpassword$  /vegbank/forms/EmailPassword.jsp [NC,QSA,L]
 
 
 ## /get
+# plots are special case:
+RewriteCond %{REQUEST_URI}  ^/get/(.*)/plot/([0-9,]+)
+RewriteRule ^get/(.*)/plot/([0-9,]+)      @server_address@/vegbank/GenericDispatcher.do?command=Dispatch&view=$1&entity=observation&params=$2&where=where_plotplot_pk   [NC,QSA,L]
+#plots by accessioncode
+RewriteCond %{REQUEST_URI}  ^/get/(.*)/plot/(.*)
+RewriteRule ^get/(.*)/plot/(.*)      @server_address@/vegbank/GenericDispatcher.do?command=Dispatch&view=$1&entity=observation&params=$2&where=where_plot_ac   [NC,QSA,L]
+
+
 RewriteCond %{REQUEST_URI}  ^/get/(.*)/(.*)/(.*)
 RewriteRule ^get/(.*)/(.*)/(.*)      @server_address@/vegbank/GenericDispatcher.do?command=Dispatch&view=$1&entity=$2&params=$3   [NC,QSA,L]
 
