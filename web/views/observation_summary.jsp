@@ -279,20 +279,52 @@ Plot #<%= rowIndex++ %>
 
 <!-- methods -->
 <td nowrap="nowrap" class='largefield <bean:write name="show_covermeth" ignore="true" /><bean:write name="show_stratummeth" ignore="true" /><bean:write name="show_project" ignore="true" />hidden'>
+   
+   <!-- default values in case the translation is empty -->
+   <bean:define id="cvr_trunc" value="[?]" />
+   <bean:define id="str_trunc" value="[?]" />
+   <bean:define id="prj_trunc" value="[?]" />
+   
    <!-- PLEASE trim strings to < 25 chars -->
+   <logic:notEmpty name="onerowofobservation" property="covermethod_id_transl">
     <bean:define id="cvr_trunc"><bean:write name="onerowofobservation" property="covermethod_id_transl" /></bean:define>
     <% if ( cvr_trunc.length() > 25 ) { cvr_trunc = cvr_trunc.substring(0,22) + "..." ; } %>
-    
+   </logic:notEmpty>
+   <logic:notEmpty name="onerowofobservation" property="stratummethod_id_transl">
     <bean:define id="str_trunc"><bean:write name="onerowofobservation" property="stratummethod_id_transl" /></bean:define>
     <% if ( str_trunc.length() > 25 ) { str_trunc = str_trunc.substring(0,22) + "..." ; } %>
-    
+   </logic:notEmpty> 
+   <logic:notEmpty name="onerowofobservation" property="project_id_transl">
     <bean:define id="prj_trunc"><bean:write name="onerowofobservation" property="project_id_transl" /></bean:define>
     <% if ( prj_trunc.length() > 25 ) { prj_trunc = prj_trunc.substring(0,22) + "..." ; } %>
+   </logic:notEmpty> 
     
-    
- <span class='<bean:write name="show_covermeth" ignore="true" />hidden'>   Cvr: <a href='@get_link@std/covermethod/<bean:write name="onerowofobservation" property="covermethod_id" />'><%= cvr_trunc %></a><br/></span>
- <span class='<bean:write name="show_stratummeth" ignore="true" />hidden'>   Str: <a href='@get_link@std/stratummethod/<bean:write name="onerowofobservation" property="stratummethod_id" />'><%= str_trunc %></a><br/></span>
- <span class='<bean:write name="show_project" ignore="true" />hidden'>   Prj: <a href='@get_link@std/project/<bean:write name="onerowofobservation" property="project_id" />'><%= prj_trunc %></a></span>
+ <span class='<bean:write name="show_covermeth" ignore="true" />hidden'>   Cvr: 
+ <logic:notEmpty name="onerowofobservation" property="covermethod_id">
+   <a href='@get_link@std/covermethod/<bean:write name="onerowofobservation" property="covermethod_id" />'><%= cvr_trunc %></a>
+ </logic:notEmpty>
+ <logic:empty name="onerowofobservation" property="covermethod_id">
+  [none]
+ </logic:empty>
+ <br/></span>
+ <span class='<bean:write name="show_stratummeth" ignore="true" />hidden'>   Str: 
+ <logic:notEmpty name="onerowofobservation" property="stratummethod_id">
+   <a href='@get_link@std/stratummethod/<bean:write name="onerowofobservation" property="stratummethod_id" />'><%= str_trunc %></a>
+ </logic:notEmpty>
+ <logic:empty name="onerowofobservation" property="stratummethod_id">
+   [none]
+ </logic:empty>
+ 
+ <br/></span>
+ <span class='<bean:write name="show_project" ignore="true" />hidden'>   Prj: 
+ <logic:notEmpty name="onerowofobservation" property="project_id">
+   <a href='@get_link@std/project/<bean:write name="onerowofobservation" property="project_id"  ignore="true"/>'><%= prj_trunc %></a>
+ </logic:notEmpty>
+ <logic:empty name="onerowofobservation" property="project_id">
+    [none]
+  </logic:empty>
+ 
+ </span>
 </td>
 <!-- plants in this plot -->
  <td class='largefield <bean:write name="show_plants" ignore="true" />hidden'>
