@@ -12,7 +12,8 @@
   <bean:define id="searchType" value="Simple" />
   <bean:define id="simpleHide" value="hidden" /><!-- hide some things. -->
   <bean:define id="simpleHideReverse" value="show" /><!-- show some only for simple, like more options -->
-  <bean:define id="selectMult"></bean:define> <!-- make picklists only size 1 when simple mode -->
+  <!-- cannot define empty length strings, and jsp is starting to crack down on that: -->
+  <bean:define id="selectMult"> ignorethisatt="true"</bean:define> <!-- make picklists only size 1 when simple mode -->
   <bean:define id="stateListSize">1</bean:define>
   <bean:define id="countryListSize">1</bean:define>
 </logic:present>
