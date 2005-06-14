@@ -131,6 +131,24 @@ function setQueryText() {
                          {
                             text = text + strSep + " Area no more than " + themaxarea ;
                  }
+       
+        theplotcode = document.plotqueryform.xwhereParams_plotcode_0.value ;
+             if ( theplotcode !="" && theplotcode !=null )
+               {
+                 text = text + strSep + " Author's Plot Code is " + theplotcode ;       
+               }
+        
+       
+       
+            if ( document.plotqueryform.cust_includesubplots.checked)
+               {
+                 text = text + strSep + " including subplots " ;
+                 /*change xwhere Key: */
+                   document.plotqueryform.xwhereKey_subplots.value="xwhere_anything" ;
+               } else {
+                 text = text + strSep + " NOT including subplots " ;
+                  document.plotqueryform.xwhereKey_subplots.value="xwhere_null" ;
+               }
     
        /* value picklists, not PK */
     
@@ -163,7 +181,9 @@ function setQueryText() {
                    {
                       text = text + strSep + " rocktype is " + therocktype;
                    }
-                   
+            
+
+     
             
             /* picklists that have different values (PKs) rather than text, take text */
            
@@ -252,6 +272,7 @@ function setQueryText() {
 <logic:present parameter="show_area"><bean:define id="show_area" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_covermeth"><bean:define id="show_covermeth" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_stratummeth"><bean:define id="show_stratummeth" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_plotcode"><bean:define id="show_plotcode" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_project"><bean:define id="show_project" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_plants"><bean:define id="show_plants" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_comms"><bean:define id="show_comms" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
@@ -348,6 +369,7 @@ function setQueryText() {
 	  <logic:present name="show_area"><input type="checkbox" name="show_area" checked="checked" />Plot Size<br/></logic:present>
 	  <logic:present name="show_covermeth"><input type="checkbox" name="show_covermeth" checked="checked" />Cover Method<br/></logic:present>
 	  <logic:present name="show_stratummeth"><input type="checkbox" name="show_stratummeth" checked="checked" />Stratum Method<br/></logic:present>
+            <logic:present name="show_plotcode"><input type="checkbox" name="show_plotcode" checked="checked" />Author's Plot Code<br/></logic:present>
 	  <logic:present name="show_project"><input type="checkbox" name="show_project" checked="checked" />Project<br/></logic:present>
 	  <logic:present name="show_plants"><input type="checkbox" name="show_plants" checked="checked" />Plants within the Plot<br/></logic:present>
       <logic:present name="show_comms"><input type="checkbox" name="show_comms" checked="checked" />Community Classification<br/></logic:present>
@@ -369,6 +391,7 @@ function setQueryText() {
 	  <logic:notPresent name="show_area"><input type="checkbox" name="show_area"  />Plot Size<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_covermeth"><input type="checkbox" name="show_covermeth"  />Cover Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_stratummeth"><input type="checkbox" name="show_stratummeth"  />Stratum Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+            <logic:notPresent name="show_plotcode"><input type="checkbox" name="show_plotcode" />Author's Plot Code<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_project"><input type="checkbox" name="show_project"  />Project<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_plants"><input type="checkbox" name="show_plants"  />Plants within the Plot<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_comms"><input type="checkbox" name="show_comms"  />Community Classification<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
@@ -442,6 +465,7 @@ function setQueryText() {
 		  <logic:present name="show_area"><input type="hidden" name="show_area" value="on" /></logic:present>
 		  <logic:present name="show_covermeth"><input type="hidden" name="show_covermeth" value="on" /></logic:present>
 		  <logic:present name="show_stratummeth"><input type="hidden" name="show_stratummeth" value="on" /></logic:present>
+                      <logic:present name="show_plotcode"><input type="hidden" name="show_plotcode" value="on" /></logic:present>
 		  <logic:present name="show_project"><input type="hidden" name="show_project" value="on" /></logic:present>
 		  <logic:present name="show_plants"><input type="hidden" name="show_plants" value="on" /></logic:present>
 	      <logic:present name="show_comms"><input type="hidden" name="show_comms" value="on" /></logic:present>
@@ -913,12 +937,14 @@ function setQueryText() {
 	
 	
 	  <bean:define id="hideCurr" value="show" />
-	  		    <logic:notPresent name="show_covermeth">
-	  		      <logic:notPresent name="show_stratummeth">
-	  		        <logic:notPresent name="show_project">
-	  	     	          <bean:define id="hideCurr" value="hidden" />
-	  		        </logic:notPresent>
-	  		      </logic:notPresent>
+	  	        <logic:notPresent name="show_covermeth">
+	  		<logic:notPresent name="show_stratummeth">
+	  		  <logic:notPresent name="show_project">
+                                  <logic:notPresent name="show_plotcode">
+	  	          	   <bean:define id="hideCurr" value="hidden" />
+                    	    </logic:notPresent>                    
+	  		  </logic:notPresent>
+	  		</logic:notPresent>
 	  	        </logic:notPresent> 
 	  	    
 	    <DIV id="groupDEF" class='<bean:write name="hideCurr" />'>
@@ -930,8 +956,8 @@ function setQueryText() {
 	   </p>
 	
 	<bean:define id="hideCurr" value="show" />
-		  		    <logic:notPresent name="show_covermeth">
-		  		             <bean:define id="hideCurr" value="hidden" />
+		        <logic:notPresent name="show_covermeth">
+		          <bean:define id="hideCurr" value="hidden" />
        	  	        </logic:notPresent>
 	<p class='<bean:write name="hideCurr" />'>Cover Method Name:<br/>
                 <input type="hidden" name="xwhereKey_covermethod" value="xwhere_in" />
@@ -948,10 +974,10 @@ function setQueryText() {
               
 		      </select>
 	    </p>
-	    <bean:define id="hideCurr" value="show" />
-				  		    <logic:notPresent name="show_stratummeth">
-				  		             <bean:define id="hideCurr" value="hidden" />
-       	  	        </logic:notPresent>
+	      <bean:define id="hideCurr" value="show" />
+		<logic:notPresent name="show_stratummeth">
+		  <bean:define id="hideCurr" value="hidden" />
+       	  	</logic:notPresent>
 	      <p class='<bean:write name="hideCurr" />'>Stratum Method Name:<br/>
 	      
               <input type="hidden" name="xwhereKey_stratummethod" value="xwhere_in" />
@@ -968,12 +994,46 @@ function setQueryText() {
 		     </select>
 	      </p>
 	    
-	    
+	  <!-- start new one: plotcode -->
+                <bean:define id="hideCurr" value="show" />
+		<logic:notPresent name="show_plotcode">
+		  <bean:define id="hideCurr" value="hidden" />
+       	  	</logic:notPresent>
+	      <p class='<bean:write name="hideCurr" />'>Author's Plot Code:<br/>
+	      <span class="instructions">Enter a plot code or part of a plot code 
+                    of the plot(s) you are searching for: <strong>Use % for the wildcard</strong></span><br/>  
+                <input type="hidden" name="xwhereKey_plotcode" value="xwhere_ilike" />
+                <input type="hidden" name="xwhereParams_plotcode_1" value="authorplotcode" />
+                              
+                <input type="text" name="xwhereParams_plotcode_0" />
+        
+                
+	      </p>
+
+            <!-- end new one : plotcode -->  
+
+	  <!-- start new one: subplots -->
+                <bean:define id="hideCurr" value="show" />
+		<logic:notPresent name="show_plotcode">
+		  <bean:define id="hideCurr" value="hidden" />
+       	  	</logic:notPresent>
+	      <p class='<bean:write name="hideCurr" />'>Include subplots in the search? <br/>
+	      <span class="instructions">Check this box to include subplots in your search.  If you leave it
+                unchecked, then no subplots will be part of the results.</span><br/>  
+                <input type="hidden" name="xwhereKey_subplots" value="" /><!-- the javascript sets this xwhereKey to xwhere_notnull if checked -->
+                <input type="hidden" name="xwhereParams_subplots_0" value="true" /><!-- needed b/c 0 is wrapped in quotes -->                
+                <input type="hidden" name="xwhereParams_subplots_1" value="plot.parent_id" />
+                
+                <input type="checkbox" name="cust_includesubplots" />
+                
+	      </p>
+
+            <!-- end new one : subplots --> 
 	   
 	    <bean:define id="hideCurr" value="show" />
-				  		    <logic:notPresent name="show_project">
-				  		             <bean:define id="hideCurr" value="hidden" />
-       	  	        </logic:notPresent>
+		    <logic:notPresent name="show_project">
+		        <bean:define id="hideCurr" value="hidden" />
+       	  	    </logic:notPresent>
 	      <p class='<bean:write name="hideCurr" />'>Project Name:<br/>
 	     
               <input type="hidden" name="xwhereKey_project" value="xwhere_in" />
