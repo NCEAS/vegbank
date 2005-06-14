@@ -61,6 +61,16 @@ function getHelpPageId() {
 <%@ include file="autogen/plot_plotidlong_data.jsp" %>         
 <%@ include file="autogen/observation_plotidlong_data.jsp" %>
 <%@ include file="includeviews/sub_haddata.jsp" %>
+<!-- custom, show children if there are any -->
+ <logic:greaterThan name="onerowofplot" property="countchildplots" value="0">
+   <tr class="@nextcolorclass@"><td class="datalabel">Has Sub Plots</td>
+     <td>
+       <a href="@get_link@summary/observation/<bean:write name='onerowofplot' property='plot_id' />?where=where_plot_childrenof">
+         <bean:write name="onerowofplot" property="countchildplots" /> plot(s)
+       </a>
+     </td>
+   </tr>
+ </logic:greaterThan>
 <tr><th>Location Fields:</th><th>&nbsp;</th></tr>
 <bean:define id="hadData" value="false" /> 
 <%@ include file="autogen/plot_plotloclong_data.jsp" %>
