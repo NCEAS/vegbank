@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-12-06 18:49:35 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2005-06-15 22:54:58 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.Utility;
  * Abstract base class tag.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.6 $ $Date: 2004-12-06 18:49:35 $
+ * @version $Revision: 1.7 $ $Date: 2005-06-15 22:54:58 $
  */
 
 public abstract class VegbankTag extends TagSupport {
@@ -74,7 +74,9 @@ public abstract class VegbankTag extends TagSupport {
 
 
 	/**
-	 *
+	 * Check the request for the given attribute.  If not found, 
+     * then try to find the given attribName in other scopes.
+     * @return value of given attribute, or empty string if not found
 	 */
     protected String findAttribute(String attribName) {
         String attribValue;
