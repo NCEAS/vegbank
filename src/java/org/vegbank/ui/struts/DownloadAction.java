@@ -34,8 +34,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-24 04:31:04 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2005-06-15 22:55:39 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,9 +75,12 @@ public class DownloadAction extends Action
 	// Response content Types
 	private static final String ZIP_CONTENT_TYPE = "application/x-zip";
 	private static final String DOWNLOAD_CONTENT_TYPE = "application/x-zip";
-	public static final String EXPORT_CHARSET = "UTF-16";
-	private static final String VEGBRANCH_CONTENT_TYPE = "text/text; charset=" + EXPORT_CHARSET;
-	private static final String VEGBRANCH_ZIP_CONTENT_TYPE = "application/x-zip; charset=" + EXPORT_CHARSET;
+    public static final String EXPORT_CHARSET = "UTF-16";
+	public static final String VEGBRANCH_CHARSET = "UTF-16";
+	public static final String CSV_CHARSET = "LATIN1";
+	public static final String ZIP_CHARSET = "UTF-8";
+	private static final String VEGBRANCH_CONTENT_TYPE = "text/text; charset=" + VEGBRANCH_CHARSET;
+	private static final String VEGBRANCH_ZIP_CONTENT_TYPE = "application/x-zip; charset=" + ZIP_CHARSET;
 
 	// Resource paths
 	private static ResourceBundle res = ResourceBundle.getBundle("vegbank");
@@ -227,7 +230,7 @@ public class DownloadAction extends Action
 					transformXML transformer = new transformXML();
 					//////// Get as string, not UTF-16
 					vegbranchCSV = transformer.getTransformedFromString(xml, VEGBRANCH_XSL_PATH);
-					
+
 					// use a writer
 					//Writer writer = new Writer();
 					//transformer.getTransformedFromString(xml, VEGBRANCH_XSL_PATH, writer);
@@ -262,12 +265,12 @@ public class DownloadAction extends Action
 					// TODO: Get the OS of user if possible and return a native file	
 					// For now use DOS style, cause those idiots would freak with anything else ;)					
 					log.debug("Zipping VegbranchImport.zip");
-					ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS, EXPORT_CHARSET);
+					ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS, ZIP_CHARSET);
 					/////////////////
 
 				} else {
 					this.initResponseForFileDownload( response, "vegbranch_import.csv", VEGBRANCH_CONTENT_TYPE);
-					//response.setCharacterEncoding(EXPORT_CHARSET);
+					//response.setCharacterEncoding(VEGBRANCH_CHARSET);
 					this.sendFileToBrowser( vegbranchCSV , response);
 
 				}
@@ -379,7 +382,9 @@ public class DownloadAction extends Action
 		    sb.append(line).append("\n");
         }
 
-        return sb.toString();
+        // set the encoding
+        log.debug("encoding CSV as " + CSV_CHARSET);
+        return new String(sb.toString().getBytes(), CSV_CHARSET);
 	}
 
 
