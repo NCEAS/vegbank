@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: anderson $'
- *  '$Date: 2005-05-24 04:27:28 $'
- *  '$Revision: 1.18 $'
+ *  '$Date: 2005-06-17 22:07:16 $'
+ *  '$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,9 +30,11 @@ package org.vegbank.common.utility;
 import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+//import org.apache.commons.compress.zip.ZipEntry;
+//import org.apache.commons.compress.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -78,6 +80,8 @@ public class ServletUtility
 	public static void zipFiles(Hashtable nameContent, OutputStream outStream, int style, String encoding) throws IOException
 	{
 		ZipOutputStream zipstream = new ZipOutputStream(outStream);
+        //log.debug("using commons-compress code to setEncoding");
+        //zipstream.setEncoding(encoding);
 		
 		Enumeration names = nameContent.keys();
 		while ( names.hasMoreElements() )
@@ -92,13 +96,16 @@ public class ServletUtility
 			try {
 				// Set up an input stream with the given character encoding
 				if (Utility.isStringNullOrEmpty(encoding)) {
+                    log.debug("NOT encoding");
 					origin = new ByteArrayInputStream(fileContent.getBytes());
 				} else {
+                    log.debug("encoding: " + encoding);
 					origin = new ByteArrayInputStream(fileContent.getBytes(encoding));
 				}
 
 			} catch(UnsupportedEncodingException uex) {
 				// Use the platform's default charset
+                log.error("Unsupported encoding.  Using default.");
 				origin = new ByteArrayInputStream(fileContent.getBytes());
 			}
 
@@ -107,7 +114,8 @@ public class ServletUtility
 			// -- TODO: make better check for binary data
 			// -- other than whether encoding is set or not
 			if (Utility.isStringNullOrEmpty(encoding)) {
-				LineEnds.convert(origin, zipstream, LineEnds.STYLE_DOS);
+                log.debug("NOT converting line ends");
+				//LineEnds.convert(origin, zipstream, LineEnds.STYLE_DOS);
 
 			} else {
 				
@@ -125,6 +133,32 @@ public class ServletUtility
 		zipstream.close();
 	}
 	
+	public static void deflateAndSend(Hashtable nameContent, OutputStream outStream, String encoding) throws IOException
+	{
+/*
+        String inputString = nameContent.get("plot_taxa.csv");
+        byte[] input = inputString.getBytes(encoding);
+
+        // Compress the bytes
+        byte[] output = new byte[100];
+        Deflater compresser = new Deflater();
+        compresser.setInput(input);
+        compresser.finish();
+        int compressedDataLength = compresser.deflate(output);
+
+        // Decompress the bytes
+        Inflater decompresser = new Inflater();
+        decompresser.setInput(output, 0, compressedDataLength);
+        byte[] result = new byte[100];
+        int resultLength = decompresser.inflate(result);
+        decompresser.end();
+
+        // Decode the bytes into a String
+        String outputString = new String(result, 0, resultLength, encoding);
+*/
+    }
+
+
 	/**
 	 * Send a HTML email message.
 	 * 
@@ -645,7 +679,7 @@ public class ServletUtility
 		Vector fileList = new Vector();
 		InputStream in = inFile.getInputStream();
 		ZipInputStream zis = new ZipInputStream(in);
-		ZipEntry e;
+		java.util.zip.ZipEntry e;
 		// Loop over every ZipEntry in ZIP file
 		while( ( e = zis.getNextEntry()) != null)
 		{

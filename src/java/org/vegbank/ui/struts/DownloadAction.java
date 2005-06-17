@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.model.Observation;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.DateUtility;
-import org.vegbank.common.utility.ServletUtility;
+import org.vegbank.common.utility.ZipUtility;
 import org.vegbank.common.utility.XMLUtil;
 import org.vegbank.plots.datasink.ASCIIReportsHelper;
 import org.vegbank.plots.datasource.DBModelBeanReader;
@@ -34,8 +34,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-06-15 22:55:39 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2005-06-17 22:07:16 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,10 +75,12 @@ public class DownloadAction extends Action
 	// Response content Types
 	private static final String ZIP_CONTENT_TYPE = "application/x-zip";
 	private static final String DOWNLOAD_CONTENT_TYPE = "application/x-zip";
-    public static final String EXPORT_CHARSET = "UTF-16";
-	public static final String VEGBRANCH_CHARSET = "UTF-16";
-	public static final String CSV_CHARSET = "LATIN1";
-	public static final String ZIP_CHARSET = "UTF-8";
+    public static final String EXPORT_CHARSET = "UTF16";
+	public static final String VEGBRANCH_CHARSET = "UTF16";
+	public static final String CSV_CHARSET = "UTF8";
+	//public static final String CSV_CHARSET = "Cp1252";   // Latin1
+	//public static final String CSV_CHARSET = "ISO8859_1";   // Latin1
+	public static final String ZIP_CHARSET = "UTF8";
 	private static final String VEGBRANCH_CONTENT_TYPE = "text/text; charset=" + VEGBRANCH_CHARSET;
 	private static final String VEGBRANCH_ZIP_CONTENT_TYPE = "application/x-zip; charset=" + ZIP_CHARSET;
 
@@ -133,7 +135,7 @@ public class DownloadAction extends Action
 				
 				// TODO: Get the OS of user if possible and return a native file	
 				// For now use DOS style, cause those idiots would freak with anything else ;)					
-				ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
+                ZipUtility.zipTextFiles(nameContent, responseOutputStream);
 				/////////////////
 			} else if ( formatType.equalsIgnoreCase( FLAT_FORMAT_TYPE ) ) {
 
@@ -158,9 +160,9 @@ public class DownloadAction extends Action
 
                     this.initResponseForFileDownload(response, "vegbank_export_csv.zip", ZIP_CONTENT_TYPE);
                     OutputStream responseOutputStream = response.getOutputStream();
-                    responseOutputStream.flush();
                     
-                    ServletUtility.zipFiles(nameContent, responseOutputStream, LineEnds.STYLE_DOS);
+                    ZipUtility.zipTextFiles(nameContent, responseOutputStream);
+                    //ZipUtility.zipTextFiles(nameContent, responseOutputStream, LineEnds.STYLE_DOS);
 
                 } catch (SecurityException sex) {
                     log.error("security exception while executing psql", sex);
@@ -200,7 +202,7 @@ public class DownloadAction extends Action
                     
                     // TODO: Get the OS of user if possible and return a native file	
                     // For now use DOS style, cause those idiots would freak with anything else ;)					
-                    ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS );
+                    ZipUtility.zipTextFiles(nameContent, responseOutputStream);
                     
                 }
                 // Just downLoad the generated file
@@ -265,7 +267,7 @@ public class DownloadAction extends Action
 					// TODO: Get the OS of user if possible and return a native file	
 					// For now use DOS style, cause those idiots would freak with anything else ;)					
 					log.debug("Zipping VegbranchImport.zip");
-					ServletUtility.zipFiles( nameContent, responseOutputStream, LineEnds.STYLE_DOS, ZIP_CHARSET);
+                    ZipUtility.zipTextFiles(nameContent, responseOutputStream);
 					/////////////////
 
 				} else {
@@ -385,6 +387,9 @@ public class DownloadAction extends Action
         // set the encoding
         log.debug("encoding CSV as " + CSV_CHARSET);
         return new String(sb.toString().getBytes(), CSV_CHARSET);
+
+        //log.debug("not changing encoding");
+        //return sb.toString();
 	}
 
 
