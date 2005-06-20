@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:31:30 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2005-06-20 21:14:49 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -310,7 +310,9 @@ public class KeywordGen {
 
 		// count records
 		String sqlFrom = entityQuery.substring( entityQuery.lastIndexOf("FROM") );
-		rs = stmt.executeQuery("SELECT COUNT(*) AS count FROM (" + entityQuery + ") AS entityQuery");
+		String sql = "SELECT COUNT(*) AS count FROM (" + entityQuery + ") AS entityQuery";
+		rs = stmt.executeQuery(sql);
+
 		if (rs.next()) {
 			count = rs.getLong("count");
 		}
@@ -533,17 +535,19 @@ public class KeywordGen {
             StringBuffer sb = new StringBuffer(128);
             String glue;
 
-            if (q.toLowerCase().indexOf(" where ") == -1) { glue = " WHERE "; } 
-            else { glue = " AND "; }
+            if (q.indexOf(" where ") == -1) { glue = " where "; } 
+            else { glue = " and "; }
 
             // find stuff that goes after WHERE
-            int pos = q.indexOf(" order by ");
+            int pos = q.indexOf("order by");
             if (pos == -1) {
+                log.debug("no ORDER BY clause: " + q);
                 sb.append(q).append(glue).append(getMismatchWhere(entityName));
             } else {
+                log.debug("found ORDER BY at " + pos + " of " + q.length());
                 sb.append(q.substring(0,pos))
                     .append(glue).append(getMismatchWhere(entityName))
-                    .append(q.substring(pos));
+                    .append(" ").append(q.substring(pos));
             }
             return sb.toString();
 
