@@ -1,4 +1,5 @@
-
+DROP VIEW view_csv_taxonimportance;
+DROP VIEW view_csv_taxonimportance_pre;
 DROP VIEW view_browseparty_all_count_combined;
 
 DROP VIEW view_browseparty_classcontrib_count;
@@ -197,5 +198,25 @@ CREATE VIEW view_browseparty_all_count_combined AS
   ORDER BY countallcontrib DESC;
 
 
-
+CREATE view view_csv_taxonimportance_pre AS 
+SELECT taxonobservation.observation_id AS observation_ID, 
+    authorplantname  AS plant, 
+    (CASE WHEN (taxonimportance.stratum_id is null) THEN '-all-' ELSE  (SELECT stratumtype.stratumname FROM stratumtype, stratum 
+          WHERE stratum.stratumtype_id=stratumtype.stratumtype_id AND stratum.stratum_id=taxonimportance.stratum_id) END) AS stratum,
+    cover, 
+    (select min(coverIndex.coverCode) from coverIndex where coverPercent=taxonimportance.cover 
+      AND coverIndex.coverMethod_ID=observation.coverMethod_ID and observation.observation_ID=taxonobservation.observation_ID) 
+       as coverCode_exact, 
+    (select min(coverIndex.coverCode) from coverIndex where upperlimit>=taxonimportance.cover and lowerlimit<=taxonimportance.cover
+      AND coverIndex.coverMethod_ID=observation.coverMethod_ID and observation.observation_ID=taxonobservation.observation_ID) 
+       as coverCode_byrange, 
+       taxonimportance.basalarea, taxonobservation.accessioncode
+ FROM taxonobservation, taxonimportance, view_notemb_observation AS observation 
+ WHERE taxonobservation.taxonobservation_id=taxonimportance.taxonobservation_id AND 
+   taxonobservation.observation_ID=observation.observation_ID ;
+   
+CREATE view view_csv_taxonimportance AS 
+ SELECT observation_ID, plant, stratum, cover, CASE WHEN (covercode_exact is null) THEN covercode_byrange ELSE covercode_exact END as covercode, 
+   basalarea, accessioncode
+ FROM view_csv_taxonimportance_pre;
   
