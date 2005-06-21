@@ -301,12 +301,28 @@ doc-comments	"/>
               <xsl:with-param name="statusCode" select="entity_usage.name_status_cd"/>
             </xsl:call-template>
           </commUsage.commNameStatus>
-          <xsl:if test="string-length(entity_usage.entity_name_id/entity_name/entity_name.name_system)&gt;0">
+          
             <!-- dig to get system -->
             <commUsage.classSystem>
-              <xsl:value-of select="entity_usage.entity_name_id/entity_name/entity_name.name_system"/>
+              <xsl:choose>
+                 <!-- special rules to help these values match our lists -->
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='CEGL'">NVC-Code</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='NVC'">NVC-Scientific</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='English Common'">NVC-English Common</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='key'">NVC-Code</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='CODE'">NVC-Code</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='Code'">NVC-Code</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='code'">NVC-Code</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='elcode'">NVC-Code</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='scientific name without author'">NVC-Scientific</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='English common name'">NVC-English Common</xsl:when>
+                 <xsl:when test="entity_usage.entity_name_id/entity_name/entity_name.name_system='translated name'">NVC-Scientific translated</xsl:when>
+                 <xsl:when test="string-length(entity_usage.entity_name_id/entity_name/entity_name.name_system)=0">Other</xsl:when>
+                <xsl:otherwise>  <!-- default -->    <xsl:value-of select="entity_usage.entity_name_id/entity_name/entity_name.name_system"/></xsl:otherwise>
+              </xsl:choose>
+
             </commUsage.classSystem>
-          </xsl:if>
+         
       <!--    <commUsage.PARTY_ID>
             <xsl:call-template name="writeParty"/>
           </commUsage.PARTY_ID> -->
