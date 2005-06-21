@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>  <!-- THIS File styles NatureServe - VegBank "Common Model" data into VegBank Package.  Currently only the initial load is handled, not updates.
+
+*****************REQUIRED ***************************
+You must first style the doc with writeStringsAndID.xsl and output to UniqueID.xml.  This will be read to create IDs for names and references
+****************************************************
+-->
+
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" />
   <xsl:param name="alphahigh">QWERTYUIOPASDFGHJKLZXCVBNM</xsl:param>
@@ -44,6 +50,8 @@
       </plantConcept.plantDescription>
       <!-- start plant status -->
       <plantStatus>
+        <plantStatus.PLANTSTATUS_ID><xsl:value-of select="entity.entity_id" /></plantStatus.PLANTSTATUS_ID>
+      
         <plantStatus.plantConceptStatus>
           <xsl:value-of select="entity.classification_status"/>
         </plantStatus.plantConceptStatus>
@@ -90,6 +98,7 @@
       <!-- ready!!-->
       <xsl:for-each select="entity_usage">
         <plantUsage>
+          <plantUsage.PLANTUSAGE_ID><xsl:value-of select="../entity.entity_id" /><xsl:value-of select="number(1+position())" /></plantUsage.PLANTUSAGE_ID><!-- only for new data! -->
           <plantUsage.PLANTNAME_ID>
             <xsl:call-template name="writePlantName">
               <xsl:with-param name="NameEnt" select="entity_usage.entity_name_id/entity_name"/>
@@ -124,9 +133,10 @@
       </xsl:for-each>
       <!-- ready write also the UID as a usage. -->
       <plantUsage>
+          <plantUsage.PLANTUSAGE_ID><xsl:value-of select="entity.entity_ID" />0</plantUsage.PLANTUSAGE_ID>
           <plantUsage.PLANTNAME_ID>
             <plantName>
-              <plantName.PLANTNAME_ID><xsl:variable name="plantNameLoc"><xsl:number count="*" level="any" /></xsl:variable><xsl:value-of select="number(1+(2*$plantNameLoc))" /></plantName.PLANTNAME_ID>
+              <plantName.PLANTNAME_ID><xsl:variable name="thisPUID" select="entity.ns_uid" /><xsl:value-of select="document('UniqueID.xml')/iddoc/NAME[value=$thisPUID]/id"/></plantName.PLANTNAME_ID>
               <plantName.plantName><xsl:value-of select="entity.ns_uid" /></plantName.plantName>
             </plantName>
           </plantUsage.PLANTNAME_ID>
@@ -149,11 +159,11 @@
   <xsl:template name="writePlantName">
     <xsl:param name="NameEnt"/>
     <plantName>
-      <xsl:if test="string-length($NameEnt/entity_name.entity_name_id)&gt;0">
+
         <plantName.PLANTNAME_ID>
-          <xsl:value-of select="number(2*$NameEnt/entity_name.entity_name_id)"/>
+                <xsl:variable name="thisPNm" select="$NameEnt/entity_name.entity_name" /><xsl:value-of select="document('UniqueID.xml')/iddoc/NAME[value=$thisPNm]/id"/>
         </plantName.PLANTNAME_ID>
-      </xsl:if>
+  
       <plantName.plantName>
         <xsl:value-of select="$NameEnt/entity_name.entity_name"/>
       </plantName.plantName>
@@ -170,8 +180,8 @@
   <xsl:template name="writeReference">
     <xsl:param name="RefEnt"/>
     <reference>
-      <reference.reference_ID><xsl:if test="string-length(reference.reference_ID)=0"><xsl:variable name="refCount"><xsl:number count="*" level="any" /></xsl:variable><xsl:value-of select="number(1+(2*$refCount))" /></xsl:if>
-        <xsl:value-of select="number(2*$RefEnt/reference.reference_id)"/>
+      <reference.reference_ID>
+      <xsl:variable name="thisRefNm" select="$RefEnt/reference.full_citation" /><xsl:value-of select="document('UniqueID.xml')/iddoc/REF[value=$thisRefNm]/id"/>
       </reference.reference_ID>
       <reference.fulltext>
         <xsl:value-of select="$RefEnt/reference.full_citation"/>
@@ -219,6 +229,7 @@ doc-comments	"/>
       </commConcept.commDescription>
       <!-- start comm status -->
       <commStatus>
+        <commStatus.COMMSTATUS_ID><xsl:value-of select="entity.entity_id" /></commStatus.COMMSTATUS_ID> <!-- temp only for NEW data -->
         <commStatus.commConceptStatus>
           <xsl:value-of select="entity.classification_status"/>
         </commStatus.commConceptStatus>
@@ -269,6 +280,7 @@ doc-comments	"/>
       <!-- ready!!-->
       <xsl:for-each select="entity_usage">
         <commUsage>
+                  <commUsage.COMMUSAGE_ID><xsl:value-of select="../entity.entity_id" /><xsl:value-of select="number(1+position())" /></commUsage.COMMUSAGE_ID><!-- only for new data! -->
           <commUsage.COMMNAME_ID>
             <xsl:call-template name="writeCommName">
               <xsl:with-param name="NameEnt" select="entity_usage.entity_name_id/entity_name"/>
@@ -304,9 +316,10 @@ doc-comments	"/>
          <!-- ready -->
       <!-- ready write also the UID as a usage. -->
       <commUsage>
+          <commUsage.COMMUSAGE_ID><xsl:value-of select="entity.entity_id"/>0</commUsage.COMMUSAGE_ID>
           <commUsage.COMMNAME_ID>
             <commName>
-              <commName.COMMNAME_ID><xsl:variable name="commNameLoc"><xsl:number count="*" level="any" /></xsl:variable><xsl:value-of select="number(1+(2*$commNameLoc))" /></commName.COMMNAME_ID>
+              <commName.COMMNAME_ID><xsl:variable name="thisCUID" select="entity.ns_uid" /><xsl:value-of select="document('UniqueID.xml')/iddoc/NAME[value=$thisCUID]/id"/></commName.COMMNAME_ID>
               <commName.commName><xsl:value-of select="entity.ns_uid" /></commName.commName>
             </commName>
           </commUsage.COMMNAME_ID>
@@ -329,11 +342,10 @@ doc-comments	"/>
   <xsl:template name="writeCommName">
     <xsl:param name="NameEnt"/>
     <commName>
-      <xsl:if test="string-length($NameEnt/entity_name.entity_name_id)&gt;0">
+      
         <commName.COMMNAME_ID>
-          <xsl:value-of select="number(2*$NameEnt/entity_name.entity_name_id)"/>
-        </commName.COMMNAME_ID>
-      </xsl:if>
+                         <xsl:variable name="thisCNm" select="$NameEnt/entity_name.entity_name" /><xsl:value-of select="document('UniqueID.xml')/iddoc/NAME[value=$thisCNm]/id"/>        </commName.COMMNAME_ID>
+    
       <commName.commName>
         <xsl:value-of select="$NameEnt/entity_name.entity_name"/>
       </commName.commName>
