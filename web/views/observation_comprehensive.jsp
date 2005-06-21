@@ -61,6 +61,7 @@ function getHelpPageId() {
 <%@ include file="autogen/plot_plotidlong_data.jsp" %>         
 <%@ include file="autogen/observation_plotidlong_data.jsp" %>
 <%@ include file="includeviews/sub_haddata.jsp" %>
+
 <!-- custom, show children if there are any -->
  <logic:greaterThan name="onerowofplot" property="countchildplots" value="0">
    <tr class="@nextcolorclass@"><td class="datalabel">Has Sub Plots</td>
@@ -71,7 +72,14 @@ function getHelpPageId() {
      </td>
    </tr>
  </logic:greaterThan>
-<tr><th>Location Fields:</th><th>&nbsp;</th></tr>
+<tr><th>Location Fields:</th>
+  <bean:define id="trunclat"><bean:write name='onerowofplot' property='latitude' /></bean:define>
+  <bean:define id="trunclong"><bean:write name='onerowofplot' property='longitude' /></bean:define>
+  <% if (trunclat.length() > 7 ) { trunclat = trunclat.substring(0,7); } %>
+  <% if (trunclong.length() > 7 ) { trunclong = trunclong.substring(0,7); } %>
+  <th>MAP:<a title="TopoZone provides a close up map of the plot's location (new window)" target="_new" href="http://www.topozone.com/map.asp?lat=<bean:write name='onerowofplot' property='latitude' />&lon=<bean:write name='onerowofplot' property='longitude' />&datum=nad83&u=5">TopoZone</a>
+  | <a title="MapQuest provides a more general map of the plot's location (new window)" target="_new" href="http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=<%= trunclat %>&longitude=<%= trunclong %>">MapQuest</a>
+  </th></tr>
 <bean:define id="hadData" value="false" /> 
 <%@ include file="autogen/plot_plotloclong_data.jsp" %>
 <%@ include file="autogen/observation_plotloclong_data.jsp" %>
