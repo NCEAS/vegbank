@@ -913,12 +913,12 @@
       <attListType>open</attListType>
       <attList>
         <attListItem>
-          <attListValue>NVC-Code</attListValue>
+          <attListValue>Code</attListValue>
           <attListValueDesc>Ecological Society of American Vegetation Classification Panel. 2003. Guidelines ver. 2</attListValueDesc>
           <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>NVC-English Common</attListValue>
+          <attListValue>Common</attListValue>
           <attListValueDesc>Ecological Society of American Vegetation Classification Panel. 2003. Guidelines ver. 2</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
@@ -928,20 +928,20 @@
           <attListSortOrd>6</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>NVC-Scientific</attListValue>
+          <attListValue>Scientific</attListValue>
           <attListValueDesc>Ecological Society of American Vegetation Classification Panel. 2003. Guidelines ver. 2</attListValueDesc>
           <attListSortOrd>1</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>NVC-Scientific translated</attListValue>
+          <attListValue>Translated</attListValue>
           <attListValueDesc>Ecological Society of American Vegetation Classification Panel. 2003. Guidelines ver. 2</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
-        <attListItem>
+        <!--<attListItem>
           <attListValue>ICPN-Scientific</attListValue>
           <attListValueDesc>International Code of Phytosociological Nomenclature (2000. J. Veg. Sci. 11: 739-769)</attListValueDesc>
           <attListSortOrd>5</attListSortOrd>
-        </attListItem>
+        </attListItem>-->
       </attList>
       <attNotes>Like FGDC of Forest Cover Class.</attNotes>
       <attDefinition>This is the name of the classification system wherein the name is applied (e.g., Scientific, Spanish common).</attDefinition>
