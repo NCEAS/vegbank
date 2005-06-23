@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-30 02:05:08 $'
- *	'$Revision: 1.35 $'
+ *	'$Date: 2005-06-23 21:23:00 $'
+ *	'$Revision: 1.36 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -200,7 +200,7 @@ public class GenericCommand
                 */
 
                 if (request != null) {
-                    log.info("Count found " + numItems);
+                    //log.info("Count found " + numItems);
                     request.setAttribute("numItems", Integer.toString(numItems));
                 } 
             }
@@ -337,7 +337,7 @@ public class GenericCommand
                 */
 
                 if (log.isDebugEnabled()) {
-                    log.debug("Setting " + BEANLIST_KEY + " and " + beanName.toUpperCase() + " as lists");
+                    //log.debug("Setting " + BEANLIST_KEY + " and " + beanName.toUpperCase() + " as lists");
                 }
                 request.setAttribute(BEANLIST_KEY, searchResultList);
                 request.setAttribute(beanName.toUpperCase(), searchResultList);
@@ -347,7 +347,7 @@ public class GenericCommand
                 }
 
                 if (searchResultList != null && searchResultList.size() == 1) {
-                    log.debug("One item, so setting " + BEAN_KEY + " and " + beanName.toUpperCase() + " as beans");
+                    //log.debug("One item, so setting " + BEAN_KEY + " and " + beanName.toUpperCase() + " as beans");
                     request.setAttribute(BEAN_KEY, searchResultList.get(0));
                     request.setAttribute(beanName.toUpperCase(), searchResultList.get(0));
 
@@ -496,8 +496,8 @@ public class GenericCommand
 
 		MessageFormat format;
 
-		log.debug("hasWhereClause: " + hasWhereClause);
-		log.debug("hasParams: " + hasParams);
+		//log.debug("hasWhereClause: " + hasWhereClause);
+		//log.debug("hasParams: " + hasParams);
 
 
         /*
@@ -529,9 +529,9 @@ public class GenericCommand
 			if (hasParams) {
                 //////////////////////////////////////////
                 List wpList = new ArrayList();
-                log.debug("checking for delimited wparams: " + Utility.PARAM_DELIM);
+                //log.debug("checking for delimited wparams: " + Utility.PARAM_DELIM);
                 for (int i=0; i<whereParams.length; i++) {
-                    log.debug("whereParams: " + whereParams[i]);
+                    //log.debug("whereParams: " + whereParams[i]);
                     //StringTokenizer st = new StringTokenizer(whereParams[i], Utility.PARAM_DELIM);
                     //while (st.hasMoreTokens()) {
 
