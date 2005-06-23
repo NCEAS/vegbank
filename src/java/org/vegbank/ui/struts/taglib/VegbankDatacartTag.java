@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-30 02:06:07 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2005-06-23 21:23:25 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ import org.vegbank.common.model.Userdatasetitem;
  * manages changes to the datacart.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.6 $ $Date: 2005-05-30 02:06:07 $
+ * @version $Revision: 1.7 $ $Date: 2005-06-23 21:23:25 $
  */
 
 public class VegbankDatacartTag extends VegbankTag {
@@ -76,7 +76,7 @@ public class VegbankDatacartTag extends VegbankTag {
             usrId = DatasetUtility.ANON_USR_ID;
         }
 
-        log.debug("usrId: " + usrId);
+        //log.debug("usrId: " + usrId);
 
 		try {
             // get all items involved in a change
@@ -131,16 +131,16 @@ public class VegbankDatacartTag extends VegbankTag {
 
                 // get the datacart
                 // get userdataset_id from session
-                log.debug("getting datacart...");
+                //log.debug("getting datacart...");
                 dsu = new DatasetUtility(); 
                 Userdataset datacart = dsu.getDatacart(session);
 
                 if (datacart == null) {
                     // try to get extant datacart for user or create a new one
-                    log.debug("get/create user datacart...");
+                    //log.debug("get/create user datacart...");
                     datacart = dsu.getOrCreateDatacart(session.getId(), usrId);
                     session.setAttribute(Utility.DATACART_KEY, new Long(datacart.getUserdataset_id()));
-                    log.debug("setting datacart ID in session: " + datacart.getUserdataset_id());
+                    //log.debug("setting datacart ID in session: " + datacart.getUserdataset_id());
                 }
 
 
@@ -149,17 +149,14 @@ public class VegbankDatacartTag extends VegbankTag {
                     // handle delta.  add by default
                     dsu.setCurDataset(datacart);
                     if (arrDelta[0].equals(DELTA_DROP)) { 
-                        log.debug("setting up drop items: " + deltaItems.size());
                         dsu.dropItemsByAC(deltaItems);
-                        log.debug("updating dataset...");
+                        log.debug("dropping dataset item...");
                         count = dsu.saveDataset();
 
                     } else if (arrDelta[0].equals(DELTA_DROPALL)) { 
                         long dsId = Long.parseLong((String)deltaItems.get(0));
                         Long testUsrId = dsu.getOwnerId(dsId);
                         // check if user is DS owner
-                        log.debug("testusr: " + testUsrId);
-                        log.debug("usr: " + usrId);
                         if ( (testUsrId == null && usrId == null) ||
                                 (testUsrId != null && testUsrId.equals(usrId)) ) {
                             dsu.dropAllItems(dsId); 
@@ -167,13 +164,13 @@ public class VegbankDatacartTag extends VegbankTag {
                             log.warn("attempt to delete non-owned dataset by usrId " + usrId);
                         }
 
-                        log.debug("updating dataset...");
+                        log.debug("deleting all dataset items...");
                         count = dsu.saveDataset();
 
                     } else if (arrDelta[0].equals(DELTA_ADD)) { 
-                        log.debug("setting up add items: " + deltaItems.size());
+                        //log.debug("setting up add items: " + deltaItems.size());
                         dsu.addItemsByAC(deltaItems); 
-                        log.debug("updating dataset...");
+                        //log.debug("updating dataset...");
                         count = dsu.saveDataset();
 
                     } else if (arrDelta[0].equals(DELTA_FINDADD)) { 
@@ -190,7 +187,7 @@ public class VegbankDatacartTag extends VegbankTag {
                             count = dsu.countItems(null);
 
                         } else {
-                            log.debug("no findadd query given");
+                            //log.debug("no findadd query given");
                         }
                     }
 
@@ -209,26 +206,26 @@ public class VegbankDatacartTag extends VegbankTag {
                     // hasn't been set in session, so initialize it
                     count = 0;
                     //session.setAttribute(Utility.DATACART_COUNT_KEY, new Long(0));
-                    log.debug("initializing datacart size");
+                    //log.debug("initializing datacart size");
                 } else { 
                     // use the current value
                     count = datacartCount.longValue(); 
-                    log.debug("got datacart size from session: " + count);
+                    //log.debug("got datacart size from session: " + count);
                 }
             }
             
             // update the session
-            log.debug("setting datacart size in session: " + count);
+            //log.debug("setting datacart size in session: " + count);
             session.setAttribute(Utility.DATACART_COUNT_KEY, new Long(count));
 
-            log.debug("datacart count is " + count);
+            //log.debug("datacart count is " + count);
             if (getDisplay()) {
                 String datacartHTML = null;
                 if (count == 1) { datacartHTML = count + " item";
                 } else { datacartHTML = count + " items"; }
 
                 // return the count of items in the datacart
-                log.debug("returning HTML: " + datacartHTML);
+                //log.debug("returning HTML: " + datacartHTML);
                 pageContext.getOut().println(datacartHTML);
             }
 
@@ -268,7 +265,7 @@ public class VegbankDatacartTag extends VegbankTag {
     }
 
     public void setDeltaItems(Object s) {
-        log.debug("setting delta items: " + s.toString());
+        //log.debug("setting delta items: " + s.toString());
         this.deltaItems = s;
     }
 
