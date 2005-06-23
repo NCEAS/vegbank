@@ -13832,9 +13832,9 @@ conditions may change between resampling events.
       <attDefinition>Average height to the top of the stratum in meters.</attDefinition>
       <attUnits>m</attUnits>
       <attForms>
-        <formShow name="Austere">1198</formShow>
-        <formShow name="Summary">1199</formShow>
-        <formShow name="Detail">1200</formShow>
+        <formShow name="Austere">1201</formShow>
+        <formShow name="Summary">1203</formShow>
+        <formShow name="Detail">1203</formShow>
         <formShow name="csvvegbranch">385</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -13854,9 +13854,9 @@ conditions may change between resampling events.
       <attDefinition>Average height of the bottom of the stratum in meters.</attDefinition>
       <attUnits>m</attUnits>
       <attForms>
-        <formShow name="Austere">1201</formShow>
+        <formShow name="Austere">1198</formShow>
         <formShow name="Summary">1202</formShow>
-        <formShow name="Detail">1203</formShow>
+        <formShow name="Detail">1202</formShow>
         <formShow name="csvvegbranch">386</formShow>
       </attForms>
       <update>1.0.0</update>
