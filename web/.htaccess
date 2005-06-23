@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.15 2005-06-22 23:26:44 mlee Exp $
+# $Id: .htaccess,v 1.16 2005-06-23 14:15:55 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -24,7 +24,7 @@ RewriteRule ^workshop$      /vegdocs/workshop  [NC,QSA,L]
 RewriteRule ^forgotpassword$  /vegbank/forms/EmailPassword.jsp [NC,QSA,L]
 
 ####################################################################
-## VEGBRANCH rewrites (the VegBranch database accesses these: ######
+## VEGBRANCH rewrites (the VegBranch database accesses these: 
 ####################################################################
 
 RewriteRule ^vegbranch$      /vegdocs/vegbranch/vegbranch.html  [NC,QSA,L,R]
