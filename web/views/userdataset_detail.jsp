@@ -1,14 +1,10 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-<!-- $Id: userdataset_detail.jsp,v 1.13 2005-05-05 22:12:37 mlee Exp $ -->
-<!-- purpose : show user's datasets, either all of them (mode=all in URL) or only certain ones:
-
-  mode=ac is to show accessioncodes
-  mode=id is to show by primary key of dataset(s) 
- BOTH of the above are comma separated, and currently accessionCodes need to be surrounded by single quotes -->
- 
-
+<!-- $Id: userdataset_detail.jsp,v 1.14 2005-06-24 01:18:12 mlee Exp $ -->
+<!-- purpose : show user's datasets.  THIS WILL NOT show datasets for a user
+   other than the current user, nor will it show a dataset for someone who isn't logged in-->
+<!-- we should prompt users to log in to access this page -->
  
 <TITLE>View Your VegBank Datasets - Detail</TITLE>
 
@@ -21,7 +17,7 @@
 <%@ include file="includeviews/sub_getwebuserid.jsp" %>
 
 <!-- see what mode to be in- what scope of datasets to show -->
-<bean:parameter id="mode" name="mode" value="all" /> <!-- default value of all --> 
+<bean:parameter id="mode" name="mode" value="id" /> <!-- default value of id --> 
 
 <!-- only allow datasets that user IS owner of (if private, and those that are public) -->
 
@@ -29,6 +25,15 @@
 
 <!-- the actual wparam here, if any -->
 <bean:parameter id="urlwparam" name="wparam" value=""/>
+
+<logic:empty name="urlparam">
+  <bean:define id="mode" value="all" /><!-- if no param, then show all per user -->
+</logic:empty>
+
+<!-- test to see if wparam starts with a character, if so is ac -->
+<logic:match name="urlwparam" value=".">
+  <bean:define id="mode" value="ac" />
+</logic:match>
 
 <%
 
