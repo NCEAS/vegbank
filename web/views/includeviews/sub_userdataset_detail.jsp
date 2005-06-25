@@ -1,4 +1,6 @@
 <!-- this is a sub form that should be included in another .jsp that gets the datasets needed.  This form displays the contents of the dataset -->
+<!-- note: most often, you'll need to see just one dataset at a time in this form.  If so, pager will apply to DATASETITEMS.  Else, pager still applies to dataset -->
+
    <%
 		       //**************************************************************************************
 		       //  Set up alternating row colors
@@ -9,6 +11,10 @@
                 <p>Sorry, no dataset found.</p>
           </logic:empty>
 <logic:notEmpty name="userdataset-BEANLIST"><!-- set up table -->
+
+<bean:define id="mainPagerAsBean">
+  <!-- the pager, as saved : -->&nbsp;<vegbank:pager />
+</bean:define>
 
 <logic:iterate id="onerowofuserdataset" name="userdataset-BEANLIST"><!-- iterate over all records in set : new table for each -->
 <br />
@@ -21,10 +27,35 @@
 Items in this dataset:
 <bean:define id="ud_id" name="onerowofuserdataset" property="userdataset_id" />
  
+ <!-- ALLWAYS paginate, but reset perPage and pageNumber if "not" paginating" -->
+ <!-- pagination is opposite of last pagination, which should be still defined, even if not, still will be paginated here: -->
+ <!--bean:define id="paginateSub" value="true" /-->
+ <!--logic:equal name="paginateMain" value="true" -->
+   <!--bean:define id="paginateSub" value="false" /-->
+ <!--/logic:equal-->
+ <!-- check to see if perPage is defined, if so, capture it, else set it.  Need to know this to know when to add link to all userDatasetItems if NOT paginating here. -->
+ 
+   <!-- going through all this to get beanPerPage set as string -->
+   <bean:parameter id="beanPerPage" name="perPage" value="10" />
+   <logic:empty name="beanPerPage">
+     <bean:define id="beanPerPage" value="10" />
+   </logic:empty>
+   <!-- do same with pageNumber.  Reset to 1 if paginating main form -->
+   <bean:parameter id="beanPageNumber" name="pageNumber" value="1" />
+   <logic:empty name="beanPageNumber">
+        <bean:define id="beanPageNumber" value="1" />
+   </logic:empty>
+   <logic:equal name="paginateMain" value="true">
+        <!-- resetting sub to page 1 -->
+        <bean:define id="beanPageNumber" value="1" />
+        <!-- resetting perPage to 10 -->
+        <bean:define id="beanPerPage" value="10" />
+   </logic:equal>
+ 
 <vegbank:get id="userdatasetitem" select="userdatasetitem" beanName="map" 
-  where="where_userdataset_pk" wparam="ud_id" pager="true" />
+  where="where_userdataset_pk" wparam="ud_id" pager="true" perPage="<%= beanPerPage %>" pageNumber="<%= beanPageNumber %>" />
    <logic:empty name="userdatasetitem-BEANLIST">
-                No dataset items are in the dataset.
+      No dataset items are in the dataset.
    </logic:empty>
 
 <logic:notEmpty name="userdatasetitem-BEANLIST">
@@ -38,12 +69,17 @@ Items in this dataset:
 </tr>
 
 <%@ include file="../../includes/setup_rowindex.jsp" %>
+<% long countUDIRows = 0 ; %>
+<logic:equal name="beanPageNumber" value="1">
+  <% rowIndex = 1; %>
+</logic:equal>
 <logic:iterate id="onerowofuserdatasetitem" name="userdatasetitem-BEANLIST">
+<% countUDIRows++ ;%>
 <tr class='@nextcolorclass@'>
 <bean:define id="delta_ac" name="onerowofuserdatasetitem" property="itemaccessioncode" />
 <td>
 <%@ include file="/includes/datacart_checkbox.jsp" %>
-<%= rowIndex++ %>.&nbsp;
+<%= rowIndex++ %>.&nbsp; 
 </td>
 <td class="largefield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
 <%@ include file="../autogen/userdatasetitem_summary_data.jsp" %>
@@ -61,6 +97,18 @@ Items in this dataset:
 &nbsp; </td>
 </tr>
 </logic:iterate>
+<!-- if you've made it this far, and you are NOT paginating datasetitems, but HAVE reached the number of iterations as perPage, then provide link to full dataset -->
+  <logic:equal name="paginateMain" value="true">
+    <bean:define id="strCountUDIRows"><%= countUDIRows %></bean:define>
+    <logic:equal name="beanPerPage" value="<%= strCountUDIRows %>">
+      <!-- tell user about more udi's being possible -->
+      <tr><td colspan="10">There could be more items.  <a href="@get_link@detail/userdataset/<bean:write name='ud_id' />">Click here to see the full dataset</a></td></tr>
+    </logic:equal>
+  </logic:equal>
+  <logic:notEqual name="paginateMain" value="true">
+    <!-- then we CAN paginate the items here -->
+    <tr><td colspan="10"><vegbank:pager /></td></tr>
+  </logic:notEqual>
 </table>
 </form>
 @mark_datacart_items@
@@ -74,4 +122,5 @@ Items in this dataset:
 </logic:iterate>
 </logic:notEmpty>
 
-<vegbank:pager />
+<!-- writes the pager calculated BEFORE the second :get statement -->
+<bean:write name="mainPagerAsBean" filter="false" />
