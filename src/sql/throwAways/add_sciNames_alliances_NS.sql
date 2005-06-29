@@ -1,0 +1,4 @@
+INSERT INTO commusage (commconcept_ID, commname_id, commname, commnamestatus, classSystem, party_id, commstatus_id, usagestart) SELECT commconcept.commconcept_ID, commconcept.commname_id, commconcept.commname, commnamestatus, 'Scientific', party_id, commstatus_id, usagestart FROM commconcept, commusage as cu WHERE cu.commconcept_Id=commconcept.commconcept_ID and cu.classSystem='UID' and commconcept.commconcept_ID NOT in (select commusage.commconcept_ID from commusage where commusage.commconcept_Id=commconcept.commconcept_ID and classSystem='Scientific');
+
+
+-- this file updates the commusage records to add Scientific names to NatureServe's opinion, which were lacking from alliances
