@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.16 2005-06-23 14:15:55 mlee Exp $
+# $Id: .htaccess,v 1.17 2005-06-29 00:31:28 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -30,6 +30,7 @@ RewriteRule ^forgotpassword$  /vegbank/forms/EmailPassword.jsp [NC,QSA,L]
 RewriteRule ^vegbranch$      /vegdocs/vegbranch/vegbranch.html  [NC,QSA,L,R]
 RewriteRule ^terms$          /vegbank/general/terms.html  [NC,QSA,L,R]
 RewriteRule ^vegbranch-usda-states$      /vegdocs/vegbranch/client/vbr_usda_stateranges.zip  [NC,QSA,L,R]
+RewriteRule ^vegbranch-nps-version$      /vegdocs/vegbranch/docs/nps-plots.html  [NC,QSA,L,R]
 
 RewriteRule ^xml$            /vegdocs/xml/vegbank-xml-index.html  [NC,QSA,L,R]
 

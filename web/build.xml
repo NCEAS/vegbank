@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-06-01 10:16:37 $'
-* '$Revision: 1.171 $'
+* '$Date: 2005-06-29 00:31:28 $'
+* '$Revision: 1.172 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -608,7 +608,7 @@
     <!-- get version  -->
     <!-- RELEVANT FILES TO COPY / DELETE -->
     <!-- client files: -->
-    <property name="vegbr_client_include" value="vegbank-module*.zip  vegbranch-v*.zip   vegbranch_normalizer.zip "/>
+    <property name="vegbr_client_include" value="vegbank-module*.zip  vegbranch-v*.zip   vegbranch_normalizer.zip  vegbranch-nps-plots-converter.zip"/>
     <!-- docs files: -->
     <property name="vegbr_docs_include" value=" **/*.html **/*.csv"/>
     <!-- images files: -->
