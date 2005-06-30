@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.17 2005-06-29 00:31:28 mlee Exp $
+# $Id: .htaccess,v 1.18 2005-06-30 01:31:22 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -33,6 +33,9 @@ RewriteRule ^vegbranch-usda-states$      /vegdocs/vegbranch/client/vbr_usda_stat
 RewriteRule ^vegbranch-nps-version$      /vegdocs/vegbranch/docs/nps-plots.html  [NC,QSA,L,R]
 
 RewriteRule ^xml$            /vegdocs/xml/vegbank-xml-index.html  [NC,QSA,L,R]
+
+RewriteRule ^load-xml$            /vegbank/DisplayUploadPlotAction.do  [NC,QSA,L,R]
+RewriteRule ^load-xml/(.*)$            /vegbank/DisplayUploadPlotAction.do?localfile=$1  [NC,QSA,L,R]
 
 # Rewrite Example
 #RewriteCond %{REQUEST_URI}  ^.+\.html

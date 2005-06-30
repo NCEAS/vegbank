@@ -58,13 +58,22 @@ function getHelpPageId() {
 			Please specify the location of a VegBank XML data file.</p>
 		
          <p>
-
-			<html:radio value="local" property="dataFileLocation"/>
+      <!-- try to load file name from parameter -->
+      <bean:parameter id="beanlocalfile" name="localfile" value="n/a" />
+      
+       <logic:notEqual name="beanlocalfile" value="n/a">
+       <span class="instructions"> VegBranch thinks this is the file you are trying to upload: <br/>
+        <input type="text" value="<bean:write name='beanlocalfile' />" size="90" /> <br/>
+        Due to security issues, your browser blocks this value from being filled in the following field.
+        You can manually copy the value and paste it into the field below this, then submit this form. </span>
+        <br/>
+			 </logic:notEqual>
+      <html:radio value="local" property="dataFileLocation"/>
 				Upload from your computer
         <br/>&nbsp;&nbsp; Local data file path:
-		
-			<html:file property="plotFile" size="50" onclick="selectRadio(0)"/>
-		
+		 
+      <html:file property="plotFile" size="50" onclick="selectRadio(0)"/>
+     
         </p>
         <p>
 	
