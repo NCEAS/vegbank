@@ -863,6 +863,11 @@
     <description>No Plots and Full dataset for version 1.0.2. VegBank Module, third update</description>
   </file>
   <file>
+    <name>vegbranch/vegbank-module102-full-noplots-upd4.zip</name>
+    <description>Updated closed lists and supplied NatureServe communities.</description>
+  </file>
+
+  <file>
     <name>vegbranch/vegbank-module102-full-noplots.zip</name>
     <description>No Plots and Full dataset for version 1.0.2. VegBank Module</description>
   </file>
@@ -934,6 +939,11 @@
     <name>vegbranch/vegbranch-v1.5b.zip</name>
     <description>VegBranch, VegBank's Client Database in MS Access.  Version 1.5b</description>
   </file>
+  <file>
+    <name>vegbranch/vegbranch-v1.6.zip</name>
+    <description>VegBranch, VegBank's Client Database in MS Access.  Added NPS PLOTS entry and included UTM to Lat/Long conversion capability.</description>
+  </file>
+
   <file>
     <name>vegbranch/help/screenshots/basicent_metadata_1.4.png</name>
     <description>VegBranch help files</description>
