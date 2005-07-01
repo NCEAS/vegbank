@@ -22,14 +22,18 @@ function getHelpPageId() {
 <li><a href="@vbr_clientserver@vegbranch-v@vbr_version@@vbr_subversion_letter@.zip">Download
   VegBranch</a></li>
 <ul>  
-  <li>(~5 MB zip file that expands to 30 MB)</li>
+  
+  <li>Include NPS-PLOTS style data entry tools</li>
+  <li>Allows you to remove plants that do not occur in states you select (faster processing and smaller database)</li>
+  <li>Calculates Lat/Long from UTM coordinates (Zone is needed!)</li>
+  <li>(~7 MB zip file that expands to 38 MB)</li>
 </ul>
 </ul>
 </p>
 <p><b>VegBank Module database<span class="bright">*</span> (structure version: 1.0.2)</b> <!--(pick one) -->:
   <ul><li>This is an Access database that contains the VegBank data structure.  
     VegBranch connects to a VegBank Module database, where the vegbank data are stored.  The following databases contain varying amounts of preloaded data. <br/>
-    <span class="bright">UPDATED data</span>:18-JANUARY-2005.  (You can update old VegBank Modules with (current) VegBranch Main Menu |other functions |Data Fixes.)</li>
+      (You can update old VegBank Modules with (current) VegBranch Main Menu |other functions |Data Fixes.)</li>
 
 <li><a href="@vbr_clientserver@vegbank-module102-small-example-upd2.zip">Download VegBank module (small example data)</a></li>
   <ul>
@@ -49,14 +53,17 @@ function getHelpPageId() {
       <li>many plots</li>
       <li>(33 MB zip file that expands to 164 MB)</li>
   </ul> -->
-<li><a href="@vbr_clientserver@vegbank-module102-full-noplots-upd3.zip">Download VegBank module (full set of data, no plots)</a></li>
+<li><a href="@vbr_clientserver@vegbank-module102-full-noplots-upd4.zip">Download VegBank module (full set of data, no plots)</a></li>
   <ul>
   <li>Use this vegbank module for adding your own plots to VegBranch without preloaded plots in the way.</li>
   <li>full USDA plant taxonomy</li>
-      <li>full EcoArt community taxonomy</li>
+      <li>full NatureServe community taxonomy, plus historical EcoArt communities <br/>
+      <strong>NOTE: users of VegBranch versions before 1.6</strong> will need to change community matching criteria
+      if you want VegBranch to automatically match community names during import.  In the matching communities form, be sure
+      not to skip the optional first step, (1): Change how VegBranch matches comm Concepts.  Choose class Systems listed, such as Code and Scientific.</li>
       <li>full soil taxa and place names</li>
       <li>no plots</li>
-      <li>(35 MB zip file that expands to 166 MB)</li>
+      <li>(40 MB zip file that expands to 190 MB)</li>
   </ul>  
 
 </ul>
