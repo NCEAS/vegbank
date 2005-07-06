@@ -42,9 +42,13 @@
 		<form-bean name="EmailPasswordForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="email" type="java.lang.String" />
 		</form-bean>
-		<!--form-bean name="EntityNameForm" type="org.vegbank.ui.struts.EntityNameForm" /-->
 		<form-bean name="InterpretPlantForm" type="org.vegbank.ui.struts.InterpretPlantForm" />
-		<form-bean name="InterpretCommForm" type="org.vegbank.ui.struts.InterpretCommForm" />
+		<form-bean name="InterpretCommForm" type="org.apache.struts.action.DynaActionForm">
+            <form-property name="commclass" type="org.vegbank.common.model.Commclass"/>
+            <form-property name="comminterp" type="org.vegbank.common.model.Comminterpretation[]" size="1"/>
+            <form-property name="commconcept_ac" type="java.lang.String[]" size="1"/>
+            <form-property name="obsId" type="java.lang.String"/>
+		</form-bean>
 		<form-bean name="LogonForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="username" type="java.lang.String" />
 			<form-property name="password" type="java.lang.String" />
@@ -164,10 +168,14 @@
 			<set-property property="reqRoles" value="pro" />
 			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
 		</action>
-		<action path="/InterpretCommObservation" parameter="edit" type="org.vegbank.ui.struts.InterpretCommAction" scope="request" name="InterpretCommForm" input="InterpretCommObservation" validate="false">
+
+<action path="/InterpCommForm" scope="request" name="InterpretCommForm" validate="false" forward="/forms/CommInterpretation.jsp"/>
+
+		<action path="/InterpretCommObservation" parameter="edit" type="org.vegbank.ui.struts.InterpretCommAction" scope="session" name="InterpretCommForm" input="InterpretCommObservation" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="pro" />
 			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
+			<forward name="success" path="/forms/success.html" redirect="true" />
 		</action>
 		<action path="/ListCertifications" type="org.vegbank.ui.struts.admin.CertificationListAction" name="CertificationForm" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
