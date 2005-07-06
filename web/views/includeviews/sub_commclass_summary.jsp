@@ -2,7 +2,7 @@
 <table class="thinlines" cellpadding="2">
 <tr><th colspan="19">Community Classification:</th></tr>
 <logic:empty name="commclass-BEANLIST">
-<tr><td>  Sorry, no communties have been assigned to this plot-observation.</td></tr>
+<tr><td>  No communties have been assigned to this plot.</td></tr>
 </logic:empty>
 <logic:notEmpty name="commclass-BEANLIST">
 
