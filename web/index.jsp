@@ -71,7 +71,7 @@ function getHelpPageId() {
     </fieldset>
      <br/>
     <fieldset id="tut_datainvegbank">
-      <legend>Data in Vegbank</legend> 
+      <legend>Data in VegBank</legend> 
       <ul><li>
       <bean:include id="countdata" page="/cache/views/raw/raw_countdata.jsp" />
       <bean:write name="countdata" filter="false" />
