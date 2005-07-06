@@ -128,7 +128,8 @@ function getHelpPageId() {
     <li><a href="@web_context@DisplayDatasets.do">Manage datasets</a></li>
     </ul>
     </fieldset>
-
+    <br />
+    <%@ include file="includes/news.html" %>
 
  </div>
 
