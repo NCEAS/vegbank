@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.18 2005-06-30 01:31:22 mlee Exp $
+# $Id: .htaccess,v 1.19 2005-07-06 14:31:00 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -10,7 +10,7 @@ RewriteEngine  on
 # NC = No Case match, so case insensitive match
 # QSA = Query String Append
 # L = Last rewrite rule to do, so stop here
-RewriteRule ^plotsearch$      @plotquery_page_advanced@   [NC,QSA,L]
+RewriteRule ^plotsearch$      @plotquery_page_advanced@   [NC,QSA,L,R]
 
 #### Vegdocs Links
 ## The cool general case one doesn't work yet
@@ -19,9 +19,9 @@ RewriteRule ^plotsearch$      @plotquery_page_advanced@   [NC,QSA,L]
 #RewriteRule ^(.+)$      /vegdocs/$1   [NC,QSA, L]
 
 ## But this direct link to workshop does
-RewriteRule ^workshop$      /vegdocs/workshop  [NC,QSA,L]
+RewriteRule ^workshop$      /vegdocs/workshop  [NC,QSA,L,R]
 
-RewriteRule ^forgotpassword$  /vegbank/forms/EmailPassword.jsp [NC,QSA,L]
+RewriteRule ^forgotpassword$  /vegbank/forms/EmailPassword.jsp [NC,QSA,L,R]
 
 ####################################################################
 ## VEGBRANCH rewrites (the VegBranch database accesses these: 
@@ -79,17 +79,17 @@ RewriteRule ^cite/([^\.]+)\.RP\.(.*)$	   @get_link@std/referenceparty/$1.RP.$2  
 RewriteRule ^cite/([^\.]+)\.AR\.(.*)$	   @get_link@std/aux_role/$1.AR.$2	       [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.DS\.(.*)$	   @get_link@std/userdataset/$1.DS.$2       [NC,QSA,L]
 
-RewriteRule ^dd/(.*)/(.*)	   @dbdictionary_link@dd~table~$1~field~$2~type~fieldview.html       [NC,QSA,L]
-RewriteRule ^dd/(.*)	           @dbdictionary_link@dd~table~$1~type~tableview.html                [NC,QSA,L]
+RewriteRule ^dd/(.*)/(.*)	   @dbdictionary_link@dd~table~$1~field~$2~type~fieldview.html       [NC,QSA,L,R]
+RewriteRule ^dd/(.*)	           @dbdictionary_link@dd~table~$1~type~tableview.html                [NC,QSA,L,R]
 
 ## for deep links FROM natureserve
 RewriteRule ^natureserve/(.*)$   @get_link@std/observation/$1?where=where_observation_nsuid   [NC,QSA,L]
 
 
 ## for browsing data
-RewriteRule ^browse$	 	   @views_link@topdata.jsp?perPage=5&getonly=0       [NC,QSA,L]
-RewriteRule ^browse-byplace$	   @views_link@topdata.jsp?perPage=20&getonly=1       [NC,QSA,L]
-RewriteRule ^browse-bycomm$	   @views_link@topdata.jsp?perPage=20&getonly=5       [NC,QSA,L]
-RewriteRule ^browse-byparty$	   @views_link@topdata.jsp?perPage=20&getonly=2       [NC,QSA,L]
-RewriteRule ^browse-byplant$	   @views_link@topdata.jsp?perPage=20&getonly=4       [NC,QSA,L]
-RewriteRule ^browse-byproject$	   @views_link@topdata.jsp?perPage=20&getonly=3       [NC,QSA,L]
+RewriteRule ^browse$	 	   @views_link@topdata.jsp?perPage=5&getonly=0       [NC,QSA,L,R]
+RewriteRule ^browse-byplace$	   @views_link@topdata.jsp?perPage=20&getonly=1       [NC,QSA,L,R]
+RewriteRule ^browse-bycomm$	   @views_link@topdata.jsp?perPage=20&getonly=5       [NC,QSA,L,R]
+RewriteRule ^browse-byparty$	   @views_link@topdata.jsp?perPage=20&getonly=2       [NC,QSA,L,R]
+RewriteRule ^browse-byplant$	   @views_link@topdata.jsp?perPage=20&getonly=4       [NC,QSA,L,R]
+RewriteRule ^browse-byproject$	   @views_link@topdata.jsp?perPage=20&getonly=3       [NC,QSA,L,R]
