@@ -65,8 +65,12 @@ function getHelpPageId() {
        <span class="instructions"> VegBranch thinks this is the file you are trying to upload: <br/>
         <input type="text" value="<bean:write name='beanlocalfile' />" size="90" /> <br/>
         Due to security issues, your browser blocks this value from being filled in the following field.
-        You can manually copy the value and paste it into the field below this, then submit this form. </span>
+        You can manually copy the value and paste it into the field below this, then press the "continue" button. </span>
         <br/>
+        <logic:notMatch name="beanlocalfile" value=".zip"><!-- check for case? -->
+          <span class="bright"><strong>The above file is not zipped.</strong></span> You should zip your upload file if possible.
+          <br/>
+        </logic:notMatch>
 			 </logic:notEqual>
       <html:radio value="local" property="dataFileLocation"/>
 				Upload from your computer
