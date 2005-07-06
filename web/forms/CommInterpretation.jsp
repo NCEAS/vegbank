@@ -135,8 +135,8 @@ function updateCommTitle(name, input) {
 
 }
 
-function popupCommLookup() {
-	window.open('@forms_link@CommQuery.jsp', '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
+function popupCommLookup(thisFormName,thisCtlName) {
+	window.open('@forms_link@CommQuery.jsp?requestingForm=' + thisFormName + '&requestingField=' + thisCtlName, '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
 }
 
 function popupObs() {
@@ -232,7 +232,7 @@ function getHelpPageId() {
     <table class="thinlines">
     <tr><td class="listhead">Community accession code</td>
         <td class="item"><input id="af_commconcept_ac" type="text" name="tmp_commconcept_ac" size="28"/>
-        <a href="javascript:popupCommLookup()">Lookup</a></td></tr>
+        <input type="button" onclick="popupCommLookup(this.form.name,'tmp_commconcept_ac')" value="Lookup" /></td></tr>
 
     <tr><td class="listhead">Class fit</td>
         <td class="item"><select id="af_classfit" name="tmp_classfit">

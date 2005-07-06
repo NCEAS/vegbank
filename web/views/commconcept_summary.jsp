@@ -73,12 +73,27 @@ function getHelpPageId() {
 		       //**************************************************************************************
 		       String rowClass = "evenrow";
     %>
+<bean:define id="addSelectButton" value="no" />
+<logic:present parameter="requestingForm">
+ 
+    <!-- requestingForm param is not empty -->
+    <bean:define id="addSelectButton" value="yes" />
+ 
+</logic:present>
+
+
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
 
 <tr class='@nextcolorclass@'>
 
 <td class="largefield"><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a>
-  <br/>accession code: <bean:write name="onerow" property="accessioncode" /></td>
+  <br/>accession code: <bean:write name="onerow" property="accessioncode" />
+  <!-- add "select" button if certain params are present and notEmpty -->
+  <logic:equal name="addSelectButton" value="yes">
+    <br/><a name="#comm<bean:write name='onerow' property='commconcept_id' />" href="#comm<bean:write name='onerow' property='commconcept_id' />"
+       onclick="setOpenerFormValue('<bean:write name="onerow" property="accessioncode" />')"><img src="@images_link@btn_select.png" alt="--SELECT--" /></a>
+  </logic:equal>
+</td>
 <td class="largefield"><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
 <td class="numeric largefield">
 <bean:define id="concId" name="onerow" property="commconcept_id"/>

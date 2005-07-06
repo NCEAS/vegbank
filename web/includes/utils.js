@@ -616,6 +616,51 @@ function delay(ms) {
     }
 }
 
+function getParamFromResubmitForm(theParam) {
+	// function gets param value from resubmitForm, returns "" if nothing found
+	try {
+    var theResubmitForm;
+	  theResubmitForm = document.forms.resubmitForm ;
+  //  alert (theResubmitForm.elements.length);
+    var theReturnValue;
+
+    var i;
+    i=0 ;
+    while ( theResubmitForm.elements[i].name != theParam && i < theResubmitForm.elements.length -1)
+    {
+     i++;
+    }
+  //  alert ("ok to here" + i);
+    theReturnValue  = theResubmitForm.elements[i].value;
+	  return theReturnValue;
+	}
+	catch (e) {
+	    return "";
+    }
+}
+
+
+//this for putting a value from a popup window back into the opener -- depends on params requestingForm and requestingField
+function setOpenerFormValue(theValueToSet) {
+  // this sets the value of the opener form field, based on requestingForm att and requestingField att.
+  var tempname;
+  tempname=  getParamFromResubmitForm("requestingForm")
+ // alert(tempname);
+  var formObject;
+  try {
+    formObject = opener.document.forms[tempname];
+    // alert ("form : " + formObject.name);
+    tempname= getParamFromResubmitForm("requestingField");
+    // alert ("form field: " + tempname);
+    formObject.elements[tempname].value = theValueToSet;
+    window.close();
+
+  }
+  catch (e) {
+    alert("There was an error trying to fill in the Accession Code.  Make sure the original window is still opened.");
+  }
+}
+
 
 function postNewParam(theName,theVal) {
   // this uses the resubmitForm Form in the page that should be put there by vegbank(colon)resubmitForm
