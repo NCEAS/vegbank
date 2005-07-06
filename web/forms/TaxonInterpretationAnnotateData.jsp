@@ -4,8 +4,8 @@
 
 <script language="javascript">
 
-function popupPlantQuery() {
-	window.open('@web_context@forms/PlantQuery.jsp', '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
+function popupPlantQuery(thisFormName,thisCtlName) {
+  window.open('@web_context@forms/PlantQuery.jsp?requestingForm=' + thisFormName + '&requestingField=' + thisCtlName, '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
 }
 
 function getHelpPageId() {
@@ -91,7 +91,7 @@ String tobsId = request.getAttribute("Taxonobservation").getTaxonobservation_id(
 	<td class="listhead">Plant concept accession code</td>
 	<td><html:text name="formBean" property="pcAC" size="30"/>
 	&nbsp; &nbsp; &nbsp; &raquo; 
-		<span class="item"><a href="javascript:void popupPlantQuery()">lookup</a></span>
+    <input type="button" onclick="popupPlantQuery(this.form.name,'pcAC')" value="Lookup" />
 	</td>
 </tr>
 <tr>

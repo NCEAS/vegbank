@@ -122,7 +122,17 @@ function setNameMatchType() {
         <form action="@views_link@plantconcept_summary.jsp" method="get" name="queryform" onsubmit="prepareForm()">
 			<input type="hidden" name="where" value="where_plantconcept_mpq"/>
             <input name="criteriaAsText" type="hidden" value="" /> <!-- text to show user what they searched for --> 
-         
+     
+                <logic:present parameter="requestingForm">  
+                  <!-- record requesting form name and requesting field name if in URL to pass to next page, when form is submitted -->
+                  <bean:parameter id="requestingForm" name="requestingForm" />
+                  <bean:parameter id="requestingField" name="requestingField" />
+                  <input type="hidden" name="requestingForm" value="<bean:write name='requestingForm' />" />
+                  <input type="hidden" name="requestingField" value="<bean:write name='requestingField' />" />
+                </logic:present>  
+
+     
+     
                 <p class="instructions">
 				<strong>All search criteria are optional.</strong>
 				<br />
@@ -249,7 +259,7 @@ function setNameMatchType() {
             <!-- return only plants that are on some number of plots? -->
           <p id="tut_minplots">
             <b>Show plants that occur on at least this many plots:</b><br/>
-            <input name="xwhereParams_obscount_0" value="1" />
+            <input name="xwhereParams_obscount_0" value="0" />
             <input type="hidden" name="xwhereParams_obscount_1" value="pc.d_obscount"/>
             <input type="hidden" name="xwhereKey_obscount" value="xwhere_gteq"/>
           </p>
