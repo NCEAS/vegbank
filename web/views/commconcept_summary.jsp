@@ -77,7 +77,8 @@ function getHelpPageId() {
 
 <tr class='@nextcolorclass@'>
 
-<td class="largefield"><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a></td>
+<td class="largefield"><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a>
+  <br/>accession code: <bean:write name="onerow" property="accessioncode" /></td>
 <td class="largefield"><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
 <td class="numeric largefield">
 <bean:define id="concId" name="onerow" property="commconcept_id"/>
