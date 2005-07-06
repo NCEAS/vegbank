@@ -601,6 +601,25 @@ ul.compactdots   {
 					color: #666666;
 				}
 
+.control_tab    {
+    font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+    font-weight: bold;
+    color: #fff;
+    background-color: #666;
+    padding: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-decoration: none;
+}
+
+.control_tab a:link { color: #0e0; text-decoration: none}
+.control_tab a:visited { color: #0e0; text-decoration: none}
+.control_tab a:hover { color: #fff; background-color: #0e0; text-decoration: none}
+
+.block { 
+    display: block;
+    clear: both;
+}
 
 .description {
 	color: #000000;
@@ -748,6 +767,12 @@ forms/TaxonInterpretationAnnotateData.jsp
 	font-size: 10pt;
 	font-weight: bold;
 	background-color: #DDDDDD;
+}
+
+.rowdivider {
+	color: #fff;
+	background-color: #444;
+    width: 8px;
 }
 
 .bright { color: red }
