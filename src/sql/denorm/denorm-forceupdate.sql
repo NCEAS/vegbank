@@ -113,3 +113,48 @@ update party set d_obsCount=(select countallcontrib
     from view_browseparty_all_count where view_browseparty_all_count.party_ID=party.party_ID);
 
 UPDATE namedplace set d_obsCount=(select count(1) from place where namedplace.namedplacE_ID = place.namedplace_ID);
+
+
+
+UPDATE taxonobservation set int_origPlantConcept_ID = (select min(plantconcept_ID) from taxoninterpretation 
+     WHERE originalinterpretation=true AND taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) 
+   ;
+
+UPDATE taxonobservation set int_origPlantSciName = (select sciname from temptbl_std_plantnames as newnames
+     WHERE taxonobservation.int_origPlantConcept_ID = newnames.PlantConcept_ID) 
+   ;
+
+UPDATE taxonobservation set int_origPlantSciNameNoAuth = (select scinamenoauth from temptbl_std_plantnames as newnames
+     WHERE taxonobservation.int_origPlantConcept_ID = newnames.PlantConcept_ID) 
+   ;
+
+UPDATE taxonobservation set int_origPlantCode = (select code from temptbl_std_plantnames as newnames
+     WHERE taxonobservation.int_origPlantConcept_ID = newnames.PlantConcept_ID) 
+   ;
+
+UPDATE taxonobservation set int_origPlantCommon = (select common from temptbl_std_plantnames as newnames
+     WHERE taxonobservation.int_origPlantConcept_ID = newnames.PlantConcept_ID) 
+   ;
+
+UPDATE taxonobservation set int_currPlantConcept_ID = (select min(plantconcept_ID) from taxoninterpretation 
+     WHERE originalinterpretation=true AND taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) 
+   ;
+
+UPDATE taxonobservation set int_currPlantSciName = (select sciname from temptbl_std_plantnames as newnames
+     WHERE taxonobservation.int_currPlantConcept_ID = newnames.PlantConcept_ID) 
+   ;
+
+UPDATE taxonobservation set int_currPlantSciNameNoAuth = (select scinamenoauth from temptbl_std_plantnames as newnames
+     WHERE taxonobservation.int_currPlantConcept_ID = newnames.PlantConcept_ID) 
+   ;
+
+UPDATE taxonobservation set int_currPlantCode = (select code from temptbl_std_plantnames as newnames
+     WHERE taxonobservation.int_currPlantConcept_ID = newnames.PlantConcept_ID) 
+   ;
+
+UPDATE taxonobservation set int_currPlantCommon = (select common from temptbl_std_plantnames as newnames
+     WHERE taxonobservation.int_currPlantConcept_ID = newnames.PlantConcept_ID) 
+   ;
+   
+   
+   
