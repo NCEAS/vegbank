@@ -219,4 +219,46 @@ CREATE view view_csv_taxonimportance AS
  SELECT observation_ID, plant, stratum, cover, CASE WHEN (covercode_exact is null) THEN covercode_byrange ELSE covercode_exact END as covercode, 
    basalarea, accessioncode
  FROM view_csv_taxonimportance_pre;
-  
+ 
+ 
+ 
+ 
+ 
+ -- the following views create "standard" names for plantconcepts, based on usages of preferred party and classsystems: 
+ DROP VIEW view_std_plantnames_code;
+ CREATE VIEW view_std_plantnames_code AS
+    SELECT plantconcept_id, plantname FROM plantusage WHERE classsystem = 'Code' AND party_id = 
+    (SELECT party_id FROM party WHERE accessioncode='VB.Py.511.USDANRCSPLANTS2') AND usagestop IS NULL;
+    
+ DROP VIEW view_std_plantnames_sciname;
+ CREATE VIEW view_std_plantnames_sciname AS
+    SELECT plantconcept_id, plantname FROM plantusage WHERE classsystem = 'Scientific' AND party_id = 
+    (SELECT party_id FROM party WHERE accessioncode='VB.Py.511.USDANRCSPLANTS2') AND usagestop IS NULL;
+    
+ DROP VIEW view_std_plantnames_scinamenoauth;
+ CREATE VIEW view_std_plantnames_scinamenoauth AS
+    SELECT plantconcept_id, plantname FROM plantusage WHERE classsystem = 'Scientific without authors' AND party_id = 
+    (SELECT party_id FROM party WHERE accessioncode='VB.Py.511.USDANRCSPLANTS2') AND usagestop IS NULL;
+    
+ DROP VIEW view_std_plantnames_common;
+ CREATE VIEW view_std_plantnames_common AS
+    SELECT plantconcept_id, plantname FROM plantusage WHERE classsystem = 'English Common' AND party_id = 
+    (SELECT party_id FROM party WHERE accessioncode='VB.Py.511.USDANRCSPLANTS2') AND usagestop IS NULL;
+    
+ --the following views are same as above, but not party specific, to catch "other concepts":   
+ DROP VIEW view_all_plantnames_code;
+ CREATE VIEW view_all_plantnames_code AS
+    SELECT plantconcept_id, plantname FROM plantusage WHERE classsystem = 'Code' ;
+    
+ DROP VIEW view_all_plantnames_sciname;
+ CREATE VIEW view_all_plantnames_sciname AS
+    SELECT plantconcept_id, plantname FROM plantusage WHERE classsystem = 'Scientific' ;
+    
+ DROP VIEW view_all_plantnames_scinamenoauth;
+ CREATE VIEW view_all_plantnames_scinamenoauth AS
+    SELECT plantconcept_id, plantname FROM plantusage WHERE classsystem = 'Scientific without authors' ;
+    
+ DROP VIEW view_all_plantnames_common;
+ CREATE VIEW view_all_plantnames_common AS
+    SELECT plantconcept_id, plantname FROM plantusage WHERE classsystem = 'English Common' ;
+ --creates views of std and normal plant taxonomy:
