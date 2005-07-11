@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.19 2005-07-06 14:31:00 mlee Exp $
+# $Id: .htaccess,v 1.20 2005-07-11 21:54:28 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -33,6 +33,7 @@ RewriteRule ^vegbranch-usda-states$      /vegdocs/vegbranch/client/vbr_usda_stat
 RewriteRule ^vegbranch-nps-version$      /vegdocs/vegbranch/docs/nps-plots.html  [NC,QSA,L,R]
 
 RewriteRule ^xml$            /vegdocs/xml/vegbank-xml-index.html  [NC,QSA,L,R]
+RewriteRule ^erd$            /vegdocs/design/erd/vegbank_erd.pdf  [NC,QSA,L,R]
 
 RewriteRule ^load-xml$            /vegbank/DisplayUploadPlotAction.do  [NC,QSA,L,R]
 RewriteRule ^load-xml/(.*)$            /vegbank/DisplayUploadPlotAction.do?localfile=$1  [NC,QSA,L,R]
@@ -93,3 +94,7 @@ RewriteRule ^browse-bycomm$	   @views_link@topdata.jsp?perPage=20&getonly=5     
 RewriteRule ^browse-byparty$	   @views_link@topdata.jsp?perPage=20&getonly=2       [NC,QSA,L,R]
 RewriteRule ^browse-byplant$	   @views_link@topdata.jsp?perPage=20&getonly=4       [NC,QSA,L,R]
 RewriteRule ^browse-byproject$	   @views_link@topdata.jsp?perPage=20&getonly=3       [NC,QSA,L,R]
+
+
+RewriteRule ^nvcrs$        http://152.2.14.231/nvcrs/     [NC,QSA,L]
+RewriteRule ^nvcrs/(.*)$   http://152.2.14.231/nvcrs/$1   [NC,QSA,L]
