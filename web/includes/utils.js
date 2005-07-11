@@ -756,6 +756,59 @@ function removeClassFromDoc(classname) {
    }
 }
 
+function removeClassFromDocIfAlsoClass(removeclass,ifalsoclass,tableid) {
+	// function removes a class from elements, if also another class is present
+	// example: remove class "hidden" from all "email" class elements would unhide emails on a page
+	var inc=0
+	//  var alltags=document.all? document.all : document.getElementsByTagName("*")
+	 var alltags=gebid(tableid).getElementsByTagName("*") ;
+	  for (i=0; i<alltags.length; i++){
+	    if (alltags[i].className.indexOf(removeclass)!=-1)
+	    {
+	    // check to see if also another class is there:
+	      if (alltags[i].className.indexOf(ifalsoclass)!=-1)
+	      {
+	        /* remove the requested className.  Does not set entire class to space string b/c there could be 2 classes embedded. */
+	        alltags[i].className = alltags[i].className.replace(removeclass," ");
+	      }
+	    }
+   }
+}
+function addClassToDocIfAlsoClass(addclass,ifclass,tableid) {
+	// function removes a class from elements, if also another class is present
+	// example: remove class "hidden" from all "email" class elements would unhide emails on a page
+	  var inc=0
+	  //var alltags=document.all? document.all : document.getElementsByTagName("*")
+	  var alltags=gebid(tableid).getElementsByTagName("*") ;
+	  for (i=0; i<alltags.length; i++){
+	    if (alltags[i].className.indexOf(ifclass)!=-1)
+	    {
+	    // check to see if already there:
+	      if (alltags[i].className.indexOf(addclass)==-1)
+	      {
+	        /* remove the requested className.  Does not set entire class to space string b/c there could be 2 classes embedded. */
+	        alltags[i].className = alltags[i].className + " " + addclass ;
+	      }
+	    }
+   }
+}
+
+function showTaxonName(toshow,tableid) {
+	//function shows a particular type of taxon name for plots, and hides others.
+	// first hide all
+	addClassToDocIfAlsoClass("hidden","taxobs_authorplantname",tableid);
+	addClassToDocIfAlsoClass("hidden","taxobs_orig_scinamewithauth",tableid);
+	addClassToDocIfAlsoClass("hidden","taxobs_orig_scinamenoauth",tableid);
+	addClassToDocIfAlsoClass("hidden","taxobs_orig_code",tableid);
+	addClassToDocIfAlsoClass("hidden","taxobs_orig_common",tableid);
+	addClassToDocIfAlsoClass("hidden","taxobs_curr_scinamewithauth",tableid);
+	addClassToDocIfAlsoClass("hidden","taxobs_curr_scinamenoauth",tableid);
+	addClassToDocIfAlsoClass("hidden","taxobs_curr_code",tableid);
+    addClassToDocIfAlsoClass("hidden","taxobs_curr_common",tableid);
+	// then show the one
+	removeClassFromDocIfAlsoClass ("hidden",toshow,tableid);
+}
+
 function helpNeedsNewPage() {
    /* attempts to determine if help needs to open as new page.  Rules:
     * DOES NOT need to open new page if this is .html file
