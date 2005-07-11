@@ -67,9 +67,6 @@ Change plant label: <select id="taxonNameSelect" onChange="showTaxonName(this.va
 
 </TH></TR>
 
-<script language="javascript">
-setTaxonNameSelect(getCookie("taxon_name"));
-</script>
 
 <logic:equal parameter="strata2Show" value="3"> <!-- show all records of taxImp -->
   
@@ -348,3 +345,8 @@ setTaxonNameSelect(getCookie("taxon_name"));
 </TABLE>
 
 </logic:notEqual> <!-- whether or not to show strata -->
+
+<!-- set the plant names to show: -->
+<script language="javascript">
+setTaxonNameSelect(getCookie("taxon_name"),"taxonObservationof<bean:write name='observation_pk' />");
+</script>

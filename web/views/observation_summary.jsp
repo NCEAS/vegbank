@@ -147,7 +147,7 @@ function getHelpPageId() {
 
 
 <form action="" method="GET" id="cartable">
-<TABLE width="100%" class="leftrightborders" cellpadding="2">
+<TABLE width="100%" class="leftrightborders" cellpadding="2" id="observationsummarytableid">
 <tr>
 <th valign="bottom" align="center" nowrap="nowrap">Add/Drop</th>
 
@@ -195,7 +195,19 @@ function getHelpPageId() {
 
 <th valign="bottom" align="center" class='<bean:write name="show_plants" ignore="true" />hidden' nowrap="nowrap">
   <table class="horizborders">
+    
     <tr><td>Plants Found on Plot</td></tr>
+    <tr><td>Change plant label: <select id="taxonNameSelect" onChange="showTaxonName(this.value,'observationsummarytableid')">
+  <option value="taxobs_authorplantname">Author's plant name</option>
+  <option value="taxobs_orig_scinamewithauth">Original Interpretation, full Scientific Name</option>
+    <option value="taxobs_orig_scinamenoauth">Original Interpretation, Scientific Name without authors</option>
+     <option value="taxobs_orig_code">Original Interpretation, USDA Code</option>
+   <option value="taxobs_orig_common">Original Interpretation, Common Name</option>
+  <option value="taxobs_curr_scinamewithauth">Current Interpretation, full Scientific Name</option>
+    <option value="taxobs_curr_scinamenoauth" selected="selected">Current Interpretation, Scientific Name without authors</option>
+             <option value="taxobs_curr_code">Current Interpretation, USDA Code</option>
+           <option value="taxobs_curr_common">Current Interpretation, Common Name</option>
+</select></td></tr>
   </table>
 </th>
 
@@ -344,7 +356,19 @@ Plot #<%= rowIndex++ %>
 		   
 		    <%  inttemp ++ ;  %>
 		        &raquo; <a href='@get_link@std/taxonobservation/<bean:write name="onerowoftaxonobservation" property="taxonobservation_id" />'>
-				  <bean:write name="onerowoftaxonobservation" property="authorplantname" />
+         <!-- write all names, some of them will stay hidden -->
+         <span class="taxobs_authorplantname largefield hidden"> <bean:write name='onerowoftaxonobservation' property='authorplantname' /> </span>
+         <span class="taxobs_orig_scinamewithauth largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_origplantsciname' /> </span>
+         <span class="taxobs_orig_scinamenoauth largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_origplantscinamenoauth' /> </span>
+         <span class="taxobs_orig_code largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_origplantcode' /> </span>
+         <span class="taxobs_orig_common largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_origplantcommon' /> </span>
+         
+         <span class="taxobs_curr_scinamewithauth largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_currplantsciname' /> </span>
+         <span class="taxobs_curr_scinamenoauth largefield"> <bean:write name='onerowoftaxonobservation' property='int_currplantscinamenoauth' /> </span>
+         <span class="taxobs_curr_code largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_currplantcode' /> </span>
+         <span class="taxobs_curr_common largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_currplantcommon' /> </span>
+         
+
 				</a>
 					<logic:notEmpty name="onerowoftaxonobservation" property="maxcover">
 					  (<bean:write name="onerowoftaxonobservation" property="maxcover" />%)
@@ -383,6 +407,10 @@ Plot #<%= rowIndex++ %>
 
 <vegbank:pager />
 
+    <!-- set to show right plant name: -->
+   <script language="javascript">
+     setTaxonNameSelect(getCookie("taxon_name"),"observationsummarytableid");
+   </script>
 
 </logic:notEmpty>
 
