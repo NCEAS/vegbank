@@ -53,7 +53,7 @@
 
 <TR><TH colspan="9">
 <!-- show what kind of name? -->
-Change plant label: <select onChange="showTaxonName(this.value,'taxonObservationof<bean:write name='observation_pk' />')">
+Change plant label: <select id="taxonNameSelect" onChange="showTaxonName(this.value,'taxonObservationof<bean:write name='observation_pk' />')">
   <option value="taxobs_authorplantname">Author's plant name</option>
   <option value="taxobs_orig_scinamewithauth">Original Interpretation, full Scientific Name</option>
     <option value="taxobs_orig_scinamenoauth">Original Interpretation, Scientific Name without authors</option>
@@ -66,6 +66,10 @@ Change plant label: <select onChange="showTaxonName(this.value,'taxonObservation
 </select>
 
 </TH></TR>
+
+<script language="javascript">
+setTaxonNameSelect(getCookie("taxon_name"));
+</script>
 
 <logic:equal parameter="strata2Show" value="3"> <!-- show all records of taxImp -->
   
