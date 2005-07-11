@@ -51,7 +51,7 @@ function getHelpPageId() {
 
 <vegbank:get id="taxoninterpretation" select="taxoninterpretation_nostem" beanName="map" pager="false" where="where_taxonobservation_pk" wparam="taxonobservation_pk" perPage="-1" />
 <table class="leftrightborders" cellpadding="2">
-<tr><th colspan="19">Current Interpretations of this Taxon:</th></tr>
+<tr><th colspan="19">Interpretations of this Taxon:</th></tr>
 <logic:empty name="taxoninterpretation-BEANLIST">
 <tr><td class="@nextcolorclass@">  ERROR! no Taxon Interpretations found.</td></tr>
 </logic:empty>
