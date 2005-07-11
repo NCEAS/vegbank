@@ -445,3 +445,11 @@ DROP INDEX  emb_taxonInterpretation_idx ;
 CREATE INDEX emb_taxonInterpretation_idx ON taxonInterpretation (emb_taxonInterpretation);
 DROP INDEX  emb_taxonObservation_idx ;
 CREATE INDEX emb_taxonObservation_idx ON taxonObservation (emb_taxonObservation);
+
+--taxonobservation ID fields:
+DROP INDEX  taxonobservation_int_origPlantConcept_ID_x ;
+CREATE INDEX taxonobservation_int_origPlantConcept_ID_x on taxonobservation ( int_origPlantConcept_ID );
+
+DROP INDEX  taxonobservation_int_currPlantConcept_ID_x ;
+CREATE INDEX taxonobservation_int_currPlantConcept_ID_x on taxonobservation ( int_currPlantConcept_ID );
+
