@@ -51,7 +51,21 @@
 
 <bean:define id="stratawritten" value="no" />
 
+<TR><TH colspan="9">
+<!-- show what kind of name? -->
+Change plant label: <select onChange="showTaxonName(this.value,'taxonObservationof<bean:write name='observation_pk' />')">
+  <option value="taxobs_authorplantname">Author's plant name</option>
+  <option value="taxobs_orig_scinamewithauth">Original Interpretation, full Scientific Name</option>
+    <option value="taxobs_orig_scinamenoauth">Original Interpretation, Scientific Name without authors</option>
+     <option value="taxobs_orig_code">Original Interpretation, USDA Code</option>
+   <option value="taxobs_orig_common">Original Interpretation, Common Name</option>
+  <option value="taxobs_curr_scinamewithauth">Current Interpretation, full Scientific Name</option>
+    <option value="taxobs_curr_scinamenoauth" selected="selected">Current Interpretation, Scientific Name without authors</option>
+             <option value="taxobs_curr_code">Current Interpretation, USDA Code</option>
+           <option value="taxobs_curr_common">Current Interpretation, Common Name</option>
+</select>
 
+</TH></TR>
 
 <logic:equal parameter="strata2Show" value="3"> <!-- show all records of taxImp -->
   
@@ -83,10 +97,11 @@
        <logic:notEmpty name="taxonimportanceall-BEANLIST">             
    
    <TR><TD colspan="9">
-     <!-- sortable table: -->
+     <!-- sortable table: --> <!-- this ID is used above, in the "select plant name to view" combo box -->
      <table cellpadding="2" class="thinlines sortable" id="taxonObservationof<bean:write name='observation_pk' />">
 
          <tr><th>ord</th>
+         <%@ include file="sub_taxonimportance_showallplantnames_head.jsp" %>
          <%@ include file="../autogen/taxonimportance_summary_head.jsp" %>
          </tr>
     
@@ -119,6 +134,7 @@
      
          <tr class='<%= strataClass %>'>
           <td class="sizetiny"><% rowOrder ++ ; %><%= rowOrder %></td>
+          <%@ include file="sub_taxonimportance_showallplantnames.jsp" %>
           <%@ include file="../autogen/taxonimportance_summary_data.jsp" %>
          </tr>
 
@@ -170,6 +186,7 @@
   
    
      <tr><th>ord</th>
+     <%@ include file="sub_taxonimportance_showallplantnames_head.jsp" %>
      <%@ include file="../autogen/taxonimportance_summaryonlystrata_head.jsp" %>
      </tr>
 
@@ -196,6 +213,7 @@
  
  
      <tr class='group<%= strataGroup %>'><td class="sizetiny"><% rowOrder ++ ; %><%= rowOrder %></td>
+      <%@ include file="sub_taxonimportance_showallplantnames.jsp" %>
       <%@ include file="../autogen/taxonimportance_summaryonlystrata_data.jsp" %>
      </tr>
             
@@ -255,12 +273,14 @@
  
     
          <tr><th>ord</th>
+         <%@ include file="sub_taxonimportance_showallplantnames_head.jsp" %>
          <%@ include file="../autogen/taxonimportance_summarynostrata_head.jsp" %>
          </tr>
     
          <logic:iterate id="onerowoftaxonimportance" name="taxonimportancens-BEANLIST">
      
          <tr class='normal'><td class="sizetiny"><% rowOrder ++ ; %><%= rowOrder %></td>
+          <%@ include file="sub_taxonimportance_showallplantnames.jsp" %>
           <%@ include file="../autogen/taxonimportance_summarynostrata_data.jsp" %>
          </tr>
                
