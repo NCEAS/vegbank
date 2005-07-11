@@ -14182,9 +14182,6 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign Key into the TaxonObservation table to link to the information about the taxon for which this importance value applies.</attDefinition>
       <attForms>
-        <formShow name="SummaryNoStrata" useClass="largefield">1298</formShow>
-        <formShow name="SummaryOnlyStrata" useClass="largefield">1299</formShow>
-        <formShow name="Summary" useClass="largefield">1299</formShow>
         <formShow name="csvvegbranch">396</formShow>
       </attForms>
       <attFormsHTMLpre/>
@@ -15100,6 +15097,166 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
       <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>int_origPlantConcept_ID</attName>
+      <attLabel>the original interpretation's plant concept_ID</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>int_origPlantSciName</attName>
+      <attLabel>the original interpretation's plant scientific name</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>int_origPlantSciNameNoAuth</attName>
+      <attLabel>the original interpretation's plant scientific name without authority</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>int_origPlantCommon</attName>
+      <attLabel>the original interpretation's plant common name</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>int_origPlantCode</attName>
+      <attLabel>the original interpretation's plant code</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>int_currPlantConcept_ID</attName>
+      <attLabel>the current interpretation's plant concept_ID</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>int_currPlantSciName</attName>
+      <attLabel>the current interpretation's plant scientific name</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>int_currPlantSciNameNoAuth</attName>
+      <attLabel>the current interpretation's plant scientific name without authority</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>int_currPlantCommon</attName>
+      <attLabel>the current interpretation's plant common name</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>int_currPlantCode</attName>
+      <attLabel>the current interpretation's plant code</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
     </attribute>
   </entity>
   <entity>
