@@ -11,7 +11,9 @@
    <div id="logo">
         <img src="@images_link@vegbank_logo69x100trans.gif" id="logo-icon" />
         <a href="@web_context@" class="nobg"><img id="logo-word" alt="vegbank" border="0"
-        src="@images_link@vegbank_caps170x40outline.jpg" /></a>
+        src="@images_link@vegbank_caps170x40outline.jpg" /></a> 
+        <!-- this is something to broadcast to everyone (on jsp pages), like the system is shutting down in 1 hour -->
+        <jsp:include page="/includes/systemmessage.html" />
    </div>
 
     <div id="permanav">
