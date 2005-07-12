@@ -937,9 +937,9 @@ function gebid(id) {
     return document.getElementById(id);
 }
 
-function getEventElement(evt) {
+function getEventElement(theEvent) {
     var elem = null;
-    var evt = (evt) ? evt : ((window.event) ? window.event : null);
+    var evt = (theEvent) ? theEvent : ((window.event) ? window.event : null);
     if (evt) {
         // equalize W3C/IE models to get event target reference
         elem = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
