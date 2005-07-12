@@ -19,7 +19,9 @@ maxConnectionUsers
 resetTime
 logFile
 machine_url
+eighty_eighty
 mail_host
+mail_port
 vegbank.home.dir
 vegbank.data.dir
 vegbank.export.dirname
@@ -30,3 +32,4 @@ vegbank.schema.model
 java1.4.home.dir
 system_email
 psqlPath
+
