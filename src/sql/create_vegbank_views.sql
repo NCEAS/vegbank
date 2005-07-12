@@ -12,6 +12,7 @@ DROP VIEW view_browseparty_obscontrib;
 DROP VIEW view_browseparty_classcontrib;
 DROP VIEW view_browseparty_projectcontrib;
 
+DROP VIEW view_comminterp_more;
 
 DROP VIEW view_notemb_classContributor;
 DROP VIEW view_notemb_commInterpretation;
@@ -100,6 +101,7 @@ CREATE VIEW view_emb_embargo_complete AS
 -------------------
 
 DROP VIEW view_plantconcept_transl;
+DROP VIEW view_commconcept_transl;
 DROP VIEW  view_reference_transl ;
  CREATE VIEW view_reference_transl AS 
    SELECT CASE WHEN shortName IS NULL 
@@ -117,7 +119,6 @@ DROP VIEW  view_reference_transl ;
                END 
              AS reference_id_transl, reference_id from reference;
 
-DROP VIEW view_plantconcept_transl;
 CREATE VIEW view_plantconcept_transl AS 
   SELECT plantconcept_id, plantname_id, plantname, reference_id, 
     plantname || ' [' || (select reference_id_transl 
@@ -125,6 +126,12 @@ CREATE VIEW view_plantconcept_transl AS
                            where view_reference_transl.reference_id=plantconcept.reference_id) || ']' as plantconcept_id_transl 
     FROM plantconcept;
 
+CREATE VIEW view_commconcept_transl AS 
+  SELECT commconcept_id, commname_id, commname, reference_id, 
+    commname || ' [' || (select reference_id_transl 
+                           FROM view_reference_transl 
+                           where view_reference_transl.reference_id=commconcept.reference_id) || ']' as commconcept_id_transl 
+    FROM commconcept;
 
 
              
@@ -261,4 +268,61 @@ CREATE view view_csv_taxonimportance AS
  DROP VIEW view_all_plantnames_common;
  CREATE VIEW view_all_plantnames_common AS
     SELECT plantconcept_id, plantname FROM plantusage WHERE classsystem = 'English Common' ;
- --creates views of std and normal plant taxonomy:
+ 
+
+ -- the following views create "standard" names for commconcepts, based on usages of preferred party and classsystems: 
+ DROP VIEW view_std_commnames_code;
+ CREATE VIEW view_std_commnames_code AS
+    SELECT commconcept_id, commname FROM commusage WHERE classsystem = 'Code' AND party_id = 
+    (SELECT party_id FROM party WHERE accessioncode='VB.Py.512.NATURESERVE') AND usagestop IS NULL;
+    
+ DROP VIEW view_std_commnames_sciname;
+ CREATE VIEW view_std_commnames_sciname AS
+    SELECT commconcept_id, commname FROM commusage WHERE classsystem = 'Scientific' AND party_id = 
+    (SELECT party_id FROM party WHERE accessioncode='VB.Py.512.NATURESERVE') AND usagestop IS NULL;
+    
+ DROP VIEW view_std_commnames_translated;
+ CREATE VIEW view_std_commnames_translated AS
+    SELECT commconcept_id, commname FROM commusage WHERE classsystem = 'Translated' AND party_id = 
+    (SELECT party_id FROM party WHERE accessioncode='VB.Py.512.NATURESERVE') AND usagestop IS NULL;
+    
+ DROP VIEW view_std_commnames_common;
+ CREATE VIEW view_std_commnames_common AS
+    SELECT commconcept_id, commname FROM commusage WHERE classsystem = 'Common' AND party_id = 
+    (SELECT party_id FROM party WHERE accessioncode='VB.Py.512.NATURESERVE') AND usagestop IS NULL;
+    
+ 
+ DROP VIEW view_all_commnames_code;
+ CREATE VIEW view_all_commnames_code AS
+    SELECT commconcept_id, commname FROM commusage WHERE classsystem = 'Code' ;
+    
+ DROP VIEW view_all_commnames_sciname;
+ CREATE VIEW view_all_commnames_sciname AS
+    SELECT commconcept_id, commname FROM commusage WHERE classsystem = 'Scientific' ;
+    
+ DROP VIEW view_all_commnames_translated;
+ CREATE VIEW view_all_commnames_translated AS
+    SELECT commconcept_id, commname FROM commusage WHERE classsystem = 'Translated' ;
+    
+ DROP VIEW view_all_commnames_common;
+ CREATE VIEW view_all_commnames_common AS
+    SELECT commconcept_id, commname FROM commusage WHERE classsystem = 'Common' ;
+ 
+ 
+ CREATE VIEW view_comminterp_more AS
+   SELECT commClass.observation_ID,
+     inspection,tableanalysis,multivariateanalysis,expertsystem,classpublication_id,classnotes,accessioncode,classstartdate,classstopdate,
+     comminterpretation.* ,
+   (CASE 
+       WHEN classfit='Absolutely wrong' THEN 6
+       WHEN classfit='Understandable but wrong' THEN 4
+       WHEN classfit='Reasonable or acceptable answer' THEN 3
+       WHEN classfit='Good answer' THEN 2
+       WHEN classfit='Absolutely correct' THEN 1
+       ELSE 5 END) as classfitnum,
+   (CASE 
+       WHEN classconfidence='High' THEN 1
+       WHEN classconfidence='Medium' THEN 2
+       WHEN classconfidence='Low' THEN 3
+       ELSE 4 END) as classconfidencenum
+    FROM view_notemb_commClass as commclass, comminterpretation WHERE commclass.commclass_ID = comminterpretation.commclass_ID;
