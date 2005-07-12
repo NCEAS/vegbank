@@ -64,7 +64,7 @@ Change plant label: <select id="taxonNameSelect" onChange="showTaxonName(this.va
              <option value="taxobs_curr_code">Current Interpretation, USDA Code</option>
            <option value="taxobs_curr_common">Current Interpretation, Common Name</option>
 </select>
-
+<a href="@help-for-plantnames-href@"><img border="0" src="@image_server@question.gif" /></a>
 </TH></TR>
 
 

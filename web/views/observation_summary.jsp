@@ -197,7 +197,8 @@ function getHelpPageId() {
   <table class="horizborders">
     
     <tr><td>Plants Found on Plot</td></tr>
-    <tr><td>Change plant label: <select id="taxonNameSelect" onChange="showTaxonName(this.value,'observationsummarytableid')">
+    <tr><td>Change plant label: <a href="@help-for-plantnames-href@"><img border="0" src="@image_server@question.gif" /></a>
+    <br/><select id="taxonNameSelect" onChange="showTaxonName(this.value,'observationsummarytableid')">
   <option value="taxobs_authorplantname">Author's plant name</option>
   <option value="taxobs_orig_scinamewithauth">Original Interpretation, full Scientific Name</option>
     <option value="taxobs_orig_scinamenoauth">Original Interpretation, Scientific Name without authors</option>
@@ -207,7 +208,7 @@ function getHelpPageId() {
     <option value="taxobs_curr_scinamenoauth" selected="selected">Current Interpretation, Scientific Name without authors</option>
              <option value="taxobs_curr_code">Current Interpretation, USDA Code</option>
            <option value="taxobs_curr_common">Current Interpretation, Common Name</option>
-</select></td></tr>
+</select> </td></tr>
   </table>
 </th>
 
@@ -246,7 +247,7 @@ Plot #<%= rowIndex++ %>
 <bean:write name="onerowofobservation" property="country" /></span>
 </i>
 <br/>
-&raquo; <a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>plot detail</a>
+ <span class="sizenormal" nowrap="nowrap">&raquo; <a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>PLOT DETAIL</a></span>
 </td>
 <td class='largefield numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
 <span class='<bean:write name="show_elev" ignore="true" />hidden'>E: <bean:write name="onerowofobservation" property="elevation" /><br/></span>
@@ -357,16 +358,54 @@ Plot #<%= rowIndex++ %>
 		    <%  inttemp ++ ;  %>
 		        &raquo; <a href='@get_link@std/taxonobservation/<bean:write name="onerowoftaxonobservation" property="taxonobservation_id" />'>
          <!-- write all names, some of them will stay hidden -->
-         <span class="taxobs_authorplantname largefield hidden"> <bean:write name='onerowoftaxonobservation' property='authorplantname' /> </span>
-         <span class="taxobs_orig_scinamewithauth largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_origplantsciname' /> </span>
-         <span class="taxobs_orig_scinamenoauth largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_origplantscinamenoauth' /> </span>
-         <span class="taxobs_orig_code largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_origplantcode' /> </span>
-         <span class="taxobs_orig_common largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_origplantcommon' /> </span>
+         <span class="taxobs_authorplantname largefield hidden">
+                          <bean:write name='onerowoftaxonobservation' property='authorplantname' /> </span>
+         <span class="taxobs_orig_scinamewithauth largefield hidden">
+                          <logic:empty name='onerowoftaxonobservation' property='int_origplantsciname' >
+                             <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
+                          </logic:empty>
+                          <bean:write name='onerowoftaxonobservation' property='int_origplantsciname' /> </span>
+         <span class="taxobs_orig_scinamenoauth largefield hidden">
+                          <logic:empty name='onerowoftaxonobservation' property='int_origplantscinamenoauth' >
+                             <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
+                          </logic:empty>
+
+                          <bean:write name='onerowoftaxonobservation' property='int_origplantscinamenoauth' /> </span>
+         <span class="taxobs_orig_code largefield hidden">
+                          <logic:empty name='onerowoftaxonobservation' property='int_origplantcode' >
+                             <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
+                          </logic:empty>
+
+                          <bean:write name='onerowoftaxonobservation' property='int_origplantcode' /> </span>
+         <span class="taxobs_orig_common largefield hidden">
+                          <logic:empty name='onerowoftaxonobservation' property='int_origplantcommon' >
+                             <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
+                          </logic:empty>
+
+                          <bean:write name='onerowoftaxonobservation' property='int_origplantcommon' /> </span>
          
-         <span class="taxobs_curr_scinamewithauth largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_currplantsciname' /> </span>
-         <span class="taxobs_curr_scinamenoauth largefield"> <bean:write name='onerowoftaxonobservation' property='int_currplantscinamenoauth' /> </span>
-         <span class="taxobs_curr_code largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_currplantcode' /> </span>
-         <span class="taxobs_curr_common largefield hidden"> <bean:write name='onerowoftaxonobservation' property='int_currplantcommon' /> </span>
+         <span class="taxobs_curr_scinamewithauth largefield hidden">
+                          <logic:empty name='onerowoftaxonobservation' property='int_currplantsciname' >
+                             <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
+                          </logic:empty>
+
+                          <bean:write name='onerowoftaxonobservation' property='int_currplantsciname' /> </span>
+         <span class="taxobs_curr_scinamenoauth largefield">
+                          <logic:empty name='onerowoftaxonobservation' property='int_currplantscinamenoauth' >
+                             <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
+                          </logic:empty>
+
+                          <bean:write name='onerowoftaxonobservation' property='int_currplantscinamenoauth' /> </span>
+         <span class="taxobs_curr_code largefield hidden">
+                          <logic:empty name='onerowoftaxonobservation' property='int_currplantcode' >
+                             <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
+                          </logic:empty>
+                          <bean:write name='onerowoftaxonobservation' property='int_currplantcode' /> </span>
+         <span class="taxobs_curr_common largefield hidden">
+                          <logic:empty name='onerowoftaxonobservation' property='int_currplantcommon' >
+                             <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
+                          </logic:empty>
+                          <bean:write name='onerowoftaxonobservation' property='int_currplantcommon' /> </span>
          
 
 				</a>
