@@ -114,7 +114,16 @@ update party set d_obsCount=(select countallcontrib
 
 UPDATE namedplace set d_obsCount=(select count(1) from place where namedplace.namedplacE_ID = place.namedplace_ID);
 
-
+-- match range:
+UPDATE taxonimportance set coverCode=(select coverIndex.coverCode from coverIndex,  observation, taxonobservation
+      where ((lowerlimit<=taxonimportance.cover AND upperlimit>=taxonimportance.cover ) 
+      AND (coverIndex.coverMethod_ID=observation.coverMethod_ID and observation.observation_ID=taxonobservation.observation_ID 
+      AND taxonimportance.taxonobservation_ID=taxonobservation.taxonobservation_ID)) limit 1);
+-- match exact:
+UPDATE taxonimportance set coverCode=(select coverIndex.coverCode from coverIndex,  observation, taxonobservation
+      where ((coverPercent = taxonimportance.cover ) 
+      AND (coverIndex.coverMethod_ID=observation.coverMethod_ID and observation.observation_ID=taxonobservation.observation_ID 
+      AND taxonimportance.taxonobservation_ID=taxonobservation.taxonobservation_ID)) limit 1);
 
 UPDATE taxonobservation set int_origPlantConcept_ID = (select min(plantconcept_ID) from taxoninterpretation 
      WHERE originalinterpretation=true AND taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) 
@@ -157,4 +166,62 @@ UPDATE taxonobservation set int_currPlantCommon = (select common from temptbl_st
    ;
    
    
-   
+
+
+--update denorm community fields on observation: 
+UPDATE observation SET interp_orig_ci_ID = 
+   (select comminterpretation_ID FROM comminterpretation, commclass 
+    WHERE commclass.observation_ID = observation.observation_ID and commclass.commclass_ID = comminterpretation.commclass_ID 
+    ORDER BY classStartDate limit 1) 
+  ;
+  
+  UPDATE observation SET interp_orig_cc_ID = (select commconcept_ID from comminterpretation where comminterpretation_ID=interp_orig_ci_ID) 
+    ;
+  UPDATE observation SET interp_orig_sciname = (SELECT sciname from temptbl_std_commnames where interp_orig_cc_ID=temptbl_std_commnames.commconcept_ID)
+    ;  
+  UPDATE observation SET interp_orig_code = (SELECT code from temptbl_std_commnames where interp_orig_cc_ID=temptbl_std_commnames.commconcept_ID)
+    ;  
+  UPDATE observation SET interp_orig_party_ID = (select party_ID FROM classcontributor, comminterpretation WHERE comminterpretation.commclass_ID = classcontributor.commclass_ID 
+                                                  AND comminterpretation.comminterpretation_ID= observation.interp_orig_ci_ID   LIMIT 1)
+    ;
+  UPDATE observation SET interp_orig_partyName = (select party_id_transl FROM view_party_transl where view_party_transl.party_ID =   observation.interp_orig_party_ID) 
+    ;
+  
+UPDATE observation SET interp_current_ci_ID = 
+   (select comminterpretation_ID FROM comminterpretation, commclass 
+    WHERE commclass.observation_ID = observation.observation_ID and commclass.commclass_ID = comminterpretation.commclass_ID 
+    ORDER BY classStartDate DESC limit 1) 
+  ;  
+
+-- now get any where the current is different from original:
+  UPDATE observation SET interp_current_cc_ID = (select commconcept_ID from comminterpretation where comminterpretation_ID=interp_current_ci_ID) 
+    ;
+  UPDATE observation SET interp_current_sciname = (SELECT sciname from temptbl_std_commnames where interp_current_cc_ID=temptbl_std_commnames.commconcept_ID)
+    ;  
+  UPDATE observation SET interp_current_code = (SELECT code from temptbl_std_commnames where interp_current_cc_ID=temptbl_std_commnames.commconcept_ID)
+    ;  
+  UPDATE observation SET interp_current_party_ID = (select party_ID FROM classcontributor, comminterpretation WHERE comminterpretation.commclass_ID = classcontributor.commclass_ID 
+                                                  AND comminterpretation.comminterpretation_ID= observation.interp_current_ci_ID   LIMIT 1)
+    ;
+  UPDATE observation SET interp_current_partyName = (select party_id_transl FROM view_party_transl where view_party_transl.party_ID =   observation.interp_current_party_ID) 
+    ;
+
+  
+UPDATE observation SET interp_bestfit_ci_ID = 
+   (select comminterpretation_ID FROM view_comminterp_more 
+   WHERE view_comminterp_more.observation_ID = observation.observation_ID
+    ORDER BY classfitnum, classconfidencenum DESC limit 1) 
+  ;
+  
+
+  UPDATE observation SET interp_bestfit_cc_ID = (select commconcept_ID from comminterpretation where comminterpretation_ID=interp_bestfit_ci_ID) 
+    ;
+  UPDATE observation SET interp_bestfit_sciname = (SELECT sciname from temptbl_std_commnames where interp_bestfit_cc_ID=temptbl_std_commnames.commconcept_ID)
+    ;  
+  UPDATE observation SET interp_bestfit_code = (SELECT code from temptbl_std_commnames where interp_bestfit_cc_ID=temptbl_std_commnames.commconcept_ID)
+    ;  
+  UPDATE observation SET interp_bestfit_party_ID = (select party_ID FROM classcontributor, comminterpretation WHERE comminterpretation.commclass_ID = classcontributor.commclass_ID 
+                                                  AND comminterpretation.comminterpretation_ID= observation.interp_bestfit_ci_ID   LIMIT 1)
+    ;
+  UPDATE observation SET interp_bestfit_partyName = (select party_id_transl FROM view_party_transl where view_party_transl.party_ID =   observation.interp_bestfit_party_ID) 
+    ;
