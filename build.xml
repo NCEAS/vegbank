@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--    * build.xml   *   * Global build script for vegbank.   * The build.context must be entered for all task, to avoid this hassle you    * can call ant like this:   *  % echo "[build.context]" | ant [target]   *   *     '$Author: mlee $'   *     '$Date: 2005-06-28 23:26:47 $'   *     '$Revision: 1.68 $' -->
+<!--    * build.xml   *   * Global build script for vegbank.   * The build.context must be entered for all task, to avoid this hassle you    * can call ant like this:   *  % echo "[build.context]" | ant [target]   *   *     '$Author: mlee $'   *     '$Date: 2005-07-12 17:52:29 $'   *     '$Revision: 1.69 $' -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
   <!-- Initialize simple properties, no context handling                 -->
@@ -223,7 +223,7 @@
   </target>
   <target name="check-all" description="==> collection of tasks that check to see if everything is correct">
     <antcall target="props_verify" description="check to see that all important build properties exist in build.properties"/>
-    <antcall target="db_verify" description="check to see that model is implemented correctly"/>
+    <antcall target="db_verify_andfail" description="check to see that model is implemented correctly"/>
     <antcall target="noncvs-check" description="checks to see if noncvs files are all loaded to web." />
   </target>
   <target name="noncvs-check" depends="prepare" description="==>checks to see if noncvs files are all loaded to web.">
