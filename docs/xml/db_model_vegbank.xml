@@ -8457,171 +8457,7 @@ conditions may change between resampling events.
       </attForms>
       <update>1.0.0</update>
     </attribute>
-    <attribute>
-      <attName>topTaxon1Name</attName>
-      <attLabel>Top Taxon #1</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (255)</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Name of the highest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>topTaxon1Cover</attName>
-      <attLabel>Top Taxon #1 Cover</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Float</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Percent Cover for the highest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attUnits>%</attUnits>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>topTaxon2Name</attName>
-      <attLabel>Top Taxon #2</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (255)</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Name of the 2nd highest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>topTaxon2Cover</attName>
-      <attLabel>Top Taxon #2 Cover</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Float</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Percent Cover for the 2nd highest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attUnits>%</attUnits>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>topTaxon3Name</attName>
-      <attLabel>Top Taxon #3</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (255)</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Name of the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>topTaxon3Cover</attName>
-      <attLabel>Top Taxon #3 Cover</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Float</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Percent Cover for the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attUnits>%</attUnits>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>topTaxon4Name</attName>
-      <attLabel>Top Taxon #4</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (255)</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Name of the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>topTaxon4Cover</attName>
-      <attLabel>Top Taxon #4 Cover</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Float</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Percent Cover for the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attUnits>%</attUnits>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>topTaxon5Name</attName>
-      <attLabel>Top Taxon #5</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>varchar (255)</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Name of the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
-    <attribute>
-      <attName>topTaxon5Cover</attName>
-      <attLabel>Top Taxon #5 Cover</attLabel>
-      <attModel>denorm</attModel>
-      <attNulls>yes</attNulls>
-      <attType>Float</attType>
-      <attKey>n/a</attKey>
-      <attRelType type="n/a" name="n/a"/>
-      <attReferences>n/a</attReferences>
-      <attListType>no</attListType>
-      <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Percent Cover for the 3rdhighest cover taxon on the plot, ignoring strata.</attDefinition>
-      <attUnits>%</attUnits>
-      <attForms/>
-      <update>1.0.2</update>
-    </attribute>
+    <!-- top 5 cover values no longer used.  fields dropped with SQL : dropTop5s.sql -->
     <attribute>
       <attName>emb_observation</attName>
       <attLabel>this row embargoed.</attLabel>
@@ -8636,6 +8472,294 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value mimics the default embargo value for the plot that this record belongs to.</attDefinition>
       <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>interp_orig_ci_ID</attName>
+      <attLabel>Original commInterpret ID</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The first community the plot was assigned to.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_orig_cc_ID</attName>
+      <attLabel>CommConcept_ID</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>the Comm Concept_ID for this Interpretation.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_orig_sciname</attName>
+      <attLabel>Scientific Name of Community.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Scientific Name for this Comm Concept</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_orig_code</attName>
+      <attLabel>CEGL-type code of Community.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The CEGL type code for this Comm Concept.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_orig_party_id</attName>
+      <attLabel>Party_ID of classifier.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Party_ID of the classifier.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_orig_partyname</attName>
+      <attLabel>Classifier.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Name of the classifier.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_current_ci_ID</attName>
+      <attLabel>Most Recent Classification commInterp ID</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The most recent community the plot was assigned to.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_current_cc_ID</attName>
+      <attLabel>CommConcept_ID</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>the Comm Concept_ID for this Interpretation.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_current_sciname</attName>
+      <attLabel>Scientific Name of Community.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Scientific Name for this Comm Concept</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_current_code</attName>
+      <attLabel>CEGL-type code of Community.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The CEGL type code for this Comm Concept.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_current_party_id</attName>
+      <attLabel>Party_ID of classifier.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Party_ID of the classifier.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_current_partyname</attName>
+      <attLabel>Classifier.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Name of the classifier.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_bestfit_ci_ID</attName>
+      <attLabel>Best Fit commInterp ID</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The best fit, confidence pattern the plot is assigned to.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_bestfit_cc_ID</attName>
+      <attLabel>CommConcept_ID</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>the Comm Concept_ID for this Interpretation.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_bestfit_sciname</attName>
+      <attLabel>Scientific Name of Community.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Scientific Name for this Comm Concept</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_bestfit_code</attName>
+      <attLabel>CEGL-type code of Community.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The CEGL type code for this Comm Concept.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_bestfit_party_id</attName>
+      <attLabel>Party_ID of classifier.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Party_ID of the classifier.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attName>interp_bestfit_partyname</attName>
+      <attLabel>Classifier.</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The Name of the classifier.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
     </attribute>
   </entity>
   <entity>
@@ -9676,10 +9800,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Original E-W coordinate as recorded by the author</attDefinition>
-      <attForms>
-        <formShow name="csvvegbranch">300</formShow>
-        <formShow name="summarycsv">300</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -9695,10 +9816,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Original N-S coordinate as recorded by the author</attDefinition>
-      <attForms>
-        <formShow name="csvvegbranch">301</formShow>
-        <formShow name="summarycsv">301</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -9714,10 +9832,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Original UTM zone reported by the author</attDefinition>
-      <attForms>
-        <formShow name="csvvegbranch">302</formShow>
-        <formShow name="summarycsv">302</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -9733,10 +9848,7 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Original datum reported by the author</attDefinition>
-      <attForms>
-        <formShow name="csvvegbranch">303</formShow>
-        <formShow name="summarycsv">303</formShow>
-      </attForms>
+      <attForms/>
       <update>1.0.0</update>
     </attribute>
     <attribute>
@@ -10010,6 +10122,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN permanence THEN 'permanent plot' ELSE 'not permanent' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
@@ -14235,6 +14348,28 @@ conditions may change between resampling events.
         @subst_lt@img src="@images_link@bluedot.png" height="4px" width='@subst_lt@bean:write name="onerowoftaxonimportance" property="cover"/@subst_gt@px' /@subst_gt@
        @subst_lt@/td@subst_gt@@subst_lt@/tr@subst_gt@@subst_lt@/table@subst_gt@</attFormsHTMLpost>
       <update>1.0.2</update>
+    </attribute>
+    <attribute>
+      <attName>coverCode</attName>
+      <attLabel>Original Cover Code</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (10)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The original cover code used by the author in the Cover Method for the plot.</attDefinition>
+      <attForms>
+        <formShow name="SummaryNoStrata">1299.5</formShow>
+        <formShow name="SummaryNoTaxon">3.5</formShow>
+        <formShow name="Summary">1300.5</formShow>
+        <formShow name="SummaryOnlyStrata">1301.5</formShow>
+      </attForms>
+      <update>1.0.3</update>
+      <updateSQLFile>addCoverCodeToTaxImportance.sql</updateSQLFile>
     </attribute>
     <attribute>
       <attName>basalArea</attName>
