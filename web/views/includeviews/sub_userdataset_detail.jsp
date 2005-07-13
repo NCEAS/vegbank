@@ -8,7 +8,7 @@
 		       String rowClass = "evenrow";
     %>
 <logic:empty name="userdataset-BEANLIST">
-                <p>Sorry, no dataset found.</p>
+                <p>This dataset is empty.</p>
           </logic:empty>
 <logic:notEmpty name="userdataset-BEANLIST"><!-- set up table -->
 
