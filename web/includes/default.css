@@ -769,6 +769,14 @@ forms/TaxonInterpretationAnnotateData.jsp
 	background-color: #DDDDDD;
 }
 
+.listhead2 {
+	color: #000000;
+	font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	background-color: #CAAFB1;
+}
+
 .rowdivider {
 	color: #fff;
 	background-color: #444;
