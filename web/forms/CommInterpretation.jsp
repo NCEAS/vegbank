@@ -9,30 +9,48 @@
 <script language="javascript">
 var interpCount = 0;
 
-function toggleRowDisplay(evt) {
+function toggleRecordDisplayByEvent(evt) {
     var link = getEventElement(evt);
+    toggleRecordDisplay(link);
+}
+                                                                                                                                                                              
+function toggleRecordDisplay(link) {
     var sibling = findSibling(link.parentNode.nextSibling, "DIV", 15);
                                                                                                                                                                               
     if (sibling.style.display == "none") {
-        sibling.style.display = "block";
-        link.innerHTML = "hide";
+        showRecord(sibling, link);
     } else {
-        sibling.style.display = "none";
-        link.innerHTML = "show";
+        hideRecord(sibling, link);
     }
 }
                                                                                                                                                                               
-function deleteRow(evt) {
+function showRecord(record, link) {
+    show(record);
+    link.innerHTML = "hide";
+}
+
+function hideRecord(record, link) {
+    hide(record);
+    link.innerHTML = "show";
+}
+
+function deleteRecord(evt) {
     var link = getEventElement(evt);
     var sibling = link.parentNode.parentNode;
     var parent = link.parentNode.parentNode.parentNode;
     parent.removeChild(sibling);
 }
-                                                                                                                                                                              
+
+function lookupComm(evt) {
+    var link = getEventElement(evt);
+    var ac = findSibling(link, "span", 10);
+    window.open('@cite_link@' + ac.innerHTML, '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
+}
+
 function findSibling(node, nodeName, max) {
     var sibling = node.nextSibling;
     var count = 0;
-    while (sibling.nodeName != nodeName && count < max) {
+    while (sibling != null && sibling.nodeName.toLowerCase() != nodeName.toLowerCase() && count < max) {
         sibling = sibling.nextSibling;
         count++;
     }
@@ -52,11 +70,26 @@ function closeAddForm() {
 }
 
 //
-// Displays the add_form for adding rows.
+// Displays the add_form for adding records.
 //
 function openAddForm() { 
     show(gebid('add_form'));
     hide(gebid("add_another_link"));
+    document.location = "#add_form_anchor";
+}
+
+//
+// Resets the add_form.
+//
+function resetAddForm() { 
+    gebid("af_rec_id").value = "";
+    gebid("af_commconcept_ac").value = "";
+    gebid("af_classfit").selectedIndex = 0;
+    gebid("af_classconfidence").selectedIndex = 0;
+    gebid("af_commauthority_id").selectedIndex = 0;
+    gebid("af_type").checked = false;
+    gebid("af_nomenclaturaltype").checked = false;
+    gebid("af_notes").value = "";
 }
 
 //
@@ -64,66 +97,106 @@ function openAddForm() {
 //
 function saveForm() {
     var addForm = gebid('add_form');
-    var newRecord = gebid('record_template').cloneNode(true);
+    var isNew = false;
+    var saveRecord = null;
 
-    // set the title ID
-    var elem;
-    elem = newRecord.getElementsByTagName("span")[0].getElementsByTagName("span")[0];
-    newRecord.setAttribute("id", "rec_" + interpCount);
-    elem.setAttribute("id", "rec_title_" + interpCount);
+    var recId = gebid('af_rec_id').value;
+    //alert("af_rec_id is a " + recId);
+
+    var recTitleSpan;
     var title = gebid("af_commconcept_ac").value;
-    elem.innerHTML = title;
+
+    // is this new or and edit?
+    if (recId == null || recId == "") {
+        isNew = true;
+        saveRecord = gebid('record_template').cloneNode(true);
+        saveRecord.setAttribute("id", "rec" + interpCount);
+        recTitleSpan = saveRecord.getElementsByTagName("span")[0].getElementsByTagName("span")[0];
+        recTitleSpan.setAttribute("id", "rec" +  interpCount + "_title");
+    } else {
+        isNew = false;
+        saveRecord = gebid(recId);
+        recTitleSpan = saveRecord.getElementsByTagName("span")[0].getElementsByTagName("span")[0];
+        //alert("saving old record '" + recId + "': " + saveRecord);
+    }
+
+    recTitleSpan.innerHTML = title;
 
     // set IDs for fields in table
-    var table = newRecord.getElementsByTagName("div")[0].getElementsByTagName("table")[0];
+    var table = saveRecord.getElementsByTagName("div")[0].getElementsByTagName("table")[0];
     var rows = table.getElementsByTagName("tr");
 
     for (var i=0; i<rows.length; i++) {
-        var tmpInput = rows.item(i).getElementsByTagName("input")[0];
-        var tmpId = tmpInput.getAttribute("id");
-        //alert("Changing " + tmpId + " to rec_" + tmpId + "_" + interpCount);
-        tmpInput.setAttribute("id", "rec_" + tmpId + "_" + interpCount);
+        var destField = rows.item(i).getElementsByTagName("input")[0];
+        //alert("input: " + destField + " name: " + destField.getAttribute("name"));
+        var tmpId = destField.getAttribute("id");
 
-        var tmpFormField = gebid("af_" + tmpId);
-
-        if (tmpFormField.value) {
-            //alert("nodeName: " + tmpFormField.nodeName);
-            if (tmpFormField.nodeName == "SELECT") {
-                // get the ref name for display
-                tmpInput.value = tmpFormField.value;
-                var refIndex = tmpFormField.selectedIndex;
-                var tmpRef = tmpFormField.options.item(refIndex);
-                tmpInput.nextSibling.innerHTML = tmpRef.text;
-
-            } else if (tmpId == "type" || tmpId == "nomenclaturaltype") {
-                // checkbox
-                if (tmpFormField.checked) {
-                    tmpInput.value = true;
-                    tmpInput.nextSibling.innerHTML = "yes";
-                } else {
-                    tmpInput.value = false;
-                    tmpInput.nextSibling.innerHTML = "no";
-                }
-            } else {
-                tmpInput.value = tmpFormField.value;
-                tmpInput.nextSibling.innerHTML = tmpInput.value;
-            }
-
-        } else if (tmpId == "type" || tmpId == "nomenclaturaltype") {
-            // might be unchecked checkbox
-            tmpInput.value = false;
-            tmpInput.nextSibling.innerHTML = "no";
+        if (isNew) {
+            //alert("Changing " + tmpId + " to rec"+ interpCount + "_"  + tmpId);
+            destField.setAttribute("id", "rec" + interpCount + "_" + tmpId);
+        } else {
+            tmpId = tmpId.substring(tmpId.indexOf("_") + 1);
+            //alert("getting af_" + tmpId);
         }
 
-        tmpInput.setAttribute("name", "comminterp[" + interpCount + "]." + tmpId);
+        var srcField = gebid("af_" + tmpId);
+
+        if (srcField.nodeName == "SELECT") {
+            // get the ref name for display
+            destField.value = srcField.value;
+            var refIndex = srcField.selectedIndex;
+            var tmpRef = srcField.options.item(refIndex);
+            destField.nextSibling.innerHTML = tmpRef.text;
+
+        } else if (tmpId == "type" || tmpId == "nomenclaturaltype") {
+            // checkbox
+            if (srcField.checked) {
+                destField.value = true;
+                destField.nextSibling.innerHTML = "yes";
+            } else {
+                destField.value = false;
+                destField.nextSibling.innerHTML = "no";
+            }
+        } else {
+            destField.value = srcField.value;
+            destField.nextSibling.innerHTML = destField.value;
+        }
+
+        destField.setAttribute("name", "comminterp[" + interpCount + "]." + tmpId);
     }
 
 
-    // slap the new record on the end
-    gebid('record_container').appendChild(newRecord);
-    show(newRecord);
+    if (isNew) {
+        // slap the new record on the end
+        gebid('record_container').appendChild(saveRecord);
+        show(saveRecord);
+        interpCount++;
+    } else {
+        // reveal the old record
+        //showRecord(saveRecord);
+    }
 
-    interpCount++;
+}
+
+function editRecord(evt) {
+    var link = getEventElement(evt);
+    var thisRecord = link.parentNode.parentNode;
+    var recId = thisRecord.getAttribute("id").substring("rec".length);
+    var addForm = gebid('add_form');
+    var recordDiv = findSibling(link.parentNode.nextSibling, "DIV", 15);
+                                                                                                                                                              
+    //hideRecord(recordDiv, findSibling(link.nextSibling, "A", 10));
+    var prefix = "rec" + recId;
+    gebid("af_rec_id").value = prefix;
+    gebid("af_commconcept_ac").value = gebid(prefix + "_commconcept_ac").value;
+    gebid("af_classfit").value = gebid(prefix + "_classfit").value;
+    gebid("af_classconfidence").value = gebid(prefix + "_classconfidence").value;
+    gebid("af_commauthority_id").value = gebid(prefix + "_commauthority_id").value;
+    gebid("af_type").value = gebid(prefix + "_type").value;
+    gebid("af_nomenclaturaltype").value = gebid(prefix + "_nomenclaturaltype").value;
+    gebid("af_notes").value = gebid(prefix + "_notes").value;
+
+    openAddForm();
 }
 
 function popupAddReference() {
@@ -229,23 +302,26 @@ function getHelpPageId() {
 
 <!-- BEGIN ADD FORM -->
 <div id="add_form" class="block" style="margin-top: 10px">
+    <a named="add_form_anchor" id="add_form_anchor" />
+    <input id="af_rec_id" type="hidden" name="tmp_rec_id" />
+
     <table class="thinlines">
-    <tr><td class="listhead">Community accession code</td>
+    <tr><td class="listhead2">Community accession code</td>
         <td class="item"><input id="af_commconcept_ac" type="text" name="tmp_commconcept_ac" size="28"/>
         <input type="button" onclick="popupCommLookup(this.form.name,'tmp_commconcept_ac')" value="Lookup" /></td></tr>
 
-    <tr><td class="listhead">Class fit</td>
+    <tr><td class="listhead2">Class fit</td>
         <td class="item"><select id="af_classfit" name="tmp_classfit">
             <option value="" selected="selected">--none--</option>
             @VB_INSERT_CLOSEDLIST_comminterpretation.classfit@</select></td></tr>
 
-    <tr><td class="listhead">Class confidence</td>
+    <tr><td class="listhead2">Class confidence</td>
         <td class="item"><select id="af_classconfidence" name="tmp_classconfidence">
             <option value="" selected="selected">--none--</option>
             @VB_INSERT_CLOSEDLIST_comminterpretation.classconfidence@</select></td></tr>
 
 
-    <tr><td class="listhead">Reference</td>
+    <tr><td class="listhead2">Reference</td>
         <td class="item">
         <select id="af_commauthority_id" name="tmp_commauthority_id">
             <option value="" selected="selected">--none--</option>
@@ -255,13 +331,13 @@ function getHelpPageId() {
         </select>
         <!--br/><a href="javascript:popupAddReference()">Add reference</a--></td></tr>
 
-    <tr><td class="listhead">This is a typal plot of this community?</td>
+    <tr><td class="listhead2">This is a typal plot of this community?</td>
         <td class="item"><input type="checkbox" id="af_type" name="tmp_type"/></td></tr>
 
-    <tr><td class="listhead">This is a typal plot of the nomenclature (Braun-Blanquet)?</td>
+    <tr><td class="listhead2">This is a typal plot of the nomenclature (Braun-Blanquet)?</td>
         <td class="item"><input type="checkbox" id="af_nomenclaturaltype" name="tmp_nomenclaturaltype"/></td></tr>
 
-    <tr><td class="listhead">Notes</td>
+    <tr><td class="listhead2">Notes</td>
         <td class="item"><textarea id="af_notes" name="tmp_notes" rows="4" cols="45"></textarea></td></tr>
 
     <tr><td colspan="2" class="item">
@@ -273,7 +349,7 @@ function getHelpPageId() {
 </div>
 <!-- END ADD FORM -->
 
-<p id="add_another_link" style="display: none"><a href="javascript: openAddForm();">Add another community</a></p>
+<p id="add_another_link" style="display: none"><a href="javascript:resetAddForm(); openAddForm();">Add another community</a></p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;
   <html:submit property="submit" value="Submit Interpretation" />
 	&nbsp; &nbsp; &nbsp; &nbsp;
@@ -285,8 +361,10 @@ function getHelpPageId() {
 <!-- BEGIN STATIC ROW TEMPLATE -->
 <div id="record_template" style="display: none; margin-bottom: 10px">
     <span class="control_tab">
-        <a href="#" onclick="javascript: toggleRowDisplay(event); return false;">hide</a> |
-        <a href="#" onclick="javascript: deleteRow(event); return false;">delete</a>
+        <a href="#" onclick="javascript: editRecord(event); return false;">edit</a> |
+        <a href="#" onclick="javascript: toggleRecordDisplayByEvent(event); return false;">hide</a> |
+        <a href="#" onclick="javascript: lookupComm(event); return false;">lookup</a> |
+        <a href="#" onclick="javascript: deleteRecord(event); return false;">delete</a>
         &nbsp; &nbsp;
         <span id="title"></span>
     </span>
