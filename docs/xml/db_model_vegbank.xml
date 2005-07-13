@@ -6218,7 +6218,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>default = plot.area</attNotes>
-      <attDefinition>the total surface area (in m2) used for cover estimates and for which a complete species list is provided.  If subplots were used, this would be the total area of the subplots without interstitial space.</attDefinition>
+      <attDefinition>the total surface area (in m^2) used for cover estimates and for which a complete species list is provided.  If subplots were used, this would be the total area of the subplots without interstitial space.  RESERVED VALUE: -1 is used to indicate the complete list of species had no known boundaries.</attDefinition>
       <attUnits>m²</attUnits>
       <attForms>
         <formShow name="plotMethodShort">660</formShow>
@@ -6261,7 +6261,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>default = plot.area</attNotes>
-      <attDefinition>the total surface area (in m2) observed for recording woody stem data</attDefinition>
+      <attDefinition>the total surface area (in m^2) observed for recording woody stem data.  RESERVED VALUE: -1 means no known area.</attDefinition>
       <attUnits>m²</attUnits>
       <attForms>
         <formShow name="plotMethodShort">670</formShow>
@@ -10001,7 +10001,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Total area of the plot in m2.  If many subplots, this area includes the subplots and the interstitial space.</attDefinition>
+      <attDefinition>Total area of the plot in m2.  If many subplots, this area includes the subplots and the interstitial space.  RESERVED VALUE: -1 is used to indicate that the plot had no boundaries.</attDefinition>
       <attUnits>m²</attUnits>
       <attForms>
         <formShow name="plotLayoutLong">956</formShow>
@@ -13648,7 +13648,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This is the area in m2 used to infer the presence of the stem(s) referenced in this record.  Overrides similar area field in taxonObservation, taxonImportance, and/or observation.</attDefinition>
+      <attDefinition>This is the area in m2 used to infer the presence of the stem(s) referenced in this record.  Overrides similar area field in taxonObservation, taxonImportance, and/or observation.  RESERVED VALUE: -1 is used to indicate no known boundaries were used while collecting this stem size.</attDefinition>
       <attUnits>m²</attUnits>
       <attForms>
         <formShow name="Austere">1171</formShow>
@@ -14429,7 +14429,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>The area used to infer the importance values of the taxon, if not the same as observation.taxonInferenceArea.</attNotes>
-      <attDefinition>This is the area in m2 used to infer the importance values (i.e. cover, biomass, basal area) in this record.</attDefinition>
+      <attDefinition>This is the area in m2 used to infer the importance values (i.e. cover, biomass, basal area) in this record.  RESERVED VALUE: -1 is used to indicate no plot boundaries were used when estimating importance values.</attDefinition>
       <attUnits>m²</attUnits>
       <attForms>
         <formShow name="Austere">1303</formShow>
@@ -15189,7 +15189,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>The area used to infer the presence of the taxon, if not the same as observation.taxonInferenceArea.</attNotes>
-      <attDefinition>This is the area in m2 used to infer the presence of a given taxon.  Generally this should be equal to observation.taxonInferenceArea, but at times this area may be larger or smaller for a specific taxon.</attDefinition>
+      <attDefinition>This is the area in m2 used to infer the presence of a given taxon.  Generally this should be equal to observation.taxonInferenceArea, but at times this area may be larger or smaller for a specific taxon.  RESERVED VALUE: -1 is used to indicate that no known plot boundaries were used when recording this species on the plot.  That is, this species may occur outside the plot area as indicated in the plot and observation tables.</attDefinition>
       <attUnits>m²</attUnits>
       <attForms>
         <formShow name="Austere">1303</formShow>

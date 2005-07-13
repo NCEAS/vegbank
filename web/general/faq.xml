@@ -27,7 +27,8 @@
 Some are required to share their data by their grants, but don't want to deal with the hassle of setting up computer servers and software to manage this.  
 Some use VegBank as a means of collaborating with others in data analysis.  
 Others have finished analysis and are eager to find a use for their hard work other than being filed away to collect dust.  
-Still others see the foresight in adding their data to the greater body of knowledge on a public site like VegBank. <br/><br/>
+Still others see the foresight in adding their data to the greater body of knowledge on a public site like VegBank. <br/>
+        <br/>
 Other data, like plants and communities, come from VegBank's users, but rely heavily on VegBank users like the organizations <a target="_new" href="http://plants.usda.gov/">USDA Plants</a> and <a href="http://natureserve.org/" target="_new_">NatureServe</a> to provide this data.</atxt>
     </question>
     <question>
@@ -133,6 +134,25 @@ US Geological Survey (USGS)</b>.  We gratefully acknowledge the continuing finan
       <qname>training</qname>
       <qtxt>When can I sign up for a training workshop?</qtxt>
       <atxt>We do offer training in VegBank and VegBranch.  Training information can be found on the <a href="@panel_link@training.html"> Professional Training</a> page. We present workshops at the ESA annual meeting and periodically with groups who request special training.  VegBank presents information about the <a href="@workshop_link@index.html"> next VegBank workshop here</a>.  You can sign up for a workshop from that page, if there is one in the near future, or you can request a training session by sending email to help@vegbank.org.  We will try to offer special training session, but are limited in both time and funds for such purposes.</atxt>
+    </question>
+    <question>
+      <qname>areafields</qname>
+      <qtxt>How does VegBank keep track of plot area?  Why is the area negative sometimes?</qtxt>
+      <atxt>VegBank has several fields that store area values, recording the size of the plot <strong>in square meters.</strong>  A simple value is not always sufficient, as 
+      sub-sampling and super-sampling are often used, as are dispersed subplots.  Furthermore, sub- or super-sampling may be used
+      only for certain species or even certain sizes of species.  These complex situations require that many area fields be available in VegBank.  <strong>Area of -1</strong> indicates
+      that there is no known area. <br/><br />
+      <ul>
+            <li><a href="/dd/plot/area">Plot.Area</a> - this is the size of the plot, including subplots and any interstitial space</li>
+            <li><a href="/dd/observation/taxonobservationarea">Observation.TaxonObservationArea</a> - this is the area used to compile a complete list of species for the whole plot, omitting interstitial space</li>
+            <li><a href="/dd/taxonobservation/taxoninferencearea">TaxonObservation.TaxonInferenceArea</a> - this is the area used to determine one particular species is present.  It could be larger or smaller than Observation.TaxonObservationArea, overriding that value</li>
+           <li><a href="/dd/taxonimportance/inferencearea">TaxonImportance.InferenceArea</a> - this is the area used to calculate the importance values for one particular species.  Overrides any of the above values.</li>
+            <li><a href="/dd/observation/stemobservationarea">Observation.StemObservationArea</a> - this is the area used to measure all stems on the plot.</li>
+            <li><a href="/dd/stemsize/stemtaxonarea">StemSize.StemTaxonArea</a> - this is the area used to record a particular stem size for a particular species.  Overrides the above value.</li>
+      </ul>
+      Explained graphically: <br/>
+      <img src="@images_link@size-explanation.png" />
+      </atxt>
     </question>
   </category>
   <category name="contact" label="Contacting VegBank Developers">
