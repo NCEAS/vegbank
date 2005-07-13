@@ -75,7 +75,6 @@ function closeAddForm() {
 function openAddForm() { 
     show(gebid('add_form'));
     hide(gebid("add_another_link"));
-    document.location = "#add_form_anchor";
 }
 
 //
@@ -87,8 +86,10 @@ function resetAddForm() {
     gebid("af_classfit").selectedIndex = 0;
     gebid("af_classconfidence").selectedIndex = 0;
     gebid("af_commauthority_id").selectedIndex = 0;
+    gebid("af_type").value = false;
     gebid("af_type").checked = false;
     gebid("af_nomenclaturaltype").checked = false;
+    gebid("af_nomenclaturaltype").value = false;
     gebid("af_notes").value = "";
 }
 
@@ -349,7 +350,7 @@ function getHelpPageId() {
 </div>
 <!-- END ADD FORM -->
 
-<p id="add_another_link" style="display: none"><a href="javascript:resetAddForm(); openAddForm();">Add another community</a></p>
+<p id="add_another_link" style="display: none"><a href="#add_form_anchor" onclick="javascript:resetAddForm();openAddForm();return true">Add another community</a></p>
 <p>&nbsp; &nbsp; &nbsp; &nbsp;
   <html:submit property="submit" value="Submit Interpretation" />
 	&nbsp; &nbsp; &nbsp; &nbsp;
@@ -361,7 +362,7 @@ function getHelpPageId() {
 <!-- BEGIN STATIC ROW TEMPLATE -->
 <div id="record_template" style="display: none; margin-bottom: 10px">
     <span class="control_tab">
-        <a href="#" onclick="javascript: editRecord(event); return false;">edit</a> |
+        <a href="#add_form_anchor" onclick="javascript: editRecord(event); return true;">edit</a> |
         <a href="#" onclick="javascript: toggleRecordDisplayByEvent(event); return false;">hide</a> |
         <a href="#" onclick="javascript: lookupComm(event); return false;">lookup</a> |
         <a href="#" onclick="javascript: deleteRecord(event); return false;">delete</a>
