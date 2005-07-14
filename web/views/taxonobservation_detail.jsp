@@ -62,11 +62,14 @@ function getHelpPageId() {
 </tr>-->
 <logic:iterate id="onerowoftaxoninterpretation" name="taxoninterpretation-BEANLIST">
 <tr class="@nextcolorclass@">
-<td class="largefield">
+<td>
 <a href="@get_link@detail/taxoninterpretation/@subst_lt@bean:write name='onerowoftaxoninterpretation' property='taxoninterpretation_id' /@subst_gt@">
-                            Details
+                           MORE DETAILS
                             </a>
 </td>
+</tr>
+<!-- IMPORTANT COMMENT, IT DOES SOMETHING!! This updates the color class so that the next row is the same color as this one: @nextcolorclass@ -->
+<tr class="@nextcolorclass@">
 <td><!-- all of this in one cell -->
 <%@ include file="autogen/taxoninterpretation_notblshort_data.jsp" %>
 </td>
@@ -84,17 +87,9 @@ Interpret This Plant</a>
 </td></tr>
 <!-- </table> -->
 
-
 </table>
 
-
-
-
 </TD>
-
-        
-
-
 
 <TD valign="top"><!-- importance values -->
   
