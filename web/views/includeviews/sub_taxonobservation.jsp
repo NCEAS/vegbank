@@ -53,6 +53,7 @@
 
 <TR><TH colspan="9">
   <!-- menu of plant names : -->
+  <bean:define id="showTaxonNameDivID">taxonObservationof<bean:write name='observation_pk' /></bean:define>
   <%@ include file="sub_taxonimportance_showallplantnames_menu.jsp" %>
 </TH></TR>
 
@@ -335,7 +336,3 @@
 
 </logic:notEqual> <!-- whether or not to show strata -->
 
-<!-- set the plant names to show: -->
-<script language="javascript">
-setTaxonNameSelect(getCookie("taxon_name"),"taxonObservationof<bean:write name='observation_pk' />");
-</script>
