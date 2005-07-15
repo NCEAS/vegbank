@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.15 2005-05-30 02:04:19 anderson Exp $
+ * $Id: vegbank2005.css,v 1.16 2005-07-15 16:45:43 mlee Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -14,6 +14,71 @@
 /*-------------------------------------------------
 MAINCONTENT
 -------------------------------------------------*/
+
+/* hide this part from IE-mac \*/
+html,body {
+    height: 100%;
+}
+/* end hide */
+
+
+body {
+    padding: 0;
+	margin: 0;
+	font: 10pt "Lucida Grande", LucidaGrande, Lucida, Helvetica, Arial, sans-serif;
+    color: #333;
+    /*  text-align: center; we don't need this.*/
+	background: #dfdfdf url(@images_link@bg_texture.jpg);
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    voice-family: "\"}\"";
+    voice-family: inherit;
+    height: auto;
+}
+html>body #container {
+    height: auto;
+}
+
+#wrapper {
+    width: 752px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+    padding: 0;
+}
+#body > #wrapper {
+    width: 750px;
+}
+
+#maincontent {
+    float: left;
+    min-height: 50%;
+    width: 752px;
+    padding: 0 0 15px 0;
+    margin: 0;
+    text-align: left;
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;
+}
+#wrapper > #maincontent {
+    width: 750px;
+}
+#footer {
+    /* only footer positioning goes here */
+    float: left;
+    clear: both;
+}
+#postfooter {
+
+    /* only postfooter positioning goes here */
+}
+
+
 
 #maincontent {
     background-color: #fff;
@@ -439,7 +504,7 @@ DATACART
 .datacart-icon-normal {
     background: url(@images_link@cart_dark.gif) top left no-repeat;
 }
-                                                                                                                                                                                                  
+
 
 /*
 html>body #datacart {
@@ -539,7 +604,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit
 .busyicon {
     background: url(@images_link@spinner.gif) top left no-repeat;
 }
-                                                                                                                                                                                                  
+
 .busyanim {
     background: url(@images_link@spinner-anim.gif) top left no-repeat;
 }
