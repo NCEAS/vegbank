@@ -12,5 +12,7 @@ Sorry, badly formatted request to get taxa.  Needs observation ID.
 
 <logic:present parameter="observation_pk">
   <bean:parameter id="observation_pk" name="observation_pk" />
+  <bean:define id="inrawview" value="true" />
+
 <%@ include file="../includeviews/sub_taxonobservation.jsp" %>
 </logic:present>
