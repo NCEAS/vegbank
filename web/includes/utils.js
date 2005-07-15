@@ -756,17 +756,22 @@ function removeClassFromDoc(classname) {
    }
 }
 
-function removeClassFromDocIfAlsoClass(removeclass,ifalsoclass,tableid) {
+function removeClassFromDocIfAlsoClass(removeclass,ifalsoclass,tableid,addsuffix) {
 	// function removes a class from elements, if also another class is present
 	// example: remove class "hidden" from all "email" class elements would unhide emails on a page
+	// will add suffix to ifalsoclass
 	var inc=0
-	//  var alltags=document.all? document.all : document.getElementsByTagName("*")
-	 var alltags=gebid(tableid).getElementsByTagName("*") ;
+	  if (tableid == "*") { var alltags=document.all? document.all : document.getElementsByTagName("*") ;}
+	  if (tableid != "*") { var alltags=gebid(tableid).getElementsByTagName("*") ;}
 	  for (i=0; i<alltags.length; i++){
-	    if (alltags[i].className.indexOf(removeclass)!=-1)
+	    if (alltags[i].className.indexOf(ifalsoclass)!=-1)
 	    {
+			// add the suffix if not there:
+			if (alltags[i].className.indexOf(ifalsoclass + addsuffix)==-1) {
+		    	alltags[i].className = alltags[i].className.replace(ifalsoclass,ifalsoclass + addsuffix);
+		    }
 	    // check to see if also another class is there:
-	      if (alltags[i].className.indexOf(ifalsoclass)!=-1)
+	      if (alltags[i].className.indexOf(removeclass)!=-1)
 	      {
 	        /* remove the requested className.  Does not set entire class to space string b/c there could be 2 classes embedded. */
 	        alltags[i].className = alltags[i].className.replace(removeclass," ");
@@ -774,20 +779,26 @@ function removeClassFromDocIfAlsoClass(removeclass,ifalsoclass,tableid) {
 	    }
    }
 }
-function addClassToDocIfAlsoClass(addclass,ifclass,tableid) {
+function addClassToDocIfAlsoClass(addclass,ifclass,tableid,addsuffix) {
 	// function removes a class from elements, if also another class is present
 	// example: remove class "hidden" from all "email" class elements would unhide emails on a page
 	  var inc=0
-	  //var alltags=document.all? document.all : document.getElementsByTagName("*")
-	  var alltags=gebid(tableid).getElementsByTagName("*") ;
+	  if (tableid == "*") { var alltags=document.all? document.all : document.getElementsByTagName("*") ;}
+	  if (tableid != "*") { var alltags=gebid(tableid).getElementsByTagName("*") ;}
+	//debugging:  var dontagain = false;
 	  for (i=0; i<alltags.length; i++){
 	    if (alltags[i].className.indexOf(ifclass)!=-1)
 	    {
+		// add the suffix if not there:
+		if (alltags[i].className.indexOf(ifclass + addsuffix)==-1) {
+		  alltags[i].className = alltags[i].className.replace(ifclass,ifclass + addsuffix);
+	    }
 	    // check to see if already there:
 	      if (alltags[i].className.indexOf(addclass)==-1)
 	      {
 	        /* remove the requested className.  Does not set entire class to space string b/c there could be 2 classes embedded. */
 	        alltags[i].className = alltags[i].className + " " + addclass ;
+	     //debugging:   if ( !dontagain ) {	        alert("added as class:" + alltags[i].className);  dontagain = true; }
 	      }
 	    }
    }
@@ -795,30 +806,26 @@ function addClassToDocIfAlsoClass(addclass,ifclass,tableid) {
 
 function showTaxonName(toshow,tableid) {
 	//function shows a particular type of taxon name for plots, and hides others.
+	if (toshow=="" ) { return false; }
 	// first hide all
-	addClassToDocIfAlsoClass("hidden","taxobs_authorplantname",tableid);
-	addClassToDocIfAlsoClass("hidden","taxobs_orig_scinamewithauth",tableid);
-	addClassToDocIfAlsoClass("hidden","taxobs_orig_scinamenoauth",tableid);
-	addClassToDocIfAlsoClass("hidden","taxobs_orig_code",tableid);
-	addClassToDocIfAlsoClass("hidden","taxobs_orig_common",tableid);
-	addClassToDocIfAlsoClass("hidden","taxobs_curr_scinamewithauth",tableid);
-	addClassToDocIfAlsoClass("hidden","taxobs_curr_scinamenoauth",tableid);
-	addClassToDocIfAlsoClass("hidden","taxobs_curr_code",tableid);
-    addClassToDocIfAlsoClass("hidden","taxobs_curr_common",tableid);
+	var suffixToOverride = "_override_";
+	addClassToDocIfAlsoClass("hidden","taxobs_authorplantname",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxobs_orig_scinamewithauth",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxobs_orig_scinamenoauth",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxobs_orig_code",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxobs_orig_common",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxobs_curr_scinamewithauth",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxobs_curr_scinamenoauth",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxobs_curr_code",tableid,suffixToOverride);
+    addClassToDocIfAlsoClass("hidden","taxobs_curr_common",tableid,suffixToOverride);
 	// then show the one
-	removeClassFromDocIfAlsoClass ("hidden",toshow,tableid);
+	removeClassFromDocIfAlsoClass ("hidden",toshow,tableid,suffixToOverride);
 
     // set cookie
-    setCookie('taxon_name', gebid("taxonNameSelect").selectedIndex);
+    setCookie('taxon_name_full', gebid("taxonNameSelect").value);
     //alert('setting cookie: taxon_name: ' + gebid("taxonNameSelect").selectedIndex);
 }
 
-function setTaxonNameSelect(i,tableid) {
-    var sel = gebid("taxonNameSelect");
-    if (i != null) { sel.selectedIndex = i - 0; }
-    //alert("setTaxonNameSelect: " + i);
-    showTaxonName(sel.value,tableid)
-}
 
 function helpNeedsNewPage() {
    /* attempts to determine if help needs to open as new page.  Rules:
