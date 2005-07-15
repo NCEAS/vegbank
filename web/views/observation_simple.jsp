@@ -3,7 +3,7 @@
   @webpage_head_html@
 
 <TITLE>View VegBank Data: Observations - Simple Summary</TITLE>
-
+<%@ include file="includeviews/inlinestyles.jsp" %>
       @webpage_masthead_html@
       @possibly_center@
         <h2>View VegBank Observations</h2>

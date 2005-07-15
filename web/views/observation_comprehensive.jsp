@@ -13,6 +13,7 @@ function getHelpPageId() {
 
 </script>
 
+<%@ include file="includeviews/inlinestyles.jsp" %>
   @webpage_masthead_html@   @possibly_center@  
   <h2>Comprehensive View of a Plot</h2>
   <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
