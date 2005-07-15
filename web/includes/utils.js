@@ -822,7 +822,7 @@ function showTaxonName(toshow,tableid) {
 	removeClassFromDocIfAlsoClass ("hidden",toshow,tableid,suffixToOverride);
 
     // set cookie
-    setCookie('taxon_name_full', gebid("taxonNameSelect").value);
+    setCookie('taxon_name_full', toshow);
     //alert('setting cookie: taxon_name: ' + gebid("taxonNameSelect").selectedIndex);
 }
 
