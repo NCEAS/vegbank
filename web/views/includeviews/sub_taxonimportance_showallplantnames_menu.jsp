@@ -12,7 +12,7 @@
   <bean:define id="showTaxonNameDivID">*</bean:define> <!-- default of everything: SHOULD NOT BE USED -->
 </logic:notPresent>
 Change plant label: <a href="@help-for-plantnames-href@"><img border="0" src="@image_server@question.gif" /></a> <br/>
-<select id="taxonNameSelect" onChange="showTaxonName(this.value,'<bean:write name="showTaxonNameDivID" />')">
+<select onChange="showTaxonName(this.value,'<bean:write name="showTaxonNameDivID" />')">
                              <option value="" >--Choose a value--</option>
        <option value="taxobs_authorplantname" <logic:equal name="plantNamesToShowBean" value="taxobs_authorplantname"> selected="selected" </logic:equal>>Author's plant name</option>
   <option value="taxobs_orig_scinamewithauth" <logic:equal name="plantNamesToShowBean" value="taxobs_orig_scinamewithauth"> selected="selected" </logic:equal>>Original Interpretation, full Scientific Name</option>
