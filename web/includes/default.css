@@ -222,10 +222,11 @@ body>.someclass {
 */
 
 a {text-decoration: underline; padding: 1px; }
-a.external { padding-left: 9px; background: url(@images_link@external.gif) no-repeat; }
+
 a:link { color: #04d; }
 a:visited { color: #04d; }
 a:hover { color: #fff; background-color: #04d; text-decoration: none; }
+
 
 
 a:Link.sortlink { color: #336600; text-decoration: underline ; }
@@ -290,12 +291,12 @@ a.anchor:link, a.anchor:visited, a.anchor:hover {
 */
 
 /* default table */
-table tr td{
+/* this causes too many problems! : table tr td {
   padding: 0;
   margin: 0;
   border: 0;
- /* font-size: 10pt; */ /* can just inherit from table class or surrounding, which will be 10pt, ususally */
-}
+
+} */
 
 /* actions user can take from this form: ie interpret plant.*/
 td.useraction  {font-weight: bold; color: #FF0000 ; background: #ffffcc }
@@ -616,7 +617,7 @@ ul.compactdots   {
 .control_tab a:visited { color: #0e0; text-decoration: none}
 .control_tab a:hover { color: #fff; background-color: #0e0; text-decoration: none}
 
-.block { 
+.block {
     display: block;
     clear: both;
 }
