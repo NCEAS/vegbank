@@ -43,10 +43,13 @@
 			<form-property name="email" type="java.lang.String" />
 		</form-bean>
 		<form-bean name="InterpretPlantForm" type="org.vegbank.ui.struts.InterpretPlantForm" />
-		<form-bean name="InterpretCommForm" type="org.apache.struts.action.DynaActionForm">
+
+		<!--form-bean name="InterpretCommForm" type="org.apache.struts.validator.LazyValidatorForm" /-->
+
+		<form-bean name="InterpretCommForm" type="org.apache.struts.validator.LazyValidatorForm">
             <form-property name="commclass" type="org.vegbank.common.model.Commclass"/>
-            <form-property name="comminterp" type="org.vegbank.common.model.Comminterpretation[]" size="1"/>
-            <form-property name="commconcept_ac" type="java.lang.String[]" size="1"/>
+            <form-property name="comminterp" type="org.vegbank.common.model.Comminterpretation[]"/>
+            <form-property name="commconcept_ac" type="java.lang.String[]"/>
             <form-property name="obsId" type="java.lang.String"/>
 		</form-bean>
 		<form-bean name="LogonForm" type="org.apache.struts.validator.DynaValidatorForm">
@@ -106,6 +109,7 @@
 		<forward name="RegisterNewUser" path="/forms/RegisterNewUser.jsp" />
 	</global-forwards>
 	<action-mappings type="org.vegbank.ui.struts.VegbankActionMapping">
+		<action path="/UserPreferences" forward="/forms/UserPreferences.jsp" />
 		<action path="/AdminMenu" forward="/admin/admin_menu.jsp" />
 		<action path="/AddCoverMethod" type="org.vegbank.ui.struts.AddCoverMethodAction" name="AddCoverMethodForm" scope="request" validate="true" input="AddCoverMethod" />
 		<action path="/AddJournal" type="org.vegbank.ui.struts.AddJournalAction" name="AddJournalForm" scope="request" validate="true" input="AddJournal" />
@@ -253,7 +257,8 @@
 		<set-property property="inputForward" value="true" />
 		<set-property property="maxFileSize" value="100M" />
 	</controller>
-	<message-resources parameter="org.apache.struts.webapp.example.ApplicationResources" />
+	<!--message-resources parameter="org.apache.struts.webapp.example.ApplicationResources" null="false" /-->
+    <message-resources parameter="org.vegbank.ui.struts.application" null="false"/>
 	<plug-in className="org.apache.struts.plugins.ModuleConfigVerifier" />
 	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
 		<set-property property="pathnames" value="/WEB-INF/validator-rules.xml, /WEB-INF/validation.xml" />
