@@ -665,6 +665,8 @@ function setOpenerFormValue(theValueToSet) {
 function postNewParam(theName,theVal) {
   // this uses the resubmitForm Form in the page that should be put there by vegbank(colon)resubmitForm
   // to send user to new location, but using the posted instead of URL parameters.
+  if ( theVal == null ) {return false; }
+  if ( theVal == "" ) {return false; }
   resubmitform = document.forms.resubmitForm ;
   var numelements = resubmitform.elements.length;
 
@@ -987,6 +989,18 @@ function getCookie (name) {
 // sets a 30 day cookie by default
 // PARAMS: name, value, expires (Date object), path, domain, secure (t/f)
 //
+
+function setCookieForField(name,onoff) {
+	// just sends to setCookie function, but coverts on to show and off to hide
+	// alert(onoff + " is onoff");
+	var val = "hide";
+	if ( onoff == true ) {
+	  val = "show" ;
+	}
+	//alert("setting " + name + " to : " + val);
+	setCookie (name,val) ;
+}
+
 function setCookie (name, value) {
     var expDays = 30;
     var expDefault = new Date();
