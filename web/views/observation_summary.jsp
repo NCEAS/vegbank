@@ -23,6 +23,7 @@ function getHelpPageId() {
 
 <title>VegBank Plot Query Results</title>
 
+<bean:define id="thisviewid" value="observation_summary" />
 <%@ include file="includeviews/inlinestyles.jsp" %>
 
 

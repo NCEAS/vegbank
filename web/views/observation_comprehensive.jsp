@@ -1,5 +1,6 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
+<bean:define id="FullPageWidthSuffix" value="_100perc" /><!-- sets stylesheet to full width stylesheet -->
   @webpage_head_html@
   @ajax_js_include@
   @datacart_js_include@
@@ -13,20 +14,25 @@ function getHelpPageId() {
 
 </script>
 
+<bean:define id="thisviewid" value="observation_comprehensive" />
 <%@ include file="includeviews/inlinestyles.jsp" %>
   @webpage_masthead_html@   @possibly_center@  
-  <h2>Comprehensive View of a Plot</h2>
+
   <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
 <vegbank:pager />
 <logic:empty name="plotobs-BEANLIST"> Sorry, no plot-observations are available. </logic:empty>
-<!--NOPE logic:notEmpty name="plotobs-BEANLIST" --><!-- set up table -->
-<!--NOPE logic:iterate id="onerowofobservation" name="BEANLIST"--><!-- iterate over all records in set : new table for each -->
+<!-- NOPE logic:notEmpty name="plotobs-BEANLIST" NOPE--><!-- set up table -->
+<!-- NOPE logic:iterate id="onerowofobservation" name="BEANLIST" NOPE--><!-- iterate over all records in set : new table for each -->
 <bean:define id="onerowofobservation" name="plotobs-BEAN" />
-<bean:define id="onerowofplot" name="plotobs-BEAN" />
+<bean:define id="onerowofplot" name="onerowofobservation" />
 <bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
 <bean:define id="plot_pk" name="onerowofplot" property="plot_id"/>
 
+  <table class="noborders"><tr><td align="left">
+  
+    <h2 align="center">Comprehensive View of a Plot</h2>
+  
 
 <!-- datacart item -->
   <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
@@ -37,9 +43,12 @@ function getHelpPageId() {
     </form>
 </div>
 
-<div style="display: block; float: right; width: 45%; text-align: right;" id="tut_showhidefieldinfo">
+<div style="display: block; float: right; width: 45%; text-align: center;" id="tut_showhidefieldinfo">
+   <strong>Configure View</strong> <br/>
+   <a href="@get_link@taxa/observation/<bean:write name='observation_pk' />">Less Plot Detail</a>  --
    <a href="<vegbank:changeParam paramName='showHelp' paramValue='true' />">Show</a>
-   | <a href="<vegbank:changeParam paramName='showHelp' paramValue='false' />">Hide</a> Field Info
+   / <a href="<vegbank:changeParam paramName='showHelp' paramValue='false' />">Hide</a> Field Info --
+   <a href="@views_link@UserPreferences.jsp">More Options</a>
 </div>
 
 
@@ -201,7 +210,7 @@ function getHelpPageId() {
 </TR>
 <TR><TD colspan="2"><hr /><br/></TD></TR>
 </TABLE>
-<!--NOPE /logic:iterate NOPE-->
+<!--/logic:iterate NOPE-->
 <vegbank:pager/>
-<!--NOPE /logic:notEmpty NOPE--><br />
+<!-- NOPE /logic:notEmpty NOPE--><br />
 @webpage_footer_html@

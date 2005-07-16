@@ -1,5 +1,6 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
+<bean:define id="FullPageWidthSuffix" value="_100perc" /><!-- sets stylesheet to full width stylesheet -->
   @webpage_head_html@
   @ajax_js_include@
   @datacart_js_include@
@@ -14,6 +15,7 @@ function getHelpPageId() {
 
 <title>View Taxa on Plot(s): VegBank</title>
 <%     String rowClass = "evenrow";  %>
+<bean:define id="thisviewid" value="observation_taxa" />
 <%@ include file="includeviews/inlinestyles.jsp" %>
 
 
@@ -100,16 +102,21 @@ function getHelpPageId() {
 <!-- start of plot & obs fields-->
 
 <tr class='@nextcolorclass@' align="left">
-<td width="50%"  ><!-- that td cannot have a class, it gets overwritten -->
+<td><!-- that td cannot have a class, it gets overwritten -->
 <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
-<strong>CART: </strong> Drop/Add Plot #<%= rowIndex++ %> : <strong><bean:write name="onerowofobservation" property="authorplotcode" /></strong>
+<strong>CART: </strong> Drop/Add Plot #<%= rowIndex++ %> 
 
 <%@ include file="../includes/datacart_checkbox.jsp" %>
 
   
 </td>
+<td>
+<strong><bean:write name="onerowofobservation" property="authorplotcode" /></strong>
+<a href="@get_link@comprehensive/observation/<bean:write name='observation_pk' />">More Detail</a> |
+<a href="@get_link@summary/observation/<bean:write name='observation_pk' />">Less Detail</a> 
+</td>
 </tr>
-<tr><td>
+<tr><td colspan="2">
 <bean:parameter id="showHelpBean" name="showHelp" value="false" />
 <bean:parameter id="strataToShowBean" name="strata2Show" value="2" />
 <bean:define id="requestedPageURL"><%= "/views/raw/raw_taxonobservation.jsp?observation_pk=" + observation_pk  + "&showHelp=" + showHelpBean + "&strata2Show=" + strataToShowBean %></bean:define>
