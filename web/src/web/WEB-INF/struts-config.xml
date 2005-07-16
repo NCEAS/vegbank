@@ -44,8 +44,6 @@
 		</form-bean>
 		<form-bean name="InterpretPlantForm" type="org.vegbank.ui.struts.InterpretPlantForm" />
 
-		<!--form-bean name="InterpretCommForm" type="org.apache.struts.validator.LazyValidatorForm" /-->
-
 		<form-bean name="InterpretCommForm" type="org.apache.struts.validator.LazyValidatorForm">
             <form-property name="commclass" type="org.vegbank.common.model.Commclass"/>
             <form-property name="comminterp" type="org.vegbank.common.model.Comminterpretation[]"/>
