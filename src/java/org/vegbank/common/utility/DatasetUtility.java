@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-30 05:06:40 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2005-07-16 03:08:51 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,6 +126,7 @@ public class DatasetUtility
         }
 
         if (beanList != null) {
+            log.debug("adding " + beanList.size() + " DSIs to the DS to be added");
             dsBean.setuserdataset_userdatasetitems(createDatasetItemList(beanList));
         }
 
@@ -144,6 +145,7 @@ public class DatasetUtility
             String dsDescription, String dsType, String dsSharing, Long usrId) 
             throws SQLException{
 
+        log.debug("creating dataset - name:" + dsName + ", type:" + dsType + ", usr:" + usrId);
         Userdataset dsBean = createDataset(beanList, dsName, dsDescription, 
                 dsType, dsSharing, usrId);
 
@@ -210,7 +212,11 @@ public class DatasetUtility
         try {
             initBeanInserter();
 
+            List dsiList = dsBean.getuserdataset_userdatasetitems();
+
+            log.debug("now inserting DS bean...");
             long dsPK = bean2db.insert(dsBean);
+            log.debug("new dataset ID: " + dsPK);
             newAC = ag.buildAccession("userdataset", Long.toString(dsPK), dsBean.getDatasetname());
             bean2db.returnConnection();
             log.debug("inserted new userdataset with its children: " + newAC);
@@ -340,19 +346,11 @@ public class DatasetUtility
 
                 } else {
                     beanClassName = bean.getClass().getName().toLowerCase();
-                    if (Utility.canBeDatasetItem(beanClassName)) {
+                    if (Utility.canAddToDatasetOnLoad(beanClassName)) {
                         // make a new dsi out of the normal bean
                         // TODO: implement VBModelBean.toUserdatasetitem()
                         AccessionCode dsiAC = new AccessionCode(dsiBean.getAccessioncode());
-                        dsiBean = new Userdatasetitem();
-                        dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
-                        dsiBean.setItemtype(beanClassName);
-                        dsiBean.setItemaccessioncode(dsiAC.toString());
-                        dsiBean.setItemdatabase(dsiAC.getDatabaseId());
-                        dsiBean.setItemtable(dsiAC.getEntityName());
-                        dsiBean.setItemrecord(dsiAC.getEntityId().toString());
-
-                        dsiList.add(dsiBean);
+                        dsiList.add( createDatasetItem(dsiAC, null) );
                     }
                 }
             }
@@ -367,28 +365,41 @@ public class DatasetUtility
      */
     public void addItem(AccessionCode ac) {
         //log.debug("adding " + ac.toString());
-        addItem(ac.getEntityName(), ac.getEntityId(), ac.toString());
+        /////////////addItem(ac.getEntityName(), ac.getEntityId(), ac.toString());
+        newItemsToAdd.put(ac.toString(), createDatasetItem(ac, new Long(curDataset.getUserdataset_id())));
     }
-
 
     /**
      * Add a Userdatasetitem to the current dataset.
      * Does not update the DB.
      */
+    /*
+       // not used 6/21/2005
     public void addItem(String tableName, Long PK, String ac) {
-
-        Userdatasetitem dsiBean = new Userdatasetitem();
-        dsiBean.setUserdataset_id(curDataset.getUserdataset_id()); 
-        dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
-        dsiBean.setItemtype(tableName);
-        dsiBean.setItemaccessioncode(ac);
-        dsiBean.setItemdatabase(ITEM_DB);
-        dsiBean.setItemtable(tableName);
-        dsiBean.setItemrecord(PK.toString());
-
         // get dsi list and add this one
-        newItemsToAdd.put(ac, dsiBean);
+        newItemsToAdd.put(ac, createDatasetItem(tableName, PK, ac);
     }
+    */
+
+    /**
+     * Add a Userdatasetitem to the current dataset.
+     * Does not update the DB.
+     */
+    public static Userdatasetitem createDatasetItem(AccessionCode ac, Long dsId) {
+        Userdatasetitem dsiBean = new Userdatasetitem();
+        if (dsId != null) {
+            dsiBean.setUserdataset_id(dsId.longValue());
+        }
+        dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
+        dsiBean.setItemtype(ac.getEntityName());
+        dsiBean.setItemaccessioncode(ac.toString());
+        dsiBean.setItemtable(ac.getEntityName());
+        dsiBean.setItemrecord(ac.getEntityId().toString());
+        dsiBean.setItemdatabase(ITEM_DB);
+        log.debug("creating a DSI: " + ac.toString() + ", itemtable: " + dsiBean.getItemtable());
+        return dsiBean;
+    }
+
 
 
     /**
@@ -565,6 +576,8 @@ public class DatasetUtility
     /**
      * Populate a Userdatasetitem as much as possible and return it.
      */
+    /*
+       // not in use 6/21/2005
     public Userdatasetitem createItem(String tableName, Long PK) throws SQLException {
         Userdatasetitem dsiBean = new Userdatasetitem();
         dsiBean.setItemaccessioncode(ag.getAccession(tableName, PK.longValue()));
@@ -572,6 +585,7 @@ public class DatasetUtility
         //dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
         return dsiBean;
     }
+    */
 
 
     // =================================================================
