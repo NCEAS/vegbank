@@ -1,6 +1,11 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" href="@web_context@includes/vegbank2005.css" type="text/css" media="screen" />
+<!-- here, switch b/t html and jsp for what width to show, and jsp only for sizes requiring full screen -->
+<logic:equal name="Boolean.false" value="true"><!-- HTML page style -->
+<link rel="stylesheet" href="@web_context@includes/vegbank2005_size750px.css" type="text/css" media="screen" />
+</logic:equal>
+<!-- comment must be turned off in called page: <%@ include file="/includes/jspstyles.jsp" %> :and comment must be started! -->
 <link rel="stylesheet" href="@web_context@includes/default.css" type="text/css" media="all" />
 <link rel="shortcut icon"  href="@images_link@vegbank_logo16x16.gif" type="image/gif" />
 <script language="javascript" src="@web_context@includes/encoders.js"></script>

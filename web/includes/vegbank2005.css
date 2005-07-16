@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.16 2005-07-15 16:45:43 mlee Exp $
+ * $Id: vegbank2005.css,v 1.17 2005-07-16 04:55:54 mlee Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -43,31 +43,6 @@ html>body #container {
     height: auto;
 }
 
-#wrapper {
-    width: 752px;
-    height: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #fff;
-    padding: 0;
-}
-#body > #wrapper {
-    width: 750px;
-}
-
-#maincontent {
-    float: left;
-    min-height: 50%;
-    width: 752px;
-    padding: 0 0 15px 0;
-    margin: 0;
-    text-align: left;
-    border-left: 1px solid #999;
-    border-right: 1px solid #999;
-}
-#wrapper > #maincontent {
-    width: 750px;
-}
 #footer {
     /* only footer positioning goes here */
     float: left;
@@ -217,20 +192,6 @@ fieldset > #home-img {
 /*-------------------------------------------------
 CEILING
 -------------------------------------------------*/
-#ceiling {
-	padding: 0;
-    border-top: 1px solid #ccc;
-    height: 63px;
-    width: 752px;
-    /*
-    border-bottom: 1px solid #999;
-     */
-    border-left: 1px solid #999;
-    border-right: 1px solid #999;
-}
-#wrapper > #ceiling {
-    width: 750px;
-}
 
 
 #logo {
@@ -283,30 +244,7 @@ a.nobg:hover {
 /*-------------------------------------------------
 HEADER
 -------------------------------------------------*/
-#header {
-    position: relative;
-    /*
-    left: 68px;
-    */
-    width: 650px;
-    height: 74px;
-    padding: 0;
-    margin: -8px 0 0 68px;
-    text-align: left;
-    background: url(@images_link@header_bg650.gif) top left no-repeat;
-    font-size: 15px;
-    vertical-align: text-top;
-    color: #808059;
-    font-weight: bold;
-    /*
-    background-color: #fff;
-    background-color: #cccc8f;
-    background-color: #808059;
-    border: 3px solid #E6E6CF;
-    border-width: 1px 1px 2px 1px;
-    border-color: #E6E6CF #CCCC8F #CCCC8F #E6E6CF;
-    */
-}
+
 #header-left {
     float: left;
     height: 59px;
@@ -433,20 +371,7 @@ html>body #header-right ul li a {
 /*-------------------------------------------------
 FOOTER
 -------------------------------------------------*/
-#footer {
-    width: 752px;
-    border: 1px solid #999;
-    background-color: #E6E6CF;
-    padding: 0;
-    margin: 0;
-    font-size: 10px;
-    text-align: left;
-    line-height: 2.5em;
-}
-#wrapper > #footer {
-    /* beginning to despise IE */
-    width: 750px;
-}
+
 #footersmall {
     width: 100%;
     border: 1px solid #999;
