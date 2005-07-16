@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 13:57:20 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-07-16 03:09:28 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,8 @@ public class AccessionCode
 {
 	protected static Log log = LogFactory.getLog(AccessionCode.class);
 
+    private static AccessionGen ag;
+
     private String ac = null;
     private String dbId = null;
     private String entityCode = null;
@@ -60,6 +62,12 @@ public class AccessionCode
             entityCode = parts[1];
             entityId = Long.valueOf(parts[2]);
             confirmation = parts[3];
+        }
+
+        if (ag == null) {
+            synchronized (this) {
+                ag = new AccessionGen();
+            }
         }
     }
 
@@ -81,7 +89,6 @@ public class AccessionCode
      * Gets the entity (table) name, the second field.
      */
     public String getEntityName() {
-        AccessionGen ag = new AccessionGen();
         return ag.getTableName(getEntityCode());
     }
 
