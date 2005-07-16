@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:11:06 $'
- *	'$Revision: 1.22 $'
+ *	'$Date: 2005-07-16 03:06:51 $'
+ *	'$Revision: 1.23 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -111,7 +111,7 @@ public class LoadTreeToDatabase
 	private boolean doCommit = true;
 	private HashMap tableKeys = new HashMap();
     private AccessionGen ag = null;
-    private VBModelBeanToDB bean2db = null;
+    //private VBModelBeanToDB bean2db = null;
     private String xmlFileName = null;
     private Long usrId = new Long(0);
 
@@ -147,7 +147,8 @@ public class LoadTreeToDatabase
 		//Utility.prettyPrintHash(vegbankPackage);
 
         try {
-            this.bean2db = new VBModelBeanToDB();
+            dlog.append("Beginning VegBank XML dataload");
+            //this.bean2db = new VBModelBeanToDB();
         } catch(Exception vbex) {
             log.error("FATAL: problem initializing VBModelBeanToDB: " + vbex.getMessage());
 		    errors.addError(LoadingErrors.DATABASELOADINGERROR, vbex.getMessage());
@@ -164,6 +165,7 @@ public class LoadTreeToDatabase
 		//this boolean determines if the dataset should be commited or rolled-back
 		commit = true;
 		this.initDB();
+        dlog.append("preparing data..."); 
 
 		// insert commConcepts
 		Enumeration commConcepts =  getChildTables(vegbankPackage, "commConcept");
@@ -206,6 +208,7 @@ public class LoadTreeToDatabase
 			insertObservation(observation);
 		}
 
+        dlog.append("finished preparing data"); 
 
 		//log.info("commit new data?: " + commit);
 
@@ -216,14 +219,22 @@ public class LoadTreeToDatabase
             // COMMIT
             //////////////////////////////////////////////////////////////////
 			log.debug("committing xml data to DB");
+			dlog.append("committing xml data to DB");
 			writeConn.commit();
 
             try {
                 // DATASET CREATION
                 log.debug("====================== DATASET CREATION"); 
                 dsAC = createDataset();
-                dlog.addTag("datasetURL", vbResources.getString("serverAddress") + 
-                        "/get/std/userdataset/" + dsAC.toString());
+                if (dsAC != null) {
+                    log.debug("done creating dataset"); 
+                    dlog.addTag("datasetURL", vbResources.getString("serverAddress") + 
+                            "/get/std/userdataset/" + dsAC.toString());
+                } else {
+                    dlog.append("!!! empty dataset");
+                    log.error("empty dataset");
+                }
+
             } catch (Exception ex) {
                 log.error("problem creating dataset or dataset items", ex);
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
@@ -246,13 +257,12 @@ public class LoadTreeToDatabase
 
 
             try {
-                log.debug("====================== DENORMS (not implemented yet)");
+                log.debug("====================== DENORMS");
                 // RUN DENORMALIZATION SQL
-                //log.info("Running denormalizations");
+                log.info("Running denormalizations");
+                runDenorms();
 
-                // TODO: run denorms
-                
-                //writeConn.commit();
+                ////writeConn.commit();
             } catch (Exception ex) {
                 log.error("Problem while running denormalizations", ex);
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
@@ -263,12 +273,14 @@ public class LoadTreeToDatabase
             try {
                 // KEYWORD GENERATION
                 log.debug("====================== KEYWORD GEN");
+                dlog.append("====================== KEYWORD GEN");
                 KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
                 Iterator tit = tableKeys.keySet().iterator();
                 while (tit.hasNext()) {
                     String tableName = ((String)tit.next()).toLowerCase();
                     kwGen.updatePartialEntityByTable(tableName);
                 }
+
             } catch (SQLException kwex) {
                 log.error("problem inserting new keywords", kwex);
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
@@ -278,6 +290,7 @@ public class LoadTreeToDatabase
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem generating keywords: " + ex.toString());
             }
+                //log.error("\n\nREMEMBER TO GEN KEYWORDS!\n\n");
 
             // this is still considered a successful load, despite potential errors
             receiptTpl = DataloadLog.TPL_SUCCESS;
@@ -320,8 +333,6 @@ public class LoadTreeToDatabase
         }
 
 
-        runDenorms();
-		
 		//Return dbconnection to pool
 		DBConnectionPool.returnDBConnection(writeConn);
 		readConn.setReadOnly(false);
@@ -601,11 +612,11 @@ public class LoadTreeToDatabase
 			
 			//log.info("Running SQL: " + sb.toString());
 			if (tableName.equals("plot")) {
-				log.info("Loaded Table : " +tableName + " with PK of " + PK);
+				log.info("loaded table: " +tableName + " with PK of " + PK);
 			}
 
             // update the dataload log's insertion count for this table
-            //if (Utility.canBeDatasetItem(tableName)) {
+            //if (Utility.canAddToDatasetOnLoad(tableName)) {
                 dlog.increment("entityCounts", tableName);
             //}
 
@@ -2211,12 +2222,21 @@ public class LoadTreeToDatabase
      * Populate a Userdatasetitem as much as possible.
      */
     private Userdatasetitem createDatasetItem(String tableName, long PK) throws SQLException {
+        AccessionCode dsiAC = new AccessionCode(ag.getAccession(tableName, PK));
+        return DatasetUtility.createDatasetItem(dsiAC, null);
+
+        /*
         Userdatasetitem dsiBean = new Userdatasetitem();
-        dsiBean.setItemaccessioncode(ag.getAccession(tableName, PK));
+        dsiBean.setItemaccessioncode(dsiAC.toString());
         dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
         dsiBean.setItemtype(tableName);
-        //log.debug("+++ ADDING userdatasetitem for " + tableName + ": " + dsiBean.getItemaccessioncode());
+        dsiBean.setItemdatabase(dsiAC.getDatabaseId());
+        dsiBean.setItemtable(dsiAC.getEntityName());
+        dsiBean.setItemrecord(dsiAC.getEntityId().toString());
+
+        log.debug("+++ ADDING userdatasetitem for " + tableName + ": " + dsiBean.getItemaccessioncode());
         return dsiBean;
+        */
     }
 
     /**
@@ -2237,12 +2257,15 @@ public class LoadTreeToDatabase
             tableName = (String)it.next();
     
             // Is this a supported table?
-            if (Utility.canBeDatasetItem(tableName) ) {
+            if (Utility.canAddToDatasetOnLoad(tableName) ) {
+                //log.debug("+++ adding dsi: " + tableName);
                 Vector keys = (Vector)tableKeys.get(tableName);
                 Iterator kit = keys.iterator();
                 while (kit.hasNext()) {
                     try {
-                        dsiBean = createDatasetItem(tableName, ((Long)kit.next()).longValue());
+                        Long itemId = (Long)kit.next();
+                        //log.debug("adding DSI: " + itemId.toString());
+                        dsiBean = createDatasetItem(tableName, itemId.longValue());
                         dsiBeanList.add(dsiBean);
 
                     } catch (Exception bex) {
@@ -2251,16 +2274,24 @@ public class LoadTreeToDatabase
                         dlog.append("problem while inserting userDatasetItem: " + bex.toString());
                     }
                 } // end while table PKs
+                //log.debug("DONE");
             } // end if
         } // end while table names
 
         // insert the dataset items as a new dataset
-        DatasetUtility dsu = new DatasetUtility();
-        AccessionCode dsAC = dsu.insertDataset(dsiBeanList, xmlFileName, 
-                "Created via XML upload", "load", "private", usrId);
+        if (dsiBeanList.size() > 0) {
+            log.debug("About to insert DSI list; size = " + dsiBeanList.size());
+            DatasetUtility dsu = new DatasetUtility();
+            AccessionCode dsAC = dsu.insertDataset(dsiBeanList, xmlFileName, 
+                    "Created via XML upload", "load", "private", usrId);
 
-        log.debug("ADDED userdataset " + dsAC.toString());
-        return dsAC;
+            log.debug("ADDED userdataset " + dsAC.toString());
+            return dsAC;
+        } else {
+            log.error("No dataset items to create.");
+        }
+
+        return null;
     }
 
 
