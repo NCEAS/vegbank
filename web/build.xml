@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-07-06 17:59:17 $'
-* '$Revision: 1.173 $'
+* '$Date: 2005-07-16 22:52:17 $'
+* '$Revision: 1.174 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -716,6 +716,7 @@
     <copy todir="${vegbranch_server}/help" filtering="no">
       <fileset dir="${lrg_binary_src}/vegbranch/help">
         <include name="**/*.png"/>
+        <include name="**/*.jpg"/>
       </fileset>
     </copy>
   </target>
