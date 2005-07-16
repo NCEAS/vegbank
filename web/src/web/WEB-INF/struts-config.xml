@@ -107,7 +107,6 @@
 		<forward name="RegisterNewUser" path="/forms/RegisterNewUser.jsp" />
 	</global-forwards>
 	<action-mappings type="org.vegbank.ui.struts.VegbankActionMapping">
-		<action path="/UserPreferences" forward="/forms/UserPreferences.jsp" />
 		<action path="/AdminMenu" forward="/admin/admin_menu.jsp" />
 		<action path="/AddCoverMethod" type="org.vegbank.ui.struts.AddCoverMethodAction" name="AddCoverMethodForm" scope="request" validate="true" input="AddCoverMethod" />
 		<action path="/AddJournal" type="org.vegbank.ui.struts.AddJournalAction" name="AddJournalForm" scope="request" validate="true" input="AddJournal" />
