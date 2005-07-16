@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-06 01:05:19 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2005-07-16 02:59:35 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import org.apache.struts.Globals;
 import org.apache.struts.action.*;
 import org.apache.commons.beanutils.BasicDynaBean;
 import org.apache.commons.beanutils.BasicDynaClass;
+import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.ui.struts.VegbankAction;
@@ -39,6 +40,7 @@ import org.vegbank.plots.datasource.DBModelBeanReader;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.DatabaseAccess;
 import org.vegbank.common.utility.VBModelBeanToDB;
+import org.vegbank.common.utility.AccessionCode;
 import org.vegbank.common.model.Commclass;
 import org.vegbank.common.model.Comminterpretation;
 import org.vegbank.common.model.Classcontributor;
@@ -82,7 +84,8 @@ public class InterpretCommAction extends VegbankAction {
         }
 
 		long lObsId = Long.parseLong(obsId);
-        DynaActionForm icForm = (DynaActionForm)form;
+        //DynaActionForm icForm = (DynaActionForm)form;
+        DynaBean icForm = (DynaBean)form;
 
 		// for validation,
 		// store the obsId in the session
@@ -121,6 +124,7 @@ public class InterpretCommAction extends VegbankAction {
 
 				log.debug("EDITING");
 
+/*
                 commclass = new Commclass();
                 commclass.setObservation_id(lObsId);
                 comminterpArray = new Comminterpretation[1];
@@ -129,11 +133,12 @@ public class InterpretCommAction extends VegbankAction {
                 commconcept_ac[0] = "";
 
                 icForm.set("commclass", commclass);
-                icForm.set("comminterp", comminterpArray);
+                //icForm.set("comminterp", comminterpArray);
                 icForm.set("commconcept_ac", commconcept_ac);
                 request.setAttribute("commclass", commclass);
-                request.setAttribute("comminterp", comminterpArray);
+                //request.setAttribute("comminterp", comminterpArray);
                 request.setAttribute("commconcept_ac", commconcept_ac);
+*/
 
 				return mapping.findForward("edit");
 
@@ -143,128 +148,130 @@ public class InterpretCommAction extends VegbankAction {
 				// get the taxonobservation_id
 				log.debug("SAVING");
 
+                //
+                // STRATEGY:
+                // Populate classcontributor
+                // Populate comminterp list
+                // Populate commclass
+                // Insert commclass bean
+                //
+
+                // Initialize variables
+				ResultSet rs = null;
+				DatabaseAccess da = new DatabaseAccess();
                 commclass = (Commclass)icForm.get("commclass");
                 classcontrib = new Classcontributor();
                 comminterpArray = (Comminterpretation[])icForm.get("comminterp");
-
-                // use to get commconcept_id
                 commconcept_ac = (String[])icForm.get("commconcept_ac");
+                Long commconcept_id = null;
 
 
-
-                // set up the commclass + comminterps
                 if (commclass == null) {
-                    // init the commclass
-                    commclass.setObservation_id(lObsId);
-
-                } else {
-
-                    // add the comminterps
-                    List comminterpList = new ArrayList();
-                    if (comminterpArray.length == 0) {
-                        for (int i=0; i< comminterpArray.length; i++) {
-                            comminterpList.add((Comminterpretation)comminterpArray[i]);
-                        }
-
-                        commclass.setcommclass_comminterpretations(comminterpList);
-                    }
-
-                }
-
-				ResultSet rs = null;
-				DatabaseAccess da = new DatabaseAccess();
-				
-				// set the obsId (from the form) in the T-Int
-				//////Taxoninterpretation tint = icForm.getTaxonInterpretation();
-				//////tint.setTaxonobservation_id(Long.parseLong(icForm.getTobsId()));
-
-				//
-				// Get plantname_id
-				//
-				//////log.debug("checking for plantName: " + Utility.encodeForDB(icForm.getPlantName()));
-				//rs = da.issueSelect(
-				//		"SELECT plantname_id FROM plantname WHERE lower(plantname)='" +
-				//			Utility.encodeForDB(icForm.getPlantName()) + "'");
-
-				// can find plantName?
-                /*
-				if (rs.next()) {
-					// use the extant plantName 
-					log.debug("using extant plantName");
-					tint.setPlantname_id(rs.getLong(1));
-
-				} else {
-					// plantName does not yet exist, so store it
-					String ins = "INSERT INTO plantname (plantname,dateentered) VALUES ('" + 
-							Utility.encodeForDB(icForm.getPlantName()) + "', now())";
-					log.debug("adding new plantName: " + ins);
-					da.issueUpdate(ins);
-				}
-                */
-				
-                /*
-				//
-				// Get plantconcept_id
-				// 
-				log.debug("getting plantconcept_id with: " + icForm.getPcAC());
-				rs = da.issueSelect(
-						"SELECT plantconcept_id FROM plantconcept WHERE lower(accessioncode)='" +
-						icForm.getPcAC().toLowerCase() + "'");
-
-
-				if (rs.next()) {
-					log.debug("setting plantconcept_id");
-					tint.setPlantconcept_id(rs.getLong(1));
-
-				} else {
-					log.error("Can't find plantconcept_id for given AC: " + icForm.getPcAC());
+                    log.error("A commclass must be passed from form");
 					errors.add(Globals.ERROR_KEY, new ActionMessage(
 								"errors.general", 
-								"The plant concept accession code you entered could not be found."));
-					saveErrors(request, errors);
-					return mapping.findForward("edit");
-				}
-				
-				// 
-				// Set the interpretationdate
-				//
-				tint.setInterpretationdate("now()");
-				
-				// 
-				// Set party_id
-				//
-				tint.setParty_id(new Long(getUser(request.getSession()).getPartyid()).longValue());
-				
-				// 
-				// Set role_id
-				//
-				rs = da.issueSelect("SELECT role_id FROM aux_role WHERE LOWER(rolecode)='not specified'");
-				if (rs.next()) {
-					tint.setRole_id(rs.getLong(1));
-				} else {
-					log.error("Can't find role_id for rolecode: 'Not specified'");
-					errors.add(Globals.ERROR_KEY, new ActionMessage(
-								"errors.general", 
-								"Bad rolecode, 'not specified'"));
+								"No commclass object found in post"));
 					saveErrors(request, errors);
 					return mapping.findForward("vberror");
+                }
+
+
+                //
+                // COMMINTERPRETATIONS
+                //
+                log.debug("Handling comm. interpretations: " + comminterpArray.length );
+                List comminterpList = new ArrayList();
+                if (comminterpArray.length == 0) {
+                    //error
+					log.error("No comm interps entered");
+					errors.add(Globals.ERROR_KEY, new ActionMessage("errors.general", 
+                            "Please choose at least one community for your interpretation of this plot."));
+					saveErrors(request, errors);
+					return mapping.findForward("vberror");
+
+                } else {
+                    for (int i=0; i< comminterpArray.length; i++) {
+                        Comminterpretation comminterp = (Comminterpretation)comminterpArray[i];
+                        comminterp.setComminterpretation_id(-1);
+
+                        // set commconcept_id
+                        commconcept_id = new AccessionCode(commconcept_ac[i]).getEntityId();
+                        log.debug("adding commconcept_id #" + commconcept_id);
+                        comminterp.setCommconcept_id(commconcept_id.longValue());
+
+                        // get the commname
+                        try {
+                            rs = da.issueSelect("SELECT commname FROM commconcept WHERE commconcept_id='" + commconcept_id.toString() + "'");
+                            if (rs.next()) {
+                                comminterp.setCommname(rs.getString(1));
+                            } else {
+                                log.error("Problem finding commconcept.commname for commconcept_id: " + commconcept_id.toString());
+                            }
+                            rs.close();
+                        } catch (Exception ex) {
+                            log.error("Problem finding commconcept.commname for commconcept_id: " +
+                                    commconcept_id.toString() + ", " + ex.toString());
+                        }
+
+                        // embargo
+                        comminterp.setEmb_comminterpretation("0");
+
+                        // add comminterp to list
+                        comminterpList.add(comminterp);
+                        log.debug("COMMINTERP: \n" + comminterp.toXML());
+                    }
+                    // save all comminterps to commclass
+                    commclass.setcommclass_comminterpretations(comminterpList);
+                    log.debug("added " + comminterpList.size() + " comm. interps");
+                }
+
+
+                //
+                // CLASSCONTRIBUTORS
+                //
+
+				// Set party
+				classcontrib.setParty_id(new Long(getUser(request.getSession()).getPartyid()).longValue());
+				
+				// Set role
+				rs = da.issueSelect("SELECT role_id FROM aux_role WHERE LOWER(rolecode)='classifier'");
+				if (rs.next()) {
+					classcontrib.setRole_id(rs.getLong(1));
+				} else {
+					log.error("Can't find role_id for rolecode: 'Classifier'");
+					errors.add(Globals.ERROR_KEY, new ActionMessage("errors.general", 
+								"Bad rolecode, 'not specified'"));
+					saveErrors(request, errors);
+				    rs.close();
+					return mapping.findForward("vberror");
 				}
+                rs.close();
 
-				
+                // Set embargo
+                classcontrib.setEmb_classcontributor("0");
+
+                log.debug("adding one Classcontributor");
+                ArrayList classcontributorList = new ArrayList();
+                classcontributorList.add(classcontrib);
+                commclass.setcommclass_classcontributors(classcontributorList);
+
+
+
+
 				// 
-				// Set other tint fields
+				// COMMCLASS
 				//
-				tint.setOriginalinterpretation("false");
-				tint.setCurrentinterpretation("false");
-				tint.setInterpretationtype("Other");
+                commclass.setObservation_id(lObsId);
+				commclass.setClassstartdate("now()");
+                commclass.setEmb_commclass("0");
 
-				//log.debug("tint:\n" + tint.toXML());
-				rs.close();
+                // TODO: set commclass.accessioncode
 				
-				// save new taxonInterpretation record
-				log.debug("inserting new taxoninterpretation");
-				VBModelBeanToDB db = new VBModelBeanToDB();
-				db.insert(tint);
+				// save new commclass record
+				log.debug("inserting new commclass");
+				VBModelBeanToDB bean2db = new VBModelBeanToDB();
+				long newId = bean2db.insert(commclass);
+                log.debug("Done inserting new commclass #" + newId);
 				
 
 				ActionMessages messages = new ActionMessages();
@@ -273,24 +280,23 @@ public class InterpretCommAction extends VegbankAction {
 							"Thank you.  Your interpretation has been saved."));
 				saveMessages(request, messages);
 
-				request.getSession().removeAttribute("tobsId");
+				request.getSession().removeAttribute("obsId");
 
 				// tell the next action to clear out the form
-				log.debug("Newing up the form");
-				icForm = new InterpretCommForm();
-				request.setAttribute("formBean", icForm);
+				//log.debug("Newing up the form");
+				//icForm = new InterpretCommForm();
+				//request.setAttribute("formBean", icForm);
 
 				log.debug("Leaving InterpretCommAction (save)");
 				return mapping.findForward("edit");
-                */
 			}
 		
 		} catch (Exception ex) {
-			log.error("ERROR InterpretCommAction: FAILURE: " + ex.toString());
+			log.error("ERROR InterpretCommAction: FAILURE", ex);
 			errors.add(Globals.ERROR_KEY, new ActionMessage(
 						"errors.general", ex.toString()));
 			saveErrors(request, errors);
-			return mapping.findForward("edit");
+			return mapping.findForward("vberror");
 		}
 
 
