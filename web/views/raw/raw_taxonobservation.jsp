@@ -1,5 +1,6 @@
 @stdvegbankget_jspdeclarations@
 <% String rowClass = "evenrow" ; %>
+
 <!-- MUST BE passed observation_pk -->
 
 
@@ -11,7 +12,7 @@ Sorry, badly formatted request to get taxa.  Needs observation ID.
 </logic:notPresent>
 
 <logic:present parameter="observation_pk">
-  <bean:parameter id="observation_pk" name="observation_pk" />
+  <bean:parameter id="observation_pk" name="observation_pk" value="-1"/>
   <bean:define id="inrawview" value="true" />
 
 <%@ include file="../includeviews/sub_taxonobservation.jsp" %>
