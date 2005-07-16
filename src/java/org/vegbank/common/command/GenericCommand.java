@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-06-23 21:23:00 $'
- *	'$Revision: 1.36 $'
+ *	'$Date: 2005-07-16 02:53:59 $'
+ *	'$Revision: 1.37 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -337,22 +337,30 @@ public class GenericCommand
                 */
 
                 if (log.isDebugEnabled()) {
-                    //log.debug("Setting " + BEANLIST_KEY + " and " + beanName.toUpperCase() + " as lists");
+                    log.debug("Setting " + BEANLIST_KEY + " and " + beanName.toUpperCase() + " as lists");
                 }
                 request.setAttribute(BEANLIST_KEY, searchResultList);
                 request.setAttribute(beanName.toUpperCase(), searchResultList);
 
-                if (!Utility.isStringNullOrEmpty(id)) {
-                    request.setAttribute(id + "-" + BEANLIST_KEY, searchResultList);
+                String thisGetId = getId();
+                if (!Utility.isStringNullOrEmpty(thisGetId)) {
+                    request.setAttribute(thisGetId + "-" + BEANLIST_KEY, searchResultList);
+                } else {
+                    log.debug("============id is empty");
                 }
 
                 if (searchResultList != null && searchResultList.size() == 1) {
-                    //log.debug("One item, so setting " + BEAN_KEY + " and " + beanName.toUpperCase() + " as beans");
+                    if (log.isDebugEnabled()) {
+                        log.debug("One item, so setting " + BEAN_KEY + " and " + beanName.toUpperCase() + " as beans");
+                    }
                     request.setAttribute(BEAN_KEY, searchResultList.get(0));
                     request.setAttribute(beanName.toUpperCase(), searchResultList.get(0));
 
-                    if (!Utility.isStringNullOrEmpty(id)) {
-                        request.setAttribute(id + "-" + BEAN_KEY, searchResultList.get(0));
+                    if (!Utility.isStringNullOrEmpty(thisGetId)) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Also setting " + thisGetId + "-" + BEAN_KEY);
+                        }
+                        request.setAttribute(thisGetId + "-" + BEAN_KEY, searchResultList.get(0));
                     }
                 }
             } // end if request not null
@@ -651,7 +659,7 @@ public class GenericCommand
 				{
 					String propName = (String) propNames.get(i);
 					String value = rs.getString(i+1);
-					//log.debug("Mapping property " + propName + " = " + value);
+					log.debug("Mapping property " + propName + " = " + value);
 					map.put(propName, value);	
 				}
 		  		beanList.add(map);
@@ -662,7 +670,7 @@ public class GenericCommand
 				{
 					String propName = (String) propNames.get(i);
 					String value = rs.getString(i+1);
-					//log.debug("Setting bean property " + propName + " = " + value);
+					log.debug("Setting bean property " + propName + " = " + value);
 					BeanUtils.copyProperty(bean, propName, value);	
 				}
 		  		beanList.add(bean);
