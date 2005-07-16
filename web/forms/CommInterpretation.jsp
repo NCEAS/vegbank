@@ -39,6 +39,10 @@ function deleteRecord(evt) {
     var sibling = link.parentNode.parentNode;
     var parent = link.parentNode.parentNode.parentNode;
     parent.removeChild(sibling);
+
+    // TODO: find a smart way to re-index the comminterps
+    // maybe push this interp's index to an open index queue
+    interpCount--;
 }
 
 function lookupComm(evt) {
@@ -109,6 +113,7 @@ function saveForm() {
 
     // is this new or and edit?
     if (recId == null || recId == "") {
+        recId = "rec" + interpCount;
         isNew = true;
         saveRecord = gebid('record_template').cloneNode(true);
         saveRecord.setAttribute("id", "rec" + interpCount);
@@ -163,7 +168,13 @@ function saveForm() {
             destField.nextSibling.innerHTML = destField.value;
         }
 
-        destField.setAttribute("name", "comminterp[" + interpCount + "]." + tmpId);
+        var fieldIndex = recId.substring("rec".length);
+        //alert("adding to index " + fieldIndex);
+        if (tmpId == "commconcept_ac") {
+            destField.setAttribute("name", "commconcept_ac[" + fieldIndex + "]");
+        } else {
+            destField.setAttribute("name", "comminterp[" + fieldIndex + "]." + tmpId);
+        }
     }
 
 
@@ -276,13 +287,13 @@ function getHelpPageId() {
 <!--tr><td>You are:</td><td class="item"><input text disabled="true" value="Joe Schmoe"/></td></tr-->
 
 <tr><th bgcolor="#666666" colspan="2">Method of Classification:</th></tr>
-<tr><td class="listhead">Inspection</td><td class="item"><html:checkbox name="commclass" property="inspection"/></td></tr>
-<tr><td class="listhead">Tabular Analysis</td><td class="item"><html:checkbox name="commclass" property="tableanalysis"/></td></tr>
-<tr><td class="listhead">Multivariate Analysis</td><td class="item"><html:checkbox name="commclass" property="multivariateanalysis"/></td></tr>
-<tr><td class="listhead">Expert System (desc. in notes)</td><td class="item"><html:checkbox name="commclass" property="expertsystem"/></td></tr>
+<tr><td class="listhead">Inspection</td><td class="item"><html:checkbox property="commclass.inspection" value="true" /></td></tr>
+<tr><td class="listhead">Tabular Analysis</td><td class="item"><html:checkbox property="commclass.tableanalysis" value="true" /></td></tr>
+<tr><td class="listhead">Multivariate Analysis</td><td class="item"><html:checkbox property="commclass.multivariateanalysis" value="true" /></td></tr>
+<tr><td class="listhead">Expert System (desc. in notes)</td><td class="item"><html:checkbox property="commclass.expertsystem" value="true" /></td></tr>
 <tr><td class="listhead">Classification publication</td>
     <td class="item">
-    <html:select name="commclass" property="classpublication_id">
+    <html:select property="commclass.classpublication_id">
             <option value="" selected="selected">--none--</option>
         <logic:iterate id="ref" name="BEANLIST">
             <option value='<bean:write name="ref" property="reference_id"/>'><bean:write name="ref" property="reference_id_transl"/></option>
@@ -290,7 +301,7 @@ function getHelpPageId() {
         </html:select>
         <!--br/><a href="javascript:popupAddReference()">Add reference</a--></td></tr>
 
-<tr><td class="listhead">Notes</td><td class="item"><html:textarea name="commclass" property="classnotes" rows="4" cols="45"></html:textarea></td></tr>
+<tr><td class="listhead">Notes</td><td class="item"><html:textarea property="commclass.classnotes" rows="4" cols="45"></html:textarea></td></tr>
 <!--tr><th bgcolor="#666666" colspan="2">Communities to which this plot belongs:</th></tr-->
 </table>
 
@@ -333,10 +344,10 @@ function getHelpPageId() {
         <!--br/><a href="javascript:popupAddReference()">Add reference</a--></td></tr>
 
     <tr><td class="listhead2">This is a typal plot of this community?</td>
-        <td class="item"><input type="checkbox" id="af_type" name="tmp_type"/></td></tr>
+        <td class="item"><input type="checkbox" id="af_type" name="tmp_type" value="true" /></td></tr>
 
     <tr><td class="listhead2">This is a typal plot of the nomenclature (Braun-Blanquet)?</td>
-        <td class="item"><input type="checkbox" id="af_nomenclaturaltype" name="tmp_nomenclaturaltype"/></td></tr>
+        <td class="item"><input type="checkbox" id="af_nomenclaturaltype" name="tmp_nomenclaturaltype" value="true" /></td></tr>
 
     <tr><td class="listhead2">Notes</td>
         <td class="item"><textarea id="af_notes" name="tmp_notes" rows="4" cols="45"></textarea></td></tr>
@@ -403,7 +414,7 @@ function getHelpPageId() {
 <br/>
 <h3>Other Interpretations</h3>
 <% String rowClass = "evenrow"; %>
-<vegbank:get id="commclass" select="commclass" beanName="map" pager="false" where="where_observation_pk" wparam="obsId"/>
+<vegbank:get id="commclass" select="commclass" beanName="map" pager="false" where="where_observation_pk" wparam="obsId" perPage="-1" />
 <%@ include file="../views/includeviews/sub_commclass_summary.jsp" %>
  
 
