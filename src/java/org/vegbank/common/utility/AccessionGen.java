@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2005-06-06 19:28:44 $'
- *	'$Revision: 1.20 $'
+ *	'$Author: anderson $'
+ *	'$Date: 2005-07-16 03:10:22 $'
+ *	'$Revision: 1.21 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,12 +88,14 @@ public class AccessionGen {
 		tableCodes = new HashMap();
 		String key;
 
+        log.debug("init AG ++++++++++++++++++++++++++++++++++++++++");
 		// load the table abbreviations
 		for (Enumeration e = res.getKeys(); e.hasMoreElements() ;) {
 			key = (String)e.nextElement();
 			if (key.startsWith("abbr.")) {
-				tableCodes.put(key.substring(5).toLowerCase(),
-                        res.getString(key));
+				String tableName = key.substring(5).toLowerCase();
+                String code = res.getString(key).toLowerCase();
+				tableCodes.put(tableName, code);
 			}
 		}
 
@@ -243,6 +245,7 @@ public class AccessionGen {
 	 * Given a table code (abbreviation), returns full table name.
 	 */
 	public String getTableName(String code) {
+        code = code.toLowerCase();
 		String key, value;
 		if (tableCodes.containsValue(code)) {
 			Iterator it = tableCodes.keySet().iterator();
