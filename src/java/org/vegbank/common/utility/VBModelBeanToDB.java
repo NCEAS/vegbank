@@ -3,8 +3,8 @@
  * Authors: @author@ Release: @release@
  * 
  * '$Author: anderson $' 
- * '$Date: 2005-05-19 01:29:24 $' 
- * '$Revision: 1.9 $'
+ * '$Date: 2005-07-16 03:12:42 $' 
+ * '$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -90,6 +90,8 @@ public class VBModelBeanToDB
 
 	private List classNameList = new ArrayList();
 
+    private List methodsList = new ArrayList();
+
 	private Map tableKeys = new HashMap();
 
 	private Map allTableKeys = new HashMap();
@@ -118,8 +120,161 @@ public class VBModelBeanToDB
 	/**
 	 * Inserts a <code>VBModelBean</code> into the database.
 	 * 
-	 * @param bean
-	 *          the bean to write to the db.
+	 * @param bean the bean to write to the db.
+	 * @return the Primary Key allocated
+	 * @throws Exception
+	 *           any errors encounter get thrown up.
+	 */
+	private long insertBean(VBModelBean bean) throws Exception 
+    {
+        return insertBean(bean, true);
+    }
+
+	/**
+	 * Inserts a <code>VBModelBean</code> into the database, optionally committing it.
+	 * 
+	 * @param bean the bean to write to the db.
+	 * @param doCommit
+	 * @return the Primary Key allocated
+	 * @throws Exception
+	 *           any errors encounter get thrown up.
+	 */
+	private long insertBean(VBModelBean bean, boolean doCommit) throws Exception
+	{
+		long PK = 0;
+        String entityName = getEntityName(bean);
+        log.debug("entity name of bean to insert: " + entityName);
+        classNameList.add(entityName);
+
+        //String entityName = VBObjectUtils.getUnQualifiedName( bean.getClass().getName() );
+        //String xmlPK = this.getXMLPK(bean, entityName);
+        long inputUniqueId = this.getInputUniqueId(bean);
+        String inputUniqueIdAsString  = new Long(inputUniqueId).toString();
+
+        // Handle dups prevention
+
+        // Check if this has already been added to db
+        ////////if (inputUniqueId == -1 || inputUniqueId == 0) {
+        // This is problematic since one could argue
+        // that a 0 value indicates new record.
+        if (inputUniqueId == -1) {
+            log.debug("PK is -1 so not checking for duplicates");
+            PK = 0;
+        } else {
+            long assignedPK = inputUniqueIdTracker.getAssignedPK(entityName, inputUniqueIdAsString);
+            if (assignedPK != 0) {
+                log.info("Already entered record for  inputUniqueId " + inputUniqueId + 
+                        " into " + entityName + " using PK of " + assignedPK);
+                PK = assignedPK;
+            } else {
+                // find record in DB
+                PK = this.isObjectInDatabase(bean);
+            }
+        }
+        
+        if (PK == 0)
+        {
+            PK = this.reservePrimaryKey();
+            // Keep track of pks and table names do I can add AccessionCodes later
+            this.storeTableNameAndPK((String) getLastListElement(classNameList), PK);
+            allTableKeys.put(getLastListElement(classNameList), new Long(PK));
+            
+            // prevent duplicates
+            inputUniqueIdTracker.setAssignedPK(entityName, inputUniqueIdAsString, PK);
+            //log.debug("No record added for xml PK: " + inputUniqueId
+            //				+ " for table " + entityName + "; adding PK now: " + PK);
+
+            // Need add the PK to the object
+            bean.putPrimaryKey(PK);
+
+            Map getBeanMethods = this.getBeanGetFKSetPairs(bean);
+            Iterator pairs = getBeanMethods.values().iterator();
+            while (pairs.hasNext())
+            {
+                MemberGetterSetters getBeanSetFKPair = (MemberGetterSetters)pairs.next();
+                Method getBeanMethod = getBeanSetFKPair.getGetterMethod();
+                Method setFKMethod = getBeanSetFKPair.getSetterMethod();
+
+                log.debug("Processing: " + getBeanMethod + " and " + setFKMethod);
+
+                if (getBeanMethod != null && setFKMethod != null)
+                {
+                    VBModelBean newBean = (VBModelBean) getBeanMethod.invoke(bean, null);
+
+                    if (newBean != null)
+                    {
+                        // TODO: write into db and get PK -- RECURSIVE
+                        //VBModelBeanToDB bean2db = new VBModelBeanToDB(bean, conn);
+
+                        // Need to add FKs to the bean in some cases
+                        this.handleSpecialCases(newBean);
+
+                        long FKtoUse = this.insertBean(newBean, false);
+
+                        // TODO: Fill in the FK on the current bean
+                        //log.debug("setting FK with " + setFKMethod + "(" + FKtoUse + ")");
+                        setFKMethod.invoke(bean, new Object[] {new Long(FKtoUse)});
+                    }
+                }
+            }
+
+            // Get the Statement and run
+            String SQL = this.getStatement(bean);
+            Statement stmt = conn.createStatement();
+            stmt.execute(SQL);
+            stmt.close();
+
+            HashMap foreignKeys = new HashMap();
+
+            // TODO: Need to get the FK name?
+            // FIXME: Need a lookup here as the FKName is a function of
+            // FKtable name, tablename and ??? ... hack for now
+
+            String foreignKeyName = this.getPrimaryKeyFieldName();
+            foreignKeys.put(foreignKeyName, new Long(PK));
+
+            // Write Objects that depend on this PK to database
+            handleChildren(foreignKeys, bean);
+
+        }
+        else
+        {
+            allTableKeys.put(getLastListElement(classNameList), new Long(PK));
+            log.info("Found an identical record in the Database");
+        }
+
+        // About to drop out of recursion CLEAN UP
+        ///////beans.remove(bean);  // can't do it here!
+        methodsList.remove(getLastListElement(methodsList));
+        classNameList.remove(getLastListElement(classNameList));
+
+        //log.debug("VBModelBeanToDB: Have " + beans.size() + " to work on before commiting.");
+
+        if (doCommit) {
+            log.debug("commiting a bean");
+            conn.commit();
+        }
+
+        /*
+        accessionCodesAdded.addAll(this.addAllAccessionCodes());
+        Iterator ait = accessionCodesAdded.iterator();
+        while (ait.hasNext()) {
+            log.debug("new AC: " + (String)ait.next());
+        }
+        if (doCommit) {
+            conn.commit();
+        }
+        */
+
+        return PK;
+    }
+
+
+	/**
+	 * Inserts all beans added with addBean, adding the given <code>VBModelBean</code> 
+     * to the end of the list.
+	 * 
+	 * @param bean the bean to write to the db.
 	 * @return the Primary Key allocated
 	 * @throws Exception
 	 *           any errors encounter get thrown up.
@@ -136,110 +291,7 @@ public class VBModelBeanToDB
         Iterator bit = beans.iterator();
         while (bit.hasNext()) {
             VBModelBean bean = (VBModelBean)bit.next();
-
-            String entityName = getEntityName(bean);
-            classNameList.add(entityName);
-
-            //String entityName = VBObjectUtils.getUnQualifiedName( bean.getClass().getName() );
-            //String xmlPK = this.getXMLPK(bean, entityName);
-            long inputUniqueId = this.getInputUniqueId(bean);
-            String inputUniqueIdAsString  = new Long(inputUniqueId).toString();
-
-            // Handle dups prevention
-
-            // Check if this has already been added to db
-            if (inputUniqueId == -1) {
-                log.debug("PK is -1 so not checking for duplicates");
-                PK = 0;
-            } else {
-                long assignedPK = inputUniqueIdTracker.getAssignedPK(entityName, inputUniqueIdAsString);
-                if (assignedPK != 0) {
-                    log.info("Already entered record for  inputUniqueId " + inputUniqueId + 
-                            " into " + entityName + " using PK of " + assignedPK);
-                    PK = assignedPK;
-                } else {
-                    PK = this.isObjectInDatabase(bean);
-                }
-            }
-            
-            if (PK == 0)
-            {
-                PK = this.reservePrimaryKey();
-                // Keep track of pks and table names do I can add AccessionCodes later
-                this.storeTableNameAndPK((String) getLastListElement(classNameList), PK);
-                allTableKeys.put(getLastListElement(classNameList), new Long(PK));
-                
-                // prevent duplicates
-                inputUniqueIdTracker.setAssignedPK(entityName, inputUniqueIdAsString, PK);
-                //log.debug("No record added for xml PK: " + inputUniqueId
-                //				+ " for table " + entityName + "; adding PK now: " + PK);
-
-                // Need add the PK to the object
-                bean.putPrimaryKey(PK);
-
-                Map getBeanMethods = this.getBeanGetFKSetPairs(bean);
-                Iterator pairs = getBeanMethods.values().iterator();
-                while (pairs.hasNext())
-                {
-                    MemberGetterSetters getBeanSetFKPair = (MemberGetterSetters)pairs.next();
-                    Method getBeanMethod = getBeanSetFKPair.getGetterMethod();
-                    Method setFKMethod = getBeanSetFKPair.getSetterMethod();
-
-                    //log.debug("Processing: " + getBeanMethod + " and " + setFKMethod);
-
-                    if (getBeanMethod != null && setFKMethod != null)
-                    {
-                        VBModelBean newBean = (VBModelBean) getBeanMethod.invoke(bean, null);
-
-                        if (newBean != null)
-                        {
-                            // TODO: write into db and get PK -- RECURSIVE
-                            //VBModelBeanToDB bean2db = new VBModelBeanToDB(bean, conn);
-
-                            // Need to add FKs to the bean in some cases
-                            this.handleSpecialCases(newBean);
-
-                            long FKtoUse = this.insert(newBean);
-
-                            // TODO: Fill in the FK on the current bean
-                            log.debug("calling " + setFKMethod + "(" + FKtoUse + ")");
-                            setFKMethod.invoke(bean, new Object[] {new Long(FKtoUse)});
-                        }
-                    }
-                }
-
-                // Get the Statement and run
-                String SQL = this.getStatement(bean);
-                Statement stmt = conn.createStatement();
-                stmt.execute(SQL);
-                stmt.close();
-
-                HashMap foreignKeys = new HashMap();
-
-                // TODO: Need to get the FK name?
-                // FIXME: Need a lookup here as the FKName is a function of
-                // FKtable name, tablename and ??? ... hack for now
-
-                String foreignKeyName = this.getPrimaryKeyFieldName();
-                foreignKeys.put(foreignKeyName, new Long(PK));
-
-                // Write Objects that depend on this PK to database
-                handleChildren(foreignKeys, bean);
-
-            }
-            else
-            {
-                allTableKeys.put(getLastListElement(classNameList), new Long(PK));
-                log.info("Found an identical record in the Database");
-            }
-
-            // About to drop out of recursion CLEAN UP
-            //beans.remove(bean);
-            //methodsList.remove(getLastListElement(methodsList));
-            classNameList.remove(getLastListElement(classNameList));
-
-            //log.debug("VBModelBeanToDB: Have " + beans.size() + " to work on before commiting.");
-
+            PK = insertBean(bean, false);
         } // end while
 
 
@@ -261,6 +313,7 @@ public class VBModelBeanToDB
 		// if we get here
 		return PK;
 	}
+
 
 	/**
 	 * @param bean
@@ -400,8 +453,7 @@ public class VBModelBeanToDB
 			throws Exception
 	{
 		// Get current declared methods array
-        log.debug("handleChildren()");
-		List methodsList = new ArrayList();
+		methodsList = new ArrayList();
 		methodsList.add(currentBean.getClass().getDeclaredMethods());
 		Method[] methods = (Method[]) getLastListElement(methodsList);
 		for (int i = 0; i < methods.length; i++)
@@ -417,7 +469,7 @@ public class VBModelBeanToDB
 					VBModelBean bean = (VBModelBean)it.next();
 					setForeignKeys(foreignKeys, bean);
                     
-					this.insert(bean);
+					this.insertBean(bean, false);
 				}
 			}
 		}
@@ -589,8 +641,7 @@ public class VBModelBeanToDB
 	 */
 	private long reservePrimaryKey() throws SQLException
 	{
-		log.debug("VBModelBeanToDB : Generating key for class: "
-				+ getLastListElement(classNameList));
+		//log.debug("Generating key for class: " + getLastListElement(classNameList));
 		String tableName = (String) getLastListElement(classNameList);
 		String primaryKeyName = Utility.getPKNameFromTableName(tableName);
 		long PK = Utility.dbAdapter
@@ -712,7 +763,7 @@ public class VBModelBeanToDB
 		
 		// Need to find the accessionCode in the bean
 		LinkedHashMap nameValues = bean.toOrderedHashMap();
-		log.debug("getInputUniqueId: Bean values: " + nameValues);
+		//log.debug("getInputUniqueId: Bean values: " + nameValues);
 		Set keys = nameValues.keySet();
 		Iterator it = keys.iterator();
 
