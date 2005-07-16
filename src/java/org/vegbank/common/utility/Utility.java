@@ -27,8 +27,8 @@ import org.vegbank.common.Constants;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-05-23 07:50:16 $'
- * '$Revision: 1.50 $'
+ * '$Date: 2005-07-16 03:10:42 $'
+ * '$Revision: 1.51 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -958,11 +958,12 @@ public class Utility implements Constants
 	}
 
 	/**
+     * 
 	 * @return
 	 */
-	public static boolean canBeDatasetItem(String tableName) {
+	public static boolean canAddToDatasetOnLoad(String tableName) {
         if (Utility.isStringNullOrEmpty(tableName)) {
-            log.debug("canBeDataItem(): given empty string");
+            log.debug("canAddToDatasetOnLoad(): given empty string");
             return false;
         }
 
