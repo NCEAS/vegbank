@@ -866,7 +866,6 @@
     <name>vegbranch/vegbank-module102-full-noplots-upd4.zip</name>
     <description>Updated closed lists and supplied NatureServe communities.</description>
   </file>
-
   <file>
     <name>vegbranch/vegbank-module102-full-noplots.zip</name>
     <description>No Plots and Full dataset for version 1.0.2. VegBank Module</description>
@@ -943,7 +942,6 @@
     <name>vegbranch/vegbranch-v1.6.zip</name>
     <description>VegBranch, VegBank's Client Database in MS Access.  Added NPS PLOTS entry and included UTM to Lat/Long conversion capability.</description>
   </file>
-
   <file>
     <name>vegbranch/help/screenshots/basicent_metadata_1.4.png</name>
     <description>VegBranch help files</description>
@@ -1564,6 +1562,82 @@
     <name>vegbranch/help/screenshots/smaller/z_vb_reconcile_1.4.png</name>
     <description>VegBranch help files</description>
   </file>
+   
+  <file><!-- start 1.6 updates -->
+    <name>vegbranch/help/screenshots/cust_entry_nps2_buildusdalist_1.6.png</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/cust_entry_nps2_main_1.6.png</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/cust_entry_nps2_plots-species_master_1.6.png</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/cust_entry_nps2_plots_env_1.6.png</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/cust_entry_nps2_plots_id_1.6.png</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/cust_entry_nps2_plots_opt_1.6.png</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/cust_entry_nps2_plots_phys_1.6.png</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/cust_entry_nps2_project_1.6.png</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/cust_entry_nps_chooseplant_1.6.png</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/smaller/cust_entry_nps2_buildusdalist_1.6.jpg</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/smaller/cust_entry_nps2_main_1.6.jpg</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/smaller/cust_entry_nps2_plots-species_master_1.6.jpg</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/smaller/cust_entry_nps2_plots_env_1.6.jpg</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/smaller/cust_entry_nps2_plots_id_1.6.jpg</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/smaller/cust_entry_nps2_plots_opt_1.6.jpg</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/smaller/cust_entry_nps2_plots_phys_1.6.jpg</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/smaller/cust_entry_nps2_project_1.6.jpg</name>
+    <description>VegBranch help files</description>
+  </file>
+  <file>
+    <name>vegbranch/help/screenshots/smaller/cust_entry_nps_chooseplant_1.6.jpg</name>
+    <description>VegBranch help files</description>
+  </file>
+  
+
+  
   <file>
     <name>vegbranch/media/vegbranch_datacheck_noerrs_config.xml</name>
     <description>Vegbranch Demo Video files</description>
