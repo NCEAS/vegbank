@@ -1,0 +1,146 @@
+@webpage_top_html@
+  
+  @webpage_head_html@
+  <title>Help: NPS-PLOTS Entry in VegBranch: plots</title>
+  @webpage_masthead_html@
+<h2><a href="@vegbranch_link@vbr-help.html">VegBranch Help</a>:</h2>
+<h3>NPS-PLOTS Entry in VegBranch: plots</h3>
+<p><strong>Please Note:</strong> The example data in the screenshots
+is not real data and doesn't make ecological sense.</p>
+<p>
+Enter information about each plot in this form, using the four tabs.  
+The picklists should be used if possible, but generally you can 
+enter your own value if none of the values in the list applies.  
+Also enter species on this plot by clicking the 
+<strong>"view/edit species list"</strong> button in the upper right. <br/><br/>
+Different fields will be shown on this form, depending on what "plot type"
+is selected on the previous form: 
+   <a href="Help.form.cust_entry_nps2_project.html">
+      Project Metadata</a>.  
+      The Plot Type is always displayed in vertical text in the upper left
+      part of each tab.
+      You can close this form, then change the type of plots in that form, 
+      then return here to enter a different type of plot.  You cannot change
+      the type of plot once you have entered it.
+</p>
+<div style="float:right"><span class="caption">Identifiers Tab:<br/>
+Screenshot (click to enlarge in new window):<br/></span><a target="_new" class="image" href="../screenshots/cust_entry_nps2_plots_id_1.6.png">
+<img title="click for larger screenshot" border="0" 
+  src="../screenshots/smaller/cust_entry_nps2_plots_id_1.6.jpg">
+</a>
+</div>
+<h3>Header</h3>
+<p>The header is the top portion of the screen with a teal background.  
+You can use the header to switch to a different plot using the "Select a Plot:" picklist.
+You can also move to a new plot to enter, or delete a plot.  Also, you can
+View/Edit the Species List.  VegBranch has a <strong>small screen mode</strong> for
+users with small monitors.  Extra menus in "small screen mode" are removed
+to help more fit on your screen.  Click <strong>Refresh</strong> to update 
+any picklists that may not be updated.</p>
+
+<h3>Identifiers</h3>
+
+<p>You should enter the <strong>Plot Code first</strong> when you enter a new plot.
+</p>
+<p>If you enter a plot code that matches typical NPS-PLOTS format (i.e. ACAD.123 or FIIS.45),
+then it will fill out the Park Code and State.  You can <strong>edit the state</strong>
+in the event that your plot doesn't occur in the park, or the park
+crosses state boundaries (i.e. GRSM). 
+</p>
+<p>Once you have selected a state value, the 
+<strong>list of counties and quadrangles</strong> will include only
+those counties and quadrangles in that state. </p>
+<p>You only need enter a community name or CEGL code, you do not need to enter both.  
+VegBranch will fill in the other for you.  If your community isn't in the list,
+you can <a href="@forms_link@CommQuery.jsp">search for it in VegBank</a>
+to download into your VegBank module.  Or, you can add it as a new community,
+using VegBranch forms.  You can write any value in the community list; you do
+not need to select a value in the list, though VegBranch will warn
+you that you've entered a community that isn't found.  You can turn off 
+the warnings in the <a href="Help.form.cust_entry_nps2_project.html">Project Metadata Form</a>.
+If you enter a name not in the list, you will need
+to match the community to a VegBank community or add it as a new community
+in the loading tables. </p>
+
+<p>If you enter an X dimension, a Y dimension, and a rectangular shape, VegBranch
+calculates the plot size, but you can write a new value if it is wrong for some reason.
+
+<div style="float:right"><span class="caption">Environment Tab:<br/>
+Screenshot (click to enlarge in new window):<br/></span><a target="_new" class="image" href="../screenshots/cust_entry_nps2_plots_env_1.6.png">
+<img title="click for larger screenshot" border="0" 
+  src="../screenshots/smaller/cust_entry_nps2_plots_env_1.6.jpg">
+</a>
+</div>
+<h3>Environment</h3>
+<p>You can enter  <strong>either UTM coordinates or Lat/Long values</strong>
+by clicking the "UTM" or "Lat/Long" button on the Environment Tab.  
+VegBranch can convert UTMs to Lat/Long <strong>as long as you provide a UTM zone</strong>.
+UTMs should be entered in <strong>decimal meters</strong> and Lat/Longs in 
+<strong>decimal degrees</strong> and <strong>Longitude should be negative</strong>
+for coordinates in the Western Hemisphere.
+</p>
+<p>If you enter an <strong>elevation in feet</strong>, be sure to check the "feet" box for units.  VegBranch
+will convert the value to meters for VegBranch.</p>
+<p>You can enter either an exact <strong>slope</strong> or choose a class.  Similarly, only
+one of exact <strong>aspect</strong> or aspect class needs to be entered.  If you have an
+exact value, it is better to enter the exact value.  If you enter both, 
+the exact value will be used.  Please note that exact slope and aspect 
+as both in decimal degrees.</p>
+<p><strong>Picklists</strong>: You can enter values that are not in the lists.
+But you will probably have to match such values to a VegBranch value later in the 
+migration process.</p>
+
+<div style="float:right"><span class="caption">Physiognomy and Comments Tab<br/>
+Screenshot (click to enlarge in new window):<br/></span><a target="_new" class="image" href="../screenshots/cust_entry_nps2_plots_phys_1.6.png">
+<img title="click for larger screenshot" border="0" 
+  src="../screenshots/smaller/cust_entry_nps2_plots_phys_1.6.jpg">
+</a>
+</div>
+
+<h3>Physiognomy and Comments</h3>
+<p>For each <strong>stratum</strong> you can select the height class
+and % Cover.  Click the stratum name buttons just above these fields, 
+then enter values in each.  Then, select the next stratum button and continue.
+To see how all the strata relate, press the "View Summary in Vertical Format" button.
+</p>
+<p><strong>Note:</strong> you cannot enter or edit the species in this view.
+To edit species, press the "View/Edit Species List" button at the top
+of the form.
+</p>
+
+
+<h3>Optional Fields</h3>
+<p>You may use optional fields in your data.  If so, you must define them
+<strong>for each plot</strong>.  To do so, enter the Optional Field Name in 
+the "Defn:" picklist, and the value below it. <br/><br/>
+This differs from VegBranch's approach,
+which defines optional fields (user defined fields) for the entire loading 
+process.  As a result, you are <strong>limited to about 30</strong> unique optional
+variables.  You can reuse a variable any number of times (for as many plots as you want).
+NPS-PLOTS uses the "Optional Fields Defined" to define the 5 Optional Fields.
+VegBranch helps you do this systematically by breaking the 5 definitions apart.
+A preview of what will be entered in the "Optional Fields Defined" field is listed at
+the bottom of this tab.
+</p>
+<div style="float:right"><span class="caption">Optional Fields Tab:<br/>
+Screenshot (click to enlarge in new window):<br/></span><a target="_new" class="image" href="../screenshots/cust_entry_nps2_plots_opt_1.6.png">
+<img title="click for larger screenshot" border="0" 
+  src="../screenshots/smaller/cust_entry_nps2_plots_opt_1.6.jpg">
+</a>
+</div>
+<p><strong>Other Measure 1 and 2</strong> are user defined variables in your species list.
+Similarly, there can only be about 24 such variables, but each can be used as many
+times as you like.  Fill in a value for these in this form, or you may do so in the Species
+List Form.</p>
+<p>After entering plot data in this form, press the <a href="Help.form.cust_entry_nps2_plots-species_master.html">View/Edit Species List</a>
+button to enter the species that occur on this plot, along with cover % and other information. </p>
+
+
+
+
+<br/>
+
+<a href="Help.form.cust_entry_nps2_main.html">VegBranch NPS-PLOTS Data Entry Main Menu</a>.
+<br/>
+<a href="@vegbranch_link@vbr-help.html">VegBranch Help Menu</a>
+@webpage_footer_html@

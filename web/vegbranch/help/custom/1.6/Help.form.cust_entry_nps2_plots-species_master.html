@@ -1,0 +1,144 @@
+@webpage_top_html@
+  
+  @webpage_head_html@
+  <title>Help: Enter Species for a plot: NPS-PLOTS entry forms in VegBranch</title>
+  @webpage_masthead_html@
+<h2><a href="@vegbranch_link@vbr-help.html">VegBranch Help</a>:</h2>
+<h3>Enter Species for a plot: NPS-PLOTS entry forms in VegBranch</h3>
+<div>
+<span class="caption">Screenshot (click to enlarge in new window):<br/></span><a target="_new" class="image" href="../screenshots/cust_entry_nps2_plots-species_master_1.6.png">
+<img title="click for larger screenshot" border="0" 
+  src="../screenshots/smaller/cust_entry_nps2_plots-species_master_1.6.jpg">
+</a>
+</div>
+<p>
+Use this form to enter species on your plot.  For normal plots (not AA plots) 
+you can also enter species that are outside the plot.
+</p>
+<p><strong>In Plot?</strong>:  There are <strong>2 sections</strong> to this form.
+The first is for plants occurring <strong>within the plot boundaries</strong>.  The lower
+one is for plants occurring <strong>NOT within the plot boundaries</strong>.
+For users concerned with how VegBank deals with the latter species, we set the 
+Taxon-Inference-Area to -1, meaning the plant was found within a 
+unbounded area.  Please see <a href="@general_link@faq.html#areafields">the VegBank FAQ</a>
+for more on how VegBank deals with area.
+
+</p>
+
+<p><strong>Stratum</strong>: You can select one of the available strata
+with the picklist.  The values in this list correspond to the strata available 
+to the method you selected in the <a href="Help.form.cust_entry_nps2_project.html">
+      Project Metadata Form</a>. 
+  </p>
+  <p><strong>Choosing a Plant</strong>:
+  The most difficult part of this form is entering the plant
+  name in such a way that is efficient, yet VegBranch can recognize the plant.
+  You can select a plant in any of four ways:
+  </p>
+  <ul>
+    <li><strong>USDA Code</strong>: The first picklist is a list of USDA
+    Codes.  You can select one of these.  If your data are listed by USDA
+    Codes on the data sheets, this is probably the most efficient method.</li>
+    <li><strong>Scientific Name</strong>: The next picklist is a list
+    of scientific names.  This is probably the LEAST efficient method of selecting
+    a name, but it works.  If your plant is <strong>not in the list</strong>
+    you must enter a new scientific name in this field.</li>
+    <li><strong>4 Letters (Probably most efficient)</strong>: The "Four Letters Approach" is available thanks to
+     a regional NatureServe Ecologist making this suggestion to us during a workshop.
+     In the third plant field, you can type the first <strong>2 letters of the genus</strong>
+     and the first <strong>2 letters of the species</strong>.  Then, if your selection
+     is unambiguous (depends on what species are in your 
+     <a href="Help.form.cust_entry_nps2_buildusdalist.html">USDA list</a>), the unambiguous
+     plant is chosen.  If your selection is ambiguous, you can 
+     <a href="Help.form.cust_entry_nps_chooseplant.html">choose from a list</a>
+     of the several species with the matching 2 letters of genus and 2 letters of species.
+    </li> 
+    <li><strong>Choose from the Full List</strong>: You can press the button
+    with the black triangle on it to 
+    <a href="Help.form.cust_entry_nps_chooseplant.html">choose from a full list</a>
+    of plants.  In addition, you can enter criteria to search for plants in that form.
+    </li>
+   </ul>
+   <p><strong>Tip:</strong> Whichever of these four ways you prefer, you can
+   select the radio button above the field, and that field will be the only
+   tab-stop of the four plant fields.  This means that when you press the TAB button
+   on your keyboard after entering a stratum, you will go immediately to your
+   preferred plant field, and on to the next field after you choose a plant. </p>
+   
+   <p><strong>Unknown Species</strong>: Ecologists all find species in the field
+   that cannot be identified.  There are two features on this form that help you cope.
+   <br/>First, <strong>you can press the "sp." button</strong> to add "sp." to a Genus or family, i.e. first
+   select "Pinus" then press the "sp." button and your species becomes "Pinus sp."
+   If you already have a "Pinus sp." on your plot, it becomes "Pinus sp. #2".  VegBranch
+   recognizes species names in this format and knows how to handle them.  If you want to
+   remove the "sp." from a plant, just press the "sp." button again. <br/>
+   Next, you can choose a <strong>Taxon ID Certainty</strong> value to indicate that you might be 
+   somewhat uncertain of what you have entered.  Note that you can be "Certain" that 
+   a species is "Pinus sp.", that is you are certain it is a species of Pine, but you
+   don't know which one.  You could fill in "Probable" for "Pinus taeda" if
+   you think this is the species, but you aren't positive.
+   </p>
+   <p><strong>Cover</strong>: You can enter a cover code or an exact percent.  If you
+   enter a code, the percent will be filled in for you.  Cover Codes will be displayed
+   that are part of the Cover Method you selected in the
+   <a href="Help.form.cust_entry_nps2_project.html">Project Metadata Form</a>. 
+   <br/><i>ADVANCED USERS:</i> If there are cover codes in your method you don't want listed 
+   (sometimes there are different versions of the same value, such as 01 and 1 
+   for the NPS-PLOTS Cover Method), you can delete some Cover Codes from the VegBank
+   Module.  Note that you CANNOT add new Codes to a Cover Method already in VegBank;
+   your plots will not upload correctly.  To remove values, go to the 
+   <a href="Help.form.cust_entry_nps2_project.html">Project Metadata Form</a>,
+   then press "view" cover methods.  Then press "allow edits" and accept the warning.
+   Then highlight any rows in the Cover Codes subform and press the delete key on your keyboard.
+   <strong>BE CAREFUL DOING THIS</strong> as the deletes cannot be easily undone.
+   </p>
+     <div>
+      <span class="caption">Screenshot (click to enlarge in new window):<br/></span><a target="_new" class="image" href="../screenshots/cust_entry_nps2_plots-species_master_1.6.png">
+      <img title="click for larger screenshot" border="0" 
+        src="../screenshots/smaller/cust_entry_nps2_plots-species_master_1.6.jpg">
+      </a>
+      </div> 
+   <p><strong>Optional Fields</strong>: You can define optional fields
+   at the top of this form (and also in the plot entry form),
+   and enter the values for each row.  Please see the 
+   <a href="Help.form.cust_entry_nps2_plots.html">plot entry form help</a>
+   for more on defining Optional Values.
+   </p>
+   
+   <p><strong>DBH</strong>: is a list of DBH's, separated by commas
+   for a given species.  You should not enter comments into this field (i.e. text),
+   but only numeric values separated by commas.  Unfortunately, there
+   is NO shorthand for multiple stems of the same size (i.e. 4x15 or 15(4)).  You
+   have to enter the value several times (15,15,15,15).
+   If you enter an invalid value, VegBranch will warn you that you will
+   have to deal with it later.  You can turn these warnings off in the 
+   <a href="Help.form.cust_entry_nps2_project.html">Project Metadata Form</a>.
+   </p>
+   <p><strong>Miscellaneous fields</strong>: The "Used Plants" checkbox, Source, User, and Update
+   fields are filled in automatically.  A <strong>sorting value</strong> is also 
+   atomically filled in, based on the 
+   order you entered the plants.  If you want to change the sorting order, edit these values
+   (decimals are allowed), then press
+   the "sort" button above the field to sort by this column.  You can sort by stratum
+   with the sort button above stratum.  Sorting is independently controlled in
+   the "within plot" and "not within plot" boxes.
+   </p>
+   <p><strong>Blue arrow buttons</strong>: these resize the "plants in the plot" and 
+   "not in the plot" boxes.  The up and down arrows make them shorter or taller.  
+   The left and right
+   buttons make them narrow and wider.  You can adjust them to fit the screen.
+   <br/><i>Advanced Users:</i> The size of the boxes is not saved permanently, but will
+   revert to the old size when you enter you next plot.  
+   If you'd like
+   to save the sizes permanently (as well as tab-stops for the selected plant field, see above),
+   you can right-click on a field, then select properties.  Click the "other" tab
+   and fill in anything in the "Tag" field.  Then choose File|Save from the file menu.
+   When you make a change to a form in Access manually, then save, any changes
+   made by the program are also saved (such as tab stops and sizes of "species in plot" and
+   "species not in plot" boxes).  Note that currently <i>you should not attempt this
+   when entering AA-Observations</i>, just normal plots (or quickplots).
+   </p>
+<a href="Help.form.cust_entry_nps2_main.html">VegBranch NPS-PLOTS Data Entry Main Menu</a>.
+<br/>
+<a href="@vegbranch_link@vbr-help.html">VegBranch Help Menu</a>
+@webpage_footer_html@
