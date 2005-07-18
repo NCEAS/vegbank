@@ -54,14 +54,14 @@
                       @subst_lt@%@ include file="/includes/orderbythisfield.jsp"  %@subst_gt@
                   </xsl:when>
                   <xsl:otherwise><!-- no sort -->
-                    <th>
+
                   <xsl:call-template name="labelField">
+                     <xsl:with-param name="container">th</xsl:with-param>
                     <xsl:with-param name="currEnt" select="$currEnt"/>
                     <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                     <xsl:with-param name="currLbl" select="../../attLabel"/>
                     <xsl:with-param name="currDefn" select="../../attDefinition" />
                   </xsl:call-template>
-                  </th>
                   </xsl:otherwise>
                 </xsl:choose>
                 
@@ -89,12 +89,15 @@
             <redirect:write file="{$pathToWrite}{$currEnt}_{$view}_data.jsp">
               <xsl:for-each select="attribute/attForms/formShow[translate(@name,$alphahigh,$alphalow)=$view]">
                 <xsl:sort select="node()" data-type="number"/>
-                     <span class="datalabelsmall"><xsl:call-template name="labelField">
+                     <xsl:call-template name="labelField">
+                        <xsl:with-param name="container">span</xsl:with-param>
+                        <xsl:with-param name="containerClass">datalabelsmall</xsl:with-param>
+                        <xsl:with-param name="suffix">: </xsl:with-param>
                         <xsl:with-param name="currEnt" select="$currEnt"/>
                         <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                         <xsl:with-param name="currLbl" select="../../attLabel"/>
                         <xsl:with-param name="currDefn" select="../../attDefinition" />
-                      </xsl:call-template>: </span>
+                      </xsl:call-template>
                 <xsl:call-template name="writeField">
                   <xsl:with-param name="currEnt" select="$currEnt"/>
                   <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
@@ -114,14 +117,14 @@
                 <xsl:sort select="node()" data-type="number"/>
                 <logic:notEmpty name="onerowof{$currEnt}" property="{translate(../../attName,$alphahigh,$alphalow)}">
                   <tr class="@nextcolorclass@">
-                    <td class="datalabel">
                       <xsl:call-template name="labelField">
+                        <xsl:with-param name="container">td</xsl:with-param>
+                        <xsl:with-param name="containerClass">datalabel</xsl:with-param>
                         <xsl:with-param name="currEnt" select="$currEnt"/>
                         <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                         <xsl:with-param name="currLbl" select="../../attLabel"/>
                         <xsl:with-param name="currDefn" select="../../attDefinition" />
                       </xsl:call-template>
-                    </td>
                     <xsl:call-template name="writeField">
                       <xsl:with-param name="currEnt" select="$currEnt"/>
                       <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
@@ -158,7 +161,7 @@
     </xsl:comment>-->
           <!-- this is what gets written on cell -->
           <xsl:variable name="currFldMaybeTransl"><xsl:value-of select="$currFld"/><xsl:if test="string-length($currentAtt/attFKTranslationSQL)&gt;0">_transl</xsl:if><xsl:if test="$currentAtt/attType='Date'">_datetrunc</xsl:if></xsl:variable>    
-             <xsl:element name="{$container}"><logic:notEmpty name="onerowof{$currEnt}" property="{$currFldMaybeTransl}"><xsl:element name="span"><xsl:choose>
+             <xsl:element name="{$container}"><xsl:attribute name="class"><xsl:value-of select="translate(concat($currEnt,'_',$currFld),$alphahigh,$alphalow)" /></xsl:attribute><logic:notEmpty name="onerowof{$currEnt}" property="{$currFldMaybeTransl}"><xsl:element name="span"><xsl:choose>
             <xsl:when test="string-length(@useClass)=0">
               <!-- no specific class for this data -->
               <!-- fill in different class for long text fields: -->
@@ -170,7 +173,7 @@
               </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:attribute name="class"><xsl:value-of select="@useClass"/></xsl:attribute>
+               <xsl:attribute name="class"><xsl:value-of select="@useClass"/></xsl:attribute>
             </xsl:otherwise>
           </xsl:choose>
         <!-- parse date: -->
@@ -244,11 +247,16 @@
     <bean:write name="onerowof{$currEnt}" property="{$beanPropName}"/>
   </xsl:template>
   <xsl:template name="labelField">
+    <xsl:param name="container" />
+    <xsl:param name="containerClass" />
+    <xsl:param name="suffix" /><!-- something to add after the label -->
     <xsl:param name="currEnt"/>
     <xsl:param name="currFld"/>
     <xsl:param name="currLbl"/>
     <xsl:param name="currDefn" />
-    <span title="{$currDefn}">
+    <xsl:element name="{$container}">
+        <xsl:attribute name="class"><xsl:value-of select="translate(concat($currEnt,'_',$currFld),$alphahigh,$alphalow)" /><xsl:value-of select="concat(' ',$containerClass)" /></xsl:attribute>
+        <xsl:attribute name="title"><xsl:value-of select="$currDefn" /></xsl:attribute>
     <xsl:choose>
       <xsl:when test="string-length($currLbl)&gt;0">
         <xsl:value-of select="$currLbl"/>
@@ -258,11 +266,13 @@
         <xsl:value-of select="$currFld"/>
       </xsl:otherwise>
     </xsl:choose>
-    </span>
-     <logic:equal parameter="showHelp"  value="true">
-     <a href="/dd/{$currEnt}/{$currFld}">
+     <span class="ddlink">
+     <xsl:text> </xsl:text><a class="image" href="/dd/{$currEnt}/{$currFld}">
       <img src="@images_link@question.gif" alt="?" border="0"/>
     </a>
-    </logic:equal>
+    </span>
+    <xsl:value-of select="$suffix" />
+    </xsl:element>
+
   </xsl:template>
 </xsl:stylesheet>
