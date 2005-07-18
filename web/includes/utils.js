@@ -811,15 +811,16 @@ function showTaxonName(toshow,tableid) {
 	if (toshow=="" ) { return false; }
 	// first hide all
 	var suffixToOverride = "_override_";
-	addClassToDocIfAlsoClass("hidden","taxobs_authorplantname",tableid,suffixToOverride);
-	addClassToDocIfAlsoClass("hidden","taxobs_orig_scinamewithauth",tableid,suffixToOverride);
-	addClassToDocIfAlsoClass("hidden","taxobs_orig_scinamenoauth",tableid,suffixToOverride);
-	addClassToDocIfAlsoClass("hidden","taxobs_orig_code",tableid,suffixToOverride);
-	addClassToDocIfAlsoClass("hidden","taxobs_orig_common",tableid,suffixToOverride);
-	addClassToDocIfAlsoClass("hidden","taxobs_curr_scinamewithauth",tableid,suffixToOverride);
-	addClassToDocIfAlsoClass("hidden","taxobs_curr_scinamenoauth",tableid,suffixToOverride);
-	addClassToDocIfAlsoClass("hidden","taxobs_curr_code",tableid,suffixToOverride);
-    addClassToDocIfAlsoClass("hidden","taxobs_curr_common",tableid,suffixToOverride);
+
+	addClassToDocIfAlsoClass("hidden","taxonobservation_authorplantname",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxonobservation_int_origplantscifull",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxonobservation_int_origplantscinamenoauth",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxonobservation_int_origplantcode",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxonobservation_int_origplantcommon",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxonobservation_int_currplantscifull",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxonobservation_int_currplantscinamenoauth",tableid,suffixToOverride);
+	addClassToDocIfAlsoClass("hidden","taxonobservation_int_currplantcode",tableid,suffixToOverride);
+    addClassToDocIfAlsoClass("hidden","taxonobservation_int_currplantcommon",tableid,suffixToOverride);
 	// then show the one
 	removeClassFromDocIfAlsoClass ("hidden",toshow,tableid,suffixToOverride);
 

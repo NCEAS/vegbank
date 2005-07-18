@@ -100,12 +100,13 @@
        <table cellpadding="2" class="thinlines sortable" id="taxonObservationof<bean:write name='observation_pk' />">
 
          <tr><th>ord</th>
-         <%@ include file="sub_taxonimportance_showallplantnames_head.jsp" %>
+         <%@ include file="../autogen/taxonobservation_summary_head.jsp" %>
          <%@ include file="../autogen/taxonimportance_summary_head.jsp" %>
           <th class="table_stemsize">Stems:</th><th class="graphic_stemsize">Stem Diameters (graphically):</th>
          </tr>
     
          <logic:iterate id="onerowoftaxonimportance" name="taxonimportance-BEANLIST">
+           <bean:define id="onerowoftaxonobservation" name="onerowoftaxonimportance" /> <!-- clone taximp -->
            <bean:define id="taxonimportance_pk" name="onerowoftaxonimportance" property="taxonimportance_id" />
         
         	 <logic:notEqual name="onerowoftaxonimportance" property="stratum_id_transl"
@@ -138,7 +139,7 @@
      
             <tr class='<%= strataClass %>'>
               <td class="sizetiny"><% rowOrder ++ ; %><%= rowOrder %></td>
-              <%@ include file="sub_taxonimportance_showallplantnames.jsp" %>
+              <%@ include file="../autogen/taxonobservation_summary_data.jsp" %>
               <%@ include file="../autogen/taxonimportance_summary_data.jsp" %>
               <!-- start STEMS -->
               <td class="table_stemsize">
