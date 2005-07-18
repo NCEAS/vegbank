@@ -1,3 +1,5 @@
+
+
 DROP VIEW view_csv_taxonimportance;
 DROP VIEW view_csv_taxonimportance_pre;
 DROP VIEW view_browseparty_all_count_combined;
@@ -29,7 +31,10 @@ DROP VIEW view_notemb_taxonObservation;
 DROP VIEW view_notemb_observation;
 DROP VIEW view_notemb_plot;
 
-
+DROP VIEW view_plantconcept_transl;
+DROP VIEW view_commconcept_transl;
+DROP VIEW view_reference_transl ;
+DROP VIEW view_party_transl ;
 drop view view_party_public;
 
 CREATE VIEW view_party_public AS 
@@ -100,9 +105,7 @@ CREATE VIEW view_emb_embargo_complete AS
 -- END EMBARGO VIEWS 
 -------------------
 
-DROP VIEW view_plantconcept_transl;
-DROP VIEW view_commconcept_transl;
-DROP VIEW  view_reference_transl ;
+
  CREATE VIEW view_reference_transl AS 
    SELECT CASE WHEN shortName IS NULL 
                THEN CASE WHEN title IS NULL 
@@ -135,7 +138,7 @@ CREATE VIEW view_commconcept_transl AS
 
 
              
-DROP VIEW view_party_transl ;
+
  CREATE VIEW view_party_transl AS 
    SELECT CASE WHEN surname is null 
                THEN CASE WHEN organizationname IS NULL
