@@ -1,4 +1,5 @@
 @webpage_top_html@
+<!-- RCSFile: $RCSfile: stratummethod_summary.jsp,v $ \ -->
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
 
@@ -6,7 +7,7 @@
 
 
  
-<TITLE>View VegBank Data: stratumMethods - Summary</TITLE>
+<TITLE>View VegBank Data: Stratum Methods - Summary</TITLE>
 
 
   
@@ -20,7 +21,7 @@
 
 <vegbank:pager />
 <logic:empty name="stratummethod-BEANLIST">
-<p>  Sorry, no stratumMethods found.</p>
+<p>  Sorry, no Stratum Methods found.</p>
 </logic:empty>
 <logic:notEmpty name="stratummethod-BEANLIST">
 <table class="leftrightborders" cellpadding="2">
