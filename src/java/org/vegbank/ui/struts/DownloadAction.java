@@ -34,8 +34,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-06-17 22:07:16 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2005-07-21 01:02:25 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,6 +105,9 @@ public class DownloadAction extends Action
 		String formatType = (String)thisForm.get("formatType");
 		String dataType = (String)thisForm.get("dataType");
 		String[] selectedPlots = (String[])thisForm.get("selectedPlots");
+        String s = request.getParameter("blank_empties");
+        boolean blankEmpties = (Utility.isStringNullOrEmpty(s)) ? 
+                true: Boolean.valueOf(s).booleanValue();
 		
 		log.debug("dsId = " + dsId + ", formatType = " + formatType);
 		
@@ -149,13 +152,15 @@ public class DownloadAction extends Action
                 sqlParams[0] = dsId.toString();
                 Hashtable nameContent = new Hashtable();
 
+                String nulls = (blankEmpties ? "": "null");
+
                 try {
 
                     // TAXA
-                    nameContent.put("plot_taxa.csv", getCSVResults(taxaSQL, where, sqlParams));
+                    nameContent.put("plot_taxa.csv", getCSVResults(taxaSQL, where, sqlParams, nulls));
 
                     // ENV
-                    nameContent.put("plot_env.csv", getCSVResults(envSQL, where, sqlParams));
+                    nameContent.put("plot_env.csv", getCSVResults(envSQL, where, sqlParams, nulls));
 
 
                     this.initResponseForFileDownload(response, "vegbank_export_csv.zip", ZIP_CONTENT_TYPE);
@@ -396,7 +401,7 @@ public class DownloadAction extends Action
     /**
      *
      */
-    private String getCSVResults(String sqlSelect, String sqlWhere, String[] sqlParams) 
+    private String getCSVResults(String sqlSelect, String sqlWhere, String[] sqlParams, String nulls) 
             throws IOException {
         String psqlPath = Utility.dbPropFile.getString("psqlPath");
         String dbUser = Utility.dbPropFile.getString("user");
@@ -405,13 +410,14 @@ public class DownloadAction extends Action
 
         MessageFormat format = new MessageFormat(sqlWhere);
         sqlWhere = format.format(sqlParams);
-        String sqlQuery = sqlSelect + " AND " + sqlWhere;
+        String sqlQuery = sqlSelect + " AND " + sqlWhere + " ORDER BY observation_id";
 
         inputFilePathTaxa = Utility.writeTempFile(new StringReader(sqlQuery));
         //outputFilePath = buildOutputFilePath() + "vegbank_export.csv";
 
         String cmd = psqlPath + " -U " + dbUser + " -d " + dbName + 
                 " -f " + inputFilePathTaxa +
+                " --pset null=" + nulls + 
                 //" -o " + outputFilePath +
                 " -n -A -F , " +
                 " -P footer=false";

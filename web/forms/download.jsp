@@ -69,6 +69,16 @@ if (ok) {
                     This download consists of two files: one for general plot data (location, name, ID, community, etc.)
                     and one for plants occurring on each plot (plant name, stratum, plot ID, cover percent).
                   </blockquote>
+                <p>
+                    &nbsp; &nbsp; &nbsp;
+                    <input type="radio" name="blank_empties" value="true" checked="checked" />
+                    Make empty values <strong>blank</strong> (e.g. "98GK44",,,"Wetlands")
+                    <br />
+                    &nbsp; &nbsp; &nbsp;
+                    <input type="radio" name="blank_empties" value="false" />
+                    Make empty values <strong>null</strong> (e.g. "98GK44",null,null,"Wetlands")
+                </p>
+
               </li>  
 
               <li class="oddrow padded">
@@ -100,6 +110,7 @@ if (ok) {
         "unzip" the downloaded file, you'll need what most
         computers have: a decompression program like <a href="http://www.winzip.com">WinZip</a> 
         (Windows XP has its own decompression utility built in). </p>
+        
         
         <input name="actionDownload" type="image" value="download" border="0" src="@image_server@btn_download.gif" />
 
