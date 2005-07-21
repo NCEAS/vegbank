@@ -14,7 +14,6 @@ function getHelpPageId() {
 
 </script>
 
-<bean:define id="thisviewid" value="observation_comprehensive" />
 <%@ include file="includeviews/inlinestyles.jsp" %>
   @webpage_masthead_html@   @possibly_center@  
 
@@ -46,9 +45,7 @@ function getHelpPageId() {
 <div style="display: block; float: right; width: 45%; text-align: center;" id="tut_showhidefieldinfo">
    <strong>Configure View</strong> <br/>
    <a href="@get_link@taxa/observation/<bean:write name='observation_pk' />">Less Plot Detail</a>  --
-   <a href="<vegbank:changeParam paramName='showHelp' paramValue='true' />">Show</a>
-   / <a href="<vegbank:changeParam paramName='showHelp' paramValue='false' />">Hide</a> Field Info --
-   <a href="@views_link@UserPreferences.jsp">More Options</a>
+   <a href="@views_link@UserPreferences.jsp">Configure data displayed on this page</a>
 </div>
 
 
@@ -134,9 +131,9 @@ function getHelpPageId() {
 
 <!-- %@ include file="includeviews/sub_taxonobservation.jsp" %-->
 <!-- get params to pass if they are here -->
-<bean:parameter id="showHelpBean" name="showHelp" value="false" />
+
 <bean:parameter id="strataToShowBean" name="strata2Show" value="2" />
-<bean:define id="requestedPageURL"><%= "/views/raw/raw_taxonobservation.jsp?observation_pk=" + observation_pk  + "&showHelp=" + showHelpBean + "&strata2Show=" + strataToShowBean %></bean:define>
+<bean:define id="requestedPageURL"><%= "/views/raw/raw_taxonobservation.jsp?observation_pk=" + observation_pk  + "&strata2Show=" + strataToShowBean %></bean:define>
 <!-- page requesting :  <bean:write name="requestedPageURL" /> --> 
 <bean:include id="taxonobs_page" page='<%= requestedPageURL %>' />
 <bean:write name="taxonobs_page" filter="false" />
@@ -168,7 +165,7 @@ function getHelpPageId() {
 <TR><TD colspan="2" valign="top" align="left">
 <!-- community info -->
 
-<bean:include id="commclass_page" page='<%= "/views/raw/raw_commclass.jsp?observation_pk=" + observation_pk  + "&showHelp=" + showHelpBean%>' />
+<bean:include id="commclass_page" page='<%= "/views/raw/raw_commclass.jsp?observation_pk=" + observation_pk  %>' />
 <bean:write name="commclass_page" filter="false" />
 
 <!--vegbank:get id="commclass" select="commclass" beanName="map" 

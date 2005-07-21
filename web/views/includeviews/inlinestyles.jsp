@@ -1,4 +1,8 @@
-<!-- this file set the default styles to use for jsp, and edits them according to cookie's contents -->
+<bean:define id="thisviewid"><%= request.getRequestURI().substring(1+request.getRequestURI().lastIndexOf("/"),request.getRequestURI().indexOf(".")) %></bean:define>
+<!-- view: ><bean:write name="thisviewid" />< -->
+
+<!-- this file set the default styles to use for jsp, and edits them 
+   according to cookie's contents -->
 
 <!-- plant names are a simple case: -->
   <bean:define id="plantNamesToShowBean">taxobs_curr_scinamenoauth</bean:define > <!-- default -->

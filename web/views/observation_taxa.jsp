@@ -15,7 +15,7 @@ function getHelpPageId() {
 
 <title>View Taxa on Plot(s): VegBank</title>
 <%     String rowClass = "evenrow";  %>
-<bean:define id="thisviewid" value="observation_taxa" />
+
 <%@ include file="includeviews/inlinestyles.jsp" %>
 
 
