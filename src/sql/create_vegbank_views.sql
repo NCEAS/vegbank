@@ -1,5 +1,4 @@
 
-
 DROP VIEW view_csv_taxonimportance;
 DROP VIEW view_csv_taxonimportance_pre;
 DROP VIEW view_browseparty_all_count_combined;
@@ -16,6 +15,9 @@ DROP VIEW view_browseparty_projectcontrib;
 
 DROP VIEW view_comminterp_more;
 
+DROP VIEW view_observation_transl;
+
+
 DROP VIEW view_notemb_classContributor;
 DROP VIEW view_notemb_commInterpretation;
 DROP VIEW view_notemb_commClass;
@@ -30,6 +32,7 @@ DROP VIEW view_notemb_taxonInterpretation;
 DROP VIEW view_notemb_taxonObservation;
 DROP VIEW view_notemb_observation;
 DROP VIEW view_notemb_plot;
+
 
 DROP VIEW view_plantconcept_transl;
 DROP VIEW view_commconcept_transl;
@@ -329,3 +332,10 @@ CREATE view view_csv_taxonimportance AS
        WHEN classconfidence='Low' THEN 3
        ELSE 4 END) as classconfidencenum
     FROM view_notemb_commClass as commclass, comminterpretation WHERE commclass.commclass_ID = comminterpretation.commclass_ID;
+    
+    
+CREATE VIEW view_observation_transl AS 
+  SELECT observation_ID, 
+  COALESCE(authorObsCode,authorPlotCode) AS observation_id_transl 
+  FROM view_notemb_observation as observation, plot 
+  WHERE observation.plot_ID = plot.plot_ID;
