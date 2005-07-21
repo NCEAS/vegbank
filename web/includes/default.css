@@ -338,13 +338,15 @@ TH, TH.normal	{
 	background-color : #e6e6cf;
 	}
 
-.sorted, .sorted {
+.sorted {
 	background-color : #a9a95a;
     }
 
-.sorteddesc, .sorteddesc {
+.sorteddesc {
 	background-color : #a9a95a;
     }
+
+td.graphic_stemsize { background-color : #FFFFFF; }
 
 /* SEE ALSO .sortarrow style  and A:link.sortlink  */
 
