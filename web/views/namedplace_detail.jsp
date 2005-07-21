@@ -12,7 +12,8 @@
 
 
 
-      @webpage_masthead_html@
+      <%@ include file="includeviews/inlinestyles.jsp" %> 
+ @webpage_masthead_html@
       @possibly_center@
         <h2>View VegBank Named Places</h2>
 <!--Get standard declaration of rowClass as string: -->

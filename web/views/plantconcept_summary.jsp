@@ -10,6 +10,7 @@ function getHelpPageId() {
 }
 
 </script>
+ <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@ 
 

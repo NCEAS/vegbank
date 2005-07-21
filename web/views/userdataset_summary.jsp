@@ -1,7 +1,7 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-<!-- $Id: userdataset_summary.jsp,v 1.2 2005-05-05 22:12:37 mlee Exp $ -->
+<!-- $Id: userdataset_summary.jsp,v 1.3 2005-07-21 22:57:12 mlee Exp $ -->
 <!-- purpose : show user's datasets, either all of them (mode=all in URL) or only certain ones:
 
   mode=ac is to show accessioncodes
@@ -13,6 +13,7 @@
 <TITLE>View Your VegBank Datasets - Summary</TITLE>
 
   
+ <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  
 <br/>  

@@ -11,6 +11,7 @@
 
 
   
+ <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  <h2>View Public VegBank Datasets</h2>
 <vegbank:get select="userdataset_nonprivate" beanName="map" where="where_usr_email" pager="true"/>

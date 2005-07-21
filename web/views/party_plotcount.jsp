@@ -5,6 +5,7 @@
  
 <TITLE>Browse VegBank Data by Party</TITLE>
  
+ <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  
 <h2>Browse Plots By Party</h2>

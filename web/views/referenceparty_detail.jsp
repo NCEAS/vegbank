@@ -3,7 +3,8 @@
   @webpage_head_html@
  
 <TITLE>View VegBank Data: Reference Parties - Detail</TITLE>
-      @webpage_masthead_html@
+      <%@ include file="includeviews/inlinestyles.jsp" %> 
+ @webpage_masthead_html@
       @possibly_center@
         <h2>View VegBank Reference Parties</h2>
 <!--Get standard declaration of rowClass as string: -->

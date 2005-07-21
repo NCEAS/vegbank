@@ -3,6 +3,7 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
 <TITLE>View VegBank Data: projects - Detail</TITLE>
+ <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  
 <h2>View VegBank Projects</h2>

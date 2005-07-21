@@ -4,6 +4,7 @@
 
  
 <TITLE>View VegBank Data: Parties - Summary</TITLE>
+ <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  
 <h2>View VegBank Parties</h2>

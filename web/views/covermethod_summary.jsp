@@ -10,6 +10,7 @@
 
 
   
+ <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  
 <h2>View VegBank Cover Methods</h2>

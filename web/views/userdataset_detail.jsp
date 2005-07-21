@@ -1,7 +1,7 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-<!-- $Id: userdataset_detail.jsp,v 1.15 2005-06-25 02:50:16 mlee Exp $ -->
+<!-- $Id: userdataset_detail.jsp,v 1.16 2005-07-21 22:57:12 mlee Exp $ -->
 <!-- purpose : show user's datasets.  THIS WILL NOT show datasets for a user
    other than the current user, nor will it show a dataset for someone who isn't logged in-->
 <!-- we should prompt users to log in to access this page -->
@@ -9,6 +9,7 @@
 <TITLE>View Your VegBank Datasets - Detail</TITLE>
 
   
+ <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  
   

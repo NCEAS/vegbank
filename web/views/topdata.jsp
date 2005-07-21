@@ -19,7 +19,8 @@ function getHelpPageId() {
 
 
 
-@webpage_masthead_html@
+<%@ include file="includeviews/inlinestyles.jsp" %> 
+ @webpage_masthead_html@
   <h1>Browse VegBank Data</h1>
 
  <!-- can pass param (or any combination): getonly=0 (all)
