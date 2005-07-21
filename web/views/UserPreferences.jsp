@@ -53,8 +53,9 @@
                <bean:write name="onerowofcookie" property="viewname" />
              </logic:empty>  
            </h4> 
+           <logic:notEqual name="onerowofcookie" property="viewname" value="global">
 (<a target="_new" href="@views_link@<bean:write name='onerowofcookie' property='viewname' />.jsp?wparam=<bean:write name='onerowofcookie' property='examplepk' />">Example View</a> - opens in a new window) <br/>
-             
+           </logic:notEqual>  
          </logic:notEqual>
            <bean:write name="onerowofcookie" property="cookienamelabel" />
            <logic:empty name="onerowofcookie" property="cookienamelabel">
@@ -95,7 +96,7 @@
   
   
   
-  <h3>Future Development</h3>
+  <h2>Future Development</h2>
     <p>
     <strong>Save these changes</strong> permanently to your account, so that whenever and whereever you login to VegBank,
     they are the same.  If you do not save the changes, they will still be used on your computer until you
