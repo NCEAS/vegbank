@@ -120,7 +120,8 @@ Items in this dataset:
 
 
 </logic:iterate>
-</logic:notEmpty>
 
 <!-- writes the pager calculated BEFORE the second :get statement -->
 <bean:write name="mainPagerAsBean" filter="false" />
+</logic:notEmpty>
+
