@@ -1,6 +1,5 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
-  <%@ taglib uri="/WEB-INF/c.tld" prefix="c" %>
   @webpage_head_html@
 <bean:parameter id="obsId" name="obsId"/>
 <bean:define id="isCommInterp" value="true"/>
@@ -57,7 +56,7 @@
 <tr><td class="listhead">Plot</td><td class="item"><bean:write name="plotobs-BEAN" property="authorobscode" />
 <html:hidden value="<%= pObsId %>" property="obsId"/>
 
-<a href="javascript:popupObs()">See plot</a></td></tr>
+<a href="javascript:popupObs('<bean:write name="obsId" />')">See plot</a></td></tr>
     
 
 <!--tr><td>You are:</td><td class="item"><input text disabled="true" value="Joe Schmoe"/></td></tr-->

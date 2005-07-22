@@ -40,7 +40,6 @@ function deleteRecord(evt) {
     // maybe push this interp's index to an open index queue
     interpCount--;
 
-    alert(interpCount);
     if (interpCount > 0) {
         // there are some interps already.
         // if form is changed, disable the submit button
@@ -278,8 +277,8 @@ function popupCommLookup(thisFormName,thisCtlName) {
 	window.open('@forms_link@CommQuery.jsp?requestingForm=' + thisFormName + '&requestingField=' + thisCtlName, '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
 }
 
-function popupObs() {
-	window.open('@server_address@@get_link@detail/observation/<bean:write name="obsId"/>', '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
+function popupObs(obsId) {
+	window.open('@server_address@@get_link@detail/observation/' + obsId, '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
 }
 
 function getHelpPageId() {
