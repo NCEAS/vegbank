@@ -106,6 +106,13 @@
         by reloading the page with the "reload" or "refresh" button
         on your browser.</p>
      </div>
+     <div class="notBackToOpener">
+       <!-- what to show when not popup -->
+       <p>&nbsp;</p>
+       <p>
+       <a href="@general_link@account.html">Back to My Account</a>
+       </p>
+     </div>
      
    </logic:notEmpty>
   
