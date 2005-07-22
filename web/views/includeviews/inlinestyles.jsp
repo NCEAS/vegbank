@@ -16,18 +16,25 @@
   <!-- DEBUG: getcookies got: plantNamesToShowBean: <bean:write name="plantNamesToShowBean" /> -->
 
 
- <style type="text/css">
- .<bean:write name="plantNamesToShowBean" /> {visibility: visible;}
- <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_authorplantname" >.taxonobservation_authorplantname { display:none; } </logic:notEqual>
- <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_origplantscifull" >.taxonobservation_int_origplantscifull { display:none; }</logic:notEqual>
- <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_origplantscinamenoauth" >.taxonobservation_int_origplantscinamenoauth { display:none; }</logic:notEqual>
- <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_origplantcode" >.taxonobservation_int_origplantcode { display:none; }</logic:notEqual>
- <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_origplantcommon" >.taxonobservation_int_origplantcommon { display:none; }</logic:notEqual>
- <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantscifull" >.taxonobservation_int_currplantscifull { display:none; }</logic:notEqual>
- <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantscinamenoauth" >.taxonobservation_int_currplantscinamenoauth { display:none; } </logic:notEqual>
- <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantcode" >.taxonobservation_int_currplantcode { display:none; }</logic:notEqual>
- <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantcommon" >.taxonobservation_int_currplantcommon { display:none; }</logic:notEqual>
- </style> 
+ <bean:define id="filterplants" value="true" />
+ <logic:equal name="thisviewid" value="taxonobservation_detail">
+   <bean:define id="filterplants" value="false" />
+ </logic:equal>
+ 
+ <logic:equal name="filterplants" value="true">
+   <style type="text/css">
+     .<bean:write name="plantNamesToShowBean" /> {visibility: visible;}
+     <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_authorplantname" >.taxonobservation_authorplantname { display:none; } </logic:notEqual>
+     <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_origplantscifull" >.taxonobservation_int_origplantscifull { display:none; }</logic:notEqual>
+     <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_origplantscinamenoauth" >.taxonobservation_int_origplantscinamenoauth { display:none; }</logic:notEqual>
+     <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_origplantcode" >.taxonobservation_int_origplantcode { display:none; }</logic:notEqual>
+     <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_origplantcommon" >.taxonobservation_int_origplantcommon { display:none; }</logic:notEqual>
+     <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantscifull" >.taxonobservation_int_currplantscifull { display:none; }</logic:notEqual>
+     <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantscinamenoauth" >.taxonobservation_int_currplantscinamenoauth { display:none; } </logic:notEqual>
+     <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantcode" >.taxonobservation_int_currplantcode { display:none; }</logic:notEqual>
+     <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantcommon" >.taxonobservation_int_currplantcommon { display:none; }</logic:notEqual>
+   </style> 
+ </logic:equal>
  
  <% String theCookieVal=null; %>
  <!-- cookies controlled by db table -->
