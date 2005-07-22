@@ -15220,7 +15220,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_origPlantConcept_ID</attName>
-      <attLabel>the original interpretation's plant concept_ID</attLabel>
+      <attLabel>Original Interpretation, Plant Concept ID</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
@@ -15236,7 +15236,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_origPlantSciFull</attName>
-      <attLabel>the original interpretation's plant scientific name</attLabel>
+      <attLabel>Original Interpretation, full Scientific Name</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
@@ -15255,7 +15255,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_origPlantSciNameNoAuth</attName>
-      <attLabel>the original interpretation's plant scientific name without authority</attLabel>
+      <attLabel>Original Interpretation, Scientific Name without authors</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
@@ -15274,7 +15274,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_origPlantCommon</attName>
-      <attLabel>the original interpretation's plant common name</attLabel>
+      <attLabel>Original Interpretation, Common Name</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
@@ -15293,7 +15293,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_origPlantCode</attName>
-      <attLabel>the original interpretation's plant code</attLabel>
+      <attLabel>Original Interpretation, USDA Code</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
@@ -15312,7 +15312,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_currPlantConcept_ID</attName>
-      <attLabel>the current interpretation's plant concept_ID</attLabel>
+      <attLabel>Current Interpretation, Plant Concept ID</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
@@ -15328,7 +15328,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_currPlantSciFull</attName>
-      <attLabel>the current interpretation's plant scientific name</attLabel>
+      <attLabel>Current Interpretation, full Scientific Name</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
@@ -15347,7 +15347,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_currPlantSciNameNoAuth</attName>
-      <attLabel>the current interpretation's plant scientific name without authority</attLabel>
+      <attLabel>Current Interpretation, Scientific Name without authors</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
@@ -15366,7 +15366,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_currPlantCommon</attName>
-      <attLabel>the current interpretation's plant common name</attLabel>
+      <attLabel>Current Interpretation, Common Name</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
@@ -15385,7 +15385,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attName>int_currPlantCode</attName>
-      <attLabel>the current interpretation's plant code</attLabel>
+      <attLabel>Current Interpretation, USDA Code</attLabel>
       <attModel>denorm</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
