@@ -59,8 +59,8 @@
       <!-- menu of plant names : -->
       <bean:define id="showTaxonNameDivID">stemdatatable</bean:define>
       <%@ include file="includeviews/sub_taxonimportance_showallplantnames_menu.jsp" %>
-      <br/>
-      <a href="@views_link@UserPreferences.jsp">Configure data displayed on this page</a>
+     <!-- <br/>
+      <a href="javascript:void setupConfig('<bean:write name='thisviewid' />');">Configure data displayed on this page</a> -->
     </p>
     
     
