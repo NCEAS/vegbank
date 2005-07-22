@@ -283,11 +283,11 @@
         <xsl:value-of select="$currFld"/>
       </xsl:otherwise>
     </xsl:choose>
-     <span class="ddlink">
-     <xsl:text> </xsl:text><a title="Click here for definition of this field." target="_blank" class="image" href="/dd/{$currEnt}/{$currFld}" onclick="popupDD('/dd/{$currEnt}/{$currFld}'); return false;">
+     
+     <xsl:text> </xsl:text><a title="Click here for definition of this field." target="_blank" class="image" href="/dd/{$currEnt}/{$currFld}" onclick="popupDD('/dd/{$currEnt}/{$currFld}'); return false;"><span class="ddlink">
       <img src="@images_link@question.gif" alt="?" border="0"/>
-    </a>
-    </span>
+    </span></a>
+    
     <xsl:value-of select="$suffix" />
     </xsl:element>
 
