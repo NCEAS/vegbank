@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-16 03:08:51 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2005-07-22 23:41:23 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -467,8 +467,8 @@ public class DatasetUtility
             String insert = 
                 "INSERT INTO userdatasetitem (userdataset_id,itemtype,itemdatabase,itemtable,itemrecord,itemaccessioncode) " + 
                 "SELECT '" + curDataset.getUserdataset_id() + "','" + itemType + "','" + Utility.DATABASE_NAME + "','" + itemTable + 
-                "', observation_id, observationaccessioncode FROM (" + DatabaseUtility.removeSemicolons(query) +
-                ") AS findadd_selection WHERE findadd_selection.observationaccessioncode NOT IN " +
+                "', " + pkField + ", " +  acField + " FROM (" + DatabaseUtility.removeSemicolons(query) +
+                ") AS findadd_selection WHERE findadd_selection." + acField + " NOT IN " +
                 "(SELECT udi.itemaccessioncode FROM userdatasetitem udi WHERE userdataset_id='" + 
                 curDataset.getUserdataset_id() + "')";
 
