@@ -802,8 +802,8 @@
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
-      <attDefinition/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This is the community Name that the party uses for this community, of the type indicated in classSystem.</attDefinition>
       <attForms/>
       <update>1.0.0</update>
     </attribute>
@@ -1070,8 +1070,8 @@
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
-      <attDefinition/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This is the name of the plant upon which the concept is based.</attDefinition>
       <attForms/>
       <update>1.0.0</update>
     </attribute>
@@ -1976,8 +1976,8 @@ change through time.</entitySummary>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
-      <attDefinition/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This is the plant name that the party uses for this plant concept, in the name system indicated in classSystem.</attDefinition>
       <attForms/>
       <update>1.0.0</update>
     </attribute>
@@ -4147,8 +4147,8 @@ change through time.</entitySummary>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes/>
-      <attDefinition/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Name of the community indicated in commConcept_ID.</attDefinition>
       <attForms/>
       <update>1.0.0</update>
     </attribute>
@@ -8484,7 +8484,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>The first community the plot was assigned to.</attDefinition>
+      <attDefinition>The first community interpretation ID where the plot was assigned to a community.</attDefinition>
       <update>1.0.3</update>
       <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
     </attribute>
@@ -8580,7 +8580,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>The most recent community the plot was assigned to.</attDefinition>
+      <attDefinition>The most recent community interpretation of the plot.</attDefinition>
       <update>1.0.3</update>
       <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
     </attribute>
@@ -8676,7 +8676,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>The best fit, confidence pattern the plot is assigned to.</attDefinition>
+      <attDefinition>The best fit, confidence pattern community interpretation ID.</attDefinition>
       <update>1.0.3</update>
       <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
     </attribute>
@@ -15230,7 +15230,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The Plant Concept ID for the Original Interpretation.</attDefinition>
       <update>1.0.3</update>
       <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
     </attribute>
@@ -15246,7 +15246,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The full Scientific Name, with authors, for the Original Interpretation.</attDefinition>
       <attForms>
         <formShow name="Summary" linkToPK="true">1292</formShow>
       </attForms>
@@ -15265,7 +15265,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The Scientific Name without authors for the Original Interpretation.</attDefinition>
       <attForms>
         <formShow name="Summary" linkToPK="true">1293</formShow>
       </attForms>
@@ -15284,7 +15284,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The Common Name for the Original Interpretation.</attDefinition>
       <attForms>
         <formShow name="Summary" linkToPK="true">1294</formShow>
       </attForms>
@@ -15303,7 +15303,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The USDA Code, if available, for the Original Interpretation.</attDefinition>
       <attForms>
         <formShow name="Summary" linkToPK="true">1295</formShow>
       </attForms>
@@ -15322,7 +15322,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The Plant Concept ID for the Current Interpretation, which is often that same as the Original Interpretation.</attDefinition>
       <update>1.0.3</update>
       <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
     </attribute>
@@ -15338,7 +15338,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The full Scientific Name, with authors,for the Current Interpretation.</attDefinition>
       <attForms>
         <formShow name="Summary" linkToPK="true">1297</formShow>
       </attForms>
@@ -15357,7 +15357,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The Scientific Name without authors for the Current Interpretation.</attDefinition>
       <attForms>
         <formShow name="Summary" linkToPK="true">1298</formShow>
       </attForms>
@@ -15376,7 +15376,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The Common Name for the Current Interpretation.</attDefinition>
       <attForms>
         <formShow name="Summary" linkToPK="true">1299</formShow>
       </attForms>
@@ -15395,7 +15395,7 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
+      <attDefinition>The USDA Code, if available, for the Current Interpretation.</attDefinition>
       <attForms>
         <formShow name="Summary" linkToPK="true">1300</formShow>
       </attForms>

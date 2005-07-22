@@ -108,6 +108,10 @@ function getHelpPageId() {
                       </a>
                     </xsl:otherwise>
                   </xsl:choose>
+                  <xsl:if test="attModel='denorm'">
+                    <br/>
+                    <span class="bright" title="denormlized field, data drawn from elsewhere in the datamodel">Denormalized</span>
+                  </xsl:if>
                 </td>
                 <td>
                   <xsl:value-of select="attNulls"/>

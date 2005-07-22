@@ -9,7 +9,7 @@
 </xsl:template>
 
 <xsl:template match="dataModel/entity/attribute">
-  <xsl:if test="attModel=$whichModel">
+  <xsl:if test="attModel=$whichModel or attModel='logical'"><!-- always do logical fields -->
      <xsl:copy><xsl:apply-templates select="@* | node()" /></xsl:copy>
   </xsl:if>
 </xsl:template>

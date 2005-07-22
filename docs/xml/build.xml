@@ -38,7 +38,7 @@
   <target name="logical" depends="init">
     <echo>Limiting fields to logical</echo>
     <style out="${limitData}" in="${origData}" extension=".xml" style="${limitstyle}" force="true">
-      <param name="whichModel" expression="logical"/>
+      <param name="whichModel" expression="denorm"/>
     </style>
     <antcall target="dictionary2html"/>
   </target>

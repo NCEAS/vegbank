@@ -28,7 +28,7 @@ function getHelpPageId() {
       <h2>
         <a  href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
       </h2>
-            <p>Table:<xsl:value-of select="../entityName"/>  (<a href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">Click for table view</a>)
+            <p>Table: <strong><xsl:value-of select="../entityName"/></strong>  (<a href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">Click for table view</a>)
               <br/>
               <blockquote>
                 <p>
@@ -55,6 +55,10 @@ function getHelpPageId() {
                       <xsl:value-of select="attName"/>
                     </xsl:otherwise>
                   </xsl:choose>
+                  <xsl:if test="attModel='denorm'">
+                    <br/>
+                    <span class="bright" title="denormlized field, data drawn from elsewhere in the datamodel">Denormalized</span>
+                  </xsl:if>
                 </td>
               </tr>
               <tr class="oddrow">
@@ -210,7 +214,7 @@ function getHelpPageId() {
       <h2>
         <a  href="{$htmlPrefix}-index.html">VegBank data dictionary</a>
       </h2>
-            <p>Table:<xsl:value-of select="../entityName"/>  (<a href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">Click for table view</a>)
+            <p>Table:<strong><xsl:value-of select="../entityName"/></strong>  (<a href="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~tableview.html">Click for table view</a>)
               <br/>
               <blockquote>
                 <p>
@@ -237,6 +241,11 @@ function getHelpPageId() {
                       <xsl:value-of select="attName"/>
                     </xsl:otherwise>
                   </xsl:choose>
+                  <xsl:if test="attModel='denorm'">
+                    <br/>
+                    <span class="bright" title="denormlized field, data drawn from elsewhere in the datamodel">Denormalized</span>
+                  </xsl:if>
+
                 </td>
               </tr>
               <tr class="oddrow">
