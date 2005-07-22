@@ -78,6 +78,7 @@
                   <xsl:with-param name="currentAtt" select="ancestor::attribute"/>
                   <xsl:with-param name="container">td</xsl:with-param>
                   <xsl:with-param name="view" select="$view" />
+                  <xsl:with-param name="linkToPK" select="@linkToPK" /><!-- special link for summary to detail -->
                 </xsl:call-template>
               </xsl:for-each>
             </redirect:write>
@@ -157,6 +158,7 @@
     <xsl:param name="currentAtt"/>
     <xsl:param name="container" /><!-- p or td -->
     <xsl:param name="view" /><!-- name of this view -->
+    <xsl:param name="linkToPK" /><!-- if true, then encapsulate in <a></a> -->
     <!--    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
     </xsl:comment>-->
           <!-- this is what gets written on cell -->
@@ -201,11 +203,26 @@
             </xsl:when>
             <!-- 2nd repeat of this  test -->
             <xsl:otherwise>
-              <!-- just write data -->
-              <xsl:call-template name="writeOneFieldValue">
-                <xsl:with-param name="beanPropName" select="$currFldMaybeTransl"/>
-                <xsl:with-param name="currEnt" select="$currEnt"/>
-              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="$linkToPK='true'">
+                  <!-- add link to PK -->
+                  <xsl:element name="a">
+                    <xsl:attribute name="href">@get_link@detail/<xsl:value-of select="$currEnt" />/@subst_lt@bean:write name='onerowof<xsl:value-of select="$currEnt"/>' property='<xsl:value-of select="translate($currentAtt/../attribute[attKey='PK']/attName,$alphahigh,$alphalow)" />' /@subst_gt@</xsl:attribute>
+                       <xsl:call-template name="writeOneFieldValue">
+                         <xsl:with-param name="beanPropName" select="$currFldMaybeTransl"/>
+                         <xsl:with-param name="currEnt" select="$currEnt"/>
+                     </xsl:call-template>
+                  </xsl:element>
+                </xsl:when>
+                <xsl:otherwise>
+                                 <!-- just write data -->
+                     <xsl:call-template name="writeOneFieldValue">
+                         <xsl:with-param name="beanPropName" select="$currFldMaybeTransl"/>
+                         <xsl:with-param name="currEnt" select="$currEnt"/>
+                     </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+
             </xsl:otherwise>
           </xsl:choose>
           <!-- units -->
