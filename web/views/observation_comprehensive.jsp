@@ -45,6 +45,8 @@ function getHelpPageId() {
 <div style="display: block; float: right; width: 45%; text-align: center;" id="tut_showhidefieldinfo">
    <strong>Configure View</strong> <br/>
    <a href="@get_link@taxa/observation/<bean:write name='observation_pk' />">Less Plot Detail</a>  --
+   <a href="@get_link@summary/stemcount/<bean:write name='observation_pk' />?where=where_observation_pk">
+   Stems Detail</a>  --
    <a href="javascript:void setupConfig('<bean:write name='thisviewid' />');">Configure data displayed on this page</a>
 </div>
 

@@ -1,7 +1,7 @@
 @webpage_top_html@
  @stdvegbankget_jspdeclarations@
  @webpage_head_html@
- <TITLE>View VegBank Data: Stem Counts - Summary</TITLE>
+ <TITLE>View VegBank Data: Stems </TITLE>
 
 <!-- justa simple include now -->
 <%@ include file="includeviews/inlinestyles.jsp" %>
@@ -12,7 +12,7 @@
 
 
       @possibly_center@
-        <h2>View VegBank Stem Counts</h2>
+        <h2>View VegBank Stems</h2>
         <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
   
