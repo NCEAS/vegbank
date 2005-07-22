@@ -5,11 +5,11 @@
    according to cookie's contents -->
 
 <!-- plant names are a simple case: -->
-  <bean:define id="plantNamesToShowBean">taxobs_curr_scinamenoauth</bean:define > <!-- default -->
+  <bean:define id="plantNamesToShowBean">taxonobservation_int_currplantscinamenoauth</bean:define > <!-- default -->
   <!-- looking for full -->
   <logic:present cookie="taxon_name_full">
     <!-- getting the cookie value which IS present: -->
-    <bean:cookie id="plantNamesToShowCookie" name="taxon_name_full"  value="taxobs_curr_scinamenoauth" /> 
+    <bean:cookie id="plantNamesToShowCookie" name="taxon_name_full"  value="taxonobservation_int_currplantscinamenoauth" /> 
     <!-- if cookie was set, then set to define new bean -->
     <bean:define id="plantNamesToShowBean"><bean:write name="plantNamesToShowCookie" property="value" /></bean:define>
   </logic:present>
