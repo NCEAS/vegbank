@@ -284,7 +284,7 @@
       </xsl:otherwise>
     </xsl:choose>
      <span class="ddlink">
-     <xsl:text> </xsl:text><a class="image" href="/dd/{$currEnt}/{$currFld}">
+     <xsl:text> </xsl:text><a title="Click here for definition of this field." target="_blank" class="image" href="/dd/{$currEnt}/{$currFld}" onclick="popupDD('/dd/{$currEnt}/{$currFld}'); return false;">
       <img src="@images_link@question.gif" alt="?" border="0"/>
     </a>
     </span>

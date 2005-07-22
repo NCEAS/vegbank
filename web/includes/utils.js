@@ -665,6 +665,8 @@ function getParamFromResubmitForm(theParam) {
 }
 
 
+
+
 //this for putting a value from a popup window back into the opener -- depends on params requestingForm and requestingField
 function setOpenerFormValue(theValueToSet) {
   // this sets the value of the opener form field, based on requestingForm att and requestingField att.
@@ -710,6 +712,12 @@ function setupConfig(strView) {
       }
     setupWin = window.open(strURL,'vegbank_setup','toolbar=yes, location=yes, menubar=yes, scrollbars=yes, resizable=yes, copyhistory=no, width=400, height=600');
     setupWin.focus();
+}
+
+
+function popupDD(url) {
+	DDWin = window.open(url,'vegbank_dd','toolbar=yes, location=yes, menubar=yes, scrollbars=yes, resizable=yes, copyhistory=no, width=400, height=600');
+	DDWin.focus();
 }
 
 function postNewParam(theName,theVal) {
