@@ -182,10 +182,35 @@ function ts_makeSortable(table) {
     // We have a first row: assume it's the header, and make its contents clickable links
     for (var i=0;i<firstRow.cells.length;i++) {
         var cell = firstRow.cells[i];
-        var txt = ts_getInnerText(cell);
-        cell.innerHTML = '<a href="#" class="sortlink" onclick="ts_resortTable(this);return false;">'+txt+'<span class="sortarrow"></span></a>';
+        //var txt = ts_getInnerText(cell);
+        // var extralink = ts_getExtraLink(cell);
+        var txtHTML = cell.innerHTML;
+        var linkStart = '<a href="#" title="Click here to sort by this column" class="sortlink" onclick="ts_resortTable(this);return false;">';
+        var linkEnd = '<span class="sortarrow"></span></a>';
+        // look for <a
+        var whereA = txtHTML.indexOf("<a");
+        //DEBUG: alert ('exists: ' + whereA);
+        if (whereA == -1) {
+			// there are no links, span entire cell
+			//DEBUG: alert('could not find <a in :' + txtHTML);
+			cell.innerHTML = linkStart + txtHTML + linkEnd;
+		}
+		if (whereA != -1) {
+			// there are links, add link up to point where new link starts
+			//DEBUG: alert('<a starts @ ' + whereA + ' in ' + txtHTML);
+			if (whereA == 0 ) {
+				//DEBUG: alert ('<a starts:' + txtHTML);
+				// add a little something since the start of the whole thing is a link
+				linkStart = linkStart + 'sort';
+			}
+			// insert links up to point where next link starts
+			cell.innerHTML = linkStart + txtHTML.substring(0,whereA) + linkEnd + txtHTML.substring(whereA,txtHTML.length);
+
+		}
+        //cell.innerHTML = 'sort' + cell.innerHTML ;
     }
 }
+
 
 function ts_getInnerText(el) {
 	if (typeof el == "string") return el;
