@@ -1,6 +1,11 @@
 
 <table class="thinlines" cellpadding="2">
 <tr><th colspan="19">Community Classification:</th></tr>
+
+<tr class="interpCommLink"><td class="useraction" colspan="19">
+    <a href='@web_context@InterpretCommObservation.do?obsId=<%= request.getParameter("observation_pk") %>'>Interpret this plot to a community concept</a>
+</td></tr>
+
 <logic:empty name="commclass-BEANLIST">
 <tr><td>  No communties have been assigned to this plot.</td></tr>
 </logic:empty>

@@ -3,6 +3,8 @@
   <%@ taglib uri="/WEB-INF/c.tld" prefix="c" %>
   @webpage_head_html@
 <bean:parameter id="obsId" name="obsId"/>
+<bean:define id="isCommInterp" value="true"/>
+<style type="text/css"> .interpCommLink {display:none} </style>
 
 <script type="text/javascript" src="@includes_link@comm_interp.js"></script>
 
