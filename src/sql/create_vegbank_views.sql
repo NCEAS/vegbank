@@ -14,7 +14,7 @@ DROP VIEW view_browseparty_classcontrib;
 DROP VIEW view_browseparty_projectcontrib;
 
 DROP VIEW view_comminterp_more;
-
+DROP VIEW view_taxoninterp_more;
 DROP VIEW view_observation_transl;
 
 
@@ -333,6 +333,12 @@ CREATE view view_csv_taxonimportance AS
        ELSE 4 END) as classconfidencenum
     FROM view_notemb_commClass as commclass, comminterpretation WHERE commclass.commclass_ID = comminterpretation.commclass_ID;
     
+CREATE VIEW view_taxonInterp_more AS
+  SELECT taxonInterpretation.*, plantconcept.accessionCode AS pc_accessioncode, plantconcept.plantname as pc_plantname,
+    taxonobservation.observation_ID 
+  FROM view_notEmb_taxonInterpretation as taxonInterpretation, taxonobservation, plantconcept
+  WHERE taxonobservation.taxonobservation_ID=taxonInterpretation.taxonobservation_ID 
+    AND plantconcept.plantconcept_id=taxonInterpretation.plantconcept_id;
     
 CREATE VIEW view_observation_transl AS 
   SELECT observation_ID, 
