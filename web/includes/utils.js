@@ -661,27 +661,53 @@ function setOpenerFormValue(theValueToSet) {
   }
 }
 
+function resubmitOpeningForm() {
+	// resubmits opening form
+	try {
+		// get opener
+		// does not work, loses functions (and form): opener.document.write("Refreshing data...");
+		opener.postNewParam("name","");
+		window.close();
+	}
+	catch (e) {
+		//DEBUG:
+		//alert(e);
+		return "";
+	}
+}
+
+function setupConfig(strView) {
+	// opens popup to config this view
+	var strURL =  '@views_link@UserPreferences_popup.jsp';
+	if (strView != "" )
+	  {
+		strURL = strURL + '?where=where_cookie_view&wparam='+strView;
+      }
+    setupWin = window.open(strURL,'vegbank_setup','toolbar=yes, location=yes, menubar=yes, scrollbars=yes, resizable=yes, copyhistory=no, width=400, height=600');
+    setupWin.focus();
+}
 
 function postNewParam(theName,theVal) {
   // this uses the resubmitForm Form in the page that should be put there by vegbank(colon)resubmitForm
   // to send user to new location, but using the posted instead of URL parameters.
   if ( theVal == null ) {return false; }
-  if ( theVal == "" ) {return false; }
   resubmitform = document.forms.resubmitForm ;
-  var numelements = resubmitform.elements.length;
 
-  var wasDone = "false" ;
-    for (var i=0 ; i<numelements ; i++) {
-      if (resubmitform.elements[i].name == theName ) {
-        resubmitform.elements[i].value = theVal ;
-        wasDone = "true" ;
+  if ( theVal != "" ) {
+    var numelements = resubmitform.elements.length;
+    var wasDone = "false" ;
+      for (var i=0 ; i<numelements ; i++) {
+        if (resubmitform.elements[i].name == theName ) {
+          resubmitform.elements[i].value = theVal ;
+          wasDone = "true" ;
+        }
       }
-    }
 
-  if ( wasDone == "false") {
-    //didnt get done, add new input to form (tricky)
-    resubmitform.placeholder.name = theName ;
-    resubmitform.placeholder.value = theVal ;
+    if ( wasDone == "false") {
+      //didnt get done, add new input to form (tricky)
+      resubmitform.placeholder.name = theName ;
+      resubmitform.placeholder.value = theVal ;
+    }
   }
   resubmitform.submit();
 
