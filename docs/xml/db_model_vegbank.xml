@@ -14314,9 +14314,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Foreign Key into the stratum table, if this record is limited to the importance of a taxon in one stratum. If null, all values in this record speak of the importance of the entire taxon across all strata.</attDefinition>
       <attForms>
-        <formShow name="SummaryNoTaxon">2</formShow>
         <formShow name="Summary">1299</formShow>
-        <formShow name="SummaryOnlyStrata">1300</formShow>
         <formShow name="csvvegbranch">397</formShow>
       </attForms>
       <update>1.0.2</update>
@@ -14336,10 +14334,7 @@ conditions may change between resampling events.
       <attDefinition>Cover, in percent, of the taxon (potentially limitied to one stratum if stratum_ID has a value).</attDefinition>
       <attUnits>%</attUnits>
       <attForms>
-        <formShow name="SummaryNoStrata">1299</formShow>
-        <formShow name="SummaryNoTaxon">3</formShow>
         <formShow name="Summary">1300</formShow>
-        <formShow name="SummaryOnlyStrata">1301</formShow>
         <formShow name="csvvegbranch">398</formShow>
       </attForms>
       <attFormsHTMLpre> @subst_lt@table class="noborder" cellpadding="0" cellspacing="0"@subst_gt@@subst_lt@tr@subst_gt@@subst_lt@td@subst_gt@</attFormsHTMLpre>
@@ -14362,10 +14357,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>The original cover code used by the author in the Cover Method for the plot.</attDefinition>
       <attForms>
-        <formShow name="SummaryNoStrata">1299.5</formShow>
-        <formShow name="SummaryNoTaxon">3.5</formShow>
         <formShow name="Summary">1300.5</formShow>
-        <formShow name="SummaryOnlyStrata">1301.5</formShow>
       </attForms>
       <update>1.0.3</update>
       <updateSQLFile>addCoverCodeToTaxImportance.sql</updateSQLFile>
@@ -14385,8 +14377,6 @@ conditions may change between resampling events.
       <attDefinition>Total basal area of the species in m2/ha (potentially limitied to one stratum if stratum_ID has a value).</attDefinition>
       <attUnits>m²/ha</attUnits>
       <attForms>
-        <formShow name="Austere">1300</formShow>
-        <formShow name="SummaryNoTaxon">4</formShow>
         <formShow name="Summary">1301</formShow>
         <formShow name="Detail">1302</formShow>
         <formShow name="csvvegbranch">399</formShow>
@@ -14408,8 +14398,6 @@ conditions may change between resampling events.
       <attDefinition>The biomass of the species in g/m2 (potentially limitied to one stratum if stratum_ID has a value).</attDefinition>
       <attUnits>g/m²</attUnits>
       <attForms>
-        <formShow name="Austere">1300.5</formShow>
-        <formShow name="SummaryNoTaxon">5</formShow>
         <formShow name="Summary">1301.5</formShow>
         <formShow name="Detail">1302.5</formShow>
         <formShow name="csvvegbranch">400</formShow>
@@ -14431,6 +14419,7 @@ conditions may change between resampling events.
       <attDefinition>This is the area in m2 used to infer the importance values (i.e. cover, biomass, basal area) in this record.  RESERVED VALUE: -1 is used to indicate no plot boundaries were used when estimating importance values.</attDefinition>
       <attUnits>m²</attUnits>
       <attForms>
+        <formShow name="Summary">1302</formShow>
         <formShow name="Austere">1303</formShow>
         <formShow name="Detail">1305</formShow>
         <formShow name="csvvegbranch">401</formShow>
