@@ -1,7 +1,8 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-
+    @ajax_js_include@
+  @datacart_js_include@
 
 <TITLE>View VegBank Plant Concepts - Summary</TITLE>
 <script type="text/javascript">
@@ -51,9 +52,34 @@ function getHelpPageId() {
              <p>Sorry, no Plant concepts match your criteria.</p>
           </logic:empty>
 <logic:notEmpty name="concept-BEANLIST"><!-- set up table -->
+<p>
+ <!-- add all results -->
+
+        <a href="javascript:addAllResults('plantconcept');"
+            title="add all query results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" id="datacart-addallresults-icon" /></a>
+
+        <a href="javascript:addAllResults('plantconcept');"
+            title="add all results to datacart">add all query results</a> to datacart,&nbsp;&nbsp;
+
+        <a href="javascript:addAllOnPage()" title="add all on page to datacart" class="nobg"><img src="/vegbank/images/cart_add_one.gif" border="0" /></a>
+        <a href="javascript:addAllOnPage()" title="add all on page">add plots on page</a> to datacart,&nbsp;&nbsp;
+                                                                                                                                                                                                  
+    <!-- drop page -->
+
+        <a href="javascript:dropAllOnPage()" title="drop all on page from datacart" class="nobg"><img src="/vegbank/images/cart_drop_one.gif" border="0" /></a>
+        <a href="javascript:dropAllOnPage()" title="drop all on page">drop plots on page</a> from datacart
+
+</p>
+<%@ include file="../includes/setup_rowindex.jsp" %>
+    <!-- mtl: still not really sure what this does: -->
+    <logic:equal parameter="delta" value="findadd-accessioncode">
+        <vegbank:datacart delta="findadd:plantconcept:plantconcept:plantconcept_id:accessioncode" deltaItems="getQuery" display="false" />
+    </logic:equal>
+<form action="" method="GET" id="cartable">
 <table width="100%" cellpadding="2" class="leftrightborders" ><!--each field, only write when HAS contents-->
 <!-- header -->
 <tr id="tut_mainheaderrow">
+  <th valign="bottom" align="center" nowrap="nowrap">Add/Drop</th>
   <th>More</th>
   
   <bean:define id="thisfield" value="plantname" />
@@ -93,6 +119,14 @@ function getHelpPageId() {
   <bean:define id="concId" name="onerow" property="plantconcept_id"/>
 
 <tr class='@nextcolorclass@'>
+  <!-- datacart -->
+  <td align="center"><!-- that td cannot have a class, it gets overwritten -->
+        <bean:define id="delta_ac" name="onerow" property="accessioncode" />
+        Plant #<%= rowIndex++ %>
+        <br/>
+        <%@ include file="../includes/datacart_checkbox.jsp" %>
+  </td>
+
 <td class="largefield"><a href='@get_link@detail/plantconcept/<bean:write name="onerow" property="plantconcept_id"/>'>details</a>
 <!-- add "select" button if certain params are present and notEmpty -->
    <logic:equal name="addSelectButton" value="yes">
@@ -131,6 +165,9 @@ function getHelpPageId() {
 
 </logic:iterate>
 </table>
+<!-- datacart -->
+</form>
+@mark_datacart_items@
 
 </logic:notEmpty>
 
