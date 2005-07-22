@@ -15,7 +15,14 @@ function getHelpPageId() {
       <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@
       @possibly_center@
+<TABLE width="100%"><TR><TD>
         <h2>View VegBank Taxon Observations</h2>
+        </TD><TD class="center">
+
+   <strong>Configure View</strong> <br/>
+   <a href="javascript:void setupConfig('<bean:write name='thisviewid' />');">Configure data displayed on this page</a>
+     </TD></TR></TABLE>
+        
 <!--Get standard declaration of rowClass as string: -->
         <% String rowClass = "evenrow"; %>
          <% String rowClassReset = "evenrow"; %>

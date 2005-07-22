@@ -13,7 +13,7 @@ function getHelpPageId() {
 }
 </script>
 
-<title>View Taxa on Plot(s): VegBank</title>
+<title>View Plants on Plots: VegBank</title>
 <%     String rowClass = "evenrow";  %>
 
 <%@ include file="includeviews/inlinestyles.jsp" %>
@@ -22,7 +22,10 @@ function getHelpPageId() {
 @webpage_masthead_html@
 
  @possibly_center@  
-  <h2>Taxa on Plots View</h2>
+  <h2>Plants on Plots View</h2>
+  
+
+  
   <div id="tut_plotcriteriamessages">
 
 <!-- tell the user what was searched for, if criteriaAsText is passed here : -->
@@ -41,7 +44,7 @@ function getHelpPageId() {
 
 
 <vegbank:pager />
-<div style="clear:both; display: block;">
+<TABLE width="100%"><TR><TD>
                                                                                                                                                                                                   
    <table class="noborder">
     <tr>
@@ -73,9 +76,10 @@ function getHelpPageId() {
     </tr>
                                                                                                                                                                                                   
   </table>
-</div>
-
-
+  </TD><TD class="center">
+     <strong>Configure View</strong> <br/>
+     <a href="javascript:void setupConfig('<bean:write name='thisviewid' />');">Configure data displayed on this page</a>
+  </TD></TR></TABLE>
 <%@ include file="../includes/setup_rowindex.jsp" %>
 
 <logic:empty name="plotobs-BEANLIST">
