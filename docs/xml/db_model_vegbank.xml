@@ -15137,7 +15137,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>The taxon name that the author of the plot used to refer to a taxon observed within the plot.</attDefinition>
       <attForms>
-        <formShow name="Summary">1290</formShow>
+        <formShow name="Summary" linkToPK="true">1290</formShow>
         <formShow name="Detail">1291</formShow>
         <formShow name="csvvegbranch">426</formShow>
       </attForms>
@@ -15248,7 +15248,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
       <attForms>
-        <formShow name="Summary">1292</formShow>
+        <formShow name="Summary" linkToPK="true">1292</formShow>
       </attForms>
       <update>1.0.3</update>
       <updateSQLFile>throwAways\alterTaxObsDenormRenameSciNameToFull.sql</updateSQLFile>
@@ -15267,7 +15267,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
       <attForms>
-        <formShow name="Summary">1293</formShow>
+        <formShow name="Summary" linkToPK="true">1293</formShow>
       </attForms>
       <update>1.0.3</update>
       <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
@@ -15286,7 +15286,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
       <attForms>
-        <formShow name="Summary">1294</formShow>
+        <formShow name="Summary" linkToPK="true">1294</formShow>
       </attForms>
       <update>1.0.3</update>
       <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
@@ -15305,7 +15305,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
       <attForms>
-        <formShow name="Summary">1295</formShow>
+        <formShow name="Summary" linkToPK="true">1295</formShow>
       </attForms>
       <update>1.0.3</update>
       <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
@@ -15340,7 +15340,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
       <attForms>
-        <formShow name="Summary">1297</formShow>
+        <formShow name="Summary" linkToPK="true">1297</formShow>
       </attForms>
       <update>1.0.3</update>
       <updateSQLFile>throwAways\alterTaxObsDenormRenameSciNameToFull.sql</updateSQLFile>
@@ -15359,7 +15359,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
       <attForms>
-        <formShow name="Summary">1298</formShow>
+        <formShow name="Summary" linkToPK="true">1298</formShow>
       </attForms>
       <update>1.0.3</update>
       <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
@@ -15378,7 +15378,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
       <attForms>
-        <formShow name="Summary">1299</formShow>
+        <formShow name="Summary" linkToPK="true">1299</formShow>
       </attForms>
       <update>1.0.3</update>
       <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
@@ -15397,7 +15397,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>This value is looked up from the taxoninterpretation table, based on the settings there, and then using the plant taxonomy module.</attDefinition>
       <attForms>
-        <formShow name="Summary">1300</formShow>
+        <formShow name="Summary" linkToPK="true">1300</formShow>
       </attForms>
       <update>1.0.3</update>
       <updateSQLFile>addTaxonObsDenormPlantNames.sql</updateSQLFile>
