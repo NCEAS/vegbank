@@ -224,6 +224,7 @@
           <xs:attribute name="addSort" type="xs:boolean"/>
           <xs:attribute name="suffix" type="xs:string"/>
           <xs:attribute name="prefix" type="xs:string"/>
+          <xs:attribute name="linkToPK" type="xs:boolean" />
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
@@ -283,6 +284,5 @@
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
-  <xs:element name="updateSQLFile" type="xs:string" />
- 
+  <xs:element name="updateSQLFile" type="xs:string"/>
 </xs:schema>
