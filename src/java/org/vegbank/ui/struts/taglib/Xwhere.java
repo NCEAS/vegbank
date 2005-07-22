@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2005-06-01 09:41:12 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2005-07-22 18:47:45 $'
+ *	'$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  *
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.11 $ $Date: 2005-06-01 09:41:12 $
+ * @version $Revision: 1.12 $ $Date: 2005-07-22 18:47:45 $
  */
 
 public class Xwhere {
@@ -561,8 +561,8 @@ public class Xwhere {
         //MTL : easier to do AND and OR using the same loop, instead of replacing " " with "|".  Hope performance is ok.
 
 		//if (numWords > 1 && !matchAny) {
-			StringBuffer sb = new StringBuffer(numWords * ((String)params[0]).length() * 2);
-
+			StringBuffer sb = new StringBuffer(2 + numWords * ((String)params[0]).length() * 2);
+            sb.append("("); //start opening paren, needed in OR statements
 			boolean first = true;
 			String token = null;
 			while (stWords.hasMoreTokens()) {
@@ -598,8 +598,8 @@ public class Xwhere {
                 }
 
 			}
-
-			return sb.toString();
+            sb.append(")"); //close starting paren, which is needed in OR statements
+			return  sb.toString() ;
 
 		//} else {
 			// matching any word (OR) is easy
