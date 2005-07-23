@@ -54,6 +54,18 @@ function getHelpPageId() {
             <span class="instructions">WARNING: dropping all items cannot be undone</span>
         </td>
     </tr>
+    <tr><td colspan="2"><!-- query by datacart -->
+      <strong>Query using the datacart:</strong><br/>
+      <a href="@get_link@std/observation/<%= lngDatacartId.toString() %>?where=where_datacart_obs_hasplants&criteriaAsText=Plots+with+plants+in+your+datacart">
+        Query for plots matching plants in your datacart
+      </a> <br/>
+      <a href="@get_link@std/observation/<%= lngDatacartId.toString() %>?where=where_datacart_obs_hascomms&criteriaAsText=Plots+interpreted+as+communities+in+your+datacart">
+        Query for plots interpreted as a community in your datacart
+      </a> <br/>
+      
+      
+    
+    </td></tr>
     </table>
     </div>
 </logic:notEmpty>
