@@ -1,0 +1,1 @@
+@stdvegbankget_jspdeclarations@<vegbank:get showQuery="true" id="commconcept-findadd" select="commconcept"  beanName="map" pager="false" xwhereEnable="true" allowOrderBy="true" /><vegbank:datacart delta="findadd:commconcept:commconcept:commconcept_id:accessioncode" deltaItems="getQuery" display="true" />
