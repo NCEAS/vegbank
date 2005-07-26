@@ -236,11 +236,15 @@ function ts_getInnerText(el) {
 function ts_resortTable(lnk) {
     // get the span
     var span;
-    for (var ci=0;ci<lnk.childNodes.length;ci++) {
-        if (lnk.childNodes[ci].tagName && lnk.childNodes[ci].tagName.toLowerCase() == 'span') span = lnk.childNodes[ci];
+    var spanColl = lnk.getElementsByTagName("span");
+    // dEBUG: &(spanColl.length);
+    for (var ci=0;ci<spanColl.length;ci++) {
+        if (spanColl[ci].className && spanColl[ci].className.indexOf('sortarrow') != -1) {
+			span = spanColl[ci];
+		}
     }
     var spantext = ts_getInnerText(span);
-    var td = lnk.parentNode;
+    var td = getParent(lnk,"th");
     var column = td.cellIndex;
     var table = getParent(td,'TABLE');
 
@@ -261,32 +265,61 @@ function ts_resortTable(lnk) {
 
     newRows.sort(sortfn);
 
-    if (span.getAttribute("sortdir") == 'down') {
-        ARROW = '&uarr;';
-        newRows.reverse();
-        span.setAttribute('sortdir','up');
-    } else {
+
+    // dEBUG: &("ok so far");
+    if (span) {
+		// dEBUG: &('we have a span');
+		// dEBUG: &('span innerHTML:' + span.innerHTML);
+	}
+
+    if (span && span.className.indexOf('up') != -1) {
+		// dEBUG: &("it is an up arrow!");
         ARROW = '&darr;';
-        span.setAttribute('sortdir','down');
+        newRows.reverse();
+        span.className = span.className.replace('up','down');
+        if (span.className.indexOf('down')==-1) {
+			//add downarrow to class name
+			span.className=span.className + ' downarrow';
+		}
+    } else {
+		// dEBUG: &("it is NOT an up arrow");
+        ARROW = '&uarr;';
+        if (span) {
+		  span.className=span.className.replace('down','up');
+          if (span.className.indexOf('uparrow')==-1) {
+			//add downarrow to class name
+			span.className=span.className + ' uparrow';
+		  }
+		} else {
+			// add a span to IE
+			// alert('adding a span');
+			ARROW = '<span class="sortarrow uparrow">&uarr;</span>';
+		}
     }
 
     // We appendChild rows that already exist to the tbody, so it moves them rather than creating new ones
     // don't do sortbottom rows
     for (i=0;i<newRows.length;i++) { if (!newRows[i].className || (newRows[i].className && (newRows[i].className.indexOf('sortbottom') == -1))) table.tBodies[0].appendChild(newRows[i]);}
+
     // do sortbottom rows only
     for (i=0;i<newRows.length;i++) { if (newRows[i].className && (newRows[i].className.indexOf('sortbottom') != -1)) table.tBodies[0].appendChild(newRows[i]);}
 
     // Delete any other arrows there may be showing
     var allspans = document.getElementsByTagName("span");
     for (ci=0;ci<allspans.length;ci++) {
-        if (allspans[ci].className == 'sortarrow') {
+        if (allspans[ci].className.indexOf('sortarrow') != -1) {
             if (getParent(allspans[ci],"table") == getParent(lnk,"table")) { // in the same table as us?
-                allspans[ci].innerHTML = '';
+     		     allspans[ci].innerHTML = ''
+                // DO NOT TRY TO REMOVE uparrow and downarrow classes here!
             }
         }
     }
 
-    span.innerHTML = ARROW;
+    if (span) {
+      span.innerHTML = ARROW;
+    } else {
+	  lnk.innerHTML = lnk.innerHTML + ARROW;
+	}
 }
 
 function getParent(el, pTagName) {
