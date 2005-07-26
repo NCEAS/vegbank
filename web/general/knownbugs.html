@@ -1,0 +1,49 @@
+@webpage_top_html@
+  
+  @webpage_head_html@
+
+<TITLE>VegBank Known Bugs</TITLE>
+
+ 
+
+ @webpage_masthead_html@
+
+ 
+
+
+<h1>VegBank Known Bugs</h1>
+
+<p>As with any website that attempts to 
+provide dynamic content and advanced features,
+some things are bound to fail on certain browsers, or for certain conditions.
+We strive to make everything work according to web standards,
+and generally this results in good functioning on all browsers.  This
+is not always the case though.  For recommended configuration and requirements,
+please see <a href="@general_link@requirements.html">Our Requirements Page</a>.
+</p>
+<p>minor bugs mean slight imperfection in display, but functions correctly. <br/>
+   Moderate bugs mean some malfunctioning, but still quite usable. <br/>
+   MAJOR bugs mean does not function. </p>
+
+<ul>
+  <li><strong>minor</strong> <i>Windows, Internet Explorer</i>: in the tutorial, the content of the main page
+  spills over into the scroll bar if the page is too narrow.  Browser bug.</li>
+  <li><strong>Moderate</strong> <i>All platforms/browsers</i>: searching for
+  data using non-ASCII characters (e.g. &aring;,&agrave;,&eacute;,&ntilde;,&uuml;) doesn't get you the matching data.
+  Solution: use wildcards for these characters (e.g. search for "Hult%n" instead of "Hult&eacute;n").</li>
+  <li><strong>Moderate</strong> Sorting in some views uses some JavaScript
+  which fails in some browsers on some platforms, specifically: <i>Mac, Internet Explorer</i>
+  sorting not possible. <i>Mac, Safari</i> sorting produces
+  unexpected orders.  <i>Windows, Opera</i> tables get really wide after sorting. 
+  <strong>Solution:</strong> use the default sort order, or download the data and sort in your
+  own program, or use a different browser that sorts properly.</li>
+  
+</ul>  
+  
+
+@webpage_footer_html@
+
+
+
+
+
