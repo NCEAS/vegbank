@@ -24,6 +24,7 @@
     </xs:simpleType>
     <!-- PK, FK or neither -->
   </xs:element>
+  <xs:element name="attID" type="xs:positiveInteger" />
   <xs:element name="attLabel" type="nonEmptyString"/>
   <!-- human readable label that we might think about using instead of field names for forms -->
   <xs:element name="attList">
@@ -155,6 +156,7 @@
   <xs:element name="attribute">
     <xs:complexType>
       <xs:sequence>
+        <xs:element ref="attID" />
         <xs:element ref="attName"/>
         <xs:element ref="attLabel" minOccurs="0"/>
         <xs:element ref="attModel"/>
