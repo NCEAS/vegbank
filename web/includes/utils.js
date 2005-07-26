@@ -245,18 +245,56 @@ function ts_resortTable(lnk) {
     }
     var spantext = ts_getInnerText(span);
     var td = getParent(lnk,"th");
-    var column = td.cellIndex;
+    var column = 0;
+    column = td.cellIndex;
     var table = getParent(td,'TABLE');
 
     // Work out a type for the column
     if (table.rows.length <= 1) return;
-    var itm = ts_getInnerText(table.rows[1].cells[column]);
+    // problem: sometimes the cells are hidden and this causes problems with this approach:
+    //  var itm = ts_getInnerText(table.rows[1].cells[column]);
+    var itm= "";
+    var cr = 1;
+    //get a value from the table, and try to get one that isn't empty.
+    // debug: alert('column is:' + column);
+    do
+	  {
+	    for (co=0;co<table.rows[cr].cells.length;co++) {
+            //if ( cr == 1 ) {
+				// print contents for debugging
+				// alert(cr + ',' + co + ':' + ts_getInnerText(table.rows[cr].cells[co]));
+
+			//}
+
+
+			if ( column == table.rows[cr].cells[co].cellIndex ) {
+				//if (cr==1) alert('set item!');
+				itm = ts_getInnerText(table.rows[cr].cells[co]);
+                // get rid of junk.
+				//itm = itm.replace(/\n/,"");
+				//alert('>' + itm + '<');
+				// regular expressions aren't working in FireFox...
+
+				if (isTextNotEmpty(itm) == false) {
+					// itm is empty!
+					itm = "";
+			    }
+			}
+	    }
+
+	    // debug: alert('itm inside: >>' + itm + '<< cr:' + cr + ' of ' + table.rows.length);
+	    cr++;
+	  }
+    while (itm =="" && cr<table.rows.length)
+
+    // debug: alert('itm: >' + itm + '<' + ' rows: ' + cr);
     sortfn = ts_sort_caseinsensitive;
     if (itm.match(/^\d\d[\/-]\d\d[\/-]\d\d\d\d$/)) sortfn = ts_sort_date;
     if (itm.match(/^\d\d[\/-]\d\d[\/-]\d\d$/)) sortfn = ts_sort_date;
     if (itm.match(/^[£$]/)) sortfn = ts_sort_currency;
     if (itm.match(/^[\d\.]+$/)) sortfn = ts_sort_numeric;
     if (itm.match(/^[\s]*[\d\.]+[ \%]*/)) sortfn = ts_sort_numeric;
+    // debug: alert('sortfn: ' + sortfn);
     SORT_COLUMN_INDEX = column;
     var firstRow = new Array();
     var newRows = new Array();
@@ -421,6 +459,53 @@ function removeEvent(obj, evType, fn, useCapture){
     alert("Handler could not be removed");
   }
   return false;
+}
+
+function isTextNotEmpty(txt) {
+	// looks @ text and returns true if there is really something there (letter or character or number or _)
+    if (txt.toLowerCase().indexOf('1') != -1) return true;
+    if (txt.toLowerCase().indexOf('2') != -1) return true;
+    if (txt.toLowerCase().indexOf('3') != -1) return true;
+    if (txt.toLowerCase().indexOf('4') != -1) return true;
+    if (txt.toLowerCase().indexOf('5') != -1) return true;
+    if (txt.toLowerCase().indexOf('6') != -1) return true;
+    if (txt.toLowerCase().indexOf('7') != -1) return true;
+    if (txt.toLowerCase().indexOf('8') != -1) return true;
+    if (txt.toLowerCase().indexOf('9') != -1) return true;
+    if (txt.toLowerCase().indexOf('0') != -1) return true;
+    if (txt.toLowerCase().indexOf('a') != -1) return true;
+    if (txt.toLowerCase().indexOf('b') != -1) return true;
+    if (txt.toLowerCase().indexOf('c') != -1) return true;
+    if (txt.toLowerCase().indexOf('d') != -1) return true;
+    if (txt.toLowerCase().indexOf('e') != -1) return true;
+    if (txt.toLowerCase().indexOf('f') != -1) return true;
+    if (txt.toLowerCase().indexOf('g') != -1) return true;
+    if (txt.toLowerCase().indexOf('h') != -1) return true;
+    if (txt.toLowerCase().indexOf('i') != -1) return true;
+    if (txt.toLowerCase().indexOf('j') != -1) return true;
+    if (txt.toLowerCase().indexOf('k') != -1) return true;
+    if (txt.toLowerCase().indexOf('l') != -1) return true;
+    if (txt.toLowerCase().indexOf('m') != -1) return true;
+    if (txt.toLowerCase().indexOf('n') != -1) return true;
+    if (txt.toLowerCase().indexOf('o') != -1) return true;
+    if (txt.toLowerCase().indexOf('p') != -1) return true;
+    if (txt.toLowerCase().indexOf('q') != -1) return true;
+    if (txt.toLowerCase().indexOf('r') != -1) return true;
+    if (txt.toLowerCase().indexOf('s') != -1) return true;
+    if (txt.toLowerCase().indexOf('t') != -1) return true;
+    if (txt.toLowerCase().indexOf('u') != -1) return true;
+    if (txt.toLowerCase().indexOf('v') != -1) return true;
+    if (txt.toLowerCase().indexOf('w') != -1) return true;
+    if (txt.toLowerCase().indexOf('x') != -1) return true;
+    if (txt.toLowerCase().indexOf('y') != -1) return true;
+    if (txt.toLowerCase().indexOf('z') != -1) return true;
+    if (txt.toLowerCase().indexOf('_') != -1) return true;
+    if (txt.toLowerCase().indexOf('-') != -1) return true;
+    if (txt.toLowerCase().indexOf('+') != -1) return true;
+    if (txt.toLowerCase().indexOf('!') != -1) return true;
+    if (txt.toLowerCase().indexOf('~') != -1) return true;
+
+    return false;
 }
 
 
