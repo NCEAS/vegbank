@@ -33,6 +33,26 @@ function include(sURI)
   }
 }
 
+var browser_agent;
+var browser_major;
+var browser_ie;
+var browser_ie3;
+var browser_ie4;
+var browser_iemac;
+var browser_safari;
+function detectBrowser() {
+    browser_agent=navigator.userAgent.toLowerCase();
+
+    // Browser Detection stuff
+    browser_major = parseInt(navigator.appVersion);
+    browser_ie     = ((browser_agent.indexOf("msie") != -1) && (browser_agent.indexOf("opera") == -1));
+    browser_ie3    = (browser_ie && (browser_major < 4));
+    browser_ie4    = (browser_ie && (browser_major == 4) && (browser_agent.indexOf("msie 4")!=-1) );
+	browser_iemac  = (browser_ie && (browser_agent.indexOf("mac")!=-1));
+	browser_safari  = (!browser_ie && (browser_agent.indexOf("safari")!=-1));
+}
+detectBrowser();
+
 function toggle(e) {
 	if (e.checked) {
 		highlight(e);
@@ -185,7 +205,12 @@ function ts_makeSortable(table) {
         //var txt = ts_getInnerText(cell);
         // var extralink = ts_getExtraLink(cell);
         var txtHTML = cell.innerHTML;
-        var linkStart = '<a href="#" title="Click here to sort by this column" class="sortlink" onclick="ts_resortTable(this);return false;">';
+        var linkStart;
+        if (browser_safari) {
+            linkStart = '<a href="#" title="Click here to sort by this column" class="sortlink" onclick="ts_resortTable(this, '+i+');return false;">';
+        } else {
+            linkStart = '<a href="#" title="Click here to sort by this column" class="sortlink" onclick="ts_resortTable(this);return false;">';
+        }
         var linkEnd = '<span class="sortarrow"></span></a>';
         // look for <a
         var whereA = txtHTML.indexOf("<a");
@@ -233,7 +258,7 @@ function ts_getInnerText(el) {
 	return str;
 }
 
-function ts_resortTable(lnk) {
+function ts_resortTable(lnk, cellIndex) {
     // get the span
     var span;
     var spanColl = lnk.getElementsByTagName("span");
@@ -245,8 +270,15 @@ function ts_resortTable(lnk) {
     }
     var spantext = ts_getInnerText(span);
     var td = getParent(lnk,"th");
-    var column = 0;
-    column = td.cellIndex;
+    // try it the old way for Safari
+    var td2 = lnk.parentNode;
+    var column = cellIndex || td.cellIndex;
+    /*
+    if (!cellIndex && td.cellIndex == 0 && td2.cellIndex != 0) {
+	    column = td2.cellIndex;
+		 alert ('override column to:' + column);
+	}
+    */
     var table = getParent(td,'TABLE');
 
     // Work out a type for the column
@@ -256,7 +288,9 @@ function ts_resortTable(lnk) {
     var itm= "";
     var cr = 1;
     //get a value from the table, and try to get one that isn't empty.
-    // debug: alert('column is:' + column);
+    //alert('column is:' + column);
+    // default: 
+    SORT_COLUMN_INDEX = column;
     do
 	  {
 	    for (co=0;co<table.rows[cr].cells.length;co++) {
@@ -267,9 +301,13 @@ function ts_resortTable(lnk) {
 			//}
 
 
-			if ( column == table.rows[cr].cells[co].cellIndex ) {
-				//if (cr==1) alert('set item!');
+			if ( (!browser_safari && column == table.rows[cr].cells[co].cellIndex ) ||
+                    (browser_safari && column == co)) {
+				//set to co for over all col
+                SORT_COLUMN_INDEX = co;
+                //if (cr==1) alert('set item!');
 				itm = ts_getInnerText(table.rows[cr].cells[co]);
+                //alert("item: " + itm);
                 // get rid of junk.
 				//itm = itm.replace(/\n/,"");
 				//alert('>' + itm + '<');
@@ -287,15 +325,15 @@ function ts_resortTable(lnk) {
 	  }
     while (itm =="" && cr<table.rows.length)
 
-    // debug: alert('itm: >' + itm + '<' + ' rows: ' + cr);
+    //alert('sorting by value: >' + itm + '<' + ' read from row #: ' + cr);
     sortfn = ts_sort_caseinsensitive;
     if (itm.match(/^\d\d[\/-]\d\d[\/-]\d\d\d\d$/)) sortfn = ts_sort_date;
     if (itm.match(/^\d\d[\/-]\d\d[\/-]\d\d$/)) sortfn = ts_sort_date;
-    if (itm.match(/^[£$]/)) sortfn = ts_sort_currency;
+    if (itm.match(/^[\$]/)) sortfn = ts_sort_currency;
     if (itm.match(/^[\d\.]+$/)) sortfn = ts_sort_numeric;
     if (itm.match(/^[\s]*[\d\.]+[ \%]*/)) sortfn = ts_sort_numeric;
-    // debug: alert('sortfn: ' + sortfn);
-    SORT_COLUMN_INDEX = column;
+     //alert('sorting function is: ' + sortfn);
+    // SORT_COLUMN_INDEX = column;
     var firstRow = new Array();
     var newRows = new Array();
     for (i=0;i<table.rows[0].length;i++) { firstRow[i] = table.rows[0][i]; }
