@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-16 02:53:59 $'
- *	'$Revision: 1.37 $'
+ *	'$Date: 2005-07-27 22:24:35 $'
+ *	'$Revision: 1.38 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -336,7 +336,7 @@ public class GenericCommand
                 }
                 */
 
-                if (log.isDebugEnabled()) {
+                if (!skipQuery && log.isDebugEnabled()) {
                     log.debug("Setting " + BEANLIST_KEY + " and " + beanName.toUpperCase() + " as lists");
                 }
                 request.setAttribute(BEANLIST_KEY, searchResultList);

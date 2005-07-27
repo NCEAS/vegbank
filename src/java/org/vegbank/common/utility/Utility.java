@@ -27,8 +27,8 @@ import org.vegbank.common.Constants;
  * Purpose: An utility class for Vegbank project.
  * 
  * '$Author: anderson $'
- * '$Date: 2005-07-16 03:10:42 $'
- * '$Revision: 1.51 $'
+ * '$Date: 2005-07-27 22:24:35 $'
+ * '$Revision: 1.52 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,6 +76,7 @@ public class Utility implements Constants
 	public static String VB_DATA_DIR;
 	public static String VB_EXPORT_DIR;
 	public static String VB_EXPORT_DIRNAME;
+	public static String SERVER_ADDRESS;
 	public static String WEBAPP_DIR;
 	public static String WEB_DIR;
 	public static String MODELBEAN_CACHING;
@@ -108,6 +109,7 @@ public class Utility implements Constants
 		VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
 		VEGBANK_XML_SCHEMA = VEGBANK_SCHEMA_LOCATION + VEGBANK_SCHEMA_NAME;
 
+		SERVER_ADDRESS = vegbankPropFile.getString("serverAddress");
 		WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");
 		WEB_DIR = vegbankPropFile.getString("vegbank.web.dir");
 		VB_HOME_DIR = vegbankPropFile.getString("vegbank.home.dir");
