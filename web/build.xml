@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-07-27 17:40:19 $'
-* '$Revision: 1.175 $'
+* '$Date: 2005-07-27 22:24:31 $'
+* '$Revision: 1.176 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -401,9 +401,11 @@
     <!-- style business rules to create .jsp -->
     <style in="${forms}/businessrules.xml" style="${forms}/businessrules.xsl" out="${forms}/businessrules.jsp" force="${forceoverwrite}"/>
     <copy overwrite="${forceoverwrite}" todir="${forms_server}" filtering="yes">
-      <fileset dir="${forms}" includes="*jsp *html" excludes="**/CVS* *.xsl *.xsd businessrules.xml "/>
+      <fileset dir="${forms}" includes="**/*jsp **/*html" excludes="**/CVS* *.xsl *.xsd businessrules.xml "/>
     </copy>
-    
+    <copy overwrite="${forceoverwrite}" todir="${forms_server}" filtering="yes">
+      <fileset dir="${forms}" includes="**/*.csv" excludes="**/*jsp **/*html **/CVS* *.xsl *.xsd businessrules.xml "/>
+    </copy>
     
     
     <antcall target="views"/>
