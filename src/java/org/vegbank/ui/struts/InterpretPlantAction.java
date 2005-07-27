@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:11:06 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2005-07-27 21:55:07 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,8 +53,7 @@ import org.vegbank.common.model.Taxonobservation;
 public class InterpretPlantAction extends VegbankAction {
 
 	private static Log log = LogFactory.getLog(InterpretPlantAction.class); 
-	private static final String TOBS_LIST_URL =
-			"/GenericDispatcherFwd.do?prop=taxonobservation_v_annotate_obs_pk&param=";
+	private static final String CANCEL_URL = Utility.SERVER_ADDRESS + "/get/std/observation/";
 
 	public ActionForward execute(
 			ActionMapping mapping,
@@ -96,7 +95,7 @@ public class InterpretPlantAction extends VegbankAction {
 		try {
 			if (isCancelled(request)) {
 				log.debug("CANCELLING");
-				return new ActionForward(TOBS_LIST_URL + ipForm.getObservation_id(), true);
+				return new ActionForward(CANCEL_URL + ipForm.getObservation_id(), true);
 			}
 
 			log.debug("Interpreting tobs " + tobsAC);

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-16 02:59:35 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-07-27 21:55:07 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ import org.vegbank.common.model.Classcontributor;
 public class InterpretCommAction extends VegbankAction {
 
 	private static Log log = LogFactory.getLog(InterpretCommAction.class); 
-	private static final String CANCEL_URL = "/get/std/observation/";
+	private static final String CANCEL_URL = Utility.SERVER_ADDRESS + "/get/std/observation/";
 
 	public ActionForward execute(
 			ActionMapping mapping,
