@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-16 02:57:01 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2005-07-27 21:47:55 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.Utility;
  * Abstract base class tag.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.8 $ $Date: 2005-07-16 02:57:01 $
+ * @version $Revision: 1.9 $ $Date: 2005-07-27 21:47:55 $
  */
 
 public abstract class VegbankTag extends TagSupport {
@@ -149,7 +149,21 @@ public abstract class VegbankTag extends TagSupport {
 			if (Utility.isArrayNullOrEmpty(attribValue)) {
 				// find in other scopes
 				//log.debug("Finding " + attribName + " with RequestUtils.lookup()");
-				attribValue = (String[])RequestUtils.lookup(pageContext, attribName, null);
+				Object o = null;
+                try {
+                    o = RequestUtils.lookup(pageContext, attribName, null);
+                    attribValue = (String[])o;
+                } catch (ClassCastException ccex) {
+                    if (o != null) {
+                        if (o.getClass().getName().equals("java.lang.String")) {
+                            attribValue = new String[1];
+                            attribValue[0] = (String)o;
+                        } else {
+                            log.error("Value of attribute " + attribName +
+                                    " cannot be a String[]; type is " + o.getClass().getName());
+                        }
+                    }
+                }
 			}
 
 		} catch (JspException jspex) {
