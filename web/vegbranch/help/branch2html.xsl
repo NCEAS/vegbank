@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect"> 
-  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/> 
 
 <xsl:output method="html"/>
 <xsl:param name="htmlsuffix">.html</xsl:param>
