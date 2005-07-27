@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect"> 
-  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/> 
   <!-- <xsl:param name="CurrentTable" />
 <xsl:param name="CurrentField" /> -->
   <!-- not needed : <xsl:param name="CurrentTable">observation</xsl:param>
@@ -11,6 +10,11 @@
   <xsl:output method="html"/>
   <xsl:template match="/dataModel">
   <xsl:for-each select="entity/attribute">
+   <redirect:write file="{$htmlPrefix}~field_id~{attID}~defn.html">
+     <xsl:comment> definition of: <xsl:value-of select="../entityName" />.<xsl:value-of select="attName" /></xsl:comment>
+     <xsl:value-of select="attDefinition" />
+   </redirect:write>
+  
  <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">@webpage_top_html@
   @webpage_head_html@
 
