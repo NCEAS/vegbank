@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-07-16 22:52:17 $'
-* '$Revision: 1.174 $'
+* '$Date: 2005-07-27 17:40:19 $'
+* '$Revision: 1.175 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -100,7 +100,7 @@
     <property name="email_templates_src" value="./email_templates"/>
     <property name="general_src" value="./general"/>
     <property name="design_src" value="./design"/>
-    <property name="dictionary_src" value="../docs/xml/"/>
+    <property name="dictionary_src" value="../docs/xml/build/"/>
     <property name="news_src" value="./news"/>
     <property name="help_src" value="./help"/>
     <property name="manual_src" value="./help/manual"/>

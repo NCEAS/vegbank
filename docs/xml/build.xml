@@ -15,7 +15,8 @@
     <echo>init docs/xml webapp '${webapp}'</echo>
     <!-- freely editable variables -->
     <property name="origData" value="db_model_vegbank.xml"/>
-    <property name="htmlPrefix" value="dd"/>
+    <property name="htmlPrefix" value="build/dd"/>
+    <mkdir dir="build" />
     <property name="limitData" value="db_model_vegbank_limited.xml"/>
     <!-- do not edit the following variables unless you have replaced with new xsl file -->
     <property name="limitstyle" value="db_model_limit.xsl"/>

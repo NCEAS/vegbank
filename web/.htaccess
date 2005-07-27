@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.21 2005-07-22 05:41:48 mlee Exp $
+# $Id: .htaccess,v 1.22 2005-07-27 17:40:19 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -80,6 +80,7 @@ RewriteRule ^cite/([^\.]+)\.RP\.(.*)$	   @get_link@std/referenceparty/$1.RP.$2  
 RewriteRule ^cite/([^\.]+)\.AR\.(.*)$	   @get_link@std/aux_role/$1.AR.$2	       [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.DS\.(.*)$	   @get_link@std/userdataset/$1.DS.$2       [NC,QSA,L]
 
+RewriteRule ^dd/([0-9]+)	   @dbdictionary_link@dd~field_id~$1~defn.html       [NC,QSA,L,R]
 RewriteRule ^dd/(.*)/(.*)	   @dbdictionary_link@dd~table~$1~field~$2~type~smallview.html       [NC,QSA,L,R]
 RewriteRule ^dd/(.*)	           @dbdictionary_link@dd~table~$1~type~tableview.html                [NC,QSA,L,R]
 
