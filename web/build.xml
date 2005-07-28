@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-07-27 22:24:31 $'
-* '$Revision: 1.176 $'
+* '$Date: 2005-07-28 00:49:11 $'
+* '$Revision: 1.177 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -100,7 +100,9 @@
     <property name="email_templates_src" value="./email_templates"/>
     <property name="general_src" value="./general"/>
     <property name="design_src" value="./design"/>
-    <property name="dictionary_src" value="../docs/xml/build/"/>
+    <property name="docs_xml_dir" value="../docs/xml/" />
+    <property name="dbmodelxml" value="${docs_xml_dir}db_model_vegbank.xml" />
+    <property name="dictionary_src" value="${docs_xml_dir}build/"/>
     <property name="news_src" value="./news"/>
     <property name="help_src" value="./help"/>
     <property name="manual_src" value="./help/manual"/>
@@ -483,9 +485,9 @@
 -->
   <target name="dictionary" depends="init" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
     <!-- calls ant to run a different ant target which creates the vegbank dictionary based on logical fields only -->
-    <echo>calling ../docs/xml with webapp '${webapp}'</echo>
+    <echo>calling ${docs_xml_dir} with webapp '${webapp}'</echo>
    <!-- prepare the files to distribute -->
-    <ant dir="../docs/xml" target="logical"/>
+    <ant dir="${docs_xml_dir}" target="logical"/>
        <!-- distribute the files -->
        <antcall target="dist-dictionary" />
        </target>
@@ -497,14 +499,14 @@
     </copy>
     
   </target>
-  <target name="dataxml" depends="tokenfiles" description="=&gt; Dist. the documentation files and xml files in ../docs/xml/dataxml to server ">
+  <target name="dataxml" depends="tokenfiles" description="=&gt; Dist. the documentation files and xml files in ${docs_xml_dir}dataxml to server ">
      <copy todir="${static_xmlserver}" flatten="true" filtering="yes" overwrite="${forceoverwrite}">
       <fileset dir="./dataxml">
         <include name="*.html"/>
       </fileset>
     </copy>
     <!-- copy xml files too -->
-    <ant dir="../docs/xml" target="dist-dataxml"/>
+    <ant dir="${docs_xml_dir}" target="dist-dataxml"/>
   </target>
   <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
     <!-- pattern for this target: (optional: style xml to get tokens), copy from includes to includes_server, set filtersfile on server copy, post filtering -->
@@ -538,6 +540,8 @@
    <loadfile srcfile="${includes_src}/footer.html" property="vegbank_footer_html_help" />
    <filter token="vegbank_footer_html_help" value="${vegbank_footer_html_help}" />
    -->
+   
+  
    <!-- dist relavent includes to server and filter tokens while doing so -->
    <copy todir="${includes_server}" filtering="yes" overwrite="${forceoverwrite}">
      <fileset dir="${includes_src}">
@@ -553,12 +557,15 @@
     <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>
     <filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/>
     
+        <!-- get filters for data dictionary defns: -->
+   <style in="${dbmodelxml}" out="${includes_server}/dd_defns_tokens.properties" style="${docs_xml_dir}getDefnsForFields.xsl" force="${forceoverwrite}" />
+    <filter filtersfile="${includes_server}/dd_defns_tokens.properties" />    
     
     
     <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="${forceoverwrite}"/>
     <copy file="${manual_src}/manual_filters.properties" tofile="${includes_server}/manual_filters.properties" filtering="yes" overwrite="${forceoverwrite}"/>
     <filter filtersfile="${includes_server}/manual_filters.properties"/>
-    <ant dir="${basedir}/../docs/xml" target="dist-closedlist-tokenfile"/>
+    <ant dir="${basedir}/${docs_xml_dir}" target="dist-closedlist-tokenfile"/>
     <copy file="${includes_src}/closedlist-tokens.properties" tofile="${includes_server}/closedlist-tokens.properties" filtering="yes" overwrite="${forceoverwrite}"/>
     <filter filtersfile="${includes_server}/closedlist-tokens.properties"/> 
    <copy todir="${includes_server}" filtering="yes" overwrite="${forceoverwrite}">
@@ -568,7 +575,6 @@
    </copy>
    
 
-   
    <loadfile srcfile="${includes_server}/webpage_top.html" property="webpage_top_html" />
    <filter token="webpage_top_html" value="${webpage_top_html}" />
  
@@ -660,7 +666,7 @@
   </target>
   <!-- images -->
   <target name="vegbranch-dist-updatelists" depends="vegbranch-init" description="dist vegbranch update closed/open lists file">
-    <ant dir="../docs/xml" target="vegbranch-update-lists"/>
+    <ant dir="${docs_xml_dir}" target="vegbranch-update-lists"/>
     <copy todir="${vegbranch_server}" filtering="no" overwrite="${forceoverwrite}">
       <fileset dir="${vegbranch_src}">
         <include name="current-closed-list.zip"/>
