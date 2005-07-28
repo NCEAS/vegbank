@@ -1,0 +1,336 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Michael Lee</Author>
+  <LastAuthor>Michael Lee</LastAuthor>
+  <Created>2005-07-28T00:22:06Z</Created>
+  <Company>UNC-VegBank</Company>
+  <Version>10.6714</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <DownloadComponents/>
+  <LocationOfComponents HRef="file:///\\"/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>10230</WindowHeight>
+  <WindowWidth>8475</WindowWidth>
+  <WindowTopX>360</WindowTopX>
+  <WindowTopY>105</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s21">
+   <NumberFormat ss:Format="Short Date"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="example_plot_env">
+  <Table ss:ExpandedColumnCount="115" ss:ExpandedRowCount="5" x:FullColumns="1"
+   x:FullRows="1">
+   <Row>
+    <Cell><Data ss:Type="String">observation_id</Data></Cell>
+    <Cell><Data ss:Type="String">authorplotcode_vb</Data></Cell>
+    <Cell><Data ss:Type="String">reference_id_name</Data></Cell>
+    <Cell><Data ss:Type="String">parent_id_name</Data></Cell>
+    <Cell><Data ss:Type="String">authorobscode_vb</Data></Cell>
+    <Cell><Data ss:Type="String">previousobs_id_name</Data></Cell>
+    <Cell><Data ss:Type="String">project_id_name</Data></Cell>
+    <Cell><Data ss:Type="String">obsstartdate_vb</Data></Cell>
+    <Cell><Data ss:Type="String">obsenddate_vb</Data></Cell>
+    <Cell><Data ss:Type="String">dateaccuracy_vb</Data></Cell>
+    <Cell><Data ss:Type="String">confidentialitystatus</Data></Cell>
+    <Cell><Data ss:Type="String">latitude</Data></Cell>
+    <Cell><Data ss:Type="String">longitude</Data></Cell>
+    <Cell><Data ss:Type="String">locationaccuracy</Data></Cell>
+    <Cell><Data ss:Type="String">stateprovince_vb</Data></Cell>
+    <Cell><Data ss:Type="String">country_vb</Data></Cell>
+    <Cell><Data ss:Type="String">original_classification_accessioncode</Data></Cell>
+    <Cell><Data ss:Type="String">original_community_accessioncode</Data></Cell>
+    <Cell><Data ss:Type="String">original_community_scientific</Data></Cell>
+    <Cell><Data ss:Type="String">original_community_code</Data></Cell>
+    <Cell><Data ss:Type="String">original_community_classifier</Data></Cell>
+    <Cell><Data ss:Type="String">current_classification_accessioncode</Data></Cell>
+    <Cell><Data ss:Type="String">current_community_accessioncode</Data></Cell>
+    <Cell><Data ss:Type="String">current_community_scientific</Data></Cell>
+    <Cell><Data ss:Type="String">current_community_code</Data></Cell>
+    <Cell><Data ss:Type="String">current_community_classifier</Data></Cell>
+    <Cell><Data ss:Type="String">bestfit_classification_accessioncode</Data></Cell>
+    <Cell><Data ss:Type="String">bestfit_community_accessioncode</Data></Cell>
+    <Cell><Data ss:Type="String">bestfit_community_scientific</Data></Cell>
+    <Cell><Data ss:Type="String">bestfit_community_code</Data></Cell>
+    <Cell><Data ss:Type="String">bestfit_community_classifier</Data></Cell>
+    <Cell><Data ss:Type="String">locationnarrative_vb</Data></Cell>
+    <Cell><Data ss:Type="String">azimuth</Data></Cell>
+    <Cell><Data ss:Type="String">dsgpoly_vb</Data></Cell>
+    <Cell><Data ss:Type="String">shape_vb</Data></Cell>
+    <Cell><Data ss:Type="String">area</Data></Cell>
+    <Cell><Data ss:Type="String">standsize_vb</Data></Cell>
+    <Cell><Data ss:Type="String">placementmethod_vb</Data></Cell>
+    <Cell><Data ss:Type="String">permanence_vb</Data></Cell>
+    <Cell><Data ss:Type="String">layoutnarrative_vb</Data></Cell>
+    <Cell><Data ss:Type="String">elevation</Data></Cell>
+    <Cell><Data ss:Type="String">elevationaccuracy</Data></Cell>
+    <Cell><Data ss:Type="String">elevationrange</Data></Cell>
+    <Cell><Data ss:Type="String">slopeaspect</Data></Cell>
+    <Cell><Data ss:Type="String">minslopeaspect</Data></Cell>
+    <Cell><Data ss:Type="String">maxslopeaspect</Data></Cell>
+    <Cell><Data ss:Type="String">slopegradient</Data></Cell>
+    <Cell><Data ss:Type="String">minslopegradient</Data></Cell>
+    <Cell><Data ss:Type="String">maxslopegradient</Data></Cell>
+    <Cell><Data ss:Type="String">topoposition_vb</Data></Cell>
+    <Cell><Data ss:Type="String">landform_vb</Data></Cell>
+    <Cell><Data ss:Type="String">surficialdeposits_vb</Data></Cell>
+    <Cell><Data ss:Type="String">rocktype_vb</Data></Cell>
+    <Cell><Data ss:Type="String">dateentered_vb</Data></Cell>
+    <Cell><Data ss:Type="String">covermethod_id_name</Data></Cell>
+    <Cell><Data ss:Type="String">coverdispersion_vb</Data></Cell>
+    <Cell><Data ss:Type="String">autotaxoncover_vb</Data></Cell>
+    <Cell><Data ss:Type="String">stratummethod_id_name</Data></Cell>
+    <Cell><Data ss:Type="String">methodnarrative_vb</Data></Cell>
+    <Cell><Data ss:Type="String">taxonobservationarea</Data></Cell>
+    <Cell><Data ss:Type="String">stemsizelimit</Data></Cell>
+    <Cell><Data ss:Type="String">stemobservationarea</Data></Cell>
+    <Cell><Data ss:Type="String">stemsamplemethod_vb</Data></Cell>
+    <Cell><Data ss:Type="String">originaldata_vb</Data></Cell>
+    <Cell><Data ss:Type="String">effortlevel_vb</Data></Cell>
+    <Cell><Data ss:Type="String">plotvalidationlevel</Data></Cell>
+    <Cell><Data ss:Type="String">floristicquality_vb</Data></Cell>
+    <Cell><Data ss:Type="String">bryophytequality_vb</Data></Cell>
+    <Cell><Data ss:Type="String">lichenquality_vb</Data></Cell>
+    <Cell><Data ss:Type="String">observationnarrative_vb</Data></Cell>
+    <Cell><Data ss:Type="String">landscapenarrative_vb</Data></Cell>
+    <Cell><Data ss:Type="String">homogeneity_vb</Data></Cell>
+    <Cell><Data ss:Type="String">phenologicaspect_vb</Data></Cell>
+    <Cell><Data ss:Type="String">representativeness_vb</Data></Cell>
+    <Cell><Data ss:Type="String">standmaturity_vb</Data></Cell>
+    <Cell><Data ss:Type="String">successionalstatus_vb</Data></Cell>
+    <Cell><Data ss:Type="String">basalarea</Data></Cell>
+    <Cell><Data ss:Type="String">hydrologicregime_vb</Data></Cell>
+    <Cell><Data ss:Type="String">soilmoistureregime_vb</Data></Cell>
+    <Cell><Data ss:Type="String">soildrainage_vb</Data></Cell>
+    <Cell><Data ss:Type="String">watersalinity_vb</Data></Cell>
+    <Cell><Data ss:Type="String">waterdepth</Data></Cell>
+    <Cell><Data ss:Type="String">shoredistance</Data></Cell>
+    <Cell><Data ss:Type="String">soildepth</Data></Cell>
+    <Cell><Data ss:Type="String">organicdepth</Data></Cell>
+    <Cell><Data ss:Type="String">soiltaxon_id_name</Data></Cell>
+    <Cell><Data ss:Type="String">soiltaxonsrc_vb</Data></Cell>
+    <Cell><Data ss:Type="String">percentbedrock</Data></Cell>
+    <Cell><Data ss:Type="String">percentrockgravel</Data></Cell>
+    <Cell><Data ss:Type="String">percentwood</Data></Cell>
+    <Cell><Data ss:Type="String">percentlitter</Data></Cell>
+    <Cell><Data ss:Type="String">percentbaresoil</Data></Cell>
+    <Cell><Data ss:Type="String">percentwater</Data></Cell>
+    <Cell><Data ss:Type="String">percentother</Data></Cell>
+    <Cell><Data ss:Type="String">nameother_vb</Data></Cell>
+    <Cell><Data ss:Type="String">treeht</Data></Cell>
+    <Cell><Data ss:Type="String">shrubht</Data></Cell>
+    <Cell><Data ss:Type="String">fieldht</Data></Cell>
+    <Cell><Data ss:Type="String">nonvascularht</Data></Cell>
+    <Cell><Data ss:Type="String">submergedht</Data></Cell>
+    <Cell><Data ss:Type="String">treecover</Data></Cell>
+    <Cell><Data ss:Type="String">shrubcover</Data></Cell>
+    <Cell><Data ss:Type="String">fieldcover</Data></Cell>
+    <Cell><Data ss:Type="String">nonvascularcover</Data></Cell>
+    <Cell><Data ss:Type="String">floatingcover</Data></Cell>
+    <Cell><Data ss:Type="String">submergedcover</Data></Cell>
+    <Cell><Data ss:Type="String">dominantstratum_vb</Data></Cell>
+    <Cell><Data ss:Type="String">growthform1type_vb</Data></Cell>
+    <Cell><Data ss:Type="String">growthform2type_vb</Data></Cell>
+    <Cell><Data ss:Type="String">growthform3type_vb</Data></Cell>
+    <Cell><Data ss:Type="String">growthform1cover</Data></Cell>
+    <Cell><Data ss:Type="String">growthform2cover</Data></Cell>
+    <Cell><Data ss:Type="String">growthform3cover</Data></Cell>
+    <Cell><Data ss:Type="String">totalcover</Data></Cell>
+    <Cell><Data ss:Type="String">observation_accessioncode_vb</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">5732</Data></Cell>
+    <Cell><Data ss:Type="String">GLAC.123</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">GLAC.123</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Glacier National Park</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="DateTime">1999-09-02T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="DateTime">1999-09-02T00:00:00.000</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">48.594247076000002</Data></Cell>
+    <Cell><Data ss:Type="Number">-113.417011698</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">Montana</Data></Cell>
+    <Cell><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="32"><Data ss:Type="String">From Cut Bank Pass Trailhead hike about 1.75 mi. to meadow area on right side of trail.  Plot center is about 6 paces from trail to NW.</Data></Cell>
+    <Cell ss:Index="35"><Data ss:Type="String">Circle</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="39"><Data ss:Type="Boolean">1</Data></Cell>
+    <Cell ss:Index="41"><Data ss:Type="Number">1588.00799758623</Data></Cell>
+    <Cell ss:Index="44"><Data ss:Type="Number">135</Data></Cell>
+    <Cell ss:Index="47"><Data ss:Type="Number">2.5</Data></Cell>
+    <Cell ss:Index="50"><Data ss:Type="String">Basin floor</Data></Cell>
+    <Cell><Data ss:Type="String">mountain valley</Data></Cell>
+    <Cell><Data ss:Type="String">Glacial Deposits: Till</Data></Cell>
+    <Cell ss:Index="54" ss:StyleID="s21"><Data ss:Type="DateTime">2004-11-19T00:00:00.000</Data></Cell>
+    <Cell><Data ss:Type="String">NPS CoverMethod</Data></Cell>
+    <Cell><Data ss:Type="String">contiguous</Data></Cell>
+    <Cell><Data ss:Type="Boolean">1</Data></Cell>
+    <Cell><Data ss:Type="String">National Park Service</Data></Cell>
+    <Cell ss:Index="61"><Data ss:Type="Number">10</Data></Cell>
+    <Cell ss:Index="63"><Data ss:Type="String">full census</Data></Cell>
+    <Cell ss:Index="65"><Data ss:Type="String">Thorough</Data></Cell>
+    <Cell ss:Index="67"><Data ss:Type="String">High but incomplete</Data></Cell>
+    <Cell><Data ss:Type="String">Very incomplete</Data></Cell>
+    <Cell><Data ss:Type="String">Very incomplete</Data></Cell>
+    <Cell><Data ss:Type="String">We've been seeing these forb-rich openings fairly frequently.  They seem to get heavy animal use, so feel they're an important component of landscape, even though they're sometimes fairly small (0.25 ac or so).  Some exotics in here, probably due to close</Data></Cell>
+    <Cell ss:Index="74"><Data ss:Type="String">good</Data></Cell>
+    <Cell ss:Index="80"><Data ss:Type="String">well drained</Data></Cell>
+    <Cell ss:Index="84"><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="88"><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">3</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">6</Data></Cell>
+    <Cell><Data ss:Type="Number">4</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="115"><Data ss:Type="String">VB.Ob.5732.GLAC123</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">24129</Data></Cell>
+    <Cell><Data ss:Type="String">F00OLI21_3a</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">F00OLI21_3a</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">NYNHP database dump 2004</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="DateTime">2000-07-19T00:00:00.000</Data></Cell>
+    <Cell ss:Index="10"><Data ss:Type="String">Exact</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">41.728560000000002</Data></Cell>
+    <Cell><Data ss:Type="Number">-73.561369999999997</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">New York</Data></Cell>
+    <Cell ss:Index="17"><Data ss:Type="String">VB.Cl.20790.24129</Data></Cell>
+    <Cell><Data ss:Type="String">VB.CC.28547.NYHERITAGERICHS</Data></Cell>
+    <Cell ss:Index="22"><Data ss:Type="String">VB.Cl.20790.24129</Data></Cell>
+    <Cell><Data ss:Type="String">VB.CC.28547.NYHERITAGERICHS</Data></Cell>
+    <Cell ss:Index="27"><Data ss:Type="String">VB.Cl.20790.24129</Data></Cell>
+    <Cell><Data ss:Type="String">VB.CC.28547.NYHERITAGERICHS</Data></Cell>
+    <Cell ss:Index="35"><Data ss:Type="String">square</Data></Cell>
+    <Cell><Data ss:Type="Number">100</Data></Cell>
+    <Cell ss:Index="39"><Data ss:Type="Boolean">0</Data></Cell>
+    <Cell ss:Index="41"><Data ss:Type="Number">440</Data></Cell>
+    <Cell ss:Index="47"><Data ss:Type="Number">8</Data></Cell>
+    <Cell ss:Index="50"><Data ss:Type="String">Lowslope</Data></Cell>
+    <Cell ss:Index="54" ss:StyleID="s21"><Data ss:Type="DateTime">2005-03-18T00:00:00.000</Data></Cell>
+    <Cell><Data ss:Type="String">NYNHP Percentage</Data></Cell>
+    <Cell><Data ss:Type="String">Entire</Data></Cell>
+    <Cell><Data ss:Type="Boolean">1</Data></Cell>
+    <Cell><Data ss:Type="String">NY Natural Heritage Program</Data></Cell>
+    <Cell ss:Index="60"><Data ss:Type="Number">100</Data></Cell>
+    <Cell ss:Index="62"><Data ss:Type="Number">100</Data></Cell>
+    <Cell><Data ss:Type="String">Full census</Data></Cell>
+    <Cell><Data ss:Type="String">NYNHP Field Forms Database or Geographical Manual Files</Data></Cell>
+    <Cell ss:Index="74"><Data ss:Type="String">good lythrum saliraria at top of this patch.</Data></Cell>
+    <Cell ss:Index="78"><Data ss:Type="String">Saturated</Data></Cell>
+    <Cell><Data ss:Type="String">Mesic</Data></Cell>
+    <Cell><Data ss:Type="String">very poorly drained</Data></Cell>
+    <Cell><Data ss:Type="String">Freshwater</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="85"><Data ss:Type="Number">90</Data></Cell>
+    <Cell ss:Index="88"><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">5</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="96"><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0.3</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">51</Data></Cell>
+    <Cell><Data ss:Type="Number">80</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell ss:Index="115"><Data ss:Type="String">VB.Ob.24129.F00OLI213A</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">24380</Data></Cell>
+    <Cell><Data ss:Type="String">1_1</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">1_1</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Walker LTER Project</Data></Cell>
+    <Cell ss:Index="11"><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">70.332999999999998</Data></Cell>
+    <Cell><Data ss:Type="Number">148.78299999999999</Data></Cell>
+    <Cell ss:Index="15"><Data ss:Type="String">Alaska</Data></Cell>
+    <Cell><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="36"><Data ss:Type="Number">12.5</Data></Cell>
+    <Cell ss:Index="39"><Data ss:Type="Boolean">0</Data></Cell>
+    <Cell ss:Index="47"><Data ss:Type="Number">12</Data></Cell>
+    <Cell ss:Index="54" ss:StyleID="s21"><Data ss:Type="DateTime">2005-03-28T00:00:00.000</Data></Cell>
+    <Cell><Data ss:Type="String">Percentage (%)</Data></Cell>
+    <Cell ss:Index="57"><Data ss:Type="Boolean">0</Data></Cell>
+    <Cell><Data ss:Type="String">No Strata</Data></Cell>
+    <Cell ss:Index="115"><Data ss:Type="String">VB.Ob.24380.11</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="Number">26038</Data></Cell>
+    <Cell><Data ss:Type="String">027-04-0402</Data></Cell>
+    <Cell ss:Index="5"><Data ss:Type="String">027-04-0402</Data></Cell>
+    <Cell ss:Index="7"><Data ss:Type="String">Carolina Vegetation Survey 27</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="DateTime">1997-05-13T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="DateTime">1997-05-13T00:00:00.000</Data></Cell>
+    <Cell><Data ss:Type="String">Exact</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">32.302246035000003</Data></Cell>
+    <Cell><Data ss:Type="Number">-80.830519776000003</Data></Cell>
+    <Cell><Data ss:Type="Number">100</Data></Cell>
+    <Cell><Data ss:Type="String">South Carolina</Data></Cell>
+    <Cell><Data ss:Type="String">United States</Data></Cell>
+    <Cell ss:Index="33"><Data ss:Type="Number">152</Data></Cell>
+    <Cell><Data ss:Type="String">(0,0);(0,10);(50,10);(50,-10);(0,-10);(0,0)</Data></Cell>
+    <Cell><Data ss:Type="String">rectangle</Data></Cell>
+    <Cell><Data ss:Type="Number">1000</Data></Cell>
+    <Cell ss:Index="39"><Data ss:Type="Boolean">1</Data></Cell>
+    <Cell ss:Index="41"><Data ss:Type="Number">6</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell ss:Index="44"><Data ss:Type="Number">60</Data></Cell>
+    <Cell ss:Index="47"><Data ss:Type="Number">2</Data></Cell>
+    <Cell ss:Index="51"><Data ss:Type="String">B</Data></Cell>
+    <Cell ss:Index="54" ss:StyleID="s21"><Data ss:Type="DateTime">2005-06-11T00:00:00.000</Data></Cell>
+    <Cell><Data ss:Type="String">Carolina Vegetation Survey</Data></Cell>
+    <Cell><Data ss:Type="String">subplot-contiguous</Data></Cell>
+    <Cell><Data ss:Type="Boolean">0</Data></Cell>
+    <Cell><Data ss:Type="String">Carolina Vegetation Survey</Data></Cell>
+    <Cell ss:Index="60"><Data ss:Type="Number">1000</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">1000</Data></Cell>
+    <Cell><Data ss:Type="String">full census</Data></Cell>
+    <Cell><Data ss:Type="String">UNC-CH, Peet</Data></Cell>
+    <Cell ss:Index="68"><Data ss:Type="String">Low</Data></Cell>
+    <Cell><Data ss:Type="String">low</Data></Cell>
+    <Cell ss:Index="88"><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="Number">83</Data></Cell>
+    <Cell><Data ss:Type="Number">15</Data></Cell>
+    <Cell><Data ss:Type="Number">0</Data></Cell>
+    <Cell><Data ss:Type="Number">1</Data></Cell>
+    <Cell><Data ss:Type="String">Bryo/Lichen</Data></Cell>
+    <Cell ss:Index="115"><Data ss:Type="String">VB.Ob.26038.027040402</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>
