@@ -49,6 +49,7 @@ function getHelpPageId() {
 </logic:equal>
   </div>
 <vegbank:pager />
+<form action="" method="GET" id="cartable">
 <table class="outsideborder" width="100%" cellpadding="0" cellspacing="0"><!--each field, only write when HAS contents-->
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
 
@@ -57,11 +58,8 @@ function getHelpPageId() {
 
 <bean:define id="delta_ac" name="onerow" property="accessioncode" />
 <tr><td colspan="4">
-    <form action="" method="GET" id="cartable">
        <%@ include file="../includes/datacart_checkbox.jsp" %> click to update datacart
-    </form>
 </td></tr>
-  @mark_datacart_items@
 
 <tr id="tut_plantuniversal<bean:write name='iterated' ignore='true'/>">
 <td colspan="4">
@@ -228,6 +226,8 @@ function getHelpPageId() {
 <bean:define id='iterated' value='_iterated'/>
 </logic:iterate> <!-- plant -->
 </table>
+</form>
+  @mark_datacart_items@
 
  <!-- concept -->
 
