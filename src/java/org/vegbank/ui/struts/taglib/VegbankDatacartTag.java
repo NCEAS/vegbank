@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-06-23 21:23:25 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2005-07-28 21:49:56 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,13 +45,14 @@ import org.vegbank.common.model.Userdatasetitem;
  * manages changes to the datacart.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.7 $ $Date: 2005-06-23 21:23:25 $
+ * @version $Revision: 1.8 $ $Date: 2005-07-28 21:49:56 $
  */
 
 public class VegbankDatacartTag extends VegbankTag {
 
     public static final String DELTA_DELIM = ":";
     public static final String DELTA_COUNT = "count";
+    public static final String DELTA_SET = "set";
     public static final String DELTA_ADD = "add";
     public static final String DELTA_DROP = "drop";
     public static final String DELTA_DROPALL = "dropall";
@@ -172,6 +173,12 @@ public class VegbankDatacartTag extends VegbankTag {
                         dsu.addItemsByAC(deltaItems); 
                         //log.debug("updating dataset...");
                         count = dsu.saveDataset();
+
+                    } else if (arrDelta[0].equals(DELTA_SET)) { 
+                        long dsId = Long.parseLong((String)deltaItems.get(0));
+                        log.debug("setting datacart: " + dsId);
+                        count = dsu.setDatacart(usrId.longValue(), dsId);
+                        session.setAttribute(Utility.DATACART_KEY, new Long(dsId));
 
                     } else if (arrDelta[0].equals(DELTA_FINDADD)) { 
                         if (deltaItems != null && deltaItems.size() > 0) {

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-22 23:41:23 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2005-07-28 21:49:56 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DatabaseAccess;
-import org.vegbank.common.model.Userdataset;
 import org.vegbank.common.model.Userdatasetitem;
+import org.vegbank.common.model.Userdataset;
 import org.vegbank.common.model.VBModelBean;
 
 
@@ -55,6 +55,9 @@ public class DatasetUtility
 	public static final String DATACART_DESC = "datacart";
 	public static final String SHARING_PRIVATE = "private";
 	public static final String ITEM_DB = "vegbank";
+	public static final String TYPE_NORMAL = "normal";
+	public static final String TYPE_LOAD = "load";
+	public static final String TYPE_DATACART = "datacart";
 	public static final Long ANON_USR_ID = null;  // anon usr_id is null
 
 	protected static Log log = LogFactory.getLog(DatasetUtility.class);
@@ -897,4 +900,94 @@ public class DatasetUtility
         return dsId;
     }
 
+    /**
+     * Sets a user's current datacart.  Changes the old
+     * datacart to a normal datacart. There can be only one.
+     * @param usr_id of dataset owner
+     * @param dsId of the target dataset
+     * @return count of items in chosen dataset
+     */
+    public long setDatacart(long usrId, long dsId)
+            throws SQLException {
+        if (usrId == 0) { log.warn("setDatacart was given usrId = 0"); }
+        long count = 0;
+
+        // check if datacart should be reset
+        if (dsId == -1) {
+            // reset datacart
+            // just bump old datacart and end
+            bumpDatacart(usrId);
+
+        } else {
+            // make sure user owns this dataset
+            Long lUsrId = getOwnerId(dsId);
+            if (lUsrId == null) { 
+                log.error("setDatacart: no owner for dsId = " + dsId); return 0;
+            }
+
+            if (lUsrId.longValue() != usrId) {
+                log.warn("setDatacart: DS owner does not match given usrId = " + usrId); return 0; 
+            }
+
+            // bump user's old datacart
+            bumpDatacart(usrId);
+
+            // activate given dataset as datacart
+            activateDatacart(dsId);
+
+            count = countItems(new Long(dsId));
+        }
+
+
+        return count;
+    }
+
+    /**
+     * Sets given dataset as datacart.
+     */
+    private void activateDatacart(long dsId)
+            throws SQLException {
+        updateDatasetType(dsId, TYPE_DATACART);
+    }
+
+
+    /**
+     * Sets a user's datacart to normal.
+     */
+    private void bumpDatacart(long usrId)
+            throws SQLException {
+        Userdataset uds = getDatacartByUser(new Long(usrId));
+        if (uds != null) {
+            long dsId = uds.getUserdataset_id();
+            updateDatasetType(dsId, TYPE_NORMAL);
+        }
+    }
+
+
+    /**
+     * 
+     */
+    private void updateDatasetType(long dsId, String newType) 
+            throws SQLException {
+        if (Utility.isStringNullOrEmpty(newType)) {
+            log.error("Given dataset type is empty");
+            return;
+        }
+
+        try {
+            StringBuffer query = new StringBuffer(64)
+                .append("UPDATE userdataset SET datasettype='")
+                .append(newType)
+                .append("' WHERE userdataset_id='")
+                .append(dsId)
+                .append("'");
+
+            log.debug("updating dataset type: " + query.toString());
+            da.issueUpdate(DatabaseUtility.removeSemicolons(query.toString()));
+
+        } catch (Exception ex) {
+            log.error("Exception while updating dataset type", ex);
+            throw new SQLException("Problem updating dataset type to " + newType + ": " + ex.toString());
+        }
+    }
 }

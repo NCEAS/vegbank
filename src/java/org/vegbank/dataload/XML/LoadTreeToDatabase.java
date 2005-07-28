@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-16 03:06:51 $'
- *	'$Revision: 1.23 $'
+ *	'$Date: 2005-07-28 21:49:56 $'
+ *	'$Revision: 1.24 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2283,7 +2283,7 @@ public class LoadTreeToDatabase
             log.debug("About to insert DSI list; size = " + dsiBeanList.size());
             DatasetUtility dsu = new DatasetUtility();
             AccessionCode dsAC = dsu.insertDataset(dsiBeanList, xmlFileName, 
-                    "Created via XML upload", "load", "private", usrId);
+                    "Created via XML upload", DatasetUtility.TYPE_LOAD, "private", usrId);
 
             log.debug("ADDED userdataset " + dsAC.toString());
             return dsAC;
