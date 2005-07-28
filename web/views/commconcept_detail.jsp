@@ -1,7 +1,8 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-
+  @ajax_js_include@
+  @datacart_js_include@
 
 
 
@@ -40,11 +41,43 @@ function getHelpPageId() {
              <p>Sorry, no community concepts match your criteria.</p>
           </logic:empty>
 <logic:notEmpty name="concept-BEANLIST"><!-- set up table -->
+
+  <logic:present parameter="where"> <!-- only add these in custom where situations -->
+  
+     <!--data cart -->
+      <!-- add all results -->
+  
+          <a href="javascript:addAllResults('commconcept');"
+              title="add all query results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" id="datacart-addallresults-icon" /></a>
+  
+          <a href="javascript:addAllResults('commconcept');"
+              title="add all results to datacart">add all query results</a> to datacart,&nbsp;&nbsp;
+  
+          <a href="javascript:addAllOnPage()" title="add all on page to datacart" class="nobg"><img src="/vegbank/images/cart_add_one.gif" border="0" /></a>
+          <a href="javascript:addAllOnPage()" title="add all on page">add plots on page</a> to datacart,&nbsp;&nbsp;
+                                                                                                                                                                                                    
+      <!-- drop page -->
+  
+          <a href="javascript:dropAllOnPage()" title="drop all on page from datacart" class="nobg"><img src="/vegbank/images/cart_drop_one.gif" border="0" /></a>
+          <a href="javascript:dropAllOnPage()" title="drop all on page">drop plots on page</a> from datacart
+   </logic:present>
+<%@ include file="../includes/setup_rowindex.jsp" %>
+      <logic:equal parameter="delta" value="findadd-accessioncode">
+          <vegbank:datacart delta="findadd:commconcept:commconcept:commconcept_id:accessioncode" deltaItems="getQuery" display="false" />
+    </logic:equal>
+    
+<form action="" method="GET" id="cartable">
 <table class="outsideborder" width="100%" cellpadding="0" cellspacing="0"><!--each field, only write when HAS contents-->
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
 
 <!-- tutorial note: here, id's are defined for first iteration only.  After first iteration _iterated is appened to id, those will NOT BE UNIQUE -->
 <tr id="tut_fullcomm<bean:write name='iterated' ignore='true'/>"><th class="major_smaller" colspan="4"><bean:write name="onerow" property="commname_id_transl"/> | <bean:write name="onerow" property="reference_id_transl"/></th></tr>
+
+<bean:define id="delta_ac" name="onerow" property="accessioncode" />
+<tr><td colspan="4">
+       <%@ include file="../includes/datacart_checkbox.jsp" %> click to update datacart
+</td></tr>
+
 <tr id="tut_communiversal<bean:write name='iterated' ignore='true'/>">
 <td colspan="4">
   <span class="datalabelsmall">Name: </span>
@@ -200,6 +233,9 @@ function getHelpPageId() {
 <bean:define id='iterated' value='_iterated'/> <!-- for tutorial -->
 </logic:iterate>
 </table>
+</form>
+@mark_datacart_items@
+
 
  <!-- concept -->
 

@@ -48,7 +48,33 @@ function getHelpPageId() {
 
 </logic:equal>
   </div>
-<vegbank:pager />
+  <logic:present parameter="where"> <!-- only add these in custom where situations -->
+  
+     <!--data cart -->
+      <!-- add all results -->
+  
+          <a href="javascript:addAllResults('plantconcept');"
+              title="add all query results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" id="datacart-addallresults-icon" /></a>
+  
+          <a href="javascript:addAllResults('plantconcept');"
+              title="add all results to datacart">add all query results</a> to datacart,&nbsp;&nbsp;
+  
+          <a href="javascript:addAllOnPage()" title="add all on page to datacart" class="nobg"><img src="/vegbank/images/cart_add_one.gif" border="0" /></a>
+          <a href="javascript:addAllOnPage()" title="add all on page">add plots on page</a> to datacart,&nbsp;&nbsp;
+                                                                                                                                                                                                    
+      <!-- drop page -->
+  
+          <a href="javascript:dropAllOnPage()" title="drop all on page from datacart" class="nobg"><img src="/vegbank/images/cart_drop_one.gif" border="0" /></a>
+          <a href="javascript:dropAllOnPage()" title="drop all on page">drop plots on page</a> from datacart
+   </logic:present>
+<%@ include file="../includes/setup_rowindex.jsp" %>
+      <logic:equal parameter="delta" value="findadd-accessioncode">
+          <vegbank:datacart delta="findadd:plantconcept:plantconcept:plantconcept_id:accessioncode" deltaItems="getQuery" display="false" />
+    </logic:equal>
+  
+ <vegbank:pager />
+  
+  
 <form action="" method="GET" id="cartable">
 <table class="outsideborder" width="100%" cellpadding="0" cellspacing="0"><!--each field, only write when HAS contents-->
 <logic:iterate id="onerow" name="concept-BEANLIST"><!-- iterate over all records in set : new table for each -->
