@@ -23,8 +23,6 @@ function getHelpPageId() {
    <a href="javascript:void setupConfig('<bean:write name='thisviewid' />');">Configure data displayed on this page</a>
      </TD></TR></TABLE>
         
-<!--Get standard declaration of rowClass as string: -->
-        <% String rowClass = "evenrow"; %>
          <% String rowClassReset = "evenrow"; %>
         <vegbank:get id="taxonobservation" select="taxonobservation" beanName="map" pager="true" 
            whereNumeric="where_taxonobservation_pk"/>

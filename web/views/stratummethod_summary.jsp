@@ -15,8 +15,6 @@
  @webpage_masthead_html@ 
   @possibly_center@  
 <h2>View VegBank Stratum Methods</h2>
-<!--Get standard declaration of rowClass as string: -->
-        <% String rowClass = "evenrow"; %>
         <vegbank:get id="stratummethod" select="stratummethod" beanName="map" pager="true"  
           allowOrderBy="true" xwhereEnable="true"/>
 

@@ -14,7 +14,7 @@ function getHelpPageId() {
 </script>
 
 <title>View Plants on Plots: VegBank</title>
-<%     String rowClass = "evenrow";  %>
+
 
 <%@ include file="includeviews/inlinestyles.jsp" %>
 

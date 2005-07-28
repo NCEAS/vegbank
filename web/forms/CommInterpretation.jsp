@@ -192,7 +192,6 @@
 <!-- extant interps -->
 <br/> <br/> <br/>
 <h3>Other Interpretations</h3>
-<% String rowClass = "evenrow"; %>
 <vegbank:get id="commclass" select="commclass" beanName="map" pager="false" where="where_observation_pk" wparam="obsId" perPage="-1" />
 <%@ include file="../views/includeviews/sub_commclass_summary.jsp" %>
  

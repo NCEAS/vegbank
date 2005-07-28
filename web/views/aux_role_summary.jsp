@@ -50,7 +50,6 @@
 	 <th>    Community Interpretation     </th>
 	 </logic:equal>		     
            </tr>
-           <%      String rowClass = "evenrow";   %>
           <logic:iterate id="onerowofaux_role" name="MY_ROLES-BEANLIST">     
            
            <tr class='@nextcolorclass@'>

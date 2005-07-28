@@ -11,8 +11,6 @@
 <h2>Browse Plots By Party</h2>
 
 
-<!--Get standard declaration of rowClass as string: -->
-        <% String rowClass = "evenrow"; %>
 
 
         <vegbank:get id="browseparty" select="browseparty" 

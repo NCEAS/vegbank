@@ -6,10 +6,6 @@
 
   
    <%
-                       //**************************************************************************************
-                       //  Set up alternating row colors
-                       //**************************************************************************************
-                       String rowClass = "evenrow";
      int inttemp=0 ; 
      String howManyPlantsComplex="3"; // this many plants if complex query
      String howManyPlantsDefault="5"; // this many plants if default query (overrides above)

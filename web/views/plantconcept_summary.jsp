@@ -98,12 +98,6 @@ function getHelpPageId() {
   
   <th>Description</th><th>Accession Code</th>
 </tr>
-   <%
-		       //**************************************************************************************
-		       //  Set up alternating row colors
-		       //**************************************************************************************
-		       String rowClass = "evenrow";
-    %>
     
      <bean:define id="addSelectButton" value="no" />
      <logic:present parameter="requestingForm">

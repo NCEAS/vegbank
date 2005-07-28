@@ -5,7 +5,6 @@
   @ajax_js_include@
   @datacart_js_include@
 
-   <%     String rowClass = "evenrow";  %>
 <title>VegBank Comprehensive Plot View</title>
 <script type="text/javascript">
 function getHelpPageId() {

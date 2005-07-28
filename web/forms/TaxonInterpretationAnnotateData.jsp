@@ -213,9 +213,7 @@ org.vegbank.common.command.GenericCommandStatic.execute(
 		  <th>Confidence</th>
 		  <th>Party</th>
 	 </tr>
-<%
-String rowClass = "evenrow";
-%>
+
 <vegbank:get id="taxoninterpretation" select="taxoninterpretation" beanName="map"
   where="where_taxonobservation_pk" wparam="tobsId" pager="false" perPage="-1"/>
 

@@ -15,7 +15,6 @@
  <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  <h2>View VegBank Community Classifications</h2>
-<% String rowClass = "evenrow"; %>
 <vegbank:get id="commclass" select="commclass" beanName="map" pager="true"/>
 <vegbank:pager />
 

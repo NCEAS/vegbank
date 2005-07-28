@@ -16,8 +16,6 @@ function getHelpPageId() {
         <h2>Browse VegBank Plants</h2>
         <p class="instructions">With this page, you can browse through plant concepts in VegBank.  For more search options, please see
         the <a href="@forms_link@PlantQuery.jsp">plant query</a>. </p> 
-<!--Get standard declaration of rowClass as string: -->
-        <% String rowClass = "evenrow"; %>
  <div  id="tut_browseplantsbyname">
  <h3>By Name</h3>
  <p> 

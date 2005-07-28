@@ -140,7 +140,6 @@ if (searchString ==  null || searchString.equals("")) {
 <br/>
 <logic:notEmpty name="meta-BEANLIST">
 <!-- start metasearch results --> <!-- this tag needed for Mozilla Search Plugin -->
-<% String rowClass = "evenrow"; %>
 
 	<table bgcolor="#333333" cellspacing="0" cellpadding="1" border="0" align="center">
 	<tr><td><table bgcolor="#FFFFFF" border="0" cellspacing="0" cellpadding="10" width="250">

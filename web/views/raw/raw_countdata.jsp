@@ -1,5 +1,4 @@
   @stdvegbankget_jspdeclarations@
-  <% String rowClass = "evenrow" ; %>
   
   <table class="leftrightborders" cellpadding="1">
        <vegbank:get select="observation_summ" beanName="map" />

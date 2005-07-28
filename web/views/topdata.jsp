@@ -2,7 +2,6 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
   <!-- variables for this page -->
-<% String rowClass = "evenrow"; %>
 <% String currentNum = ""; %> <!-- what number am I on? -->
 <% String allNums = "12345"; %> <!-- what set of string represents all numbers? -->
 <% String howManyPerPage = "6" ; %> <!-- how many records to show perPage intially? -->

@@ -1,5 +1,4 @@
 @stdvegbankget_jspdeclarations@
-<% String rowClass = "evenrow" ; %>
 
 <!-- this is the raw one -->
 

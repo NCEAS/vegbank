@@ -17,12 +17,7 @@
 <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@
  @possibly_center@ 
-   <%
-		       //**************************************************************************************
-		       //  Set up alternating row colors
-		       //**************************************************************************************
-		       String rowClass = "evenrow";
-    %>
+
 <vegbank:get select="usercertification_approved" beanName="map" pager="true"/>
 <vegbank:pager />
 <logic:empty name="BEANLIST">

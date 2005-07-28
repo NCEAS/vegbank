@@ -14,7 +14,7 @@
 <h1>Data Currently in VegBank </h1>
 <div align="center">
 <table class="leftrightborders" cellpadding="2">
-<% String rowClass = "evenrow"; %>
+
 <vegbank:get select="observation_summ" beanName="map" />
  <logic:empty name="BEANLIST">
   <tr class="@nextcolorclass@"><td colspan="2">ERROR! There are no observations!</td></tr>
