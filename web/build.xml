@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-07-28 00:49:11 $'
-* '$Revision: 1.177 $'
+* '$Date: 2005-07-28 21:23:58 $'
+* '$Revision: 1.178 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -422,7 +422,7 @@
       <fileset dir="${views}/custom" includes="*jsp" excludes="**/CVS* "/>
     </copy>
     <copy overwrite="${forceoverwrite}" todir="${views_server}" filtering="yes">
-      <fileset dir="${views}" includes="**/*jsp **/*html" excludes="**/CVS* "/>
+      <fileset dir="${views}" includes="**/*jsp **/*html" excludes="**/CVS* template_datacart.jsp"/>
     </copy>
     <antcall target="cache" />
   </target>
