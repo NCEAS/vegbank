@@ -56,12 +56,7 @@ csv_<xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>=SELECT <
 
       @possibly_center@
         <h2>View VegBank <xsl:value-of select="entityLabel"/>s</h2>
-        <xsl:comment>Get standard declaration of rowClass as string: </xsl:comment>
         
-        <xsl:text disable-output-escaping="yes">
-        &lt;% String rowClass = "evenrow"; %&gt;
-        </xsl:text>
-
        
        
         <xsl:element name="vegbank:get">
