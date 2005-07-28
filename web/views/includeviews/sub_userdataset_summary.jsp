@@ -1,11 +1,7 @@
 <!-- this is a sub form that should be included in another .jsp that gets the datasets needed.  This form displays the contents of the dataset -->
-   <%
-		       //**************************************************************************************
-		       //  Set up alternating row colors
-		       //**************************************************************************************
-		       String rowClass = "evenrow";
-    %>
-<vegbank:pager />
+<logic:notPresent name="forceAll" >
+  <vegbank:pager />
+</logic:notPresent>
 <logic:empty name="userdataset-BEANLIST">
                 <p>Sorry, no Datasets found! <% if ( strWebUserId == "-1" ) {  %> you are not logged on. <% } %></p>
           </logic:empty>
@@ -13,6 +9,7 @@
 
 <table class="leftrightborders" cellpadding="1"><!--each field, only write when HAS contents-->
 <tr>
+<th>Datacart</th>
 <%@ include file="../autogen/userdataset_summary_head.jsp" %>
 <th>ITEMS</th>
 </tr>
@@ -21,6 +18,13 @@
 
 
 <tr  class="@nextcolorclass@">
+<td>
+ <logic:notEqual name="onerowofuserdataset" property="datasettype" value="load">
+<form method="post" action="@views_link@datacart_detail.jsp"><input type="hidden" name="delta" value="set" />
+                    <input type="hidden" name="deltaItems" value="<bean:write name='onerowofuserdataset' property='userdataset_id' />" />
+                    <input type="submit" value="datacart" />
+                    </form>
+                    </logic:notEqual>
 <%@ include file="../autogen/userdataset_summary_data.jsp" %>
 
 <!-- show dataset items -->
@@ -74,4 +78,6 @@
 
 </logic:notEmpty>
 
-<vegbank:pager />
+<logic:notPresent name="forceAll" >
+  <vegbank:pager />
+</logic:notPresent>

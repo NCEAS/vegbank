@@ -1,12 +1,7 @@
 <!-- this is a sub form that should be included in another .jsp that gets the datasets needed.  This form displays the contents of the dataset -->
 <!-- note: most often, you'll need to see just one dataset at a time in this form.  If so, pager will apply to DATASETITEMS.  Else, pager still applies to dataset -->
 
-   <%
-		       //**************************************************************************************
-		       //  Set up alternating row colors
-		       //**************************************************************************************
-		       String rowClass = "evenrow";
-    %>
+ 
 <logic:empty name="userdataset-BEANLIST">
                 <p>This dataset is empty.</p>
           </logic:empty>

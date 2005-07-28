@@ -5,6 +5,7 @@
   @datacart_js_include@
 <!-- purpose : show datacart (singular selected dataset) for the user -->
  
+   
 <TITLE>Your Datacart</TITLE>
 <script type="text/javascript">
 function getHelpPageId() {
@@ -76,6 +77,13 @@ function getHelpPageId() {
 <h2>Other Datasets</h2>
 <p class="instructions">
 Switch the datacart to another dataset here.</p>
-<p>COMING SOON!</p>
+<!-- set perPage to -1 -->
+<bean:define id="perPage" value="-1" />
+<!-- sets to force all datasets to be displayed: -->
+<bean:define id="forceAll" value="true" />
+  <!-- do the right get -->
+ <%@ include file="includeviews/sub_getuserdatasets.jsp" %>
+  <!-- display stuff -->
+<%@ include file="includeviews/sub_userdataset_summary.jsp" %>
 
           @webpage_footer_html@
