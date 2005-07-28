@@ -85,7 +85,7 @@ function getHelpPageId() {
       </a> 
       <logic:notPresent name="datacart_contains_commconcept"> 
         You have <strong>no communities</strong> in your datacart.  
-        <a href="@forms_link@CommQuery.jsp">Search for plants here.</a>
+        <a href="@forms_link@CommQuery.jsp">Search for communities here.</a>
       
       </logic:notPresent>
       <br/>
@@ -94,7 +94,19 @@ function getHelpPageId() {
     </p>
 
 
-<p><a href="@views_link@datacart_detail.jsp?delta=set&deltaItems=-1">Create a new datacart.</a> This saves the current one. </p>
+<p><strong>Save the datacart</strong><br/>
+You can save this datacart and start adding more items to a new one, if you are logged in. </p>
+      <% if ( strWebUserId != "-1" ) {  %>  
+        <!-- you are logged in --> 
+        <p>
+          <a href="@views_link@datacart_detail.jsp?delta=set&deltaItems=-1">Create a new datacart.</a>
+          This saves the current datacart to your account. 
+        </p> 
+      <% } %>
+      <% if ( strWebUserId == "-1" ) {  %>  
+              You are not logged in. 
+              You can <a href="@general_link@login.jsp">Login Here.</a> 
+      <% } %>
 
 </logic:notEmpty>
 
