@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-28 21:49:56 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2005-07-28 23:19:50 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -636,7 +636,7 @@ public class DatasetUtility
             query.append("='").append(usrId).append("' ");
         }
 
-        query.append(" AND datasettype='").append(DATACART_NAME).append("'");
+        query.append(" AND datasettype='").append(TYPE_DATACART).append("'");
         return retrieveDatasetFromDB(query.toString());
     }
 
@@ -703,7 +703,7 @@ public class DatasetUtility
 
             if (ds == null) {
                 ds = createDataset(null, dsName, DATACART_DESC, 
-                        DATACART_NAME, SHARING_PRIVATE, ANON_USR_ID);
+                        TYPE_DATACART, SHARING_PRIVATE, ANON_USR_ID);
             }
         } catch (SQLException ex) {
             log.error("Problem creating anon datacart named " + dsName, ex);
@@ -733,7 +733,7 @@ public class DatasetUtility
             if (ds == null) {
                 log.debug("+ + + creating new empty datacart + + + usr_id: " + usrId);
                 ds = createDataset(null, sessionId, sessionId, 
-                        DATACART_NAME, SHARING_PRIVATE, usrId);
+                        TYPE_DATACART, SHARING_PRIVATE, usrId);
                 AccessionCode dsAC = insertDataset(ds);
                 if (dsAC != null) { 
                     log.debug("inserted new dataset as datacart: " + dsAC.toString());
@@ -954,12 +954,31 @@ public class DatasetUtility
     /**
      * Sets a user's datacart to normal.
      */
-    private void bumpDatacart(long usrId)
+    public void bumpDatacart(long usrId)
             throws SQLException {
+                /*
         Userdataset uds = getDatacartByUser(new Long(usrId));
         if (uds != null) {
             long dsId = uds.getUserdataset_id();
+            log.debug("bumping old datacart: " + dsId);
             updateDatasetType(dsId, TYPE_NORMAL);
+        }
+        */
+        try {
+            StringBuffer query = new StringBuffer(64)
+                .append("UPDATE userdataset SET datasettype='")
+                .append(TYPE_NORMAL)
+                .append("' WHERE datasettype='")
+                .append(TYPE_DATACART)
+                .append("' AND usr_id='")
+                .append(usrId)
+                .append("'");
+
+            log.debug("bumping datacarts: " + query.toString());
+            da.issueUpdate(DatabaseUtility.removeSemicolons(query.toString()));
+        } catch (Exception ex) {
+            log.error("Exception while bumping datacarts", ex);
+            throw new SQLException("Problem bumping datacarts" + ex.toString());
         }
     }
 
@@ -990,4 +1009,28 @@ public class DatasetUtility
             throw new SQLException("Problem updating dataset type to " + newType + ": " + ex.toString());
         }
     }
+
+
+    /**
+     * 
+     */
+    public void setOwner(long usrId, long dsId)
+            throws SQLException {
+        try {
+            StringBuffer query = new StringBuffer(64)
+                .append("UPDATE userdataset SET usr_id='")
+                .append(usrId)
+                .append("' WHERE userdataset_id='")
+                .append(dsId)
+                .append("'");
+
+            log.debug("updating dataset owner: " + query.toString());
+            da.issueUpdate(DatabaseUtility.removeSemicolons(query.toString()));
+
+        } catch (Exception ex) {
+            log.error("Exception while updating dataset owner", ex);
+            throw new SQLException("Problem updating dataset owner to " + usrId + ": " + ex.toString());
+        }
+    }
+
 }

@@ -16,8 +16,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.vegbank.common.Constants;
 import org.vegbank.common.model.WebUser;
+import org.vegbank.common.model.Userdataset;
 import org.vegbank.common.utility.PermComparison;
 import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.DatasetUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
 
 /*
@@ -26,8 +28,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-19 01:27:31 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2005-07-28 23:19:50 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -149,11 +151,29 @@ public class LogonAction extends VegbankAction
 
 		// Save the logged-in user's ID in session
 		HttpSession session = request.getSession();
-		session.setAttribute(Constants.USER_KEY, user.getUseridLong());
+		Long usrId = user.getUseridLong();
+		session.setAttribute(Constants.USER_KEY, usrId);
 		session.setMaxInactiveInterval(-1);  // never timeout
 
 		log.debug("LogonAction: User '"+ user.getUsername() + 
 				"' authenticated in session " + session.getId());
+
+        //
+        // DATACART
+        // If session has datacart, bump old dc and set ownership of current.
+        //
+        try {
+            DatasetUtility dsu = new DatasetUtility(); 
+            Userdataset datacart = dsu.getDatacart(session);
+            if (datacart != null) {
+                log.debug("claiming datacart for user");
+                dsu.bumpDatacart(usrId.longValue());
+                dsu.setOwner(usrId.longValue(), datacart.getUserdataset_id());
+                dsu.setDatacart(usrId.longValue(), datacart.getUserdataset_id());
+            }
+        } catch (java.sql.SQLException sex) {
+            log.error("Problem while setting datacart for logged in user", sex);
+        }
 
 		// Remove the obsolete form bean
 		if (mapping.getAttribute() != null) {
