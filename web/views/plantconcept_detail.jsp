@@ -1,8 +1,10 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
+  @ajax_js_include@
+  @datacart_js_include@
  
-<TITLE>View VegBank Plant Concepts</TITLE>
+<TITLE>VegBank Plant Concept Detail</TITLE>
 <script type="text/javascript">
 function getHelpPageId() {
   return "view-plant-detail";
@@ -14,7 +16,7 @@ function getHelpPageId() {
  @webpage_masthead_html@ 
   @possibly_center@ 
 
-<h2>View Plant Concepts</h2>
+<h2>Plant Concept Detail</h2>
   <vegbank:get id="concept" select="plantconcept" beanName="map" pager="true" xwhereEnable="true"
    allowOrderBy="true" orderBy="xorderby_plantname"
     />
@@ -53,6 +55,14 @@ function getHelpPageId() {
 <!-- tutorial note: here, id's are defined for first iteration only.  After first iteration _iterated is appened to id, those will NOT BE UNIQUE -->
 <tr id="tut_fullplant<bean:write name='iterated' ignore='true'/>"><th class="major_smaller" colspan="4"><bean:write name="onerow" property="plantname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]</th></tr>
 
+<bean:define id="delta_ac" name="onerow" property="accessioncode" />
+<tr><td colspan="4">
+    <form action="" method="GET" id="cartable">
+       <%@ include file="../includes/datacart_checkbox.jsp" %> click to update datacart
+    </form>
+</td></tr>
+  @mark_datacart_items@
+
 <tr id="tut_plantuniversal<bean:write name='iterated' ignore='true'/>">
 <td colspan="4">
 <span class="datalabelsmall">Name: </span><bean:write name="onerow" property="plantname_id_transl"/><br/>
@@ -89,6 +99,7 @@ function getHelpPageId() {
   </logic:notEqual>
 
 </td></tr>
+
 
 <vegbank:get id="plantstatus" select="plantstatus" where="where_plantconcept_pk" beanName="map" wparam="concId" perPage="-1" pager="false"/>
 
