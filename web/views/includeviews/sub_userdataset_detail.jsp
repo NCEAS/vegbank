@@ -50,7 +50,7 @@ Items in this dataset:
 <vegbank:get id="userdatasetitem" select="userdatasetitem" beanName="map" 
   where="where_userdataset_pk" wparam="ud_id" pager="true" perPage="<%= beanPerPage %>" pageNumber="<%= beanPageNumber %>" />
    <logic:empty name="userdatasetitem-BEANLIST">
-      No dataset items are in the dataset.
+      Nothing is in the dataset.
    </logic:empty>
 
 <logic:notEmpty name="userdatasetitem-BEANLIST">
@@ -91,6 +91,16 @@ Items in this dataset:
   </logic:equal>
 &nbsp; </td>
 </tr>
+  <!-- this defines specific variables to use in datacart -->
+  <logic:equal name="onerowofuserdataset" property="datasettype" value="datacart">
+    <logic:equal name="onerowofuserdatasetitem" property="itemtable" value="plantconcept">
+      <bean:define id="datacart_contains_plantconcept" value="true" />
+    </logic:equal>
+    <logic:equal name="onerowofuserdatasetitem" property="itemtable" value="commconcept">
+      <bean:define id="datacart_contains_commconcept" value="true" />
+    </logic:equal>
+  </logic:equal>
+
 </logic:iterate>
 <!-- if you've made it this far, and you are NOT paginating datasetitems, but HAVE reached the number of iterations as perPage, then provide link to full dataset -->
   <logic:equal name="paginateMain" value="true">

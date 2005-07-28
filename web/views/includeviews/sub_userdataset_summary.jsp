@@ -19,12 +19,13 @@
 
 <tr  class="@nextcolorclass@">
 <td>
- <logic:notEqual name="onerowofuserdataset" property="datasettype" value="load">
+ <logic:equal name="onerowofuserdataset" property="datasettype" value="normal">
 <form method="post" action="@views_link@datacart_detail.jsp"><input type="hidden" name="delta" value="set" />
                     <input type="hidden" name="deltaItems" value="<bean:write name='onerowofuserdataset' property='userdataset_id' />" />
-                    <input type="submit" value="datacart" />
+                    <input type="submit" value="activate" />
                     </form>
-                    </logic:notEqual>
+                    </logic:equal>
+                    
 <%@ include file="../autogen/userdataset_summary_data.jsp" %>
 
 <!-- show dataset items -->
@@ -34,7 +35,7 @@
 <vegbank:get id="userdatasetitem" select="userdatasetitem_counts" beanName="map" 
   where="where_userdataset_pk" wparam="ud_id" perPage="-1" />
    <logic:empty name="userdatasetitem-BEANLIST">
-                Nothing is in this dataset!
+                Nothing is in the dataset.
    </logic:empty>
 
 <logic:notEmpty name="userdatasetitem-BEANLIST">
