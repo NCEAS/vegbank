@@ -60,7 +60,7 @@ if (ok) {
       Please choose a download file data format, then click the download button.</p>
 			<ul class="compact">
               <li class="evenrow padded"> <input type="radio" value="flat" name="formatType" checked="checked" /><img src="@images_link@csv_icon.gif" alt="csv format" />
-              <strong>Comma-Separated Values</strong>
+              <strong>Comma-Separated Values - Plots only</strong> - <a target="_blank" href="@forms_link@examples/download_csv_explanation.jsp">More Information</a>
 
                   <blockquote> 
                     CSV files are generic spreadsheet files that can be imported into virtually any spreadsheet or database

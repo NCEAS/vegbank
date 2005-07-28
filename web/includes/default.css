@@ -337,6 +337,12 @@ TH, TH.normal	{
 	font-size: 10pt;
 	background-color : #e6e6cf;
 	}
+/* this is a row that defines what this row is */
+.rowDefn {
+    background-color : #e6e6cf;
+    font-size: 8pt;
+    font-color : #333333;
+    }
 
 .sorted {
 	background-color : #a9a95a;
