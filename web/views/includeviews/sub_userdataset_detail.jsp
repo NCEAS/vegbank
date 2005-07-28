@@ -2,9 +2,14 @@
 <!-- note: most often, you'll need to see just one dataset at a time in this form.  If so, pager will apply to DATASETITEMS.  Else, pager still applies to dataset -->
 
  
-<logic:empty name="userdataset-BEANLIST">
-                <p>This dataset is empty.</p>
-          </logic:empty>
+ <logic:empty name="userdataset-BEANLIST">
+   <p>Sorry, no Datasets found! 
+      <% if ( strWebUserId == "-1" ) {  %>  
+        You are not logged in. 
+        <a href="@general_link@login.jsp">Login Here.</a> 
+      <% } %>
+   </p>
+ </logic:empty>
 <logic:notEmpty name="userdataset-BEANLIST"><!-- set up table -->
 
 <bean:define id="mainPagerAsBean">
