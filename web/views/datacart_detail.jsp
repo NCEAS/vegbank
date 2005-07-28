@@ -74,13 +74,20 @@ function getHelpPageId() {
       <a href="@get_link@std/observation/<%= lngDatacartId.toString() %>?where=where_datacart_obs_hasplants&criteriaAsText=Plots+with+plants+in+your+datacart">
         Query for plots matching plants in your datacart
       </a> 
-      <logic:notPresent name="datacart_contains_plantconcept"> You have no plants in your datacart </logic:notPresent>
+      <logic:notPresent name="datacart_contains_plantconcept"> 
+        You have <strong>no plants</strong> in your datacart.  
+        <a href="@forms_link@PlantQuery.jsp">Search for plants here.</a>
+      </logic:notPresent>
       
       <br/>
       <a href="@get_link@std/observation/<%= lngDatacartId.toString() %>?where=where_datacart_obs_hascomms&criteriaAsText=Plots+interpreted+as+communities+in+your+datacart">
         Query for plots interpreted as a community in your datacart
       </a> 
-      <logic:notPresent name="datacart_contains_commconcept"> You have no communities in your datacart </logic:notPresent>
+      <logic:notPresent name="datacart_contains_commconcept"> 
+        You have <strong>no communities</strong> in your datacart.  
+        <a href="@forms_link@CommQuery.jsp">Search for plants here.</a>
+      
+      </logic:notPresent>
       <br/>
       
       

@@ -2,9 +2,14 @@
 <logic:notPresent name="forceAll" >
   <vegbank:pager />
 </logic:notPresent>
-<logic:empty name="userdataset-BEANLIST">
-                <p>Sorry, no Datasets found! <% if ( strWebUserId == "-1" ) {  %> you are not logged on. <% } %></p>
-          </logic:empty>
+ <logic:empty name="userdataset-BEANLIST">
+   <p>Sorry, no Datasets found! 
+      <% if ( strWebUserId == "-1" ) {  %>  
+        You are not logged in. 
+        <a href="@general_link@login.jsp">Login Here.</a> 
+      <% } %>
+   </p>
+ </logic:empty>
 <logic:notEmpty name="userdataset-BEANLIST"><!-- set up table -->
 
 <table class="leftrightborders" cellpadding="1"><!--each field, only write when HAS contents-->
