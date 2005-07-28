@@ -18005,7 +18005,6 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Description of dataset.</attDefinition>
       <attForms>
-        <formShow name="Summary">7</formShow>
         <formShow name="Detail">7</formShow>
         <formShow name="csvvegbranch">488</formShow>
       </attForms>
@@ -18063,7 +18062,6 @@ conditions may change between resampling events.
       <attNotes>public, private, password</attNotes>
       <attDefinition>OK to share this dataset with others?  Note that the dataset must be public or password-protected to be accessed via the accessionCode.</attDefinition>
       <attForms>
-        <formShow name="Summary">9</formShow>
         <formShow name="Detail">9</formShow>
         <formShow name="csvvegbranch">490</formShow>
       </attForms>
