@@ -32,6 +32,10 @@ function getHelpPageId() {
   <vegbank:get id="userdataset" select="userdataset" beanName="map" 
   where="where_userdataset_pk" wparam="<%= lngDatacartId.toString() %>" pager="false"/>
 
+<logic:empty name="userdataset-BEANLIST">
+  Your datacart is empty.  Click items after searching for or viewing data to add them to your datacart.
+</logic:empty>
+
 <logic:notEmpty name="userdataset-BEANLIST">
 
 <div style="clear:both; display: block;">
@@ -55,28 +59,45 @@ function getHelpPageId() {
             <span class="instructions">WARNING: dropping all items cannot be undone</span>
         </td>
     </tr>
-    <tr><td colspan="2"><!-- query by datacart -->
-      <strong>Query using the datacart:</strong><br/>
-      <a href="@get_link@std/observation/<%= lngDatacartId.toString() %>?where=where_datacart_obs_hasplants&criteriaAsText=Plots+with+plants+in+your+datacart">
-        Query for plots matching plants in your datacart
-      </a> <br/>
-      <a href="@get_link@std/observation/<%= lngDatacartId.toString() %>?where=where_datacart_obs_hascomms&criteriaAsText=Plots+interpreted+as+communities+in+your+datacart">
-        Query for plots interpreted as a community in your datacart
-      </a> <br/>
-      
-      
     
-    </td></tr>
+    
     </table>
     </div>
-</logic:notEmpty>
+
 
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>
 
-<br/><hr/><br/>
+<p>
+<!-- query by datacart -->
+      <br/>
+      <strong>Query using the datacart:</strong><br/>
+      <a href="@get_link@std/observation/<%= lngDatacartId.toString() %>?where=where_datacart_obs_hasplants&criteriaAsText=Plots+with+plants+in+your+datacart">
+        Query for plots matching plants in your datacart
+      </a> 
+      <logic:notPresent name="datacart_contains_plantconcept"> You have no plants in your datacart </logic:notPresent>
+      
+      <br/>
+      <a href="@get_link@std/observation/<%= lngDatacartId.toString() %>?where=where_datacart_obs_hascomms&criteriaAsText=Plots+interpreted+as+communities+in+your+datacart">
+        Query for plots interpreted as a community in your datacart
+      </a> 
+      <logic:notPresent name="datacart_contains_commconcept"> You have no communities in your datacart </logic:notPresent>
+      <br/>
+      
+      
+    </p>
+
+
+<p><a href="@views_link@datacart_detail.jsp?delta=set&deltaItems=-1">Create a new datacart.</a> This saves the current one. </p>
+
+</logic:notEmpty>
+
+
+
+<hr/><br/>
 <h2>Other Datasets</h2>
 <p class="instructions">
-Switch the datacart to another dataset here.</p>
+You can activate another dataset to make it the current datacart by pressing the "activate" button
+next to another dataset, if you have another dataset.  You must be logged in to do so.</p>
 <!-- set perPage to -1 -->
 <bean:define id="perPage" value="-1" />
 <!-- sets to force all datasets to be displayed: -->
