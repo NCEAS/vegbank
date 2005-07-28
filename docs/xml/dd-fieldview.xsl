@@ -10,10 +10,6 @@
   <xsl:output method="html"/>
   <xsl:template match="/dataModel">
   <xsl:for-each select="entity/attribute">
-   <redirect:write file="{$htmlPrefix}~field_id~{attID}~defn.html">
-     <xsl:comment> definition of: <xsl:value-of select="../entityName" />.<xsl:value-of select="attName" /></xsl:comment>
-     <xsl:value-of select="attDefinition" />
-   </redirect:write>
   
  <redirect:write file="{$htmlPrefix}~table~{translate(../entityName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~field~{translate(attName,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')}~type~fieldview.html">@webpage_top_html@
   @webpage_head_html@
