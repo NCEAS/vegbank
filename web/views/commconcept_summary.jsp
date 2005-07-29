@@ -113,7 +113,7 @@ function getHelpPageId() {
       <!-- data cart -->
       <td align="center"><!-- that td cannot have a class, it gets overwritten -->
         <bean:define id="delta_ac" name="onerow" property="accessioncode" />
-        Plot #<%= rowIndex++ %>
+        Comm #<%= rowIndex++ %>
         <br/>
         <%@ include file="../includes/datacart_checkbox.jsp" %>
       </td>
