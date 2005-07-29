@@ -37,7 +37,7 @@ function setDate() {
 
 function setNameMatchType() {
 	matchType = document.queryform.matchType;
-
+      
 	if (matchType[1].checked) {
 		document.queryform.xwhereKey_commname.value = "xwhere_match";
 		document.queryform.xwhereSearch_commname.value = "true";
@@ -55,6 +55,30 @@ function setNameMatchType() {
         qexplain = " contains ALL words of "; /* this used later in building criteriaAsText */
 	}
 
+    /* do same as above but for description */
+    
+      matchTypeDesc = document.queryform.matchTypeDesc;
+          
+      if (matchTypeDesc[1].checked) {
+        document.queryform.xwhereKey_commdesc.value = "xwhere_match";
+        document.queryform.xwhereSearch_commdesc.value = "true";
+        document.queryform.xwhereMatchAny_commdesc.value = "true";
+            qexplainDesc = " contains any words of "; /* this used later in building criteriaAsText */
+      } else if (matchTypeDesc[2].checked) {
+        document.queryform.xwhereKey_commdesc.value = "xwhere_ilike";
+        document.queryform.xwhereSearch_commdesc.value = "false";
+        document.queryform.xwhereMatchAny_commdesc.value = "false";
+            qexplainDesc = " is "; /* this used later in building criteriaAsText */
+      } else {
+        document.queryform.xwhereKey_commdesc.value = "xwhere_match";
+        document.queryform.xwhereSearch_commdesc.value = "true";
+        document.queryform.xwhereMatchAny_commdesc.value = "false";
+            qexplainDesc = " contains ALL words of "; /* this used later in building criteriaAsText */
+      }
+    
+    
+
+
     /* this part of the function sets the criteriaAsText field which the next form displays as: You searched for this and that... */
     /* var to store building string */
     text = "" ;
@@ -66,6 +90,13 @@ function setNameMatchType() {
                   text = text + strSep + " Community Name " + qexplain + "\"" + thecommname + "\"" ;
               }
         
+    
+        thedesc = document.queryform.xwhereParams_commdesc_0.value ;
+                       if ( thedesc != "" &&  thedesc != null )
+                                   {
+                                      text = text + strSep + " Community Description " + qexplainDesc + "\"" + thedesc + "\"" ;
+                           }
+    
     
        /* value picklists, not PK */
          
@@ -105,6 +136,9 @@ function setNameMatchType() {
                                   text = text + strSep + " with at least " + theplotcount + " plot(s)" ;
                            }
 
+
+
+
      
     text=text + "                   "; /* ensures substring will not fail */
     document.queryform.criteriaAsText.value =  text.substring(strSep.length)
@@ -140,7 +174,7 @@ function setNameMatchType() {
 				</p>
             
          <div id="tut_commquerynamefield">
-         <p><b>Community name:</b><br/>
+         <p><b>Community Name:</b><br/>
               <!-- COMM TAXON INPUT--> 
 
               
@@ -166,6 +200,37 @@ function setNameMatchType() {
 
 	      </p>
           </div>
+          <hr/>
+          
+                   <div id="tut_commquerydescfield">
+                   <p><b>Community Description:</b><br/>
+                        <!-- COMM TAXON INPUT--> 
+          
+                        
+              <input type="text" size="35" name="xwhereParams_commdesc_0"/>
+              <input type="hidden" name="xwhereParams_commdesc_1" value="cc.commdescription"/>
+                  &nbsp; <span class="normal">e.g. acer quercus "north carolina"
+                  <br/>
+              <input type="radio" name="matchTypeDesc" value="all" checked="checked"/>contains ALL words
+                  <br/>
+              <input type="radio" name="matchTypeDesc" value="any"/>contains ANY word
+                  <br/>
+              <input type="radio" name="matchTypeDesc" value="is"/>is exactly 
+                  <span class="sizetiny">
+                  (use % as a wildcard: e.g. %acer %quercus %)
+                  </span>
+                  <br/>
+              <input type="hidden" name="xwhereKey_commdesc" value="xwhere_match"/>
+              <input type="hidden" name="xwhereSearch_commdesc" value="true"/>
+              <input type="hidden" name="xwhereMatchAny_commdesc" value="false"/>
+                  </span>
+                          
+          
+                  </p>
+          </div>
+          
+          
+          
                 <hr/>
            
 	    <!-- Community level -->	    
