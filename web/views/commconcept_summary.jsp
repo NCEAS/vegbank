@@ -47,7 +47,7 @@ function getHelpPageId() {
 <vegbank:pager />
 
  <!-- add all results -->
-
+ <p>
         <a href="javascript:addAllResults('commconcept');"
             title="add all query results to datacart" class="nobg"><img src="/vegbank/images/cart_star_on_blue2.gif" border="0" id="datacart-addallresults-icon" /></a>
 
@@ -63,7 +63,7 @@ function getHelpPageId() {
         <a href="javascript:dropAllOnPage()" title="drop all on page">drop plots on page</a> from datacart
 
     <%@ include file="../includes/setup_rowindex.jsp" %>
-
+  </p>
 
     <logic:equal parameter="delta" value="findadd-accessioncode">
         <vegbank:datacart delta="findadd:commconcept:commconcept:commconcept_id:accessioncode" deltaItems="getQuery" display="false" />
