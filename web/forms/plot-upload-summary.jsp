@@ -11,8 +11,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-05-06 06:40:39 $'
-  *  '$Revision: 1.6 $'
+  *      '$Date: 2005-07-31 04:34:15 $'
+  *  '$Revision: 1.7 $'
   *
   *
   -->
@@ -23,10 +23,10 @@
 <TITLE>Upload Received</TITLE>
 
 
-
+<!-- get the email -->
+<%@ include file="/views/includeviews/sub_getwebuserid.jsp" %>
+<!-- this now defines beanWebUserEmail -->
  
-
-
 
 
 @webpage_masthead_html@
@@ -42,7 +42,8 @@
 
 <p>Thanks for contributing your work to the project.
 <br />
-An email will be sent to <bean:write name="email"/> containing load results.
+An email will be sent to <logic:notPresent name="beanWebUserEmail" >your email address</logic:notPresent>
+<bean:write name="beanWebUserEmail" ignore="true" /> containing load results.
 
 <!--
 <p>Are you sure you want to add this data to Vegbank?
