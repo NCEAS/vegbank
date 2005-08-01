@@ -104,6 +104,9 @@ Items in this dataset:
     <logic:equal name="onerowofuserdatasetitem" property="itemtable" value="commconcept">
       <bean:define id="datacart_contains_commconcept" value="true" />
     </logic:equal>
+    <logic:equal name="onerowofuserdatasetitem" property="itemtable" value="observation">
+      <bean:define id="datacart_contains_observation" value="true" />
+    </logic:equal>
   </logic:equal>
 
 </logic:iterate>
