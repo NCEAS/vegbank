@@ -18,7 +18,7 @@
         whereNonNumeric="where_observation_ac" beanName="map" pager="false" perPage="-1"
         xwhereEnable="true" allowOrderBy="true" />
     <logic:notEmpty name="plotobs-BEANLIST">
-     <logic:iterate length="50" id="onerowofobservation" name="plotobs-BEANLIST">
+     <logic:iterate id="onerowofobservation" name="plotobs-BEANLIST">
        <bean:define id="observation_pk" name="onerowofobservation" property="observation_id"/>
        <item>
          <title>Plot: <bean:write name="onerowofobservation" property="authorobscode" /></title>
