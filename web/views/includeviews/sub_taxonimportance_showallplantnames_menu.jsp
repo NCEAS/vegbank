@@ -11,7 +11,7 @@
 <logic:notPresent name="showTaxonNameDivID">
   <bean:define id="showTaxonNameDivID">*</bean:define> <!-- default of everything: SHOULD NOT BE USED -->
 </logic:notPresent>
-Change plant label: <a href="@help-for-plantnames-href@"><img border="0" src="@image_server@question.gif" /></a> <br/>
+Change plant label: <a class="image" href="@help-for-plantnames-href@"><img border="0" src="@image_server@question.gif" /></a> <br/>
 <select onChange="showTaxonName(this.value,'<bean:write name="showTaxonNameDivID" />')">
                              <option value="" >--Choose a value--</option>
        <option value="taxonobservation_authorplantname" <logic:equal name="plantNamesToShowBean" value="taxonobservation_authorplantname"> selected="selected" </logic:equal>>Author's plant name</option>
