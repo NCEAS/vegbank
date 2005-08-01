@@ -2,8 +2,12 @@
 <?xml-stylesheet type="text/xsl" href="dd-guide.xsl"?>
 <dataDictionaryKey>
   <att>
+    <name>field label</name>
+    <defn>The name used to describe this field on the VegBank website.</defn>
+  </att>
+  <att>
     <name>field name</name>
-    <defn>The field name is the name of the field (column) in a table.</defn>
+    <defn>The field name is the database name of the field (column) in a table.</defn>
   </att>
   <att>
     <name>nulls</name>

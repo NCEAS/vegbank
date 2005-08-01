@@ -15,7 +15,8 @@
     <echo>init docs/xml webapp '${webapp}'</echo>
     <!-- freely editable variables -->
     <property name="origData" value="db_model_vegbank.xml"/>
-    <property name="htmlPrefix" value="build/dd"/>
+    <property name="htmlPrefix" value="dd"/>
+    <property name="ddfiledir" value="build/" />
     <mkdir dir="build" />
     <property name="limitData" value="db_model_vegbank_limited.xml"/>
     <!-- do not edit the following variables unless you have replaced with new xsl file -->
@@ -58,12 +59,12 @@
   <target name="dictionary2html" depends="init">
     <!-- create new build file to run ant on -->
     <echo>Writing field views</echo>
-    <style out="BOGUSFld.txt" in="${limitData}" extension=".xml" style="${styleFieldView}" force="true">
+    <style out="${ddfiledir}BOGUSFld.txt" in="${limitData}" extension=".xml" style="${styleFieldView}" force="true">
       <!-- file for html to be built from -->
       <param name="htmlPrefix" expression="${htmlPrefix}"/>
     </style>
     <echo>Writing table views</echo>
-    <style out="BOGUSTbl.txt" in="${limitData}" extension=".xml" style="${styleTableView}" force="true">
+    <style out="${ddfiledir}BOGUSTbl.txt" in="${limitData}" extension=".xml" style="${styleTableView}" force="true">
       <!-- file for html to be built from -->
       <param name="htmlPrefix" expression="${htmlPrefix}"/>
     </style>
@@ -71,14 +72,14 @@
   </target>
   <target name="dd-index" depends="init">
     <echo>Writing new data dictionary index page.</echo>
-    <style out="${htmlPrefix}-index.html" in="${limitData}" extension=".html" style="${style-index}" force="true">
+    <style out="${ddfiledir}${htmlPrefix}-index.html" in="${limitData}" extension=".html" style="${style-index}" force="true">
       <param name="htmlPrefix" expression="${htmlPrefix}"/>
     </style>
     <antcall target="dd-guide"/>
   </target>
   <target name="dd-guide" depends="init">
     <echo>Wiriting new datadictionary guide</echo>
-    <style out="${htmlPrefix}-guide.html" in="${guide-data}" extension=".html" style="${style-guide}" force="true">
+    <style out="${ddfiledir}${htmlPrefix}-guide.html" in="${guide-data}" extension=".html" style="${style-guide}" force="true">
       <param name="htmlPrefix" expression="${htmlPrefix}"/>
     </style>
     

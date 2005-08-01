@@ -38,6 +38,29 @@ function getHelpPageId() {
              
             </p>
             <table class="thinlines">
+               <tr class="oddrow">
+                <td><b><a href="dd-guide.html#field-label">field label:</a></b></td>
+                <td>
+                  <xsl:choose>
+                    <xsl:when test="attNulls='no'">
+                      <b>
+                        <xsl:value-of select="attLabel"/>
+                      </b>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="attLabel"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:if test="attModel='denorm'">
+                    <br/>
+                    <span class="bright" title="denormlized field, data drawn from elsewhere in the datamodel">Denormalized</span>
+                  </xsl:if>
+
+                </td>
+
+              </tr>
+
+              
               <tr class="evenrow">
                 <td>
                   <b>
@@ -224,6 +247,28 @@ function getHelpPageId() {
              
             </p>
             <table class="thinlines">
+              <tr class="oddrow">
+                <td><b><a href="dd-guide.html#field-label">field label:</a></b></td>
+                <td>
+                  <xsl:choose>
+                    <xsl:when test="attNulls='no'">
+                      <b>
+                        <xsl:value-of select="attLabel"/>
+                      </b>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="attLabel"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:if test="attModel='denorm'">
+                    <br/>
+                    <span class="bright" title="denormlized field, data drawn from elsewhere in the datamodel">Denormalized</span>
+                  </xsl:if>
+
+                </td>
+
+              </tr>
+              
               <tr class="evenrow">
                 <td>
                   <b>

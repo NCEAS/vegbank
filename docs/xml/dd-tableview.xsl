@@ -42,6 +42,12 @@ function getHelpPageId() {
             <tr>
               <th>
                 
+                  <a href="dd-guide.html#field-label">field label</a>
+                
+               
+              </th>
+              <th>
+                
                   <a href="dd-guide.html#field-name">field name</a>
                 
                
@@ -90,6 +96,24 @@ function getHelpPageId() {
               </xsl:variable>
               <tr class="{$RowColor}">
                 <td rowspan="2">
+                  <xsl:choose>
+                    <xsl:when test="attNulls='no'">
+                      <b>
+                          <xsl:value-of select="attLabel"/>
+                       
+                      </b>
+                    </xsl:when>
+                    <xsl:otherwise>
+                     
+                        <xsl:value-of select="attLabel"/>
+
+                    </xsl:otherwise>
+                  </xsl:choose>
+
+                </td>
+
+                
+                <td rowspan="1" class="largefield">
                   <xsl:if test="$RowType=0">
                   <a name="this_field" />
                   </xsl:if>
@@ -121,7 +145,7 @@ function getHelpPageId() {
                 <td>
                   <xsl:value-of select="attKey"/>
                 </td>
-                <td>
+                <td class="largefield">
                   <!-- references can be split so that it doesn't make the column too wide in output -->
                   <xsl:choose>
                     <xsl:when test="contains(attReferences,'.')">
@@ -147,8 +171,8 @@ function getHelpPageId() {
                           <xsl:for-each select="attList/attListItem">
                           <xsl:sort data-type="number" select="attListSortOrd"/>
                             <option>
-                              <xsl:value-of select="substring(attListValue,1,27)"/>
-                              <xsl:if test="string-length(attListValue)>27">...</xsl:if>
+                              <xsl:value-of select="substring(attListValue,1,20)"/>
+                              <xsl:if test="string-length(attListValue)>20">...</xsl:if>
                             </option>
                           </xsl:for-each>
                         </select>
@@ -156,7 +180,7 @@ function getHelpPageId() {
                     </xsl:otherwise>
                   </xsl:choose>
                 </td>
-                <td>
+                <td class="largefield">
                   <xsl:value-of select="attNotes"/>
                 </td>
                 </tr>
