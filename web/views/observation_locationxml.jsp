@@ -5,7 +5,7 @@
     <title>A Map of VegBank Plots</title>
     <link><![CDATA[@machine_url@/]]></link>
     <description>This map shows you the plots you requested on VegBank.  A file is generated in VegBank, then processed by an external mapping program, such as that found on Yahoo.com.  Maps will vary depending on the mapping program used.</description>
-    <image><url>@machine_url@/vegbank/images/vegbank_logo69x100trans.gif</url><title>VegBank</title><link>http://vegbank.org</link></image>
+    <image><url>@machine_url@/vegbank/images/vegbank_fulllogo.jpg</url><title>VegBank</title><link>@machine_url@/</link></image>
     <ymaps:Groups>
       <group>
         <Title>VegBank Plots</Title>
