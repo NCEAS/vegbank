@@ -159,11 +159,14 @@
     <xsl:param name="container" /><!-- p or td -->
     <xsl:param name="view" /><!-- name of this view -->
     <xsl:param name="linkToPK" /><!-- if true, then encapsulate in <a></a> -->
+    <xsl:param name="writeSuffix" /><!-- write something after the field value -->
+    <xsl:param name="altField" /><!-- true if writing an alternate field -->
     <!--    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
     </xsl:comment>-->
           <!-- this is what gets written on cell -->
           <xsl:variable name="currFldMaybeTransl"><xsl:value-of select="$currFld"/><xsl:if test="string-length($currentAtt/attFKTranslationSQL)&gt;0">_transl</xsl:if><xsl:if test="$currentAtt/attType='Date'">_datetrunc</xsl:if></xsl:variable>    
-             <xsl:element name="{$container}"><xsl:attribute name="class"><xsl:value-of select="translate(concat($currEnt,'_',$currFld),$alphahigh,$alphalow)" /></xsl:attribute><logic:notEmpty name="onerowof{$currEnt}" property="{$currFldMaybeTransl}"><xsl:element name="span"><xsl:choose>
+             <xsl:element name="{$container}"><xsl:if test="$altField!='true'"><xsl:attribute name="class"><xsl:value-of select="translate(concat($currEnt,'_',$currFld),$alphahigh,$alphalow)" /></xsl:attribute></xsl:if>
+<logic:notEmpty name="onerowof{$currEnt}" property="{$currFldMaybeTransl}"><xsl:element name="span"><xsl:choose>
             <xsl:when test="string-length(@useClass)=0">
               <!-- no specific class for this data -->
               <!-- fill in different class for long text fields: -->
@@ -225,6 +228,7 @@
 
             </xsl:otherwise>
           </xsl:choose>
+
           <!-- units -->
         <xsl:if test="string-length($currentAtt/attUnits)&gt;0"><xsl:if test="contains($view,'csv')=false"><!-- do not write units to csv data views -->
           <xsl:comment>only write units if there is something here:</xsl:comment>
@@ -249,6 +253,25 @@
         <!--</span>-->
       
       </logic:notEmpty>
+        <!-- add something to view if alternate field is specified and field is null -->
+        <!-- alternate field if null? -->
+         <xsl:if test="string-length($currentAtt/attAltIfNull)&gt;0 and $altField!='true'"><!-- second condition prevents infinite loops -->
+           <!-- yes there is an alt field if null, display it -->
+           <logic:empty	 name="onerowof{$currEnt}" property="{$currFldMaybeTransl}">
+             <xsl:comment>The field is empty, but there is an alternate, display the alternate field:</xsl:comment>
+               <xsl:call-template name="writeField">
+                  <xsl:with-param name="currEnt" select="$currEnt"/>
+                  <xsl:with-param name="currFld" select="translate($currentAtt/attAltIfNull,$alphahigh,$alphalow)"/>
+                  <xsl:with-param name="currentAtt" select="$currentAtt"/><!-- not ideal to pass this att again, but doing it anyway -->
+                  <xsl:with-param name="container">span</xsl:with-param><!-- p or td -->
+                  <xsl:with-param name="view" select="$view" /><!-- name of this view -->
+                  <xsl:with-param name="linkToPK" select="$linkToPK" /><!-- if true, then encapsulate in <a></a> -->
+                  <xsl:with-param name="writeSuffix" select="$currentAtt/attAltIfNull/@addSuffixTxt" /><!-- write something after the field value -->              
+                  <xsl:with-param name="altField">true</xsl:with-param><!-- true if writing an alternate field -->
+               </xsl:call-template>
+           </logic:empty>
+         </xsl:if>  
+      
         <xsl:if test="$container!='span'">
       <logic:empty name="onerowof{$currEnt}" property="{$currFld}">
         <!-- only extra bit if empty and container is not p-->
@@ -256,12 +279,19 @@
 <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></logic:notEqual></xsl:if>
       </logic:empty>
         </xsl:if>
+        <xsl:value-of select="$writeSuffix" /><!-- write this.  if null or empty, won't affect view -->
     </xsl:element><!-- td or p -->
   </xsl:template>
   <xsl:template name="writeOneFieldValue">
     <xsl:param name="currEnt"/>
     <xsl:param name="beanPropName"/>
-    <bean:write name="onerowof{$currEnt}" property="{$beanPropName}"/>
+    <xsl:param name="ignore" />
+    <xsl:element name="bean:write">
+      <xsl:attribute name="name">onerowof<xsl:value-of select="translate($currEnt,$alphahigh,$alphalow)" /></xsl:attribute>
+      <xsl:attribute name="property"><xsl:value-of select="$beanPropName" /></xsl:attribute>
+      <xsl:if test="$ignore='true'"><xsl:attribute name="ignore">true</xsl:attribute></xsl:if>
+    </xsl:element>
+
   </xsl:template>
   <xsl:template name="labelField">
     <xsl:param name="container" />

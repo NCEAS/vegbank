@@ -3,6 +3,19 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
   <xs:element name="archive" type="xs:boolean"/>
   <!-- may have to do with revisions work Gabe started? -->
+  <xs:element name="attAltIfNull">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">name of alternate field to display if this is null.  XML attributes may be added to add suffix to string written.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          
+          <xs:attribute name="addSuffixTxt" type="xs:string"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="attDefinition" type="xs:string"/>
   <xs:element name="attForms">
     <xs:complexType>
@@ -24,7 +37,7 @@
     </xs:simpleType>
     <!-- PK, FK or neither -->
   </xs:element>
-  <xs:element name="attID" type="xs:positiveInteger" />
+  <xs:element name="attID" type="xs:positiveInteger"/>
   <xs:element name="attLabel" type="nonEmptyString"/>
   <!-- human readable label that we might think about using instead of field names for forms -->
   <xs:element name="attList">
@@ -156,7 +169,7 @@
   <xs:element name="attribute">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="attID" />
+        <xs:element ref="attID"/>
         <xs:element ref="attName"/>
         <xs:element ref="attLabel" minOccurs="0"/>
         <xs:element ref="attModel"/>
@@ -167,6 +180,7 @@
         <xs:element ref="attRelType"/>
         <xs:element ref="attReferences"/>
         <xs:element ref="attFKTranslationSQL" minOccurs="0"/>
+        <xs:element ref="attAltIfNull" minOccurs="0" />
         <xs:element ref="attListType"/>
         <xs:element ref="attList"/>
         <xs:element ref="attNotes"/>
@@ -226,7 +240,7 @@
           <xs:attribute name="addSort" type="xs:boolean"/>
           <xs:attribute name="suffix" type="xs:string"/>
           <xs:attribute name="prefix" type="xs:string"/>
-          <xs:attribute name="linkToPK" type="xs:boolean" />
+          <xs:attribute name="linkToPK" type="xs:boolean"/>
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
