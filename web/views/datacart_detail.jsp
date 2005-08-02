@@ -72,12 +72,30 @@ function getHelpPageId() {
       <br/>
       <strong>Query using the datacart:</strong>   
     </p>
-      <ul><li>
+      <ul>
+      <li>
+      <span class="bright"><strong>NEW!</strong></span> You can view a constancy table for plots in your datacart.
+      <logic:present name="datacart_contains_observation">
+        <a href="@get_link@constancyanalysis/userdataset/<%= lngDatacartId.toString() %>">
+              View Constancy Table</a><br/> 
+        <span class="small"><strong>
+        <a href="@forms_link@ConstancyTableRequest.jsp">View constancy table of multiple datasets here.</a></strong> 
+        
+        </span>
+      </logic:present>
+      <logic:notPresent name="datacart_contains_observation"> 
+        You have <strong>no plots</strong> in your datacart.  
+        <a href="@plotquery_page_advanced@">Search for plots here.</a>
+      </logic:notPresent>
+      
+      </li>
+
+
+      <li>
       <span class="bright"><strong>NEW!</strong></span> You can view a map of the plots in your datacart.
       <logic:present name="datacart_contains_observation">
         <a target="_blank" href="http://api.maps.yahoo.com/Maps/V1/annotatedMaps?appid=vegbankmaps&xmlsrc=@machine_url@/vegbank/views/observation_locationxml.jsp?wparam=<%= lngDatacartId.toString() %>%26where=where_inuserdataset_pk_obs">
-              Map datacart plots
-        </a> 
+              Map datacart plots</a> 
         <span class="small"><strong>External "Yahoo!" Link:</strong> Will open in a new window.
         VegBank is not responsible for content.  Currently limited to 500 plots. Sometimes
         Yahoo's interface is not willing to wait for plot locations to completely load.</span>
@@ -87,7 +105,10 @@ function getHelpPageId() {
         <a href="@plotquery_page_advanced@">Search for plots here.</a>
       </logic:notPresent>
       
-      </li><li>     
+      </li>
+      
+      
+      <li>     
       
       
       <a href="@get_link@std/observation/<%= lngDatacartId.toString() %>?where=where_datacart_obs_hasplants&criteriaAsText=Plots+with+plants+in+your+datacart">
@@ -138,7 +159,7 @@ You can activate another dataset to make it the current datacart by pressing the
 next to another dataset, if you have another dataset.  You must be logged in to do so.</p>
 <!-- set perPage to -1 -->
 <bean:define id="perPage" value="-1" />
-<!-- sets to force all datasets to be displayed: -->
+<!-- sets to force all datasets to be displayed, no pagination: -->
 <bean:define id="forceAll" value="true" />
   <!-- do the right get -->
  <%@ include file="includeviews/sub_getuserdatasets.jsp" %>

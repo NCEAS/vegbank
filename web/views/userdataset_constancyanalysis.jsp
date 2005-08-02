@@ -10,14 +10,39 @@
  @webpage_masthead_html@ 
   @possibly_center@  
 <h2>View VegBank Plots: Summarize multiple sets of plots.</h2>
+  <!-- look for special set of params: -->
+  
 
   <logic:notPresent parameter="wparam">
-    Request not valid.  Please email help@vegbank.org if you followed a link on VegBank to this page.
+      <logic:present parameter="includeds">
+        <%
+        // define variables
+        String wparamsarray = "-1";
+        String[] arr_includeds;
+        
+        // assign values to variables
+        arr_includeds = request.getParameterValues("includeds");
+        for(int counter = 0; counter < arr_includeds.length; counter++)
+        {
+         wparamsarray = wparamsarray + "," + arr_includeds[counter];
+        } 
+         
+        %>
+        <bean:define id="wparam"><%= wparamsarray %></bean:define>
+       
+       </logic:present>
+       <logic:notPresent parameter="includeds">
+         <bean:define id="wparambad" value="true" />
+         No datasets were selected.
+         Please choose one or more datasets to compare.  Press <a href="javascript:history.back()">Here to go back</a>.
+       </logic:notPresent>       
   </logic:notPresent>
+  
   <logic:notPresent parameter="where">
+    <!-- use default where -->
     <bean:define id="where" value="where_userdataset_pk" />
   </logic:notPresent>
-<logic:present parameter="wparam">
+<logic:notEqual name="wparambad" value="true">
     <vegbank:get id="multobssummary" select="userdataset_currentplants_analysis" 
       beanName="map" pager="false" perPage="-1" allowOrderBy="true" orderBy="orderby_plantconc_dataset" 
      />
@@ -174,6 +199,6 @@
      </table>
    </logic:notEmpty>
    <br />
-</logic:present>  
+</logic:notEqual>  
 
           @webpage_footer_html@
