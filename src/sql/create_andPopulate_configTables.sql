@@ -22,6 +22,11 @@ insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sort
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'taxonimportance_inferencearea','show','global',68777,14) ;
 
 
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'plant_concept_name','hide','global',68777,14) ;
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'plant_full_scientific_name','hide','global',68777,15) ;
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'plant_scientific_name_noauthors','show','global',68777,16) ;
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'plant_common_name','hide','global',68777,17) ;
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'plant_code','hide','global',68777,18) ;
 
 --help bits
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, sortorder)  values ( 'ddlink','hide','global',0,0 ) ;
@@ -39,3 +44,10 @@ insert into dba_cookieLabels ( viewOrCookie , description) values ('taxonimporta
 insert into dba_cookieLabels ( viewOrCookie , description) values ('taxonimportance_basalarea','Basal Area for a species');
 insert into dba_cookieLabels ( viewOrCookie , description) values ('taxonimportance_biomass','Biomass for a species');
 insert into dba_cookieLabels ( viewOrCookie , description) values ('taxonimportance_inferencearea','Inference Area used to determine importance values (cover, biomass, basal area, etc.) for a species.');
+
+
+insert into dba_cookieLabels (viewOrCookie , description) values ('plant_concept_name','The plant name the concept is based on');
+insert into dba_cookieLabels (viewOrCookie , description) values ('plant_full_scientific_name','The full scientific name, including authors, of the plant concept');
+insert into dba_cookieLabels (viewOrCookie , description) values ('plant_scientific_name_noauthors','The scientific name without authors of the plant concept');
+insert into dba_cookieLabels (viewOrCookie , description) values ('plant_common_name','The common name for the plant concept, if available');
+insert into dba_cookieLabels (viewOrCookie , description) values ('plant_code','The Code for the plant concept, if available');
