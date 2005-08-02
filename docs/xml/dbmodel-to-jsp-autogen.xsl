@@ -3,6 +3,8 @@
   <!--  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/> -->
   <!-- comment out extenstion-elemtn ... though this comment to run locally without xalan -->
   <xsl:param name="pathToWrite"/>
+  <xsl:param name="quot">"</xsl:param>
+  <xsl:param name="apos">'</xsl:param>
   <xsl:output method="html"/>
   <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
   <xsl:param name="alphahigh">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:param>
@@ -303,7 +305,7 @@
     <xsl:param name="currDefn" />
     <xsl:element name="{$container}">
         <xsl:attribute name="class"><xsl:value-of select="translate(concat($currEnt,'_',$currFld),$alphahigh,$alphalow)" /><xsl:value-of select="concat(' ',$containerClass)" /></xsl:attribute>
-        <xsl:attribute name="title"><xsl:value-of select="$currDefn" /></xsl:attribute>
+        <xsl:attribute name="title"><xsl:value-of select="translate($currDefn,$quot,' ')" /></xsl:attribute>
     <xsl:choose>
       <xsl:when test="string-length($currLbl)&gt;0">
         <xsl:value-of select="$currLbl"/>
