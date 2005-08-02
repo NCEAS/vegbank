@@ -41,6 +41,7 @@
 
 <logic:present name="forceAll">
   <bean:define id="mode" value="all" /><!-- forces all items to be displayed -->
+  <bean:define id="paginateMain" value="false" />
 </logic:present>
 
 
@@ -52,7 +53,7 @@ String paramDelim = Utility.PARAM_DELIM ;
  
 <logic:equal name="mode" value="all">
   <!-- show all of a user's datasets -->
-  <vegbank:get id="userdataset" select="userdataset" beanName="map" 
+  <vegbank:get id="userdataset" select="userdataset_countobs" beanName="map" 
   where="where_usrpk" wparam="<%= strWebUserId %>" pager="<%= paginateMain %>"/>
      <!-- where="where usr_id={0} -->
 </logic:equal>
@@ -78,3 +79,5 @@ String paramDelim = Utility.PARAM_DELIM ;
  <!-- where_usrpk_ac=where usr_id={0} AND usr_id={1} -->
 
 </logic:equal>
+
+  
