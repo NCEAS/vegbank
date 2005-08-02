@@ -331,7 +331,8 @@ Plot #<%= rowIndex++ %>
 </td>
 <!-- plants in this plot -->
  <td class='largefield <bean:write name="show_plants" ignore="true" />hidden'>
-<vegbank:get id="taxonobservation" select="taxonobservation_maxcover" where="where_taxonobservation_maxcover" wparam="observation_pk"
+<vegbank:get id="taxonobservation" select="taxonobservation_maxcover" 
+  where="where_observation_pk" wparam="observation_pk" allowOrderBy="true" orderBy="xorderby_sort_maxcover_desc"
   pager="false" perPage="-1" beanName="map" />
   <logic:empty name="taxonobservation-BEANLIST">
    No data
