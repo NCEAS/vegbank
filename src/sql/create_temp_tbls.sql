@@ -7,6 +7,7 @@ DROP TABLE temptbl_std_plantnames;
 CREATE TABLE temptbl_std_plantnames
 (
 PLANTCONCEPT_ID serial ,
+plantname varchar(255), 
 sciname varchar (255),
 scinamenoauth varchar (255),
 code varchar (255),
@@ -15,7 +16,7 @@ PRIMARY KEY ( PLANTCONCEPT_ID )
 );
 
 
-INSERT INTO temptbl_std_plantnames (plantConcept_ID, sciname, scinamenoauth,code,common) 
+INSERT INTO temptbl_std_plantnames (plantConcept_ID, sciname, scinamenoauth,code,common, plantname) 
   SELECT plantConcept_ID, 
   (select (plantname) from view_std_plantnames_sciname as newnames
     WHERE newnames.plantconcept_ID = plantconcept.plantconcept_id limit 1), 
@@ -24,7 +25,7 @@ INSERT INTO temptbl_std_plantnames (plantConcept_ID, sciname, scinamenoauth,code
     (select (plantname) from view_std_plantnames_code  as newnames
     WHERE newnames.plantconcept_ID = plantconcept.plantconcept_id limit 1),
     (select (plantname) from view_std_plantnames_common  as newnames
-    WHERE newnames.plantconcept_ID = plantconcept.plantconcept_id limit 1) FROM plantConcept;
+    WHERE newnames.plantconcept_ID = plantconcept.plantconcept_id limit 1) , plantname FROM plantConcept;
 
 --populate systems:
 --UPDATE temptbl_std_plantnames SET sciname=(select min(plantname) from view_std_plantnames_sciname as newnames
