@@ -30,7 +30,7 @@
                     <input type="submit" value="activate" />
                     </form>
                     </logic:equal>
-                    
+     </td>               
 <%@ include file="../autogen/userdataset_summary_data.jsp" %>
 
 <!-- show dataset items -->
