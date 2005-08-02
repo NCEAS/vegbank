@@ -107,7 +107,14 @@
     
          <logic:iterate id="onerowoftaxonimportance" name="taxonimportance-BEANLIST">
            <bean:define id="onerowoftaxonobservation" name="onerowoftaxonimportance" /> <!-- clone taximp -->
-           <bean:define id="taxonimportance_pk" name="onerowoftaxonimportance" property="taxonimportance_id" />
+           
+           <logic:empty name="onerowoftaxonimportance" property="taxonimportance_id">
+             <!-- in case there are no taxonimportance records : -->
+             <bean:define id="taxonimportance_pk" value="-1" />
+           </logic:empty>
+           <logic:notEmpty name="onerowoftaxonimportance" property="taxonimportance_id">
+             <bean:define id="taxonimportance_pk" name="onerowoftaxonimportance" property="taxonimportance_id" />
+           </logic:notEmpty>  
         
         	 <logic:notEqual name="onerowoftaxonimportance" property="stratum_id_transl"
 	       	  value='<%= lastStratum %>'>
