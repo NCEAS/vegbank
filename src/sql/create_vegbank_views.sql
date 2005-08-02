@@ -1,4 +1,13 @@
 
+
+DROP VIEW view_taxonobs_distinctid_curr_counts_plants;
+
+DROP VIEW view_taxonobs_distinctid_curr_counts;  
+DROP VIEW view_taxonobs_distinctid_curr;
+--DROP VIEW view_taxonobs_distinctid_orig;
+
+
+DROP VIEW view_taxonobs_withmaxcover;
 DROP VIEW view_csv_taxonimportance;
 DROP VIEW view_csv_taxonimportance_pre;
 DROP VIEW view_browseparty_all_count_combined;
@@ -345,3 +354,36 @@ CREATE VIEW view_observation_transl AS
   COALESCE(authorObsCode,authorPlotCode) AS observation_id_transl 
   FROM view_notemb_observation as observation, plot 
   WHERE observation.plot_ID = plot.plot_ID;
+
+-- CREATE VIEW view_taxonobs_distinctid_curr AS SELECT observation_id, int_currplantconcept_id as plantconcept_id, max(cover) as maxplantcover FROM view_notEmb_taxonObservation as taxonobservation,     taxonimportance where taxonimportance.taxonobservation_id=taxonobservation.taxonobservation_id GROUP BY plantconcept_id,observation_id;
+
+-- this view needed in the event there are no taxonimportance records for a taxonobservation.
+-- drop view view_taxonobs_withmaxcover;
+CREATE VIEW view_taxonobs_withmaxcover AS
+  SELECT taxonobservation.*, 
+    (select max(cover) from taxonimportance where taxonimportance.taxonobservation_ID=taxonobservation.taxonobservation_ID) as maxcover 
+  FROM view_notEmb_taxonObservation as taxonobservation;
+
+--   drop view view_taxonobs_distinctid_curr;
+CREATE VIEW view_taxonobs_distinctid_curr AS
+  SELECT userdataset_id, observation_id, int_currplantconcept_id as plantconcept_id, max(maxcover) as maxplantcover
+    FROM view_taxonobs_withmaxcover as taxonobservation, userdatasetitem 
+    WHERE observation_id =  itemrecord  AND itemtable='observation' 
+    GROUP BY plantconcept_id,userdataset_id,observation_id;
+  
+-- drop view view_taxonobs_distinctid_curr_counts;  
+CREATE VIEW  view_taxonobs_distinctid_curr_counts AS 
+  SELECT userdataset_id, plantconcept_id, count(1) AS countObs,  avg(maxplantcover) AS avgcovernoround
+  FROM view_taxonobs_distinctid_curr
+  GROUP BY userdataset_id, plantconcept_id;  
+  
+-- drop view view_taxonobs_distinctid_curr_counts_plants;
+CREATE VIEW view_taxonobs_distinctid_curr_counts_plants AS
+     SELECT view_taxonobs_distinctid_curr_counts.*,  round(CAST (view_taxonobs_distinctid_curr_counts.avgcovernoround as numeric),3) AS avgcover, 
+     temptbl_std_plantnames.plantname, temptbl_std_plantnames.sciname, temptbl_std_plantnames.scinamenoauth,
+     temptbl_std_plantnames.code,temptbl_std_plantnames.common FROM temptbl_std_plantnames, view_taxonobs_distinctid_curr_counts 
+     WHERE view_taxonobs_distinctid_curr_counts.plantconcept_ID=temptbl_std_plantnames.plantconcept_ID;
+
+
+
+--CREATE VIEW view_taxonobs_distinctid_orig;
