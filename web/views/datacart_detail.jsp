@@ -94,11 +94,15 @@ function getHelpPageId() {
       <li>
       <span class="bright"><strong>NEW!</strong></span> You can view a map of the plots in your datacart.
       <logic:present name="datacart_contains_observation">
-        <a target="_blank" href="http://api.maps.yahoo.com/Maps/V1/annotatedMaps?appid=vegbankmaps&xmlsrc=@machine_url@/vegbank/views/observation_locationxml.jsp?wparam=<%= lngDatacartId.toString() %>%26where=where_inuserdataset_pk_obs">
+        <a target="_blank" href="@views_link@userdataset_map.jsp?wparam=<%= lngDatacartId.toString() %>">
               Map datacart plots</a> 
         <span class="small"><strong>External "Yahoo!" Link:</strong> Will open in a new window.
         VegBank is not responsible for content.  Currently limited to 500 plots. Sometimes
-        Yahoo's interface is not willing to wait for plot locations to completely load.</span>
+        Yahoo's interface is not willing to wait for plot locations to completely load.</span><br/>
+        <span class="small"><strong>
+                <a href="@forms_link@MapDatasets.jsp">Map multiple datasets here.</a></strong> 
+                
+        </span>
       </logic:present>
       <logic:notPresent name="datacart_contains_observation"> 
         You have <strong>no plots</strong> in your datacart.  
