@@ -4,39 +4,15 @@
   <bean:define id="FullPageWidthSuffix" value="_100perc" /><!-- sets stylesheet to full width stylesheet -->
   @webpage_head_html@
  
-<TITLE>View VegBank Data: Multiple Plot Summary</TITLE>
+<TITLE>Constancy Table : VegBank </TITLE>
   
  <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  
-<h2>View VegBank Plots: Summarize multiple sets of plots.</h2>
-  <!-- look for special set of params: -->
-  
+<h2>VegBank Constancy Table</h2>
 
-  <logic:notPresent parameter="wparam">
-      <logic:present parameter="includeds">
-        <%
-        // define variables
-        String wparamsarray = "-1";
-        String[] arr_includeds;
-        
-        // assign values to variables
-        arr_includeds = request.getParameterValues("includeds");
-        for(int counter = 0; counter < arr_includeds.length; counter++)
-        {
-         wparamsarray = wparamsarray + "," + arr_includeds[counter];
-        } 
-         
-        %>
-        <bean:define id="wparam"><%= wparamsarray %></bean:define>
-       
-       </logic:present>
-       <logic:notPresent parameter="includeds">
-         <bean:define id="wparambad" value="true" />
-         No datasets were selected.
-         Please choose one or more datasets to compare.  Press <a href="javascript:history.back()">Here to go back</a>.
-       </logic:notPresent>       
-  </logic:notPresent>
+  <!-- look for special set of dataset params: -->
+  <%@ include file="includeviews/get_datasetparams.jsp" %>
   
   <logic:notPresent parameter="where">
     <!-- use default where -->
@@ -67,7 +43,7 @@
          <th class="plant_scientific_name_noauthors">Scientific Without Authors</th>
          <th class="plant_common_name">              Common Name</th>
          <th class="plant_code">                     Code</th>
-         
+         <% rowClass="evenrow" ; %><!-- reset colors for row -->
          <!-- show dataset details -->
          <!-- wparam is on the URL line -->
          <vegbank:get id="datasettop" select="userdataset_countobs" beanName="map"  pager="false" perPage="-1"
@@ -120,6 +96,7 @@
              </tr>
              </logic:notEqual>
              <tr>
+             <% rowClass="evenrow" ; %><!-- reset colors for row -->
              <!-- <td><bean:write name="onerowofmultobssummary" property="plantconcept_id" /></td> -->
            <!-- now get name(s) -->
            
