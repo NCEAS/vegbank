@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-28 23:19:50 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2005-08-04 00:31:22 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,6 +58,7 @@ public class DatasetUtility
 	public static final String TYPE_NORMAL = "normal";
 	public static final String TYPE_LOAD = "load";
 	public static final String TYPE_DATACART = "datacart";
+	public static final String DEF_DS_NAME = "unnamed dataset";
 	public static final Long ANON_USR_ID = null;  // anon usr_id is null
 
 	protected static Log log = LogFactory.getLog(DatasetUtility.class);
@@ -719,20 +720,17 @@ public class DatasetUtility
      * Sets current dataset (used by DatasetUtility).
      * Does not write to DB but does read.
      */
-    public Userdataset getOrCreateDatacart(String sessionId, Long usrId) {
+    public Userdataset getOrCreateDatacart(Long usrId) {
         Userdataset ds = null;
         try {
-            if (usrId == null) { 
-                // get the anon datacart using sessionId
-                ds = getDatasetByName(sessionId, usrId);
-            } else {
+            if (usrId != null) { 
                 // a real user can only have one datacart
                 ds = getDatacartByUser(usrId);
             }
 
             if (ds == null) {
                 log.debug("+ + + creating new empty datacart + + + usr_id: " + usrId);
-                ds = createDataset(null, sessionId, sessionId, 
+                ds = createDataset(null, DEF_DS_NAME, "", 
                         TYPE_DATACART, SHARING_PRIVATE, usrId);
                 AccessionCode dsAC = insertDataset(ds);
                 if (dsAC != null) { 
