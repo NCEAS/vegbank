@@ -9,13 +9,23 @@
      }
     </style>
  
- <!-- aldo -->
+       <!-- look for special set of dataset params: -->
+      <!-- the contents of the following include are commented out: 
+        <%@ include file="includeviews/get_datasetparams.jsp" %> 
+     -->
+ 
+ <!-- key is set in build.properties -->
 <script src="http://maps.google.com/maps?file=api&v=1&key=@googlemaps_apikey@" type="text/javascript"></script>
  
-<TITLE>Google Map VegBank Datasets</TITLE>
+<TITLE>Google Map of VegBank Datasets</TITLE>
  
 <bean:define id="pageContentBean"><!-- init main page content: --></bean:define> 
- 
+
+
+<!-- define where if not defined -->
+<bean:parameter id="where" name="where" value="where_userdataset_pk" />
+
+
  
     <% int mapNum = -1; %>    
             <!-- define vars to get min/max lat and long, intialize to undefined values  -->
@@ -23,12 +33,13 @@
             <% double maxLat = -500.03; %>
             <% double minLong = 500.03; %>
             <% double maxLong = -500.03; %>
-            
-            
-          <logic:equal parameter="where" value="where_userdataset_pk">
+   <!-- check to see if wparam is bad -->
+<logic:notEqual name="wparambad" value="true">             
+     <!-- wparam is NOT BAD -->       
+          <logic:equal name="where" value="where_userdataset_pk">
            
   
-            <vegbank:get id="datasets" select="userdataset" beanName="map"
+            <vegbank:get id="datasets" select="userdataset_countobs" beanName="map"
               pager="false" perPage="-1" allowOrderBy="true" orderBy="xorderby_datasetname" />
 
 
@@ -101,16 +112,18 @@
                 //get as javascript variable, too   
                 var iconPrefix = "<%= iconPrefix %>" ;
                 
-               <bean:define id="mapKey"><strong>Key: </strong> 
+               <bean:define id="mapKey">
+               <!-- float these suckers left to make them stay together and not wrap badly: -->
+               <div style="float:left; padding:2px"><strong>Dataset Key: </strong> </div>
                 <logic:iterate id="onerowofdatasets" name="datasets-BEANLIST">
                    <%     mapNum ++ ;
                           if (mapNum == 10 ) {
                              mapNum = 0;  //reset mapNum to 0, as there are only 0-9 for images.
                           }
                     %>
-                   <img src="@images_link@<%= iconPrefix + mapNum + ".png" %>" />
-                   <bean:write name="onerowofdatasets" property="datasetname" />
-                   (<bean:write name="onerowofdatasets" property="countobs" /> plots) &nbsp; &nbsp;
+                  <div style="float:left; padding:2px"> <img src="@images_link@<%= iconPrefix + mapNum + ".png" %>" />
+                    <a href="@get_link@detail/userdataset/<bean:write name='onerowofdatasets' property='userdataset_id' />" target="_blank"><bean:write name="onerowofdatasets" property="datasetname" /></a>
+                   (<bean:write name="onerowofdatasets" property="countobs" /> plots) </div>
                 </logic:iterate>
                </bean:define>
                    <% mapNum = -1 ; %>
@@ -216,6 +229,20 @@
          
        } //for loop to rezoom
        map.setMapType(G_SATELLITE_TYPE)
+      
+      var whereismap = new GMap(document.getElementById("whereismap"));
+      whereismap.centerAndZoom(new GPoint(MyCenterLong,MyCenterLat), 16);
+        var boundsnew = map.getBoundsLatLng();
+        var points = [];
+        
+          points.push(new GPoint(boundsnew.minX, boundsnew.minY));
+          points.push(new GPoint(boundsnew.minX, boundsnew.maxY));
+          points.push(new GPoint(boundsnew.maxX, boundsnew.maxY));
+          points.push(new GPoint(boundsnew.maxX, boundsnew.minY));
+          points.push(new GPoint(boundsnew.minX, boundsnew.minY));
+          
+        whereismap.addOverlay(new GPolyline(points));
+        whereismap.disableDragging();
       } //browser is compatible
      
    } // onload function
@@ -239,25 +266,52 @@
     
     //]]>
     </script>
- 
+ </logic:notEqual> <!-- wparambad -->
  
  @webpage_masthead_html@ 
-    
-<h1>THIS IS NOW A TEST PAGE test!!</h1>
+ 
+
+<logic:equal name="wparambad" value="true">
+  <!-- failed, report errors here -->
+  <p>
+   Sorry, but VegBank didn't access any datasets to map.  
+   Please Press <a href="javascript:history.back()">back</a> 
+   (the back button on your browser if that doesn't work),
+   and try again.
+   
+   </p>
+   <p>
+   You can also go <a href="@web_context@">Back to the Home Page.</a>
+   </p>
+ 
+</logic:equal>
+
+<logic:notEqual name="wparambad" value="true">
+
 <!-- set up the map: -->
 <!-- write hidden page content: -->
   <div class="hidden" id="pagedatums">
-    <bean:write name="pageContentBean" filter="false"/>
+    <bean:write name="pageContentBean" filter="false" />
   </div>
-  <div id="key" >
-     
-                     
+  <div style="width: 700px" id="key" >
+     <table width="100%" border="0" class="noborder"><tr><td width="80%">
+    <h1>Map of your plots</h1>
+<span class="instructions">This page shows you a <a target="_blank" href="http://maps.google.com">Google Map</a> of your datasets selected.
+However, it is not compatible with all browsers, though most of the major modern browsers 
+are satisfactory.  Firefox/Mozilla and Internet Explorer are fine.  See the help pages Google's Website for more on browser compatibility.
+<br/>
+<strong>Links on this page will open in a new window</strong> (except the built in Google links), as you can move the map around,
+and zoom in and out, but if you use the back button to get to this page, the map will be reset.<br/>
+</span>
      <bean:write name="mapKey" ignore="true" filter="false"/>               
-                         
-             
+     
+     </td><td>
+     <span class="small">Initial location of larger map outlined here:</span><br/>
+     <div id="whereismap" style="width: 190px; height: 100px"></div>
+     </td></tr></table>        
   
   </div>
-  <div id="map" style="width: 720px; height: 500px"></div>
+  <div id="map" style="width: 700px; height: 500px"></div>
 
 <!--
 MIN LAT: <%= minLat %><br/>
@@ -266,7 +320,7 @@ MIN long: <%= minLong %><br/>
 max long: <%= maxLong %><br/>
 -->
 
-
+</logic:notEqual>
 
      @webpage_footer_html@
  
