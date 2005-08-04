@@ -17,7 +17,7 @@
 <bean:define id="pageContentBean"><!-- init main page content: --></bean:define> 
  
  
-    <% int mapNum = 0; %>    
+    <% int mapNum = -1; %>    
             <!-- define vars to get min/max lat and long, intialize to undefined values  -->
             <% double minLat = 500.03; %>
             <% double maxLat = -500.03; %>
@@ -30,13 +30,8 @@
   
             <vegbank:get id="datasets" select="userdataset" beanName="map"
               pager="false" perPage="-1" allowOrderBy="true" orderBy="xorderby_datasetname" />
-              <logic:notEmpty name="datasets-BEANLIST">
-                <logic:iterate id="onerowofdatasets" name="datasets-BEANLIST">
-                   <!-- define icons: -->
-                  
-                </logic:iterate>
-  
-              </logic:notEmpty>  
+
+
   
            <!-- special get for these: -->
             <vegbank:get id="plotobs" select="plotobs_ds_mapping" beanName="map" 
@@ -45,7 +40,7 @@
             <bean:define id="groupsdefined" value="true" />
             
           </logic:equal>
-                <% mapNum = -1 ; %>
+
                 <% String lastDS = "-1"; %>
          <logic:notPresent name="groupsdefined">
          
@@ -61,18 +56,9 @@
 <script type="text/javascript">
     //<![CDATA[
 
-       // Creates a marker whose info window displays the given number
-       function createMarker(point, number) {
-         var marker = new GMarker(point);
-       
-         // Show this marker's index in the info window when it is clicked
-          var html =  number  ;
-         GEvent.addListener(marker, "click", function() {
-           marker.openInfoWindowHtml(html);
-         });
-       
-         return marker;
-       }
+  
+  
+      
   
   // adds the google map loader when the window loads.
   addEvent(window, "load", vegbankGoogleMapLoad);
@@ -87,9 +73,50 @@
         map.addControl(new GLargeMapControl());
         map.addControl(new GMapTypeControl());
          
+         // go ahead and set default icon.
+         <% String iconPrefix = "map_google_c_" ; %>
+  
+              <logic:notEmpty name="datasets-BEANLIST">
+                // define base of class of icon:
+                var baseIcon = new GIcon();
+                // do a key, and differentiate icons. 
+                // default icons are colored 
+                   
+                   baseIcon.shadow = "@images_link@map_google_shadow_20.png";
+                   baseIcon.iconSize = new GSize(12, 20);
+                   baseIcon.shadowSize = new GSize(22, 20);
+                   baseIcon.iconAnchor = new GPoint(6, 20);
+                   baseIcon.infoWindowAnchor = new GPoint(5, 1);
+                   
+
+                   <logic:equal parameter="mapicons" value="nocolors">
+                      <% iconPrefix = "map_google_l_" ; %>
+                      baseIcon.shadow = "@images_link@map_google_shadow_50.png";
+                      baseIcon.iconSize = new GSize(20, 34);
+                      baseIcon.shadowSize = new GSize(37, 34);
+                      baseIcon.iconAnchor = new GPoint(9, 34);
+                      baseIcon.infoWindowAnchor = new GPoint(9, 2);
+                      baseIcon.infoShadowAnchor = new GPoint(18, 25);
+                   </logic:equal>
+                //get as javascript variable, too   
+                var iconPrefix = "<%= iconPrefix %>" ;
+                
+               <bean:define id="mapKey"><strong>Key: </strong> 
+                <logic:iterate id="onerowofdatasets" name="datasets-BEANLIST">
+                   <%     mapNum ++ ;
+                          if (mapNum == 10 ) {
+                             mapNum = 0;  //reset mapNum to 0, as there are only 0-9 for images.
+                          }
+                    %>
+                   <img src="@images_link@<%= iconPrefix + mapNum + ".png" %>" />
+                   <bean:write name="onerowofdatasets" property="datasetname" />
+                   (<bean:write name="onerowofdatasets" property="countobs" /> plots) &nbsp; &nbsp;
+                </logic:iterate>
+               </bean:define>
+                   <% mapNum = -1 ; %>
+              </logic:notEmpty>  
   
 
-     
      <logic:notEmpty name="plotobs-BEANLIST">
       <logic:iterate id="onerowofobservation" name="plotobs-BEANLIST">
                 // figure out which map icon to use 
@@ -132,7 +159,9 @@
           
                  var point = new GPoint(<bean:write name="onerowofobservation" property="longitude" />,
                                         <bean:write name="onerowofobservation" property="latitude" />);
-                 var marker = createMarker(point, document.getElementById("plot_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />").innerHTML);
+                 var marker = createMarker(point, 
+                   document.getElementById("plot_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />").innerHTML,
+                     <%= mapNum %>, iconPrefix , baseIcon );
                  //var marker = createMarker(point, "goo");
                              map.addOverlay(marker);
                  
@@ -190,6 +219,24 @@
       } //browser is compatible
      
    } // onload function
+    
+    
+     // Creates a marker whose info window displays the given html (not number)
+           function createMarker(point, html, number, iconPrefix, baseIcon) {
+             var icon = new GIcon(baseIcon);
+             icon.image = "@images_link@" + iconPrefix +  number + ".png";
+             var marker = new GMarker(point, icon);
+           
+             // show plot info when clicked
+             
+             GEvent.addListener(marker, "click", function() {
+               marker.openInfoWindowHtml(html);
+             });
+           
+             return marker;
+       }
+    
+    
     //]]>
     </script>
  
@@ -199,17 +246,25 @@
 <h1>THIS IS NOW A TEST PAGE test!!</h1>
 <!-- set up the map: -->
 <!-- write hidden page content: -->
-<div class="hidden" id="pagedatums">
-<bean:write name="pageContentBean" filter="false"/>
-</div>
-<div id="map" style="width: 720px; height: 500px"></div>
+  <div class="hidden" id="pagedatums">
+    <bean:write name="pageContentBean" filter="false"/>
+  </div>
+  <div id="key" >
+     
+                     
+     <bean:write name="mapKey" ignore="true" filter="false"/>               
+                         
+             
+  
+  </div>
+  <div id="map" style="width: 720px; height: 500px"></div>
 
-
+<!--
 MIN LAT: <%= minLat %><br/>
 max LAT: <%= maxLat %><br/>
 MIN long: <%= minLong %><br/>
 max long: <%= maxLong %><br/>
-
+-->
 
 
 
