@@ -17,7 +17,7 @@ A constancy table shows you the taxa on each set of plots, showing how many
 plots have each species for each dataset, and also the average cover percent (if available in the database).
 </p>
 
-<p class="instructions">You must be a register user who is logged in to use this feature.</p>
+<p class="instructions">You must be a registered user who is logged in to use this feature.</p>
 
  <p class="instruction">Please check the row next to the datasets you would like to include
   in the constancy table.</p>
