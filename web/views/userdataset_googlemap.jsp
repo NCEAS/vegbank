@@ -10,11 +10,53 @@
     </style>
  
  <!-- aldo -->
-<script src="http://maps.google.com/maps?file=api&v=1&key=ABQIAAAAGgQ8067Uv8fomyaGenqurhScc7vbZ9k8oOw50vJywIe37DMV3RQQqfC--A7oo1vWYtUwWji02NwdAw" type="text/javascript"></script>
+<script src="http://maps.google.com/maps?file=api&v=1&key=@googlemaps_apikey@" type="text/javascript"></script>
  
 <TITLE>Google Map VegBank Datasets</TITLE>
  
 <bean:define id="pageContentBean"><!-- init main page content: --></bean:define> 
+ 
+ 
+    <% int mapNum = 0; %>    
+            <!-- define vars to get min/max lat and long, intialize to undefined values  -->
+            <% double minLat = 500.03; %>
+            <% double maxLat = -500.03; %>
+            <% double minLong = 500.03; %>
+            <% double maxLong = -500.03; %>
+            
+            
+          <logic:equal parameter="where" value="where_userdataset_pk">
+           
+  
+            <vegbank:get id="datasets" select="userdataset" beanName="map"
+              pager="false" perPage="-1" allowOrderBy="true" orderBy="xorderby_datasetname" />
+              <logic:notEmpty name="datasets-BEANLIST">
+                <logic:iterate id="onerowofdatasets" name="datasets-BEANLIST">
+                   <!-- define icons: -->
+                  
+                </logic:iterate>
+  
+              </logic:notEmpty>  
+  
+           <!-- special get for these: -->
+            <vegbank:get id="plotobs" select="plotobs_ds_mapping" beanName="map" 
+                 pager="false" perPage="-1" allowOrderBy="true" orderBy="orderby_ds_plotcode" />
+           <!-- dont replace this beanlist -->
+            <bean:define id="groupsdefined" value="true" />
+            
+          </logic:equal>
+                <% mapNum = -1 ; %>
+                <% String lastDS = "-1"; %>
+         <logic:notPresent name="groupsdefined">
+         
+                
+          <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
+                  whereNonNumeric="where_observation_ac" beanName="map" pager="false" perPage="-1"
+                  xwhereEnable="true" allowOrderBy="true" />
+        </logic:notPresent>
+     
+      
+     <!-- now define script functions that define all this -->
  
 <script type="text/javascript">
     //<![CDATA[
@@ -47,46 +89,6 @@
          
   
 
-   <% int mapNum = 0; %>    
-           // define vars to get min/max lat and long, intialize to undefined values 
-           <% double minLat = 500.03; %>
-           <% double maxLat = -500.03; %>
-           <% double minLong = 500.03; %>
-           <% double maxLong = -500.03; %>
-           
-           
-         <logic:equal parameter="where" value="where_userdataset_pk">
-          
- 
-           <vegbank:get id="datasets" select="userdataset" beanName="map"
-             pager="false" perPage="-1" allowOrderBy="true" orderBy="xorderby_datasetname" />
-             <logic:notEmpty name="datasets-BEANLIST">
-               <logic:iterate id="onerowofdatasets" name="datasets-BEANLIST">
-                  // define icons: 
-                 
-               </logic:iterate>
- 
-             </logic:notEmpty>  
- 
-          // special get for these: 
-           <vegbank:get id="plotobs" select="plotobs_ds_mapping" beanName="map" 
-                pager="false" perPage="-1" allowOrderBy="true" orderBy="orderby_ds_plotcode" />
-           // dont replace this beanlist 
-           <bean:define id="groupsdefined" value="true" />
-           
-         </logic:equal>
-               <% mapNum = -1 ; %>
-               <% String lastDS = "-1"; %>
-        <logic:notPresent name="groupsdefined">
-        
-               
-         <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
-                 whereNonNumeric="where_observation_ac" beanName="map" pager="false" perPage="-1"
-                 xwhereEnable="true" allowOrderBy="true" />
-       </logic:notPresent>
-    
-     
-     // here, loop around the plots: 
      
      <logic:notEmpty name="plotobs-BEANLIST">
       <logic:iterate id="onerowofobservation" name="plotobs-BEANLIST">
