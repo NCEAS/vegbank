@@ -39,8 +39,8 @@
        <td><input type="checkbox" value="<bean:write name='userdataset_pk' />" name="includeds" /></td>
        <td><a href="@get_link@summary/userdataset/<bean:write name='userdataset_pk' />">details</a>
        <%@ include file="../autogen/userdataset_summary_data.jsp" %>
-       <td>
-       <a href='@get_link@std/observation/<bean:write name="onerowofuserdataset" property="accessioncode" />?where=where_inuserdataset_ac_obs'>
+       <td class="numeric">
+       <a href='@get_link@std/observation/<bean:write name="onerowofuserdataset" property="itemaccessioncode" />?where=where_inuserdataset_ac_obs'>
        <bean:write name="onerowofuserdataset" property="countobs" /></a></td>
      </tr>
 
