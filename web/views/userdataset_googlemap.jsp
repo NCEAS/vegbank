@@ -213,13 +213,13 @@
            map.centerAndZoom(new GPoint( MyCenterLong,MyCenterLat), (MyDefaultZoomLevel - i)); 
            //get map size
            var bounds = map.getBoundsLatLng();
-           // var width = bounds.maxX - bounds.minX;
-           // var height = bounds.maxY - bounds.minY;
+            var width = bounds.maxX - bounds.minX;
+            var height = bounds.maxY - bounds.minY;
            
            //check to see if it is too small
            
            if ( (<%= minLong %> < bounds.minX) || (<%= maxLong %> > bounds.maxX) 
-                  || (<%= minLat %> < bounds.minY) || (<%= maxLong %> > bounds.maxY) ) {
+                  || (<%= minLat %> < bounds.minY) || (<%= maxLat %> > ( bounds.maxY - (height/10) )) ) {
              //reached too small, go up one
              map.centerAndZoom(new GPoint( MyCenterLong,MyCenterLat), (MyDefaultZoomLevel - i) + 1);
              // and stop doing this
