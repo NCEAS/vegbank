@@ -105,28 +105,25 @@
                    <bean:write name="onerowofmultobssummary" property="plantname" />
                  </a>
                </td>
+               <!-- need to put the "other names" with asterisks at same place as names with (for sorting), so these lines are really long -->
                <td class="largefield plant_full_scientific_name">     
                  <a href="@get_link@detail/plantconcept/<bean:write name='onerowofmultobssummary' property='plantconcept_id' />">
-                   <bean:write name="onerowofmultobssummary" property="sciname" />
-                   <logic:empty name="onerowofmultobssummary" property="sciname"><bean:write name="onerowofmultobssummary" property="plantname" />**</logic:empty>
+                   <bean:write name="onerowofmultobssummary" property="sciname" /><logic:empty name="onerowofmultobssummary" property="sciname"><bean:write name="onerowofmultobssummary" property="plantname" />**</logic:empty>
                  </a>
                </td>
                <td class="largefield plant_scientific_name_noauthors">
                  <a href="@get_link@detail/plantconcept/<bean:write name='onerowofmultobssummary' property='plantconcept_id' />">
-                   <bean:write name="onerowofmultobssummary" property="scinamenoauth" />
-                   <logic:empty name="onerowofmultobssummary" property="scinamenoauth"><bean:write name="onerowofmultobssummary" property="plantname" />**</logic:empty>
+                   <bean:write name="onerowofmultobssummary" property="scinamenoauth" /><logic:empty name="onerowofmultobssummary" property="scinamenoauth"><bean:write name="onerowofmultobssummary" property="plantname" />**</logic:empty>
                  </a>
                </td>
                <td class="largefield plant_common_name">              
                  <a href="@get_link@detail/plantconcept/<bean:write name='onerowofmultobssummary' property='plantconcept_id' />">
-                   <bean:write name="onerowofmultobssummary" property="common" />
-                   <logic:empty name="onerowofmultobssummary" property="common"><bean:write name="onerowofmultobssummary" property="plantname" />**</logic:empty>
+                   <bean:write name="onerowofmultobssummary" property="common" /><logic:empty name="onerowofmultobssummary" property="common"><bean:write name="onerowofmultobssummary" property="plantname" />**</logic:empty>
                  </a>
                </td>
                <td class="largefield plant_code">                     
                  <a href="@get_link@detail/plantconcept/<bean:write name='onerowofmultobssummary' property='plantconcept_id' />">
-                   <bean:write name="onerowofmultobssummary" property="code" />
-                   <logic:empty name="onerowofmultobssummary" property="code"><bean:write name="onerowofmultobssummary" property="plantname" />**</logic:empty>
+                   <bean:write name="onerowofmultobssummary" property="code" /><logic:empty name="onerowofmultobssummary" property="code"><bean:write name="onerowofmultobssummary" property="plantname" />**</logic:empty>
                  </a>
                </td>
                <!-- reset the current column -->
