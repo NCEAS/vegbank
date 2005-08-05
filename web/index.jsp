@@ -125,7 +125,7 @@ function getHelpPageId() {
     <legend>My VegBank Account</legend>
     <ul>
     <li><a href="@web_context@LoadUser.do">Edit profile information</a></li>
-    <li><a href="@web_context@DisplayDatasets.do">Manage datasets</a></li>
+    <li><a href="@general_link@datasets.html">Manage datasets</a></li>
     </ul>
     </fieldset>
     <br />
