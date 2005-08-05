@@ -6,17 +6,71 @@
 
  @webpage_masthead_html@
  
-<blockquote> 
-  <h2>
-    View or Manage Datasets</h2>
-  	
-		<!--a href="@usermanagement_servlet@?action=showfiles" --> <b>View Your Registered Queries </b> <br />
- 		<!--a href="@usermanagement_servlet@?action=showfiles" --> <b>View Your Registered Result Sets </b> <br />
- 		<!--a href="@usermanagement_servlet@?action=showfiles" --> <b>View Your Uploaded Files  </b><br />
 
-	<p><b>Select plots from 
-    dataset</b> </p>
-  <blockquote> 
+  <h2>View or Manage Datasets</h2>
+ 
+   <p class="instructions"><strong>Please Note:</strong> 
+      To store and work with datasets, you'll need a 
+      <a href="@forms_link@RegisterNewUser.jsp">VegBank Account</a>, which is free.
+      If you need only temporary access to a single dataset, you
+      can use the datacart as an anonymous user, but some functions (such as dealing with
+      multiple datasets simultaneously) will not be possible.
+   </p>
+ 
+  	<p><strong>
+    <a href="@views_link@datacart_detail.jsp">View your datacart,</a></strong>
+    which is the "active" dataset that you can add items to as
+    you navigate through VegBank's menus and views. </p>
+    <p><strong><a href="@web_context@DisplayDatasets.do">View/Edit all your datasets.</a>
+     </strong> 
+    You can activate any of these datasets to become your datacart.
+      Additionally, you can rename or change the dataset description, 
+      or delete datasets you don't wish to keep any longer.  Soon,
+      you'll be able to merge datasets, too.</p>
+      
+<!--  <p><strong>Merge datasets</strong></p>
+
+  <p><strong>Delete datasets</strong></p>
+
+  <p><strong>Download dataset</strong></p>  -->
+      
+    <h2>Dataset Functions</h2>
+    
+    <p><strong>
+       <a href="@forms_link@MapDatasets.jsp">Map Datasets.</a></strong>  
+       This maps the plots in one or more datasets 
+       onto a geographical map, using external mapping websites.  </p>   
+
+    <p><strong>
+       <a href="@forms_link@ConstancyTableRequest.jsp">Constancy Table.</a></strong>  
+       VegBank can provide a report of all plants occuring in one or more datasets,
+       with the number of plots each plant occurs in (for each dataset), as well as
+       the average cover when present.</p>
+       
+    <p><strong>
+       <a href="@forms_link@PlotSearchByDataset.jsp?searchby=plant">
+       Find plots with <i>plants</i> in a dataset.</a></strong>  
+       The <a href="@plotquery_page_advanced@">Plot Search</a> allows you
+       to find plots that match a plant name, such as "Acer rubrum."  
+       For more specific searches that match exact plant concepts, you can add
+       plant concepts to your datacart.  Then you can search
+       for plots in the datacart, or another dataset here.
+       
+       </p>
+       
+
+    <p><strong>
+       <a href="@forms_link@PlotSearchByDataset.jsp?searchby=comm">Find plots with <i>communities</i> in a dataset.</a></strong>  
+       Similar to the above search, you can add particular community concepts
+       to your datacart, then from here, you can search
+       for plots that have been interpreted as any of those communities.
+       
+       </p>
+       
+
+	<!--<p><b>Select plots from 
+    dataset</b> </p> -->
+  <!-- <blockquote> 
     <p> Copy to new dataset<br />
       Display<br />
       Delete<br />
@@ -24,8 +78,8 @@
       Cite<br />
       Interpret taxa<br />
       Select active plot</p>
-  </blockquote>
-  <p><b>View plots</b></p>
+  </blockquote> -->
+ <!-- <p><b>View plots</b></p>
   <blockquote> 
     <p> Select view options<br />
       Choose how view 
@@ -37,17 +91,17 @@
       interpretation<br />
       Attach plot to 
       active dataset</p>
-    </blockquote>
+    </blockquote> -->
 	
-  <p><b>Merge datasets</b></p>
-  <p><b>Delete datasets</b></p>
-  <p><b>Download dataset</b></p>
+
+<!--
   <blockquote> 
     <p>Select fields to download<br />
       Select format 
       for download [XML, PC-Ord, TNC-Plots, Cornell Condensed, TurboVeg]</p>
     </blockquote>
-</blockquote>
+-->
+
 <br />
 @webpage_footer_html@
 
