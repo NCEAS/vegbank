@@ -2,10 +2,9 @@
   A form can easily wrap this file and do something with the array of includeds params -->
 
 
-<!-- set perPage to -1 -->
-<bean:define id="perPage" value="-1" />
+
 <!-- sets to force all datasets to be displayed, no pagination: -->
-<bean:define id="forceAll" value="true" />
+<bean:define id="forceNoPage" value="true" />
   <!-- do the right get -->
  <%@ include file="sub_getuserdatasets.jsp" %>
   <!-- display stuff -->
@@ -33,7 +32,7 @@
 
   <logic:iterate id="onerowofuserdataset" name="userdataset-BEANLIST"><!-- iterate over all records in set : new table for each -->
     <!-- only show those with observations -->
-    <logic:greaterThan name="onerowofuserdataset" property="countobs" value="0">
+   
       <bean:define id="userdataset_pk" name="onerowofuserdataset" property="userdataset_id" />
      <tr>
        <td><input type="checkbox" value="<bean:write name='userdataset_pk' />" name="includeds" /></td>
@@ -45,7 +44,7 @@
      </tr>
 
 
-    </logic:greaterThan>
+    
 
   </logic:iterate>
   </table>
