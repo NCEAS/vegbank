@@ -29,31 +29,49 @@
 
 <p class="instructions">You must be a registered user who is logged in to use this feature.</p>
 
- <p class="instruction">Please check the row next to the datasets you would like to map.  Each dataset
- will be marked with a different colored and shaped icon in a map, using Yahoo! Maps.
- 
- </p>
- <p>
-   The maps from this form open in a new window, in an external website.  VegBank uses Yahoo! Maps,
+
+ <p class="instructions">
+   Mapping is handled in an external website.  VegBank uses 
+   <a href="http://maps.yahoo.com">Yahoo! Maps</a> and 
+   <a href="http://maps.google.com">Google Maps</a>,
    who have generously made their mapping software open to such requests.
    
-    VegBank is not responsible for the content in the lower window, including any advertisements found there. <br/>
+    VegBank is not responsible for the content in these maps,
+    including any advertisements found there. <br/>
     
     
  
+ </p>
+ 
+  <p class="instructions">Please check the row next to the datasets you would like to map.  
+  Then choose whether you would like to use Yahoo Maps or Google Maps.  
+  For Google Maps, you have a choice of icons as well.
+  
+  
  </p>
  
   <form name="dataset" action="@views_link@userdataset_map.jsp" onsubmit="prepareForm()">
-
+  <bean:define id="where" value="where_userdataset_hastable" />
+  <bean:define id="wparam" value="observation" />
+  
   <%@ include file="/views/includeviews/sub_userdataset_checkboxes.jsp" %>
   <logic:present name="successfulget">
     <!-- only put this button if there were user datasets retrieved -->
     
 
-    <p>Map using:<br/>
-     <input type="radio" name="mapwith" value="yahoo" />Yahoo! Maps <br/>
-     <input type="radio" name="mapwith" value="google" checked="checked">Google Maps <br/>
-     </p>
+    <p>Map using: </p>
+     <table class="thinlines"><tr class="evenrow"><td>
+     <input type="radio" name="mapwith" value="yahoo" />Yahoo! Maps 
+     </td></tr>
+     <tr class="oddrow"><td> 
+     <input type="radio" name="mapwith" value="google" checked="checked">Google Maps 
+     <div class="small">
+       <br/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="mapicons" value="colors" checked="checked"/> Smaller Icons of Different Colors <img src="@images_link@map_google_c_0.png" alt="example small icon #1" /><img src="@images_link@map_google_c_1.png" alt="example small icon #2" /><img src="@images_link@map_google_c_2.png" alt="example small icon #3" />
+       <br/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="mapicons" value="nocolors" /> Larger Icons Marked With Letters <img src="@images_link@map_google_l_0.png" alt="example large icon #1" /><img src="@images_link@map_google_l_1.png" alt="example large icon #2" /><img src="@images_link@map_google_l_2.png" alt="example large icon #3" />
+     </div>
+     </td></tr></table>
+     
+    
      <input type="submit" value="Map Datasets" />
    </logic:present> 
   </form>
