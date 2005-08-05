@@ -19,19 +19,21 @@ plots have each species for each dataset, and also the average cover percent (if
 
 <p class="instructions">You must be a registered user who is logged in to use this feature.</p>
 
- <p class="instruction">Please check the row next to the datasets you would like to include
+ <p class="instructions">Please check the row next to the datasets you would like to include
   in the constancy table.</p>
   <form name="dataform" action="@views_link@userdataset_constancyanalysis.jsp">
-
+    <bean:define id="where" value="where_userdataset_hastable" />
+  <bean:define id="wparam" value="observation" />
+  
   <%@ include file="/views/includeviews/sub_userdataset_checkboxes.jsp" %>
   <logic:present name="successfulget">
     <!-- only put this button if there were user datasets retrieved -->
-    <input type="submit" value="Get Constancy Table" />
+    <br/><input type="submit" value="Get Constancy Table" />
   </logic:present>  
  </form>
 </logic:notEmpty>
 
- 
+ <br/>
 @webpage_footer_html@
 
 
