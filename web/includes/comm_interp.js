@@ -65,20 +65,6 @@ function lookupComm(evt) {
     window.open('@cite_link@' + ac.innerHTML, '', 'width=810,height=600,location,status,scrollbars,toolbar,resizable');
 }
 
-function findSibling(node, nodeName, max) {
-    var sibling = node.nextSibling;
-    var count = 0;
-    while (sibling != null && sibling.nodeName.toLowerCase() != nodeName.toLowerCase() && count < max) {
-        sibling = sibling.nextSibling;
-        count++;
-    }
-    return sibling;
-}
-                                                                                                                                                                              
-
-function show(elem) { elem.style.display = 'block'; }
-function hide(elem) { elem.style.display = 'none'; }
-
 //
 // Hides the add_form.
 //

@@ -555,14 +555,11 @@ function isTextNotEmpty(txt) {
 
 function showorhidediv(theid)
 {
-	var el = document.getElementById(theid);
-	if (el.style.display == 'none')
-	{
-		el.style.display = 'block';
-
+	var el = gebid(theid);
+	if (el.style.display == 'none') {
+		show(el); 
 	} else {
-		el.style.display = 'none';
-
+		hide(el);
 	}
 }
 
@@ -857,6 +854,7 @@ function resubmitOpeningForm() {
 		//alert(e);
 		return "";
 	}
+    return false;
 }
 
 function setupConfig(strView) {
@@ -899,7 +897,7 @@ function postNewParam(theName,theVal) {
     }
   }
   resubmitform.submit();
-
+    return false;
 }
 
 function tut_close() {
@@ -977,9 +975,10 @@ function removeClassFromDocIfAlsoClass(removeclass,ifalsoclass,tableid,addsuffix
 	// function removes a class from elements, if also another class is present
 	// example: remove class "hidden" from all "email" class elements would unhide emails on a page
 	// will add suffix to ifalsoclass
-	var inc=0
-	  if (tableid == "*") { var alltags=document.all? document.all : document.getElementsByTagName("*") ;}
-	  if (tableid != "*") { var alltags=gebid(tableid).getElementsByTagName("*") ;}
+	var inc=0;
+    var alltags;
+	  if (tableid == "*") { alltags=document.all? document.all : document.getElementsByTagName("*") ;}
+	  if (tableid != "*") { alltags=gebid(tableid).getElementsByTagName("*") ;}
 	  for (i=0; i<alltags.length; i++){
 	    if (alltags[i].className.indexOf(ifalsoclass)!=-1)
 	    {
@@ -999,9 +998,10 @@ function removeClassFromDocIfAlsoClass(removeclass,ifalsoclass,tableid,addsuffix
 function addClassToDocIfAlsoClass(addclass,ifclass,tableid,addsuffix) {
 	// function removes a class from elements, if also another class is present
 	// example: remove class "hidden" from all "email" class elements would unhide emails on a page
-	  var inc=0
-	  if (tableid == "*") { var alltags=document.all? document.all : document.getElementsByTagName("*") ;}
-	  if (tableid != "*") { var alltags=gebid(tableid).getElementsByTagName("*") ;}
+	  var inc=0;
+      var alltags;
+	  if (tableid == "*") { alltags=document.all? document.all : document.getElementsByTagName("*") ;}
+	  if (tableid != "*") { alltags=gebid(tableid).getElementsByTagName("*") ;}
 	//debugging:  var dontagain = false;
 	  for (i=0; i<alltags.length; i++){
 	    if (alltags[i].className.indexOf(ifclass)!=-1)
@@ -1042,6 +1042,7 @@ function showTaxonName(toshow,tableid) {
     // set cookie
     setCookie('taxon_name_full', toshow);
     //alert('setting cookie: taxon_name: ' + gebid("taxonNameSelect").selectedIndex);
+    return false;
 }
 
 
@@ -1242,4 +1243,24 @@ function DeleteCookie (name) {
     document.cookie = name + "=" + cval + "; expires=" + exp.toGMTString();
 }
 
+
+//
+// Searches siblings of given node with
+// given nodeName a maximum of max times.
+//
+function findSibling(node, nodeName, max) {
+    var sibling = node.nextSibling;
+    var count = 0;
+    while (sibling != null && sibling.nodeName.toLowerCase() != nodeName.toLowerCase() && count < max) {
+        sibling = sibling.nextSibling;
+        count++;
+    }
+    if (count == max) {
+        return null;
+    }
+    return sibling;
+}
+                                                                                                                                                                              
+function show(elem) { elem.style.display = 'block'; }
+function hide(elem) { elem.style.display = 'none'; }
 
