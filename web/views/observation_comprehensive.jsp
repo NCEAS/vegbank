@@ -141,8 +141,9 @@ function getHelpPageId() {
 </div>
 </TD>
 </TR>
+</TABLE>
 <!-- obs contrib -->
-<TR><TD COLSPAN="2" align="left">
+
 <vegbank:get id="observationcontributor" select="observationcontributor" beanName="map" pager="false" where="where_observation_pk" wparam="observation_pk" perPage="-1" />
 <table class="leftrightborders" cellpadding="2">
 <tr><th colspan="9">Observation Contributors:</th></tr>
@@ -160,10 +161,7 @@ function getHelpPageId() {
 </logic:iterate>
 </logic:notEmpty>
 </table>
-</TD></TR>
-
-
-<TR><TD colspan="2" valign="top" align="left">
+ 
 <!-- community info -->
 
 <bean:include id="commclass_page" page='<%= "/views/raw/raw_commclass.jsp?observation_pk=" + observation_pk  %>' />
@@ -204,11 +202,29 @@ function getHelpPageId() {
 </logic:iterate>
 </table>
 </logic:notEmpty>
-</TD>
-</TR>
-<TR><TD colspan="2"><hr /><br/></TD></TR>
-</TABLE>
+<br/><br/>
+<table class="thinlines">
+<tr><th colspan="3">User Defined Values</th></tr>
+
+<bean:define id="userdefinedexist" value="false" /><!-- default value-->
+<bean:include id="defval_obs" page='<%= "/views/raw/raw_definedvalue_summary.jsp?wparam=observation" + Utility.PARAM_DELIM + observation_pk  %>' />
+<logic:notMatch name="defval_obs" value="@!NO_USER_DEFINED_VALUES!@">
+  <bean:define id="userdefinedexist" value="true" /><!-- wrote some -->
+  <bean:write name="defval_obs" filter="false" />
+</logic:notMatch>
+
+<bean:include id="defval_plot" page='<%= "/views/raw/raw_definedvalue_summary.jsp?wparam=plot" + Utility.PARAM_DELIM + plot_pk  %>' />
+<logic:notMatch name="defval_plot" value="@!NO_USER_DEFINED_VALUES!@">
+  <bean:define id="userdefinedexist" value="true" /><!-- wrote some -->
+  <bean:write name="defval_plot" filter="false" />
+</logic:notMatch>
+
+<logic:equal name="userdefinedexist" value="false"><!-- if I didn't write any -->
+  <tr><td colspan="2">No User Defined Data for this plot</td></tr>
+</logic:equal>
+
+</table>
 <!--/logic:iterate NOPE-->
-<vegbank:pager/>
+<!--vegbank:pager/-->
 <!-- NOPE /logic:notEmpty NOPE--><br />
 @webpage_footer_html@
