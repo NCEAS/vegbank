@@ -12,35 +12,50 @@
  </logic:empty>
 <logic:notEmpty name="userdataset-BEANLIST"><!-- set up table -->
 
-<table class="leftrightborders" cellpadding="1"><!--each field, only write when HAS contents-->
+<table class="thinlines" cellpadding="1"><!--each field, only write when HAS contents-->
 <tr>
-<th>Datacart</th>
-<%@ include file="../autogen/userdataset_summary_head.jsp" %>
-<th>ITEMS</th>
+<th nowrap="nowrap">Datacart</th>
+<!--%@ include file="../autogen/userdataset_summary_head.jsp" %-->
+<%@ include file="../custom/userdataset_summary_head.jsp" %>
+<th nowrap="nowrap">ITEMS</th>
 </tr>
 
 <logic:iterate id="onerowofuserdataset" name="userdataset-BEANLIST"><!-- iterate over all records in set : new table for each -->
 
 
-<tr  class="@nextcolorclass@">
-<td>
+<logic:empty name="onerowofuserdataset" property="datasetdescription">
+    <bean:define id="dsDesc" value="no description"/>
+</logic:empty>
+<logic:notEmpty name="onerowofuserdataset" property="datasetdescription">
+    <bean:define id="dsDesc" name="onerowofuserdataset" property="datasetdescription"/>
+</logic:notEmpty>
+
+<tr class="@nextcolorclass@" id="<bean:write name="onerowofuserdataset" property="userdataset_id" />">
+<td align="center" class="control_tab_link" rowspan="2">
  <logic:equal name="onerowofuserdataset" property="datasettype" value="normal">
-<form method="post" action="@views_link@datacart_detail.jsp"><input type="hidden" name="delta" value="set" />
-                    <input type="hidden" name="deltaItems" value="<bean:write name='onerowofuserdataset' property='userdataset_id' />" />
-                    <input type="submit" value="activate" />
-                    </form>
-                    </logic:equal>
-     </td>               
-<%@ include file="../autogen/userdataset_summary_data.jsp" %>
+        <form method="post" action="@views_link@datacart_detail.jsp"><input type="hidden" name="delta" value="set" />
+        <input type="hidden" name="deltaItems" value="<bean:write name='onerowofuserdataset' property='userdataset_id' />" />
+        <input type="submit" value="activate" />
+        <br />
+        </form>
+ </logic:equal>
+        <a href="#" onclick="editDatasetRow(this.parentNode);return false;" class="control_tab_link">edit</a>
+ <logic:notEqual name="onerowofuserdataset" property="datasettype" value="datacart">
+        <a href="#" onclick="removeDatasetRow(this.parentNode);return false;" class="nobg"><img src="@image_server@grey_x.gif"></a>
+ </logic:notEqual>
+
+     </td>
+<!--%@ include file="../autogen/userdataset_summary_data.jsp" %-->
+<%@ include file="../custom/userdataset_summary_data.jsp" %>
 
 <!-- show dataset items -->
-<TD class="largefield">
+<TD class="largefield" rowspan="2">
 <bean:define id="ud_id" name="onerowofuserdataset" property="userdataset_id" />
  
 <vegbank:get id="userdatasetitem" select="userdatasetitem_counts" beanName="map" 
   where="where_userdataset_pk" wparam="ud_id" perPage="-1" />
    <logic:empty name="userdatasetitem-BEANLIST">
-                Nothing is in the dataset.
+                Empty dataset.
    </logic:empty>
 
 <logic:notEmpty name="userdatasetitem-BEANLIST">
@@ -76,10 +91,18 @@
 </TD>
 
 </tr>
+<tr class="<%= rowClass %>" id="<bean:write name="onerowofuserdataset" property="userdataset_id" />-desc">
+<td colspan="3" class="special_note"><bean:write name="dsDesc" /></td>
+</tr>
+
 </logic:iterate>
 </table>
 
 
+
+<!-- BEGIN EDIT FORM TEMPLATE -->
+<table id="hidden_table" class="hidden"><tr id="edit_row_tpl" valign="top" style="background-color: #CAAFB1; border: 4px solid #f00;"><form onsubmit="saveCurrentRecord();return false;"><td class="control_tab" nowrap="nowrap"><a href="#" onclick="saveDatasetEdit(this.parentNode);return false;">save</a> | <a href="#" onclick="cancelDatasetEdit(this.parentNode);return false;">cancel</a><br/><img src="@images_link@i.gif" border="0" width="24" height="22" id="edit_row_busy_icon" class="busyicon"/></td><td><input id="name_input" name="dsname" size="27" style="font-size=9pt"></td><td colspan="3" align="center"><textarea id="desc_textarea" name="dsdesc" rows="3" cols="32" style="font-size:8pt;">Enter description</textarea></td></form></tr><tr id="hidden_table_row"><td></td></tr></table>
+<!-- END EDIT FORM TEMPLATE -->
 
 
 </logic:notEmpty>

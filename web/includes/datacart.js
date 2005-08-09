@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.6 2005-05-30 02:04:19 anderson Exp $
+// $Id: datacart.js,v 1.7 2005-08-09 23:59:12 anderson Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -8,6 +8,7 @@
 var dc_formId = null;
 var dc_onClassCheckbox = null;
 var dc_offClassCheckbox = null;
+var dc_editedCol = null;
 
 
 
@@ -33,14 +34,14 @@ function refreshCartCount() {
  * Uses AJaX and <vegbank:datacart> to update the datacart items.
  */
 function updateCartItem(elem, add) {
-    setBusy(true);
+    setDatacartBusy(true);
 	var ajax = initAjax();
 
     var fnWhenDone = function(oXML) { 
         //alert("pong");
 		setDatacartCount(oXML.responseText);
         flashDatacart();
-        setBusy(false);
+        setDatacartBusy(false);
     };
 
     var params;
@@ -67,7 +68,7 @@ function updateCartItem(elem, add) {
  */
 function addAllResults(itemType) {
   
-    setBusy(true);
+    setDatacartBusy(true);
 
 	var ajax = initAjax();
 
@@ -75,7 +76,7 @@ function addAllResults(itemType) {
 		setDatacartCount(oXML.responseText);
         changePageItemStates(true, false);
         flashDatacart();
-        setBusy(false);
+        setDatacartBusy(false);
     };
 
 
@@ -429,9 +430,14 @@ function changeItemState(elem, isChecked, doCartUpdate) {
 }
 
 
-function setBusy(isBusy) {
+function setDatacartBusy(isBusy) {
     document.getElementById("datacart-count-icon").className = 
 		(isBusy ? "busyanim" : "datacart-icon-normal");
+}
+                                                                                                                                                                                                  
+function setEditRowBusy(isBusy) {
+    document.getElementById("edit_row_busy_icon").className = 
+		(isBusy ? "busyanim" : "busyicon");
 }
                                                                                                                                                                                                   
 
@@ -444,4 +450,157 @@ function flashDatacart() {
     Fat.fade_element("datacart", 12, 1500, "#FF9933", "#FFFFFF");
 }
 
+function editDatasetRow(col) {
+    var staticRow = col.parentNode;
+    var dsId = staticRow.getAttribute("id");
 
+    if (dc_editedCol != null) {
+        cancelDatasetEdit(dc_editedCol);
+    }
+
+    // populate the editable name and description fields
+    var edit_row = gebid("edit_row_tpl");
+    var editCols = edit_row.getElementsByTagName("td");
+    // form -> td, td -> input
+    var nameInput = gebid("name_input");
+    // form -> td, td, td -> textarea
+    var descTextarea = gebid("desc_textarea");
+
+    // populate the name field
+    var staticNameCol = findSibling(col, "td", 20);
+    var dsName = staticNameCol.firstChild.innerHTML;
+    if (dsName && dsName[0] == "\n") {
+        dsName = dsName.substring(1);
+    }
+    nameInput.value = dsName;
+    hide(staticRow);
+
+    // populate the description
+    var descRow = gebid(dsId + "-desc");
+    if (descRow) {
+        var dsDesc = descRow.getElementsByTagName("td")[0].innerHTML;
+        if (dsDesc && dsDesc[0] == "\n") {
+            dsDesc = dsDesc.substring(1);
+        }
+        if (dsDesc == "no description") {
+            dsDesc = "";
+        }
+
+        descTextarea.value = dsDesc;
+        hide(descRow);
+    }
+
+    // show the edit row
+    edit_row.style.display = "";
+    //nameInput.focus();
+    staticRow.parentNode.insertBefore(edit_row, findSibling(staticRow, "tr", 20));
+    dc_editedCol = col;
+}
+
+function cancelDatasetEdit(col) {
+    // hide the edit_row form
+    // by moving it into the hidden table
+    var edit_row = gebid("edit_row_tpl");
+    var hidden_table = gebid("hidden_table");
+    var hidden_table_row = gebid("hidden_table_row");
+
+    var staticRow = edit_row.previousSibling;
+
+    hidden_table.insertBefore(edit_row, hidden_table.firstChild);
+
+    // show the static row
+    while (staticRow.nodeName.toLowerCase() != "tr") {
+        staticRow = staticRow.previousSibling;
+    }
+    var dsId = staticRow.getAttribute("id");
+
+    //staticRow.className = "thinlines";
+    staticRow.style.display = "";
+    //staticRow.style.background = "#ff0";
+
+    // show the static description row if there
+    var descRow = gebid(dsId + "-desc");
+    if (descRow) {
+        descRow.style.display = "";
+        //descRow.style.background = "#00F";
+    }
+
+    dc_editedCol = null;
+}
+
+/**
+ * Uses AJaX and <vegbank:update> to update the dataset header.
+ */
+function saveDatasetEdit(col) {
+    setEditRowBusy(true);
+	var ajax = initAjax();
+
+    var fnWhenDone = function(oXML) { 
+        //alert("pong");
+        setEditRowBusy(false);
+        cancelDatasetEdit(dc_editedCol);
+    };
+
+    var nameInput = gebid("name_input");
+    var descTextarea = gebid("desc_textarea");
+    var staticRow = gebid("edit_row_tpl").previousSibling;
+    while (staticRow.nodeName.toLowerCase() != "tr") {
+        staticRow = staticRow.previousSibling;
+    }
+    var dsId = staticRow.getAttribute("id");
+    var dsName = nameInput.value;
+    var dsDesc = descTextarea.value;
+
+    var params = "";
+    params += "fieldNames=datasetname";
+    params += "&fieldValues=" + encodeURIComponent(dsName);
+    params += "&fieldNames=datasetdescription"
+    params += "&fieldValues="+encodeURIComponent(dsDesc);
+    params += "&recordId="+encodeURIComponent(dsId);
+    var url = "@web_context@general/update_userdataset.ajax.jsp";
+
+    var staticCols = staticRow.getElementsByTagName("td");
+    staticCols[1].firstChild.innerHTML = dsName;
+    var descRow = gebid(dsId + "-desc");
+    if (descRow) {
+        if (dsDesc == null || dsDesc == "") {
+            dsDesc = "no description";
+        }
+        descRow.getElementsByTagName("td")[0].innerHTML = dsDesc;
+    }
+
+    //alert(url + "?" + params);
+    ajax.connect(url, "POST", params, fnWhenDone);
+
+}
+
+function saveCurrentRecord() {
+    saveDatasetEdit(dc_editedCol);
+    return false;
+}
+function removeDatasetRow(col) {
+    var staticRow = col.parentNode;
+    var table = col.parentNode.parentNode;
+    var gonerClass = staticRow.className;
+    var tmpSibling = findSibling(staticRow, "tr", 20);
+    var siblingClass;
+    var tmpClass;
+    if (tmpSibling != null) {
+        siblingClass = tmpSibling.className;
+        tmpClass = siblingClass;
+    }
+
+    table.removeChild(staticRow);
+
+    // reset row colors
+    while (tmpSibling != null) {
+        if (tmpClass == gonerClass) {
+            tmpClass = siblingClass;
+        } else {
+            tmpClass = gonerClass;
+        }
+
+        tmpSibling.className = tmpClass;
+        tmpSibling = findSibling(tmpSibling, "tr", 20);
+    }
+}
