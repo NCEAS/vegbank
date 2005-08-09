@@ -3,10 +3,10 @@
   <xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes" />
 
   <xsl:param name="view">Detail</xsl:param>
-  <xsl:param name="oneTbl">observation</xsl:param>
+  <xsl:param name="oneTbl">userDefined</xsl:param>
   <xsl:param name="detailAdd"></xsl:param>
   
-  <xsl:param name="more">no</xsl:param><!-- yes if you want a link to details for each summary row -->
+  <xsl:param name="more">yes</xsl:param><!-- yes if you want a link to details for each summary row -->
   <xsl:param name="alphalow">abcdefghijklmnopqrstuvwxyz</xsl:param>
   <xsl:param name="alphahigh">ABCDEFGHIJKLMNOPQRSTUVWXYZ</xsl:param>
   <xsl:template match="entity">
@@ -24,7 +24,7 @@ Copy from after the START: comment to the END: comment for contents of the file!
           <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>
           <xsl:if test="string-length(attFKTranslationSQL)&gt;0">, <xsl:value-of select="attFKTranslationSQL"/> AS <xsl:value-of select="translate(attName,$alphahigh,$alphalow)"/>_transl</xsl:if><xsl:if test="attType='Date'">,<!-- add truncated date: -->  date(<xsl:value-of select="attName" />) AS <xsl:value-of select="attName" />_datetrunc</xsl:if>
           <xsl:if test="position()!=last()">,</xsl:if> \
-      </xsl:for-each>           <xsl:if test="count(attribute[substring(attName,1,4)='emb_'])&gt;0">view_notemb_<xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/> AS </xsl:if><xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>  WHERE true
+      </xsl:for-each>  FROM         <xsl:if test="count(attribute[substring(attName,1,4)='emb_'])&gt;0">view_notemb_<xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/> AS </xsl:if><xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>  WHERE true
 where_<xsl:value-of select="$currEnt"/>_pk=<xsl:value-of select="$currPK" /> IN ({0})
       </xsl:comment>
       <xsl:comment> ____________________________START CSV (encoded!)  SQL for:  <xsl:value-of select="entityName"/> _______________________________________ 
@@ -51,6 +51,7 @@ csv_<xsl:value-of select="translate(entityName,$alphahigh,$alphalow)"/>=SELECT <
  @webpage_head_html@
  <TITLE>View VegBank Data: <xsl:value-of select="entityLabel"/>s - <xsl:value-of select="$view"/>
         </TITLE>
+        @subst_lt@%@ include file="includeviews/inlinestyles.jsp" %@subst_gt@
 @webpage_masthead_html@ 
 
 

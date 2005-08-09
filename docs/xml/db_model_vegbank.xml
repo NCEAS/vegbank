@@ -5,7 +5,7 @@
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
   -->
 <!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
+<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-template.xsl"?>
 <!--
 -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
@@ -4838,6 +4838,7 @@ change through time.</entitySummary>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>userDefined.USERDEFINED_ID</attReferences>
+      <attFKTranslationSQL>(SELECT userdefined.userdefinedname from userdefined where userdefined.userdefined_ID=definedvalue.userdefined_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
