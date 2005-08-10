@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:56:25 $'
- *	'$Revision: 1.20 $'
+ *	'$Date: 2005-08-10 00:01:51 $'
+ *	'$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,8 @@ public class UploadPlotAction extends VegbankAction
 		String savedFileName = null;
 		Collection files = new Vector();
 		VegbankXMLUploadThread worker = null;
-		WebUser user = getUser(request.getSession());
+		HttpSession session = request.getSession();
+		WebUser user = getUser(session);
 		String userId = user.getUseridLong().toString();
 
 		setSaveDir(user.getUploadDir(true));

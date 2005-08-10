@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-23 07:50:52 $'
- *	'$Revision: 1.15 $'
+ *	'$Date: 2005-08-10 00:01:51 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,8 @@
 
 package org.vegbank.common.model;
 
-import org.vegbank.common.utility.LogUtility;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.DateUtility;
 import org.vegbank.common.utility.PermComparison;
@@ -38,6 +39,7 @@ import java.io.*;
  */
 public class WebUser
 {
+	private static Log log = LogFactory.getLog(WebUser.class); 
     public static final String DEFAULT_VB_DATA_DIR = "/usr/vegbank/upload";
     public static final String DEFAULT_VB_EXPORT_DIR = "/usr/www/vegbank/htdocs/export";
 
