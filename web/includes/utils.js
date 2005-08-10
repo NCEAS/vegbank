@@ -1264,3 +1264,14 @@ function findSibling(node, nodeName, max) {
 function show(elem) { elem.style.display = 'block'; }
 function hide(elem) { elem.style.display = 'none'; }
 
+
+//
+// @param ac: the accession code to verify
+// @param fnWhenDone: function(oXML) { stuff }
+//
+function verifyAC(ac, fnWhenDone) {
+	var ajax = initAjax();
+    var params = "wparam=" + encodeURIComponent(ac);
+    var url = "@web_context@general/verify_ac.ajax.jsp";
+    ajax.connect(url, "POST", params, fnWhenDone);
+}
