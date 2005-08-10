@@ -172,6 +172,23 @@ function MM_swapImage() { //v3.0
 }
 
 
+addEvent(window, "load", populateDefinedValueDivs);
+function populateDefinedValueDivs() {
+ // this populates the defined value divs in a page. 
+ if (!document.getElementById('definedValuesToPopulateByJs')) return;
+ var containerdiv = document.getElementById('definedValuesToPopulateByJs');
+ var datadivs = containerdiv.getElementsByTagName("div");
+ // loop thru all bits of data
+ for (i=0;datadivs.length;i++) {
+   // if the write div exists
+   if (document.getElementById('write_' + datadivs[i].id)) {
+     //set the write div to the data value
+     document.getElementById('write_' + datadivs[i].id).innerHTML = datadivs[i].innerHTML;
+   }
+ }
+ 
+}
+
 /*************************************************************************************************/
 /*  the following from http://www.kryogenix.org/code/browser/sorttable/   on about 2004-DEC-01   */
 /*************************************************************************************************/

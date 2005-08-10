@@ -28,7 +28,18 @@
     <bean:define id="lastStratum">
       -none-
     </bean:define>
-		 
+	
+<!-- get user defined first-->
+<vegbank:get id="userdefined" select="definedvalue_distinctud" beanName="map" pager="false" 
+  perPage="-1" where="where_definedvalue_obstaxonimportance" wparam="observation_pk" />
+
+
+<!-- get defined values for this observation -->
+<bean:define id="requestedPageURLdefVal"><%= "/views/raw/raw_definedvalue_dataonly.jsp?where=where_definedvalue_obstaxonimportance&wparam=" + observation_pk   %></bean:define><!-- + Utility.PARAM_DELIM + whoKnowsWhat? -->
+<bean:include id="defval_thisobs" page="<%= requestedPageURLdefVal %>" />
+<div id="definedValuesToPopulateByJs">
+  <bean:write name="defval_thisobs" filter="false" />
+</div>	 
 
 <TABLE cellpadding="0" class="thinlines" width="98%">
   <logic:equal name="smallheader" value="yes">
@@ -100,9 +111,17 @@
        <table cellpadding="2" class="thinlines sortable" id="taxonObservationof<bean:write name='observation_pk' />">
 
          <tr><th>ord</th>
-         <%@ include file="../autogen/taxonobservation_summary_head.jsp" %>
-         <%@ include file="../autogen/taxonimportance_summary_head.jsp" %>
-          <th class="table_stemsize">Stems:</th><th class="graphic_stemsize">Stem Diameters (graphically):</th>
+           <%@ include file="../autogen/taxonobservation_summary_head.jsp" %>
+           <%@ include file="../autogen/taxonimportance_summary_head.jsp" %>
+           <th class="table_stemsize">Stems:</th>
+           <th class="graphic_stemsize">Stem Diameters (graphically):</th>                   
+           <logic:iterate id="onerowofuserdefined" name="userdefined-BEANLIST">
+             <th>
+               User-Defined: 
+               <a href="@get_link@std/userdefined/<bean:write name='onerowofuserdefined' property='userdefined_id' />">
+               <bean:write name="onerowofuserdefined" property="userdefinedname" /></a>
+             </th>
+           </logic:iterate>
          </tr>
     
          <logic:iterate id="onerowoftaxonimportance" name="taxonimportance-BEANLIST">
@@ -192,8 +211,14 @@
                    </td></tr>
                  </table>
                 </logic:notEqual>
-              </td>
-            </tr><!-- end stems graphically-->
+              </td><!-- end stems graphically-->
+              <!-- user defined -->
+         <logic:iterate id="onerowofuserdefined" name="userdefined-BEANLIST">
+           <td id="write_defval_<bean:write name='onerowofuserdefined' property='lowertablename' />_rec<bean:write name='taxonimportance_pk' />_ud<bean:write name='onerowofuserdefined' property='userdefined_id' />">
+             <!-- start off with nothing here, is populated by js -->
+           </td>
+         </logic:iterate>
+            </tr>
          </logic:iterate><!-- through taxonimportance-->
        </table>
       </TD></TR>  
@@ -233,4 +258,3 @@
    </TABLE>
 
 </logic:notEqual> <!-- whether or not to show strata -->
-
