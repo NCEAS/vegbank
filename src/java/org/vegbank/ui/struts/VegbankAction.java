@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-06-29 06:56:22 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2005-08-10 00:01:07 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ public abstract class VegbankAction extends Action {
 	/**
 	 * @return the WebUser instance in given session or null
 	 */
-	public WebUser getUser(HttpSession session) {
+	public static WebUser getUser(HttpSession session) {
 		try {
 			return (new UserDatabaseAccess().getUser(
 				(Long)session.getAttribute(Constants.USER_KEY)));

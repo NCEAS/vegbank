@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-27 21:47:55 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2005-08-10 00:01:08 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.Utility;
  * Abstract base class tag.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.9 $ $Date: 2005-07-27 21:47:55 $
+ * @version $Revision: 1.10 $ $Date: 2005-08-10 00:01:08 $
  */
 
 public abstract class VegbankTag extends TagSupport {
@@ -80,36 +80,16 @@ public abstract class VegbankTag extends TagSupport {
 	 */
     protected String findAttribute(String attribName) {
         String attribValue;
-		try {
-			// look in the request
-			//log.debug("Finding " + attribName + " with Request.getParameter()");
-        	attribValue = pageContext.getRequest().getParameter(attribName);
-			if (attribValue == null || attribValue.equals("")) {
-				
-				// find in other scopes
-				//log.debug("Finding " + attribName + " with RequestUtils.lookup()");
-                Object o = null;
-                try {
-                    o = RequestUtils.lookup(pageContext, attribName, null);
-                    attribValue = (String)o;
-                } catch (ClassCastException ccex) {
-                    if (o == null) {
-                        log.error("Value of attribute " + attribName + " cannot be a String");
-                    } else {
-                        log.error("Value of attribute " + attribName +
-                                " cannot be a String; type is " + o.getClass().getName());
-                    }
-                }
-			}
 
-			if (attribValue == null) {
-				attribValue = "";
-			} 
+        // look in the request
+        attribValue = pageContext.getRequest().getParameter(attribName);
+        if (Utility.isStringNullOrEmpty(attribValue)) {
+            attribValue = lookupAttribute(attribName);
+        }
 
-
-		} catch (JspException jspex) {
-			attribValue = "";
-		}
+        if (attribValue == null) {
+            attribValue = "";
+        } 
 
 		log.debug("findAttribute: " + attribName + " = " + attribValue);
 		return attribValue;
@@ -142,45 +122,71 @@ public abstract class VegbankTag extends TagSupport {
 	 */
     protected String[] findAttributeArray(String attribName) {
         String[] attribValue;
-		try {
-			// look in the request
-			//log.debug("Finding " + attribName + " with Request.getParameter()");
-        	attribValue = pageContext.getRequest().getParameterValues(attribName);
-			if (Utility.isArrayNullOrEmpty(attribValue)) {
-				// find in other scopes
-				//log.debug("Finding " + attribName + " with RequestUtils.lookup()");
-				Object o = null;
-                try {
-                    o = RequestUtils.lookup(pageContext, attribName, null);
-                    attribValue = (String[])o;
-                } catch (ClassCastException ccex) {
-                    if (o != null) {
-                        if (o.getClass().getName().equals("java.lang.String")) {
-                            attribValue = new String[1];
-                            attribValue[0] = (String)o;
-                        } else {
-                            log.error("Value of attribute " + attribName +
-                                    " cannot be a String[]; type is " + o.getClass().getName());
-                        }
-                    }
-                }
-			}
+        // look in the request
+        //log.debug("Finding " + attribName + " with Request.getParameter()");
+        attribValue = pageContext.getRequest().getParameterValues(attribName);
+        if (Utility.isArrayNullOrEmpty(attribValue)) {
+            attribValue = lookupAttributeArray(attribName);
+        }
 
-		} catch (JspException jspex) {
-			attribValue = null;
-		}
-
-		/*
-		if (attribValue == null) {
-			attribValue = new String[1];
-			attribValue[0] = "";
-		} 
-		*/
-
-		//log.debug("findAttributeArray: " + attribName);
 		return attribValue;
     }
 
+
+    /**
+     * Check other scopes for this attribute as an array.
+     */
+    protected String[] lookupAttributeArray(String attribName) {
+        String[] attribValue = null;
+        Object o = null;
+
+        // find in other scopes
+        //log.debug("Finding " + attribName + " with RequestUtils.lookup()");
+        try {
+            o = RequestUtils.lookup(pageContext, attribName, null);
+            attribValue = (String[])o;
+        } catch (ClassCastException ccex) {
+            if (o != null) {
+                if (o.getClass().getName().equals("java.lang.String")) {
+                    attribValue = new String[1];
+                    attribValue[0] = (String)o;
+                } else {
+                    log.error("Value of attribute " + attribName +
+                            " cannot be a String[]; type is " + o.getClass().getName());
+                }
+            }
+		} catch (JspException jspex) {
+			attribValue = null;
+        }
+
+        return attribValue;
+    }
+
+    /**
+     * Check other scopes for this attribute as a String.
+     */
+    protected String lookupAttribute(String attribName) {
+        String attribValue = null;
+        Object o = null;
+
+        // find in other scopes
+        //log.debug("Finding " + attribName + " with RequestUtils.lookup()");
+        try {
+            o = RequestUtils.lookup(pageContext, attribName, null);
+            attribValue = (String)o;
+        } catch (ClassCastException ccex) {
+            if (o == null) {
+                log.error("Value of attribute " + attribName + " cannot be a String");
+            } else {
+                log.error("Value of attribute " + attribName +
+                        " cannot be a String; type is " + o.getClass().getName());
+            }
+		} catch (JspException jspex) {
+			attribValue = "";
+        }
+
+        return attribValue;
+    }
 
 	/**
 	 * @param attrib String value of an attribute

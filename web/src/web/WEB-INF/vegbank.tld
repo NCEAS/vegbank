@@ -205,6 +205,37 @@
 </attribute>
 </tag>
 
+<tag>
+<name>update</name>
+<tagclass>org.vegbank.ui.struts.taglib.VegbankUpdateTag</tagclass>
+<bodycontent>empty</bodycontent>
+<attribute>
+	<name>entity</name>
+	<required>true</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>fieldNames</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>fieldValues</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>recordId</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>auth</name>
+	<required>false</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+</tag>
+
 
 </taglib>
 
