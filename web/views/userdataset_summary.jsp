@@ -1,7 +1,10 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
-<!-- $Id: userdataset_summary.jsp,v 1.4 2005-07-28 21:04:01 mlee Exp $ -->
+    @ajax_js_include@
+    @datacart_js_include@
+
+<!-- $Id: userdataset_summary.jsp,v 1.5 2005-08-11 20:20:42 mlee Exp $ -->
 <!-- purpose : show user's datasets, either all of them (mode=all in URL) or only certain ones:
 
   mode=ac is to show accessioncodes
