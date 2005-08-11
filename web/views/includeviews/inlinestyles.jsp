@@ -53,25 +53,32 @@
        <bean:define id="checkforcookie"><bean:write name="onerowofcookie" property="fullcookiename" /></bean:define>
        <bean:define id="defaultval"><bean:write name="onerowofcookie" property="defaultvalue" /></bean:define>
        <% 
-       theCookieVal=null; 
-       for(int i=0;i<cookies.length;i++){ 
+       if (cookies!= null) {
+         theCookieVal=null; 
+         for(int i=0;i<cookies.length;i++){ 
             if(cookies[i].getName().equals(checkforcookie)){ 
              theCookieVal = cookies[i].getValue(); 
              
             } 
-       }
-        if (theCookieVal == null) {
+         }
+         if (theCookieVal == null) {
            theCookieVal=defaultval ;
            
-       } 
-        if (theCookieVal.equals("hide")) {
+         } 
+         if (theCookieVal.equals("hide")) {
         %>
          .<bean:write name="onerowofcookie" property="cookiename" /> { display:none; }
+         <logic:equal name="onerowofcookie" property="fullcookiename" value="globaluser_defined_data">
+           <% // define special bean that says NOT to show user defined data. Don't even look it up %>
+           <bean:define id="do_not_show_userdefined_data" value="true" />
+         </logic:equal>
         <%
         }
-       
+       } //not null cookies.
        %>
-
+       
+       
+       
      </logic:iterate>
    </style>
  </logic:notEmpty>
