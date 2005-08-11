@@ -4,6 +4,7 @@
 
 <!-- get style info, but hide it. this sets the right beans for displaying of things -->
 <div class="hidden">
+ <bean:define id="noinlinestyles" value="nostyle" /><!-- this bean makes styles go away inline, approriate for raw views -->
 <%@ include file="../includeviews/inlinestyles.jsp" %>
 </div>
 

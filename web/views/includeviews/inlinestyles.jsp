@@ -25,7 +25,7 @@
  </logic:equal>
  
  <logic:equal name="filterplants" value="true">
-   <style type="text/css">
+   <<bean:write ignore='true' name='noinlinestyles' />style type="text/css">
      .<bean:write name="plantNamesToShowBean" /> {visibility: visible;}
      <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_authorplantname" >.taxonobservation_authorplantname { display:none; } </logic:notEqual>
      <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_origplantscifull" >.taxonobservation_int_origplantscifull { display:none; }</logic:notEqual>
@@ -36,7 +36,7 @@
      <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantscinamenoauth" >.taxonobservation_int_currplantscinamenoauth { display:none; } </logic:notEqual>
      <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantcode" >.taxonobservation_int_currplantcode { display:none; }</logic:notEqual>
      <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantcommon" >.taxonobservation_int_currplantcommon { display:none; }</logic:notEqual>
-   </style> 
+   </<bean:write ignore='true' name='noinlinestyles' />style> 
  </logic:equal>
  
  <% String theCookieVal=null; %>
@@ -51,7 +51,7 @@
     Cookie[] cookies = request.getCookies(); 
     %>
    
-   <style type="text/css">
+   <<bean:write ignore='true' name='noinlinestyles' />style type="text/css">
      <logic:iterate id="onerowofcookie" name="cookie-BEANLIST">
        <bean:define id="checkforcookie"><bean:write name="onerowofcookie" property="fullcookiename" /></bean:define>
        <bean:define id="defaultval"><bean:write name="onerowofcookie" property="defaultvalue" /></bean:define>
@@ -83,7 +83,7 @@
        
        
      </logic:iterate>
-   </style>
+   </<bean:write ignore='true' name='noinlinestyles' />style>
  </logic:notEmpty>
   
   <!--logic:equal name="stemTableToShowBean" value="false"> .table_stemsize { display:none;} < /logic:equal-->
