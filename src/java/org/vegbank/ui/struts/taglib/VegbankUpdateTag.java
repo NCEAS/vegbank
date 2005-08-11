@@ -3,10 +3,10 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-08-11 01:29:22 $'
- *	'$Revision: 1.1 $'
- * 
+ *	'$Author: mlee $'
+ *	'$Date: 2005-08-11 22:57:33 $'
+ *	'$Revision: 1.2 $'
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -61,7 +61,7 @@ import org.vegbank.common.utility.DatabaseUtility;
  * to look up in SQLStore.properties.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.1 $ $Date: 2005-08-11 01:29:22 $
+ * @version $Revision: 1.2 $ $Date: 2005-08-11 22:57:33 $
  */
 
 public class VegbankUpdateTag extends VegbankTag {
@@ -102,15 +102,31 @@ public class VegbankUpdateTag extends VegbankTag {
             sql.append("UPDATE ").append(tableName).append(" SET ");
 
             // iterate through fields/values
+
+
+
             String[] fieldNames = getFieldNamesArray();
             String[] fieldValues = getFieldValuesArray();
+            //variables to hold length and current values
+            String currfieldVal = null;
+            int fieldvalueslength = 0;
+
             boolean first = true;
             for (int i=0; i<fieldNames.length; i++) {
                 if (first) { first = false; }
                 else { sql.append(", "); }
 
+                //if they aren't null, use the values
+                if (fieldValues != null) {
+					currfieldVal = fieldValues[i] ;
+					fieldvalueslength = fieldValues.length;
+			    }
+                else {  //otherwise, use 0 and null
+					fieldvalueslength = 0;
+					currfieldVal = null;
+				}
                 sql.append(Utility.encodeForDB(fieldNames[i])).append("=");
-                if (fieldValues.length <= i || fieldValues[i] == null) {
+                if (fieldvalueslength <= i || currfieldVal == null) {
                     // no more values or value is null
                     sql.append("null");
                 } else {
@@ -138,13 +154,13 @@ public class VegbankUpdateTag extends VegbankTag {
 			log.error("Error while running <vegbank:update> ", ex);
 		}
 
-		
+
         return SKIP_BODY;
     }
 
 
     /**
-     * 
+     *
      */
 	protected String entity;
 
@@ -157,7 +173,7 @@ public class VegbankUpdateTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String fieldNames;
 
@@ -174,7 +190,7 @@ public class VegbankUpdateTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String fieldValues;
 
@@ -191,7 +207,7 @@ public class VegbankUpdateTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String recordId;
 
@@ -204,7 +220,7 @@ public class VegbankUpdateTag extends VegbankTag {
     }
 
     /**
-     * 
+     *
      */
 	protected String auth;
 
