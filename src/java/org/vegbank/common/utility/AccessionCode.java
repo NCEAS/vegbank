@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-16 03:09:28 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-08-11 01:30:23 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,10 +58,15 @@ public class AccessionCode
         this.ac = ac;
         if (!Utility.isStringNullOrEmpty(ac)) {
             String[] parts = this.ac.split("\\.");
-            dbId = parts[0];
-            entityCode = parts[1];
-            entityId = Long.valueOf(parts[2]);
-            confirmation = parts[3];
+            if (parts.length < 4) {
+                log.error(ac + " is not a valid Accession Code");
+                this.ac = null;
+            } else {
+                dbId = parts[0];
+                entityCode = parts[1];
+                entityId = Long.valueOf(parts[2]);
+                confirmation = parts[3];
+            }
         }
 
         if (ag == null) {
@@ -75,14 +80,16 @@ public class AccessionCode
      * Gets the database ID, the prefix.
      */
     public String getDatabaseId() {
-        return (dbId == null ? "": dbId);
+        //return (dbId == null ? "": dbId);
+        return dbId;
     }
 
     /**
      * Gets the entity code, the second field.
      */
     public String getEntityCode() {
-        return (entityCode == null ? "": entityCode);
+        //return (entityCode == null ? "": entityCode);
+        return entityCode;
     }
 
     /**
@@ -96,14 +103,16 @@ public class AccessionCode
      * Gets the record ID, the PK, the third field.
      */
     public Long getEntityId() {
-        return (entityId == null ? new Long(0): entityId);
+        //return (entityId == null ? new Long(0): entityId);
+        return entityId;
     }
 
     /**
      * Gets the confirmation code, the suffix.
      */
     public String getConfirmation() {
-        return (confirmation == null ? "": confirmation);
+        //return (confirmation == null ? "": confirmation);
+        return confirmation;
     }
 
     /**
