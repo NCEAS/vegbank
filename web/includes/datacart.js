@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.9 2005-08-11 06:37:24 mlee Exp $
+// $Id: datacart.js,v 1.10 2005-08-11 20:30:02 mlee Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -436,8 +436,10 @@ function setDatacartBusy(isBusy) {
 }
 
 function setEditRowBusy(isBusy) {
-    document.getElementById("edit_row_busy_icon").className =
+    if (document.getElementById("edit_row_busy_icon")) {
+		document.getElementById("edit_row_busy_icon").className =
 		(isBusy ? "busyanim" : "busyicon");
+	}
 }
 
 
@@ -590,19 +592,21 @@ function saveCurrentRecord() {
     saveDatasetEdit(dc_editedCol);
     return false;
 }
-function removeDatasetRow(col) {
+function removeDatasetRow(col, undelete) {
 	//deletes a dataset by updating the stopdate and removing from screen using js
 	//special param: getCurrDateTime gets the current time for values in the called ajax file
-	if (!confirm("Do you really want to delete this dataset?  Press Cancel to Cancel or Press OK to delete it.")) {
-		return false;
-	}
+	if (!undelete) {
+    	if (!confirm("Do you really want to delete this dataset?  Press Cancel to Cancel or Press OK to delete it.")) {
+     		return false;
+    	}
+    }
 
-	    setEditRowBusy(true);
+	  //  setEditRowBusy(true);
 		var ajax = initAjax();
 
 	    var fnWhenDone = function(oXML) {
 	        //alert("pong");
-	        setEditRowBusy(false);
+	       // setEditRowBusy(false);
 	       // dont need this:  cancelDatasetEdit(dc_editedCol);
     };
 
@@ -615,10 +619,12 @@ function removeDatasetRow(col) {
     var params = "";
     params += "fieldNames=datasetstop";
     params += "&recordId="+encodeURIComponent(dsId);
-    params += "&getCurrDateTime=true";
+    if (undelete) {
+		// set to null by NOT passing fieldValues
+	} else {
+		// set to now()
+      params += "&getCurrDateTime=true";}
     var url = "@web_context@general/update_userdataset.ajax.jsp";
-
-
 
     staticRow.className = "deleted";
     var descRow = findSibling(staticRow, "tr", 20);
@@ -627,7 +633,11 @@ function removeDatasetRow(col) {
 		 descRow.className = "deleted";
 	}
 	var staticCols = staticRow.getElementsByTagName("td");
-	staticCols[0].innerHTML="deleted";
+	if (undelete) {
+      staticCols[0].innerHTML="undeleted!";
+    } else {
+	  staticCols[0].innerHTML="deleted!";
+    }
     /* THIS DOESNT WORK SO I'M JUST NOTING IT WAS DELETED :
     var tmpSibling = findSibling(staticRow, "tr", 20);
     var siblingClass;
