@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-27 21:55:07 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-08-11 01:30:05 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,14 +72,12 @@ public class InterpretCommAction extends VegbankAction {
 
 		log.debug("In action InterpretCommAction as " + actionParam);
 		ActionErrors errors = new ActionErrors();
+        ActionMessages messages = new ActionMessages();
 
 		String obsId = request.getParameter("obsId");
         if (Utility.isStringNullOrEmpty(obsId)) {
-            log.error("Cannot proceed without obsId being passed in request");
-            errors.add(Globals.ERROR_KEY, new ActionMessage(
-                        "errors.general", 
-                        "Request parameter 'obsId' is required."));
-            saveErrors(request, errors);
+            log.error("No obsId param found in request");
+            prepareError("Request parameter 'obsId' is required.", errors, request);
             return mapping.findForward("edit");
         }
 
@@ -167,11 +165,8 @@ public class InterpretCommAction extends VegbankAction {
 
 
                 if (commclass == null) {
-                    log.error("A commclass must be passed from form");
-					errors.add(Globals.ERROR_KEY, new ActionMessage(
-								"errors.general", 
-								"No commclass object found in post"));
-					saveErrors(request, errors);
+					log.error("No commclass object found in post");
+                    prepareError("No commclass object found in post", errors, request);
 					return mapping.findForward("vberror");
                 }
 
@@ -184,9 +179,7 @@ public class InterpretCommAction extends VegbankAction {
                 if (comminterpArray.length == 0) {
                     //error
 					log.error("No comm interps entered");
-					errors.add(Globals.ERROR_KEY, new ActionMessage("errors.general", 
-                            "Please choose at least one community for your interpretation of this plot."));
-					saveErrors(request, errors);
+                    prepareError("Please choose at least one community for your interpretation of this plot.", errors, request);
 					return mapping.findForward("vberror");
 
                 } else {
@@ -195,7 +188,14 @@ public class InterpretCommAction extends VegbankAction {
                         comminterp.setComminterpretation_id(-1);
 
                         // set commconcept_id
-                        commconcept_id = new AccessionCode(commconcept_ac[i]).getEntityId();
+                        AccessionCode ac = new AccessionCode(commconcept_ac[i]);
+                        if (Utility.isStringNullOrEmpty(ac.toString())) {
+                            log.error("ERROR: Bad comm. concept accession code given: " + commconcept_ac[i]);
+                            prepareError("Bad comm. concept accession code given: " + commconcept_ac[i], errors, request);
+                            return mapping.findForward("vberror");
+                        }
+
+                        commconcept_id = ac.getEntityId();
                         log.debug("adding commconcept_id #" + commconcept_id);
                         comminterp.setCommconcept_id(commconcept_id.longValue());
 
@@ -239,10 +239,8 @@ public class InterpretCommAction extends VegbankAction {
 					classcontrib.setRole_id(rs.getLong(1));
 				} else {
 					log.error("Can't find role_id for rolecode: 'Classifier'");
-					errors.add(Globals.ERROR_KEY, new ActionMessage("errors.general", 
-								"Bad rolecode, 'not specified'"));
-					saveErrors(request, errors);
 				    rs.close();
+                    prepareError("Bad rolecode, 'not specified'", errors, request);
 					return mapping.findForward("vberror");
 				}
                 rs.close();
@@ -274,7 +272,6 @@ public class InterpretCommAction extends VegbankAction {
                 log.debug("Done inserting new commclass #" + newId);
 				
 
-				ActionMessages messages = new ActionMessages();
 				messages.add("saved", new ActionMessage(
 							"errors.general", 
 							"Thank you.  Your interpretation has been saved."));
@@ -293,9 +290,7 @@ public class InterpretCommAction extends VegbankAction {
 		
 		} catch (Exception ex) {
 			log.error("ERROR InterpretCommAction: FAILURE", ex);
-			errors.add(Globals.ERROR_KEY, new ActionMessage(
-						"errors.general", ex.toString()));
-			saveErrors(request, errors);
+            prepareError(ex.toString(), errors, request);
 			return mapping.findForward("vberror");
 		}
 
