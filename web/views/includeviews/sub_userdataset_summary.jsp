@@ -31,7 +31,7 @@
 </logic:notEmpty>
 
 <tr class="@nextcolorclass@" id="<bean:write name="onerowofuserdataset" property="userdataset_id" />">
-<td align="center" class="control_tab_link" rowspan="2">
+<td align="center" class="control_tab_link" rowspan="2" valign="top">
  <logic:equal name="onerowofuserdataset" property="datasettype" value="normal">
         <form method="post" action="@views_link@datacart_detail.jsp"><input type="hidden" name="delta" value="set" />
         <input type="hidden" name="deltaItems" value="<bean:write name='onerowofuserdataset' property='userdataset_id' />" />
@@ -49,7 +49,7 @@
 <%@ include file="../custom/userdataset_summary_data.jsp" %>
 
 <!-- show dataset items -->
-<TD class="largefield" rowspan="2">
+<TD class="largefield" rowspan="2" valign="top" nowrap="nowrap">
 <bean:define id="ud_id" name="onerowofuserdataset" property="userdataset_id" />
  
 <vegbank:get id="userdatasetitem" select="userdatasetitem_counts" beanName="map" 
