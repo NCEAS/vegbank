@@ -218,6 +218,7 @@ function populateDefinedValueDivs() {
 /*  the following from http://www.kryogenix.org/code/browser/sorttable/   on about 2004-DEC-01   */
 /*************************************************************************************************/
 
+// this has been known to cause firefox tables to lose their lines, if there are rowspans
 addEvent(window, "load", sortables_init);
 
 var SORT_COLUMN_INDEX;
@@ -228,9 +229,9 @@ function sortables_init() {
     tbls = document.getElementsByTagName("table");
     for (ti=0;ti<tbls.length;ti++) {
         thisTbl = tbls[ti];
-        if (((' '+thisTbl.className+' ').indexOf("sortable") != -1) && (thisTbl.id)) {
+        if (((thisTbl.className).indexOf("sortable") != -1) ) {
             //initTable(thisTbl.id);
-            ts_makeSortable(thisTbl);
+            if (thisTbl.getAttribute("id").length>0) ts_makeSortable(thisTbl);
         }
     }
 }
