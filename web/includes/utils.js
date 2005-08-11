@@ -146,7 +146,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 
 
 function trim(s) {
-  //trims a string, also replaces double spaces with single spaces
+  //trims a string, use trim_cr if you want carriage returns and line feeds removed (but that's buggy)
   if (s==null || s=="") return "";
   while (s.substring(0,1) == ' ') {
     s = s.substring(1,s.length);
