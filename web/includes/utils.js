@@ -1315,6 +1315,6 @@ function hide(elem) { elem.style.display = 'none'; }
 function verifyAC(ac, fnWhenDone) {
 	var ajax = initAjax();
     var params = "wparam=" + encodeURIComponent(ac);
-    var url = "@web_context@general/verify_ac.ajax.jsp";
+    var url = "@ajax_link@verify_ac.ajax.jsp";
     ajax.connect(url, "POST", params, fnWhenDone);
 }

@@ -66,4 +66,4 @@
 @WEBPAGE_FOOTER_HTML@
 
 
-<!-- also MUST add general/findadd_{id}_datacart.ajax.jsp
+<!-- also MUST add a file to ajax/findadd_{id}_datacart.ajax.jsp

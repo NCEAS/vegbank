@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.10 2005-08-11 20:30:02 mlee Exp $
+// $Id: datacart.js,v 1.11 2005-08-11 21:40:25 mlee Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -25,7 +25,7 @@ function refreshCartCount() {
     };
 
     var params = "delta=drop";
-    var url = "@web_context@general/get_datacart_count.ajax.jsp";
+    var url = "@ajax_link@get_datacart_count.ajax.jsp";
     ajax.connect(url, "POST", params, fnWhenDone);
 }
 
@@ -55,7 +55,7 @@ function updateCartItem(elem, add) {
     }
 
     params += "&deltaItems="+encodeURIComponent(elem.value);
-    var url = "@web_context@general/get_datacart_count.ajax.jsp";
+    var url = "@ajax_link@get_datacart_count.ajax.jsp";
 
     //alert(url + "?" + params);
     ajax.connect(url, "POST", params, fnWhenDone);
@@ -92,7 +92,7 @@ function addAllResults(itemType) {
     }
 
     //alert(params);
-    var url = "@web_context@general/findadd_" + itemType + "_datacart.ajax.jsp";
+    var url = "@ajax_link@findadd_" + itemType + "_datacart.ajax.jsp";
     ajax.connect(url, "POST", params, fnWhenDone);
 
 }
@@ -196,7 +196,7 @@ function findSelectedDatacartItems(dsId, acString) {
 		}
     };
 
-    var url = "@web_context@general/get_datacart_acs.ajax.jsp";
+    var url = "@ajax_link@get_datacart_acs.ajax.jsp";
     var params = "wparam="+encodeURIComponent(dsId);
     params += "&wparam="+encodeURIComponent(acString);
 
@@ -571,7 +571,7 @@ function saveDatasetEdit(col) {
     params += "&fieldNames=datasetdescription"
     params += "&fieldValues="+encodeURIComponent(dsDesc);
     params += "&recordId="+encodeURIComponent(dsId);
-    var url = "@web_context@general/update_userdataset.ajax.jsp";
+    var url = "@ajax_link@update_userdataset.ajax.jsp";
 
     var staticCols = staticRow.getElementsByTagName("td");
     staticCols[1].firstChild.innerHTML = HTMLSafe(dsName);
@@ -624,7 +624,7 @@ function removeDatasetRow(col, undelete) {
 	} else {
 		// set to now()
       params += "&getCurrDateTime=true";}
-    var url = "@web_context@general/update_userdataset.ajax.jsp";
+    var url = "@ajax_link@update_userdataset.ajax.jsp";
 
     staticRow.className = "deleted";
     var descRow = findSibling(staticRow, "tr", 20);
