@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.7 2005-08-09 23:59:12 anderson Exp $
+// $Id: datacart.js,v 1.8 2005-08-11 05:32:23 mlee Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -19,12 +19,12 @@ function refreshCartCount() {
     alert("refreshing");
 	var ajax = initAjax();
 
-    var fnWhenDone = function(oXML) { 
+    var fnWhenDone = function(oXML) {
         //alert("pong");
 		setDatacartCount(oXML.responseText);
     };
 
-    var params = "delta=drop"; 
+    var params = "delta=drop";
     var url = "@web_context@general/get_datacart_count.ajax.jsp";
     ajax.connect(url, "POST", params, fnWhenDone);
 }
@@ -37,7 +37,7 @@ function updateCartItem(elem, add) {
     setDatacartBusy(true);
 	var ajax = initAjax();
 
-    var fnWhenDone = function(oXML) { 
+    var fnWhenDone = function(oXML) {
         //alert("pong");
 		setDatacartCount(oXML.responseText);
         flashDatacart();
@@ -46,11 +46,11 @@ function updateCartItem(elem, add) {
 
     var params;
 
-    if (add) { 
+    if (add) {
         params = "delta=add";
         //elem.parentNode.className = 'highlight';
-    } else { 
-        params = "delta=drop"; 
+    } else {
+        params = "delta=drop";
         //elem.parentNode.className = curClass;
     }
 
@@ -67,12 +67,12 @@ function updateCartItem(elem, add) {
  * Uses AJaX.
  */
 function addAllResults(itemType) {
-  
+
     setDatacartBusy(true);
 
 	var ajax = initAjax();
 
-    var fnWhenDone = function(oXML) { 
+    var fnWhenDone = function(oXML) {
 		setDatacartCount(oXML.responseText);
         changePageItemStates(true, false);
         flashDatacart();
@@ -87,7 +87,7 @@ function addAllResults(itemType) {
             params += "&";
         }
 
-        params += document.resubmitForm.elements[i].name + "=" + 
+        params += document.resubmitForm.elements[i].name + "=" +
                 encodeURIComponent(document.resubmitForm.elements[i].value);
     }
 
@@ -128,13 +128,13 @@ function changePageItemStates(isChecked, doCartUpdate) {
 
 
 /**
- * 
+ *
  */
 function setCheckboxParentHighlight(elem, on) {
     //alert(elem + " IS CHECKED: " + elem.checked + " CLASSNAME: " + elem.className);
-    if (on) { 
+    if (on) {
         elem.parentNode.className = 'highlight';
-    } else { 
+    } else {
         elem.parentNode.className = elem.className;
     }
 }
@@ -162,7 +162,7 @@ function markDatacartItems(dsId) {
 		acString += "'";
 
 		// run query through AJaX
-		// can't use jsp since the page is already loaded at this point.  
+		// can't use jsp since the page is already loaded at this point.
 		findSelectedDatacartItems(dsId, acString);
 	}
 }
@@ -174,8 +174,8 @@ function markDatacartItems(dsId) {
 function findSelectedDatacartItems(dsId, acString) {
 	var ajax = initAjax();
 
-    var fnWhenDone = function(oXML) { 
-		// oXML.responseText contains a CSV of accession codes 
+    var fnWhenDone = function(oXML) {
+		// oXML.responseText contains a CSV of accession codes
 		// found on this page and in the datacart
 		var nodeList = document.getElementById('cartable').getElementsByTagName('input');
 
@@ -186,13 +186,13 @@ function findSelectedDatacartItems(dsId, acString) {
 		for (var i=0; i<nodeList.length; i++) {
 			var elem = nodeList.item(i);
 			if (elem.type == 'checkbox') {
-				if (datacartACs.indexOf(elem.value.toLowerCase()) != -1) { 
+				if (datacartACs.indexOf(elem.value.toLowerCase()) != -1) {
 					// mark it
 					elem.checked = true;
 					elem.parentNode.className = 'highlight';
                     toggleLabelStyle(elem.label);
-				} 
-			} 
+				}
+			}
 		}
     };
 
@@ -207,7 +207,7 @@ function findSelectedDatacartItems(dsId, acString) {
 
 
 
-///////////////////////// ARC ///////////////////////// 
+///////////////////////// ARC /////////////////////////
 /**
 NAME: initARC()
 
@@ -219,7 +219,7 @@ USAGE:
  In your main HTML body use onLoad() to call initARC(), passing in the form id
  and on/off class names you wish to use to customise your checkbox buttons.
  e.g. <body onLoad="initARC('myform','cbOnClass', 'cbOffClass');">
- 
+
 PARAMS:
  formId   - The ID of the form you wish to customise
  onClass  - The CSS class name for the checkbox's on style
@@ -257,7 +257,7 @@ function addLabelProperties(f){
 		if(typeof label.htmlFor == 'undefined') return;
 		elem = document.getElementById(label.htmlFor);
 		//elem = f.elements[label.htmlFor]; /* old method */
-		
+
 		if(typeof elem == 'undefined'){
 			//no label defined, find first sub-input
 			var inputs = label.getElementsByTagName("input");
@@ -277,7 +277,7 @@ function addLabelProperties(f){
         i++;
         label = labels[i];
 	}
-} 
+}
 
 
 
@@ -295,7 +295,7 @@ USAGE:
  valid form of a label is <label>text <input /></label> - while it is possible
  to modify this code to allow for this form I have left this as an exercise for
  the reader.
- 
+
 PARAMS:
  formId   - Parent form of this label
  label    - The label for a checkbox we wish to toggle
@@ -304,18 +304,18 @@ PARAMS:
 */
 function toggleLabelStyle(label) {
 	if(!document.getElementById || !label) return;
-		
+
 	var form = document.getElementById(dc_formId); //label.form;
 	if(!form) return;
-	
+
 	//find checkbox associated with label (if in htmlFor form)
 	if(label.htmlFor) {
 		var e = document.getElementById(label.htmlFor);
-		
+
 		if(e.type=="checkbox"){
 			e.label.className = (e.label.className==dc_onClassCheckbox) ? dc_offClassCheckbox : dc_onClassCheckbox;
 			e.checked = (e.label.className==dc_onClassCheckbox);
-		} 
+		}
 	}
 }
 
@@ -333,7 +333,7 @@ ABOUT:
 
 USAGE:
  Called from initARC()
- 
+
 PARAMS:
  formId   - The form we're customising
  onClass  - The CSS class name for the checkbox's on style
@@ -344,16 +344,16 @@ function customiseInputs() {
 
 	var prettyForm = document.getElementById(dc_formId);
 	if(!prettyForm) return;
-		
+
 	//onReset, reset to initial values
 	prettyForm.onreset = function() { customiseInputs(); }
-	
+
 	//attach an easy to access .label reference to form elements
 	addLabelProperties(prettyForm);
 
 	var inputs = prettyForm.getElementsByTagName('input');
 	for (var i=0; i < inputs.length; i++) {
-		
+
 		//CHECKBOX ONLY
 		if( (inputs[i].type=="checkbox") && inputs[i].label && dc_onClassCheckbox && dc_offClassCheckbox){
 			//hide element
@@ -366,7 +366,7 @@ function customiseInputs() {
                 function () {
                     var elem = this.getElementsByTagName("input")[0];
                     changeItemState(elem, !elem.checked, true);
-                    return false; 
+                    return false;
                 };
 
             //mouseover
@@ -406,14 +406,14 @@ function customiseInputs() {
                     function () {
                         this.label.style.border = "1px dotted #333";
                         this.label.style.margin="0px";
-                        return false; 
+                        return false;
                     };
 
 				inputs[i].onblur =
                     function () {
                         this.label.style.border = "none";
                         this.label.style.margin="1px";
-                        return false; 
+                        return false;
                     };
 			}
 		}
@@ -431,15 +431,15 @@ function changeItemState(elem, isChecked, doCartUpdate) {
 
 
 function setDatacartBusy(isBusy) {
-    document.getElementById("datacart-count-icon").className = 
+    document.getElementById("datacart-count-icon").className =
 		(isBusy ? "busyanim" : "datacart-icon-normal");
 }
-                                                                                                                                                                                                  
+
 function setEditRowBusy(isBusy) {
-    document.getElementById("edit_row_busy_icon").className = 
+    document.getElementById("edit_row_busy_icon").className =
 		(isBusy ? "busyanim" : "busyicon");
 }
-                                                                                                                                                                                                  
+
 
 function setDatacartCount(newCount) {
 	document.getElementById("datacart-count").innerHTML = newCount;
@@ -470,8 +470,15 @@ function editDatasetRow(col) {
     var staticNameCol = findSibling(col, "td", 20);
     var dsName = staticNameCol.firstChild.innerHTML;
     if (dsName && dsName[0] == "\n") {
-        dsName = dsName.substring(1);
-    }
+	            dsName = dsName.substring(1);
+       }
+    dsName=trim_cr(dsName);
+    //debug  alert('>' + dsName.charAt(0) + '<  = #' + dsName.charCodeAt(0)  );
+    if (dsName.charCodeAt(0) == 13 || dsName.charCodeAt(0) == 10) {
+		dsName = dsName.substring(1);
+	}
+    //encoding!
+    dsName = UnHTMLSafe(dsName);
     nameInput.value = dsName;
     hide(staticRow);
 
@@ -485,7 +492,7 @@ function editDatasetRow(col) {
         if (dsDesc == "no description") {
             dsDesc = "";
         }
-
+        dsDesc = UnHTMLSafe(dsDesc);
         descTextarea.value = dsDesc;
         hide(descRow);
     }
@@ -535,7 +542,7 @@ function saveDatasetEdit(col) {
     setEditRowBusy(true);
 	var ajax = initAjax();
 
-    var fnWhenDone = function(oXML) { 
+    var fnWhenDone = function(oXML) {
         //alert("pong");
         setEditRowBusy(false);
         cancelDatasetEdit(dc_editedCol);
@@ -549,8 +556,13 @@ function saveDatasetEdit(col) {
     }
     var dsId = staticRow.getAttribute("id");
     var dsName = nameInput.value;
-    var dsDesc = descTextarea.value;
+    //debug  alert('>' + dsName + '<');
+    // needs utils.js:
+    dsName = trim_cr(dsName);
+    //debug alert('after trim: >' + dsName + '<');
 
+    var dsDesc = descTextarea.value;
+    dsDesc = trim_cr(dsDesc);
     var params = "";
     params += "fieldNames=datasetname";
     params += "&fieldValues=" + encodeURIComponent(dsName);
@@ -560,13 +572,13 @@ function saveDatasetEdit(col) {
     var url = "@web_context@general/update_userdataset.ajax.jsp";
 
     var staticCols = staticRow.getElementsByTagName("td");
-    staticCols[1].firstChild.innerHTML = dsName;
+    staticCols[1].firstChild.innerHTML = HTMLSafe(dsName);
     var descRow = gebid(dsId + "-desc");
     if (descRow) {
         if (dsDesc == null || dsDesc == "") {
             dsDesc = "no description";
         }
-        descRow.getElementsByTagName("td")[0].innerHTML = dsDesc;
+        descRow.getElementsByTagName("td")[0].innerHTML = HTMLSafe(dsDesc);
     }
 
     //alert(url + "?" + params);

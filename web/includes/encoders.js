@@ -1,4 +1,4 @@
-/* $Id: encoders.js,v 1.1 2005-03-18 18:18:19 anderson Exp $ */
+/* $Id: encoders.js,v 1.2 2005-08-11 05:32:23 mlee Exp $ */
 
 
 
@@ -36,7 +36,7 @@ function setBase64Str(str){
     base64Str = str;
     base64Count = 0;
 }
-function readBase64(){    
+function readBase64(){
     if (!base64Str) return END_OF_INPUT;
     if (base64Count >= base64Str.length) return END_OF_INPUT;
     var c = base64Str.charCodeAt(base64Count) & 0xff;
@@ -79,7 +79,7 @@ function base64Encode(str){
 }
 function readReverseBase64(){
     if (!base64Str) return END_OF_INPUT;
-    while (true){      
+    while (true){
         if (base64Count >= base64Str.length) return END_OF_INPUT;
         var nextCharacter = base64Str.charAt(base64Count);
         base64Count++;
@@ -87,7 +87,7 @@ function readReverseBase64(){
             return reverseBase64Chars[nextCharacter];
         }
         if (nextCharacter == 'A') return 0;
-    } 
+    }
     return -1;
 }
 
@@ -165,5 +165,28 @@ function hexDecode(str){
         }
     }
     return result;
-    
+
+}
+
+
+function HTMLSafe(str) {
+	//function makes HTML safe, by replacing < > & and " with appropriate &amp; stuff
+	// do ampersand first
+	str = str.replace(/&/g,"&amp;" );
+	str = str.replace(/</g,"&lt;"  );
+	str = str.replace(/>/g,"&gt;"  );
+	//str = str.replace("'","&apos;");
+	//str = str.replace('"',"&quot;");
+	return str;
+}
+
+function UnHTMLSafe(str) {
+	//reverses HTMLSafe and turns &amp; into & and &lt; into < etc.
+	str = str.replace(/&lt;/gi  ,"<");
+	str = str.replace(/&gt;/gi  ,">");
+	//str = str.replace("&apos;","'");
+	//str = str.replace("&quot;",'"');
+	// do ampersand last
+	str = str.replace(/&amp;/gi, "&");
+	return str;
 }

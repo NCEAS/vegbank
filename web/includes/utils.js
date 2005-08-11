@@ -145,6 +145,29 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 }
 
 
+function trim(s) {
+  //trims a string, also replaces double spaces with single spaces
+  if (s==null || s=="") return "";
+  while (s.substring(0,1) == ' ') {
+    s = s.substring(1,s.length);
+  }
+  while (s.substring(s.length-1,s.length) == ' ') {
+    s = s.substring(0,s.length-1);
+  }
+ // while (s.indexOf("  ")!=-1) {
+//	  s.replace(/  /g," ");
+ // }
+  return s;
+}
+function trim_cr(s) {
+  //trims a string, also replaces double spaces with single spaces
+  if (s==null || s=="") return "";
+  s = s.replace(/\n/g, " ");
+  s = trim(s);
+  return s;
+}
+
+
 /************************/
 /* MOUSE OVER FUNCTIONS */
 /************************/
