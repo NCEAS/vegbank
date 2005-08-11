@@ -59,9 +59,7 @@
               </td></tr>
            </logic:notEqual>  
          </logic:notEqual>
-           <tr> 
-             <td>
-           
+          
 
          <% 
          theCookieVal=null; 
@@ -87,7 +85,13 @@
           }
           
          %>
-           <input type="checkbox" onchange="setCookieForField('<bean:write name='onerowofcookie' property='fullcookiename' />',this.checked)"  <%= isChecked %> /> 
+         
+         <logic:equal name="onerowofcookie" property="startgroup" value="t">
+           <tr><td colspan="9"><hr/></td></tr>
+         </logic:equal>
+           <tr> 
+            <td>
+              <input type="checkbox" onchange="setCookieForField('<bean:write name='onerowofcookie' property='fullcookiename' />',this.checked)"  <%= isChecked %> /> 
             </td>
             <td>
               <bean:write name="onerowofcookie" property="cookienamelabel" />

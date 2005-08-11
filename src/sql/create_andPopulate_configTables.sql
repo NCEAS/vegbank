@@ -1,13 +1,13 @@
 
 drop table dba_cookie;
 create table dba_cookie ( cookie_ID serial , cookieName varchar(75) not null, defaultValue varchar(75) not null,
-  viewname varchar(25) not null, description text, examplePK integer not null, sortorder integer, primary key(cookie_ID));
+  viewname varchar(25) not null, description text, examplePK integer not null, sortorder integer, startGroup boolean, prefixHTML text, suffixHTML text, primary key(cookie_ID));
 
 drop table dba_cookieLabels;
 create table dba_cookieLabels (cookielabel_id serial, viewOrCookie varchar(50), description text, primary key (viewOrCookie));
 
 
-insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, description, sortorder)  values ( 'table_stemsize','hide','observation_comprehensive',3062,'show table of stem sizes on this view',1 ) ;
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, description, sortorder)  values ( 'table_stemsize','hide','observation_comprehensive',3062,'show table of stem sizes on this view',1) ;
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, description, sortorder)  values ( 'table_stemsize','show','observation_taxa',3062,'show table of stem sizes on this view' ,3) ;
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, description, sortorder)  values ( 'graphic_stemsize','show','observation_comprehensive',3062,'show graphic of stem sizes on this view' ,4) ;
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, description, sortorder)  values ( 'graphic_stemsize','show','observation_taxa',3062,'show graphic of stem sizes on this view',6 ) ;
@@ -22,7 +22,7 @@ insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sort
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'taxonimportance_inferencearea','show','global',68777,14) ;
 
 
-insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'plant_concept_name','hide','global',68777,14) ;
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder,startGroup)  values ( 'plant_concept_name','hide','global',68777,14,true) ;
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'plant_full_scientific_name','hide','global',68777,15) ;
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'plant_scientific_name_noauthors','show','global',68777,16) ;
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sortorder)  values ( 'plant_common_name','hide','global',68777,17) ;
@@ -30,6 +30,9 @@ insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sort
 
 --help bits
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, sortorder)  values ( 'ddlink','hide','global',0,0 ) ;
+
+--userdefined
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, sortorder,startGroup)  values ( 'user_defined_data','show','global',0,20,true ) ;
 
 insert into dba_cookieLabels ( viewOrCookie , description) values ('graphic_stemsize','A graphical representation of tree stems, using DBH size');
 insert into dba_cookieLabels ( viewOrCookie , description) values ('table_stemsize','A tabular overview of stems for each taxon');
@@ -51,3 +54,5 @@ insert into dba_cookieLabels (viewOrCookie , description) values ('plant_full_sc
 insert into dba_cookieLabels (viewOrCookie , description) values ('plant_scientific_name_noauthors','The scientific name without authors of the plant concept');
 insert into dba_cookieLabels (viewOrCookie , description) values ('plant_common_name','The common name for the plant concept, if available');
 insert into dba_cookieLabels (viewOrCookie , description) values ('plant_code','The Code for the plant concept, if available');
+
+insert into dba_cookieLabels (viewOrCookie , description) values ('user_defined_data','Display User Defined Data for plots, if available');
