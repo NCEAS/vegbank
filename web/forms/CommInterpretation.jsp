@@ -6,6 +6,7 @@
 <style type="text/css"> .interpCommLink {display:none} </style>
 
 <script type="text/javascript" src="@includes_link@comm_interp.js"></script>
+@ajax_js_include@
 
 <title>Interpret Plot</title>
  
@@ -128,7 +129,7 @@
         <td class="item"><textarea id="af_notes" name="tmp_notes" rows="4" cols="45"></textarea></td></tr>
 
     <tr><td colspan="2" class="item">
-        <input type="button" value="save this community" onclick="javascript:saveForm(); closeAddForm(); return false;"/>
+        <input type="button" value="save this community" onclick="javascript:saveForm(); return false;"/>
         &nbsp; &nbsp;
         <input type="button" value="cancel" onclick="javascript:closeAddForm(); return false;"/>
     </td></tr>
@@ -160,6 +161,7 @@
         <span id="title"></span>
     </span>
     <br/>
+    <span class="hidden" class="error">Please enter a valid community accession code.</span>
 
 
     <div class="block" >

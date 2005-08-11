@@ -129,19 +129,37 @@ function resetAddForm() {
 }
 
 //
-// Copies add_form values to a newly inserted record_template.
+// Checks AC via AJAX, then calls saveValidatedForm if ok.
 //
 function saveForm() {
+    // validate ac
+    var fnWhenDone = function(oXML) { 
+        if (oXML.responseText == 0) {
+            alert("Please choose or enter a valid community accession code.");
+        } else {
+            saveValidatedForm();
+            closeAddForm();
+        }
+    };
+
+    var ccac = gebid("af_commconcept_ac").value;
+    verifyAC(ccac, fnWhenDone);
+}
+
+
+//
+// Copies add_form values to a newly inserted record_template.
+//
+function saveValidatedForm() {
     var addForm = gebid('add_form');
     var isNew = false;
     var saveRecord = null;
 
+    var title = gebid("af_commconcept_ac").value;
     var recId = gebid('af_rec_id').value;
     //alert("af_rec_id is a " + recId);
 
-    var recTitleSpan;
-    var title = gebid("af_commconcept_ac").value;
-
+    var recTitleSpan, errorMsgRow;
     // is this new or and edit?
     if (recId == null || recId == "") {
         recId = "rec" + interpCount;
@@ -158,6 +176,8 @@ function saveForm() {
     }
 
     recTitleSpan.innerHTML = title;
+    errorMsgRow = findSibling(recTitleSpan.parentNode, "span", 10);
+    errorMsgRow.setAttribute("id", "error-" + title);
 
     // set IDs for fields in table
     var table = saveRecord.getElementsByTagName("div")[0].getElementsByTagName("table")[0];
@@ -271,3 +291,35 @@ function getHelpPageId() {
   return "interpret-taxon-on-plot";
 }
 
+//
+// NOT USED
+// For each given commInterp, verify the comm AC.
+//
+/*
+function verifyCommACs() {
+    
+    var fnWhenDone = function(oXML) { 
+        alert("pk: " + oXML.responseText);
+        //gebid("").value = oXML.responseText;
+    };
+
+    var ac, i;
+    var tmpField;
+    var elems = document.InterpretCommForm.elements;
+    var type, name;
+                                                                                                                                                                     
+    // find the commconcept_ac[] elements
+    for (i=0; i<elems.length; i++) {
+        tmpField = elems[i];
+        type = tmpField.getAttribute("type");
+        name = tmpField.getAttribute("name");
+                                                                                                                                                                     
+        if (type && type.toLowerCase() == "hidden" && name.substring(0,15) == "commconcept_ac[") {
+            verifyAC(tmpField.value, fnWhenDone);
+            delay(300);
+        }
+    }
+
+    return false;
+}
+*/
