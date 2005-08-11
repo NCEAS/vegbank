@@ -29,14 +29,14 @@
  <logic:equal name="onerowofuserdataset" property="datasettype" value="normal">
         <form method="post" action="@views_link@datacart_detail.jsp"><input type="hidden" name="delta" value="set" />
         <input type="hidden" name="deltaItems" value="<bean:write name='onerowofuserdataset' property='userdataset_id' />" />
-        <input type="submit" value="activate" />
+        <input title="Make this dataset the current datacart" type="submit" value="activate" />
         <br />
         </form>
  </logic:equal>
  <logic:notEqual name="onerowofuserdataset" property="datasettype" value="load"><!-- dont edit load datasets -->
-        <a href="#" onclick="editDatasetRow(this.parentNode);return false;" class="control_tab_link">edit</a>
+        <a title="Edit dataset name or description" href="#" onclick="editDatasetRow(this.parentNode);return false;" class="control_tab_link">edit</a>
    <logic:notEqual name="onerowofuserdataset" property="datasettype" value="datacart">
-        <a href="#" onclick="removeDatasetRow(this.parentNode);return false;" class="nobg"><img src="@image_server@grey_x.gif"></a>
+        <a title="Delete this dataset" href="#" onclick="removeDatasetRow(this.parentNode);return false;" class="nobg"><img src="@image_server@grey_x.gif"></a>
    </logic:notEqual>
  </logic:notEqual><!-- dont edit load datasets -->
 
@@ -72,3 +72,5 @@
 <logic:notPresent name="forceAll" >
   <vegbank:pager />
 </logic:notPresent>
+
+<p class="instructions">Tip: You can <a href="@views_link@userdataset_deleted.jsp">undelete datasets</a> that you deleted within the past 30 days.</p>

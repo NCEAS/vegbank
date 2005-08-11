@@ -4,7 +4,7 @@
     @ajax_js_include@
     @datacart_js_include@
 
-<!-- $Id: userdataset_deleted.jsp,v 1.1 2005-08-11 20:31:09 mlee Exp $ -->
+<!-- $Id: userdataset_deleted.jsp,v 1.2 2005-08-11 23:26:22 mlee Exp $ -->
 <!-- purpose : show user's expired datasets,  -->
 
  
@@ -76,6 +76,6 @@ One month after being deleted, they are permanently removed from the system.
 <br />
 </logic:notEmpty>
 
-
+<p>View your Normal <a href="@web_context@DisplayDatasets.do">Datasets Here.</a>
 
           @webpage_footer_html@
