@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.8 2005-08-11 05:32:23 mlee Exp $
+// $Id: datacart.js,v 1.9 2005-08-11 06:37:24 mlee Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -591,9 +591,44 @@ function saveCurrentRecord() {
     return false;
 }
 function removeDatasetRow(col) {
+	//deletes a dataset by updating the stopdate and removing from screen using js
+	//special param: getCurrDateTime gets the current time for values in the called ajax file
+	if (!confirm("Do you really want to delete this dataset?  Press Cancel to Cancel or Press OK to delete it.")) {
+		return false;
+	}
+
+	    setEditRowBusy(true);
+		var ajax = initAjax();
+
+	    var fnWhenDone = function(oXML) {
+	        //alert("pong");
+	        setEditRowBusy(false);
+	       // dont need this:  cancelDatasetEdit(dc_editedCol);
+    };
+
     var staticRow = col.parentNode;
+    var dsId = staticRow.getAttribute("id");
     var table = col.parentNode.parentNode;
     var gonerClass = staticRow.className;
+
+    //set up ajax
+    var params = "";
+    params += "fieldNames=datasetstop";
+    params += "&recordId="+encodeURIComponent(dsId);
+    params += "&getCurrDateTime=true";
+    var url = "@web_context@general/update_userdataset.ajax.jsp";
+
+
+
+    staticRow.className = "deleted";
+    var descRow = findSibling(staticRow, "tr", 20);
+    if (descRow) {
+		 //alert('found desc row');
+		 descRow.className = "deleted";
+	}
+	var staticCols = staticRow.getElementsByTagName("td");
+	staticCols[0].innerHTML="deleted";
+    /* THIS DOESNT WORK SO I'M JUST NOTING IT WAS DELETED :
     var tmpSibling = findSibling(staticRow, "tr", 20);
     var siblingClass;
     var tmpClass;
@@ -615,4 +650,8 @@ function removeDatasetRow(col) {
         tmpSibling.className = tmpClass;
         tmpSibling = findSibling(tmpSibling, "tr", 20);
     }
+    */
+
+    //run ajax
+    ajax.connect(url, "POST", params, fnWhenDone);
 }

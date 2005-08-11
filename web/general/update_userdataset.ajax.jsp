@@ -1,1 +1,1 @@
-@stdvegbankget_jspdeclarations@<vegbank:update entity="userdataset" />
+@stdvegbankget_jspdeclarations@<logic:equal parameter="getCurrDateTime" value="true"><bean:define id="fieldValues"><%= new java.util.Date() %></bean:define></logic:equal><vegbank:update entity="userdataset" />

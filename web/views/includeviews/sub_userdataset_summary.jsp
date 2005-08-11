@@ -39,10 +39,12 @@
         <br />
         </form>
  </logic:equal>
+ <logic:notEqual name="onerowofuserdataset" property="datasettype" value="load"><!-- dont edit load datasets -->
         <a href="#" onclick="editDatasetRow(this.parentNode);return false;" class="control_tab_link">edit</a>
- <logic:notEqual name="onerowofuserdataset" property="datasettype" value="datacart">
+   <logic:notEqual name="onerowofuserdataset" property="datasettype" value="datacart">
         <a href="#" onclick="removeDatasetRow(this.parentNode);return false;" class="nobg"><img src="@image_server@grey_x.gif"></a>
- </logic:notEqual>
+   </logic:notEqual>
+ </logic:notEqual><!-- dont edit load datasets -->
 
      </td>
 <!--%@ include file="../autogen/userdataset_summary_data.jsp" %-->
