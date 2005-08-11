@@ -656,6 +656,7 @@ form {
 /* standard alternating colors on tables: */
 .oddrow { background-color : #FFFFFF }
 .evenrow {background-color : #DDDDDD }
+.deleted {background-color : #666666 ; font-color: #DDDDDD ; font-size:7pt}
 .highlight {background-color : #FF9933 }
 .tut_highlight {background-color : #FF9933 }
 tr.tut_highlight th, tr.tut_highlight td, td.tut_highlight, th.tuthighlight {
