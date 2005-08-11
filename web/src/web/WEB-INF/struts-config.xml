@@ -222,9 +222,13 @@
 			<forward name="failure" path="/LoadCertification.do" redirect="false" />
 		</action>
 		<action path="/SaveTaxonInterpretation" validate="true" parameter="save" type="org.vegbank.ui.struts.InterpretPlantAction" name="InterpretPlantForm"  input="InterpretTaxonObservation" scope="request">
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="pro" />
 			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
 		</action>
 		<action path="/SaveCommInterpretation" validate="true" parameter="save" type="org.vegbank.ui.struts.InterpretCommAction" name="InterpretCommForm"  input="InterpretCommObservation" scope="request">
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="pro" />
 			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
 		</action>
 		<action path="/UpdatePassword" type="org.vegbank.ui.struts.UserProfileAction" name="ChangePasswordForm" parameter="pwd" scope="request" validate="true" input="ChangePassword">
