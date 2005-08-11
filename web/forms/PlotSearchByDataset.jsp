@@ -34,7 +34,7 @@ for plots using items that you have added to a dataset.
   <logic:present name="successfulget">
     <!-- only put this button if there were user datasets retrieved -->
     <logic:equal parameter="searchby" value="comm">
-      <input type="button" value="Find Plots" onlick="document.location='@get_link@std/observation/' + document.datasetform.userdataset_id.value + '?where=where_datacart_obs_hascomms&criteriaAsText=Plots+with+communities+in+a+dataset';"
+      <input type="button" value="Find Plots" onclick="document.location='@get_link@std/observation/' + document.datasetform.userdataset_id.value + '?where=where_datacart_obs_hascomms&criteriaAsText=Plots+with+communities+in+a+dataset';"
       /> With communities in the selected dataset.
       <bean:define id="searchbydone" value="true" />
     </logic:equal>  
