@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-08-11 01:30:23 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2005-08-11 02:03:59 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,6 +96,10 @@ public class AccessionCode
      * Gets the entity (table) name, the second field.
      */
     public String getEntityName() {
+        String code = getEntityCode();
+        if (Utility.isStringNullOrEmpty(code)) {
+            return null;
+        }
         return ag.getTableName(getEntityCode());
     }
 
