@@ -14,6 +14,7 @@
 
 <!-- observation_pk must also be defined for this to work -->
 
+
 <!-- also CAN pass a bean: showStrataDefn : if "no" then doesn't show strata definitions, else does -->
 <logic:empty name="showStrataDefn">
  <bean:define id="showStrataDefn" value="yes" /><!-- default value -->
@@ -30,17 +31,19 @@
     </bean:define>
 	
 <!-- get user defined first-->
-<vegbank:get id="userdefined" select="definedvalue_distinctud" beanName="map" pager="false" 
-  perPage="-1" where="where_definedvalue_obstaxonimportance" wparam="observation_pk" />
-
-
-<!-- get defined values for this observation -->
-<bean:define id="requestedPageURLdefVal"><%= "/views/raw/raw_definedvalue_dataonly.jsp?where=where_definedvalue_obstaxonimportance&wparam=" + observation_pk   %></bean:define><!-- + Utility.PARAM_DELIM + whoKnowsWhat? -->
-<bean:include id="defval_thisobs" page="<%= requestedPageURLdefVal %>" />
-<div id="definedValuesToPopulateByJs">
-  <bean:write name="defval_thisobs" filter="false" />
-</div>	 
-
+<!-- if this bean is defined, then don't even look up userdefinded data, (and do not display it) -->
+<logic:notPresent name="do_not_show_userdefined_data">
+      <vegbank:get id="userdefined" select="definedvalue_distinctud" beanName="map" pager="false" 
+        perPage="-1" where="where_definedvalue_obstaxonimportance" wparam="observation_pk" />
+    
+    
+    <!-- get defined values for this observation -->
+    <bean:define id="requestedPageURLdefVal"><%= "/views/raw/raw_definedvalue_dataonly.jsp?where=where_definedvalue_obstaxonimportance&wparam=" + observation_pk   %></bean:define><!-- + Utility.PARAM_DELIM + whoKnowsWhat? -->
+    <bean:include id="defval_thisobs" page="<%= requestedPageURLdefVal %>" />
+    <div id="definedValuesToPopulateByJs">
+      <bean:write name="defval_thisobs" filter="false" />
+    </div>	 
+</logic:notPresent>
 <TABLE cellpadding="0" class="thinlines" width="98%">
   <logic:equal name="smallheader" value="yes">
      <TR><TH colspan="9">-Taxa-</TH></TR>
@@ -115,15 +118,17 @@
            <%@ include file="../autogen/taxonimportance_summary_head.jsp" %>
            <th class="table_stemsize">Stems:</th>
            <th class="graphic_stemsize">Stem Diameters (graphically):</th>                   
-           <logic:iterate id="onerowofuserdefined" name="userdefined-BEANLIST">
+           <logic:present name="userdefined-BEANLIST">
+            <logic:iterate id="onerowofuserdefined" name="userdefined-BEANLIST">
              <th>
                User-Defined: 
                <a href="@get_link@std/userdefined/<bean:write name='onerowofuserdefined' property='userdefined_id' />">
                <bean:write name="onerowofuserdefined" property="userdefinedname" /></a>
              </th>
-           </logic:iterate>
+            </logic:iterate>
+           </logic:present>
          </tr>
-    
+         
          <logic:iterate id="onerowoftaxonimportance" name="taxonimportance-BEANLIST">
            <bean:define id="onerowoftaxonobservation" name="onerowoftaxonimportance" /> <!-- clone taximp -->
            
@@ -213,11 +218,13 @@
                 </logic:notEqual>
               </td><!-- end stems graphically-->
               <!-- user defined -->
+         <logic:present name="userdefined-BEANLIST">
          <logic:iterate id="onerowofuserdefined" name="userdefined-BEANLIST">
            <td id="write_defval_<bean:write name='onerowofuserdefined' property='lowertablename' />_rec<bean:write name='taxonimportance_pk' />_ud<bean:write name='onerowofuserdefined' property='userdefined_id' />">
              <!-- start off with nothing here, is populated by js -->
            </td>
          </logic:iterate>
+         </logic:present>
             </tr>
          </logic:iterate><!-- through taxonimportance-->
        </table>

@@ -2,6 +2,10 @@
 
 <!-- MUST BE passed observation_pk -->
 
+<!-- get style info, but hide it. this sets the right beans for displaying of things -->
+<div class="hidden">
+<%@ include file="../includeviews/inlinestyles.jsp" %>
+</div>
 
 <!-- this is the raw taxonobs -->
 <!--  request.getRequestURL() |  request.getQueryString()  -->

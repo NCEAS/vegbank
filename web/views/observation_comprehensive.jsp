@@ -134,7 +134,7 @@ function getHelpPageId() {
 <!-- get params to pass if they are here -->
 
 <bean:parameter id="strataToShowBean" name="strata2Show" value="2" />
-<bean:define id="requestedPageURL"><%= "/views/raw/raw_taxonobservation.jsp?observation_pk=" + observation_pk  + "&strata2Show=" + strataToShowBean %></bean:define>
+<bean:define id="requestedPageURL"><%= "/views/raw/raw_taxonobservation.jsp?observation_pk=" + observation_pk  + "&strata2Show=" + strataToShowBean %><logic:present name="do_not_show_userdefined_data">&do_not_show_userdefined_data=true</logic:present></bean:define>
 <!-- page requesting :  <bean:write name="requestedPageURL" /> --> 
 <bean:include id="taxonobs_page" page='<%= requestedPageURL %>' />
 <bean:write name="taxonobs_page" filter="false" />
@@ -202,28 +202,32 @@ function getHelpPageId() {
 </logic:iterate>
 </table>
 </logic:notEmpty>
-<br/><br/>
-<table class="thinlines">
-<tr><th colspan="3">User Defined Values</th></tr>
 
-<bean:define id="userdefinedexist" value="false" /><!-- default value-->
-<bean:include id="defval_obs" page='<%= "/views/raw/raw_definedvalue_summary.jsp?wparam=observation" + Utility.PARAM_DELIM + observation_pk  %>' />
-<logic:notMatch name="defval_obs" value="@!NO_USER_DEFINED_VALUES!@">
-  <bean:define id="userdefinedexist" value="true" /><!-- wrote some -->
-  <bean:write name="defval_obs" filter="false" />
-</logic:notMatch>
-
-<bean:include id="defval_plot" page='<%= "/views/raw/raw_definedvalue_summary.jsp?wparam=plot" + Utility.PARAM_DELIM + plot_pk  %>' />
-<logic:notMatch name="defval_plot" value="@!NO_USER_DEFINED_VALUES!@">
-  <bean:define id="userdefinedexist" value="true" /><!-- wrote some -->
-  <bean:write name="defval_plot" filter="false" />
-</logic:notMatch>
-
-<logic:equal name="userdefinedexist" value="false"><!-- if I didn't write any -->
-  <tr><td colspan="2">No User Defined Data for this plot</td></tr>
-</logic:equal>
-
-</table>
+<!-- if this bean is defined, then don't even look up userdefinded data, (and do not display it) -->
+<logic:notPresent name="do_not_show_userdefined_data">
+     <br/><br/>
+     <table class="thinlines">
+     <tr><th colspan="3">User Defined Values</th></tr>
+     
+     <bean:define id="userdefinedexist" value="false" /><!-- default value-->
+     <bean:include id="defval_obs" page='<%= "/views/raw/raw_definedvalue_summary.jsp?wparam=observation" + Utility.PARAM_DELIM + observation_pk  %>' />
+     <logic:notMatch name="defval_obs" value="@!NO_USER_DEFINED_VALUES!@">
+       <bean:define id="userdefinedexist" value="true" /><!-- wrote some -->
+       <bean:write name="defval_obs" filter="false" />
+     </logic:notMatch>
+     
+     <bean:include id="defval_plot" page='<%= "/views/raw/raw_definedvalue_summary.jsp?wparam=plot" + Utility.PARAM_DELIM + plot_pk  %>' />
+     <logic:notMatch name="defval_plot" value="@!NO_USER_DEFINED_VALUES!@">
+       <bean:define id="userdefinedexist" value="true" /><!-- wrote some -->
+       <bean:write name="defval_plot" filter="false" />
+     </logic:notMatch>
+     
+     <logic:equal name="userdefinedexist" value="false"><!-- if I didn't write any -->
+       <tr><td colspan="2">No User Defined Data for this plot</td></tr>
+     </logic:equal>
+     
+     </table>
+</logic:notPresent>
 <!--/logic:iterate NOPE-->
 <!--vegbank:pager/-->
 <!-- NOPE /logic:notEmpty NOPE--><br />

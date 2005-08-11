@@ -1,6 +1,9 @@
 <bean:define id="thisviewid"><%= request.getRequestURI().substring(1+request.getRequestURI().lastIndexOf("/"),request.getRequestURI().indexOf(".")) %></bean:define>
 <!-- view: ><bean:write name="thisviewid" />< -->
-
+<!-- check for parameter which limits user defined data:, if so hide it, used in raw views where cookies are not accessible -->
+<logic:present parameter="do_not_show_userdefined_data">
+  <bean:define id="do_not_show_userdefined_data" value="true" />
+</logic:present>
 <!-- this file set the default styles to use for jsp, and edits them 
    according to cookie's contents -->
 
