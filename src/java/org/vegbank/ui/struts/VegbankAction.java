@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-08-10 00:01:07 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2005-08-11 01:27:18 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import java.sql.*;
 import java.util.*;
 import javax.servlet.http.*;
 
+import org.apache.struts.Globals;
 import org.apache.struts.action.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -105,4 +106,21 @@ public abstract class VegbankAction extends Action {
 		}
 	}
 		
+    /**
+     * Helps report messages.  Puts 'vbmsg' in request, unlocalized.
+     */
+    protected void prepareMessage(String comment, ActionMessages messages, HttpServletRequest request) {
+        messages.add(Globals.MESSAGE_KEY, new ActionMessage("errors.general", comment));
+        messages.add("vbmsg", new ActionMessage(comment, false));
+        saveMessages(request, messages);
+    }
+    
+    /**
+     * Helps report error messages.  Puts 'vberror' in request, unlocalized.
+     */
+    protected void prepareError(String comment, ActionErrors errors, HttpServletRequest request) {
+        errors.add(Globals.ERROR_KEY, new ActionMessage("errors.general", comment));
+        errors.add("vberror", new ActionMessage(comment, false));
+        saveErrors(request, errors);
+    }
 }

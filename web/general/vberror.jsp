@@ -20,15 +20,51 @@ This problem has been reported to the developers.</p>
 
 	<p>
 	<span class="error">ERROR MESSAGES:</span>
-<logic:messagesPresent>
-	<ul>
-	<html:messages id="err">
-		<li><bean:write name="err"/></li>
-	</html:messages>
-	</ul>
-</logic:messagesPresent>
 
+<logic:messagesPresent message="false">
+    <ul>
+    <html:messages id="error" message="false" property="vberror">
+      <logic:notEmpty name="error">
+        <li><bean:write name="error"/></li>
+      </logic:notEmpty>
+    </html:messages>
+    </ul>
+</logic:messagesPresent>
 </blockquote>
+                                                                                                                                                                     
+<%
+/*
+   // this is helpful for debugging Struts lame message stuff
+  //Object o = request.getAttribute(Globals.ERROR_KEY);
+  Object o = request.getAttribute(Globals.MESSAGE_KEY);
+  if (o != null) {
+    ActionMessages ae = (ActionMessages)o;
+                                                                                                                                                                     
+    // Get the locale and message resources bundle
+    Locale locale =
+      (Locale)session.getAttribute(Globals.LOCALE_KEY);
+    MessageResources messages =
+      (MessageResources)request.getAttribute
+      (Globals.MESSAGES_KEY);
+                                                                                                                                                                     
+    // Loop thru all the labels in the ActionMessage's
+    for (Iterator i = ae.properties(); i.hasNext();) {
+      String property = (String)i.next();
+      out.println("<br>property " + property + ": ");
+                                                                                                                                                                     
+      // Get all messages for this label
+      for (Iterator it = ae.get(property); it.hasNext();) {
+        ActionMessage a = (ActionMessage)it.next();
+        String key = a.getKey();
+        Object[] values = a.getValues();
+        out.println(" [key=" + key +
+            ", message=" + messages.getMessage(locale,key,values) + "]");
+      }
+    }
+}
+*/
+%>
+
 
 <br/>
 <br/>
