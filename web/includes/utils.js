@@ -174,19 +174,21 @@ function MM_swapImage() { //v3.0
 
 addEvent(window, "load", populateDefinedValueDivs);
 function populateDefinedValueDivs() {
- // this populates the defined value divs in a page. 
+ // this populates the defined value divs in a page.
  if (!document.getElementById('definedValuesToPopulateByJs')) return;
  var containerdiv = document.getElementById('definedValuesToPopulateByJs');
  var datadivs = containerdiv.getElementsByTagName("div");
  // loop thru all bits of data
- for (i=0;datadivs.length;i++) {
+ for (i=0;i<datadivs.length;i++) {
    // if the write div exists
-   if (document.getElementById('write_' + datadivs[i].id)) {
-     //set the write div to the data value
-     document.getElementById('write_' + datadivs[i].id).innerHTML = datadivs[i].innerHTML;
-   }
+   //debug: alert('trying to set #' + i );
+   //debug: alert(' which is ID:' + datadivs[i].id);
+     if (document.getElementById('write_' + datadivs[i].id)) {
+       //set the write div to the data value
+       document.getElementById('write_' + datadivs[i].id).innerHTML = datadivs[i].innerHTML;
+     }
  }
- 
+
 }
 
 /*************************************************************************************************/
@@ -306,7 +308,7 @@ function ts_resortTable(lnk, cellIndex) {
     var cr = 1;
     //get a value from the table, and try to get one that isn't empty.
     //alert('column is:' + column);
-    // default: 
+    // default:
     SORT_COLUMN_INDEX = column;
     do
 	  {
@@ -574,7 +576,7 @@ function showorhidediv(theid)
 {
 	var el = gebid(theid);
 	if (el.style.display == 'none') {
-		show(el); 
+		show(el);
 	} else {
 		hide(el);
 	}
@@ -1277,7 +1279,7 @@ function findSibling(node, nodeName, max) {
     }
     return sibling;
 }
-                                                                                                                                                                              
+
 function show(elem) { elem.style.display = 'block'; }
 function hide(elem) { elem.style.display = 'none'; }
 
