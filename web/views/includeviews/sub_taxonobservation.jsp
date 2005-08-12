@@ -34,11 +34,11 @@
 <!-- if this bean is defined, then don't even look up userdefinded data, (and do not display it) -->
 <logic:notPresent name="do_not_show_userdefined_data">
       <vegbank:get id="userdefined" select="definedvalue_distinctud" beanName="map" pager="false" 
-        perPage="-1" where="where_definedvalue_obstaxonimportance" wparam="observation_pk" />
+        perPage="-1" where="where_definedvalue_obstaxonimportance_andtaxonobservation" wparam="observation_pk" />
     
     
     <!-- get defined values for this observation -->
-    <bean:define id="requestedPageURLdefVal"><%= "/views/raw/raw_definedvalue_dataonly.jsp?where=where_definedvalue_obstaxonimportance&wparam=" + observation_pk   %></bean:define><!-- + Utility.PARAM_DELIM + whoKnowsWhat? -->
+    <bean:define id="requestedPageURLdefVal"><%= "/views/raw/raw_definedvalue_dataonly.jsp?where=where_definedvalue_obstaxonimportance_andtaxonobservation&wparam=" + observation_pk   %></bean:define><!-- + Utility.PARAM_DELIM + whoKnowsWhat? -->
     <bean:include id="defval_thisobs" page="<%= requestedPageURLdefVal %>" />
     <div id="definedValuesToPopulateByJs">
       <bean:write name="defval_thisobs" filter="false" />
@@ -220,7 +220,14 @@
               <!-- user defined -->
          <logic:present name="userdefined-BEANLIST">
          <logic:iterate id="onerowofuserdefined" name="userdefined-BEANLIST">
-           <td id="write_defval_<bean:write name='onerowofuserdefined' property='lowertablename' />_rec<bean:write name='taxonimportance_pk' />_ud<bean:write name='onerowofuserdefined' property='userdefined_id' />">
+           <bean:define id="thisrecord_id" value="-1" />
+           <logic:equal name="onerowofuserdefined" property="lowertablename" value="taxonobservation">
+             <bean:define id="thisrecord_id" type="java.lang.String" name="onerowoftaxonimportance" property="taxonobservation_id" />
+           </logic:equal>  
+           <logic:equal name="onerowofuserdefined" property="lowertablename" value="taxonimportance">  
+             <bean:define id="thisrecord_id" type="java.lang.String" name="onerowoftaxonimportance" property="taxonimportance_id" />
+           </logic:equal>
+           <td id="write_defval_<bean:write name='onerowofuserdefined' property='lowertablename' />_rec<bean:write name='thisrecord_id' />_ud<bean:write name='onerowofuserdefined' property='userdefined_id' />">
              <!-- start off with nothing here, is populated by js -->
            </td>
          </logic:iterate>
