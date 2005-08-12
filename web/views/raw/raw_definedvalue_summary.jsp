@@ -14,7 +14,7 @@
 
 <logic:iterate id="onerowofdefinedvalue" name="definedvalue-BEANLIST">
    
-  <tr class="@nextcolorclass@">
+  <tr>
     <td class="datalabel userdefined">
  <a href="@get_link@std/userdefined/<bean:write name='onerowofdefinedvalue' property='userdefined_id' />">
   <bean:write name="onerowofdefinedvalue" property="userdefinedname" />

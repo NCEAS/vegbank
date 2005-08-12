@@ -183,6 +183,19 @@ function getHelpPageId() {
 <tr class="@nextcolorclass@">
 <%@ include file="autogen/soilobs_summary_data.jsp" %>
 </tr>
+
+<logic:notPresent name="do_not_show_userdefined_data">
+     <bean:define id="soilobs_pk" name="onerowofsoilobs" property="soilobs_id" />
+     <bean:include id="defval_soilobs" page='<%= "/views/raw/raw_definedvalue_summary.jsp?wparam=soilobs" + Utility.PARAM_DELIM + soilobs_pk  %>' />
+     <logic:notMatch name="defval_soilobs" value="@!NO_USER_DEFINED_VALUES!@">
+     <tr class="<%= rowClass %>"><td><strong>User Defined Values:</strong></td><td colspan="25">
+     <table class="thinlines">
+     <bean:write name="defval_soilobs" filter="false" />
+     </table>
+     </td></tr>
+     </logic:notMatch>
+</logic:notPresent>
+
 </logic:iterate>
 </table>
 </logic:notEmpty>
