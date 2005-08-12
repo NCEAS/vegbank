@@ -99,21 +99,24 @@ String paramDelim = Utility.PARAM_DELIM ;
 <logic:equal name="mode" value="all">
   <!-- show all of a user's datasets -->
   <vegbank:get id="userdataset" select="userdataset_countobs" beanName="map" 
-  where="where_usrpk" wparam="<%= strWebUserId %>" pager="<%= paginateMain %>" perPage="<%= perPageDos %>" />
+  where="where_usrpk" wparam="<%= strWebUserId %>" pager="<%= paginateMain %>" perPage="<%= perPageDos %>" 
+  allowOrderBy="true" orderBy="xorderby_datasetname" />
      <!-- where="where usr_id={0} -->
 </logic:equal>
 
 <logic:equal name="mode" value="mydswithtable">
   <!-- show all of a user's datasets -->
   <vegbank:get id="userdataset" select="userdataset_countobs" beanName="map" 
-  where="where_userdataset_hastable" wparam="<%= strWebUserId + paramDelim + urlwparam %>" pager="<%= paginateMain %>" perPage="<%= perPageDos %>" />
+  where="where_userdataset_hastable" wparam="<%= strWebUserId + paramDelim + urlwparam %>" 
+  pager="<%= paginateMain %>" perPage="<%= perPageDos %>" allowOrderBy="true" orderBy="xorderby_datasetname"  />
      <!-- where="where_userdataset_hastable" -->
 </logic:equal>
  
 <logic:equal name="mode" value="id">
   <!-- id mode: -->
   <vegbank:get id="userdataset" select="userdataset" beanName="map" 
-  where="where_usrpk_dsid" wparam="<%= strWebUserId + paramDelim + urlwparam %>" pager="<%= paginateMain %>" perPage="<%= perPageDos %>" /> <!--  -->
+  where="where_usrpk_dsid" wparam="<%= strWebUserId + paramDelim + urlwparam %>" pager="<%= paginateMain %>" 
+  perPage="<%= perPageDos %>" allowOrderBy="true" orderBy="xorderby_datasetname" /> <!--  -->
 <!-- where_usrpk_dsid=where usr_id={0} AND accessionCode={1} -->
 </logic:equal>
 
