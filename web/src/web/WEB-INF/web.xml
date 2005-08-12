@@ -139,6 +139,16 @@
             </servlet-mapping>  
         
 
+    <error-page>
+        <error-code>500</error-code>
+        <location>/general/vberror.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/general/404.html</location>
+    </error-page>
+
           <!-- Struts Tag Library Descriptors -->
           <taglib>
             <taglib-uri>/WEB-INF/struts-bean.tld</taglib-uri>
