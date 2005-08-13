@@ -213,7 +213,25 @@ a.anchor:link, a.anchor:visited, a.anchor:hover {
   padding: 0;
 }
 
+/* used in forms/TaxonInterpretationAnnotateData.jsp
+white text with links that work with it:
+*/
+.whitetext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
+				color: #FFFFFF;
+			 	font-size: 8pt}
+.whitetext a:link     { color: #FFFFFF; text-decoration: none}
+.whitetext a:visited  { color: #FFFFFF; text-decoration: none}
+.whitetext a:hover	  { color: #3399FF; text-decoration: none}
 
+a.whitetext:link	{ color: #FFFFFF; text-decoration: none}
+a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
+a.whitetext:hover	{ color: #3399FF; text-decoration: none}
+
+.notstrong { color: #666666; font-size: 8pt;  font-variant: small-caps }
+.notstrong a { color: #666666;}
+.notstrong a:link { color: #666666;}
+.notstrong a:visited { color: #666666;}
+.notstrong a:hover { color: #FFFFFF;}
 
 
 /*
@@ -686,19 +704,7 @@ tr.tut_highlight th, tr.tut_highlight td, td.tut_highlight, th.tuthighlight {
 
 
 
-/* used in forms/TaxonInterpretationAnnotateData.jsp
-white text with links that work with it:
-*/
-.whitetext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
-				color: #FFFFFF;
-			 	font-size: 8pt}
-.whitetext a:link     { color: #FFFFFF; text-decoration: none}
-.whitetext a:visited  { color: #FFFFFF; text-decoration: none}
-.whitetext a:hover	  { color: #3399FF; text-decoration: none}
 
-a.whitetext:link	{ color: #FFFFFF; text-decoration: none}
-a.whitetext:visited	{ color: #FFFFFF; text-decoration: none}
-a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 
 /* main menu, metasearch, index.jsp :*/
 .greytext 		{ font-family: Arial, Tahoma, Helvetica, Geneva, sans-serif;
