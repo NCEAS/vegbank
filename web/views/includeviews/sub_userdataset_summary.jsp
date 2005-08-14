@@ -17,7 +17,7 @@
 <th nowrap="nowrap">Datacart</th>
 <!--%@ include file="../autogen/userdataset_summary_head.jsp" %-->
 <%@ include file="../custom/userdataset_summary_head.jsp" %>
-
+<%@ include file="../custom/userdatasetitem_quicksummary_head.jsp" %>
 </tr>
 
 <logic:iterate id="onerowofuserdataset" name="userdataset-BEANLIST"><!-- iterate over all records in set : new table for each -->
@@ -43,7 +43,7 @@
      </td>
 <!--%@ include file="../autogen/userdataset_summary_data.jsp" %-->
 <%@ include file="../custom/userdataset_summary_data.jsp" %>
-
+<%@ include file="../custom/userdatasetitem_quicksummary_data.jsp" %>
 
 
 </tr>
