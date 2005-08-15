@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.11 2005-08-11 21:40:25 mlee Exp $
+// $Id: datacart.js,v 1.12 2005-08-15 22:50:24 anderson Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -664,4 +664,5 @@ function removeDatasetRow(col, undelete) {
 
     //run ajax
     ajax.connect(url, "POST", params, fnWhenDone);
+    return true;
 }
