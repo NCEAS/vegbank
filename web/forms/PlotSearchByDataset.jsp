@@ -52,7 +52,7 @@ for plots using items that you have added to a dataset.
   </form>
   
  
-</logic:notEmpty>
+
 
  
 @webpage_footer_html@

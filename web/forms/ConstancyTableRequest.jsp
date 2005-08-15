@@ -31,7 +31,7 @@ plots have each species for each dataset, and also the average cover percent (if
     <br/><input type="submit" value="Get Constancy Table" />
   </logic:present>  
  </form>
-</logic:notEmpty>
+
 
  <br/>
 @webpage_footer_html@
