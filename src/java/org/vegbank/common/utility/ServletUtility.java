@@ -8,8 +8,8 @@ package org.vegbank.common.utility;
  *    etc.. 
  *
  *	'$Author: anderson $'
- *  '$Date: 2005-06-17 22:07:16 $'
- *  '$Revision: 1.19 $'
+ *  '$Date: 2005-08-15 23:26:11 $'
+ *  '$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,6 +183,7 @@ public class ServletUtility
 		// Set the body content
 		msg.setContent(body, "text/html");
 		// -- Send the message --
+		log.debug("Sending message: " + subject);
 		Transport.send(msg);
 	}
 	
@@ -286,10 +287,10 @@ public class ServletUtility
 		props.put("mail.smtp.host", smtpServer);
 
         if (!Utility.isStringNullOrEmpty(Utility.SMTP_PORT)) {
-		    props.put("mail.smtp.port", smtpServer);
-            //log.debug("Using this smtp server and port: " + smtpServer + Utility.SMTP_PORT);
+            log.debug("Using this smtp server and port: " + smtpServer + ":" + Utility.SMTP_PORT);
+		    props.put("mail.smtp.port", Utility.SMTP_PORT);
         } else {
-            //log.debug("Using this smtp server: " + smtpServer);
+            log.debug("Using this smtp server: " + smtpServer);
         }
 
 
