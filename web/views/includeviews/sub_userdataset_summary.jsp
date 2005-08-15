@@ -14,7 +14,9 @@
 
 <table class="thinlines" cellpadding="1"><!--each field, only write when HAS contents-->
 <tr>
-<th nowrap="nowrap">Datacart</th>
+<% if ( strWebUserId != "-1" ) {  %>  <!-- dont show for anon users, who can't edit or activate ds -->
+<th>Manage Datasets</th>
+<% } %>
 <!--%@ include file="../autogen/userdataset_summary_head.jsp" %-->
 <%@ include file="../custom/userdataset_summary_head.jsp" %>
 <%@ include file="../custom/userdatasetitem_quicksummary_head.jsp" %>
@@ -25,22 +27,24 @@
 
 
 <tr class="@nextcolorclass@" id="<bean:write name="onerowofuserdataset" property="userdataset_id" />">
-<td align="center" class="control_tab_link" rowspan="2" valign="top">
- <logic:equal name="onerowofuserdataset" property="datasettype" value="normal">
-        <form method="post" action="@views_link@datacart_detail.jsp"><input type="hidden" name="delta" value="set" />
-        <input type="hidden" name="deltaItems" value="<bean:write name='onerowofuserdataset' property='userdataset_id' />" />
-        <input title="Make this dataset the current datacart" type="submit" value="activate" />
-        <br />
-        </form>
- </logic:equal>
- <logic:notEqual name="onerowofuserdataset" property="datasettype" value="load"><!-- dont edit load datasets -->
-        <a title="Edit dataset name or description" href="#" onclick="editDatasetRow(this.parentNode);return false;" class="control_tab_link">edit</a>
-   <logic:notEqual name="onerowofuserdataset" property="datasettype" value="datacart">
-        <a title="Delete this dataset" href="#" onclick="removeDatasetRow(this.parentNode);return false;" class="nobg"><img src="@image_server@grey_x.gif"></a>
-   </logic:notEqual>
- </logic:notEqual><!-- dont edit load datasets -->
-
-     </td>
+  <% if ( strWebUserId != "-1" ) {  %> <!-- dont show for anon users, who can't edit or activate ds -->
+     <td align="center" class="control_tab_link" rowspan="2" valign="top">
+      <logic:equal name="onerowofuserdataset" property="datasettype" value="normal">
+             <form method="post" action="@views_link@datacart_detail.jsp"><input type="hidden" name="delta" value="set" />
+             <input type="hidden" name="deltaItems" value="<bean:write name='onerowofuserdataset' property='userdataset_id' />" />
+             <input title="Make this dataset the current datacart" type="submit" value="activate" />
+             <br />
+             </form>
+      </logic:equal>
+      <logic:notEqual name="onerowofuserdataset" property="datasettype" value="load"><!-- dont edit load datasets -->
+             <a title="Edit dataset name or description" href="#" onclick="editDatasetRow(this.parentNode);return false;" class="control_tab_link">edit</a>
+        <logic:notEqual name="onerowofuserdataset" property="datasettype" value="datacart">
+             <a title="Delete this dataset" href="#" onclick="removeDatasetRow(this.parentNode);return false;" class="nobg"><img src="@image_server@grey_x.gif"></a>
+        </logic:notEqual>
+      </logic:notEqual><!-- dont edit load datasets -->
+     
+          </td>
+   <% } %>
 <!--%@ include file="../autogen/userdataset_summary_data.jsp" %-->
 <%@ include file="../custom/userdataset_summary_data.jsp" %>
 <%@ include file="../custom/userdatasetitem_quicksummary_data.jsp" %>
