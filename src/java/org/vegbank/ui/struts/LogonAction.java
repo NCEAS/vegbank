@@ -3,6 +3,7 @@ package org.vegbank.ui.struts;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.*;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
@@ -28,8 +29,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-28 23:19:50 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2005-08-15 22:04:28 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -164,15 +165,35 @@ public class LogonAction extends VegbankAction
         //
         try {
             DatasetUtility dsu = new DatasetUtility(); 
-            Userdataset datacart = dsu.getDatacart(session);
-            if (datacart != null) {
+            Long dsId = dsu.getDatacartId(session);
+
+            long numItems = 0;
+            if (dsId != null) {
+                numItems = dsu.countItems(dsId);
+            }
+            log.debug("anon datacart size: " + numItems);
+
+            if (dsId == null || numItems == 0) {
+                // get user's old datacart if has one
+                Userdataset datacart = dsu.getDatacartByUser(usrId);
+                if (datacart != null) {
+                    log.debug("anon datacart was empty so using old one");
+                    dsId = new Long(datacart.getUserdataset_id());
+                    session.setAttribute(Utility.DATACART_KEY, dsId);
+                    session.setAttribute(Utility.DATACART_COUNT_KEY, new Long(dsu.countItems(dsId)));
+                }
+
+            } else {
+                // bump old cart 
+                // ds_id already in session
                 log.debug("claiming datacart for user");
                 dsu.bumpDatacart(usrId.longValue());
-                dsu.setOwner(usrId.longValue(), datacart.getUserdataset_id());
-                dsu.setDatacart(usrId.longValue(), datacart.getUserdataset_id());
+                dsu.setOwner(usrId.longValue(), dsId.longValue());
+                dsu.setDatacart(usrId.longValue(), dsId.longValue());
             }
-        } catch (java.sql.SQLException sex) {
-            log.error("Problem while setting datacart for logged in user", sex);
+
+        } catch (Exception ex) {
+            log.error("Problem while setting datacart for logged in user", ex);
         }
 
 		// Remove the obsolete form bean

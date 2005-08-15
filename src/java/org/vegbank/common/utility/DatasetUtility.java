@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-08-04 00:31:22 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2005-08-15 22:04:28 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -687,7 +687,8 @@ public class DatasetUtility
             return null;
         }
         
-        return getDataset(getDatacartId(session));
+        log.debug("getting datacart from session: " + did);
+        return getDataset(did);
     }
 
 
