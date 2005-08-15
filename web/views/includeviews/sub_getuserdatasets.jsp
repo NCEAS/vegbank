@@ -91,6 +91,8 @@
 </logic:present>
 
 
+
+
 <%
 String paramDelim = Utility.PARAM_DELIM ;
 %>
@@ -128,4 +130,10 @@ String paramDelim = Utility.PARAM_DELIM ;
 
 </logic:equal>
 
+<% if ( strWebUserId == "-1" ) {  %>
+  <!-- user is not logged in, trying to get datacart then -->
+   <vegbank:get id="userdataset" select="userdataset" beanName="map" 
+  where="where_userdataset_pk" wparam="<%= (DatasetUtility.getDatacartId(request.getSession())).toString() %>" pager="false"/>
   
+
+<% } %>

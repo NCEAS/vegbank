@@ -64,7 +64,8 @@ function getHelpPageId() {
     </table>
     </div>
 
-
+<!-- tell included file to show datacart specific stuff -->
+<bean:define id="thisisdatacart" value="true" type="java.lang.String" />
 <%@ include file="includeviews/sub_userdataset_detail.jsp" %>
 
 <hr/>

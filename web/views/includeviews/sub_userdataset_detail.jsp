@@ -62,7 +62,9 @@ Items in this dataset:
 <form action="" method="GET" id="cartable">
 <table class="leftrightborders" cellpadding="2" >
 <tr>
-<th>Drop</th>
+  <logic:equal name="thisisdatacart" value="true">
+    <th>Drop</th>
+  </logic:equal>  
 <th>Item</th>
 <%@ include file="../autogen/userdatasetitem_summary_head.jsp" %>
 <th>More Info</th>
@@ -77,10 +79,13 @@ Items in this dataset:
 <% countUDIRows++ ;%>
 <tr class='@nextcolorclass@'>
 <bean:define id="delta_ac" name="onerowofuserdatasetitem" property="itemaccessioncode" />
-<td>
-<%@ include file="/includes/datacart_checkbox.jsp" %>
-<%= rowIndex++ %>.&nbsp; 
-</td>
+<!-- only show if this is the datacart -->
+<logic:equal name="thisisdatacart" value="true">
+  <td>
+   <%@ include file="/includes/datacart_checkbox.jsp" %>
+   <%= rowIndex++ %>.&nbsp; 
+  </td>
+</logic:equal>
 <td class="largefield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
 <%@ include file="../autogen/userdatasetitem_summary_data.jsp" %>
 <td class="largefield">
