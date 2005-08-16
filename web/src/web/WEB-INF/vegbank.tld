@@ -235,7 +235,31 @@
 	<rtexprvalue>true</rtexprvalue>
 </attribute>
 </tag>
-
+<tag>
+    <name>denorm</name>
+    <tagclass>org.vegbank.ui.struts.taglib.VegbankDenormTag</tagclass>
+    <bodycontent>empty</bodycontent>
+    <attribute>
+      <name>update</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>wparam</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>denormtype</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>auth</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
 
 </taglib>
 
