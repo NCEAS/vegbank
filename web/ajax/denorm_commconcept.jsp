@@ -36,7 +36,7 @@
 <!--tr-->
   <!--td>&</td-->
   <!--td class="numeric"--><!--bean:write name="&-RESULTS" ignore="true"/--><!--/td-->
-  <!--td--><!--logic:empty name="&-RESULTS"--><!--span class="error">ERROR!  please check the log</span--><!--/logic:empty--><!--/td-->
+  <!--td--><!--logic:lessThan value="0" name="&-RESULTS"--><!--span class="error">ERROR!  please check the log</span--><!--/logic:lessThan--><!--/td-->
 <!--/tr-->
 
 
@@ -44,26 +44,26 @@
 <tr>
   <td>commconcept.commname</td>
   <td class="numeric"><bean:write name="dnrm_commconcept_commname-RESULTS" ignore="true"/></td>
-  <td><logic:empty name="dnrm_commconcept_commname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:empty></td>
+  <td><logic:lessThan value="0" name="dnrm_commconcept_commname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 
 <vegbank:denorm update="dnrm_commusage_commname" />
 <tr>
   <td>dnrm_commusage_commname</td>
   <td class="numeric"><bean:write name="dnrm_commusage_commname-RESULTS" ignore="true"/></td>
-  <td><logic:empty name="dnrm_commusage_commname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:empty></td>
+  <td><logic:lessThan value="0" name="dnrm_commusage_commname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 <vegbank:denorm update="dnrm_commusage_commconceptid" />
 <tr>
   <td>dnrm_commusage_commconceptid</td>
   <td class="numeric"><bean:write name="dnrm_commusage_commconceptid-RESULTS" ignore="true"/></td>
-  <td><logic:empty name="dnrm_commusage_commconceptid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:empty></td>
+  <td><logic:lessThan value="0" name="dnrm_commusage_commconceptid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 <vegbank:denorm update="dnrm_commusage_partyid" />
 <tr>
   <td>dnrm_commusage_partyid</td>
   <td class="numeric"><bean:write name="dnrm_commusage_partyid-RESULTS" ignore="true"/></td>
-  <td><logic:empty name="dnrm_commusage_partyid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:empty></td>
+  <td><logic:lessThan value="0" name="dnrm_commusage_partyid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 
 

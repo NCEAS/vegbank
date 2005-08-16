@@ -36,25 +36,25 @@
 <tr>
   <td>dnrm_plantconcept_plantname</td>
   <td class="numeric"><bean:write name="dnrm_plantconcept_plantname-RESULTS" ignore="true"/></td>
-  <td><logic:empty name="dnrm_plantconcept_plantname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:empty></td>
+  <td><logic:lessThan value="0" name="dnrm_plantconcept_plantname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 <vegbank:denorm update="dnrm_plantusage_plantname" />
 <tr>
   <td>dnrm_plantusage_plantname</td>
   <td class="numeric"><bean:write name="dnrm_plantusage_plantname-RESULTS" ignore="true"/></td>
-  <td><logic:empty name="dnrm_plantusage_plantname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:empty></td>
+  <td><logic:lessThan value="0" name="dnrm_plantusage_plantname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 <vegbank:denorm update="dnrm_plantusage_plantconceptid" />
 <tr>
   <td>dnrm_plantusage_plantconceptid</td>
   <td class="numeric"><bean:write name="dnrm_plantusage_plantconceptid-RESULTS" ignore="true"/></td>
-  <td><logic:empty name="dnrm_plantusage_plantconceptid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:empty></td>
+  <td><logic:lessThan value="0" name="dnrm_plantusage_plantconceptid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 <vegbank:denorm update="dnrm_plantusage_partyid" />
 <tr>
   <td>dnrm_plantusage_partyid</td>
   <td class="numeric"><bean:write name="dnrm_plantusage_partyid-RESULTS" ignore="true"/></td>
-  <td><logic:empty name="dnrm_plantusage_partyid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:empty></td>
+  <td><logic:lessThan value="0" name="dnrm_plantusage_partyid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 
 </table>
