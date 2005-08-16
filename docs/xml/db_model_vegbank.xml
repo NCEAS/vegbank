@@ -9097,6 +9097,91 @@ conditions may change between resampling events.
       <update>1.0.3</update>
       <updateSQLFile>addInterpFldsToObs.sql</updateSQLFile>
     </attribute>
+    <attribute>
+      <attID>2300</attID>
+      <attName>topTaxon1Name</attName>
+      <attLabel>Top Taxon #1</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Name of the highest cover taxon on the plot, ignoring strata.</attDefinition>
+      <update>1.0.2</update>
+      <updateSQLFile>addTop5SppToObs_denormFlds.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attID>2301</attID>
+      <attName>topTaxon2Name</attName>
+      <attLabel>Top Taxon #2</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Name of the 2nd highest cover taxon on the plot, ignoring strata.</attDefinition>
+      <update>1.0.2</update>
+      <updateSQLFile>addTop5SppToObs_denormFlds.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attID>2302</attID>
+      <attName>topTaxon3Name</attName>
+      <attLabel>Top Taxon #3</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Name of the 3rd highest cover taxon on the plot, ignoring strata.</attDefinition>
+      <update>1.0.2</update>
+      <updateSQLFile>addTop5SppToObs_denormFlds.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attID>2303</attID>
+      <attName>topTaxon4Name</attName>
+      <attLabel>Top Taxon #4</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Name of the 4th highest cover taxon on the plot, ignoring strata.</attDefinition>
+      <update>1.0.2</update>
+      <updateSQLFile>addTop5SppToObs_denormFlds.sql</updateSQLFile>
+    </attribute>
+    <attribute>
+      <attID>2304</attID>
+      <attName>topTaxon5Name</attName>
+      <attLabel>Top Taxon #5</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Name of the 5th highest cover taxon on the plot, ignoring strata.</attDefinition>
+      <update>1.0.2</update>
+      <updateSQLFile>addTop5SppToObs_denormFlds.sql</updateSQLFile>
+    </attribute>
   </entity>
   <entity>
     <entityName>observationContributor</entityName>
