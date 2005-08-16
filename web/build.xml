@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2005-08-11 21:26:42 $'
-* '$Revision: 1.180 $'
+* '$Date: 2005-08-16 20:37:10 $'
+* '$Revision: 1.181 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -843,6 +843,7 @@ ERROR: An invalid context name entered: '${webapp}'
   </target>
   <!-- these help tab completion work easier: -->
   <target name="admin/" depends="admin" />
+    <target name="ajax/" depends="ajax" />
 <target name="dataxml/" depends="dataxml" />
 <target name="design/" depends="design" />
 <target name="email_templates/" depends="email_templates" />
