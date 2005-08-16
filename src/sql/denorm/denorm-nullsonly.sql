@@ -250,3 +250,22 @@ UPDATE observation set
     WHERE interp_bestfit_party_ID IS NULL;
   UPDATE observation SET interp_bestfit_partyName = (select party_id_transl FROM view_party_transl where view_party_transl.party_ID =   observation.interp_bestfit_party_ID) 
     where interp_bestfit_partyName is null;
+    
+    
+    
+    --top n taxa
+UPDATE observation set topTaxon2Name = 	 
+(SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE   tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 1) where topTaxon1Name is null;	 
+ 	 
+UPDATE observation set topTaxon3Name = 	 
+(SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE  tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 2) where topTaxon1Name is null;	 
+ 	 	 
+UPDATE observation set topTaxon4Name = 	 
+(SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE   tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 3) where topTaxon1Name is null;	 
+ 	 
+UPDATE observation set topTaxon5Name = 	 
+(SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE  tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 4) where topTaxon1Name is null;	 
+ 	  
+UPDATE observation set topTaxon1Name = 	 
+(SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE  tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 0) where topTaxon1Name is null;
+

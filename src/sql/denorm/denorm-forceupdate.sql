@@ -225,3 +225,20 @@ UPDATE observation SET interp_bestfit_ci_ID =
     ;
   UPDATE observation SET interp_bestfit_partyName = (select party_id_transl FROM view_party_transl where view_party_transl.party_ID =   observation.interp_bestfit_party_ID) 
     ;
+    
+    
+        --top n taxa
+    UPDATE observation set topTaxon2Name = 	 
+    (SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE   tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 1) ; 
+     	 
+    UPDATE observation set topTaxon3Name = 	 
+    (SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE  tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 2) ;
+     	 	 
+    UPDATE observation set topTaxon4Name = 	 
+    (SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE   tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 3) ; 
+     	 
+    UPDATE observation set topTaxon5Name = 	 
+    (SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE  tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 4) ;
+     	  
+    UPDATE observation set topTaxon1Name = 	 
+(SELECT coalesce(int_currplantscinamenoauth,authorplantName )  FROM view_taxonobs_withmaxcover AS tob WHERE  tob.observation_ID=observation.observation_ID order by maxcover DESC limit 1 OFFSET 0) ;
