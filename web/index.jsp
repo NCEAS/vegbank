@@ -130,7 +130,29 @@ function getHelpPageId() {
     </fieldset>
     <br />
     <%@ include file="includes/news.html" %>
-
+    
+  
+    <% 
+      Boolean isAdmin = (Boolean)(request.getSession().getAttribute("isAdmin"));
+    
+      if (isAdmin != null) {
+        if (isAdmin.booleanValue()) {
+    %>
+      <br/>
+       <!-- Admin -->
+        <fieldset id="tut_adminmenu">
+        <legend>ADMINISTRATION</legend>
+        <ul>
+        <li><html:link action="AdminMenu.do">Admin Menu</html:link></li>
+        <li>See the current <a href="@forms_link@system-status.jsp">System Status</a></li>
+        <li>Check <a href="@forms_link@businessrules.jsp">Business Rules</a></li>
+        </ul>
+        </fieldset>
+    
+    <% 
+        }
+      } 
+%>  
  </div>
 
 
