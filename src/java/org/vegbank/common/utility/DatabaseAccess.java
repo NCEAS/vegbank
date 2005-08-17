@@ -5,8 +5,8 @@
  *             			National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:11:06 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2005-08-17 00:15:54 $'
+ *	'$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,11 +82,11 @@ public class DatabaseAccess
 	 * @param inputStatement
 	 * @return ResutSet
 	 */
-	public int issueUpdate(String inputStatement) throws SQLException 
+	public long issueUpdate(String inputStatement) throws SQLException 
 	{
 		DBConnection dbConn = null;
 		int serialNumber = -1;
-		int results = -1;
+		long results = -1;
 		Statement query = null;
 
 		try {
