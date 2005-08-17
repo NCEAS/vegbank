@@ -16777,6 +16777,23 @@ conditions may change between resampling events.
       </attForms>
       <update>1.0.2</update>
     </attribute>
+    <attribute>
+      <attID>1838</attID>
+      <attName>usr_id</attName>
+      <attLabel>Embargo Owning User</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Usr_ID of the person who owns (and therefore can edit/extend/cancel) this embargo</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>addusr_idToembargo.sql</updateSQLFile>
+    </attribute>
   </entity>
   <entity>
     <entityName>usr</entityName>

@@ -1,4 +1,4 @@
-
+DROP VIEW view_plotall_withembargo;
 
 DROP VIEW view_taxonobs_distinctid_curr_counts_plants;
 
@@ -375,7 +375,9 @@ CREATE VIEW view_taxonobs_distinctid_curr_counts_plants AS
      temptbl_std_plantnames.plantname, temptbl_std_plantnames.sciname, temptbl_std_plantnames.scinamenoauth,
      temptbl_std_plantnames.code,temptbl_std_plantnames.common FROM temptbl_std_plantnames, view_taxonobs_distinctid_curr_counts 
      WHERE view_taxonobs_distinctid_curr_counts.plantconcept_ID=temptbl_std_plantnames.plantconcept_ID;
-
-
+--DROP VIEW view_plotall_withembargo;
+CREATE VIEW view_plotall_withembargo
+AS SELECT plot.*, embargo_id, embargoreason,defaultstatus,embargostart,embargostop from plot
+LEFT JOIN embargo on plot.plot_id = embargo.plot_ID;
 
 --CREATE VIEW view_taxonobs_distinctid_orig;

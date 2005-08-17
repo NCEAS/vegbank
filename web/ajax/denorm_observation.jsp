@@ -2,12 +2,12 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
  
-<TITLE>denorm commconcept</TITLE>
+<TITLE>denorm observation</TITLE>
  
  @webpage_masthead_html@ 
  
 
-<h2>denorm commconcept</h2>
+<h2>denorm observation</h2>
 <p>If no errors are presented on this page, it should have worked ok. </p>
 
 <!-- look for wparam, if so, then do ac -->
@@ -406,6 +406,14 @@
   <td>dnrm_obs_toptaxon1</td>
   <td class="numeric"><bean:write name="dnrm_obs_toptaxon1-RESULTS" ignore="true"/></td>
   <td><logic:lessThan value="0" name="dnrm_obs_toptaxon1-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+</tr>
+
+<tr><td colspan="3"> <hr/></td></tr>
+<vegbank:denorm update="dnrm_embargo_usrid" />
+<tr>
+  <td>dnrm_embargo_usrid</td>
+  <td class="numeric"><bean:write name="dnrm_embargo_usrid-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm_embargo_usrid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 
 
