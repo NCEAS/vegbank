@@ -14,6 +14,40 @@
   allowOrderBy="true" xwhereEnable="true"/>
 <!--Where statement removed from preceding: -->
 <vegbank:pager/>
+
+<!-- party could be empty b/c of denorms not right -->
+<logic:empty name="party-BEANLIST">
+  <!-- see if this is a party that is not denormalized correctly: -->
+  
+  <logic:present parameter="wparam">
+    <logic:notPresent parameter="where">
+        <!-- 1) see if this is a simple party request: wparam present, where is not -->
+          <!-- see if this party really exists-->
+          <vegbank:get id="partyexist" select="party_recordid" beanName="map" pager="false" />
+          <logic:notEmpty name="partyexist-BEANLIST">
+            <!-- 2 the party does exist! -->
+              <logic:iterate id="onerowofpartyexist" name="partyexist-BEANLIST" length="1">
+                <bean:define id="denormAC" name="onerowofpartyexist" property="accessioncode" />
+              </logic:iterate>
+              <logic:notEmpty name="denormAC">
+              <!-- have the accessioncode, include denorm page in hidden div here-->
+                  <div class="hidden">
+                    <bean:define id="partydenormurl">/ajax/denorm_party.jsp?wparam=<bean:write name="denormAC" /></bean:define>
+                    <bean:include id="partydenormpage" page="<%= partydenormurl %>" />
+                    <!-- not necessary to write this, but what the heck? -->
+                    <bean:write name="partydenormpage" filter="false" />
+                  </div>
+                 
+                 
+                  <!-- do the get again -->
+                   <vegbank:get id="party" select="party" beanName="map" pager="true" 
+                    allowOrderBy="true" xwhereEnable="true"/>
+             </logic:notEmpty>  
+        </logic:notEmpty>
+    </logic:notPresent>
+  </logic:present>
+</logic:empty>
+<!-- see if it's still empty-->
 <logic:empty name="party-BEANLIST">
 <p>  Sorry, no parties found.</p>
 </logic:empty>
