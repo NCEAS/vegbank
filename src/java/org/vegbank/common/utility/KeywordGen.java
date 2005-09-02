@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-06-20 21:14:49 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2005-09-02 21:15:15 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,10 @@ public class KeywordGen {
 	private static final int SINGLE = 1;
 	private static final int MULTI = 2;
 	private static final int BUILD_MODE = SINGLE;
-	private static final int MAX_PER_XACTION = 500;
+	private static final int MAX_PER_XACTION = 100;
+	private static final String MM_TEMP_TABLE_PREFIX = "kwmm";
+	private static final String EXTRA_TEMP_TABLE_PREFIX = "kwextra";
+    private static String mmTempTableName = null;
 
 	private Connection conn = null;
 	private static ResourceBundle res = null;
@@ -67,6 +70,11 @@ public class KeywordGen {
 	public KeywordGen(Connection dbconn) {
 		init();
 		this.conn = dbconn;
+        try {
+            conn.setAutoCommit(false);
+        } catch (SQLException s99) {
+            log.error("Unable to set autocommit to false in kwgen init", s99);
+        }
 	}
 	
 
@@ -80,6 +88,8 @@ public class KeywordGen {
 		extraQueries = new HashMap();
 		HashMap map;
 		String key, entityName, extraName, tableName;
+        mmTempTableName = MM_TEMP_TABLE_PREFIX + Thread.currentThread().hashCode();
+
 
 		// load the entity list
 		for (Enumeration e = res.getKeys(); e.hasMoreElements() ;) {
@@ -170,21 +180,35 @@ public class KeywordGen {
      */
 	private void genKeywords(String entityName, boolean updateMismatch) throws SQLException {
 
+		entityName = entityName.toLowerCase();
+
+        if (updateMismatch) {
+            // select mismatch records (those without keywords yet) into temp table
+            buildMismatchTempTable(entityName);
+        }
+
+
         if (!insertMainKeywords(entityName, updateMismatch)) {
             throw new SQLException("Problem inserting keywords for " + entityName);
         }
 
         if (extraQueries.get(entityName) != null) {
-            if (!insertExtraKeywords(entityName, updateMismatch)) {
+            log.debug("+++ inserting extra keywords for " + entityName);
+            String tmpTableName = insertExtraKeywords(entityName, updateMismatch);
+            if (tmpTableName == null) {
                 throw new SQLException("Problem inserting extras for " + entityName);
             }
 
-            if (BUILD_MODE == SINGLE) {
-                if (!appendExtraKeywords(entityName, updateMismatch)) {
+            if (!tmpTableName.equals("") && BUILD_MODE == SINGLE) {
+                log.debug("+++ appending extra keywords for " + entityName);
+                if (!appendExtraKeywords(entityName, updateMismatch, tmpTableName)) {
                     throw new SQLException("Problem appending extras for " + entityName);
                 }
+                log.debug("done appending extra keywords for " + entityName);
             }
         }
+        log.debug("committing keywords for " + entityName);
+        conn.commit();
     }
 
 
@@ -196,14 +220,10 @@ public class KeywordGen {
 	private boolean insertMainKeywords(String entityName, boolean updateMismatch) throws SQLException {
 		log.info("Inserting main keywords for entity: " + entityName);
 
-		entityName = entityName.toLowerCase();
+		String entityQuery = getEntityQuery(entityName, updateMismatch, true);
+		if (entityQuery == null) { return false; }
 
-		String entityQuery = getEntityQuery(entityName, updateMismatch);
-		if (entityQuery == null) {
-			return false;
-		}
-
-		return buildKeywordTable("keywords", entityQuery, entityName, false, !updateMismatch);
+		return (null != buildKeywordTable("keywords", entityQuery, entityName, false, !updateMismatch, false));
 	}
 
 
@@ -211,28 +231,32 @@ public class KeywordGen {
 	 * Inserts a record in the extra keywords table for each record in given entity. 
 	 *
      * @param updateMismatch find only records missing from the keywords table
-	 * @return true if inserts were all successful
+	 * @return temp table name if inserts were all successful, else null
 	 */
-	private boolean insertExtraKeywords(String entityName, boolean updateMismatch) throws SQLException {
+	private String insertExtraKeywords(String entityName, boolean updateMismatch) throws SQLException {
+
         // run it where doDelete != updateMismatch
         return insertExtraKeywords(entityName, false, !updateMismatch);
     }
 
     /**
+     * @param isUpdate should be false if we're adding new keywords
      * @param doDelete is the inverse of updateMismatch
+	 * @return temp table name if inserts were all successful, else null if error
      */
-	private boolean insertExtraKeywords(String entityName, boolean isUpdate, boolean doDelete) 
+	private String insertExtraKeywords(String entityName, boolean isUpdate, boolean doDelete) 
             throws SQLException {
 		String entityQuery, extraName;
 		entityName = entityName.toLowerCase();
 		HashMap extraMap = (HashMap)extraQueries.get(entityName);
-		if (extraMap == null) { return true; }
+		if (extraMap == null) { return ""; }
 
 		log.info("##### Inserting extra keywords for entity " + entityName);
 
 		// each entity can have many extra queries
 		boolean first = true;
 		boolean success = true, temporarySuccess;
+        String tmpTableName=null;
 		Iterator it = extraMap.keySet().iterator();
 		while (it.hasNext()) {
 			extraName = (String)it.next();
@@ -240,23 +264,23 @@ public class KeywordGen {
 
 			if (entityQuery == null) { 
 				log.error("ERROR: query missing for extras." + entityName + "." + extraName);
-				return false; 
+				return null; 
 			}
 
 			log.info("## Inserting extras: " + extraName);
 			if (BUILD_MODE == MULTI) {
 				//////// MULTI
-				//temporarySuccess = buildKeywordTable("keywords", entityQuery, entityName, isUpdate, false);
-                log.error("not using MULTI mode");
+				//tmpTableName = buildKeywordTable("keywords", entityQuery, entityName, isUpdate, false);
+                log.error("MULTI mode not implemented!");
 			} else {
 				/////// SINGLE
-				temporarySuccess = buildKeywordTable("keywords_extra", entityQuery, entityName, isUpdate, doDelete);
+				tmpTableName = buildKeywordTable(EXTRA_TEMP_TABLE_PREFIX, entityQuery, entityName, isUpdate, doDelete, true);
 			}
 
-			if (!temporarySuccess) {
+			if (tmpTableName == null) {
 				// if any failed, success = false
 				success = false;
-				log.error("ERROR while inserting extra's with: " + entityQuery);
+				log.error("ERROR while inserting extras with: " + entityQuery);
 			}
 
 			if (first) {
@@ -265,7 +289,7 @@ public class KeywordGen {
 			}
 		}
 
-		return success;
+		return tmpTableName;
 	}
 
 
@@ -274,17 +298,20 @@ public class KeywordGen {
 	 *
 	 * @return true if updates were all successful
 	 */
-	private boolean appendExtraKeywords(String entityName, boolean updateMismatch) throws SQLException {
-		String entityQuery = "SELECT table_id,keywords FROM keywords_extra ";
+	private boolean appendExtraKeywords(String entityName, boolean updateMismatch, String tmpTableName) throws SQLException {
+		String entityQuery = "SELECT table_id,keywords FROM " + tmpTableName + " ";
 
+        /*
         if (updateMismatch) {
-            entityQuery += getExtraMismatchWhere(entityName);
+            entityQuery += getWhereClauseConnector(entityQuery);
+            entityQuery += getMismatchWhere(entityName);
         } else {
 		    entityQuery += "WHERE entity='" + entityName + "'";
         }
+        */
 
         // isUpdate = true, doDelete = false ALWAYS
-		return buildKeywordTable("keywords", entityQuery, entityName, true, false);
+		return (null != buildKeywordTable("keywords", entityQuery, entityName, true, false, false));
 	}
 
 
@@ -292,55 +319,87 @@ public class KeywordGen {
 	 * Given a keyword query for one entity, this method populate the
 	 * given keyword table (main or extra).
 	 */
-	private boolean buildKeywordTable(String kwTable, String entityQuery, 
-			String entityName, boolean isUpdate, boolean doDelete) throws SQLException {
+	private String buildKeywordTable(String kwTable, String entityQuery, 
+			String entityName, boolean isUpdate, boolean doDelete, boolean useTempTable) throws SQLException {
 
 
 		StringBuffer sbTmpKw = null;
 		HashMap kwIdMap = new HashMap();
-		String tmpId;
+		String tmpId, sql;
 		long lTmpId;
 		long count=0;
 		int numFields;
 		ResultSet rs;
+        ResultSetMetaData rsmd;
 		Statement stmt = conn.createStatement();
-		conn.setAutoCommit(false);
 
-		showSQL(entityQuery);
-
-		// count records
+        /*
+        // count records
 		String sqlFrom = entityQuery.substring( entityQuery.lastIndexOf("FROM") );
-		String sql = "SELECT COUNT(*) AS count FROM (" + entityQuery + ") AS entityQuery";
-		rs = stmt.executeQuery(sql);
+		sql = "SELECT COUNT(*) AS count FROM (" + entityQuery + ") AS entityQuery";
+        log.debug("buildKeywordTable: " + sql);
+        rs = stmt.executeQuery(sql);
+        */
+        sql = "select count(id) from " + mmTempTableName;
+        log.debug("COUNTING RECORDS: " + sql);
+        rs = stmt.executeQuery(sql);
 
 		if (rs.next()) {
 			count = rs.getLong("count");
 		}
 
 		if (count == 0) {
-			log.info("No records found.");
-			return true;
+			log.debug("No keywords for " + kwTable);
+			return "";
 		}
+
+        ///////////////////////////////
+        sql = "select * from " + mmTempTableName;
+        log.debug("GETTING RECORDS: " + sql);
+        rs = stmt.executeQuery(sql);
+
+        rsmd = rs.getMetaData();
+        int numCols = rsmd.getColumnCount();
+		while (rs.next()) {
+            for (int i=1; i<=numCols; i++) {
+			    log.debug(i + " :: " + rs.getObject(i).toString());
+            }
+		}
+        ///////////////////////////////
+
 
 		
 		PreparedStatement pstmt;
 		if (isUpdate) {
 		 	pstmt = getUpdatePreparedStatement();
 		} else {
-		 	pstmt = getInsertPreparedStatement(kwTable, entityName);
+            if (useTempTable) {
+                // create empty temp table
+                kwTable = kwTable + Thread.currentThread().hashCode();
+                log.debug("creating TEMP TABLE " + kwTable);
+                try {
+                    stmt.executeUpdate("SELECT * INTO TEMP TABLE " + kwTable + " FROM keywords WHERE true=false");
+                } catch (SQLException s2) {
+                    log.error("Unable to create temp table " + kwTable, s2);
+                }
+            }
+		 	pstmt = getInsertPreparedStatement(kwTable);
 		}
 
 		if (doDelete) {
+			sql = "DELETE FROM " + kwTable + " WHERE entity='" + entityName + "'";
 			log.info("deleting entity's current keywords");
-			stmt.executeUpdate("DELETE FROM " + kwTable + " WHERE entity='" + entityName + "'");
+			log.debug(sql);
+			stmt.executeUpdate(sql);
 		}
 
+		//log.info("Selecting entities...please wait");
 		log.info("Selecting " + count + " " + entityName + " entities...please wait");
-
+		showSQL(entityQuery);
 		rs = stmt.executeQuery(entityQuery);
 
 		// get metadata
-		ResultSetMetaData rsmd = rs.getMetaData();
+		rsmd = rs.getMetaData();
 		numFields = rsmd.getColumnCount();
 		String tmpValue, tmpField;
 		StringBuffer sbKeywords;
@@ -356,6 +415,7 @@ public class KeywordGen {
 
 		long l=0;
 		while (rs.next()) {
+            log.debug(" ++++++++++ next +++++++++++");
 
 			try {
 				// first column MUST be PK for parent entity table
@@ -364,7 +424,7 @@ public class KeywordGen {
 			} catch (Exception ex) {
 				log.error("ERROR: PK field is not valid");
 				conn.rollback();
-				return false;
+				return kwTable;
 			}
 
 			sbKeywords = new StringBuffer(256);
@@ -385,35 +445,39 @@ public class KeywordGen {
 									lTmpId + ": " + tmpValue);
 						}
 					} else {
-						// compile all keywords into one value
-						sbKeywords.append(KW_DELIM).append(tmpValue);
+						// concatenate all keywords into one value
+                        log.debug(lTmpId + ": " + tmpValue);
+                        sbKeywords.append(KW_DELIM).append(tmpValue);
 					}
-
 				}
-
 			}
 		
-			if (isUpdate) {
-				// collect all keywords for same tmpId
-				sbTmpKw = (StringBuffer)kwIdMap.get(tmpId);
-				if (sbTmpKw == null) {
-					sbTmpKw = new StringBuffer(128);
-				}
+            if (isUpdate) {
+                // collect all keywords for same tmpId
+                sbTmpKw = (StringBuffer)kwIdMap.get(tmpId);
+                if (sbTmpKw == null) {
+                    sbTmpKw = new StringBuffer(128);
+                }
 
-				// append the latest
-				sbTmpKw.append(sbKeywords);
-				kwIdMap.put(tmpId, sbTmpKw);
-			} else {
-				insertRow(pstmt, lTmpId, entityName, sbKeywords.toString());
-				sb.updateStatusBar();
+                // append the latest
+                sbTmpKw.append(sbKeywords);
+                kwIdMap.put(tmpId, sbTmpKw);
+                log.debug("adding keywords to " + tmpId + ": " + sbTmpKw.toString());
+            } else {
+                insertRow(pstmt, lTmpId, entityName, sbKeywords.toString());
+                sb.updateStatusBar();
 
-				if (l++ > MAX_PER_XACTION) {
-					conn.commit();
-				}
-			}
+                if (++l % MAX_PER_XACTION == 0) {
+                    log.debug("MAX XACTIONS REACHED...committing");
+                    conn.commit();
+                }
+            }
+
 		} // end while all results 
+        log.debug(" ++++++++++ DONE +++++++++++");
 
 		if (isUpdate) {
+            log.debug("attempting to update...");
 			sb.setupStatusBar(kwIdMap.size());
 			// update each record en masse
 			l=0;
@@ -423,7 +487,9 @@ public class KeywordGen {
 				updateRow(pstmt, Long.parseLong(tmpId), entityName,
 						((StringBuffer)kwIdMap.get(tmpId)).toString());
 				sb.updateStatusBar();
-				if (l++ > MAX_PER_XACTION) {
+
+				if (++l % MAX_PER_XACTION == 0) {
+                    log.debug("MAX XACTIONS REACHED...committing");
 					conn.commit();
 				}
 			}
@@ -437,9 +503,8 @@ public class KeywordGen {
 		stopWatch.printTimeElapsed();
 
 		rs.close();
-		conn.commit();
 
-		return true;
+		return kwTable;
 	}
 
 
@@ -451,6 +516,7 @@ public class KeywordGen {
 		pstmt.setLong(1, tableId);
 		pstmt.setString(2, entity);
 		pstmt.setString(3, keywords);
+		log.debug("insertRow: " + pstmt.toString());
 		pstmt.executeUpdate();
 	}
 
@@ -463,7 +529,7 @@ public class KeywordGen {
 		pstmt.setString(1, keywords);
 		pstmt.setLong(2, tableId);
 		pstmt.setString(3, entityName);
-		//log.info(pstmt.toString());
+		log.debug("updateRow: " + pstmt.toString());
 		pstmt.executeUpdate();
 	}
 
@@ -471,7 +537,7 @@ public class KeywordGen {
 	/**
 	 *
 	 */
-	private PreparedStatement getInsertPreparedStatement(String table, String entityName) 
+	private PreparedStatement getInsertPreparedStatement(String table)
 			throws SQLException {
 		return conn.prepareStatement(
 			"INSERT INTO " + table + " (table_id,entity,keywords) VALUES (?,?,?)");
@@ -490,17 +556,12 @@ public class KeywordGen {
 
 	/**
 	 *
+	 * @param includeSelectFields if false, only select PK field
 	 */
-	private String getEntityQuery(String entityName, boolean updateMismatch) {
+	private String getEntityQuery(String entityName, boolean updateMismatch, boolean includeSelectFields) {
 
-		String pkField = res.getString("pk." + entityName);
+		String pkField = getEntityPK(entityName);
 		String from = res.getString("from." + entityName);
-		String select = res.getString("select." + entityName);
-
-		if (Utility.isStringNullOrEmpty(select)) {
-			log.error("ERROR: select." + entityName + " must be specified");
-			return null;
-		}
 
 		if (Utility.isStringNullOrEmpty(from)) {
 			log.error("ERROR: from." + entityName + " must be specified");
@@ -512,19 +573,59 @@ public class KeywordGen {
 			log.error("ERROR: pk." + entityName + " must be specified");
 			return null;
 		}
-        if (updateMismatch) {
-		    String tmp = "SELECT DISTINCT " + pkField + "," + select + " FROM " + from;
-            if (from.toLowerCase().indexOf(" where ") == -1) { tmp += " WHERE ";
-            } else { tmp += " AND "; }
-            return tmp + getMismatchWhere(entityName);
-        } else {
-		    return "SELECT DISTINCT " + pkField + "," + select + " FROM " + from;
+
+        String tmp = "";
+
+        if (includeSelectFields) {
+            String select = res.getString("select." + entityName);
+            if (Utility.isStringNullOrEmpty(select)) {
+                log.error("ERROR: select." + entityName + " must be specified");
+                return null;
+            }
+
+            tmp = "SELECT DISTINCT " + pkField + "," + select;
         }
+
+        tmp += " FROM " + from;
+
+        if (updateMismatch) {
+            tmp += getWhereClauseConnector(tmp);
+            tmp += getMismatchWhere(entityName);
+        }
+
+        return tmp;
+	}
+
+
+	private String getMismatchSelectQuery(String entityName) {
+
+		String pkField = res.getString("pk." + entityName);
+		String from = res.getString("from." + entityName);
+
+		if (Utility.isStringNullOrEmpty(from)) {
+			log.error("ERROR: from." + entityName + " must be specified");
+			return null;
+		}
+
+
+		if (Utility.isStringNullOrEmpty(pkField)) {
+			log.error("ERROR: pk." + entityName + " must be specified");
+			return null;
+		}
+
+        String tmp = "SELECT DISTINCT " + pkField + " FROM " + from;
+        if (from.toLowerCase().indexOf(" where ") == -1) {
+            tmp += " WHERE ";
+        } else {
+            tmp += " AND "; 
+        }
+
+        return tmp + getMismatchWhere(entityName);
 	}
 
 
     /**
-     *
+     * This is used to populate the extra keywords temp table.
      */
     private String getExtraEntityQuery(String entityName, String extraName, boolean whereMismatch) {
 		HashMap extraMap = (HashMap)extraQueries.get(entityName);
@@ -539,12 +640,16 @@ public class KeywordGen {
             else { glue = " and "; }
 
             // find stuff that goes after WHERE
-            int pos = q.indexOf("order by");
+            int pos = q.indexOf("group by");
             if (pos == -1) {
-                log.debug("no ORDER BY clause: " + q);
+                pos = q.indexOf("order by");
+            }
+
+            if (pos == -1) {
+                // just tack that baby on the end
                 sb.append(q).append(glue).append(getMismatchWhere(entityName));
             } else {
-                log.debug("found ORDER BY at " + pos + " of " + q.length());
+                // append it carefully 
                 sb.append(q.substring(0,pos))
                     .append(glue).append(getMismatchWhere(entityName))
                     .append(" ").append(q.substring(pos));
@@ -559,15 +664,39 @@ public class KeywordGen {
 
 
     /**
+     * This is used to get the where clause which builds
+     * the temp table that holds just IDs 
+     * of records that don't have keywords yet.
      * Caveat: Does not start with WHERE or AND.
      */
-    private String getMismatchWhere(String entityName) {
+    private String getMismatchInitWhere(String entityName) {
         String pkName = getEntityPK(entityName);
+        if (Utility.isStringNullOrEmpty(entityName)) { return ""; }
+
         StringBuffer where = new StringBuffer(128);
         where.append(pkName)
             .append(" NOT IN (SELECT table_id FROM keywords WHERE entity='")
             .append(entityName)
             .append("')");
+
+        return where.toString();
+    }
+
+
+    /**
+     * Produces a where clause that limits PK by those 
+     * found in the mismatch temp table.
+     * Caveat: Does not start with WHERE or AND.
+     */
+    private String getMismatchWhere(String entityName) {
+        String pkName = getEntityPK(entityName);
+        if (Utility.isStringNullOrEmpty(entityName)) { return ""; }
+
+        StringBuffer where = new StringBuffer(128);
+        where.append(pkName)
+            .append(" IN (SELECT id FROM ")
+            .append(mmTempTableName)
+            .append(")");
 
         return where.toString();
     }
@@ -582,7 +711,7 @@ public class KeywordGen {
         where.append(" WHERE table_id NOT IN ")
             .append("(SELECT table_id FROM keywords WHERE entity='")
             .append(entityName)
-		    .append(") AND entity='")
+		    .append("') AND entity='")
             .append(entityName)
             .append("'");
 
@@ -644,57 +773,64 @@ public class KeywordGen {
 	}
 
     /**
-     * Gets the entity query and limits it to missing entity records.
+     * Returns " WHERE " or " AND ".
      */
-    /*
-    public void updatePartialEntity(String entityName) throws SQLException {
-        log.debug("uPE:" + entityName);
+    private String getWhereClauseConnector(String sql) {
+        if (sql.toLowerCase().indexOf(" where ") == -1) {
+            return " WHERE ";
+        } else {
+            return " AND "; 
+        }
+    }
+
+    /**
+     * Responsible for creating the mismatch ID temp table.
+     */
+    private void buildMismatchTempTable(String entityName) {
         String pkName = getEntityPK(entityName);
-        StringBuffer where = new StringBuffer(128);
-        where.append(" WHERE ")
+        String entityQuery = getEntityQuery(entityName, false, false);
+
+        StringBuffer sb = new StringBuffer(256)
+            .append("SELECT DISTINCT ")
             .append(pkName)
+            .append(" AS id INTO TEMP TABLE ")
+            .append(mmTempTableName)
+            .append(entityQuery);
+
+        // add WHERE or AND
+        sb.append(getWhereClauseConnector(entityQuery));
+
+        sb.append(pkName)
             .append(" NOT IN (SELECT table_id FROM keywords WHERE entity='")
             .append(entityName)
             .append("')");
 
-        // make sure you don't delete the extant keywords!
-        boolean isUpdate = false;
-        boolean doDelete = false;
+        
+        try {
+		    Statement stmt = conn.createStatement();
+            try { 
+                // see if the tmp table already exists
+                ResultSet rs = stmt.executeQuery("SELECT schemaname FROM pg_tables WHERE tablename='" + mmTempTableName + "'");
+                if (rs.next()) {
+                    log.debug("Dropping temp table: " + mmTempTableName);
+                    stmt.executeUpdate("DROP TABLE " + mmTempTableName); 
+                }
+                rs.close();
 
-        log.debug("inserting new main keywords");
-		buildKeywordTable("keywords", getEntityQuery(entityName) + where.toString(), 
-                entityName, isUpdate, doDelete);
+            } catch (Exception ex) { 
+                log.debug("Couldn't drop temp table " + mmTempTableName + ": " + ex.toString());
+		        stmt = conn.createStatement();
+            }
 
-        if (extraQueries.get(entityName) != null) {
-            log.debug("inserting new extra keywords");
-            insertExtraKeywords(entityName, isUpdate, doDelete);
+            log.debug("Creating mismatch temp table for " + entityName + ": " + sb.toString());
+            stmt.executeUpdate(sb.toString());
+            stmt.close();
+
+        } catch (SQLException s2) {
+            log.error("Unable to create mismatch temp table", s2);
         }
     }
-    */
-
-
-    /**
-     *
-     */
-    /*
-    public void updatePartialEntity(String entity, List pkList) {
-        //TODO: insert new keywords records for each pkList item
-
-        if (pkList == null || pkList.size() == 0) return;
-        StringBuffer = new StringBuffer(64);
-        query.append("SELECT ");
-        String pk;
-        Iterator lit = pkList.iterator();
-        while (lit.hasNext()) {
-            pk = (String)lit.next();
-            if (first) { first = false; }
-            else { query.append(","); }
-            query.append(pk);
-        }
-    }
-    */
-
-
+            
     /**
      *
      */

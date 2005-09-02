@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-08-17 00:15:54 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-09-02 21:15:15 $'
+ *	'$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ import org.vegbank.common.utility.DenormUtility;
  * to look up in SQLStore.properties.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.2 $ $Date: 2005-08-17 00:15:54 $
+ * @version $Revision: 1.3 $ $Date: 2005-09-02 21:15:15 $
  */
 
 public class VegbankDenormTag extends VegbankTag {
@@ -74,10 +74,18 @@ public class VegbankDenormTag extends VegbankTag {
 		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
 
 		try {
-            String update = getUpdate();
-            String denormtype = getDenormtype();
-            String resultsString = Long.toString(DenormUtility.update(update, getDenormtype(), getWparamArray()));
-            request.setAttribute(update+"-RESULTS",resultsString);
+			String updatetable = getUpdatetable();
+
+			if (updatetable != null) {
+               // this table should be updated completely
+               String resultsString = Long.toString(DenormUtility.updateAll(updatetable));
+               request.setAttribute(updatetable+"-RESULTS",resultsString);
+			} else {
+               // a particular update statement is passed.
+               String update = getUpdate();
+               String resultsString = Long.toString(DenormUtility.update(update, getDenormtype(), getWparamArray()));
+               request.setAttribute(update+"-RESULTS",resultsString);
+		    }
 
 		} catch (Exception ex) {
 			log.error("Error while running <vegbank:denorm> ", ex);
@@ -107,16 +115,15 @@ public class VegbankDenormTag extends VegbankTag {
     /**
      *  FROM vegbank:get
      */
+    protected String wparam = null;
 
-    	protected String wparam = null;
+    public String getWparam() {
+        String s = findAttribute("wparam", this.wparam);
+    //	if (s != null) {
+    //		s = s.toLowerCase();
+    //	}
 
-	    public String getWparam() {
-			String s = findAttribute("wparam", this.wparam);
-		//	if (s != null) {
-		//		s = s.toLowerCase();
-		//	}
-
-			return s.replace(';',' '); //no semicolons allowed.  could lead to security problem
+        return s.replace(';',' '); //no semicolons allowed.  could lead to security problem
     }
 
     public String[] getWparamArray() {
@@ -169,6 +176,20 @@ public class VegbankDenormTag extends VegbankTag {
 			s = "null"; // default
 		}
         this.denormtype = s;
+    }
+
+
+    /**
+     *  denormType is one strong of either: all, null, ac (null is default option)
+     */
+	protected String updatetable;
+
+    public String getUpdatetable() {
+        return findAttribute("updatetable", this.updatetable);
+    }
+
+    public void setUpdatetable(String s) {
+         this.updatetable = s;
     }
 
 

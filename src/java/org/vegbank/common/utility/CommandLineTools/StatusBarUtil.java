@@ -5,8 +5,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2004-10-27 23:34:09 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-09-02 21:15:15 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ public class StatusBarUtil {
 	 * @param count
 	 */
 	public void completeStatusBar(long count) {
+        if (count == 0 || pct1 == 0) { return; }
 		if (smallCount) {
 			int num = (int) (100 * scalar) - (int) pct1 * (int) l;
 			for (int i = 0; i < num; i++) {
@@ -76,7 +77,7 @@ public class StatusBarUtil {
 			}
 
 		} else {
-			if (l < pct1) {
+			if (l < pct1 || pct1 == 0) {
 				// do nothing
 			} else if (l % pct1 == 0) {
 				System.out.print("-");
@@ -89,6 +90,8 @@ public class StatusBarUtil {
 	 * @param count -- how many chunks of work to do
 	 */
 	public void setupStatusBar(long count) {
+
+        if (count < 1) { return; }
 
 		pct1 = (long) ((count / 100) / scalar);
 		if (pct1 < 1) {

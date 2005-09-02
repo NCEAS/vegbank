@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-28 21:49:56 $'
- *	'$Revision: 1.24 $'
+ *	'$Date: 2005-09-02 21:15:15 $'
+ *	'$Revision: 1.25 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,6 +71,7 @@ import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.model.Userdatasetitem;
 import org.vegbank.common.model.Userdataset;
 import org.vegbank.common.utility.AccessionGen;
+import org.vegbank.common.utility.DenormUtility;
 import org.vegbank.common.utility.DBConnection;
 import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.common.utility.Utility;
@@ -629,12 +630,15 @@ public class LoadTreeToDatabase
 			this.filterSQLException(se, sb.toString());
 		}
 		
-		// All the tables can have defined value field
-		insertUserDefinedTables(tableName, PK, fieldValueHash);
-		// All fields can have a revision
-		insertRevision(PK, fieldValueHash);
-		// All fields can have a note attached
-		insertNoteLink(PK, fieldValueHash);
+        if (!tableName.equalsIgnoreCase("userdefined") &&
+                !tableName.equalsIgnoreCase("definedvalue")) {
+            // All the tables can have defined value field
+            insertUserDefinedTables(tableName, PK, fieldValueHash);
+            // All fields can have a revision
+            insertRevision(PK, fieldValueHash);
+            // All fields can have a note attached
+            insertNoteLink(PK, fieldValueHash);
+        }
 		
 		this.storeTableNameAndPK(tableName, PK);
 		
@@ -935,21 +939,29 @@ public class LoadTreeToDatabase
 	private boolean insertUserDefinedTables( String parentTableName, long tableRecordID, Hashtable parentHash) throws SQLException
 	{
 		boolean result = false;
-		
-		Enumeration userdefineds = getChildTables( parentHash, "userDefined");
-		while ( userdefineds.hasMoreElements() )
-		{
-			Hashtable userDefined = (Hashtable) userdefineds.nextElement();
-			// Use the parentTableName as the tableName value
-			userDefined.put( "tableName", parentTableName);
-			long userDefinedPK = insertTable( "userDefined", userDefined );
-			
-			// Get the defined value
-			Hashtable definedValue = getChildTable( userDefined, "definedValue");
-			definedValue.put("tablerecord_id", ""+tableRecordID);
-			definedValue.put("userdefined_id", ""+userDefinedPK);
-			insertTable( "definedValue", definedValue );
-		}
+		Enumeration definedValues = getChildTables( parentHash, "definedValue");
+
+		while ( definedValues.hasMoreElements() ) {
+            Hashtable definedValueHash = (Hashtable)definedValues.nextElement();
+            log.debug("got a definedValue for " + parentTableName + ": " + definedValueHash.get("definedValue"));
+
+
+            // the actual <userDefined> is under a <definedValue.USERDEFINED_ID>
+            Hashtable udIdHash = getChildTable(definedValueHash, "USERDEFINED_ID");
+            if (udIdHash != null) {
+                Hashtable userDefined = getChildTable(udIdHash, "userDefined");
+                log.debug("got the userDefined hashtable.");
+
+                log.debug("inserting userDefined element...");
+                long userDefinedPK = insertTable("userDefined", userDefined);
+                definedValueHash.put("tablerecord_id", ""+tableRecordID);
+                definedValueHash.put("userdefined_id", ""+userDefinedPK);
+                log.debug("userdefined_id=" + userDefinedPK);
+                log.debug("inserting definedValue element...");
+                insertTable( "definedValue", definedValueHash );
+            }
+		}   
+        
 		return result;
 	}
 	
@@ -1171,12 +1183,31 @@ public class LoadTreeToDatabase
 			if ( childObject == null)
 			{
 				childObject  = new Vector();
-			}
+                /*
+                if ("USERDEFINED_ID".equals(tableName)) {
+                    if (parentHash.size() > 0) {
+                        Iterator kit = parentHash.keySet().iterator();
+                        while (kit.hasNext()) {
+                            log.debug("AVAILABLE KEYS: " + (String)kit.next());
+                        }
+                    }
+                }
+                */
+			} 
 			// Need to handle potential null before casting
 			childVec = (Vector) childObject;
 		}
 
 		Enumeration enum = childVec.elements();
+        /*
+        if ("USERDEFINED_ID".equals(tableName)) {
+            log.debug("##############: number children for definedValue.USERDEFINED_ID: " + childVec.size());
+            while(enum.hasMoreElements()) {
+                log.debug("child: " + enum.nextElement().toString());
+            }
+        }
+        */
+
 		return enum;
 	}
 	
@@ -2298,6 +2329,21 @@ public class LoadTreeToDatabase
     private void runDenorms() {
 
         try {
+            Iterator tit = tableKeys.keySet().iterator();
+            while (tit.hasNext()) {
+                String tableName = ((String)tit.next()).toLowerCase();
+                log.debug("Denormalizing " + tableName);
+                // note that this will run default denorms on the table
+                // which currently means all null denorms
+                // not just this load's new records.
+                try {
+                    DenormUtility.updateTable(tableName);
+                } catch (SQLException ex) {
+                    log.error("unable to denormalize table " + tableName, ex);
+                }
+            }
+
+            /*
             String psqlPath = Utility.dbPropFile.getString("psqlPath");
             String user = Utility.dbPropFile.getString("user");
             String pwd = Utility.dbPropFile.getString("password");
@@ -2309,15 +2355,16 @@ public class LoadTreeToDatabase
 
             String cmd = psqlPath + " -U " + user;
 
-            /* not using password for now
-            if (!Utility.isStringNullOrEmpty(pwd)) {
-                cmd += " -p " + pwd;
-            } */
+            // not using password for now
+            //if (!Utility.isStringNullOrEmpty(pwd)) {
+             //   cmd += " -p " + pwd;
+            //}
 
             cmd += " -f " + vbHomeDir + "sql/" + sqlScriptName + " " + dbName;
 
             log.debug("executing denorm sql script: " + cmd);
             Runtime.getRuntime().exec(cmd);
+            */
 
         } catch (Exception ex) {
             log.error("Problem running denormalizations", ex);

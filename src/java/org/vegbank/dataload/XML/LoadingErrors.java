@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-02-11 00:20:25 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2005-09-02 21:15:15 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,8 +126,8 @@ public class LoadingErrors
 			}
 			else 
 			{
-				// Plot failed to load
-				message = defaultIdentifier + " failed to load, see errors below";
+				// There were errors
+				message = defaultIdentifier + " had errors.";
 			}
 		}
 		else

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-08-17 00:15:54 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2005-09-02 21:15:15 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ public class DenormUtility
 	protected static Log log = LogFactory.getLog(DenormUtility.class);
 	private static ResourceBundle sqlStore =
 			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
+    private static Hashtable tableDenorms = null;
 
 
     /**
@@ -73,6 +74,11 @@ public class DenormUtility
         } else {
             // get the where statement from SQLStore
             whereSQL = sqlStore.getString(update + "_w_" + denormtype);
+            if (whereSQL.toLowerCase().startsWith("where ")) {
+                // strip leading "where "
+                whereSQL = whereSQL.substring("where ".length());
+            }
+
             if (whereSQL.indexOf("{0}") != -1 ) {
                 //need to substitude wparams for {0}, etc
                 MessageFormat format;
@@ -85,11 +91,119 @@ public class DenormUtility
 
         sql.append(updateSQL).append(" AND ").append(whereSQL);
 
+
         log.debug("running SQL: " + sql.toString());
         DatabaseAccess da = new DatabaseAccess();
         long results = da.issueUpdate(DatabaseUtility.removeSemicolons(sql.toString()));
         log.debug("SQL IS DONE.  Result:" + results );
 
         return results;
+    }
+
+    /**
+     * Run all queries in sql store that begin with dnrm (and don't have _w_).
+     */
+    public static long updateAll() 
+            throws SQLException {
+        return updateAll(null);
+    }
+
+    /**
+     * Run all queries in sql store that begin with dnrm (and don't have _w_)
+     * for a given table (or null to do all tables).
+     * @param null or table name
+     */
+    public static long updateAll(String table) 
+            throws SQLException {
+        if (tableDenorms == null) {
+            init();
+        }
+
+        long count = 0;
+        Vector v;
+        if (table != null) {
+            // update ONE table
+            count = updateTable(table);
+        } else {
+            // update ALL tables
+            Iterator tables = tableDenorms.keySet().iterator();
+            while (tables.hasNext()) {
+                count += updateTable((String)tables.next());
+            }
+        }
+            
+        return count;
+    }
+
+    /**
+     * Runs all denorms for one table.
+     */
+    public static long updateTable(String table) throws SQLException {
+        return updateTable(table, null, null);
+    }
+
+    public static long updateTable(String table, String denormtype, String[] whereParams) 
+            throws SQLException {
+
+        if (tableDenorms == null) {
+            init();
+        }
+
+        long count = 0;
+
+        Vector v = (Vector)tableDenorms.get(table);
+        if (v == null) { return 0; }
+
+        Iterator it = v.iterator();
+        while (it.hasNext()) {
+            count += update((String)it.next(), denormtype, whereParams);
+        }
+
+        return count;
+    }
+
+    /**
+     *
+     */
+    private static void init() {
+        tableDenorms = new Hashtable();
+        Hashtable unsorted = new Hashtable();
+        String table = null;
+        Vector v;
+
+		// load the entity list
+		for (Enumeration e = sqlStore.getKeys(); e.hasMoreElements() ;) {
+			String key = (String)e.nextElement();
+			if (key.startsWith("dnrm-") && key.indexOf("_w_") == -1) {
+
+                try {
+                    StringTokenizer st = new StringTokenizer(key, "-");
+
+                    if (st.hasMoreTokens()) { st.nextToken(); }
+                    if (st.hasMoreTokens()) { table = st.nextToken(); }
+
+				    v = (Vector)unsorted.get(table);
+
+                    if (v == null) { v = new Vector(); }
+                    v.add(key);
+                    log.debug("init: adding denorm for " + table);
+
+				    unsorted.put(table, v);
+
+                }  catch (Exception ex) {
+                    log.debug("Can't parse denorm key: " + key);
+                }
+			}
+		}
+
+        // sort them
+        Iterator kit = unsorted.keySet().iterator();
+        while (kit.hasNext()) {
+            table = (String)kit.next();
+            v = (Vector)unsorted.get(table);
+            Collections.sort(v);
+            tableDenorms.put(table, v);
+            log.debug("sorted: " + v.toString());
+        }
     }
 }
