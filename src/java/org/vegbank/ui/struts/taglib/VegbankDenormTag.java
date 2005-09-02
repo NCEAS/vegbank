@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-09-02 21:15:15 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2005-09-02 23:11:46 $'
+ *	'$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ import org.vegbank.common.utility.DenormUtility;
  * to look up in SQLStore.properties.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.3 $ $Date: 2005-09-02 21:15:15 $
+ * @version $Revision: 1.4 $ $Date: 2005-09-02 23:11:46 $
  */
 
 public class VegbankDenormTag extends VegbankTag {
@@ -76,7 +76,7 @@ public class VegbankDenormTag extends VegbankTag {
 		try {
 			String updatetable = getUpdatetable();
 
-			if (updatetable != null) {
+			if (!Utility.isStringNullOrEmpty(updatetable)) {
                // this table should be updated completely
                String resultsString = Long.toString(DenormUtility.updateAll(updatetable));
                request.setAttribute(updatetable+"-RESULTS",resultsString);

@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-09-02 21:15:15 $'
- *	'$Revision: 1.25 $'
+ *	'$Date: 2005-09-02 23:11:46 $'
+ *	'$Revision: 1.26 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -261,7 +261,7 @@ public class LoadTreeToDatabase
                 log.debug("====================== DENORMS");
                 // RUN DENORMALIZATION SQL
                 log.info("Running denormalizations");
-                runDenorms();
+                //runDenorms();
 
                 ////writeConn.commit();
             } catch (Exception ex) {

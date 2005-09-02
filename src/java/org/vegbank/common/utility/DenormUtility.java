@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-09-02 21:15:15 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-09-02 23:11:46 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -194,6 +194,7 @@ public class DenormUtility
                     log.debug("Can't parse denorm key: " + key);
                 }
 			}
+
 		}
 
         // sort them
@@ -205,5 +206,7 @@ public class DenormUtility
             tableDenorms.put(table, v);
             log.debug("sorted: " + v.toString());
         }
+
+        log.debug("INIT COMPLETE");
     }
 }
