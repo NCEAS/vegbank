@@ -56,3 +56,16 @@ insert into dba_cookieLabels (viewOrCookie , description) values ('plant_common_
 insert into dba_cookieLabels (viewOrCookie , description) values ('plant_code','The Code for the plant concept, if available');
 
 insert into dba_cookieLabels (viewOrCookie , description) values ('user_defined_data','Display User Defined Data for plots, if available');
+
+
+
+drop table dba_confidentialityStatus;
+CREATE TABLE dba_confidentialityStatus ( confidentialityStatus integer, confidentialityText varchar(100), confidentialityShortText varchar(100),primary key (confidentialityStatus));
+
+insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (0,'public','public');
+insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (1,'1 km radius (nearest 0.01 degree)','1 km');
+insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (2,'10 km radius (nearest 0.1 degree)','10 km');
+insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (3,'100 km radius (nearest degree)','100 km');
+insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (4,'NOT IMPLEMENTED: location embargo','location');
+insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (5,'NOT IMPLEMENTED: public embargo','public emb.');
+insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (6,'complete embargo','complete');
