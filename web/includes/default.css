@@ -721,6 +721,9 @@ th.grey, td.grey, tr.grey, .grey {background-color : #DDDDDD; }
 th.listRowA {background-color : #CCCCCC }
 th.listRowB {background-color : #EEEEEE }
 
+/* filtering forms */
+ tr.filter td, tr.filter th, th.filter, td.filter { background-color: #FFFFCC ; border-color: #333333; border-width:1px;}
+
 
 /*
 forms/TaxonInterpretationAnnotateData.jsp
