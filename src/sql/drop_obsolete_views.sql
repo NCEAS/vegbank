@@ -8,3 +8,7 @@ drop view view_plantConcept_ordered ;
 drop view view_project_countobs;
 
 drop view view_browsenamedplace_bystate;
+
+
+--fields to drop (denorm fields):
+ALTER TABLE embargo DROP COLUMN usr_ID ;
