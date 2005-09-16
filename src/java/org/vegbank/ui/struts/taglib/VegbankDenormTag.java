@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-09-02 23:11:46 $'
- *	'$Revision: 1.4 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2005-09-16 22:20:13 $'
+ *	'$Revision: 1.5 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ import org.vegbank.common.utility.DenormUtility;
  * to look up in SQLStore.properties.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.4 $ $Date: 2005-09-02 23:11:46 $
+ * @version $Revision: 1.5 $ $Date: 2005-09-16 22:20:13 $
  */
 
 public class VegbankDenormTag extends VegbankTag {
@@ -163,7 +163,7 @@ public class VegbankDenormTag extends VegbankTag {
 
 
     /**
-     *  denormType is one strong of either: all, null, ac (null is default option)
+     *  denormType is one string of either: all, null, ac (null is default option), or pk (for pk of the table in question, though not always supported.)
      */
 	protected String denormtype;
 
