@@ -167,6 +167,19 @@ function trim_cr(s) {
   return s;
 }
 
+function trim_accode(s) {
+	//function trims everything from string except [0-9\.a-zA-Z]
+	var ret = "";
+	for (i=0;i<s.length;i++) {
+      var charCode = s.charCodeAt(i);
+     // alert(charCode + " is charCode" + s.substr(i,1));
+	  if ( (charCode== 46) || ( (charCode>= 48) && (charCode<= 57) ) || ( (charCode>= 65) && (charCode<= 90) ) || ( (charCode>= 97) && (charCode<= 122) )) {
+		  ret += s.substr(i,1);
+	  }
+
+	}
+	return ret;
+}
 
 /************************/
 /* MOUSE OVER FUNCTIONS */
