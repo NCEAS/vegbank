@@ -182,6 +182,8 @@
   <td>
     <select name="xwhereParams_fuzzing_0" onchange="showPressFilterMessage()">
           <option value="">--all--</option>
+    <!-- save this for later -->
+    <bean:define id="fuzzingoptions">
     <vegbank:get id="fuzzing" select="confidentialitystatuslist" beanName="map" 
       allowOrderBy="false" xwhereEnable="false" where="where_confidentialitystatus_lt" wparam="4"  pager="false" perPage="-1" />
       <logic:notEmpty name="fuzzing-BEANLIST">
@@ -189,6 +191,8 @@
             <option value="<bean:write name='onerowoffuzzing' property='confidentialitystatus' />"><bean:write name='onerowoffuzzing' property='confidentialityshorttext' /></option>
         </logic:iterate>
       </logic:notEmpty>
+    </bean:define>  
+    <bean:write name="fuzzingoptions" filter="false" />
     </select>
     <input type="hidden" name="xwhereParams_fuzzing_1" value="plot.confidentialitystatus" />
     <input type="hidden" name="xwhereKey_fuzzing" value="xwhere_eq" />
@@ -345,7 +349,27 @@
   </td>
   <td><!-- only show values that are applicable to fuzzing-->
     <logic:lessEqual name='onerowofplot' property='confidentialitystatus' value='3'>
-      <bean:write name='onerowofplot' property='confidentialitystatus_transl' />
+          <span id="confidplot<bean:write name='onerowofplot' property='plot_id' />">
+          <bean:write name='onerowofplot' property='confidentialitystatus_transl' /> 
+          <!-- this is a link that shows the picklist to edit this confidentiality, and hides the original value -->
+            <span class="sizetiny">
+              <a href="#" 
+                onclick="gebid('editconfidplot<bean:write name='onerowofplot' property='plot_id' />select').value='<bean:write name='onerowofplot' property='confidentialitystatus' />';gebid('editconfidplot<bean:write name='onerowofplot' property='plot_id' />').className='sizesmall';gebid('confidplot<bean:write name='onerowofplot' property='plot_id' />').className='hidden';return false;">
+                edit...</a>
+            </span>
+          </span>
+          <span class="hidden" id="editconfidplot<bean:write name='onerowofplot' property='plot_id' />">
+            edit: 
+            <select id="editconfidplot<bean:write name='onerowofplot' property='plot_id' />select" onchange="updatePlotLocationFuzzing(<bean:write name='onerowofplot' property='plot_id' />,this.value)">
+                  
+                <!-- these saved from above -->
+                <bean:write name="fuzzingoptions" filter="false" />
+            </select>
+          </span>
+          <br/>
+          <span class="sizesmall" id="plot<bean:write name='onerowofplot' property='plot_id' />latlong">lat:<bean:write name='onerowofplot' property='latitude' /><br/>
+          long:<bean:write name='onerowofplot' property='longitude' /></span><br/>
+          
     </logic:lessEqual>
   </td>
   <td><!-- only show embargo values (456) -->
