@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.13 2005-09-16 01:00:06 mlee Exp $
+// $Id: datacart.js,v 1.14 2005-09-16 22:20:54 mlee Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -539,7 +539,7 @@ function cancelDatasetEdit(col) {
 
 
 /**
- * Uses AJaX and <vegbank:update> to update the dataset header.
+ * Uses AJaX and vegbank:update to update the dataset header.
  */
  function adjustEmbargo(lngID,blnRenew,blnCancel) {
 	// this adjusts embargo, given its ID and either blnRenew to renew for 3 years or blnCancel to cancel the embargo
@@ -597,6 +597,75 @@ function updateEmbargoDenorms(accCode) {
 	  }
 
 }
+
+
+function updatePlotLocationFuzzing(lngID,intLevel) {
+	 //function updates plot.confidentialityStatus, which controls the lat and long denorm fields in the plot table
+	 // subsequent ajax updates lat/long, this one updates only plot.confidentialityStatus with vegbank:update
+      //only allow 0-3 for update values
+     //debug: alert("updatePlotLocationFuzzing> plot:" + lngID + " lev:" + intLevel);
+      if (intLevel >=0 && intLevel <=3 && !isNaN(intLevel)) {
+		//debug: alert(intLevel + "is between 0 and 3");
+         //use put function to say that we're thinking about it
+         putAjaxResponseOnPage("plot" + lngID + "latlong: calculating...");
+
+         setEditRowBusy(true);
+		 var ajax = initAjax();
+		  var fnWhenDone = function(oXML) {
+		         //alert("pong");
+		        //debug: alert("done with updatePlotLocationFuzzing function, now dealing with response: " + oXML.responseText);
+		         //uses response text to know what accession code (plot accession code) to run updates of embargo denorm on.
+		         // updateLatLongDenorms(trim_accode(oXML.responseText));
+                 putAjaxResponseOnPage(oXML.responseText);
+		          setEditRowBusy(false);
+	      };
+	          var params = "";
+		      params += "fieldNames=confidentialitystatus";
+		      params += "&fieldValues=" + encodeURIComponent(intLevel);
+		      params += "&recordId="+encodeURIComponent(lngID);
+	          var url = "@ajax_link@update_plotlocationfuzzing.ajax.jsp";
+	   //call ajax
+       ajax.connect(url, "POST", params, fnWhenDone);
+   }
+}
+
+
+function genericAjax(file,recordId) {
+	//generic function that runs an ajax call, adding param recordId
+	//generally used for get functions that get a string
+	           var ajax = initAjax();
+			   var fnWhenDone = function(oXML) {
+				      //alert("pong");
+				      //alert(oXML.responseText);
+				      //setEditRowBusy(false);
+				      //take first bit of responseText up to : and this is the ID that should be used to set in document
+				      putAjaxResponseOnPage(oXML.responseText);
+
+				   //debug:   alert("done with genericAjax");
+				      //return oXML.responseText;
+			      };
+			  var params = "recordId="+encodeURIComponent(recordId);;
+			  var url="@ajax_link@" + file;
+ 	         ajax.connect(url, "POST", params, fnWhenDone);
+}
+
+function putAjaxResponseOnPage(response) {
+	// puts an ajax response on the page, replacing the div ID's innerHTML
+	// response should be of the format:
+	// IDOfElement:HTMLToUse
+	// example:
+	// plot225467:lat is 45 and long is 15
+	if (response.indexOf(":") != -1) {
+							  var divId = response.substr(0,response.indexOf(":"));
+							  //only allow numbers and letters:
+							  divId=trim_accode(divId);
+							 // alert(divId + " is divId");
+							  var restHTML = response.substr(response.indexOf(":")+1);
+							 // alert("rest:" + restHTML);
+							  gebid(divId).innerHTML = restHTML;
+					  }
+}
+
 /**
  * Uses AJaX and <vegbank:update> to update the dataset header.
  */
