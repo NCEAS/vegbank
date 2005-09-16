@@ -7,6 +7,17 @@
 </tr>
 
 
+
+<logic:present parameter="latlong_only">
+  <!-- only update lat/long in plot table -->
+  <vegbank:denorm update="dnrm-plot-22201-latlong" />
+  <tr>
+    <td>dnrm-plot-22201-latlong</td>
+    <td class="numeric"><bean:write name="dnrm-plot-22201-latlong-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-plot-22201-latlong-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  </tr>
+</logic:present>
+
 <logic:present parameter="emb_only">
   <!-- common request -->
   
@@ -80,6 +91,7 @@
 </logic:present>
 
 <logic:notPresent parameter="emb_only">
+ <logic:notPresent parameter="latlong_only">
   <vegbank:denorm update="dnrm-comminterpretation-2401-commname" />
   <tr>
     <td>dnrm-comminterpretation-2401-commname</td>
@@ -395,6 +407,6 @@
   <td class="numeric"><bean:write name="dnrm-observation-21601-toptaxon1-RESULTS" ignore="true"/></td>
   <td><logic:lessThan value="0" name="dnrm-observation-21601-toptaxon1-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
-
+ </logic:notPresent>
 </logic:notPresent>
 </table>
