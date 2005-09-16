@@ -1,10 +1,5 @@
-@webpage_top_html@
-  @stdvegbankget_jspdeclarations@
-  @webpage_head_html@
- 
-<TITLE>denorm commconcept</TITLE>
- 
- @webpage_masthead_html@ 
+@stdvegbankget_jspdeclarations@
+
  
 
 <h2>denorm commconcept</h2>
@@ -40,37 +35,32 @@
 <!--/tr-->
 
 
-<vegbank:denorm update="dnrm_commconcept_commname" />
+<vegbank:denorm update="dnrm-commconcept-2101-commname" />
 <tr>
   <td>commconcept.commname</td>
-  <td class="numeric"><bean:write name="dnrm_commconcept_commname-RESULTS" ignore="true"/></td>
-  <td><logic:lessThan value="0" name="dnrm_commconcept_commname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  <td class="numeric"><bean:write name="dnrm-commconcept-2101-commname-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-commconcept-2101-commname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 
-<vegbank:denorm update="dnrm_commusage_commname" />
+<vegbank:denorm update="dnrm-commusage-1201-commname" />
 <tr>
-  <td>dnrm_commusage_commname</td>
-  <td class="numeric"><bean:write name="dnrm_commusage_commname-RESULTS" ignore="true"/></td>
-  <td><logic:lessThan value="0" name="dnrm_commusage_commname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  <td>dnrm-commusage-1201-commname</td>
+  <td class="numeric"><bean:write name="dnrm-commusage-1201-commname-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-commusage-1201-commname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
-<vegbank:denorm update="dnrm_commusage_commconceptid" />
+<vegbank:denorm update="dnrm-commusage-1501-commconceptid" />
 <tr>
-  <td>dnrm_commusage_commconceptid</td>
-  <td class="numeric"><bean:write name="dnrm_commusage_commconceptid-RESULTS" ignore="true"/></td>
-  <td><logic:lessThan value="0" name="dnrm_commusage_commconceptid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  <td>dnrm-commusage-1501-commconceptid</td>
+  <td class="numeric"><bean:write name="dnrm-commusage-1501-commconceptid-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-commusage-1501-commconceptid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
-<vegbank:denorm update="dnrm_commusage_partyid" />
+<vegbank:denorm update="dnrm-commusage-1801-partyid" />
 <tr>
-  <td>dnrm_commusage_partyid</td>
-  <td class="numeric"><bean:write name="dnrm_commusage_partyid-RESULTS" ignore="true"/></td>
-  <td><logic:lessThan value="0" name="dnrm_commusage_partyid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  <td>dnrm-commusage-1801-partyid</td>
+  <td class="numeric"><bean:write name="dnrm-commusage-1801-partyid-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-commusage-1801-partyid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 
 
 </table>
-
-
-
-@webpage_footer_html@
-
 

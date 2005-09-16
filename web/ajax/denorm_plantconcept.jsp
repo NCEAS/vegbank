@@ -1,11 +1,5 @@
-@webpage_top_html@
-  @stdvegbankget_jspdeclarations@
-  @webpage_head_html@
- 
-<TITLE>denorm PLANT concept</TITLE>
- 
- @webpage_masthead_html@ 
- 
+@stdvegbankget_jspdeclarations@
+
 
 <h2>denorm PLANT concept</h2>
 <p>If no errors are presented on this page, it should have worked ok. </p>
@@ -32,34 +26,33 @@
   <th>records updated (0 is NOT an error)</th>
   <th>Errors?</th>
 </tr>
-<vegbank:denorm update="dnrm_plantconcept_plantname" />
+<vegbank:denorm update="dnrm-plantconcept-301-plantname" />
 <tr>
-  <td>dnrm_plantconcept_plantname</td>
-  <td class="numeric"><bean:write name="dnrm_plantconcept_plantname-RESULTS" ignore="true"/></td>
-  <td><logic:lessThan value="0" name="dnrm_plantconcept_plantname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  <td>dnrm-plantconcept-301-plantname</td>
+  <td class="numeric"><bean:write name="dnrm-plantconcept-301-plantname-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-plantconcept-301-plantname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
-<vegbank:denorm update="dnrm_plantusage_plantname" />
+<vegbank:denorm update="dnrm-plantusage-1-plantname" />
 <tr>
-  <td>dnrm_plantusage_plantname</td>
-  <td class="numeric"><bean:write name="dnrm_plantusage_plantname-RESULTS" ignore="true"/></td>
-  <td><logic:lessThan value="0" name="dnrm_plantusage_plantname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  <td>dnrm-plantusage-1-plantname</td>
+  <td class="numeric"><bean:write name="dnrm-plantusage-1-plantname-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-plantusage-1-plantname-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
-<vegbank:denorm update="dnrm_plantusage_plantconceptid" />
+<vegbank:denorm update="dnrm-plantusage-601-plantconceptid" />
 <tr>
-  <td>dnrm_plantusage_plantconceptid</td>
-  <td class="numeric"><bean:write name="dnrm_plantusage_plantconceptid-RESULTS" ignore="true"/></td>
-  <td><logic:lessThan value="0" name="dnrm_plantusage_plantconceptid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  <td>dnrm-plantusage-601-plantconceptid</td>
+  <td class="numeric"><bean:write name="dnrm-plantusage-601-plantconceptid-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-plantusage-601-plantconceptid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
-<vegbank:denorm update="dnrm_plantusage_partyid" />
+<vegbank:denorm update="dnrm-plantusage-901-partyid" />
 <tr>
-  <td>dnrm_plantusage_partyid</td>
-  <td class="numeric"><bean:write name="dnrm_plantusage_partyid-RESULTS" ignore="true"/></td>
-  <td><logic:lessThan value="0" name="dnrm_plantusage_partyid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  <td>dnrm-plantusage-901-partyid</td>
+  <td class="numeric"><bean:write name="dnrm-plantusage-901-partyid-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-plantusage-901-partyid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 
 </table>
 
 
-@webpage_footer_html@
 
 

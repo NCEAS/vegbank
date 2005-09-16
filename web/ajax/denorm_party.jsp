@@ -1,5 +1,4 @@
-
-  @stdvegbankget_jspdeclarations@
+@stdvegbankget_jspdeclarations@
 
    
 
@@ -26,11 +25,11 @@
   <th>records updated (0 is NOT an error)</th>
   <th>Errors?</th>
 </tr>
-<vegbank:denorm update="dnrm_party_partypublic" />
+<vegbank:denorm update="dnrm-party-21901-partypublic" />
 <tr>
-  <td>dnrm_party_partypublic</td>
-  <td class="numeric"><bean:write name="dnrm_party_partypublic-RESULTS" ignore="true"/></td>
-  <td><logic:lessThan value="0" name="dnrm_party_partypublic-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+  <td>dnrm-party-21901-partypublic</td>
+  <td class="numeric"><bean:write name="dnrm-party-21901-partypublic-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-party-21901-partypublic-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 
 </table>
