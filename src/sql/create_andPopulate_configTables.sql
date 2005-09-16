@@ -69,3 +69,5 @@ insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText
 insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (4,'NOT IMPLEMENTED: location embargo','location');
 insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (5,'NOT IMPLEMENTED: public embargo','public emb.');
 insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (6,'complete embargo','complete');
+-- the following is a "pseudo value" in that it is not stored in the database this way, but is calculated.
+insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (106,'expired embargo','expired');
