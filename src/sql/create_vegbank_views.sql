@@ -50,7 +50,7 @@ DROP VIEW view_party_transl ;
 drop view view_party_public;
 
 CREATE VIEW view_party_public AS 
-  SELECT party_id, accessioncode, salutation, surname, 
+  SELECT party.party_id, accessioncode, salutation, surname, 
     givenname, middlename,organizationname, 
     contactinstructions, email 
     FROM party LEFT JOIN usr ON party.party_ID=usr.party_ID
@@ -377,7 +377,7 @@ CREATE VIEW view_taxonobs_distinctid_curr_counts_plants AS
      WHERE view_taxonobs_distinctid_curr_counts.plantconcept_ID=temptbl_std_plantnames.plantconcept_ID;
 --DROP VIEW view_plotall_withembargo;
 CREATE VIEW view_plotall_withembargo
-AS SELECT plot.*, embargo_id, embargoreason,defaultstatus,embargostart,embargostop from plot
+AS SELECT plot.*, embargo_id, embargoreason,defaultstatus,embargostart,embargostop, (defaultstatus + CASE WHEN embargostop<now() then 100 ELSE 0 END) AS embstatusinclexpired from plot
 LEFT JOIN embargo on plot.plot_id = embargo.plot_ID;
 
 --CREATE VIEW view_taxonobs_distinctid_orig;
