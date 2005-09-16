@@ -62,7 +62,7 @@ insert into dba_cookieLabels (viewOrCookie , description) values ('user_defined_
 drop table dba_confidentialityStatus;
 CREATE TABLE dba_confidentialityStatus ( confidentialityStatus integer, confidentialityText varchar(100), confidentialityShortText varchar(100),primary key (confidentialityStatus));
 
-insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (0,'public','public');
+insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (0,'exact location','exact');
 insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (1,'1 km radius (nearest 0.01 degree)','1 km');
 insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (2,'10 km radius (nearest 0.1 degree)','10 km');
 insert into dba_confidentialityStatus (confidentialityStatus,confidentialityText,confidentialityShortText) values (3,'100 km radius (nearest degree)','100 km');
