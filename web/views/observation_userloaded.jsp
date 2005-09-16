@@ -2,6 +2,8 @@
   @stdvegbankget_jspdeclarations@
   <bean:define id="FullPageWidthSuffix" value="_100perc" /><!-- sets stylesheet to full width stylesheet -->
   @webpage_head_html@
+  @ajax_js_include@
+  @datacart_js_include@
 
  
        <script type="text/javascript">
@@ -82,6 +84,11 @@
                 // gebid('hidefilterinput').value='true';
                }
              }
+             function showFootNote()
+             {
+               gebid('footnote').className='normal';
+             }
+             
          // -->
     </script>
  
@@ -149,7 +156,7 @@
   <th>Location Masking</th>
   <th>Embargo</th>
   <th>Embargo Start</th>
-  <th>Stop</th>
+  <th>Stop <img src="@images_link@i.gif" border="0" width="24" height="22" id="edit_row_busy_icon" class="busyicon"/></th>
   <th>XML file</th>
   <th>Upload Date</th>
   <th>Project</th>
@@ -167,7 +174,7 @@
    <!-- <input type="hidden" name="hidefilter" id="hidefilterinput" value="false" />-->
    
    <td title="Enter a plot code, use % for wildcard character.">
-       <input type="text" size="15" name="xwhereParams_plotcode_0" onchange="showPressFilterMessage()">
+       <input type="text" size="15" name="xwhereParams_plotcode_0" onchange="showPressFilterMessage()" />
        <input type="hidden" name="xwhereParams_plotcode_1" value="authorplotcode" />
        <input type="hidden" name="xwhereKey_plotcode" value="xwhere_ilike" /><br/>
        <span class="sizetiny">Use % for wildcard</span>
@@ -193,11 +200,13 @@
           <option value="true">no embargo</option>
     <vegbank:get id="embargo" select="confidentialitystatuslist" beanName="map" 
       allowOrderBy="false" xwhereEnable="false" where="where_confidentialitystatus_gt" wparam="5"  pager="false" perPage="-1" />
+      <logic:notEmpty name="embargo-BEANLIST">
       <logic:iterate id="onerowofembargo" name="embargo-BEANLIST" >
             <option value="<bean:write name='onerowofembargo' property='confidentialitystatus' />"><bean:write name='onerowofembargo' property='confidentialityshorttext' /></option>
       </logic:iterate>
+      </logic:notEmpty >
     </select>
-    <input type="hidden" name="xwhereParams_embargo_1" value="plot.defaultstatus" />
+    <input type="hidden" name="xwhereParams_embargo_1" value="plot.embstatusinclexpired" />
     <!-- the following is set by javascript: -->
     <input type="hidden" name="xwhereKey_embargo" value="xwhere_eq" />  
 
@@ -216,7 +225,7 @@
     </select>-<select title="choose a month" id="date_embargoStart_month" name="date_embargoStart_month">
       <option value=""></option>
       <%@ include file="/includes/options_12months.html" %>
-    </select>-<input onchange="showPressFilterMessage()" title="enter a year, format YYYY, i.e. 1999" type="text" size="4" id="date_embargoStart_year" name="date_embargoStart_year"> 
+    </select>-<input onchange="showPressFilterMessage()" title="enter a year, format YYYY, i.e. 1999" type="text" size="4" id="date_embargoStart_year" name="date_embargoStart_year" /> 
     <br/>
     <span class="sizetiny">Enter day, month AND year, D-M-YYYY</span>
   </td>
@@ -234,7 +243,7 @@
       </select>-<select title="choose a month" id="date_embargoStop_month" name="date_embargoStop_month" >
         <option value=""></option>
         <%@ include file="/includes/options_12months.html" %>
-      </select>-<input onchange="showPressFilterMessage()" title="enter a year, format YYYY, i.e. 1999" type="text" size="4" id="date_embargoStop_year" name="date_embargoStop_year" > 
+      </select>-<input onchange="showPressFilterMessage()" title="enter a year, format YYYY, i.e. 1999" type="text" size="4" id="date_embargoStop_year" name="date_embargoStop_year" /> 
       <br/>
       <span class="sizetiny">Enter day, month AND year, D-M-YYYY</span>
   </td>
@@ -271,7 +280,7 @@
           </select>-<select title="choose a month" id="date_datasetStart_month" name="date_datasetStart_month" >
             <option value=""></option>
             <%@ include file="/includes/options_12months.html" %>
-          </select>-<input onchange="showPressFilterMessage()" title="enter a year, format YYYY, i.e. 1999" type="text" size="4" id="date_datasetStart_year" name="date_datasetStart_year" > 
+          </select>-<input onchange="showPressFilterMessage()" title="enter a year, format YYYY, i.e. 1999" type="text" size="4" id="date_datasetStart_year" name="date_datasetStart_year" /> 
           <br/>
       <span class="sizetiny">Enter day, month AND year, D-M-YYYY</span>
   </td>
@@ -298,7 +307,7 @@
   
   <tr class="filter" id="filterrow2">
   <td colspan="19" nowrap="nowrap">
-  <span id="nowpressfilter" class="hidden"><strong>Press filter when finished entering criteria&raquo;</strong></span><input type="submit" value="filter" /> -- <input type="reset" value="reset form" />
+  <input type="submit" value="filter" /> <span id="nowpressfilter" class="hidden"><strong>&laquo;Press filter when finished entering criteria</strong></span>-- <input type="reset" value="reset form" />
   -- <logic:equal name="nofilter" value="true"><a href="@views_link@observation_userloaded.jsp">show all (unfilter)</a></logic:equal>
   </form> <br/>
    
@@ -308,7 +317,7 @@
   </td>
 </tr>   
 <tr class="hidden" id="filterrow3">
-  <td colspan="19" class="sizetiny"><a href="#" onclick="showhidefilter(true);">&gt;&gt;Show Filtering options...</a> Filtering is hidden</td></tr>
+  <td colspan="19" class="sizetiny"><a href="#" onclick="showhidefilter(true);">&gt;&gt;Show Filtering options...</a> Filtering is hidden</td>
 </tr>
 
 <logic:empty name="plot-BEANLIST">
@@ -331,7 +340,7 @@
 <bean:define property="observation_id" name="onerowofplot" id="observation_pk"/>
 <tr class="@nextcolorclass@">
 
-  <td class="largefield"><a href="@get_link@detail/observation/<bean:write name='onerowofplot' property='observation_id' />">
+  <td class="largefield"><a href="@get_link@comprehensive/observation/<bean:write name='onerowofplot' property='observation_id' />">
     <bean:write name='onerowofplot' property='authorplotcode' /></a>
   </td>
   <td><!-- only show values that are applicable to fuzzing-->
@@ -340,8 +349,8 @@
     </logic:lessEqual>
   </td>
   <td><!-- only show embargo values (456) -->
-    <logic:greaterThan name='onerowofplot' property='defaultstatus' value='3'>
-      <bean:write name='onerowofplot' property='defaultstatus_transl' />
+    <logic:greaterThan name='onerowofplot' property='embstatusinclexpired' value='3'>
+      <bean:write name='onerowofplot' property='embstatusinclexpired_transl' />
     </logic:greaterThan>
   </td>
   <td>
@@ -357,13 +366,15 @@
   </td>
   <td>
     <logic:notEmpty name="onerowofplot" property="embargostop">
-    <span title="<bean:write name='onerowofplot' property='embargostop' />">
+    <span id="embargostop_<bean:write name='onerowofplot' property='embargo_id' />" title="<bean:write name='onerowofplot' property='embargostop' />">
       <dt:format pattern="dd-MMM-yyyy">
         <dt:parse pattern="yyyy-MM-dd">
           <bean:write name='onerowofplot' property='embargostop_datetrunc' />
         </dt:parse>
       </dt:format>
-    </span>
+    </span> <br/>
+    <input type="button" value="renew 3 yrs" onclick="adjustEmbargo(<bean:write name='onerowofplot' property='embargo_id'/>,true);gebid('embargostop_'+<bean:write name='onerowofplot' property='embargo_id'/>).innerHTML='RENEWED <a href=#footnote>*</a>';showFootNote();" />
+    <input type="button" value="cancel embargo" onclick="if (confirm('Are you sure you want to end the embargo on this plot, making it visible to all VegBank users?  Press OK to continue.')) {adjustEmbargo(<bean:write name='onerowofplot' property='embargo_id'/>,false,true);gebid('embargostop_'+<bean:write name='onerowofplot' property='embargo_id'/>).innerHTML='CANCELLED<a href=#footnote>*</a>';showFootNote();}" />
     </logic:notEmpty>
   </td>
   <td class="largefield">
@@ -401,7 +412,12 @@
 </logic:iterate>
 </logic:notEmpty>
 </table>
-
+<div id="footnote" class="hidden">
+  <span class="sizetiny"><a name="footnote">*</a> Once a plot's embargo is renewed or cancelled,
+    VegBank requires about one minute to apply the embargo.  If you
+    just cancelled an embargo, it will be viewable online soon.
+  
+  </span></div>
 <br/>
 <vegbank:pager/>
 
