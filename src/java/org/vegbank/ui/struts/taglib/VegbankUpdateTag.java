@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2005-08-11 22:57:33 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2005-09-16 00:53:31 $'
+ *	'$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ package org.vegbank.ui.struts.taglib;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.*;
 import java.text.SimpleDateFormat;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -61,12 +62,14 @@ import org.vegbank.common.utility.DatabaseUtility;
  * to look up in SQLStore.properties.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.2 $ $Date: 2005-08-11 22:57:33 $
+ * @version $Revision: 1.3 $ $Date: 2005-09-16 00:53:31 $
  */
 
 public class VegbankUpdateTag extends VegbankTag {
 
 	private static final Log log = LogFactory.getLog(VegbankUpdateTag.class);
+	private static ResourceBundle updatableFields =
+			ResourceBundle.getBundle("org.vegbank.common.UpdatableFields");
 	public static final String AUTH_USR_ID = "usr_id";
 	public static final String AUTH_CUSTOM = "custom";
 
@@ -118,19 +121,24 @@ public class VegbankUpdateTag extends VegbankTag {
 
                 //if they aren't null, use the values
                 if (fieldValues != null) {
+
 					currfieldVal = fieldValues[i] ;
 					fieldvalueslength = fieldValues.length;
 			    }
                 else {  //otherwise, use 0 and null
+					log.debug("fieldValues are completely missing.  Will set to null.");
 					fieldvalueslength = 0;
 					currfieldVal = null;
 				}
-                sql.append(Utility.encodeForDB(fieldNames[i])).append("=");
-                if (fieldvalueslength <= i || currfieldVal == null) {
-                    // no more values or value is null
-                    sql.append("null");
-                } else {
-                    sql.append("'").append(Utility.encodeForDB(fieldValues[i])).append("'");
+				// only certain field names are allowed for update, this is for security reasons!
+                if ( updatableFields.getString(entity.toLowerCase() + "." + fieldNames[i].toLowerCase()).equals("true")) {
+                   sql.append(Utility.encodeForDB(fieldNames[i])).append("=");
+                   if (fieldvalueslength <= i || currfieldVal == null) {
+                       // no more values or value is null
+                       sql.append("null");
+                   } else {
+                       sql.append("'").append(Utility.encodeForDB(fieldValues[i])).append("'");
+                   }
                 }
             }
 
@@ -143,7 +151,24 @@ public class VegbankUpdateTag extends VegbankTag {
                     log.error("Use of <vegbank:update> requires a valid web session");
                     return SKIP_BODY;
                 }
-                sql.append(" AND usr_id='").append(usrId.longValue()).append("'");
+
+                if (entity.toLowerCase().indexOf("user") != -1) {
+					// this is a user table, and each user can update his/her records
+					sql.append(" AND usr_id='").append(usrId.longValue()).append("'");
+				} else {
+					// this is NOT a user table, so lookup to see if user has permissions to update
+                    String validateTable = entity.toLowerCase();
+                    String validateField = pkName;
+                    if (validateTable.equals("embargo")) {
+						//special case, look @ plot instead
+						validateTable = "plot";
+						validateField = "plot_id";
+					}
+
+					sql.append(" AND (SELECT count(1) FROM userdataset, userdatasetitem WHERE userdataset.userdataset_id=userdatasetitem.userdataset_id");
+					sql.append(" AND datasettype='load' AND usr_id='").append(usrId.longValue()).append("' AND itemtable='").append(validateTable);
+					sql.append("' AND itemrecord=").append(entity.toLowerCase()).append(".").append(validateField).append(") >0");
+				}
             }
 
             log.debug(sql.toString());
