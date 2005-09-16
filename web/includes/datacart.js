@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.12 2005-08-15 22:50:24 anderson Exp $
+// $Id: datacart.js,v 1.13 2005-09-16 01:00:06 mlee Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -537,6 +537,66 @@ function cancelDatasetEdit(col) {
     dc_editedCol = null;
 }
 
+
+/**
+ * Uses AJaX and <vegbank:update> to update the dataset header.
+ */
+ function adjustEmbargo(lngID,blnRenew,blnCancel) {
+	// this adjusts embargo, given its ID and either blnRenew to renew for 3 years or blnCancel to cancel the embargo
+	//debug: alert('adjustEmbargo: ' + lngID + "," + blnRenew + "," + blnCancel );
+
+	 setEditRowBusy(true);
+	 var ajax = initAjax();
+	  var fnWhenDone = function(oXML) {
+	         //alert("pong");
+	         //debug: alert("done with adjustEmbargo function, now dealing with response: " + oXML.responseText);
+	         //uses response text to know what accession code (plot accession code) to run updates of embargo denorm on.
+	         updateEmbargoDenorms(trim_accode(oXML.responseText));
+	          setEditRowBusy(false);
+      };
+          var params = "";
+	      params += "fieldNames=embargostop";
+	      if (blnRenew) params += "&adjustCurrDateTime=3&adjustUnit=year";
+	      if (blnCancel) params += "&getCurrDateTime=true";
+	      params += "&recordId="+encodeURIComponent(lngID);
+          var url = "@ajax_link@update_embargo.ajax.jsp";
+   //call ajax
+   ajax.connect(url, "POST", params, fnWhenDone);
+   //still need to update denormalized fields, too, this done with 2nd ajax call: in fnWhenDone
+
+ }
+
+
+function updateEmbargoDenorms(accCode) {
+	// updates observation denorm embargo fields to allow it to be shown on website
+	// can pass plotAccCode, too, and if so it is used
+	  //debug: alert("updateEmbargoDenorms>> with: " + accCode);
+
+	   var ajax = initAjax();
+	   var fnWhenDone = function(oXML) {
+		         //alert("pong");
+		         //alert(oXML.responseText);
+		         setEditRowBusy(false);
+		        //debug: alert("done with updateEmbargoDenorms");
+	      };
+	  var params = "emb_only=true";
+	  var url="@ajax_link@denorm_observation.jsp";
+     //debug: alert("accCode length:" + accCode.length);
+      if (accCode.length>0) {
+		setEditRowBusy(true);
+		if (accCode.toLowerCase().indexOf(".pl.") != -1 ) {
+		  //special case: plot accession code
+		 // alert("running plot accession code embargo denorm update");
+          params += "&plotacccode=" + accCode;
+	    } else {
+		  //std observation accessioncode assumed.
+		 // alert("running OBS accession code embargo denorm update");
+		  params += "&wparam=" + accCode;
+        }
+         ajax.connect(url, "POST", params, fnWhenDone);
+	  }
+
+}
 /**
  * Uses AJaX and <vegbank:update> to update the dataset header.
  */
