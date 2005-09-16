@@ -13,20 +13,36 @@ function getHelpPageId() {
 
 </script>
 
-<%@ include file="includeviews/inlinestyles.jsp" %>
-  @webpage_masthead_html@   @possibly_center@  
+
 
   <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
-<vegbank:pager />
-<logic:empty name="plotobs-BEANLIST"> Sorry, no plot-observations are available. </logic:empty>
+
+
+<logic:empty name="plotobs-BEAN">  
+  <!-- define dummy variables : -->
+   <bean:define id="onerowofobservation">-1</bean:define>
+  <bean:define id="onerowofplot" >-1</bean:define>
+  <bean:parameter name="wparam" id="beanwparam" value="-1" />
+  <logic:redirect page="/views/observation_summary.jsp" paramId="wparam" paramName="beanwparam" />
+  
+</logic:empty>
+
+<logic:notEmpty name="plotobs-BEAN">  
 <!-- NOPE logic:notEmpty name="plotobs-BEANLIST" NOPE--><!-- set up table -->
 <!-- NOPE logic:iterate id="onerowofobservation" name="BEANLIST" NOPE--><!-- iterate over all records in set : new table for each -->
-<bean:define id="onerowofobservation" name="plotobs-BEAN" />
-<bean:define id="onerowofplot" name="onerowofobservation" />
-<bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
-<bean:define id="plot_pk" name="onerowofplot" property="plot_id"/>
+  <bean:define id="onerowofobservation" name="plotobs-BEAN" />
+  <bean:define id="onerowofplot" name="onerowofobservation" />
+  <bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
+  <bean:define id="plot_pk" name="onerowofplot" property="plot_id"/>
+</logic:notEmpty>
 
+<bean:define id="observation_pk" name="onerowofplot" property="observation_id"/>
+  <bean:define id="plot_pk" name="onerowofplot" property="plot_id"/>
+
+
+<%@ include file="includeviews/inlinestyles.jsp" %>
+  @webpage_masthead_html@   @possibly_center@  
   <table class="noborders"><tr><td align="left">
   
     <h2 align="center">Comprehensive View of a Plot</h2>
