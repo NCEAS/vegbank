@@ -129,6 +129,33 @@ function getHelpPageId() {
 <!-- party perspective -->
 <span class="datalabelsmall">Party Perspective according to: </span>
 <a href='@get_link@std/party/<bean:write name="thispartyid" />'><bean:write name="statusbean" property="party_id_transl" /></a>
+<!-- state dates of this perspective -->
+<br/><span class="datalabelsmall">Perspective from:</span>
+   <strong>
+    <span title="<bean:write name='statusbean' property='startdate' />">
+      <dt:format pattern="dd-MMM-yyyy">
+        <dt:parse pattern="yyyy-MM-dd">
+          <bean:write name='statusbean' property='startdate_datetrunc' />
+        </dt:parse>
+      </dt:format>
+    </span>
+   </strong>
+   <span class="datalabelsmall">to:</span>
+   <strong>
+       <logic:empty name='statusbean' property='stopdate'>
+         ongoing
+       </logic:empty>
+       <logic:notEmpty name='statusbean' property='stopdate'>
+       <span title="<bean:write name='statusbean' property='stopdate' />">
+         <dt:format pattern="dd-MMM-yyyy">
+           <dt:parse pattern="yyyy-MM-dd">
+             <bean:write name='statusbean' property='stopdate_datetrunc' />
+           </dt:parse>
+         </dt:format>
+       </span>
+       </logic:notEmpty>
+   </strong>
+
 </td></tr>
 <tr id="tut_commpartyperspective<bean:write name='iterated' ignore='true'/>">
 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>

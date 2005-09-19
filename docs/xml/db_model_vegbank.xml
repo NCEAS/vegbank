@@ -157,6 +157,22 @@
       <attDefinition>Number of observations associated with this entity.</attDefinition>
       <update>1.0.3</update>
     </attribute>
+    <attribute>
+      <attID>121</attID>
+      <attName>d_currentaccepted</attName>
+      <attLabel>Currently Accepted by Someone</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Boolean</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Currently accepted by at least one party.</attDefinition>
+      <update>1.0.3</update><updateSQLFile>add_currentaccepted_toconcept.sql</updateSQLFile>
+    </attribute>
   </entity>
   <entity>
     <entityName>commCorrelation</entityName>
@@ -1195,6 +1211,23 @@
       <attNotes>n/a</attNotes>
       <attDefinition>Number of observations associated with this entity.</attDefinition>
       <update>1.0.3</update>
+    </attribute>
+    <attribute>
+      <attID>244</attID>
+      <attName>d_currentaccepted</attName>
+      <attLabel>Currently Accepted by Someone</attLabel>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Boolean</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Currently accepted by at least one party.</attDefinition>
+      <update>1.0.3</update>
+      <updateSQLFile>add_currentaccepted_toconcept.sql</updateSQLFile>
     </attribute>
   </entity>
   <entity>

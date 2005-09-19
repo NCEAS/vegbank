@@ -51,6 +51,14 @@
   <td><logic:lessThan value="0" name="dnrm-plantusage-901-partyid-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 
+<vegbank:denorm update="dnrm-plantconcept-2-dcurrentaccepted" />
+<tr>
+  <td>dnrm-plantconcept-2-dcurrentaccepted</td>
+  <td class="numeric"><bean:write name="dnrm-plantconcept-2-dcurrentaccepted-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-plantconcept-2-dcurrentaccepted-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+</tr>
+
+
 </table>
 
 

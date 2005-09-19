@@ -112,13 +112,16 @@ function getHelpPageId() {
 <tr class='@nextcolorclass@'>
       <!-- data cart -->
       <td align="center"><!-- that td cannot have a class, it gets overwritten -->
-        <bean:define id="delta_ac" name="onerow" property="accessioncode" />
-        Comm #<%= rowIndex++ %>
-        <br/>
-        <%@ include file="../includes/datacart_checkbox.jsp" %>
+        <logic:notEmpty name="onerow" property="accessioncode">
+          <bean:define id="delta_ac" name="onerow" property="accessioncode" />
+          Comm #<%= rowIndex++ %>
+          <br/>
+          <%@ include file="../includes/datacart_checkbox.jsp" %>
+        </logic:notEmpty>  
       </td>
 <td class="largefield"><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a>
   <br/>accession code: <bean:write name="onerow" property="accessioncode" />
+  <logic:equal name="onerow" property="d_currentaccepted" value="f"><strong> NOT CURRENTLY ACCEPTED</strong></logic:equal>
   <!-- add "select" button if certain params are present and notEmpty -->
   <logic:equal name="addSelectButton" value="yes">
     <br/><a name="#comm<bean:write name='onerow' property='commconcept_id' />" href="#comm<bean:write name='onerow' property='commconcept_id' />"

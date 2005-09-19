@@ -123,11 +123,13 @@ function getHelpPageId() {
 
 <td class="largefield"><a href='@get_link@detail/plantconcept/<bean:write name="onerow" property="plantconcept_id"/>'>details</a>
 <!-- add "select" button if certain params are present and notEmpty -->
+   <logic:equal name="onerow" property="d_currentaccepted" value="f"><strong> NOT CURRENTLY ACCEPTED</strong></logic:equal>
    <logic:equal name="addSelectButton" value="yes">
      <br/><a name="#plant<bean:write name='onerow' property='plantconcept_id' />" href="#plant<bean:write name='onerow' property='plantconcept_id' />"
         onclick="setOpenerFormValue('<bean:write name="onerow" property="accessioncode" />')"><img src="@images_link@btn_select.png" alt="--SELECT--" /></a>
+        
    </logic:equal>
-
+   
 
 </td>
 <td class="largefield"><bean:write name="onerow" property="plantname_id_transl"/>&nbsp;</td>

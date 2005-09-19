@@ -62,5 +62,12 @@
 </tr>
 
 
+<vegbank:denorm update="dnrm-commconcept-3-dcurrentaccepted" />
+<tr>
+  <td>dnrm-commconcept-3-dcurrentaccepted</td>
+  <td class="numeric"><bean:write name="dnrm-commconcept-3-dcurrentaccepted-RESULTS" ignore="true"/></td>
+  <td><logic:lessThan value="0" name="dnrm-commconcept-3-dcurrentaccepted-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+</tr>
+
 </table>
 
