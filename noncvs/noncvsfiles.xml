@@ -1838,4 +1838,9 @@
     <name>workshop/whittaker.pdf</name>
     <description>Workshop Files, Historical</description>
   </file>
+  <!-- natureserve files -->
+  <file>
+    <name>natureserve/MWoo_VegBank_updater.zip</name>
+    <description>Maggie Woo's NatureServe documentation on how to pull taxa and communities out of Biotics and into the "common model" xml that is described in /docs/xml/natureserve</description>
+  </file>
 </noncvs>
