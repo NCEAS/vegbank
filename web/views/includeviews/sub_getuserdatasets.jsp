@@ -120,6 +120,16 @@ String paramDelim = Utility.PARAM_DELIM ;
   where="where_usrpk_dsid" wparam="<%= strWebUserId + paramDelim + urlwparam %>" pager="<%= paginateMain %>" 
   perPage="<%= perPageDos %>" allowOrderBy="true" orderBy="xorderby_datasetname" /> <!--  -->
 <!-- where_usrpk_dsid=where usr_id={0} AND accessionCode={1} -->
+
+
+   <!-- if still didn't get dataset, try to get it via public datasets, but not this user ID: -->
+   <logic:empty name="userdataset-BEANLIST">
+     <vegbank:get id="userdataset" select="userdataset_nonprivate" beanName="map" 
+       where="where_userdataset_pk" wparam="<%= urlwparam %>" pager="<%= paginateMain %>" 
+       perPage="<%= perPageDos %>" allowOrderBy="true" orderBy="xorderby_datasetname" /> <!--  --> 
+   </logic:empty>
+
+
 </logic:equal>
 
 <logic:equal name="mode" value="ac">
@@ -128,12 +138,21 @@ String paramDelim = Utility.PARAM_DELIM ;
     where="where_usrpk_ac" wparam="<%= strWebUserId + paramDelim + urlwparam %>"  pager="<%= paginateMain %>"  perPage="<%= perPageDos %>" />
  <!-- where_usrpk_ac=where usr_id={0} AND usr_id={1} -->
 
+   <!-- if still didn't get dataset, try to get it via public datasets, but not this user ID: -->
+   <logic:empty name="userdataset-BEANLIST">
+        <vegbank:get id="userdataset" select="userdataset_nonprivate" beanName="map" 
+          where="where_accessioncode" wparam="<%= urlwparam %>" pager="<%= paginateMain %>" 
+          perPage="<%= perPageDos %>" allowOrderBy="true" orderBy="xorderby_datasetname" /> <!--  --> 
+   </logic:empty>
+
 </logic:equal>
 
-<% if ( strWebUserId == "-1" ) {  %>
+<logic:empty name="userdataset-BEANLIST">
+ <% if ( strWebUserId == "-1" ) {  %>
   <!-- user is not logged in, trying to get datacart then -->
    <vegbank:get id="userdataset" select="userdataset" beanName="map" 
   where="where_userdataset_pk" wparam="<%= (DatasetUtility.getDatacartId(request.getSession())).toString() %>" pager="false"/>
   
 
-<% } %>
+ <% } %>
+</logic:empty>
