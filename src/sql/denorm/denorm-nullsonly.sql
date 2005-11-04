@@ -130,9 +130,9 @@ UPDATE taxonobservation set int_origPlantConcept_ID = (select min(plantconcept_I
      WHERE originalinterpretation=true AND taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) 
    WHERE int_origPlantConcept_ID is null ;
 
-UPDATE taxonobservation set int_origPlantSciName = (select sciname from temptbl_std_plantnames as newnames
+UPDATE taxonobservation set int_origPlantScifull = (select sciname from temptbl_std_plantnames as newnames
      WHERE taxonobservation.int_origPlantConcept_ID = newnames.PlantConcept_ID) 
-   WHERE int_origPlantSciName is null ;
+   WHERE int_origPlantScifull is null ;
 
 UPDATE taxonobservation set int_origPlantSciNameNoAuth = (select scinamenoauth from temptbl_std_plantnames as newnames
      WHERE taxonobservation.int_origPlantConcept_ID = newnames.PlantConcept_ID) 
@@ -150,9 +150,9 @@ UPDATE taxonobservation set int_currPlantConcept_ID = (select min(plantconcept_I
      WHERE originalinterpretation=true AND taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) 
    WHERE int_currPlantConcept_ID is null ;
 
-UPDATE taxonobservation set int_currPlantSciName = (select sciname from temptbl_std_plantnames as newnames
+UPDATE taxonobservation set int_currPlantScifull = (select sciname from temptbl_std_plantnames as newnames
      WHERE taxonobservation.int_currPlantConcept_ID = newnames.PlantConcept_ID) 
-   WHERE int_currPlantSciName is null ;
+   WHERE int_currPlantScifull is null ;
 
 UPDATE taxonobservation set int_currPlantSciNameNoAuth = (select scinamenoauth from temptbl_std_plantnames as newnames
      WHERE taxonobservation.int_currPlantConcept_ID = newnames.PlantConcept_ID) 

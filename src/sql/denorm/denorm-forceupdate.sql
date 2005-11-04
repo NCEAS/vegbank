@@ -129,7 +129,7 @@ UPDATE taxonobservation set int_origPlantConcept_ID = (select min(plantconcept_I
      WHERE originalinterpretation=true AND taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) 
    ;
 
-UPDATE taxonobservation set int_origPlantSciName = (select sciname from temptbl_std_plantnames as newnames
+UPDATE taxonobservation set int_origPlantScifull = (select sciname from temptbl_std_plantnames as newnames
      WHERE taxonobservation.int_origPlantConcept_ID = newnames.PlantConcept_ID) 
    ;
 
@@ -149,7 +149,7 @@ UPDATE taxonobservation set int_currPlantConcept_ID = (select min(plantconcept_I
      WHERE originalinterpretation=true AND taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) 
    ;
 
-UPDATE taxonobservation set int_currPlantSciName = (select sciname from temptbl_std_plantnames as newnames
+UPDATE taxonobservation set int_currPlantScifull = (select sciname from temptbl_std_plantnames as newnames
      WHERE taxonobservation.int_currPlantConcept_ID = newnames.PlantConcept_ID) 
    ;
 
