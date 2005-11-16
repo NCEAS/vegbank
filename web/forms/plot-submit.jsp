@@ -55,7 +55,10 @@ function getHelpPageId() {
 			<h4>Plot Data File Location:</h4>
         <p class="instructions">
 	  
-			Please specify the location of a VegBank XML data file.</p>
+	Please specify the location of a VegBank XML data file.  It is 
+      <strong>highly recommended</strong> that you zip the XML data file first,
+       then send the zipped file to us.  This makes the upload much faster, as
+       our XML files can generally be compressed by at least 95 percent.</p>
 		
          <p>
       <!-- try to load file name from parameter -->
