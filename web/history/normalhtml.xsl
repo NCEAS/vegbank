@@ -2,6 +2,7 @@
 <!-- purpose of this file is to copy xml elements to html directly, except for tableToStyle elements, which get grey/yellow pattern alternating rows and columns to increase legibility -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
+<xsl:output method="html" omit-xml-declaration="yes" />
 <xsl:template match="*">
   
    <xsl:element name="{name()}">
