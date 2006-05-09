@@ -31,14 +31,16 @@ googlemaps_apikey=ABQIAAAAGgQ8067Uv8fomyaGenqurhScc7vbZ9k8oOw50vJywIe37DMV3RQQqf
 # the colon plus port number used for tomcat.  If JK enabled, should be blank
 eighty_eighty=:8080
 mail_host=mail.msi.ucsb.edu
-
-
+mail_port=25
+system_email=
+psqlPath=/usr/bin/psql
 
 # Vegbank Directories
 vegbank.home.dir=/usr/vegbank
 vegbank.data.dir=/usr/vegbank/upload
 apache.document.root=/usr/www/vegbank/htdocs
 vegbank.export.dir=export
+vegbank.web.dir=/usr/local/jakarta-tomcat/webapps/vegbank
 
 # XML Schema
 vegbank.schema.data=vegbank-data-ver1.0.2usage.xsd

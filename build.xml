@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--    * build.xml   *   * Global build script for vegbank.   * The build.context must be entered for all task, to avoid this hassle you    * can call ant like this:   *  % echo "[build.context]" | ant [target]   *   *     '$Author: mlee $'   *     '$Date: 2005-07-22 23:04:50 $'   *     '$Revision: 1.70 $' -->
+<!--    * build.xml   *   * Global build script for vegbank.   * The build.context must be entered for all task, to avoid this hassle you    * can call ant like this:   *  % echo "[build.context]" | ant [target]   *   *     '$Author: berkley $'   *     '$Date: 2006-05-09 21:50:08 $'   *     '$Revision: 1.71 $' -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
   <!-- Initialize simple properties, no context handling                 -->
@@ -47,6 +47,8 @@
       </not>
       </condition> 
  </target>
+ 
+ 
   <!-- ================================================================= -->
   <!-- Read properties file, Setup filters, etc.                         -->
   <!-- ================================================================= -->
@@ -148,6 +150,8 @@
     </uptodate>
     <!-- <echo> ${modelBeanGenerate.notRequired} </echo> -->
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Make the jars                                                     -->
   <!-- ================================================================= -->
@@ -176,6 +180,8 @@
       <fileset dir="${lib.dir}" includes="*jar"/>
     </copy>
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Run the unit tests                                                -->
   <!-- ================================================================= -->
@@ -191,6 +197,8 @@
       </batchtest>
     </junit>
   </target>
+  
+  
   <target name="set-deploy.target" depends="init">
     <!-- Given build.context, set deploy.target -->
     <!-- set the proper deploy target -->
@@ -205,6 +213,8 @@
     </condition>
     <echo>***** set-deploy.target: ${deploy.target} , ${build.context} ****************</echo>
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Deploy files to webserver                                         -->
   <!-- ================================================================= -->
@@ -221,11 +231,15 @@
       <fileset dir="${docs.dir}/xml" includes="csvtools.xsl"/>
     </copy>
   </target>
+  
+  
   <target name="check-all" description="==> collection of tasks that check to see if everything is correct">
     <antcall target="props_verify" description="check to see that all important build properties exist in build.properties"/>
     <antcall target="db_verify_andfail" description="check to see that model is implemented correctly"/>
     <antcall target="noncvs-check" description="checks to see if noncvs files are all loaded to web." />
   </target>
+  
+  
   <target name="noncvs-check" depends="prepare" description="==>checks to see if noncvs files are all loaded to web.">
       <style out="./noncvs/build.xml" in="./noncvs/noncvsfiles.xml" extension=".xml" style="./noncvs/fileToNewBuild.xsl" force="true">
         <param name="prefix" expression="${machine_url}/noncvs/"/>
@@ -233,6 +247,8 @@
       <!-- generated the new build file, now run it -->
       <ant dir="./noncvs" target="check" />
   </target>
+  
+  
   <target name="deploy-all" depends="deploy-jars" description="==> deploys vegbank module jars, html and other resources">
     <antcall target="db_verify_andfail" description="check to see that model is implemented correctly"/>
     <antcall target="deploy-web-all" inheritAll="true"/>
@@ -247,6 +263,8 @@
      <echo>--------------------YOU MUST TOMGO NOW!!!!!!!!!!!!! (as root)-----------------</echo>
       <echo>----------------------------------------------------------------------------------------</echo>
   </target>
+  
+  
   <target name="sqlviews" depends="prepare">
      <echo>-----Dropping any obsolete views, normal if none of these are present currently.-----</echo>
      <exec executable="psql" dir="src/sql/">
@@ -260,8 +278,9 @@
      <exec executable="psql" dir="src/sql/">
        <arg line=" -U ${databaseUser} -f create_andPopulate_configTables.sql ${databaseName} "/>
      </exec>
-
   </target>
+  
+  
   
   <!-- ================================================================= -->
   <!-- Development deploy files to webserver (subset of total deploy)    -->
@@ -281,6 +300,8 @@
     </copy>
     <!-- insert actions here like deploy forms, WEB-INF etc. -->
   </target>
+  
+  
   <target name="deploy-jars" depends="jar,deploy-prepare,deploy-props" description="==> deploys vegbank module jars and deletes WEB-INF/classes">
     <echo message="Distr all of jars in ${ant.project.name}"/>
     <echo>deploying jars to ${web.lib.dir}</echo>
@@ -289,6 +310,8 @@
     </copy>
     <!--echo>deleting ${web.classes.dir}</echo>     <delete dir="${web.classes.dir}"/-->
   </target>
+  
+  
   <target name="deploy-props" depends="jar,deploy-prepare" description="==> deploys properties files to WEB-INF/classes">
     <echo message="Distr all properties files in ${build.lib.dir}/vegbank.jar to ${web.classes.dir}"/>
     <echo>deploying properties files to ${web.classes.dir}</echo>
@@ -303,18 +326,22 @@
     </copy>
     <echo file="${build.status.dir}/deploy-props.txt">       -----------------DEPLOY PROPS STATUS------------------------@subst_lt@br/@subst_gt@       Properties last deployed at time: ${currentTime} @subst_lt@br/@subst_gt@       Connection to database Name: ${databaseName} @subst_lt@br/@subst_gt@       Deployed from : ${basedir} @subst_lt@br/@subst_gt@       vegbank version: ${vegbankVersion} @subst_lt@br/@subst_gt@       ---------------------------------------------------------------------@subst_lt@br/@subst_gt@       </echo>
     <!-- check the model, but don't fail on errors! -->
-    <antcall target="db_verify"/>
+    <!--<antcall target="db_verify"/>-->
     <!-- copy status files to the file to server -->
     <copy todir="${web.status.dir}" filtering="yes" overwrite="yes">
       <fileset dir="${build.status.dir}" includes="*.*"/>
     </copy>
   </target>
+  
+  
   <target name="deploy-sql" depends="prepare">
     <mkdir dir="${vegbank.home.dir}/sql"/>
     <copy todir="${vegbank.home.dir}/sql" filtering="no" overwrite="yes">
       <fileset dir="./src/sql/denorm" includes="*.sql"/>
     </copy>
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Deploy only web resources                                         -->
   <!-- ================================================================= -->
@@ -325,6 +352,8 @@
       <property name="forceoverwrite" value="${forceoverwrite}" />
     </ant>
   </target>
+  
+  
   <target name="deploy-web-all" depends="deploy-prepare, set-deploy.target">
     <echo>*********After set-deploy.target: ${deploy.target}-all, ${build.context}, ${hostname}</echo>
     <ant dir="web" target="${deploy.target}-all" inheritAll="false">
@@ -332,6 +361,8 @@
       <property name="forceoverwrite" value="true" />
     </ant>
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Pave the way for a deployment                                     -->
   <!-- ================================================================= -->
@@ -341,18 +372,24 @@
     <mkdir dir="${web.lib.dir}"/>
     <mkdir dir="${web.classes.dir}"/>
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Remove all Generated files                                        -->
   <!-- ================================================================= -->
   <target name="clean" depends="init" description="==> Remove all generated files">
     <delete dir="${build.dir}"/>
   </target>
+  
+  
   <target name="dist" depends="deploy, javadoc">
     <copy todir="${web.context}/dev">
       <fileset dir="${build.docs.dir}" casesensitive="yes"/>
     </copy>
     <ant dir="exp/vegbank_web" target="dist" inheritAll="false"/>
   </target>
+  
+  
   <target name="dist-reports" depends="prepare, run-tests" description="==> Generate htmls from generated reports and distributes to web">
     <!-- Create a report from the junit output -->
     <junitreport todir="${build.reports.test.dir}">
@@ -363,6 +400,8 @@
     </junitreport>
     <echo> 	************************************************** 	Reports distributed to ${build.context}/dev/reports on tomcat 	**************************************************	     </echo>
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Generate model beans, XML Digester rules, XML schema and JSP from -->
   <!-- the datamodel XML and generate utility                            -->
@@ -395,6 +434,8 @@
     <!-- NOT USED YET, ALLOWS USE OF THE BEANLOADER CODE FOR UPLOADING XML 		generate a digester rules.xml so xml can be read into a VBModelBean Tree  	<echo>Generate the Digester Rules ( for reading XML into Beans ) ... ${build.java.src.dir}/</echo> 	<java classname="org.apache.xalan.xslt.Process" 		fork="true"> 		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/GenDigesterRules.xsl -OUT ${build.java.src.dir}/DigesterRules.xml "/> 		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/> 	</java> 	-->
     <!-- generate the ForeignTables property  file    		THIS FILE MUST BE HAND EDITED AS I CANNOT FIGURE OUT GENERATION LOGIC ( order in which to visit child tables ) 		This is useful for creating the properties file initially, and then hand edit   	<echo>Generate the ForeignTables.properties into ${build.java.src.dir}</echo> 	<java classname="org.apache.xalan.xslt.Process" 		fork="true"> 		<arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/GenForeignTableProps.xsl -OUT ${build.java.src.dir}/ForeignTables.properties "/> 		<jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/> 	</java> 	-->
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Compile the java code                                             -->
   <!-- ================================================================= -->
@@ -424,6 +465,8 @@
       <classpath refid="classpath.compilation"/>
     </javac>
   </target>
+  
+  
   <!--    * Some property files have values that are filtered by ant, delete these so     * ant can filter them again.   -->
   <target name="cleanprops" depends="prepare" description="==> Remove generated properties files">
     <echo>cleanprops: removing old generated properties files</echo>
@@ -431,6 +474,8 @@
       <fileset dir="${build.classes.dir}" includes="**/*.properties"/>
     </delete>
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Install Vegbank on the local system                               -->
   <!-- ================================================================= -->
@@ -480,6 +525,8 @@
     <!-- Need to do the apache dir too -->
     <!-- The following are only supported by apache ant 1.6.0 and higher, comment out for now    <chgrp group="vegbank">       <fileset dir="${vegbank.home.dir}">         <include name="**/*"/>      </fileset>      <fileset dir="${env.TOMCAT_HOME}/">         <include name="**/*"/>      </fileset>    </chgrp>    <chmod perm="g+rw">      <fileset dir="${vegbank.home.dir}">         <include name="**/*"/>      </fileset>      <fileset dir="${env.TOMCAT_HOME}/">         <include name="**/*"/>      </fileset>    </chmod>    -->
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Generate Javadoc                                                  -->
   <!-- ================================================================= -->
@@ -502,6 +549,8 @@
       <link href="http://jakarta.apache.org/struts/api"/>
     </javadoc>
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Database related targets                                          -->
   <!-- ================================================================= -->
@@ -510,16 +559,22 @@
     <!-- Alternate XSL for genrating Vegbank.sql -->
     <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.sql.src.dir}/vegbank-ML.sql" style="${docs.dir}/xml/dbmodel-to-sql.xsl"/>
   </target>
+  
+  
   <!-- A simple checker between the model and the database, NOT definative -->
   <target name="db_generate_verify_script" description="==> Generate the database verify script" depends="prepare">
     <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.script.src.dir}/VerifyDatabase.pl" style="${xsl.src.dir}/VerifyDatabaseGen.xsl"/>
   </target>
+  
+  
   <target name="db_verify_andfail" description="==> Michael's method of checking db to match model xml and fails build if diffs">
     <property name="failOnModelDiff" value="true"/>
-    <antcall target="db_verify"/>
+    <!--<antcall target="db_verify"/>-->
     <!-- just do the diff -->
     <!--<exec dir="${build.status.dir}" executable="diff" output="${build.status.dir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">       <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>     </exec>-->
   </target>
+  
+  
   <target name="db_verify" description="==> Michael's new method of checking the database to match model xml" depends="prepare">
     <!-- set to not fail unless already set -->
     <condition property="failOnModelDiff" value="false">
@@ -553,13 +608,19 @@
     </exec>
     <echo>Diff results: ${diffResult}</echo>
   </target>
+  
+  
   <target name="props_verify" description="==> checks build.properties to make sure all the properties are there " depends="init">
     <echo>Checking build.properties for missing properties...</echo>
     <exec dir="." executable="bin/test_props.sh" failonerror="true"/>
   </target>
+  
+  
   <target name="db_generate_archive_triggersql" description="==> Generate the archive trigger sql scripts" depends="prepare">
     <xslt in="${docs.dir}/xml/db_model_vegbank.xml" out="${build.sql.src.dir}/trigger.sql" style="${xsl.src.dir}/VegbankModel2RevisionTriggersSQL.xsl"/>
   </target>
+  
+  
   <target name="db_rebuild_empty_vegbank" description="==> Rebuild the vegbank Database" depends="db_generate_sql">
     <!-- DROP and CREATE Database -->
     <exec executable="${bin.dir}/rebuilddb.sh">
@@ -568,16 +629,22 @@
     </exec>
     <antcall target="grant_db_privilages"/>
   </target>
+  
+  
   <target name="db_pre_load" description="==> Preload data into database" depends="prepare">
     <exec executable="${bin.dir}/run_sql.sh">
       <arg value="${build.context}"/>
       <arg value="${sql.src.dir}/insert_preload_ANSI.sql"/>
     </exec>
   </target>
+  
+  
   <target name="grant_db_privilages" description="==> Grant privilages to qa user" depends="prepare">
     <!-- Grant privilages -->
     <exec executable="bin/qa_user/grantQAPrivil.pl"/>
   </target>
+  
+  
   <!-- ================================================================= -->
   <!-- Utility targets for internal build file consumption               -->
   <!-- ================================================================= -->
@@ -597,11 +664,13 @@
         </not>
       </and>
     </condition>
-    <fail if="noContextName"> ******************************************************************************* ERROR: You did not enter a context name. *******************************************************************************     </fail>
-    <fail if="invalidContextName"> ******************************************************************************* ERROR: An invalid context name entered: '${build.context}'  	Only vegbank and vegtest contexts currently supported. *******************************************************************************     </fail>
+    <fail if="noContextName"> *********** ERROR: You did not enter a context name. *******</fail>
+    <fail if="invalidContextName">******* ERROR: An invalid context name entered: '${build.context}'  	Only vegbank and vegtest contexts currently supported. *********</fail>
     -->
   </target>
-     <target name="setoverwrite" description="=&gt; sets overwrite to true, could also do same with commandLine&gt; ant -Dforceoverwrite=true" >
-         <property name="forceoverwrite" value="true" /> <!-- this should always be true if deploying all -->
-   </target>
+  
+  
+  <target name="setoverwrite" description="=&gt; sets overwrite to true, could also do same with commandLine&gt; ant -Dforceoverwrite=true" >
+       <property name="forceoverwrite" value="true" /> <!-- this should always be true if deploying all -->
+  </target>
 </project>
