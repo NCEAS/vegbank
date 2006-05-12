@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-12 19:31:54 $'
-  * '$Revision: 1.1 $'
+  * '$Date: 2006-05-12 19:43:28 $'
+  * '$Revision: 1.2 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -106,14 +106,11 @@
   <!-- ================================================================= -->
   <target name="generateBeans" depends="prepare">
     <!-- DOES NOT PICKUP CORRECT XSLT PROCCESOR FOR ME -->
-    <property name="xsl.src.dir" value="${srcDir}/xsl"/>
-    <property name="build.java.src.dir" value="${buildSrcDir}"/>
-    <property name="build.javadatamodel.src.dir" value="${buildSrcDir}/org/vegbank/common/model"/>
-    <property name="build.javadatamodel.utility.src.dir" value="${build.javadatamodel.src.dir}/utility"/>
-    <property name="vegbank.schema.data" value="vegbank.schema.data=vegbank-data-ver1.0.2usage.xsd"/>
-    <property name="docs.dir" value="${docsDir}"/>
-    <property name="model.generated.flag" value="${buildSrcDir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG"/>
-    <property name="build.lib.dir" value="${buildLibDir}"/>
+    <property name="xslSrcDir" value="${srcDir}/xsl"/>
+    <property name="buildBeanSrcDir" value="${buildSrcDir}/org/vegbank/common/model"/>
+    <property name="buildModelUtilitySrcDir" value="${buildBeanSrcDir}/utility"/>
+    <property name="vegbankSchemaData" value="vegbank-data-ver1.0.2usage.xsd"/>
+    <property name="modelGeneratedFlag" value="${buildSrcDir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG"/>
     <path id="classpath.compilation">
       <pathelement path="${buildClassDir}"/>
       <pathelement path="${buildSrcDir}"/>
@@ -122,26 +119,20 @@
         <include name="**/*jar"/>
       </fileset>
     </path>
-    
-    <!--<xslt in="${docsDir}/xml/db_model_vegbank.xml" style="${xsl.src.dir}/VegBankModel2Java.xsl" 
-      out="${build.java.src.dir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG">
-      <param name="outdir" expression="${build.javadatamodel.src.dir}/"/>
-      <classpath refid="classpath.compilation"/>
-    </xslt>-->
-    <echo>Generating the regular VBModelBeans ...  using ${xsl.src.dir}/VegBankModel2Java.xsl building to ${build.javadatamodel.src.dir}/</echo>
-    <echo>argline:  -IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/VegBankModel2Java.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.javadatamodel.src.dir}</echo>
+
+    <echo>Generating the regular VBModelBeans ...  using ${xslSrcDir}/VegBankModel2Java.xsl building to ${buildBeanSrcDir}/</echo>
     <java classname="org.apache.xalan.xslt.Process" fork="true">
-      <arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/VegBankModel2Java.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.javadatamodel.src.dir}/"/>
+      <arg line="-IN ${docsDir}/xml/db_model_vegbank.xml -XSL ${xslSrcDir}/VegBankModel2Java.xsl -OUT ${modelGeneratedFlag} -PARAM outdir ${buildBeanSrcDir}/"/>
       <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
-    <echo>Generate the Utility javabeans e.g. statelist from ${docs.dir}/xml/utility into ... ${build.javadatamodel.utility.src.dir}/ using ${xsl.src.dir}/UtilityXMLToJavaBeans.xsl</echo>
+    <echo>Generate the Utility javabeans e.g. statelist from ${docsDir}/xml/utility into ... ${buildModelUtilitySrcDir}/ using ${xslSrcDir}/UtilityXMLToJavaBeans.xsl</echo>
     <java classname="org.apache.xalan.xslt.Process" fork="true">
-      <arg line="-IN ${docs.dir}/xml/utility/UtilityBeans.xml -XSL ${xsl.src.dir}/UtilityXMLToJavaBeans.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.javadatamodel.utility.src.dir}/"/>
+      <arg line="-IN ${docsDir}/xml/utility/UtilityBeans.xml -XSL ${xslSrcDir}/UtilityXMLToJavaBeans.xsl -OUT ${modelGeneratedFlag} -PARAM outdir ${buildModelUtilitySrcDir}/"/>
       <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
-    <echo>Generate the vegbank schema xsd file ... ${build.lib.dir}/${vegbank.schema.data}</echo>
+    <echo>Generate the vegbank schema xsd file ... ${buildLibDir}/${vegbankSchemaData}</echo>
     <java classname="org.apache.xalan.xslt.Process" fork="true">
-      <arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${docs.dir}/xml/dbmodel-to-schema.xsl -OUT ${build.lib.dir}/${vegbank.schema.data}"/>
+      <arg line="-IN ${docsDir}/xml/db_model_vegbank.xml -XSL ${docsDir}/xml/dbmodel-to-schema.xsl -OUT ${buildLibDir}/${vegbankSchemaData}"/>
       <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
   </target>
