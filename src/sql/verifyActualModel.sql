@@ -7,12 +7,14 @@ mtl_FTbl || '.' || mtl_fFldNm as MTL_references, 'dil' as unknownModel, 'if i''m
 (select relname from pg_statio_all_tables where pg_constraint.conrelid=pg_statio_all_tables.relid) as mtl_tblNm, 
 
 (select relname from pg_statio_all_tables where pg_constraint.confrelid=pg_statio_all_tables.relid) as mtl_FTbl, 
-(select attname from pg_attribute where attrelid=conrelid and attnum =conkey[1]) as mtl_fldNm, 
-(select attname from pg_attribute where attrelid=confrelid and attnum =confkey[1]) as mtl_fFldNm 
+(select attname from pg_attribute as pg2 where attrelid=conrelid and attnum =conkey[1]) as mtl_fldNm, 
+(select attname from pg_attribute as pg3 where attrelid=confrelid and attnum =confkey[1]) as mtl_fFldNm 
 
 FROM pg_constraint WHERE conrelid>0 and confrelid>0) as mtl_cons 
 
-ON (select relname from pg_statio_all_tables where attrelid=relid)=mtl_tblNm and pg_attribute.attname=mtl_fldNm where attstattarget=-1 and attrelid in (select relid from pg_statio_all_tables where schemaname='public') 
+ON (select relname from pg_statio_all_tables where attrelid=relid)=mtl_tblNm and pg_attribute.attname=mtl_fldNm where attstattarget=-1 and pg_attribute.attrelid in (select relid from pg_statio_all_tables where schemaname='public') 
+GROUP BY pg_attribute.attrelid, attName, pg_attribute.atttypid, pg_attribute.atttypmod, pg_attribute.attnotnull, 
+  mtl_cons.mtl_ftbl, mtl_cons.mtl_ffldnm
   HAVING (select relname from pg_statio_all_tables where attrelid=relid) NOT LIKE 'dba_%' AND 
          (select relname from pg_statio_all_tables where attrelid=relid) NOT LIKE 'temptbl_%'
 ORDER BY (select relname from pg_statio_all_tables where attrelid=relid),  replace(attname,'_','a')

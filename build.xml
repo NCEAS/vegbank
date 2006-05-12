@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!--    * build.xml   *   * Global build script for vegbank.   * The build.context must be entered for all task, to avoid this hassle you    * can call ant like this:   *  % echo "[build.context]" | ant [target]   *   *     '$Author: berkley $'   *     '$Date: 2006-05-09 21:50:08 $'   *     '$Revision: 1.71 $' -->
+<!--    * build.xml   *   * Global build script for vegbank.   * The build.context must be entered for all task, to avoid this hassle you    * can call ant like this:   *  % echo "[build.context]" | ant [target]   *   *     '$Author: berkley $'   *     '$Date: 2006-05-12 15:57:21 $'   *     '$Revision: 1.72 $' -->
 <project name="Vegbank" default="jar" basedir=".">
   <!-- ================================================================= -->
   <!-- Initialize simple properties, no context handling                 -->
@@ -221,7 +221,6 @@
   <target name="deploy" depends="deploy-jars, deploy-sql" description="==> deploys vegbank module jars, html and other resources">
     <ant target="deploy-web" inheritAll="true"/>
     <echo>db connect: ${databaseConnectString}</echo>
-    <!-- disable generic display that Gabe made: <mkdir dir="${web.context}/GenJSP"/>     <copy todir="${web.context}/GenJSP">       <fileset dir="${build.jsp.src.dir}" includes="*jsp"/>     </copy> -->
     <echo>copying ${build.java.src.dir}/velocity.properties to web context base</echo>
     <copy todir="${web.context}">
       <fileset dir="${build.java.src.dir}" includes="velocity.properties"/>
@@ -297,6 +296,10 @@
         <include name="**/*.properties"/>
         <include name="**/*.xml"/>
       </fileset>
+    </copy>
+    <copy todir="${web.inf}">
+      <fileset dir="web/src/web/WEB-INF" includes="**/*"/>
+      <exclude name="**/CVS*"/>
     </copy>
     <!-- insert actions here like deploy forms, WEB-INF etc. -->
   </target>
@@ -569,9 +572,9 @@
   
   <target name="db_verify_andfail" description="==> Michael's method of checking db to match model xml and fails build if diffs">
     <property name="failOnModelDiff" value="true"/>
-    <!--<antcall target="db_verify"/>-->
+    <antcall target="db_verify"/>
     <!-- just do the diff -->
-    <!--<exec dir="${build.status.dir}" executable="diff" output="${build.status.dir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">       <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>     </exec>-->
+    <exec dir="${build.status.dir}" executable="diff" output="${build.status.dir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">       <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>     </exec>
   </target>
   
   
