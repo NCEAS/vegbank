@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<!--
+  *  '$RCSfile: build.new.xml,v $'
+  *    Authors: @authors@
+  *    Release: @release@
+  *
+  * '$Author: berkley $'
+  * '$Date: 2006-05-12 19:31:54 $'
+  * '$Revision: 1.1 $'
+  *
+  *	Authors: Chad Berkley
+  *	Copyright: 2002 Regents of the University of California and the
+  *							National Center for Ecological Analysis and Synthesis
+  *
+  *  See http://jakarta.apache.org for details on Ant
+  *
+-->
+<project name="vegbank" default="war" basedir=".">
+  <!-- 
+   normal install:
+   1) setup variables (init)
+   2) copy src files to build (prepare)
+   3) compile build/src to build/classes (compile)
+   4) create any jars/wars (jar/war)
+   5) copy build files to destination (install)
+   6) copy any support files (lib, web, etc) to destination (install)
+  -->
+  <!--set up the correct variables-->
+  <target name="init">
+    <!--************ customize these properties *****************-->
+    <!--servlet/web container props-->
+    <property name="tomcat" value="/usr/local/jakarta-tomcat"/>
+    <property name="webapps" value="${tomcat}/webapps"/>
+    <property name="webdir" value="${webapps}"/>
+    <property name="host" value="localhost:8080"/>
+    <!--database props-->
+    <property name="databaseHost" value="localhost"/>
+    <property name="databaseType" value="postgresql"/>
+    <property name="databaseUser" value="berkley"/>
+    <property name="databasePassword" value=""/>
+    <property name="databasePort" value="1521"/>
+    <property name="databaseDriverType" value="thin"/>
+    <property name="databaseDriverClass" value="org.postresql.Driver"/>
+    <property name="databaseName" value="vegbank"/>
+    <!--mail server props-->
+    <property name="mailServer" value="mail.msi.ucsb.edu"/>
+    <property name="mailPort" value="25"/>
+    
+    <!--************* do not edit below here ****************-->
+    <property name="databaseConnection" value="jdbc:${databaseType}://${databaseHost}/${databaeName}"/>
+    <property name="buildDir" value="build"/>
+    <property name="srcDir" value="src"/>
+    <property name="classDir" value="classes"/>
+    <property name="docsDir" value="docs"/>
+    <property name="libDir" value="lib"/>
+  </target>
+  
+  <!--copy files to the build directory and prepare for compilation-->
+  <target name="prepare" depends="init">
+    <property name="buildSrcDir" value="${buildDir}/${srcDir}"/>
+    <property name="buildClassDir" value="${buildDir}/${classDir}"/>
+    <property name="buildLibDir" value="${buildDir}/lib"/>
+    <property name="javaSrcDir" value="${srcDir}/java"/>
+    <mkdir dir="${buildSrcDir}"/>
+    <mkdir dir="${buildClassDir}"/>
+    <mkdir dir="${buildLibDir}"/>
+    
+    <!--copy the java src to the build/src dir-->
+    <copy todir="${buildSrcDir}">
+      <fileset dir="${javaSrcDir}">
+        <exclude name="**/CVS*"/>
+        <exclude name="**/.#*"/>
+      </fileset>
+    </copy>
+    
+  </target>
+  
+  <!--set the classpath-->
+  <target name="setclasspath">
+    <path id="projectClassPath">
+      <!-- Project jars -->
+      <pathelement location="./"/>
+      <pathelement location="${buildSrcDir}"/>
+      <pathelement location="./"/>
+      <fileset dir="lib/">
+        <include name="**/*.jar"/>
+      </fileset>
+    </path>
+    <property name="classpath" refid="projectClassPath"/>
+  </target>
+  
+  <!--compile all files in build/src to build/classes-->
+  <target name="compile" depends="setclasspath, prepare, generateBeans">
+    <echo>classpath: ${classpath}</echo>
+    <javac srcdir="${buildSrcDir}"
+           destdir="${buildClassDir}"
+           classpath="${classpath}"
+           debug="on"
+           source="1.4"/>
+  </target>
+  
+  <!-- ================================================================= -->
+  <!-- Generate model beans, XML Digester rules, XML schema and JSP from -->
+  <!-- the datamodel XML and generate utility                            -->
+  <!-- javabeans                                                         -->
+  <!-- ================================================================= -->
+  <target name="generateBeans" depends="prepare">
+    <!-- DOES NOT PICKUP CORRECT XSLT PROCCESOR FOR ME -->
+    <property name="xsl.src.dir" value="${srcDir}/xsl"/>
+    <property name="build.java.src.dir" value="${buildSrcDir}"/>
+    <property name="build.javadatamodel.src.dir" value="${buildSrcDir}/org/vegbank/common/model"/>
+    <property name="build.javadatamodel.utility.src.dir" value="${build.javadatamodel.src.dir}/utility"/>
+    <property name="vegbank.schema.data" value="vegbank.schema.data=vegbank-data-ver1.0.2usage.xsd"/>
+    <property name="docs.dir" value="${docsDir}"/>
+    <property name="model.generated.flag" value="${buildSrcDir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG"/>
+    <property name="build.lib.dir" value="${buildLibDir}"/>
+    <path id="classpath.compilation">
+      <pathelement path="${buildClassDir}"/>
+      <pathelement path="${buildSrcDir}"/>
+      <!-- Pick up non java resources -->
+      <fileset dir="${libDir}">
+        <include name="**/*jar"/>
+      </fileset>
+    </path>
+    
+    <!--<xslt in="${docsDir}/xml/db_model_vegbank.xml" style="${xsl.src.dir}/VegBankModel2Java.xsl" 
+      out="${build.java.src.dir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG">
+      <param name="outdir" expression="${build.javadatamodel.src.dir}/"/>
+      <classpath refid="classpath.compilation"/>
+    </xslt>-->
+    <echo>Generating the regular VBModelBeans ...  using ${xsl.src.dir}/VegBankModel2Java.xsl building to ${build.javadatamodel.src.dir}/</echo>
+    <echo>argline:  -IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/VegBankModel2Java.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.javadatamodel.src.dir}</echo>
+    <java classname="org.apache.xalan.xslt.Process" fork="true">
+      <arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${xsl.src.dir}/VegBankModel2Java.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.javadatamodel.src.dir}/"/>
+      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+    </java>
+    <echo>Generate the Utility javabeans e.g. statelist from ${docs.dir}/xml/utility into ... ${build.javadatamodel.utility.src.dir}/ using ${xsl.src.dir}/UtilityXMLToJavaBeans.xsl</echo>
+    <java classname="org.apache.xalan.xslt.Process" fork="true">
+      <arg line="-IN ${docs.dir}/xml/utility/UtilityBeans.xml -XSL ${xsl.src.dir}/UtilityXMLToJavaBeans.xsl -OUT ${model.generated.flag} -PARAM outdir ${build.javadatamodel.utility.src.dir}/"/>
+      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+    </java>
+    <echo>Generate the vegbank schema xsd file ... ${build.lib.dir}/${vegbank.schema.data}</echo>
+    <java classname="org.apache.xalan.xslt.Process" fork="true">
+      <arg line="-IN ${docs.dir}/xml/db_model_vegbank.xml -XSL ${docs.dir}/xml/dbmodel-to-schema.xsl -OUT ${build.lib.dir}/${vegbank.schema.data}"/>
+      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+    </java>
+  </target>
+  
+  <!--jar all classes in build/classes to vegbank.jar-->
+  <target name="jar" depends="compile">
+  
+  </target>
+  
+  <!--war build directory to vegbank.war-->
+  <target name="war" depends="jar">
+  
+  </target>
+  
+  <!--install war file to target webapps dir-->
+  <target name="install" depends="war">
+  
+  </target>
+  
+  <!--clean the install back to a clean slate-->
+  <target name="clean" depends="init">
+    <delete dir="${buildDir}"/>
+  </target>
+</project>
