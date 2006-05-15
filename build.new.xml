@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-12 19:59:41 $'
-  * '$Revision: 1.4 $'
+  * '$Date: 2006-05-15 18:04:51 $'
+  * '$Revision: 1.5 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -28,8 +28,12 @@
   <!--set up the correct variables-->
   <target name="init">
     <!--************ customize these properties *****************-->
+    <!--general props-->
+    <property name="name" value="vegbank"/>
     <!--servlet/web container props-->
     <property name="tomcat" value="/usr/local/jakarta-tomcat"/>
+    <property name="tomcatVersion" value="5"/>
+    <property name="context" value="${name}"/>
     <property name="webapps" value="${tomcat}/webapps"/>
     <property name="webdir" value="${webapps}"/>
     <property name="host" value="localhost:8080"/>
@@ -53,6 +57,8 @@
     <property name="classDir" value="classes"/>
     <property name="docsDir" value="docs"/>
     <property name="libDir" value="lib"/>
+    <property name="distDir" value="dist"/>
+    <property name="webDir" value="web"/>
   </target>
   
   <!--copy files to the build directory and prepare for compilation-->
@@ -99,6 +105,115 @@
            source="1.4"/>
   </target>
   
+  <!--jar all classes in build/classes to vegbank.jar-->
+  <target name="jar" depends="compile">
+    <jar destfile="${buildDir}/${name}.jar" update="true">
+      <fileset dir="${buildClassDir}"/>
+    </jar>
+  </target>
+  
+  <!--get everything in the right place to build the war file-->
+  <target name="warPrepare" depends="jar">
+     <property name="buildWarDir" value="${buildDir}/war"/>
+     <property name="srcWebInfDir" value="web/src/web/WEB-INF"/>
+     <property name="warWebInfDir" value="${buildWarDir}/WEB-INF" />
+     <property name="warLib" value="${buildWarDir}/lib" />
+     <property name="warContext" value="${buildWarDir}/${context}" />
+     <mkdir dir="${warLib}" />
+     <mkdir dir="${warWebInfDir}" />
+     <mkdir dir="${warContext}" />
+
+     <!--copy the vegbank.jar file-->
+     <copy file="${buildDir}/${name}.jar" todir="${warLib}" />
+     
+     <!--copy the other jar files-->
+     <copy todir="${warLib}" filtering="no">
+       <fileset dir="${libDir}">
+          <include name="**/*.jar"/>
+       </fileset>
+     </copy>
+     
+     <!--copy the WEB-INF support files-->
+     <copy todir="${warWebInfDir}" filtering="no">
+       <fileset dir="${srcWebInfDir}">
+          <include name="**/*.tld"/>
+          <include name="**/*.xml"/>
+          <exclude name="**/web.xml"/>
+       </fileset>
+     </copy>
+     
+     <!--copy the web files-->
+     <copy todir="${warContext}" filtering="no">
+       <fileset dir="${webDir}">
+         <include name="*.jsp"/>
+         <include name="*.html"/>
+       </fileset>
+     </copy>
+     <copy todir="${warContext}/admin" filtering="no">
+       <fileset dir="${webDir}/admin"/>
+     </copy>
+     <copy todir="${warContext}/ajax" filtering="no">
+       <fileset dir="${webDir}/ajax"/>
+     </copy>
+     <copy todir="${warContext}/email_templates" filtering="no">
+       <fileset dir="${webDir}/email_templates"/>
+     </copy>
+     <copy todir="${warContext}/forms" filtering="no">
+       <fileset dir="${webDir}/forms"/>
+     </copy>
+     <copy todir="${warContext}/general" filtering="no">
+       <fileset dir="${webDir}/general"/>
+     </copy>
+     <copy todir="${warContext}/images" filtering="no">
+       <fileset dir="${webDir}/images"/>
+     </copy>
+     <copy todir="${warContext}/includes" filtering="no">
+       <fileset dir="${webDir}/includes"/>
+     </copy>
+     <copy todir="${warContext}/panel" filtering="no">
+       <fileset dir="${webDir}/panel"/>
+     </copy>
+     <copy todir="${warContext}/views" filtering="no">
+       <fileset dir="${webDir}/views"/>
+     </copy>
+     <copy todir="${warContext}" filtering="no">
+       <fileset dir="${buildSrcDir}">
+         <include name="velocity.properties"/>
+       </fileset>
+     </copy>
+     <copy todir="${warContext}/xsl" filtering="no">
+       <fileset dir="${srcDir}/xsl">
+         <include name="**/*"/>
+       </fileset>
+     </copy>
+     <copy todir="${warContext}/vegdocs/help" filtering="no">
+       <fileset dir="${webDir}/help">
+         <include name="**/*"/>
+       </fileset>
+     </copy>
+   </target>
+
+  <!--war build directory to vegbank.war--> 
+  <target name="war" depends="warPrepare">
+     <mkdir dir="${distDir}" />
+     <war destfile="${distDir}/${context}.war"
+          webxml="${srcWebInfDir}/web.xml">
+       <fileset dir="${warContext}"/>
+       <lib dir="${warLib}"/>
+       <webinf dir="${warWebInfDir}"/>
+     </war>
+   </target>
+  
+  <!--install war file to target webapps dir-->
+  <target name="install" depends="war">
+  
+  </target>
+  
+  <!--clean the install back to a clean slate-->
+  <target name="clean" depends="init">
+    <delete dir="${buildDir}"/>
+  </target>
+  
   <!-- ================================================================= -->
   <!-- Generate model beans, XML Digester rules, XML schema and JSP from -->
   <!-- the datamodel XML and generate utility                            -->
@@ -135,25 +250,5 @@
       <arg line="-IN ${docsDir}/xml/db_model_vegbank.xml -XSL ${docsDir}/xml/dbmodel-to-schema.xsl -OUT ${buildLibDir}/${vegbankSchemaData}"/>
       <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
-  </target>
-  
-  <!--jar all classes in build/classes to vegbank.jar-->
-  <target name="jar" depends="compile">
-  
-  </target>
-  
-  <!--war build directory to vegbank.war-->
-  <target name="war" depends="jar">
-  
-  </target>
-  
-  <!--install war file to target webapps dir-->
-  <target name="install" depends="war">
-  
-  </target>
-  
-  <!--clean the install back to a clean slate-->
-  <target name="clean" depends="init">
-    <delete dir="${buildDir}"/>
   </target>
 </project>
