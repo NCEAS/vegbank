@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-15 18:04:51 $'
-  * '$Revision: 1.5 $'
+  * '$Date: 2006-05-15 19:58:39 $'
+  * '$Revision: 1.6 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -30,12 +30,19 @@
     <!--************ customize these properties *****************-->
     <!--general props-->
     <property name="name" value="vegbank"/>
+    <property name="version" value="1.0.2"/>
+    <property name="vegbankHome" value="/usr/local/vegbank"/>
+    <property name="dataPath" value="${vegbankHome}/data"/>
+    <property name="exportPath" value="${vegbankHome}/export"/>
+    <property name="uploadPath" value="${vegbankHome}/upload"/>
+    <property name="dataSchemaName" value="vegbank-data-ver1.0.2usage.xsd"/>
+    <property name="modelSchemaName" value="db_model_vegbank_schema.xsd"/>
     <!--servlet/web container props-->
     <property name="tomcat" value="/usr/local/jakarta-tomcat"/>
     <property name="tomcatVersion" value="5"/>
     <property name="context" value="${name}"/>
     <property name="webapps" value="${tomcat}/webapps"/>
-    <property name="webdir" value="${webapps}"/>
+    <property name="webServerDir" value="${webapps}/${name}"/>
     <property name="host" value="localhost:8080"/>
     <!--database props-->
     <property name="databaseHost" value="localhost"/>
@@ -46,11 +53,15 @@
     <property name="databaseDriverType" value="thin"/>
     <property name="databaseDriverClass" value="org.postresql.Driver"/>
     <property name="databaseName" value="vegbank"/>
+    <property name="psqlPath" value="/usr/bin/psql"/>
     <!--mail server props-->
     <property name="mailServer" value="mail.msi.ucsb.edu"/>
     <property name="mailPort" value="25"/>
+    <!--rmi server props-->
+    <property name="rmiServer" value=""/>
     
-    <!--************* do not edit below here ****************-->
+    
+    <!--** do not edit below here unless you really know what you're doing **-->
     <property name="databaseConnection" value="jdbc:${databaseType}://${databaseHost}/${databaeName}"/>
     <property name="buildDir" value="build"/>
     <property name="srcDir" value="src"/>
@@ -61,8 +72,44 @@
     <property name="webDir" value="web"/>
   </target>
   
+  <!--set the inline copy filters.  do not edit these directly. If you want
+      to edit these, do it in the properties in init.                       -->
+  <target name="setFilters" depends="init">
+    <filter token="databaseType" value="${databaseType}"/>
+    <filter token="databaseUser" value="${databaseUser}"/>
+    <filter token="databaseUserPassword" value="${databasePassword}"/>
+    <filter token="databasePort" value="${databasePort}"/>
+    <filter token="hostname" value="${host}"/>
+    <filter token="databaseDriverType" value="${databaseDriverType}"/>
+    <filter token="databaseDriverClass" value="${databaseDriverClass}"/>
+    <filter token="databaseConnectString" value="${databaseConnection}"/>
+    <filter token="databaseName" value="${databaseName}"/>
+    <filter token="psqlPath" value="${psqlPath}"/>
+    <filter token="vegbankVersion" value="${version}"/>
+    <filter token="vegbank.data.dir" value="${dataPath}/"/>
+    <filter token="vegbank.export.dirname" value="${exportPath}/"/>
+    <filter token="vegbank.home.dir" value="${vegbankHome}/"/>
+    <filter token="vegbank.web.dir" value="${webServerDir}/"/>
+    <filter token="schemaLocation" value="${webServerDir}/vegdocs/xml/"/>
+    <filter token="vegbankSchemaName" value="${dataSchemaName}"/>
+    <!-- End filters created from build.${context}.properties -->
+    <!-- Copied these straight from the veg_plot build.xml, are they relevant ? -->
+    <!-- Servlet specific -->
+    <filter token="mailHost" value="${mailServer}"/>
+    <filter token="mailPort" value="${mailPort}"/>
+    <filter token="machineURL" value="${host}"/>
+    <filter token="serverAddress" value="${host}"/>
+    <filter token="systemEmail" value="${mailServer}"/> <!--not sure if this is the right value-->
+    <filter token="genericForm" value="${context}/forms/generic_form.html"/>
+    <filter token="genericTemplate" value="${context}/forms/tmp.html"/>
+    <filter token="rmiserver" value="${rmiServer}"/>
+    <filter token="uploadDir" value="${uploadPath}"/>
+    <filter token="servlet_lib_dir" value="${webapps}/lib"/>
+    <filter token="servlet_context" value="${context}/"/>
+  </target>
+  
   <!--copy files to the build directory and prepare for compilation-->
-  <target name="prepare" depends="init">
+  <target name="prepare" depends="setFilters">
     <property name="buildSrcDir" value="${buildDir}/${srcDir}"/>
     <property name="buildClassDir" value="${buildDir}/${classDir}"/>
     <property name="buildLibDir" value="${buildDir}/lib"/>
@@ -70,6 +117,9 @@
     <mkdir dir="${buildSrcDir}"/>
     <mkdir dir="${buildClassDir}"/>
     <mkdir dir="${buildLibDir}"/>
+    <mkdir dir="${dataPath}"/>
+    <mkdir dir="${exportPath}"/>
+    <mkdir dir="${uploadPath}"/>
     
     <!--copy the java src to the build/src dir-->
     <copy todir="${buildSrcDir}">
@@ -143,50 +193,50 @@
      </copy>
      
      <!--copy the web files-->
-     <copy todir="${warContext}" filtering="no">
+     <copy todir="${warContext}" filtering="yes">
        <fileset dir="${webDir}">
          <include name="*.jsp"/>
          <include name="*.html"/>
        </fileset>
      </copy>
-     <copy todir="${warContext}/admin" filtering="no">
+     <copy todir="${warContext}/admin" filtering="yes">
        <fileset dir="${webDir}/admin"/>
      </copy>
-     <copy todir="${warContext}/ajax" filtering="no">
+     <copy todir="${warContext}/ajax" filtering="yes">
        <fileset dir="${webDir}/ajax"/>
      </copy>
-     <copy todir="${warContext}/email_templates" filtering="no">
+     <copy todir="${warContext}/email_templates" filtering="yes">
        <fileset dir="${webDir}/email_templates"/>
      </copy>
-     <copy todir="${warContext}/forms" filtering="no">
+     <copy todir="${warContext}/forms" filtering="yes">
        <fileset dir="${webDir}/forms"/>
      </copy>
-     <copy todir="${warContext}/general" filtering="no">
+     <copy todir="${warContext}/general" filtering="yes">
        <fileset dir="${webDir}/general"/>
      </copy>
      <copy todir="${warContext}/images" filtering="no">
        <fileset dir="${webDir}/images"/>
      </copy>
-     <copy todir="${warContext}/includes" filtering="no">
+     <copy todir="${warContext}/includes" filtering="yes">
        <fileset dir="${webDir}/includes"/>
      </copy>
-     <copy todir="${warContext}/panel" filtering="no">
+     <copy todir="${warContext}/panel" filtering="yes">
        <fileset dir="${webDir}/panel"/>
      </copy>
-     <copy todir="${warContext}/views" filtering="no">
+     <copy todir="${warContext}/views" filtering="yes">
        <fileset dir="${webDir}/views"/>
      </copy>
-     <copy todir="${warContext}" filtering="no">
+     <copy todir="${warContext}" filtering="yes">
        <fileset dir="${buildSrcDir}">
          <include name="velocity.properties"/>
        </fileset>
      </copy>
-     <copy todir="${warContext}/xsl" filtering="no">
+     <copy todir="${warContext}/xsl" filtering="yes">
        <fileset dir="${srcDir}/xsl">
          <include name="**/*"/>
        </fileset>
      </copy>
-     <copy todir="${warContext}/vegdocs/help" filtering="no">
+     <copy todir="${warContext}/vegdocs/help" filtering="yes">
        <fileset dir="${webDir}/help">
          <include name="**/*"/>
        </fileset>
@@ -206,13 +256,24 @@
   
   <!--install war file to target webapps dir-->
   <target name="install" depends="war">
-  
+    <copy todir="${webapps}" filtering="no">
+      <fileset dir="${distDir}">
+        <include name="${context}.war"/>
+      </fileset>
+    </copy>
   </target>
   
   <!--clean the install back to a clean slate-->
   <target name="clean" depends="init">
     <delete dir="${buildDir}"/>
   </target>
+  
+  <!--
+  **************************************************************************
+  Targets below this line are helper targets that get depended on by
+  other targets but should generally never be called by themselves.
+  **************************************************************************
+  -->
   
   <!-- ================================================================= -->
   <!-- Generate model beans, XML Digester rules, XML schema and JSP from -->
