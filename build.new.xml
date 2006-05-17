@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-16 19:42:39 $'
-  * '$Revision: 1.7 $'
+  * '$Date: 2006-05-17 16:21:08 $'
+  * '$Revision: 1.8 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -55,7 +55,7 @@
     <property name="databasePassword" value=""/>
     <property name="databasePort" value="1521"/>
     <property name="databaseDriverType" value="thin"/>
-    <property name="databaseDriverClass" value="org.postresql.Driver"/>
+    <property name="databaseDriverClass" value="org.postgresql.Driver"/>
     <property name="databaseName" value="vegbank"/>
     <property name="psqlPath" value="/usr/bin/psql"/>
     <!--mail server props-->
@@ -69,7 +69,7 @@
     
     
     <!--** do not edit below here unless you really know what you're doing **-->
-    <property name="databaseConnection" value="jdbc:${databaseType}://${databaseHost}/${databaeName}"/>
+    <property name="databaseConnection" value="jdbc:${databaseType}://${databaseHost}/${databaseName}"/>
     <property name="buildDir" value="build"/>
     <property name="srcDir" value="src"/>
     <property name="classDir" value="classes"/>
@@ -116,6 +116,25 @@
     <filter token="servlet_context" value="${context}/"/>
     <!--loadfiles for the web stuff-->
     <property name="includesServer" value="web/includes"/>
+    
+    <filter filtersfile="${includesServer}/filters.properties"/>
+    <filter filtersfile="${includesServer}/placeurl.properties"/>
+    <echo>**************stdvegbankget_jspdeclarations: ${stdvegbankget_jspdeclarations}
+    prop file: ${includesServer}/filters.properties</echo>
+    <copy todir="build" file="testfile" filtering="yes"/>
+    <!-- get filters for data dictionary defns: -->
+    <!--<property name="dbmodelxml" value="${docs_xml_dir}db_model_vegbank.xml" />
+    <style in="${dbmodelxml}" out="${includes_server}/dd_defns_tokens.properties" style="${docs_xml_dir}getDefnsForFields.xsl" force="${forceoverwrite}" />
+    <filter filtersfile="${includesServer}/dd_defns_tokens.properties" />    
+    
+    
+    <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="${forceoverwrite}"/>
+    <copy file="${manual_src}/manual_filters.properties" tofile="${includes_server}/manual_filters.properties" filtering="yes" overwrite="${forceoverwrite}"/>
+    <filter filtersfile="${includes_server}/manual_filters.properties"/>
+    <ant dir="${basedir}/${docs_xml_dir}" target="dist-closedlist-tokenfile"/>
+    <copy file="${includes_src}/closedlist-tokens.properties" tofile="${includes_server}/closedlist-tokens.properties" filtering="yes" overwrite="${forceoverwrite}"/>
+    <filter filtersfile="${includes_server}/closedlist-tokens.properties"/> -->
+    
     <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
     <loadfile srcfile="${includesServer}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration" />
     <loadfile srcfile="${includesServer}/webpage_footer_small.html" property="webpage_footer_small_html" />
@@ -124,7 +143,7 @@
     <loadfile srcfile="${includesServer}/webpage_masthead.html" property="webpage_masthead_html" />
     <loadfile srcfile="${includesServer}/webpage_head.html" property="webpage_head_html" />
     <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
-    <loadfile srcfile="${includesServer}/stdvegbankget_jspdeclarations.jsp" property="stdvegbankget_jspdeclarations"/>
+    <!--<loadfile srcfile="${includesServer}/stdvegbankget_jspdeclarations.jsp" property="stdvegbankget_jspdeclarations"/>-->
     <!--filters for the web install-->
     <filter token="webpage_top_html" value="${webpage_top_html}" />
     <filter token="webpage_head_html" value="${webpage_head_html}" />
@@ -134,7 +153,7 @@
     <filter token="webpage_footer_small_html" value="${webpage_footer_small_html}" />
     <filter token="webpage_stylesheets_declaration" value="${webpage_stylesheets_declaration}" />
     <filter token="webpage_stylesheets_declaration_html" value="${webpage_stylesheets_declaration}"/>
-    <filter token="stdvegbankget_jspdeclarations" value="${stdvegbankget_jspdeclarations}"/>
+    <!--<filter token="stdvegbankget_jspdeclarations" value="${stdvegbankget_jspdeclarations}"/>-->
     
     <filter token="machine_url" value="${serverUrl}"/>
     <filter token="eighty_eighty" value="${eighty_eighty}"/>
@@ -211,6 +230,7 @@
     <property name="buildClassDir" value="${buildDir}/${classDir}"/>
     <property name="buildLibDir" value="${buildDir}/lib"/>
     <property name="javaSrcDir" value="${srcDir}/java"/>
+    <property name="includesDir" value="${webDir}/includes"/>
     <mkdir dir="${buildSrcDir}"/>
     <mkdir dir="${buildClassDir}"/>
     <mkdir dir="${buildLibDir}"/>
@@ -219,13 +239,24 @@
     <mkdir dir="${uploadPath}"/>
     
     <!--copy the java src to the build/src dir-->
-    <copy todir="${buildSrcDir}">
+    <copy todir="${buildSrcDir}" filtering="yes">
       <fileset dir="${javaSrcDir}">
         <exclude name="**/CVS*"/>
         <exclude name="**/.#*"/>
       </fileset>
     </copy>
     
+    <!--copy .properties files-->
+    <copy todir="${buildClassDir}" filtering="yes">
+      <fileset dir="${javaSrcDir}">
+        <include name="**/*.properties"/>
+      </fileset>
+    </copy>
+    <copy todir="${buildClassDir}" filtering="yes">
+      <fileset dir="${includesDir}">
+        <include name="**/*.properties"/>
+      </fileset>
+    </copy>
   </target>
   
   <!--set the classpath-->
@@ -275,7 +306,7 @@
      <mkdir dir="${warContextCacheDir}"/>
 
      <!--copy the vegbank.jar file-->
-     <copy file="${buildDir}/${name}.jar" todir="${warLib}" />
+     <copy file="${buildDir}/${name}.jar" todir="${warLib}" filtering="no"/>
      
      <!--copy the other jar files-->
      <copy todir="${warLib}" filtering="no">
@@ -285,7 +316,7 @@
      </copy>
      
      <!--copy the WEB-INF support files-->
-     <copy todir="${warWebInfDir}" filtering="no">
+     <copy todir="${warWebInfDir}" filtering="yes">
        <fileset dir="${srcWebInfDir}">
           <include name="**/*.tld"/>
           <include name="**/*.xml"/>
