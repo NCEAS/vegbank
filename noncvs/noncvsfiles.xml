@@ -10,47 +10,7 @@
     <name>data/insert_preload_ANSI.sql.gz</name>
     <description>The SQL used to insert the preloaded data.  As long as the database stays backed up, this is probably not needed.</description>
   </file>
-  <file>
-    <name>panel/esa_guidelines_v2.pdf</name>
-    <description>Guidelines doc</description>
-  </file>
-  <file>
-    <name>panel/esa_guidelines_v2.zip</name>
-    <description>Guidelines doc</description>
-  </file>
-  <file>
-    <name>panel/mou.pdf</name>
-    <description>MOU with VegBank and various other orgs</description>
-  </file>
-  <file>
-    <name>panel/NVC_guidelines_v3.pdf</name>
-    <description>Guidelines doc</description>
-  </file>
-  <file>
-    <name>panel/NVC_guidelines_v4.pdf</name>
-    <description>Guidelines doc</description>
-  </file>
-  <file>
-    <name>panel/standards_v1.pdf</name>
-    <description>Guidelines doc</description>
-  </file>
-  <file>
-    <name>panel/standards_v1.zip</name>
-    <description>Guidelines doc</description>
-  </file>
-  <file>
-    <name>panel/TDWG2003_Peet.pdf</name>
-    <description>Panel doc</description>
-  </file>
-  <file>
-    <name>panel/TDWG2003_Peet.ppt</name>
-    <description>Panel doc</description>
-  </file>
-  <file>
-    <name>panel/vision.pdf</name>
-    <description>Panel doc</description>
-  </file>
-  <file>
+ <file>
     <name>pubs/esa_2001.pdf</name>
     <description>publications</description>
   </file>
@@ -1793,50 +1753,6 @@
   <file>
     <name>vegbranch/media/vegbranch_viewvbmod.swf</name>
     <description>Vegbranch Demo Video files</description>
-  </file>
-  <file>
-    <name>workshop/arizona_nvc.xls</name>
-    <description>Workshop Files, Historical</description>
-  </file>
-  <file>
-    <name>workshop/arizona_plants.xls</name>
-    <description>Workshop Files, Historical</description>
-  </file>
-  <file>
-    <name>workshop/data_entry.xls</name>
-    <description>Workshop Files, Historical</description>
-  </file>
-  <file>
-    <name>workshop/plot_form.pdf</name>
-    <description>Workshop Files, Historical</description>
-  </file>
-  <file>
-    <name>workshop/VegBank_NVC.pdf</name>
-    <description>Workshop Files, Historical, Informational</description>
-  </file>
-  <file>
-    <name>workshop/VegBank_NVC.ppt</name>
-    <description>Workshop Files, Historical, Informational</description>
-  </file>
-  <file>
-    <name>workshop/VegBank_tutorial_model.pdf</name>
-    <description>Workshop Files, Historical, Informational</description>
-  </file>
-  <file>
-    <name>workshop/VegBank_tutorial_model.ppt</name>
-    <description>Workshop Files, Historical, Informational</description>
-  </file>
-  <file>
-    <name>workshop/VegBank_tutorial_why.pdf</name>
-    <description>Workshop Files, Historical, Informational</description>
-  </file>
-  <file>
-    <name>workshop/VegBank_tutorial_why.ppt</name>
-    <description>Workshop Files, Historical, Informational</description>
-  </file>
-  <file>
-    <name>workshop/whittaker.pdf</name>
-    <description>Workshop Files, Historical</description>
   </file>
   <!-- natureserve files -->
   <file>
