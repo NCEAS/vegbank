@@ -1,0 +1,1345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
+  <title/>
+  <version/>
+  <versionDesc/>
+  <author/>
+  <institution/>
+  <contributor/>
+  <description/>
+  <date/>
+  <entity>
+    <entityName>cust_cvs_SoilDepth</entityName>
+    <entitySummary>a list of soil Depths for each corner of intensively sampled modules</entitySummary>
+    <entityDescription>a list of soil Depths for each corner of intensively sampled modules</entityDescription>
+    <attribute>
+      <attID>1</attID>
+      <attName>corner</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (4)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>module number OR A=average depth, min=minimum, max=maximum</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>2</attID>
+      <attName>depth</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>depth to impermeable layer in cm</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>3</attID>
+      <attName>DepthID</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>serial</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>sequential order of depths, unique key value</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>4</attID>
+      <attName>module</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (4)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>module number OR A=average depth, min=minimum, max=maximum</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>5</attID>
+      <attName>observation_ID</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>FK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>observation.observation_ID</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>link to observation</attDefinition>
+    <update>2.0.0</update></attribute>
+  </entity>
+  <entity>
+    <entityName>observation</entityName>
+    <entitySummary>see VegBank</entitySummary>
+    <entityDescription>see VegBank</entityDescription>
+    <attribute>
+      <attID>6</attID>
+      <attName>cust_cvs_CanopyHeight</attName>
+      <attLabel>Canopy Height in meters</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Height of canopy vegetation in meters.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>7</attID>
+      <attName>cust_cvs_compassType</attName>
+      <attLabel>Compass Type</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (10)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>What type of direction was used in defining plot aspect and other direction fields (such as bearing of the center line): based on magnetic or true bearings</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>8</attID>
+      <attName>cust_cvs_CowardinSystem</attName>
+      <attLabel>Cowardin System</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (19)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>terrestrial, palustrine, estuarine, riverine, lacustrine</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>9</attID>
+      <attName>cust_cvs_GPSLocationX</attName>
+      <attLabel>GPS Position within Plot (X)</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>X coordinate in plot where GPS was while recording position, in meters</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>10</attID>
+      <attName>cust_cvs_GPSLocationY</attName>
+      <attLabel>GPS Position within Plot (Y)</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Y coordinate in plot where GPS was while recording position, in meters</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>11</attID>
+      <attName>cust_cvs_LeafPhenology</attName>
+      <attLabel>Leaf Phenology</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (8)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>comma list of EG=Evergreen, CD=Cold-deciduous, DD=Drought-deciduous, MC=Mixed evergreen-cold deciduous, MD=Mixed evergreen-drought deciduous</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>12</attID>
+      <attName>cust_cvs_LeafType</attName>
+      <attLabel>Leaf Type</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (7)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>comma list of B=Broad-leaved, N=Needle-leaved, M=Microphyllous, G=Graminoid, F=Forb, P=Pteridophyte</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>13</attID>
+      <attName>cust_cvs_lengthSoilProbe</attName>
+      <attLabel>Length of Soil Probe (cm)</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Length of the soil Probe used to determine soil Depths in separate custom CVS table.  If depth equals or exceeds this value, then the depth is unknown, but is at least this deep.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>14</attID>
+      <attName>cust_cvs_LocationSource</attName>
+      <attLabel>Location Source</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>How was the location of the plot determined (i.e. GPS, Topographic Map)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>15</attID>
+      <attName>cust_cvs_mcnab_LFI</attName>
+      <attLabel>LFI average value</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Calculated summary value of all LFI angle measurements</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>16</attID>
+      <attName>cust_cvs_mcnab_LFI_135</attName>
+      <attLabel>LFI at 135 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle to horizon, using the aspect+135 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>17</attID>
+      <attName>cust_cvs_mcnab_LFI_180</attName>
+      <attLabel>LFI at 180 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle to horizon, using the aspect+180 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>18</attID>
+      <attName>cust_cvs_mcnab_LFI_225</attName>
+      <attLabel>LFI at 225 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle to horizon, using the aspect+225 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>19</attID>
+      <attName>cust_cvs_mcnab_LFI_270</attName>
+      <attLabel>LFI at 270 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle to horizon, using the aspect+270 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>20</attID>
+      <attName>cust_cvs_mcnab_LFI_315</attName>
+      <attLabel>LFI at 315 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle to horizon, using the aspect+315 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>21</attID>
+      <attName>cust_cvs_mcnab_LFI_45</attName>
+      <attLabel>LFI at 45 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle to horizon, using the aspect+45 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>22</attID>
+      <attName>cust_cvs_mcnab_LFI_90</attName>
+      <attLabel>LFI at 90 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle to horizon, using the aspect+90 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>23</attID>
+      <attName>cust_cvs_mcnab_LFI_asp</attName>
+      <attLabel>LFI at aspect</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle to horizon, using the aspect as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>24</attID>
+      <attName>cust_cvs_mcnab_TSI</attName>
+      <attLabel>TSI average value</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Calculated summary value of all TSI angle measurements</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>25</attID>
+      <attName>cust_cvs_mcnab_TSI_135</attName>
+      <attLabel>TSI at 135 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle of microtopography (ca. 10m), using the aspect+135 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>26</attID>
+      <attName>cust_cvs_mcnab_TSI_180</attName>
+      <attLabel>TSI at 180 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle of microtopography (ca. 10m), using the aspect+180 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>27</attID>
+      <attName>cust_cvs_mcnab_TSI_225</attName>
+      <attLabel>TSI at 225 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle of microtopography (ca. 10m), using the aspect+225 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>28</attID>
+      <attName>cust_cvs_mcnab_TSI_270</attName>
+      <attLabel>TSI at 270 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle of microtopography (ca. 10m), using the aspect+270 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>29</attID>
+      <attName>cust_cvs_mcnab_TSI_315</attName>
+      <attLabel>TSI at 315 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle of microtopography (ca. 10m), using the aspect+315 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>30</attID>
+      <attName>cust_cvs_mcnab_TSI_45</attName>
+      <attLabel>TSI at 45 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle of microtopography (ca. 10m), using the aspect+45 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>31</attID>
+      <attName>cust_cvs_mcnab_TSI_90</attName>
+      <attLabel>TSI at 90 deg</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle of microtopography (ca. 10m), using the aspect+90 degrees as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>32</attID>
+      <attName>cust_cvs_mcnab_TSI_asp</attName>
+      <attLabel>TSI at aspect</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>vertical angle of microtopography (ca. 10m), using the aspect as a bearing</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>33</attID>
+      <attName>cust_cvs_Ownership</attName>
+      <attLabel>Land Owner</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (100)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Person, organization, corporation, or government owning the land in which the plot is located.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>34</attID>
+      <attName>cust_cvs_percentBedrock</attName>
+      <attLabel>Percent Bedrock</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot's Earth Surface covered by bedrock.  All earth surface categories should sum to 100% for a plot, and each may be exposed or covered by ground cover material.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>35</attID>
+      <attName>cust_cvs_percentBoulder</attName>
+      <attLabel>Percent Boulder</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot's Earth Surface covered by boulders, that is rocks with their largest diameters exceeding roughly 250 mm (10 in.).  All earth surface categories should sum to 100% for a plot, and each may be exposed or covered by ground cover material</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>36</attID>
+      <attName>cust_cvs_percentCWD</attName>
+      <attLabel>Percent Coarse Woody Debris</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot that is covered in Coarse Woody Debris.  This ground cover category is independent of others and may cover other categoies or be covered.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>37</attID>
+      <attName>cust_cvs_percentDuff</attName>
+      <attLabel>Percent Duff</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot that is covered in Duff.  The Organic Layer (""O"</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>38</attID>
+      <attName>cust_cvs_percentFWD</attName>
+      <attLabel>Percent Fine Woody Debris</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot that is covered in Fine Woody Debris.  This ground cover category is independent of others and may cover other categoies or be covered.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>39</attID>
+      <attName>cust_cvs_percentGravelCobble</attName>
+      <attLabel>Percent Gravel/Cobble</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot's Earth Surface covered by gravel or cobble, that is rocks with their largest diameters ranging from roughly 2 to 250 mm (10 in.).  All earth surface categories should sum to 100% for a plot, and each may be exposed or covered by groun</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>40</attID>
+      <attName>cust_cvs_percentHistosol</attName>
+      <attLabel>Percent Histosol</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot's Earth Surface covered by Histosol.  Histosols are wet soils comprised of significant amounts of organic matter and are poorly drained, such as peat and muck.  All earth surface categories should sum to 100% for a plot, and each may b</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>41</attID>
+      <attName>cust_cvs_percentLitter</attName>
+      <attLabel>Percent Litter</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot that is covered in Litter.  The Organic Layer (""O"</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>42</attID>
+      <attName>cust_cvs_percentMineralSoil</attName>
+      <attLabel>Percent Mineral Soil</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot's Earth Surface covered by mineral (inorganic) soil.  All earth surface categories should sum to 100% for a plot, and each may be exposed or covered by ground cover material.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>43</attID>
+      <attName>cust_cvs_percentNonVasc</attName>
+      <attLabel>Percent Nonvascular Vegetation</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot that is covered by nonvascular vegetation, such as lichens and bryophytes.  This ground cover category is independent of others and may cover other categoies or be covered.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>44</attID>
+      <attName>cust_cvs_percentOther</attName>
+      <attLabel>Percent Other</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot that is covered by something other than the standard categories, if significant.  Name of the category is specified in a separate field.  This ground cover category is independent of others and may cover other categoies or be covered.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>45</attID>
+      <attName>cust_cvs_percentOtherName</attName>
+      <attLabel>Name of ""Percent Other"" Category</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (80)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>If some category of ground cover is significant on this plot, yet is not one of the standard ground cover and earth surface categories, its name may be recorded in this field and its percent in another field.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>46</attID>
+      <attName>cust_cvs_percentWater</attName>
+      <attLabel>Percent Water</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Percent of the plot that is covered by standing water when the plot was sampled.  This ground cover category is independent of others and may cover other categoies or be covered.</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>47</attID>
+      <attName>cust_cvs_samplingLevel</attName>
+      <attLabel>Sampling Level</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Level 1: planted stem inventory, Level 2: full stem inventory, Level 3: stem inventory + cover estimates for important spp, Level 4: rigorous without nested corners, Level 5: full sampling intensity</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>48</attID>
+      <attName>cust_cvs_taxaRichness</attName>
+      <attLabel>Species Richness</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Number of taxa found on this plot.  Please use 0 if there are no species on this plot, which is of course possible.</attDefinition>
+    <update>2.0.0</update></attribute>
+  </entity>
+  <entity>
+    <entityName>plantConcept</entityName>
+    <entitySummary>see VegBank</entitySummary>
+    <entityDescription>see VegBank</entityDescription>
+    <attribute>
+      <attID>49</attID>
+      <attName>denorm_family</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>50</attID>
+      <attName>denorm_genus</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>51</attID>
+      <attName>denorm_hybridX</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>52</attID>
+      <attName>denorm_quadAbbr</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>53</attID>
+      <attName>denorm_quadName</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>54</attID>
+      <attName>denorm_species</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>55</attID>
+      <attName>denorm_triAbbr</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>56</attID>
+      <attName>denorm_triName</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+  </entity>
+  <entity>
+    <entityName>plantStatus</entityName>
+    <entitySummary>see VegBank</entitySummary>
+    <entityDescription>see VegBank</entityDescription>
+    <attribute>
+      <attID>57</attID>
+      <attName>denorm_FamilyName</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (80)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+  </entity>
+  <entity>
+    <entityName>soilObs</entityName>
+    <entitySummary>see VegBank</entitySummary>
+    <entityDescription>see VegBank</entityDescription>
+    <attribute>
+      <attID>58</attID>
+      <attName>cust_cvs_Al_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Extractable minor nutrients (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>59</attID>
+      <attName>cust_cvs_B_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Extractable minor nutrients (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>60</attID>
+      <attName>cust_cvs_Ca_over_Mg_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Calculated variables - exCa/exMg</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>61</attID>
+      <attName>cust_cvs_Ca_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Exchangeable (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>62</attID>
+      <attName>cust_cvs_collectionName</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>label applied to soil sample, if applicable (i.e. 1A,1B would have A,B values in SubModID)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>63</attID>
+      <attName>cust_cvs_Cu_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Extractable minor nutrients (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>64</attID>
+      <attName>cust_cvs_Density</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Density (g/cc)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>65</attID>
+      <attName>cust_cvs_Fe_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Extractable minor nutrients (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>66</attID>
+      <attName>cust_cvs_K_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Exchangeable (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>67</attID>
+      <attName>cust_cvs_Lab</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (10)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Lab name/code where soils were processed, BSL = Brookside Labs, NCDA = NC Dept Agriculture</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>68</attID>
+      <attName>cust_cvs_Mg_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Exchangeable (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>69</attID>
+      <attName>cust_cvs_Mn_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Extractable minor nutrients (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>70</attID>
+      <attName>cust_cvs_N</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>General characteristics - Estimated N release</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>71</attID>
+      <attName>cust_cvs_Na_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Exchangeable (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>72</attID>
+      <attName>cust_cvs_P</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>General characteristics - Easily extractable P</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>73</attID>
+      <attName>cust_cvs_percent_Ca</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>% of Base Saturation</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>74</attID>
+      <attName>cust_cvs_percent_H</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>% of Base Saturation</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>75</attID>
+      <attName>cust_cvs_percent_K</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>% of Base Saturation</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>76</attID>
+      <attName>cust_cvs_percent_Mg</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>% of Base Saturation</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>77</attID>
+      <attName>cust_cvs_percent_Na</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>% of Base Saturation</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>78</attID>
+      <attName>cust_cvs_percent_Othr</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>% of Base Saturation</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>79</attID>
+      <attName>cust_cvs_S</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>General characteristics - Soluble S</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>80</attID>
+      <attName>cust_cvs_Zn_ppm</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Extractable minor nutrients (ppm)</attDefinition>
+    <update>2.0.0</update></attribute>
+  </entity>
+  <entity>
+    <entityName>stemCount</entityName>
+    <entitySummary>see VegBank</entitySummary>
+    <entityDescription>see VegBank</entityDescription>
+    <attribute>
+      <attID>81</attID>
+      <attName>groundDiameter</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>82</attID>
+      <attName>groundDiameterAccuracy</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+  </entity>
+  <entity>
+    <entityName>stemLocation</entityName>
+    <entitySummary>see VegBank</entitySummary>
+    <entityDescription>see VegBank</entityDescription>
+    <attribute>
+      <attID>83</attID>
+      <attName>cust_cvs_stemComment</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition/>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>84</attID>
+      <attName>cust_cvs_stemSource</attName>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Cultivated, Transplant, Live Staking, or Natural</attDefinition>
+    <update>2.0.0</update></attribute>
+  </entity>
+  <entity>
+    <entityName>taxonObservation</entityName>
+    <entitySummary>see VegBank</entitySummary>
+    <entityDescription>see VegBank</entityDescription>
+    <attribute>
+      <attID>85</attID>
+      <attName>cust_cvs_corner1Presence</attName>
+      <attLabel>Corner 1 Presence</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Presence value for this module from corner 1</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>86</attID>
+      <attName>cust_cvs_corner2Presence</attName>
+      <attLabel>Corner 2 Presence</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Presence value for this module from corner 2</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>87</attID>
+      <attName>cust_cvs_corner3Presence</attName>
+      <attLabel>Corner 3 Presence</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Presence value for this module from corner 3</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>88</attID>
+      <attName>cust_cvs_corner4Presence</attName>
+      <attLabel>Corner 4 Presence</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Presence value for this module from corner 4</attDefinition>
+    <update>2.0.0</update></attribute>
+    <attribute>
+      <attID>89</attID>
+      <attName>cust_cvs_corner5Presence</attName>
+      <attLabel>Corner 5 Presence</attLabel>
+      <attModel>logical</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Integer</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Presence value for this module from corner 5</attDefinition>
+    <update>2.0.0</update></attribute>
+  </entity>
+</dataModel>
