@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-17 16:21:08 $'
-  * '$Revision: 1.8 $'
+  * '$Date: 2006-05-22 22:37:24 $'
+  * '$Revision: 1.9 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -27,25 +27,25 @@
   -->
   <!--set up the correct variables-->
   <target name="init">
-    <!--************ customize these properties *****************-->
+    <!--** customize these properties after customizing build.properties **-->
     <!--general props-->
+    <property file="build.properties"/>
     <property name="name" value="vegbank"/>
     <property name="version" value="1.0.2"/>
-    <property name="vegbankHome" value="/usr/local/vegbank"/>
+    <property name="vegbankHome" value="${vegbank.home.dir}"/>
     <property name="dataPath" value="${vegbankHome}/data"/>
     <property name="exportPath" value="${vegbankHome}/export"/>
     <property name="uploadPath" value="${vegbankHome}/upload"/>
     <property name="dataSchemaName" value="vegbank-data-ver1.0.2usage.xsd"/>
     <property name="modelSchemaName" value="db_model_vegbank_schema.xsd"/>
     <!--servlet/web container props-->
-    <property name="tomcat" value="/usr/local/jakarta-tomcat"/>
     <property name="tomcatVersion" value="5"/>
     <property name="context" value="${name}"/>
-    <property name="webapps" value="${tomcat}/webapps"/>
+    <property name="webapps" value="${webapps.dir}"/>
     <property name="webServerDir" value="${webapps}/${name}"/>
-    <property name="host" value="localhost:8080"/>
+    <property name="host" value="localhost"/>
     <property name="googleMapsAPIKey" value=""/>
-    <property name="serverUrl" value="http://localhost:8080"/>
+    <property name="serverUrl" value="http://localhost"/>
     <property name="contextUrl" value="${serverUrl}/${context}"/>
     <property name="vegdocs" value="/vegdocs"/>
     <!--database props-->
@@ -78,6 +78,7 @@
     <property name="distDir" value="dist"/>
     <property name="webDir" value="web"/>
     <property name="cacheDir" value="cache"/>
+    <property name="helpDir" value="${webDir}/help"/>
   </target>
   
   <!--set the inline copy filters.  do not edit these directly. If you want
@@ -113,28 +114,28 @@
     <filter token="rmiserver" value="${rmiServer}"/>
     <filter token="uploadDir" value="${uploadPath}"/>
     <filter token="servlet_lib_dir" value="${webapps}/lib"/>
-    <filter token="servlet_context" value="${context}/"/>
+    <filter token="servlet_context" value="${webServerDir}/"/>
     <!--loadfiles for the web stuff-->
     <property name="includesServer" value="web/includes"/>
     
+    <!--load main filters files-->
     <filter filtersfile="${includesServer}/filters.properties"/>
     <filter filtersfile="${includesServer}/placeurl.properties"/>
-    <echo>**************stdvegbankget_jspdeclarations: ${stdvegbankget_jspdeclarations}
-    prop file: ${includesServer}/filters.properties</echo>
-    <copy todir="build" file="testfile" filtering="yes"/>
+
     <!-- get filters for data dictionary defns: -->
-    <!--<property name="dbmodelxml" value="${docs_xml_dir}db_model_vegbank.xml" />
-    <style in="${dbmodelxml}" out="${includes_server}/dd_defns_tokens.properties" style="${docs_xml_dir}getDefnsForFields.xsl" force="${forceoverwrite}" />
+    <property name="docsXmlDir" value="${docsDir}/xml" />
+    <property name="dbmodelxml" value="${docsXmlDir}/db_model_vegbank.xml" />
+    <property name="helpManualDir" value="${helpDir}/manual"/>
+    <style in="${dbmodelxml}" out="${includesServer}/dd_defns_tokens.properties" style="${docsXmlDir}/getDefnsForFields.xsl" force="true" />
     <filter filtersfile="${includesServer}/dd_defns_tokens.properties" />    
+    <style in="${helpManualDir}/manual_src.xml" out="${helpManualDir}/manual_filters.properties" style="${helpManualDir}/manual2tokens.xsl" force="true"/>
+    <copy file="${helpManualDir}/manual_filters.properties" tofile="${includesServer}/manual_filters.properties" filtering="yes" overwrite="true"/>
+    <filter filtersfile="${includesServer}/manual_filters.properties"/>
+    <style out="${includesServer}/closedlist-tokens.properties" in="${dbmodelxml}" extension=".properties" style="${docsXmlDir}/closedList_forms_options.xsl" force="true"/>
+    <copy file="${includesServer}/closedlist-tokens.properties" tofile="${includesServer}/closedlist-tokens.properties" filtering="yes" overwrite="true"/>
+    <filter filtersfile="${includesServer}/closedlist-tokens.properties"/>
     
-    
-    <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="${forceoverwrite}"/>
-    <copy file="${manual_src}/manual_filters.properties" tofile="${includes_server}/manual_filters.properties" filtering="yes" overwrite="${forceoverwrite}"/>
-    <filter filtersfile="${includes_server}/manual_filters.properties"/>
-    <ant dir="${basedir}/${docs_xml_dir}" target="dist-closedlist-tokenfile"/>
-    <copy file="${includes_src}/closedlist-tokens.properties" tofile="${includes_server}/closedlist-tokens.properties" filtering="yes" overwrite="${forceoverwrite}"/>
-    <filter filtersfile="${includes_server}/closedlist-tokens.properties"/> -->
-    
+    <!--filters for the web pages-->
     <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
     <loadfile srcfile="${includesServer}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration" />
     <loadfile srcfile="${includesServer}/webpage_footer_small.html" property="webpage_footer_small_html" />
@@ -143,7 +144,7 @@
     <loadfile srcfile="${includesServer}/webpage_masthead.html" property="webpage_masthead_html" />
     <loadfile srcfile="${includesServer}/webpage_head.html" property="webpage_head_html" />
     <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
-    <!--<loadfile srcfile="${includesServer}/stdvegbankget_jspdeclarations.jsp" property="stdvegbankget_jspdeclarations"/>-->
+    
     <!--filters for the web install-->
     <filter token="webpage_top_html" value="${webpage_top_html}" />
     <filter token="webpage_head_html" value="${webpage_head_html}" />
@@ -153,8 +154,8 @@
     <filter token="webpage_footer_small_html" value="${webpage_footer_small_html}" />
     <filter token="webpage_stylesheets_declaration" value="${webpage_stylesheets_declaration}" />
     <filter token="webpage_stylesheets_declaration_html" value="${webpage_stylesheets_declaration}"/>
-    <!--<filter token="stdvegbankget_jspdeclarations" value="${stdvegbankget_jspdeclarations}"/>-->
     
+    <!--connection filters from the old build file-->
     <filter token="machine_url" value="${serverUrl}"/>
     <filter token="eighty_eighty" value="${eighty_eighty}"/>
     <filter token="googlemaps_apikey" value="${googleMapsAPIKey}" />
@@ -221,7 +222,6 @@
     <filter token="listservuser_link" value="${listservUserOptions}" />
     <!-- Struts -->
     <filter token="DisplayUploadPlotAction" value="${contextUrl}/DisplayUploadPlotAction.do"/>
-    
   </target>
   
   <!--copy files to the build directory and prepare for compilation-->
@@ -304,6 +304,7 @@
      <mkdir dir="${warWebInfDir}" />
      <mkdir dir="${warContext}" />
      <mkdir dir="${warContextCacheDir}"/>
+     <mkdir dir="${cacheRawDir}"/>
 
      <!--copy the vegbank.jar file-->
      <copy file="${buildDir}/${name}.jar" todir="${warLib}" filtering="no"/>
@@ -374,7 +375,7 @@
        </fileset>
      </copy>
      <copy todir="${cacheRawDir}" filtering="yes">
-       <fileset dir="${warContext}/views/raw">
+       <fileset dir="${webDir}/views/raw">
          <include name="raw_countdata.jsp"/>
          <include name="raw_recentprojects.jsp"/>
        </fileset>
@@ -399,11 +400,36 @@
         <include name="${context}.war"/>
       </fileset>
     </copy>
+    <!--<ant antfile="build.xml" target="deploy-all" dir="${webDir}"/>-->
+  </target>
+  
+  <!--install the web files-->
+  <target name="web-install" depends="init">
+    <ant antfile="build.xml" target="deploy-all" dir="${webDir}"/>
   </target>
   
   <!--clean the install back to a clean slate-->
   <target name="clean" depends="init">
     <delete dir="${buildDir}"/>
+    <delete dir="${distDir}"/>
+  </target>
+  
+  <!--deletes the build dir but also any contents of a previous installation-->
+  <target name="full-clean" depends="clean">
+    <delete>
+      <fileset dir="${vegbank.home.dir}">
+        <include name="**/*"/>
+        <exclude name="logs/"/>
+      </fileset>
+    </delete>
+    <delete>
+      <fileset dir="${apache.document.root}" includes="**/*.*"/>
+    </delete>
+    <!--<delete>
+      <fileset dir="${vegbank.web.dir}" includes="**/*.*"/>
+    </delete>-->
+    <delete file="${webapps}/${context}.war"/>
+    <delete dir="${webapps}/${context}"/>
   </target>
   
   <!--

@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: berkley $'
-* '$Date: 2006-05-09 21:50:08 $'
-* '$Revision: 1.182 $'
+* '$Date: 2006-05-22 22:37:24 $'
+* '$Revision: 1.183 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -324,7 +324,7 @@
       </fileset>
     </copy>
     <copy overwrite="${forceoverwrite}" todir="${panel_server}" filtering="no">
-      <fileset dir="${lrg_binary_src}/panel" includes="**/*"/>
+      <fileset dir="panel/data" includes="**/*"/>
       <!--  <fileset dir="${lrg_binary_src}/panel" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf  NVC_guidelines_v4.pdf  TDWG2003_Peet.pdf TDWG2003_Peet.ppt"/> -->
     </copy>
   </target>
@@ -414,7 +414,7 @@
       </fileset>
     </copy>
     <copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="no">
-      <fileset dir="${lrg_binary_src}/workshop" includes="**/*"/>
+      <fileset dir="workshop" includes="**/*"/>
       <!--  <fileset dir="${lrg_binary_src}" includes="  VegBank_NVC.pdf  VegBank_NVC.ppt  VegBank_tutorial_model.pdf  VegBank_tutorial_model.ppt VegBank_tutorial_why.pdf  VegBank_tutorial_why.ppt whittaker.pdf plot_form.pdf data_entry.xls  arizona_plants.xls  arizona_nvc.xls "/> -->
     </copy>
   </target>
@@ -428,7 +428,7 @@
       </fileset>
     </copy>
     <copy overwrite="${forceoverwrite}" todir="${pubs_server}" filtering="no">
-      <fileset dir="${lrg_binary_src}/pubs" includes="**/*"/>
+      <fileset dir="pubs" includes="**/*"/>
     </copy>
   </target>
   
@@ -529,9 +529,10 @@
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
   -->
   <target name="web" depends="xsl" description="==> Distribute Web Files ">
-    <xmlvalidate file="${web.src.dir}/WEB-INF/struts-config.xml" failonerror="true">
+  <echo>url: ${web.src.dir}/WEB-INF/struts-config.xml</echo>
+    <!--<xmlvalidate file="${web.src.dir}/WEB-INF/struts-config.xml" failonerror="true">
       <dtd publicId="-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" location="http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd"/>
-    </xmlvalidate>
+    </xmlvalidate>-->
     <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes">
       <fileset dir="${web.src.dir}"/>
     </copy>
@@ -622,7 +623,7 @@
     <filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/>
     
         <!-- get filters for data dictionary defns: -->
-   <style in="${dbmodelxml}" out="${includes_server}/dd_defns_tokens.properties" style="${docs_xml_dir}getDefnsForFields.xsl" force="${forceoverwrite}" />
+   <style in="${docs_xml_dir}db_model_vegbank.xml" out="${includes_server}/dd_defns_tokens.properties" style="${docs_xml_dir}getDefnsForFields.xsl" force="${forceoverwrite}" />
     <filter filtersfile="${includes_server}/dd_defns_tokens.properties" />    
     
     
@@ -732,7 +733,7 @@
   <target name="vegbranch-dist-client" depends="vegbranch-init" description="dist vegbranch client to server">
     <!-- <copy file vegbranch database tofile="${vegbranch_server}/file" /> -->
     <copy todir="${vegbranch_server}/client" filtering="no">
-      <fileset dir="${lrg_binary_src}/vegbranch" includes="${vegbr_client_include}"/>
+      <fileset dir="vegbranch" includes="${vegbr_client_include}"/>
     </copy>
   </target>
   
@@ -784,7 +785,7 @@
   <!-- examples -->
   <target name="vegbranch-dist-examples" depends="vegbranch-init" description="dist vegbranch binary examples to server ">
     <copy todir="${vegbranch_server}/examples" filtering="no">
-      <fileset dir="${lrg_binary_src}/vegbranch" includes="${vegbr_examples_include}"/>
+      <fileset dir="vegbranch" includes="${vegbr_examples_include}"/>
     </copy>
   </target>
   
@@ -807,7 +808,7 @@
     </copy>
     <!-- copy screenshots -->
     <copy todir="${vegbranch_server}/help" filtering="no">
-      <fileset dir="${lrg_binary_src}/vegbranch/help">
+      <fileset dir="vegbranch/help">
         <include name="**/*.png"/>
         <include name="**/*.jpg"/>
       </fileset>
@@ -817,7 +818,7 @@
   
   <target name="vegbranch-dist-demomedia" depends="vegbranch-init" description="dist demo media to server from noncvs large binary src">
     <copy todir="${vegbranch_server}/docs/demo/media" filtering="no">
-      <fileset dir="${lrg_binary_src}/vegbranch/media">
+      <fileset dir="vegbranch/media">
         <include name="**/*.*"/>
       </fileset>
     </copy>

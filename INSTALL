@@ -1,0 +1,22 @@
+Installation instructions for Vegbank 
+Author: Chad Berkley
+Date: 5/19/2006
+
+Pre-requisites:
+Java 1.4.2
+Ant 1.6.5
+Tomcat 5.0
+Apache 2.0
+mod_jk 1.2.6
+
+Tomcat, Apache and Mod_jk must all be installed and talking to each other.
+If you have SELinux turned on, ***make sure you turn it off*** or add appropriate
+rules before you attempt to install mod_jk.  If SELinux is running in its
+normal configuration, it will not allow mod_jk to create the shared memory
+file that it needs for Apache and Tomcat to communicate.
+
+You should have the following environment variables set:
+JAVA_HOME
+TOMCAT_HOME
+
+
