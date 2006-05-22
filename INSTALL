@@ -1,6 +1,6 @@
 Installation instructions for Vegbank 
 Author: Chad Berkley
-Date: 5/19/2006
+Date: 5/22/2006
 
 Pre-requisites:
 Java 1.4.2
@@ -8,6 +8,7 @@ Ant 1.6.5
 Tomcat 5.0
 Apache 2.0
 mod_jk 1.2.6
+Postgresql 8.1.3
 
 Tomcat, Apache and Mod_jk must all be installed and talking to each other.
 If you have SELinux turned on, ***make sure you turn it off*** or add appropriate
@@ -18,5 +19,59 @@ file that it needs for Apache and Tomcat to communicate.
 You should have the following environment variables set:
 JAVA_HOME
 TOMCAT_HOME
+
+=======================
+INSTALLING THE DATABASE
+=======================
+Vegbank requires Postgresql to be installed and configured on the server.  It
+is recommended that it be version 8.1.3 or later, though we have only tested
+with 8.1.3.  
+
+After you have installed postgres, you will need to setup a database and 
+user for the vegbank tablespace.  Note that if you are starting from a 
+blank database, you must do these commands as the 'postgres' user with the
+postmaster running.
+#create the database
+bash$ createdb vegbank
+#create a user for the db
+bash$ createuser vegbank
+#login to postgres and give the user privileges on the new database
+bash$ psql
+psql=> grant all on database vegbank to vegbank;
+GRANT
+#quit psql
+psql=> \q
+#you should now be able to login to the new database like this
+bash$ psql -U vegbank vegbank
+vegbank=>
+
+Now you just have to create the database schema that vegbank will use.
+If you have a postgresql backup dump that you are installing the db from, 
+use the command:
+bash$ psql -U vegbank vegbank < backupFile.sql > dbimport.log 2>&1
+
+If you want to create a fresh, blank database, you first need to create the 
+db sql script from the data model like so:
+bash$ ant generateDBSQL
+You will find the vegbank.sql file has been built in build/sql.  You can then 
+run
+bash$ psql -U vegbank vegbank < build/sql/vegbank.sql >dbcreate.log 2>&1
+
+You should then be able to login and use the \d command in psql to display
+the table structure of the database.
+
+==============================
+INSTALLING THE WEB APPLICATION
+==============================
+
+bash$ ant -f build.new.xml install
+#start tomcat and apache then:
+bash$ ant -f build.new.xml web-install
+
+to clean the build
+------------------
+bash$ ant -f build.new.xml clean
+#or to clean the build and clean the install use:
+bash$ ant -f build.new.xml full-clean
 
 

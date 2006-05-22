@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-22 22:37:24 $'
-  * '$Revision: 1.9 $'
+  * '$Date: 2006-05-22 23:09:37 $'
+  * '$Revision: 1.10 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -430,6 +430,11 @@
     </delete>-->
     <delete file="${webapps}/${context}.war"/>
     <delete dir="${webapps}/${context}"/>
+  </target>
+  
+  <!--target that generates the sql to build a blank database-->
+  <target name="generateDBSQL" depends="init">
+    <xslt in="${docsDir}/xml/db_model_vegbank.xml" out="${buildDir}/sql/vegbank.sql" style="${srcDir}/xsl/VegBankModel2SQL.xsl"/>
   </target>
   
   <!--
