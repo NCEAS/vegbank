@@ -19,29 +19,147 @@ file that it needs for Apache and Tomcat to communicate.
 You should have the following environment variables set:
 JAVA_HOME
 TOMCAT_HOME
+ANT_HOME
+
+=========================================
+INSTALLING TOMCAT, ANT, APACHE AND MOD_JK
+=========================================
+NOTE: Tomcat, Apache and Mod_jk must all be installed and talking to each other.
+If you have SELinux turned on, ***make sure you turn it off*** or add appropriate
+rules before you attempt to install mod_jk.  If SELinux is running in its
+normal configuration, it will not allow mod_jk to create the shared memory
+file that it needs for Apache and Tomcat to communicate.
+
+1) Tomcat: download (jakarta.apache.org) and unpack the 
+jakarta-tomcat-5.0.x.tar.gz file to the 
+directory where you want tomcat installed.  Unpack the archive.  Create a 
+symlink to jakarta-tomcat in the same directory.  This is useful if you 
+upgrade tomcat later so you won't have to update all your config files.  
+To do this enter this command:
+bash$ ln -s jakarta-tomcat-5.0.28 jakarta-tomcat
+You should get a link like this:
+lrwxrwxrwx  1 berkley berkley  21 May 23 13:57 jakarta-tomcat -> jakarta-tomcat-5.0.28
+Next, edit the jakarta-tomcat/conf/server.xml file and make sure that the 
+Connector for AJP13 is enabled and running on port 8009.  It should look like:
+<Connector port="8009"
+               enableLookups="false" redirectPort="8443" debug="0"
+               protocol="AJP/1.3" />
+and it should be uncommented. At this point, also make any other necessary
+changes to the server.xml file.  If you don't want a tomcat-standalone
+running on port 8080, you can comment that connector out.  Sometimes it's 
+useful for testing though.
+
+2) Ant: Vegbank uses the Ant build system for installation.  You will need
+ant installed and on your path.  Download (jakarta.apache.org/ant) and
+unpack the ant archive.  It's usually good to install it into the same
+directory where you put tomcat.  It should unpack into a single directory.
+You will need your JAVA_HOME env. variable set to your java installation.
+If you want to make things easier on yourself, DO NOT use a java installation
+that came with an OS distro!  Download and install a real version of Java from
+java.sun.com instead.  Your env. vars should look something like this:
+JAVA_HOME=/usr/java/j2sdk1.4.2_10
+ANT_HOME=/usr/local/devtools/apache-ant-1.6.5
+now add java and ant to your path like this:
+bash$ export PATH=$PATH:$JAVA_HOME/bin:$ANT_HOME/bin
+if you do an 'env |grep PATH' you should get something like this:
+PATH=/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/usr/X11R6/bin:
+/home/berkley/bin:/usr/java/j2sdk1.4.2_10/bin:/usr/local/devtools/apache-ant-1.6.5/bin
+
+you should now be able to type 'java -version' and get 
+[berkley@aldo vegbank]$ java -version
+java version "1.4.2_10"
+Java(TM) 2 Runtime Environment, Standard Edition (build 1.4.2_10-b03)
+Java HotSpot(TM) Client VM (build 1.4.2_10-b03, mixed mode)
+and type 'ant' and get 
+[berkley@aldo vegbank]$ ant
+Buildfile: build.xml does not exist!
+Build failed
+
+If you get those two, you're golden.
+
+3) Install apache.  I'm not going to talk you through this.  there are plenty
+of tutorials on the web.
+
+4) Install mod_jk.  This can be a pain.  If you can get a distro that has
+apache and mod_jk co-compiled or co-installed that's the easiest.  
+
+5) Configure apache/tomcat/mod_jk.  Make sure you've done the enabling the 
+8009 connector in step 1 above.  Then go to your /etc/httpd/conf directory
+(you'll need root access) and edit httpd.conf.  Make sure that there is a line 
+that says:
+Include conf.d/*.conf
+next, go to the bottom of that file and add the following:
+<VirtualHost *>
+  ServerName aldo.nceas.ucsb.edu
+  ServerAlias vegbank-test.nceas.ucsb.edu
+  ServerAdmin root@server.com
+  DocumentRoot /usr/www/vegbank/htdocs
+  ErrorLog /usr/www/vegbank/logs/error_log
+  CustomLog /usr/www/vegbank/logs/access_log commong
+  <Directory "/usr/www/vegbank/htdocs/">
+    Options FollowSymLinks Indexes
+    AllowOverride all
+  </Directory>
+</VirtualHost>
+Change the values to match your server config.  The important thing here
+is that we are changing the <Directory> attributes for /usr/www/vegbank/htdocs
+This is very important.  
+
+Save the httpd.conf file and create (or edit) a file in the same directory
+called workers.properties.  Make it look like this:
+
+workers.tomcat_home=/usr/local/devtools/jakarta-tomcat
+workers.java_home=/usr/java/j2sdk1.4.2_10
+ps=/
+worker.list=ajp13
+worker.ajp13.port=8009
+worker.ajp13.host=localhost
+worker.ajp13.type=ajp13
+
+This defines the worker for our ajp connection. Now we need to tell mod_jk
+to use this worker.  edit the file /etc/httpd/conf.d/mod_jk.conf.
+It should be made to look like this:
+
+LoadModule      jk_module modules/mod_jk.so
+JkWorkersFile   /etc/httpd/conf/workers.properties
+JkLogFile       logs/mod_jk.log
+JkLogLevel      debug
+JkMount /vegbank ajp13
+JkMount /vegbank/* ajp13
+<Location "/WEB-INF/">
+    AllowOverride None
+    deny from all
+</Location>
+
+This tells mod_jk to mount the server directory /vegbank and route it to 
+tomcat for processing instead of just serving it statically.  It also 
+prevents people from listing the contents of your WEB-INF directory.  
+
+That should be it.  Now we can get the database and Vegbank itself installed.
 
 =======================
 INSTALLING THE DATABASE
 =======================
 Vegbank requires Postgresql to be installed and configured on the server.  It
-is recommended that it be version 8.1.3 or later, though we have only tested
-with 8.1.3.  
+is recommended that it be version 8.1.3 or later, though we have tested with 
+8.1.3 and 7.4.8.
 
 After you have installed postgres, you will need to setup a database and 
 user for the vegbank tablespace.  Note that if you are starting from a 
 blank database, you must do these commands as the 'postgres' user with the
 postmaster running.
-#create the database
+create the database
 bash$ createdb vegbank
-#create a user for the db
+create a user for the db
+note that depending on what postgres user system you are using, this may
+require you to create a system user account for 'vegbank' as well
 bash$ createuser vegbank
-#login to postgres and give the user privileges on the new database
-bash$ psql
+login to postgres and give the user privileges on the new database
+bash$ psql vegbank
 psql=> grant all on database vegbank to vegbank;
 GRANT
-#quit psql
 psql=> \q
-#you should now be able to login to the new database like this
+you should now be able to login to the new database like this
 bash$ psql -U vegbank vegbank
 vegbank=>
 
@@ -52,10 +170,10 @@ bash$ psql -U vegbank vegbank < backupFile.sql > dbimport.log 2>&1
 
 If you want to create a fresh, blank database, you first need to create the 
 db sql script from the data model like so:
-bash$ ant generateDBSQL
+bash$ ant -f build.new.xml generateDBSQL
 You will find the vegbank.sql file has been built in build/sql.  You can then 
 run
-bash$ psql -U vegbank vegbank < build/sql/vegbank.sql >dbcreate.log 2>&1
+bash$ psql -U vegbank vegbank < build/sql/vegbank.sql >dbcreate.log 
 
 You should then be able to login and use the \d command in psql to display
 the table structure of the database.
@@ -64,14 +182,38 @@ the table structure of the database.
 INSTALLING THE WEB APPLICATION
 ==============================
 
+Before you begin the actual install, you'll need to make sure some directories
+are setup.  
+Vegbank home directory:    /usr/vegbank
+                           /usr/vegbank/upload
+                           /usr/vegbank/export
+                           /usr/vegbank/data
+                           /usr/vegbank/logs
+Vegbank static web root:   /usr/www/vegbank
+                           /usr/www/vegbank/htdocs
+                           /usr/www/vegbank/logs
+These directories should all be writable by the user who installs vegbank, the
+user that is going to run tomcat and by the 'apache' user.  
+To make it easier, you can create a new group, change 
+the permissions to g+rwx (with group ownership of your new group
+and add the relevant users to that group.  
+Here's an example where 'berkley' is the installation user and 'dev' is the 
+group to which 'apache', 'tomcat' and 'berkley' all belong.  This is a listing
+of the contents of /usr/vegbank:
+drwxrwxr-x  2 berkley dev 4096 May 23 14:12 data
+drwxrwxr-x  2 berkley dev 4096 May 23 14:12 export
+drwxrwxr-x  2 berkley dev 4096 May 23 14:12 logs
+drwxrwxr-x  2 berkley dev 4096 May 23 14:12 upload
+[berkley@aldo vegbank]$
+
 bash$ ant -f build.new.xml install
-#start tomcat and apache then:
+start tomcat and apache then (always start tomcat first):
 bash$ ant -f build.new.xml web-install
 
 to clean the build
 ------------------
 bash$ ant -f build.new.xml clean
-#or to clean the build and clean the install use:
+or to clean the build and clean the install use:
 bash$ ant -f build.new.xml full-clean
 
 
