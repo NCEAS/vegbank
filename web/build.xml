@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: berkley $'
-* '$Date: 2006-05-22 22:37:24 $'
-* '$Revision: 1.183 $'
+* '$Date: 2006-05-23 23:32:59 $'
+* '$Revision: 1.184 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -58,79 +58,79 @@
       </and>
     </condition>
     <echo>(web/) Loading main props file: ../build${build.props.name}.properties</echo>
-    <property file="../build${build.props.name}.properties"/>
-    <condition property="machine_url" value="">
-      <not>
-        <isset property="machine_url"/>
-      </not>
-    </condition>
-    <condition property="eighty_eighty" value="">
-      <not>
-        <isset property="eighty_eighty"/>
-      </not>
-    </condition>
+<property file="../build.properties"/>
+<condition property="machine_url" value="">
+<not>
+<isset property="machine_url"/>
+</not>
+</condition>
+<condition property="eighty_eighty" value="">
+<not>
+<isset property="eighty_eighty"/>
+</not>
+</condition>
 
 
 
-    <filter token="machine_url" value="${machine_url}"/>
-    <filter token="eighty_eighty" value="${eighty_eighty}"/>
-    <filter token="googlemaps_apikey" value="${googlemaps_apikey}" />
-   
-        <!-- set forceoverwrite to false if not already set -->
-      <condition property="forceoverwrite" value="false">
-      <not>
-        <isset property="forceoverwrite"/>
-      </not>
-      </condition> 
-      <echo>FORCING OVERWRITE: ${forceoverwrite}</echo>
-      <echo>BASE URL:  ${machine_url}(${eighty_eighty})
-    </echo>
-    <!-- set the apache doc root -->
-    <condition property="apache.document.root" value="/usr/www/${webapp}/htdocs">
-      <not>
-        <isset property="apache.document.root"/>
-      </not>
-    </condition>
-    <!-- The webapp that contains copy, images and other
-		resources is defined by web.context_uri and
-		makes the first part of the URI. -->
-    <property name="web.context_uri" value="vegbank"/>
-    <property name="forms" value="./forms"/>
-    <property name="views" value="./views"/>
-    <property name="admin_src" value="./admin"/>
-    <property name="email_templates_src" value="./email_templates"/>
-    <property name="general_src" value="./general"/>
-        <property name="ajax_src" value="./ajax"/>
-    <property name="design_src" value="./design"/>
-    <property name="docs_xml_dir" value="../docs/xml/" />
-    <property name="dbmodelxml" value="${docs_xml_dir}db_model_vegbank.xml" />
-    <property name="dictionary_src" value="${docs_xml_dir}build/"/>
-    <property name="news_src" value="./news"/>
-    <property name="help_src" value="./help"/>
-    <property name="manual_src" value="./help/manual"/>
-    <property name="manual_src_temp" value="./help/manual/build"/>
-    <property name="src.dir" value="./src"/>
-    <property name="web.src.dir" value="${src.dir}/web"/>
-    <property name="xsl.src.dir" value="${web.src.dir}/xsl"/>
-    <property name="panel_src" value="./panel"/>
-    <property name="history_src" value="./history"/>
-    <property name="plot" value="./plot"/>
-    <property name="pubs_src" value="./pubs"/>
-    <property name="includes_src" value="./includes"/>
-    <property name="image_src" value="./images"/>
-    <property name="hostname" value="vegbank"/>
-    <property name="workshop_src" value="./workshop"/>
-    <property name="vegdocs.dir" value="/vegdocs"/>
-    <property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
-    <property name="static_xmlserver" value="${vegdocs_server}/xml"/>
-    <property name="vegbranch_src" value="./vegbranch"/>
-    <!-- large binary files location:   targets that read from large binaries separate -->
-    <property name="lrg_binary_src" value="${apache.document.root}/noncvs"/>
-    <filter token="dist" value="dist"/>
-    <filter token="hostname" value="${hostname}"/>
-    <filter token="version" value="development"/>
-    <!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
-    <property name="tomcat.home.dir" value="/usr/local/jakarta-tomcat"/>
+<filter token="machine_url" value="${machine_url}"/>
+<filter token="eighty_eighty" value="${eighty_eighty}"/>
+<filter token="googlemaps_apikey" value="${googlemaps_apikey}" />
+
+<!-- set forceoverwrite to false if not already set -->
+<condition property="forceoverwrite" value="false">
+<not>
+<isset property="forceoverwrite"/>
+</not>
+</condition> 
+<echo>FORCING OVERWRITE: ${forceoverwrite}</echo>
+<echo>BASE URL:  ${machine_url}(${eighty_eighty})
+</echo>
+<!-- set the apache doc root -->
+<condition property="apache.document.root" value="/usr/www/${webapp}/htdocs">
+<not>
+<isset property="apache.document.root"/>
+</not>
+</condition>
+<!-- The webapp that contains copy, images and other
+	resources is defined by web.context_uri and
+	makes the first part of the URI. -->
+<property name="web.context_uri" value="vegbank"/>
+<property name="forms" value="./forms"/>
+<property name="views" value="./views"/>
+<property name="admin_src" value="./admin"/>
+<property name="email_templates_src" value="./email_templates"/>
+<property name="general_src" value="./general"/>
+<property name="ajax_src" value="./ajax"/>
+<property name="design_src" value="./design"/>
+<property name="docs_xml_dir" value="../docs/xml/" />
+<property name="dbmodelxml" value="${docs_xml_dir}db_model_vegbank.xml" />
+<property name="dictionary_src" value="${docs_xml_dir}build/"/>
+<property name="news_src" value="./news"/>
+<property name="help_src" value="./help"/>
+<property name="manual_src" value="./help/manual"/>
+<property name="manual_src_temp" value="./help/manual/build"/>
+<property name="src.dir" value="./src"/>
+<property name="web.src.dir" value="${src.dir}/web"/>
+<property name="xsl.src.dir" value="${web.src.dir}/xsl"/>
+<property name="panel_src" value="./panel"/>
+<property name="history_src" value="./history"/>
+<property name="plot" value="./plot"/>
+<property name="pubs_src" value="./pubs"/>
+<property name="includes_src" value="./includes"/>
+<property name="image_src" value="./images"/>
+<property name="hostname" value="vegbank"/>
+<property name="workshop_src" value="./workshop"/>
+<property name="vegdocs.dir" value="/vegdocs"/>
+<property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
+<property name="static_xmlserver" value="${vegdocs_server}/xml"/>
+<property name="vegbranch_src" value="./vegbranch"/>
+<!-- large binary files location:   targets that read from large binaries separate -->
+<property name="lrg_binary_src" value="${apache.document.root}/noncvs"/>
+<filter token="dist" value="dist"/>
+<filter token="hostname" value="${hostname}"/>
+<filter token="version" value="development"/>
+<!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
+<property name="tomcat.home.dir" value="${tomcat}"/>
     <property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
     <property name="views_server" value="${tomcat.home.dir}/webapps/${webapp}/views"/>
     <property name="cache_server" value="${tomcat.home.dir}/webapps/${webapp}/cache"/>
