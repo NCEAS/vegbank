@@ -23,8 +23,17 @@ logFile = connectionPool.log
 # MTL new settings as of 24-JUL-2004: (can be removed if JK enabled, such as on vegbank.org)
 # name of URL to get to this machine 
 machine_url=http://gyro.msi.ucsb.edu
+
+#Google mapping needs an API code that links into the web directory that contains the jsp requesting data from google
+# for us, that's /vegbank/views, but is also domain dependent
+# we currently have API keys for vegbank.org, aldo.vegbank.org, and aldo.nceas.ucsb.edu
+# additional domains will need new API keys, available at: http://www.google.com/apis/maps/signup.html 
+# enter the domain and directory like so: http://vegbank.org/vegbank/views and press the submit button.
+
 #aldo/views:
-googlemaps_apikey=ABQIAAAAGgQ8067Uv8fomyaGenqurhScc7vbZ9k8oOw50vJywIe37DMV3RQQqfC--A7oo1vWYtUwWji02NwdAw
+# googlemaps_apikey=ABQIAAAAGgQ8067Uv8fomyaGenqurhScc7vbZ9k8oOw50vJywIe37DMV3RQQqfC--A7oo1vWYtUwWji02NwdAw
+#aldo.nceas:
+googlemaps_apikey=ABQIAAAAyCWSCZzeYN_4DAz2EXQSkxQAX3PYsGEmw_dTtKYP0Ls776WgnBQIwiIx_gXlg_dMafsBasYANOBjYg
 #vegbank/views
 #googlemaps_apikey=ABQIAAAAGgQ8067Uv8fomyaGenqurhRE6blkb4s9uHdGAM1GoRCGigL8FRS5GAggVqhxRe5rbvsp5LZXAnocYQ
 
