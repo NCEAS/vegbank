@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-24 19:20:32 $'
-  * '$Revision: 1.12 $'
+  * '$Date: 2006-05-24 19:34:21 $'
+  * '$Revision: 1.13 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -399,6 +399,11 @@ generateBeans generate the java beans needed for compilation
      <copy todir="${warContext}/xsl" filtering="yes">
        <fileset dir="${srcDir}/xsl">
          <include name="**/*"/>
+       </fileset>
+     </copy>
+     <copy todir="${apache.document.root}/vegdocs/xml" filtering="yes">
+       <fileset dir="${buildDir}/lib">
+         <include name="*.xsd"/>
        </fileset>
      </copy>
      <!--<copy todir="${warContext}/vegdocs/help" filtering="yes">
