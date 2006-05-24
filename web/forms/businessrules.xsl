@@ -12,8 +12,6 @@
 
   @possibly_center@
 <h1>View VegBank Business Rules: current status</h1>
-<!--Get standard declaration of rowClass as string: -->
-        @subst_lt@% String rowClass = "evenrow"; %@subst_gt@
   
   
   <xsl:apply-templates />
