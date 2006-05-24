@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-24 19:34:21 $'
-  * '$Revision: 1.13 $'
+  * '$Date: 2006-05-24 19:35:33 $'
+  * '$Revision: 1.14 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -19,7 +19,7 @@
 <!--
 ============================================================================
 Usage Tips
-----------
+**********
 This build file should be used with the build.properties file in the same
 directory.  It also requires the web/build.xml file for the web installation.
 A normal installation goes like this:
@@ -43,10 +43,10 @@ completely from scratch do
 ant -f build.new.xml full-clean install
 
 Target List
------------
+***********
 
 Target        Description
-------        -----------
+******        ***********
 init          initialize variables and pull properties from build.properties
 setFilters    sets the text filters to automatically change the @x@ variables
 prepare       copy files to prepare for compilation
