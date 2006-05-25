@@ -1,149 +1,149 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
+PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+"http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
 
-    <display-name>Vegbank Web Interface</display-name>
-    <description>Vegbank servlets</description>
+<display-name>Vegbank Web Interface</display-name>
+<description>Vegbank servlets</description>
 
-	<filter>
-    		<filter-name>GZIPFilter</filter-name>
-    		<description>GZIPs the response before sending to browser</description>
-		<filter-class>org.vegbank.filter.GZIPFilter</filter-class>
-  	</filter>
+<filter>
+	<filter-name>GZIPFilter</filter-name>
+	<description>GZIPs the response before sending to browser</description>
+	<filter-class>org.vegbank.filter.GZIPFilter</filter-class>
+</filter>
 
-	<!-- When to apply this filter, now for everything --> 
-	<filter-mapping>
-		<filter-name>GZIPFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<!-- When to apply this filter, now for everything --> 
+<filter-mapping>
+	<filter-name>GZIPFilter</filter-name>
+	<url-pattern>/*</url-pattern>
+</filter-mapping>
 
-  <!-- Action Servlet Configuration -->
-  <servlet>
-    <servlet-name>action</servlet-name>
-    <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
-    <init-param>
-      <param-name>config</param-name>
-      <param-value>/WEB-INF/struts-config.xml</param-value>
-    </init-param>
-    <init-param>
-      <param-name>application</param-name>
-      <param-value>org.vegbank.ui.struts.application</param-value>
-    </init-param>
-    <init-param>
-      <param-name>debug</param-name>
-      <param-value>2</param-value>
-    </init-param>
-    <init-param>
-      <param-name>detail</param-name>
-      <param-value>2</param-value>
-    </init-param>
-    <init-param>
-      <param-name>validate</param-name>
-      <param-value>true</param-value>
-    </init-param>
-    <init-param>
-      <param-name>properties</param-name>
-      <param-value>/velocity.properties</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
-
-			<servlet>
-				<servlet-name>DataUploadServlet</servlet-name>
-				<description>John's famous upload servlet</description>
-				<servlet-class>org.vegbank.servlet.DataUploadServlet</servlet-class>
-			</servlet>
+<!-- Action Servlet Configuration -->
+<servlet>
+<servlet-name>action</servlet-name>
+<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+<init-param>
+<param-name>config</param-name>
+<param-value>/WEB-INF/struts-config.xml</param-value>
+</init-param>
+<init-param>
+<param-name>application</param-name>
+<param-value>org.vegbank.ui.struts.application</param-value>
+</init-param>
+<init-param>
+<param-name>debug</param-name>
+<param-value>2</param-value>
+</init-param>
+<init-param>
+<param-name>detail</param-name>
+<param-value>2</param-value>
+</init-param>
+<init-param>
+<param-name>validate</param-name>
+<param-value>true</param-value>
+</init-param>
+<init-param>
+<param-name>properties</param-name>
+<param-value>/velocity.properties</param-value>
+</init-param>
+<load-on-startup>1</load-on-startup>
+</servlet>
 
 
-            <servlet>
-              <servlet-name>DataSubmitServlet</servlet-name>
-              <description>as it zounds</description>
-              <servlet-class>org.vegbank.servlet.request.DataSubmitServlet</servlet-class>
-              <!-- <load-on-startup>5</load-on-startup> -->
-            </servlet>
-            
-            <servlet>
-              <servlet-name>ImageServlet</servlet-name>
-              <description>Returns image content</description>
-              <servlet-class>org.vegbank.servlet.util.ImageServlet</servlet-class>
-			  <init-param>
-			  	<param-name>base_img_dir</param-name>
-				<param-value>/images/random</param-value>
-			  </init-param>
-              <!-- <load-on-startup>5</load-on-startup> -->
-            </servlet>
-            
-            <servlet>
-              <servlet-name>framework</servlet-name>
-              <description>The general servlet framework containing a varaiety of utilities</description>
-              <servlet-class>org.vegbank.servlet.framework.FrameworkServlet</servlet-class>
-              <load-on-startup>5</load-on-startup>
-            </servlet>
-
-            <servlet>
-              <servlet-name>DataRequestServlet</servlet-name>
-              <description>A</description>
-              <servlet-class>org.vegbank.servlet.request.DataRequestServlet</servlet-class>
-              <load-on-startup>5</load-on-startup>
-            </servlet>
-
-            <servlet>
-              <servlet-name>QueryBuilderServlet</servlet-name>
-              <description>Currently used for building nested queries</description>
-              <servlet-class>org.vegbank.servlet.request.QueryBuilderServlet</servlet-class>
-            </servlet>
+		<servlet>
+			<servlet-name>DataUploadServlet</servlet-name>
+			<description>John's famous upload servlet</description>
+			<servlet-class>org.vegbank.servlet.DataUploadServlet</servlet-class>
+		</servlet>
 
 
-            <!-- The Mappings -->
+    <servlet>
+      <servlet-name>DataSubmitServlet</servlet-name>
+      <description>as it zounds</description>
+      <servlet-class>org.vegbank.servlet.request.DataSubmitServlet</servlet-class>
+      <!-- <load-on-startup>5</load-on-startup> -->
+    </servlet>
+    
+    <servlet>
+      <servlet-name>ImageServlet</servlet-name>
+      <description>Returns image content</description>
+      <servlet-class>org.vegbank.servlet.util.ImageServlet</servlet-class>
+		  <init-param>
+			<param-name>base_img_dir</param-name>
+			<param-value>/images/random</param-value>
+		  </init-param>
+      <!-- <load-on-startup>5</load-on-startup> -->
+    </servlet>
+    
+    <servlet>
+      <servlet-name>framework</servlet-name>
+      <description>The general servlet framework containing a varaiety of utilities</description>
+      <servlet-class>org.vegbank.servlet.framework.FrameworkServlet</servlet-class>
+      <load-on-startup>5</load-on-startup>
+    </servlet>
 
-            <!-- Action Servlet Mapping -->
-            <servlet-mapping>
-              <servlet-name>action</servlet-name>
-              <url-pattern>*.do</url-pattern>
-            </servlet-mapping>
+    <servlet>
+      <servlet-name>DataRequestServlet</servlet-name>
+      <description>A</description>
+      <servlet-class>org.vegbank.servlet.request.DataRequestServlet</servlet-class>
+      <load-on-startup>5</load-on-startup>
+    </servlet>
+
+    <servlet>
+      <servlet-name>QueryBuilderServlet</servlet-name>
+      <description>Currently used for building nested queries</description>
+      <servlet-class>org.vegbank.servlet.request.QueryBuilderServlet</servlet-class>
+    </servlet>
 
 
-            <servlet-mapping>
-			  <servlet-name>DataUploadServlet</servlet-name>
-				<url-pattern>/servlet/upload</url-pattern>
-			</servlet-mapping>
+    <!-- The Mappings -->
 
-            <servlet-mapping>
-              <servlet-name>DataSubmitServlet</servlet-name>
-              <url-pattern>/servlet/DataSubmitServlet</url-pattern>
-            </servlet-mapping>  
-            
-            <servlet-mapping>
-              <servlet-name>ImageServlet</servlet-name>
-              <url-pattern>/servlet/img</url-pattern>
-            </servlet-mapping>  
-            
-            <servlet-mapping>
-              <servlet-name>framework</servlet-name>
-              <url-pattern>/servlet/framework</url-pattern>
-            </servlet-mapping>
-            
-            <servlet-mapping>
-              <servlet-name>DataRequestServlet</servlet-name>
-              <url-pattern>/servlet/DataRequestServlet</url-pattern>
-            </servlet-mapping>  
-            
-            <servlet-mapping>
-              <servlet-name>QueryBuilderServlet</servlet-name>
-              <url-pattern>/servlet/QueryBuilderServlet</url-pattern>
-            </servlet-mapping>  
-        
+    <!-- Action Servlet Mapping -->
+    <servlet-mapping>
+      <servlet-name>action</servlet-name>
+      <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
 
-    <error-page>
+
+    <servlet-mapping>
+		  <servlet-name>DataUploadServlet</servlet-name>
+			<url-pattern>/servlet/upload</url-pattern>
+		</servlet-mapping>
+
+    <servlet-mapping>
+      <servlet-name>DataSubmitServlet</servlet-name>
+      <url-pattern>/servlet/DataSubmitServlet</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet-mapping>
+      <servlet-name>ImageServlet</servlet-name>
+      <url-pattern>/servlet/img</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet-mapping>
+      <servlet-name>framework</servlet-name>
+      <url-pattern>/servlet/framework</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+      <servlet-name>DataRequestServlet</servlet-name>
+      <url-pattern>/servlet/DataRequestServlet</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet-mapping>
+      <servlet-name>QueryBuilderServlet</servlet-name>
+      <url-pattern>/servlet/QueryBuilderServlet</url-pattern>
+    </servlet-mapping>  
+
+
+ <!-- <error-page>
         <error-code>500</error-code>
         <location>/general/vberror.jsp</location>
-    </error-page>
-
+    </error-page> -->
+  
     <error-page>
         <error-code>404</error-code>
         <location>/general/404.html</location>

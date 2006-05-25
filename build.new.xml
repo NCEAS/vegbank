@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-24 19:35:33 $'
-  * '$Revision: 1.14 $'
+  * '$Date: 2006-05-25 18:29:25 $'
+  * '$Revision: 1.15 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -82,7 +82,8 @@ generateBeans generate the java beans needed for compilation
     <property name="tomcatVersion" value="5"/>
     <property name="context" value="${name}"/>
     <property name="webapps" value="${webapps.dir}"/>
-    <property name="webServerDir" value="${webapps}/${name}"/>
+    <property name="contextDir" value="${webapps}/${name}"/>
+    <property name="webServerDir" value="${apache.document.root}"/>
     <property name="host" value="${hostname}"/>
     <property name="googleMapsAPIKey" value=""/>
     <property name="serverUrl" value="http://${host}"/>
@@ -146,7 +147,7 @@ generateBeans generate the java beans needed for compilation
     <filter token="rmiserver" value="${rmiServer}"/>
     <filter token="uploadDir" value="${uploadPath}"/>
     <filter token="servlet_lib_dir" value="${webapps}/lib"/>
-    <filter token="servlet_context" value="${webServerDir}/"/>
+    <filter token="servlet_context" value="${contextDir}/"/>
     <!--loadfiles for the web stuff-->
     <property name="includesServer" value="web/includes"/>
     
@@ -269,6 +270,7 @@ generateBeans generate the java beans needed for compilation
     <mkdir dir="${dataPath}"/>
     <mkdir dir="${exportPath}"/>
     <mkdir dir="${uploadPath}"/>
+    <mkdir dir="${apache.document.root}"/>
     
     <!--copy the java src to the build/src dir-->
     <copy todir="${buildSrcDir}" filtering="yes">
@@ -364,33 +366,44 @@ generateBeans generate the java beans needed for compilation
          <include name="*.html"/>
        </fileset>
      </copy>
-     <!--<copy todir="${warContext}/admin" filtering="yes">
-       <fileset dir="${webDir}/admin"/>
-     </copy>
-     <copy todir="${warContext}/ajax" filtering="yes">
-       <fileset dir="${webDir}/ajax"/>
-     </copy>
+
+     <!--
      <copy todir="${warContext}/email_templates" filtering="yes">
        <fileset dir="${webDir}/email_templates"/>
-     </copy>
-     <copy todir="${warContext}/forms" filtering="yes">
-       <fileset dir="${webDir}/forms"/>
-     </copy>
-     <copy todir="${warContext}/general" filtering="yes">
-       <fileset dir="${webDir}/general"/>
      </copy>
      <copy todir="${warContext}/images" filtering="no">
        <fileset dir="${webDir}/images"/>
      </copy>
-     <copy todir="${warContext}/includes" filtering="yes">
-       <fileset dir="${webDir}/includes"/>
-     </copy>
      <copy todir="${warContext}/panel" filtering="yes">
        <fileset dir="${webDir}/panel"/>
+     </copy>-->
+     <!--<copy todir="${apache.document.root}">
+       <fileset file="${webDir}/.htaccess"/>
+     </copy>-->
+     <copy todir="${warContext}/includes" filtering="yes">
+       <fileset dir="${webDir}/includes">
+         <include name="**/*.jsp"/>
+       </fileset>
+     </copy>
+     <copy todir="${warContext}/general" filtering="yes">
+       <fileset dir="${webDir}/general">
+         <include name="**/*.jsp"/>
+       </fileset>
+     </copy>
+     <copy todir="${warContext}/forms" filtering="yes">
+       <fileset dir="${webDir}/forms">
+         <include name="**/*.jsp"/>
+       </fileset>
+     </copy> 
+     <copy todir="${warContext}/ajax" filtering="yes">
+       <fileset dir="${webDir}/ajax"/>
+     </copy> 
+     <copy todir="${warContext}/admin" filtering="yes">
+       <fileset dir="${webDir}/admin"/>
      </copy>
      <copy todir="${warContext}/views" filtering="yes">
        <fileset dir="${webDir}/views"/>
-     </copy>-->
+     </copy>
      <copy todir="${warContext}" filtering="yes">
        <fileset dir="${buildSrcDir}">
          <include name="velocity.properties"/>
