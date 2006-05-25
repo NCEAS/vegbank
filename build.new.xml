@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-25 18:29:25 $'
-  * '$Revision: 1.15 $'
+  * '$Date: 2006-05-25 20:07:44 $'
+  * '$Revision: 1.16 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -53,14 +53,19 @@ prepare       copy files to prepare for compilation
 setclasspath  set the classpath for compilation
 compile       compile all java classes
 jar           put all java classes into a jar file
-warPrepare    copy files needed to build the war file (for servlet initialization)
+warPrepare    copy files needed to build the war file (for servlet 
+              initialization)
 war           create the war file
 install       install the war file to the servlet container
-web-install   install the static web files from the web/ directory (uses the web/build.xml file)
+web-install   install the static web files from the web/ directory (uses 
+              the web/build.xml file)
 clean         delete the build and dist dirs
-full-clean    delete the build, dist, vegbank.home, apache.document.root, and the servlet context
+full-clean    delete the build, dist, vegbank.home, apache.document.root, 
+              and the servlet context
 generateDBSQL generate the SQL to create a blank database from the datamodel
 generateBeans generate the java beans needed for compilation
+dbVerify      verify that the database and the datamodel are the same.  create
+              the status documents for the admin status display
 
 ============================================================================
 -->
@@ -112,11 +117,17 @@ generateBeans generate the java beans needed for compilation
     <property name="webDir" value="web"/>
     <property name="cacheDir" value="cache"/>
     <property name="helpDir" value="${webDir}/help"/>
+    <property name="buildStatusDir" value="${buildDir}/status"/>
+    <property name="webStatusDir" value="${webServerDir}/status"/>
+    <property name="sqlSrcDir" value="${srcDir}/sql"/>
   </target>
   
   <!--set the inline copy filters.  do not edit these directly. If you want
       to edit these, do it in the properties in init.                       -->
   <target name="setFilters" depends="init">
+    <tstamp>
+      <format property="currentTime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+    </tstamp>
     <filter token="databaseType" value="${databaseType}"/>
     <filter token="databaseUser" value="${databaseUser}"/>
     <filter token="databaseUserPassword" value="${databasePassword}"/>
@@ -249,12 +260,15 @@ generateBeans generate the java beans needed for compilation
     <filter token="datasubmitservlet" value="${contextUrl}/servlet/DataSubmitServlet"/>
     <filter token="nestedquerybuilder" value="${contextUrl}/servlet/QueryBuilderServlet"/>
     <filter token="authenticationservlet" value="${contextUrl}/servlet/authenticate"/>
-   <!-- listserv -->
+    <!-- listserv -->
     <filter token="listservinfo_link" value="${listserv}"/>
     <filter token="listservarchive_link" value="${listservArchive}"/>
     <filter token="listservuser_link" value="${listservUserOptions}" />
     <!-- Struts -->
     <filter token="DisplayUploadPlotAction" value="${contextUrl}/DisplayUploadPlotAction.do"/>
+    <!--Other-->
+    <filter token="subst_lt" value="&lt;"/>
+    <filter token="subst_gt" value="&gt;"/>
   </target>
   
   <!--copy files to the build directory and prepare for compilation-->
@@ -271,6 +285,8 @@ generateBeans generate the java beans needed for compilation
     <mkdir dir="${exportPath}"/>
     <mkdir dir="${uploadPath}"/>
     <mkdir dir="${apache.document.root}"/>
+    <mkdir dir="${buildStatusDir}"/>
+    <mkdir dir="${webStatusDir}"/>
     
     <!--copy the java src to the build/src dir-->
     <copy todir="${buildSrcDir}" filtering="yes">
@@ -454,8 +470,17 @@ generateBeans generate the java beans needed for compilation
   </target>
   
   <!--install the web files-->
-  <target name="web-install" depends="init">
+  <target name="web-install" depends="prepare">
     <ant antfile="build.xml" target="deploy-all" dir="${webDir}"/>
+    <echo file="${buildStatusDir}/deploy-props.txt">       -----------------DEPLOY PROPS STATUS------------------------@subst_lt@br/@subst_gt@       Properties last deployed at time: ${currentTime} @subst_lt@br/@subst_gt@       Connection to database Name: ${databaseName} @subst_lt@br/@subst_gt@       Deployed from : ${basedir} @subst_lt@br/@subst_gt@       vegbank version: ${version} @subst_lt@br/@subst_gt@       ---------------------------------------------------------------------@subst_lt@br/@subst_gt@       </echo>
+    <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
+    <echo file="${buildStatusDir}/verify.readme">${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
+    <!-- check the model, but don't fail on errors! -->
+    <!--<antcall target="db_verify"/>-->
+    <!-- copy status files to the file to server -->
+    <copy todir="${webStatusDir}" filtering="yes" overwrite="yes">
+      <fileset dir="${buildStatusDir}" includes="*.*"/>
+    </copy>
   </target>
   
   <!--clean the install back to a clean slate-->
@@ -493,6 +518,41 @@ generateBeans generate the java beans needed for compilation
   other targets but should generally never be called by themselves.
   **************************************************************************
   -->
+  
+  <!--Michael's new method of checking the database to match model xml-->
+  <target name="dbVerify" depends="prepare">
+    <!-- set to not fail unless already set -->
+    <condition property="failOnModelDiff" value="false">
+      <not>
+        <isset property="failOnModelDiff"/>
+      </not>
+    </condition>
+    <!-- validate first -->
+    <echo>Validating model XML against schema: at ${docsDir}/xml/${vegbank.schema.model}</echo>
+    <xmlvalidate file="${docsDir}/xml/db_model_vegbank.xml" failonerror="true">
+      <attribute name="http://apache.org/xml/features/validation/schema" value="true"/>
+      <attribute name="http://xml.org/sax/features/namespaces" value="true"/>
+      <property name="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation" value="${docs.dir}/xml/${vegbank.schema.model}"/>
+    </xmlvalidate>
+    <!-- get ideal model output -->
+    <xslt in="${docsDir}/xml/db_model_vegbank.xml" out="${buildStatusDir}/logicalmodel.txt" style="${docsDir}/xml/checkModelAgainstDB.xsl" force="true"/>
+    <!-- get acutal model output -->
+    <echo>Checking model with databaseUser = ${databaseUser} for database = ${databaseName}</echo>
+    <exec dir="${sqlSrcDir}" executable="psql">
+      <arg line="-U ${databaseUser} ${databaseName} -f verifyActualModel.sql -o ${buildStatusDir}/actualmodel.txt -At "/>
+    </exec>
+    <!-- compare ideal logical model to acutal model -->
+    <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
+    <echo> If the next line does not have 'Diff results: 0', and the build failed, this is because ${verify_readme}  The diff file is located here:</echo>
+    <echo file="${build.status.dir}/verify.readme">${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
+    <echo>------</echo>
+    <echo>${buildStatusDir}/modeldiffs.txt</echo>
+    <echo>------</echo>
+    <exec dir="${buildStatusDir}" executable="diff" output="${buildStatusDir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">
+      <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>
+    </exec>
+    <echo>Diff results: ${diffResult}</echo>
+  </target>
   
   <!-- ================================================================= -->
   <!-- Generate model beans, XML Digester rules, XML schema and JSP from -->
