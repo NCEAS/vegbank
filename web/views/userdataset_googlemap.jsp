@@ -239,8 +239,10 @@
          } //not done rezooming
 
        } //for loop to rezoom
-       map.setMapType(G_SATELLITE_MAP)
-
+       map.setMapType(G_SATELLITE_MAP);
+       //save this position:
+       map.savePosition();
+      
       var whereismap = new GMap2(document.getElementById("whereismap"));
       whereismap.setCenter(new GLatLng(MyCenterLat,MyCenterLong), 1);
         var boundsnew = map.getBounds();
