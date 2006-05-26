@@ -65,7 +65,14 @@
     //<![CDATA[
   // adds the google map loader when the window loads.
   addEvent(window, "load", vegbankGoogleMapLoad);
-
+  addEvent(window, "onunload", vegbankGUnload);
+ 
+ function vegbankGUnload() {
+  // alert('unloading Google maps now...');
+   GUnload();
+  // alert('GoogleMaps now unloaded.  Thank you for mapping with us!');
+ }
+ 
  function vegbankGoogleMapLoad() {
 
     if (GBrowserIsCompatible()) {
