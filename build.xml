@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-05-30 17:54:16 $'
-  * '$Revision: 1.74 $'
+  * '$Date: 2006-05-30 21:00:31 $'
+  * '$Revision: 1.75 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -25,22 +25,22 @@ directory.  It also requires the web/build.xml file for the web installation.
 A normal installation goes like this:
 
 Set the variables in build.properties then
-ant -f build.new.xml install
+ant install
 ***now start/restart tomcat/apache.  after tomcat and apache are started (or restarted)
 ***note that if tomcat is already running and you have it set to reload when 
 ***it finds a new war file, you shouldn't have to manually restart it.  Apache
 ***only needs to be restarted if something major happens.  Usually as long as
 ***tomcat restarts on it's own, you're ok to go to the next step.
-ant -f build.new.xml web-install
+ant web-install
 
 Try your url (i.e. http://localhost/vegbank) in your browser.  If any of the 
 links don't work go back and fix the properties in your build.properties file.
 
 If you want to do a clean install (removing the build files and re-compiling) do 
-ant -f build.new.xml clean install
+ant clean install
 or to completely flush your system of all vegbank related stuff and start
 completely from scratch do
-ant -f build.new.xml full-clean install
+ant full-clean install
 
 Target List
 ***********
@@ -470,7 +470,7 @@ dbVerify      verify that the database and the datamodel are the same.  create
   </target>
   
   <!--install the web files-->
-  <target name="web-install" depends="prepare">
+  <target name="web-install" depends="dbVerify">
     <ant antfile="build.xml" target="deploy-all" dir="${webDir}"/>
     <echo file="${buildStatusDir}/deploy-props.txt">       -----------------DEPLOY PROPS STATUS------------------------@subst_lt@br/@subst_gt@       Properties last deployed at time: ${currentTime} @subst_lt@br/@subst_gt@       Connection to database Name: ${databaseName} @subst_lt@br/@subst_gt@       Deployed from : ${basedir} @subst_lt@br/@subst_gt@       vegbank version: ${version} @subst_lt@br/@subst_gt@       ---------------------------------------------------------------------@subst_lt@br/@subst_gt@       </echo>
     <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
@@ -509,7 +509,9 @@ dbVerify      verify that the database and the datamodel are the same.  create
   
   <!--target that generates the sql to build a blank database-->
   <target name="generateDBSQL" depends="init">
-    <xslt in="${docsDir}/xml/db_model_vegbank.xml" out="${buildDir}/sql/vegbank.sql" style="${srcDir}/xsl/VegBankModel2SQL.xsl"/>
+    <xslt in="${docsDir}/xml/db_model_vegbank.xml" 
+      out="${buildDir}/sql/vegbank.sql" 
+      style="${srcDir}/xsl/VegBankModel2SQL.xsl"/>
   </target>
   
   <!--
@@ -529,26 +531,37 @@ dbVerify      verify that the database and the datamodel are the same.  create
     </condition>
     <!-- validate first -->
     <echo>Validating model XML against schema: at ${docsDir}/xml/${vegbank.schema.model}</echo>
-    <xmlvalidate file="${docsDir}/xml/db_model_vegbank.xml" failonerror="true">
-      <attribute name="http://apache.org/xml/features/validation/schema" value="true"/>
+    <!--<xmlvalidate file="${docsDir}/xml/db_model_vegbank.xml" failonerror="true">-->
+    <xmlvalidate failonerror="yes" lenient="yes" warn="yes"
+             classname="org.apache.xerces.parsers.SAXParser"
+             classpath="lib/xercesImpl.jar"
+             file="${docsDir}/xml/db_model_vegbank.xml">
+      <!--<attribute name="http://apache.org/xml/features/validation/schema" value="true"/>-->
       <attribute name="http://xml.org/sax/features/namespaces" value="true"/>
-      <property name="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation" value="${docs.dir}/xml/${vegbank.schema.model}"/>
+      <property name="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation" 
+                value="${docs.dir}/xml/${vegbank.schema.model}"/>
     </xmlvalidate>
     <!-- get ideal model output -->
-    <xslt in="${docsDir}/xml/db_model_vegbank.xml" out="${buildStatusDir}/logicalmodel.txt" style="${docsDir}/xml/checkModelAgainstDB.xsl" force="true"/>
+    <xslt in="${docsDir}/xml/db_model_vegbank.xml" 
+      out="${buildStatusDir}/logicalmodel.txt" 
+      style="${docsDir}/xml/checkModelAgainstDB.xsl" 
+      force="true"/>
     <!-- get acutal model output -->
-    <echo>Checking model with databaseUser = ${databaseUser} for database = ${databaseName}</echo>
-    <exec dir="${sqlSrcDir}" executable="psql">
-      <arg line="-U ${databaseUser} ${databaseName} -f verifyActualModel.sql -o ${buildStatusDir}/actualmodel.txt -At "/>
+    <echo>Checking model with databaseUser '${databaseUser}' for database '${databaseName}'</echo>
+    <exec dir="." executable="psql">
+      <arg line="-U ${databaseUser} ${databaseName} -f ${sqlSrcDir}/verifyActualModel.sql -o ${buildStatusDir}/actualmodel.txt -At "/>
     </exec>
     <!-- compare ideal logical model to acutal model -->
-    <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
-    <echo> If the next line does not have 'Diff results: 0', and the build failed, this is because ${verify_readme}  The diff file is located here:</echo>
-    <echo file="${build.status.dir}/verify.readme">${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
-    <echo>------</echo>
+    <property name="verify_readme" 
+      value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
+    <echo> If the next line does not have 'Diff results: 0', and the build 
+      failed, this is because ${verify_readme}  The diff file is located here:</echo>
+    <echo file="${buildStatusDir}/verify.readme">${verify_readme}  The Diff file is 
+      displayed on screen unless there are no differences.</echo>
     <echo>${buildStatusDir}/modeldiffs.txt</echo>
-    <echo>------</echo>
-    <exec dir="${buildStatusDir}" executable="diff" output="${buildStatusDir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">
+    <exec dir="${buildStatusDir}" executable="diff" 
+      output="${buildStatusDir}/modeldiffs.txt" resultproperty="diffResult" 
+      failonerror="${failOnModelDiff}">
       <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>
     </exec>
     <echo>Diff results: ${diffResult}</echo>

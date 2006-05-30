@@ -19,10 +19,6 @@
         <xs:element ref="entity" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
-   <xs:unique name="uniqueAttID">
-    <xs:selector xpath="entity/attribute" />
-    <xs:field xpath="attID" />
-  </xs:unique>
   </xs:element>
   <xs:element name="date" type="xs:string"/>
   <xs:element name="description" type="xs:string"/>
