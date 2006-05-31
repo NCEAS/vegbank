@@ -1,9 +1,9 @@
 #
 # '$RCSfile: README,v $'
-# '$Author: farrell $'
-# '$Date: 2003-10-11 21:20:09 $'
-# '$Revision: 1.16 $'
-# '$Date: 2003-10-11 21:20:09 $'
+# '$Author: berkley $'
+# '$Date: 2006-05-31 16:45:02 $'
+# '$Revision: 1.17 $'
+# '$Date: 2006-05-31 16:45:02 $'
 #
 
 VEGBANK: Vegatation Plots Database and Archival System
@@ -22,6 +22,7 @@ Contributors: Robert K. Peet
               Gabriel Farrell (farrell@nceas.ucsb.edu)
               John Harris (harris@nceas.ucsb.edu)
               Micheal Lee (mikelee@email.unc.edu)
+              Chad Berkley (berkley@nceas.ucsb.edu)
               
 VegBank is the vegetation plot database of the Ecological Society of America's 
 Panel on Vegetation Classification. VegBank consists of three modules that 
@@ -33,39 +34,20 @@ be submitted to VegBank and may be subsequently searched, viewed, annotated, rev
 
 Installation
 ------------
-Vegbank requires
-Jakarta-tomcat 4.1, 
-PostrgreSQL 7.2, 
-Java 1.3
-Apache 1.3
-Grass
-Apache Ant 
+See INSTALL file in this directory.
 
-VEGBANK JAR FILES
------------------
-The build script creates the vegbank jars and distributes them into the servlet container.
-> ant deploy
-
-In addition a number of third party jars are required, these are in the lib directory.
-
-
-OTHER REQUIRED SERVLET FILES
-----------------------------
-/vegbank/veg_plot/src/utilities/coord_transform.sh
-All the files in the /vegbank/veg_plot/exp/vegbank_websrc/web/WEB-INF/
 
 PROPERTIES FILES:
 ----------------
-./veg_plot/build.properties - edit for your environment. 
-
-
+./veg_plot/build.properties - edit for your environment 
+./build.properties - edit for your environment
 
 DATABASE SETUP:
 ---------------
+** For more information, see the INSTALL file.
 
 Vegbank has a single database for Plots, Plant Taxonomy and Plant 
 Community. There is also a Framework database for shared resources like users.
-
 
 Initializing PostgresSQL:
 
@@ -108,9 +90,6 @@ Right now it is only used for geocoordinate coversion, it is a large dependancy
 just for that.
 
 The programs homepage is "http://www3.baylor.edu/grass/"
-
-Documentation
--------------
 
 
 Major Known Bugs or Feature Requests (see http://bugzilla.ecoinformatics.org)
