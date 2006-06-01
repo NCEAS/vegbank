@@ -168,12 +168,20 @@ If you have a postgresql backup dump that you are installing the db from,
 use the command:
 bash$ psql -U vegbank vegbank < backupFile.sql > dbimport.log 2>&1
 
+Note that if you use a backup file, you will need to run the script 
+src/sql/create_aggregrates.sql to create the aggregate CONCAT function since
+the backups do not include aggregate functions.  You may also need to run
+other .sql scripts in the src/sql directory if you find your backup copy
+is missing information or tables.
+
 If you want to create a fresh, blank database, you first need to create the 
 db sql script from the data model like so:
 bash$ ant -f build.new.xml generateDBSQL
 You will find the vegbank.sql file has been built in build/sql.  You can then 
 run
 bash$ psql -U vegbank vegbank < build/sql/vegbank.sql >dbcreate.log 
+bash$ psql -U vegbank vegbank < src/sql/create_aggregrates.sql
+
 
 You should then be able to login and use the \d command in psql to display
 the table structure of the database.
