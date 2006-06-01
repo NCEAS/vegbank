@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-02-16 20:59:41 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-06-01 20:53:42 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -84,4 +84,12 @@ public class SAXValidationErrorHandler implements ErrorHandler
 		sb.append("\tColumn : " + arg0.getColumnNumber() + "\n");
 		errors.addError(LoadingErrors.VALIDATIONERROR, sb.toString() );
 	}
+  
+  /**
+   * return the loading errors for this parse
+   */
+  public LoadingErrors getLoadingErrors()
+  {
+    return errors;
+  }
 }
