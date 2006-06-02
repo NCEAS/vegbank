@@ -5,9 +5,7 @@
 <?xml-stylesheet type="text/xsl" href="check_db_model_vegbank.xsl"?>
   -->
 <!--<?xml-stylesheet type="text/xsl" href="check_attForms.xsl"?>-->
-<?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-template.xsl"?>
-<!--
--->
+<!-- <?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-template.xsl"?> -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
   <title>Vegetation Database Component Description: --all modules--</title>
   <version>1.0.3</version>
@@ -171,7 +169,8 @@
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Currently accepted by at least one party.</attDefinition>
-      <update>1.0.3</update><updateSQLFile>add_currentaccepted_toconcept.sql</updateSQLFile>
+      <update>1.0.3</update>
+      <updateSQLFile>add_currentaccepted_toconcept.sql</updateSQLFile>
     </attribute>
   </entity>
   <entity>
@@ -7172,27 +7171,27 @@ conditions may change between resampling events.
       <attList>
         <attListItem>
           <attListValue>Intermittently flooded</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Substrate is usually exposed, but surface water can be present for variable periods without detectable seasonal periodicity. Inundation is not predictable to a given season and is dependent upon highly localized rain storms. This modifier was developed for use in the arid West for water regimes of Playa lakes, intermittent streams, and dry washes but can be used in other parts of the U.S. where appropriate. This modifier can be applied to both wetland and non-wetland situations. Equivalent to Cowardin's Intermittently Flooded modifier.</attListValueDesc>
           <attListSortOrd>6</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Permanently flooded</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Water covers the land surface at all times of the year in all years. Equivalent to Cowardin's "permanently flooded".</attListValueDesc>
           <attListSortOrd>7</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Permanently flooded - tidal</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Salt water covers the land surface at all times of the year in all years. This modifier applies only to permanently flooded area irregularly flooded by fresh tidal water. Equivalent to Cowardin's "permanently flooded/tidal".</attListValueDesc>
           <attListSortOrd>8</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Saturated</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Surface water is seldom present, but substrate is saturated to surface for extended periods during the growing season. Equivalent to Cowardin's Saturated modifier.</attListValueDesc>
           <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Seasonally flooded</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Surface water is present for extended periods during the growing season, but is absent by the end of the growing season in most years. The water table after flooding ceases is very variable, extending from saturated to a water table well below the ground surface. Includes Cowardin's Seasonal, Seasonal-Saturated, and Seasonal-Well Drained modifiers.</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -7202,17 +7201,17 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>Semipermanently flooded</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Surface water persists throughout the growing season in most years. Land surface is normally saturated when water level drops below soil surface. Includes Cowardin's Intermittently Exposed and Semipermanently Flooded modifiers.</attListValueDesc>
           <attListSortOrd>1</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Temporarily flooded</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Surface water present for brief periods during growing season, but water table usually lies well below soil surface. Often characterizes flood-plain wetlands. Equivalent to Cowardin's Temporary modifier.</attListValueDesc>
           <attListSortOrd>5</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Tidally flooded</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Flooded by the alternate rise and fall of the surface of oceans, seas, and the bays, rivers, etc. connected to them, caused by the attraction of the moon and sun.</attListValueDesc>
           <attListSortOrd>9</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -7222,22 +7221,22 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>Upland</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Not a wetland.  Very rarely flooded.</attListValueDesc>
           <attListSortOrd>13</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Irregularly flooded</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Tidal water floods land surface less often than daily; the area must be flooded by tides at least once yearly as a result of extreme high spring tide plus wind plus flow.</attListValueDesc>
           <attListSortOrd>11</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Irregularly exposed</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Land surface is exposed by tides less often than daily; the area from mean low tide to extreme low spring tide.</attListValueDesc>
           <attListSortOrd>12</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Wind-tidally flooded</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Flooded by the alternate rise and fall of the surface of oceans, seas, and the bays, rivers, etc. connected to them, caused by the back-up of water caused by unfavorable winds.</attListValueDesc>
           <attListSortOrd>10</attListSortOrd>
         </attListItem>
       </attList>
@@ -10878,67 +10877,67 @@ conditions may change between resampling events.
       <attListType>closed</attListType>
       <attList>
         <attListItem>
-          <attListValue>Backslope</attListValue>
-          <attListValueDesc>dipslope</attListValueDesc>
-          <attListSortOrd>5</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Basin floor</attListValue>
-          <attListValueDesc>depression</attListValueDesc>
-          <attListSortOrd>12</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Channel bed</attListValue>
-          <attListValueDesc>narrow valley bottom, gully arroyo</attListValueDesc>
-          <attListSortOrd>11</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>Channel wall</attListValue>
-          <attListValueDesc>bank</attListValueDesc>
-          <attListSortOrd>10</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>High level</attListValue>
-          <attListValueDesc>mesa, high flat</attListValueDesc>
-          <attListSortOrd>3</attListSortOrd>
-        </attListItem>
-        <attListItem>
-          <attListValue>High slope</attListValue>
-          <attListValueDesc>shoulder slope, upper slope, convex creep slope</attListValueDesc>
-          <attListSortOrd>2</attListSortOrd>
-        </attListItem>
-        <attListItem>
           <attListValue>Interfluve</attListValue>
-          <attListValueDesc>crest, summit, ridge</attListValueDesc>
+          <attListValueDesc>(crest, summit, ridge): linear top of ridge, hill, or mountain; the elevated area between two fluves (drainageways) that sheds water to the drainageways.</attListValueDesc>
           <attListSortOrd>1</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Low level</attListValue>
-          <attListValueDesc>terrace, low flat</attListValueDesc>
-          <attListSortOrd>9</attListSortOrd>
+          <attListValue>High slope</attListValue>
+          <attListValueDesc>(shoulder slope, upper slope, convex creep slope): geomorphic component that forms the uppermost inclined surface at the top of a slope.  Comprises the transition zone from backslope to summit. Surface is dominantly convex in profile and erosional in origin.</attListValueDesc>
+          <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
-          <attListValue>Lowslope</attListValue>
-          <attListValueDesc>lower slope, foot slope, colluvial footslope</attListValueDesc>
-          <attListSortOrd>7</attListSortOrd>
+          <attListValue>High level</attListValue>
+          <attListValueDesc>(mesa, high flat): level top of plateau</attListValueDesc>
+          <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Midslope</attListValue>
-          <attListValueDesc>transportational midslope, middle slope</attListValueDesc>
+          <attListValueDesc>(transportational midslope, middle slope): intermediate slope position</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
+          <attListValue>Backslope</attListValue>
+          <attListValueDesc>(dipslope): subset of midslopes which are steep, linear, and may include cliff segments (fall faces).</attListValueDesc>
+          <attListSortOrd>5</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>Step in slope</attListValue>
-          <attListValueDesc>ledge, terracette</attListValueDesc>
+          <attListValueDesc>(ledge, terracette): nearly level shelf interrupting a steep slope, rock wall, or cliff face.</attListValueDesc>
           <attListSortOrd>6</attListSortOrd>
         </attListItem>
         <attListItem>
+          <attListValue>Lowslope</attListValue>
+          <attListValueDesc>(lower slope, foot slope, colluvial footslope): inner gently inclined surface at the base of a slope. Surface profile is generally concave and a transition between midslope or backslope, and toe slope.</attListValueDesc>
+          <attListSortOrd>7</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>Toeslope</attListValue>
-          <attListValueDesc>alluvial toeslope</attListValueDesc>
+          <attListValueDesc>(alluvial toeslope): outermost gently inclined surface at base of a slope. In profile, commonly gentle and linear and characterized by alluvial deposition.</attListValueDesc>
           <attListSortOrd>8</attListSortOrd>
         </attListItem>
+        <attListItem>
+          <attListValue>Low level</attListValue>
+          <attListValueDesc>(terrace, low flat): valley floor or shoreline representing the former position of an alluvial plain, lake, or shore.</attListValueDesc>
+          <attListSortOrd>9</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Channel wall</attListValue>
+          <attListValueDesc>(bank): sloping side of a channel.</attListValueDesc>
+          <attListSortOrd>10</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Channel bed</attListValue>
+          <attListValueDesc>(narrow valley bottom, gully arroyo): bed of single or braided watercourse commonly barren of vegetation and formed of modern alluvium.</attListValueDesc>
+          <attListSortOrd>11</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>Basin floor</attListValue>
+          <attListValueDesc>(depression): nearly level to gently sloping, bottom surface of a basin.</attListValueDesc>
+          <attListSortOrd>12</attListSortOrd>
+        </attListItem>
       </attList>
-      <attNotes>closed list</attNotes>
+      <attNotes>n/a</attNotes>
       <attDefinition>Position of the plot on land surface (e.g., Summit, shoulder, upper slope, middle slope, lower slope, toeslope, no slope, channel bed, dune swale, pond).</attDefinition>
       <attForms>
         <formShow name="plotEnvLong">998</formShow>
@@ -10961,14 +10960,29 @@ conditions may change between resampling events.
       <attListType>open</attListType>
       <attList>
         <attListItem>
+          <attListValue>active slope</attListValue>
+          <attListValueDesc>(metastable slope) A mountain or hill slope that is responding to valley incision, and has detritus accumulated behind obstructions, indicating contemporary transport of slope alluvium. Slope gradients commonly exceed 45 percent.</attListValueDesc>
+          <attListSortOrd>2</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>alluvial cone</attListValue>
+          <attListValueDesc>The material washed down mountain and hill slopes by ephemeral streams and deposited at the mouth of gorges in the form of a moderately steep, conical mass descending equally in all directions from the point of issue.</attListValueDesc>
+          <attListSortOrd>6</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>alluvial fan</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A body of alluvium, with or without debris flow deposits, whose surface forms a segment of a cone that radiates downslope from the point where the stream emerges from a narrow valley onto a less sloping surface. Common longitudinal profiles are gently sloping and nearly linear.  Source uplands range in relief and aerial extent from mountains and plateaus to gullied terrains on hill and piedmont slopes.</attListValueDesc>
           <attListSortOrd>10</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>alluvial flat</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A nearly level, graded, alluvial surface.</attListValueDesc>
           <attListSortOrd>15</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>alluvial plain</attListValue>
+          <attListValueDesc>A flood plain or a low-gradient delta. It may be modern or relict.</attListValueDesc>
+          <attListSortOrd>17</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>alluvial terrace</attListValue>
@@ -10976,9 +10990,19 @@ conditions may change between resampling events.
           <attListSortOrd>20</attListSortOrd>
         </attListItem>
         <attListItem>
+          <attListValue>arroyo</attListValue>
+          <attListValueDesc>(wash) The flat-floored channel or an ephemeral stream, commonly with very steep to vertical banks cut in alluvium.</attListValueDesc>
+          <attListSortOrd>22</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>backshore terrace</attListValue>
           <attListValueDesc/>
           <attListSortOrd>25</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>backswamp</attListValue>
+          <attListValueDesc>(valley flat) Extensive marshy, depressed areas of flood plains between the natural levee borders of channel belts and valley sides or terraces.</attListValueDesc>
+          <attListSortOrd>27</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>backwater</attListValue>
@@ -11007,7 +11031,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>bar</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>An elongated landform generated by waves and currents and usually running parallel to the shore, composed predominantly of unconsolidated sand, gravel, cobbles, or stones with water on two sides.</attListValueDesc>
           <attListSortOrd>55</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11032,7 +11056,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>basin</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A depressed area with no or limited surface outlet. Examples are closed depressions in a glacial till plain, lake basin, river basin, or fault-bordered intermontane structure such as the Bighorn Basin of Wyoming.</attListValueDesc>
           <attListSortOrd>80</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11052,7 +11076,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>beach</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>The unconsolidated material that covers a gently sloping zone, typically with a concave profile, extending landward from the low-water line to the place where there is a definite change in material or physiographic form (such as a cliff) or to the line of permanent vegetation; the relatively thick and temporary accumulation of loose water-borne material (usually well-sorted sand and pebbles, accompanied by mud, cobbles, boulders, and smoothed rock and shell fragment) that is in active transit along, or deposited on the shore zone between the limits of low water and high water.</attListValueDesc>
           <attListSortOrd>100</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11071,9 +11095,19 @@ conditions may change between resampling events.
           <attListSortOrd>115</attListSortOrd>
         </attListItem>
         <attListItem>
+          <attListValue>bluff</attListValue>
+          <attListValueDesc>(a) A high bank or bold headland, with a broad, precipitous, sometimes rounded cliff face overlooking a plain or body of water, especially on the outside of a stream meander; (b) any cliff with a steep, broad face.</attListValueDesc>
+          <attListSortOrd>117</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>bottomlands</attListValue>
           <attListValueDesc/>
           <attListSortOrd>120</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>braided channel or stream</attListValue>
+          <attListValueDesc>(flood-plain landforms) A channel or stream with multiple channels that interweave as a result of repeated bifurcation and convergence of flow around interchannel bars, resembling in plan the strands of a complex braid. Braiding is generally confined to broad, shallow streams of low sinuosity, high bedload, non-cohesive bank material, and step gradient. At a given bank-full discharge, braided streams have steeper slopes and shallower, broader, and less stable channel cross sections than meandering streams.</attListValueDesc>
+          <attListSortOrd>122</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>butte</attListValue>
@@ -11087,7 +11121,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>canyon</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A long, deep, narrow, very steep-sided valley with high and precipitous walls in an area of high local relief.</attListValueDesc>
           <attListSortOrd>135</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11112,7 +11146,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>cirque</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Semicircular, concave, bowl-like area with steep face primarily resulting from erosive activity of a mountain glacier.</attListValueDesc>
           <attListSortOrd>160</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11127,7 +11161,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>cliff</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Any high, very steep to perpendicular or overhanging face of rock or earth; a precipice.</attListValueDesc>
           <attListSortOrd>175</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11166,6 +11200,11 @@ conditions may change between resampling events.
           <attListSortOrd>210</attListSortOrd>
         </attListItem>
         <attListItem>
+          <attListValue>crest</attListValue>
+          <attListValueDesc>(summit) The commonly linear top of a ridge, hill or mountain.</attListValueDesc>
+          <attListSortOrd>212</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>cuesta</attListValue>
           <attListValueDesc/>
           <attListSortOrd>215</attListSortOrd>
@@ -11177,7 +11216,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>delta</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A body of alluvium, nearly flat and fan-shaped, deposited at or near the mouth of a river or stream where it enters a body of relatively quiet water, usually a sea or lake.</attListValueDesc>
           <attListSortOrd>225</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11217,7 +11256,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>dome</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A roughly symmetrical upfold, with bed dipping in all directions, more or less equally, from a point. A smoothly rounded landform or rock mass such as a rock-capped mountain summit, roughly resembling the dome of a building.</attListValueDesc>
           <attListSortOrd>265</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11237,12 +11276,12 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>drumlin</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A low, smooth, elongated oval hill, mound, or ridge of compact glacial till that may or may not have a core of bedrock or stratified glacial drift. The longer axis is parallel to the general direction of glacier flow.  Drumlins are products of streamline (laminar) flow of glaciers, which molded the subglacial floor through a combination of erosion and deposition.</attListValueDesc>
           <attListSortOrd>285</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>dune (undifferentiated)</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A mound, ridge, or hill of loose, windblown granular material (generally sand), either bare or covered with vegetation.</attListValueDesc>
           <attListSortOrd>290</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11277,12 +11316,12 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>escarpment</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(scarp) A relatively continuous and steep slope or cliff breaking the general continuity of more gently sloping land surfaces and produced by erosion or faulting. The term is more often applied to cliffs produced by differential erosion.</attListValueDesc>
           <attListSortOrd>325</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>esker</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A long, narrow sinuous, steep-sided ridge composed of irregularly stratified sand and gravel that was deposited by a subsurface stream flowing between ice walls, or in an ice tunnel of a retreating glacier, and was left behind when the ice melted.</attListValueDesc>
           <attListSortOrd>330</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11321,8 +11360,13 @@ conditions may change between resampling events.
           <attListSortOrd>365</attListSortOrd>
         </attListItem>
         <attListItem>
+          <attListValue>flat</attListValue>
+          <attListValueDesc>A general term for a level or nearly level surface or small area of land marked by little or no relief, eg. mud flat or valley flat.</attListValueDesc>
+          <attListSortOrd>367</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>flood plain</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(bottomland) The nearly level alluvial plain that borders a stream and is subject to inundation under flood-stage conditions unless protected artificially.  It is usually a constructional landform built of sediment deposited during overflow and lateral migration of the stream.</attListValueDesc>
           <attListSortOrd>370</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11372,7 +11416,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>gorge</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(a) A narrow, deep valley with nearly vertical rocky walls, enclosed by mountains, smaller than a canyon, and more steep-sided than a ravine; especially a restricted, steep-walled part of a canyon. (b) A narrow defile or passage between hills or mountains.</attListValueDesc>
           <attListSortOrd>420</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11407,7 +11451,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>hills</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(foothills) A natural elevation of the land surface, rising as much as 300 m above the surrounding lowlands, usually of restricted summit area (relative to a tableland) and having a well-defined outline; hill slopes generally exceed 15%.  The distinction between a hill and a mountain is often dependent on local usage.</attListValueDesc>
           <attListSortOrd>455</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11427,7 +11471,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>hummock</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A rounded or conical mound of knoll, hillock, or other small elevation.  Also, a slight rise of ground above a level surface.</attListValueDesc>
           <attListSortOrd>475</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11457,7 +11501,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>kame</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A moundlike hill of ice-contact glacial drift, composed chiefly of stratified sand and gravel.</attListValueDesc>
           <attListSortOrd>505</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11492,7 +11536,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>kettle</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A steep-sided bowl-shaped depression without surface drainage. It is in glacial drift deposits and believed to have formed by the melting of a large, detached block of stagnant ice buried in the glacial drift.</attListValueDesc>
           <attListSortOrd>540</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11502,7 +11546,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>knob</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(a) A rounded eminence, as a knoll, hillock, or small hill or mountain; especially a prominent or isolated hill with steep sides, commonly found in the southern United States. (b) A peak or other projection from the top of a hill or mountain. Also a boulder or group of boulders or an area of resistant rocks protruding from the side of a hill or mountain.</attListValueDesc>
           <attListSortOrd>550</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11557,7 +11601,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>levee</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(floodwall, earth dike) An artificial or natural embankment built along the margin of a watercourse or an arm of the sea, to protect land from inundation or to confine streamflow to its channel.</attListValueDesc>
           <attListSortOrd>605</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11612,7 +11656,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>moraine (undifferentiated)</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A drift topography characterized by chaotic mounds and pits, generally randomly oriented, developed in superglacial drift by collapse and flow as the underlying stagnant ice melted. Slopes may be steep and unstable and there will be used and unused stream coursed and lake depressions interspersed with the morainic ridges. Consequently, there will be rapid or abrupt changes between materials of differing lithology.</attListValueDesc>
           <attListSortOrd>660</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11627,7 +11671,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>mountain(s)</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(hill) A natural elevation of the land surface, rising more than 300 m above surrounding lowlands, usually of restricted summit area (relative to a plateau), and generally having steep sides (greater than 25 percent slope) with or without considerable bare-rock surface. A mountain can occur as a single, isolated mass or in a group forming a chain or range. Mountains are primarily formed by deep-seated earth movements and/or volcanic action and secondarily by differential erosion.</attListValueDesc>
           <attListSortOrd>675</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11652,7 +11696,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>outwash plain</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(glacial outwash, kettles) An extensive lowland area of coarse textured, glaciofluvial material. An outwash plain is commonly smooth; where pitted, due to melt-out of incorporated ice masses, it is generally low in relief.</attListValueDesc>
           <attListSortOrd>700</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11662,7 +11706,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>oxbow</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(meander belt, oxbow lake) A closely looping stream meander having an extreme curvature such that only a neck of land is left between the two parts of the stream. A term used in New England for the land enclosed, or partly enclosed, within an oxbow.</attListValueDesc>
           <attListSortOrd>710</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11692,7 +11736,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>pingo</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A large frost mound; especially a relatively large conical mound of soil-covered ice (commonly 30 to 50 m high and up to 400 m in diameter) raised in part by hydrostatic pressure within and below the permafrost of Arctic regions, and of more than 1 year’s duration.</attListValueDesc>
           <attListSortOrd>740</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11702,12 +11746,12 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>plain</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(lowland, plateau) An extensive lowland area that ranges from level to gently sloping or undulating. A plain has few or no prominent hills or valleys, and usually occurs at low elevation with reference to surrounding areas (local relief generally less than 100m, although some, such as the Great Plains of the United States, are as much as 1000 to 1800 m above sea level.) Where dissected, remnants of a plain can form the local uplands.</attListValueDesc>
           <attListSortOrd>750</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>plateau</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(mesa, plain) An extensive upland mass with a relatively flat summit area that is considerably elevated (more than 100m) above adjacent lowlands, and is separated from them on one or more sides by escarpments. A comparatively large part of a plateau surface is near summit level.</attListValueDesc>
           <attListSortOrd>755</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11752,7 +11796,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>ravine</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(gulch, draw) A small stream channel; narrow, steep-sided, and commonly V-shaped in cross section; and larger than a gully.</attListValueDesc>
           <attListSortOrd>800</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11762,7 +11806,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>ridge</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A long, narrow elevation of the land surface, usually sharp rested with steep sides and forming an extended upland between valleys. The term is used in areas of both hill and mountain relief.</attListValueDesc>
           <attListSortOrd>810</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11797,7 +11841,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>saddle</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A low point on a ridge or crestline, generally a divide (pass, col) between the heads of streams flowing in opposite directions.</attListValueDesc>
           <attListSortOrd>845</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11851,8 +11895,13 @@ conditions may change between resampling events.
           <attListSortOrd>895</attListSortOrd>
         </attListItem>
         <attListItem>
+          <attListValue>shoulder</attListValue>
+          <attListValueDesc>(hill slope) The geomorphic component that form the uppermost inclined surface at the top of a hillslope. It comprises the transition zone from backslope to summit of an upland. The surface is dominantly convex in profile and erosional in origin.</attListValueDesc>
+          <attListSortOrd>897</attListSortOrd>
+        </attListItem>
+        <attListItem>
           <attListValue>sinkhole (undifferentiated)</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(doline) A closed depression formed either by solution of the surficial bedrock (e.g. limestone, gypsum, salt) or by collapse of underlying caves. Complexes of sinkholes in carbonate-rock terraces are the main components of karst topography.</attListValueDesc>
           <attListSortOrd>900</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11892,12 +11941,12 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>spit</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(a) A small point or low tongue or narrow embankment of land, commonly consisting of sand or gravel deposited by longshore drifting and having one end attached to the mainland and the other terminating in open water, usually the sea; a fingerlike extension of the beach. (b) A relatively long, narrow shoal or reef extending from the shore into a body of water.</attListValueDesc>
           <attListSortOrd>940</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>splay</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A small alluvial fan or other outspread deposit formed where an overloaded stream breaks through a levee and deposits its material (often coarse-grained) on the flood plain.</attListValueDesc>
           <attListSortOrd>945</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11932,7 +11981,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>swale</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(a) A slight depression, sometimes swampy, in the midst of generally level land. (b) A shallow depression in an undulating ground moraine due to uneven glacial deposition. (c) A long, narrow, generally shallow, trough-like depression between two beach ridges, and aligned roughly parallel to the coastline.</attListValueDesc>
           <attListSortOrd>980</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -11944,6 +11993,11 @@ conditions may change between resampling events.
           <attListValue>tarn</attListValue>
           <attListValueDesc/>
           <attListSortOrd>990</attListSortOrd>
+        </attListItem>
+        <attListItem>
+          <attListValue>terrace</attListValue>
+          <attListValueDesc>A step-like surface, bordering a valley floor or shoreline, that represent the former position of an alluvial plain, or lake or sea shore. The term is usually applied to both the relatively flat summit surface (platform, tread), cut or built by stream or wave action, and the steeper descending slope (scarp, riser), graded to a lower base level of erosion.</attListValueDesc>
+          <attListSortOrd>992</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>tidal flat</attListValue>
@@ -11987,7 +12041,7 @@ conditions may change between resampling events.
         </attListItem>
         <attListItem>
           <attListValue>valley</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>(basin) An elongate, relatively large, externally drained depression of the earth's surface that is primarily developed by stream erosion.</attListValueDesc>
           <attListSortOrd>1035</attListSortOrd>
         </attListItem>
         <attListItem>
@@ -12006,8 +12060,8 @@ conditions may change between resampling events.
           <attListSortOrd>1050</attListSortOrd>
         </attListItem>
       </attList>
-      <attNotes>closed list</attNotes>
-      <attDefinition>Landform type.</attDefinition>
+      <attNotes>n/a</attNotes>
+      <attDefinition>A recognizable physical feature on the surface of the earth, often including consideration of the natural cause of its formation.</attDefinition>
       <attForms>
         <formShow name="plotEnvLong">1001</formShow>
         <formShow name="plotEnvShort">1002</formShow>
