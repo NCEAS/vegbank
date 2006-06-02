@@ -23,12 +23,12 @@ import org.vegbank.common.Constants;
 
 /*
  * '$RCSfile: Utility.java,v $'
- * 
+ *
  * Purpose: An utility class for Vegbank project.
- * 
- * '$Author: anderson $'
- * '$Date: 2005-07-27 22:24:35 $'
- * '$Revision: 1.52 $'
+ *
+ * '$Author: mlee $'
+ * '$Date: 2006-06-02 19:16:33 $'
+ * '$Revision: 1.53 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,8 +50,8 @@ public class Utility implements Constants
 	/**
 	 * Handle for logging
 	 */
-	private static Log log = LogFactory.getLog(Utility.class); 
-	
+	private static Log log = LogFactory.getLog(Utility.class);
+
 	public static AbstractDatabase dbAdapter;
 	// FIXME: Read from properties
 	public static  String DB_ADAPTER_NAME = "org.vegbank.common.dbAdapter.PostgresqlAdapter";
@@ -83,8 +83,9 @@ public class Utility implements Constants
 	public static String VB_EMAIL_FROM;
 	public static String VB_EMAIL_ADMIN_TO;
 	public static String VB_EMAIL_ADMIN_FROM;
+	public static String DATABASE_ACCESSION_KEY_PREASSIGN;
 	public static List DS_CANDIDATES;
-	public static String PARAM_DELIM = "__"; 
+	public static String PARAM_DELIM = "__";
 	public static String DATACART_KEY = "datacart";   // found in session
 	public static String DATACART_COUNT_KEY = "datacart-count";   // found in session
 
@@ -105,7 +106,7 @@ public class Utility implements Constants
 		vegbankPropFile = ResourceBundle.getBundle("vegbank");
 		VEGBANK_SCHEMA_LOCATION = vegbankPropFile.getString("schemaLocation");
 		if (!VEGBANK_SCHEMA_LOCATION.endsWith("/")) { VEGBANK_SCHEMA_LOCATION += "/"; }
-		VEGBANK_SCHEMA_NAME = vegbankPropFile.getString("vegbankSchemaName");	
+		VEGBANK_SCHEMA_NAME = vegbankPropFile.getString("vegbankSchemaName");
 		VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
 		VEGBANK_XML_SCHEMA = VEGBANK_SCHEMA_LOCATION + VEGBANK_SCHEMA_NAME;
 
@@ -117,37 +118,40 @@ public class Utility implements Constants
 		VB_EXPORT_DIRNAME = vegbankPropFile.getString("vegbank.export.dirname");
 		VB_EXPORT_DIR = WEB_DIR + VB_EXPORT_DIRNAME;
 		MODELBEAN_CACHING = vegbankPropFile.getString("modelbean.caching");
-		
+
 		SMTP_SERVER = vegbankPropFile.getString("mailHost");
 		SMTP_PORT = vegbankPropFile.getString("mailPort");
 		VB_EMAIL_FROM = vegbankPropFile.getString("systemEmail");
 		VB_EMAIL_ADMIN_TO = vegbankPropFile.getString("admin.email.to");
 		VB_EMAIL_ADMIN_FROM = vegbankPropFile.getString("admin.email.from");
 
+        // accessionCode properties for this database:
+        DATABASE_ACCESSION_KEY_PREASSIGN = vegbankPropFile.getString("database.accession.key.preassign");
+
 	} catch (Exception ex) {
 		log.error("There was a problem loading Utility properties", ex);
 	} }
 
 
-	/** 
+	/**
 	 * Determine our db adapter class and create an instance of that class
 	 */
-	static 
+	static
 	{
-		try 
+		try
 		{
 			dbAdapter = (AbstractDatabase) createObject(DB_ADAPTER_NAME);
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			log.error("Error in Vegbank Util static block:" + e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * There are some characters that need to be escaped before they are being
 	 * written to the database, this escaping needs to be removed before usage.
-	 * 
+	 *
 	 * @param  s -- String to escape chars on
 	 * @return ready for db write
 	 */
@@ -156,21 +160,21 @@ public class Utility implements Constants
 		// Handle nulls
 		if ( s == null)
 			return null;
-			
+
 		//String origString = s;
 
-		// TODO: Implement this method 
+		// TODO: Implement this method
 		// '' -> ', '$ -> $, '^ -> ^ ( perhaps removing all ' will work?)
 		// needs experimentation
 
 		//System.out.println("---->" + origString + " VS. " + s );
 		return s;
 	}
-	
+
 	/**
 	 * There are some characters that need to be escaped before they are being
 	 * written to the database
-	 * 
+	 *
 	 * @param s -- String to escape chars on
 	 * @return String -- ready for db write
 	 */
@@ -179,20 +183,20 @@ public class Utility implements Constants
 		// Handle nulls
 		if ( s == null)
 			return null;
-			
+
 		// List of characters to escape
 		char[] specialChar = {'\'', '$', '^'};
-		
+
 		for (int i = 0; i < specialChar.length ; i++)
 		{
 			char currentChar = specialChar[i];
 			//System.out.println("----->" + currentChar);
-			
-			if ( s.indexOf ( currentChar) != -1 ) 
+
+			if ( s.indexOf ( currentChar) != -1 )
 			{
 				StringBuffer hold = new StringBuffer();
 				char c;
-				for ( int ii = 0; ii < s.length(); ii++ ) 
+				for ( int ii = 0; ii < s.length(); ii++ )
 				{
 					if ( (c=s.charAt(ii)) == currentChar  )
 						hold.append ("\\" + currentChar );
@@ -209,9 +213,9 @@ public class Utility implements Constants
   /**
    * Convert a string to a boolean.
    * Vegbank sometimes stores booleans in Strings for ease of use ( laziness )
-   * This attemps to right that wrong by converting certain String patterns into 
+   * This attemps to right that wrong by converting certain String patterns into
    * boolean values
-   * 
+   *
    * @param string String to test for true/t equality
    * @return is this a Stringified true?
    */
@@ -222,20 +226,20 @@ public class Utility implements Constants
     // Check for braindead stuff first
     if ( string == null || string.equals("") )
       return false;
-      
+
     if ( string.equals("true") )
       return true;
     if ( string.equals("t") )
       return true;
-      
+
     return result;
-    
+
    }
 
 	/**
 	 * Thin wrapper around setting a date field in a PreparedStatement to handle
 	 * adding nulls when needed, e.g. empty string.
-	 * 
+	 *
 	 * @param date
 	 * @param psmnt
 	 * @param i
@@ -254,12 +258,12 @@ public class Utility implements Constants
 			// this maybe should be setDate
 			psmnt.setString(i, date);
 		}
-	}	
-	
+	}
+
 	/**
 	 * Thin wrapper around setting a double field in a PreparedStatement to handle
 	 * adding nulls when needed, e.g. empty string.
-	 * 
+	 *
 	 * @param number
 	 * @param psmnt
 	 * @param i
@@ -278,11 +282,11 @@ public class Utility implements Constants
 			// this maybe should be setDate
 			psmnt.setString(i, number);
 		}
-	}	
-	
+	}
+
 	/**
 	 * Retrieves the content of a URL as a string
-	 * 
+	 *
 	 * @param u - the URL
 	 * @return	String - the content of the URL
 	 * @throws java.io.IOException
@@ -299,16 +303,16 @@ public class Utility implements Constants
 				istreamChar = (char)istreamInt;
 				serverResponse.append(istreamChar);
 			}
-    
+
 			return serverResponse.toString();
 		}
 
-	
+
 /**
  * <p>
  * Instantiate a class using the name of the class at runtime
  * </p>
- * 
+ *
  * @param className
  *          the fully qualified name of the class to instantiate
  * @return Instance of the requested class
@@ -335,7 +339,7 @@ public class Utility implements Constants
 		}
 		return object;
 	}
-	
+
     /**
      * Generates a VBModelBean from the field names in a ResultSet.
      */
@@ -355,7 +359,7 @@ public class Utility implements Constants
                 //String value = rs.getString(i);
                 try {
                     if (value != null) {
-                        BeanUtils.copyProperty(bean, propName, value);	
+                        BeanUtils.copyProperty(bean, propName, value);
                     }
                 } catch (Exception ex) {
                     log.debug("unable to set " + propName + " in bean " + beanName);
@@ -373,8 +377,8 @@ public class Utility implements Constants
 	 * <p>
 	 * Utility Method to check for nulls and empty String
 	 * </p>
-	 * 
-	 * @param stringToCheck 
+	 *
+	 * @param stringToCheck
 	 * @return Is this Empty or null?
 	 */
 	public static boolean isStringNullOrEmpty(String stringToCheck)
@@ -392,20 +396,20 @@ public class Utility implements Constants
 				stringToCheck.equalsIgnoreCase("no") ||
 				stringToCheck.equalsIgnoreCase("0"));
 	}
-	
+
 	/**
 	 * <p>
 	 * Utility Method to check for nulls and empty array.
 	 * </p>
-	 * 
-	 * @param arrayToCheck 
+	 *
+	 * @param arrayToCheck
 	 * @return Is this Empty or null?
 	 */
 	public static boolean isArrayNullOrEmpty(Object[] arrayToCheck)
 	{
 		return arrayToCheck == null || arrayToCheck.length == 0;
 	}
-	
+
 	/**
 	 * <p>
 	 * Convience method to check several string for nullness or emtyness
@@ -427,7 +431,7 @@ public class Utility implements Constants
 		}
 		return result;
 	}
-	
+
 	/**
 	 * <p>
 	 * Convience method to check several string for non nullness or non emtyness
@@ -449,29 +453,29 @@ public class Utility implements Constants
 		}
 		return result;
 	}
-	
+
 	/**
 	 * <p>
 	 * Convience method to create a simple comma separted string from an <code>Object[]</code>.
 	 * </p>
 	 *
-	 * @param objects 
+	 * @param objects
 	 * 		Array of <code>Object</code>s to convert to comma separate <code>String</code>
-	 * @return String 
+	 * @return String
 	 */
 	public static String arrayToCommaSeparatedString(Object[] objects)
 	{
 		return joinArray(objects, ",");
 	}
-	
+
 	/**
 	 * <p>
-	 * Convience method to create a simple delimetted <code>String</code> from 
+	 * Convience method to create a simple delimetted <code>String</code> from
 	 * an <code>Object[]</code>.
 	 * </p>
 	 *
 	 * @param objects
-	 * @param delimiter 
+	 * @param delimiter
 	 * 		The delimeter to use when constructing the <code>String</code>
 	 * @return The delimited List as <code>String</code>
 	 */
@@ -492,7 +496,7 @@ public class Utility implements Constants
 	/**
 	 * Capitalizes the first letter of a string. Leaves the rest of the Sting alone
 	 * @param text
-	 * @return String 
+	 * @return String
 	 */
 	public static String upperCaseFirstLetter(String text)
 	{
@@ -500,10 +504,10 @@ public class Utility implements Constants
 		//System.out.println("Utiltiy > " +result);
 		return result;
 	}
-	
+
 	/**
 	 * Prints out a hashtable in an easy to read fashion
-	 * 
+	 *
 	 * @param hash -- hashtable to pretty print
 	 */
 	public static void prettyPrintHash( Hashtable hash )
@@ -513,7 +517,7 @@ public class Utility implements Constants
         }
 		log.debug(prettyPrintHash(hash, 0));
 	}
-	
+
 	private static String prettyPrintHash( Hashtable hash,  int indent)
 	{
 		//log.debug(indent +" -- "+hash.hashCode());
@@ -522,7 +526,7 @@ public class Utility implements Constants
 		while ( keys.hasNext() )
 		{
 			Object key = keys.next();
-			sb.append(getIdent( indent ) + key + ":");  
+			sb.append(getIdent( indent ) + key + ":");
 			Object value = hash.get( key  );
 			if ( value instanceof  java.util.Hashtable )
 			{
@@ -536,7 +540,7 @@ public class Utility implements Constants
 				{
 					Object element = it.next();
 					if ( element instanceof  java.util.Hashtable )
-					{		
+					{
 						sb.append( "--->" +((Hashtable) element).get("TableName") );
 						sb.append("\n");
 						sb.append( prettyPrintHash( (Hashtable) element, indent + 1));
@@ -550,24 +554,24 @@ public class Utility implements Constants
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Gets current date and time using UTC Timezone.
-	 *   
+	 *
 	 * @return Date-- current Date
 	 */
-	public static java.util.Date getNow( ) 
+	public static java.util.Date getNow( )
 	{
 		// TODO: not tested yet
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-    	return cal.getTime(); 
+    	return cal.getTime();
 	}
-	
+
 	/**
-	 * Gets current date in a format that can be accepted 
+	 * Gets current date in a format that can be accepted
 	 * by the RDBMS and that is like: Aug 9, 2002
-	 * 
-	 * @return the date in a RDBMS format 
+	 *
+	 * @return the date in a RDBMS format
 	 */
 	 public static String getCurrentDate()
 	 {
@@ -576,10 +580,10 @@ public class Utility implements Constants
 		DateFormat med = DateFormat.getDateInstance (DateFormat.MEDIUM);
 		return med.format(now);
 	 }
-	
+
 	/**
 	 * Convience method for get a string of tabs
-	 * 
+	 *
 	 * @param indent
 	 * @return
 	 */
@@ -595,10 +599,10 @@ public class Utility implements Constants
 
 	/**
 	 * <p>
-	 * Convience method to get the VB Primary Key Name, basically 
+	 * Convience method to get the VB Primary Key Name, basically
 	 * handles expections to the naming conviention.
 	 * </p>
-	 * 
+	 *
 	 * @param table The name of this table
 	 * @return the PKName for this table
 	 */
@@ -625,10 +629,10 @@ public class Utility implements Constants
 	 * Foreign Key don't always have the same name as the primary key of the
 	 * the the primary table, this is a utility to allow this lookup to happen.
 	 * </br>
-	 * 
+	 *
 	 * <b>Not</b> a comprehensive lookup!
 	 * </p>
-	 * 
+	 *
 	 * @param FKName The Foriegn Key name
 	 * @return The Primary Key name that corresponds to the inputed FK name.
 	 */
@@ -636,7 +640,7 @@ public class Utility implements Constants
 	{
 		// TODO: this is not comprehesive as this is only a problem
 		// for some lookups, should be comprehensive to avoid misuse
-		String PKname = "";	
+		String PKname = "";
 		if ( FKName.equalsIgnoreCase(Plantstatus.PLANTPARENT_ID))
 		{
 			PKname = Plantconcept.PKNAME;
@@ -650,19 +654,19 @@ public class Utility implements Constants
 
 	/**
 	 * Only certain database names need to have accessionCodes loaded
-	 * 
-	 * @return boolean 
+	 *
+	 * @return boolean
 	 */
 	public static boolean isLoadAccessionCodeOn()
 	{
-        // I'm not sure what we were thinking when this code was written, 
+        // I'm not sure what we were thinking when this code was written,
         // but I'm disabling it.  2/1/2005 PMA
         return true;
 
         /*
 		boolean genAC = false;
 		log.debug("Utility: databaseName = " + DATABASE_NAME);
-		
+
 		if (DATABASE_NAME.equalsIgnoreCase("vegbank") || DATABASE_NAME.equalsIgnoreCase("vegtest")) {
 			genAC = true;
 		} else {
@@ -678,7 +682,7 @@ public class Utility implements Constants
 	public static String getAccessionPrefix()
 	{
 		String accessionPrefix = "";
-		
+
 		// This is a function of database name and host machine
 		if ( DATABASE_NAME.equalsIgnoreCase("vegbank"))
 		{
@@ -697,14 +701,14 @@ public class Utility implements Constants
 		{
 			accessionPrefix = "NOTVALID";
 		}
-		
+
 		return accessionPrefix;
 	}
-	
+
 	/**
-	 * Convert an inputstream to a String. Not sure how the handle encoding 
+	 * Convert an inputstream to a String. Not sure how the handle encoding
 	 * so using System default for now.
-	 * 
+	 *
 	 * @param is
 	 * @return
 	 * @throws IOException
@@ -713,22 +717,22 @@ public class Utility implements Constants
 	{
 		InputStreamReader reader = new InputStreamReader(is);
 		char[] buffer = new char[4096];
-		
+
 		StringWriter writer = new StringWriter();
-		
+
 		int bytes_read;
 		while ((bytes_read = reader.read(buffer)) != -1)
 		{
 			writer.write(buffer, 0, bytes_read);
 		}
-		
+
 		String result = writer.toString();
 		return result;
 	}
-	
+
 	/**
 	 * Convience method to Uppercase first char of a String and lower case
-	 * the rest 
+	 * the rest
 	 * @param stringToCapitalize
 	 * @return
 	 */
@@ -739,10 +743,10 @@ public class Utility implements Constants
 		result.append( stringToCapitalize.substring(1).toLowerCase() );
 		return result.toString();
 	}
-	
-	/** 
+
+	/**
 	 * Parse up an Accessioncode into its parts
-	 * 
+	 *
 	 * @param accessionCode Vegbank AC to be parsed.
 	 * @return code, entityname, key in a <code>String[]</code>
 	 */
@@ -752,14 +756,14 @@ public class Utility implements Constants
 		String ENTITYCODE = "ENTITYCODE";
 		String KEYVALUE = "KEYVALUE";
 		String CONFIMATIONCODE = "CONFIMATIONCODE";
-		
+
 		HashMap parsedAC = new HashMap();
 		// method
 		log.debug("Utility: accessionCode = " + accessionCode);
 		Pattern pattern = Pattern.compile("([^\\.]*)\\.([^\\.]*)\\.([^\\.]*)\\.{0,1}([^\\.]*)");
 		Matcher m = pattern.matcher(accessionCode);
 		if ( m.find() )
-		{	
+		{
 			parsedAC.put("DBCODE", m.group(1) );
 			parsedAC.put("ENTITYCODE", m.group(2) );
 			parsedAC.put("KEYVALUE", m.group(3) );
@@ -768,10 +772,10 @@ public class Utility implements Constants
 		log.debug("Parsed an AccessionCode: DBCode > '" + parsedAC.get(DBCODE) + "' ENTITYCODE > '" + parsedAC.get(ENTITYCODE) + "' KEYVALUE > '" + parsedAC.get(KEYVALUE) + "' CONFIMATIONCODE > '" + parsedAC.get(CONFIMATIONCODE) + "'"  );
 		return parsedAC;
 	}
-	
+
 	/**
 	 * Ugly hack to test if an entityCode is a root entity or not.
-	 * 
+	 *
 	 * @param entityCode
  	 * @return Is root entity?
 	 */
@@ -787,10 +791,10 @@ public class Utility implements Constants
 
 		return result;
 	}
-	
+
 	/**
 	 * Create and write a temp file in the system tmp dir (/tmp).
-	 * 
+	 *
 	 * @param in
 	 *          Reader to write out to filesystem
 	 * @throws IOException
@@ -814,7 +818,7 @@ public class Utility implements Constants
 
 	/**
 	 * Tool to save a file to the filesystem.
-	 * 
+	 *
 	 * @param in
 	 *          Reader to write out to filesystem
 	 * @param filename
@@ -843,7 +847,7 @@ public class Utility implements Constants
 
 	/**
 	 * Tool to delete a file from the filesystem.
-	 * 
+	 *
 	 * @param filename
 	 *          The name of the file to write to
 	 * @throws IOException
@@ -856,7 +860,7 @@ public class Utility implements Constants
 
     /**
      * Serialize a file.
-     * 
+     *
      * @param fileName
      * @param the Object
      * @throws IOException
@@ -866,11 +870,11 @@ public class Utility implements Constants
         ObjectOutputStream objectOut = new ObjectOutputStream (fileOut);
         objectOut.writeObject(o);
     }
-    
+
 
     /**
      * Deserialize a file.
-     * 
+     *
      * @param fileName
      * @param the Object
      * @throws IOException
@@ -885,7 +889,7 @@ public class Utility implements Constants
         }
         return null;
     }
-    
+
 
 
 	/**
@@ -899,7 +903,7 @@ public class Utility implements Constants
 		return Character.toUpperCase(str.charAt(0)) +
 				str.toLowerCase().substring(1);
 	}
-	
+
 
 	/**
 	 * @return true if the value of the given string is a number
@@ -909,7 +913,7 @@ public class Utility implements Constants
 			return false;
 		}
 
-		try { Long.parseLong(s); } 
+		try { Long.parseLong(s); }
 		catch (NumberFormatException nfex) { return false; }
 
 		return true;
@@ -917,7 +921,7 @@ public class Utility implements Constants
 
 
 	/**
-	 * @return true if the first/only value of the given 
+	 * @return true if the first/only value of the given
 	 *    comma-separated list is a number
 	 */
 	public static boolean isNumericList(String csv) {
@@ -960,7 +964,7 @@ public class Utility implements Constants
 	}
 
 	/**
-     * 
+     *
 	 * @return
 	 */
 	public static boolean canAddToDatasetOnLoad(String tableName) {
@@ -982,8 +986,8 @@ public class Utility implements Constants
     }
 
     /**
-     * Returns a version of the given string that is no 
-     * longer than len chars and ends in "..." if 
+     * Returns a version of the given string that is no
+     * longer than len chars and ends in "..." if
      * any chars were abbreviated (string was long).
      */
     public static String abbreviate(String src, int len) {
