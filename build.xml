@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: berkley $'
-  * '$Date: 2006-05-30 21:00:31 $'
-  * '$Revision: 1.75 $'
+  * '$Author: mlee $'
+  * '$Date: 2006-06-02 21:57:18 $'
+  * '$Revision: 1.76 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -137,6 +137,7 @@ dbVerify      verify that the database and the datamodel are the same.  create
     <filter token="databaseDriverClass" value="${databaseDriverClass}"/>
     <filter token="databaseConnectString" value="${databaseConnection}"/>
     <filter token="databaseName" value="${databaseName}"/>
+    <filter token="database.accession.key.preassign" value="${database.accession.key.preassign}" />
     <filter token="psqlPath" value="${psqlPath}"/>
     <filter token="vegbankVersion" value="${version}"/>
     <filter token="vegbank.data.dir" value="${dataPath}/"/>
