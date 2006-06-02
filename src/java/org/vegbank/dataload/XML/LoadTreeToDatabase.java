@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-09-02 23:11:46 $'
- *	'$Revision: 1.26 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-06-02 21:15:15 $'
+ *	'$Revision: 1.27 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,6 +80,7 @@ import org.vegbank.common.utility.KeywordGen;
 import org.vegbank.common.utility.DataloadLog;
 import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.AccessionCode;
+import org.vegbank.common.utility.Timer;
 
 
 /**
@@ -111,10 +112,11 @@ public class LoadTreeToDatabase
 	// Allow no commit for testing
 	private boolean doCommit = true;
 	private HashMap tableKeys = new HashMap();
-    private AccessionGen ag = null;
-    //private VBModelBeanToDB bean2db = null;
-    private String xmlFileName = null;
-    private Long usrId = new Long(0);
+  private AccessionGen ag = null;
+  //private VBModelBeanToDB bean2db = null;
+  private String xmlFileName = null;
+  private Long usrId = new Long(0);
+  private Timer timer;
 
 	
 	// This holds the name of the current concept
@@ -142,6 +144,7 @@ public class LoadTreeToDatabase
 	public void insertVegbankPackage(Hashtable vbPkg, String xmlFileName, Long usrId)
 		    throws SQLException
 	{
+    Timer t1 = new Timer("inserting vegbank package");
 		this.vegbankPackage = vbPkg;
 		this.xmlFileName = xmlFileName;
 		this.usrId = usrId;
@@ -163,28 +166,35 @@ public class LoadTreeToDatabase
             return;
         }
 
+    timer = new Timer("initing db");
 		//this boolean determines if the dataset should be commited or rolled-back
 		commit = true;
 		this.initDB();
         dlog.append("preparing data..."); 
-
+    timer.stop();
+        
 		// insert commConcepts
+    timer = new Timer("inserting commConcepts");
 		Enumeration commConcepts =  getChildTables(vegbankPackage, "commConcept");
 		while ( commConcepts.hasMoreElements() )
 		{
 			Hashtable commConcept = (Hashtable) commConcepts.nextElement();
 			insertCommConcept(commConcept);
 		}			
+    timer.stop();
 
 		// insert plantConcepts
+    timer = new Timer("inserting plantConcepts");
 		Enumeration plantConcepts =  getChildTables(vegbankPackage, "plantConcept");
 		while ( plantConcepts.hasMoreElements() )
 		{
 			Hashtable plantConcept = (Hashtable) plantConcepts.nextElement();
 			insertPlantConcept(plantConcept);
 		}
+    timer.stop();
 
 		// insert references
+    timer = new Timer("inserting references");
 		Enumeration references =
 			getChildTables(vegbankPackage, "reference");
 		while (references.hasMoreElements())
@@ -192,22 +202,27 @@ public class LoadTreeToDatabase
 			Hashtable reference = (Hashtable) references.nextElement();
 			this.insertReference(reference);
 		}
+    timer.stop();
 
 		// insert Parties
+    timer = new Timer("inserting parties");
 		Enumeration parties = getChildTables(vegbankPackage, "party");
 		while (parties.hasMoreElements())
 		{
 			Hashtable party = (Hashtable) parties.nextElement();
 			this.insertParty(party);
 		}
+    timer.stop();
 
 		// insert observations
+    timer = new Timer("inserting observations");
 		Enumeration observations = getChildTables(vegbankPackage, "observation");
 		while (observations.hasMoreElements())
 		{
 			Hashtable observation = (Hashtable) observations.nextElement();
 			insertObservation(observation);
 		}
+    timer.stop();
 
         dlog.append("finished preparing data"); 
 
@@ -221,10 +236,13 @@ public class LoadTreeToDatabase
             //////////////////////////////////////////////////////////////////
 			log.debug("committing xml data to DB");
 			dlog.append("committing xml data to DB");
+      timer = new Timer("committing data to db");
 			writeConn.commit();
+      timer.stop();
 
             try {
                 // DATASET CREATION
+                timer = new Timer("creating dataset");
                 log.debug("====================== DATASET CREATION"); 
                 dsAC = createDataset();
                 if (dsAC != null) {
@@ -235,44 +253,52 @@ public class LoadTreeToDatabase
                     dlog.append("!!! empty dataset");
                     log.error("empty dataset");
                 }
-
+                timer.stop();
             } catch (Exception ex) {
                 log.error("problem creating dataset or dataset items", ex);
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem creating dataset: " + ex.toString());
+                timer.stop();
             }
 
 
             try {
                 // ACCESSION CODE GENERATION
+                timer = new Timer("create accession codes");
                 log.debug("====================== ACCESSION GEN"); 
                 List newAccessionCodes = this.addAllAccessionCodes();
                 log.debug("========= DONE adding ACs");
                 accessionCodesAdded.addAll(newAccessionCodes);
                 writeConn.commit();
+                timer.stop();
             } catch (Exception ex) {
                 log.error("Problem while generating accession codes", ex);
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem generating accession codes: " + ex.toString());
+                timer.stop();
             }
 
 
             try {
                 log.debug("====================== DENORMS");
+                timer = new Timer("denormalizing sql");
                 // RUN DENORMALIZATION SQL
                 log.info("Running denormalizations");
                 //runDenorms();
 
                 ////writeConn.commit();
+                timer.stop();
             } catch (Exception ex) {
                 log.error("Problem while running denormalizations", ex);
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem while running denormalizations: " + ex.toString());
+                timer.stop();
             }
 
 
             try {
                 // KEYWORD GENERATION
+                timer = new Timer("generate keywords");
                 log.debug("====================== KEYWORD GEN");
                 dlog.append("====================== KEYWORD GEN");
                 KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
@@ -281,15 +307,17 @@ public class LoadTreeToDatabase
                     String tableName = ((String)tit.next()).toLowerCase();
                     kwGen.updatePartialEntityByTable(tableName);
                 }
-
+                timer.stop();
             } catch (SQLException kwex) {
                 log.error("problem inserting new keywords", kwex);
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem generating keywords: " + kwex.toString());
+                timer.stop();
             } catch (Exception ex) {
                 log.error("Some lame problem inserting new keywords", ex);
 				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem generating keywords: " + ex.toString());
+                timer.stop();
             }
                 //log.error("\n\nREMEMBER TO GEN KEYWORDS!\n\n");
 
@@ -338,6 +366,7 @@ public class LoadTreeToDatabase
 		DBConnectionPool.returnDBConnection(writeConn);
 		readConn.setReadOnly(false);
 		DBConnectionPool.returnDBConnection(readConn);
+    t1.stop();
 	}
 
 	private void initDB() throws SQLException

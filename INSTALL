@@ -176,15 +176,30 @@ is missing information or tables.
 
 If you want to create a fresh, blank database, you first need to create the 
 db sql script from the data model like so:
-bash$ ant -f build.new.xml generateDBSQL
+
+**NOTE This has not really worked in a while.  Right now, the only sure fire way
+to create the database is with a pg_dump (backup) file from an existing database.
+This is a known bug and will be fixed.**
+
+bash$ ant generateDBSQL
 You will find the vegbank.sql file has been built in build/sql.  You can then 
 run
 bash$ psql -U vegbank vegbank < build/sql/vegbank.sql >dbcreate.log 
-bash$ psql -U vegbank vegbank < src/sql/create_aggregrates.sql
-
+bash$ psql -U vegbank vegbank < build/sql/create_aggregrates.sql
+bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
+bash$ psql -U vegbank vegbank < build/sql/denorm/add_embargo_all_or_nothingfields.sql.sql
 
 You should then be able to login and use the \d command in psql to display
-the table structure of the database.
+the table structure of the database
+
+Next you need to add a user so you can load data.  Note the permission type of
+15 is the admin user.
+bash$ psql
+vegbank=# insert into party (party_id, givenname, surname, email) values (1,'jim','bob','jimbob@cooluni.edu');
+INSERT 0 1
+vegbank=# insert into usr (usr_id, party_id, password, permission_type, email_address) values (1,1,'mypasswd',15,'jimbob@cooluni.edu');
+INSERT 0 1
+.
 
 ==============================
 INSTALLING THE WEB APPLICATION
@@ -214,14 +229,14 @@ drwxrwxr-x  2 berkley dev 4096 May 23 14:12 logs
 drwxrwxr-x  2 berkley dev 4096 May 23 14:12 upload
 [berkley@aldo vegbank]$
 
-bash$ ant -f build.new.xml install
+bash$ ant install
 start tomcat and apache then (always start tomcat first):
-bash$ ant -f build.new.xml web-install
+bash$ ant web-install
 
 to clean the build
 ------------------
-bash$ ant -f build.new.xml clean
+bash$ ant clean
 or to clean the build and clean the install use:
-bash$ ant -f build.new.xml full-clean
+bash$ ant full-clean
 
 

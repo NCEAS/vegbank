@@ -6,8 +6,8 @@ package org.vegbank.dataload.XML;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-01 20:53:42 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2006-06-02 21:15:15 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,8 +73,7 @@ public class VegbankXMLUpload
 	
 	// AccessionCodes of loaded root entities
 	private List accessionCodes = null;
-  private long startTime;
-  private long endTime;
+  private org.vegbank.common.utility.Timer timer;
 
 	
  	/**
@@ -127,7 +126,7 @@ public class VegbankXMLUpload
 			ConditionalContentHandlerController controller)
             throws IOException, SAXException
 	{
-    startTime = System.currentTimeMillis();
+    timer = new org.vegbank.common.utility.Timer("Time to process xml file");
 		log.info("processing XML file");
 		log.info("Validation on: " + this.validate);
 		log.info("Rectification on: " + this.rectify);
@@ -181,9 +180,7 @@ public class VegbankXMLUpload
 		}
 
 		log.debug("Done processing XML file");
-    endTime = System.currentTimeMillis();
-    long totalTime = (endTime - startTime)/1000;
-    log.info("CHADCHADCHADCHADCHADCHAD: Total XML Load time: " + totalTime + " seconds");
+    timer.stop();
 	}
 	
 	private InputSource getInputSource( File pFile) throws FileNotFoundException

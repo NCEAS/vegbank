@@ -4,9 +4,9 @@ package org.vegbank.common.utility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-10-27 20:04:29 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-06-02 21:15:15 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,13 +46,13 @@ public class StopWatchUtil
 	
 	public void startWatch()
 	{
-		System.out.println("Starting clock on '" + taskName + "'");
+		//System.out.println("Starting clock on '" + taskName + "'");
 		startTime = System.currentTimeMillis();
 	}
 	
 	public void stopWatch()
 	{
-		System.out.println("Stopping clock on '" + taskName + "'");
+		//System.out.println("Stopping clock on '" + taskName + "'");
 		stopTime = System.currentTimeMillis();
 	}
 	
@@ -138,7 +138,7 @@ public class StopWatchUtil
 		
 		sb.append("to complete.");
 
-	   System.out.println( sb.toString() );
+	   //System.out.println( sb.toString() );
 	}
 
 }

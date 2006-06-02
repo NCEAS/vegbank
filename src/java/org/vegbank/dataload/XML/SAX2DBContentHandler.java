@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-01 20:53:42 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2006-06-02 21:15:15 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,9 +49,10 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	private List accessionCodes = null;
 	private HashMap tableTally = null;
 	private List tallyIgnoreList = null;
-    private DataloadLog dlog = null;
-    private String xmlFileName = null;
-    private Long usrId = null;
+  private DataloadLog dlog = null;
+  private String xmlFileName = null;
+  private Long usrId = null;
+  private org.vegbank.common.utility.Timer timer;
 	
 	public SAX2DBContentHandler(LoadingErrors errors, List accessionCodes, boolean load, 
             String xmlFileName, Long usrId, DataloadLog dlog)
@@ -94,9 +95,7 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 		} else {
 			log.info("Document parsing complete but NOT loaded, as requested.");
 		}
-    endTime = System.currentTimeMillis();
-    long totalTime = (endTime - startTime)/1000;
-    log.info("CHADCHADCHADCHADCHADCHADCHADCHADCHAD: Total parse time: " + totalTime  + "seconds");
+    timer.stop();
 	}
 
 	private Hashtable tmpStore = new Hashtable();
@@ -107,8 +106,6 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	private boolean atFirstPlot = true;
 	private Vector tables = new Vector();
 	private Vector fKFields = new Vector();
-  private long startTime;
-  private long endTime;
 	// Characters Sections can be truncated in many parts 
 	String currentValue = "";
 
@@ -462,8 +459,7 @@ public class SAX2DBContentHandler extends ConditionalContentHandler
 	public void startDocument() throws SAXException
 	{
 		// Do Nothing
-    startTime = System.currentTimeMillis();
-    log.info("CHADCHADCHADCHADCHADCHADCHAD: Starting document at time " + startTime);
+    timer = new org.vegbank.common.utility.Timer("Time for SAX parse");
 	}
 
 	/* (non-Javadoc)

@@ -4,9 +4,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-09-02 21:15:15 $'
- *	'$Revision: 1.4 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-06-02 21:15:15 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,16 +54,16 @@ public class StatusBarUtil {
 		if (smallCount) {
 			int num = (int) (100 * scalar) - (int) pct1 * (int) l;
 			for (int i = 0; i < num; i++) {
-				System.out.print("-");
+				//System.out.print("-");
 			}
 		} else {
 			int num = (int) ((100 * scalar) - ((int) count / (int) pct1));
 			for (int i = 0; i < num; i++) {
-				System.out.print("-");
+				//System.out.print("-");
 			}
 		}
-		System.out.println("| 100%");
-		System.out.println("updated " + l + "\n");
+		//System.out.println("| 100%");
+		//System.out.println("updated " + l + "\n");
 	}
 
 	/**
@@ -73,14 +73,14 @@ public class StatusBarUtil {
 		l++;
 		if (smallCount) {
 			for (int i = 0; i < pct1; i++) {
-				System.out.print("-");
+				//System.out.print("-");
 			}
 
 		} else {
 			if (l < pct1 || pct1 == 0) {
 				// do nothing
 			} else if (l % pct1 == 0) {
-				System.out.print("-");
+				//System.out.print("-");
 			}
 		}
 	}
@@ -102,12 +102,12 @@ public class StatusBarUtil {
 			pct1++;
 		}
 
-		System.out.print("0% |");
+		//System.out.print("0% |");
 		for (int i = 0; i < 100 * scalar; i++) {
-			System.out.print(" ");
+			//System.out.print(" ");
 		}
-		System.out.println("| 100%  ");
+		//System.out.println("| 100%  ");
 		// First part of true status bar
-		System.out.print("0% |");
+		//System.out.print("0% |");
 	}
 }

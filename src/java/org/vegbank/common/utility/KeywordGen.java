@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-09-02 21:15:15 $'
- *	'$Revision: 1.11 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-06-02 21:15:15 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@ public class KeywordGen {
 	private List entityList;
 	private Map table2entity;
 	private Map extraQueries;
+  private org.vegbank.common.utility.Timer timer;
 
 
 	public KeywordGen() {
@@ -131,9 +132,10 @@ public class KeywordGen {
 	// STANDALONE
 	//////////////////////////////////////////////////////////
 	public void run(String dbName, String dbHost, boolean updateMismatch) {
-
+    timer = new org.vegbank.common.utility.Timer("Time for keyword generation run thread");
+    
 		String dbURL = "jdbc:postgresql://"+dbHost+"/"+dbName;
-		System.out.println("connect string: " + dbURL);
+		//System.out.println("connect string: " + dbURL);
 
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -143,7 +145,7 @@ public class KeywordGen {
 					dbName + " on " + dbHost + " [y|n] > ");
 
 			if (!s.equals("y")) {
-				System.out.println("Thanks anyway.");
+				//System.out.println("Thanks anyway.");
 				conn.close();
 				System.exit(0);
 			}
@@ -159,6 +161,7 @@ public class KeywordGen {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+    timer.stop();
 	}
 
 
@@ -769,7 +772,7 @@ public class KeywordGen {
 
 	private void showSQL(String sql) {
 		log.debug("SQL: " + sql);
-		System.out.println("SQL: " + sql);
+		//System.out.println("SQL: " + sql);
 	}
 
     /**
