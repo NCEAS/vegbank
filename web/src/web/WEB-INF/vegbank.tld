@@ -185,6 +185,27 @@
 
 
 <tag>
+<name>requestaccessioncode</name>
+<tagclass>org.vegbank.ui.struts.taglib.VegbankRequestAccessionCodeTag</tagclass>
+<bodycontent>empty</bodycontent>
+<attribute>
+	<name>table</name>
+	<required>true</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>recordcount</name>
+	<required>true</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+<attribute>
+	<name>requestkey</name>
+	<required>true</required>
+	<rtexprvalue>true</rtexprvalue>
+</attribute>
+</tag>
+
+<tag>
 <name>datacart</name>
 <tagclass>org.vegbank.ui.struts.taglib.VegbankDatacartTag</tagclass>
 <bodycontent>empty</bodycontent>
