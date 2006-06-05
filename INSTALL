@@ -167,6 +167,10 @@ Now you just have to create the database schema that vegbank will use.
 If you have a postgresql backup dump that you are installing the db from, 
 use the command:
 bash$ psql -U vegbank vegbank < backupFile.sql > dbimport.log 2>&1
+bash$ psql -U vegbank vegbank < build/sql/create_aggregrates.sql
+bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
+bash$ psql -U vegbank vegbank < build/sql/denorm/add_embargo_all_or_nothingfields.sql
+bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
 
 Note that if you use a backup file, you will need to run the script 
 src/sql/create_aggregrates.sql to create the aggregate CONCAT function since
@@ -187,7 +191,8 @@ run
 bash$ psql -U vegbank vegbank < build/sql/vegbank.sql >dbcreate.log 
 bash$ psql -U vegbank vegbank < build/sql/create_aggregrates.sql
 bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
-bash$ psql -U vegbank vegbank < build/sql/denorm/add_embargo_all_or_nothingfields.sql.sql
+bash$ psql -U vegbank vegbank < build/sql/denorm/add_embargo_all_or_nothingfields.sql
+bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
 
 You should then be able to login and use the \d command in psql to display
 the table structure of the database
