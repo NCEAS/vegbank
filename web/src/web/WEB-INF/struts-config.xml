@@ -1,5 +1,11 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<!--to add a new form to this file, you need to add entries in the 2 following 
+    locations:
+    1) global-forwards
+    2) action-mappings
+-->
 <struts-config>
+  <!--form beans-->
 	<form-beans>
 		<form-bean name="AddCoverMethodForm" type="org.vegbank.ui.struts.AddCoverMethodForm" />
 		<form-bean name="AddJournalForm" type="org.vegbank.ui.struts.AddJournalForm" />
@@ -13,20 +19,6 @@
 			<form-property name="newpassword2" type="java.lang.String" />
 			<form-property name="action" type="java.lang.String" />
 		</form-bean>
-		<!--form-bean name="CommQueryForm" type="org.vegbank.ui.struts.CommQueryForm" /-->
-		<!-- MTL: 5/5/05 probably not needed -->
-		<!--form-bean name="DisplayEntityForm" type="org.apache.struts.validator.DynaValidatorForm">
-			<form-property name="accessionCode" type="java.lang.String" />
-			<form-property name="resultType" type="java.lang.String" />
-		</form-bean-->
-		<!-- MTL: 5/5/05 probably not needed -->
-		<!--form-bean name="DisplayPlotForm" type="org.apache.struts.validator.DynaValidatorForm">
-			<form-property name="accessionCode" type="java.lang.String" />
-			<form-property name="resultType" type="java.lang.String" />
-		</form-bean-->
-		<!--<form-bean name="DisplayQueryResultsForm" type="org.apache.struts.validator.DynaValidatorForm">
-			<form-property name="selectedPlots" type="java.lang.String[]" />
-		</form-bean>-->
 		<form-bean name="DownloadForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="dsId" type="java.lang.Long" initial="0" />
 			<form-property name="dataType" type="java.lang.String" initial="all" />
@@ -43,7 +35,6 @@
 			<form-property name="email" type="java.lang.String" />
 		</form-bean>
 		<form-bean name="InterpretPlantForm" type="org.vegbank.ui.struts.InterpretPlantForm" />
-
 		<form-bean name="InterpretCommForm" type="org.apache.struts.validator.LazyValidatorForm">
             <form-property name="commclass" type="org.vegbank.common.model.Commclass"/>
             <form-property name="comminterp" type="org.vegbank.common.model.Comminterpretation[]"/>
@@ -57,8 +48,6 @@
 		<form-bean name="GenericDispatcherForm" type="org.apache.struts.action.DynaActionForm">
 			<form-property name="accessionCode" type="java.lang.String" />
 		</form-bean>
-		<!--form-bean name="PlantQueryForm" type="org.vegbank.ui.struts.PlantQueryForm" /-->
-		<!--form-bean name="PlotQueryForm" type="org.vegbank.ui.struts.PlotQueryForm" /-->
 		<form-bean name="RegisterNewUserForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="usr" type="org.vegbank.common.model.Usr" />
 			<form-property name="party" type="org.vegbank.common.model.Party" />
@@ -69,6 +58,8 @@
 		<form-bean name="UploadPlotForm" type="org.vegbank.ui.struts.UploadPlotForm" />
 		<form-bean name="UserProfileForm" type="org.vegbank.ui.struts.UserProfileForm" />
 	</form-beans>
+  
+  <!--global forwards-->
 	<global-forwards>
 		<forward name="failure" path="/forms/failure.jsp" redirect="false" />
 		<forward name="success" path="/forms/success.html" />
@@ -83,44 +74,51 @@
 		<forward name="Certification" path="/LoadCertification.do" />
 		<forward name="CertificationException" path="/forms/CertificationException.jsp" />
 		<forward name="CertificationList" path="/ListCertifications.do" />
+    <forward name="UserList" path="/ListUsers.do" />
 		<forward name="ChangePassword" path="/forms/change_pwd.jsp" redirect="false" />
-		<forward name="InterpretTaxonObservation" path="/InterpretTaxonObservation.do" redirect="false" />
-		<forward name="InterpretCommObservation" path="/InterpretCommObservation.do" redirect="false" />
+		<forward name="InterpretTaxonObservation" 
+             path="/InterpretTaxonObservation.do" redirect="false" />
+		<forward name="InterpretCommObservation" path="/InterpretCommObservation.do" 
+             redirect="false" />
 		<forward name="Download" path="/forms/download.jsp" />
 		<forward name="DownloadManager" path="/DownloadManager.do" />
-		<forward name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp" redirect="true" />
-		<forward name="DisplayLoadSummary" path="/forms/plot-upload-summary.jsp" redirect="true" />
-		<!--forward name="DisplayResults" path="/forms/DisplayResults.jsp" /-->
+		<forward name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp" 
+             redirect="true" />
+		<forward name="DisplayLoadSummary" path="/forms/plot-upload-summary.jsp" 
+             redirect="true" />
 		<forward name="DisplayUploadPlotAction" path="/forms/plot-submit.jsp" />
 		<forward name="DropPlotAction" path="/forms/plot-drop.jsp" />
 		<forward name="EmailPassword" path="/forms/EmailPassword.jsp" />
-		<!--forward name="EntityName" path="/forms/EntityName.jsp" /-->
 		<forward name="Logoff" path="/forms/Logoff.do" />
 		<forward name="Logon" path="/general/login.jsp" />
 		<forward name="MainMenu" path="/index.jsp" />
 		<forward name="ManageUsers" path="/admin/manage_users.jsp" redirect="false" />
-		<!--forward name="PlantQuery" path="/forms/PlantQuery.jsp" /-->
-		<!--forward name="CommQuery" path="/forms/CommQuery.jsp" /-->
 		<forward name="PleaseWait" path="/PleaseWait.do" />
-		<!--forward name="PlotQuery" path="/PlotQuery.do" redirect="false" contextRelative="false" /-->
-		<!--forward name="LoadPlotQuery" path="/LoadPlotQuery.do" redirect="false" /-->
 		<forward name="RegisterNewUser" path="/forms/RegisterNewUser.jsp" />
 	</global-forwards>
+  
+  <!--action mappings-->
 	<action-mappings type="org.vegbank.ui.struts.VegbankActionMapping">
 		<action path="/AdminMenu" forward="/admin/admin_menu.jsp" />
-		<action path="/AddCoverMethod" type="org.vegbank.ui.struts.AddCoverMethodAction" name="AddCoverMethodForm" scope="request" validate="true" input="AddCoverMethod" />
-		<action path="/AddJournal" type="org.vegbank.ui.struts.AddJournalAction" name="AddJournalForm" scope="request" validate="true" input="AddJournal" />
-		<action path="/AddParty" type="org.vegbank.ui.struts.AddPartyAction" name="AddPartyForm" scope="request" validate="true" input="AddParty" />
-		<action path="/AddReference" type="org.vegbank.ui.struts.AddReferenceAction" name="AddReferenceForm" scope="request" validate="true" input="AddReference">
+		<action path="/AddCoverMethod" type="org.vegbank.ui.struts.AddCoverMethodAction" 
+            name="AddCoverMethodForm" scope="request" validate="true" 
+            input="AddCoverMethod" />
+		<action path="/AddJournal" type="org.vegbank.ui.struts.AddJournalAction" 
+            name="AddJournalForm" scope="request" validate="true" input="AddJournal" />
+		<action path="/AddParty" type="org.vegbank.ui.struts.AddPartyAction" 
+            name="AddPartyForm" scope="request" validate="true" input="AddParty" />
+		<action path="/AddReference" type="org.vegbank.ui.struts.AddReferenceAction" 
+            name="AddReferenceForm" scope="request" validate="true" input="AddReference">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="pro" />
 		</action>
-		<action path="/AddStratumMethod" type="org.vegbank.ui.struts.AddStratumMethodAction" name="AddStratumMethodForm" scope="request" validate="true" input="AddStratumMethod" />
+		<action path="/AddStratumMethod" type="org.vegbank.ui.struts.AddStratumMethodAction" 
+            name="AddStratumMethodForm" scope="request" validate="true" 
+            input="AddStratumMethod" />
 		<action path="/DisplayMainMenu" forward="/index.jsp">
 		</action>
-		<!--<action path="/DisplayEntity" type="org.vegbank.ui.struts.DisplayEntityAction" name="DisplayEntityForm" scope="request" validate="true" input="failure" />-->
-		<!--action path="/DisplayPlot" type="org.vegbank.ui.struts.DisplayPlotAction" name="DisplayPlotForm" scope="request" validate="true" input="failure" /-->
-		<action path="/DisplayUploadPlotAction" parameter="form" type="org.vegbank.ui.struts.UploadPlotAction" scope="request" validate="false">
+		<action path="/DisplayUploadPlotAction" parameter="form" 
+            type="org.vegbank.ui.struts.UploadPlotAction" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
             <forward name="form" path="/forms/plot-submit.jsp"/>
@@ -145,51 +143,66 @@
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
 		</action>
-		<!--action path="/CommQuery" type="org.vegbank.ui.struts.DummyAction" name="CommQueryForm" scope="request" validate="true" input="CommQuery">
-			<forward name="default" path="/views/commconcept_detail.jsp" />
-		</action-->
-		<action path="/Download" type="org.vegbank.ui.struts.DownloadAction" name="DownloadForm" scope="request" validate="true" input="Download" >
+		<action path="/Download" type="org.vegbank.ui.struts.DownloadAction" 
+            name="DownloadForm" scope="request" validate="true" input="Download" >
 			<forward name="success" path="/forms/download.jsp" />
 		</action>
-		<action path="/DownloadManager" type="org.vegbank.ui.struts.DownloadManagerAction" name="DownloadManagerForm" scope="request" validate="true" input="DisplayResults">
+		<action path="/DownloadManager" type="org.vegbank.ui.struts.DownloadManagerAction" 
+            name="DownloadManagerForm" scope="request" validate="true" input="DisplayResults">
 			<forward name="success" path="/forms/download.jsp" />
 		</action>
-		<action path="/DropPlot" type="org.vegbank.ui.struts.DropPlotAction" name="DropPlotForm" scope="request" validate="true" input="DropPlotAction">
+		<action path="/DropPlot" type="org.vegbank.ui.struts.DropPlotAction" 
+            name="DropPlotForm" scope="request" validate="true" input="DropPlotAction">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="dba" />
 		</action>
-		<action path="/EmailPassword" type="org.vegbank.ui.struts.EmailPasswordAction" name="EmailPasswordForm" scope="request" validate="true" input="EmailPassword">
+		<action path="/EmailPassword" type="org.vegbank.ui.struts.EmailPasswordAction" 
+            name="EmailPasswordForm" scope="request" validate="true" input="EmailPassword">
 			<forward name="success" path="/index.jsp" />
 		</action>
-		<!--action path="/EntityName" type="org.vegbank.ui.struts.EntityNameAction" name="EntityNameForm" scope="request" validate="true" input="EntityName" /-->
-		<action path="/GenericDispatcher" type="org.vegbank.ui.struts.GenericDispatcherAction" name="GenericDispatcherForm" scope="request" />
+		<action path="/GenericDispatcher" 
+            type="org.vegbank.ui.struts.GenericDispatcherAction" 
+            name="GenericDispatcherForm" scope="request" />
 		<action path="/GenericDispatcherFwd" type="org.vegbank.ui.struts.GenericDispatcherFwdAction" />
-		<action path="/InterpretTaxonObservation" parameter="edit" type="org.vegbank.ui.struts.InterpretPlantAction" scope="request" name="InterpretPlantForm" input="InterpretTaxonObservation" validate="false">
+		<action path="/InterpretTaxonObservation" parameter="edit" 
+            type="org.vegbank.ui.struts.InterpretPlantAction" scope="request" 
+            name="InterpretPlantForm" input="InterpretTaxonObservation" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="pro" />
-			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
+			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" 
+               redirect="false" />
 		</action>
-
-<action path="/InterpCommForm" scope="request" name="InterpretCommForm" validate="false" forward="/forms/CommInterpretation.jsp"/>
-
-		<action path="/InterpretCommObservation" parameter="edit" type="org.vegbank.ui.struts.InterpretCommAction" scope="session" name="InterpretCommForm" input="InterpretCommObservation" validate="false">
+    <action path="/InterpCommForm" scope="request" name="InterpretCommForm" 
+        validate="false" forward="/forms/CommInterpretation.jsp"/>
+		<action path="/InterpretCommObservation" parameter="edit" 
+            type="org.vegbank.ui.struts.InterpretCommAction" scope="session" 
+            name="InterpretCommForm" input="InterpretCommObservation" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="pro" />
 			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
 			<forward name="success" path="/forms/success.html" redirect="true" />
 		</action>
-		<action path="/ListCertifications" type="org.vegbank.ui.struts.admin.CertificationListAction" name="CertificationForm" scope="request" validate="false">
+		<action path="/ListCertifications" 
+            type="org.vegbank.ui.struts.admin.CertificationListAction" 
+            name="CertificationForm" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="dba" />
 			<forward name="view" path="/admin/list_certifications.jsp" redirect="false" />
 		</action>
-		<action path="/LoadCertification" type="org.vegbank.ui.struts.CertificationLoadAction" name="CertificationForm" scope="request" validate="false">
+    <action path="/ListUsers" type="org.vegbank.ui.struts.admin.CertificationListAction" 
+            name="CertificationForm" scope="request" validate="false">
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="dba" />
+			<forward name="view" path="/admin/list_users.jsp" redirect="false" />
+		</action>
+		<action path="/LoadCertification" type="org.vegbank.ui.struts.CertificationLoadAction" 
+            name="CertificationForm" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
 			<forward name="success" path="/forms/certification.jsp" />
-		</action><!--<action path="/LoadPlotQuery" type="org.vegbank.ui.struts.PlotQueryLoadAction" name="PlotQueryForm" validate="false" scope="request">
-			<forward name="plot_query" path="/forms/plot-query.jsp" redirect="false" />
-		</action>--><action path="/LoadUser" parameter="user" type="org.vegbank.ui.struts.UserProfileAction" name="UserProfileForm" validate="false" scope="session">
+		</action>
+    <action path="/LoadUser" parameter="user" type="org.vegbank.ui.struts.UserProfileAction" 
+            name="UserProfileForm" validate="false" scope="session">
 			<set-property property="action" value="edit" />
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
@@ -198,69 +211,79 @@
 		</action><action path="/Logoff" type="org.vegbank.ui.struts.LogoffAction">
 			<forward name="success" path="/index.jsp" />
 		</action>
-		<action path="/Logon" type="org.vegbank.ui.struts.LogonAction" name="LogonForm" validate="true" input="Logon">
+		<action path="/Logon" type="org.vegbank.ui.struts.LogonAction" 
+            name="LogonForm" validate="true" input="Logon">
 			<forward name="success" path="/index.jsp" redirect="true" />
 		</action>
-		
-		
-		
-		<!--action path="/PlantQuery" type="org.vegbank.ui.struts.QueryAction" name="PlantQueryForm" scope="request" validate="true" input="PlantQuery">
-			<forward name="success" path="/forms/DisplayQueryResults.jsp" />
-		</action-->
-		<action path="/PleaseWait" type="org.vegbank.ui.struts.PleaseWaitAction" scope="request" validate="false">
+		<action path="/PleaseWait" type="org.vegbank.ui.struts.PleaseWaitAction" 
+            scope="request" validate="false">
 			<forward name="self" path="/general/wait.jsp" />
 		</action>
-		<!--action path="/PlotQuery" type="org.vegbank.ui.struts.PlotQueryAction" name="PlotQueryForm" scope="request" validate="true" input="LoadPlotQuery">
-			<forward name="display_results" path="/forms/DisplayResults.jsp" redirect="false" />
-		</action-->
-		<action path="/RegisterNewUser" type="org.vegbank.ui.struts.RegisterNewUserAction" name="RegisterNewUserForm" scope="request" validate="true" input="RegisterNewUser">
+		<action path="/RegisterNewUser" type="org.vegbank.ui.struts.RegisterNewUserAction" 
+            name="RegisterNewUserForm" scope="request" validate="true" input="RegisterNewUser">
 			<forward name="success" path="/DisplayMainMenu.do" redirect="true" />
 		</action>
-		<action path="/SaveCertification" type="org.vegbank.ui.struts.CertificationSaveAction" name="CertificationForm" scope="request" input="Certification" validate="true">
+		<action path="/SaveCertification" type="org.vegbank.ui.struts.CertificationSaveAction" 
+            name="CertificationForm" scope="request" input="Certification" validate="true">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
 			<forward name="failure" path="/LoadCertification.do" redirect="false" />
 		</action>
-		<action path="/SaveTaxonInterpretation" validate="true" parameter="save" type="org.vegbank.ui.struts.InterpretPlantAction" name="InterpretPlantForm"  input="InterpretTaxonObservation" scope="request">
+		<action path="/SaveTaxonInterpretation" validate="true" parameter="save" 
+            type="org.vegbank.ui.struts.InterpretPlantAction" name="InterpretPlantForm"  
+            input="InterpretTaxonObservation" scope="request">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="pro" />
 			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
 		</action>
-		<action path="/SaveCommInterpretation" validate="true" parameter="save" type="org.vegbank.ui.struts.InterpretCommAction" name="InterpretCommForm"  input="InterpretCommObservation" scope="request">
+		<action path="/SaveCommInterpretation" validate="true" parameter="save" 
+            type="org.vegbank.ui.struts.InterpretCommAction" name="InterpretCommForm"  
+            input="InterpretCommObservation" scope="request">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="pro" />
 			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
 		</action>
-		<action path="/UpdatePassword" type="org.vegbank.ui.struts.UserProfileAction" name="ChangePasswordForm" parameter="pwd" scope="request" validate="true" input="ChangePassword">
+		<action path="/UpdatePassword" type="org.vegbank.ui.struts.UserProfileAction" 
+            name="ChangePasswordForm" parameter="pwd" scope="request" validate="true" 
+            input="ChangePassword">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
 			<forward name="change_pwd" path="/forms/change_pwd.jsp" redirect="false" />
 		</action>
-		<action path="/UploadPlot" type="org.vegbank.ui.struts.UploadPlotAction" name="UploadPlotForm" scope="request" validate="true" input="DisplayUploadPlotAction">
+		<action path="/UploadPlot" type="org.vegbank.ui.struts.UploadPlotAction" 
+            name="UploadPlotForm" scope="request" validate="true" input="DisplayUploadPlotAction">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="cert" />
 			<forward name="summary" path="/forms/plot-upload-summary.jsp" redirect="false" />
 		</action>
-		<action path="/UpdateUser" name="UserProfileForm" scope="session" validate="true" parameter="user" input="edit_user" type="org.vegbank.ui.struts.UserProfileAction">
+		<action path="/UpdateUser" name="UserProfileForm" scope="session" validate="true" 
+            parameter="user" input="edit_user" type="org.vegbank.ui.struts.UserProfileAction">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="reg" />
 			<set-property property="action" value="update" />
 			<forward name="edit_user" path="/forms/edit_user.jsp" />
 		</action>
-		<action path="/ViewCertification" type="org.vegbank.ui.struts.admin.CertificationViewAction" name="CertificationForm" scope="request" validate="false">
+		<action path="/ViewCertification" type="org.vegbank.ui.struts.admin.CertificationViewAction" 
+            name="CertificationForm" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="dba" />
 			<forward name="view" path="/admin/view_certification.jsp" />
 			<forward name="list" path="/ListCertifications.do" redirect="true" />
 		</action>
+
 	</action-mappings>
+  
+  <!-- control statements -->
 	<controller processorClass="org.vegbank.ui.struts.RequestProcessor">
 		<set-property property="inputForward" value="true" />
 		<set-property property="maxFileSize" value="100M" />
 	</controller>
-	<!--message-resources parameter="org.apache.struts.webapp.example.ApplicationResources" null="false" /-->
-    <message-resources parameter="org.vegbank.ui.struts.application" null="false"/>
-	<plug-in className="org.apache.struts.plugins.ModuleConfigVerifier" />
+  
+  <!--messages-->
+  <message-resources parameter="org.vegbank.ui.struts.application" null="false"/>
+	
+  <!--plug-ins-->
+  <plug-in className="org.apache.struts.plugins.ModuleConfigVerifier" />
 	<plug-in className="org.apache.struts.validator.ValidatorPlugIn">
 		<set-property property="pathnames" value="/WEB-INF/validator-rules.xml, /WEB-INF/validation.xml" />
 	</plug-in>
