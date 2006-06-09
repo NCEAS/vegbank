@@ -13,6 +13,7 @@
 		<form-bean name="AddReferenceForm" type="org.vegbank.ui.struts.AddReferenceForm" />
 		<form-bean name="AddStratumMethodForm" type="org.vegbank.ui.struts.AddStratumMethodForm" />
 		<form-bean name="CertificationForm" type="org.vegbank.ui.struts.CertificationForm" />
+    <form-bean name="UserForm" type="org.vegbank.ui.struts.UserForm" />
 		<form-bean name="ChangePasswordForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="password" type="java.lang.String" />
 			<form-property name="newpassword1" type="java.lang.String" />
@@ -189,8 +190,8 @@
 			<set-property property="reqRoles" value="dba" />
 			<forward name="view" path="/admin/list_certifications.jsp" redirect="false" />
 		</action>
-    <action path="/ListUsers" type="org.vegbank.ui.struts.admin.CertificationListAction" 
-            name="CertificationForm" scope="request" validate="false">
+    <action path="/ListUsers" type="org.vegbank.ui.struts.admin.UserListAction" 
+            name="UserForm" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="dba" />
 			<forward name="view" path="/admin/list_users.jsp" redirect="false" />
@@ -208,7 +209,8 @@
 			<set-property property="reqRoles" value="reg" />
 			<forward name="view_user" path="/forms/edit_user.jsp" redirect="false" />
 			<forward name="edit_user" path="/forms/edit_user.jsp" redirect="false" />
-		</action><action path="/Logoff" type="org.vegbank.ui.struts.LogoffAction">
+		</action>
+    <action path="/Logoff" type="org.vegbank.ui.struts.LogoffAction">
 			<forward name="success" path="/index.jsp" />
 		</action>
 		<action path="/Logon" type="org.vegbank.ui.struts.LogonAction" 

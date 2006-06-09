@@ -1,13 +1,13 @@
 <!--
-*  '$Id: admin_menu.jsp,v 1.7 2005-03-17 06:42:22 mlee Exp $'
+*  '$Id: admin_menu.jsp,v 1.8 2006-06-09 17:43:52 berkley Exp $'
 *   Purpose: Home for admins
 *   Copyright: 2000 Regents of the University of California and the
 *              National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: mlee $'
-*  '$Date: 2005-03-17 06:42:22 $'
-*  '$Revision: 1.7 $'
+*  '$Author: berkley $'
+*  '$Date: 2006-06-09 17:43:52 $'
+*  '$Revision: 1.8 $'
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -44,6 +44,9 @@
   <ul>
     <li> 
       <h4 class="vegbank"><html:link forward="CertificationList">Certify Users</html:link></h4>
+    </li>
+    <li> 
+      <h4 class="vegbank"><html:link forward="UserList">View/Edit Users</html:link></h4>
     </li>
     <li> 
       <h4 class="vegbank"><html:link forward="DropPlotAction">Delete plots</html:link></h4>

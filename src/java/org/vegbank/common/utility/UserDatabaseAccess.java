@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-05-02 11:11:06 $'
- *	'$Revision: 1.19 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-06-09 17:43:51 $'
+ *	'$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ package org.vegbank.common.utility;
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		'$Author: anderson $'
- *     '$Date: 2005-05-02 11:11:06 $'
- *     '$Revision: 1.19 $'
+ *		'$Author: berkley $'
+ *     '$Date: 2006-06-09 17:43:51 $'
+ *     '$Revision: 1.20 $'
  */
 
 import java.sql.PreparedStatement;
@@ -51,6 +51,7 @@ import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.PermComparison;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.ui.struts.CertificationForm;
+import org.vegbank.ui.struts.UserForm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -568,6 +569,42 @@ public class UserDatabaseAccess
 
 		return certForm;
 	 }
+   
+   /**
+    * get the user list info
+    */
+   public List getFullUserList()
+     throws java.sql.SQLException
+   {
+      List allUsrList = new ArrayList();
+      DBConnection conn = getConnection();
+      UserForm usrForm = new UserForm();
+      
+      // make sure give sort string is safe
+      /*sortBy = (Utility.isStringNullOrEmpty(sortBy) ? "usercertification_id" : sortBy);
+      if (sortBy.indexOf(' ') != -1) {
+        sortBy = "usercertification_id";
+      }*/
+       
+      Statement query = conn.createStatement();
+      String sql = usrForm.getSQL();
+      
+      //issue the query
+      ResultSet results = query.executeQuery(sql);
+      
+      while (results.next()) {
+        usrForm = new UserForm();
+        usrForm.initFromResultSet(results);
+      
+        // fill in the blanks
+        //fillInCertUserInfo(tmpCertForm);
+        allUsrList.add(usrForm);
+      }
+      results.close();
+      query.close();
+      
+      return allUsrList;
+   }
 
 	 /**
 	  *
