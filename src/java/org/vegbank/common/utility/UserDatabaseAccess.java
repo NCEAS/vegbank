@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-09 17:43:51 $'
- *	'$Revision: 1.20 $'
+ *	'$Date: 2006-06-09 19:59:03 $'
+ *	'$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: berkley $'
- *     '$Date: 2006-06-09 17:43:51 $'
- *     '$Revision: 1.20 $'
+ *     '$Date: 2006-06-09 19:59:03 $'
+ *     '$Revision: 1.21 $'
  */
 
 import java.sql.PreparedStatement;
@@ -149,6 +149,28 @@ public class UserDatabaseAccess
 		DBConnectionPool.returnDBConnection(conn);
 		return(false);
 	 }
+   
+  /**
+   * delete the user with the given usrId
+   */
+  public void deleteUser(long usrId)
+    throws SQLException
+  {
+    StringBuffer sb = new StringBuffer();
+    DBConnection conn = getConnection();
+    Statement stmt = conn.createStatement();
+    sb.append("delete from usr where usr_id = '"+usrId+"';");
+    sb.append("delete from usercertification where usr_id = '"+usrId+"';");
+    sb.append("delete from usernotify where usr_id = '"+usrId+"';");
+    sb.append("delete from userdataset where usr_id = '"+usrId+"';");
+    sb.append("delete from userpermission where usr_id = '"+usrId+"';");
+    sb.append("delete from userpreference where usr_id = '"+usrId+"';");
+    sb.append("delete from userquery where usr_id = '"+usrId+"';");
+    sb.append("delete from userrecordowner where usr_id = '"+usrId+"';");
+    stmt.execute(sb.toString());
+    stmt.close();
+    conn.commit();
+  }
 	 
 	/**
 	 * method that inserts the certification info to the user database.

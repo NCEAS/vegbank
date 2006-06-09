@@ -210,6 +210,13 @@
 			<forward name="view_user" path="/forms/edit_user.jsp" redirect="false" />
 			<forward name="edit_user" path="/forms/edit_user.jsp" redirect="false" />
 		</action>
+    <action path="/DeleteUser" parameter="user" type="org.vegbank.ui.struts.UserProfileAction" 
+            name="UserProfileForm" validate="false" scope="session">
+			<set-property property="action" value="delete" />
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="reg" />
+      <forward name="success" path="ListUsers.do" redirect="true" />
+		</action>
     <action path="/Logoff" type="org.vegbank.ui.struts.LogoffAction">
 			<forward name="success" path="/index.jsp" />
 		</action>

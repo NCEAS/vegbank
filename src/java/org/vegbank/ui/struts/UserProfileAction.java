@@ -1,11 +1,11 @@
 /*
- *	'$Id: UserProfileAction.java,v 1.5 2004-11-19 20:58:11 anderson Exp $'
+ *	'$Id: UserProfileAction.java,v 1.6 2006-06-09 19:59:03 berkley Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-11-19 20:58:11 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-06-09 19:59:03 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@ public class UserProfileAction extends VegbankAction {
 
 	static final String FWD_CHANGE_PWD = "change_pwd";
 	static final String FWD_EDIT_USER = "edit_user";
+  static final String FWD_DELETE_USER = "delete_user";
 	static final String FWD_VIEW_USER = "view_user";
 	static final String FWD_MAIN_MENU = "MainMenu";
 	static final String FWD_SUCCESS = "success";
@@ -181,7 +182,15 @@ public class UserProfileAction extends VegbankAction {
 					session.removeAttribute("UserProfileForm");
 					request.setAttribute("webuser", changedUser); 
 					return mapping.findForward(FWD_SUCCESS);
-				} // end if action
+				} else if (action.equals("delete")) {
+          //delete the user
+          log.debug("deleting user");
+          UserDatabaseAccess uda = new UserDatabaseAccess();
+          //nuke 'em
+          uda.deleteUser(new Long(reqUsrId).longValue());
+          
+          return mapping.findForward(FWD_SUCCESS);
+        }// end if action
 
 
 			} else if (param.equals("pwd")) {
