@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-09 17:43:51 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2006-06-12 17:56:59 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,9 +67,7 @@ public class UserListAction extends VegbankAction {
 		// List all applications
 		try {
 			log.debug("UserListAction: getting all users");
-			/*List allApps = uda.getAllCertificationAppHeaders(
-					request.getParameter("sortby"));*/
-      List allUsersList = uda.getFullUserList();
+      List allUsersList = uda.getFullUserList(request.getParameter("sortby"));
 
 			// NOTE: Action must be configured scope=session
 			//   in order to pass List (of Beans) to JSP 

@@ -1,15 +1,15 @@
 
 
 <!-- 
-  *   '$Id: list_users.jsp,v 1.2 2006-06-09 19:59:03 berkley Exp $ '
+  *   '$Id: list_users.jsp,v 1.3 2006-06-12 17:56:59 berkley Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: berkley $'
-  *      '$Date: 2006-06-09 19:59:03 $'
-  *  '$Revision: 1.2 $'
+  *      '$Date: 2006-06-12 17:56:59 $'
+  *  '$Revision: 1.3 $'
   *
   *
   -->
@@ -50,15 +50,15 @@
 	<table  border="0" cellspacing="5" cellpadding="2">
 		<!--  display list containing applicant name, date, requested perm. Delim by status. -->
 
-	<!--<bean:define id="sortbyId" value="usercertification_id"/>
-	<bean:define id="sortbyReq" value="requested_cert_level"/>
-	<bean:define id="sortbyStatus" value="certificationstatus"/>-->
+  <bean:define id="sortbyId" value="usr.usr_id"/>
+	<bean:define id="sortbyPerm" value="usr.permission_type"/>
+	<bean:define id="sortbyOrg" value="party.organizationname"/>
 
-    <tr> 
-      <th align="center">User</th>
-      <th align="center">Permissions</th>
-      <th align="center">Organization</th>
-      <th align="center"><b>ACTION</b></th>
+  <tr> 
+    <th align="center"><html:link action="ListUsers" paramId="sortby" paramName="sortbyId">User</html:link></th>
+    <th align="center"><html:link action="ListUsers" paramId="sortby" paramName="sortbyPerm">Permissions</html:link></th>
+    <th align="center"><html:link action="ListUsers" paramId="sortby" paramName="sortbyOrg">Organization</html:link></th>
+    <th align="center"><b>ACTION</b></th>
 	</tr>
 
 	<tr>

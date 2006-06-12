@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-09 19:59:03 $'
- *	'$Revision: 1.21 $'
+ *	'$Date: 2006-06-12 17:56:59 $'
+ *	'$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: berkley $'
- *     '$Date: 2006-06-09 19:59:03 $'
- *     '$Revision: 1.21 $'
+ *     '$Date: 2006-06-12 17:56:59 $'
+ *     '$Revision: 1.22 $'
  */
 
 import java.sql.PreparedStatement;
@@ -595,21 +595,20 @@ public class UserDatabaseAccess
    /**
     * get the user list info
     */
-   public List getFullUserList()
+   public List getFullUserList(String sortBy)
      throws java.sql.SQLException
    {
       List allUsrList = new ArrayList();
       DBConnection conn = getConnection();
       UserForm usrForm = new UserForm();
       
-      // make sure give sort string is safe
-      /*sortBy = (Utility.isStringNullOrEmpty(sortBy) ? "usercertification_id" : sortBy);
-      if (sortBy.indexOf(' ') != -1) {
-        sortBy = "usercertification_id";
-      }*/
+      if(Utility.isStringNullOrEmpty(sortBy))
+      {
+        sortBy = "usr_id";
+      }
        
       Statement query = conn.createStatement();
-      String sql = usrForm.getSQL();
+      String sql = usrForm.getSQL(sortBy);
       
       //issue the query
       ResultSet results = query.executeQuery(sql);

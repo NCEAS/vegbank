@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-09 17:43:51 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2006-06-12 17:56:59 $'
+ *	'$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,11 +158,12 @@ public class UserForm extends ValidatorForm
 	/**
 	 * return need fields from the usr table
 	 */
-	public static String getSQL() {
+	public static String getSQL(String sortBy) {
 		StringBuffer sb = new StringBuffer(512);
+    
     sb.append("select usr.usr_id, party.email, party.surname, party.givenname, " +
       "usr.permission_type, party.accessioncode, party.organizationname " + 
-      "from usr, party where usr.party_id = party.party_id");
+      "from usr, party where usr.party_id = party.party_id order by " + sortBy);
 		return sb.toString();
 	}
 
@@ -175,16 +176,6 @@ public class UserForm extends ValidatorForm
 		if (results == null) {
 			return;
 		}
-    /*
-      private long usrId;
-      private String emailAddress;
-      private String surName;
-      private String givenName;
-      private int permissionType;
-      private String accessionCode;
-      private String organization;
-    */
-    
     this.setUsrId(results.getInt(1));
 		this.setEmailAddress(results.getString(2));
     this.setSurName(results.getString(3));
