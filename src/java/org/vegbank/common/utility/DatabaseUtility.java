@@ -4,9 +4,9 @@
  *  Copyright: 2002 Regents of the University of California and the
  *             National Center for Ecological Analysis and Synthesis
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-05-05 20:22:31 $'
- *	'$Revision: 1.15 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-06-12 22:44:31 $'
+ *	'$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -310,7 +310,7 @@ public class DatabaseUtility
 	 */
 	private void dropSinglePlot(String plotId) throws java.sql.SQLException {
 
-		log.error("DatabaseUtility.dropSinglePlot > ID=" + plotId);
+		log.info("DatabaseUtility.dropSinglePlot > ID=" + plotId);
 		String obsIds;
 		boolean results = true;
 		StringBuffer sb = new StringBuffer(256)

@@ -237,7 +237,20 @@ Plot #<%= rowIndex++ %>
 <bean:write name="onerowofobservation" property="country" /></span>
 </i>
 <br/>
- <span class="sizenormal" nowrap="nowrap">&raquo; <a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>PLOT DETAIL</a></span>
+ <span class="sizenormal" nowrap="nowrap">&raquo; <a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>Details...</a></span>
+ <!--if the isAdmin att is set, add the 'delete plot' link-->
+ <% 
+      Boolean isAdmin = (Boolean)(request.getSession().getAttribute("isAdmin"));
+    
+      if (isAdmin != null) {
+        if (isAdmin.booleanValue()) {
+    %>
+      <br/>
+    <span class="sizenormal" nowrap="nowrap">&raquo; <a href='@web_context@DropPlot.do?plotIdList=<bean:write name="onerowofobservation" property="observation_id" />'>Delete</a></span>
+    <% 
+        }
+      } 
+%>  
 </td>
 <td class='largefield numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
 <span class='<bean:write name="show_elev" ignore="true" />hidden'>E: <bean:write name="onerowofobservation" property="elevation" /><br/></span>
