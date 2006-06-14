@@ -1,15 +1,15 @@
 
 
 <!-- 
-  *   '$Id: list_users.jsp,v 1.3 2006-06-12 17:56:59 berkley Exp $ '
+  *   '$Id: list_users.jsp,v 1.4 2006-06-14 20:34:17 berkley Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: berkley $'
-  *      '$Date: 2006-06-12 17:56:59 $'
-  *  '$Revision: 1.3 $'
+  *      '$Date: 2006-06-14 20:34:17 $'
+  *  '$Revision: 1.4 $'
   *
   *
   -->
@@ -50,14 +50,17 @@
 	<table  border="0" cellspacing="5" cellpadding="2">
 		<!--  display list containing applicant name, date, requested perm. Delim by status. -->
 
+  
   <bean:define id="sortbyId" value="usr.usr_id"/>
+  <bean:define id="sortbyName" value="party.surname"/>
+  <bean:define id="sortbyEmail" value="party.email"/>
 	<bean:define id="sortbyPerm" value="usr.permission_type"/>
 	<bean:define id="sortbyOrg" value="party.organizationname"/>
 
   <tr> 
-    <th align="center"><html:link action="ListUsers" paramId="sortby" paramName="sortbyId">User</html:link></th>
+    <th align="center"><html:link action="ListUsers" paramId="sortby" paramName="sortbyName">Name</html:link></th>
+    <th align="center"><html:link action="ListUsers" paramId="sortby" paramName="sortbyEmail">EMail</html:link></th>
     <th align="center"><html:link action="ListUsers" paramId="sortby" paramName="sortbyPerm">Permissions</html:link></th>
-    <th align="center"><html:link action="ListUsers" paramId="sortby" paramName="sortbyOrg">Organization</html:link></th>
     <th align="center"><b>ACTION</b></th>
 	</tr>
 
@@ -68,16 +71,17 @@
 		<html:hidden name="usrBean" property="usrId"/>
     <tr> 
 		<td nowrap>
-			#<bean:write name="usrBean" property="usrId"/>: 
-			<bean:write name="usrBean" property="surName"/>, 
+      <bean:write name="usrBean" property="surName"/>, 
 			<bean:write name="usrBean" property="givenName"/>
-			<br/>
-			<bean:write name="usrBean" property="emailAddress"/>
 		</td>
+    
+    <td nowrap>
+      <bean:write name="usrBean" property="emailAddress"/>
+    </td>
 
 		<td align="center"><bean:write name="usrBean" property="permissionType"/></td>
 
-		<td align="center"><bean:write name="usrBean" property="organization"/></td>
+		<!--<td align="center"><bean:write name="usrBean" property="organization"/></td>-->
 
 		<td align="center" class="vegbank">
       <html:link action="LoadUser" paramId="usrId" paramName="usrBean" paramProperty="usrId" title="view user">View/Edit</html:link><br/>  
