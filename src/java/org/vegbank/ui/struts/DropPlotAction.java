@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2003-10-20 22:59:34 $'
- *	'$Revision: 1.3 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-06-15 20:10:06 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,24 +79,6 @@ public class DropPlotAction extends Action
 							"errors.database", ex.getMessage()," "));
 				fwd = "failure";
 			}
-			/*
-			for (int i=0; i < arrPlotIdList.length; i++) {
-				if (arrPlotIdList[i] != null && !arrPlotIdList[i].equals("")) {
-					try {
-						System.out.println("Deleting plot_id: " + arrPlotIdList[i]);
-						du.dropPlot(arrPlotIdList[i]);
-						//du.dropPlot(Integer.parseInt(arrPlotIdList[i]), "localhost");
-					} catch (SQLException ex) {
-						System.out.println("DropPlotAction problem while deleting plot_id: " + 
-								arrPlotIdList[i] + ", " + ex.getMessage());
-						errors.add(Globals.ERROR_KEY, new ActionMessage(
-									"errors.database", ex.getMessage(),"<delete plot by ID>"));
-						fwd = "failure";
-						break;
-					}
-				}
-			}
-			*/
 		}
 
 		if (!errors.isEmpty()) {

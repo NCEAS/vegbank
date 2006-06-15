@@ -1,15 +1,15 @@
 
 
 <!-- 
-  *   '$Id: list_users.jsp,v 1.4 2006-06-14 20:34:17 berkley Exp $ '
+  *   '$Id: list_users.jsp,v 1.5 2006-06-15 20:10:06 berkley Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
   *    '$Author: berkley $'
-  *      '$Date: 2006-06-14 20:34:17 $'
-  *  '$Revision: 1.4 $'
+  *      '$Date: 2006-06-15 20:10:06 $'
+  *  '$Revision: 1.5 $'
   *
   *
   -->
@@ -79,7 +79,11 @@
       <bean:write name="usrBean" property="emailAddress"/>
     </td>
 
-		<td align="center"><bean:write name="usrBean" property="permissionType"/></td>
+		<td align="center">
+      <html:link action="EditPermission" paramId="usrId" paramName="usrBean" paramProperty="usrId" title="edit permissions">
+        <bean:write name="usrBean" property="permissionType"/>
+      </html:link>
+    </td>
 
 		<!--<td align="center"><bean:write name="usrBean" property="organization"/></td>-->
 

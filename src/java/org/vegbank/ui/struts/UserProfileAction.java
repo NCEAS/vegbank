@@ -1,11 +1,11 @@
 /*
- *	'$Id: UserProfileAction.java,v 1.6 2006-06-09 19:59:03 berkley Exp $'
+ *	'$Id: UserProfileAction.java,v 1.7 2006-06-15 20:10:06 berkley Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-09 19:59:03 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2006-06-15 20:10:06 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ public class UserProfileAction extends VegbankAction {
   static final String FWD_DELETE_USER = "delete_user";
 	static final String FWD_VIEW_USER = "view_user";
 	static final String FWD_MAIN_MENU = "MainMenu";
+  static final String FWD_EDIT_PERMISSION = "editPermission";
 	static final String FWD_SUCCESS = "success";
 	static final String FWD_FAILURE = "failure";
 
@@ -188,6 +189,31 @@ public class UserProfileAction extends VegbankAction {
           UserDatabaseAccess uda = new UserDatabaseAccess();
           //nuke 'em
           uda.deleteUser(new Long(reqUsrId).longValue());
+          
+          return mapping.findForward(FWD_SUCCESS);
+          
+        } else if (action.equals("editPermission")) {
+          request.setAttribute("webuser", curUser); 
+					upForm.setWebuser(curUser);
+					request.setAttribute("upform", upForm); 
+					return mapping.findForward(FWD_EDIT_PERMISSION);
+          
+        } else if (action.equals("changePermission")) {
+          //actually change the permission here
+          userdb = new UserDatabaseAccess();
+          String permType = (String)request.getParameter("permissiontype");
+					
+          WebUser changedUser = upForm.getWebuser();
+          //curUser.setPermissiontype(new Long(permType).longValue());
+          //upForm.setWebuser(curUser);
+          
+					//long newPerm = changedUser.getPermissiontype();
+          userdb.setUserPermissionSum(new Long(reqUsrId).longValue(), new Long(permType).longValue());
+          request.setAttribute("webuser", changedUser); 
+					log.debug("calling upForm.setWebUser ");
+					upForm.setWebuser(changedUser);
+          log.debug("edit: putting upform in request attribute 'upform'");
+					request.setAttribute("upform", upForm); 
           
           return mapping.findForward(FWD_SUCCESS);
         }// end if action

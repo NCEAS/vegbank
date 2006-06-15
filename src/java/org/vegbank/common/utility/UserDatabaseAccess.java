@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-12 17:56:59 $'
- *	'$Revision: 1.22 $'
+ *	'$Date: 2006-06-15 20:10:06 $'
+ *	'$Revision: 1.23 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: berkley $'
- *     '$Date: 2006-06-12 17:56:59 $'
- *     '$Revision: 1.22 $'
+ *     '$Date: 2006-06-15 20:10:06 $'
+ *     '$Revision: 1.23 $'
  */
 
 import java.sql.PreparedStatement;
@@ -830,8 +830,9 @@ public class UserDatabaseAccess
 
 			DBConnection conn = getConnection();
 			Statement stmt = conn.createStatement();
-			stmt.executeUpdate("UPDATE usr SET permission_type=" + sum + 
-					" WHERE usr_id=" + usrId);
+      String sql = "UPDATE usr SET permission_type=" + sum + 
+					" WHERE usr_id=" + usrId;
+			stmt.executeUpdate(sql);
 
 			stmt.close();
 			DBConnectionPool.returnDBConnection(conn);

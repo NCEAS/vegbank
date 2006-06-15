@@ -81,6 +81,7 @@
              path="/InterpretTaxonObservation.do" redirect="false" />
 		<forward name="InterpretCommObservation" path="/InterpretCommObservation.do" 
              redirect="false" />
+    <forward name="EditPermission" path="/forms/edit_permission.jsp" />
 		<forward name="Download" path="/forms/download.jsp" />
 		<forward name="DownloadManager" path="/DownloadManager.do" />
 		<forward name="DisplayLoadReport" path="/forms/DisplayLoadReport.jsp" 
@@ -195,6 +196,20 @@
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="dba" />
 			<forward name="view" path="/admin/list_users.jsp" redirect="false" />
+		</action>
+    <action path="/EditPermission" type="org.vegbank.ui.struts.UserProfileAction" 
+            name="UserProfileForm" scope="request" validate="false">
+      <set-property property="action" value="editPermission" />
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="dba" />
+      <forward name="editPermission" path="/forms/edit_permission.jsp" redirect="false" />
+		</action>
+    <action path="/ChangePermission" type="org.vegbank.ui.struts.UserProfileAction" 
+            name="UserProfileForm" scope="request" validate="false">
+      <set-property property="action" value="changePermission" />
+			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="dba" />
+      <forward name="success" path="ListUsers.do" redirect="true" />
 		</action>
 		<action path="/LoadCertification" type="org.vegbank.ui.struts.CertificationLoadAction" 
             name="CertificationForm" scope="request" validate="false">
