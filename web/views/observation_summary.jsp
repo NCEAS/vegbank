@@ -246,7 +246,7 @@ Plot #<%= rowIndex++ %>
         if (isAdmin.booleanValue()) {
     %>
       <br/>
-    <span class="sizenormal" nowrap="nowrap">&raquo; <a href='@web_context@DropPlot.do?plotIdList=<bean:write name="onerowofplot" property="plot_id" />'>Delete</a></span>
+    <span class="sizenormal" nowrap="nowrap">&raquo; <a href='@web_context@DropPlotConfirm.do?plotIdList=<bean:write name="onerowofplot" property="plot_id" />'>Delete</a></span>
     <% 
         }
       } 

@@ -153,10 +153,18 @@
             name="DownloadManagerForm" scope="request" validate="true" input="DisplayResults">
 			<forward name="success" path="/forms/download.jsp" />
 		</action>
+    <action path="/DropPlotConfirm" type="org.vegbank.ui.struts.DropPlotAction"
+            name="DropPlotForm" scope="request" validate="true" input="DropPlotAction">
+      <set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
+			<set-property property="reqRoles" value="dba" />
+      <set-property property="action" value="confirm" />
+      <forward name="success" path="/forms/delete_plot_confirm.jsp" redirect="false" />
+    </action>
 		<action path="/DropPlot" type="org.vegbank.ui.struts.DropPlotAction" 
             name="DropPlotForm" scope="request" validate="true" input="DropPlotAction">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
 			<set-property property="reqRoles" value="dba" />
+      <set-property property="action" value="delete" />
 		</action>
 		<action path="/EmailPassword" type="org.vegbank.ui.struts.EmailPasswordAction" 
             name="EmailPasswordForm" scope="request" validate="true" input="EmailPassword">
