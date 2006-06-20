@@ -13,7 +13,8 @@ ALTER TABLE commClass ADD COLUMN emb_commClass Integer;
 ALTER TABLE commInterpretation ADD COLUMN emb_commInterpretation Integer;
 ALTER TABLE classContributor ADD COLUMN emb_classContributor Integer;
 
---set default values: to 10 so that we can automatically show those <5 (new values not shown until script completes to denorm this data)
+--set default values: to 10 so that we can automatically show those <5 
+--(new values not shown until script completes to denorm this data)
 
 ALTER TABLE plot ALTER COLUMN emb_plot DROP DEFAULT;
 ALTER TABLE observation ALTER COLUMN emb_observation DROP DEFAULT;
