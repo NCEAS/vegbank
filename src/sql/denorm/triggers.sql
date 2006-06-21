@@ -5,19 +5,22 @@ drop language plpgsql;
 
 
 CREATE TABLE trigger_audit( 
-    operation         char(1)   NOT NULL,
+    operation         char(10)   NOT NULL,
     stamp             timestamp NOT NULL,
-    userid            text      NOT NULL,
-    obs_id            integer   NOT NULL
+    userid            text      NOT NULL
 );
 
 create language plpgsql;
 
 CREATE OR REPLACE FUNCTION process_denorm_update() RETURNS TRIGGER AS $process_denorm_update$
     BEGIN
-        INSERT INTO trigger_audit SELECT 'U', now(), user, NEW.obervation_id;
-        --insert into trigger_audit (operation, stamp, userid, obs_id)
-        --  values ('U', now(), user, 1234);
+        
+        update commUsage SET commName = (select commname.commname from commname where 
+        commname.commname_ID=commUsage.commName_ID) ;
+        
+
+        
+        INSERT INTO trigger_audit SELECT 'DENORM', now(), user;
         RETURN NULL; 
     END;
     
