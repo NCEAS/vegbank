@@ -1,0 +1,530 @@
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<table border="1">
+  <tr> 
+    <th>Field Name</th>
+    <th>purpose</th>
+    <th>slow update?</th>
+    <th>defn</th>
+  </tr>
+  <tr> 
+    <td><b>commConcept.commName</b></td>
+    <td>taxa</td>
+    <td>&nbsp;</td>
+    <td> = The name the community is based on, denorm of commName_ID<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>commConcept.d_obscount</b></td>
+    <td>count</td>
+    <td>y</td>
+    <td> = Number of observations associated with this entity.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>commConcept.d_currentaccepted</b></td>
+    <td>taxa</td>
+    <td>med</td>
+    <td> = Currently accepted by at least one party.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>commUsage.commName</b></td>
+    <td>taxa</td>
+    <td>&nbsp;</td>
+    <td> = This is the community Name that the party uses for this community, 
+      of the type indicated in classSystem.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>commUsage.COMMCONCEPT_ID</b></td>
+    <td>taxa</td>
+    <td>&nbsp;</td>
+    <td> = This field is the foreign key into the commConcept table.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>commUsage.PARTY_ID</b></td>
+    <td>taxa</td>
+    <td>&nbsp;</td>
+    <td> = Foreign key that identifies the party that used the class concept with 
+      the name.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>plantConcept.plantname</b></td>
+    <td>taxa</td>
+    <td>&nbsp;</td>
+    <td> = This is the name of the plant upon which the concept is based.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>plantConcept.d_obscount</b></td>
+    <td>count</td>
+    <td>y</td>
+    <td> = Number of observations associated with this entity.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>plantConcept.d_currentaccepted</b></td>
+    <td>taxa</td>
+    <td>med</td>
+    <td> = Currently accepted by at least one party.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>plantUsage.PLANTCONCEPT_ID</b></td>
+    <td>taxa</td>
+    <td>&nbsp;</td>
+    <td> = This field is the foreign key into the plantConcept table.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>plantUsage.plantName</b></td>
+    <td>taxa</td>
+    <td>&nbsp;</td>
+    <td> = This is the plant name that the party uses for this plant concept, 
+      in the name system indicated in classSystem.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>plantUsage.PARTY_ID</b></td>
+    <td>taxa</td>
+    <td>&nbsp;</td>
+    <td> = Foreign key that identifies the party that uses the concept with the 
+      name.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>classContributor.emb_classContributor</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>commClass.emb_commClass</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>commInterpretation.commname</b></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td> = Name of the community indicated in commConcept_ID.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>commInterpretation.emb_commInterpretation</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>disturbanceObs.emb_disturbanceObs</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>namedPlace.d_obscount</b></td>
+    <td>count</td>
+    <td>y</td>
+    <td> = Number of observations associated with this entity.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.emb_observation</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_orig_ci_ID</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The first community interpretation ID where the plot was assigned to 
+      a community.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_orig_cc_ID</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = the Comm Concept_ID for this Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_orig_sciname</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The Scientific Name for this Comm Concept<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_orig_code</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The CEGL type code for this Comm Concept.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_orig_party_id</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The Party_ID of the classifier.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_orig_partyname</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The Name of the classifier.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_current_ci_ID</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The most recent community interpretation of the plot.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_current_cc_ID</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = the Comm Concept_ID for this Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_current_sciname</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The Scientific Name for this Comm Concept<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_current_code</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The CEGL type code for this Comm Concept.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_current_party_id</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The Party_ID of the classifier.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_current_partyname</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The Name of the classifier.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_bestfit_ci_ID</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The best fit, confidence pattern community interpretation ID.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_bestfit_cc_ID</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = the Comm Concept_ID for this Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_bestfit_sciname</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The Scientific Name for this Comm Concept<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_bestfit_code</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The CEGL type code for this Comm Concept.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_bestfit_party_id</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The Party_ID of the classifier.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.interp_bestfit_partyname</b></td>
+    <td>download</td>
+    <td>med</td>
+    <td> = The Name of the classifier.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.topTaxon1Name</b></td>
+    <td>query results</td>
+    <td>med</td>
+    <td> = Name of the highest cover taxon on the plot, ignoring strata.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.topTaxon2Name</b></td>
+    <td>query results</td>
+    <td>med</td>
+    <td> = Name of the 2nd highest cover taxon on the plot, ignoring strata.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.topTaxon3Name</b></td>
+    <td>query results</td>
+    <td>med</td>
+    <td> = Name of the 3rd highest cover taxon on the plot, ignoring strata.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.topTaxon4Name</b></td>
+    <td>query results</td>
+    <td>med</td>
+    <td> = Name of the 4th highest cover taxon on the plot, ignoring strata.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>observation.topTaxon5Name</b></td>
+    <td>query results</td>
+    <td>med</td>
+    <td> = Name of the 5th highest cover taxon on the plot, ignoring strata.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>party.partyPublic</b></td>
+    <td>&nbsp;</td>
+    <td>y</td>
+    <td> = This party may be displayed on the website. Not used for parties that 
+      are not contributing anywhere and have only signed up as users.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>party.d_obscount</b></td>
+    <td>count</td>
+    <td>y</td>
+    <td> = Number of observations associated with this entity.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>plot.stateProvince</b></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td> = State or Province Name (full name) where the plot is located (US and 
+      Canada only).<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>plot.country</b></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td> = Country where the plot is located.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>plot.emb_plot</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>project.d_obscount</b></td>
+    <td>count</td>
+    <td>&nbsp;</td>
+    <td> = Number of observations associated with this entity.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>soilObs.emb_soilObs</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>stemCount.emb_stemCount</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>stemLocation.emb_stemLocation</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>stratum.STRATUMMETHOD_ID</b></td>
+    <td>??</td>
+    <td>&nbsp;</td>
+    <td> = <br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>stratum.stratumName</b></td>
+    <td>??</td>
+    <td>&nbsp;</td>
+    <td> = <br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonImportance.coverCode</b></td>
+    <td>view/download</td>
+    <td>med</td>
+    <td> = The original cover code used by the author in the Cover Method for 
+      the plot.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonImportance.stratumBase</b></td>
+    <td>view/download</td>
+    <td>&nbsp;</td>
+    <td> = The Base of the Stratum in meters.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonImportance.stratumHeight</b></td>
+    <td>view/download</td>
+    <td>&nbsp;</td>
+    <td> = The Tallest part of the Stratum in meters.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonImportance.emb_taxonImportance</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonInterpretation.emb_taxonInterpretation</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.emb_taxonObservation</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_origPlantConcept_ID</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The Plant Concept ID for the Original Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_origPlantSciFull</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The full Scientific Name, with authors, for the Original Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_origPlantSciNameNoAuth</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The Scientific Name without authors for the Original Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_origPlantCommon</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The Common Name for the Original Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_origPlantCode</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The USDA Code, if available, for the Original Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_currPlantConcept_ID</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The Plant Concept ID for the Current Interpretation, which is often 
+      that same as the Original Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_currPlantSciFull</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The full Scientific Name, with authors,for the Current Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_currPlantSciNameNoAuth</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The Scientific Name without authors for the Current Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_currPlantCommon</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The Common Name for the Current Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonObservation.int_currPlantCode</b></td>
+    <td>download</td>
+    <td>&nbsp;</td>
+    <td> = The USDA Code, if available, for the Current Interpretation.<br/>
+    </td>
+  </tr>
+  <tr> 
+    <td><b>taxonAlt.emb_taxonAlt</b></td>
+    <td>embargo</td>
+    <td>&nbsp;</td>
+    <td> = This value mimics the default embargo value for the plot that this 
+      record belongs to.<br/>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
