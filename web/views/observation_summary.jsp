@@ -135,7 +135,7 @@ function getHelpPageId() {
 <%@ include file="../includes/setup_rowindex.jsp" %>
 
 <logic:empty name="plotobs-BEANLIST">
-                Sorry, no plot-observations are available.
+                Sorry, no plots are available.
           </logic:empty>
 <logic:notEmpty name="plotobs-BEANLIST"><!-- set up table -->
 
