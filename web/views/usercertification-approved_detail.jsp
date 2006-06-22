@@ -18,18 +18,18 @@
  @webpage_masthead_html@
  @possibly_center@ 
 
-<vegbank:get select="usercertification_approved" beanName="map" pager="true"/>
-<vegbank:pager />
-<logic:empty name="BEANLIST">
+<vegbank:get id="usercert" select="usercertification_approved" beanName="map" pager="true"/>
+
+<logic:empty name="usercert-BEANLIST">
 				<p>
                 There are no certified users.
 				</p> 
           </logic:empty>
-<logic:notEmpty name="BEANLIST"><!-- set up table -->
-
+<logic:notEmpty name="usercert-BEANLIST"><!-- set up table -->
+<vegbank:pager />
 <h2>Certified VegBank Users</h2>
 
-<logic:iterate id="onerow" name="BEANLIST">
+<logic:iterate id="onerow" name="usercert-BEANLIST">
 <table  class="leftrightborders" cellpadding="2" >
 <!--each field, only write when HAS contents-->
 
@@ -115,9 +115,9 @@
 <br/>&nbsp;<br/>
 </logic:iterate>
 
-
+<vegbank:pager/>
 </logic:notEmpty>
 
-<vegbank:pager/>
+
 
           @webpage_footer_html@
