@@ -73,10 +73,12 @@ function getHelpPageId() {
 <!-- tutorial note: here, id's are defined for first iteration only.  After first iteration _iterated is appened to id, those will NOT BE UNIQUE -->
 <tr id="tut_fullcomm<bean:write name='iterated' ignore='true'/>"><th class="major_smaller" colspan="4"><bean:write name="onerow" property="commname_id_transl"/> | <bean:write name="onerow" property="reference_id_transl"/></th></tr>
 
-<bean:define id="delta_ac" name="onerow" property="accessioncode" />
-<tr><td colspan="4">
+<logic:notEmpty name="onerow" property="accessioncode">
+  <bean:define id="delta_ac" name="onerow" property="accessioncode" />
+  <tr><td colspan="4">
        <%@ include file="../includes/datacart_checkbox.jsp" %> click to update datacart
-</td></tr>
+  </td></tr>
+</logic:notEmpty>  
 
 <tr id="tut_communiversal<bean:write name='iterated' ignore='true'/>">
 <td colspan="4">
