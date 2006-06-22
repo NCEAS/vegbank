@@ -52,6 +52,7 @@ VegBr=VegBranch database, non-unique code as VegBranch exists locally on a user'
 
 Additionally, table abbreviations must be registered and monitored to ensure uniqueness and they are as follows (case desired, but not sensitive):
 
+aux_role              AR
 plot                  Pl
 observation           Ob
 plantConcept          PC
@@ -68,6 +69,12 @@ userDefined           UD
 taxonObservation      TO
 commClass             Cl
 referenceParty        RP
+-----
+## new as of June 2006:
+taxonInterpretation   TI
+plantStatus           PS
+commStatus            CS
+
 
 PK# is self-explanatory, ranging from 1 to 2147483647
 
