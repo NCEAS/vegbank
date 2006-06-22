@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-06-02 19:17:15 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2006-06-22 18:26:02 $'
+ *	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ import org.vegbank.common.utility.DatabaseUtility;
  *
  *
  * @author M. Lee
- * @version $Revision: 1.1 $ $Date: 2006-06-02 19:17:15 $
+ * @version $Revision: 1.2 $ $Date: 2006-06-22 18:26:02 $
  */
 
 public class VegbankRequestAccessionCodeTag extends VegbankTag {
@@ -115,7 +115,7 @@ public class VegbankRequestAccessionCodeTag extends VegbankTag {
 			  StringBuffer sql = new StringBuffer(128);
 			  //  StringBuffer selectsql = new StringBuffer(128);
 			  //get main clause from SQLStore
-			  sql.append("INSERT INTO dba_test ( dba_testrequestacc_id, databasekey, tableabbrev) ");
+			  sql.append("INSERT INTO dba_preassignacccode ( dba_requestnumber, databasekey, tableabbrev) ");
               sql.append(" values ('").append(reqkey).append("','").append(dbKey).append("','").append(tableAbbrev).append("')");
 
               log.debug("asking for accession codes via " + sql.toString());
@@ -125,7 +125,7 @@ public class VegbankRequestAccessionCodeTag extends VegbankTag {
                da.issueUpdate(DatabaseUtility.removeSemicolons(sql.toString()));
 		   }
 		   log.debug("compiling accession codes");
-		   da.issueUpdate("UPDATE dba_test SET accessionCode = databasekey || '.' || tableabbrev || '.' || dba_test_id || '.' || confirmcode  WHERE accessionCode is null");
+		   da.issueUpdate("UPDATE dba_preassignacccode SET accessionCode = databasekey || '.' || tableabbrev || '.' || dba_preassignacccode_id || '.' || confirmcode  WHERE accessionCode is null");
 
            log.debug("finished with inserting new accessionCodes");
 		} catch (Exception ex) {
