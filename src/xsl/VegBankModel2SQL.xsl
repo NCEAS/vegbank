@@ -6,9 +6,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: farrell $'
- *	'$Date: 2003-04-16 17:54:16 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-06-22 18:32:13 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@
   <xsl:template name="createTable">
 
     <xsl:variable name="tableName" select="entityName"/>
-    <xsl:variable name="sequenceName"><xsl:value-of select="attribute[attKey='PK']/attName"/>_seq</xsl:variable>
+    <xsl:variable name="sequenceName"><xsl:value-of select="entityName" />__<xsl:value-of select="attribute[attKey='PK']/attName"/>_seq</xsl:variable>
     
 ----------------------------------------------------------------------------
 -- CREATE <xsl:value-of select="$tableName"/>
@@ -99,8 +99,19 @@ ALTER TABLE  <xsl:value-of select="../entityName"/>
     <xsl:param name="sequenceName"/>
     <xsl:choose>
       <xsl:when test="attKey='PK'">
-        <xsl:value-of select="attName"/> integer <xsl:call-template name="handleNotNull"/>
-          NOT NULL PRIMARY KEY default nextval('<xsl:value-of select="$sequenceName"/>')</xsl:when>
+        <xsl:choose>
+          <xsl:when test="attType='serial'">
+          <xsl:value-of select="attName"/> integer 
+          NOT NULL PRIMARY KEY default nextval('<xsl:value-of select="$sequenceName"/>')
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- pk is not a serial -->
+            <xsl:value-of select="attName"/> <xsl:value-of select="attType" /> 
+          NOT NULL PRIMARY KEY )
+
+          </xsl:otherwise>
+        </xsl:choose>
+        </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="attName"/> <xsl:text> </xsl:text> <xsl:value-of select="attType"/> <xsl:call-template name="handleNotNull"/>
       </xsl:otherwise>
@@ -110,8 +121,8 @@ ALTER TABLE  <xsl:value-of select="../entityName"/>
     <!-- Comma unless it is the last attribute -->
     <xsl:choose>
       <!-- I wish I knew why I need to decrement last() in this case ??? well it works -->
-      <xsl:when test="position() = last()-1"></xsl:when>
-      <xsl:otherwise>,</xsl:otherwise>
+      <xsl:when test="position() = last()"></xsl:when>
+      <xsl:otherwise>, </xsl:otherwise>
     </xsl:choose>
 
   </xsl:template>
