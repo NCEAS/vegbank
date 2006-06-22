@@ -141,9 +141,9 @@
 
                 <bean:define id="pageContentBean"><bean:write name="pageContentBean" filter="false" />
                     <div id="plot_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />">
-                     Plot: <a target="_blank" href="@get_link@comprehensive/observation/<bean:write name='observation_pk'/>"><bean:write name="onerowofobservation" property="authorplotcode" /></a>
+                     <%@ include file="includeviews/sub_plotmappingdata.jsp" %>
                      <logic:notEmpty name="onerowofobservation" property="datasetname">
-                      <br/> Dataset: <bean:write name="onerowofobservation" property="datasetname"/>
+                      <br/>(Dataset: <bean:write name="onerowofobservation" property="datasetname"/>)
                      </logic:notEmpty>
                     </div>
                 </bean:define>

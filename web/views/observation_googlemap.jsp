@@ -57,9 +57,7 @@
          <bean:define id="obsId" name="onerowofobservation" property="observation_id"/>
          <bean:define id="observation_pk" name="onerowofobservation" property="observation_id"/>
          <div class="hidden" id="obsid_<bean:write name='obsId' />">
-           <strong><bean:write name="onerowofobservation" property="authorplotcode" /></strong>
-           fuzzing: <bean:write name="onerowofobservation" property="degrees_fuzzed" /> , 
-           accuracy: <bean:write name="onerowofobservation" property="locationaccuracy" />
+           <%@ include file="includeviews/sub_plotmappingdata.jsp" %>
          </div>
          <!-- define javascript call for this plot: -->
           <bean:define id="currlat"><bean:write name="onerowofobservation" property="latitude" /></bean:define>
