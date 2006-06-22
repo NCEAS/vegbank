@@ -24,5 +24,5 @@ create sequence dba_preassignacccode_dba_requestnumber_seq;
    primary key (dba_onerow_id)
    );
    
- --populate it:  
+ --populate dba_onerow (just one empty row of data):  
  insert into dba_onerow (dba_onerow_id) values (1);
