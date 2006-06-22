@@ -15,8 +15,14 @@
      -->
 
  <!-- key is set in build.properties -->
-<script src="http://maps.google.com/maps?file=api&v=2&key=@googlemaps_apikey@" type="text/javascript"></script>
-
+  <script src="http://maps.google.com/maps?file=api&v=2&key=@googlemaps_apikey@" type="text/javascript"></script>
+  <script src="@includes_link@VbGoogleMap.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    function VbGLoadAllMapsThisPage() {
+      // calls the right one on this page:
+      vegbankGoogleMapLoad()
+    }
+  </script>
 <TITLE>Google Map of VegBank Datasets</TITLE>
 
 
@@ -63,53 +69,25 @@
 
 <script type="text/javascript">
     //<![CDATA[
-  // adds the google map loader when the window loads.
-  addEvent(window, "load", vegbankGoogleMapLoad);
-  addEvent(window, "onunload", vegbankGUnload);
- 
- function vegbankGUnload() {
-  // alert('unloading Google maps now...');
-   GUnload();
-  // alert('GoogleMaps now unloaded.  Thank you for mapping with us!');
- }
  
  function vegbankGoogleMapLoad() {
 
     if (GBrowserIsCompatible()) {
-       // alert('starting new map!');
-        var map = new GMap2(document.getElementById("map"));
-        map.setCenter(new GLatLng(36.59370,-82.22100), 13);
+       //setup counters:
+          var countPlots = 0;
+          var countPlotsToConfirm = -1; // look up constant
 
-        map.addControl(new GLargeMapControl());
-        map.addControl(new GMapTypeControl());
-       // GLog.write('controls added');
+       
+       var map = VbGMapLoadByCenter("map",36.59370,-82.22100,13)
+       
          // go ahead and set default icon.
          <% String iconPrefix = "map_google_c_" ; %>
 
               <logic:notEmpty name="datasets-BEANLIST">
-                // define base of class of icon:
-                var baseIcon = new GIcon();
-                // do a key, and differentiate icons.
-                // default icons are colored
-
-                   baseIcon.shadow = "@images_link@map_google_shadow_20.png";
-                   baseIcon.iconSize = new GSize(12, 20);
-                   baseIcon.shadowSize = new GSize(22, 20);
-                   baseIcon.iconAnchor = new GPoint(6, 20);
-                   baseIcon.infoWindowAnchor = new GPoint(5, 1);
-
 
                    <logic:equal parameter="mapicons" value="nocolors">
                       <% iconPrefix = "map_google_l_" ; %>
-                      baseIcon.shadow = "@images_link@map_google_shadow_50.png";
-                      baseIcon.iconSize = new GSize(20, 34);
-                      baseIcon.shadowSize = new GSize(37, 34);
-                      baseIcon.iconAnchor = new GPoint(9, 34);
-                      baseIcon.infoWindowAnchor = new GPoint(9, 2);
-                      baseIcon.infoShadowAnchor = new GPoint(18, 25);
                    </logic:equal>
-                //get as javascript variable, too
-                var iconPrefix = "<%= iconPrefix %>" ;
 
                <bean:define id="mapKey">
                <!-- float these suckers left to make them stay together and not wrap badly: -->
@@ -128,10 +106,15 @@
                    <% mapNum = -1 ; %>
               </logic:notEmpty>
 
-
+     // set whether or not icons are colored.
      <logic:notEmpty name="plotobs-BEANLIST">
+        var blnColored = true; //default
+      <logic:equal parameter="mapicons" value="nocolors">
+        blnColored = false;
+      </logic:equal>
+      
       <logic:iterate id="onerowofobservation" name="plotobs-BEANLIST">
-                // figure out which map icon to use
+                // figure out which number map icon to use
 
                 <logic:notEmpty name="onerowofobservation" property="userdataset_id">
                   <logic:notEqual value="<%= lastDS %>" name="onerowofobservation" property="userdataset_id">
@@ -156,25 +139,19 @@
            //  write the html for popup window:
            //   dataset may be null, that's ok
 
-
-
-        // alert('writing new point <bean:write name='observation_pk'/>');
-
-                        <bean:define id="pageContentBean"><bean:write name="pageContentBean" filter="false" />
-                            <div id="plot_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />">
-                             Plot: <a target="_blank" href="@get_link@comprehensive/observation/<bean:write name='observation_pk'/>"><bean:write name="onerowofobservation" property="authorplotcode" /></a>
-                             <logic:notEmpty name="onerowofobservation" property="datasetname">
-                              <br/> Dataset: <bean:write name="onerowofobservation" property="datasetname"/>
-                             </logic:notEmpty>
-                            </div>
-                        </bean:define>
-
-                 var point = new GLatLng(<bean:write name="onerowofobservation" property="latitude" />,<bean:write name="onerowofobservation" property="longitude" />);
-                 // map.addOverlay(new GMarker(point));
-                 var marker = createMarker(point, document.getElementById("plot_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />").innerHTML, <%= mapNum %>, iconPrefix , baseIcon );
-                 //var marker = createMarker(point, "goo");
-                             map.addOverlay(marker);
-
+                <bean:define id="pageContentBean"><bean:write name="pageContentBean" filter="false" />
+                    <div id="plot_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />">
+                     Plot: <a target="_blank" href="@get_link@comprehensive/observation/<bean:write name='observation_pk'/>"><bean:write name="onerowofobservation" property="authorplotcode" /></a>
+                     <logic:notEmpty name="onerowofobservation" property="datasetname">
+                      <br/> Dataset: <bean:write name="onerowofobservation" property="datasetname"/>
+                     </logic:notEmpty>
+                    </div>
+                </bean:define>
+               
+             countPlots=  VbGCreateMarker(<bean:write name="onerowofobservation" property="latitude" />,
+                               <bean:write name="onerowofobservation" property="longitude" />, 
+                       document.getElementById("plot_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />").innerHTML, 
+                       <%= mapNum %>, blnColored, map, countPlots, countPlotsToConfirm);
 
 
         //  check to see if lat and long set any boundaries for min max
@@ -196,87 +173,16 @@
 
       </logic:iterate>
      </logic:notEmpty>
+       
+       //correct the location based on what was mapped.
+       VbGFixZoomToBounds(map,<%= minLat %>,<%= maxLat %>,<%= minLong %>,<%= maxLong %>,true)
+       
+       // add a "where is this stuff" map ; an overview of where the big map is.  Note the big maps bounds, not plot bounds
+    VbGMapLoadWhereIsMap("whereismap",map)
+   
+      } // end of browser is compatible if statement
 
-
-       // these are now with 0 at coarsest, start there, work up
-       var MyMaxZoomLevel = 16; // max level of zoom possible
-       var MyStartZoomLevel = 2;
-       var MyDoneWithThis = 0; // 0 if not done
-       var MyCenterLat =  <%= (maxLat + minLat)*0.5 %>;
-       // GLog.write('center Lat:' + MyCenterLat);
-       var MyCenterLong = <%= (maxLong + minLong)*0.5 %>;
-       // GLog.write('center Long:' + MyCenterLong);
-       map.setCenter(new GLatLng( MyCenterLat,MyCenterLong), MyStartZoomLevel);
-       for(i=1; i<MyMaxZoomLevel; i++) {
-         //try to zoom in and see the plots better
-         if (MyDoneWithThis == 0 ) {
-           // alert('zooming in');
-           map.zoomIn();
-           // alert('zoomed in');
-           //get map size
-           var bounds = map.getBounds();
-           var southWestBounds = bounds.getSouthWest();
-           var northEastBounds = bounds.getNorthEast();
-           var width = northEastBounds.lng() - southWestBounds.lng();
-           var height = northEastBounds.lat() - southWestBounds.lat();
-           // GLog.write('current width:' + width);
-           // GLog.write('current height:' + height);
-           //check to see if it is too small
-
-           if ( (<%= minLong %> < southWestBounds.lng()) || (<%= maxLong %> > northEastBounds.lng())
-                  || (<%= minLat %> < southWestBounds.lat()) || (<%= maxLat %> > ( northEastBounds.lat() - (height / 10)  )) ) {
-             //reached too small, go back one
-             // GLog.write('zoomed too far:');
-             // GLog.write('long: min ' + <%= minLong %> + ' map ' + southWestBounds.lng());
-             // GLog.write('long: max ' + <%= maxLong %> + ' map ' + northEastBounds.lng());
-             // GLog.write('lat: min ' + <%= minLat %> + ' map ' + southWestBounds.lat());
-             // GLog.write('lat: max ' + <%= maxLat %> + ' map ' + northEastBounds.lat());
-             // alert('zooming back out!');
-             map.zoomOut();
-             // and stop doing this
-             MyDoneWithThis = 1;
-           } // coords too much
-         } //not done rezooming
-
-       } //for loop to rezoom
-       map.setMapType(G_SATELLITE_MAP);
-       //save this position:
-       map.savePosition();
-      
-      var whereismap = new GMap2(document.getElementById("whereismap"));
-      whereismap.setCenter(new GLatLng(MyCenterLat,MyCenterLong), 1);
-        var boundsnew = map.getBounds();
-        var points = [];
-
-          points.push(new GLatLng(boundsnew.getSouthWest().lat(), boundsnew.getSouthWest().lng()));
-          points.push(new GLatLng(boundsnew.getSouthWest().lat(), boundsnew.getNorthEast().lng()));
-          points.push(new GLatLng(boundsnew.getNorthEast().lat(), boundsnew.getNorthEast().lng()));
-          points.push(new GLatLng(boundsnew.getNorthEast().lat(), boundsnew.getSouthWest().lng()));
-          points.push(new GLatLng(boundsnew.getSouthWest().lat(), boundsnew.getSouthWest().lng()));
-
-        whereismap.addOverlay(new GPolyline(points));
-        whereismap.disableDragging();
-      } //browser is compatible
-
-   } // onload function
-
-
-     // Creates a marker whose info window displays the given html (not number)
-           function createMarker(point, html, number, iconPrefix, baseIcon) {
-             var icon = new GIcon(baseIcon);
-             icon.image = "@images_link@" + iconPrefix +  number + ".png";
-             var marker = new GMarker(point, icon);
-
-             // show plot info when clicked
-
-             GEvent.addListener(marker, "click", function() {
-               marker.openInfoWindowHtml(html);
-             });
-
-             return marker;
-       }
-
-
+   } // end of main function
     //]]>
     </script>
  </logic:notEqual> <!-- wparambad -->
@@ -327,6 +233,8 @@ and zoom in and out, but if you use the back button to get to this page, the map
   <div id="map" style="width: 700px; height: 500px"></div>
 
 <!--
+
+FYI Debugging: 
 MIN LAT: <%= minLat %><br/>
 max LAT: <%= maxLat %><br/>
 MIN long: <%= minLong %><br/>

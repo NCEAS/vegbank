@@ -19,7 +19,7 @@
    // unloads the google map
   // // alert( 'unloading Google maps now...');
    GUnload();
-   alert( 'GoogleMaps now unloaded.  Thank you for mapping with us!');
+  // alert( 'GoogleMaps now unloaded.  Thank you for mapping with us!');
  }
 
   function VbGMapLoadByCenter(elementId,lat,lng,zoomLevel) {
@@ -68,7 +68,36 @@
        return map;
      } //compatible
    }
-
+   
+   function VbGMapLoadWhereIsMap(elementId,refMap) {
+	   // this function loads a "where is" map, or key to where something is.
+	    var whereismap = new GMap2(document.getElementById(elementId));
+	    // load boundaries of reference Map
+	    var boundsnew = refMap.getBounds();
+	    //record all 4 as separate vars
+	    var minLat = boundsnew.getSouthWest().lat();
+	    var maxLat = boundsnew.getNorthEast().lat();
+	    var minLng = boundsnew.getSouthWest().lng();
+	    var maxLng = boundsnew.getNorthEast().lng();
+	    
+	    // set center as same
+	    whereismap.setCenter(new GLatLng((minLat + maxLat) * 0.5,(minLng + maxLng) * 0.5), 1);
+	    //array of points
+	    var points = [];
+	    //add the points, in sequence
+	    points.push(new GLatLng(minLat, minLng));
+	    points.push(new GLatLng(minLat, maxLng));
+	    points.push(new GLatLng(maxLat, maxLng));
+	    points.push(new GLatLng(maxLat, minLng));
+	    points.push(new GLatLng(minLat, minLng));
+	         //  GLog.write("about to add overview polyline:");
+	    //overlay the array of points
+	    whereismap.addOverlay(new GPolyline(points));
+           //  GLog.write("DONE adding  overview polyline.");
+        //disable dragging to stop people from accidentally moving it
+        whereismap.disableDragging();
+   }
+   
 
 	    function VbGFixZoomToBounds(map,minLat,maxLat,minLng,maxLng,blnSaveZoom) {
             // new way of zooming to right level, using getBoundsZoomLevel:
@@ -89,10 +118,22 @@
    }
 
   // Creates a marker whose info window displays the given html (not number)
-   function VbGCreateMarker(lat,lng, html, number, VbGiconPrefix, blnColored, map, markerNumber, markerConfirmNumber) {
+   function VbGCreateMarker(lat,lng, html, number,  blnColored, map, markerNumber, markerConfirmNumber) {
 	     //this creates marker with listener that responds to clicks:
+	     // lat and lng are floating point latitude and longitude in decimal degrees
+	     // html is html to display for the marker (ie plot identification)
+	     // number is the group number to display: 0-9 
+	     // blnColored is true if using small colored icons, else larger lettered ones
+	     // markerNumber is a counter for the number of plots mapped
+	     // markerConfirmNumber is a threshhold past which the user gets a confirmation message to continue mapping.
+	     // if markerConfirmNumber is -1, then uses the default, supplied in this function, else uses what is set in page
+	     
+	     if ( markerConfirmNumber == -1 ) {
+			markerConfirmNumber = 100 ; //default value 
+		 }
+	     
 	     // // alert( 'writing new marker at ' + lat + ',  ' + lng);
-         GLog.write('trying marking #' + markerNumber);
+//          GLog.write('trying marking #' + markerNumber);
 	     //deal with whether or not to continue this?
 		 var keepMapping = true ; //default
 		 if (markerNumber < 0) {
@@ -104,14 +145,14 @@
 			 if (Math.floor(markerNumber/markerConfirmNumber) == (markerNumber/markerConfirmNumber)) {
 				 // tell user that X plots have been mapped, continue mapping?
 				 if (!confirm(markerNumber + " plots have been mapped, continue mapping (browser may get slow if too many plots are mapped)?")) {
-					 GLog.write('marking #' + markerNumber + 'cancelled');
+// 					 GLog.write('marking #' + markerNumber + 'cancelled');
 					 markerNumber =  -2; //set to not map anything else, though js will still be iterated through
 					// keepMapping = false; // for now, continue mapping this one.
 				 }
 			 }
 		  }
 	    if (keepMapping == true) {
-            GLog.write('really marking #' + markerNumber);
+//             GLog.write('really marking #' + markerNumber);
 			//create the position
 			  var point = new GLatLng(lat,lng);
 
@@ -124,6 +165,7 @@
 				 baseIcon.shadowSize = new GSize(22, 20);
 				 baseIcon.iconAnchor = new GPoint(6, 20);
 				 baseIcon.infoWindowAnchor = new GPoint(5, 1);
+				 VbGiconPrefix = "map_google_c_";
 			  } else {
 				 baseIcon.shadow = "@images_link@map_google_shadow_50.png";
 				 baseIcon.iconSize = new GSize(20, 34);
@@ -131,8 +173,12 @@
 				 baseIcon.iconAnchor = new GPoint(9, 34);
 				 baseIcon.infoWindowAnchor = new GPoint(9, 2);
 				 baseIcon.infoShadowAnchor = new GPoint(18, 25);
+				 VbGiconPrefix = "map_google_l_";
 			  }
-
+             //make sure the group number doesn't exceed 9
+             while (number > 9) {
+				 number = number - 10;
+			 }
 			 var icon = new GIcon(baseIcon,"@images_link@" + VbGiconPrefix +  number + ".png");
 			 // icon.image = "@images_link@" + VbGiconPrefix +  number + ".png";
 			 var marker = new GMarker(point, icon);
@@ -142,9 +188,11 @@
 			 GEvent.addListener(marker, "click", function() {
 			   marker.openInfoWindowHtml(html);
 			 });
+// 		      GLog.write('before adding marker:');
 			  map.addOverlay(marker);
 			  markerNumber ++;
 	 } //keepMapping true
+// 	     GLog.write('returning: ' + markerNumber);
          return markerNumber;
    }
 
@@ -198,14 +246,14 @@
 	   // alert( "--Long:" + mErrToLong);
 	   //now see if Google agrees:
 	   var OriginPoint = new GLatLng(lat,lng);
-	//   VbGCreateMarker(lat,lng, "Origin", 1, "map_google_l_", false, map);
+	//   VbGCreateMarker(lat,lng, "Origin", 1,  false, map);
 	   var LatErrPoint = new GLatLng(lat + mErrToLat,lng);
-	  // VbGCreateMarker(lat + mErrToLat,lng, "Origin", 2, "map_google_c_", true, map);
+	  // VbGCreateMarker(lat + mErrToLat,lng, "Origin", 2,  true, map);
 	   var LongErrPoint = new GLatLng(lat,lng + mErrToLong);
-	  // VbGCreateMarker(lat,lng + mErrToLong, "Origin", 3, "map_google_c_", true, map);
+	  // VbGCreateMarker(lat,lng + mErrToLong, "Origin", 3,  true, map);
 	   // alert( "orig error was:" + metersErr);
-	   GLog.write("Google thinks error (meters) Lat:" + OriginPoint.distanceFrom(LatErrPoint) );
-	   GLog.write("-g--Long:" + OriginPoint.distanceFrom(LongErrPoint));
+// 	   GLog.write("Google thinks error (meters) Lat:" + OriginPoint.distanceFrom(LatErrPoint) );
+// 	   GLog.write("-g--Long:" + OriginPoint.distanceFrom(LongErrPoint));
 
        //combinePrev with degreesErr
        var TotalLatErr = degreesErr + mErrToLat;
@@ -226,7 +274,7 @@
        //  GLog.write("added point:");
        //  GLog.write(LatPoints[i]);
        //  GLog.write(LongPoints[i]);
-        // VbGCreateMarker(lat+LatPoints[i],lng+LongPoints[i],"this is " + i,i,"map_google_c_",true,map);
+        // VbGCreateMarker(lat+LatPoints[i],lng+LongPoints[i],"this is " + i,i,true,map);
          points.push(new GLatLng(lat + LatPoints[i],lng + LongPoints[i]));
 	   }
 	   // alert( 'done with loop');
@@ -322,7 +370,7 @@ function VbGMakeMapClickable(map) {
 				 VbGCreateMarker(parseFloat(markers[i].getAttribute("latitude")),
 									  parseFloat(markers[i].getAttribute("longitude")),
 									  "html placeholder",
-									  1, "map_google_c_", true, map, markerNumber, markerConfirmNumber);
+									  1, true, map, markerNumber, markerConfirmNumber);
 			  // markers[i].getElementsByTagName("htmltoshow").toString()
 			  markerNumber ++;
 	        }
