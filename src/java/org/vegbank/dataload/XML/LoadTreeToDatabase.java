@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-02 21:15:15 $'
- *	'$Revision: 1.27 $'
+ *	'$Date: 2006-06-22 19:51:51 $'
+ *	'$Revision: 1.28 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -303,6 +303,7 @@ public class LoadTreeToDatabase
                 dlog.append("====================== KEYWORD GEN");
                 KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
                 Iterator tit = tableKeys.keySet().iterator();
+                int i = 0;
                 while (tit.hasNext()) {
                     String tableName = ((String)tit.next()).toLowerCase();
                     kwGen.updatePartialEntityByTable(tableName);
@@ -324,6 +325,9 @@ public class LoadTreeToDatabase
             // this is still considered a successful load, despite potential errors
             receiptTpl = DataloadLog.TPL_SUCCESS;
             subject = vbResources.getString("dataload.subject.success");
+            
+            //call the denorm SQL
+            
 
 		} else {
             //////////////////////////////////////////////////////////////////
@@ -1447,7 +1451,7 @@ public class LoadTreeToDatabase
 	 * @return long -- observationId
 	 */
 	private long insertObservation(Hashtable observationHash) throws SQLException
-	{
+	{    
 		long observationId = 0;
 		// Handle null
 		if ( observationHash == null )
@@ -1460,7 +1464,7 @@ public class LoadTreeToDatabase
 		{
 			return observationId;
 		}
-		
+		Timer obsTimer = new Timer("IOT1");
 		//	Need to insert the plot and the project and get the FKs
 		Hashtable project = this.getFKChildTable(observationHash, Observation.PROJECT_ID, "project");
 		long projectId = this.insertProject(project);
@@ -1477,7 +1481,9 @@ public class LoadTreeToDatabase
 		{
 			previousObsId = insertObservation(previousObs);
 		}
-		
+		obsTimer.stop();
+    obsTimer = new Timer("IOT2");
+    
 		addForeignKey(observationHash, Observation.PREVIOUSOBS_ID, previousObsId);
 		addForeignKey(observationHash, Observation.PLOT_ID, plotId);
 		addForeignKey(observationHash, Observation.PROJECT_ID, projectId);
@@ -1498,7 +1504,9 @@ public class LoadTreeToDatabase
 		long soilTaxonId = insertTable("soilTaxon", soilTaxon);
 		addForeignKey(observationHash, Observation.SOILTAXON_ID, soilTaxonId);
 		
-		
+		obsTimer.stop();
+    obsTimer = new Timer("IOT3");
+    
 		// Insert the observation
 		observationId = insertTable("observation", observationHash);
 		
@@ -1518,6 +1526,9 @@ public class LoadTreeToDatabase
 			this.insertContributor( "observationContributor", (Hashtable) ocs.nextElement(), Observationcontributor.OBSERVATION_ID,  observationId);
 		}
 		
+    obsTimer.stop();
+    obsTimer = new Timer("IOT4");
+    
 		// Add stratums
 		Enumeration stratums = getChildTables(observationHash, "stratum");
 		while ( stratums.hasMoreElements())
@@ -1526,6 +1537,9 @@ public class LoadTreeToDatabase
 			long stratumId = insertStratum(stratum, stratumMethodId, observationId);
 		}
 		
+    obsTimer.stop();
+    obsTimer = new Timer("IOT5");
+    
 		// Add commClass
 		Enumeration commClasses =  getChildTables(observationHash, "commClass");
 		while ( commClasses.hasMoreElements() )
@@ -1551,6 +1565,9 @@ public class LoadTreeToDatabase
 				this.insertCommInterpetation(commIntepretation);
 			}
 		}
+    
+    obsTimer.stop();
+    obsTimer = new Timer("IOT6.0");
 		
 		// Insert the taxonObservations
 		insertTaxonObservations(
@@ -1558,11 +1575,15 @@ public class LoadTreeToDatabase
 			observationId,
 			stratumMethodId);
 			
-		
+		obsTimer.stop();
+    obsTimer = new Timer("IOT6.1");
 		// Add the observation synonyms 
 		Enumeration observationSynonyms =  getChildTables(observationHash, "observationSynonym");
+    obsTimer.stop();
+    obsTimer = new Timer("IOT6.2");
 		while ( observationSynonyms.hasMoreElements() )
 		{
+      
 			Hashtable observationSynonym = (Hashtable) observationSynonyms.nextElement();
 			
 			// Get synonymobservation_id, party_id, role_id
@@ -1584,6 +1605,7 @@ public class LoadTreeToDatabase
 			long observationSynonymId = insertTable("observationSynonym", observationSynonym);
 			
 		}
+    obsTimer.stop();
 		
 		return observationId;
 	}
@@ -1645,7 +1667,7 @@ public class LoadTreeToDatabase
 	}
 
 	/**
-	 * Insert a taxonInterpretation 
+	 * Insert a taxonObservation 
 	 * 
 	 * @param observationHash
 	 * @param observationId
@@ -1656,6 +1678,7 @@ public class LoadTreeToDatabase
 		long observationId,
 		long stratumMethodId) throws SQLException
 	{	
+    Timer obsTimer;
 		// Insert the taxonObservations
 		Enumeration taxonObservations = getChildTables(observationHash, "taxonObservation");
 		while ( taxonObservations.hasMoreElements())
@@ -1668,12 +1691,12 @@ public class LoadTreeToDatabase
 			{
 				continue;
 			}
-			
+      
 			// Add PlantName 
 			Hashtable plantname = getChildTable(taxonObservation, "Plantname");
 			long plantNameId = insertTable("Plantname", plantname);
 			
-			// Add FKs to taxonObservation
+      // Add FKs to taxonObservation
 			addForeignKey(taxonObservation, Taxonobservation.OBSERVATION_ID, observationId);
 		
 			
@@ -1692,7 +1715,7 @@ public class LoadTreeToDatabase
 				{
 					continue;
 				}
-				
+			  
 				// Get the stratum_id if there is one
 				Hashtable stratum = getFKChildTable(taxonImportance, Taxonimportance.STRATUM_ID, "stratum");					
 				if ( stratum != null )
@@ -1700,15 +1723,16 @@ public class LoadTreeToDatabase
 					long stratumId = insertStratum(stratum, stratumMethodId, observationId);					
 					addForeignKey(taxonImportance, Taxonimportance.STRATUM_ID, stratumId);
 				}
-
+      
 				addForeignKey(taxonImportance, Taxonimportance.TAXONOBSERVATION_ID, taxonObservationId);
 				taxonImportanceId = insertTable("taxonImportance", taxonImportance );
 
 				// Add  StemCount
 				Enumeration stemCounts = getChildTables(taxonImportance, "stemCount");
-				while ( stemCounts.hasMoreElements())
+        
+      	while ( stemCounts.hasMoreElements())
 				{
-					long stemCountId = 0;
+      		long stemCountId = 0;
 					Hashtable stemCount = (Hashtable) stemCounts.nextElement();
 					
 					stemCountId = getExtantPK(stemCount);
@@ -1716,7 +1740,7 @@ public class LoadTreeToDatabase
 					{
 						continue;
 					}
-					
+					    
 					addForeignKey(stemCount, Stemcount.TAXONIMPORTANCE_ID, taxonImportanceId);
 					stemCountId = insertTable("stemCount", stemCount);
 					
@@ -1746,12 +1770,12 @@ public class LoadTreeToDatabase
 								taxonObservationId,
 								stemLocationId, 
 								taxonInterpretation);
-						}	
+						}
 					}
 				}
 			}
 			
-			// Add TaxonInterpretation
+      // Add TaxonInterpretation
 			Enumeration taxonInterpretations = getChildTables(taxonObservation, "taxonInterpretation");
 			while ( taxonInterpretations.hasMoreElements())
 			{
@@ -1764,6 +1788,9 @@ public class LoadTreeToDatabase
 		}
 	}
 
+  /**
+   * add a taxon interpretation
+   */
 	private void insertTaxonInterpretation(
 		long taxonObservationId,
 		long stemLocationId,
