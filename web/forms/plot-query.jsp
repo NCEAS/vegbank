@@ -77,7 +77,34 @@ function setQueryText() {
                          {
                             text = text + strSep + " Elevation no more than " + themaxelevation ;
                      }
-        theminslopeaspect = document.plotqueryform.xwhereParams_minslopeaspect_0.value ;
+         /* lat & long */
+         
+         theminlatitude = document.plotqueryform.xwhereParams_minlatitude_0.value ;
+                    if ( theminlatitude != "" &&  theminlatitude != null )
+                     {
+                        text = text + strSep + " Latitude of at least " + theminlatitude ;
+                     }
+               
+         themaxlatitude = document.plotqueryform.xwhereParams_maxlatitude_0.value ;
+                     if ( themaxlatitude != "" &&  themaxlatitude != null )
+                     {
+                        text = text + strSep + " Latitude no more than " + themaxlatitude ;
+                     }
+        theminlongitude = document.plotqueryform.xwhereParams_minlongitude_0.value ;
+                     if ( theminlongitude != "" &&  theminlongitude != null )
+                     {
+                       text = text + strSep + " Longitude of at least " + theminlongitude ;
+                     }
+               
+        themaxlongitude = document.plotqueryform.xwhereParams_maxlongitude_0.value ;
+                     if ( themaxlongitude != "" &&  themaxlongitude != null )
+                     {
+                       text = text + strSep + " Longitude no more than " + themaxlongitude ;
+                     }
+       
+        
+       
+       theminslopeaspect = document.plotqueryform.xwhereParams_minslopeaspect_0.value ;
             if ( theminslopeaspect != "" &&  theminslopeaspect != null )
                      {
                         text = text + strSep + " Slope Aspect of at least " + theminslopeaspect ;
@@ -261,6 +288,7 @@ function setQueryText() {
 <bean:define id="hasshowparams" value="false" />
 <logic:present parameter="show_statecountry"><bean:define id="show_statecountry" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_elev"><bean:define id="show_elev" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_latlong"><bean:define id="show_latlong" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_aspect"><bean:define id="show_aspect" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_slope"><bean:define id="show_slope" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_rocktype"><bean:define id="show_rocktype" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
@@ -358,6 +386,7 @@ function setQueryText() {
       
       <logic:present name="show_statecountry"><input type="checkbox" name="show_statecountry" checked="checked" />State and Country<br/></logic:present>
 	  <logic:present name="show_elev"><input type="checkbox" name="show_elev" checked="checked" />Elevation<br/></logic:present>
+      <logic:present name="show_latlong"><input type="checkbox" name="show_latlong" checked="checked" />Lat/Long<br/></logic:present>
 	  <logic:present name="show_aspect"><input type="checkbox" name="show_aspect" checked="checked" />Aspect<br/></logic:present>
 	  <logic:present name="show_slope"><input type="checkbox" name="show_slope" checked="checked" />Slope Gradient<br/></logic:present>
 	  <logic:present name="show_rocktype"><input type="checkbox" name="show_rocktype" checked="checked" />Rock Type<br/></logic:present>
@@ -380,6 +409,7 @@ function setQueryText() {
       <% int intAdditionalWritten = 1 ; %>
       <logic:notPresent name="show_statecountry"><input type="checkbox" name="show_statecountry"  />State and Country<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_elev"><input type="checkbox" name="show_elev"  />Elevation<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+      <logic:notPresent name="show_latlong"><input type="checkbox" name="show_latlong"  />Lat/Long<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_aspect"><input type="checkbox" name="show_aspect"  />Aspect<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_slope"><input type="checkbox" name="show_slope"  />Slope Gradient<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_rocktype"><input type="checkbox" name="show_rocktype"  />Rock Type<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
@@ -454,6 +484,7 @@ function setQueryText() {
         
           <logic:present name="show_statecountry"><input type="hidden" name="show_statecountry" value="on" /></logic:present>
 		  <logic:present name="show_elev"><input type="hidden" name="show_elev" value="on" /></logic:present>
+          <logic:present name="show_latlong"><input type="hidden" name="show_latlong" value="on" /></logic:present>
 		  <logic:present name="show_aspect"><input type="hidden" name="show_aspect" value="on" /></logic:present>
 		  <logic:present name="show_slope"><input type="hidden" name="show_slope" value="on" /></logic:present>
 		  <logic:present name="show_rocktype"><input type="hidden" name="show_rocktype" value="on" /></logic:present>
@@ -475,7 +506,9 @@ function setQueryText() {
    
     <bean:define id="hideCurr" value="show" />
     <logic:notPresent name="show_statecountry">
+      <logic:notPresent name="show_latlong">
         <bean:define id="hideCurr" value="hidden" />
+      </logic:notPresent>  
     </logic:notPresent>
     
     <div class='<bean:write name="hideCurr" />'>
@@ -483,7 +516,87 @@ function setQueryText() {
     
 
     <h3 class="<bean:write name='simpleHide' />">Find Plots Based on Location</h3>
-        <div id="tut_stateprovincecountry">
+          <!-- lat/long -->
+            <bean:define id="hideCurr" value="show" />
+            <logic:notPresent name="show_latlong">
+               <bean:define id="hideCurr" value="hidden" />
+            </logic:notPresent>  
+          
+           <div id="tut_latlong" class="<bean:write name="hideCurr" />">
+              <h4>Geocoordinates:</h4>
+            <p class="instructions">
+              Choose a minimum and maxium Latitude and Longitude to find plots within those bounds. <br/>
+              Please note that <strong>negative longitude</strong> is used for the Western Hemisphere,
+              and negative Latitude is used for the Southern Hemisphere.
+            </p>
+            <p class="instructions">
+              You can <a href="@views_link@plot-query-bymap.jsp">search for plots using a map</a> with VegBank, too.
+            </p>
+            <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>Minimum</th>
+                    <th>Maximum</th>
+                    <th>Units</th>
+                  </tr>
+                 
+                  <tr><!-- Lat --> 
+                    <td>&nbsp;</td>
+                    <td colspan="2" class="item" align="center">from 
+                        <bean:write name="minmaxbean-BEAN" property="curminlatitude"/> to 
+                        <bean:write name="minmaxbean-BEAN" property="curmaxlatitude"/> degrees</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr> 
+                  <tr>
+                    <td>Latitude</td>
+                    <td>
+                      <input type="hidden" name="xwhereKey_minlatitude" value="xwhere_gteq" />
+                      <input type="hidden" name="xwhereParams_minlatitude_1" value="latitude" />
+                      <input name="xwhereParams_minlatitude_0" class="number" size="20"/>
+                    </td>
+                    <td>
+                      <input type="hidden" name="xwhereKey_maxlatitude" value="xwhere_lteq" />
+                      <input type="hidden" name="xwhereParams_maxlatitude_1" value="latitude" />
+                      <input name="xwhereParams_maxlatitude_0" class="number" size="20"/>
+                    </td>
+                    <td class="units">degrees</td>
+                  </tr>
+                  <tr><!-- Long --> 
+                    <td>&nbsp;</td>
+                    <td colspan="2" class="item" align="center">from 
+                        <bean:write name="minmaxbean-BEAN" property="curminlongitude"/> to 
+                        <bean:write name="minmaxbean-BEAN" property="curmaxlongitude"/> degrees</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                  </tr> 
+                  <tr>
+                    <td>Longitude</td>
+                    <td>
+                      <input type="hidden" name="xwhereKey_minlongitude" value="xwhere_gteq" />
+                      <input type="hidden" name="xwhereParams_minlongitude_1" value="longitude" />
+                      <input name="xwhereParams_minlongitude_0" class="number" size="20"/>
+                    </td>
+                    <td>
+                      <input type="hidden" name="xwhereKey_maxlongitude" value="xwhere_lteq" />
+                      <input type="hidden" name="xwhereParams_maxlongitude_1" value="longitude" />
+                      <input name="xwhereParams_maxlongitude_0" class="number" size="20"/>
+                    </td>
+                    <td class="units">degrees</td>
+                  </tr>            
+             </table>
+            
+         </div><!-- tut div -->
+       
+    
+    <!-- end lat/long -->
+    
+           <bean:define id="hideCurr" value="show" />
+           <logic:notPresent name="show_statecountry">
+              <bean:define id="hideCurr" value="hidden" />
+           </logic:notPresent> 
+            
+       <div id="tut_stateprovincecountry" class='<bean:write name="hideCurr" />'>
           <h4>State/Province, Country:</h4>
 	    <p class="instructions">
 	      Choose a state, province, and/or country to find plots located there. <br />

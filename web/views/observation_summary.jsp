@@ -57,6 +57,7 @@ function getHelpPageId() {
 
  @possibly_center@  
   <h2>VegBank Plots</h2>
+  <p>You can also <a href="#" onclick='resubmitWithNewPage("@views_link@observation_googlemap.jsp")'>map these plots</a>.</p>
   <!-- call sub file to get observations (this code is reused)-->
   <%@ include file="includeviews/sub_getobservation.jsp" %>
 

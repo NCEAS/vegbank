@@ -301,34 +301,47 @@
 
    }
 
-function VbGMakeMapClickable(map) {
+function VbGMakeMapQueryClickable(map) {
+	 // this function makes a map "query clickable"
    GEvent.addListener(map, "click", function(overlay, point) {
     // var center = map.getCenter();
     // see if there are already points in prevous:
     var prevLat = parseFloat(document.getElementById("previousLat").innerHTML);
     var prevLong = parseFloat(document.getElementById("previousLong").innerHTML);
-    //this basically checks that they are numbers
-    if ( (prevLat < 5000 ) && ( prevLong < 5000) ) {
+    
+    
+    if (document.getElementById("pointsClicked").innerHTML == "0") {
+	  // first time, draw point:
+	  VbGCreateMarker(point.lat(),point.lng(), "This the first point on the map that you drew.  It is a placeholder point until you click another point.", 0,  true, map, 1, 500);	 
+	} else {
+	  if (document.getElementById("pointsClicked").innerHTML=="1") {
+		  //clear the first point
+		  map.clearOverlays();
+	  }
 	  //map these with the current Lat/Long
       VbGMarkLine(prevLat,prevLong,point.lat(),point.lng(),map);
 	}
+    document.getElementById("pointsClicked").innerHTML = Number(document.getElementById("pointsClicked").innerHTML) + 1;
+    document.getElementById("message").innerHTML =  "added point #" + document.getElementById("pointsClicked").innerHTML 
+              + "(" + point.lat() + "," + point.lng() + ")" ;
+    
      document.getElementById("previousLat").innerHTML = point.lat().toString();
      document.getElementById("previousLong").innerHTML = point.lng().toString();
      document.getElementById("allPoints").innerHTML = document.getElementById("allPoints").innerHTML + point.lat() + ',' + point.lng() + ';';
      //check for min and max
-     if (point.lat() < parseFloat(document.getElementById("minLat").innerHTML)) {
+     if (point.lat() < parseFloat(document.getElementById("minLat").value)) {
 		// alert('set new min');
-		document.getElementById("minLat").innerHTML = point.lat().toString();
+		document.getElementById("minLat").value = point.lat().toString();
 	 }
-	 if (point.lat() > parseFloat(document.getElementById("maxLat").innerHTML)) {
-	 		document.getElementById("maxLat").innerHTML = point.lat().toString();
+	 if (point.lat() > parseFloat(document.getElementById("maxLat").value)) {
+	 		document.getElementById("maxLat").value = point.lat().toString();
 	 }
 
-	 if (point.lng() < parseFloat(document.getElementById("minLng").innerHTML)) {
-	 	document.getElementById("minLng").innerHTML = point.lng().toString();
+	 if (point.lng() < parseFloat(document.getElementById("minLng").value)) {
+	 	document.getElementById("minLng").value = point.lng().toString();
 	 }
-	 if (point.lng() > parseFloat(document.getElementById("maxLng").innerHTML)) {
-	 	document.getElementById("maxLng").innerHTML = point.lng().toString();
+	 if (point.lng() > parseFloat(document.getElementById("maxLng").value)) {
+	 	document.getElementById("maxLng").value = point.lng().toString();
 	 }
     });
 }
@@ -340,13 +353,12 @@ function VbGMakeMapClickable(map) {
      document.getElementById("allPoints").innerHTML = "";
   }
 
-  function VbGClearThisMap(mapDivName) {
-    if (confirm("really clear this map") == true) {
-      var map = VbGMapLoadByCenter("map",35.124,-81.2948,3);
-      VbGClearMap(map);
-      VbGMakeMapClickable(map);
+  function VbGClearThisMap() {
+    var blnOK = false;
+    if (confirm("Really clear this map?") == true) {
+      blnOK = true;
     }
-    return false;
+    return blnOK;
 
   }
 
