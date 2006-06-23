@@ -60,8 +60,8 @@ You can close the rectangle, but you don't have to. </p>
 <!-- placeholder for google map to start query -->
 </div>
 <!-- just a link to itself: -->
-<a href="@views_link@plot-query-bymap.jsp?reload=true" onclick='return VbGClearThisMap()'>reset drawn box on map</a> 
-
+<a href="#" onclick='if (VbGClearThisMap()) { VbGClearMapForm(); alert("The map will be reset when you click it."); } ;return false;'>reset drawn box on map</a> 
+<!-- @views_link@plot-query-bymap.jsp?reload=true -->
 <br />
 <form name="mapqueryform" action="@views_link@observation_summary.jsp" method="get" onsubmit="javascript:return prepareForm()">
 

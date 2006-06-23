@@ -308,19 +308,24 @@ function VbGMakeMapQueryClickable(map) {
     // see if there are already points in prevous:
     var prevLat = parseFloat(document.getElementById("previousLat").innerHTML);
     var prevLong = parseFloat(document.getElementById("previousLong").innerHTML);
-    
+
+	  
+	  if (Number(document.getElementById("pointsClicked").innerHTML)<=1) {
+		  //clear the first point, or anything already there
+		  map.clearOverlays();
+	  }    
     
     if (document.getElementById("pointsClicked").innerHTML == "0") {
 	  // first time, draw point:
 	  VbGCreateMarker(point.lat(),point.lng(), "This the first point on the map that you drew.  It is a placeholder point until you click another point.", 0,  true, map, 1, 500);	 
-	} else {
-	  if (document.getElementById("pointsClicked").innerHTML=="1") {
-		  //clear the first point
-		  map.clearOverlays();
-	  }
+	  // make sure that the values aren't preloaded (ie with back button):
+	  VbGClearMapForm();
+	} 
+
+	  
 	  //map these with the current Lat/Long
       VbGMarkLine(prevLat,prevLong,point.lat(),point.lng(),map);
-	}
+	
     document.getElementById("pointsClicked").innerHTML = Number(document.getElementById("pointsClicked").innerHTML) + 1;
     document.getElementById("message").innerHTML =  "added point #" + document.getElementById("pointsClicked").innerHTML 
               + "(" + point.lat() + "," + point.lng() + ")" ;
@@ -346,11 +351,17 @@ function VbGMakeMapQueryClickable(map) {
     });
 }
 
-  function VbGClearMap(map) {
-	 map.clearOverlays();
+  function VbGClearMapForm() {
+	// map.clearOverlays();
 	 document.getElementById("previousLat").innerHTML = "";
      document.getElementById("previousLong").innerHTML = "";
      document.getElementById("allPoints").innerHTML = "";
+     document.getElementById("minLat").value = 5000;
+     document.getElementById("maxLat").value = -5000;
+     document.getElementById("minLng").value = 5000;
+     document.getElementById("maxLng").value = -5000;
+     document.getElementById("message").innerHTML = "";
+     document.getElementById("pointsClicked").innerHTML = "0";
   }
 
   function VbGClearThisMap() {
