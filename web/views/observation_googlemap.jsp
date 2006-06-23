@@ -143,6 +143,9 @@
    
    
 <br />
+<p><a href="@plotquery_page_advanced@">Search for more plots</a> 
+  | <a href="@views_link@plot-query-bymap.jsp">Search for plots using a map</a></p>
+
 @webpage_footer_html@
 
 <!-- now we throw in the js to map things -->
