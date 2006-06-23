@@ -282,6 +282,13 @@ table.thinlines th {border-style:solid;
   border-color:#333333;
   padding: 2px;
   }
+
+div.thinlines {border-style: solid;
+                 border-width:1px;
+                 padding: 5px ;
+                 margin: 2px ;
+                 border-color:#333333 }
+
 /* left right class for table gets you vertical lines for your tables only (and surrounding thin line) :
 
 | |
@@ -359,7 +366,7 @@ TH, TH.normal	{
 .rowDefn {
     background-color : #e6e6cf;
     font-size: 8pt;
-    font-color : #333333;
+    color : #333333;
     }
 
 .sorted {
@@ -674,7 +681,7 @@ form {
 /* standard alternating colors on tables: */
 .oddrow { background-color : #FFFFFF }
 .evenrow {background-color : #DDDDDD }
-.deleted {background-color : #666666 ; font-color: #DDDDDD ; font-size:7pt}
+.deleted {background-color : #666666 ; color: #DDDDDD ; font-size:7pt}
 .highlight {background-color : #FF9933 }
 .tut_highlight {background-color : #FF9933 }
 tr.tut_highlight th, tr.tut_highlight td, td.tut_highlight, th.tuthighlight {
@@ -894,8 +901,8 @@ TABLE.filetable TD {border-bottom:solid #93BEE2 1px}
 .irform { color: #000000; background: #cccc99; font-weight: normal; font-size: 8pt; }
 
 
-
-.verticaltext { layout-flow: vertical-ideographic }
+/* this is complained about and isn't in CVS, so commenting out:
+    .verticaltext { layout-flow: vertical-ideographic } */
 
 /* Generic Display styles */
 .gdEntityName { color: #FFFF80; }
