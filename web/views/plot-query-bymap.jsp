@@ -3,7 +3,12 @@
   @webpage_head_html@
   @ajax_js_include@
   @datacart_js_include@
-
+     <!-- style bit is for google maps -->
+     <style type="text/css">
+     v\:* {
+       behavior:url(#default#VML);
+     }
+    </style>
   
    <%
      int inttemp=0 ; 
@@ -89,7 +94,7 @@ You can close the rectangle, but you don't have to. </p>
             <input type="hidden" name="xwhereGlue" value="AND" />
             <input type="hidden" name="criteriaAsText" value="Plots inside boundary drawn on map." />
 
-        <div id="previousLat"> </div><div id="previousLong"> </div>
+        prevLat:<div id="previousLat"> </div> prevLong:<div id="previousLong"> </div>
         <hr />
         <div id="allPoints"> </div>
         <div id="pointsClicked">0</div>
@@ -103,7 +108,7 @@ You can close the rectangle, but you don't have to. </p>
 </div>
 
 <p>If you can't find the plots you're interested in with this search, 
-could try the <a href="@plotquery_page_advanced@">advanced search</a>.</p>
+you could try the <a href="@plotquery_page_advanced@">advanced search</a>.</p>
 
 @webpage_footer_html@
 
@@ -112,8 +117,8 @@ could try the <a href="@plotquery_page_advanced@">advanced search</a>.</p>
   <!-- //<![CDATA[
   function VbGLoadAllMapsThisPage(){
   
-   var querymap = VbGMapLoadByCenter("querymap",49.2678,-97.3828,3);
-   VbGMakeMapQueryClickable(querymap);
+   var map = VbGMapLoadByCenter("querymap",49.2678,-97.3828,3);
+   VbGMakeMapQueryClickable(map);
   
    }
    //]]>
