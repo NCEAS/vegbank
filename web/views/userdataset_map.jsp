@@ -25,7 +25,7 @@
  @webpage_masthead_html@ 
     
 <logic:equal name="wparambad" value="false">
-<p>
+<p><img src="@images_link@maplogo.gif" /> 
 The Mapping request has been processed and you should be forwarded automatically to the map.
 If the forward fails, you can find
 <a href="<%= mainFrameSrc %><bean:write name='wparam' ignore='true'/>">the map here.</a>

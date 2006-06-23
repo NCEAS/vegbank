@@ -22,7 +22,7 @@
 <!-- VegBank Header -->
   @webpage_masthead_html@
   
- <h1>Map Your VegBank Datasets</h1> 
+ <h1><img src="@images_link@maplogo.gif" /> Map Your VegBank Datasets</h1> 
 
 <p class="instructions">Use this page to map the location of the plots in one of more of your datasets.
 </p>

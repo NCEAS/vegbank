@@ -95,7 +95,7 @@ function getHelpPageId() {
 
 
       <li class="oddrow">
-         <span class="bright"><strong>NEW!</strong></span> You can view a map of the plots in your datacart.<br/>
+         <img src="@images_link@maplogo.gif" /> <span class="bright"><strong>NEW!</strong></span> You can view a map of the plots in your datacart.<br/>
          <logic:present name="datacart_contains_observation">
            <a href="@views_link@userdataset_googlemap.jsp?wparam=<%= lngDatacartId.toString() %>">
                 &raquo; Map datacart plots with Google</a> |

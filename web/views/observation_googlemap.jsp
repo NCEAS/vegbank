@@ -25,7 +25,7 @@
     
     @webpage_masthead_html@
     
-     <h2>VegBank Plots -- mapped with Google Maps</h2>
+     <h2><img src="@images_link@maplogo.gif" /> VegBank Plots -- mapped with Google Maps</h2>
      <p>If you are having problems with this mapping functionality, please see the instructions
      and tips on <a href="@forms_link@MapDatasets.jsp">this page</a>. </p>
      

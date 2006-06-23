@@ -214,7 +214,7 @@
   </div>
   <div style="width: 700px" id="key" >
      <table width="100%" border="0" class="noborder"><tr><td width="80%">
-    <h1>Map of your plots</h1>
+    <h2><img src="@images_link@maplogo.gif" /> Map of your plots</h2>
 <span class="instructions">This page shows you a <a target="_blank" href="http://maps.google.com">Google Map</a> of your datasets selected.
 However, it is not compatible with all browsers, though most of the major modern browsers
 are satisfactory.  Firefox/Mozilla and Internet Explorer are fine.  See the help pages Google's Website for more on browser compatibility.
