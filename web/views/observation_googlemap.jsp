@@ -3,7 +3,12 @@
   @webpage_head_html@
   @ajax_js_include@
   @datacart_js_include@
-
+     <!-- style bit is for google maps -->
+     <style type="text/css">
+     v\:* {
+       behavior:url(#default#VML);
+     }
+    </style>
   
    <%
      int inttemp=0 ; 

@@ -3,6 +3,7 @@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
 
+     <!-- style bit is for google maps -->
      <style type="text/css">
      v\:* {
        behavior:url(#default#VML);
