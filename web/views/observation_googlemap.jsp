@@ -92,6 +92,27 @@
             } %>
            
      </logic:iterate> <!-- iterating across obs -->
+     
+     <!-- check for presence of min and max boundaries -->
+     <bean:parameter id="boundminlat" name="xwhereParams_minlatitude_0" value="5000" />
+     <bean:parameter id="boundmaxlat" name="xwhereParams_maxlatitude_0" value="-5000" />
+     <bean:parameter id="boundminlng" name="xwhereParams_minlongitude_0" value="5000" />
+     <bean:parameter id="boundmaxlng" name="xwhereParams_maxlongitude_0" value="-5000" />
+             <!-- draw bounding box, too ?? -->
+             <bean:define id="jsBoundaryMapping">
+               // start mapping boundary, if applicable
+               if ( (<bean:write name="boundminlat" /> < 5000  ) && 
+                    (<bean:write name="boundmaxlat" /> > -5000) && 
+                    (<bean:write name="boundminlng" /> < 5000) && 
+                    (<bean:write name="boundmaxlng" /> > -5000)  ) {
+                 // do the mapping:
+                 VbGMarkRectangle(<bean:write name="boundminlat" />,<bean:write name="boundminlng" />,
+                                  <bean:write name="boundmaxlat" />,<bean:write name="boundmaxlng" />,map);
+               }
+             </bean:define>
+           
+     
+     
    </logic:notEmpty> <!-- obs not empty -->
    
    
@@ -106,6 +127,8 @@
    var countPlotsToConfirm = -1; // look up constant
    var map  = VbGMapLoadByBounds("map",<%= VbGminLat %>,<%= VbGmaxLat %>,<%= VbGminLong %>,<%= VbGmaxLong %>,2);
    <bean:write name="jsPlotMapping" filter="false" />
+   <bean:write name="jsBoundaryMapping" filter="false" />
+   
    }
    //]]>
   -->
