@@ -117,6 +117,7 @@
        }
    }
 
+
   // Creates a marker whose info window displays the given html (not number)
    function VbGCreateMarker(lat,lng, html, number,  blnColored, map, markerNumber, markerConfirmNumber) {
          //this creates marker with listener that responds to clicks:
@@ -226,6 +227,111 @@
       map.addOverlay(new GPolyline(points,color,weight,opacity));
       }
 
+
+function VbGProvideKeyIcon(blnColored,number,elementToWrite) {
+    // this function fills in the elementToWrite with innerHTML of an image that represents the number indicated
+       //get icon prefix
+       var VbGiconPrefix = "init";
+       if (blnColored==true) {
+           VbGiconPrefix = "map_google_c_";
+       } else {
+           VbGiconPrefix = "map_google_l_";
+       }
+       //check number that it's between 0 and 9
+       while (number > 9) {
+         number = number - 10;
+       }
+       //write to the element:
+       //"@images_link@" + VbGiconPrefix +  number + ".png"
+       document.getElementById(elementToWrite).innerHTML = "<img src='@images_link@"  + VbGiconPrefix +  number + ".png' alt='icon #" + number + "' />";
+      // alert("done..." + number);
+}
+
+function VbGDifferentiateMarker(blnColored,lat,lng,degreesErr,metersErr) {
+    //differentiate marker via accuracy:
+    //this does the reverse of VbGMarkCircularAccuracy, which uses degrees, this uses meters.
+          
+          //if metersErr is -1 then the actual error isn't known
+          var blnUnknownErr  = false ; //default
+          if (metersErr == -1) {
+              blnUnknownErr = true;
+              //reset metersErr to not interfere with calcs: (this is picky, admittedly)
+              metersErr = 0;
+          }
+           //first, it calculates the meters error by guessing where the points should go,
+           // using 111.319718km = 1 deg Lat and 75km = 1 deg Long (varies depending on where you are)
+           //calc the meters err as latitude, which is always the same no matter where on earth you are:
+           var latToMErr = (degreesErr * 111131.9718);
+           // long error will be different, because longitude shrinks as you get near the poles
+           //calc the meters err as longitude, adjusting by latitude:
+           var longAdjust = Math.cos((lat * Math.PI) / 180);
+          //  alert( "Long Adjustment is: " + longAdjust);
+           var longToMErr = (latToMErr * longAdjust);
+           //combinePrev with degreesErr
+           var totalLatErr = latToMErr + metersErr;
+           var totalLngErr = longToMErr + metersErr;
+         
+         var avgErr = (totalLatErr + totalLngErr) * 0.5;
+      //   alert ("avgErr: " + avgErr);
+         // split into 5 classes:
+         // 1: 0-50m (excellent)
+         // 2: 50-200m (good)
+         // 3: 200-1000m (fair)
+         // 4: 1000m (poor)
+         // 5: unknown
+         var errClass = 5; //default
+         if (avgErr <= 50) {
+             errClass = 1;
+         } else if (avgErr <= 200) {
+             errClass = 2;
+         } else if (avgErr <= 1000) {
+             errClass = 3; 
+         } else {    
+             errClass = 4;
+         }
+         //now, if errClass is good, but metersErr wasn't known, then we have to say unknown accuracy:
+         if (blnUnknownErr == true && errClass < 4) {
+             errClass = 5;
+         }
+        // alert("errClass: " + errClass);
+         //now icon numbers are assigned:
+         var iconNum = 0;
+         if (blnColored == true) {
+           //colored:
+           // 2,6,3,0,9 for 1-5
+           switch(errClass) {
+             case 1:
+                 iconNum = 2;
+                 break    
+            case 2:
+                 iconNum = 6;
+                  break
+            case 3:
+                  iconNum = 3;
+                  break
+            case 4:
+                 iconNum = 0;
+                  break
+            case 5:
+                 iconNum = 4;
+                  break      
+           } // switch ends
+         } else {
+           //not colored, use letters
+           // 1-4 is 0-3, 5 is 9
+           iconNum = errClass - 1;
+           // unknown jumps to higher letter
+           if (iconNum == 4) {
+               iconNum = 9;
+           } //is unknown
+         } //not colored
+    return iconNum;
+  }     
+  
+  
+
+
+
    function VbGMarkCircularAccuracy(lat,lng,degreesErr,metersErr,map) {
        // this marks a map with a cirular-ish (really polygon) circle marking the inaccuracy in a plot's location
        // lat and lng are latitude and longitude in decimal degrees
@@ -282,7 +388,7 @@
        // push the original location again:
        points.push(new GLatLng(lat + LatPoints[0],lng + LongPoints[0]));
        // alert( 'pushed some points');
-       map.addOverlay(new GPolyline(points,"CCCCCC"));
+       map.addOverlay(new GPolyline(points,"#CCCCCC"));
        // alert( 'added overlay #1');
        // also draw from origin going out 45 degrees to show the 2 different error sources: fuzzing and uncertainty
        var newPoints = [];
@@ -296,10 +402,10 @@
        evenNewerPoints.push(new GLatLng(midLat,midLng));
        evenNewerPoints.push(new GLatLng(lat - (TotalLatErr) * Math.sin(Math.PI / 4),lng + (TotalLngErr) * Math.cos(Math.PI / 4)));
        //draw overlays of different color indicating src of error:
-       map.addOverlay(new GPolyline(newPoints,"FF0000"));
-       map.addOverlay(new GPolyline(evenNewerPoints,"0000FF"));
+       map.addOverlay(new GPolyline(newPoints,"#FF0000"));
+       map.addOverlay(new GPolyline(evenNewerPoints,"#0000FF"));
        // alert( 'done with circular adding function');
-
+       
    }
 
 function VbGMakeMapQueryClickable(map) {
