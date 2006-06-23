@@ -102,10 +102,10 @@ You can close the rectangle, but you don't have to. </p>
 
 </div>
 
+<p>If you can't find the plots you're interested in with this search, 
+could try the <a href="@plotquery_page_advanced@">advanced search</a>.</p>
 
-  </body>
-
-</html>
+@webpage_footer_html@
 
 <!-- now we throw in the js to map things -->
   <script type="text/javascript">
