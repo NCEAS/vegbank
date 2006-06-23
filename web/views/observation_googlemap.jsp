@@ -10,6 +10,9 @@
      }
     </style>
   
+   <!-- the following file allows configured icons -->
+   <%@ include file="includeviews/inlinestyles.jsp" %> 
+
    <%
      int inttemp=0 ; 
      String howManyPlantsComplex="3"; // this many plants if complex query
@@ -46,8 +49,18 @@
         <!-- all this page does is iterate through the plots and generate js to map them -->
         
         <!-- dont forget this: -->
-         <div id="map" style="width: 700px; height: 500px"></div>
-
+       <div style="width: 700px" id="googleMapPageContainer">
+         <div style="width: 97%" id="iconKeyDiv" class="thinlines">
+           <strong>Combined Accuracy:</strong> 
+           Each plot's icon reflects the coordinate accuracy combined with any fuzzing (confidentiality) applied. <br/>
+           <span id="iconkey1"> </span>0-50m  &nbsp;&nbsp;&nbsp;&nbsp;
+           <span id="iconkey2"> </span>50-200m  &nbsp;&nbsp;&nbsp;&nbsp;
+           <span id="iconkey3"> </span>200-1000m  &nbsp;&nbsp;&nbsp;&nbsp;
+           <span id="iconkey4"> </span>&gt; 1000m  &nbsp;&nbsp;&nbsp;&nbsp;
+           <span id="iconkey5"> </span>unknown  &nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void changeMappingIcon('<logic:equal cookie="globalmapping_icons_not_colored" value="show">no</logic:equal>letters');">change icons</a>
+         </div>
+         <div id="map" style="width: 100%; height: 500px"></div>
+       </div> 
 
     <logic:empty name="plotobs-BEANLIST">
                     Sorry, no plots are available.
@@ -69,13 +82,13 @@
          <!-- define javascript call for this plot: -->
           <bean:define id="currlat"><bean:write name="onerowofobservation" property="latitude" /></bean:define>
           <bean:define id="currlong"><bean:write name="onerowofobservation" property="longitude" /></bean:define>
-          <bean:define id="curraccuracy"><bean:write name="onerowofobservation" property="locationaccuracy" /><logic:empty name="onerowofobservation" property="locationaccuracy">0</logic:empty></bean:define>
+          <bean:define id="curraccuracy"><bean:write name="onerowofobservation" property="locationaccuracy" /><logic:empty name="onerowofobservation" property="locationaccuracy">-1</logic:empty></bean:define>
          <bean:define id="jsPlotMapping">
            <bean:write name="jsPlotMapping" filter="false" />
-           countPlots = VbGCreateMarker(<bean:write name="currlat" />,
-                                        <bean:write name="currlong" />, 
+           countPlots = VbGCreateMarker(<bean:write name="currlat" />,<bean:write name="currlong" />, 
                                    gebid("obsid_" + <bean:write name="obsId" /> ).innerHTML, 
-                                   1, true, map, countPlots, countPlotsToConfirm )
+                                   VbGDifferentiateMarker(blnColored,<bean:write name="currlat" />,<bean:write name="currlong" />,<bean:write name="onerowofobservation" property="degrees_fuzzed" />,<bean:write name="curraccuracy" />),
+                                   blnColored, map, countPlots, countPlotsToConfirm )
           //  alert('ok to here');
           // this is too slow for more than a few plots, and it still doesn't work in IE
           // if (countPlots > 0) {
@@ -138,7 +151,18 @@
   function VbGLoadAllMapsThisPage(){
    var countPlots = 0;
    var countPlotsToConfirm = -1; // look up constant
+   var blnColored = true;  //default
+   <logic:equal cookie="globalmapping_icons_not_colored" value="show">
+      blnColored = false; 
+   </logic:equal>  
   <logic:notEmpty name="plotobs-BEANLIST">
+   //fill in key:
+   VbGProvideKeyIcon(blnColored,VbGDifferentiateMarker(blnColored,0,0,0,25)  ,"iconkey1");
+   VbGProvideKeyIcon(blnColored,VbGDifferentiateMarker(blnColored,0,0,0,75)  ,"iconkey2");
+   VbGProvideKeyIcon(blnColored,VbGDifferentiateMarker(blnColored,0,0,0,250) ,"iconkey3");
+   VbGProvideKeyIcon(blnColored,VbGDifferentiateMarker(blnColored,0,0,0,1250),"iconkey4");
+   VbGProvideKeyIcon(blnColored,VbGDifferentiateMarker(blnColored,0,0,0,-1)  ,"iconkey5");
+   
    var map  = VbGMapLoadByBounds("map",<%= VbGminLat %>,<%= VbGmaxLat %>,<%= VbGminLong %>,<%= VbGmaxLong %>,2);
    <bean:write name="jsPlotMapping" filter="false" />
    <bean:write name="jsBoundaryMapping" filter="false" />
