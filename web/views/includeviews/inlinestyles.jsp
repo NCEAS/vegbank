@@ -75,8 +75,10 @@
            <% // define special bean that says NOT to show user defined data. Don't even look it up %>
            <bean:define id="do_not_show_userdefined_data" value="true" />
          </logic:equal>
+         
         <%
-        }
+        } //cookie is a hide cookie
+        
        } //not null cookies.
        %>
        
@@ -86,7 +88,5 @@
    </<bean:write ignore='true' name='noinlinestyles' />style>
  </logic:notEmpty>
   
-  <!--logic:equal name="stemTableToShowBean" value="false"> .table_stemsize { display:none;} < /logic:equal-->
-  <!--logic:equal name="stemGraphicToShowBean" value="false"> .stemsize_graphic { display:none;} < /logic:equal--> 
   
-  </style>
+  </style><!-- this may be an extra style icon, but that doesn't cause errors. -->
