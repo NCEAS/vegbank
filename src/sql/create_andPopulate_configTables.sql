@@ -34,6 +34,9 @@ insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, sorto
 --userdefined
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, sortorder,startGroup)  values ( 'user_defined_data','show','global',0,20,true ) ;
 
+-- mapping
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, sortorder,startGroup)  values ( 'mapping_icons_not_colored','hide','global',0,25,true ) ;
+
 insert into dba_cookieLabels ( viewOrCookie , description) values ('graphic_stemsize','A graphical representation of tree stems, using DBH size');
 insert into dba_cookieLabels ( viewOrCookie , description) values ('table_stemsize','A tabular overview of stems for each taxon');
 insert into dba_cookieLabels ( viewOrCookie , description) values ('observation_comprehensive','The Comprehensive Plot View');
@@ -56,6 +59,8 @@ insert into dba_cookieLabels (viewOrCookie , description) values ('plant_common_
 insert into dba_cookieLabels (viewOrCookie , description) values ('plant_code','The Code for the plant concept, if available');
 
 insert into dba_cookieLabels (viewOrCookie , description) values ('user_defined_data','Display User Defined Data for plots, if available');
+
+insert into dba_cookieLabels (viewOrCookie , description) values ('mapping_icons_not_colored','Do not use colors to differentiate mapping icons (much easier to read for those who are color-blind).');
 
 
 
