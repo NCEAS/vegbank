@@ -958,6 +958,14 @@ function popupDD(url) {
 	DDWin.focus();
 }
 
+function resubmitWithNewPage(baseurl) {
+	//resubmits the current form, but with a different page:
+	 resubmitform = document.forms.resubmitForm ;
+	 resubmitform.action = baseurl;
+	 resubmitform.submit();
+	 return false;
+}
+
 function postNewParam(theName,theVal) {
   // this uses the resubmitForm Form in the page that should be put there by vegbank(colon)resubmitForm
   // to send user to new location, but using the posted instead of URL parameters.
