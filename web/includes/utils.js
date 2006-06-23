@@ -671,6 +671,36 @@ function initAjax() {
 }
 
 
+function formConvertToGetIfURLLengthOK(theformname) {
+    //this checks to see what the length of the resulting URL will be if using "GET"
+    //if it's longer than 2000 chars, it switches the form to post
+    //if it's shorter, it uses GET
+    
+    //get the form in question
+    var theFormToCheck = document.forms[theformname];
+    //loop through all elements
+    var numelements = theFormToCheck.elements.length;
+    var cumulativeLen = 0;
+    for (var i=0 ; i<numelements ; i++) {
+      //this will figure out how long the params will be:
+         var elementName = theFormToCheck.elements[i].name;
+         var elementValue = theFormToCheck.elements[i].value;
+          // add length of name and value plus room for &/? and =
+          cumulativeLen = cumulativeLen + 1 + elementName.length + 1 + elementValue.length;
+      }
+      //now add action length, too
+      cumulativeLen = cumulativeLen + theFormToCheck.action.length;
+  //  alert(theformname + " will have parameters length of " + cumulativeLen + " when submitted");  
+  if (cumulativeLen > 2000 ) {
+      // has to be a post
+      theFormToCheck.method = "POST";
+  } else {
+      //can be a get, we prefer that
+      theFormToCheck.method = "GET";
+  }
+    
+}
+
 //
 // Use this to get the items in a list
 //
@@ -962,7 +992,9 @@ function resubmitWithNewPage(baseurl) {
 	//resubmits the current form, but with a different page:
 	 resubmitform = document.forms.resubmitForm ;
 	 resubmitform.action = baseurl;
-	 resubmitform.submit();
+     //convert to get if possible
+     formConvertToGetIfURLLengthOK("resubmitForm");
+     resubmitform.submit();
 	 return false;
 }
 
@@ -988,6 +1020,11 @@ function postNewParam(theName,theVal) {
       resubmitform.placeholder.value = theVal ;
     }
   }
+  
+  //convert to get if possible
+  formConvertToGetIfURLLengthOK("resubmitForm");
+  
+  //submit form
   resubmitform.submit();
     return false;
 }
