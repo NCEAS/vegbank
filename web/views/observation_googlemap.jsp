@@ -56,7 +56,9 @@
         <bean:define id="jsPlotMapping">
           // init this javascript bean 
         </bean:define>
-       
+       <bean:define id="jsBoundaryMapping">
+               // start mapping boundary, if applicable
+       </bean:define>
     
        <logic:iterate id="onerowofobservation" name="BEANLIST">
          <bean:define id="obsId" name="onerowofobservation" property="observation_id"/>
@@ -75,9 +77,11 @@
                                    gebid("obsid_" + <bean:write name="obsId" /> ).innerHTML, 
                                    1, true, map, countPlots, countPlotsToConfirm )
           //  alert('ok to here');
+          // this is too slow for more than a few plots, and it still doesn't work in IE
           // if (countPlots > 0) {
              // alert('trying to find err');
-            // VbGMarkCircularAccuracy(<bean:write name="currlat" />,<bean:write name="currlong" />,0,0,map);
+          //   VbGMarkCircularAccuracy(<bean:write name="currlat" />,<bean:write name="currlong" />,
+          //        <bean:write name="onerowofobservation" property="degrees_fuzzed" />,<bean:write name="curraccuracy" />,map);
           // }
            // alert('ok to circ accuracy');
          </bean:define> <!-- end of defining javascript call at end of this -->
@@ -99,17 +103,21 @@
      </logic:iterate> <!-- iterating across obs -->
      
      <!-- check for presence of min and max boundaries -->
-     <bean:parameter id="boundminlat" name="xwhereParams_minlatitude_0" value="5000" />
-     <bean:parameter id="boundmaxlat" name="xwhereParams_maxlatitude_0" value="-5000" />
-     <bean:parameter id="boundminlng" name="xwhereParams_minlongitude_0" value="5000" />
-     <bean:parameter id="boundmaxlng" name="xwhereParams_maxlongitude_0" value="-5000" />
+     <bean:parameter id="pboundminlat" name="xwhereParams_minlatitude_0" value="5000" />
+     <bean:parameter id="pboundmaxlat" name="xwhereParams_maxlatitude_0" value="-5000" />
+     <bean:parameter id="pboundminlng" name="xwhereParams_minlongitude_0" value="5000" />
+     <bean:parameter id="pboundmaxlng" name="xwhereParams_maxlongitude_0" value="-5000" />
+     <bean:define id="boundminlat"><bean:write name="pboundminlat" /><logic:empty name="pboundminlat">5000</logic:empty></bean:define>
+     <bean:define id="boundmaxlat"><bean:write name="pboundmaxlat" /><logic:empty name="pboundmaxlat">-5000</logic:empty></bean:define>
+     <bean:define id="boundminlng"><bean:write name="pboundminlng" /><logic:empty name="pboundminlng">5000</logic:empty></bean:define>
+     <bean:define id="boundmaxlng"><bean:write name="pboundmaxlng" /><logic:empty name="pboundmaxlng">-5000</logic:empty></bean:define>
              <!-- draw bounding box, too ?? -->
              <bean:define id="jsBoundaryMapping">
                // start mapping boundary, if applicable
                if ( (<bean:write name="boundminlat" /> < 5000  ) && 
                     (<bean:write name="boundmaxlat" /> > -5000) && 
                     (<bean:write name="boundminlng" /> < 5000) && 
-                    (<bean:write name="boundmaxlng" /> > -5000)  ) {
+                    (<bean:write name="boundmaxlng" /> > -5000) && true  ) {
                  // do the mapping:
                  VbGMarkRectangle(<bean:write name="boundminlat" />,<bean:write name="boundminlng" />,
                                   <bean:write name="boundmaxlat" />,<bean:write name="boundmaxlng" />,map);
@@ -130,10 +138,11 @@
   function VbGLoadAllMapsThisPage(){
    var countPlots = 0;
    var countPlotsToConfirm = -1; // look up constant
+  <logic:notEmpty name="plotobs-BEANLIST">
    var map  = VbGMapLoadByBounds("map",<%= VbGminLat %>,<%= VbGmaxLat %>,<%= VbGminLong %>,<%= VbGmaxLong %>,2);
    <bean:write name="jsPlotMapping" filter="false" />
    <bean:write name="jsBoundaryMapping" filter="false" />
-   
+  </logic:notEmpty> 
    }
    //]]>
   -->
