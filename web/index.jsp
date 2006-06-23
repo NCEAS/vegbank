@@ -20,6 +20,7 @@ function getHelpPageId() {
     <li><a href="@general_link@faq.html#whatisplot">What is a plot?</a></li>
     <li><a href="@browseplotspage@">Browse plots</a></li>
     <li><a href="@plotquery_page_simple@">Simple search</a></li>
+    <li><a href="@views_link@plot-query-bymap.jsp">Search with a map</a></li>
     <li><a href="@plotquery_page_advanced@">Advanced plot search</a></li>
     </ul>
      <%@ include file="includes/plot-map-northamerica-home.jsp" %>
