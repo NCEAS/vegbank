@@ -83,11 +83,14 @@
        
          // go ahead and set default icon.
          <% String iconPrefix = "map_google_c_" ; %>
-
+         // store user preference for later:
+         changeMappingIcon("noletters", true);
               <logic:notEmpty name="datasets-BEANLIST">
 
                    <logic:equal parameter="mapicons" value="nocolors">
                       <% iconPrefix = "map_google_l_" ; %>
+                      // again, store user preference for later:
+                      changeMappingIcon("letters", true);
                    </logic:equal>
 
                <bean:define id="mapKey">
@@ -195,9 +198,7 @@
   <!-- failed, report errors here -->
   <p>
    Sorry, but VegBank didn't access any datasets to map.
-   Please Press <a href="javascript:history.back()">back</a>
-   (the back button on your browser if that doesn't work),
-   and try again.
+   Please <a href="@forms_link@MapDatasets.jsp">try again</a>. 
 
    </p>
    <p>
@@ -232,7 +233,7 @@ and zoom in and out, but if you use the back button to get to this page, the map
 
   </div>
   <div id="map" style="width: 700px; height: 500px"></div>
-
+  <p><a href="@forms_link@MapDatasets.jsp">Map other datasets</a> <span class="sizetiny">(Requires Login)</span></p>
 <!--
 
 FYI Debugging: 
