@@ -818,7 +818,34 @@ function validateThisForm(thisform) {
 
                         blnIsValid = false;
                         }
-                  }
+                        
+                         //check min and max, if both exist:
+						      if ( item.value == null || item.value == "")  {
+							     //ignore it for now	  
+							  } else {
+								//not null, see if it's a min field   
+						        // format: xwhereParams_min[fieldname]_0 and xwhereParams_max[fieldname]_0
+						        var itemName = item.name;
+						        if (itemName.substring(0,16) == "xwhereParams_min" && itemName.substring(itemName.length-2)=="_0" ) {
+								  //see if max field exists and is populated
+								  try {
+									  var maxValue = thisform.elements[itemName.substring(0,13) + "max" + itemName.substring(16)].value;
+									  //if it got here, compare the vlaue and make sure max is > min
+									  if (Number(maxValue) < Number(item.value)) {
+										  item.className = "errNumber";
+										  item.focus();
+										  alert("You entered a minimum value (" + item.value + ") that is greater than the maximum ("
+										       + maxValue + ")  Please fix this and try again.");
+										       blnIsValid = false;
+									  }
+								  } catch (e) {
+								  	 // alert(e);
+									  //forget about it and keep going
+								  }
+							    } //end of is a min field
+				              } //end of item populated or not
+                        
+                  } //end of numeric check
                   //check dates:
                   if ( (item.className == "date" || item.className == "errDate" ) && blnIsValid ) {
                          // should be number and only check until there is one error
@@ -836,6 +863,7 @@ function validateThisForm(thisform) {
                             blnIsValid = false;
                             }
                   }
+                 
               }
         return blnIsValid;
 }
