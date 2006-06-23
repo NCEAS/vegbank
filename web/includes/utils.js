@@ -1137,6 +1137,22 @@ function showTaxonName(toshow,tableid) {
     return false;
 }
 
+function changeMappingIcon(strColorsNoColors, blnNoRepost) {
+  //changes the page by setting the cookie: globalmapping_icons_not_colored    , then reloads page
+  // pass either "letters" or "noletters"
+  var strShowHide = "";
+  if (strColorsNoColors == "letters") {
+      strShowHide = "show";  
+      } else {
+      strShowHide = "hide";
+      }
+  setCookie('globalmapping_icons_not_colored',strShowHide);
+  if ( blnNoRepost == undefined || blnNoRepost == false ) {
+    //reset form
+    postNewParam("nothing","");
+  }
+}
+
 
 function helpNeedsNewPage() {
    /* attempts to determine if help needs to open as new page.  Rules:
