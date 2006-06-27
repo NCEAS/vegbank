@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: berkley $'
- *	'$Date: 2006-06-15 20:10:06 $'
- *	'$Revision: 1.23 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-06-27 21:06:37 $'
+ *	'$Revision: 1.24 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ package org.vegbank.common.utility;
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		'$Author: berkley $'
- *     '$Date: 2006-06-15 20:10:06 $'
- *     '$Revision: 1.23 $'
+ *		'$Author: mlee $'
+ *     '$Date: 2006-06-27 21:06:37 $'
+ *     '$Revision: 1.24 $'
  */
 
 import java.sql.PreparedStatement;
@@ -830,10 +830,14 @@ public class UserDatabaseAccess
 
 			DBConnection conn = getConnection();
 			Statement stmt = conn.createStatement();
-      String sql = "UPDATE usr SET permission_type=" + sum + 
-					" WHERE usr_id=" + usrId;
-			stmt.executeUpdate(sql);
-
+            String sql = "UPDATE usr SET permission_type=" + sum + 
+                                " WHERE usr_id=" + usrId;
+            stmt.executeUpdate(sql);
+            // if this is not 1, then should make the PARTY associated with this public:
+            if (usrId > 1 ) {
+              String sqlPty = "UPDATE party SET partypublic=true WHERE party_id = (select party_ID from usr where usr_id=" + usrId + ")";
+              stmt.executeUpdate(sqlPty);
+            }
 			stmt.close();
 			DBConnectionPool.returnDBConnection(conn);
 		}

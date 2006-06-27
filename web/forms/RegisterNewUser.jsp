@@ -10,8 +10,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-05-31 18:40:58 $'
-*  '$Revision: 1.18 $'
+*  '$Date: 2006-06-27 21:06:37 $'
+*  '$Revision: 1.19 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -133,6 +133,8 @@
           <span class="sizesmall">Last Name:</span>
 		  <br/>
 		  <html:text property="party.surname" size="30"/>
+          <!-- insert default value: -->
+          <html:hidden property="party.partypublic" value="false"  />
       </TD>
     </TR>
   </TABLE>

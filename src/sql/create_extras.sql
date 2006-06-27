@@ -1,4 +1,4 @@
--- $Id: create_extras.sql,v 1.4 2006-06-22 18:29:32 mlee Exp $
+-- $Id: create_extras.sql,v 1.5 2006-06-27 21:06:37 mlee Exp $
 -- 
 -- Runs extra SQL on the data model after it is created to make things as they need to be
 -- CHIEFLY default values and extra things like custom sequences
@@ -22,6 +22,10 @@ ALTER TABLE userPermission ALTER COLUMN permissionStart SET default now();
 ALTER TABLE userQuery ALTER COLUMN queryStart SET default now();
 ALTER TABLE userPreference ALTER COLUMN preferenceStart SET default now();
 ALTER TABLE userRecordOwner ALTER COLUMN ownerStart SET default now();
+
+-- whether parties are publicly viewable or not, by default true, but turned off as user registers, back on if they get certified
+-- so this is just for parties added through the XML loader, which should all be public.
+ALTER TABLE party ALTER COLUMN partypublic SET default true;
 
 
 -- create a unique sequence that feeds the dba_requestnumber field:
