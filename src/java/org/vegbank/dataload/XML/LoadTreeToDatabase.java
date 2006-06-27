@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-22 19:51:51 $'
- *	'$Revision: 1.28 $'
+ *	'$Date: 2006-06-27 22:09:27 $'
+ *	'$Revision: 1.29 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -285,6 +285,12 @@ public class LoadTreeToDatabase
                 // RUN DENORMALIZATION SQL
                 log.info("Running denormalizations");
                 //runDenorms();
+                //instead of running the denorm directly, start a thread
+                //to run them
+                java.util.Timer denormTimer = new java.util.Timer();
+                denormTimer.schedule(
+                  new RunDenormTimerTask(System.currentTimeMillis()),
+                  new Date(System.currentTimeMillis()));
 
                 ////writeConn.commit();
                 timer.stop();
@@ -2382,18 +2388,21 @@ public class LoadTreeToDatabase
     }
 
 
-    private void runDenorms() {
+    private synchronized void runDenorms() {
 
         try {
             Iterator tit = tableKeys.keySet().iterator();
             while (tit.hasNext()) {
                 String tableName = ((String)tit.next()).toLowerCase();
                 log.debug("Denormalizing " + tableName);
+                System.out.println("****************Denormalizing " + tableName);
                 // note that this will run default denorms on the table
                 // which currently means all null denorms
                 // not just this load's new records.
                 try {
+                    Timer t = new Timer("denormalizing " + tableName);
                     DenormUtility.updateTable(tableName);
+                    t.stop();
                 } catch (SQLException ex) {
                     log.error("unable to denormalize table " + tableName, ex);
                 }
@@ -2427,4 +2436,52 @@ public class LoadTreeToDatabase
         }
     }
 
+    /**
+     * thread to run the denorms in.
+     */
+    private class RunDenormTimerTask extends java.util.TimerTask
+    {
+      private long runtime;
+      private boolean run = true;
+      
+      /**
+       * constructor.  pass in the scheduled time of execution in millis
+       */
+      public RunDenormTimerTask(long scheduledTime)
+      {
+        runtime = scheduledTime;
+      }
+      
+      /**
+       * run the task
+       */
+      public void run()
+      {
+        if(run)
+        {
+          Timer t = new Timer("runDenorm thread");
+          System.out.println("**************Running in denorm thread*****************");
+          runDenorms();
+          System.out.println("***************denorm thread finished******************");
+          t.stop();
+        }
+      }
+      
+      /**
+       * cancel the task
+       */
+      public boolean cancel()
+      {
+        run = false;
+        return run;
+      }
+      
+      /**
+       * returns the scheduled exe time.
+       */
+      public long scheduledExecutionTime()
+      {
+        return runtime;
+      }
+    }
 }
