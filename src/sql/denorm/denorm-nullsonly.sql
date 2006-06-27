@@ -61,10 +61,6 @@ is not null and party_ID is null;
      
      
      
-
-update party set partypublic=true where party_ID in (select party_ID 
-from view_party_public);
-
 update taxonImportance set stratumHeight=(select stratumHeight from stratum 
 where taxonImportance.stratum_ID=stratum.stratum_ID) where 
 taxonImportance.stratum_ID is not null and stratumHeight is null;
