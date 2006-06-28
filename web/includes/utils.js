@@ -752,6 +752,7 @@ function getValuesFromList_ifexists(theformname,thelistname,getValueOrText) {
        varWhatToReturn =  getValuesFromList(document.forms[theformname].elements[thelistname],getValueOrText);
     } catch (e) {
         //set to ""
+        // alert('Failed to find list:' + thelistname);
         varWhatToReturn = "";
     }
     return varWhatToReturn;
@@ -761,9 +762,10 @@ function getValuesFromFIELD_ifexists(theformname,thefieldname) {
     //this function just sets value to "" if list doesn't exist
     varWhatToReturn = "";
     try {
-       varWhatToReturn =  document.forms[theformname].elements[thelistname].value;
+       varWhatToReturn =  document.forms[theformname].elements[thefieldname].value;
     } catch (e) {
         //set to ""
+        // alert('Failed to find FIELD: ' + thefieldname );
         varWhatToReturn = "";
     }
     return varWhatToReturn;
@@ -895,9 +897,9 @@ function validateThisForm(thisform) {
 						        if (itemName.substring(0,16) == "xwhereParams_min" && itemName.substring(itemName.length-2)=="_0" ) {
 								  //see if max field exists and is populated
 								  try {
-									  var maxValue = thisform.elements[itemName.substring(0,13) + "max" + itemName.substring(16)].value;
+                                      var maxValue = getValuesFromFIELD_ifexists(thisform.name,itemName.substring(0,13) + "max" + itemName.substring(16));
 									  //if it got here, compare the vlaue and make sure max is > min
-									  if (Number(maxValue) < Number(item.value)) {
+                                      if ( (maxValue != "") && (maxValue != null) && Number(maxValue) < Number(item.value)) {
 										  item.className = "errNumber";
 										  item.focus();
 										  alert("You entered a minimum value (" + item.value + ") that is greater than the maximum ("
