@@ -121,7 +121,7 @@ function getHelpPageId() {
     <tr><td class="horizborders">Author Code</td></tr>
     <!-- the following is a bit of a hack.  The class will be hidden, unless show_statecountry is something, in 
     this case "show", and the class "showhidden" isn't anything, so displays normally.  MTL May 6, 2005 -->
-    <tr class='horizborders <bean:write name="show_statecountry" ignore="true" />hidden'>
+    <tr class='horizborders'>
       <td>Plot Location</td></tr>
   </table>
 </th>
@@ -200,7 +200,7 @@ Plot #<%= rowIndex++ %>
 <strong><bean:write name="onerowofobservation" property="authorobscode" /></strong>
 <br/>
 <i>
-<span class='<bean:write name="show_statecountry" ignore="true" />hidden'><bean:write name="onerowofobservation" property="stateprovince" />,<br/>
+<span><bean:write name="onerowofobservation" property="stateprovince" />,<br/>
 <bean:write name="onerowofobservation" property="country" /></span>
 </i>
 <br/>
