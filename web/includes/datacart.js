@@ -1,4 +1,4 @@
-// $Id: datacart.js,v 1.14 2005-09-16 22:20:54 mlee Exp $
+// $Id: datacart.js,v 1.15 2006-06-28 17:38:40 mlee Exp $
 // Handles AJaX routines for datacart access.
 // Uses ARC customize the form's checkboxes.
 
@@ -725,7 +725,7 @@ function removeDatasetRow(col, undelete) {
 	//deletes a dataset by updating the stopdate and removing from screen using js
 	//special param: getCurrDateTime gets the current time for values in the called ajax file
 	if (!undelete) {
-    	if (!confirm("Do you really want to delete this dataset?  Press Cancel to Cancel or Press OK to delete it.")) {
+        if (!confirm("Do you really want to delete this dataset?  Press OK to delete it, or press Cancel to delete nothing.")) {
      		return false;
     	}
     }
