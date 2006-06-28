@@ -675,7 +675,7 @@ function formConvertToGetIfURLLengthOK(theformname) {
     //this checks to see what the length of the resulting URL will be if using "GET"
     //if it's longer than 2000 chars, it switches the form to post
     //if it's shorter, it uses GET
-    
+   // alert('seeing if I can make this a GET');
     //get the form in question
     var theFormToCheck = document.forms[theformname];
     //loop through all elements
@@ -743,6 +743,42 @@ function getValuesFromList(thelist, getValueOrText) {
       return("");
 
   }
+}
+
+function getValuesFromList_ifexists(theformname,thelistname,getValueOrText) {
+    //this function just sets value to "" if list doesn't exist
+    varWhatToReturn = "";
+    try {
+       varWhatToReturn =  getValuesFromList(document.forms[theformname].elements[thelistname],getValueOrText);
+    } catch (e) {
+        //set to ""
+        varWhatToReturn = "";
+    }
+    return varWhatToReturn;
+}
+
+function getValuesFromFIELD_ifexists(theformname,thefieldname) {
+    //this function just sets value to "" if list doesn't exist
+    varWhatToReturn = "";
+    try {
+       varWhatToReturn =  document.forms[theformname].elements[thelistname].value;
+    } catch (e) {
+        //set to ""
+        varWhatToReturn = "";
+    }
+    return varWhatToReturn;
+}
+
+function getValuesFromCheckBox_ifexists(theformname,thefieldname) {
+    //this function just sets value to "" if list doesn't exist
+    varWhatToReturn = "";
+    try {
+       varWhatToReturn =  document.forms[theformname].elements[thelistname].checked;
+    } catch (e) {
+        //set to ""
+        varWhatToReturn = false;
+    }
+    return varWhatToReturn;
 }
 
 
