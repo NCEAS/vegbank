@@ -100,7 +100,9 @@ function getHelpPageId() {
 <%@ include file="../includes/setup_rowindex.jsp" %>
 
 <logic:empty name="plotobs-BEANLIST">
-                Sorry, no plots are available.
+             <p>   Sorry, no plots are available.  
+                If you were searching for plots based on text, try adding wildcards (%) to 
+                <a href="javascript:history.back()">your search</a>. </p>
           </logic:empty>
 <logic:notEmpty name="plotobs-BEANLIST"><!-- set up table -->
 
