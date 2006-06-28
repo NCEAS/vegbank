@@ -26,8 +26,16 @@
 <logic:present parameter="criteriaAsText">
   <bean:parameter id="bean_criteriaAsText" name="criteriaAsText" />
   <logic:notEmpty name="bean_criteriaAsText">
-    <p class="psmall">You searched for plots: <bean:write name="bean_criteriaAsText" /></p>
-
+    <p class="psmall" id="plotCriteriaParagraphs"><strong>You searched for plots:</strong> <bean:write name="bean_criteriaAsText" /></p>
+    <script type="text/javascript">
+      // <!--
+      // alert('here we go...');
+      var plotCriteriaMessage = gebid("plotCriteriaParagraphs").innerHTML;
+      plotCriteriaMessage = plotCriteriaMessage.replace(/ AND /g," <b>AND</b> ");
+      gebid("plotCriteriaParagraphs").innerHTML = plotCriteriaMessage;
+      
+      -->
+    </script>
 
   </logic:notEmpty>
 </logic:present>  
