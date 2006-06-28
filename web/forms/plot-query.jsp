@@ -41,7 +41,10 @@ function getHelpPageId() {
 function prepareForm() {
     var blnOK = validateThisForm(document.forms.plotqueryform);
     if ( blnOK ) {
+      // set the criteria text
       setQueryText();
+      //convert to GET method if short enough
+      formConvertToGetIfURLLengthOK("plotqueryform");
     }  
     return blnOK;
 }
@@ -53,50 +56,50 @@ function setQueryText() {
     text = "" ;
     strSep = " AND" ;
     /* get relevant fields into variables */
-    thecountry = getValuesFromList(document.plotqueryform.xwhereParams_country_0,"value") ;
+    thecountry = getValuesFromList_ifexists("plotqueryform","xwhereParams_country_0","value") ;
     if ( thecountry != "" &&  thecountry != null )
          {
             text = text + strSep + " in " + thecountry;
      }
     
-    thestate = getValuesFromList(document.plotqueryform.xwhereParams_state_0,"value") ;
+    thestate = getValuesFromList_ifexists("plotqueryform","xwhereParams_state_0","value") ;
     if ( thestate != "" &&  thestate != null )
              {
                 text = text + strSep + " in " + thestate ;
              }
     /* all min and max fields: */
     
-        theminelevation = document.plotqueryform.xwhereParams_minelevation_0.value ;
+        theminelevation = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_minelevation_0") ;
             if ( theminelevation != "" &&  theminelevation != null )
                      {
                         text = text + strSep + " Elevation of at least " + theminelevation ;
                  }
         
-        themaxelevation = document.plotqueryform.xwhereParams_maxelevation_0.value ;
+        themaxelevation = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_maxelevation_0") ;
              if ( themaxelevation != "" &&  themaxelevation != null )
                          {
                             text = text + strSep + " Elevation no more than " + themaxelevation ;
                      }
          /* lat & long */
          
-         theminlatitude = document.plotqueryform.xwhereParams_minlatitude_0.value ;
+         theminlatitude = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_minlatitude_0") ;
                     if ( theminlatitude != "" &&  theminlatitude != null )
                      {
                         text = text + strSep + " Latitude of at least " + theminlatitude ;
                      }
                
-         themaxlatitude = document.plotqueryform.xwhereParams_maxlatitude_0.value ;
+         themaxlatitude = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_maxlatitude_0") ;
                      if ( themaxlatitude != "" &&  themaxlatitude != null )
                      {
                         text = text + strSep + " Latitude no more than " + themaxlatitude ;
                      }
-        theminlongitude = document.plotqueryform.xwhereParams_minlongitude_0.value ;
+        theminlongitude = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_minlongitude_0") ;
                      if ( theminlongitude != "" &&  theminlongitude != null )
                      {
                        text = text + strSep + " Longitude of at least " + theminlongitude ;
                      }
                
-        themaxlongitude = document.plotqueryform.xwhereParams_maxlongitude_0.value ;
+        themaxlongitude = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_maxlongitude_0") ;
                      if ( themaxlongitude != "" &&  themaxlongitude != null )
                      {
                        text = text + strSep + " Longitude no more than " + themaxlongitude ;
@@ -104,63 +107,63 @@ function setQueryText() {
        
         
        
-       theminslopeaspect = document.plotqueryform.xwhereParams_minslopeaspect_0.value ;
+       theminslopeaspect = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_minslopeaspect_0") ;
             if ( theminslopeaspect != "" &&  theminslopeaspect != null )
                      {
                         text = text + strSep + " Slope Aspect of at least " + theminslopeaspect ;
                  }
         
-        themaxslopeaspect = document.plotqueryform.xwhereParams_maxslopeaspect_0.value ;
+        themaxslopeaspect = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_maxslopeaspect_0") ;
              if ( themaxslopeaspect != "" &&  themaxslopeaspect != null )
                          {
                             text = text + strSep + " Slope Aspect no more than " + themaxslopeaspect ;
                      }
-        theminslopegradient = document.plotqueryform.xwhereParams_minslopegradient_0.value ;
+        theminslopegradient = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_minslopegradient_0") ;
             if ( theminslopegradient != "" &&  theminslopegradient != null )
                      {
                         text = text + strSep + " Slope Gradient greater than " + theminslopegradient ;
                  }
         
-        themaxslopegradient = document.plotqueryform.xwhereParams_maxslopegradient_0.value ;
+        themaxslopegradient = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_maxslopegradient_0") ;
              if ( themaxslopegradient != "" &&  themaxslopegradient != null )
                          {
                             text = text + strSep + " Slope Gradient less than " + themaxslopegradient ;
                      }
-        theminobsstartdate = document.plotqueryform.xwhereParams_minobsstartdate_0.value ;
+        theminobsstartdate = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_minobsstartdate_0") ;
             if ( theminobsstartdate != "" &&  theminobsstartdate != null )
                      {
                         text = text + strSep + " Sampling Date after " + theminobsstartdate ;
                  }
         
-        themaxobsstartdate = document.plotqueryform.xwhereParams_maxobsstartdate_0.value ;
+        themaxobsstartdate = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_maxobsstartdate_0") ;
              if ( themaxobsstartdate != "" &&  themaxobsstartdate != null )
                          {
                             text = text + strSep + " Sampling Date before " + themaxobsstartdate ;
                      }
-        themindateentered = document.plotqueryform.xwhereParams_mindateentered_0.value ;
+        themindateentered = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_mindateentered_0") ;
             if ( themindateentered != "" &&  themindateentered != null )
                      {
                         text = text + strSep + " Entered into VegBank after " + themindateentered ;
                  }
         
-        themaxdateentered = document.plotqueryform.xwhereParams_maxdateentered_0.value ;
+        themaxdateentered = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_maxdateentered_0") ;
              if ( themaxdateentered != "" &&  themaxdateentered != null )
                          {
                             text = text + strSep + " Entered into VegBank before " + themaxdateentered ;
                      }
-        theminarea = document.plotqueryform.xwhereParams_minarea_0.value ;
+        theminarea = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_minarea_0") ;
             if ( theminarea != "" &&  theminarea != null )
                      {
                         text = text + strSep + " Area at least " + theminarea ;
                  }
         
-        themaxarea = document.plotqueryform.xwhereParams_maxarea_0.value ;
+        themaxarea = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_maxarea_0") ;
              if ( themaxarea != "" &&  themaxarea != null )
                          {
                             text = text + strSep + " Area no more than " + themaxarea ;
                  }
        
-        theplotcode = document.plotqueryform.xwhereParams_plotcode_0.value ;
+        theplotcode = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_plotcode_0") ;
              if ( theplotcode !="" && theplotcode !=null )
                {
                  text = text + strSep + " Author's Plot Code is " + theplotcode ;       
@@ -168,7 +171,7 @@ function setQueryText() {
         
        
        
-            if ( document.plotqueryform.cust_includesubplots.checked)
+            if ( getValuesFromCheckBox_ifexists("plotqueryform","cust_includesubplots") == true )
                {
                  text = text + strSep + " including subplots " ;
                  /*change xwhere Key: */
@@ -179,35 +182,35 @@ function setQueryText() {
                }
     
        /* value picklists, not PK */
-    
-              thetopoposition = getValuesFromList(document.plotqueryform.xwhereParams_topoposition_0,"value") ;
+       
+              thetopoposition = getValuesFromList_ifexists("plotqueryform","xwhereParams_topoposition_0","value") ;
               if ( thetopoposition != "" &&  thetopoposition != null )
                    {
-                      text = text + strSep + " topoposition is " + thetopoposition;
+                      text = text + strSep + " Topo Position is " + thetopoposition;
                }
                
-              thelandform = getValuesFromList(document.plotqueryform.xwhereParams_landform_0,"value") ;
+              thelandform = getValuesFromList_ifexists("plotqueryform","xwhereParams_landform_0","value") ;
               if ( thelandform != "" &&  thelandform != null )
                    {
-                      text = text + strSep + " landform is " + thelandform;
+                      text = text + strSep + " Landform is " + thelandform;
                }
                
-              thehydrologicregime = getValuesFromList(document.plotqueryform.xwhereParams_hydrologicregime_0,"value") ;
+              thehydrologicregime = getValuesFromList_ifexists("plotqueryform","xwhereParams_hydrologicregime_0","value") ;
               if ( thehydrologicregime != "" &&  thehydrologicregime != null )
                    {
-                      text = text + strSep + " hydrologicregime is " + thehydrologicregime;
+                      text = text + strSep + " Hydrologic Regime is " + thehydrologicregime;
                }
                
-              thesurficialdeposits = getValuesFromList(document.plotqueryform.xwhereParams_surficialdeposits_0,"value") ;
+              thesurficialdeposits = getValuesFromList_ifexists("plotqueryform","xwhereParams_surficialdeposits_0","value") ;
               if ( thesurficialdeposits != "" &&  thesurficialdeposits != null )
                    {
-                      text = text + strSep + " surficialdeposits is " + thesurficialdeposits;
+                      text = text + strSep + " Surficial Deposits is " + thesurficialdeposits;
                }
                
-              therocktype = getValuesFromList(document.plotqueryform.xwhereParams_rocktype_0,"value") ;
+              therocktype = getValuesFromList_ifexists("plotqueryform","xwhereParams_rocktype_0","value") ;
               if ( therocktype != "" &&  therocktype != null )
                    {
-                      text = text + strSep + " rocktype is " + therocktype;
+                      text = text + strSep + " Rock Type is " + therocktype;
                    }
             
 
@@ -215,19 +218,19 @@ function setQueryText() {
             
             /* picklists that have different values (PKs) rather than text, take text */
            
-            thecovermethod = getValuesFromList(document.plotqueryform.xwhereParams_covermethod_0,"text") ;
+            thecovermethod = getValuesFromList_ifexists("plotqueryform","xwhereParams_covermethod_0","text") ;
             if ( thecovermethod != "" &&  thecovermethod != null )
                      {
                         text = text + strSep + " Cover Method is " + thecovermethod;
                  }
 
-                thestratummethod = getValuesFromList(document.plotqueryform.xwhereParams_stratummethod_0,"text") ;
+                thestratummethod = getValuesFromList_ifexists("plotqueryform","xwhereParams_stratummethod_0","text") ;
                 if ( thestratummethod != "" &&  thestratummethod != null )
                      {
                         text = text + strSep + " Stratum Method is " + thestratummethod;
                  }
 
-                theproject = getValuesFromList(document.plotqueryform.xwhereParams_project_0,"text") ;
+                theproject = getValuesFromList_ifexists("plotqueryform","xwhereParams_project_0","text") ;
                 if ( theproject != "" &&  theproject != null )
                      {
                         text = text + strSep + " Project is " + theproject;
@@ -239,12 +242,12 @@ function setQueryText() {
   %>
     
      
-            thetaxon<%= alph.substring(i,i+1)  %> =  document.plotqueryform.xwhereParams_taxon<%= alph.substring(i,i + 1) %>_2.value ;
-            thetaxon<%= alph.substring(i,i+1)  %>covermin = document.plotqueryform.xwhereParams_taxon<%= alph.substring(i,i + 1) %>_0.value ;
-            thetaxon<%= alph.substring(i,i+1)  %>covermax = document.plotqueryform.xwhereParams_taxon<%= alph.substring(i,i + 1) %>_1.value ;
+            thetaxon<%= alph.substring(i,i+1)  %> =  getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_taxon<%= alph.substring(i,i + 1) %>_2");
+            thetaxon<%= alph.substring(i,i+1)  %>covermin = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_taxon<%= alph.substring(i,i + 1) %>_0") ;
+            thetaxon<%= alph.substring(i,i+1)  %>covermax = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_taxon<%= alph.substring(i,i + 1) %>_1") ;
               if ( thetaxon<%= alph.substring(i,i+1)  %> != "" &&  thetaxon<%= alph.substring(i,i+1)  %> != null )
                 {
-                  text = text + strSep + " Plant Name is " + thetaxon<%= alph.substring(i,i+1)  %> ;
+                  text = text + strSep + " has a Plant Named " + thetaxon<%= alph.substring(i,i+1)  %> ;
                   if  ( thetaxon<%= alph.substring(i,i+1)  %>covermin != "" &&  thetaxon<%= alph.substring(i,i+1)  %>covermin != null )
                    {
                      text = text + " and its Cover is at least " + thetaxon<%= alph.substring(i,i+1)  %>covermin ;
@@ -262,7 +265,7 @@ function setQueryText() {
        for (int i=0; i<howmanycomms ; i++)
        {
        %>
-         thecomm<%= alph.substring(i,i+1)  %> =  document.plotqueryform.xwhereParams_community<%= alph.substring(i,i + 1) %>_0.value ;
+         thecomm<%= alph.substring(i,i+1)  %> =  getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_community<%= alph.substring(i,i + 1) %>_0") ;
             if ( thecomm<%= alph.substring(i,i+1)  %> != "" &&  thecomm<%= alph.substring(i,i+1)  %> != null )
              {
                text = text + strSep + " Community Name is " + thecomm<%= alph.substring(i,i+1)  %> ;
@@ -517,12 +520,10 @@ function setQueryText() {
 
     <h3 class="<bean:write name='simpleHide' />">Find Plots Based on Location</h3>
           <!-- lat/long -->
-            <bean:define id="hideCurr" value="show" />
-            <logic:notPresent name="show_latlong">
-               <bean:define id="hideCurr" value="hidden" />
-            </logic:notPresent>  
-          
-           <div id="tut_latlong" class="<bean:write name="hideCurr" />">
+       
+          <!-- new: don't just hide, remove if not selected: -->
+          <logic:present name="show_latlong">
+           <div id="tut_latlong">
               <h4>Geocoordinates:</h4>
             <p class="instructions">
               Choose a minimum and maxium Latitude and Longitude to find plots within those bounds. <br/>
@@ -587,16 +588,14 @@ function setQueryText() {
              </table>
             
          </div><!-- tut div -->
-       
+         <!-- new: don't just hide, remove if not selected: -->
+         </logic:present>
     
     <!-- end lat/long -->
     
-           <bean:define id="hideCurr" value="show" />
-           <logic:notPresent name="show_statecountry">
-              <bean:define id="hideCurr" value="hidden" />
-           </logic:notPresent> 
-            
-       <div id="tut_stateprovincecountry" class='<bean:write name="hideCurr" />'>
+     <!-- new: don't just hide, remove if not selected: -->
+     <logic:present name="show_statecountry">     
+       <div id="tut_stateprovincecountry" >
           <h4>State/Province, Country:</h4>
 	    <p class="instructions">
 	      Choose a state, province, and/or country to find plots located there. <br />
@@ -677,8 +676,10 @@ function setQueryText() {
 	    	 
         </td></tr></table>
      </div><!-- tut div -->
-	  
-    <hr  class="<bean:write name='simpleHide' />" />
+	 
+     </logic:present>
+     
+    <hr class="<bean:write name='simpleHide' />" />
 	</div>
       
     
@@ -712,12 +713,10 @@ function setQueryText() {
 
 	
 	  <!-- elev -->
-	  <bean:define id="hideCurr" value="show" />
-		    <logic:notPresent name="show_elev">
-		            <bean:define id="hideCurr" value="hidden" />
-		     </logic:notPresent>  
-		
-	  <tr  class='<bean:write name="hideCurr" />'><!-- ELEVATION --> 
+ 
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_elev">
+	  <tr><!-- ELEVATION --> 
 	    <td>&nbsp;</td>
 	    <td colspan="2" class="item" align="center">from 
 			<bean:write name="minmaxbean-BEAN" property="curminelevation"/> to 
@@ -725,7 +724,7 @@ function setQueryText() {
 	    <td>&nbsp;</td>
 	    <td>&nbsp;</td>
 	  </tr>	
-	  <tr class='<bean:write name="hideCurr" />'>
+	  <tr>
 	    <td>Elevation</td>
 	    <td>
           <input type="hidden" name="xwhereKey_minelevation" value="xwhere_gteq" />
@@ -739,19 +738,20 @@ function setQueryText() {
 	    </td>
 	    <td class="units">meters</td>
 	  </tr>
+    <!-- new: don't just hide, remove if not selected: -->
+    </logic:present>  
 
-	  <bean:define id="hideCurr" value="show" />
-		    <logic:notPresent name="show_aspect">
-		            <bean:define id="hideCurr" value="hidden" />
-		     </logic:notPresent> 	  
 	  
-	  <tr  class='<bean:write name="hideCurr" />'><!-- Slope Aspect -->
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_aspect">
+  
+	  <tr><!-- Slope Aspect -->
 	    <td>&nbsp;</td>
 	    <td colspan="2" class="item" align="center">from <bean:write name="minmaxbean-BEAN" property="curminslopeaspect"/> to <bean:write name="minmaxbean-BEAN" property="curmaxslopeaspect"/> degrees</td>
 	    <td>&nbsp;</td>
 	    <td>&nbsp;</td>
 	  </tr>
-	  <tr class='<bean:write name="hideCurr" />'>
+	  <tr>
 	    <td>Slope Aspect</td>
 	    <td>
           <input type="hidden" name="xwhereKey_minslopeaspect" value="xwhere_gteq" />
@@ -766,20 +766,18 @@ function setQueryText() {
 	    <td  class="units">degrees</td>
 	  
 	  </tr>
-	  <bean:define id="hideCurr" value="show" />
-	  		    <logic:notPresent name="show_slope">
-	  		            <bean:define id="hideCurr" value="hidden" />
-	  		     </logic:notPresent> 	  
-	 
-	  
-	
-	  <tr class='<bean:write name="hideCurr" />'><!-- Slope Gradient -->
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present>
+      
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_slope">
+	  <tr><!-- Slope Gradient -->
 	    <td>&nbsp;</td>
 		<td colspan="2" class="item" align="center">from <bean:write name="minmaxbean-BEAN" property="curminslopegradient"/> to <bean:write name="minmaxbean-BEAN" property="curmaxslopegradient"/> degrees</td>
 		<td>&nbsp;</td>
 	    <td>&nbsp;</td>
 	  </tr>
-	  <tr class='<bean:write name="hideCurr" />'>
+	  <tr>
 	    <td>Slope Gradient</td>
         <td>
           <input type="hidden" name="xwhereKey_minslopegradient" value="xwhere_gteq" />
@@ -794,6 +792,8 @@ function setQueryText() {
 	    <td  class="units">degrees</td>
 	   
 	  </tr>
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present>
 		  
 	</table>
 	<hr/>
@@ -821,12 +821,11 @@ function setQueryText() {
 	      Please select values for VegBank fields that are constrained to limited vocabulary.  You do not need to select values for all fields.  Select "--ANY--" to ignore the field in the query.
 	    </p>
 
-	 <bean:define id="hideCurr" value="show" />
-		    <logic:notPresent name="show_rocktype">
-	     	          <bean:define id="hideCurr" value="hidden" />
-		    </logic:notPresent> 
+	 
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_rocktype">
 
-	    <p class='<bean:write name="hideCurr" />'>
+	    <p>
 	      Rock Type<br/>
            <input type="hidden" name="xwhereKey_rocktype" value="xwhere_in" />
           <input type="hidden" name="xwhereParams_rocktype_1" value="rocktype" />
@@ -836,13 +835,13 @@ function setQueryText() {
         @VB_INSERT_CLOSEDLIST_plot.rocktype@
 		</select>
 	    </p>
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present>
+   
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_surficial">   
 	    
-		 <bean:define id="hideCurr" value="show" />
-			    <logic:notPresent name="show_surficial">
-		     	          <bean:define id="hideCurr" value="hidden" />
-		    </logic:notPresent> 
-	    
-	    <p class='<bean:write name="hideCurr" />'>
+	    <p>
 	      Surficial Deposits<br/>
             <input type="hidden" name="xwhereKey_surficialdeposits" value="xwhere_in" />
             <input type="hidden" name="xwhereParams_surficialdeposits_1" value="surficialdeposits" />
@@ -852,13 +851,13 @@ function setQueryText() {
 
 	      </select> 
 	    </p>
-	    
-	    	 <bean:define id="hideCurr" value="show" />
-				    <logic:notPresent name="show_hydrologic">
-			     	          <bean:define id="hideCurr" value="hidden" />
-		    </logic:notPresent> 
-	    
-	    <p class='<bean:write name="hideCurr" />'>
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present> 
+
+
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_hydrologic">        
+	    <p>
 	      Hydrologic Regime<br />
         <input type="hidden" name="xwhereKey_hydrologicregime" value="xwhere_in" />
         <input type="hidden" name="xwhereParams_hydrologicregime_1" value="hydrologicregime" />
@@ -868,17 +867,15 @@ function setQueryText() {
 
 	      </select> 
 	    </p>
-	    
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present>      
 	  
 	<!--  <hr/> -->
 	
-	    <!-- picklist values to select -->    
-	    	 <bean:define id="hideCurr" value="show" />
-				    <logic:notPresent name="show_topo">
-			     	          <bean:define id="hideCurr" value="hidden" />
-		    </logic:notPresent> 
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_topo"> 
 	    
-	    <p class='<bean:write name="hideCurr" />'>Topo Position<br />
+	    <p>Topo Position<br />
         <input type="hidden" name="xwhereKey_topoposition" value="xwhere_in" />
         <input type="hidden" name="xwhereParams_topoposition_1" value="topoposition" />
         <select name="xwhereParams_topoposition_0" size="6" multiple="multiple">
@@ -887,14 +884,15 @@ function setQueryText() {
           @VB_INSERT_CLOSEDLIST_plot.topoposition@
 	      </select> 
 	    </p>
-	    
-	    	 <bean:define id="hideCurr" value="show" />
-				    <logic:notPresent name="show_landform">
-			     	          <bean:define id="hideCurr" value="hidden" />
-		    </logic:notPresent> 
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present>
+   
+   
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_landform"> 
 	    
 	    <!-- is an open list, FYI -->
-	    <p class='<bean:write name="hideCurr" />'>Landform<br />
+	    <p>Landform<br />
          <input type="hidden" name="xwhereKey_landform" value="xwhere_in" />
          <input type="hidden" name="xwhereParams_landform_1" value="landform" />
          <select name="xwhereParams_landform_0" size="6" multiple="multiple">
@@ -903,7 +901,8 @@ function setQueryText() {
 
 	      </select> 
 	    </p>
-	
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present>
 	    </div><!-- 5 to 9 -->
 	 
     
@@ -920,12 +919,7 @@ function setQueryText() {
   	    
 	    <DIV id="groupABC" class='<bean:write name="hideCurr" />'>
   
-  
-  
-	<!--<h3>Find Plots based on Sampling Methods</h3>-->
-    
-	
-	  <!-- sampling methodology -->
+	  <!-- misc plot atts -->
 	
 	      <h4>Plot Date &amp; Size:</h4> 
 	    <p class="instructions">
@@ -944,12 +938,11 @@ function setQueryText() {
 	    <th>Units</th>
 	    
 	  </tr>
-	   <bean:define id="hideCurr" value="show" />
-	    		    <logic:notPresent name="show_datesampled">
-	    		              <bean:define id="hideCurr" value="hidden" />
-         	        </logic:notPresent> 
+	   
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_datesampled">
 	  
-	  <tr class='<bean:write name="hideCurr" />'><!-- date --> 
+	  <tr><!-- date --> 
 	    <td>&nbsp;</td>
 		<td colspan="2" class="item" align="center">from 
             <dt:format pattern="MM/dd/yyyy">
@@ -967,7 +960,7 @@ function setQueryText() {
 		<td>&nbsp;</td>
 	    <td>&nbsp;</td>
 	  </tr>
-	  <tr class='<bean:write name="hideCurr" />'>
+	  <tr>
 	    <td>Date Sampled <br/> <span class="instructions">M/D/YYYY</span></td>
 	    <td>
           <input type="hidden" name="xwhereKey_minobsstartdate" value="xwhere_gteq" />
@@ -982,12 +975,12 @@ function setQueryText() {
 	    <td class="units">date</td>
 	   
 	  </tr>
-	  
-	  <bean:define id="hideCurr" value="show" />
-	  	    		    <logic:notPresent name="show_dateentered">
-	  	    		              <bean:define id="hideCurr" value="hidden" />
-         	        </logic:notPresent> 
-	  <tr class='<bean:write name="hideCurr" />'><!-- date2 --> 
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present><!-- show_datesampled -->
+   
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_dateentered">
+	  <tr><!-- date2 --> 
 	    <td>&nbsp;</td>
 		<td colspan="2" class="item" align="center">from 
             <dt:format pattern="MM/dd/yyyy">
@@ -1001,7 +994,7 @@ function setQueryText() {
 		<td>&nbsp;</td>
 	   
 	  </tr>
-	  <tr class='<bean:write name="hideCurr" />'>
+	  <tr>
 	    <td>Date Entered into VegBank <br/> <span class="instructions">M/D/YYYY</span></td>
         <td>
           <input type="hidden" name="xwhereKey_mindateentered" value="xwhere_gteq" />
@@ -1016,19 +1009,19 @@ function setQueryText() {
 	    <td class="units">date</td>
 	  
 	  </tr>
-	 
-	 <bean:define id="hideCurr" value="show" />
-	 	    		    <logic:notPresent name="show_area">
-	 	    		              <bean:define id="hideCurr" value="hidden" />
-         	        </logic:notPresent> 
-	  <tr class='<bean:write name="hideCurr" />'><!-- plot size -->
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present> <!-- name="show_dateentered"-->
+   
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_area">
+	  <tr><!-- plot size -->
 	    <td>&nbsp;</td>
 		<td colspan="2" class="item" align="center">from 
 			<bean:write name="minmaxbean-BEAN" property="curminarea"/> to <bean:write name="minmaxbean-BEAN" property="curmaxarea"/> square meters</td>
 		<td>&nbsp;</td>
 	  
 	  </tr>
-	  <tr class='<bean:write name="hideCurr" />'>
+	  <tr>
 	    <td>Plot Size</td>
         <td>
           <input type="hidden" name="xwhereKey_minarea" value="xwhere_gteq" />
@@ -1043,6 +1036,8 @@ function setQueryText() {
 	    <td class="units">square meters</td>
 	   
 	  </tr>
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present> <!--name="show_area"-->
 	  
 	</table>
 	<hr/> 
@@ -1069,11 +1064,10 @@ function setQueryText() {
 	      Select method(s) <!--or people--> that apply to plots of interest.
 	   </p>
 	
-	<bean:define id="hideCurr" value="show" />
-		        <logic:notPresent name="show_covermeth">
-		          <bean:define id="hideCurr" value="hidden" />
-       	  	        </logic:notPresent>
-	<p class='<bean:write name="hideCurr" />'>Cover Method Name:<br/>
+    
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_covermeth">
+	<p>Cover Method Name:<br/>
                 <input type="hidden" name="xwhereKey_covermethod" value="xwhere_in" />
                 <input type="hidden" name="xwhereParams_covermethod_1" value="covermethod_id" />
                 <select name="xwhereParams_covermethod_0" size="6" multiple="multiple">
@@ -1088,11 +1082,12 @@ function setQueryText() {
               
 		      </select>
 	    </p>
-	      <bean:define id="hideCurr" value="show" />
-		<logic:notPresent name="show_stratummeth">
-		  <bean:define id="hideCurr" value="hidden" />
-       	  	</logic:notPresent>
-	      <p class='<bean:write name="hideCurr" />'>Stratum Method Name:<br/>
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present><!-- name="show_covermeth"-->
+
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_stratummeth">
+	      <p>Stratum Method Name:<br/>
 	      
               <input type="hidden" name="xwhereKey_stratummethod" value="xwhere_in" />
                 <input type="hidden" name="xwhereParams_stratummethod_1" value="stratummethod_id" />
@@ -1107,13 +1102,13 @@ function setQueryText() {
                   </logic:iterate>
 		     </select>
 	      </p>
-	    
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present><!-- name="show_stratummeth"-->
+	   
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_plotcode">
 	  <!-- start new one: plotcode -->
-                <bean:define id="hideCurr" value="show" />
-		<logic:notPresent name="show_plotcode">
-		  <bean:define id="hideCurr" value="hidden" />
-       	  	</logic:notPresent>
-	      <p class='<bean:write name="hideCurr" />'>Author's Plot Code:<br/>
+	      <p>Author's Plot Code:<br/>
 	      <span class="instructions">Enter a plot code or part of a plot code 
                     of the plot(s) you are searching for: <strong>Use % for the wildcard</strong></span><br/>  
                 <input type="hidden" name="xwhereKey_plotcode" value="xwhere_ilike" />
@@ -1123,15 +1118,19 @@ function setQueryText() {
         
                 
 	      </p>
+    <!-- new: don't just hide, remove if not selected: -->
+   </logic:present><!-- name="show_plotcode"-->
 
             <!-- end new one : plotcode -->  
 
 	  <!-- start new one: subplots -->
-                <bean:define id="hideCurr" value="show" />
-		<logic:notPresent name="show_plotcode">
-		  <bean:define id="hideCurr" value="hidden" />
-       	  	</logic:notPresent>
-	      <p class='<bean:write name="hideCurr" />'>Include subplots in the search? <br/>
+       <!-- this one is always on, but can be hidden! -->
+       <bean:define id="hideCurr" value="show" />
+       <logic:notPresent name="show_plotcode">
+           <bean:define id="hideCurr" value="hidden" />
+       </logic:notPresent>
+        
+          <p class='<bean:write name="hideCurr" />'>Include subplots in the search? <br/>
 	      <span class="instructions">Check this box to include subplots in your search.  If you leave it
                 unchecked, then no subplots will be part of the results.</span><br/>  
                 <input type="hidden" name="xwhereKey_subplots" value="" /><!-- the javascript sets this xwhereKey to xwhere_notnull if checked -->
@@ -1141,14 +1140,13 @@ function setQueryText() {
                 <input type="checkbox" name="cust_includesubplots" />
                 
 	      </p>
+   
 
             <!-- end new one : subplots --> 
 	   
-	    <bean:define id="hideCurr" value="show" />
-		    <logic:notPresent name="show_project">
-		        <bean:define id="hideCurr" value="hidden" />
-       	  	    </logic:notPresent>
-	      <p class='<bean:write name="hideCurr" />'>Project Name:<br/>
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_project">
+	      <p>Project Name:<br/>
 	     
               <input type="hidden" name="xwhereKey_project" value="xwhere_in" />
                 <input type="hidden" name="xwhereParams_project_1" value="project_id" />
@@ -1165,17 +1163,16 @@ function setQueryText() {
 		      </select>
 	
         </p>
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present><!-- name="show_project"-->
 	  
 	  </DIV>
 	  
 	  <!-- FIND USING VEGATATION -->
-       <bean:define id="hideCurr" value="show" />
-	  	  		         <logic:notPresent name="show_plants">
-	  	  	     	          <bean:define id="hideCurr" value="hidden" />
-	  	  		        </logic:notPresent>
-	  	  		     
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_plants">
 	  	  	    
-	    <DIV id="groupG" class='<bean:write name="hideCurr" />'>
+	    <DIV id="groupG">
     
     <h3  class="<bean:write name='simpleHide' />">Find Plots Based on Vegetation</h3>
 	
@@ -1231,13 +1228,15 @@ function setQueryText() {
 </div> <!-- tutorial div -->
 <hr class="<bean:write name='simpleHide' />"/> 
       </DIV>
-      <bean:define id="hideCurr" value="show" />
-	  	  	  		         <logic:notPresent name="show_comms">
-	  	  	  	     	          <bean:define id="hideCurr" value="hidden" />
-	  	  	  		        </logic:notPresent>
+      
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present><!-- name="show_plants"-->
+   
+   <!-- new: don't just hide, remove if not selected: -->
+   <logic:present name="show_comms">
 	  	  	  		     
 	  	  	  	    
-	    <DIV id="groupH" class='<bean:write name="hideCurr" />'>
+	    <DIV id="groupH">
       <div id="tut_comms">
       <!-- FIND USING COMMUNITIES -->
       
@@ -1297,16 +1296,12 @@ function setQueryText() {
 	    </table>
         </div><!-- tutorial div -->
         </DIV>
+   <!-- new: don't just hide, remove if not selected: -->
+   </logic:present><!-- name="show_comms"-->
 	    <!-- SUBMIT THE FORM -->
           <h3  class="<bean:write name='simpleHide' />">Search VegBank Plots</h3>
 		      <input type="submit" value="search"/>&nbsp;&nbsp;
 		      <html:reset value="reset"/>
-		      
-		   
-	
-     
-    
-	    
       
     </form>      
     
