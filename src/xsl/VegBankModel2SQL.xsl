@@ -7,8 +7,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-06-22 18:32:13 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2006-06-29 04:26:44 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,12 @@
     </xsl:for-each>
     <xsl:for-each select="entity">
       <xsl:call-template name="alterTable"/>
+    </xsl:for-each>
+    <xsl:for-each select="sequence">
+     --CREATE ANY NAMED SEQUENCES:
+     --
+     
+      <xsl:call-template name="createSequence" />
     </xsl:for-each>
   </xsl:template>
 
@@ -106,16 +112,18 @@ ALTER TABLE  <xsl:value-of select="../entityName"/>
           </xsl:when>
           <xsl:otherwise>
             <!-- pk is not a serial -->
-            <xsl:value-of select="attName"/> <xsl:value-of select="attType" /> 
+            <xsl:value-of select="attName"/> <xsl:call-template name="handleType" /> 
           NOT NULL PRIMARY KEY )
 
           </xsl:otherwise>
         </xsl:choose>
         </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="attName"/> <xsl:text> </xsl:text> <xsl:value-of select="attType"/> <xsl:call-template name="handleNotNull"/>
+        <xsl:value-of select="attName"/> <xsl:text> </xsl:text> <xsl:call-template name="handleType" /> <xsl:call-template name="handleNotNull"/>
       </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="string-length(attDefaultValue)&gt;0"> DEFAULT <xsl:value-of select="attDefaultValue" /></xsl:if>
+    
 
 
     <!-- Comma unless it is the last attribute -->
@@ -134,7 +142,17 @@ ALTER TABLE  <xsl:value-of select="../entityName"/>
   <xsl:template name="handleNotNull">
     <xsl:if test="attNulls = 'no'"> NOT NULL</xsl:if>
   </xsl:template>
+ <!-- handle types -->
+  <xsl:template name="handleType">
+    <xsl:choose>
+      <xsl:when test="attType='Date'"> timestamp with time zone </xsl:when>
+      <xsl:otherwise><xsl:value-of select="attType" /></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+ <xsl:template name="createSequence">
+ CREATE SEQUENCE <xsl:value-of select="sequenceName" /> ;
  
+ </xsl:template>
 
  <!--
     Default match rule is shut up

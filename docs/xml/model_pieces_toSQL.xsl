@@ -7,15 +7,26 @@
 </xsl:template>
 
 <xsl:template name="createonefield">
-ALTER TABLE <xsl:value-of select="../entityName" /> ADD COLUMN <xsl:value-of select="attName" /> <xsl:text> </xsl:text><xsl:value-of select="attType" /> ;
+ALTER TABLE <xsl:value-of select="../entityName" /> ADD COLUMN <xsl:value-of select="attName" /> <xsl:text> </xsl:text><xsl:call-template name="handleType" /> <xsl:if test="string-length(attDefaultValue)&gt;0"> DEFAULT <xsl:value-of select="attDefaultValue" /></xsl:if>;
 </xsl:template>
 
 
 
 <xsl:template name="alterfield">
-<xsl:for-each select="attribute">
-ALTER TABLE <xsl:value-of select="../entityName" /> ALTER COLUMN <xsl:value-of select="attName" /> <xsl:text> </xsl:text><xsl:value-of select="attType" /> <xsl:text >  </xsl:text> <xsl:if test="attNulls='no'"> NOT NULL </xsl:if> ;
+<xsl:for-each select="attribute"><!-- THIS DOES NOT CHANGE THE DATA TYPE FOR YOU! IT will only update required/not required and default values -->
+ALTER TABLE <xsl:value-of select="../entityName" /> ALTER COLUMN <xsl:value-of select="attName" /> <xsl:text> </xsl:text>  <xsl:choose>
+  <xsl:when test="attNulls='no'"> SET NOT NULL</xsl:when>
+  <xsl:otherwise> DROP NOT NULL</xsl:otherwise>
+</xsl:choose> ;
+ALTER TABLE <xsl:value-of select="../entityName" /> ALTER COLUMN <xsl:value-of select="attName" /> <xsl:text> </xsl:text>  <xsl:choose>
+  <xsl:when test="string-length(attDefaultValue&gt;0)"> SET DEFAULT <xsl:value-of select="attDefaultValue" /></xsl:when>
+  <xsl:otherwise> DROP DEFAULT</xsl:otherwise>
+</xsl:choose> ;
+
+
+
 </xsl:for-each>
+
 </xsl:template>
 
 <xsl:template name="dropfield">
@@ -46,7 +57,7 @@ DROP TABLE <xsl:value-of select="entityName" />;
 CREATE TABLE <xsl:value-of select="entityName" />
 (
 <xsl:for-each select="attribute">
-<xsl:value-of select="attName" /><xsl:text> </xsl:text> <xsl:value-of select="attType" /> <xsl:if test="attNulls='no'"> NOT NULL</xsl:if> ,
+<xsl:value-of select="attName" /><xsl:text> </xsl:text> <xsl:call-template name="handleType" /> <xsl:if test="attNulls='no'"> NOT NULL</xsl:if> <xsl:if test="string-length(attDefaultValue)&gt;0"> DEFAULT <xsl:value-of select="attDefaultValue" /></xsl:if> ,
 </xsl:for-each>
 PRIMARY KEY ( <xsl:value-of  select="attribute[attKey='PK']/attName" /> )
 );
@@ -73,7 +84,7 @@ ALTER TABLE<xsl:text> </xsl:text><xsl:value-of select="../entityName" />   ADD C
 -------- MAKE CLOSED LIST TABLE--------------
 CREATE TABLE <xsl:value-of select="$currauxTbl" />
 (
-values<xsl:text> </xsl:text><xsl:value-of select="attType" /> NOT NULL,
+values<xsl:text> </xsl:text><xsl:call-template name="handleType" /> NOT NULL,
 valueDescription text,
 sortOrd integer,
 PRIMARY KEY (values)
@@ -95,5 +106,12 @@ INSERT INTO <xsl:value-of select="$currauxTbl" /> (values,valueDescription,sortO
 </xsl:for-each>
 
 </xsl:template>
+<!-- handle data type -->
+  <xsl:template name="handleType">
+    <xsl:choose>
+      <xsl:when test="attType='Date'"> timestamp with time zone </xsl:when>
+      <xsl:otherwise><xsl:value-of select="attType" /></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>
