@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: mlee $'
-  * '$Date: 2006-06-02 21:57:18 $'
-  * '$Revision: 1.76 $'
+  * '$Date: 2006-06-29 23:42:46 $'
+  * '$Revision: 1.77 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -90,7 +90,7 @@ dbVerify      verify that the database and the datamodel are the same.  create
     <property name="contextDir" value="${webapps}/${name}"/>
     <property name="webServerDir" value="${apache.document.root}"/>
     <property name="host" value="${hostname}"/>
-    <property name="googleMapsAPIKey" value=""/>
+    <!-- is set in build.props : <property name="googleMapsAPIKey" value=""/> -->
     <property name="serverUrl" value="http://${host}"/>
     <property name="contextUrl" value="${serverUrl}/${context}"/>
     <property name="vegdocs" value="/vegdocs"/>
