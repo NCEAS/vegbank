@@ -10,12 +10,12 @@
     <xs:complexType>
       <xs:simpleContent>
         <xs:extension base="xs:string">
-          
           <xs:attribute name="addSuffixTxt" type="xs:string"/>
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="attDefaultValue" type="xs:string"/>
   <xs:element name="attDefinition" type="xs:string"/>
   <xs:element name="attForms">
     <xs:complexType>
@@ -175,12 +175,13 @@
         <xs:element ref="attModel"/>
         <xs:element ref="attNulls"/>
         <xs:element ref="attType"/>
+        <xs:element ref="attDefaultValue" minOccurs="0"/>
         <xs:element ref="javaType" minOccurs="0"/>
         <xs:element ref="attKey"/>
         <xs:element ref="attRelType"/>
         <xs:element ref="attReferences"/>
         <xs:element ref="attFKTranslationSQL" minOccurs="0"/>
-        <xs:element ref="attAltIfNull" minOccurs="0" />
+        <xs:element ref="attAltIfNull" minOccurs="0"/>
         <xs:element ref="attListType"/>
         <xs:element ref="attList"/>
         <xs:element ref="attNotes"/>
@@ -218,6 +219,7 @@
         <xs:element ref="module" minOccurs="0"/>
         <xs:element ref="archive" minOccurs="0"/>
         <xs:element ref="entityNeedParentToAdd" minOccurs="0"/>
+        <xs:element ref="entityCreatedVersion" minOccurs="0"/>
         <xs:element ref="attribute" maxOccurs="unbounded"/>
         <!-- may have to do with gabe's work on archiving to the revisions table? -->
         <!-- fields on the table -->
@@ -226,6 +228,13 @@
     <!-- table -->
   </xs:element>
   <!-- restrictions on entity being added to db : requires a parent listed to be added -->
+  <xs:element name="entityCreatedVersion">
+      <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:pattern value="[0-9].[0-9].[0-9]"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
   <xs:element name="entityNeedParentToAdd" type="xs:string"/>
   <xs:element name="entityDescription" type="xs:string"/>
   <xs:element name="entityLabel" type="xs:string"/>
@@ -300,5 +309,6 @@
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
+  <xs:element name="updateComments" type="xs:string" />
   <xs:element name="updateSQLFile" type="xs:string"/>
 </xs:schema>
