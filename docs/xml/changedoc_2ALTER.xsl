@@ -3,7 +3,8 @@
   <xsl:import href="model_pieces_toSQL.xsl" />
 
   <xsl:output method="text"/>
-  <xsl:param name="getID">44</xsl:param>
+  <xsl:param name="getID"></xsl:param>
+  <xsl:param name="onlyVersion">1.0.5</xsl:param>
   <xsl:param name="apos">'</xsl:param>
   <xsl:param name="replc">`</xsl:param>
   <xsl:param name="level">1</xsl:param><!-- 1 is for postgres, 2 is for access -->
@@ -13,10 +14,32 @@
   </xsl:template>
   <xsl:template match="dataModel">
     <!-- for regular xml doc -->
-    <xsl:for-each select="entity">
-      <xsl:call-template name="createfield" />
-    </xsl:for-each>
+    <xsl:choose>
+      <xsl:when test="string-length($onlyVersion)&gt;0">
+        <!-- print changes for one version -->
+        <xsl:for-each select="entity">
+          <xsl:choose>
+            <xsl:when test="entityCreatedVersion=$onlyVersion">
+               <xsl:call-template name="createtable" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:for-each select="attribute[update=$onlyVersion]">
+                <xsl:call-template name="createonefield" />
+              </xsl:for-each>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- regular -->
+        <xsl:for-each select="entity">
+          <xsl:call-template name="createfield" />
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
+    
   </xsl:template>
+  
   <xsl:template match="modelChange">
      <xsl:if test="modelChangeID=$getID">
    <!--   <xsl:if test="modelChangeVersion='1.0.2'">  -->
