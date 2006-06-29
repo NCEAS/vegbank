@@ -15,7 +15,6 @@ FROM pg_constraint WHERE conrelid>0 and confrelid>0) as mtl_cons
 ON (select relname from pg_statio_all_tables where attrelid=relid)=mtl_tblNm and pg_attribute.attname=mtl_fldNm where attstattarget=-1 and pg_attribute.attrelid in (select relid from pg_statio_all_tables where schemaname='public') 
 GROUP BY pg_attribute.attrelid, attName, pg_attribute.atttypid, pg_attribute.atttypmod, pg_attribute.attnotnull, 
   mtl_cons.mtl_ftbl, mtl_cons.mtl_ffldnm
-  HAVING (select relname from pg_statio_all_tables where attrelid=relid) NOT LIKE 'dba_%' AND 
-         (select relname from pg_statio_all_tables where attrelid=relid) NOT LIKE 'temptbl_%'
+  HAVING (select relname from pg_statio_all_tables where attrelid=relid) NOT LIKE 'temptbl_%'
 ORDER BY (select relname from pg_statio_all_tables where attrelid=relid),  replace(attname,'_','a')
 ;
