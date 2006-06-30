@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: berkley $'
- *	'$Date: 2006-06-02 21:15:15 $'
- *	'$Revision: 1.12 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-06-30 20:12:22 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ public class KeywordGen {
 
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection(dbURL, "datauser", "");			
+			conn = DriverManager.getConnection(dbURL, "vegbank", "");			
 
 			String s = prompt("\nAre you sure you want to update keywords in " +
 					dbName + " on " + dbHost + " [y|n] > ");

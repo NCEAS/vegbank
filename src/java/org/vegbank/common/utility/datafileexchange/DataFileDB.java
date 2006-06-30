@@ -5,9 +5,9 @@ package org.vegbank.common.utility.datafileexchange;
  *
  * Purpose: 
  *
- * '$Author: farrell $'
- * '$Date: 2003-11-12 22:53:51 $'
- * '$Revision: 1.3 $'
+ * '$Author: mlee $'
+ * '$Date: 2006-06-30 20:12:22 $'
+ * '$Revision: 1.4 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -188,7 +188,7 @@ public class DataFileDB  {
  		{
 			Class.forName("org.postgresql.Driver");
 			//the framework database
-			c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/framework", "datauser", "");
+			c = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/framework", "vegbank", "");
 		}
 		catch ( Exception e )
 		{

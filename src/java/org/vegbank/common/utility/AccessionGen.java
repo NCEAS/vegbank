@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-07-16 03:10:22 $'
- *	'$Revision: 1.21 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-06-30 20:12:22 $'
+ *	'$Revision: 1.22 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -288,7 +288,7 @@ public class AccessionGen {
             if (conn == null) {
                 Class.forName("org.postgresql.Driver");
                 conn = new DBConnection();
-                conn.setConnections(DriverManager.getConnection(dbURL, "datauser", ""));
+                conn.setConnections(DriverManager.getConnection(dbURL, "vegbank", ""));
             }
 
 			//countRecords();

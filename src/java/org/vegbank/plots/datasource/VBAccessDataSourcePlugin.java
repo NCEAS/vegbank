@@ -10,9 +10,9 @@ import java.sql.*;
  *
  *  Release: @release@
  *	
- * 	'$Author: farrell $'  
- * 	'$Date: 2003-08-21 21:16:45 $' 
- * 	'$Revision: 1.3 $'
+ * 	'$Author: mlee $'  
+ * 	'$Date: 2006-06-30 20:12:22 $' 
+ * 	'$Revision: 1.4 $'
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -33,7 +33,7 @@ public class VBAccessDataSourcePlugin extends VegBankDataSourcePlugin implements
 {
 	private String driver = "sun.jdbc.odbc.JdbcOdbcDriver";
 	private String dbUrl = "jdbc:odbc:vegbank_access";
-	private String dbUser = "datauser";
+	private String dbUser = "vegbank";
 	private Connection con = null;
 	
 	
