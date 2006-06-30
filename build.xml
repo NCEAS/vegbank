@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: berkley $'
-  * '$Date: 2006-06-30 18:47:57 $'
-  * '$Revision: 1.78 $'
+  * '$Author: mlee $'
+  * '$Date: 2006-06-30 19:26:25 $'
+  * '$Revision: 1.79 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -464,7 +464,7 @@ dbVerify      verify that the database and the datamodel are the same.  create
   
   <!--install war file to target webapps dir-->
   <target name="install" depends="war">
-    <copy todir="${binPath}" filtering="no">
+    <copy todir="${binPath}" filtering="yes" overwrite="yes">
       <fileset dir="bin">
         <include name="**/*"/>
       </fileset>
