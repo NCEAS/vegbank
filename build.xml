@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: mlee $'
-  * '$Date: 2006-06-29 23:42:46 $'
-  * '$Revision: 1.77 $'
+  * '$Author: berkley $'
+  * '$Date: 2006-06-30 18:47:57 $'
+  * '$Revision: 1.78 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -79,6 +79,7 @@ dbVerify      verify that the database and the datamodel are the same.  create
     <property name="version" value="1.0.2"/>
     <property name="vegbankHome" value="${vegbank.home.dir}"/>
     <property name="dataPath" value="${vegbankHome}/data"/>
+    <property name="binPath" value="${vegbankHome}/bin"/>
     <property name="exportPath" value="${vegbankHome}/export"/>
     <property name="uploadPath" value="${vegbankHome}/upload"/>
     <property name="dataSchemaName" value="vegbank-data-ver1.0.2usage.xsd"/>
@@ -288,6 +289,7 @@ dbVerify      verify that the database and the datamodel are the same.  create
     <mkdir dir="${apache.document.root}"/>
     <mkdir dir="${buildStatusDir}"/>
     <mkdir dir="${webStatusDir}"/>
+    <mkdir dir="${binPath}"/>
     
     <!--copy the java src to the build/src dir-->
     <copy todir="${buildSrcDir}" filtering="yes">
@@ -462,6 +464,11 @@ dbVerify      verify that the database and the datamodel are the same.  create
   
   <!--install war file to target webapps dir-->
   <target name="install" depends="war">
+    <copy todir="${binPath}" filtering="no">
+      <fileset dir="bin">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
     <copy todir="${webapps}" filtering="no">
       <fileset dir="${distDir}">
         <include name="${context}.war"/>
@@ -513,6 +520,9 @@ dbVerify      verify that the database and the datamodel are the same.  create
     <xslt in="${docsDir}/xml/db_model_vegbank.xml" 
       out="${buildDir}/sql/vegbank.sql" 
       style="${srcDir}/xsl/VegBankModel2SQL.xsl"/>
+    <copy todir="${buildDir}/sql" filtering="yes" overwrite="yes">
+      <fileset dir="${srcDir}/sql" includes="**/*.sql"/>
+    </copy>
   </target>
   
   <!--
