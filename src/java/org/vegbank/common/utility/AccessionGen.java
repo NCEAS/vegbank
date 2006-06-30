@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-06-30 20:12:22 $'
- *	'$Revision: 1.22 $'
+ *	'$Date: 2006-06-30 21:30:57 $'
+ *	'$Revision: 1.23 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -288,7 +288,7 @@ public class AccessionGen {
             if (conn == null) {
                 Class.forName("org.postgresql.Driver");
                 conn = new DBConnection();
-                conn.setConnections(DriverManager.getConnection(dbURL, "vegbank", ""));
+                conn.setConnections(DriverManager.getConnection(dbURL, "vegbank", "dta4all"));
             }
 
 			//countRecords();
