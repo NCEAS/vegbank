@@ -51,7 +51,7 @@ fi
 
 echo "$DIFFS for $DATABASE between (earlier) $DATE1 and (later) $DATE2"
 
-psql -U datauser $DATABASE -c "SELECT late.stattable,  early.countrecs as earlyCountRecs,        early.maxPK as earlyMaxPK,       late.countrecs as lateCountRecs,       late.maxPK as lateMaxPK,       (late.countrecs - early.countrecs) as diffCount                  FROM dba_dbstatstime as early,         (select max(stat_id) as sid, stattable from dba_dbstatstime where statdate<'$DATE1' group by stattable) as earlyID,        dba_dbstatstime as late,         (select max(stat_id) as sid, stattable from dba_dbstatstime where statdate<'$DATE2' group by stattable) as lateID     where earlyID.sID=early.stat_ID AND lateID.sid=late.stat_ID AND late.statTable=early.statTable  $CRITERIA ;"
+psql -U vegbank $DATABASE -c "SELECT late.stattable,  early.countrecs as earlyCountRecs,        early.maxPK as earlyMaxPK,       late.countrecs as lateCountRecs,       late.maxPK as lateMaxPK,       (late.countrecs - early.countrecs) as diffCount                  FROM dba_dbstatstime as early,         (select max(stat_id) as sid, stattable from dba_dbstatstime where statdate<'$DATE1' group by stattable) as earlyID,        dba_dbstatstime as late,         (select max(stat_id) as sid, stattable from dba_dbstatstime where statdate<'$DATE2' group by stattable) as lateID     where earlyID.sID=early.stat_ID AND lateID.sid=late.stat_ID AND late.statTable=early.statTable  $CRITERIA ;"
 
  
 
