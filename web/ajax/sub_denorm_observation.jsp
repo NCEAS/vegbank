@@ -21,72 +21,72 @@
 <logic:present parameter="emb_only">
   <!-- common request -->
   
-  <vegbank:denorm update="dnrm-plot-4501-embargo" />
+  <vegbank:denorm update="dnrm-plot-34501-embargo" />
   <tr>
-    <td>dnrm-plot-4501-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-plot-4501-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-plot-4501-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-plot-34501-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-plot-34501-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-plot-34501-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
-  <vegbank:denorm update="dnrm-observation-4801-embargo" />
+  <vegbank:denorm update="dnrm-observation-34801-embargo" />
   <tr>
-    <td>dnrm-observation-4801-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-observation-4801-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-observation-4801-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-observation-34801-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-observation-34801-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-observation-34801-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
-  <vegbank:denorm update="dnrm-disturbanceobs-5101-embargo" />
+  <vegbank:denorm update="dnrm-disturbanceobs-35101-embargo" />
   <tr>
-    <td>dnrm-disturbanceobs-5101-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-disturbanceobs-5101-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-disturbanceobs-5101-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-disturbanceobs-35101-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-disturbanceobs-35101-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-disturbanceobs-35101-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
-  <vegbank:denorm update="dnrm-soilobs-5401-embargo" />
+  <vegbank:denorm update="dnrm-soilobs-35401-embargo" />
   <tr>
-    <td>dnrm-soilobs-5401-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-soilobs-5401-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-soilobs-5401-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-soilobs-35401-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-soilobs-35401-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-soilobs-35401-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
-  <vegbank:denorm update="dnrm-commclass-5701-embargo" />
+  <vegbank:denorm update="dnrm-commclass-35701-embargo" />
   <tr>
-    <td>dnrm-commclass-5701-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-commclass-5701-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-commclass-5701-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-commclass-35701-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-commclass-35701-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-commclass-35701-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
-  <vegbank:denorm update="dnrm-classcontributor-6001-embargo" />
+  <vegbank:denorm update="dnrm-classcontributor-36001-embargo" />
   <tr>
-    <td>dnrm-classcontributor-6001-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-classcontributor-6001-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-classcontributor-6001-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-classcontributor-36001-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-classcontributor-36001-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-classcontributor-36001-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
-  <vegbank:denorm update="dnrm-comminterpretation-6301-embargo" />
+  <vegbank:denorm update="dnrm-comminterpretation-36301-embargo" />
   <tr>
-    <td>dnrm-comminterpretation-6301-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-comminterpretation-6301-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-comminterpretation-6301-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-comminterpretation-36301-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-comminterpretation-36301-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-comminterpretation-36301-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
-  <vegbank:denorm update="dnrm-taxonobservation-6601-embargo" />
+  <vegbank:denorm update="dnrm-taxonobservation-36601-embargo" />
   <tr>
-    <td>dnrm-taxonobservation-6601-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-taxonobservation-6601-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-taxonobservation-6601-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-taxonobservation-36601-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-taxonobservation-36601-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-taxonobservation-36601-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
-  <vegbank:denorm update="dnrm-taxonimportance-6901-embargo" />
+  <vegbank:denorm update="dnrm-taxonimportance-36901-embargo" />
   <tr>
-    <td>dnrm-taxonimportance-6901-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-taxonimportance-6901-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-taxonimportance-6901-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-taxonimportance-36901-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-taxonimportance-36901-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-taxonimportance-36901-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
   
-  <vegbank:denorm update="dnrm-taxoninterpretation-7801-embargo" />
+  <vegbank:denorm update="dnrm-taxoninterpretation-37801-embargo" />
   <tr>
-    <td>dnrm-taxoninterpretation-7801-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-taxoninterpretation-7801-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-taxoninterpretation-7801-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-taxoninterpretation-37801-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-taxoninterpretation-37801-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-taxoninterpretation-37801-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
   </tr>
-  <vegbank:denorm update="dnrm-taxonalt-8101-embargo" />
+  <vegbank:denorm update="dnrm-taxonalt-38101-embargo" />
   <tr>
-    <td>dnrm-taxonalt-8101-embargo</td>
-    <td class="numeric"><bean:write name="dnrm-taxonalt-8101-embargo-RESULTS" ignore="true"/></td>
-    <td><logic:lessThan value="0" name="dnrm-taxonalt-8101-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
+    <td>dnrm-taxonalt-38101-embargo</td>
+    <td class="numeric"><bean:write name="dnrm-taxonalt-38101-embargo-RESULTS" ignore="true"/></td>
+    <td><logic:lessThan value="0" name="dnrm-taxonalt-38101-embargo-RESULTS"><span class="error">ERROR!  please check the log</span></logic:lessThan></td>
 </tr>
 </logic:present>
 
