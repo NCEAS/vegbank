@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: mlee $'
-  * '$Date: 2006-06-30 19:26:25 $'
-  * '$Revision: 1.79 $'
+  * '$Date: 2006-07-03 23:40:47 $'
+  * '$Revision: 1.80 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -161,6 +161,11 @@ dbVerify      verify that the database and the datamodel are the same.  create
     <filter token="uploadDir" value="${uploadPath}"/>
     <filter token="servlet_lib_dir" value="${webapps}/lib"/>
     <filter token="servlet_context" value="${contextDir}/"/>
+    
+    <!-- backup properties -->
+    <filter token="pgdumpPath" value="${pgdumpPath}"/>
+    <filter token="backupDir" value="${backupDir}"/>
+    
     <!--loadfiles for the web stuff-->
     <property name="includesServer" value="web/includes"/>
     
@@ -291,6 +296,8 @@ dbVerify      verify that the database and the datamodel are the same.  create
     <mkdir dir="${webStatusDir}"/>
     <mkdir dir="${binPath}"/>
     
+    
+    
     <!--copy the java src to the build/src dir-->
     <copy todir="${buildSrcDir}" filtering="yes">
       <fileset dir="${javaSrcDir}">
@@ -311,7 +318,18 @@ dbVerify      verify that the database and the datamodel are the same.  create
       </fileset>
     </copy>
   </target>
-  
+  <target name="bin" depends="setFilters">
+     <!-- backups: -->
+        <mkdir dir="${backupDir}"/>
+        <mkdir dir="${backupDir}/oldarchive"/>
+        <mkdir dir="${backupDir}/latest"/>
+        <mkdir dir="${backupDir}/latest/to_move"/>
+        <copy todir="${binPath}" filtering="yes" overwrite="yes">
+	   <fileset dir="bin">
+	     <include name="**/*"/>
+	   </fileset>
+        </copy>
+  </target>
   <!--set the classpath-->
   <target name="setclasspath">
     <path id="projectClassPath">
@@ -464,11 +482,9 @@ dbVerify      verify that the database and the datamodel are the same.  create
   
   <!--install war file to target webapps dir-->
   <target name="install" depends="war">
-    <copy todir="${binPath}" filtering="yes" overwrite="yes">
-      <fileset dir="bin">
-        <include name="**/*"/>
-      </fileset>
-    </copy>
+    
+    <antcall target="bin" /> <!-- copy the bin files -->
+    
     <copy todir="${webapps}" filtering="no">
       <fileset dir="${distDir}">
         <include name="${context}.war"/>
