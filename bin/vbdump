@@ -58,10 +58,6 @@ $PG_DUMP -U @databaseUser@ --no-owner --no-privileges @databaseName@ > $BACKUP_F
 
 # compress
 bzip2 -f --best $BACKUP_FILE_PATH
-# remove old link
-rm $LATEST_DUMP
-# create new link
-ln -s $BACKUP_FILE_PATH.bz2 $LATEST_DUMP
 
 ## handle the copy to remote computer:
 # first copy to standard name (so that copies don't proliferate on other machine)
@@ -79,10 +75,3 @@ mv $BACKUP_FILE_PATH_ZIP $BACKUP_LATEST_DIR/
 
 # move the other dumps out of the to-move dir:
 mv $BACKUP_LATEST_TOMOVE_DIR/*.* $BACKUP_OLDARCHIVE/
-
-
-# remove link:
-rm $LATEST_DUMP
-
-## that's all!
-
