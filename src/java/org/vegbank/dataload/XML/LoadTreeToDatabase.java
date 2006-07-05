@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-27 22:09:27 $'
- *	'$Revision: 1.29 $'
+ *	'$Date: 2006-07-05 18:56:44 $'
+ *	'$Revision: 1.30 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -284,13 +284,13 @@ public class LoadTreeToDatabase
                 timer = new Timer("denormalizing sql");
                 // RUN DENORMALIZATION SQL
                 log.info("Running denormalizations");
-                //runDenorms();
+                runDenorms();
                 //instead of running the denorm directly, start a thread
                 //to run them
-                java.util.Timer denormTimer = new java.util.Timer();
+                /*java.util.Timer denormTimer = new java.util.Timer();
                 denormTimer.schedule(
                   new RunDenormTimerTask(System.currentTimeMillis()),
-                  new Date(System.currentTimeMillis()));
+                  new Date(System.currentTimeMillis()));*/
 
                 ////writeConn.commit();
                 timer.stop();
@@ -2395,15 +2395,16 @@ public class LoadTreeToDatabase
             while (tit.hasNext()) {
                 String tableName = ((String)tit.next()).toLowerCase();
                 log.debug("Denormalizing " + tableName);
-                System.out.println("****************Denormalizing " + tableName);
                 // note that this will run default denorms on the table
                 // which currently means all null denorms
                 // not just this load's new records.
+                Timer t = new Timer("denormalizing " + tableName);
                 try {
-                    Timer t = new Timer("denormalizing " + tableName);
                     DenormUtility.updateTable(tableName);
                     t.stop();
                 } catch (SQLException ex) {
+                    System.out.println("UNABLE to denormalize " + tableName);
+                    t.stop();
                     log.error("unable to denormalize table " + tableName, ex);
                 }
             }
@@ -2460,9 +2461,7 @@ public class LoadTreeToDatabase
         if(run)
         {
           Timer t = new Timer("runDenorm thread");
-          System.out.println("**************Running in denorm thread*****************");
           runDenorms();
-          System.out.println("***************denorm thread finished******************");
           t.stop();
         }
       }
