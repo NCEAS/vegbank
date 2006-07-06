@@ -169,14 +169,37 @@ use the command:
 bash$ psql -U vegbank vegbank < backupFile.sql > dbimport.log 2>&1
 bash$ psql -U vegbank vegbank < build/sql/create_aggregrates.sql
 bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
-bash$ psql -U vegbank vegbank < build/sql/denorm/add_embargo_all_or_nothingfields.sql
 bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
+bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
+bash$ psql -U vegbank vegbank < build/sql/create_andPopulate_configTables.sql
 
 Note that if you use a backup file, you will need to run the script 
 src/sql/create_aggregrates.sql to create the aggregate CONCAT function since
 the backups do not include aggregate functions.  You may also need to run
 other .sql scripts in the src/sql directory if you find your backup copy
-is missing information or tables.
+is missing information or tables.  Specifically, if your version is less
+than the current version, you should run all files titled like 
+vegbank-changes-1.0.5.sql to update your version.  
+
+To find out the version of your database, check in the table: dba_datamodelversion.
+All versions since 1.0.5 and their initial date should be listed here.
+
+For example, if the backup version was 1.0.5, and the current version was 1.0.7, 
+you'd run vegbank-changes-1.0.6.sql then vegbank-changes-1.0.7.sql.  Views should be
+dropped before running these files, so the proper order would be:
+
+bash$ psql -U vegbank vegbank < build/sql/drop_obsolete_views.sql
+bash$ psql -U vegbank vegbank < build/sql/drop_vegbank_views.sql
+bash$ psql -U vegbank vegbank < build/sql/drop_obsolete_views.sql
+bash$ psql -U vegbank vegbank < build/sql/drop_vegbank_views.sql
+
+bash$ psql -U vegbank vegbank < build/sql/vegbank-changes-1.0.6.sql
+bash$ psql -U vegbank vegbank < build/sql/vegbank-changes-1.0.7.sql
+bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
+
+drop_obsolete_views.sql is run twice because it isn't known whether those views
+might depend on existing views in the database or vice-versa.  Changes may not 
+succeed if all views are not dropped.
 
 If you want to create a fresh, blank database, you first need to create the 
 db sql script from the data model like so:
@@ -191,8 +214,11 @@ run
 bash$ psql -U vegbank vegbank < build/sql/vegbank.sql >dbcreate.log 
 bash$ psql -U vegbank vegbank < build/sql/create_aggregrates.sql
 bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
-bash$ psql -U vegbank vegbank < build/sql/denorm/add_embargo_all_or_nothingfields.sql
 bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
+bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
+bash$ psql -U vegbank vegbank < build/sql/create_andPopulate_configTables.sql
+
+You won't have to update the version numbers in this scenario.
 
 You should then be able to login and use the \d command in psql to display
 the table structure of the database
