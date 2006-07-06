@@ -1,6 +1,10 @@
 @webpage_top_html@
  @stdvegbankget_jspdeclarations@
  @webpage_head_html@
+   <!-- include script for sorting tables -->
+   <script language="javascript" src="@includes_link@sort_table.js"></script>
+
+ 
  <TITLE>View VegBank Data: Stems </TITLE>
 
 <!-- justa simple include now -->

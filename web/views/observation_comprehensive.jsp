@@ -12,6 +12,8 @@ function getHelpPageId() {
 }
 
 </script>
+  <!-- include script for sorting tables -->
+  <script language="javascript" src="@includes_link@sort_table.js"></script>
 
 
 
