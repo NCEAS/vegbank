@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-06 16:06:32 $'
- *	'$Revision: 1.32 $'
+ *	'$Date: 2006-07-06 18:25:22 $'
+ *	'$Revision: 1.33 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -375,9 +375,9 @@ public class LoadTreeToDatabase
 
 
 		//Return dbconnection to pool
-		DBConnectionPool.returnDBConnection(writeConn);
-		readConn.setReadOnly(false);
-		DBConnectionPool.returnDBConnection(readConn);
+		//DBConnectionPool.returnDBConnection(writeConn);
+		//readConn.setReadOnly(false);
+		//DBConnectionPool.returnDBConnection(readConn);
     t1.stop();
 	}
 
@@ -2568,6 +2568,10 @@ public class LoadTreeToDatabase
                   String tableName = ((String)tit.next()).toLowerCase();
                   kwGen.updatePartialEntityByTable(tableName);
               }
+              //Return dbconnection to pool
+              DBConnectionPool.returnDBConnection(writeConn);
+              readConn.setReadOnly(false);
+              DBConnectionPool.returnDBConnection(readConn);
               timer.stop();
           } catch (SQLException kwex) {
               log.error("problem inserting new keywords", kwex);
@@ -2580,6 +2584,7 @@ public class LoadTreeToDatabase
                       "Problem generating keywords: " + ex.toString());
               timer.stop();
           }
+    
           System.out.println("==========Done with Keyword Thread=============");
           t.stop();
         }
