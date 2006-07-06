@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-05 18:56:44 $'
- *	'$Revision: 1.30 $'
+ *	'$Date: 2006-07-06 15:31:28 $'
+ *	'$Revision: 1.31 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -122,7 +122,8 @@ public class LoadTreeToDatabase
 	// This holds the name of the current concept
 	private String currentConceptName = null;
 	
-	public LoadTreeToDatabase(LoadingErrors errors, List accessionCodes, boolean doCommit, DataloadLog dlog)
+	public LoadTreeToDatabase(LoadingErrors errors, List accessionCodes, 
+    boolean doCommit, DataloadLog dlog)
 	{
 		this.doCommit = doCommit;
 		this.accessionCodesAdded = accessionCodes;
@@ -256,7 +257,7 @@ public class LoadTreeToDatabase
                 timer.stop();
             } catch (Exception ex) {
                 log.error("problem creating dataset or dataset items", ex);
-				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem creating dataset: " + ex.toString());
                 timer.stop();
             }
@@ -273,7 +274,7 @@ public class LoadTreeToDatabase
                 timer.stop();
             } catch (Exception ex) {
                 log.error("Problem while generating accession codes", ex);
-				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem generating accession codes: " + ex.toString());
                 timer.stop();
             }
@@ -296,7 +297,7 @@ public class LoadTreeToDatabase
                 timer.stop();
             } catch (Exception ex) {
                 log.error("Problem while running denormalizations", ex);
-				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem while running denormalizations: " + ex.toString());
                 timer.stop();
             }
@@ -317,12 +318,12 @@ public class LoadTreeToDatabase
                 timer.stop();
             } catch (SQLException kwex) {
                 log.error("problem inserting new keywords", kwex);
-				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem generating keywords: " + kwex.toString());
                 timer.stop();
             } catch (Exception ex) {
                 log.error("Some lame problem inserting new keywords", ex);
-				errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem generating keywords: " + ex.toString());
                 timer.stop();
             }
@@ -331,9 +332,6 @@ public class LoadTreeToDatabase
             // this is still considered a successful load, despite potential errors
             receiptTpl = DataloadLog.TPL_SUCCESS;
             subject = vbResources.getString("dataload.subject.success");
-            
-            //call the denorm SQL
-            
 
 		} else {
             //////////////////////////////////////////////////////////////////
@@ -382,10 +380,12 @@ public class LoadTreeToDatabase
 	private void initDB() throws SQLException
 	{
 		//	Get DBConnections
-		writeConn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
+		writeConn=DBConnectionPool.getInstance().getDBConnection("Need " +
+      "connection for inserting dataset");
 		writeConn.setAutoCommit(false);
 		
-		readConn=DBConnectionPool.getInstance().getDBConnection("Need read connection to support inserting dataset");
+		readConn=DBConnectionPool.getInstance().getDBConnection("Need read " +
+      "connection to support inserting dataset");
 		readConn.setReadOnly(true);
 
 		// Initialize the AccessionGen
@@ -406,8 +406,9 @@ public class LoadTreeToDatabase
 		try 
 		{
 			sb.append(
-				"SELECT " + Utility.getPKNameFromTableName(tableName) +" from "+tableName+" where " 
-				+ Constants.ACCESSIONCODENAME + " = '" + accessionCode + "'"
+				"SELECT " + Utility.getPKNameFromTableName(tableName) +" from "+
+        tableName+" where " + Constants.ACCESSIONCODENAME + " = '" + 
+        accessionCode + "'"
 			);
 
 			Statement query = readConn.createStatement();
@@ -494,7 +495,8 @@ public class LoadTreeToDatabase
 	{
 		long PK = -1;
 		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT nextval('" + tableName + "_" + Utility.getPKNameFromTableName(tableName) + "_seq')");
+		sb.append("SELECT nextval('" + tableName + "_" + 
+      Utility.getPKNameFromTableName(tableName) + "_seq')");
 		try 
 		{
 		   Statement query = writeConn.createStatement();
@@ -521,7 +523,8 @@ public class LoadTreeToDatabase
 	 * @param FKValue
 	 * @return boolean -- success or not
 	 */
-	private boolean insertTables( String tableName, Enumeration tables, String fKName, long fKValue ) throws SQLException
+	private boolean insertTables( String tableName, Enumeration tables, 
+    String fKName, long fKValue ) throws SQLException
 	{
 		boolean result = true;
 		
@@ -549,7 +552,8 @@ public class LoadTreeToDatabase
 	 * @param fieldValueHash
 	 * @return long -- PK of the table
 	 */
-	private long insertTable( String tableName, Hashtable fieldValueHash ) throws SQLException
+	private long insertTable( String tableName, Hashtable fieldValueHash ) 
+    throws SQLException
 	{
 		//log.debug("insertTable: " + tableName);
 		
@@ -572,13 +576,15 @@ public class LoadTreeToDatabase
 		// TODO: Make configurable and add user perms. 
 		if ( ! this.isAllowedToLoad(fieldValueHash) )
 		{
-			//log.debug("*** User is not allowed to load " + fieldValueHash.get(TABLENAME));
+			//log.debug("*** User is not allowed to load " + 
+      //  fieldValueHash.get(TABLENAME));
 			return PK; // Even if empty
 		}
 		
 		// Insert Reference if it exists
 		long referenceId = 0;
-		Hashtable reference = getFKChildTable(fieldValueHash, "reference_ID", "reference");
+		Hashtable reference = getFKChildTable(fieldValueHash, "reference_ID", 
+      "reference");
 		if ( reference != null)
 		{
 			//log.debug("Inserting extant reference");
@@ -626,7 +632,8 @@ public class LoadTreeToDatabase
 					if ( this.isPKName(field, tableName))
 					{
 						// Check if this has already been added to db
-						long storedPK = inputPKTracker.getAssignedPK(tableName, stringValue.toString());
+						long storedPK = inputPKTracker.getAssignedPK(tableName, 
+              stringValue.toString());
 						if (storedPK != 0) 
 						{
 							//log.debug("Already entered record xmlPK "
@@ -665,7 +672,8 @@ public class LoadTreeToDatabase
 		}
 		catch ( SQLException se ) 
 		{
-            log.error("sql exception while inserting: " + se.toString() + "\n:::" + sb.toString());
+      log.error("sql exception while inserting: " + se.toString() + 
+       "\n:::" + sb.toString());
 			this.filterSQLException(se, sb.toString());
 		}
 		
@@ -822,7 +830,8 @@ public class LoadTreeToDatabase
 				|| ! isFieldValueEqual(noteLinkDescription, noteLink, "attributeName"))
 			{
 				// Housten we have a problem
-				errors.addError(LoadingErrors.VALIDATIONERROR, "Mismatch on NOTELINK_ID = " + noteLinkId);
+				errors.addError(LoadingErrors.VALIDATIONERROR, 
+          "Mismatch on NOTELINK_ID = " + noteLinkId);
 				commit = false;
 			}
 			else
@@ -875,7 +884,8 @@ public class LoadTreeToDatabase
 				|| ! isFieldValueEqual(revisionDescription, revision, "tableAttribute"))
 			{
 				// Housten we have a problem
-				errors.addError(LoadingErrors.VALIDATIONERROR, "Mismatch on REVISION_ID = " + revisionId);
+				errors.addError(LoadingErrors.VALIDATIONERROR, 
+          "Mismatch on REVISION_ID = " + revisionId);
 				commit = false;
 			}
 			else
@@ -918,7 +928,8 @@ public class LoadTreeToDatabase
 		}
 		
 		// Insert Reference Journal
-		Hashtable referenceJournal = getFKChildTable(reference, Reference.REFERENCEJOURNAL_ID, "referenceJournal");
+		Hashtable referenceJournal = getFKChildTable(reference, 
+      Reference.REFERENCEJOURNAL_ID, "referenceJournal");
 		long referenceJournalId = insertTable("referenceJournal", referenceJournal);
 
 		addForeignKey(reference, Reference.REFERENCEJOURNAL_ID, referenceJournalId);
@@ -939,13 +950,17 @@ public class LoadTreeToDatabase
 		{
 			Hashtable referenceContributor = (Hashtable) referenceContributors.nextElement();
 			
-			Hashtable referenceParty = getFKChildTable(referenceContributor, Referencecontributor.REFERENCEPARTY_ID, "referenceParty");
+			Hashtable referenceParty = getFKChildTable(referenceContributor, 
+        Referencecontributor.REFERENCEPARTY_ID, "referenceParty");
 			// Add  referenceParty
 			long referencePartyId = insertReferenceParty(referenceParty);
 			
-			addForeignKey(referenceContributor, Referencecontributor.REFERENCE_ID, referenceId);
-			addForeignKey(referenceContributor, Referencecontributor.REFERENCEPARTY_ID, referencePartyId);
-			long referenceContributorId = insertTable("referenceContributor", referenceContributor);
+			addForeignKey(referenceContributor, Referencecontributor.REFERENCE_ID, 
+        referenceId);
+			addForeignKey(referenceContributor, Referencecontributor.REFERENCEPARTY_ID, 
+        referencePartyId);
+			long referenceContributorId = insertTable("referenceContributor", 
+        referenceContributor);
 		}		
 		
 		return referenceId;
@@ -966,23 +981,27 @@ public class LoadTreeToDatabase
 				return referencePartyId;
 			}
 			
-			Hashtable referencePartyParent = getFKChildTable(referenceParty, Referenceparty.CURRENTPARTY_ID, "referenceParty");
+			Hashtable referencePartyParent = getFKChildTable(referenceParty, 
+        Referenceparty.CURRENTPARTY_ID, "referenceParty");
 			long referencePartyParentId = insertReferenceParty(referencePartyParent);
 			
-			addForeignKey(referenceParty, Referenceparty.CURRENTPARTY_ID, referencePartyParentId);
+			addForeignKey(referenceParty, Referenceparty.CURRENTPARTY_ID, 
+        referencePartyParentId);
 			referencePartyId = insertTable( "referenceParty", referenceParty);
 		}
 		return referencePartyId;
 	}
 
-	private boolean insertUserDefinedTables( String parentTableName, long tableRecordID, Hashtable parentHash) throws SQLException
+	private boolean insertUserDefinedTables( String parentTableName, 
+    long tableRecordID, Hashtable parentHash) throws SQLException
 	{
 		boolean result = false;
 		Enumeration definedValues = getChildTables( parentHash, "definedValue");
 
 		while ( definedValues.hasMoreElements() ) {
             Hashtable definedValueHash = (Hashtable)definedValues.nextElement();
-            log.debug("got a definedValue for " + parentTableName + ": " + definedValueHash.get("definedValue"));
+            log.debug("got a definedValue for " + parentTableName + ": " + 
+              definedValueHash.get("definedValue"));
 
 
             // the actual <userDefined> is under a <definedValue.USERDEFINED_ID>
@@ -1025,7 +1044,8 @@ public class LoadTreeToDatabase
 				Object value = fieldValueHash.get(field);
 				if ( this.isDatabaseReadyField(field, value, tableName) )
 				{				
-					fieldEqualsValue.add(field + "=" + "'" + Utility.encodeForDB(value.toString()) + "'");
+					fieldEqualsValue.add(field + "=" + "'" + 
+            Utility.encodeForDB(value.toString()) + "'");
 				}
 			}
 			
@@ -1082,7 +1102,8 @@ public class LoadTreeToDatabase
 				Object value = fieldValueHash.get(field);
 				if ( this.isDatabaseReadyField(field, value, tableName) )
 				{				
-					fieldEqualsValue.add(field + "=" + "'" + Utility.encodeForDB(value.toString()) + "'");
+					fieldEqualsValue.add(field + "=" + "'" + 
+            Utility.encodeForDB(value.toString()) + "'");
 				}
 			}
 			
@@ -1112,11 +1133,13 @@ public class LoadTreeToDatabase
 	}
 	
 	
-	private String getSQLNullValues( String tableName, Hashtable fieldValuesHash ) throws SQLException
+	private String getSQLNullValues( String tableName, Hashtable fieldValuesHash ) 
+    throws SQLException
 	{
 		StringBuffer sb = new StringBuffer();
 		
-		ResultSet rs = readConn.getMetaData().getColumns(null, null, tableName.toLowerCase(), "%" );
+		ResultSet rs = readConn.getMetaData().getColumns(null, null, 
+      tableName.toLowerCase(), "%" );
 		
 		//log.debug("Got a Result Set");
 		while ( rs.next() )
@@ -1152,7 +1175,8 @@ public class LoadTreeToDatabase
 	 *  
 	 * @param tableName
 	 */
-	private Hashtable getFKChildTable( Hashtable parentHash, String keyName ,String tableName)
+	private Hashtable getFKChildTable( Hashtable parentHash, String keyName ,
+    String tableName)
 	{
 		Hashtable childHash = null;
 		
@@ -1174,7 +1198,8 @@ public class LoadTreeToDatabase
 		Hashtable childHash = null;
 		if ( parentHash == null )
 		{
-			log.warn("Got asked to find: '" + tableName+ "' from a null Hashtable. This shouldn't happen but hey, what do I know?");
+			log.warn("Got asked to find: '" + tableName + 
+        "' from a null Hashtable. This shouldn't happen but hey, what do I know?");
 			return childHash;
 
 			//Utility.prettyPrintHash(parentHash);
@@ -1193,12 +1218,14 @@ public class LoadTreeToDatabase
 		}
 		else if ( o == null)
 		{
-			//log.debug("Could not find table.. " + tableName + " as child of  table " + parentHash.get("TableName"));
+			//log.debug("Could not find table.. " + tableName + 
+      //  " as child of  table " + parentHash.get("TableName"));
 		}
 		else
 		{
 			// Don't know what to do here
-			log.warn("Type: '" + o.getClass() + "' should not exist here in" + tableName + "?.");
+			log.warn("Type: '" + o.getClass() + "' should not exist here in" + 
+        tableName + "?.");
 		}
 		return childHash;
 	}
@@ -1240,7 +1267,8 @@ public class LoadTreeToDatabase
 		Enumeration enum = childVec.elements();
         /*
         if ("USERDEFINED_ID".equals(tableName)) {
-            log.debug("##############: number children for definedValue.USERDEFINED_ID: " + childVec.size());
+            log.debug("##############: number children for " +
+              "definedValue.USERDEFINED_ID: " + childVec.size());
             while(enum.hasMoreElements()) {
                 log.debug("child: " + enum.nextElement().toString());
             }
@@ -1290,7 +1318,8 @@ public class LoadTreeToDatabase
 	 * @param party
 	 * @return
 	 */
-	private long insertPartyBase(Hashtable party, String tableName) throws SQLException
+	private long insertPartyBase(Hashtable party, String tableName) 
+    throws SQLException
 	{
 		long pKey = 0;
 		
@@ -1302,7 +1331,8 @@ public class LoadTreeToDatabase
 		
 		// recursivly deal with FK party's
 		Hashtable ownerParty = getFKChildTable(party, "owner_ID", "party");
-		Hashtable currentNameParty = getFKChildTable(party, "currentName_ID", "party");
+		Hashtable currentNameParty = getFKChildTable(party, "currentName_ID", 
+      "party");
 		
 		long ownerPartyPK = 0;
 		long currentNamePartyPK = 0;
@@ -1325,7 +1355,8 @@ public class LoadTreeToDatabase
 		return pKey;
 	}
 	
-	private long insertContributor(String tableName, Hashtable contribHash, String keyName, long keyValue) throws SQLException
+	private long insertContributor(String tableName, Hashtable contribHash, 
+    String keyName, long keyValue) throws SQLException
 	{
 		long pKey = 0;
 		// Handle null
@@ -1399,7 +1430,8 @@ public class LoadTreeToDatabase
 			addForeignKey(place, Place.PLOT_ID, plotId);
 
 			// Insert NamedPlace
-			Hashtable namedPlace =   this.getFKChildTable(place, Place.NAMEDPLACE_ID, "namedPlace");
+			Hashtable namedPlace =   this.getFKChildTable(place, Place.NAMEDPLACE_ID, 
+        "namedPlace");
 			long namedPlaceId = insertTable("namedPlace",namedPlace);
 				
 			addForeignKey(place, Place.NAMEDPLACE_ID, namedPlaceId);
@@ -1443,7 +1475,8 @@ public class LoadTreeToDatabase
 		Enumeration pcs = this.getChildTables( projectFieldValueHash, "projectContributor");
 		while (pcs.hasMoreElements())
 		{	
-			this.insertContributor( "projectContributor", (Hashtable) pcs.nextElement(), Projectcontributor.PROJECT_ID,  projectId);
+			this.insertContributor( "projectContributor", 
+        (Hashtable) pcs.nextElement(), Projectcontributor.PROJECT_ID,  projectId);
 		}	
 
 		return projectId;
@@ -1472,7 +1505,8 @@ public class LoadTreeToDatabase
 		}
 		Timer obsTimer = new Timer("IOT1");
 		//	Need to insert the plot and the project and get the FKs
-		Hashtable project = this.getFKChildTable(observationHash, Observation.PROJECT_ID, "project");
+		Hashtable project = this.getFKChildTable(observationHash, 
+      Observation.PROJECT_ID, "project");
 		long projectId = this.insertProject(project);
 		
 		Hashtable plot = getFKChildTable(observationHash, Observation.PLOT_ID, "plot");
@@ -1480,7 +1514,8 @@ public class LoadTreeToDatabase
 
 		// Continue loading as normal
 		
-		Hashtable previousObs = getFKChildTable(observationHash, Observation.PREVIOUSOBS_ID, "observation");
+		Hashtable previousObs = getFKChildTable(observationHash, 
+      Observation.PREVIOUSOBS_ID, "observation");
 		
 		long previousObsId = 0;
 		if (previousObs != null)
@@ -1495,18 +1530,22 @@ public class LoadTreeToDatabase
 		addForeignKey(observationHash, Observation.PROJECT_ID, projectId);
 		
 		// CoverMethod
-		Hashtable coverMethod = getFKChildTable(observationHash, Observation.COVERMETHOD_ID, "coverMethod");
+		Hashtable coverMethod = getFKChildTable(observationHash, 
+      Observation.COVERMETHOD_ID, "coverMethod");
 		long coverMethodId = insertTable("coverMethod", coverMethod);
-		this.insertTables("coverIndex",  getChildTables(coverMethod, "coverIndex"), Observation.COVERMETHOD_ID, coverMethodId);
+		this.insertTables("coverIndex",  getChildTables(coverMethod, "coverIndex"), 
+      Observation.COVERMETHOD_ID, coverMethodId);
 		addForeignKey(observationHash, Observation.COVERMETHOD_ID, coverMethodId);
 
 		// StratumMethod			
-		Hashtable stratumMethod = getFKChildTable(observationHash, Observation.STRATUMMETHOD_ID, "stratumMethod");
+		Hashtable stratumMethod = getFKChildTable(observationHash, 
+      Observation.STRATUMMETHOD_ID, "stratumMethod");
 		long stratumMethodId = insertStratumMethod(stratumMethod);
 		addForeignKey(observationHash, Observation.STRATUMMETHOD_ID, stratumMethodId);
 
 		// SoilTaxon
-		Hashtable soilTaxon = getFKChildTable(observationHash, Observation.SOILTAXON_ID, "soilTaxon");
+		Hashtable soilTaxon = getFKChildTable(observationHash, 
+      Observation.SOILTAXON_ID, "soilTaxon");
 		long soilTaxonId = insertTable("soilTaxon", soilTaxon);
 		addForeignKey(observationHash, Observation.SOILTAXON_ID, soilTaxonId);
 		
@@ -1517,19 +1556,24 @@ public class LoadTreeToDatabase
 		observationId = insertTable("observation", observationHash);
 		
 		// TODO: insert graphic, observationSynonym
-		//this.insertTables("graphic",  getChildTables(observationHash, "graphic"), "observation_id", observationId);
+		//this.insertTables("graphic",  getChildTables(observationHash, "graphic"), 
+    //  "observation_id", observationId);
 		
 		// Add disturbanceObs
-		this.insertTables("disturbanceObs",  getChildTables(observationHash, "disturbanceObs"), Disturbanceobs.OBSERVATION_ID, observationId);
+		this.insertTables("disturbanceObs",  getChildTables(observationHash, 
+      "disturbanceObs"), Disturbanceobs.OBSERVATION_ID, observationId);
 		
 		// Add SoilObs
-		this.insertTables("soilObs",  getChildTables(observationHash, "soilObs"), Soilobs.OBSERVATION_ID, observationId);
+		this.insertTables("soilObs",  getChildTables(observationHash, "soilObs"), 
+      Soilobs.OBSERVATION_ID, observationId);
 		
 		// Add observation contributors
 		Enumeration ocs = this.getChildTables( observationHash, "observationContributor");
 		while (ocs.hasMoreElements())
 		{	
-			this.insertContributor( "observationContributor", (Hashtable) ocs.nextElement(), Observationcontributor.OBSERVATION_ID,  observationId);
+			this.insertContributor( "observationContributor", 
+        (Hashtable) ocs.nextElement(), Observationcontributor.OBSERVATION_ID,  
+        observationId);
 		}
 		
     obsTimer.stop();
@@ -1559,11 +1603,13 @@ public class LoadTreeToDatabase
 			Enumeration ccs = this.getChildTables( commClass, "classContributor");
 			while (ccs.hasMoreElements())
 			{	
-				this.insertContributor( "classContributor", (Hashtable) ccs.nextElement(), "commclass_id",  commClassId);
+				this.insertContributor( "classContributor", 
+          (Hashtable) ccs.nextElement(), "commclass_id",  commClassId);
 			}
 			
 			// Add communtity interpretation
-			Enumeration commIntepretations =  getChildTables(commClass, "commInterpretation");
+			Enumeration commIntepretations =  getChildTables(commClass, 
+        "commInterpretation");
 			while ( commIntepretations.hasMoreElements() )
 			{
 				Hashtable commIntepretation = (Hashtable) commIntepretations.nextElement();
@@ -1584,7 +1630,8 @@ public class LoadTreeToDatabase
 		obsTimer.stop();
     obsTimer = new Timer("IOT6.1");
 		// Add the observation synonyms 
-		Enumeration observationSynonyms =  getChildTables(observationHash, "observationSynonym");
+		Enumeration observationSynonyms =  getChildTables(observationHash, 
+      "observationSynonym");
     obsTimer.stop();
     obsTimer = new Timer("IOT6.2");
 		while ( observationSynonyms.hasMoreElements() )
@@ -1593,22 +1640,28 @@ public class LoadTreeToDatabase
 			Hashtable observationSynonym = (Hashtable) observationSynonyms.nextElement();
 			
 			// Get synonymobservation_id, party_id, role_id
-			Hashtable observation = getFKChildTable(observationSynonym, Observationsynonym.OBSERVATIONSYNONYM_ID, "observation");
+			Hashtable observation = getFKChildTable(observationSynonym, 
+        Observationsynonym.OBSERVATIONSYNONYM_ID, "observation");
 			long synonymObservationId = insertObservation(observation);
 			
-			long partyId = insertParty( getFKChildTable(observationSynonym, Observationsynonym.PARTY_ID, "party") );
+			long partyId = insertParty( getFKChildTable(observationSynonym, 
+        Observationsynonym.PARTY_ID, "party") );
 			long roleId = 
 				insertTable(
 					"aux_Role", 
-					this.getFKChildTable( observationSynonym, Observationsynonym.ROLE_ID, "aux_Role" )
+					this.getFKChildTable( observationSynonym, Observationsynonym.ROLE_ID, 
+            "aux_Role" )
 				);
 
-			addForeignKey(observationSynonym, Observationsynonym.PRIMARYOBSERVATION_ID, observationId);
-			addForeignKey(observationSynonym, Observationsynonym.SYNONYMOBSERVATION_ID, synonymObservationId);
+			addForeignKey(observationSynonym, Observationsynonym.PRIMARYOBSERVATION_ID, 
+        observationId);
+			addForeignKey(observationSynonym, Observationsynonym.SYNONYMOBSERVATION_ID, 
+        synonymObservationId);
 			addForeignKey(observationSynonym, Observationsynonym.PARTY_ID, partyId);
 			addForeignKey(observationSynonym, Observationsynonym.ROLE_ID, roleId);
 
-			long observationSynonymId = insertTable("observationSynonym", observationSynonym);
+			long observationSynonymId = insertTable("observationSynonym", 
+        observationSynonym);
 			
 		}
     obsTimer.stop();
@@ -1710,7 +1763,8 @@ public class LoadTreeToDatabase
 			//log.debug("taxonObservationId: " + taxonObservationId );
 		
 			//  Add Taxonimportances
-			Enumeration taxonImportances = getChildTables(taxonObservation, "taxonImportance");
+			Enumeration taxonImportances = getChildTables(taxonObservation, 
+        "taxonImportance");
 			while ( taxonImportances.hasMoreElements())
 			{
 				long taxonImportanceId = 0;
@@ -1723,14 +1777,16 @@ public class LoadTreeToDatabase
 				}
 			  
 				// Get the stratum_id if there is one
-				Hashtable stratum = getFKChildTable(taxonImportance, Taxonimportance.STRATUM_ID, "stratum");					
+				Hashtable stratum = getFKChildTable(taxonImportance, 
+          Taxonimportance.STRATUM_ID, "stratum");					
 				if ( stratum != null )
 				{
 					long stratumId = insertStratum(stratum, stratumMethodId, observationId);					
 					addForeignKey(taxonImportance, Taxonimportance.STRATUM_ID, stratumId);
 				}
       
-				addForeignKey(taxonImportance, Taxonimportance.TAXONOBSERVATION_ID, taxonObservationId);
+				addForeignKey(taxonImportance, Taxonimportance.TAXONOBSERVATION_ID, 
+          taxonObservationId);
 				taxonImportanceId = insertTable("taxonImportance", taxonImportance );
 
 				// Add  StemCount
@@ -1767,7 +1823,8 @@ public class LoadTreeToDatabase
 						stemLocationId = insertTable("stemLocation", stemLocation);
 						
 						// Add TaxonInterpretation
-						Enumeration taxonInterpretations = getChildTables(taxonObservation, "taxonInterpretation");
+						Enumeration taxonInterpretations = getChildTables(taxonObservation, 
+              "taxonInterpretation");
 						while ( taxonInterpretations.hasMoreElements())
 						{
 							Hashtable taxonInterpretation = (Hashtable) taxonInterpretations.nextElement();
@@ -1782,7 +1839,8 @@ public class LoadTreeToDatabase
 			}
 			
       // Add TaxonInterpretation
-			Enumeration taxonInterpretations = getChildTables(taxonObservation, "taxonInterpretation");
+			Enumeration taxonInterpretations = getChildTables(taxonObservation, 
+        "taxonInterpretation");
 			while ( taxonInterpretations.hasMoreElements())
 			{
 				Hashtable taxonInterpretation = (Hashtable) taxonInterpretations.nextElement();
@@ -1810,27 +1868,33 @@ public class LoadTreeToDatabase
 		}
 		
 		// Get the party
-		Hashtable party =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.PARTY_ID, "party");
+		Hashtable party =  this.getFKChildTable(taxonInterpretation, 
+      Taxoninterpretation.PARTY_ID, "party");
 		long partyId = insertParty(party);
 		
 		// Get the Role
-		Hashtable role =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.ROLE_ID, "aux_Role");
+		Hashtable role =  this.getFKChildTable(taxonInterpretation, 
+      Taxoninterpretation.ROLE_ID, "aux_Role");
 		long roleId = insertTable("aux_Role", role);
 		
 		// Get the PlantConcept
-		Hashtable plantConcept =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.PLANTCONCEPT_ID, "plantConcept");
+		Hashtable plantConcept =  this.getFKChildTable(taxonInterpretation, 
+      Taxoninterpretation.PLANTCONCEPT_ID, "plantConcept");
 		long plantConceptId = this.insertPlantConcept(plantConcept);
 		
 		// Get the museum party
-		Hashtable museumParty =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.MUSEUM_ID, "party");
+		Hashtable museumParty =  this.getFKChildTable(taxonInterpretation, 
+      Taxoninterpretation.MUSEUM_ID, "party");
 		long museumId = insertParty(museumParty);
 		
 		// Get the collector party
-		Hashtable collectorParty =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.COLLECTOR_ID, "party");
+		Hashtable collectorParty =  this.getFKChildTable(taxonInterpretation, 
+      Taxoninterpretation.COLLECTOR_ID, "party");
 		long collectorId = insertParty(collectorParty);
 		
 		// Get the PlantName
-		Hashtable plantName =  this.getFKChildTable(taxonInterpretation, Taxoninterpretation.PLANTNAME_ID, "plantName");
+		Hashtable plantName =  this.getFKChildTable(taxonInterpretation, 
+      Taxoninterpretation.PLANTNAME_ID, "plantName");
 		long plantNameId = insertTable("plantname", plantName);
 		
 		
@@ -1853,7 +1917,8 @@ public class LoadTreeToDatabase
 			Hashtable taxonAlt = (Hashtable) taxonAlts.nextElement();
 			addForeignKey(taxonAlt, Taxonalt.TAXONINTERPRETATION_ID, pKey);
 			
-			Hashtable altPlantConcept = this.getFKChildTable(taxonAlt, Taxonalt.PLANTCONCEPT_ID, "plantConcept");
+			Hashtable altPlantConcept = this.getFKChildTable(taxonAlt, 
+        Taxonalt.PLANTCONCEPT_ID, "plantConcept");
 			long altPlantConceptId = insertPlantConcept(altPlantConcept);
 			addForeignKey(taxonAlt, Taxonalt.PLANTCONCEPT_ID, altPlantConceptId);
 			
@@ -1890,7 +1955,8 @@ public class LoadTreeToDatabase
 		//Utility.prettyPrintHash(plantConcept);
 		
 		// TODO: depends on PlantName
-		Hashtable plantName = this.getFKChildTable(plantConcept, Plantconcept.PLANTNAME_ID, "plantName");
+		Hashtable plantName = this.getFKChildTable(plantConcept, 
+      Plantconcept.PLANTNAME_ID, "plantName");
 		currentConceptName = (String) plantName.get(Plantname.PLANTNAME);
 	    log.debug("pc name: " + currentConceptName);
 		long plantNameId = insertTable("plantName", plantName);
@@ -1912,7 +1978,6 @@ public class LoadTreeToDatabase
 
             // Add plantUsage
             Enumeration plantUsages = getChildTables(plantStatus, "plantUsage");
-            ////////////////////////////Enumeration plantUsages = getChildTables(plantConcept, "plantUsage");
             while ( plantUsages.hasMoreElements())
             {
                 Hashtable plantUsage = (Hashtable) plantUsages.nextElement();
@@ -1956,7 +2021,8 @@ public class LoadTreeToDatabase
 		//Utility.prettyPrintHash(commConcept);
 		
 		//  depends on commName
-		Hashtable commName = this.getFKChildTable(commConcept, Commconcept.COMMNAME_ID, "commName");
+		Hashtable commName = this.getFKChildTable(commConcept, 
+      Commconcept.COMMNAME_ID, "commName");
 		currentConceptName = (String) commName.get(Commname.COMMNAME);
 		long commNameId = insertTable("commName", commName);
 		
@@ -1983,7 +2049,6 @@ public class LoadTreeToDatabase
             }
 		}
 		
-		
 		return pKey;
 	}		
 	
@@ -2009,11 +2074,13 @@ public class LoadTreeToDatabase
 		//Utility.prettyPrintHash(commStatus);
 	
 		// Add commParent
-		Hashtable commParent = this.getFKChildTable(commStatus, Commstatus.COMMPARENT_ID, "commConcept");
+		Hashtable commParent = this.getFKChildTable(commStatus, 
+      Commstatus.COMMPARENT_ID, "commConcept");
 		long commParentId = insertCommConcept(commParent); // recursive
 	
 		// Add party
-		Hashtable party = this.getFKChildTable(commStatus, Commstatus.PARTY_ID, "party");
+		Hashtable party = this.getFKChildTable(commStatus, Commstatus.PARTY_ID, 
+      "party");
 		long partyId = insertParty(party);
 		
 		addForeignKey(commStatus, Commstatus.COMMPARENT_ID, commParentId);
@@ -2037,7 +2104,8 @@ public class LoadTreeToDatabase
 			Hashtable commCorrelation = (Hashtable) commCorrelations.nextElement();
 
 			// TODO:  Add commConcept
-			Hashtable commConcept = this.getFKChildTable(commCorrelation, Commcorrelation.COMMCONCEPT_ID, "commConcept");
+			Hashtable commConcept = this.getFKChildTable(commCorrelation, 
+        Commcorrelation.COMMCONCEPT_ID, "commConcept");
 			long commConceptId = insertCommConcept(commConcept); 
 
 			addForeignKey(commCorrelation, Commcorrelation.COMMSTATUS_ID, pKey);
@@ -2057,11 +2125,13 @@ public class LoadTreeToDatabase
 		}
 		
 		// Add commName 
-		Hashtable commName = this.getFKChildTable(commUsage, Commusage.COMMNAME_ID, "commName");
+		Hashtable commName = this.getFKChildTable(commUsage, Commusage.COMMNAME_ID, 
+      "commName");
 		long commNameId = insertTable("commName", commName);
 		
 		// Add party
-		Hashtable party = this.getFKChildTable(commUsage, Commusage.PARTY_ID, "party");
+		Hashtable party = this.getFKChildTable(commUsage, Commusage.PARTY_ID, 
+      "party");
 		long partyId = insertParty(party);
 		
 		addForeignKey(commUsage,  Commusage.COMMNAME_ID, commNameId);
@@ -2104,11 +2174,13 @@ public class LoadTreeToDatabase
 		}
 		
 		// Add plantName 
-		Hashtable plantName = this.getFKChildTable(plantUsage, Plantusage.PLANTNAME_ID, "plantName");
+		Hashtable plantName = this.getFKChildTable(plantUsage, 
+      Plantusage.PLANTNAME_ID, "plantName");
 		long plantNameId = insertTable("plantName", plantName);
 		
 		// Add Party
-		Hashtable party = this.getFKChildTable(plantUsage, Plantusage.PARTY_ID, "party");
+		Hashtable party = this.getFKChildTable(plantUsage, Plantusage.PARTY_ID, 
+      "party");
 		long partyId = insertParty(party);
 		
 		addForeignKey(plantUsage, Plantusage.PLANTNAME_ID, plantNameId);
@@ -2139,11 +2211,13 @@ public class LoadTreeToDatabase
 		//Utility.prettyPrintHash(plantStatus);
 		
 		// Add plantParent
-		Hashtable plantParent = this.getFKChildTable(plantStatus, Plantstatus.PLANTPARENT_ID, "plantConcept");
+		Hashtable plantParent = this.getFKChildTable(plantStatus, 
+      Plantstatus.PLANTPARENT_ID, "plantConcept");
 		long plantParentId = insertPlantConcept(plantParent); // recursive
 		
 		// Add PlantParty
-		Hashtable party = this.getFKChildTable(plantStatus, Plantstatus.PARTY_ID, "party");
+		Hashtable party = this.getFKChildTable(plantStatus, Plantstatus.PARTY_ID, 
+      "party");
 		long partyId = insertParty(party);
 			
 		addForeignKey(plantStatus, Plantstatus.PLANTPARENT_ID, plantParentId);
@@ -2162,16 +2236,19 @@ public class LoadTreeToDatabase
 		}
 		
 		// Add plantCorrelation
-		Enumeration plantCorrelations = getChildTables(plantStatus, "plantCorrelation");
+		Enumeration plantCorrelations = getChildTables(plantStatus, 
+      "plantCorrelation");
 		while ( plantCorrelations.hasMoreElements())
 		{
 			Hashtable plantCorrelation = (Hashtable) plantCorrelations.nextElement();
 
-			Hashtable plantConcept = this.getFKChildTable(plantCorrelation, Plantcorrelation.PLANTCONCEPT_ID, "plantConcept");
+			Hashtable plantConcept = this.getFKChildTable(plantCorrelation, 
+        Plantcorrelation.PLANTCONCEPT_ID, "plantConcept");
 			long plantConceptId = insertPlantConcept(plantConcept); 
 
 			addForeignKey(plantCorrelation, Plantcorrelation.PLANTSTATUS_ID, pKey);
-			addForeignKey(plantCorrelation, Plantcorrelation.PLANTCONCEPT_ID, plantConceptId);
+			addForeignKey(plantCorrelation, Plantcorrelation.PLANTCONCEPT_ID, 
+        plantConceptId);
 							
 			insertTable( "plantCorrelation", plantCorrelation);
 		}
@@ -2200,7 +2277,8 @@ public class LoadTreeToDatabase
 	 * @param observationId
 	 * @return
 	 */
-	private long insertStratum(Hashtable stratum, long stratumMethodId, long observationId) throws SQLException
+	private long insertStratum(Hashtable stratum, long stratumMethodId, 
+    long observationId) throws SQLException
 	{
 		long pKey = 0;
 		pKey = getExtantPK(stratum);
@@ -2209,7 +2287,8 @@ public class LoadTreeToDatabase
 			return pKey;
 		}
 		
-		Hashtable stratumType = getFKChildTable(stratum, Stratum.STRATUMTYPE_ID, "stratumType");
+		Hashtable stratumType = getFKChildTable(stratum, Stratum.STRATUMTYPE_ID, 
+      "stratumType");
 		
 		addForeignKey(stratumType, Stratumtype.STRATUMMETHOD_ID, stratumMethodId);
 		
@@ -2226,7 +2305,8 @@ public class LoadTreeToDatabase
 	 * @param commIntepretation
 	 * @param commClassId
 	 */
-	private long insertCommInterpetation(Hashtable commIntepretation) throws SQLException
+	private long insertCommInterpetation(Hashtable commIntepretation) 
+    throws SQLException
 	{			
 		long pKey = 0;
 		// Handle null
@@ -2241,13 +2321,17 @@ public class LoadTreeToDatabase
 		}
 			
 
-		Hashtable commConcept = this.getFKChildTable(commIntepretation, Comminterpretation.COMMCONCEPT_ID, "commConcept");
+		Hashtable commConcept = this.getFKChildTable(commIntepretation, 
+      Comminterpretation.COMMCONCEPT_ID, "commConcept");
 		long commConceptId = this.insertCommConcept(commConcept);
-		addForeignKey(commIntepretation, Comminterpretation.COMMCONCEPT_ID, commConceptId);
+		addForeignKey(commIntepretation, Comminterpretation.COMMCONCEPT_ID, 
+      commConceptId);
 		
-		Hashtable reference = this.getFKChildTable(commIntepretation, Comminterpretation.COMMAUTHORITY_ID, "reference");
+		Hashtable reference = this.getFKChildTable(commIntepretation, 
+      Comminterpretation.COMMAUTHORITY_ID, "reference");
 		long commAuthorityId = this.insertReference(reference);
-		addForeignKey(commIntepretation, Comminterpretation.COMMAUTHORITY_ID, commAuthorityId);
+		addForeignKey(commIntepretation, Comminterpretation.COMMAUTHORITY_ID, 
+      commAuthorityId);
 		
 		return insertTable("commInterpretation", commIntepretation);
 	}
@@ -2291,7 +2375,8 @@ public class LoadTreeToDatabase
 		else if ( tableName.equalsIgnoreCase("aux_role"))
 		{
 			String errorMessage = "You are not allowed to load a new record in the '"
-				+ tableName +"' table. + [ table: " + tableName + " AcessionCode in XML: " +  hashtable.get(Constants.ACCESSIONCODENAME)  
+				+ tableName +"' table. + [ table: " + tableName + " AcessionCode in XML: " +  
+          hashtable.get(Constants.ACCESSIONCODENAME)  
 				+ "] \n Please use an existing records AccessionCode to"
 				+ " load or have someone with permissions load this record and use the"
 				+ " assigned AccessionCode. ";
@@ -2314,7 +2399,8 @@ public class LoadTreeToDatabase
     /**
      * Populate a Userdatasetitem as much as possible.
      */
-    private Userdatasetitem createDatasetItem(String tableName, long PK) throws SQLException {
+    private Userdatasetitem createDatasetItem(String tableName, long PK) 
+      throws SQLException {
         AccessionCode dsiAC = new AccessionCode(ag.getAccession(tableName, PK));
         return DatasetUtility.createDatasetItem(dsiAC, null);
 
@@ -2327,7 +2413,8 @@ public class LoadTreeToDatabase
         dsiBean.setItemtable(dsiAC.getEntityName());
         dsiBean.setItemrecord(dsiAC.getEntityId().toString());
 
-        log.debug("+++ ADDING userdatasetitem for " + tableName + ": " + dsiBean.getItemaccessioncode());
+        log.debug("+++ ADDING userdatasetitem for " + tableName + ": " + 
+          dsiBean.getItemaccessioncode());
         return dsiBean;
         */
     }
@@ -2363,8 +2450,10 @@ public class LoadTreeToDatabase
 
                     } catch (Exception bex) {
                         log.error("problem while inserting userDatasetItem", bex);
-                        errors.addError(LoadingErrors.DATABASELOADINGERROR, bex.toString());
-                        dlog.append("problem while inserting userDatasetItem: " + bex.toString());
+                        errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                          bex.toString());
+                        dlog.append("problem while inserting userDatasetItem: " + 
+                          bex.toString());
                     }
                 } // end while table PKs
                 //log.debug("DONE");
@@ -2376,7 +2465,8 @@ public class LoadTreeToDatabase
             log.debug("About to insert DSI list; size = " + dsiBeanList.size());
             DatasetUtility dsu = new DatasetUtility();
             AccessionCode dsAC = dsu.insertDataset(dsiBeanList, xmlFileName, 
-                    "Created via XML upload", DatasetUtility.TYPE_LOAD, "private", usrId);
+                    "Created via XML upload", DatasetUtility.TYPE_LOAD, 
+                    "private", usrId);
 
             log.debug("ADDED userdataset " + dsAC.toString());
             return dsAC;
