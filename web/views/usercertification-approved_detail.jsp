@@ -27,7 +27,7 @@
           </logic:empty>
 <logic:notEmpty name="usercert-BEANLIST"><!-- set up table -->
 <vegbank:pager />
-<h2>Certified VegBank Users</h2>
+<h2 class="center">Certified VegBank Users</h2>
 
 <logic:iterate id="onerow" name="usercert-BEANLIST">
 <table  class="leftrightborders" cellpadding="2" >
@@ -38,7 +38,7 @@
 </strong></th>
 </tr>
 <logic:notEmpty name="onerow" property="organizationname">
-<tr class='@nextcolorclass@'><td class="datalabel">Organization</td><td> <bean:write name="onerow" property="organizationname"/></td></tr>
+<tr class='@nextcolorclass@'><td class="datalabel">Current Organization</td><td> <bean:write name="onerow" property="organizationname"/></td></tr>
 </logic:notEmpty>
 
 
@@ -50,7 +50,7 @@
 </tr>
 </logic:notEmpty>
 <logic:notEmpty name="onerow" property="current_org">
-<tr class='@nextcolorclass@'><td align="left" class="datalabel">Current Organization</td>
+<tr class='@nextcolorclass@'><td align="left" class="datalabel">Organization at time of Certification</td>
 <td><bean:write name="onerow" property="current_org"/>&nbsp;</td>
 </tr>
 </logic:notEmpty>
