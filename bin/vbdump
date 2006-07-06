@@ -75,3 +75,8 @@ mv $BACKUP_FILE_PATH_ZIP $BACKUP_LATEST_DIR/
 
 # move the other dumps out of the to-move dir:
 mv $BACKUP_LATEST_TOMOVE_DIR/*.* $BACKUP_OLDARCHIVE/
+
+# perform a VACUUM ANALYZE after the backup operation
+# note for this to work your pg_hba.conf file must be setup
+# for local trust authentication, not password
+vacuumdb -z @databaseName@ -U @databaseUser@
