@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-06 15:31:28 $'
- *	'$Revision: 1.31 $'
+ *	'$Date: 2006-07-06 16:06:32 $'
+ *	'$Revision: 1.32 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -306,7 +306,11 @@ public class LoadTreeToDatabase
             try {
                 // KEYWORD GENERATION
                 timer = new Timer("generate keywords");
-                log.debug("====================== KEYWORD GEN");
+                java.util.Timer keywordsTimer = new java.util.Timer();
+                keywordsTimer.schedule(
+                  new RunKeywordsTimerTask(System.currentTimeMillis()),
+                  new Date(System.currentTimeMillis()));
+                /*log.debug("====================== KEYWORD GEN");
                 dlog.append("====================== KEYWORD GEN");
                 KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
                 Iterator tit = tableKeys.keySet().iterator();
@@ -314,14 +318,14 @@ public class LoadTreeToDatabase
                 while (tit.hasNext()) {
                     String tableName = ((String)tit.next()).toLowerCase();
                     kwGen.updatePartialEntityByTable(tableName);
-                }
+                }*/
                 timer.stop();
-            } catch (SQLException kwex) {
+            } /*catch (SQLException kwex) {
                 log.error("problem inserting new keywords", kwex);
                 errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem generating keywords: " + kwex.toString());
                 timer.stop();
-            } catch (Exception ex) {
+            } */catch (Exception ex) {
                 log.error("Some lame problem inserting new keywords", ex);
                 errors.addError(LoadingErrors.DATABASELOADINGERROR, 
                         "Problem generating keywords: " + ex.toString());
@@ -2530,7 +2534,7 @@ public class LoadTreeToDatabase
     /**
      * thread to run the denorms in.
      */
-    private class RunDenormTimerTask extends java.util.TimerTask
+    private class RunKeywordsTimerTask extends java.util.TimerTask
     {
       private long runtime;
       private boolean run = true;
@@ -2538,7 +2542,7 @@ public class LoadTreeToDatabase
       /**
        * constructor.  pass in the scheduled time of execution in millis
        */
-      public RunDenormTimerTask(long scheduledTime)
+      public RunKeywordsTimerTask(long scheduledTime)
       {
         runtime = scheduledTime;
       }
@@ -2550,8 +2554,33 @@ public class LoadTreeToDatabase
       {
         if(run)
         {
-          Timer t = new Timer("runDenorm thread");
-          runDenorms();
+          System.out.println("==========Running in Keyword Thread=============");
+          Timer t = new Timer("runKeywords thread");
+          try {
+              // KEYWORD GENERATION
+              timer = new Timer("generate keywords");
+              log.debug("====================== KEYWORD GEN");
+              dlog.append("====================== KEYWORD GEN");
+              KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
+              Iterator tit = tableKeys.keySet().iterator();
+              int i = 0;
+              while (tit.hasNext()) {
+                  String tableName = ((String)tit.next()).toLowerCase();
+                  kwGen.updatePartialEntityByTable(tableName);
+              }
+              timer.stop();
+          } catch (SQLException kwex) {
+              log.error("problem inserting new keywords", kwex);
+              errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                      "Problem generating keywords: " + kwex.toString());
+              timer.stop();
+          } catch (Exception ex) {
+              log.error("Some lame problem inserting new keywords", ex);
+              errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                      "Problem generating keywords: " + ex.toString());
+              timer.stop();
+          }
+          System.out.println("==========Done with Keyword Thread=============");
           t.stop();
         }
       }
