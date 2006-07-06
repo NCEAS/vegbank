@@ -6,6 +6,10 @@
  
 <TITLE>Constancy Table : VegBank </TITLE>
   
+  <!-- include script for sorting tables -->
+  <script language="javascript" src="@includes_link@sort_table.js"></script>
+  
+  
  <%@ include file="includeviews/inlinestyles.jsp" %> 
  @webpage_masthead_html@ 
   @possibly_center@  
@@ -38,11 +42,11 @@
      <table class="thinlines sortable" cellpadding="2" id="maintable">
        <tr>
          <!--<th>Plant Concept ID</th>-->
-         <th class="plant_concept_name">             Plant Concept Name</th>                
-         <th class="plant_full_scientific_name">     Full Scientific Name</th>
-         <th class="plant_scientific_name_noauthors">Scientific Without Authors</th>
-         <th class="plant_common_name">              Common Name</th>
-         <th class="plant_code">                     Code</th>
+         <th class="plant_concept_name"></th>                
+         <th class="plant_full_scientific_name"></th>
+         <th class="plant_scientific_name_noauthors"></th>
+         <th class="plant_common_name"></th>
+         <th class="plant_code"></th>
          <% rowClass="evenrow" ; %><!-- reset colors for row -->
          <!-- show dataset details -->
          <!-- wparam is on the URL line -->
@@ -51,17 +55,32 @@
          <% String userdatasetsInOrder = "-1" ; %><!-- the first id, -1 will be ignored later -->
          <logic:notEmpty name="datasettop-BEANLIST">
            <logic:iterate id="onerowofdatasettop" name="datasettop-BEANLIST">
-             <!-- 2 COLS for EACH DATASET! -->
+             <!-- 4 COLS for EACH DATASET! -->
              <bean:define id="currdatasetid"><bean:write name="onerowofdatasettop" property="userdataset_id" /></bean:define>
-             <th class="@nextcolorclass@">Plots<br/> 
+             <th colspan="4">
                Dataset: 
                <a href="@get_link@std/userdataset/<bean:write name='currdatasetid' />"><bean:write name="onerowofdatasettop" property="datasetname" /></a>
-               Total: <bean:write name="onerowofdatasettop" property="countobs" />
+               Total: <bean:write name="onerowofdatasettop" property="countobs" /> plots
                
              </th>
-             <th class="<%= rowClass %>" >Average Cover %<br/> Dataset: <bean:write name="onerowofdatasettop" property="datasetname" /></th>
-             
              <% userdatasetsInOrder = userdatasetsInOrder + "," + currdatasetid ; %>
+           </logic:iterate>
+           </tr><!-- end of top top row -->
+           <tr class="sortbythisrow"><!-- start of secondary header -->
+
+         <th class="plant_concept_name">             Plant Concept Name</th>                
+         <th class="plant_full_scientific_name">     Full Scientific Name</th>
+         <th class="plant_scientific_name_noauthors">Scientific Without Authors</th>
+         <th class="plant_common_name">              Common Name</th>
+         <th class="plant_code">                     Code</th>
+
+           <logic:iterate id="onerowofdatasettop" name="datasettop-BEANLIST">
+             <!-- 4 COLS for EACH DATASET! -->
+             <bean:define id="currdatasetid"><bean:write name="onerowofdatasettop" property="userdataset_id" /></bean:define>
+             <th class="@nextcolorclass@">Plots</th>
+             <th class="<%= rowClass %>" >Avg Cover %<br/> </th>
+             <th class="<%= rowClass %>" >min Cover %<br/> </th>
+             <th class="<%= rowClass %>" >MAX Cover %<br/> </th>
            </logic:iterate>
          </logic:notEmpty>
           <!-- create an array of userdataset_ids in ascending order here, with first one ignored (-1) -->
@@ -88,7 +107,8 @@
                               <!--SKIP b/c:new row to be written! -->
                               <td class="@nextcolorclass@ numeric">0</td>
                               <td class="<%= rowClass %> numeric" >&nbsp;</td><!-- skip this dataset -->
-                              
+                              <td class="<%= rowClass %> numeric" >&nbsp;</td><!-- skip this dataset -->
+                              <td class="<%= rowClass %> numeric" >&nbsp;</td><!-- skip this dataset -->
                             <%
                               currentColumn++ ;
                           }  
@@ -142,7 +162,8 @@
               <!--SKIP b/c:<bean:write name="thisdatasetid_temp" />-->
               <td class="@nextcolorclass@ numeric">0</td>
               <td class="<%= rowClass %> numeric" >&nbsp;</td><!-- skip this dataset -->
-              
+              <td class="<%= rowClass %> numeric" >&nbsp;</td><!-- skip this dataset -->
+              <td class="<%= rowClass %> numeric" >&nbsp;</td><!-- skip this dataset -->
             <%
               currentColumn++ ;
             }
@@ -150,6 +171,8 @@
             %>
          <td class="@nextcolorclass@ numeric"><bean:write name="onerowofmultobssummary" property="countobs" /></td>
          <td class="<%= rowClass %> numeric" ><bean:write name="onerowofmultobssummary" property="avgcover" /></td>
+         <td class="<%= rowClass %> numeric" ><bean:write name="onerowofmultobssummary" property="mincover" /></td>
+         <td class="<%= rowClass %> numeric" ><bean:write name="onerowofmultobssummary" property="maxcover" /></td>
           <% currentColumn++ ; %>
          
          <!-- remember last pc -->
@@ -162,6 +185,8 @@
                                   %>
                                     <!--SKIP b/c:new row to be written! -->
                                     <td class="@nextcolorclass@ numeric">0</td>
+                                    <td class="<%= rowClass %> numeric" >&nbsp;</td><!-- skip this dataset -->
+                                    <td class="<%= rowClass %> numeric" >&nbsp;</td><!-- skip this dataset -->
                                     <td class="<%= rowClass %> numeric" >&nbsp;</td><!-- skip this dataset -->
                                     
                                   <%

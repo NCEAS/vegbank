@@ -317,13 +317,16 @@ CREATE VIEW view_taxonobs_distinctid_curr AS
   
 -- drop view view_taxonobs_distinctid_curr_counts;  
 CREATE VIEW  view_taxonobs_distinctid_curr_counts AS 
-  SELECT userdataset_id, plantconcept_id, count(1) AS countObs,  avg(maxplantcover) AS avgcovernoround
+  SELECT userdataset_id, plantconcept_id, count(1) AS countObs,  avg(maxplantcover) AS avgcovernoround, 
+  min(maxplantcover) AS mincovernoround, max(maxplantcover) AS maxcovernoround
   FROM view_taxonobs_distinctid_curr
   GROUP BY userdataset_id, plantconcept_id;  
   
 -- drop view view_taxonobs_distinctid_curr_counts_plants;
 CREATE VIEW view_taxonobs_distinctid_curr_counts_plants AS
-     SELECT view_taxonobs_distinctid_curr_counts.*,  round(CAST (view_taxonobs_distinctid_curr_counts.avgcovernoround as numeric),3) AS avgcover, 
+     SELECT view_taxonobs_distinctid_curr_counts.*,  round(CAST (view_taxonobs_distinctid_curr_counts.avgcovernoround as numeric),3) AS avgcover,
+     round(CAST (view_taxonobs_distinctid_curr_counts.mincovernoround as numeric),3) AS mincover,
+     round(CAST (view_taxonobs_distinctid_curr_counts.maxcovernoround as numeric),3) AS maxcover,
      temptbl_std_plantnames.plantname, temptbl_std_plantnames.sciname, temptbl_std_plantnames.scinamenoauth,
      temptbl_std_plantnames.code,temptbl_std_plantnames.common FROM temptbl_std_plantnames, view_taxonobs_distinctid_curr_counts 
      WHERE view_taxonobs_distinctid_curr_counts.plantconcept_ID=temptbl_std_plantnames.plantconcept_ID;
