@@ -289,6 +289,10 @@ div.thinlines {border-style: solid;
                  margin: 2px ;
                  border-color:#333333 }
 
+/* extra space for sorting links: */
+table.sortable th {padding: 4px ! important};
+
+
 /* left right class for table gets you vertical lines for your tables only (and surrounding thin line) :
 
 | |

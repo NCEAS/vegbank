@@ -23,6 +23,10 @@ function sortables_init() {
 }
 
 function ts_makeSortable(table) {
+    //converts a table's header into links that trigger javascript that sorts the table by that column:
+    
+     
+    
     if (table.rows && table.rows.length > 0) {
         //check for first 3 rows to see if one row's class is "sortthisrow", if so, sort that row, not top one
         var firstRowNum = 0; //default 0
@@ -38,7 +42,7 @@ function ts_makeSortable(table) {
         var firstRow = table.rows[firstRowNum];
     }
     if (!firstRow) return;
-
+    
     // We have a first row: assume it's the header, and make its contents clickable links
     for (var i=0;i<firstRow.cells.length;i++) {
         var cell = firstRow.cells[i];
@@ -70,6 +74,7 @@ function ts_makeSortable(table) {
 		}
         //cell.innerHTML = 'sort' + cell.innerHTML ;
     }
+   
 }
 
 
@@ -239,7 +244,7 @@ function ts_resortTable(lnk, cellIndex, headerRowIndex) {
     for (ci=0;ci<allspans.length;ci++) {
         if (allspans[ci].className.indexOf('sortarrow') != -1) {
             if (getParent(allspans[ci],"table") == getParent(lnk,"table")) { // in the same table as us?
-     		     allspans[ci].innerHTML = ''
+                 allspans[ci].innerHTML = ''
                 // DO NOT TRY TO REMOVE uparrow and downarrow classes here!
             }
         }

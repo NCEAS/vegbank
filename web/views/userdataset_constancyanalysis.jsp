@@ -78,9 +78,9 @@
              <!-- 4 COLS for EACH DATASET! -->
              <bean:define id="currdatasetid"><bean:write name="onerowofdatasettop" property="userdataset_id" /></bean:define>
              <th class="@nextcolorclass@">Plots</th>
-             <th class="<%= rowClass %>" >Avg Cover %<br/> </th>
-             <th class="<%= rowClass %>" >min Cover %<br/> </th>
-             <th class="<%= rowClass %>" >MAX Cover %<br/> </th>
+             <th class="<%= rowClass %>" >Avg Cover %</th>
+             <th class="<%= rowClass %>" >min Cover %</th>
+             <th class="<%= rowClass %>" >MAX Cover %</th>
            </logic:iterate>
          </logic:notEmpty>
           <!-- create an array of userdataset_ids in ascending order here, with first one ignored (-1) -->
