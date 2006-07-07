@@ -60,7 +60,7 @@ function ts_makeSortable(table) {
 			// there are links, add link up to point where new link starts
 			//DEBUG: alert('<a starts @ ' + whereA + ' in ' + txtHTML);
 			if (whereA == 0 ) {
-				alert ('<a starts:' + txtHTML);
+				// alert ('<a starts:' + txtHTML);
 				// add a little something since the start of the whole thing is a link
 				linkStart = linkStart + 'sort';
 			}
@@ -95,10 +95,15 @@ function ts_getInnerText(el) {
 }
 
 function ts_resortTable(lnk, cellIndex, headerRowIndex) {
+    //sorts a table according to the current column
+    
     // get the span
     var span;
+    
     var spanColl = lnk.getElementsByTagName("span");
+    
     // dEBUG: &(spanColl.length);
+    //this gets the arrow on the current link, if applicable:
     for (var ci=0;ci<spanColl.length;ci++) {
         if (spanColl[ci].className && spanColl[ci].className.indexOf('sortarrow') != -1) {
 			span = spanColl[ci];
