@@ -109,9 +109,7 @@ function ts_resortTable(lnk, cellIndex, headerRowIndex) {
     // try it the old way for Safari
    // var td2 = lnk.parentNode;
     
-    var column = cellIndex ; //|| td.cellIndex;
-    
-    var rowStartSort = headerRowIndex ; //start on next row after headerRowIndex passed, i.e. don't sort header.
+    var column = cellIndex ; // just use the passed cell index or column index
     
     var table = getParent(td,'TABLE');
 
@@ -120,13 +118,14 @@ function ts_resortTable(lnk, cellIndex, headerRowIndex) {
     // problem: sometimes the cells are hidden and this causes problems with this approach:
     //  var itm = ts_getInnerText(table.rows[1].cells[column]);
     var itm= "";
-    var cr = rowStartSort;
+    var cr = headerRowIndex + 1;  //start on next row after headerRowIndex passed
     //get a value from the table, and try to get one that isn't empty.
     //alert('column is:' + column);
     // default:
     SORT_COLUMN_INDEX = column;
     
-    //loop through rows
+    //loop through rows and columns to try to get the first piece of data, to see what type of data it is:
+    // loop rows:
     do
 	  {
         // loop through columns to find the one we are sorting based on
@@ -169,9 +168,9 @@ function ts_resortTable(lnk, cellIndex, headerRowIndex) {
     // SORT_COLUMN_INDEX = column;
    // var firstRow = new Array();
     var newRows = new Array();
-   // for (i=0;i<table.rows[rowStartSort].length;i++) { firstRow[i] = table.rows[0][i]; }
+   // for (i=0;i<table.rows[headerRowIndex].length;i++) { firstRow[i] = table.rows[0][i]; }
    // alert("firstRow is this long: " + firstRow.length);
-    var startSortingAtRowNum = headerRowIndex + 1;
+    var startSortingAtRowNum = headerRowIndex + 1; //start sorting at next row after header that was passed
     for (j=( startSortingAtRowNum );j<table.rows.length;j++) { 
         // alert('adding row:' + j);
         newRows[j- startSortingAtRowNum] = table.rows[j]; 
@@ -219,14 +218,19 @@ function ts_resortTable(lnk, cellIndex, headerRowIndex) {
     }
 
     // do sortbottom rows only
-    // for (i=rowStartSort;i<newRows.length;i++) { 
-    //      if (newRows[i].className && (newRows[i].className.indexOf('sortbottom') != -1)) {
-    //          table.tBodies[0].appendChild(newRows[i]);
-    //      }
-    // }
+     for (i=0;i<newRows.length;i++) { 
+          if (newRows[i].className && (newRows[i].className.indexOf('sortbottom') != -1)) {
+              table.tBodies[0].appendChild(newRows[i]);
+          }
+     }
 
     // Delete any other arrows there may be showing
-    var allspans = document.getElementsByTagName("span");
+    var allspans = getParent(td,"TR").getElementsByTagName("span");
+    if (allspans.length == 0 ) {
+        //backup attempt to get them:
+        allspans = table.getElementsByTagName("span");
+    }
+    //alert('got spans in TR:' + allspans.length);
     for (ci=0;ci<allspans.length;ci++) {
         if (allspans[ci].className.indexOf('sortarrow') != -1) {
             if (getParent(allspans[ci],"table") == getParent(lnk,"table")) { // in the same table as us?
