@@ -17,7 +17,7 @@ function getHelpPageId() {
     <fieldset id="tut_findplots">
     <legend>Find Plots</legend>
     <ul>
-    <li><a href="@general_link@faq.html#whatisplot">What is a plot?</a></li>
+    
     <li><a href="@browseplotspage@">Browse plots</a></li>
     <li><a href="@plotquery_page_simple@">Simple search</a></li>
     <li><a href="@views_link@plot-query-bymap.jsp">Search with a map</a></li>
@@ -85,10 +85,26 @@ function getHelpPageId() {
 
 
     <div id="content-3col-c">
+    
+     <%@ include file="includes/news.html" %>
+        <br />
+    
+    
+        <fieldset id="tut_myaccount">
+        <legend>My VegBank Account</legend>
+        <ul>
+        <li><a href="@web_context@LoadUser.do">Edit profile information</a></li>
+        <li><a href="@general_link@datasets.html">Manage datasets</a></li>
+        </ul>
+        </fieldset>
+        <br />
+   
+        
     <fieldset id="tut_learnabout">
     <legend>Learn About VegBank</legend>
     <ul>
     <li><a href="@general_link@info.html">What is VegBank?</a></li>
+    <li><a href="@general_link@faq.html#whatisplot">What is a plot?</a></li>
     <li><a href="@general_link@faq.html">FAQ</a></li>
     <li><a href="@jspHelpPage@">Tutorial</a></li>
     <li><a href="@general_link@cite.html">Cite or link to VegBank</a></li>
@@ -121,16 +137,6 @@ function getHelpPageId() {
     </ul>
     </fieldset>
 
-    <br />
-    <fieldset id="tut_myaccount">
-    <legend>My VegBank Account</legend>
-    <ul>
-    <li><a href="@web_context@LoadUser.do">Edit profile information</a></li>
-    <li><a href="@general_link@datasets.html">Manage datasets</a></li>
-    </ul>
-    </fieldset>
-    <br />
-    <%@ include file="includes/news.html" %>
     
   
     <% 
