@@ -171,7 +171,7 @@ bash$ psql -U vegbank vegbank < build/sql/create_aggregrates.sql
 bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
 bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
 bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
-bash$ psql -U vegbank vegbank < build/sql/create_andPopulate_configTables.sql
+bash$ psql -U vegbank vegbank < build/sql/vegbank_populate_configtables.sql
 
 Note that if you use a backup file, you will need to run the script 
 src/sql/create_aggregrates.sql to create the aggregate CONCAT function since
@@ -216,7 +216,7 @@ bash$ psql -U vegbank vegbank < build/sql/create_aggregrates.sql
 bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
 bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
 bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
-bash$ psql -U vegbank vegbank < build/sql/create_andPopulate_configTables.sql
+bash$ psql -U vegbank vegbank < build/sql/vegbank_populate_configtables.sql
 
 You won't have to update the version numbers in this scenario.
 
