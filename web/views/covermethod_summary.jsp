@@ -14,6 +14,15 @@
  @webpage_masthead_html@ 
   @possibly_center@  
 <h2>View VegBank Cover Methods</h2>
+
+
+<!-- add search box -->
+<bean:define id="entityToSearch" value="covermethod" />
+<bean:define id="NameOfEntityToPresent" value="cover method" />
+<bean:define id="SearchInstructions" value="(enter a name, cover index)" /> 
+<%@ include file="includeviews/sub_searchEntity.jsp" %>
+
+
           <logic:notPresent parameter="orderBy">
               <!-- set default sorting -->
               <bean:define id="orderBy" value="xorderby_covertype" />

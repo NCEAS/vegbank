@@ -11,91 +11,10 @@
 <h2>View VegBank Projects</h2>
 
 
-
-<!-- ############################################### -->
-<!--            start of search box                  --> 
-<!-- ############################################### -->
-<!-- % String searchString = request.getParameter("xwhereParams"); % -->
-<!-- collect previous info on project: -->
-<bean:parameter id="beansearchString" value="" name="xwhereParams" />
-<bean:parameter id="beanxwhereMatchAny" value="" name="xwhereMatchAny" />
-<bean:parameter id="beanxwhereMatchWholeWords" value="" name="xwhereMatchWholeWords"/>
-
-<form action="@views_link@project_summary.jsp" method="get">
-    <table cellpadding="0" cellspacing="0" border="0" bgcolor="#DDDDDD">
-    <tr>
-        <td><img src="@image_server@uplt3.gif"/></td>
-        <td></td>
-        <td><img src="@image_server@uprt3.gif"/></td>
-    </tr>
-
-    <tr>
-        <td></td>
-        <td><span id="searchProjectShown">
-            <!-- link to hide this: -->
-            
-            <input type="hidden" name="clearSearch" value="" />
-            <input type="hidden" name="xwhereKey" value="xwhere_kw_match" />
-            <input type="hidden" name="where" value="where_keywords_pk_in" />
-            <input type="hidden" name="wparam" value="project__project" />
-            <input type="hidden" name="xwhereSearch" value="true" />
-            <span class="greytext">
-            &nbsp; Search for a project (enter a name, organization, etc.):
-            &nbsp;&nbsp;
-              <a href="#" onclick="showorhidediv('searchProjectShown');showorhidediv('searchProjectHidden');return false;">
-                &lt;&lt;Hide search
-              </a>
-            </span>
-            <br />
-             <input type="text" name="xwhereParams" size="30" value="<bean:write name='beansearchString' />"/>
-             <html:submit value="search" />
-       
-       <!--</td>
-        </tr>
-        <tr><td></td><td align="right"> -->
-        
-        <div align="right">
-             <input type="checkbox" name="xwhereMatchAny" <logic:equal value='on' name='beanxwhereMatchAny' >checked="checked" </logic:equal> />
-                Match any word
-        </div>
-       
-        <!--
-        </td>
-        <td></td>
-    </tr>
-        <tr><td></td><td align="right">
-        -->
-        <div align="right">
-        <!-- check this box if this search is a wparam search and it was checked before, or if it isn't a search: -->
-              <input type="checkbox" 
-                     name="xwhereMatchWholeWords" 
-                     <logic:empty  name='beansearchString' > checked="checked" </logic:empty> 
-                     <logic:equal value='on' name='beanxwhereMatchWholeWords' >checked="checked" </logic:equal>  
-                />
-                Match whole words only
-          </div>
-       <!-- end of shown search span --></span>
-       
-       <span id="searchProjectHidden" style="display:none" class="greytext">
-           <a href="#" onclick="showorhidediv('searchProjectShown');showorhidediv('searchProjectHidden');return false;">
-             Search for Project &gt;&gt;
-           </a>
-        </span></td>
-            <td></td> 
-            
-    </tr>
-    <tr>
-        <td><img src="@image_server@lwlt3.gif"/></td>
-        <td></td>
-        <td><img src="@image_server@lwrt3.gif"/></td>
-    </tr>
-    
-    </table>
-</form>
-<br />
-<!-- ############################################### -->
-<!--            end of search box                    --> 
-<!-- ############################################### -->
+<!-- add search box -->
+<bean:define id="entityToSearch" value="project" />
+<bean:define id="SearchInstructions" value="(enter a name, place, person, etc.)" /> 
+<%@ include file="includeviews/sub_searchEntity.jsp" %>
 
 
      <logic:notPresent parameter="orderBy">

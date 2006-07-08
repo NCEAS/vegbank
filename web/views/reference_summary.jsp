@@ -8,6 +8,12 @@
  @webpage_masthead_html@  
 @possibly_center@
 <h2>View VegBank References</h2>
+
+<!-- add search box -->
+<bean:define id="entityToSearch" value="reference" />
+<bean:define id="SearchInstructions" value="(enter a title, author, etc.)" /> 
+<%@ include file="includeviews/sub_searchEntity.jsp" %>
+
         
 <vegbank:get id="reference" select="reference" beanName="map" pager="true" xwhereEnable="true" allowOrderBy="true"/>
 <!--Where statement removed from preceding: -->

@@ -9,93 +9,10 @@
   @possibly_center@  
 <h2>View VegBank Parties</h2>
 
-<!-- ############################################### -->
-<!--            start of search box                  --> 
-<!-- ############################################### -->
-
-<!-- % String searchString = request.getParameter("xwhereParams"); % -->
-<!-- collect previous info on parties: -->
-<bean:parameter id="beansearchString" value="" name="xwhereParams" />
-<bean:parameter id="beanxwhereMatchAny" value="" name="xwhereMatchAny" />
-<bean:parameter id="beanxwhereMatchWholeWords" value="" name="xwhereMatchWholeWords"/>
-
-<form action="@views_link@party_summary.jsp" method="get">
-    <table cellpadding="0" cellspacing="0" border="0" bgcolor="#DDDDDD">
-    <tr>
-        <td><img src="@image_server@uplt3.gif"/></td>
-        <td></td>
-        <td><img src="@image_server@uprt3.gif"/></td>
-    </tr>
-
-    <tr>
-        <td></td>
-        <td><span id="searchPartyShown">
-            <!-- link to hide this: -->
-            
-            <input type="hidden" name="clearSearch" value="" />
-            <input type="hidden" name="xwhereKey" value="xwhere_kw_match" />
-            <input type="hidden" name="where" value="where_keywords_pk_in" />
-            <input type="hidden" name="wparam" value="party__party" />
-            <input type="hidden" name="xwhereSearch" value="true" />
-            <span class="greytext">
-            &nbsp; Search for a party (enter a name, organization, etc.):
-            &nbsp;&nbsp;
-              <a href="#" onclick="showorhidediv('searchPartyShown');showorhidediv('searchPartyHidden');return false;">
-                &lt;&lt;Hide search
-              </a>
-            </span>
-            <br />
-             <input type="text" name="xwhereParams" size="30" value="<bean:write name='beansearchString' />"/>
-             <html:submit value="search" />
-       
-       <!--</td>
-        </tr>
-        <tr><td></td><td align="right"> -->
-        
-        <div align="right">
-             <input type="checkbox" name="xwhereMatchAny" <logic:equal value='on' name='beanxwhereMatchAny' >checked="checked" </logic:equal> />
-                Match any word
-        </div>
-       
-        <!--
-        </td>
-        <td></td>
-    </tr>
-        <tr><td></td><td align="right">
-        -->
-        <div align="right">
-        <!-- check this box if this search is a wparam search and it was checked before, or if it isn't a search: -->
-              <input type="checkbox" 
-                     name="xwhereMatchWholeWords" 
-                     <logic:empty  name='beansearchString' > checked="checked" </logic:empty> 
-                     <logic:equal value='on' name='beanxwhereMatchWholeWords' >checked="checked" </logic:equal>  
-                />
-                Match whole words only
-          </div>
-       <!-- end of shown search span --></span>
-       
-       <span id="searchPartyHidden" style="display:none" class="greytext">
-           <a href="#" onclick="showorhidediv('searchPartyShown');showorhidediv('searchPartyHidden');return false;">
-             Search for a party &gt;&gt;
-           </a>
-        </span></td>
-            <td></td> 
-            
-    </tr>
-    <tr>
-        <td><img src="@image_server@lwlt3.gif"/></td>
-        <td></td>
-        <td><img src="@image_server@lwrt3.gif"/></td>
-    </tr>
-    
-    </table>
-</form>
-<br />
-
-
-<!-- ############################################### -->
-<!--              end of search box                  --> 
-<!-- ############################################### -->
+<!-- add search box -->
+<bean:define id="entityToSearch" value="party" />
+<bean:define id="SearchInstructions" value="(enter a name, organization, etc.)" /> 
+<%@ include file="includeviews/sub_searchEntity.jsp" %>
 
 
        <logic:notPresent parameter="orderBy">

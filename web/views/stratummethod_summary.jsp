@@ -15,6 +15,15 @@
  @webpage_masthead_html@ 
   @possibly_center@  
 <h2>View VegBank Stratum Methods</h2>
+<!-- add search box -->
+<bean:define id="entityToSearch" value="stratummethod" />
+<bean:define id="NameOfEntityToPresent" value="stratum method" />
+<bean:define id="SearchInstructions" value="(enter a name, description, type)" /> 
+<%@ include file="includeviews/sub_searchEntity.jsp" %>
+
+
+
+
         <vegbank:get id="stratummethod" select="stratummethod" beanName="map" pager="true"  
           allowOrderBy="true" xwhereEnable="true"/>
 
