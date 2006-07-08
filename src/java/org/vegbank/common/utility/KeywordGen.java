@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-06-30 20:12:22 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2006-07-08 08:57:20 $'
+ *	'$Revision: 1.14 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ public class KeywordGen {
 
 		try {
 			Class.forName("org.postgresql.Driver");
-			conn = DriverManager.getConnection(dbURL, "vegbank", "");			
+            conn = DriverManager.getConnection(dbURL, dbName, "dta4all");          
 
 			String s = prompt("\nAre you sure you want to update keywords in " +
 					dbName + " on " + dbHost + " [y|n] > ");
@@ -377,13 +377,20 @@ public class KeywordGen {
 		 	pstmt = getUpdatePreparedStatement();
 		} else {
             if (useTempTable) {
-                // create empty temp table
-                kwTable = kwTable + Thread.currentThread().hashCode();
+                // create empty temp table, include name of entity to keep this entity's stuff applied to only this entity (this table doesn't get dropped)
+                kwTable = kwTable + Thread.currentThread().hashCode() + entityName;
                 log.debug("creating TEMP TABLE " + kwTable);
+                String sqlTempTbl = "SELECT * INTO TEMP TABLE " + kwTable + " FROM keywords WHERE true=false";
                 try {
-                    stmt.executeUpdate("SELECT * INTO TEMP TABLE " + kwTable + " FROM keywords WHERE true=false");
+                    stmt.executeUpdate(sqlTempTbl);
                 } catch (SQLException s2) {
-                    log.error("Unable to create temp table " + kwTable, s2);
+                    
+                    // this is not an error if there is more than one extra statement on this table.  
+                    // In that case, this table already exists, and the fact that the previous sql didn't work is not significant
+                    // If the temp table REALLY doesn't exist,
+                    // then another error will be thrown later.  (ML)
+                    //  log.error("Unable to create temp table " + kwTable , s2);
+                   
                 }
             }
 		 	pstmt = getInsertPreparedStatement(kwTable);
