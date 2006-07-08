@@ -48,29 +48,28 @@
      <h2><img src="@images_link@maplogo.gif" /> Search for VegBank Plots on a Map</h2>
 
 <p class="instructions">
-On this page, you can draw a rectangle on the map in order to find the plots within it.
-<b>Click the map four times</b> to form a rectangle, with each click representing a vertex
-of the rectangle.  As you click, a blue rectangle will form to 
-show you where the boundaries of your rectangle are.  It doesn't have to be a perfect rectangle,
-but it should be close to a rectangle.  You can also zoom in or out, and drag to move the map around.
-If you make a mistake, click the "reset drawn box on map"
-link below and the map will reset.
-
+On this page, you can search for plots within a particular latitude and longitude.
 </p>
-
-<p class="instructions">After you select four points, press the "find plots" button at the bottom of the page.
-You can close the rectangle, but you don't have to. </p>
+<ul class="instructions">
+  <li><b>Click the map four times</b> to form a rectangle.</li>
+  <li>As you click, a blue rectangle will form to as the boundaries of your rectangle</li>
+  <li>You can also <b>zoom</b> in or out using the + and - buttons, and <b>drag</b> to move the map around.</li>
+  <li>If you make a mistake, click the <b>"reset map"</b> button below and the map will reset.</li>
+  <li>Once you have your rectangle, click the <b>"Find Plots"</b> button.</li>
+  <li>Plots will shown that are within the maximim and minimum latitude and longitude of your clicked points.</li>
+</ul>  
 
 <div id="querymap" style="width: 500px; height: 350px">
 <!-- placeholder for google map to start query -->
 </div>
 <!-- just a link to itself: -->
-<a href="#" onclick='if (VbGClearThisMap()) { VbGClearMapForm(); alert("The map will be reset when you click it."); } ;return false;'>reset drawn box on map</a> 
+
 <!-- @views_link@plot-query-bymap.jsp?reload=true -->
 <br />
 <form name="mapqueryform" action="@views_link@observation_summary.jsp" method="get" onsubmit="javascript:return prepareForm()">
 
-    <input type="submit" value="find plots"/>
+    <input type="submit" value="Find Plots"/> | 
+      <input type="button" onclick='if (VbGClearThisMap()) { VbGClearMapForm(); alert("The map will be reset when you click it."); } ;' value="Reset Map" /> 
     <div class="hidden">
       <!-- the following are copied from the plot-query form, using names from that form, and id's from this one -->
         
