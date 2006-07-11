@@ -5,9 +5,9 @@ package org.vegbank.common.utility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-11-03 00:07:41 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-07-11 19:26:56 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,9 @@ public class XMLUtil
 		Iterator iterator = vegbankModelBeans.iterator();
 		while ( iterator.hasNext() )
 		{
+      //System.out.println("iterating through vegbankModelBeans");
 			VBModelBean vbmb = (VBModelBean) iterator.next();
+      //System.out.println("creating xml: " + vbmb.toXML());
 			sb.append( vbmb.toXML() );
 		}
 		String entireXML = wrapInBoilerPlateXML(sb); 	

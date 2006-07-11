@@ -3,6 +3,9 @@ package org.vegbank.ui.struts;
 import java.io.*;
 import java.util.*;
 import java.text.MessageFormat;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,9 +25,12 @@ import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.DateUtility;
 import org.vegbank.common.utility.ZipUtility;
 import org.vegbank.common.utility.XMLUtil;
+import org.vegbank.common.utility.DBConnection;
+import org.vegbank.common.utility.DBConnectionPool;
 import org.vegbank.plots.datasink.ASCIIReportsHelper;
 import org.vegbank.plots.datasource.DBModelBeanReader;
 import org.vegbank.xmlresource.transformXML;
+
 
 import com.Ostermiller.util.LineEnds;
 
@@ -33,9 +39,9 @@ import com.Ostermiller.util.LineEnds;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-07-21 01:02:25 $'
- *	'$Revision: 1.7 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-07-11 19:26:56 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,6 +107,7 @@ public class DownloadAction extends Action
 		// Get the form
 		DynaActionForm thisForm = (DynaActionForm) form;
 		
+    //System.out.println("thisForm: " + thisForm.toString());
 		Long dsId = (Long)thisForm.get("dsId");
 		String formatType = (String)thisForm.get("formatType");
 		String dataType = (String)thisForm.get("dataType");
@@ -113,9 +120,49 @@ public class DownloadAction extends Action
 		
 		try
 		{
+      try
+      {
+        //get the selectedPlots from the userdatasetitem table
+        //for some reason they are not being passed in by the jsp
+        DBConnection conn = null;
+        conn = DBConnectionPool.getInstance().getDBConnection("Need " +
+          "connection for inserting dataset");
+        conn.setAutoCommit(false);
+        
+        //this sql gets the user selected items from the dataset
+        String sql = "select itemaccessioncode from userdatasetitem " +
+          "where userdataset_id = " + dsId;
+        Statement query = conn.createStatement();
+        ResultSet rs = query.executeQuery(sql);
+        String accCode;
+        Vector plotIds = new Vector();
+        while (rs.next()) 
+        { //add the accession numbers to a vector
+           accCode = rs.getString(1);
+           plotIds.addElement(accCode);
+        }
+        log.debug("DownloadAction: selectedPlots: " + plotIds.toString());
+        selectedPlots = new String[plotIds.size()];
+        for(int i=0; i<plotIds.size(); i++)
+        {
+         selectedPlots[i] = (String)plotIds.elementAt(i);
+        }
+        rs.close();
+        DBConnectionPool.returnDBConnection(conn);
+      }
+      catch(SQLException sqle)
+      {
+        log.debug("DownloadAction: " + sqle.getMessage(), sqle);
+        sqle.printStackTrace();
+        errors.add(
+          Globals.ERROR_KEY,
+          new ActionMessage("errors.action.failed", sqle.getMessage() ));
+        return mapping.findForward("failure");
+      }
+      
 			// Handle the format type
 			if ( formatType.equalsIgnoreCase( XML_FORMAT_TYPE) )
-			{
+			{ 
 				// Store the returned ModelBean Trees
 				Collection plotObservations = this.getPlotObservations(selectedPlots);
 		
@@ -142,85 +189,42 @@ public class DownloadAction extends Action
 				/////////////////
 			} else if ( formatType.equalsIgnoreCase( FLAT_FORMAT_TYPE ) ) {
 
-                // exec psql queries to create files
-                // zip files into one
-                // redir to that file
-                String taxaSQL = sqlStore.getString("csv_taxonimportance");
-                String envSQL = sqlStore.getString("csv_plotandobservation");
-                String where = sqlStore.getString("where_inuserdataset_pk_obs");
-                String[] sqlParams = new String[1];
-                sqlParams[0] = dsId.toString();
-                Hashtable nameContent = new Hashtable();
+        // exec psql queries to create files
+        // zip files into one
+        // redir to that file
+        String taxaSQL = sqlStore.getString("csv_taxonimportance");
+        String envSQL = sqlStore.getString("csv_plotandobservation");
+        String where = sqlStore.getString("where_inuserdataset_pk_obs");
+        String[] sqlParams = new String[1];
+        sqlParams[0] = dsId.toString();
+        Hashtable nameContent = new Hashtable();
 
-                String nulls = (blankEmpties ? "": "null");
+        String nulls = (blankEmpties ? "": "null");
 
-                try {
+        try {
 
-                    // TAXA
-                    nameContent.put("plot_taxa.csv", getCSVResults(taxaSQL, where, sqlParams, nulls));
+            // TAXA
+            nameContent.put("plot_taxa.csv", getCSVResults(taxaSQL, where, sqlParams, nulls));
 
-                    // ENV
-                    nameContent.put("plot_env.csv", getCSVResults(envSQL, where, sqlParams, nulls));
+            // ENV
+            nameContent.put("plot_env.csv", getCSVResults(envSQL, where, sqlParams, nulls));
 
 
-                    this.initResponseForFileDownload(response, "vegbank_export_csv.zip", ZIP_CONTENT_TYPE);
-                    OutputStream responseOutputStream = response.getOutputStream();
-                    
-                    ZipUtility.zipTextFiles(nameContent, responseOutputStream);
-                    //ZipUtility.zipTextFiles(nameContent, responseOutputStream, LineEnds.STYLE_DOS);
+            this.initResponseForFileDownload(response, "vegbank_export_csv.zip", ZIP_CONTENT_TYPE);
+            OutputStream responseOutputStream = response.getOutputStream();
+            
+            ZipUtility.zipTextFiles(nameContent, responseOutputStream);
+            //ZipUtility.zipTextFiles(nameContent, responseOutputStream, LineEnds.STYLE_DOS);
 
-                } catch (SecurityException sex) {
-                    log.error("security exception while executing psql", sex);
-                } catch (IOException ioe) {
-                    log.error("IO exception while executing psql", ioe);
-                } catch (NullPointerException npe) {
-                    log.error("null pointer exception while executing psql", npe);
-                } catch (IllegalArgumentException iae) {
-                    log.error("illegal argument exception while executing psql", iae);
-                }
-
-                
-                /*
-                String environmentalData = null;
-                String speciesData = null;
-                Collection plotObservations = this.getPlotObservations(selectedPlots);
-                if (dataType.equalsIgnoreCase(ENVIRONMENTAL_DATA_TYPE)
-                        || dataType.equalsIgnoreCase(ALL_DATA_TYPE)) { 
-                    environmentalData = ASCIIReportsHelper.getEnvironmentalData(plotObservations);
-                }
-                if (dataType.equalsIgnoreCase(SPECIES_DATA_TYPE)
-                        || dataType.equalsIgnoreCase(ALL_DATA_TYPE)) {
-                    speciesData =
-                        ASCIIReportsHelper.getSpeciesData(plotObservations);
-                }
-
-                // Place generated file in ZIP archive
-                if ( dataType.equalsIgnoreCase(ALL_DATA_TYPE) )
-                {
-                    this.initResponseForFileDownload(response, "VegbankPlotsFlat.zip", ZIP_CONTENT_TYPE);
-                    
-                    Hashtable nameContent = new Hashtable();
-                    nameContent.put("environmentalData.txt",environmentalData);
-                    nameContent.put("speciesData.txt", speciesData);
-                    OutputStream responseOutputStream = response.getOutputStream();
-                    responseOutputStream.flush();
-                    
-                    // TODO: Get the OS of user if possible and return a native file	
-                    // For now use DOS style, cause those idiots would freak with anything else ;)					
-                    ZipUtility.zipTextFiles(nameContent, responseOutputStream);
-                    
-                }
-                // Just downLoad the generated file
-                else 
-                {
-                    this.initResponseForFileDownload( response, "VegbankDownload.txt", DOWNLOAD_CONTENT_TYPE);
-                    if ( environmentalData != null ) {
-                        this.sendFileToBrowser( environmentalData.toString() , response);
-                    } else if ( speciesData != null ) {
-                        this.sendFileToBrowser( speciesData.toString() , response);
-                    }
-                }
-                */
+        } catch (SecurityException sex) {
+            log.error("security exception while executing psql", sex);
+        } catch (IOException ioe) {
+            log.error("IO exception while executing psql", ioe);
+        } catch (NullPointerException npe) {
+            log.error("null pointer exception while executing psql", npe);
+        } catch (IllegalArgumentException iae) {
+            log.error("illegal argument exception while executing psql", iae);
+        }
 
 			} else if ( formatType.equalsIgnoreCase( VEGBRANCH_FORMAT_TYPE) ) {
 				// Store the returned ModelBean Trees

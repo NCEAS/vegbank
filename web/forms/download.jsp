@@ -92,9 +92,9 @@ if (ok) {
                </li>
 
               <li class="evenrow padded">
-                <input type="radio" value="xml" name="formatType" disabled="disabled"/>
+                <input type="radio" value="xml" name="formatType"/>
                 <img src="@images_link@xml_icon.gif" alt="XML format" />
-                <strong>XML</strong> - future development
+                <strong>XML</strong> - Warning, this can be slow if you have selected a lot of observations.
                 <blockquote>XML documents are for advanced users.  VegBank's XML format
                    describes plots, plants, communities and other entities found in our database.  
                    Please see <a href="@NativeXMLIndexPage@">our XML index</a> for more sample XML 
