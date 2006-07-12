@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-03-22 00:42:21 $'
- *	'$Revision: 1.22 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-07-12 19:48:46 $'
+ *	'$Revision: 1.23 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -275,7 +275,10 @@ public class DBModelBeanReader
 		
 		// StratumMethod
 		Stratummethod stratumMethod = obs.getStratummethodobject();
-		getRelatedObjectsFromDB(Stratummethod.PKNAME, stratumMethod.getStratummethod_id(), stratumMethod );
+    if(stratumMethod != null)
+    {
+      getRelatedObjectsFromDB(Stratummethod.PKNAME, stratumMethod.getStratummethod_id(), stratumMethod );
+    }
 		
 		// ProjectContributors
 		Iterator projectContributors =project.getproject_projectcontributors().iterator();
