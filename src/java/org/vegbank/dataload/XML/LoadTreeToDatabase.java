@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-06 18:25:22 $'
- *	'$Revision: 1.33 $'
+ *	'$Date: 2006-07-12 21:23:37 $'
+ *	'$Revision: 1.34 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,6 +70,7 @@ import org.vegbank.common.model.Taxoninterpretation;
 import org.vegbank.common.model.Taxonobservation;
 import org.vegbank.common.model.Userdatasetitem;
 import org.vegbank.common.model.Userdataset;
+import org.vegbank.common.model.VBModelBean;
 import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DenormUtility;
 import org.vegbank.common.utility.DBConnection;
@@ -81,6 +82,7 @@ import org.vegbank.common.utility.DataloadLog;
 import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.AccessionCode;
 import org.vegbank.common.utility.Timer;
+import org.vegbank.plots.datasource.DBModelBeanReader;
 
 
 /**
@@ -373,11 +375,18 @@ public class LoadTreeToDatabase
             log.error("problem writing dataload log to dataload.log: ", ioex);
         }
 
-
-		//Return dbconnection to pool
-		//DBConnectionPool.returnDBConnection(writeConn);
-		//readConn.setReadOnly(false);
-		//DBConnectionPool.returnDBConnection(readConn);
+    //set off a thread that caches the XML generated from the beans
+    java.util.Timer xmlGenTimer = new java.util.Timer();
+    RunXMLGenTimerTask task;
+    Iterator accCodes = this.addAllAccessionCodes().iterator();
+    while(accCodes.hasNext())
+    {
+      String accCode = (String)accCodes.next();
+      task = new RunXMLGenTimerTask(System.currentTimeMillis());
+      task.setAccessionCode(accCode);
+      xmlGenTimer.schedule(task, new Date(System.currentTimeMillis()));
+    }
+      
     t1.stop();
 	}
 
@@ -1507,7 +1516,6 @@ public class LoadTreeToDatabase
 		{
 			return observationId;
 		}
-		Timer obsTimer = new Timer("IOT1");
 		//	Need to insert the plot and the project and get the FKs
 		Hashtable project = this.getFKChildTable(observationHash, 
       Observation.PROJECT_ID, "project");
@@ -1526,8 +1534,6 @@ public class LoadTreeToDatabase
 		{
 			previousObsId = insertObservation(previousObs);
 		}
-		obsTimer.stop();
-    obsTimer = new Timer("IOT2");
     
 		addForeignKey(observationHash, Observation.PREVIOUSOBS_ID, previousObsId);
 		addForeignKey(observationHash, Observation.PLOT_ID, plotId);
@@ -1552,9 +1558,6 @@ public class LoadTreeToDatabase
       Observation.SOILTAXON_ID, "soilTaxon");
 		long soilTaxonId = insertTable("soilTaxon", soilTaxon);
 		addForeignKey(observationHash, Observation.SOILTAXON_ID, soilTaxonId);
-		
-		obsTimer.stop();
-    obsTimer = new Timer("IOT3");
     
 		// Insert the observation
 		observationId = insertTable("observation", observationHash);
@@ -1579,9 +1582,6 @@ public class LoadTreeToDatabase
         (Hashtable) ocs.nextElement(), Observationcontributor.OBSERVATION_ID,  
         observationId);
 		}
-		
-    obsTimer.stop();
-    obsTimer = new Timer("IOT4");
     
 		// Add stratums
 		Enumeration stratums = getChildTables(observationHash, "stratum");
@@ -1590,9 +1590,6 @@ public class LoadTreeToDatabase
 			Hashtable stratum = (Hashtable) stratums.nextElement();
 			long stratumId = insertStratum(stratum, stratumMethodId, observationId);
 		}
-		
-    obsTimer.stop();
-    obsTimer = new Timer("IOT5");
     
 		// Add commClass
 		Enumeration commClasses =  getChildTables(observationHash, "commClass");
@@ -1621,9 +1618,6 @@ public class LoadTreeToDatabase
 				this.insertCommInterpetation(commIntepretation);
 			}
 		}
-    
-    obsTimer.stop();
-    obsTimer = new Timer("IOT6.0");
 		
 		// Insert the taxonObservations
 		insertTaxonObservations(
@@ -1631,13 +1625,10 @@ public class LoadTreeToDatabase
 			observationId,
 			stratumMethodId);
 			
-		obsTimer.stop();
-    obsTimer = new Timer("IOT6.1");
 		// Add the observation synonyms 
 		Enumeration observationSynonyms =  getChildTables(observationHash, 
       "observationSynonym");
-    obsTimer.stop();
-    obsTimer = new Timer("IOT6.2");
+
 		while ( observationSynonyms.hasMoreElements() )
 		{
       
@@ -1668,7 +1659,6 @@ public class LoadTreeToDatabase
         observationSynonym);
 			
 		}
-    obsTimer.stop();
 		
 		return observationId;
 	}
@@ -2605,6 +2595,76 @@ public class LoadTreeToDatabase
       public long scheduledExecutionTime()
       {
         return runtime;
+      }
+    }
+    
+    /**
+     * thread to run the denorms in.
+     */
+    private class RunXMLGenTimerTask extends java.util.TimerTask
+    {
+      private long runtime;
+      private boolean run = true;
+      private String accCode = "";
+      
+      /**
+       * constructor.  pass in the scheduled time of execution in millis
+       */
+      public RunXMLGenTimerTask(long scheduledTime)
+      {
+        runtime = scheduledTime;
+      }
+      
+      /**
+       * run the task
+       */
+      public void run()
+      {
+        if(run)
+        {
+          try
+          {
+            System.out.println("==============In runXMLGenTimerTask==============");
+            DBModelBeanReader beanReader = new DBModelBeanReader();
+            VBModelBean bean = beanReader.getVBModelBean(accCode);
+            //System.out.println("=========generating xml for " + accCode);
+            //System.out.println("=========XML: " + bean.toXML());
+          } catch (SQLException kwex) {
+              log.error("SQL problem caching bean xml", kwex);
+              errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                      "SQL problem caching bean xml: " + kwex.toString());
+          } catch (Exception ex) {
+              log.error("problem caching bean xml", ex);
+              errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                      "problem caching bean xml: " + ex.toString());
+          }
+          System.out.println("==============Done with runXMLGenTimerTask==============");
+        }
+      }
+      
+      /**
+       * cancel the task
+       */
+      public boolean cancel()
+      {
+        run = false;
+        return run;
+      }
+      
+      /**
+       * returns the scheduled exe time.
+       */
+      public long scheduledExecutionTime()
+      {
+        return runtime;
+      }
+      
+      /**
+       * sets the accession code that you want to cache the xml for
+       */
+      public void setAccessionCode(String accCode)
+      {
+        this.accCode = accCode;
       }
     }
 }
