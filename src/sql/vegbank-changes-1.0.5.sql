@@ -4,7 +4,10 @@
 
 -- views MUST BE DROPPED FIRST, then this file run, then VIEWS RESTORED.  (drop_vegank_views.sql then create_vegbank_views.sql)
 
-
+--create the table for the xml cache.
+create table dba_xmlCache (
+accessioncode   varchar(100),
+xml             bytea);
 
 CREATE TABLE dba_datamodelversion
 (
@@ -14,9 +17,6 @@ versionImplemented  timestamp with time zone  DEFAULT now() ,
 
 PRIMARY KEY ( dba_datamodelversion_ID )
 );
-
-
-
 
 --create table that stores a list of newly requested accession codes, but these elements aren't in the db yet:
 create table dba_preassignacccode (

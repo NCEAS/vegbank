@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-13 20:15:42 $'
- *	'$Revision: 1.36 $'
+ *	'$Date: 2006-07-13 20:16:11 $'
+ *	'$Revision: 1.37 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2627,7 +2627,7 @@ public class LoadTreeToDatabase
             
             SQL for the table
             -----------------
-            create table xmlCache (
+            create table dba_xmlCache (
               accessioncode   varchar(100),
               xml             bytea);
           */
