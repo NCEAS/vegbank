@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-12 21:23:37 $'
- *	'$Revision: 1.34 $'
+ *	'$Date: 2006-07-13 20:12:34 $'
+ *	'$Revision: 1.35 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ package org.vegbank.dataload.XML;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.util.regex.*;
 import java.util.*;
 import java.io.*;
 
@@ -309,9 +311,9 @@ public class LoadTreeToDatabase
                 // KEYWORD GENERATION
                 timer = new Timer("generate keywords");
                 java.util.Timer keywordsTimer = new java.util.Timer();
-                keywordsTimer.schedule(
-                  new RunKeywordsTimerTask(System.currentTimeMillis()),
-                  new Date(System.currentTimeMillis()));
+                //keywordsTimer.schedule(
+                //  new RunKeywordsTimerTask(System.currentTimeMillis()),
+                //  new Date(System.currentTimeMillis()));
                 /*log.debug("====================== KEYWORD GEN");
                 dlog.append("====================== KEYWORD GEN");
                 KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
@@ -335,6 +337,13 @@ public class LoadTreeToDatabase
             }
                 //log.error("\n\nREMEMBER TO GEN KEYWORDS!\n\n");
 
+             //set off a thread that caches the XML generated from the beans
+            java.util.Timer xmlGenTimer = new java.util.Timer();
+            Iterator accCodes = this.addAllAccessionCodes().iterator();
+            RunXMLGenTimerTask task = new RunXMLGenTimerTask(System.currentTimeMillis());
+            task.setAccessionCode(accCodes);
+            xmlGenTimer.schedule(task, new Date(System.currentTimeMillis()));
+             
             // this is still considered a successful load, despite potential errors
             receiptTpl = DataloadLog.TPL_SUCCESS;
             subject = vbResources.getString("dataload.subject.success");
@@ -374,19 +383,7 @@ public class LoadTreeToDatabase
         } catch (IOException ioex) {
             log.error("problem writing dataload log to dataload.log: ", ioex);
         }
-
-    //set off a thread that caches the XML generated from the beans
-    java.util.Timer xmlGenTimer = new java.util.Timer();
-    RunXMLGenTimerTask task;
-    Iterator accCodes = this.addAllAccessionCodes().iterator();
-    while(accCodes.hasNext())
-    {
-      String accCode = (String)accCodes.next();
-      task = new RunXMLGenTimerTask(System.currentTimeMillis());
-      task.setAccessionCode(accCode);
-      xmlGenTimer.schedule(task, new Date(System.currentTimeMillis()));
-    }
-      
+        
     t1.stop();
 	}
 
@@ -2605,7 +2602,7 @@ public class LoadTreeToDatabase
     {
       private long runtime;
       private boolean run = true;
-      private String accCode = "";
+      private Iterator accCodeItt;
       
       /**
        * constructor.  pass in the scheduled time of execution in millis
@@ -2622,23 +2619,79 @@ public class LoadTreeToDatabase
       {
         if(run)
         {
+          /*
+            The table this xml is going into looks like this:
+            +---------------------+
+            | AccessionCode | XML |
+            |---------------|-----|
+            
+            SQL for the table
+            -----------------
+            create table xmlCache (
+              accessioncode   varchar(100),
+              xml             bytea);
+          */
           try
           {
             System.out.println("==============In runXMLGenTimerTask==============");
-            DBModelBeanReader beanReader = new DBModelBeanReader();
-            VBModelBean bean = beanReader.getVBModelBean(accCode);
-            //System.out.println("=========generating xml for " + accCode);
-            //System.out.println("=========XML: " + bean.toXML());
-          } catch (SQLException kwex) {
-              log.error("SQL problem caching bean xml", kwex);
-              errors.addError(LoadingErrors.DATABASELOADINGERROR, 
-                      "SQL problem caching bean xml: " + kwex.toString());
-          } catch (Exception ex) {
-              log.error("problem caching bean xml", ex);
-              errors.addError(LoadingErrors.DATABASELOADINGERROR, 
-                      "problem caching bean xml: " + ex.toString());
+            DBConnection conn = null;
+            conn = DBConnectionPool.getInstance().getDBConnection("Need " +
+              "connection for caching xml");
+            conn.setAutoCommit(true);
+            System.out.println("got db connection");
+            while(accCodeItt.hasNext())
+            {
+              String accCode = (String)accCodeItt.next();
+              System.out.println("generating xml for " + accCode);
+              DBModelBeanReader beanReader = new DBModelBeanReader();
+              VBModelBean bean = beanReader.getVBModelBean(accCode);
+              if(bean == null)
+              {
+                continue;
+              }
+              
+              /*
+               TODO: what do we do if the accession number already exists?
+              */
+              
+              String xml = bean.toXML();
+              String sql = "insert into xmlcache (accessioncode, xml) values " +
+                "(?, ?)";
+              PreparedStatement ps = conn.prepareStatement(sql);
+              ps.setString(1, accCode);
+              ps.setBytes(2, xml.getBytes());
+              //System.out.println("executing sql: " + sql.substring(0, 50));
+              //Statement query = conn.createStatement();
+              int rowcount = ps.executeUpdate();
+              //int rowcount = query.executeUpdate(sql);
+              System.out.println("rowcount: " + rowcount);
+              if(rowcount != 1)
+              {//failure
+                String msg = "SQL problem caching bean xml";
+                log.error(msg);
+                System.out.println(msg);
+              }
+            } 
+            
+            DBConnectionPool.returnDBConnection(conn);
+            System.out.println("==============Done with runXMLGenTimerTask==============");
           }
-          System.out.println("==============Done with runXMLGenTimerTask==============");
+          catch (SQLException sqle) 
+          {
+            System.out.println("error in runXMLGenTimer: " + sqle.getMessage());
+            sqle.printStackTrace();
+            log.error("SQL problem caching bean xml", sqle);
+            errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                    "SQL problem caching bean xml: " + sqle.toString());
+          } 
+          catch (Exception ex) 
+          {
+            System.out.println("sql error in runXMLGenTimer: " + ex.getMessage());
+            ex.printStackTrace();
+            log.error("problem caching bean xml", ex);
+            errors.addError(LoadingErrors.DATABASELOADINGERROR, 
+                    "problem caching bean xml: " + ex.toString());
+          }
         }
       }
       
@@ -2662,9 +2715,9 @@ public class LoadTreeToDatabase
       /**
        * sets the accession code that you want to cache the xml for
        */
-      public void setAccessionCode(String accCode)
+      public void setAccessionCode(Iterator accCodeItt)
       {
-        this.accCode = accCode;
+        this.accCodeItt = accCodeItt;
       }
     }
 }
