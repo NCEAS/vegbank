@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-11 19:26:56 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2006-07-13 21:49:24 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.sql.*;
 
 import org.vegbank.common.model.VBModelBean;
 
@@ -60,7 +61,42 @@ public class XMLUtil
       //System.out.println("iterating through vegbankModelBeans");
 			VBModelBean vbmb = (VBModelBean) iterator.next();
       //System.out.println("creating xml: " + vbmb.toXML());
-			sb.append( vbmb.toXML() );
+      String xml;
+      //first check to see if the xml is cached in the database, if not
+      //then generate it from the bean.
+      try
+      {
+        DBConnection conn = null;
+        conn = DBConnectionPool.getInstance().getDBConnection("Need " +
+          "connection for getting cached xml");
+        conn.setAutoCommit(true);
+        String accCode = vbmb.getAccessioncode();
+        String sql = "select xml from dba_xmlcache where accessioncode like ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, accCode);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next())
+        {
+          byte[] b = rs.getBytes(1);
+          xml = new String(b);
+          System.out.println("Got cached xml");
+          rs.close();
+        }
+        else
+        {
+          System.out.println("got xml from bean");
+          xml = vbmb.toXML();
+        }
+        DBConnectionPool.returnDBConnection(conn);
+      }
+      catch(Exception e)
+      {
+        System.out.println("error generating xml: " + e.getMessage());
+        e.printStackTrace();
+        xml = vbmb.toXML();
+      }
+      
+			sb.append(xml);
 		}
 		String entireXML = wrapInBoilerPlateXML(sb); 	
 		return entireXML;

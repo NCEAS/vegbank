@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-13 20:16:11 $'
- *	'$Revision: 1.37 $'
+ *	'$Date: 2006-07-13 21:49:24 $'
+ *	'$Revision: 1.38 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -311,9 +311,9 @@ public class LoadTreeToDatabase
                 // KEYWORD GENERATION
                 timer = new Timer("generate keywords");
                 java.util.Timer keywordsTimer = new java.util.Timer();
-                //keywordsTimer.schedule(
-                //  new RunKeywordsTimerTask(System.currentTimeMillis()),
-                //  new Date(System.currentTimeMillis()));
+                keywordsTimer.schedule(
+                  new RunKeywordsTimerTask(System.currentTimeMillis()),
+                  new Date(System.currentTimeMillis()));
                 /*log.debug("====================== KEYWORD GEN");
                 dlog.append("====================== KEYWORD GEN");
                 KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
@@ -2646,7 +2646,7 @@ public class LoadTreeToDatabase
               DBModelBeanReader beanReader = new DBModelBeanReader();
               VBModelBean bean = beanReader.getVBModelBean(accCode);
               if(bean == null)
-              {
+              { //if there is no bean available for the accCode, ignore it
                 continue;
               }
               
