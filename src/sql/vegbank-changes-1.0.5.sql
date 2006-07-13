@@ -1,5 +1,3 @@
---creates a table that stores when each version is implemented on each database
-
 -- ATTENTION!!!
 
 -- views MUST BE DROPPED FIRST, then this file run, then VIEWS RESTORED.  (drop_vegank_views.sql then create_vegbank_views.sql)
@@ -9,6 +7,7 @@ create table dba_xmlCache (
 accessioncode   varchar(100),
 xml             bytea);
 
+--creates a table that stores when each version is implemented on each database
 CREATE TABLE dba_datamodelversion
 (
 dba_datamodelversion_ID serial NOT NULL ,
