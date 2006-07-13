@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-13 20:12:34 $'
- *	'$Revision: 1.35 $'
+ *	'$Date: 2006-07-13 20:15:42 $'
+ *	'$Revision: 1.36 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2655,7 +2655,7 @@ public class LoadTreeToDatabase
               */
               
               String xml = bean.toXML();
-              String sql = "insert into xmlcache (accessioncode, xml) values " +
+              String sql = "insert into dba_xmlCache (accessioncode, xml) values " +
                 "(?, ?)";
               PreparedStatement ps = conn.prepareStatement(sql);
               ps.setString(1, accCode);
