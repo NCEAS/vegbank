@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-13 21:49:24 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2006-07-14 22:07:09 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.sql.*;
 
 import org.vegbank.common.model.VBModelBean;
+import org.vegbank.plots.datasource.DBModelBeanReader;
 
 /**
  * @author farrell
@@ -166,5 +167,109 @@ public class XMLUtil
 		return df.format(date);
 	}
 
-
+  /**
+   * main method for running xml utilities on the command line
+   */
+  public static void main(String[] args)
+  {
+    //right now the only thing this does is create cached xml from the existing
+    //database structure.  
+    //process: 1) get accession codes
+    //         2) check to see if the code already exists in the dba_xmlcache table
+    //         3) if it does, don'd do anything
+    //         4) if it doesn't then create a bean from that accession code
+    //         5) run bean.toXML() and put the result into the dba_xmlcache table
+    //         6) commit the change
+    
+    String sql[] = new String[5];
+    sql[0] = "select accessioncode from observation";
+    sql[1] = "select accessioncode from plantconcept";
+    sql[2] = "select accessioncode from commconcept";
+    sql[3] = "select accessioncode from project";
+    sql[4] = "select accessioncode from party";
+    //if you want to check for accession codes in more tables, add the sql here
+    
+    try
+    {
+      String accCode = "";
+      DBModelBeanReader beanReader = new DBModelBeanReader();
+      DBConnection conn = null;
+        conn = DBConnectionPool.getInstance().getDBConnection("Need " +
+          "connection for caching xml");
+        conn.setAutoCommit(true);
+      for(int i=0; i<sql.length; i++)
+      {
+        System.out.println("getting accession codes: " + sql[i]);
+        PreparedStatement ps = conn.prepareStatement(sql[i]);
+        ResultSet rs = ps.executeQuery();
+        while(rs.next())
+        { //go through each accesssion code and create the xml if it's not
+          //already in the dba_xmlcache table
+          try
+          {
+            accCode = rs.getString(1);
+            System.out.println("Checking for cached xml for accCode: " + accCode);
+            String checkSQL = "select accessioncode from dba_xmlcache where " +
+              "accessioncode = ?";
+            PreparedStatement ps2 = conn.prepareStatement(checkSQL);
+            ps2.setString(1, accCode);
+            ResultSet rs2 = ps2.executeQuery();
+            if(!rs2.next())
+            { //it's not in the cache table so get the xml and add it
+              System.out.println("XML not already in cache for accCode: " + accCode);
+              VBModelBean bean = beanReader.getVBModelBean(accCode);
+              if(bean == null)
+              { //if there is no bean available for the accCode, ignore it
+                System.out.println("No bean available for accCode: " + accCode);
+                continue;
+              }
+              else
+              {
+                System.out.println("Found bean for accCode: " + accCode);
+              }
+              
+              String xml = bean.toXML();
+              System.out.println("Caching xml for accCode " + accCode);
+              //got the xml, now cache it
+              String insertSQL = "insert into dba_xmlcache (accessioncode, xml) " +
+                "values (?, ?)";
+              PreparedStatement ps3 = conn.prepareStatement(insertSQL);
+              ps3.setString(1, accCode);
+              ps3.setBytes(2, xml.getBytes());
+              int rowcount = ps3.executeUpdate();
+              if(rowcount != 1)
+              {
+                System.out.println("ERROR, xml for acc code " + accCode + " not " +
+                  "correctly inserted: " + ps3.toString());
+              }
+              else
+              {
+                System.out.println("XML successfully cached for accCode: " + accCode);
+              }
+            }
+            else
+            {
+              System.out.println("XML already cached for " + accCode);
+            }
+            rs2.close();
+          }
+          catch(Exception ee)
+          {
+            System.out.println("******Skipping accCode: " + accCode);
+            System.out.println("Error: " + ee.getMessage());
+          }
+          System.out.println();
+        }
+        rs.close();
+      }
+      DBConnectionPool.returnDBConnection(conn);
+      System.out.println("******Finished caching xml**********");
+    }
+    catch(Exception e)
+    {
+      System.out.println("Error caching xml from beans: " + e.getMessage());
+      e.printStackTrace();
+      System.exit(0);
+    }
+  }
 }

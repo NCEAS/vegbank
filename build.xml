@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: mlee $'
-  * '$Date: 2006-07-03 23:40:47 $'
-  * '$Revision: 1.80 $'
+  * '$Author: berkley $'
+  * '$Date: 2006-07-14 22:07:09 $'
+  * '$Revision: 1.81 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -66,6 +66,10 @@ generateDBSQL generate the SQL to create a blank database from the datamodel
 generateBeans generate the java beans needed for compilation
 dbVerify      verify that the database and the datamodel are the same.  create
               the status documents for the admin status display
+runxmlcache   caches the xml representation of each bean with accession numbers
+              in the observation, plantconcept, commconcept, project and 
+              party tables.  This is needed to upgrade the database to use
+              xml caching for xml downloads.
 
 ============================================================================
 -->
@@ -629,6 +633,21 @@ dbVerify      verify that the database and the datamodel are the same.  create
     <java classname="org.apache.xalan.xslt.Process" fork="true">
       <arg line="-IN ${docsDir}/xml/db_model_vegbank.xml -XSL ${docsDir}/xml/dbmodel-to-schema.xsl -OUT ${buildLibDir}/${vegbankSchemaData}"/>
       <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+    </java>
+  </target>
+  
+  <!--
+    Runs the xml utility to cache xml to the database.  this is only needed
+    as a bootstrap for older databases that don't contain any cached xml.  
+    new insertions automatically cache the xml for those plots inserted.
+  -->
+  <target name="runxmlcache" depends="jar">
+    <java classname="org.vegbank.common.utility.XMLUtil" fork="true">
+      <classpath>
+        <pathelement location="build/vegbank.jar"/>
+        <pathelement path="${classpath}"/>
+      </classpath>
+      <jvmarg value="-Xmx1024m"/>
     </java>
   </target>
 </project>
