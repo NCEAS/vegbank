@@ -8,7 +8,13 @@
 <!-- ############################################### -->
 <!-- % String searchString = request.getParameter("xwhereParams"); % -->
 <!-- collect previous info on <bean:write name="entityToSearch" />: -->
-<bean:parameter id="beansearchString" value="" name="xwhereParams" />
+<logic:present name="alternateSearchInputs">
+  <bean:parameter id="beansearchString" value="" name="xwhereParams_custom_0" />
+</logic:present>
+<logic:notPresent name="alternateSearchInputs">
+  <bean:parameter id="beansearchString" value="" name="xwhereParams" />
+</logic:notPresent>
+
 <bean:parameter id="beanxwhereMatchAny" value="" name="xwhereMatchAny" />
 <bean:parameter id="beanxwhereMatchWholeWords" value="" name="xwhereMatchWholeWords"/>
 
@@ -17,7 +23,7 @@
   <bean:define id="NameOfEntityToPresent"><bean:write name="entityToSearch" /></bean:define>
 </logic:notPresent>
 
-<form action="@views_link@<bean:write name="entityToSearch" />_summary.jsp" method="get">
+<form action="@views_link@<bean:write name='entityToSearch' />_summary.jsp" method="get">
     <table cellpadding="0" cellspacing="0" border="0" bgcolor="#DDDDDD">
     <tr>
         <td><img src="@image_server@uplt3.gif"/></td>
@@ -27,23 +33,39 @@
 
     <tr>
         <td></td>
-        <td><span id="search<bean:write name="entityToSearch" />Shown">
+        <td><span id="search<bean:write name='entityToSearch' />Shown">
             <!-- link to hide this: -->
             
+            <logic:present name="alternateSearchInputs">
+              <!-- this allows calling page to change this by specifying inputs to use here, typically: -->
+             <!-- xwhereKey=xwhere_match  -->
+             <!-- where=where_simple -->
+             <!-- xwhereParams_custom_1=projectname --> 
+             
+             <!-- xwhereParams_custom_0=alvar (this is specified BELOW, but IS NEEDED -->
+             <bean:write name="alternateSearchInputs" filter="false" />
+            </logic:present>
+            <logic:notPresent name="alternateSearchInputs">
+                <!-- typical settings:-->
+                <input type="hidden" name="xwhereKey" value="xwhere_kw_match" />
+                <input type="hidden" name="where" value="where_keywords_pk_in" />
+                <input type="hidden" name="wparam" value="<bean:write name="entityToSearch" />__<bean:write name="entityToSearch" />" />
+                <!-- end of typical settings-->
+            </logic:notPresent>    
+            
+            
             <input type="hidden" name="clearSearch" value="" />
-            <input type="hidden" name="xwhereKey" value="xwhere_kw_match" />
-            <input type="hidden" name="where" value="where_keywords_pk_in" />
-            <input type="hidden" name="wparam" value="<bean:write name="entityToSearch" />__<bean:write name="entityToSearch" />" />
             <input type="hidden" name="xwhereSearch" value="true" />
             <span class="greytext">
-            &nbsp; Search for a <bean:write name="entityToSearch" /> <bean:write name="SearchInstructions" ignore="true" />:
+            &nbsp; Search for a <bean:write name="NameOfEntityToPresent" /> <bean:write name="SearchInstructions" ignore="true" />:
             &nbsp;&nbsp;
               <a href="#" onclick="showorhidediv('search<bean:write name="entityToSearch" />Shown');showorhidediv('search<bean:write name="entityToSearch" />Hidden');return false;">
                 &lt;&lt;Hide search
               </a>
             </span>
             <br />
-             <input type="text" name="xwhereParams" size="30" value="<bean:write name='beansearchString' />"/>
+              <!-- alt search suffix used to add "_name_0" to this input -->
+             <input type="text" name="xwhereParams<logic:present name='alternateSearchInputs'>_custom_0</logic:present>" size="30" value="<bean:write name='beansearchString' />"/>
              <html:submit value="search" />
        
        <!--</td>
@@ -74,7 +96,7 @@
        
        <span id="search<bean:write name="entityToSearch" />Hidden" style="display:none" class="greytext">
            <a href="#" onclick="showorhidediv('search<bean:write name="entityToSearch" />Shown');showorhidediv('search<bean:write name="entityToSearch" />Hidden');return false;">
-             Search for <bean:write name="entityToSearch" /> &gt;&gt;
+             Search for <bean:write name="NameOfEntityToPresent" /> &gt;&gt;
            </a>
         </span></td>
             <td></td> 
