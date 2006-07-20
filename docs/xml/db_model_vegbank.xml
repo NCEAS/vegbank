@@ -8,13 +8,13 @@
 <!-- <?xml-stylesheet type="text/xsl" href="dbmodel-to-jsp-template.xsl"?> -->
 <dataModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="db_model_vegbank_schema.xsd">
   <title>Vegetation Database Component Description: --all modules--</title>
-  <version>1.0.3</version>
-  <versionDesc>1.0.3 not yet complete, added intially namedPlaceCorrelation table.</versionDesc>
+  <version>1.0.5</version>
+  <versionDesc>1.0.5 contains all dba tables that were previously embedded, plus some new ones.</versionDesc>
   <author>M. Lee</author>
   <institution>NCEAS</institution>
   <contributor>M. Lee</contributor>
   <description>This file describes the vegbank database structure.</description>
-  <date>2005-03-05T15:03:00-07:00</date>
+  <date>2006-07-19T21:30:00-07:00</date>
   <entity>
     <entityName>commConcept</entityName>
     <entityLabel>Community Concept</entityLabel>
@@ -14200,7 +14200,6 @@ conditions may change between resampling events.
       <attDefinition>SCS Code</attDefinition>
       <attForms>
         <formShow name="Austere">1138</formShow>
-        <formShow name="Summary">1139</formShow>
         <formShow name="Detail">1140</formShow>
         <formShow name="csvvegbranch">366</formShow>
       </attForms>
@@ -14260,12 +14259,13 @@ conditions may change between resampling events.
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>soilTaxon.SOILTAXON_ID</attReferences>
+      <attFKTranslationSQL>(Select st2.soilName from soilTaxon as st2 where st2.soilTaxon_ID=soilTaxon.soilParent_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Parent soil taxon in the soil taxon hierarchy for this particular framwork.  For example, in USDA soils list, the parent of a soil SubGroup would be the GreatGroup.</attDefinition>
       <attForms>
-        <formShow name="Summary">1147</formShow>
+        <formShow name="Summary" useClass="largefield">1147</formShow>
         <formShow name="Detail">1148</formShow>
         <formShow name="csvvegbranch">369</formShow>
       </attForms>
@@ -14287,7 +14287,7 @@ conditions may change between resampling events.
       <attDefinition>System in which this soil taxon is part.  This field may be used to separate multiple soil taxonomic systems.  Each unique soil taxonomic system should have all its soilTaxon records with the same soilFramework value.  Correlation of different framework taxa is not currently possible.</attDefinition>
       <attForms>
         <formShow name="Austere">1149</formShow>
-        <formShow name="Summary">1150</formShow>
+        <formShow name="Summary">1143</formShow>
         <formShow name="Detail">1151</formShow>
         <formShow name="csvvegbranch">370</formShow>
       </attForms>
