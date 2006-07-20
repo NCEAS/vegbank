@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: berkley $'
-  * '$Date: 2006-07-14 22:07:09 $'
-  * '$Revision: 1.81 $'
+  * '$Author: mlee $'
+  * '$Date: 2006-07-20 20:44:49 $'
+  * '$Revision: 1.82 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -158,7 +158,7 @@ runxmlcache   caches the xml representation of each bean with accession numbers
     <filter token="mailPort" value="${mailPort}"/>
     <filter token="machineURL" value="${host}"/>
     <filter token="serverAddress" value="${host}"/>
-    <filter token="systemEmail" value="${mailServer}"/> <!--not sure if this is the right value-->
+    <filter token="systemEmail" value="${systemEmail}"/> 
     <filter token="genericForm" value="${context}/forms/generic_form.html"/>
     <filter token="genericTemplate" value="${context}/forms/tmp.html"/>
     <filter token="rmiserver" value="${rmiServer}"/>
