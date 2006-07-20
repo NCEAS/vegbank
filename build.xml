@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: mlee $'
-  * '$Date: 2006-07-20 20:44:49 $'
-  * '$Revision: 1.82 $'
+  * '$Date: 2006-07-20 21:08:07 $'
+  * '$Revision: 1.83 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -95,7 +95,6 @@ runxmlcache   caches the xml representation of each bean with accession numbers
     <property name="contextDir" value="${webapps}/${name}"/>
     <property name="webServerDir" value="${apache.document.root}"/>
     <property name="host" value="${hostname}"/>
-    <!-- is set in build.props : <property name="googleMapsAPIKey" value=""/> -->
     <property name="serverUrl" value="http://${host}"/>
     <property name="contextUrl" value="${serverUrl}/${context}"/>
     <property name="vegdocs" value="/vegdocs"/>
@@ -213,7 +212,7 @@ runxmlcache   caches the xml representation of each bean with accession numbers
     <!--connection filters from the old build file-->
     <filter token="machine_url" value="${serverUrl}"/>
     <filter token="eighty_eighty" value="${eighty_eighty}"/>
-    <filter token="googlemaps_apikey" value="${googleMapsAPIKey}" />
+    <filter token="googlemaps_apikey" value="${googlemaps_apikey}" />
     <filter token="dist" value="dist"/>
     <filter token="hostname" value="${host}"/>
     <filter token="version" value="development"/>
