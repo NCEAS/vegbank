@@ -15,6 +15,26 @@
  @webpage_masthead_html@ 
   @possibly_center@  
 <h2>View VegBank Named Places</h2>
+
+
+<!-- add search box -->
+<bean:define id="entityToSearch" value="namedplace" />
+<bean:define id="NameOfEntityToPresent" value="named place" />
+<bean:define id="SearchInstructions" value="(enter a name, or part of a name)" /> 
+<bean:define id="alternateSearchInputs">
+  <input type="hidden" name="xwhereKey" value="xwhere_match" />
+  <input type="hidden" name="where" value="where_simple" />
+  <input type="hidden" name="xwhereParams_custom_1" value="placename" /><!-- name of field to search -->
+</bean:define>
+<%@ include file="includeviews/sub_searchEntity.jsp" %>
+
+
+  <logic:notPresent parameter="perPage">
+    <bean:define id="perPage">25</bean:define>
+  </logic:notPresent> 
+
+
+
         <vegbank:get id="namedplace" select="namedplace" beanName="map" pager="true" xwhereEnable="true"  />
 <!--Where statement removed from preceding: -->
 <vegbank:pager /><logic:empty name="namedplace-BEANLIST">
