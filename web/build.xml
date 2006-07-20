@@ -5,9 +5,9 @@
 *    Authors: @authors@
 *    Release: @release@
 *
-* '$Author: berkley $'
-* '$Date: 2006-05-23 23:32:59 $'
-* '$Revision: 1.184 $'
+* '$Author: mlee $'
+* '$Date: 2006-07-20 03:53:37 $'
+* '$Revision: 1.185 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -252,7 +252,7 @@
   </target>
   
   
-  <target name="index" depends="help,cache" description="=&gt; target to dist. the index.html file">
+  <target name="index" depends="help" description="=&gt; target to dist. the index.html file">
     <copy overwrite="${forceoverwrite}" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
     <!-- add to second webpage at root/${webapp}/index.html -->
     <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
@@ -465,7 +465,7 @@
     <copy overwrite="${forceoverwrite}" todir="${views_server}" filtering="yes">
       <fileset dir="${views}" includes="**/*jsp **/*html" excludes="**/CVS* template_datacart.jsp"/>
     </copy>
-    <antcall target="cache" />
+   
   </target>
   
   
@@ -882,6 +882,7 @@
   <target name="deploy-all" description="=&gt; all in deploy plus slow rarely updated stuff">
     <antcall target="setoverwrite" />
     <antcall target="deploy-all-doesit" />
+    <antcall target="cache" /><!-- has to be after views, etc. -->
   </target>
   
   
