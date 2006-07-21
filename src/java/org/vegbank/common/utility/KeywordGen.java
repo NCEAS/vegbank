@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-07-08 08:57:20 $'
- *	'$Revision: 1.14 $'
+ *	'$Date: 2006-07-21 05:15:18 $'
+ *	'$Revision: 1.15 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ public class KeywordGen {
 					map = new HashMap();
 				}
 
-				//log.info("Adding extra for " + entityName + ": " + extraName);
+				log.info("Adding extra for " + entityName + ": " + extraName);
 				map.put(extraName, res.getString(key));
 				extraQueries.put(entityName, map);
 			}
@@ -202,13 +202,14 @@ public class KeywordGen {
                 throw new SQLException("Problem inserting extras for " + entityName);
             }
 
-            if (!tmpTableName.equals("") && BUILD_MODE == SINGLE) {
-                log.debug("+++ appending extra keywords for " + entityName);
-                if (!appendExtraKeywords(entityName, updateMismatch, tmpTableName)) {
-                    throw new SQLException("Problem appending extras for " + entityName);
-                }
-                log.debug("done appending extra keywords for " + entityName);
-            }
+           // this is handled in insertExtraKeywords as each statement gets its own temp table now (MTL 20-JUL-2006)
+           // if (!tmpTableName.equals("") && BUILD_MODE == SINGLE) {
+           //     log.debug("+++ appending extra keywords for " + entityName);
+           //     if (!appendExtraKeywords(entityName, updateMismatch, tmpTableName)) {
+           //         throw new SQLException("Problem appending extras for " + entityName);
+           //     }
+           //     log.debug("done appending extra keywords for " + entityName + " using temp table: " + tmpTableName);
+           // }
         }
         log.debug("committing keywords for " + entityName);
         conn.commit();
@@ -259,11 +260,13 @@ public class KeywordGen {
 		// each entity can have many extra queries
 		boolean first = true;
 		boolean success = true, temporarySuccess;
+        long countPerTable = 0;
         String tmpTableName=null;
 		Iterator it = extraMap.keySet().iterator();
 		while (it.hasNext()) {
 			extraName = (String)it.next();
-			entityQuery = getExtraEntityQuery(entityName, extraName, !doDelete);
+            countPerTable = countPerTable + 1;
+            entityQuery = getExtraEntityQuery(entityName, extraName, !doDelete);
 
 			if (entityQuery == null) { 
 				log.error("ERROR: query missing for extras." + entityName + "." + extraName);
@@ -277,7 +280,16 @@ public class KeywordGen {
                 log.error("MULTI mode not implemented!");
 			} else {
 				/////// SINGLE
-				tmpTableName = buildKeywordTable(EXTRA_TEMP_TABLE_PREFIX, entityQuery, entityName, isUpdate, doDelete, true);
+                
+				tmpTableName = buildKeywordTable(EXTRA_TEMP_TABLE_PREFIX + countPerTable + "_", entityQuery, entityName, isUpdate, doDelete, true);
+                // go ahead and append that one:
+                if (!tmpTableName.equals("") && BUILD_MODE == SINGLE) {
+                  log.debug("+++ appending extra keywords for " + entityName + " using temp table: " + tmpTableName);
+                  if (!appendExtraKeywords(entityName, !doDelete, tmpTableName)) {
+                      throw new SQLException("Problem appending extras for " + entityName);
+                  }
+                  log.debug("done appending extra keywords for " + entityName + " using temp table: " + tmpTableName);
+                }
 			}
 
 			if (tmpTableName == null) {
@@ -378,6 +390,8 @@ public class KeywordGen {
 		} else {
             if (useTempTable) {
                 // create empty temp table, include name of entity to keep this entity's stuff applied to only this entity (this table doesn't get dropped)
+                // and also add the name of the extra (the bit after the extra.entity.)
+                
                 kwTable = kwTable + Thread.currentThread().hashCode() + entityName;
                 log.debug("creating TEMP TABLE " + kwTable);
                 String sqlTempTbl = "SELECT * INTO TEMP TABLE " + kwTable + " FROM keywords WHERE true=false";
@@ -398,7 +412,7 @@ public class KeywordGen {
 
 		if (doDelete) {
 			sql = "DELETE FROM " + kwTable + " WHERE entity='" + entityName + "'";
-			log.info("deleting entity's current keywords");
+			log.info("deleting entity's current temporary extra keywords");
 			log.debug(sql);
 			stmt.executeUpdate(sql);
 		}
@@ -406,8 +420,7 @@ public class KeywordGen {
 		//log.info("Selecting entities...please wait");
 		log.info("Selecting " + count + " " + entityName + " entities...please wait");
 		showSQL(entityQuery);
-		rs = stmt.executeQuery(entityQuery);
-
+        rs = stmt.executeQuery(entityQuery);
 		// get metadata
 		rsmd = rs.getMetaData();
 		numFields = rsmd.getColumnCount();
