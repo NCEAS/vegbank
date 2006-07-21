@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-12 19:48:46 $'
- *	'$Revision: 1.23 $'
+ *	'$Date: 2006-07-21 21:40:22 $'
+ *	'$Revision: 1.24 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -266,19 +266,16 @@ public class DBModelBeanReader
 		// Need to fill out some more Objects 
 		
 		// Project 
-		Project project = obs.getProjectobject();
-		getRelatedObjectsFromDB(Project.PKNAME, project.getProject_id(), project );
+		Project project = new Project();//obs.getProjectobject();
+    getRelatedObjectsFromDB(Project.PKNAME, project.getProject_id(), project );
 		
 		// CoverMethod
-		Covermethod coverMethod = obs.getCovermethodobject();
-		getRelatedObjectsFromDB(Covermethod.PKNAME, coverMethod.getCovermethod_id(), coverMethod );
+		Covermethod coverMethod = new Covermethod();//obs.getCovermethodobject();
+    getRelatedObjectsFromDB(Covermethod.PKNAME, coverMethod.getCovermethod_id(), coverMethod );
 		
 		// StratumMethod
-		Stratummethod stratumMethod = obs.getStratummethodobject();
-    if(stratumMethod != null)
-    {
-      getRelatedObjectsFromDB(Stratummethod.PKNAME, stratumMethod.getStratummethod_id(), stratumMethod );
-    }
+		Stratummethod stratumMethod = new Stratummethod(); //obs.getStratummethodobject();
+    getRelatedObjectsFromDB(Stratummethod.PKNAME, stratumMethod.getStratummethod_id(), stratumMethod );
 		
 		// ProjectContributors
 		Iterator projectContributors =project.getproject_projectcontributors().iterator();
@@ -303,7 +300,7 @@ public class DBModelBeanReader
 				Taxoninterpretation taxonInterpretation = (Taxoninterpretation)  taxonInterpretations.next();
 				getRelatedObjectsFromDB(Taxoninterpretation.PKNAME, taxonInterpretation.getTaxoninterpretation_id(), taxonInterpretation );
 			
-				Plantconcept pc = taxonInterpretation.getPlantconceptobject();
+				Plantconcept pc = new Plantconcept();//taxonInterpretation.getPlantconceptobject();
 				getRelatedObjectsFromDB(Plantconcept.PKNAME, taxonInterpretation.getPlantconcept_id() , pc );
 		
 			}
