@@ -48,3 +48,5 @@ DROP VIEW view_commconcept_transl;
 DROP VIEW view_reference_transl ;
 DROP VIEW view_party_transl ;
 drop view view_party_public;
+
+DROP VIEW  view_keywProjPlaces ;

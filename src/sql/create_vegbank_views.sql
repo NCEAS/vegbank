@@ -1,5 +1,10 @@
 --- VIEWS MUST BE DROPPED in drop_vegbank_views first!
 
+CREATE VIEW view_keywProjPlaces AS 
+  SELECT project.project_id, plot.stateProvince 
+  FROM plot, project, observation 
+  WHERE plot.plot_ID = observation.plot_ID  AND project.project_id = observation.project_id  
+  GROUP BY project.project_ID, plot.stateProvince;
 
 CREATE VIEW view_party_public AS 
   SELECT party.party_id, accessioncode, salutation, surname, 
