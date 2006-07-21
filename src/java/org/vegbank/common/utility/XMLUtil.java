@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-20 21:58:51 $'
- *	'$Revision: 1.10 $'
+ *	'$Date: 2006-07-21 16:12:36 $'
+ *	'$Revision: 1.11 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -205,8 +205,8 @@ public class XMLUtil
       excludesList.addElement(new String("VB.Ob.26085.027070408"));
       excludesList.addElement(new String("VB.Ob.26155.044040609"));
       excludesList.addElement(new String("VB.Ob.26105.027070564"));
-      excludesList.addElement(new String("VB.Ob.25665.SHNP574"));
       excludesList.addElement(new String("VB.Ob.26154.044040608"));
+      excludesList.addElement(new String("VB.Ob.25665.SHNP574"));
       excludesList.addElement(new String("VB.Ob.25612.SHNP521"));
       excludesList.addElement(new String("VB.Ob.25636.SHNP545"));
       excludesList.addElement(new String("VB.Ob.25618.SHNP527"));
