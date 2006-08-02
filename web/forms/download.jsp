@@ -81,7 +81,7 @@ if (ok) {
 
               </li>  
 
-              <li class="oddrow padded">
+              <!--<li class="oddrow padded">
                 <input type="radio" value="vegbranch" name="formatType" disabled="disabled"/>
                 <img src="@vegbranch_link@images/vegbranch_logo_med.jpg" alt="VegBranch format"/>
                 <strong>VegBranch Import</strong> - Coming soon!
@@ -89,12 +89,12 @@ if (ok) {
                      Use this format to transfer data from the vegbank.org web site into your local 
                      <a href="@vegbranch_link@vegbranch.html">VegBranch</a> database.
                    </blockquote>
-               </li>
+               </li>-->
 
               <li class="evenrow padded">
                 <input type="radio" value="xml" name="formatType"/>
                 <img src="@images_link@xml_icon.gif" alt="XML format" />
-                <strong>XML</strong> - Warning, this can be slow if you have selected a lot of observations.
+                <strong>XML</strong> - Download plots in the same format used to upload to Vegbank.
                 <blockquote>XML documents are for advanced users.  VegBank's XML format
                    describes plots, plants, communities and other entities found in our database.  
                    Please see <a href="@NativeXMLIndexPage@">our XML index</a> for more sample XML 
