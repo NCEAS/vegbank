@@ -40,8 +40,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-11 19:26:56 $'
- *	'$Revision: 1.8 $'
+ *	'$Date: 2006-08-02 16:14:11 $'
+ *	'$Revision: 1.9 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -163,12 +163,13 @@ public class DownloadAction extends Action
 			// Handle the format type
 			if ( formatType.equalsIgnoreCase( XML_FORMAT_TYPE) )
 			{ 
+        System.out.println("getting plot observations");
 				// Store the returned ModelBean Trees
-				Collection plotObservations = this.getPlotObservations(selectedPlots);
-		
+				//Collection plotObservations = this.getPlotObservations(selectedPlots);
+        System.out.println("getting xml");
 				// wrap in XML
-				String xml = XMLUtil.getVBXML(plotObservations);
-				
+				String xml = XMLUtil.getVBXML(selectedPlots);
+				System.out.println("zipping file");
 				// Place into file for download
 				//this.initResponseForFileDownload( response, "vegbank_plots.xml", DOWNLOAD_CONTENT_TYPE);
 				//this.sendFileToBrowser(xml, response);
@@ -329,7 +330,6 @@ public class DownloadAction extends Action
 		// Get the plots
 		for ( int i = 0; i < selectedPlots.length ; i++ )
 		{
-			log.debug("DownloadAction : Downloading " + selectedPlots[i]);
 			Observation observation = (Observation) dbmbReader.getVBModelBean( selectedPlots[i]  );
 			plotObsersevations.add(observation);
 		}

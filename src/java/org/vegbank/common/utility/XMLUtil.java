@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-21 16:12:36 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2006-08-02 16:14:11 $'
+ *	'$Revision: 1.12 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,59 @@ import org.vegbank.plots.datasource.DBModelBeanReader;
 public class XMLUtil
 {
 
+  /**
+   * return the xml for the accession codes in selectedPlots.  this method
+   * will only build a bean if the xml is not cached.
+   */
+  public static String getVBXML(String[] selectedPlots)
+  {
+    System.out.println("here in getVBXML( String[] ) ");
+    StringBuffer sb = new StringBuffer();
+    String xml;
+    try
+    {
+      DBConnection conn = null;
+      conn = DBConnectionPool.getInstance().getDBConnection("Need " +
+        "connection for getting cached xml");
+      conn.setAutoCommit(true);
+      
+      for(int i=0; i<selectedPlots.length; i++)
+      {
+        String accCode = selectedPlots[i];
+        String sql = "select xml from dba_xmlcache where accessioncode like ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, accCode);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next())
+        {
+          byte[] b = rs.getBytes(1);
+          xml = new String(b);
+          rs.close();
+          System.out.println("Got cached xml");
+        }
+        else
+        {
+          DBModelBeanReader dbmbReader = new DBModelBeanReader();
+          VBModelBean vbmb = dbmbReader.getVBModelBean(accCode);
+          dbmbReader.releaseConnection();
+          xml = vbmb.toXML();
+          System.out.println("got xml from bean");
+        }
+        sb.append(xml);
+      }
+      DBConnectionPool.returnDBConnection(conn);
+    }
+    catch(Exception e)
+    {
+      System.out.println("error generating xml: " + e.getMessage());
+      e.printStackTrace();
+      xml = "";
+    }
+    
+    String entireXML = wrapInBoilerPlateXML(sb);
+    return entireXML;
+  }
+  
   /**
    * Takes a collection VegbankModelBeans and returns an XML String
    *
