@@ -73,3 +73,5 @@ insert into dba_datamodelversion (versionText) values ('1.0.5');
 -- whether parties are publicly viewable or not, by default true, but turned off as user registers, back on if they get certified
 -- so this is just for parties added through the XML loader, which should all be public.
 ALTER TABLE party ALTER COLUMN partypublic SET default true;
+
+create sequence project_project_id_seq;

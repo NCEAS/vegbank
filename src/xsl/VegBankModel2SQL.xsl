@@ -6,9 +6,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2006-06-29 04:26:44 $'
- *	'$Revision: 1.4 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-08-07 19:48:35 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,24 +112,24 @@ ALTER TABLE  <xsl:value-of select="../entityName"/>
           </xsl:when>
           <xsl:otherwise>
             <!-- pk is not a serial -->
-            <xsl:value-of select="attName"/> <xsl:call-template name="handleType" /> 
-          NOT NULL PRIMARY KEY )
-
+            <xsl:value-of select="attName"/><xsl:text> </xsl:text>
+            <xsl:call-template name="handleType" /> 
+          NOT NULL PRIMARY KEY
           </xsl:otherwise>
         </xsl:choose>
-        </xsl:when>
+      </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="attName"/> <xsl:text> </xsl:text> <xsl:call-template name="handleType" /> <xsl:call-template name="handleNotNull"/>
+        <xsl:value-of select="attName"/><xsl:text> </xsl:text>
+        <xsl:call-template name="handleType" /> 
+        <xsl:call-template name="handleNotNull"/>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="string-length(attDefaultValue)&gt;0"> DEFAULT <xsl:value-of select="attDefaultValue" /></xsl:if>
     
-
-
     <!-- Comma unless it is the last attribute -->
     <xsl:choose>
       <!-- I wish I knew why I need to decrement last() in this case ??? well it works -->
-      <xsl:when test="position() = last()"></xsl:when>
+      <xsl:when test="position() = last()-1"></xsl:when>
       <xsl:otherwise>, </xsl:otherwise>
     </xsl:choose>
 
@@ -142,6 +142,7 @@ ALTER TABLE  <xsl:value-of select="../entityName"/>
   <xsl:template name="handleNotNull">
     <xsl:if test="attNulls = 'no'"> NOT NULL</xsl:if>
   </xsl:template>
+  
  <!-- handle types -->
   <xsl:template name="handleType">
     <xsl:choose>
@@ -149,6 +150,7 @@ ALTER TABLE  <xsl:value-of select="../entityName"/>
       <xsl:otherwise><xsl:value-of select="attType" /></xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
  <xsl:template name="createSequence">
  CREATE SEQUENCE <xsl:value-of select="sequenceName" /> ;
  

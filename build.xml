@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: mlee $'
-  * '$Date: 2006-07-20 21:08:07 $'
-  * '$Revision: 1.83 $'
+  * '$Author: berkley $'
+  * '$Date: 2006-08-07 19:48:34 $'
+  * '$Revision: 1.84 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -70,7 +70,9 @@ runxmlcache   caches the xml representation of each bean with accession numbers
               in the observation, plantconcept, commconcept, project and 
               party tables.  This is needed to upgrade the database to use
               xml caching for xml downloads.
-
+createdb      creates an empty vegbank database from the existing sql scripts.  
+              the created database should be valid according to the newest 
+              schema.
 ============================================================================
 -->
 <project name="vegbank" default="war" basedir=".">
@@ -80,7 +82,7 @@ runxmlcache   caches the xml representation of each bean with accession numbers
     <!--general props-->
     <property file="build.properties"/>
     <property name="name" value="vegbank"/>
-    <property name="version" value="1.0.2"/>
+    <property name="version" value="1.0.5"/>
     <property name="vegbankHome" value="${vegbank.home.dir}"/>
     <property name="dataPath" value="${vegbankHome}/data"/>
     <property name="binPath" value="${vegbankHome}/bin"/>
@@ -406,20 +408,6 @@ runxmlcache   caches the xml representation of each bean with accession numbers
          <include name="*.html"/>
        </fileset>
      </copy>
-
-     <!--
-     <copy todir="${warContext}/email_templates" filtering="yes">
-       <fileset dir="${webDir}/email_templates"/>
-     </copy>
-     <copy todir="${warContext}/images" filtering="no">
-       <fileset dir="${webDir}/images"/>
-     </copy>
-     <copy todir="${warContext}/panel" filtering="yes">
-       <fileset dir="${webDir}/panel"/>
-     </copy>-->
-     <!--<copy todir="${apache.document.root}">
-       <fileset file="${webDir}/.htaccess"/>
-     </copy>-->
      <copy todir="${warContext}/includes" filtering="yes">
        <fileset dir="${webDir}/includes">
          <include name="**/*.jsp"/>
@@ -459,11 +447,6 @@ runxmlcache   caches the xml representation of each bean with accession numbers
          <include name="*.xsd"/>
        </fileset>
      </copy>
-     <!--<copy todir="${warContext}/vegdocs/help" filtering="yes">
-       <fileset dir="${webDir}/help">
-         <include name="**/*"/>
-       </fileset>
-     </copy>-->
      <copy todir="${cacheRawDir}" filtering="yes">
        <fileset dir="${webDir}/views/raw">
          <include name="raw_countdata.jsp"/>
@@ -535,12 +518,12 @@ runxmlcache   caches the xml representation of each bean with accession numbers
   </target>
   
   <!--target that generates the sql to build a blank database-->
-  <target name="generateDBSQL" depends="init">
+  <target name="generateDBSQL" depends="setFilters">
     <xslt in="${docsDir}/xml/db_model_vegbank.xml" 
       out="${buildDir}/sql/vegbank.sql" 
       style="${srcDir}/xsl/VegBankModel2SQL.xsl"/>
     <copy todir="${buildDir}/sql" filtering="yes" overwrite="yes">
-      <fileset dir="${srcDir}/sql" includes="**/*.sql"/>
+      <fileset dir="${srcDir}/sql" includes="**/*.*"/>
     </copy>
   </target>
   
@@ -648,5 +631,119 @@ runxmlcache   caches the xml representation of each bean with accession numbers
       </classpath>
       <jvmarg value="-Xmx1024m"/>
     </java>
+  </target>
+  
+  <!--creates an empty vegbank database from the existing sql scripts.  the
+      created database should be valid according to the newest schema
+  -->
+  <target name="createdb" depends="generateDBSQL">
+    <property name="jdbc-jar" value="lib/postgresql-8.1-405.jdbc2.jar"/>
+    <echo>**************Building Main DB with vegbank.sql****************</echo>
+    <sql driver="${databaseDriverClass}"
+          url="${databaseConnectString}"
+          userid="${databaseUser}"
+          password="${databaseUserPassword}"
+          src="${buildDir}/sql/vegbank.sql"
+          autocommit="true">
+      <classpath>
+         <pathelement location="${jdbc-jar}"/>
+      </classpath>
+    </sql>
+    
+    <echo>************** Creating Aggregrates ****************</echo>
+    <sql driver="${databaseDriverClass}"
+          url="${databaseConnectString}"
+          userid="${databaseUser}"
+          password="${databaseUserPassword}"
+          src="${buildDir}/sql/create_aggregrates.sql"
+          autocommit="true">
+      <classpath>
+         <pathelement location="${jdbc-jar}"/>
+      </classpath>
+    </sql>
+    
+    <echo>************** Creating Extras ****************</echo>
+    <sql driver="${databaseDriverClass}"
+          url="${databaseConnectString}"
+          userid="${databaseUser}"
+          password="${databaseUserPassword}"
+          src="${buildDir}/sql/create_extras.sql"
+          autocommit="true">
+      <classpath>
+         <pathelement location="${jdbc-jar}"/>
+      </classpath>
+    </sql>
+          
+    <echo>************** Creating Indices ****************</echo>
+    <sql driver="${databaseDriverClass}"
+          url="${databaseConnectString}"
+          userid="${databaseUser}"
+          password="${databaseUserPassword}"
+          src="${buildDir}/sql/createIndices.sql"
+          onerror="continue"
+          autocommit="true">
+      <classpath>
+         <pathelement location="${jdbc-jar}"/>
+      </classpath>
+    </sql>
+          
+    <echo>************** creating views ****************</echo>
+    <sql driver="${databaseDriverClass}"
+          url="${databaseConnectString}"
+          userid="${databaseUser}"
+          password="${databaseUserPassword}"
+          src="${buildDir}/sql/create_vegbank_views.sql"
+          onerror="continue"
+          autocommit="true">
+      <classpath>
+         <pathelement location="${jdbc-jar}"/>
+      </classpath>
+    </sql>
+          
+    <echo>************** populating config tables ****************</echo>
+    <sql driver="${databaseDriverClass}"
+          url="${databaseConnectString}"
+          userid="${databaseUser}"
+          password="${databaseUserPassword}"
+          src="${buildDir}/sql/vegbank_populate_configtables.sql"
+          onerror="continue"
+          autocommit="true">
+      <classpath>
+         <pathelement location="${jdbc-jar}"/>
+      </classpath>
+    </sql>
+          
+    <echo>************** applying vegbank-changes for version ${version} ****************</echo>
+    <sql driver="${databaseDriverClass}"
+          url="${databaseConnectString}"
+          userid="${databaseUser}"
+          password="${databaseUserPassword}"
+          src="${buildDir}/sql/vegbank-changes-${version}.sql"
+          onerror="continue"
+          autocommit="true">
+      <classpath>
+         <pathelement location="${jdbc-jar}"/>
+      </classpath>
+    </sql>
+    
+    <echo>************** creating admin user ****************</echo>
+    <sql driver="${databaseDriverClass}"
+          url="${databaseConnectString}"
+          userid="${databaseUser}"
+          password="${databaseUserPassword}"
+          src="${buildDir}/sql/create_admin_user.sql"
+          onerror="continue"
+          autocommit="true">
+      <classpath>
+         <pathelement location="${jdbc-jar}"/>
+      </classpath>
+    </sql>
+    
+    <echo>***************************************************************</echo>
+    <echo>Your database is now created.  Please login as the user 
+          'admin@vegbank.org' with password 'vbadmin' and change the password
+          ASAP.  This user is the super user and will allow you to create other
+          accounts.</echo>
+    <echo>***************************************************************</echo>
   </target>
 </project>

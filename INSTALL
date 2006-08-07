@@ -217,6 +217,7 @@ bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
 bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
 bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
 bash$ psql -U vegbank vegbank < build/sql/vegbank_populate_configtables.sql
+bash$ psql -U vegbank vegbank < build/sql/vegbank-changes-1.0.5.sql
 
 You won't have to update the version numbers in this scenario.
 
