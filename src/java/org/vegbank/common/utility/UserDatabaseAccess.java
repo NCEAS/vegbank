@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2006-06-27 21:06:37 $'
- *	'$Revision: 1.24 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-08-08 22:38:20 $'
+ *	'$Revision: 1.25 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ package org.vegbank.common.utility;
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		'$Author: mlee $'
- *     '$Date: 2006-06-27 21:06:37 $'
- *     '$Revision: 1.24 $'
+ *		'$Author: berkley $'
+ *     '$Date: 2006-08-08 22:38:20 $'
+ *     '$Revision: 1.25 $'
  */
 
 import java.sql.PreparedStatement;
@@ -42,6 +42,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import java.security.*;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.vegbank.common.model.Address;
@@ -79,44 +80,6 @@ public class UserDatabaseAccess
 		 }
 		 return level;
 	 }
-	
-	/**
-	 * method to get the password from the database based on an email address
-	 * 
-	 * @param emailAddress
-	 * @deprecated Use getUser and get password from that object
-	 */
-	public String getPassword(String emailAddress)
-	{
-		log.debug("UserDatabaseAccess > looking up the password for user: " + emailAddress);
-		String s = null;
-		try 
-		{
-			//get the connections etc
-			DBConnection conn = getConnection();
-			Statement query = conn.createStatement();
-			StringBuffer sb = new StringBuffer();
-			sb.append("select password from USER_INFO ");
-			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"' ");
-			
-			//issue the query
-			query.executeQuery(sb.toString());
-			ResultSet rs = query.getResultSet();
-			while (rs.next()) 
-			{
-     			s = rs.getString(1);
-    		}
-            rs.close();
-            query.close();
-			DBConnectionPool.returnDBConnection(conn);
-		}
-		catch (Exception e) 
-		{
-			log.error("Exception: " + e.getMessage());
-			e.printStackTrace();
-		}
-		return(s);
-	}
 	
 	/**
 	 * method that returns true if the input user alraedy has an entry in the 
@@ -297,7 +260,44 @@ public class UserDatabaseAccess
 		DBConnectionPool.returnDBConnection(conn);
 		return(usrId);
 	}
- 
+  
+  /**
+	 * method to get the password from the database based on an email address
+	 * 
+	 * @param emailAddress
+	 * @deprecated Use getUser and get password from that object
+	 */
+	public String getPassword(String emailAddress)
+	{
+		log.debug("UserDatabaseAccess > looking up the password for user: " + emailAddress);
+		String s = null;
+		try 
+		{
+			//get the connections etc
+			DBConnection conn = getConnection();
+			Statement query = conn.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select password from USER_INFO ");
+			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"' ");
+			
+			//issue the query
+			query.executeQuery(sb.toString());
+			ResultSet rs = query.getResultSet();
+			while (rs.next()) 
+			{
+     			s = rs.getString(1);
+    		}
+            rs.close();
+            query.close();
+			DBConnectionPool.returnDBConnection(conn);
+		}
+		catch (Exception e) 
+		{
+			log.error("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return(s);
+	}
  
 	/**
 	 * This method updates, umm - what was it?  Hmmm.  
@@ -308,11 +308,14 @@ public class UserDatabaseAccess
 	public void updatePassword(String password, String emailAddress)
 	{
 		try
-		{
+		{ //create a digest of the password and store that
+      String digest = getDigest(password, emailAddress);
+      System.out.println("digest for user " + emailAddress + ": " + digest);
 			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
-			query.execute("UPDATE usr set password='" + password + 
-					"' WHERE email_address='"+emailAddress+"' ");	
+      //store the digest string
+			query.execute("UPDATE usr set password='" + digest + 
+					"' WHERE email_address='" + emailAddress + "' ");	
             query.close();
 			DBConnectionPool.returnDBConnection(conn);
 		}
@@ -321,8 +324,32 @@ public class UserDatabaseAccess
 			log.debug("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
+    catch (GeneralSecurityException gse)
+    {
+      log.debug("Error getting digest of password: " + gse.getMessage());
+      System.out.println("Error getting digest of password: " + gse.getMessage());
+      gse.printStackTrace();
+    }
 	}
- 
+  
+  /**
+   * return the digest of a username and a password
+   */
+  public String getDigest(String password, String emailAddress)
+    throws GeneralSecurityException
+  {
+    MessageDigest digest = MessageDigest.getInstance("MD5");
+    //create the digest from the emailAddress and the password since both
+    //must be correct
+    byte b[] = digest.digest((emailAddress + password).getBytes());
+    String s = "";
+    //s += Long.toHexString((new Byte(b)).longValue());
+    for(int i=0; i<b.length; i++)
+    {
+      s += Long.toHexString((new Byte(b[i])).longValue());
+    }
+    return s;
+  }
  
 	/**
 	 * method to update the ticket count of a user -- 
@@ -865,28 +892,68 @@ public class UserDatabaseAccess
 		return sum;
 	 }
 	 
-	
+	/**
+   * this method seeds the admin account with the default password.
+   */
+  private void seedAdminAccountPassword()
+    throws Exception
+  {
+    System.out.println("Seeding admin acct");
+    UserDatabaseAccess udb = new UserDatabaseAccess();
+    udb.updatePassword("vbadmin", "admin@vegbank.org");
+    System.out.println("admin account seeded with default password.");
+  }
+  
+  /**
+   * this method converts all passwords in the database to MD5 digests
+   * from clear text.
+   */
+  private void convertPasswords()
+    throws Exception
+  {
+    String sql = "select email_address, password from usr";
+    DBConnection conn = getConnection();
+		Statement query = conn.createStatement();
+		query.executeQuery(sql);
+		ResultSet rs = query.getResultSet();
+    while(rs.next())
+    {
+      String email = rs.getString(1);
+      String pass = rs.getString(2);
+      updatePassword(pass, email);
+    }
+  }
+   
 	/**
 	 * main method for testing 
 	 */
 	public static void main(String[] args) 
 	{
-		UserDatabaseAccess udb = new UserDatabaseAccess();
-		WebUser user = null;
-		try
-		{
-			user = udb.getUser("harris02@hotmail.com");
-		}
-		catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		System.out.println("UserDatabaseAccess > user info: " + user );
-		//h.put("surName", "Harris");
-		//h.put("givenName", "John");
-		//udb.updateUserInfo(h);
+    System.out.println("Usage:");
+    System.out.println("UserDatabaseAccess seedAdmin --seeds the " + 
+      "admin account with the default password");
+    System.out.println("UserDatabaseAccess convertPasswords --converts " +
+      "existing clear text passwords to the new digest MD5 format.");
+    
+    try
+    {
+      UserDatabaseAccess uda = new UserDatabaseAccess();
+      if(args[0].equals("seedAdmin"))
+      {
+        uda.seedAdminAccountPassword();
+      }
+      else if(args[0].equals("convertPasswords"))
+      {
+        uda.convertPasswords();
+      }
+    }
+    catch(Exception e)
+    {
+      System.out.println("Error: " + e.getMessage());
+      e.printStackTrace();
+    }
+    
+    System.exit(0);
 	}
 
 }

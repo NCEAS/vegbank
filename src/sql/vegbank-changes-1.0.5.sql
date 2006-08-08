@@ -75,3 +75,6 @@ insert into dba_datamodelversion (versionText) values ('1.0.5');
 ALTER TABLE party ALTER COLUMN partypublic SET default true;
 
 create sequence project_project_id_seq;
+create sequence plot_plot_id_seq;
+create sequence namedPlace_namedPlace_ID_seq;
+alter table usr alter column password type char(512);

@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-08-07 19:48:34 $'
-  * '$Revision: 1.84 $'
+  * '$Date: 2006-08-08 22:38:20 $'
+  * '$Revision: 1.85 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -344,6 +344,9 @@ createdb      creates an empty vegbank database from the existing sql scripts.
       <pathelement location="./"/>
       <fileset dir="lib/">
         <include name="**/*.jar"/>
+      </fileset>
+      <fileset dir="build/">
+        <include name="vegbank.jar"/>
       </fileset>
     </path>
     <property name="classpath" refid="projectClassPath"/>
@@ -745,5 +748,19 @@ createdb      creates an empty vegbank database from the existing sql scripts.
           ASAP.  This user is the super user and will allow you to create other
           accounts.</echo>
     <echo>***************************************************************</echo>
+  </target>
+  
+  <!-- this target resets the admin password to the default -->
+  <target name="seedAdminPassword" depends="jar">
+    <java classname="org.vegbank.common.utility.UserDatabaseAccess" fork="true" classpath="${classpath}">
+      <arg line="seedAdmin"/>
+    </java>
+  </target>
+  <!-- this target updates all of the passwords in the usr table to use an MD5
+       digest instead of clear text-->
+  <target name="updateAllPasswords" depends="jar">
+    <java classname="org.vegbank.common.utility.UserDatabaseAccess" fork="true" classpath="${classpath}">
+      <arg line="convertPasswords"/>
+    </java>
   </target>
 </project>

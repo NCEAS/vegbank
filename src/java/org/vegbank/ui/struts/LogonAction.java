@@ -28,9 +28,9 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-08-15 22:04:28 $'
- *	'$Revision: 1.15 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-08-08 22:38:20 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,6 +105,7 @@ public class LogonAction extends VegbankAction
 	
 		WebUser user = null;
 		UserDatabaseAccess uda = new UserDatabaseAccess();
+    
 		try
 		{
 			// Attempt to get user from database;
@@ -116,6 +117,9 @@ public class LogonAction extends VegbankAction
 				log.debug("LogonAction: getting user " + username);
 				user = uda.getUser(username);			
 			}
+      
+      System.out.println("user.password: " + user.getPassword().trim());
+      System.out.println("digested provided password: " + uda.getDigest(password.trim(), user.getEmail().trim()));
 			
 			if ( user == null ) {
 				errors.add(ActionErrors.GLOBAL_ERROR,
@@ -124,7 +128,7 @@ public class LogonAction extends VegbankAction
 			} else if ( user.isGuest() ) {
 				// No need to check password
 
-			} else if  ( ! user.getPassword().equals(password) ) {
+			} else if  ( ! user.getPassword().trim().equals(uda.getDigest(password.trim(), user.getEmail().trim())) ) {
 				// wrong password
 				errors.add(ActionErrors.GLOBAL_ERROR,
 					new ActionError("errors.password.mismatch"));
