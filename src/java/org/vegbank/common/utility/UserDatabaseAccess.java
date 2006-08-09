@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-08-08 22:38:20 $'
- *	'$Revision: 1.25 $'
+ *	'$Date: 2006-08-09 16:56:58 $'
+ *	'$Revision: 1.26 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ package org.vegbank.common.utility;
  *    Authors: John Harris
  * 		
  *		'$Author: berkley $'
- *     '$Date: 2006-08-08 22:38:20 $'
- *     '$Revision: 1.25 $'
+ *     '$Date: 2006-08-09 16:56:58 $'
+ *     '$Revision: 1.26 $'
  */
 
 import java.sql.PreparedStatement;
@@ -310,7 +310,7 @@ public class UserDatabaseAccess
 		try
 		{ //create a digest of the password and store that
       String digest = getDigest(password, emailAddress);
-      System.out.println("digest for user " + emailAddress + ": " + digest);
+      //System.out.println("digest for user " + emailAddress + ": " + digest);
 			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
       //store the digest string

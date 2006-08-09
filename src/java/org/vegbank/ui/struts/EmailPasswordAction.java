@@ -1,5 +1,7 @@
 package org.vegbank.ui.struts;
 
+import java.util.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,9 +23,9 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-01-07 21:44:24 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-08-09 16:56:58 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +57,6 @@ public class EmailPasswordAction extends Action
 		HttpServletRequest request,
 		HttpServletResponse response)
 	{
-		System.out.println(" In EmailPasswordAction ");
 		ActionErrors errors = new ActionErrors();
 		String fwd = "success";
 		
@@ -81,18 +82,27 @@ public class EmailPasswordAction extends Action
 			}
 			else
 			{
-				String passwd =  user.getPassword();
-			
+        Random randomGen = new Random(System.currentTimeMillis());
+        int randomNum = randomGen.nextInt();
+        if(randomNum < 0)
+        {
+          randomNum = randomNum * -1;
+        }
+        
+				String passwd =  new Integer(randomNum).toString();
+        uda.updatePassword(passwd, email);
+        
 				// Send the email
 				String mailHost = null;
 				String cc = "";
 				String body;
 				String from = "help@vegbank.org";
-				String subject = "Recovered VegBank Password";
+				String subject = "Reset VegBank Password";
 			
 				StringBuffer sb = new StringBuffer();
 				sb.append("Dear VegBank user,\n");
-				sb.append("Your password is: "+passwd+"\n\n");
+				sb.append("Your password has been reset to: " + passwd + "\n\n");
+        sb.append("Please login as soon as possible and change your password.");
 				sb.append("VegBank Support Team\n\n");
 				sb.append("Email: help@vegbank.org\n");
 				sb.append("Website: http://vegbank.org\n");

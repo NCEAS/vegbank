@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-08-08 22:38:20 $'
-  * '$Revision: 1.85 $'
+  * '$Date: 2006-08-09 16:56:58 $'
+  * '$Revision: 1.86 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -344,9 +344,6 @@ createdb      creates an empty vegbank database from the existing sql scripts.
       <pathelement location="./"/>
       <fileset dir="lib/">
         <include name="**/*.jar"/>
-      </fileset>
-      <fileset dir="build/">
-        <include name="vegbank.jar"/>
       </fileset>
     </path>
     <property name="classpath" refid="projectClassPath"/>
@@ -752,14 +749,14 @@ createdb      creates an empty vegbank database from the existing sql scripts.
   
   <!-- this target resets the admin password to the default -->
   <target name="seedAdminPassword" depends="jar">
-    <java classname="org.vegbank.common.utility.UserDatabaseAccess" fork="true" classpath="${classpath}">
+    <java classname="org.vegbank.common.utility.UserDatabaseAccess" fork="true" classpath="${classpath}:build/vegbank.jar">
       <arg line="seedAdmin"/>
     </java>
   </target>
   <!-- this target updates all of the passwords in the usr table to use an MD5
        digest instead of clear text-->
   <target name="updateAllPasswords" depends="jar">
-    <java classname="org.vegbank.common.utility.UserDatabaseAccess" fork="true" classpath="${classpath}">
+    <java classname="org.vegbank.common.utility.UserDatabaseAccess" fork="true" classpath="${classpath}:build/vegbank.jar">
       <arg line="convertPasswords"/>
     </java>
   </target>

@@ -1,11 +1,11 @@
 /*
- *	'$Id: UserProfileAction.java,v 1.7 2006-06-15 20:10:06 berkley Exp $'
+ *	'$Id: UserProfileAction.java,v 1.8 2006-08-09 16:56:58 berkley Exp $'
  *	Authors: @author@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-15 20:10:06 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2006-08-09 16:56:58 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -239,9 +239,10 @@ public class UserProfileAction extends VegbankAction {
 					
 					if (!isAdmin) {
 						String str = (String)request.getParameter("password");
-						log.debug("your pwd is " + str);
+            UserDatabaseAccess uda = new UserDatabaseAccess();
+            str = uda.getDigest(str, curUser.getEmail());
 						
-						if (str != null && !str.equals(curUser.getPassword())) {
+						if (str != null && !str.trim().equals(curUser.getPassword().trim())) {
 							log.error("wrong pwd");
 							errors.add(Globals.ERROR_KEY, new ActionError(
 										"errors.password.mismatch"));

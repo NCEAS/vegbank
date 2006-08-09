@@ -29,8 +29,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-08-08 22:38:20 $'
- *	'$Revision: 1.16 $'
+ *	'$Date: 2006-08-09 16:56:58 $'
+ *	'$Revision: 1.17 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,8 +118,9 @@ public class LogonAction extends VegbankAction
 				user = uda.getUser(username);			
 			}
       
-      System.out.println("user.password: " + user.getPassword().trim());
-      System.out.println("digested provided password: " + uda.getDigest(password.trim(), user.getEmail().trim()));
+      //System.out.println("user.password: " + user.getPassword().trim());
+      //System.out.println("digested provided password: " + 
+      //  uda.getDigest(password.trim(), user.getEmail().trim()));
 			
 			if ( user == null ) {
 				errors.add(ActionErrors.GLOBAL_ERROR,
@@ -128,7 +129,8 @@ public class LogonAction extends VegbankAction
 			} else if ( user.isGuest() ) {
 				// No need to check password
 
-			} else if  ( ! user.getPassword().trim().equals(uda.getDigest(password.trim(), user.getEmail().trim())) ) {
+			} else if  ( ! user.getPassword().trim().equals(
+        uda.getDigest(password.trim(), user.getEmail().trim())) ) {
 				// wrong password
 				errors.add(ActionErrors.GLOBAL_ERROR,
 					new ActionError("errors.password.mismatch"));
