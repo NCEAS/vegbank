@@ -24,8 +24,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-08-09 16:56:58 $'
- *	'$Revision: 1.3 $'
+ *	'$Date: 2006-08-09 18:34:28 $'
+ *	'$Revision: 1.4 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,8 +101,8 @@ public class EmailPasswordAction extends Action
 			
 				StringBuffer sb = new StringBuffer();
 				sb.append("Dear VegBank user,\n");
-				sb.append("Your password has been reset to: " + passwd + "\n\n");
-        sb.append("Please login as soon as possible and change your password.");
+				sb.append("Your password has been reset to: " + passwd + "\n");
+        sb.append("Please login as soon as possible and change your password.\n\n");
 				sb.append("VegBank Support Team\n\n");
 				sb.append("Email: help@vegbank.org\n");
 				sb.append("Website: http://vegbank.org\n");
