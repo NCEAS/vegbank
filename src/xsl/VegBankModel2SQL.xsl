@@ -6,9 +6,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: berkley $'
- *	'$Date: 2006-08-07 19:48:35 $'
- *	'$Revision: 1.5 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-08-15 22:00:23 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@
   <xsl:template name="createTable">
 
     <xsl:variable name="tableName" select="entityName"/>
-    <xsl:variable name="sequenceName"><xsl:value-of select="entityName" />__<xsl:value-of select="attribute[attKey='PK']/attName"/>_seq</xsl:variable>
+    <xsl:variable name="sequenceName"><xsl:value-of select="entityName" />_<xsl:value-of select="attribute[attKey='PK']/attName"/>_seq</xsl:variable>
     
 ----------------------------------------------------------------------------
 -- CREATE <xsl:value-of select="$tableName"/>
