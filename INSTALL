@@ -163,6 +163,8 @@ you should now be able to login to the new database like this
 bash$ psql -U vegbank vegbank
 vegbank=>
 
+Initializing the database with a vegbank backup file
+----------------------------------------------------
 Now you just have to create the database schema that vegbank will use.
 If you have a postgresql backup dump that you are installing the db from, 
 use the command:
@@ -173,13 +175,9 @@ bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
 bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
 bash$ psql -U vegbank vegbank < build/sql/vegbank_populate_configtables.sql
 
-Note that if you use a backup file, you will need to run the script 
-src/sql/create_aggregrates.sql to create the aggregate CONCAT function since
-the backups do not include aggregate functions.  You may also need to run
-other .sql scripts in the src/sql directory if you find your backup copy
-is missing information or tables.  Specifically, if your version is less
-than the current version, you should run all files titled like 
-vegbank-changes-1.0.5.sql to update your version.  
+If your version is less than the current version, you should run all files 
+titled like vegbank-changes-1.0.5.sql (where 1.0.5 is the newest version) 
+to update your version.  
 
 To find out the version of your database, check in the table: dba_datamodelversion.
 All versions since 1.0.5 and their initial date should be listed here.
@@ -201,37 +199,22 @@ drop_obsolete_views.sql is run twice because it isn't known whether those views
 might depend on existing views in the database or vice-versa.  Changes may not 
 succeed if all views are not dropped.
 
-If you want to create a fresh, blank database, you first need to create the 
-db sql script from the data model like so:
 
-**NOTE This has not really worked in a while.  Right now, the only sure fire way
-to create the database is with a pg_dump (backup) file from an existing database.
-This is a known bug and will be fixed.**
+Initializing a clean database installation (no data)
+----------------------------------------------------
+bash$ ant createdb
 
-bash$ ant generateDBSQL
-You will find the vegbank.sql file has been built in build/sql.  You can then 
-run
-bash$ psql -U vegbank vegbank < build/sql/vegbank.sql >dbcreate.log 
-bash$ psql -U vegbank vegbank < build/sql/create_aggregrates.sql
-bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
-bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
-bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
-bash$ psql -U vegbank vegbank < build/sql/vegbank_populate_configtables.sql
-bash$ psql -U vegbank vegbank < build/sql/vegbank-changes-1.0.5.sql
 
 You won't have to update the version numbers in this scenario.
 
 You should then be able to login and use the \d command in psql to display
 the table structure of the database
 
-Next you need to add a user so you can load data.  Note the permission type of
-15 is the admin user.
-bash$ psql
-vegbank=# insert into party (party_id, givenname, surname, email) values (1,'jim','bob','jimbob@cooluni.edu');
-INSERT 0 1
-vegbank=# insert into usr (usr_id, party_id, password, permission_type, email_address) values (1,1,'mypasswd',15,'jimbob@cooluni.edu');
-INSERT 0 1
-.
+And admin user (username: admin@vegbank.org, password: vbadmin) will be created
+automatically and can be used to create other accounts.  It is highly recommended
+that you change the admin password via the change password facility in vegbank
+as soon as possible after installation.  Note the passwords are stored in the
+usr table and are digested to prevent snooping.
 
 ==============================
 INSTALLING THE WEB APPLICATION
