@@ -78,3 +78,9 @@ create sequence project_project_id_seq;
 create sequence plot_plot_id_seq;
 create sequence namedPlace_namedPlace_ID_seq;
 alter table usr alter column password type char(512);
+
+
+ALTER TABLE usr ADD COLUMN password_new varchar(512);
+UPDATE usr SET password_new = password;
+ALTER TABLE usr DROP COLUMN password;
+ALTER TABLE usr RENAME password_new TO password;

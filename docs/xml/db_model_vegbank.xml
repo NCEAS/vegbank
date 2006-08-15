@@ -17144,7 +17144,7 @@ conditions may change between resampling events.
       <attLabel>Password</attLabel>
       <attModel>implementation</attModel>
       <attNulls>no</attNulls>
-      <attType>varchar (50)</attType>
+      <attType>varchar (512)</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -17153,7 +17153,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Password to access VegBank on the web.</attDefinition>
       <attForms/>
-      <update>1.0.2</update>
+      <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>1848</attID>
