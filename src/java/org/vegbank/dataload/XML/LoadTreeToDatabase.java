@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-07-13 21:49:24 $'
- *	'$Revision: 1.38 $'
+ *	'$Date: 2006-08-16 19:45:16 $'
+ *	'$Revision: 1.39 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2470,50 +2470,33 @@ public class LoadTreeToDatabase
 
 
     private synchronized void runDenorms() {
-
-        try {
+      System.out.println("*************running denorms");
+      DenormUtility denormUtil = new DenormUtility();
+      Timer t = new Timer("denormalizing tables");
+        try 
+        {
             Iterator tit = tableKeys.keySet().iterator();
-            while (tit.hasNext()) {
+            while (tit.hasNext()) 
+            {
                 String tableName = ((String)tit.next()).toLowerCase();
-                log.debug("Denormalizing " + tableName);
-                // note that this will run default denorms on the table
-                // which currently means all null denorms
-                // not just this load's new records.
-                Timer t = new Timer("denormalizing " + tableName);
-                try {
-                    DenormUtility.updateTable(tableName);
-                    t.stop();
-                } catch (SQLException ex) {
-                    System.out.println("UNABLE to denormalize " + tableName);
-                    t.stop();
-                    log.error("unable to denormalize table " + tableName, ex);
-                }
+                log.debug("Adding " + tableName + " to denormalizing queue");
+                denormUtil.queueTable(tableName);
             }
-
-            /*
-            String psqlPath = Utility.dbPropFile.getString("psqlPath");
-            String user = Utility.dbPropFile.getString("user");
-            String pwd = Utility.dbPropFile.getString("password");
-            String dbName = Utility.dbPropFile.getString("databaseName");
-            String vbHomeDir = Utility.VB_HOME_DIR;
-            String sqlScriptName = "denorm-nullsonly.sql";
-
-            if (!vbHomeDir.endsWith(File.separator)) { vbHomeDir += File.separator; }
-
-            String cmd = psqlPath + " -U " + user;
-
-            // not using password for now
-            //if (!Utility.isStringNullOrEmpty(pwd)) {
-             //   cmd += " -p " + pwd;
-            //}
-
-            cmd += " -f " + vbHomeDir + "sql/" + sqlScriptName + " " + dbName;
-
-            log.debug("executing denorm sql script: " + cmd);
-            Runtime.getRuntime().exec(cmd);
-            */
-
-        } catch (Exception ex) {
+            
+            denormUtil.executeQueuedDenorms();
+            t.stop();
+            
+        }
+        catch (SQLException ex) 
+        {
+            System.out.println("UNABLE to denormalize tables: " + 
+              ex.getMessage());
+            t.stop();
+            log.error("unable to denormalize tables", ex);
+        }
+        catch (Exception ex) 
+        {
+            t.stop();
             log.error("Problem running denormalizations", ex);
         }
     }
