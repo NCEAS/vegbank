@@ -20340,6 +20340,44 @@ conditions may change between resampling events.
       <updateSQLFile>add_versionTable.sql</updateSQLFile>
     </attribute>
   </entity>
+  <entity>
+    <entityName>dba_xmlCache</entityName>
+    <entityLabel>XML Cache</entityLabel>
+    <entitySummary>Stores XML representations of entities in the database.</entitySummary>
+    <entityDescription/>
+    <module>extra</module>
+    <entityCreatedVersion>1.0.5</entityCreatedVersion>
+    <attribute>
+      <attID>2527</attID>
+      <attName>accessioncode</attName>
+      <attModel>denorm</attModel>
+      <attNulls>no</attNulls>
+      <attType>varchar (100)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>accession code of the element whose XML is contained in this record.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2530</attID>
+      <attName>xml</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>bytea</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The XML node that represents the element.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+  </entity>
   <sequence>
     <sequenceName>dba_preassignacccode_dba_requestnumber_seq</sequenceName>
   </sequence>
