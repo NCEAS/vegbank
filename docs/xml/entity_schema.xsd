@@ -157,6 +157,7 @@
       <xs:enumeration value="text"/>
       <xs:enumeration value="Date"/>
       <xs:enumeration value="Boolean"/>
+      <xs:enumeration value="bytea" />
     </xs:restriction>
     <!-- handle regularly enumerated types ie all but varchars -->
   </xs:simpleType>
@@ -229,7 +230,7 @@
   </xs:element>
   <!-- restrictions on entity being added to db : requires a parent listed to be added -->
   <xs:element name="entityCreatedVersion">
-      <xs:simpleType>
+    <xs:simpleType>
       <xs:restriction base="xs:string">
         <xs:pattern value="[0-9].[0-9].[0-9]"/>
       </xs:restriction>
@@ -309,6 +310,6 @@
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
-  <xs:element name="updateComments" type="xs:string" />
+  <xs:element name="updateComments" type="xs:string"/>
   <xs:element name="updateSQLFile" type="xs:string"/>
 </xs:schema>
