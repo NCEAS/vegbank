@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-08-22 21:13:18 $'
- *	'$Revision: 1.13 $'
+ *	'$Date: 2006-08-22 21:39:24 $'
+ *	'$Revision: 1.14 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,8 +88,8 @@ public class XMLUtil
             sql = "insert into dba_xmlCache (accessioncode, xml) values " +
               "(?, ?)";
             PreparedStatement ps2 = conn.prepareStatement(sql);
-            ps.setString(1, accCode);
-            ps.setBytes(2, xml.getBytes());
+            ps2.setString(1, accCode);
+            ps2.setBytes(2, xml.getBytes());
             int rowcount = ps2.executeUpdate();
             System.out.println("rowcount: " + rowcount);
             if(rowcount != 1)
