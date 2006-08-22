@@ -6,8 +6,8 @@ package org.vegbank.common.utility;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-08-02 16:14:11 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2006-08-22 21:13:18 $'
+ *	'$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ public class XMLUtil
           byte[] b = rs.getBytes(1);
           xml = new String(b);
           rs.close();
-          System.out.println("Got cached xml");
+          System.out.println("got xml from cache");
         }
         else
         {
@@ -82,6 +82,31 @@ public class XMLUtil
           dbmbReader.releaseConnection();
           xml = vbmb.toXML();
           System.out.println("got xml from bean");
+          //now cache it
+          try
+          {
+            sql = "insert into dba_xmlCache (accessioncode, xml) values " +
+              "(?, ?)";
+            PreparedStatement ps2 = conn.prepareStatement(sql);
+            ps.setString(1, accCode);
+            ps.setBytes(2, xml.getBytes());
+            int rowcount = ps2.executeUpdate();
+            System.out.println("rowcount: " + rowcount);
+            if(rowcount != 1)
+            {//failure
+              String msg = "SQL problem caching bean xml";
+              System.out.println(msg);
+            }
+            else
+            {
+              System.out.println("xml cached.");
+            }
+          }
+          catch(Exception e2)
+          {
+            System.out.println("Error caching xml: " + e2.getMessage());
+            e2.printStackTrace();
+          }
         }
         sb.append(xml);
       }
