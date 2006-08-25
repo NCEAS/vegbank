@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2006-07-20 03:53:37 $'
-* '$Revision: 1.185 $'
+* '$Date: 2006-08-25 01:29:50 $'
+* '$Revision: 1.186 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -77,6 +77,8 @@
 <filter token="googlemaps_apikey" value="${googlemaps_apikey}" />
 
 <!-- set forceoverwrite to false if not already set -->
+<echo>FORCING OVERWRITE (debug, before condition): ${forceoverwrite}</echo>
+
 <condition property="forceoverwrite" value="false">
 <not>
 <isset property="forceoverwrite"/>
@@ -875,12 +877,15 @@
   
   
   <target name="setoverwrite" description="=&gt; sets overwrite to true, could also do same with commandLine&gt; ant -Dforceoverwrite=true" >
+
       <property name="forceoverwrite" value="true" /> <!-- this should always be true if deploying all -->
+      <echo>SETTING FORCE OVERWRITE VARIABLE: ${forceoverwrite}</echo>
   </target>
   
   
   <target name="deploy-all" description="=&gt; all in deploy plus slow rarely updated stuff">
-    <antcall target="setoverwrite" />
+    <!-- doesn't work, different project? : <antcall target="setoverwrite" inheritAll="true"/> -->
+    <property name="forceoverwrite" value="true" />
     <antcall target="deploy-all-doesit" />
     <antcall target="cache" /><!-- has to be after views, etc. -->
   </target>
