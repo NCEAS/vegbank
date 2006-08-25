@@ -27,8 +27,8 @@ import org.vegbank.common.Constants;
  * Purpose: An utility class for Vegbank project.
  *
  * '$Author: mlee $'
- * '$Date: 2006-06-02 21:57:18 $'
- * '$Revision: 1.54 $'
+ * '$Date: 2006-08-25 07:03:45 $'
+ * '$Revision: 1.55 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,7 +127,7 @@ public class Utility implements Constants
 
         // accessionCode properties for this database:
         // accessionPropFile = ResourceBundle.getBundle("accession");
-        DATABASE_ACCESSION_KEY_PREASSIGN = dbPropFile.getString("database.accession.key.preassign");
+        DATABASE_ACCESSION_KEY_PREASSIGN = vegbankPropFile.getString("database.accession.key.preassign");
 
 	} catch (Exception ex) {
 		log.error("There was a problem loading Utility properties", ex);

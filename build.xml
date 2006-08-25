@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: berkley $'
-  * '$Date: 2006-08-09 16:56:58 $'
-  * '$Revision: 1.86 $'
+  * '$Author: mlee $'
+  * '$Date: 2006-08-25 07:03:45 $'
+  * '$Revision: 1.87 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -144,6 +144,7 @@ createdb      creates an empty vegbank database from the existing sql scripts.
     <filter token="databaseConnectString" value="${databaseConnection}"/>
     <filter token="databaseName" value="${databaseName}"/>
     <filter token="database.accession.key.preassign" value="${database.accession.key.preassign}" />
+    <filter token="vegbank.accession.prefix" value="${vegbank.accession.prefix}" />
     <filter token="psqlPath" value="${psqlPath}"/>
     <filter token="vegbankVersion" value="${version}"/>
     <filter token="vegbank.data.dir" value="${dataPath}/"/>
