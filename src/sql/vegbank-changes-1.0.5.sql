@@ -86,3 +86,28 @@ ALTER TABLE usr ADD COLUMN password_new varchar(512);
 UPDATE usr SET password_new = password;
 ALTER TABLE usr DROP COLUMN password;
 ALTER TABLE usr RENAME password_new TO password;
+
+drop table temptbl_std_commnames;
+CREATE TABLE temptbl_std_commnames
+(
+commconcept_id serial ,
+sciname varchar (255) ,
+translated varchar (255) ,
+code varchar (255) ,
+common varchar (255) ,
+
+PRIMARY KEY ( commconcept_id )
+);
+
+drop table temptbl_std_plantnames;
+CREATE TABLE temptbl_std_plantnames
+(
+plantconcept_id serial ,
+plantname varchar (255) ,
+sciname varchar (255) ,
+scinamenoauth varchar (255) ,
+code varchar (255) ,
+common varchar (255) ,
+
+PRIMARY KEY ( plantconcept_id )
+);

@@ -2,19 +2,20 @@
 -- MUST START WITH temptbl_ to be ignored by verify script
 
 
+--handled in model creation!
+--DROP TABLE temptbl_std_plantnames;
+--CREATE TABLE temptbl_std_plantnames
+--(
+--PLANTCONCEPT_ID serial ,
+--plantname varchar(255), 
+--sciname varchar (255),
+--scinamenoauth varchar (255),
+--code varchar (255),
+--common varchar (255),
+--PRIMARY KEY ( PLANTCONCEPT_ID )
+--);
 
-DROP TABLE temptbl_std_plantnames;
-CREATE TABLE temptbl_std_plantnames
-(
-PLANTCONCEPT_ID serial ,
-plantname varchar(255), 
-sciname varchar (255),
-scinamenoauth varchar (255),
-code varchar (255),
-common varchar (255),
-PRIMARY KEY ( PLANTCONCEPT_ID )
-);
-
+delete from temptbl_std_commnames;
 
 INSERT INTO temptbl_std_plantnames (plantConcept_ID, sciname, scinamenoauth,code,common, plantname) 
   SELECT plantConcept_ID, 
@@ -57,18 +58,19 @@ UPDATE temptbl_std_plantnames SET common=(select min(plantname) from view_all_pl
     
     
 
+-- HANDLED ELSEWHERE!
+--DROP TABLE temptbl_std_commnames;
+--CREATE TABLE temptbl_std_commnames
+--(
+--COMMCONCEPT_ID serial ,
+--sciname varchar (255),
+--translated varchar (255),
+--code varchar (255),
+--common varchar (255),
+--PRIMARY KEY ( commCONCEPT_ID )
+--);
 
-DROP TABLE temptbl_std_commnames;
-CREATE TABLE temptbl_std_commnames
-(
-COMMCONCEPT_ID serial ,
-sciname varchar (255),
-translated varchar (255),
-code varchar (255),
-common varchar (255),
-PRIMARY KEY ( commCONCEPT_ID )
-);
-
+delete from temptbl_std_commnames;
 
 INSERT INTO temptbl_std_commnames (commConcept_ID, sciname, translated,code,common) 
   SELECT commConcept_ID, 
