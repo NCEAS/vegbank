@@ -17,10 +17,13 @@ For more on VegBank's XML, please see http://vegbank.org/xml
         <xs:element ref="doc-authorSoftware" minOccurs="0" />
         <xs:element ref="doc-comments" minOccurs="0" maxOccurs="unbounded" />
         <xs:element ref="commConcept" minOccurs="0" maxOccurs="unbounded" />
-        <xs:element ref="plantConcept" minOccurs="0" maxOccurs="unbounded" />
-        <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="coverMethod" minOccurs="0" maxOccurs="unbounded" />
         <xs:element ref="observation" minOccurs="0" maxOccurs="unbounded" />
         <xs:element ref="party" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="plantConcept" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="project" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="reference" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="stratumMethod" minOccurs="0" maxOccurs="unbounded" />
         <xs:element ref="noteLink" minOccurs="0" maxOccurs="unbounded" />
         <xs:element ref="revision" minOccurs="0" maxOccurs="unbounded" />
       </xs:sequence>

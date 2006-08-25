@@ -4794,7 +4794,7 @@ change through time.</entitySummary>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
-      <attRelType type="n/a" name="n/a"/>
+      <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -13174,7 +13174,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
-      <attRelType type="n/a" name="n/a"/>
+      <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
@@ -14889,7 +14889,7 @@ conditions may change between resampling events.
       <attNulls>yes</attNulls>
       <attType>serial</attType>
       <attKey>PK</attKey>
-      <attRelType type="n/a" name="n/a"/>
+      <attRelType type="root" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>

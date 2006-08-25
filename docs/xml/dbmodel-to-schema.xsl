@@ -33,6 +33,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
         <xs:element ref="doc-comments" minOccurs="0" maxOccurs="unbounded"/>
 
             <xsl:for-each select="/dataModel/entity[module='plot' or module='community' or module='plant']">
+              <xsl:sort select="entityName" />
               <xsl:if test="attribute/attRelType/attribute::type='root'">
                 <xsl:element name="xs:element">
                   <xsl:attribute name="ref"><xsl:value-of select="entityName"/></xsl:attribute>
