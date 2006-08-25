@@ -50,3 +50,6 @@ DROP VIEW view_party_transl ;
 drop view view_party_public;
 
 DROP VIEW  view_keywProjPlaces ;
+DROP VIEW view_kwhelper_projcontrib;
+DROP VIEW view_kwhelper_refparty;
+DROP VIEW view_kwhelper_refjournal;

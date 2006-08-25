@@ -1,10 +1,5 @@
 --- VIEWS MUST BE DROPPED in drop_vegbank_views first!
 
-CREATE VIEW view_keywProjPlaces AS 
-  SELECT project.project_id, plot.stateProvince 
-  FROM plot, project, observation 
-  WHERE plot.plot_ID = observation.plot_ID  AND project.project_id = observation.project_id  
-  GROUP BY project.project_ID, plot.stateProvince;
 
 CREATE VIEW view_party_public AS 
   SELECT party.party_id, accessioncode, salutation, surname, 
@@ -341,3 +336,33 @@ AS SELECT plot.*, embargo_id, embargoreason,defaultstatus,embargostart,embargost
 LEFT JOIN embargo on plot.plot_id = embargo.plot_ID;
 
 --CREATE VIEW view_taxonobs_distinctid_orig;
+
+
+-- KEYWORDS VIEWS (otherwise they just aren't robust enough and are breaking!)
+CREATE VIEW view_kwhelper_refjournal AS
+  SELECT reference.reference_id, 
+  coalesce(referencejournal.journal,'') || ' ' || coalesce(referencejournal.issn,'') || ' ' || coalesce(referencejournal.abbreviation,'') as kw
+  FROM reference, referencejournal 
+  WHERE reference.referencejournal_id = referencejournal.referencejournal_id 
+  GROUP BY reference.reference_id, referencejournal.journal, referencejournal.issn, referencejournal.abbreviation ;
+
+CREATE VIEW view_kwhelper_refparty AS 
+  SELECT reference.reference_id, 
+    public.CONCAT(' ' || coalesce(referenceparty.givenname,'') || ' ' || coalesce(referenceparty.surname,'') || ' ' || coalesce(referenceparty.suffix,'') || ' ' || coalesce(referenceparty.organizationname,'')) as kw
+    FROM referenceparty, reference, referencecontributor 
+    WHERE referencecontributor.referenceparty_id=referenceparty.referenceparty_id AND reference.reference_id=referencecontributor.reference_id
+  GROUP BY reference.reference_id ;
+  
+
+CREATE VIEW view_keywProjPlaces AS 
+  SELECT project.project_id, plot.stateProvince 
+  FROM plot, project, observation 
+  WHERE plot.plot_ID = observation.plot_ID  AND project.project_id = observation.project_id  
+  GROUP BY project.project_ID, plot.stateProvince;
+  
+CREATE VIEW view_kwhelper_projcontrib AS 
+  SELECT project.project_id, 
+    public.CONCAT(' ' || coalesce(party.givenname,'') || ' ' ||  coalesce(party.surname,'')) as kw
+    FROM party, project, projectcontributor   
+    WHERE party.party_id=projectcontributor.party_Id AND project.project_id=projectcontributor.project_id 
+  GROUP BY project.project_id  
