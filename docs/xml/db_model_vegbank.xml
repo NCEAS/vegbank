@@ -17143,7 +17143,7 @@ conditions may change between resampling events.
       <attName>password</attName>
       <attLabel>Password</attLabel>
       <attModel>implementation</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (512)</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
@@ -20351,7 +20351,7 @@ conditions may change between resampling events.
       <attID>2527</attID>
       <attName>accessioncode</attName>
       <attModel>denorm</attModel>
-      <attNulls>no</attNulls>
+      <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
