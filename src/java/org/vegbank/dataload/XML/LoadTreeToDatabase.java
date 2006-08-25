@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-25 07:16:54 $'
- *	'$Revision: 1.40 $'
+ *	'$Date: 2006-08-25 18:44:33 $'
+ *	'$Revision: 1.41 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -440,9 +440,8 @@ public class LoadTreeToDatabase
     /**
      * Get the whether or not a preassigned PK was really assigned beforehand.
      * 
-     * @param tableName
-     * @param AccessionCode
-     * @return long -- PK of the table
+     * @param accessionCode
+     * @return boolean -- true if the accessionCode passed is found in the queue of preassigned accession codes
      */
     private boolean checkPreassignedAccCode( String accessionCode )
     {
