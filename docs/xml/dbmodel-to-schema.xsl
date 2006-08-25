@@ -11,9 +11,11 @@
   <xsl:when test="$validLevel=1">  THIS is for ANY xml document, excluding VegBranch uploads.  </xsl:when>
   <xsl:when test="$validLevel=2">  VERY STRICT schema (enforces closed lists)</xsl:when>
 
+</xsl:choose>
+
+
 For more information on VegBank, please see http://vegbank.org.
 For more on VegBank's XML, please see http://vegbank.org/xml
-</xsl:choose>
 
 </xsl:comment>
     <xsl:element name="xs:schema">
@@ -30,7 +32,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
         <xs:element ref="doc-authorSoftware" minOccurs="0"/>
         <xs:element ref="doc-comments" minOccurs="0" maxOccurs="unbounded"/>
 
-            <xsl:for-each select="/dataModel/entity">
+            <xsl:for-each select="/dataModel/entity[module='plot' or module='community' or module='plant']">
               <xsl:if test="attribute/attRelType/attribute::type='root'">
                 <xsl:element name="xs:element">
                   <xsl:attribute name="ref"><xsl:value-of select="entityName"/></xsl:attribute>
@@ -39,7 +41,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
                 </xsl:element>
               </xsl:if>
             </xsl:for-each>
-            <xsl:for-each select="/dataModel/entity">
+            <xsl:for-each select="/dataModel/entity[module='plot' or module='community' or module='plant']">
               <xsl:if test="attribute/attRelType/attribute::type='allfields'">
                 <xsl:element name="xs:element">
                   <xsl:attribute name="ref"><xsl:value-of select="entityName"/></xsl:attribute>
@@ -67,8 +69,8 @@ For more on VegBank's XML, please see http://vegbank.org/xml
 
 
 
-      <!-- first desclare simple types for closed lists -->
-      <xsl:for-each select="dataModel/entity/attribute[attListType='closed'][attModel='logical']">
+      <!-- first declare simple types for closed lists -->
+      <xsl:for-each select="dataModel/entity[module='plot' or module='community' or module='plant']/attribute[attListType='closed'][attModel='logical']">
         <xsl:element name="xs:simpleType">
           <xsl:attribute name="name"><xsl:call-template name="closedlistType"/></xsl:attribute>
           <xsl:element name="xs:restriction">
@@ -90,7 +92,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
         </xsl:element>
         <!-- end simpleContent and restriction -->
       </xsl:for-each>
-      <xsl:for-each select="dataModel/entity">
+      <xsl:for-each select="dataModel/entity[module='plot' or module='community' or module='plant']">
         <!-- complex type: table (entity) -->
         <xsl:element name="xs:element">
           <xsl:attribute name="name"><xsl:value-of select="entityName"/></xsl:attribute>
@@ -109,8 +111,8 @@ For more on VegBank's XML, please see http://vegbank.org/xml
                       </xsl:when>
                       <xsl:when test="attRelType[attribute::type='inverted']">
                         <!-- inverted FK according to schema, that is FK is not listed here, but referenced from the primary table -->
-                        <xsl:comment>
-                          <xsl:value-of select="attName"/> is inverted rel</xsl:comment>
+                       <!-- <xsl:comment>
+                          <xsl:value-of select="attName"/> is inverted rel</xsl:comment> -->
                       </xsl:when>
                       <xsl:otherwise>@@#@ CANNOT deal with attRelType @@#@: <xsl:value-of select="attName"/>
                       </xsl:otherwise>
@@ -129,7 +131,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
               <xsl:variable name="CurrEntity">
                 <xsl:value-of select="entityName"/>
               </xsl:variable>
-              <xsl:for-each select="../entity/attribute[attKey='FK'][attModel='logical'][attRelType/attribute::type='inverted'][substring-before(attReferences,'.')=$CurrEntity]">
+              <xsl:for-each select="../entity[module='plot' or module='community' or module='plant']/attribute[attKey='FK'][attModel='logical'][attRelType/attribute::type='inverted'][substring-before(attReferences,'.')=$CurrEntity]">
               <xsl:sort select="../entityName" />
                 <xsl:choose>
                   <xsl:when test="attRelType/attribute::name!='n/a'">
@@ -199,6 +201,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
     <xsl:choose>
       <xsl:when test="attType='BLOB'">xs:hexBinary</xsl:when>
       <xsl:when test="attType='oid'">xs:hexBinary</xsl:when>
+      <xsl:when test="attType='bytea'">xs:hexBinary</xsl:when>
       <xsl:when test="attType='Boolean'">xs:boolean</xsl:when>
       <xsl:when test="attType='Date'">xs:dateTime</xsl:when>
       <xsl:when test="attType='Float'">xs:decimal</xsl:when>
@@ -213,7 +216,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
     <xsl:attribute name="minOccurs"><xsl:choose><xsl:when test="attNulls='no' and $validLevel!=0"><!-- here we have reqd field, but if level of xsd is 0, then still dont require-->1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:attribute>
   </xsl:template>
   <xsl:template name="addFieldAtts">
-    <xsl:for-each select="/dataModel/entity/attribute[attRelType/attribute::type='allfields'][attModel='logical']">
+    <xsl:for-each select="/dataModel/entity[module='plot' or module='community' or module='plant']/attribute[attRelType/attribute::type='allfields'][attModel='logical']">
     <xsl:sort select="../entityName"/>
       <xsl:element name="xs:attribute">
         <xsl:attribute name="name"><xsl:value-of select="../entityName"/>.<xsl:value-of select="attName"/></xsl:attribute>
@@ -223,7 +226,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
     </xsl:for-each>
   </xsl:template>
   <xsl:template name="addTableEnts">
-    <xsl:for-each select="/dataModel/entity[attribute/attRelType/attribute::type='alltables']">
+    <xsl:for-each select="/dataModel/entity[module='plot' or module='community' or module='plant'][attribute/attRelType/attribute::type='alltables']">
     <xsl:sort select="entityName"/>
       <xsl:element name="xs:element">
         <xsl:attribute name="ref"><xsl:value-of select="entityName"/></xsl:attribute>
