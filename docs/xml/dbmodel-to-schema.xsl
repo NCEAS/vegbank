@@ -5,25 +5,15 @@
   <xsl:param name="validLevel">0</xsl:param><!-- 1 is for regular xsd: reqd fields, 2 is for extra strict xsd: closed list values, 0 is for very loose xsd such as for vegbank importing from vegbranch -->
   <xsl:template match="/">
 <xsl:comment>
- this document validates VegBank data xml documents, for version 1.0.0 
+ this document validates VegBank data xml documents, for version <xsl:value-of select="/dataModel/version" />
+ <xsl:choose>
+  <xsl:when test="$validLevel=0">  THIS IS FOR VEGBRANCH UPLOAD XML DOCUMENTS ONLY!! </xsl:when>
+  <xsl:when test="$validLevel=1">  THIS is for ANY xml document, excluding VegBranch uploads.  </xsl:when>
+  <xsl:when test="$validLevel=2">  VERY STRICT schema (enforces closed lists)</xsl:when>
 
-  *
-  *     '$Author: berkley $'
-  *     '$Date: 2006-06-01 20:53:42 $'
-  *     '$Revision: 1.8 $'
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+For more information on VegBank, please see http://vegbank.org.
+For more on VegBank's XML, please see http://vegbank.org/xml
+</xsl:choose>
 
 </xsl:comment>
     <xsl:element name="xs:schema">
