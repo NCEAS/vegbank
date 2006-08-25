@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: berkley $'
- *	'$Date: 2006-08-16 19:45:16 $'
- *	'$Revision: 1.39 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-08-25 07:16:54 $'
+ *	'$Revision: 1.40 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -437,6 +437,40 @@ public class LoadTreeToDatabase
 		return PK;
 	}
 	
+    /**
+     * Get the whether or not a preassigned PK was really assigned beforehand.
+     * 
+     * @param tableName
+     * @param AccessionCode
+     * @return long -- PK of the table
+     */
+    private boolean checkPreassignedAccCode( String accessionCode )
+    {
+        StringBuffer sb = new StringBuffer();
+        boolean preAssignFound = false;
+        try 
+        {
+            sb.append(
+                "SELECT 1 from dba_preassignacccode where " + Constants.ACCESSIONCODENAME + " = '" + accessionCode + "'"
+            );
+
+            Statement query = readConn.createStatement();
+            ResultSet rs = query.executeQuery(sb.toString());
+            while (rs.next()) 
+            {
+                // PK = rs.getInt(1);
+                preAssignFound = true;
+            }
+            rs.close();
+        }
+        catch ( SQLException se ) 
+        { 
+            this.filterSQLException(se, sb.toString());     
+        }
+        // log.debug("Pre-assigned AccCode Query: '" + sb.toString() + "' wondered if it was found: " + preAssignFound);
+        return preAssignFound;
+    }
+    
 	/**
 	 * @param se
 	 */
@@ -609,7 +643,8 @@ public class LoadTreeToDatabase
 //				return this.getTablePK(tableName, fieldValueHash);
 //			}
 		
-		PK = this.getNextId(tableName);
+		// this creates too many skipped rows, do it later:   
+        //   PK = this.getNextId(tableName);
 		
 		// Strip out accessionCodes before writing to database
 		// AC's are now added after loadind the dataset.
@@ -653,13 +688,23 @@ public class LoadTreeToDatabase
 						}
 						// Need to add this to the datastruture that prevents
 						// the adding duplicate fields
+                        // now get the next value, since we are adding it for sure:
+                        PK = this.getNextId(tableName);
+                        
 						inputPKTracker.setAssignedPK(tableName, stringValue.toString(), PK);
 						//log.debug("No record added for xmlPK :" + stringValue.toString()
 						//		+ " for table " + tableName + " adding PK now: " + PK);
 					}
 				}
 			}
-			
+            
+			// if for some reason the PK wasn't in the list, we'll get the value now:
+            if (PK == 0) {
+                
+                PK = this.getNextId(tableName);
+                log.debug("No PK was previously found! so I got " + PK);
+            }
+            
 			fieldNames.add( Utility.getPKNameFromTableName(tableName) );
 			fieldValues.add("" + PK);
 
@@ -709,8 +754,33 @@ public class LoadTreeToDatabase
 	 * @param fieldValueHash
 	 */
 	private void removeAccessionCode(Hashtable fieldValueHash)
-	{
-			fieldValueHash.remove(Constants.ACCESSIONCODENAME);
+	{ 
+          // before removing it, check to see if it is preassigned
+          
+             // we should try and see if this is a pre-assigned accessionCode from a client (that'd be VegBranch)
+             // these are stored in the dba_preassignacccode table
+             // the prefix is defined in the build.properties file
+            String accessionCode = "";
+            accessionCode = (String) fieldValueHash.get(Constants.ACCESSIONCODENAME);
+            if ( Utility.isStringNullOrEmpty( accessionCode )) {
+                // don't bother doing anything, there is no accessionCode to remove!
+                //log.debug("There was no accession code");
+            } else {
+                //log.debug("There was an accession code and it happens to be: " + accessionCode);
+                boolean skipRemoval = false;
+                if (accessionCode.startsWith(Utility.DATABASE_ACCESSION_KEY_PREASSIGN + ".")) {
+                   // only bother to check this if the prefix is right, this saves lots of time, as vegbranch temp codes are never checked
+                   //log.debug(accessionCode + " is a preassigned candidate...");
+                   skipRemoval = ( checkPreassignedAccCode( accessionCode) ) ;
+                   //if (skipRemoval) {
+                   //    log.debug(accessionCode + " was indeed preassigned.");
+                   //}
+                }
+                if (!skipRemoval) {
+                  //log.debug("removing accessionCode " + accessionCode + " from the record.");  
+		    	  fieldValueHash.remove(Constants.ACCESSIONCODENAME);
+                }
+            }
 	}
 
 	/**
@@ -772,8 +842,9 @@ public class LoadTreeToDatabase
 				// great got a real PK
 				//log.debug("Found PK ("+PK+") for "+tableName+" accessionCode: "+ accessionCode);
 			} else {
+
 				/*
-				// problem no accessionCode like that in database 
+                // problem no accessionCode like that in database 
 				StringBuffer emSb = new StringBuffer(256)
 					.append("Can't find ")
 					.append(tableName)
