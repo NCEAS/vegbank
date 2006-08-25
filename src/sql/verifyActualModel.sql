@@ -15,6 +15,18 @@ FROM pg_constraint WHERE conrelid>0 and confrelid>0) as mtl_cons
 ON (select relname from pg_statio_all_tables where attrelid=relid)=mtl_tblNm and pg_attribute.attname=mtl_fldNm where attstattarget=-1 and pg_attribute.attrelid in (select relid from pg_statio_all_tables where schemaname='public') 
 GROUP BY pg_attribute.attrelid, attName, pg_attribute.atttypid, pg_attribute.atttypmod, pg_attribute.attnotnull, 
   mtl_cons.mtl_ftbl, mtl_cons.mtl_ffldnm
-  HAVING (select relname from pg_statio_all_tables where attrelid=relid) NOT LIKE 'temptbl_%'
 ORDER BY (select relname from pg_statio_all_tables where attrelid=relid),  replace(attname,'_','a')
 ;
+
+
+--now get a list of the views -- don't bother with view defn, as they aren't easily verified (different versions of text may be the same view)
+select 'view', viewName , 'if i''m lowercase, i''m from database, else from model xml' from pg_views WHERE schemaname='public' ORDER BY viewName;
+
+--now get a list of sequences:
+select 'sequence', 
+  relName, 
+  (select 1 from pg_attrdef where adsrc ilike 'nextval(''' || relname || '''%' LIMIT 1) as attachedToPK, 
+  'if i''m lowercase, i''m from database, else from model xml' 
+ FROM pg_class 
+ WHERE relkind='S' 
+ ORDER BY attachedToPK DESC, relname ASC;

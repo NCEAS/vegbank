@@ -32,6 +32,13 @@ then diff case INSENsitive and ignoring spaces -->
     <xsl:when test="attModel='logical'">diL</xsl:when>
   </xsl:choose>|IF I'M LOWERCASE, I'M FROM DATABASE, ELSE FROM MODEL XML
 </xsl:for-each>
+  <xsl:for-each select="dataModel/view"><xsl:sort select="viewName" />view|<xsl:value-of select="viewName" />|IF I'M LOWERCASE, I'M FROM DATABASE, ELSE FROM MODEL XML
+</xsl:for-each>
+  <xsl:for-each select="dataModel/sequence"><xsl:sort select="sequenceName" />sequence|<xsl:value-of select="sequenceName" />||IF I'M LOWERCASE, I'M FROM DATABASE, ELSE FROM MODEL XML
+</xsl:for-each>
+  <xsl:for-each select="dataModel/entity/attribute[attKey='PK'][attType='serial']">
+    <xsl:sort select="concat(../entityName,'_',attName,'_seq')" />sequence|<xsl:value-of select="concat(../entityName,'_',attName,'_seq')" />|1|IF I'M LOWERCASE, I'M FROM DATABASE, ELSE FROM MODEL XML
+</xsl:for-each>
 </xsl:template>
 
 <xsl:template name="writeModel" >
