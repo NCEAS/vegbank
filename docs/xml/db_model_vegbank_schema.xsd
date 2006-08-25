@@ -17,7 +17,8 @@
         <xs:element ref="description"/>
         <xs:element ref="date"/>
         <xs:element ref="entity" maxOccurs="unbounded"/>
-        <xs:element ref="sequence" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="view" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="sequence" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
     <xs:unique name="uniqueAttID">
@@ -31,7 +32,14 @@
   <xs:element name="sequence">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="sequenceName" />
+        <xs:element ref="sequenceName"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="view">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="viewName"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -39,6 +47,5 @@
   <xs:element name="title" type="xs:string"/>
   <xs:element name="version" type="xs:string"/>
   <xs:element name="versionDesc" type="xs:string"/>
-
-
+  <xs:element name="viewName" type="xs:string"/>
 </xs:schema>

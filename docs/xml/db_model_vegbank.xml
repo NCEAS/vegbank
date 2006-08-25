@@ -19753,7 +19753,7 @@ conditions may change between resampling events.
       <attModel>implementation</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <attKey>n/a</attKey>
+      <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -20289,7 +20289,7 @@ conditions may change between resampling events.
       <attModel>implementation</attModel>
       <attNulls>no</attNulls>
       <attType>Integer</attType>
-      <attKey>PK</attKey>
+      <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
@@ -20394,6 +20394,373 @@ conditions may change between resampling events.
       <update>1.0.5</update>
     </attribute>
   </entity>
+  <entity>
+    <entityName>temptbl_std_commnames</entityName>
+    <entityLabel>Community Names (compiled)</entityLabel>
+    <entitySummary>Stores community names of different class systems.</entitySummary>
+    <entityDescription/>
+    <module>extra</module>
+    <entityCreatedVersion>1.0.5</entityCreatedVersion>
+    <attribute>
+      <attID>2550</attID>
+      <attName>commconcept_id</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>referenced commConcept.commConcept_ID</attNotes>
+      <attDefinition>unique ID for community</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2553</attID>
+      <attName>sciname</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>scientific name of the community</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2556</attID>
+      <attName>translated</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>translated name of the community</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2559</attID>
+      <attName>code</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>community code</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2562</attID>
+      <attName>common</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>community common name</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+  </entity>
+  <entity>
+    <entityName>temptbl_std_plantnames</entityName>
+    <entityLabel>Plant Names (compiled)</entityLabel>
+    <entitySummary>Stores plant names of different class systems.</entitySummary>
+    <entityDescription/>
+    <module>extra</module>
+    <entityCreatedVersion>1.0.5</entityCreatedVersion>
+    <attribute>
+      <attID>2650</attID>
+      <attName>plantconcept_id</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>referenced plantConcept.plantConcept_ID</attNotes>
+      <attDefinition>unique ID for plant</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2652</attID>
+      <attName>plantname</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>name the plant concept is based on</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2653</attID>
+      <attName>sciname</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>scientific name of the plant</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2654</attID>
+      <attName>scinamenoauth</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>scientific name of the plant, no authors</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2659</attID>
+      <attName>code</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>plant code</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2662</attID>
+      <attName>common</attName>
+      <attModel>denorm</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>plant common name</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+  </entity>
+  <view>
+    <viewName>view_all_commnames_code</viewName>
+  </view>
+  <view>
+    <viewName>view_all_commnames_common</viewName>
+  </view>
+  <view>
+    <viewName>view_all_commnames_sciname</viewName>
+  </view>
+  <view>
+    <viewName>view_all_commnames_translated</viewName>
+  </view>
+  <view>
+    <viewName>view_all_plantnames_code</viewName>
+  </view>
+  <view>
+    <viewName>view_all_plantnames_common</viewName>
+  </view>
+  <view>
+    <viewName>view_all_plantnames_sciname</viewName>
+  </view>
+  <view>
+    <viewName>view_all_plantnames_scinamenoauth</viewName>
+  </view>
+  <view>
+    <viewName>view_browseparty_all</viewName>
+  </view>
+  <view>
+    <viewName>view_browseparty_all_count</viewName>
+  </view>
+  <view>
+    <viewName>view_browseparty_all_count_combined</viewName>
+  </view>
+  <view>
+    <viewName>view_browseparty_classcontrib</viewName>
+  </view>
+  <view>
+    <viewName>view_browseparty_classcontrib_count</viewName>
+  </view>
+  <view>
+    <viewName>view_browseparty_obscontrib</viewName>
+  </view>
+  <view>
+    <viewName>view_browseparty_obscontrib_count</viewName>
+  </view>
+  <view>
+    <viewName>view_browseparty_projectcontrib</viewName>
+  </view>
+  <view>
+    <viewName>view_browseparty_projectcontrib_count</viewName>
+  </view>
+  <view>
+    <viewName>view_busrule_duplcovercode</viewName>
+  </view>
+  <view>
+    <viewName>view_busrule_duplstratumtype</viewName>
+  </view>
+  <view>
+    <viewName>view_busrule_plotsizeshape</viewName>
+  </view>
+  <view>
+    <viewName>view_commconcept_transl</viewName>
+  </view>
+  <view>
+    <viewName>view_comminterp_more</viewName>
+  </view>
+  <view>
+    <viewName>view_csv_taxonimportance</viewName>
+  </view>
+  <view>
+    <viewName>view_csv_taxonimportance_pre</viewName>
+  </view>
+  <view>
+    <viewName>view_emb_embargo_complete</viewName>
+  </view>
+  <view>
+    <viewName>view_emb_embargo_currentfullonly</viewName>
+  </view>
+  <view>
+    <viewName>view_keywprojplaces</viewName>
+  </view>
+  <view>
+    <viewName>view_kwhelper_projcontrib</viewName>
+  </view>
+  <view>
+    <viewName>view_kwhelper_refjournal</viewName>
+  </view>
+  <view>
+    <viewName>view_kwhelper_refparty</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_classcontributor</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_commclass</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_comminterpretation</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_disturbanceobs</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_observation</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_plot</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_soilobs</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_stemcount</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_stemlocation</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_taxonalt</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_taxonimportance</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_taxoninterpretation</viewName>
+  </view>
+  <view>
+    <viewName>view_notemb_taxonobservation</viewName>
+  </view>
+  <view>
+    <viewName>view_observation_transl</viewName>
+  </view>
+  <view>
+    <viewName>view_party_public</viewName>
+  </view>
+  <view>
+    <viewName>view_party_transl</viewName>
+  </view>
+  <view>
+    <viewName>view_plantconcept_transl</viewName>
+  </view>
+  <view>
+    <viewName>view_plotall_withembargo</viewName>
+  </view>
+  <view>
+    <viewName>view_reference_transl</viewName>
+  </view>
+  <view>
+    <viewName>view_std_commnames_code</viewName>
+  </view>
+  <view>
+    <viewName>view_std_commnames_common</viewName>
+  </view>
+  <view>
+    <viewName>view_std_commnames_sciname</viewName>
+  </view>
+  <view>
+    <viewName>view_std_commnames_translated</viewName>
+  </view>
+  <view>
+    <viewName>view_std_plantnames_code</viewName>
+  </view>
+  <view>
+    <viewName>view_std_plantnames_common</viewName>
+  </view>
+  <view>
+    <viewName>view_std_plantnames_sciname</viewName>
+  </view>
+  <view>
+    <viewName>view_std_plantnames_scinamenoauth</viewName>
+  </view>
+  <view>
+    <viewName>view_taxoninterp_more</viewName>
+  </view>
+  <view>
+    <viewName>view_taxonobs_distinctid_curr</viewName>
+  </view>
+  <view>
+    <viewName>view_taxonobs_distinctid_curr_counts</viewName>
+  </view>
+  <view>
+    <viewName>view_taxonobs_distinctid_curr_counts_plants</viewName>
+  </view>
+  <view>
+    <viewName>view_taxonobs_withmaxcover</viewName>
+  </view>
   <sequence>
     <sequenceName>dba_preassignacccode_dba_requestnumber_seq</sequenceName>
   </sequence>
