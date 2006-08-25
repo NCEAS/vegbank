@@ -1,6 +1,10 @@
 Installation instructions for Vegbank 
 Author: Chad Berkley
-Date: 5/22/2006
+Date Authored: 5/22/2006
+Updated: '$Date: 2006-08-25 18:35:18 $'
+
+'$Author: berkley $'
+'$Revision: 1.11 $'
 
 Pre-requisites:
 Java 1.4.2
@@ -178,6 +182,10 @@ bash$ psql -U vegbank vegbank < build/sql/vegbank_populate_configtables.sql
 If your version is less than the current version, you should run all files 
 titled like vegbank-changes-1.0.5.sql (where 1.0.5 is the newest version) 
 to update your version.  
+
+Also, if upgrading from a vegbank database from version 1.2 or before, you must
+update the password field in the database to use digested passwords.  To do this
+run 'ant updateAllPasswords'.
 
 To find out the version of your database, check in the table: dba_datamodelversion.
 All versions since 1.0.5 and their initial date should be listed here.
