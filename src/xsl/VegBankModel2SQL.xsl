@@ -7,8 +7,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-15 22:00:23 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2006-08-25 18:33:02 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,9 +69,10 @@
 -- CREATE <xsl:value-of select="$tableName"/>
 ----------------------------------------------------------------------------
 
-
-CREATE SEQUENCE <xsl:value-of select="$sequenceName"/>;
-
+<xsl:if test="count(attribute[attKey='PK'][attType='serial'])&gt;0">
+  <!-- only create the sequence if there is a PK for it to attach to -->
+  CREATE SEQUENCE <xsl:value-of select="$sequenceName"/>;
+</xsl:if>
 CREATE TABLE <xsl:value-of select="entityName"/>
 (
     <xsl:apply-templates>
