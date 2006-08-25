@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: mlee $'
-  * '$Date: 2006-08-25 09:38:18 $'
-  * '$Revision: 1.89 $'
+  * '$Date: 2006-08-25 18:38:03 $'
+  * '$Revision: 1.90 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -623,7 +623,14 @@ createdb      creates an empty vegbank database from the existing sql scripts.
       failonerror="${failOnModelDiff}">
       <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>
     </exec>
-    <echo>Diff results: ${diffResult}</echo>
+    <echo>============================== VERIFY RESULTS ================================</echo>
+    <echo>Diff results: ${diffResult}  (0 means success, 1 means failure)</echo>
+    <condition property="verifyMessage" value="_____ db model matches actual database (great!) _____" else=" ######   DB MODEL FAILS TO MATCH THE ACTUAL DATABASE  -  PLEASE SEE ${buildStatusDir}/modeldiffs.txt #########  ">
+       <equals arg1="${diffResult}" arg2="0"></equals>
+    </condition>
+        <echo>${verifyMessage}</echo>
+        <echo>${verifyMessage}</echo>
+        <echo>${verifyMessage}</echo>    
   </target>
   
   <!-- ================================================================= -->
@@ -822,6 +829,9 @@ createdb      creates an empty vegbank database from the existing sql scripts.
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql>
+    
+    <echo>************** now verifying that database is correct ****************</echo>
+    <antcall target="dbVerify" />
     
     <echo>***************************************************************</echo>
     <echo>Your database is now created.  Please login as the user 
