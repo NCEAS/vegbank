@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: mlee $'
-  * '$Date: 2006-08-25 07:03:45 $'
-  * '$Revision: 1.87 $'
+  * '$Date: 2006-08-25 08:29:46 $'
+  * '$Revision: 1.88 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -81,6 +81,51 @@ createdb      creates an empty vegbank database from the existing sql scripts.
     <!--** customize these properties after customizing build.properties **-->
     <!--general props-->
     <property file="build.properties"/>
+    <!-- ensure that all the required properties are there: -->
+    <fail unless="apache.document.root" message="'apache.document.root' is required in build.properties" />
+    <fail unless="authenticationServletHost" message="'authenticationServletHost' is required in build.properties" />
+    <fail unless="backupDir" message="'backupDir' is required in build.properties" />
+    <fail unless="communityRequestServletHost" message="'communityRequestServletHost' is required in build.properties" />
+    <fail unless="database.accession.key.preassign" message="'database.accession.key.preassign' is required in build.properties" />
+    <fail unless="databaseConnectString" message="'databaseConnectString' is required in build.properties" />
+    <fail unless="databaseDriverClass" message="'databaseDriverClass' is required in build.properties" />
+    <fail unless="databaseDriverType" message="'databaseDriverType' is required in build.properties" />
+    <fail unless="databaseName" message="'databaseName' is required in build.properties" />
+    <fail unless="databasePort" message="'databasePort' is required in build.properties" />
+    <fail unless="databaseType" message="'databaseType' is required in build.properties" />
+    <fail unless="databaseUser" message="'databaseUser' is required in build.properties" />
+    <fail unless="databaseUserPassword" message="'databaseUserPassword' is required in build.properties" />
+    <fail unless="eighty_eighty" message="'eighty_eighty' is required in build.properties" />
+    <fail unless="geoCoordRequestServletHost" message="'geoCoordRequestServletHost' is required in build.properties" />
+    <fail unless="googlemaps_apikey" message="'googlemaps_apikey' is required in build.properties" />
+    <fail unless="hostname" message="'hostname' is required in build.properties" />
+    <fail unless="insert.maxConnections" message="'insert.maxConnections' is required in build.properties" />
+    <fail unless="insert.minConnections" message="'insert.minConnections' is required in build.properties" />
+    <fail unless="java1.4.home.dir" message="'java1.4.home.dir' is required in build.properties" />
+    <fail unless="logFile" message="'logFile' is required in build.properties" />
+    <fail unless="machine_url" message="'machine_url' is required in build.properties" />
+    <fail unless="mail_host" message="'mail_host' is required in build.properties" />
+    <fail unless="mail_port" message="'mail_port' is required in build.properties" />
+    <fail unless="maxConnectionUsers" message="'maxConnectionUsers' is required in build.properties" />
+    <fail unless="pgdumpPath" message="'pgdumpPath' is required in build.properties" />
+    <fail unless="plantRequestServletHost" message="'plantRequestServletHost' is required in build.properties" />
+    <fail unless="psqlPath" message="'psqlPath' is required in build.properties" />
+    <fail unless="query.maxConnections" message="'query.maxConnections' is required in build.properties" />
+    <fail unless="query.minConnections" message="'query.minConnections' is required in build.properties" />
+    <fail unless="resetTime" message="'resetTime' is required in build.properties" />
+    <fail unless="systemEmail" message="'systemEmail' is required in build.properties" />
+    <fail unless="tomcat" message="'tomcat' is required in build.properties" />
+    <fail unless="vegbank.accession.prefix" message="'vegbank.accession.prefix' is required in build.properties" />
+    <fail unless="vegbank.data.dir" message="'vegbank.data.dir' is required in build.properties" />
+    <fail unless="vegbank.export.dir" message="'vegbank.export.dir' is required in build.properties" />
+    <fail unless="vegbank.export.dirname" message="'vegbank.export.dirname' is required in build.properties" />
+    <fail unless="vegbank.home.dir" message="'vegbank.home.dir' is required in build.properties" />
+    <fail unless="vegbank.schema.data" message="'vegbank.schema.data' is required in build.properties" />
+    <fail unless="vegbank.schema.model" message="'vegbank.schema.model' is required in build.properties" />
+    <fail unless="vegbank.web.dir" message="'vegbank.web.dir' is required in build.properties" />
+    <fail unless="webapps.dir" message="'webapps.dir' is required in build.properties" />
+    <!-- END OF REQD PROPS -->
+    
     <property name="name" value="vegbank"/>
     <property name="version" value="1.0.5"/>
     <property name="vegbankHome" value="${vegbank.home.dir}"/>
