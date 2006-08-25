@@ -1,6 +1,6 @@
 -- ATTENTION!!!
 
--- views MUST BE DROPPED FIRST, then this file run, then VIEWS RESTORED.  (drop_vegank_views.sql then create_vegbank_views.sql)
+-- views MUST BE DROPPED FIRST, then this file run, then VIEWS RESTORED.  (drop_vegbank_views.sql then create_vegbank_views.sql)
 
 --create the table for the xml cache.
 create table dba_xmlCache (
