@@ -28,6 +28,8 @@ create table dba_preassignacccode (
   primary key (dba_preassignacccode_id)
   );
 
+alter table dba_preassignacccode add column codeIsUsed boolean;
+
 -- create a unique sequence that feeds the dba_requestnumber field:
 create sequence dba_preassignacccode_dba_requestnumber_seq;
  

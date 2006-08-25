@@ -20259,6 +20259,22 @@ conditions may change between resampling events.
       <update>1.0.5</update>
       <updateSQLFile>add_requestAccCodeTblFields.sql</updateSQLFile>
     </attribute>
+    <attribute>
+      <attID>2514</attID>
+      <attName>codeIsUsed</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Boolean</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>This accessionCode is used and represented in the main database.</attDefinition>
+      <update>1.0.5</update>
+      <updateSQLFile>add_requestAccCodeTblFields.sql</updateSQLFile>
+    </attribute>
   </entity>
   <entity>
     <entityName>dba_onerow</entityName>
