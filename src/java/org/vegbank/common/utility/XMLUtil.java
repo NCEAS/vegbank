@@ -5,9 +5,9 @@ package org.vegbank.common.utility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: berkley $'
- *	'$Date: 2006-08-22 21:39:24 $'
- *	'$Revision: 1.14 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-08-26 22:49:44 $'
+ *	'$Revision: 1.15 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -212,7 +212,7 @@ public class XMLUtil
 
     fullXML.append("<?xml version='1.0' encoding='UTF-8'?>\n");
     // TODO: Delaring schema to use here, may need to allow refernce to schema and no refernce
-    fullXML.append("<VegBankPackage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"" + schemaWebLocation + Utility.VEGBANK_SCHEMA_NAME + "\">\n" );
+    fullXML.append("<VegBankPackage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"" + schemaWebLocation + Utility.VEGBANK_EXPORT_SCHEMA_NAME + "\">\n" );
 
     fullXML.append("\t<doc-VegBankVersion>" + Utility.VEGBANK_VERSION + "</doc-VegBankVersion>\n");
     fullXML.append("\t<doc-date>" + convertDateToXSdatetime(Utility.getNow()) + "</doc-date>\n");

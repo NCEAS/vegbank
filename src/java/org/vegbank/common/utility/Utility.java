@@ -27,8 +27,8 @@ import org.vegbank.common.Constants;
  * Purpose: An utility class for Vegbank project.
  *
  * '$Author: mlee $'
- * '$Date: 2006-08-25 07:03:45 $'
- * '$Revision: 1.55 $'
+ * '$Date: 2006-08-26 22:49:44 $'
+ * '$Revision: 1.56 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,7 +69,9 @@ public class Utility implements Constants
 	public static String SMTP_PORT;
 	public static String VEGBANK_SCHEMA_LOCATION;
 	public static String VEGBANK_SCHEMA_NAME;
+    public static String VEGBANK_EXPORT_SCHEMA_NAME;
 	public static String VEGBANK_XML_SCHEMA;
+    public static String VEGBANK_XML_EXPORT_SCHEMA;
 	public static String VEGBANK_VERSION;
 	public static String VEGBANK_XML_SCHEM;
 	public static String VB_HOME_DIR;
@@ -107,8 +109,10 @@ public class Utility implements Constants
 		VEGBANK_SCHEMA_LOCATION = vegbankPropFile.getString("schemaLocation");
 		if (!VEGBANK_SCHEMA_LOCATION.endsWith("/")) { VEGBANK_SCHEMA_LOCATION += "/"; }
 		VEGBANK_SCHEMA_NAME = vegbankPropFile.getString("vegbankSchemaName");
+        VEGBANK_EXPORT_SCHEMA_NAME = vegbankPropFile.getString("vegbankExportSchemaName");
 		VEGBANK_VERSION = vegbankPropFile.getString("vegbankVersion");
 		VEGBANK_XML_SCHEMA = VEGBANK_SCHEMA_LOCATION + VEGBANK_SCHEMA_NAME;
+        VEGBANK_XML_EXPORT_SCHEMA = VEGBANK_SCHEMA_LOCATION + VEGBANK_EXPORT_SCHEMA_NAME;
 
 		SERVER_ADDRESS = vegbankPropFile.getString("serverAddress");
 		WEBAPP_DIR = vegbankPropFile.getString("vegbank.webapp.dir");

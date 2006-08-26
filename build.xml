@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: mlee $'
-  * '$Date: 2006-08-25 18:38:03 $'
-  * '$Revision: 1.90 $'
+  * '$Date: 2006-08-26 22:49:44 $'
+  * '$Revision: 1.91 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -121,6 +121,8 @@ createdb      creates an empty vegbank database from the existing sql scripts.
     <fail unless="vegbank.export.dirname" message="'vegbank.export.dirname' is required in build.properties" />
     <fail unless="vegbank.home.dir" message="'vegbank.home.dir' is required in build.properties" />
     <fail unless="vegbank.schema.data" message="'vegbank.schema.data' is required in build.properties" />
+    <fail unless="vegbank.schema.exportdata" message="'vegbank.schema.exportdata' is required in build.properties" />
+    
     <fail unless="vegbank.schema.model" message="'vegbank.schema.model' is required in build.properties" />
     <fail unless="vegbank.web.dir" message="'vegbank.web.dir' is required in build.properties" />
     <fail unless="webapps.dir" message="'webapps.dir' is required in build.properties" />
@@ -133,8 +135,9 @@ createdb      creates an empty vegbank database from the existing sql scripts.
     <property name="binPath" value="${vegbankHome}/bin"/>
     <property name="exportPath" value="${vegbankHome}/export"/>
     <property name="uploadPath" value="${vegbankHome}/upload"/>
-    <property name="dataSchemaName" value="vegbank-data-ver1.0.2usage.xsd"/>
-    <property name="modelSchemaName" value="db_model_vegbank_schema.xsd"/>
+    <property name="dataSchemaName" value="${vegbank.schema.data}"/>
+    <property name="dataExportSchemaName" value="${vegbank.schema.exportdata}"/>
+    <property name="modelSchemaName" value="${vegbank.schema.model}"/>
     <!--servlet/web container props-->
     <property name="tomcatVersion" value="5"/>
     <property name="context" value="${name}"/>
@@ -198,6 +201,8 @@ createdb      creates an empty vegbank database from the existing sql scripts.
     <filter token="vegbank.web.dir" value="${webServerDir}/"/>
     <filter token="schemaLocation" value="${webServerDir}/vegdocs/xml/"/>
     <filter token="vegbankSchemaName" value="${dataSchemaName}"/>
+    <filter token="vegbankExportSchemaName" value="${dataExportSchemaName}"/>
+
     <!-- End filters created from build.${context}.properties -->
     <!-- Copied these straight from the veg_plot build.xml, are they relevant ? -->
     <!-- Servlet specific -->
