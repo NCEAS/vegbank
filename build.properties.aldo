@@ -56,7 +56,8 @@ backupDir=/usr/vegbank/backup
 
 
 # XML Schema
-vegbank.schema.data=vegbank-data-ver1.0.2usage.xsd
+vegbank.schema.data=vegbank-data-ver1.0.5-vegbranch.xsd
+vegbank.schema.exportdata=vegbank-data-ver1.0.5-full.xsd
 vegbank.schema.model=db_model_vegbank_schema.xsd
 
 # Old Settings
