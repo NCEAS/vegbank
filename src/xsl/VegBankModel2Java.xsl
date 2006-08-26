@@ -5,8 +5,8 @@
  *  Release: @release@
  *
  *  '$Author: mlee $'
- *  '$Date: 2004-11-24 22:28:33 $'
- *  '$Revision: 1.20 $'
+ *  '$Date: 2006-08-26 23:00:00 $'
+ *  '$Revision: 1.21 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -255,7 +255,7 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
         </xsl:when>
         <xsl:otherwise>
           // Got <xsl:value-of select="./attName"/>
-          xml.append(getIndent( indent ) + "&lt;!-- Ignoring <xsl:value-of select="$XMLElementName"/>  --&gt;\n");
+          // xml.append(getIndent( indent ) + "&lt;!-- Ignoring <xsl:value-of select="$XMLElementName"/>  --&gt;\n");
         </xsl:otherwise>
       </xsl:choose>
 
