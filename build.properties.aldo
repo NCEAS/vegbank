@@ -1,0 +1,71 @@
+# Database Connection Settings
+authenticationServletHost = aldo.vegbank.org
+communityRequestServletHost = aldo.vegbank.org
+plantRequestServletHost = aldo.vegbank.org
+geoCoordRequestServletHost = aldo.vegbank.org
+databaseType = postgresql
+databaseUser = vegbank
+databaseUserPassword =
+databasePort = 1521
+hostname = aldo.vegbank.org
+databaseDriverType = thin
+databaseDriverClass = org.postgresql.Driver
+databaseConnectString = jdbc:postgresql://localhost/vegbank
+databaseName = vegbank
+insert.minConnections = 1
+insert.maxConnections = 3
+query.minConnections = 1
+query.maxConnections = 3
+maxConnectionUsers = 100
+resetTime = 0.01
+logFile = connectionPool.log
+
+# MTL new settings as of 24-JUL-2004: (can be removed if JK enabled, such as on vegbank.org)
+# name of URL to get to this machine
+machine_url=http://aldo.vegbank.org
+
+#aldo/views:
+googlemaps_apikey=ABQIAAAAGgQ8067Uv8fomyaGenqurhScc7vbZ9k8oOw50vJywIe37DMV3RQQqfC--A7oo1vWYtUwWji02NwdAw
+#vegbank/views
+# googlemaps_apikey=ABQIAAAAGgQ8067Uv8fomyaGenqurhRE6blkb4s9uHdGAM1GoRCGigL8FRS5GAggVqhxRe5rbvsp5LZXAnocYQ
+#aldo.nceas: googlemaps_apikey=ABQIAAAAyCWSCZzeYN_4DAz2EXQSkxQAX3PYsGEmw_dTtKYP0Ls776WgnBQIwiIx_gXlg_dMafsBasYANOBjYg
+
+# the colon plus port number used for tomcat.  If JK enabled, should be blank
+eighty_eighty=
+mail_host=mail.nceas.ucsb.edu
+mail_port=25
+#email address of system: dba@vegbank.org normally
+systemEmail=dba@vegbank.org
+psqlPath=/usr/bin/psql
+
+# Vegbank Directories
+vegbank.home.dir=/usr/vegbank
+vegbank.data.dir=/usr/vegbank/upload
+vegbank.export.dirname=/usr/vegbank/export
+
+apache.document.root=/usr/www/vegbank/htdocs
+vegbank.export.dir=export
+webapps.dir=/usr/local/devtools/jakarta-tomcat/webapps
+vegbank.web.dir=/usr/local/devtools/jakarta-tomcat/webapps/vegbank
+
+tomcat=/usr/local/devtools/jakarta-tomcat
+
+#backup settings:
+pgdumpPath=/usr/bin/pg_dump
+backupDir=/usr/vegbank/backup
+
+
+# XML Schema
+vegbank.schema.data=vegbank-data-ver1.0.2usage.xsd
+vegbank.schema.model=db_model_vegbank_schema.xsd
+
+# Old Settings
+java1.4.home.dir = /usr/java/
+rmiserver = false # ip address if have rmiserver
+#rmiserver.home.dir = /home/farrell/muse/rmiserver/beta
+#servlet_lib = /usr/local/devtools/jakarta-tomcat/webapps/framework/WEB-INF/lib/
+
+# Accession Code properties
+# this is the prefix for accession codes in the database that are preassigned by request from client databases:
+vegbank.accession.prefix=Dev
+database.accession.key.preassign=VBAldoPre
