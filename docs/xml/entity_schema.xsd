@@ -94,6 +94,16 @@
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
+  <!-- attNullsInXML is used to override requirements in database.  In other words, this can be "no" if the element is required in XML, even though it isn't required in the db -->
+  <xs:element name="attNullsInXML">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="no"/>
+        <xs:enumeration value="yes"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  
   <xs:element name="attReferences">
     <xs:simpleType>
       <xs:union memberTypes="attRefNA attRefTblDotFld"/>
@@ -157,7 +167,7 @@
       <xs:enumeration value="text"/>
       <xs:enumeration value="Date"/>
       <xs:enumeration value="Boolean"/>
-      <xs:enumeration value="bytea" />
+      <xs:enumeration value="bytea"/>
     </xs:restriction>
     <!-- handle regularly enumerated types ie all but varchars -->
   </xs:simpleType>
@@ -175,6 +185,7 @@
         <xs:element ref="attLabel" minOccurs="0"/>
         <xs:element ref="attModel"/>
         <xs:element ref="attNulls"/>
+        <xs:element ref="attNullsInXML" minOccurs="0" />
         <xs:element ref="attType"/>
         <xs:element ref="attDefaultValue" minOccurs="0"/>
         <xs:element ref="javaType" minOccurs="0"/>
@@ -221,6 +232,7 @@
         <xs:element ref="archive" minOccurs="0"/>
         <xs:element ref="entityNeedParentToAdd" minOccurs="0"/>
         <xs:element ref="entityCreatedVersion" minOccurs="0"/>
+        <xs:element ref="entityRequirePopulation" minOccurs="0" />
         <xs:element ref="attribute" maxOccurs="unbounded"/>
         <!-- may have to do with gabe's work on archiving to the revisions table? -->
         <!-- fields on the table -->
@@ -240,6 +252,7 @@
   <xs:element name="entityDescription" type="xs:string"/>
   <xs:element name="entityLabel" type="xs:string"/>
   <xs:element name="entityName" type="validFieldTableName"/>
+  <xs:element name="entityRequirePopulation" type="xs:boolean" /><!-- this is used to indicate that the table should not be empty (no records) in the database -->
   <xs:element name="entitySummary" type="xs:string"/>
   <xs:element name="formShow">
     <xs:complexType>

@@ -217,7 +217,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="commConcept">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="commConcept.COMMCONCEPT_ID" minOccurs="0" />
+        <xs:element ref="commConcept.COMMCONCEPT_ID" minOccurs="1" />
         <xs:element ref="commConcept.COMMNAME_ID" minOccurs="1" />
         <xs:element ref="commConcept.reference_ID" minOccurs="0" />
         <xs:element ref="commConcept.commDescription" minOccurs="0" />
@@ -278,7 +278,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="commCorrelation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="commCorrelation.COMMCORRELATION_ID" minOccurs="0" />
+        <xs:element ref="commCorrelation.COMMCORRELATION_ID" minOccurs="1" />
         <xs:element ref="commCorrelation.COMMCONCEPT_ID" minOccurs="1" />
         <xs:element ref="commCorrelation.commConvergence" minOccurs="1" />
         <xs:element ref="commCorrelation.correlationStart" minOccurs="1" />
@@ -339,7 +339,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="commLineage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="commLineage.COMMLINEAGE_ID" minOccurs="0" />
+        <xs:element ref="commLineage.COMMLINEAGE_ID" minOccurs="1" />
         <xs:element ref="commLineage.parentCommStatus_ID" minOccurs="1" />
         <xs:element ref="definedValue" minOccurs="0" maxOccurs="unbounded" />
       </xs:sequence>
@@ -367,7 +367,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="commName">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="commName.COMMNAME_ID" minOccurs="0" />
+        <xs:element ref="commName.COMMNAME_ID" minOccurs="1" />
         <xs:element ref="commName.commName" minOccurs="1" />
         <xs:element ref="commName.reference_ID" minOccurs="0" />
         <xs:element ref="commName.dateEntered" minOccurs="0" />
@@ -417,7 +417,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="commStatus">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="commStatus.COMMSTATUS_ID" minOccurs="0" />
+        <xs:element ref="commStatus.COMMSTATUS_ID" minOccurs="1" />
         <xs:element ref="commStatus.reference_ID" minOccurs="0" />
         <xs:element ref="commStatus.commConceptStatus" minOccurs="1" />
         <xs:element ref="commStatus.commParent_ID" minOccurs="0" />
@@ -534,7 +534,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="commUsage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="commUsage.COMMUSAGE_ID" minOccurs="0" />
+        <xs:element ref="commUsage.COMMUSAGE_ID" minOccurs="1" />
         <xs:element ref="commUsage.COMMNAME_ID" minOccurs="1" />
         <xs:element ref="commUsage.usageStart" minOccurs="0" />
         <xs:element ref="commUsage.usageStop" minOccurs="0" />
@@ -606,7 +606,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="plantConcept">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="plantConcept.PLANTCONCEPT_ID" minOccurs="0" />
+        <xs:element ref="plantConcept.PLANTCONCEPT_ID" minOccurs="1" />
         <xs:element ref="plantConcept.PLANTNAME_ID" minOccurs="1" />
         <xs:element ref="plantConcept.reference_ID" minOccurs="1" />
         <xs:element ref="plantConcept.plantDescription" minOccurs="0" />
@@ -667,7 +667,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="plantCorrelation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="plantCorrelation.PLANTCORRELATION_ID" minOccurs="0" />
+        <xs:element ref="plantCorrelation.PLANTCORRELATION_ID" minOccurs="1" />
         <xs:element ref="plantCorrelation.PLANTCONCEPT_ID" minOccurs="1" />
         <xs:element ref="plantCorrelation.plantConvergence" minOccurs="1" />
         <xs:element ref="plantCorrelation.correlationStart" minOccurs="1" />
@@ -728,7 +728,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="plantLineage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="plantLineage.PLANTLINEAGE_ID" minOccurs="0" />
+        <xs:element ref="plantLineage.PLANTLINEAGE_ID" minOccurs="1" />
         <xs:element ref="plantLineage.parentPlantStatus_ID" minOccurs="1" />
         <xs:element ref="definedValue" minOccurs="0" maxOccurs="unbounded" />
       </xs:sequence>
@@ -756,7 +756,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="plantName">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="plantName.PLANTNAME_ID" minOccurs="0" />
+        <xs:element ref="plantName.PLANTNAME_ID" minOccurs="1" />
         <xs:element ref="plantName.plantName" minOccurs="1" />
         <xs:element ref="plantName.reference_ID" minOccurs="0" />
         <xs:element ref="plantName.dateEntered" minOccurs="0" />
@@ -806,7 +806,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="plantStatus">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="plantStatus.PLANTSTATUS_ID" minOccurs="0" />
+        <xs:element ref="plantStatus.PLANTSTATUS_ID" minOccurs="1" />
         <xs:element ref="plantStatus.reference_ID" minOccurs="0" />
         <xs:element ref="plantStatus.plantConceptStatus" minOccurs="1" />
         <xs:element ref="plantStatus.startDate" minOccurs="1" />
@@ -923,7 +923,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="plantUsage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="plantUsage.PLANTUSAGE_ID" minOccurs="0" />
+        <xs:element ref="plantUsage.PLANTUSAGE_ID" minOccurs="1" />
         <xs:element ref="plantUsage.PLANTNAME_ID" minOccurs="1" />
         <xs:element ref="plantUsage.usageStart" minOccurs="0" />
         <xs:element ref="plantUsage.usageStop" minOccurs="0" />
@@ -995,7 +995,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="address">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="address.ADDRESS_ID" minOccurs="0" />
+        <xs:element ref="address.ADDRESS_ID" minOccurs="1" />
         <xs:element ref="address.organization_ID" minOccurs="0" />
         <xs:element ref="address.orgPosition" minOccurs="0" />
         <xs:element ref="address.email" minOccurs="0" />
@@ -1122,7 +1122,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="aux_Role">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="aux_Role.ROLE_ID" minOccurs="0" />
+        <xs:element ref="aux_Role.ROLE_ID" minOccurs="1" />
         <xs:element ref="aux_Role.roleCode" minOccurs="1" />
         <xs:element ref="aux_Role.roleDescription" minOccurs="0" />
         <xs:element ref="aux_Role.accessionCode" minOccurs="0" />
@@ -1746,7 +1746,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="classContributor">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="classContributor.CLASSCONTRIBUTOR_ID" minOccurs="0" />
+        <xs:element ref="classContributor.CLASSCONTRIBUTOR_ID" minOccurs="1" />
         <xs:element ref="classContributor.PARTY_ID" minOccurs="1" />
         <xs:element ref="classContributor.ROLE_ID" minOccurs="0" />
         <xs:element ref="definedValue" minOccurs="0" maxOccurs="unbounded" />
@@ -1784,7 +1784,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="commClass">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="commClass.COMMCLASS_ID" minOccurs="0" />
+        <xs:element ref="commClass.COMMCLASS_ID" minOccurs="1" />
         <xs:element ref="commClass.classStartDate" minOccurs="0" />
         <xs:element ref="commClass.classStopDate" minOccurs="0" />
         <xs:element ref="commClass.inspection" minOccurs="0" />
@@ -1902,7 +1902,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="commInterpretation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="commInterpretation.COMMINTERPRETATION_ID" minOccurs="0" />
+        <xs:element ref="commInterpretation.COMMINTERPRETATION_ID" minOccurs="1" />
         <xs:element ref="commInterpretation.COMMCONCEPT_ID" minOccurs="0" />
         <xs:element ref="commInterpretation.classFit" minOccurs="0" />
         <xs:element ref="commInterpretation.classConfidence" minOccurs="0" />
@@ -1995,7 +1995,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="coverIndex">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="coverIndex.COVERINDEX_ID" minOccurs="0" />
+        <xs:element ref="coverIndex.COVERINDEX_ID" minOccurs="1" />
         <xs:element ref="coverIndex.coverCode" minOccurs="1" />
         <xs:element ref="coverIndex.upperLimit" minOccurs="0" />
         <xs:element ref="coverIndex.lowerLimit" minOccurs="0" />
@@ -2068,7 +2068,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="coverMethod">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="coverMethod.COVERMETHOD_ID" minOccurs="0" />
+        <xs:element ref="coverMethod.COVERMETHOD_ID" minOccurs="1" />
         <xs:element ref="coverMethod.reference_ID" minOccurs="0" />
         <xs:element ref="coverMethod.coverType" minOccurs="1" />
         <xs:element ref="coverMethod.coverEstimationMethod" minOccurs="0" />
@@ -2130,7 +2130,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="definedValue">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="definedValue.DEFINEDVALUE_ID" minOccurs="0" />
+        <xs:element ref="definedValue.DEFINEDVALUE_ID" minOccurs="1" />
         <xs:element ref="definedValue.USERDEFINED_ID" minOccurs="1" />
         <xs:element ref="definedValue.tableRecord_ID" minOccurs="1" />
         <xs:element ref="definedValue.definedValue" minOccurs="1" />
@@ -2180,7 +2180,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="disturbanceObs">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="disturbanceObs.disturbanceObs_ID" minOccurs="0" />
+        <xs:element ref="disturbanceObs.disturbanceObs_ID" minOccurs="1" />
         <xs:element ref="disturbanceObs.disturbanceType" minOccurs="1" />
         <xs:element ref="disturbanceObs.disturbanceIntensity" minOccurs="0" />
         <xs:element ref="disturbanceObs.disturbanceAge" minOccurs="0" />
@@ -2253,7 +2253,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="graphic">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="graphic.GRAPHIC_ID" minOccurs="0" />
+        <xs:element ref="graphic.GRAPHIC_ID" minOccurs="1" />
         <xs:element ref="graphic.graphicName" minOccurs="0" />
         <xs:element ref="graphic.graphicLocation" minOccurs="0" />
         <xs:element ref="graphic.graphicDescription" minOccurs="0" />
@@ -2348,7 +2348,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="namedPlace">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="namedPlace.NAMEDPLACE_ID" minOccurs="0" />
+        <xs:element ref="namedPlace.NAMEDPLACE_ID" minOccurs="1" />
         <xs:element ref="namedPlace.placeSystem" minOccurs="0" />
         <xs:element ref="namedPlace.placeName" minOccurs="1" />
         <xs:element ref="namedPlace.placeDescription" minOccurs="0" />
@@ -2482,7 +2482,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="note">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="note.NOTE_ID" minOccurs="0" />
+        <xs:element ref="note.NOTE_ID" minOccurs="1" />
         <xs:element ref="note.PARTY_ID" minOccurs="1" />
         <xs:element ref="note.ROLE_ID" minOccurs="1" />
         <xs:element ref="note.noteDate" minOccurs="0" />
@@ -2564,7 +2564,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="noteLink">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="noteLink.NOTELINK_ID" minOccurs="0" />
+        <xs:element ref="noteLink.NOTELINK_ID" minOccurs="1" />
         <xs:element ref="noteLink.tableName" minOccurs="1" />
         <xs:element ref="noteLink.attributeName" minOccurs="0" />
         <xs:element ref="noteLink.tableRecord" minOccurs="1" />
@@ -2616,19 +2616,19 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="observation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="observation.OBSERVATION_ID" minOccurs="0" />
+        <xs:element ref="observation.OBSERVATION_ID" minOccurs="1" />
         <xs:element ref="observation.PREVIOUSOBS_ID" minOccurs="0" />
         <xs:element ref="observation.PLOT_ID" minOccurs="1" />
-        <xs:element ref="observation.PROJECT_ID" minOccurs="0" />
+        <xs:element ref="observation.PROJECT_ID" minOccurs="1" />
         <xs:element ref="observation.authorObsCode" minOccurs="0" />
         <xs:element ref="observation.obsStartDate" minOccurs="0" />
         <xs:element ref="observation.obsEndDate" minOccurs="0" />
         <xs:element ref="observation.dateAccuracy" minOccurs="0" />
         <xs:element ref="observation.dateEntered" minOccurs="0" />
-        <xs:element ref="observation.COVERMETHOD_ID" minOccurs="0" />
+        <xs:element ref="observation.COVERMETHOD_ID" minOccurs="1" />
         <xs:element ref="observation.coverDispersion" minOccurs="0" />
         <xs:element ref="observation.autoTaxonCover" minOccurs="0" />
-        <xs:element ref="observation.STRATUMMETHOD_ID" minOccurs="0" />
+        <xs:element ref="observation.STRATUMMETHOD_ID" minOccurs="1" />
         <xs:element ref="observation.methodNarrative" minOccurs="0" />
         <xs:element ref="observation.taxonObservationArea" minOccurs="0" />
         <xs:element ref="observation.stemSizeLimit" minOccurs="0" />
@@ -3439,7 +3439,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="observationContributor">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="observationContributor.OBSERVATIONCONTRIBUTOR_ID" minOccurs="0" />
+        <xs:element ref="observationContributor.OBSERVATIONCONTRIBUTOR_ID" minOccurs="1" />
         <xs:element ref="observationContributor.PARTY_ID" minOccurs="1" />
         <xs:element ref="observationContributor.ROLE_ID" minOccurs="1" />
         <xs:element ref="observationContributor.contributionDate" minOccurs="0" />
@@ -3488,7 +3488,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="observationSynonym">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="observationSynonym.OBSERVATIONSYNONYM_ID" minOccurs="0" />
+        <xs:element ref="observationSynonym.OBSERVATIONSYNONYM_ID" minOccurs="1" />
         <xs:element ref="observationSynonym.synonymObservation_ID" minOccurs="1" />
         <xs:element ref="observationSynonym.PARTY_ID" minOccurs="1" />
         <xs:element ref="observationSynonym.ROLE_ID" minOccurs="1" />
@@ -3580,7 +3580,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="party">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="party.PARTY_ID" minOccurs="0" />
+        <xs:element ref="party.PARTY_ID" minOccurs="1" />
         <xs:element ref="party.salutation" minOccurs="0" />
         <xs:element ref="party.givenName" minOccurs="0" />
         <xs:element ref="party.middleName" minOccurs="0" />
@@ -3759,7 +3759,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="place">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="place.PLOTPLACE_ID" minOccurs="0" />
+        <xs:element ref="place.PLOTPLACE_ID" minOccurs="1" />
         <xs:element ref="place.calculated" minOccurs="0" />
         <xs:element ref="place.NAMEDPLACE_ID" minOccurs="1" />
         <xs:element ref="definedValue" minOccurs="0" maxOccurs="unbounded" />
@@ -3798,7 +3798,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="plot">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="plot.PLOT_ID" minOccurs="0" />
+        <xs:element ref="plot.PLOT_ID" minOccurs="1" />
         <xs:element ref="plot.authorPlotCode" minOccurs="1" />
         <xs:element ref="plot.reference_ID" minOccurs="0" />
         <xs:element ref="plot.PARENT_ID" minOccurs="0" />
@@ -4278,7 +4278,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="project">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="project.PROJECT_ID" minOccurs="0" />
+        <xs:element ref="project.PROJECT_ID" minOccurs="1" />
         <xs:element ref="project.projectName" minOccurs="1" />
         <xs:element ref="project.projectDescription" minOccurs="0" />
         <xs:element ref="project.startDate" minOccurs="0" />
@@ -4352,7 +4352,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="projectContributor">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="projectContributor.PROJECTCONTRIBUTOR_ID" minOccurs="0" />
+        <xs:element ref="projectContributor.PROJECTCONTRIBUTOR_ID" minOccurs="1" />
         <xs:element ref="projectContributor.PARTY_ID" minOccurs="1" />
         <xs:element ref="projectContributor.ROLE_ID" minOccurs="0" />
         <xs:element ref="definedValue" minOccurs="0" maxOccurs="unbounded" />
@@ -4390,7 +4390,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="revision">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="revision.REVISION_ID" minOccurs="0" />
+        <xs:element ref="revision.REVISION_ID" minOccurs="1" />
         <xs:element ref="revision.tableName" minOccurs="1" />
         <xs:element ref="revision.tableAttribute" minOccurs="1" />
         <xs:element ref="revision.tableRecord" minOccurs="1" />
@@ -4484,7 +4484,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="soilObs">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="soilObs.SOILOBS_ID" minOccurs="0" />
+        <xs:element ref="soilObs.SOILOBS_ID" minOccurs="1" />
         <xs:element ref="soilObs.soilHorizon" minOccurs="1" />
         <xs:element ref="soilObs.soilDepthTop" minOccurs="0" />
         <xs:element ref="soilObs.soilDepthBottom" minOccurs="0" />
@@ -4656,7 +4656,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="soilTaxon">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="soilTaxon.SOILTAXON_ID" minOccurs="0" />
+        <xs:element ref="soilTaxon.SOILTAXON_ID" minOccurs="1" />
         <xs:element ref="soilTaxon.soilCode" minOccurs="0" />
         <xs:element ref="soilTaxon.soilName" minOccurs="0" />
         <xs:element ref="soilTaxon.soilLevel" minOccurs="0" />
@@ -4739,7 +4739,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="stemCount">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="stemCount.STEMCOUNT_ID" minOccurs="0" />
+        <xs:element ref="stemCount.STEMCOUNT_ID" minOccurs="1" />
         <xs:element ref="stemCount.stemDiameter" minOccurs="0" />
         <xs:element ref="stemCount.stemDiameterAccuracy" minOccurs="0" />
         <xs:element ref="stemCount.stemHeight" minOccurs="0" />
@@ -4824,7 +4824,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="stemLocation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="stemLocation.STEMLOCATION_ID" minOccurs="0" />
+        <xs:element ref="stemLocation.STEMLOCATION_ID" minOccurs="1" />
         <xs:element ref="stemLocation.stemCode" minOccurs="0" />
         <xs:element ref="stemLocation.stemXPosition" minOccurs="0" />
         <xs:element ref="stemLocation.stemYPosition" minOccurs="0" />
@@ -4887,7 +4887,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="stratum">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="stratum.STRATUM_ID" minOccurs="0" />
+        <xs:element ref="stratum.STRATUM_ID" minOccurs="1" />
         <xs:element ref="stratum.STRATUMTYPE_ID" minOccurs="1" />
         <xs:element ref="stratum.stratumHeight" minOccurs="0" />
         <xs:element ref="stratum.stratumBase" minOccurs="0" />
@@ -4948,7 +4948,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="stratumMethod">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="stratumMethod.STRATUMMETHOD_ID" minOccurs="0" />
+        <xs:element ref="stratumMethod.STRATUMMETHOD_ID" minOccurs="1" />
         <xs:element ref="stratumMethod.reference_ID" minOccurs="0" />
         <xs:element ref="stratumMethod.stratumMethodName" minOccurs="1" />
         <xs:element ref="stratumMethod.stratumMethodDescription" minOccurs="0" />
@@ -5021,7 +5021,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="stratumType">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="stratumType.STRATUMTYPE_ID" minOccurs="0" />
+        <xs:element ref="stratumType.STRATUMTYPE_ID" minOccurs="1" />
         <xs:element ref="stratumType.stratumIndex" minOccurs="0" />
         <xs:element ref="stratumType.stratumName" minOccurs="0" />
         <xs:element ref="stratumType.stratumDescription" minOccurs="0" />
@@ -5145,7 +5145,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="taxonInterpretation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="taxonInterpretation.TAXONINTERPRETATION_ID" minOccurs="0" />
+        <xs:element ref="taxonInterpretation.TAXONINTERPRETATION_ID" minOccurs="1" />
         <xs:element ref="taxonInterpretation.PLANTCONCEPT_ID" minOccurs="1" />
         <xs:element ref="taxonInterpretation.interpretationDate" minOccurs="1" />
         <xs:element ref="taxonInterpretation.PLANTNAME_ID" minOccurs="0" />
@@ -5399,7 +5399,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="taxonObservation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="taxonObservation.TAXONOBSERVATION_ID" minOccurs="0" />
+        <xs:element ref="taxonObservation.TAXONOBSERVATION_ID" minOccurs="1" />
         <xs:element ref="taxonObservation.authorPlantName" minOccurs="0" />
         <xs:element ref="taxonObservation.reference_ID" minOccurs="0" />
         <xs:element ref="taxonObservation.taxonInferenceArea" minOccurs="0" />
@@ -5462,7 +5462,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="taxonAlt">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="taxonAlt.taxonAlt_ID" minOccurs="0" />
+        <xs:element ref="taxonAlt.taxonAlt_ID" minOccurs="1" />
         <xs:element ref="taxonAlt.plantConcept_ID" minOccurs="1" />
         <xs:element ref="taxonAlt.taxonAltFit" minOccurs="0" />
         <xs:element ref="taxonAlt.taxonAltConfidence" minOccurs="0" />
@@ -5523,7 +5523,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="telephone">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="telephone.TELEPHONE_ID" minOccurs="0" />
+        <xs:element ref="telephone.TELEPHONE_ID" minOccurs="1" />
         <xs:element ref="telephone.phoneNumber" minOccurs="1" />
         <xs:element ref="telephone.phoneType" minOccurs="1" />
         <xs:element ref="definedValue" minOccurs="0" maxOccurs="unbounded" />
@@ -5563,7 +5563,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
   <xs:element name="userDefined">
     <xs:complexType>
       <xs:sequence>
-        <xs:element ref="userDefined.USERDEFINED_ID" minOccurs="0" />
+        <xs:element ref="userDefined.USERDEFINED_ID" minOccurs="1" />
         <xs:element ref="userDefined.userDefinedName" minOccurs="0" />
         <xs:element ref="userDefined.userDefinedMetadata" minOccurs="0" />
         <xs:element ref="userDefined.userDefinedCategory" minOccurs="0" />

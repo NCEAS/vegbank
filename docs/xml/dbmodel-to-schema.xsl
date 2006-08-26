@@ -214,7 +214,7 @@ For more on VegBank's XML, please see http://vegbank.org/xml
     </xsl:choose>
   </xsl:template>
   <xsl:template name="handleNullz">
-    <xsl:attribute name="minOccurs"><xsl:choose><xsl:when test="attNulls='no' and $validLevel!=0"><!-- here we have reqd field, but if level of xsd is 0, then still dont require-->1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:attribute>
+    <xsl:attribute name="minOccurs"><xsl:choose><xsl:when test="(attNulls='no' or attNullsInXML='no' or attKey='PK') and ($validLevel!=0)"><!-- here we have reqd field, but if level of xsd is 0, then still dont require-->1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:attribute>
   </xsl:template>
   <xsl:template name="addFieldAtts">
     <xsl:for-each select="/dataModel/entity[module='plot' or module='community' or module='plant']/attribute[attRelType/attribute::type='allfields'][attModel='logical']">

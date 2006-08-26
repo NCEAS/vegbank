@@ -2535,6 +2535,7 @@ change through time.</entitySummary>
     <module>plot</module>
     <entityNeedParentToAdd>Never Add</entityNeedParentToAdd>
     <entityCreatedVersion>1.0.0</entityCreatedVersion>
+    <entityRequirePopulation>true</entityRequirePopulation>
     <attribute>
       <attID>390</attID>
       <attName>ROLE_ID</attName>
@@ -6298,6 +6299,7 @@ conditions may change between resampling events.
       <attLabel>Project</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
+      <attNullsInXML>no</attNullsInXML>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
@@ -6470,6 +6472,7 @@ conditions may change between resampling events.
       <attLabel>Cover Method</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
+      <attNullsInXML>no</attNullsInXML>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
@@ -6575,6 +6578,7 @@ conditions may change between resampling events.
       <attLabel>Stratum Method</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
+      <attNullsInXML>no</attNullsInXML>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
@@ -17100,6 +17104,7 @@ conditions may change between resampling events.
     <module>user</module>
     <entityNeedParentToAdd>NEVER ADD</entityNeedParentToAdd>
     <entityCreatedVersion>1.0.2</entityCreatedVersion>
+    <entityRequirePopulation>true</entityRequirePopulation>
     <attribute>
       <attID>1839</attID>
       <attName>usr_ID</attName>
@@ -19747,6 +19752,7 @@ conditions may change between resampling events.
     <entityDescription/>
     <module>extra</module>
     <entityCreatedVersion>1.0.4</entityCreatedVersion>
+    <entityRequirePopulation>true</entityRequirePopulation>
     <attribute>
       <attID>2400</attID>
       <attName>confidentialitystatus</attName>
@@ -19803,6 +19809,7 @@ conditions may change between resampling events.
     <entityDescription/>
     <module>extra</module>
     <entityCreatedVersion>1.0.4</entityCreatedVersion>
+    <entityRequirePopulation>true</entityRequirePopulation>
     <attribute>
       <attID>2409</attID>
       <attName>cookie_id</attName>
@@ -19971,6 +19978,7 @@ conditions may change between resampling events.
     <entityDescription/>
     <module>extra</module>
     <entityCreatedVersion>1.0.4</entityCreatedVersion>
+    <entityRequirePopulation>true</entityRequirePopulation>
     <attribute>
       <attID>2439</attID>
       <attName>cookielabel_id</attName>
@@ -20283,6 +20291,7 @@ conditions may change between resampling events.
     <entityDescription/>
     <module>extra</module>
     <entityCreatedVersion>1.0.5</entityCreatedVersion>
+    <entityRequirePopulation>true</entityRequirePopulation>
     <attribute>
       <attID>2516</attID>
       <attName>dba_onerow_id</attName>
