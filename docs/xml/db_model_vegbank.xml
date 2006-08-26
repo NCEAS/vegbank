@@ -4058,7 +4058,6 @@ change through time.</entitySummary>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Date</attType>
-      <attDefaultValue>now()</attDefaultValue>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -9588,6 +9587,7 @@ conditions may change between resampling events.
       <attModel>logical</attModel>
       <attNulls>no</attNulls>
       <attType>Date</attType>
+      <attDefaultValue>now()</attDefaultValue>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
@@ -20241,6 +20241,7 @@ conditions may change between resampling events.
       <attModel>implementation</attModel>
       <attNulls>no</attNulls>
       <attType>varchar (70)</attType>
+      <attDefaultValue>(replace(replace(replace(replace(now(),' ','T'),'-',''),':',''),'.','d') || 'R' || floor(random()*1000000))</attDefaultValue>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>

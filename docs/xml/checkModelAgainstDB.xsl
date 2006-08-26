@@ -39,6 +39,15 @@ then diff case INSENsitive and ignoring spaces -->
   <xsl:for-each select="dataModel/entity/attribute[attKey='PK'][attType='serial']">
     <xsl:sort select="concat(../entityName,'_',attName,'_seq')" />sequence|<xsl:value-of select="concat(../entityName,'_',attName,'_seq')" />|1|IF I'M LOWERCASE, I'M FROM DATABASE, ELSE FROM MODEL XML
 </xsl:for-each>
+<xsl:for-each select="dataModel/entity">
+  <xsl:sort select="entityName" />
+  <xsl:for-each select="attribute[string-length(attDefaultValue)&gt;0]">
+    <xsl:sort select="attName"/><xsl:value-of select="../entityName" />|<xsl:value-of select="attName" />|has default value|IF I'M LOWERCASE, I'M FROM DATABASE, ELSE FROM MODEL XML
+</xsl:for-each>
+</xsl:for-each>
+<xsl:for-each select="dataModel/entity[entityRequirePopulation='true']">
+  <xsl:sort select="entityName" />tables require entry|<xsl:value-of select="entityName" />|IF I'M LOWERCASE, I'M FROM DATABASE, ELSE FROM MODEL XML
+</xsl:for-each>
 </xsl:template>
 
 <xsl:template name="writeModel" >
