@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-28 17:12:41 $'
- *	'$Revision: 1.42 $'
+ *	'$Date: 2006-08-28 22:45:41 $'
+ *	'$Revision: 1.43 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1619,6 +1619,13 @@ public class LoadTreeToDatabase
 		observationId = getExtantPK(observationHash);
 		if ( observationId != 0 )
 		{
+            // this observation has already been inserted, as based on its accessioncode.
+            // previously, we would have stopped here, but now we add functionality to scan for interpretations
+            // both community and taxon within this observation
+            
+            //insert any commClasses that are NEW:
+            insertCommClasses(observationHash, observationId);
+            
 			return observationId;
 		}
 		//	Need to insert the plot and the project and get the FKs
@@ -1696,33 +1703,9 @@ public class LoadTreeToDatabase
 			long stratumId = insertStratum(stratum, stratumMethodId, observationId);
 		}
     
-		// Add commClass
-		Enumeration commClasses =  getChildTables(observationHash, "commClass");
-		while ( commClasses.hasMoreElements() )
-		{
-			Hashtable commClass = (Hashtable) commClasses.nextElement();
-			addForeignKey(commClass, Commclass.OBSERVATION_ID, observationId);
-			long commClassId = insertTable("commClass", commClass);
-            //log.debug("added commClass #" + commClassId);
-			
-			// Add Classification Contributors
-			Enumeration ccs = this.getChildTables( commClass, "classContributor");
-			while (ccs.hasMoreElements())
-			{	
-				this.insertContributor( "classContributor", 
-          (Hashtable) ccs.nextElement(), "commclass_id",  commClassId);
-			}
-			
-			// Add communtity interpretation
-			Enumeration commIntepretations =  getChildTables(commClass, 
-        "commInterpretation");
-			while ( commIntepretations.hasMoreElements() )
-			{
-				Hashtable commIntepretation = (Hashtable) commIntepretations.nextElement();
-				addForeignKey(commIntepretation, "COMMCLASS_id", commClassId);
-				this.insertCommInterpetation(commIntepretation);
-			}
-		}
+		// Add commclasses:
+        insertCommClasses(observationHash,
+           observationId);
 		
 		// Insert the taxonObservations
 		insertTaxonObservations(
@@ -1823,6 +1806,54 @@ public class LoadTreeToDatabase
 		
 		return pKey;
 	}
+
+    /** 
+     * Insert commClasses
+     * @param observationHash
+     * @param observationId
+     */
+     
+     private void insertCommClasses(Hashtable observationHash, long observationId ) throws SQLException
+     {
+         // Add commClass
+           Enumeration commClasses =  getChildTables(observationHash, "commClass");
+           while ( commClasses.hasMoreElements() )
+           {
+               Hashtable commClass = (Hashtable) commClasses.nextElement();
+               // check to see if this commClass was already loaded:
+               long commClassId = getExtantPK(commClass);
+               if ( commClassId != 0 ) {
+                   //already loaded this commClass
+                   //  dont do anything with this particular one
+               } else {
+                   // DO load this, as it hasn't already been done
+                   addForeignKey(commClass, Commclass.OBSERVATION_ID, observationId);
+                   commClassId = insertTable("commClass", commClass);
+                    //log.debug("added commClass #" + commClassId);
+
+                   // Add Classification Contributors
+                   Enumeration ccs = this.getChildTables( commClass, "classContributor");
+                   while (ccs.hasMoreElements())
+                   {   
+                       this.insertContributor( "classContributor", 
+                  (Hashtable) ccs.nextElement(), "commclass_id",  commClassId);
+                   }
+
+                   // Add communtity interpretation
+                   Enumeration commIntepretations =  getChildTables(commClass, 
+                     "commInterpretation");
+                   while ( commIntepretations.hasMoreElements() )
+                   {
+                       Hashtable commIntepretation = (Hashtable) commIntepretations.nextElement();
+                       addForeignKey(commIntepretation, "COMMCLASS_id", commClassId);
+                       this.insertCommInterpetation(commIntepretation);
+                   }
+               }
+            }
+         
+     }
+
+
 
 	/**
 	 * Insert a taxonObservation 
