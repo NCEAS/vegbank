@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-25 18:44:33 $'
- *	'$Revision: 1.41 $'
+ *	'$Date: 2006-08-28 17:12:41 $'
+ *	'$Revision: 1.42 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,6 +43,8 @@ import org.vegbank.common.model.Commlineage;
 import org.vegbank.common.model.Commname;
 import org.vegbank.common.model.Commstatus;
 import org.vegbank.common.model.Commusage;
+import org.vegbank.common.model.Covermethod;
+import org.vegbank.common.model.Coverindex;
 import org.vegbank.common.model.Disturbanceobs;
 import org.vegbank.common.model.Embargo;
 import org.vegbank.common.model.Observation;
@@ -188,14 +190,57 @@ public class LoadTreeToDatabase
 		}			
     timer.stop();
 
-		// insert plantConcepts
+        // insert coverMethods
+   timer = new Timer("inserting coverMethods");
+        Enumeration coverMethods =  getChildTables(vegbankPackage, "coverMethod");
+        while ( coverMethods.hasMoreElements() )
+        {
+            Hashtable coverMethod = (Hashtable) coverMethods.nextElement();
+            long coverMethodId = insertTable("coverMethod", coverMethod);
+            this.insertTables("coverIndex",  getChildTables(coverMethod, "coverIndex"), 
+              Covermethod.COVERMETHOD_ID, coverMethodId);
+        }           
+    timer.stop();
+
+
+        // insert observations
+    timer = new Timer("inserting observations");
+        Enumeration observations = getChildTables(vegbankPackage, "observation");
+        while (observations.hasMoreElements())
+        {
+            Hashtable observation = (Hashtable) observations.nextElement();
+            insertObservation(observation);
+        }
+    timer.stop();
+
+        // insert Parties
+    timer = new Timer("inserting parties");
+        Enumeration parties = getChildTables(vegbankPackage, "party");
+        while (parties.hasMoreElements())
+        {
+            Hashtable party = (Hashtable) parties.nextElement();
+            this.insertParty(party);
+        }
+    timer.stop();
+
+        // insert plantConcepts
     timer = new Timer("inserting plantConcepts");
-		Enumeration plantConcepts =  getChildTables(vegbankPackage, "plantConcept");
-		while ( plantConcepts.hasMoreElements() )
-		{
-			Hashtable plantConcept = (Hashtable) plantConcepts.nextElement();
-			insertPlantConcept(plantConcept);
-		}
+        Enumeration plantConcepts =  getChildTables(vegbankPackage, "plantConcept");
+        while ( plantConcepts.hasMoreElements() )
+        {
+            Hashtable plantConcept = (Hashtable) plantConcepts.nextElement();
+            insertPlantConcept(plantConcept);
+        }
+    timer.stop();
+    
+        // insert projects
+    timer = new Timer("inserting projects");
+        Enumeration projects =  getChildTables(vegbankPackage, "project");
+        while ( projects.hasMoreElements() )
+        {
+            Hashtable project = (Hashtable) projects.nextElement();
+            insertProject(project);
+        }           
     timer.stop();
 
 		// insert references
@@ -209,25 +254,17 @@ public class LoadTreeToDatabase
 		}
     timer.stop();
 
-		// insert Parties
-    timer = new Timer("inserting parties");
-		Enumeration parties = getChildTables(vegbankPackage, "party");
-		while (parties.hasMoreElements())
-		{
-			Hashtable party = (Hashtable) parties.nextElement();
-			this.insertParty(party);
-		}
+        // insert stratumMethods
+    timer = new Timer("inserting stratumMethods");
+        Enumeration stratumMethods =  getChildTables(vegbankPackage, "stratumMethod");
+        while ( stratumMethods.hasMoreElements() )
+        {
+            Hashtable stratumMethod = (Hashtable) stratumMethods.nextElement();
+            insertStratumMethod(stratumMethod);
+        }           
     timer.stop();
 
-		// insert observations
-    timer = new Timer("inserting observations");
-		Enumeration observations = getChildTables(vegbankPackage, "observation");
-		while (observations.hasMoreElements())
-		{
-			Hashtable observation = (Hashtable) observations.nextElement();
-			insertObservation(observation);
-		}
-    timer.stop();
+
 
         dlog.append("finished preparing data"); 
 
@@ -598,7 +635,7 @@ public class LoadTreeToDatabase
 	private long insertTable( String tableName, Hashtable fieldValueHash ) 
     throws SQLException
 	{
-		//log.debug("insertTable: " + tableName);
+		// log.debug("insertTable: " + tableName);
 		
 		long PK = 0;
 
@@ -764,6 +801,7 @@ public class LoadTreeToDatabase
             if ( Utility.isStringNullOrEmpty( accessionCode )) {
                 // don't bother doing anything, there is no accessionCode to remove!
                 //log.debug("There was no accession code");
+                fieldValueHash.remove(Constants.ACCESSIONCODENAME);
             } else {
                 //log.debug("There was an accession code and it happens to be: " + accessionCode);
                 boolean skipRemoval = false;
@@ -1610,7 +1648,7 @@ public class LoadTreeToDatabase
 		Hashtable coverMethod = getFKChildTable(observationHash, 
       Observation.COVERMETHOD_ID, "coverMethod");
 		long coverMethodId = insertTable("coverMethod", coverMethod);
-		this.insertTables("coverIndex",  getChildTables(coverMethod, "coverIndex"), 
+        this.insertTables("coverIndex",  getChildTables(coverMethod, "coverIndex"), 
       Observation.COVERMETHOD_ID, coverMethodId);
 		addForeignKey(observationHash, Observation.COVERMETHOD_ID, coverMethodId);
 
