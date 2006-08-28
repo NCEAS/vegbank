@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-06-30 21:30:57 $'
- *	'$Revision: 1.23 $'
+ *	'$Date: 2006-08-28 22:34:54 $'
+ *	'$Revision: 1.24 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -166,12 +166,14 @@ public class AccessionGen {
 		table = table.toLowerCase();
 	    String tmpConfirm = null;
 		String query = getConfirmationQuery(table);
+        //log.debug("getConfirmation>> query:" + query);
 		if (query == null) {
 			return null;
 		}
 
 		// get the confirm type
 		String confirmType = res.getString("confirm.type." + table).toUpperCase();
+        //log.debug("getConfirmation>> confirmType:" + confirmType);
 		// This is either WHERE or AND depending on if where is used in the SQL already
 		// revised, always uses AND
 		String conjunction = "";
@@ -185,19 +187,26 @@ public class AccessionGen {
 		}
 
 		query += conjunction + Utility.getPKNameFromTableName(table) + " =" + pk;
-		//log.debug("confirmation query ===> " + query);
+        
+		log.debug("confirmation query ===> " + query);
         Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
 
 		if (rs.next()) {
-			tmpConfirm = rs.getString(2);
+            
+            if (rs.getMetaData().getColumnCount() >=2 ) {
+              // there are at least 2 columns, so get the data in column 2   
+              tmpConfirm = rs.getString(2);
 
+			  if (tmpConfirm == null) {
+                if (rs.getMetaData().getColumnCount() >=3 ) {
+                    // still haven't found it, but there are at least 3 columns, so get the data in column 3
+				  tmpConfirm = rs.getString(3);
+                } 
+			  }
+            }
 			if (tmpConfirm == null) {
-				tmpConfirm = rs.getString(3);
-			}
-
-			if (tmpConfirm == null) {
-                // use the default
+                // use the default, because nothing was found
                 tmpConfirm = CONFIRM_DEFAULT;
             } else {
                 //log.debug("generated accession code: " + formatConfirmCode(tmpConfirm));
@@ -449,8 +458,9 @@ public class AccessionGen {
 
 		Iterator it = tablesAndKeys.keySet().iterator();
 		while (it.hasNext()) {
+            
 			tableName = (String)it.next();
-
+            log.debug("updateSpecificRows>> is working with table: " + tableName);            
 			// Only deal with tableNames that are defined in the property file
 			// i.e. filter junk and tables without accessionCode rules
             // Loop through all so that cases match
@@ -461,13 +471,15 @@ public class AccessionGen {
                 if (keys != null) {
                     // Add an AccessionCode for each Key
                     PreparedStatement pstmt = this.getUpdatePreparedStatement(tableName);
-
+                    
+                    
                     Iterator kit = keys.iterator();
                     while (kit.hasNext()) {
                         Long key = (Long)kit.next();
                         String baseAC = this.getBaseAccessionCode(tableName);
+                     
                         String confirmCode = getConfirmation(tableName, key.toString());
-
+                    
                         String accessionCode = this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt);
                         log.debug("updated accessionCode: " + accessionCode);
                         accessionCodeList.add(accessionCode);
@@ -482,6 +494,7 @@ public class AccessionGen {
 
 	private String updateRowAC(long tmpId, String baseAC, String tmpConfirm, PreparedStatement pstmt) throws SQLException
 	{
+        //log.debug("updateRowAC >> " + tmpId + ", " + baseAC + " , " + tmpConfirm + " :: " + pstmt.toString()); 
 		StringBuffer tmpAC;
 		// build the accession code
 		// DB.Tbl.PK#.Confirm  ex:  VB.TC.126.AKMP
@@ -491,6 +504,7 @@ public class AccessionGen {
 
 		pstmt.setString(1, tmpAC.toString());
 		pstmt.setLong(2, tmpId);
+        //log.debug("prepared statement is now (just before execute):" + pstmt.toString());
 		pstmt.executeUpdate();
 		return tmpAC.toString();
 	}
