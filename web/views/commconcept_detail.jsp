@@ -120,8 +120,21 @@ function getHelpPageId() {
   
 </td></tr>
 
-
-<vegbank:get id="commstatus" select="commstatus" where="where_commconcept_pk" beanName="map" wparam="concId" perPage="-1" pager="false"/>
+<!-- check for only one status requested! -->
+<logic:equal parameter="where" value="where_commstatus_ac">
+  <!-- get only one status -->
+  
+  <vegbank:get id="commstatus" select="commstatus" where="where_ac" beanName="map" perPage="-1" pager="false"/> <!-- same wparam as URL -->
+  <!-- show user that this is what is cited -->
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+  <td class="highlight" colspan="3">
+  <strong>This perspective was requested: </strong> <a href="@get_link@detail/commconcept/<bean:write name='concId' />">show all party perspectives for this concept</a><br/>
+  </td></tr>
+</logic:equal>
+<logic:notEqual parameter="where" value="where_commstatus_ac">
+  <!-- get all statuses -->
+  <vegbank:get id="commstatus" select="commstatus" where="where_commconcept_pk" beanName="map" wparam="concId" perPage="-1" pager="false"/>
+</logic:notEqual>  
 <logic:notEmpty name="commstatus-BEANLIST">
 <logic:iterate id="statusbean" name="commstatus-BEANLIST">
 <bean:define id="thispartyacccode" name="statusbean" property="party_accessioncode" /> <!-- get accCode of this party as bean -->

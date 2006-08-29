@@ -124,8 +124,21 @@ function getHelpPageId() {
 
 </td></tr>
 
-
-<vegbank:get id="plantstatus" select="plantstatus" where="where_plantconcept_pk" beanName="map" wparam="concId" perPage="-1" pager="false"/>
+<!-- check for only one status requested! -->
+<logic:equal parameter="where" value="where_plantstatus_ac">
+  <!-- get only one status -->
+  
+  <vegbank:get id="plantstatus" select="plantstatus" where="where_ac" beanName="map" perPage="-1" pager="false"/> <!-- same wparam as URL -->
+  <!-- show user that this is what is cited -->
+  <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+  <td class="highlight" colspan="3">
+  <strong>This perspective was requested: </strong> <a href="@get_link@detail/plantconcept/<bean:write name='concId' />">show all party perspectives for this concept</a><br/>
+  </td></tr>
+</logic:equal>
+<logic:notEqual parameter="where" value="where_plantstatus_ac">
+  <!-- get all statuses -->
+  <vegbank:get id="plantstatus" select="plantstatus" where="where_plantconcept_pk" beanName="map" wparam="concId" perPage="-1" pager="false"/>
+</logic:notEqual> 
 
 <logic:notEmpty name="plantstatus-BEANLIST">
 <logic:iterate id="statusbean" name="plantstatus-BEANLIST">

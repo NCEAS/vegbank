@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.23 2005-07-28 00:47:40 mlee Exp $
+# $Id: .htaccess,v 1.24 2006-08-29 18:48:52 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -79,6 +79,10 @@ RewriteRule ^cite/([^\.]+)\.Cl\.(.*)$	   @get_link@std/commclass/$1.Cl.$2	      
 RewriteRule ^cite/([^\.]+)\.RP\.(.*)$	   @get_link@std/referenceparty/$1.RP.$2    [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.AR\.(.*)$	   @get_link@std/aux_role/$1.AR.$2	       [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.DS\.(.*)$	   @get_link@std/userdataset/$1.DS.$2       [NC,QSA,L]
+
+RewriteRule ^cite/([^\.]+)\.TI\.(.*)$	   @get_link@std/taxoninterpretation/$1.TI.$2       [NC,QSA,L]
+RewriteRule ^cite/([^\.]+)\.PS\.(.*)$	   @get_link@detail/plantconcept/$1.PS.$2?where=where_plantstatus_ac     [NC,QSA,L]
+RewriteRule ^cite/([^\.]+)\.CS\.(.*)$	   @get_link@detail/commconcept/$1.CS.$2?where=where_commstatus_ac       [NC,QSA,L]
 
 RewriteRule ^dd/(.*)/(.*)	   @dbdictionary_link@dd~table~$1~field~$2~type~smallview.html       [NC,QSA,L,R]
 RewriteRule ^ddfull/(.*)/(.*)	   @dbdictionary_link@dd~table~$1~field~$2~type~fieldview.html       [NC,QSA,L,R]
