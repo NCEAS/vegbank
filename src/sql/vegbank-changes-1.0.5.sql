@@ -111,3 +111,44 @@ common varchar (255) ,
 
 PRIMARY KEY ( plantconcept_id )
 );
+
+CREATE TABLE dba_tableDescription
+(
+dba_tableDescription_ID serial ,
+tableName varchar (75) ,
+tableLabel varchar (200) ,
+tableNotes text ,
+tableDescription text ,
+
+PRIMARY KEY ( dba_tableDescription_ID )
+);
+
+CREATE TABLE dba_fieldDescription
+(
+dba_fieldDescription_ID serial ,
+tableName varchar (75) ,
+fieldName varchar (75) ,
+fieldLabel varchar (200) ,
+fieldModel varchar (50) ,
+fieldNulls varchar (10) ,
+fieldType varchar (30) ,
+fieldKey varchar (10) ,
+fieldReferences varchar (200) ,
+fieldList varchar (50) ,
+fieldNotes text ,
+fieldDefinition text ,
+
+PRIMARY KEY ( dba_fieldDescription_ID )
+);
+
+CREATE TABLE dba_fieldList
+(
+dba_fieldList_ID serial ,
+tableName varchar (75) ,
+fieldName varchar (75) ,
+listValue varchar (255) ,
+listValueDescription text ,
+listValueSortOrder Float ,
+
+PRIMARY KEY ( dba_fieldList_ID )
+);

@@ -20585,6 +20585,377 @@ conditions may change between resampling events.
       <update>1.0.5</update>
     </attribute>
   </entity>
+  <entity>
+    <entityName>dba_tableDescription</entityName>
+    <entityLabel>Table Description</entityLabel>
+    <entitySummary>Stores information about each table for the data dictionary.</entitySummary>
+    <entityDescription/>
+    <module>extra</module>
+    <entityCreatedVersion>1.0.5</entityCreatedVersion>
+    <entityRequirePopulation>true</entityRequirePopulation>
+    <attribute>
+      <attID>2700</attID>
+      <attName>dba_tableDescription_ID</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Primary key of this table</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2703</attID>
+      <attName>tableName</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (75)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Database name of the table</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2706</attID>
+      <attName>tableLabel</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (200)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Label of the table, that is a human readable name.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2709</attID>
+      <attName>tableNotes</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Notes about the table</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2712</attID>
+      <attName>tableDescription</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Description of the table</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+  </entity>
+  <entity>
+    <entityName>dba_fieldDescription</entityName>
+    <entityLabel>Field Description</entityLabel>
+    <entitySummary>Stores information about each field for the data dictionary.</entitySummary>
+    <entityDescription/>
+    <module>extra</module>
+    <entityCreatedVersion>1.0.5</entityCreatedVersion>
+    <entityRequirePopulation>true</entityRequirePopulation>
+    <attribute>
+      <attID>2800</attID>
+      <attName>dba_fieldDescription_ID</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Primary key of this table</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2802</attID>
+      <attName>tableName</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (75)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Table that the field exists on.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2803</attID>
+      <attName>fieldName</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (75)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Database name of thefield.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2806</attID>
+      <attName>fieldLabel</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (200)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Label (human-readable) of the field.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2809</attID>
+      <attName>fieldModel</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Model which the field belongs to, i.e. logical, denorm, implementation</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2812</attID>
+      <attName>fieldNulls</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (10)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>whether the field can contain nulls</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2815</attID>
+      <attName>fieldType</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (30)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Field's data type.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2818</attID>
+      <attName>fieldKey</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (10)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>If the field is a PK or FK.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2821</attID>
+      <attName>fieldReferences</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (200)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>If the field is a FK, what field it references</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2824</attID>
+      <attName>fieldList</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (50)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>If the field has a constrained vocabulary, whether it is open or closed.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2827</attID>
+      <attName>fieldNotes</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Field Notes.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2830</attID>
+      <attName>fieldDefinition</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Field Definition.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+  </entity>
+  <entity>
+    <entityName>dba_fieldList</entityName>
+    <entityLabel>Field Lists</entityLabel>
+    <entitySummary>Stores information about lists attached to fields.</entitySummary>
+    <entityDescription/>
+    <module>extra</module>
+    <entityCreatedVersion>1.0.5</entityCreatedVersion>
+    <attribute>
+      <attID>2900</attID>
+      <attName>dba_fieldList_ID</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Primary key of this table</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2903</attID>
+      <attName>tableName</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (75)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Table that the list belongs to.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2906</attID>
+      <attName>fieldName</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (75)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Field that the list belongs to.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2909</attID>
+      <attName>listValue</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (255)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>the list value.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2912</attID>
+      <attName>listValueDescription</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>the list value's description.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2915</attID>
+      <attName>listValueSortOrder</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>the list value's sort order.</attDefinition>
+      <update>1.0.5</update>
+    </attribute>
+  </entity>
   <view>
     <viewName>view_all_commnames_code</viewName>
   </view>
