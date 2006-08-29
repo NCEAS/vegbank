@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: mlee $'
-  * '$Date: 2006-08-29 00:16:15 $'
-  * '$Revision: 1.92 $'
+  * '$Date: 2006-08-29 22:09:07 $'
+  * '$Revision: 1.93 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -73,6 +73,7 @@ runxmlcache   caches the xml representation of each bean with accession numbers
 createdb      creates an empty vegbank database from the existing sql scripts.  
               the created database should be valid according to the newest 
               schema.
+populateDD   populates the data dictionary tables based on docs/xml/db_model_vegbank.xml
 ============================================================================
 -->
 <project name="vegbank" default="war" basedir=".">
@@ -570,9 +571,16 @@ createdb      creates an empty vegbank database from the existing sql scripts.
   
   <!--target that generates the sql to build a blank database-->
   <target name="generateDBSQL" depends="setFilters">
+     <!-- generate the database creating SQL, and SQL to populate some of it -->
+      <property name="jdbc-jar" value="lib/postgresql-8.1-405.jdbc2.jar"/>
     <xslt in="${docsDir}/xml/db_model_vegbank.xml" 
       out="${buildDir}/sql/vegbank.sql" 
       style="${srcDir}/xsl/VegBankModel2SQL.xsl"/>
+     <!-- generate the sql for populating the data dictionary within the database -->
+     <xslt in="${docsDir}/xml/db_model_vegbank.xml" 
+      out="${buildDir}/sql/populate-datadictionary.sql" 
+      style="${docsDir}/xml/dbmodel-to-ddtables.xsl" force="true"/>
+      
     <copy todir="${buildDir}/sql" filtering="yes" overwrite="yes">
       <fileset dir="${srcDir}/sql" includes="**/*.*"/>
     </copy>
@@ -695,7 +703,7 @@ createdb      creates an empty vegbank database from the existing sql scripts.
       created database should be valid according to the newest schema
   -->
   <target name="createdb" depends="generateDBSQL">
-    <property name="jdbc-jar" value="lib/postgresql-8.1-405.jdbc2.jar"/>
+    <!-- set in generateDBSQL  <property name="jdbc-jar" value="lib/postgresql-8.1-405.jdbc2.jar"/> -->
     <echo>**************Building Main DB with vegbank.sql****************</echo>
     <sql driver="${databaseDriverClass}"
           url="${databaseConnectString}"
@@ -835,6 +843,9 @@ createdb      creates an empty vegbank database from the existing sql scripts.
       </classpath>
     </sql>
     
+    <echo>************** populate data dictionary ****************</echo>
+    <antcall target="populateDD" />
+    
     <echo>************** now verifying that database is correct ****************</echo>
     <antcall target="dbVerify" />
     
@@ -844,6 +855,20 @@ createdb      creates an empty vegbank database from the existing sql scripts.
           ASAP.  This user is the super user and will allow you to create other
           accounts.</echo>
     <echo>***************************************************************</echo>
+  </target>
+  <target name="populateDD" depends="generateDBSQL">
+    <!-- populates the data dictionary tables by getting db_model_vegbank.xml styled into SQL -->
+        <sql driver="${databaseDriverClass}"
+          url="${databaseConnectString}"
+          userid="${databaseUser}"
+          password="${databaseUserPassword}"
+          src="${buildDir}/sql/populate-datadictionary.sql"
+          onerror="continue"
+          autocommit="true">
+      <classpath>
+         <pathelement location="${jdbc-jar}"/>
+      </classpath>
+    </sql>
   </target>
   
   <!-- this target resets the admin password to the default -->
