@@ -17,7 +17,7 @@
     DELETE FROM dba_fieldList;
    
     <xsl:for-each select="entity[module='plant' or module='community' or module='plot']">
-       SELECT '<xsl:value-of select="entityName" />';
+     <!--  SELECT '<xsl:value-of select="entityName" />'; -->
         INSERT INTO dba_tableDescription (  tableName , tableLabel , tableNotes , tableDescription  ) values (
         <xsl:call-template name="field-to-csv"><xsl:with-param name="text" select="entityName" /></xsl:call-template>,
         <xsl:call-template name="field-to-csv"><xsl:with-param name="text" select="entityLabel" /></xsl:call-template>,
@@ -26,7 +26,7 @@
         );
         <!-- while we're here, add info about fields: -->
         <xsl:for-each select="attribute">
-             SELECT '<xsl:value-of select="../entityName" />.<xsl:value-of select="attName" />';
+           <!--  SELECT '<xsl:value-of select="../entityName" />.<xsl:value-of select="attName" />'; -->
             INSERT INTO dba_fieldDescription ( tableName, fieldName , fieldLabel , fieldModel , fieldNulls , fieldType , fieldKey , fieldReferences , fieldList , fieldNotes , fieldDefinition )
                values (
         <xsl:call-template name="field-to-csv"><xsl:with-param name="text" select="../entityName" /></xsl:call-template>,
@@ -49,7 +49,7 @@
                <xsl:variable name="thisFieldName"  select="attName" />
                <xsl:for-each select="attList/attListItem">
                  <xsl:sort select="attListSortOrd" data-type="number" />
-                      SELECT '<xsl:value-of select="$thisTableName" />.<xsl:value-of select="$thisFieldName" />  : '<xsl:call-template name="field-to-csv"><xsl:with-param name="text" select="attListValue" /></xsl:call-template>'';
+                    <!--  SELECT '<xsl:value-of select="$thisTableName" />.<xsl:value-of select="$thisFieldName" />  : '<xsl:call-template name="field-to-csv"><xsl:with-param name="text" select="attListValue" /></xsl:call-template>''; -->
                      INSERT INTO dba_fieldlist ( tableName , fieldName , listValue , listValueDescription , listValueSortOrder )
                        values (
                              <xsl:call-template name="field-to-csv"><xsl:with-param name="text" select="$thisTableName" /></xsl:call-template>,
