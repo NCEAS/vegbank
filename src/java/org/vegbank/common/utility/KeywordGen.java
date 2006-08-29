@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2006-07-21 05:15:18 $'
- *	'$Revision: 1.15 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-08-29 21:48:29 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -146,7 +146,6 @@ public class KeywordGen {
 
 			if (!s.equals("y")) {
 				//System.out.println("Thanks anyway.");
-				conn.close();
 				System.exit(0);
 			}
 
@@ -155,8 +154,6 @@ public class KeywordGen {
 			genKeywords(updateMismatch);
 			stopWatch.stopWatch();
 			stopWatch.printTimeElapsed();
-
-			conn.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();

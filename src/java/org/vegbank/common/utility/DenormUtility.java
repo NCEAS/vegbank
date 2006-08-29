@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-08-16 19:45:16 $'
- *	'$Revision: 1.4 $'
+ *	'$Date: 2006-08-29 21:48:29 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -246,8 +246,10 @@ public class DenormUtility
         String qTableName = (String)queuedTables.elementAt(j);
         if(qTableName.trim().equals(sTableName.trim()))
         { //denorm it.  this should be in order.
-          System.out.println("Denorming sorted table " + stn.toString());
+          log.debug("Denorming queued table: " + stn);
+          //System.out.println("Denorming sorted table " + stn.toString());
           DenormUtility.updateTable(qTableName);
+          queuedTables.remove(j); //remove the table from the queue once it is run
         }
       }
     }

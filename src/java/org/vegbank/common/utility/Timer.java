@@ -5,8 +5,8 @@
  *             			National Center for Ecological Analysis and Synthesis
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-06-05 22:56:37 $'
- *	'$Revision: 1.1 $'
+ *	'$Date: 2006-08-29 21:48:29 $'
+ *	'$Revision: 1.2 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 public class Timer
 {
   //change this to false if you don't want the Timer to print to std out.
-  private static boolean SYS_OUT = true;
+  private static boolean SYS_OUT = false;
 	private static Log log = LogFactory.getLog(Timer.class);
   private long startTime;
   private long endTime;

@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2006-08-29 18:49:30 $'
- *	'$Revision: 1.46 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-08-29 21:48:29 $'
+ *	'$Revision: 1.47 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,6 +151,7 @@ public class LoadTreeToDatabase
 	public void insertVegbankPackage(Hashtable vbPkg, String xmlFileName, Long usrId)
 		    throws SQLException
 	{
+    System.out.println("BEGIN XML LOADING PROCESS (insertVegbankPackage)");
     Timer t1 = new Timer("inserting vegbank package");
 		this.vegbankPackage = vbPkg;
 		this.xmlFileName = xmlFileName;
@@ -385,6 +386,7 @@ public class LoadTreeToDatabase
             receiptTpl = DataloadLog.TPL_SUCCESS;
             subject = vbResources.getString("dataload.subject.success");
 
+            System.out.println("DONE WITH XML LOADING PROCEDURE (insertVegbankPackage)");
 		} else {
             //////////////////////////////////////////////////////////////////
             // ROLLBACK
@@ -2680,6 +2682,7 @@ public class LoadTreeToDatabase
             {
                 String tableName = ((String)tit.next()).toLowerCase();
                 log.debug("Adding " + tableName + " to denormalizing queue");
+                System.out.println("Adding " + tableName + " to denormalizing queue");
                 denormUtil.queueTable(tableName);
             }
             
@@ -2724,7 +2727,7 @@ public class LoadTreeToDatabase
       {
         if(run)
         {
-          System.out.println("==========Running in Keyword Thread=============");
+          //System.out.println("==========Running in Keyword Thread=============");
           Timer t = new Timer("runKeywords thread");
           try {
               // KEYWORD GENERATION
@@ -2755,7 +2758,7 @@ public class LoadTreeToDatabase
               timer.stop();
           }
     
-          System.out.println("==========Done with Keyword Thread=============");
+          //System.out.println("==========Done with Keyword Thread=============");
           t.stop();
         }
       }
@@ -2816,16 +2819,14 @@ public class LoadTreeToDatabase
           */
           try
           {
-            System.out.println("==============In runXMLGenTimerTask==============");
+            //System.out.println("==============In runXMLGenTimerTask==============");
             DBConnection conn = null;
             conn = DBConnectionPool.getInstance().getDBConnection("Need " +
               "connection for caching xml");
             conn.setAutoCommit(true);
-            System.out.println("got db connection");
             while(accCodeItt.hasNext())
             {
               String accCode = (String)accCodeItt.next();
-              System.out.println("generating xml for " + accCode);
               DBModelBeanReader beanReader = new DBModelBeanReader();
               VBModelBean bean = beanReader.getVBModelBean(accCode);
               if(bean == null)
@@ -2847,7 +2848,6 @@ public class LoadTreeToDatabase
               //Statement query = conn.createStatement();
               int rowcount = ps.executeUpdate();
               //int rowcount = query.executeUpdate(sql);
-              System.out.println("rowcount: " + rowcount);
               if(rowcount != 1)
               {//failure
                 String msg = "SQL problem caching bean xml";
@@ -2857,7 +2857,7 @@ public class LoadTreeToDatabase
             } 
             
             DBConnectionPool.returnDBConnection(conn);
-            System.out.println("==============Done with runXMLGenTimerTask==============");
+            //System.out.println("==============Done with runXMLGenTimerTask==============");
           }
           catch (SQLException sqle) 
           {
