@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-29 00:36:09 $'
- *	'$Revision: 1.44 $'
+ *	'$Date: 2006-08-29 17:23:00 $'
+ *	'$Revision: 1.45 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2107,6 +2107,19 @@ public class LoadTreeToDatabase
 		pKey = getExtantPK(plantConcept);
 		if ( pKey != 0 )
 		{
+            // check for new plant Status records, by plantStatus.accessionCode:
+            // Add New PlantStatus 
+            log.debug("Checking for new plantStati");
+            Enumeration newPlantStatuses = getChildTables(plantConcept, "plantStatus");
+            while ( newPlantStatuses.hasMoreElements())
+            {
+                log.debug("found a NEW? plantstatus");
+                Hashtable newPlantStatus = (Hashtable) newPlantStatuses.nextElement();
+                addForeignKey(newPlantStatus, Plantstatus.PLANTCONCEPT_ID, pKey);
+                long newPlantStatusId = insertPlantStatus(newPlantStatus, pKey);
+
+            }
+            //that's all of this plantConcept, which was recognized above as already existing in the db
 			return pKey;
 		}
 	    log.debug("########## INSERTING NEW PLANT CONCEPT");
@@ -2134,21 +2147,9 @@ public class LoadTreeToDatabase
 	        log.debug("found a plantstatus");
 			Hashtable plantStatus = (Hashtable) plantStatuses.nextElement();
 			addForeignKey(plantStatus, Plantstatus.PLANTCONCEPT_ID, pKey);
-			plantStatusId = insertPlantStatus(plantStatus);
+			plantStatusId = insertPlantStatus(plantStatus, pKey);
 
-            // Add plantUsage
-            Enumeration plantUsages = getChildTables(plantStatus, "plantUsage");
-            while ( plantUsages.hasMoreElements())
-            {
-                Hashtable plantUsage = (Hashtable) plantUsages.nextElement();
-                addForeignKey(plantUsage, Plantusage.PLANTCONCEPT_ID, pKey);
 
-                // need to add pu.plantstatus_id needs to be populated
-                addForeignKey(plantUsage, Plantusage.PLANTSTATUS_ID, plantStatusId);
-
-                insertPlantUsage(plantUsage);
-                //log.debug("added plantusage");
-            }
 		}
 		
 		
@@ -2175,7 +2176,20 @@ public class LoadTreeToDatabase
 		pKey = getExtantPK(commConcept);
 		if ( pKey != 0 )
 		{
-			return pKey;
+            // check for new comm Status records, by commStatus.accessionCode:
+            // Add New CommStatus 
+            log.debug("Checking for new commStati");
+            Enumeration newCommStatuses = getChildTables(commConcept, "commStatus");
+            while ( newCommStatuses.hasMoreElements())
+            {
+                log.debug("found a NEW? commstatus");
+                Hashtable newCommStatus = (Hashtable) newCommStatuses.nextElement();
+                addForeignKey(newCommStatus, Commstatus.COMMCONCEPT_ID, pKey);
+                long newCommStatusId = insertCommStatus(newCommStatus, pKey);
+            
+            }
+            //that's all of this commConcept, which was recognized above as already existing in the db
+            return pKey;
 		}
 		
 		//Utility.prettyPrintHash(commConcept);
@@ -2195,18 +2209,8 @@ public class LoadTreeToDatabase
 		{
 			Hashtable commStatus = (Hashtable) commStatuses.nextElement();
 			addForeignKey(commStatus, Commstatus.COMMCONCEPT_ID, pKey);
-			commStatusId = insertCommStatus(commStatus);
+			commStatusId = insertCommStatus(commStatus, pKey);
 
-            // Add commUsage
-            Enumeration commUsages = getChildTables(commStatus, "commUsage");
-            while ( commUsages.hasMoreElements())
-            {
-                log.debug("adding commUsage to commStatus #" + commStatusId);
-                Hashtable commUsage = (Hashtable) commUsages.nextElement();
-                addForeignKey(commUsage, Commusage.COMMCONCEPT_ID, pKey);
-                addForeignKey(commUsage, Commusage.COMMSTATUS_ID, commStatusId);
-                insertCommUsage(commUsage);
-            }
 		}
 		
 		return pKey;
@@ -2216,7 +2220,7 @@ public class LoadTreeToDatabase
 	 * @param commStatus
 	 * @return long -- primary key assigned
 	 */
-	private long insertCommStatus(Hashtable commStatus) throws SQLException
+	private long insertCommStatus(Hashtable commStatus, long fromCommConceptId) throws SQLException
 	{
 		long pKey =0;
 	
@@ -2273,7 +2277,19 @@ public class LoadTreeToDatabase
 						
 			insertTable( "commCorrelation", commCorrelation);
 		}
-		return pKey;
+        
+        // Add commUsage
+        Enumeration commUsages = getChildTables(commStatus, "commUsage");
+        while ( commUsages.hasMoreElements())
+        {
+            log.debug("adding commUsage to commStatus #" + pKey);
+            Hashtable commUsage = (Hashtable) commUsages.nextElement();
+            addForeignKey(commUsage, Commusage.COMMCONCEPT_ID, fromCommConceptId);
+            addForeignKey(commUsage, Commusage.COMMSTATUS_ID, pKey);
+            insertCommUsage(commUsage);
+        }
+		
+        return pKey;
 	}
 	
 	private void insertCommUsage(Hashtable commUsage) throws SQLException
@@ -2353,7 +2369,7 @@ public class LoadTreeToDatabase
 	 * @param plantStatus
 	 * @return long -- primary key assigned
 	 */
-	private long insertPlantStatus(Hashtable plantStatus) throws SQLException
+	private long insertPlantStatus(Hashtable plantStatus, long fromPlantConceptId) throws SQLException
 	{
 		long pKey =0;
 		
@@ -2412,6 +2428,21 @@ public class LoadTreeToDatabase
 							
 			insertTable( "plantCorrelation", plantCorrelation);
 		}
+        
+        // Add plantUsage
+        Enumeration plantUsages = getChildTables(plantStatus, "plantUsage");
+        while ( plantUsages.hasMoreElements())
+        {
+            Hashtable plantUsage = (Hashtable) plantUsages.nextElement();
+            addForeignKey(plantUsage, Plantusage.PLANTCONCEPT_ID, fromPlantConceptId);
+
+            // need to add pu.plantstatus_id needs to be populated
+            addForeignKey(plantUsage, Plantusage.PLANTSTATUS_ID, pKey);
+
+            insertPlantUsage(plantUsage);
+            //log.debug("added plantusage");
+        }
+        
 		return pKey;
 	}
 
