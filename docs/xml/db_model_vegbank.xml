@@ -20298,8 +20298,8 @@ conditions may change between resampling events.
       <attName>dba_onerow_id</attName>
       <attModel>implementation</attModel>
       <attNulls>no</attNulls>
-      <attType>Integer</attType>
-      <attKey>n/a</attKey>
+      <attType>serial</attType>
+      <attKey>PK</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>

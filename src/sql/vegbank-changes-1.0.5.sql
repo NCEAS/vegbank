@@ -37,12 +37,12 @@ create sequence dba_preassignacccode_dba_requestnumber_seq;
  alter table dba_preassignacccode alter column confirmcode set default (replace(replace(replace(replace(now(),' ','T'),'-',''),':',''),'.','d') || 'R' || floor(random()*1000000));
  
  create table dba_onerow (
-   dba_onerow_id int,
+   dba_onerow_id serial,
    primary key (dba_onerow_id)
    );
    
- --populate dba_onerow (just one empty row of data):  
- insert into dba_onerow (dba_onerow_id) values (1);
+ --populate dba_onerow (just one empty row of data) (doesn't populate it if it's already populated):  
+ insert into dba_onerow (dba_onerow_id) select (1) where (select count(1) from dba_onerow)=0;
 
 
 --change commclass'es expert system from boolean to text:

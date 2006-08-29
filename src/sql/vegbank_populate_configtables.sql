@@ -101,3 +101,5 @@ INSERT INTO aux_role ( rolecode , roledescription , accessioncode , roleproject 
 INSERT INTO aux_role ( rolecode , roledescription , accessioncode , roleproject , roleobservation , roletaxonint , roleclassint ) SELECT 'Systemmanager',null,'VB.AR.54.SYSTEMMANAGER',null,null,null,null WHERE (select count(1) from aux_role where accessionCode='VB.AR.54.SYSTEMMANAGER')=0;
 INSERT INTO aux_role ( rolecode , roledescription , accessioncode , roleproject , roleobservation , roletaxonint , roleclassint ) SELECT 'Taxonomist',null,'VB.AR.55.TAXONOMIST',null,'2',null,null WHERE (select count(1) from aux_role where accessionCode='VB.AR.55.TAXONOMIST')=0;
 
+-- only adds data if there is currently none in this table.
+ insert into dba_onerow (dba_onerow_id) select (1) where (select count(1) from dba_onerow)=0;
