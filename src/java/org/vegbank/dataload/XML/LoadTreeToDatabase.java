@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-28 22:45:41 $'
- *	'$Revision: 1.43 $'
+ *	'$Date: 2006-08-29 00:36:09 $'
+ *	'$Revision: 1.44 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1626,6 +1626,14 @@ public class LoadTreeToDatabase
             //insert any commClasses that are NEW:
             insertCommClasses(observationHash, observationId);
             
+            // Insert the taxonObservations
+            insertTaxonObservations(
+               observationHash,
+               observationId,
+               0,  //don't care about the stratum FK? 
+               true  // we ARE looking for only new taxonInterpretations
+               );
+            
 			return observationId;
 		}
 		//	Need to insert the plot and the project and get the FKs
@@ -1711,7 +1719,9 @@ public class LoadTreeToDatabase
 		insertTaxonObservations(
 			observationHash,
 			observationId,
-			stratumMethodId);
+			stratumMethodId, 
+            false  //looking for all taxonInterpretations, not just ones added since plot was already loaded
+            );
 			
 		// Add the observation synonyms 
 		Enumeration observationSynonyms =  getChildTables(observationHash, 
@@ -1861,11 +1871,13 @@ public class LoadTreeToDatabase
 	 * @param observationHash
 	 * @param observationId
 	 * @param stratumMethodId
+     * @param onlyNewTaxonInts -- only inserts new TaxonInterpretations to the database (for extant plots with new interpretations)
 	 */
 	private void insertTaxonObservations(
 		Hashtable observationHash,
 		long observationId,
-		long stratumMethodId) throws SQLException
+		long stratumMethodId, 
+        boolean onlyNewTaxonInts) throws SQLException
 	{	
     Timer obsTimer;
 		// Insert the taxonObservations
@@ -1878,8 +1890,26 @@ public class LoadTreeToDatabase
 			taxonObservationId = getExtantPK(taxonObservation);
 			if ( taxonObservationId != 0 )
 			{
+                if (onlyNewTaxonInts == true) {
+                      //check for newTaxonInts on this extant taxonObs
+                      // Add TaxonInterpretation(s) if they are new by accessionCode
+                        Enumeration newTInts = getChildTables(taxonObservation, 
+                           "taxonInterpretation");
+                        while ( newTInts.hasMoreElements())
+                        {
+                            Hashtable newTInt = (Hashtable) newTInts.nextElement();
+                            insertTaxonInterpretation(
+                                taxonObservationId,
+                                0, // No stemlocation availible
+                                newTInt);
+                        }
+                }
 				continue;
 			}
+            // that's all if we are just looking for taxonInterps
+            if (onlyNewTaxonInts) {
+                continue;
+            }
       
 			// Add PlantName 
 			Hashtable plantname = getChildTable(taxonObservation, "Plantname");
