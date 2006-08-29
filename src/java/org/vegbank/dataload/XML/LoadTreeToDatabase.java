@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-29 17:23:00 $'
- *	'$Revision: 1.45 $'
+ *	'$Date: 2006-08-29 18:49:30 $'
+ *	'$Revision: 1.46 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -289,7 +289,7 @@ public class LoadTreeToDatabase
                 dsAC = createDataset();
                 if (dsAC != null) {
                     log.debug("done creating dataset"); 
-                    dlog.addTag("datasetURL", vbResources.getString("serverAddress") + 
+                    dlog.addTag("datasetURL", "http://" + vbResources.getString("serverAddress") + 
                             "/get/std/userdataset/" + dsAC.toString());
                 } else {
                     dlog.append("!!! empty dataset");
