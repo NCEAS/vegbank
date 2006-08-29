@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: mlee $'
-  * '$Date: 2006-08-26 22:49:44 $'
-  * '$Revision: 1.91 $'
+  * '$Date: 2006-08-29 00:16:15 $'
+  * '$Revision: 1.92 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -648,7 +648,7 @@ createdb      creates an empty vegbank database from the existing sql scripts.
     <property name="xslSrcDir" value="${srcDir}/xsl"/>
     <property name="buildBeanSrcDir" value="${buildSrcDir}/org/vegbank/common/model"/>
     <property name="buildModelUtilitySrcDir" value="${buildBeanSrcDir}/utility"/>
-    <property name="vegbankSchemaData" value="vegbank-data-ver1.0.2usage.xsd"/>
+    <property name="vegbankSchemaData" value="${dataSchemaName}"/>
     <property name="modelGeneratedFlag" value="${buildSrcDir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG"/>
     <path id="classpath.compilation">
       <pathelement path="${buildClassDir}"/>
