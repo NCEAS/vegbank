@@ -4,9 +4,9 @@
  *  Authors: @author@
  *  Release: @release@
  *
- *  '$Author: mlee $'
- *  '$Date: 2006-08-26 23:00:00 $'
- *  '$Revision: 1.21 $'
+ *  '$Author: berkley $'
+ *  '$Date: 2006-08-29 23:21:28 $'
+ *  '$Revision: 1.22 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -196,6 +196,18 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
      */     
     public String toXML()
     {
+      String year;
+      String day;
+      String month;
+      String hour;
+      String minute;
+      String second;
+      String timezone;
+      java.text.DateFormat dateFormat;
+      java.util.Calendar calendar;
+      String fullDate;
+      String origDate;
+      
       StringBuffer xml = new StringBuffer();
       xml.append(getIndent( indent ) + "&lt;<xsl:value-of select="$entityName"/>&gt;\n");
       indent = indent +1 ;
@@ -228,13 +240,63 @@ public class <xsl:value-of select="$CappedEntityName"/> extends VBModelBean impl
       </xsl:variable>
 
       <xsl:choose>
-        <xsl:when test="./attRelType/@type ='n/a' and attKey!='PK'">
+        <xsl:when test="./attRelType/@type ='n/a' and attKey!='PK' and attType!='Date'">
       if ( this.get<xsl:value-of select="$cappedVariableName"/>() != null)
       {
         xml.append(getIndent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;");
         xml.append(escapeXML(this.get<xsl:value-of select="$cappedVariableName"/>()) );
         xml.append("&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
       }
+        </xsl:when>
+        <xsl:when test="./attRelType/@type ='n/a' and attKey!='PK' and attType='Date'">
+          xml.append(getIndent( indent ) + "&lt;<xsl:value-of select="$XMLElementName"/>&gt;");
+          if(this.get<xsl:value-of select="$cappedVariableName"/>() != null)
+          {
+            origDate = this.get<xsl:value-of select="$cappedVariableName"/>();
+            /*System.out.println("charat length - 3: " + origDate.charAt(origDate.length() - 3));
+            if(origDate.charAt(origDate.length() - 3) == '-')
+            {
+              origDate = origDate.substring(0, origDate.length() - 3);
+            }
+            System.out.println("date: " + origDate);
+            dateFormat = java.text.DateFormat.getDateTimeInstance();
+            try
+            {
+              dateFormat.parse(origDate);
+            }
+            catch(java.text.ParseException pe)
+            {
+              System.out.println("Parse Exception: " + pe.getMessage());
+              System.out.println("date looked like: " + origDate);
+            }
+            
+            calendar = dateFormat.getCalendar();
+            year = calendar.get(java.util.Calendar.YEAR);
+            day = calendar.get(java.util.Calendar.DAY_OF_MONTH);
+            month = calendar.get(java.util.Calendar.MONTH);
+            hour = calendar.get(java.util.Calendar.HOUR_OF_DAY);
+            minute = calendar.get(java.util.Calendar.MINUTE);
+            second = calendar.get(java.util.Calendar.SECOND);
+            //java.util.TimeZone tz = new java.util.TimeZone();
+            //String timezone = calendar.get(java.util.Calendar.TIMEZONE);
+            fullDate = year + "-" + month + "-" + day + "T" + hour + ":" + 
+              minute + ":" + second;*/
+              
+            origDate = origDate.trim();
+            year = origDate.substring(0, 4);
+            month = origDate.substring(5, 7);
+            day = origDate.substring(8, 10);
+            hour = origDate.substring(11, 13);
+            minute = origDate.substring(14, 16);
+            second = origDate.substring(17, 19);
+            //timezone = origDate.substring(19, 23);
+            
+            fullDate = year + "-" + month + "-" + day + "T" + hour + ":" + 
+              minute + ":" + second;
+            xml.append(escapeXML(fullDate));
+            <!--xml.append(escapeXML(this.get<xsl:value-of select="$cappedVariableName"/>()) );-->
+          }
+          xml.append("&lt;/<xsl:value-of select="$XMLElementName"/>&gt;\n");
         </xsl:when>
         <xsl:when test="attKey='PK'">
       if ( this.get<xsl:value-of select="$cappedVariableName"/>() != 0)
