@@ -14255,13 +14255,13 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attID>1491</attID>
-      <attName>SOILPARENT_ID</attName>
+      <attName>SOILPARENT_ID</attName> 
       <attLabel>Soil Parent</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>Integer</attType>
       <attKey>FK</attKey>
-      <attRelType type="normal" name="n/a"/>
+      <attRelType type="inverted" name="n/a"/>
       <attReferences>soilTaxon.SOILTAXON_ID</attReferences>
       <attFKTranslationSQL>(Select st2.soilName from soilTaxon as st2 where st2.soilTaxon_ID=soilTaxon.soilParent_ID)</attFKTranslationSQL>
       <attListType>no</attListType>

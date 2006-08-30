@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: mlee $'
-  * '$Date: 2006-08-29 22:09:07 $'
-  * '$Revision: 1.93 $'
+  * '$Author: berkley $'
+  * '$Date: 2006-08-30 17:45:16 $'
+  * '$Revision: 1.94 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -856,8 +856,10 @@ populateDD   populates the data dictionary tables based on docs/xml/db_model_veg
           accounts.</echo>
     <echo>***************************************************************</echo>
   </target>
+  
+  <!-- populates the data dictionary tables by getting db_model_vegbank.xml 
+       styled into SQL -->
   <target name="populateDD" depends="generateDBSQL">
-    <!-- populates the data dictionary tables by getting db_model_vegbank.xml styled into SQL -->
         <sql driver="${databaseDriverClass}"
           url="${databaseConnectString}"
           userid="${databaseUser}"
@@ -877,6 +879,7 @@ populateDD   populates the data dictionary tables based on docs/xml/db_model_veg
       <arg line="seedAdmin"/>
     </java>
   </target>
+  
   <!-- this target updates all of the passwords in the usr table to use an MD5
        digest instead of clear text-->
   <target name="updateAllPasswords" depends="jar">
