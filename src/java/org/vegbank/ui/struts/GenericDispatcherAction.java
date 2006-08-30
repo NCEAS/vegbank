@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-05-05 00:36:33 $'
- *	'$Revision: 1.18 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-08-30 23:02:03 $'
+ *	'$Revision: 1.19 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -187,8 +187,10 @@ public class GenericDispatcherAction extends Action
 					command = FORWARD;
 					wparam = buildWparamArray(params);
                     if (Utility.isArrayNullOrEmpty(wparam)) {
-                        log.debug("no wparam, so using summary view");
-                        view = "summary";
+                        if ( view.equals("detail") ) {
+                            log.debug("no wparam on detail view, so using summary view"); 
+                            view = "summary";
+                        }
                     }
 
 					fwdURL = "/views/" + entity + "_" + view + ".jsp";
