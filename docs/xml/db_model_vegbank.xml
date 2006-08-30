@@ -20596,6 +20596,7 @@ conditions may change between resampling events.
     <attribute>
       <attID>2700</attID>
       <attName>dba_tableDescription_ID</attName>
+      <attLabel>ID</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>serial</attType>
@@ -20611,6 +20612,7 @@ conditions may change between resampling events.
     <attribute>
       <attID>2703</attID>
       <attName>tableName</attName>
+      <attLabel>DB Table Name</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (75)</attType>
@@ -20621,11 +20623,16 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Database name of the table</attDefinition>
+      <attForms>
+        <formShow name="Summary" useClass="sizelarge" linkToPK="true">399</formShow>
+        <formShow name="Detail" useClass="sizelarge">399</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2706</attID>
       <attName>tableLabel</attName>
+      <attLabel>Table</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
@@ -20636,11 +20643,16 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Label of the table, that is a human readable name.</attDefinition>
+      <attForms>
+        <formShow name="Summary" useClass="sizelarge" linkToPK="true">405</formShow>
+        <formShow name="Detail" useClass="sizelarge">405</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2709</attID>
       <attName>tableNotes</attName>
+      <attLabel>Notes</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
@@ -20651,11 +20663,16 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Notes about the table</attDefinition>
+      <attForms>
+        <formShow name="Summary">415</formShow>
+        <formShow name="Detail">415</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2712</attID>
       <attName>tableDescription</attName>
+      <attLabel>Description</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
@@ -20666,6 +20683,26 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Description of the table</attDefinition>
+      <attForms>
+        <formShow name="Summary">425</formShow>
+        <formShow name="Detail">425</formShow>
+      </attForms>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2715</attID>
+      <attName>tableKeywords</attName>
+      <attLabel>Keywords</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>Keywords of the table, consisting of field names and table info.</attDefinition>
       <update>1.0.5</update>
     </attribute>
   </entity>
@@ -20695,6 +20732,7 @@ conditions may change between resampling events.
     <attribute>
       <attID>2802</attID>
       <attName>tableName</attName>
+      <attLabel>Table</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (75)</attType>
@@ -20710,6 +20748,7 @@ conditions may change between resampling events.
     <attribute>
       <attID>2803</attID>
       <attName>fieldName</attName>
+      <attLabel>DB Field Name</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (75)</attType>
@@ -20719,12 +20758,17 @@ conditions may change between resampling events.
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>Database name of thefield.</attDefinition>
+      <attDefinition>Database name of the field.</attDefinition>
+      <attForms>
+        <formShow name="Summary" linkToPK="true">405</formShow>
+        <formShow name="Detail" useClass="sizelarge">405</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2806</attID>
       <attName>fieldLabel</attName>
+      <attLabel>Field</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
@@ -20735,11 +20779,16 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Label (human-readable) of the field.</attDefinition>
+      <attForms>
+        <formShow name="Summary" linkToPK="true">395</formShow>
+        <formShow name="Detail" useClass="sizelarge">395</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2809</attID>
       <attName>fieldModel</attName>
+      <attLabel>Model</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
@@ -20755,21 +20804,28 @@ conditions may change between resampling events.
     <attribute>
       <attID>2812</attID>
       <attName>fieldNulls</attName>
+      <attLabel>Req'd?</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (10)</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL addLink="false">(SELECT CASE when fieldnulls='no' THEN 'required' ELSE 'not' END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>whether the field can contain nulls</attDefinition>
+      <attForms>
+        <formShow name="Summary">425</formShow>
+        <formShow name="Detail">425</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2815</attID>
       <attName>fieldType</attName>
+      <attLabel>Data Type</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (30)</attType>
@@ -20780,26 +20836,37 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Field's data type.</attDefinition>
+      <attForms>
+        <formShow name="Summary">435</formShow>
+        <formShow name="Detail">435</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2818</attID>
       <attName>fieldKey</attName>
+      <attLabel>Misc Flag</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (10)</attType>
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL addLink="false">(SELECT CASE when fieldkey='PK' or fieldkey='FK' THEN fieldkey WHEN fieldmodel='denorm' or fieldmodel='implementation' THEN fieldmodel ELSE null END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>n/a</attNotes>
-      <attDefinition>If the field is a PK or FK.</attDefinition>
+      <attDefinition>If the field is a PK or FK.  Forms may contain other useful information.</attDefinition>
+      <attForms>
+        <formShow name="Summary">445</formShow>
+        <formShow name="Detail">445</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2821</attID>
       <attName>fieldReferences</attName>
+      <attLabel>References</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (200)</attType>
@@ -20810,11 +20877,15 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>If the field is a FK, what field it references</attDefinition>
+      <attForms>
+        <formShow name="Detail">455</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2824</attID>
       <attName>fieldList</attName>
+      <attLabel>List?</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (50)</attType>
@@ -20825,11 +20896,16 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>If the field has a constrained vocabulary, whether it is open or closed.</attDefinition>
+      <attForms>
+        <formShow name="Summary">465</formShow>
+        <formShow name="Detail">465</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2827</attID>
       <attName>fieldNotes</attName>
+      <attLabel>Notes</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
@@ -20840,11 +20916,15 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Field Notes.</attDefinition>
+      <attForms>
+        <formShow name="Detail">475</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2830</attID>
       <attName>fieldDefinition</attName>
+      <attLabel>Definition</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
@@ -20855,6 +20935,26 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>Field Definition.</attDefinition>
+      <attForms>
+        <formShow name="Summary">485</formShow>
+        <formShow name="Detail">485</formShow>
+      </attForms>
+      <update>1.0.5</update>
+    </attribute>
+    <attribute>
+      <attID>2835</attID>
+      <attName>fieldKeywords</attName>
+      <attLabel>Keywords</attLabel>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>text</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>The keywords for this field, derived from most fields here and table name.</attDefinition>
       <update>1.0.5</update>
     </attribute>
   </entity>
@@ -20883,6 +20983,7 @@ conditions may change between resampling events.
     <attribute>
       <attID>2903</attID>
       <attName>tableName</attName>
+      <attLabel>Table</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (75)</attType>
@@ -20898,6 +20999,7 @@ conditions may change between resampling events.
     <attribute>
       <attID>2906</attID>
       <attName>fieldName</attName>
+      <attLabel>Field</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (75)</attType>
@@ -20913,6 +21015,7 @@ conditions may change between resampling events.
     <attribute>
       <attID>2909</attID>
       <attName>listValue</attName>
+      <attLabel>Value</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (255)</attType>
@@ -20923,11 +21026,15 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>the list value.</attDefinition>
+      <attForms>
+        <formShow name="Summary">1</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2912</attID>
       <attName>listValueDescription</attName>
+      <attLabel>Description</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>text</attType>
@@ -20938,11 +21045,15 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>the list value's description.</attDefinition>
+      <attForms>
+        <formShow name="Summary">10</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
     <attribute>
       <attID>2915</attID>
       <attName>listValueSortOrder</attName>
+      <attLabel>Sorting</attLabel>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
       <attType>Float</attType>
@@ -20953,6 +21064,9 @@ conditions may change between resampling events.
       <attList/>
       <attNotes>n/a</attNotes>
       <attDefinition>the list value's sort order.</attDefinition>
+      <attForms>
+        <formShow name="Summary">20</formShow>
+      </attForms>
       <update>1.0.5</update>
     </attribute>
   </entity>
@@ -21141,6 +21255,9 @@ conditions may change between resampling events.
   </view>
   <view>
     <viewName>view_taxonobs_withmaxcover</viewName>
+  </view>
+  <view>
+    <viewName>view_dbafielddesc_notimpl</viewName>
   </view>
   <sequence>
     <sequenceName>dba_preassignacccode_dba_requestnumber_seq</sequenceName>
