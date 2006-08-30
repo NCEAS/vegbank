@@ -365,4 +365,30 @@ CREATE VIEW view_kwhelper_projcontrib AS
     public.CONCAT(' ' || coalesce(party.givenname,'') || ' ' ||  coalesce(party.surname,'')) as kw
     FROM party, project, projectcontributor   
     WHERE party.party_id=projectcontributor.party_Id AND project.project_id=projectcontributor.project_id 
-  GROUP BY project.project_id  
+  GROUP BY project.project_id  ;
+  
+CREATE VIEW view_dbafielddesc_notimpl AS 
+  SELECT dba_fielddescription_id, 
+        tablename, 
+        (SELECT tablelabel from dba_tabledescription WHERE dba_fielddescription.tablename = dba_tabledescription.tableName LIMIT 1) AS tablename_transl, 
+        fieldname, 
+        fieldlabel, 
+        fieldmodel, 
+        fieldnulls, 
+        (CASE when fieldnulls='no' THEN 'required' ELSE 'no' END) as fieldnulls_transl, 
+        fieldtype, 
+        fieldkey, 
+        (CASE WHEN fieldkey='PK' THEN fieldkey  
+              WHEN fieldkey='FK' THEN fieldkey   
+              WHEN fieldmodel='denorm' THEN fieldmodel 
+              WHEN fieldmodel='implementation' THEN fieldmodel  
+              ELSE 'n/a'  
+         END) as fieldkey_transl, 
+        fieldreferences, 
+        fieldlist, 
+        fieldnotes, 
+        fielddefinition,
+        fieldkeywords
+        FROM  dba_fielddescription  WHERE lower(fieldmodel) <> 'implementation';
+        
+        

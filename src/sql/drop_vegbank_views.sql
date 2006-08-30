@@ -1,3 +1,4 @@
+DROP VIEW view_dbafielddesc_notimpl;
 DROP VIEW view_plotall_withembargo;
 
 DROP VIEW view_taxonobs_distinctid_curr_counts_plants;
