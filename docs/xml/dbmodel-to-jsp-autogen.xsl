@@ -134,6 +134,7 @@
                       <xsl:with-param name="currentAtt" select="ancestor::attribute"/>
                      <xsl:with-param name="container">td</xsl:with-param>
                      <xsl:with-param name="view" select="$view" />
+                     <xsl:with-param name="linkToPK" select="@linkToPK" />
                     </xsl:call-template>
                   </tr>
                   <bean:define id="hadData" value="true"/>
