@@ -119,6 +119,7 @@ tableName varchar (75) ,
 tableLabel varchar (200) ,
 tableNotes text ,
 tableDescription text ,
+tableKeywords text ,
 
 PRIMARY KEY ( dba_tableDescription_ID )
 );
@@ -137,10 +138,10 @@ fieldReferences varchar (200) ,
 fieldList varchar (50) ,
 fieldNotes text ,
 fieldDefinition text ,
+fieldKeywords text ,
 
 PRIMARY KEY ( dba_fieldDescription_ID )
 );
-
 CREATE TABLE dba_fieldList
 (
 dba_fieldList_ID serial ,
