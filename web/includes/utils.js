@@ -331,6 +331,8 @@ function showorhidediv(theid)
 }
 
 
+
+
 /****************************************************************************/
 /*  the preceding from http://johnkerry.com/js/kerry.js  on 2004-DEC-03     */
 /****************************************************************************/
@@ -923,6 +925,27 @@ function showTaxonName(toshow,tableid) {
     return false;
 }
 
+function showDataDictionaryField(blnLabels) {
+    //shows or hides labels/names on a page and sets the cookie to remember that
+    var suffixToOverride = "_override_";
+    if (blnLabels == true) {
+        addClassToDocIfAlsoClass("hidden","dba_fielddescription_fieldname","*",suffixToOverride);
+        addClassToDocIfAlsoClass("hidden","dba_tabledescription_tablename","*",suffixToOverride);
+        removeClassFromDocIfAlsoClass("hidden","dba_tabledescription_tablelabel","*",suffixToOverride);
+        removeClassFromDocIfAlsoClass("hidden","dba_fielddescription_fieldlabel","*",suffixToOverride);
+        //set cookie
+        setCookie('globaldd_showlabels_notnames','show');
+    } else {
+        removeClassFromDocIfAlsoClass("hidden","dba_fielddescription_fieldname","*",suffixToOverride);
+        removeClassFromDocIfAlsoClass("hidden","dba_tabledescription_tablename","*",suffixToOverride);
+        addClassToDocIfAlsoClass("hidden","dba_tabledescription_tablelabel","*",suffixToOverride);
+        addClassToDocIfAlsoClass("hidden","dba_fielddescription_fieldlabel","*",suffixToOverride);
+           //set cookie
+        setCookie('globaldd_showlabels_notnames','hide');
+        
+    }
+}
+
 function changeMappingIcon(strColorsNoColors, blnNoRepost) {
   //changes the page by setting the cookie: globalmapping_icons_not_colored    , then reloads page
   // pass either "letters" or "noletters"
@@ -1157,6 +1180,16 @@ function findSibling(node, nodeName, max) {
 
 function show(elem) { elem.style.display = 'block'; }
 function hide(elem) { elem.style.display = 'none'; }
+
+function showbyid(id) { show(gebid(id)) };
+function hidebyid(id) { hide(gebid(id)) };
+function showhidebyid(id,toshow) {
+    if (toshow==true) {
+      showbyid(id);  
+    } else {
+      hidebyid(id);
+    }
+}
 
 
 //

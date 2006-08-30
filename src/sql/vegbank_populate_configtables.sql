@@ -32,6 +32,8 @@ insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK,  sort
 
 --help bits
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, sortorder)  values ( 'ddlink','hide','global',0,0 ) ;
+insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, sortorder)  values ( 'dd_showlabels_notnames','show','global',0,0 ) ;
+
 
 --userdefined
 insert into dba_cookie ( cookieName ,  defaultvalue,  viewname, examplePK, sortorder,startGroup)  values ( 'user_defined_data','show','global',0,20,true ) ;
@@ -46,6 +48,9 @@ insert into dba_cookieLabels ( viewOrCookie , description) values ('observation_
 
 insert into dba_cookieLabels ( viewOrCookie , description) values ('global','Global Settings');
 insert into dba_cookieLabels ( viewOrCookie , description) values ('ddlink','Links to Field Definitions with Red Question Marks');
+insert into dba_cookieLabels ( viewOrCookie , description) values ('dd_showlabels_notnames','Show human-readable field labels instead of database names');
+
+
 insert into dba_cookieLabels ( viewOrCookie , description) values ('taxonobservation_detail','View of a one species on a plot, with importance values and interpretations.');
 
 insert into dba_cookieLabels ( viewOrCookie , description) values ('taxonimportance_covercode','Cover Code used for a Cover Class to estimate cover');

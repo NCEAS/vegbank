@@ -18,7 +18,7 @@
   </logic:present>
   <!-- DEBUG: getcookies got: plantNamesToShowBean: <bean:write name="plantNamesToShowBean" /> -->
 
-
+  
  <bean:define id="filterplants" value="true" />
  <logic:equal name="thisviewid" value="taxonobservation_detail">
    <bean:define id="filterplants" value="false" />
@@ -38,6 +38,36 @@
      <logic:notEqual name="plantNamesToShowBean" value="taxonobservation_int_currplantcommon" >.taxonobservation_int_currplantcommon { display:none; }</logic:notEqual>
    </<bean:write ignore='true' name='noinlinestyles' />style> 
  </logic:equal>
+ 
+ 
+ <!-- special dd cookie to show/hide label or database name -->
+ <!-- default: -->
+ <bean:define id="ddShowLabelsNotNameBean">show</bean:define>
+ <logic:present cookie="globaldd_showlabels_notnames">
+   <!-- show according to cookie -->
+   <bean:cookie id="ddShowLabelsNotNameCookie" name="globaldd_showlabels_notnames" value="show" />
+   <bean:define id="ddShowLabelsNotNameBean"><bean:write name="ddShowLabelsNotNameCookie" property="value" /></bean:define>
+ </logic:present>
+
+ <logic:equal name="ddShowLabelsNotNameBean" value="show">
+    <!-- show labels not names -->
+    <style type="text/css">
+     
+      .dba_fielddescription_fieldname {display:none; }
+     
+      .dba_tabledescription_tablename {display:none; }
+    </style>
+ </logic:equal>
+ <logic:notEqual name="ddShowLabelsNotNameBean" value="show">
+    <!-- show no labels, instead names -->
+    <style type="text/css">
+      .dba_fielddescription_fieldlabel {display:none; }
+     
+      .dba_tabledescription_tablelabel {display:none; }
+     
+    </style>   
+ </logic:notEqual>
+ 
  
  <% String theCookieVal=null; %>
  <!-- cookies controlled by db table -->
