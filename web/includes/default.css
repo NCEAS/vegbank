@@ -762,6 +762,12 @@ forms/TaxonInterpretationAnnotateData.jsp
 .bright { color: red }
 
 .error { font-weight: bold; }
+
+/* Data Dictionary styles */
+
+tr.requiredfield > td.dba_fielddescription_fieldlabel {font-weight: bold}
+tr.requiredfield > td.dba_fielddescription_fieldname {font-weight: bold}
+
 /*
 -----------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------
