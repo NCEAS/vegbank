@@ -66,7 +66,11 @@
             <br />
               <!-- alt search suffix used to add "_name_0" to this input -->
              <input type="text" name="xwhereParams<logic:present name='alternateSearchInputs'>_custom_0</logic:present>" size="30" value="<bean:write name='beansearchString' />"/>
+             
              <html:submit value="search" />
+             
+             <!-- link to help about searching -->
+             <a href="@help-for-searching-href@"><img height="14" width="14" border="0" src="@image_server@question.gif" /></a>
        
        <!--</td>
         </tr>

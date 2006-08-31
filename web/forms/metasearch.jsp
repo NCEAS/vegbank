@@ -111,6 +111,8 @@ if (searchString ==  null || searchString.equals("")) {
 			<br />
 			 <input type="text" name="xwhereParams" size="30" value="<%= searchString %>"/>
 		 	 <html:submit value="search" onclick="javascript:preSubmit()"/>
+       <!-- link to help about searching -->
+       <a href="@help-for-searching-href@"><img height="14" width="14" border="0" src="@image_server@question.gif" /></a>
 		</td>
 		</tr>
 		<tr><td></td><td align="right">

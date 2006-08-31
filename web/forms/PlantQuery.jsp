@@ -143,7 +143,9 @@ function setNameMatchType() {
              <p><b>Taxon name:</b><br/>
 
              
-		<input type="text" size="35" name="xwhereParams_plantname_0"/>
+    <input type="text" size="35" name="xwhereParams_plantname_0"/>  
+       <!-- link to help about searching -->
+       <a href="@help-for-searching-href@"><img height="14" width="14" border="0" src="@image_server@question.gif" /></a>
 		<input type="hidden" name="xwhereParams_plantname_1" value="pu.plantname"/>
 				&nbsp; <span class="normal">e.g. maple, acer rubrum
 				<br/>

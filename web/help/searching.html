@@ -1,0 +1,57 @@
+@webpage_top_html@
+  
+  @webpage_head_html@
+<title>VegBank Help: Searching by Text</title>
+  @webpage_masthead_small_html@
+<!-- insert help content here -->
+<h3>VegBank Help -- Searching by Text</h3>
+ <p><a href="#examples">Examples</a> are below the explanation.</p>
+ <p>
+   There are many areas in VegBank where you can enter a term to search for in the database.
+   
+   You can use the following tips where "match ANY word" is an option,
+     as well as in the search box in the header of every page:
+   <ul>
+      <li><span class="sizelarge">Case insensitive searches.</span><br/>   <code>ACER</code> is the same as <code>Acer</code> is the same as <code>acer</code> for the purposes of the search.</li>
+      
+      <li><span class="sizelarge">All words by default.</span><br/> Each word is searched for individually, and we assume that you would like 
+        matches for ALL the words you provide.  If you want to search for any one of the words you enter,
+        check the "Match any word" checkbox.
+      </li>     
+      
+      <li><span class="sizelarge">Exact phrases.</span><br/>If you want to search for a phrase or compound word, enclose it in quotes, such as <code>"North Carolina"</code>
+        or <code>"Acer rubrum"</code>.  Searches for <code>North Carolina</code> (without quotes) will match everything
+        that has <code>North</code> associated with it somewhere and also <code>Carolina</code>.  So plots something in 
+        North Myrtle Beach, South Carolina would be found by the <code>North Carolina</code> search, but not by the
+        <code>"North Carolina"</code> search.
+      </li>  
+      
+      <li>
+        <span class="sizelarge">Whole words only.</span><br/>
+        Check "Match whole words only" (if available) to search by entire words.  Otherwise, you may enter only parts
+         of words.  If you search for <code>Carya</code> without "Match whole words only" checked, <code>Allocarya</code>
+         will be found.
+      </li>
+      
+      <li>
+        <span class="sizelarge">Negative searches.</span><br/>
+         You can precede your search term with a negative sign (-) to
+        search for something that <i>doesn't</i> include the following word.  You must still separate each
+        term with a space.  If you search for <code>-acer carya</code> you'll find everything that has Carya, but not Acer.
+        Note that you probably will want to leave "Match any word" unchecked if you are using a negative search.
+      </li>
+   </ul>
+   
+ </p>
+ <a name="examples"></a>
+ <h4>Examples</h4>
+ <ul>
+   <li><code>Acer</code>: find something with the word <code>Acer</code> associated with it. </li>
+   <li><code>"Acer rubrum"</code>: find something with <code>Acer rubrum</code> associated with it. </li>
+   <li><code>-"Acer rubrum" Carya</code>: find something that <i>doesn't</i> have <code>Acer rubrum</code> associated 
+       with it, but <i>does</i> have <code>Carya</code>. </li>
+   <li><code>Fagus BEECH birch betula</code> ( <input type="checkbox" checked="checked" disabled="disabled" /> Match Any Word) : 
+     find something with <code>Fagus</code> or <code>Beech</code> or <code>Birch</code> or <code>Betula</code>
+     associated with it. </li>
+ </ul>    
+@webpage_footer_small_html@

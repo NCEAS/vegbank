@@ -179,6 +179,8 @@ function setNameMatchType() {
 
               
 		<input type="text" size="35" name="xwhereParams_commname_0"/>
+       <!-- link to help about searching -->
+       <a href="@help-for-searching-href@"><img height="14" width="14" border="0" src="@image_server@question.gif" /></a>
 		<input type="hidden" name="xwhereParams_commname_1" value="cu.commname"/>
 				&nbsp; <span class="normal">e.g. tidal, brackish
 				<br/>
