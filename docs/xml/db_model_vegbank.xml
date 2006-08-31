@@ -20624,8 +20624,8 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Database name of the table</attDefinition>
       <attForms>
-        <formShow name="Summary" useClass="sizelarge" linkToPK="true">399</formShow>
-        <formShow name="Detail" useClass="sizelarge">399</formShow>
+        <formShow name="Summary" useClass="sizelarge" linkToPK="true" noDDLink="true">399</formShow>
+        <formShow name="Detail" useClass="sizelarge" noDDLink="true">399</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20644,8 +20644,8 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Label of the table, that is a human readable name.</attDefinition>
       <attForms>
-        <formShow name="Summary" useClass="sizelarge" linkToPK="true">405</formShow>
-        <formShow name="Detail" useClass="sizelarge">405</formShow>
+        <formShow name="Summary" useClass="sizelarge" linkToPK="true" noDDLink="true">405</formShow>
+        <formShow name="Detail" useClass="sizelarge" noDDLink="true">405</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20664,8 +20664,8 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Notes about the table</attDefinition>
       <attForms>
-        <formShow name="Summary">415</formShow>
-        <formShow name="Detail">415</formShow>
+        <formShow name="Summary" noDDLink="true">415</formShow>
+        <formShow name="Detail" noDDLink="true">415</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20684,8 +20684,8 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Description of the table</attDefinition>
       <attForms>
-        <formShow name="Summary">425</formShow>
-        <formShow name="Detail">425</formShow>
+        <formShow name="Summary" noDDLink="true">425</formShow>
+        <formShow name="Detail" noDDLink="true">425</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20760,8 +20760,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Database name of the field.</attDefinition>
       <attForms>
-        <formShow name="Summary" linkToPK="true">405</formShow>
-        <formShow name="Detail" useClass="sizelarge">405</formShow>
+        <formShow name="small" linkToPK="true" noDDLink="true">405</formShow>
+        <formShow name="Summary" linkToPK="true" noDDLink="true">405</formShow>
+        <formShow name="Detail" useClass="sizelarge" noDDLink="true">405</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20780,8 +20781,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Label (human-readable) of the field.</attDefinition>
       <attForms>
-        <formShow name="Summary" linkToPK="true">395</formShow>
-        <formShow name="Detail" useClass="sizelarge">395</formShow>
+        <formShow name="Summary" linkToPK="true" noDDLink="true">395</formShow>
+        <formShow name="small" linkToPK="true" noDDLink="true">395</formShow>
+        <formShow name="Detail" useClass="sizelarge" noDDLink="true">395</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20817,8 +20819,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>whether the field can contain nulls</attDefinition>
       <attForms>
-        <formShow name="Summary">425</formShow>
-        <formShow name="Detail">425</formShow>
+        <formShow name="Summary" noDDLink="true">425</formShow>
+        <formShow name="small" noDDLink="true">425</formShow>
+        <formShow name="Detail" noDDLink="true">425</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20837,8 +20840,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Field's data type.</attDefinition>
       <attForms>
-        <formShow name="Summary">435</formShow>
-        <formShow name="Detail">435</formShow>
+        <formShow name="Summary" noDDLink="true">435</formShow>
+        <formShow name="small" noDDLink="true">435</formShow>
+        <formShow name="Detail" noDDLink="true">435</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20858,8 +20862,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>If the field is a PK or FK.  Forms may contain other useful information.</attDefinition>
       <attForms>
-        <formShow name="Summary">445</formShow>
-        <formShow name="Detail">445</formShow>
+        <formShow name="Summary" noDDLink="true">445</formShow>
+        <formShow name="small" noDDLink="true">445</formShow>
+        <formShow name="Detail" noDDLink="true">445</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20878,7 +20883,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>If the field is a FK, what field it references</attDefinition>
       <attForms>
-        <formShow name="Detail">455</formShow>
+        <formShow name="Detail" noDDLink="true">455</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20897,8 +20902,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>If the field has a constrained vocabulary, whether it is open or closed.</attDefinition>
       <attForms>
-        <formShow name="Summary">465</formShow>
-        <formShow name="Detail">465</formShow>
+        <formShow name="Summary" noDDLink="true">465</formShow>
+        <formShow name="small" noDDLink="true">465</formShow>
+        <formShow name="Detail" noDDLink="true">465</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20917,7 +20923,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Field Notes.</attDefinition>
       <attForms>
-        <formShow name="Detail">475</formShow>
+        <formShow name="Detail" noDDLink="true">475</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -20936,8 +20942,9 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>Field Definition.</attDefinition>
       <attForms>
-        <formShow name="Summary">485</formShow>
-        <formShow name="Detail">485</formShow>
+        <formShow name="Summary" noDDLink="true">485</formShow>
+        <formShow name="small" noDDLink="true">485</formShow>
+        <formShow name="Detail" noDDLink="true">485</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -21027,7 +21034,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>the list value.</attDefinition>
       <attForms>
-        <formShow name="Summary">1</formShow>
+        <formShow name="Summary" noDDLink="true">1</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -21046,7 +21053,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>the list value's description.</attDefinition>
       <attForms>
-        <formShow name="Summary">10</formShow>
+        <formShow name="Summary" noDDLink="true">10</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>
@@ -21065,7 +21072,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>the list value's sort order.</attDefinition>
       <attForms>
-        <formShow name="Summary">20</formShow>
+        <formShow name="Summary" noDDLink="true">20</formShow>
       </attForms>
       <update>1.0.5</update>
     </attribute>

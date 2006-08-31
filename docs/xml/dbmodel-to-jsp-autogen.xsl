@@ -63,6 +63,7 @@
                     <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                     <xsl:with-param name="currLbl" select="../../attLabel"/>
                     <xsl:with-param name="currDefn" select="../../attDefinition" />
+                    <xsl:with-param name="noDDLink" select="@noDDLink" />
                   </xsl:call-template>
                   </xsl:otherwise>
                 </xsl:choose>
@@ -100,6 +101,7 @@
                         <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                         <xsl:with-param name="currLbl" select="../../attLabel"/>
                         <xsl:with-param name="currDefn" select="../../attDefinition" />
+                        <xsl:with-param name="noDDLink" select="@noDDLink" />
                       </xsl:call-template>
                 <xsl:call-template name="writeField">
                   <xsl:with-param name="currEnt" select="$currEnt"/>
@@ -127,6 +129,7 @@
                         <xsl:with-param name="currFld" select="translate(../../attName,$alphahigh,$alphalow)"/>
                         <xsl:with-param name="currLbl" select="../../attLabel"/>
                         <xsl:with-param name="currDefn" select="../../attDefinition" />
+                        <xsl:with-param name="noDDLink" select="@noDDLink" />
                       </xsl:call-template>
                     <xsl:call-template name="writeField">
                       <xsl:with-param name="currEnt" select="$currEnt"/>
@@ -304,6 +307,7 @@
     <xsl:param name="currFld"/>
     <xsl:param name="currLbl"/>
     <xsl:param name="currDefn" />
+    <xsl:param name="noDDLink" />
     <xsl:element name="{$container}">
         <xsl:attribute name="class"><xsl:value-of select="translate(concat($currEnt,'_',$currFld),$alphahigh,$alphalow)" /><xsl:value-of select="concat(' ',$containerClass)" /></xsl:attribute>
         <xsl:attribute name="title"><xsl:value-of select="translate($currDefn,$quot,' ')" /></xsl:attribute>
@@ -317,9 +321,12 @@
       </xsl:otherwise>
     </xsl:choose>
      
-     <xsl:text> </xsl:text><a title="Click here for definition of this field." target="_blank" class="image" href="/dd/{$currEnt}/{$currFld}" onclick="popupDD('/dd/{$currEnt}/{$currFld}'); return false;"><span class="ddlink">
+     <xsl:text> </xsl:text><xsl:choose>
+      <xsl:when test="$noDDLink='true'"><!-- no data dictionary link, as per db_model specs --></xsl:when>
+      <xsl:otherwise>
+    <a title="Click here for definition of this field." target="_blank" class="image" href="/dd/{$currEnt}/{$currFld}" onclick="popupDD('/dd/{$currEnt}/{$currFld}'); return false;"><span class="ddlink">
       <img src="@images_link@question.gif" alt="?" border="0"/>
-    </span></a>
+    </span></a></xsl:otherwise></xsl:choose>
     
     <xsl:value-of select="$suffix" />
     </xsl:element>

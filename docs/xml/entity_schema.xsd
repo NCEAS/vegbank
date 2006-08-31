@@ -103,7 +103,6 @@
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
-  
   <xs:element name="attReferences">
     <xs:simpleType>
       <xs:union memberTypes="attRefNA attRefTblDotFld"/>
@@ -185,7 +184,7 @@
         <xs:element ref="attLabel" minOccurs="0"/>
         <xs:element ref="attModel"/>
         <xs:element ref="attNulls"/>
-        <xs:element ref="attNullsInXML" minOccurs="0" />
+        <xs:element ref="attNullsInXML" minOccurs="0"/>
         <xs:element ref="attType"/>
         <xs:element ref="attDefaultValue" minOccurs="0"/>
         <xs:element ref="javaType" minOccurs="0"/>
@@ -232,7 +231,7 @@
         <xs:element ref="archive" minOccurs="0"/>
         <xs:element ref="entityNeedParentToAdd" minOccurs="0"/>
         <xs:element ref="entityCreatedVersion" minOccurs="0"/>
-        <xs:element ref="entityRequirePopulation" minOccurs="0" />
+        <xs:element ref="entityRequirePopulation" minOccurs="0"/>
         <xs:element ref="attribute" maxOccurs="unbounded"/>
         <!-- may have to do with gabe's work on archiving to the revisions table? -->
         <!-- fields on the table -->
@@ -252,7 +251,8 @@
   <xs:element name="entityDescription" type="xs:string"/>
   <xs:element name="entityLabel" type="xs:string"/>
   <xs:element name="entityName" type="validFieldTableName"/>
-  <xs:element name="entityRequirePopulation" type="xs:boolean" /><!-- this is used to indicate that the table should not be empty (no records) in the database -->
+  <xs:element name="entityRequirePopulation" type="xs:boolean"/>
+  <!-- this is used to indicate that the table should not be empty (no records) in the database -->
   <xs:element name="entitySummary" type="xs:string"/>
   <xs:element name="formShow">
     <xs:complexType>
@@ -264,6 +264,7 @@
           <xs:attribute name="suffix" type="xs:string"/>
           <xs:attribute name="prefix" type="xs:string"/>
           <xs:attribute name="linkToPK" type="xs:boolean"/>
+          <xs:attribute name="noDDLink" type="xs:boolean"/>
         </xs:extension>
       </xs:simpleContent>
     </xs:complexType>
