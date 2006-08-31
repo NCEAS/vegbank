@@ -8,9 +8,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2005-03-16 00:04:18 $'
-*  '$Revision: 1.12 $'
+*  '$Author: mlee $'
+*  '$Date: 2006-08-31 04:00:30 $'
+*  '$Revision: 1.13 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -60,7 +60,7 @@
   <!-- table that has the whole package in its one row -->
   <p>Note that you do not need to add the full amount of Alternate Identifiers or Reference Contributors.  Only add those appropriate for the reference you are adding.</p>
   <p><font color="red">*</font>Indicates a required field.</p>
-  <p>Click a field label or table name to see more about that field in VegBank's <a href="@dbdictionary_link@dd-index.html">data dictionary</a>.  Some fields are described in more detail just below the field.</p>
+  <p>Click a field label or table name to see more about that field in VegBank's <a href="@datadictionary-index@">data dictionary</a>.  Some fields are described in more detail just below the field.</p>
   <table class="formEntry" cellpadding="5" >
     <tr>
       <!-- Left hand column -->

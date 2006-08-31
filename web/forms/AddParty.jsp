@@ -9,9 +9,9 @@
 *               National Center for Ecological Analysis and Synthesis
 *   Authors: @author@
 *
-*  '$Author: anderson $'
-*  '$Date: 2005-03-16 00:04:18 $'
-*  '$Revision: 1.10 $'
+*  '$Author: mlee $'
+*  '$Date: 2006-08-31 04:00:30 $'
+*  '$Revision: 1.11 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -57,7 +57,7 @@
 
   <h2>Party Form -- add a new Party</h2>
   <p><span class="item">Use this form to add a new Party to VegBank.</span></p>
-  <p><span class="item">Click a field label or table name to see more about that field in VegBank's <a href="@dbdictionary_link@dd-index.html">data dictionary</a>.  Some fields are described in more detail just below the field.<br/>
+  <p><span class="item">Click a field label or table name to see more about that field in VegBank's <a href="@datadictionary-index@">data dictionary</a>.  Some fields are described in more detail just below the field.<br/>
 
   <font color="red">*</font>Indicates a required field.</p>
 

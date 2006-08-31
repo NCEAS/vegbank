@@ -213,7 +213,7 @@ Note that if you make plots confidential, you must also provide a reason for the
     <question>
       <qname>datamodel</qname>
       <qtxt>What is your data model?</qtxt>
-      <atxt>Our data model is a complex set of tables that comprise our relational database.  More information about these can be seen with our <a href="@dbdictionary_link@dd-index.html">data-dictionary</a> and our <a href="@design_link@erd/vegbank_erd.pdf">ERD</a> (Entity Relationship Diagram).  The data dictionary provides information about each field and table in our database, such as data type, definition, if it is a required field, and what other field it may reference (foreign key).  The ERD is a way of visualizing the tables and fields of our database.  This information will only be useful to users who have some previous database experience.</atxt>
+      <atxt>Our data model is a complex set of tables that comprise our relational database.  More information about these can be seen with our <a href="@datadictionary-index@">data-dictionary</a> and our <a href="@design_link@erd/vegbank_erd.pdf">ERD</a> (Entity Relationship Diagram).  The data dictionary provides information about each field and table in our database, such as data type, definition, if it is a required field, and what other field it may reference (foreign key).  The ERD is a way of visualizing the tables and fields of our database.  This information will only be useful to users who have some previous database experience.</atxt>
     </question>
     <question>
       <qname>distributedvegbank</qname>

@@ -10,8 +10,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-05-05 23:54:52 $'
-  *  '$Revision: 1.11 $'
+  *      '$Date: 2006-08-31 04:00:30 $'
+  *  '$Revision: 1.12 $'
   * This program is free software; you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
   * the Free Software Foundation; either version 2 of the License, or
@@ -145,7 +145,7 @@
 <html:submit property="commit_changes" value="--add this stratum method to VegBank--" />
 <p>Note that you do not need to add the full amount of Stratum Types.  Only add the number of types that are appropriate for the method you are adding.</p>
 <p><font color="red">*</font>Indicates a required field.</p>
-<p>Click <a href="@dbdictionary_link@dd-index.html">here</a> for VegBank's data dictionary for more information on fields and tables.</p>
+<p>Click <a href="@datadictionary-index@">here</a> for VegBank's data dictionary for more information on fields and tables.</p>
 </html:form>
 
 <!-- VEGBANK FOOTER -->
