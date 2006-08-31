@@ -10,8 +10,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2006-08-31 04:00:30 $'
-*  '$Revision: 1.11 $'
+*  '$Date: 2006-08-31 05:00:21 $'
+*  '$Revision: 1.12 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -74,7 +74,7 @@
 
 	  <tr>
 	    <td class="formLbl">
-	      <p><a href="@dbdictionary_link@dd~table~party~field~salutation~type~tableview.html">Salutation:</a></p>
+	      <p><a href="/ddfull/party/salutation">Salutation:</a></p>
 	    </td>
 	    <td>
 	      <html:text property="party.salutation" size="40"/>
@@ -83,7 +83,7 @@
 
 	  <tr>
 	    <td class="formLbl">
-	      <p><a href="@dbdictionary_link@dd~table~party~field~salutation~type~tableview.html">First Name:</a></p> 
+	      <p><a href="/ddfull/party/salutation">First Name:</a></p> 
 	    </td>
 	    <td>
 	      <html:text property="party.givenname" size="40"/>
@@ -92,7 +92,7 @@
 
 	  <tr>
 	    <td class="formLbl">
-	      <p><a href="@dbdictionary_link@dd~table~party~field~middlename~type~tableview.html">Middle Name:</a></p> 
+	      <p><a href="/ddfull/party/middlename">Middle Name:</a></p> 
 	    </td>
 	    <td>
 	      <html:text property="party.middlename" size="40"/>
@@ -102,7 +102,7 @@
 	  <tr>
 	    <td class="formLbl">
 	      <p>
-	      <a href="@dbdictionary_link@dd~table~party~field~surname~type~tableview.html">Last Name:</a>
+	      <a href="/ddfull/party/surname">Last Name:</a>
 	      <font color="red">*</font>
 	      </p> 
 	    </td>
@@ -114,7 +114,7 @@
 	  <tr>
 	    <td class="formLbl">
 	      <p>
-	      <a href="@dbdictionary_link@dd~table~party~field~organizationname~type~tableview.html">Organization:</a></p> 
+	      <a href="/ddfull/party/organizationname">Organization:</a></p> 
 	    </td>
 	    <td>
 	      <html:text property="party.organizationname" size="40"/>
@@ -123,7 +123,7 @@
 
 	  <tr>
 	    <td class="formLbl">
-	      <p><a href="@dbdictionary_link@dd~table~party~field~contactinstructions~type~tableview.html">Contact Instructions:</a></p> 
+	      <p><a href="/ddfull/party/contactinstructions">Contact Instructions:</a></p> 
 	    </td>
 	    <td>
 	      <html:textarea property="party.contactinstructions" rows="3" cols="40"/>
@@ -146,7 +146,7 @@
 	
 
 	<p>
-	<b>Party <a href="@dbdictionary_link@dd~table~telephone~type~tableview.html">Telephone Numbers</a>:</b>
+	<b>Party <a href="/dd/telephone">Telephone Numbers</a>:</b>
 	<br/>
 	<span class="item">Note that you do not need to add any telephone numbers for a new party.  If you add telephone numbers, both the "phone number" and "phone type" are required fields.</span>
 	</p>
@@ -156,8 +156,8 @@
 	<table border="0" cellpadding="0" cellspacing="0">
 	  <tr class="headerrow">
 	    <th><p>num</p></th>
-	    <th><p><a href="@dbdictionary_link@dd~table~telephone~field~phonenumber~type~tableview.html">phone number</a><font color="red">*</font></p></th>
-	    <th><p><a href="@dbdictionary_link@dd~table~telephone~field~phonetype~type~tableview.html">phone type</a><font color="red">*</font></p></th>
+	    <th><p><a href="/ddfull/telephone/phonenumber">phone number</a><font color="red">*</font></p></th>
+	    <th><p><a href="/ddfull/telephone/phonetype">phone type</a><font color="red">*</font></p></th>
 	  </tr>
 	  
 	  <!-- Telephone Control -->
@@ -195,7 +195,7 @@
 
 	<!-- table to contain addresses -->
 	<p><span class="category">Party 
-	<a href="@dbdictionary_link@dd~table~address~type~tableview.html">Addresses</a>:</span>
+	<a href="/dd/address">Addresses</a>:</span>
 
 	<br/>
 	
@@ -205,7 +205,7 @@
 	  <tr class="oddrow">
 	    <td>&nbsp;</td>
 	    <td nowrap><p>
-	      <a href="@dbdictionary_link@dd~table~address~field~orgposition~type~tableview.html"> 
+	      <a href="/ddfull/address/orgposition"> 
 	      Organization Position</a>:</p>
 	    </td> 
 	    <td>
@@ -220,7 +220,7 @@
 	  </tr>
 	  <tr class="oddrow"><td></td>
 	  <td nowrap><p>
-	    <a href="@dbdictionary_link@dd~table~address~field~email~type~tableview.html"> 
+	    <a href="/ddfull/address/email"> 
 	    Email</a>:</p>
 	  </td> 
 	  <td>
@@ -230,7 +230,7 @@
 	<tr class="oddrow">
 	  <td>&nbsp;</td>
 	  <td nowrap><p>
-	    <a href="@dbdictionary_link@dd~table~address~field~deliverypoint~type~tableview.html"> 
+	    <a href="/ddfull/address/deliverypoint"> 
 	    Street Address</a>:</p>
 	  </td> 
 	  <td>
@@ -240,7 +240,7 @@
 	<tr class="oddrow">
 	  <td>&nbsp;</td>
 	  <td nowrap>
-	    <p><a href="@dbdictionary_link@dd~table~address~field~city~type~tableview.html"> City</a>:</p>
+	    <p><a href="/ddfull/address/city"> City</a>:</p>
 	  </td> 
 	  <td>
 	    <html:text property="address.city" size="35"/>
@@ -249,7 +249,7 @@
 	<tr class="oddrow">
 	  <td>&nbsp;</td>
 	  <td nowrap>
-	    <p><a href="@dbdictionary_link@dd~table~address~field~administrativearea~type~tableview.html">State/Province</a>:</p>
+	    <p><a href="/ddfull/address/administrativearea">State/Province</a>:</p>
 	  </td> 
 	  <td>
 	    <html:text property="address.administrativearea" size="35"/>
@@ -258,7 +258,7 @@
 	<tr class="oddrow">
 	  <td>&nbsp;</td>
 	  <td nowrap><p>
-	    <a href="@dbdictionary_link@dd~table~address~field~postalcode~type~tableview.html"> 
+	    <a href="/ddfull/address/postalcode"> 
 	    ZIP/Postal Code</a>:</p>
 	  </td> 
 	  <td>
@@ -268,7 +268,7 @@
 	<tr class="oddrow">
 	  <td>&nbsp;</td>
 	  <td nowrap>
-	    <p><a href="@dbdictionary_link@dd~table~address~field~country~type~tableview.html"> 
+	    <p><a href="/ddfull/address/country"> 
 	    Country</a>:</p>
 	  </td> 
 	  <td>
@@ -279,7 +279,7 @@
 	<tr class="oddrow">
 	  <td>&nbsp;</td>
 	  <td nowrap>
-	    <p><a href="@dbdictionary_link@dd~table~address~field~addressstartdate~type~tableview.html"> 
+	    <p><a href="/ddfull/address/addressstartdate"> 
 	    Start Date for Address</a>:</p>
 	  </td> 
 	  <td>
@@ -290,7 +290,7 @@
   <tr class="oddrow">
     <td>&nbsp;</td>
     <td nowrap><p>
-      <a href="@dbdictionary_link@dd~table~address~field~currentflag~type~tableview.html"> 
+      <a href="/ddfull/address/currentflag"> 
       Address is current?</a></p>
     </td> 
     <td>

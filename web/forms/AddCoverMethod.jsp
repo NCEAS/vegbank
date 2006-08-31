@@ -11,8 +11,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2005-05-06 06:38:15 $'
-*  '$Revision: 1.13 $'
+*  '$Date: 2006-08-31 05:00:21 $'
+*  '$Revision: 1.14 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -50,7 +50,7 @@
 
   <html:errors/>
 
-  <h2>Cover Method Form -- add a new <a href="@dbdictionary_link@dd~table~covermethod~type~tableview.html">Cover method</a></h2>
+  <h2>Cover Method Form -- add a new <a href="/dd/covermethod">Cover method</a></h2>
   <blockquote>
   <p>Notes: (1) We encourage use of established cover methods whenever possible so 
 as to maximize the consistency among plot records. <br />(2) The number of cover 
@@ -80,7 +80,7 @@ the method.
     <tr>
       <td class="formLbl">
 	<p><span class="category">
-	<a href="@dbdictionary_link@dd~table~covermethod~field~covertype~type~tableview.html">Cover Method Name</a>:
+	<a href="/ddfull/covermethod/covertype">Cover Method Name</a>:
 	<font color="red">*</font></span>
 	</p>
       </td>
@@ -116,7 +116,7 @@ the method.
       <td colspan="2">
 	<p>
 	<span class="category">
-	<a href="@dbdictionary_link@dd~table~coverindex~type~tableview.html">Cover Indexes</a> for this Cover Method:
+	<a href="/dd/coverindex">Cover Indexes</a> for this Cover Method:
 	</span>
 	</p>
       </td>
@@ -133,7 +133,7 @@ the method.
 	    <td rowspan="2" class="formLbl">
 	      <p>
 	      <span class="category">
-	      <a href="@dbdictionary_link@dd~table~coverindex~field~covercode~type~tableview.html">Cover Code</a><font color="red">*</font>
+	      <a href="/ddfull/coverindex/covercode">Cover Code</a><font color="red">*</font>
 	      </span>
 	      </p>
 	    </td>
@@ -141,7 +141,7 @@ the method.
 	    <td rowspan="2" class="formLbl">
 	      <p>
 	      <span class="category">
-	      <a href="@dbdictionary_link@dd~table~coverindex~field~coverpercent~type~tableview.html">Cover Class Percent</a>
+	      <a href="/ddfull/coverindex/coverpercent">Cover Class Percent</a>
 	      <font color="red">*</font>
 	      </span><br />
 	      <span class="item">estimated midpoint of class</span>
@@ -149,17 +149,17 @@ the method.
 	    </td>
 	    <td rowspan="2" class="formLbl">
 	      <p>
-	      <span class="category"><a href="@dbdictionary_link@dd~table~coverindex~field~indexdescription~type~tableview.html">Index Description</a>
+	      <span class="category"><a href="/ddfull/coverindex/indexdescription">Index Description</a>
 	      </span>
 	      </p>
 	    </td>
 	  </tr>
 	  <tr class="grey">
 	    <td class="formLbl">
-	      <p><span class="category"><a href="@dbdictionary_link@dd~table~coverindex~field~lowerlimit~type~tableview.html">lower %</a></span></p>
+	      <p><span class="category"><a href="/ddfull/coverindex/lowerlimit">lower %</a></span></p>
 	    </td>
 	    <td class="formLbl">
-	      <p><span class="category"><a href="@dbdictionary_link@dd~table~coverindex~field~upperlimit~type~tableview.html">upper %</a></span></p>
+	      <p><span class="category"><a href="/ddfull/coverindex/upperlimit">upper %</a></span></p>
 	    </td>
 	  </tr>
 

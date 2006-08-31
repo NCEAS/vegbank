@@ -2,44 +2,43 @@
   
   @webpage_head_html@
 
-
- 
 <TITLE>Interpretation ERD</TITLE>
- 
-
-
 
 @webpage_masthead_html@ 
 <h2 align="center"><br>
   Interpretation and taxon occurrence relationships.</h2>
 <blockquote> 
-  <p>1. An <a href="@dbdictionary_link@dd~table~observation~type~tableview.html">observation</a> 
-    can be <a href="@dbdictionary_link@dd~table~comminterpretation~type~tableview.html">interpreted</a>
- during one or more <a href="@dbdictionary_link@dd~table~commclass~type~tableview.html">classification 
+  <p>1. An <a href="/dd/observation">observation</a> 
+    can be <a href="/dd/comminterpretation">interpreted</a>
+ during one or more <a href="/dd/commclass">classification 
     events</a> as belonging to one or more particular types of vegetation. A vegetation 
     type corresponds to a &quot;community concept&quot; in the community taxonomy 
     module. Because vegetation can change, there is no necessary relationship 
     between the interpretations at different observation events for a plot.</p>
-  <p>2. Each <a href="@dbdictionary_link@dd~table~taxonobservation~type~tableview.html">plant 
-    taxon observed</a> in an observation event is <a href="@dbdictionary_link@dd~table~taxoninterpretation~type~tableview.html">interpreted</a> 
-    by at least one <a href="@dbdictionary_link@dd~table~party~type~tableview.html">party</a> 
+  <p>2. Each <a href="/dd/taxonobservation">plant 
+    taxon observed</a> in an observation event is <a href="/dd/taxoninterpretation">interpreted</a> 
+    by at least one <a href="/dd/party">party</a> 
     as belonging to a particular plant concept in the plant taxonomy module. Taxa 
     can be assigned various interpretations at various times by various parties. 
     </p>
   <p>3. A taxon observed during 
-    an observation event might be <a href="@dbdictionary_link@dd~table~stratumcomposition~type~tableview.html">observed 
-    to occur</a> in one or more <a href="@dbdictionary_link@dd~table~stratum~type~tableview.html">strata</a>.</p>
-  <p>4. One or more <a href="@dbdictionary_link@dd~table~stemcount~type~tableview.html">woody 
+    an observation event might be observed 
+    to occur in one or more <a href="/dd/stratum">strata</a>.  
+    
+    Various <a href="/dd/taxonimportance">importance values</a> may be associated with a particular stratum, or with the 
+    
+    taxon disregarding strata.</p>
+  <p>4. One or more <a href="/dd/stemcount">woody 
     stems</a> of a taxon might be recorded by size as occurring during an observation 
     event.<br>
     </p>
-  <p>5. A <a href="@dbdictionary_link@dd~table~party~type~tableview.html">party</a> 
+  <p>5. A <a href="/dd/party">party</a> 
     contributes by interpreting a taxon as belonging to a taxon concept or an 
     observation as representing to a community concept. In each case a party might 
     contribute in various ways defined by <a href="@design_link@lists/aux_Role.html">rolecode</a>. 
     </p>
   <p>6. Some interpretations 
-    are reported in <a href="@dbdictionary_link@dd~table~reference~type~tableview.html">literature 
+    are reported in <a href="/dd/reference">literature 
     which can be cited</a>.</p>
 </blockquote>
 <p><img src="@design_link@erd/interpretation.gif" width="770" height="576" hspace="25"></p>

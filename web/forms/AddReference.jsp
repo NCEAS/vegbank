@@ -9,8 +9,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2006-08-31 04:00:30 $'
-*  '$Revision: 1.13 $'
+*  '$Date: 2006-08-31 05:00:21 $'
+*  '$Revision: 1.14 $'
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation; either version 2 of the License, or
@@ -50,7 +50,7 @@
 
   <html:errors/>
 
-  <h2>Reference Form -- add a new <a href="@dbdictionary_link@dd~table~reference~type~tableview.html">Reference</a></h2>
+  <h2>Reference Form -- add a new <a href="/dd/reference">Reference</a></h2>
 
   <html:form action="/AddReference" onsubmit="return validateAddReferenceForm(this)" >
 
@@ -74,7 +74,7 @@
 	  <!-- one row of data entry -->
 	  <tr class="oddrow">
 	    <!-- label -->
-	    <td class="formLbl"><p><a href="@dbdictionary_link@dd~table~reference~field~shortname~type~tableview.html">Short Name</a><font color="red">*</font>:</p></td>
+	    <td class="formLbl"><p><a href="/ddfull/reference/shortname">Short Name</a><font color="red">*</font>:</p></td>
 	    <!-- input -->
 	    <td>
 	      <p>
@@ -91,7 +91,7 @@
 	  <!-- end row -->
 
 	  <tr>
-	    <td class="formLbl"><p><a href="@dbdictionary_link@dd~table~reference~field~referencetype~type~tableview.html">Type of Reference:</a></p></td>
+	    <td class="formLbl"><p><a href="/ddfull/reference/referencetype">Type of Reference:</a></p></td>
 	    <td>
         <p>
           <html:select property="reference.referencetype">
@@ -104,7 +104,7 @@
 	    </tr>
 
 	    <tr class="oddrow">
-	      <td class="formLbl"><p><a href="@dbdictionary_link@dd~table~reference~field~title~type~tableview.html">Reference Title</a><font color="red">*</font>:</p></td>
+	      <td class="formLbl"><p><a href="/ddfull/reference/title">Reference Title</a><font color="red">*</font>:</p></td>
 	      <td>
 		<p>
 		<html:text property="reference.title" size="40"/>
@@ -117,7 +117,7 @@
 
 	    <tr>
 	      <td class="formLbl"><p>
-		<a href="@dbdictionary_link@dd~table~reference~field~titlesuperior~type~tableview.html">
+		<a href="/ddfull/reference/titlesuperior">
 		Title of Superior Reference:
 		</a></p></td>
 		<td>
@@ -132,7 +132,7 @@
 
 	      <tr class="oddrow">
 		<td class="formLbl"><p>
-		  <a href="@dbdictionary_link@dd~table~reference~field~pubdate~type~tableview.html">
+		  <a href="/ddfull/reference/pubdate">
 		  Date of Publication:
 		  </a></p>
 		</td>
@@ -145,7 +145,7 @@
 
 	      <tr>
 		<td class="formLbl"><p>
-		  <a href="@dbdictionary_link@dd~table~reference~field~accessdate~type~tableview.html">
+		  <a href="/ddfull/reference/accessdate">
 		  Date Accessed:
 		  </a></p>
 		</td>
@@ -165,7 +165,7 @@
 	      
 	      <tr class="oddrow">
 		<td class="formLbl"><p>
-		  <a href="@dbdictionary_link@dd~table~reference~field~conferencedate~type~tableview.html">
+		  <a href="/ddfull/reference/conferencedate">
 		  Date of Conference:
 		  </a></p>
 		</td>
@@ -178,7 +178,7 @@
 
 	      <tr>
 		<td class="formLbl"><p>
-		  <a href="@dbdictionary_link@dd~table~reference~field~referencejournal_id~type~tableview.html">
+		  <a href="/ddfull/reference/referencejournal_id">
 		  Journal:
 		  </a></p>
 		</td>
@@ -204,7 +204,7 @@
 
 	    <tr class="oddrow">
 	      <td class="formLbl"><p>
-		<a href="@dbdictionary_link@dd~table~reference~field~volume~type~tableview.html">
+		<a href="/ddfull/reference/volume">
 		Volume:
 		</a></p>
 	      </td>
@@ -217,7 +217,7 @@
 
 	    <tr>
 	      <td class="formLbl"><p>
-		<a href="@dbdictionary_link@dd~table~reference~field~issue~type~tableview.html">
+		<a href="/ddfull/reference/issue">
 		Issue:
 		</a></p>
 	      </td>
@@ -230,7 +230,7 @@
 
 	    <tr class="oddrow">
 	      <td class="formLbl"><p>
-		<a href="@dbdictionary_link@dd~table~reference~field~pagerange~type~tableview.html">
+		<a href="/ddfull/reference/pagerange">
 		Page Range:
 		</a></p>
 	      </td>
@@ -243,7 +243,7 @@
 
 	    <tr>
 	      <td class="formLbl"><p>
-		<a href="@dbdictionary_link@dd~table~reference~field~totalpages~type~tableview.html">
+		<a href="/ddfull/reference/totalpages">
 		Total Number of Pages:
 		</a></p>
 	      </td>
@@ -255,7 +255,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~publisher~type~tableview.html">
+	      <a href="/ddfull/reference/publisher">
 	      Name of Publisher:
 	      </a></p></td>
 	      <td>
@@ -266,7 +266,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~publicationplace~type~tableview.html">
+	      <a href="/ddfull/reference/publicationplace">
 	      Publisher Location:
 	      </a></p></td>
 	      <td>
@@ -277,7 +277,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~isbn~type~tableview.html">
+	      <a href="/ddfull/reference/isbn">
 	      isbn:
 	      </a></p></td>
 	      <td>
@@ -294,7 +294,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~edition~type~tableview.html">
+	      <a href="/ddfull/reference/edition">
 	      Edition:
 	      </a></p></td>
 	      <td>
@@ -305,7 +305,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~numberofvolumes~type~tableview.html">
+	      <a href="/ddfull/reference/numberofvolumes">
 	      Number of Volumes:
 	      </a></p></td>
 	      <td>
@@ -316,7 +316,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~chapternumber~type~tableview.html">
+	      <a href="/ddfull/reference/chapternumber">
 	      Chapter:
 	      </a></p></td>
 	      <td>
@@ -327,7 +327,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~reportnumber~type~tableview.html">
+	      <a href="/ddfull/reference/reportnumber">
 	      Report Number:
 	      </a></p></td>
 	      <td>
@@ -344,7 +344,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~communicationtype~type~tableview.html">
+	      <a href="/ddfull/reference/communicationtype">
 	      Type of Personal Communication:
 	      </a></p></td>
 	      <td>
@@ -361,7 +361,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~degree~type~tableview.html">
+	      <a href="/ddfull/reference/degree">
 	      Thesis Degree:
 	      </a></p></td>
 	      <td>
@@ -379,7 +379,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~url~type~tableview.html">
+	      <a href="/ddfull/reference/url">
 	      URL:
 	      </a></p></td>
 	      <td>
@@ -396,7 +396,7 @@
 	    </tr>
 
 	    <tr class="oddrow"><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~doi~type~tableview.html">DOI:
+	      <a href="/ddfull/reference/doi">DOI:
 	      </a></p></td>
 	      <td>
 		<p>
@@ -412,7 +412,7 @@
 	    </tr>
 
 	    <tr><td class="formLbl"><p>
-	      <a href="@dbdictionary_link@dd~table~reference~field~additionalinfo~type~tableview.html">Additional Information:
+	      <a href="/ddfull/reference/additionalinfo">Additional Information:
 	      </a></p></td>
 	      <td>
 		<p>
@@ -440,7 +440,7 @@
 	<br/>
 
 	<b>
-	<a href="@dbdictionary_link@dd~table~referencealtident~type~tableview.html">Alternate Identifiers for this Reference:</a></b>
+	<a href="/dd/referencealtident">Alternate Identifiers for this Reference:</a></b>
 	<br/>
 	<span class="item">
 	Additional identifiers that allow references to be specified.  You must specify a system that is uniquely yours, such as a URL for
@@ -457,13 +457,13 @@
 	    <th><p>num</p></th>
 	    <th>
 	      <p>
-	      <a href="@dbdictionary_link@dd~table~referencealtident~field~system~type~tableview.html">system</a>
+	      <a href="/ddfull/referencealtident/system">system</a>
 	      <font color="red">*</font>
 	      <p>
 	    </th>
 	    <th>
 	      <p>
-	      <a href="@dbdictionary_link@dd~table~referencealtident~field~identifier~type~tableview.html">identifier</a>
+	      <a href="/ddfull/referencealtident/identifier">identifier</a>
 	      <font color="red">*</font>
 	      </p>
 	    </th>
@@ -499,7 +499,7 @@
 
 
 	<p><b>
-	<a href="@dbdictionary_link@dd~table~referencecontributor~type~tableview.html">
+	<a href="/dd/referencecontributor">
 	Authors and other Reference Contributors:
 	</a></b>
 	<br />
@@ -515,9 +515,9 @@
 	<!-- ReferenceContributors and Reference Party Form -->
 	<table border="0" cellpadding="0" cellspacing="0">
 	  <tr class="headerrow">
-	    <th><p><a href="@dbdictionary_link@dd~table~referencecontributor~field~position~type~tableview.html">order</a></p></th>
-	    <th><p><a href="@dbdictionary_link@dd~table~referencecontributor~field~referenceparty_id~type~tableview.html">Party Name</a><font color="red">*</font></p></th>
-	    <th><p><a href="@dbdictionary_link@dd~table~referencecontributor~field~roletype~type~tableview.html">role</a></p></th>
+	    <th><p><a href="/ddfull/referencecontributor/position">order</a></p></th>
+	    <th><p><a href="/ddfull/referencecontributor/referenceparty_id">Party Name</a><font color="red">*</font></p></th>
+	    <th><p><a href="/ddfull/referencecontributor/roletype">role</a></p></th>
 	  </tr>
 	<%
 	  for (int i=0; i<10 ; i++)

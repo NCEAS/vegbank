@@ -16,23 +16,23 @@
   relationship diagram</i></b></h2>
 <blockquote> 
   <p>Plant names are stored 
-    in a table called <a href="@dbdictionary_link@dd~table~plantname~type~tableview.html">plantName</a>. 
-    Taxon concepts are stored in <a href="@dbdictionary_link@dd~table~plantconcept~type~tableview.html">plantConcept</a>, 
-    which points to a literature citation (<a href="@dbdictionary_link@dd~table~reference~type~tableview.html">reference</a>) 
-    and the name (<a href="@dbdictionary_link@dd~table~plantname~type~tableview.html">plantName</a>) 
+    in a table called <a href="/dd/plantname">plantName</a>. 
+    Taxon concepts are stored in <a href="/dd/plantconcept">plantConcept</a>, 
+    which points to a literature citation (<a href="/dd/reference">reference</a>) 
+    and the name (<a href="/dd/plantname">plantName</a>) 
     used in the reference. This couplet is sufficient to identify a taxon concept. 
-    The name that currently applies to a concept (in the perception of a <a href="@dbdictionary_link@dd~table~plantparty~type~tableview.html">party</a>) 
-    is mapped in the <a href="@dbdictionary_link@dd~table~plantusage~type~tableview.html">plantUsage</a> 
+    The name that currently applies to a concept (in the perception of a <a href="/dd/party">party</a>) 
+    is mapped in the <a href="/dd/plantusage">plantUsage</a> 
     table, which contains a start and stop data for that name application. A particular 
     party's view as to the status of a particular taxon concept (e.g., recognized, 
     nonstandard) and the start and stop dates for that status are recorded in 
-    <a href="@dbdictionary_link@dd~table~plantstatus~type~tableview.html">plantStatus</a>. 
+    <a href="/dd/plantstatus">plantStatus</a>. 
     The standard taxon concept that a nonstandard concept maps to (in the perspective 
-    of a party) is identified through the contents of <a href="@dbdictionary_link@dd~table~plantcorrelation~type~tableview.html">plantCorrelation</a>, 
+    of a party) is identified through the contents of <a href="/dd/plantcorrelation">plantCorrelation</a>, 
     together with an indication of the degree of convergence (equal, larger, smaller, 
     overlapping). Predecessor and successor taxa ion the usage of a party can 
-    be tracked via a <a href="@dbdictionary_link@dd~table~plantlineage~type~tableview.html">plantLineage</a> 
-    table. Original descriptions can be provided in <a href="@dbdictionary_link@dd~table~plantconcept~field~plantdescription~type~tableview.html">plantDescription</a> (a field in plantConcept)
+    be tracked via a <a href="/dd/plantlineage">plantLineage</a> 
+    table. Original descriptions can be provided in <a href="/ddfull/plantconcept/plantdescription">plantDescription</a> (a field in plantConcept)
     for taxa that do not conform to international codes but which are needed for 
     plot records (e.g., hairy Poaceae, fleshy rosette, <i>Potentilla canadensis-simplex</i> 
     complex).<br>

@@ -12,8 +12,8 @@
   *  Authors: @author@
   *
   *  '$Author: mlee $'
-  *  '$Date: 2005-05-05 23:54:52 $'
-  *  '$Revision: 1.12 $'
+  *  '$Date: 2006-08-31 05:00:21 $'
+  *  '$Revision: 1.13 $'
   *
   *
   * This program is free software; you can redistribute it and/or modify
@@ -126,7 +126,7 @@
 		    <td>
 		      <p>
 		      <span class="category">
-		      <a href="@dbdictionary_link@dd~table~referencejournal~field~journal~type~tableview.html">Journal Name</a>:<font color="red">*</font>
+		      <a href="/ddfull/referencejournal/journal">Journal Name</a>:<font color="red">*</font>
 		      </span>
 		      </p>
 		    </td>
@@ -146,7 +146,7 @@
 		    <td>
 		      <p>
 		      <span class="category">
-		      <a href="@dbdictionary_link@dd~table~referencejournal~field~issn~type~tableview.html">ISSN</a>:</span>
+		      <a href="/ddfull/referencejournal/issn">ISSN</a>:</span>
 		      </p>
 		    </td>
 		    <td>
@@ -165,7 +165,7 @@
 		    <td>
 		      <p>
 		      <span class="category">
-		      <a href="@dbdictionary_link@dd~table~referencejournal~field~abbreviation~type~tableview.html">Journal Abbreviation</a>:</span>
+		      <a href="/ddfull/referencejournal/abbreviation">Journal Abbreviation</a>:</span>
 		      </p>
 
 		    </td>
