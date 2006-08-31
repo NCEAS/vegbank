@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2006-08-25 01:29:50 $'
-* '$Revision: 1.186 $'
+* '$Date: 2006-08-31 04:01:37 $'
+* '$Revision: 1.187 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -551,11 +551,7 @@
   -->
   <target name="dictionary" depends="init" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
     <!-- calls ant to run a different ant target which creates the vegbank dictionary based on logical fields only -->
-    <echo>calling ${docs_xml_dir} with webapp '${webapp}'</echo>
-   <!-- prepare the files to distribute -->
-    <ant dir="${docs_xml_dir}" target="logical"/>
-       <!-- distribute the files -->
-       <antcall target="dist-dictionary" />
+    <echo>Dictionary is now based on database population, not many html files.  This is done in the main build.xml in the /vegbank dir.</echo>
   </target>
   
   
