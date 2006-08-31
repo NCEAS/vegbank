@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-30 23:02:03 $'
- *	'$Revision: 1.19 $'
+ *	'$Date: 2006-08-31 05:01:26 $'
+ *	'$Revision: 1.20 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -152,19 +152,6 @@ public class GenericDispatcherAction extends Action
 					//log.debug("SQL, BeanName, WHERE, wparam, jsp: " +
 					//		entity + ", " + beanName + ", " + whereKey + ", (" + params + "), " + jsp);
 
-
-				} else if (view.equals("dd")) {
-					//////////////////////////////////////////
-					// VIEW: dd
-					//////////////////////////////////////////
-					command = FORWARD;
-					fwdURL = "/dbdictionary/dd~table~" + entity;
-					if (Utility.isStringNullOrEmpty(params)) {
-						fwdURL += "~type~tableview.html";
-					} else {
-						// add a field
-						fwdURL += "~field~" + params + "~type~fieldview.html";
-					}
 
 				} else if (view.equals("xml")) {
 					//////////////////////////////////////////
