@@ -4,8 +4,7 @@
     If you dont want to limit the xml this way, then target=allfields-->
   <target name="init">
     <echo>
-  	Targets: {init} allfields logical implementation clean-local-html clean-dest-html  dist-closedlist-tokenfile  dist-dataxml **dictionary2html  **dd-index **dd-guide
-  	  ** indicates targets that are referenced automatically by selected one of the first three targets
+  	Targets: {init}   dist-closedlist-tokenfile  dist-dataxml  make-jsp  vegbranch-update-lists
   </echo>
     <condition property="webapp" value="vegbank">
       <not>
@@ -38,66 +37,33 @@
     <property name="local.vegbranch.dir" value="${local.web.dir}/vegbranch" />
   </target>
   <target name="logical" depends="init">
-    <echo>Limiting fields to logical</echo>
-    <style out="${limitData}" in="${origData}" extension=".xml" style="${limitstyle}" force="true">
-      <param name="whichModel" expression="denorm"/>
-    </style>
-    <antcall target="dictionary2html"/>
+    <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
   </target>
   <target name="implementation" depends="init">
-    <echo>Limiting fields to implementation</echo>
-    <style out="${limitData}" in="${origData}" extension=".xml" style="${limitstyle}" force="true">
-      <param name="whichModel" expression="implementation"/>
-    </style>
-    <antcall target="dictionary2html"/>
-  </target>
+    <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
+    </target>
   <target name="allfields" depends="init">
-    <echo>No Limit on fields</echo>
-    <copy file="${origData}" tofile="${limitData}" overwrite="true"/>
-    <antcall target="dictionary2html"/>
+    <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
   </target>
   <target name="dictionary2html" depends="init">
     <!-- create new build file to run ant on -->
-    <echo>Writing field views</echo>
-    <style out="${ddfiledir}BOGUSFld.txt" in="${limitData}" extension=".xml" style="${styleFieldView}" force="true">
-      <!-- file for html to be built from -->
-      <param name="htmlPrefix" expression="${htmlPrefix}"/>
-    </style>
-    <echo>Writing table views</echo>
-    <style out="${ddfiledir}BOGUSTbl.txt" in="${limitData}" extension=".xml" style="${styleTableView}" force="true">
-      <!-- file for html to be built from -->
-      <param name="htmlPrefix" expression="${htmlPrefix}"/>
-    </style>
-    <antcall target="dd-index"/>
+   <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
   </target>
   <target name="dd-index" depends="init">
-    <echo>Writing new data dictionary index page.</echo>
-    <style out="${ddfiledir}${htmlPrefix}-index.html" in="${limitData}" extension=".html" style="${style-index}" force="true">
-      <param name="htmlPrefix" expression="${htmlPrefix}"/>
-    </style>
-    <antcall target="dd-guide"/>
+   <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
   </target>
   <target name="dd-guide" depends="init">
-    <echo>Wiriting new datadictionary guide</echo>
-    <style out="${ddfiledir}${htmlPrefix}-guide.html" in="${guide-data}" extension=".html" style="${style-guide}" force="true">
-      <param name="htmlPrefix" expression="${htmlPrefix}"/>
-    </style>
-    
-  </target>
+   <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
+    </target>
   <!-- distributes html -->
   <target name="distdatadic" depends="init">
-    <echo>Copying new files to server, filtering tokens</echo>
-    <ant dir="../../web" target="dist-dictionary" />
+   <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
   </target>
   <target name="clean-local-html" depends="init">
-    <delete>
-      <fileset dir="./">
-        <include name="${htmlPrefix}*.html"/>
-      </fileset>
-    </delete>
+   <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
   </target>
   <target name="clean-dest-html" depends="init">
-    
+ <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
   </target>
   <target name="dist-closedlist-tokenfile" depends="init">
     <style out="${style_server}/closedlist-tokens.properties" in="${origData}" extension=".properties" style="closedList_forms_options.xsl" force="true"/>
@@ -120,6 +86,7 @@
     </copy>
 </target>
   <target name="make-jsp">
+    <!-- this is used to create a template jsp file for the views directory -->
     <property file="jsp-template.properties"/>
     <echo>Read jsp-template.properties</echo>
     <style in="${dbmodelfile}" out="${jsptemp}" force="yes" style="${templatexsl}">
