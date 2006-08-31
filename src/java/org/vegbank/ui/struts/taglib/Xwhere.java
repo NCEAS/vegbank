@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2005-07-22 18:47:45 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2006-08-31 05:22:27 $'
+ *	'$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  *
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.12 $ $Date: 2005-07-22 18:47:45 $
+ * @version $Revision: 1.13 $ $Date: 2006-08-31 05:22:27 $
  */
 
 public class Xwhere {
@@ -582,6 +582,13 @@ public class Xwhere {
 										sb.append(" AND ");
 		                     }
 				      }
+                      // if token starts with - then search for things without it!
+                      if (token.startsWith("-")) {
+                          log.debug("attempting a negative search with " + token);
+                          sb.append(" NOT ");
+                          // remove - from token
+                          token = token.substring(1);
+                      }
 				      if ( matchWholeWords ) {
 					    //only match whole words, by inserting beginning and ending of word reg. expressions,
 					    // e.g. select count(1) from keywords where keywords ~* '[[:<:]]quercus[[:>:]]';
