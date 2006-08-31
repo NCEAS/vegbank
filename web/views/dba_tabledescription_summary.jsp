@@ -5,7 +5,7 @@
         <%@ include file="includeviews/inlinestyles.jsp" %>
 @webpage_masthead_html@ 
 
- <h2>VegBank Data Dictionary: Tables</h2>
+ <h2><a href="@datadictionary-index@">VegBank Data Dictionary</a>: Tables</h2>
   <!-- add search box -->
   <table class="noborders"><td>
   <bean:define id="entityToSearch" value="dba_tabledescription" />
@@ -54,7 +54,7 @@
     <logic:notEmpty name="dba_fielddescription-BEANLIST">
       <logic:iterate id="onerowofdba_fielddescription" name="dba_fielddescription-BEANLIST">
         <bean:define id="field_pk" name="onerowofdba_fielddescription" property="dba_fielddescription_id" />
-        <a href="@get_link@std/dba_fielddescription/<bean:write name='field_pk' />"><span class="dba_fielddescription_fieldname"><bean:write name="onerowofdba_fielddescription" property="fieldname" /></span><span class="dba_fielddescription_fieldlabel"><bean:write name="onerowofdba_fielddescription" property="fieldlabel" /></span></a>
+        <a href="@get_link@detail/dba_fielddescription/<bean:write name='field_pk' />"><span class="dba_fielddescription_fieldname"><bean:write name="onerowofdba_fielddescription" property="fieldname" /></span><span class="dba_fielddescription_fieldlabel"><bean:write name="onerowofdba_fielddescription" property="fieldlabel" /></span></a>
         &nbsp;&nbsp;
       </logic:iterate>
 

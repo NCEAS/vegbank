@@ -10,7 +10,7 @@
   <table class="noborders"><td>
   <!-- add search box -->
   <bean:define id="entityToSearch" value="dba_fielddescription" />
-  <bean:define id="NameOfEntityToPresent" value="VegBank Fields" />
+  <bean:define id="NameOfEntityToPresent" value="VegBank Field" />
   <bean:define id="SearchInstructions" value="(enter a word, field name, etc.)" /> 
   <bean:define id="alternateSearchInputs">
     <input type="hidden" name="xwhereKey" value="xwhere_match" />

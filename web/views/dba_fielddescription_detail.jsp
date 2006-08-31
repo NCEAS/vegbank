@@ -2,14 +2,14 @@
  @stdvegbankget_jspdeclarations@
  @webpage_head_html@
  <TITLE>VegBank Data Dictionary: Field Details</TITLE>
- <%@ include file="includeviews/inlinestyles.jsp" %>
+ <!--%@ include file="includeviews/inlinestyles.jsp" %-->
 @webpage_masthead_html@ 
 
-        <h2>VegBank Data Dictionary: Field Details</h2>
+        <h2><a href="@datadictionary-index@">VegBank Data Dictionary</a>: Field Details</h2>
   <table class="noborders"><td>
   <!-- add search box -->
   <bean:define id="entityToSearch" value="dba_fielddescription" />
-  <bean:define id="NameOfEntityToPresent" value="VegBank Fields" />
+  <bean:define id="NameOfEntityToPresent" value="VegBank Field" />
   <bean:define id="SearchInstructions" value="(enter a word, field name, etc.)" /> 
   <bean:define id="alternateSearchInputs">
     <input type="hidden" name="xwhereKey" value="xwhere_match" />
@@ -29,10 +29,10 @@
 </logic:empty>
 
 <logic:notEmpty name="dba_fielddescription-BEANLIST">
-<p>
+<!--<p>
 <a href="javascript:void showDataDictionaryField(true);"> show labels </a> | 
 <a href="javascript:void showDataDictionaryField(false);"> show db fields </a>
-</p>
+</p>-->
   <logic:iterate id="onerowofdba_fielddescription" name="dba_fielddescription-BEANLIST">
     <!-- iterate over all records in set : new table for each -->
     <table class="thinlines" cellpadding="2">
