@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.24 2006-08-29 18:48:52 mlee Exp $
+# $Id: .htaccess,v 1.25 2006-08-31 00:28:47 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -84,10 +84,18 @@ RewriteRule ^cite/([^\.]+)\.TI\.(.*)$	   @get_link@std/taxoninterpretation/$1.TI
 RewriteRule ^cite/([^\.]+)\.PS\.(.*)$	   @get_link@detail/plantconcept/$1.PS.$2?where=where_plantstatus_ac     [NC,QSA,L]
 RewriteRule ^cite/([^\.]+)\.CS\.(.*)$	   @get_link@detail/commconcept/$1.CS.$2?where=where_commstatus_ac       [NC,QSA,L]
 
-RewriteRule ^dd/(.*)/(.*)	   @dbdictionary_link@dd~table~$1~field~$2~type~smallview.html       [NC,QSA,L,R]
-RewriteRule ^ddfull/(.*)/(.*)	   @dbdictionary_link@dd~table~$1~field~$2~type~fieldview.html       [NC,QSA,L,R]
-RewriteRule ^dd/(.*)	           @dbdictionary_link@dd~table~$1~type~tableview.html                [NC,QSA,L,R]
+RewriteRule ^dd/(.+)/(.+)$	   @get_link@small/dba_fielddescription/$1.$2?where=where_dd_tabledotfield [NC,QSA,L,R]
+RewriteRule ^ddfull/(.+)/(.+)$	   @get_link@detail/dba_tabledescription/$1?where=where_tablename&fieldname=$2 [NC,QSA,L,R]
+RewriteRule ^dd/(.+)$	           @get_link@detail/dba_tabledescription/$1?where=where_tablename  [NC,QSA,L,R]
+RewriteRule ^dd/(.+)/$	           @get_link@detail/dba_tabledescription/$1?where=where_tablename  [NC,QSA,L,R]
 
+## fix links FROM old data dictionary (probably not needed for long, but for bookmarks and ERD?)
+RewriteRule ^vegdocs/dbdictionary/dd~table~([^~]+)~type~tableview.html$	                @get_link@detail/dba_tabledescription/$1?where=where_tablename                 [NC,QSA,L,R]
+RewriteRule ^vegdocs/dbdictionary/dd~table~([^~]+)~field~([^~]+)~type~tableview.html$   @get_link@detail/dba_tabledescription/$1?where=where_tablename&fieldname=$2    [NC,QSA,L,R]
+RewriteRule ^vegdocs/dbdictionary/dd~table~([^~]+)~field~([^~]+)~type~fieldview.html$   @get_link@detail/dba_fielddescription/$1.$2?where=where_dd_tabledotfield       [NC,QSA,L,R]
+RewriteRule ^vegdocs/dbdictionary/dd~table~([^~]+)~field~([^~]+)~type~smallview.html$   @get_link@small/dba_fielddescription/$1.$2?where=where_dd_tabledotfield        [NC,QSA,L,R]
+RewriteRule ^vegdocs/dbdictionary/dd-index.html$  @datadictionary-index@         [NC,QSA,L,R]
+         
 ## for deep links FROM natureserve
 RewriteRule ^natureserve/(.*)$   @get_link@std/observation/$1?where=where_observation_nsuid   [NC,QSA,L]
 
