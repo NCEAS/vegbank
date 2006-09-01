@@ -32,7 +32,7 @@ function include(sURI)
     }
   }
 }
-
+var CON_WEBSITE_MAIN_CONTENT_DIV_ID = "centercontent"; //the main content page of the website (all pages)
 var browser_agent;
 var browser_major;
 var browser_ie;
@@ -40,6 +40,10 @@ var browser_ie3;
 var browser_ie4;
 var browser_iemac;
 var browser_safari;
+var browser_mozilla;
+var browser_gecko;
+var browser_firefox;
+
 function detectBrowser() {
     browser_agent=navigator.userAgent.toLowerCase();
 
@@ -50,6 +54,9 @@ function detectBrowser() {
     browser_ie4    = (browser_ie && (browser_major == 4) && (browser_agent.indexOf("msie 4")!=-1) );
 	browser_iemac  = (browser_ie && (browser_agent.indexOf("mac")!=-1));
 	browser_safari  = (!browser_ie && (browser_agent.indexOf("safari")!=-1));
+    browser_mozilla = (!browser_ie && (browser_agent.indexOf("mozilla")!=-1));
+    browser_gecko   = (!browser_ie && (browser_agent.indexOf("gecko")!=-1));
+    browser_firefox = (!browser_ie && (browser_agent.indexOf("firefox")!=-1));    
 }
 detectBrowser();
 
@@ -843,7 +850,13 @@ function tut_unhighlight() {
 
 function removeClassFromDoc(classname) {
   var inc=0
-  var alltags=document.all? document.all : document.getElementsByTagName("*")
+  var alltags=alltags=gebid(tableid).getElementsByTagName(CON_WEBSITE_MAIN_CONTENT_DIV_ID) ; //hard-code this web-sites main content ID
+  if ( !alltags ) { 
+    //didn't work, try whole document
+    alltags=document.all? document.all : document.getElementsByTagName("*") ;
+  }
+  
+  document.all? document.all : document.getElementsByTagName("*")
   for (i=0; i<alltags.length; i++){
     if (alltags[i].className.indexOf(classname)!=-1)
     /* remove the requested className.  Does not set entire class to space string b/c there could be 2 classes embedded. */
@@ -857,9 +870,12 @@ function removeClassFromDocIfAlsoClass(removeclass,ifalsoclass,tableid,addsuffix
 	// will add suffix to ifalsoclass
 	var inc=0;
     var alltags;
-	  if (tableid == "*") { alltags=document.all? document.all : document.getElementsByTagName("*") ;}
+      if (tableid == "*") { tableid = CON_WEBSITE_MAIN_CONTENT_DIV_ID }; //hard-code this web-sites main content ID
 	  if (tableid != "*") { alltags=gebid(tableid).getElementsByTagName("*") ;}
-	  for (i=0; i<alltags.length; i++){
+      //if didn't find it, then get whole page.
+      if ( !alltags ) { alltags=document.all? document.all : document.getElementsByTagName("*") ;}
+      
+      for (i=0; i<alltags.length; i++){
 	    if (alltags[i].className.indexOf(ifalsoclass)!=-1)
 	    {
 			// add the suffix if not there:
@@ -1202,3 +1218,374 @@ function verifyAC(ac, fnWhenDone) {
     var url = "@ajax_link@verify_ac.ajax.jsp";
     ajax.connect(url, "POST", params, fnWhenDone);
 }
+
+// functions associated with highlighting search criteria on a page:
+var hop_cookieName = "hop_current_searchcriteria"; 
+var hop_ieSwapCookieSuffix = "_ieswap";
+    
+  function splitWithQuotes(strText) {
+    //does a split of a string, but treats things within quotes as one item.
+    // returns array of strings
+    // REQUIRES THAT SPACES BE BEFORE AND AFTER QUOTES
+    // debug:
+   // document.getElementById('goo_debug').value = "";
+    
+    var arrTemp = new Array();
+    var arrFinal = new Array();
+    arrTemp = strText.split(" ");
+    //now we have split based on space, but recombine if one starts with " and later another ends in "
+    var blnInQuote = false;
+    var strCombine = "";
+    for ( var iParam = 0; iParam < arrTemp.length; iParam++ ) {
+        var strWord = arrTemp[iParam];
+        
+        if (blnInQuote == true) {
+          // we are already in a quote, see if it ends here
+          // in any case, add what is here to new variable
+          
+          if (strWord.substring(strWord.length -1 ,strWord.length) == '"' ) { //last is quote
+            //does end with quote, add it and turn off blnInQuote
+           // document.getElementById('goo_debug').value = document.getElementById('goo_debug').value + " ends quote" ;
+            blnInQuote = false;
+            strCombine = strCombine + ' ' + strWord.substring(0,strWord.length -1);
+            arrFinal.push(strCombine);
+            strCombine = "" ; // reset
+          } else {
+            //add to strCombine
+            strCombine = strCombine + ' ' + strWord;
+          }
+        } else {
+          // not already in quote
+          if (strWord.substring(0,1) == '"' ) { //first is quote
+            // starts with a quote
+            // does it also end in quote?
+            if ((strWord.substring(strWord.length - 1,strWord.length) == '"') && (strWord.length>2 )) { //last is quote and len >2
+              //ends in quote, get in-between
+              arrFinal.push(strWord.substring(1,strWord.length-1));
+            } else  {
+              //does not end in quote
+              blnInQuote = true;
+              strCombine = strWord.substring(1); //take all but quote, get rest later
+            }
+            
+            
+          } else { //no quotes, just add
+            arrFinal.push(strWord);
+          }
+        } // in quote or no  
+    } //looping thru array
+    //check to see if something is still waiting to be added
+    if (strCombine.length > 0) { //still have somehting in strCombine
+      //add this too
+      arrFinal.push(strCombine);
+    }
+    
+    //debug: report:
+   // document.getElementById('goo').value = "";
+   //  for ( var jParam = 0; jParam < arrFinal.length; jParam++ ) {
+   //    document.getElementById('goo').value = document.getElementById('goo').value + "__" + arrFinal[jParam];
+   //  }
+    
+    return arrFinal;
+  }
+  
+  
+  function highlightShownTextOnPage(searchFor,elID, blnSplitSearchFor) {
+      //highlights a word or words on some elementId (or page if * passed)
+      // blnSplitSearchFor is true if the term should be split and separately highlighted
+      // case insensitive!
+      
+      if (searchFor == "") {
+        return; //nothing to highlight!
+      }
+
+      var arrSearchFor = new Array()
+      
+      if (blnSplitSearchFor == true) {
+        // split-up searchFor, delimiting with spaces
+        // keeps quoted phrases together and throws out stuff with - at front
+        arrSearchFor = splitWithQuotes(searchFor);   
+      } else {
+        //just add the original term to the searching
+        arrSearchFor.push(searchFor);
+      }
+      
+     // alert('searching for ' + arrSearchFor.length + ' words');
+      
+      var thisContainer;
+        if (elID == "*") { thisContainer=document ;}
+        if (elID != "*") { thisContainer=document.getElementById(elID) ;}
+           //for (var i=alltags.length - 1; i>=0; i--){
+           //  if (i > 100) { break ; }
+             //alert(i + ":" + alltags[i].tagName);
+             
+             //alert(i + ":" + thisContainer.innerHTML);
+             //search for text
+             var aBitOfText = thisContainer.innerHTML;
+             if ( aBitOfText != null ) {
+               //loop through array of values
+               for ( var jParam = 0; jParam < arrSearchFor.length; jParam++ ) {
+                 
+                 var newSearchFor = arrSearchFor[jParam];
+                 // alert('searching for ' + newSearchFor);
+                 if ((aBitOfText.indexOf(newSearchFor)!=-1) && (newSearchFor.length > 0) && (newSearchFor != " ")) {
+                   var whereItIs = aBitOfText.indexOf(newSearchFor);
+                   searchForRegEx = new RegExp(newSearchFor , "gi");
+                   thisContainer.innerHTML = replaceShownText(thisContainer.innerHTML,searchForRegEx,"<span class='hop_highlight'>" + newSearchFor + "</span>");
+                 } // searched for item found
+                 
+               } //loop through array of terms
+             } //text is not null 
+              
+           //}
+        //turn on CSS
+        // not really needed, enabled by default, and not highlighted on demand except with this function.
+        // enableHighlightCSS(true);
+  }
+  
+  function enableHighlightCSS(blnEnable) {
+    //enable or disable css highlighting
+    var styleEl = document.getElementById("hop_highlightStyle");
+
+    if (styleEl) {
+      if (browser_ie == true) {
+         // ie doesn't like changing the css after it was already written, I guess, so swap cookie and postNewPAram to reload page without hop_q  
+         if (blnEnable == true) {   
+             //show it
+             // reset cookie and reload page instead (that's what you get for using IE)
+             var cookieValueToUse = getCookie(hop_cookieName + hop_ieSwapCookieSuffix);
+             setCookie(hop_cookieName , cookieValueToUse);
+             // remove swap cookie:
+             setCookie(hop_cookieName + hop_ieSwapCookieSuffix, "");
+             postNewParam("hop_q",cookieValueToUse); // empty value doesn't work with postNewParam (that's too bad)
+         } else {
+             //hide it
+              // reset cookie and reload page instead (that's what you get for using IE)
+              setCookie(hop_cookieName + hop_ieSwapCookieSuffix,getCookie(hop_cookieName )); //remember what was highlighted in case they want it back
+              setCookie(hop_cookieName ,""); //no highlighting now
+              postNewParam("hop_q"," "); // empty value doesn't work with postNewParam (that's too bad)
+         }
+         // ok now post a new param and reload
+         //alert('about to reload');
+         
+      } else { //thank you for not using IE
+         if (blnEnable == true) {
+           //have some highlighting
+            styleEl.innerHTML = ".hop_highlight {background-color : #FFFF33 }";    
+         } else { //hide it!
+             styleEl.innerHTML = " /* .hop_highlight {background-color : #FFFF33 } */ "; 
+         } //show hide in non-IE
+         showUnhighlightPen(blnEnable); //shows the reverse of what's seen now
+         
+      } //using IE or not
+     
+    } //has the style element I was looking for
+    
+  } //end of enableHighlightCSS
+   
+  function replaceShownText(strText,strFind,strReplace) {
+    // strFind is either a regular expression of a string
+    //function replaces SHOWN text (i.e. ignores stuff inside a tag)
+    // <span>span </span> would only replace the middle span.
+    // badly formed html will break this
+    // strText can be thought of as this: TEXT <tag> TEXT <tag> TEXT
+    // strText can also have other things to skip, ie &something;
+    // also skip <input>THIS STUFF</input> and similar tags:  script, style,  textarea, title  (input,button these don't work to include)
+    var strTagsToSkip = " script style textarea title ";
+    // so this just goes through and replaces where you see TEXT but not tag
+    
+    if (strFind == "") {
+      return strText;
+    }
+    var strRemaining = strText;
+    var strNewText = "";
+    var closingChar = ">"; //default
+    var strCloseTagFirst = ""; //variable to store what tag we have to close before continuing anything
+        
+    do
+      {
+        // get first bit of strRemaining
+        var whereAmp = strRemaining.indexOf("&");
+        var whereLT = strRemaining.indexOf("<"); 
+        if ((whereAmp < whereLT) && (whereAmp != -1)) {
+            //commit ampersand bit first
+            whereLT = whereAmp; //pretend that "&" is a "<"
+            closingChar = ";"; //semi-colon closes a &something; tag -- pretend that ";" is a ">"
+        } else { //look for < not & 
+            closingChar = ">"; //looking for > not ;
+        } // < not &
+        
+            var strBit = "";
+            if (whereLT == -1) { //there is no <
+              //no tags left, just do a replace
+              strNewText  = strNewText + strRemaining.replace(strFind,strReplace);
+              strRemaining = "";
+            } else { //there is at least one tag
+              if (whereLT == 0 ) {
+                //starts with a tag, so copy the tag
+                var whereGT = strRemaining.indexOf(closingChar); 
+                if (whereGT == -1) {
+                  //hmmm, there is not GT, just add this to the new text, but this is an error
+                  strNewTExt = strNewText + strRemaining;
+                  strRemaining = "";
+                } else {
+                  //there is a GT, copy up to it and pass the rest to remaining
+                  //but first see if this is a tag that should be starting something special, i.e. script that we shouldn't replace inside
+                  strCloseTagFirst = hop_interpretTextTag(strRemaining);
+                  //alert(strRemaining.substring(whereGT -1,whereGT));
+                  if ((strTagsToSkip.indexOf(" " + strCloseTagFirst + " ") != -1) && (strRemaining.substring(whereGT,whereGT+1) != "/")) {
+                      // alert("found special tag that doesn't close itself:" + strCloseTagFirst + " : " + strRemaining.substring(0,whereGT + 1));
+                      //ok this is a special tag, so skip everything to the closing tag of the same kind
+                      //find closing tag
+                      var strRemainLowerCase = strRemaining.toLowerCase();
+                      var whereCloseTag = strRemainLowerCase.indexOf("</" + strCloseTagFirst);
+                      // dump lowercase strReamin
+                      strRemainLowerCase = "";
+                      if (whereCloseTag == -1) {
+                          //this doesn't close, so just copy everything
+                          strNewText = strNewText + strRemaining;
+                          strRemaining = "";
+                      } else { // it does close (good)
+                          // copy up to but not including the last (that will happen on the next go-around)
+                          strNewText = strNewText + strRemaining.substring(0,whereCloseTag );
+                          strRemaining = strRemaining.substring(whereCloseTag);
+                      } //tag closes or not
+                      
+                  } else { //normal tag, copy the tag and the inside part of the tag will be dealt with later.
+                    strNewText = strNewText + strRemaining.substring(0,whereGT + 1);
+                    strRemaining = strRemaining.substring(whereGT + 1);
+                  }  //normal or special tag
+                } //closing tag exists
+
+              } else {
+                //does not start with a tag
+                //replace stuff up to the tag and continue
+                strBit = strRemaining.substring(0,whereLT);
+                strNewText = strNewText + strBit.replace(strFind,strReplace);
+                strRemaining = strRemaining.substring(whereLT);
+              } //does (not) start with a tag
+            } //tags or not
+          
+      } //do loop
+    while (strRemaining!="")
+    return strNewText;
+  }
+  
+function hop_interpretTextTag(strText) {
+  // tells us what the first tag is, including possibily closing tags
+  // <foo> returns foo
+  // <foo bar="bar"> returns foo
+  // </foo> returns /foo
+  // RETURNS LOWER CASE
+  if (strText.indexOf("<") != -1) {
+      //there is a tag!
+      var strTag = strText.substring(strText.indexOf("<") + 1);
+      // where does tag end?
+      var whereSpace = strTag.indexOf(" ");
+      var whereGT = strTag.indexOf(">");
+      var whereEndTag ;
+      //figure out where tag ends:
+      if (whereSpace == -1 && whereGT == -1) {
+          //neither exists, so the tag doesn't end, therefore no tag!
+          return "";
+      } else if (whereSpace != -1 && whereGT != -1) {
+          //both exist, get the smaller one
+          whereEndTag = Math.min(whereSpace,whereGT);
+      } else if (whereSpace != -1) {
+          //use whereSpace, since it was found (whereGT must not, as it would be caught above)
+          whereEndTag = whereSpace;
+      } else {
+          // finally, must be whereGT
+          whereEndTag = whereGT;
+      }  // figured out where tag ended
+      strTag = strTag.substring(0,whereEndTag ); //knocks off space or > that ended it, too!
+      return strTag.toLowerCase();
+  }
+  
+}
+  
+  //actually called from pages:
+  
+  function hop_highlightShownTextOnPageCustom() {
+     // if (browser_ie) {
+     //     return; //doesn't work on IE, surprise, surpise!
+     // }
+      if ( document.forms.resubmitForm ) {
+          var theResubForm = document.forms.resubmitForm;
+           if ( theResubForm.hop_q ) {
+                  //normal, just set the cookie
+                  
+                  setCookie(hop_cookieName,theResubForm.hop_q.value); //set even if empty
+               } else {
+                  // there is not hop_q, look for hop_params
+                  if (theResubForm.hop_params ) {
+                    // populate cookie based on params instead of value
+                    var strParams = " " + theResubForm.hop_params.value + " "; //name of params
+                    var strParamValues = ""; // var to store values in
+                    for (var i = 0; i < theResubForm.elements.length ; i++ ) {
+                        //loop through form values, adding values if they match strParams
+                        var strCheckField = " " + theResubForm.elements[i].name + " ";
+                        if (strParams.indexOf(strCheckField) != -1) {
+                            if (strParamValues.length > 0) {
+                                strParamValues = strParamValues + " "; //add a space after it
+                            } //there is already something there
+                           strParamValues = strParamValues + theResubForm.elements[i].value;
+                        } //matches
+                    } //loop through elements on form
+                    
+                    setCookie(hop_cookieName,strParamValues); //set even if empty
+                    
+                  } //there are hop_params
+               } //there is a hop_q
+           } //there is a resubmit form
+          
+          
+       var nowSearchFor =  getCookie(hop_cookieName);
+       highlightShownTextOnPage(nowSearchFor,CON_WEBSITE_MAIN_CONTENT_DIV_ID,true);
+       
+       // if ie has swap cookie there, then show controls, too:
+       var blnHideControls = ((nowSearchFor.length == 0) || (nowSearchFor == " "));
+       var blnShowUnhighlightPen = true;
+       
+       if (blnHideControls && browser_ie) {
+           //see if swap cookie there
+           nowSearchFor = getCookie(hop_cookieName + hop_ieSwapCookieSuffix);
+           var blnHideControls = ((nowSearchFor.length == 0) || (nowSearchFor == " "));
+           if (blnHideControls == false) {
+               // dont hide controls, but default the pen the other way for IE
+               blnShowUnhighlightPen = false;
+           }
+       }
+       //alert('thinking about showing controls');
+       //show/hide controls to turn on or off highlighting
+       if ( gebid("hop_highlightcontrol")) { //controls exist
+           if (blnHideControls ) {
+             //alert('hiding ctls');
+             gebid("hop_highlightcontrol").className= "hidden";  //hide them, we aren't highlighting anything  
+           } else {
+             //alert('showing ctls');
+             gebid("hop_highlightcontrol").className= "show";  //show them, b/c we highlighted something (or tried)
+           }
+           showUnhighlightPen(blnShowUnhighlightPen);
+       } //if controls exist on page
+  }
+  
+  function showUnhighlightPen(blnShowUn) {
+      // shows unhighlight pen if blnShowUn, else shows highlight Pen
+      var strPenUnhighID = "hop_highlightcontrol_unhigh";
+      var strPenHighID = "hop_highlightcontrol_high";
+    if ( (gebid(strPenUnhighID)) && (gebid (strPenHighID))) {  
+      if (blnShowUn == true) {
+         //show unhighlight pen, not highlight pen
+         //alert('showing unhighlight pen');
+         gebid(strPenUnhighID).className="show";
+         gebid(strPenHighID).className="hidden";            
+      } else {
+         //show highlight pen, not unhighlight pen
+         //alert('showing HIGHLIGHT pen');
+         gebid(strPenUnhighID).className="hidden";
+         gebid(strPenHighID).className="show"; 
+                     
+      }
+    } //pens exist
+  }
