@@ -3,6 +3,9 @@
  @webpage_head_html@
  <TITLE>VegBank Data Dictionary</TITLE>
         <%@ include file="includeviews/inlinestyles.jsp" %>
+   <!-- include highlighting options -->
+   <%@ include file="includeviews/hop_highlightSearchCriteria.jsp" %>
+
 @webpage_masthead_html@ 
 
  <h2><a href="@datadictionary-index@">VegBank Data Dictionary</a>: Tables</h2>
