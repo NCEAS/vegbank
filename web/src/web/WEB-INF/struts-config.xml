@@ -253,7 +253,7 @@
 		</action>
 		<action path="/RegisterNewUser" type="org.vegbank.ui.struts.RegisterNewUserAction" 
             name="RegisterNewUserForm" scope="request" validate="true" input="RegisterNewUser">
-			<forward name="success" path="/DisplayMainMenu.do" redirect="true" />
+			<forward name="success" path="/DisplayMainMenu.do?justRegistered=true" redirect="true" />
 		</action>
 		<action path="/SaveCertification" type="org.vegbank.ui.struts.CertificationSaveAction" 
             name="CertificationForm" scope="request" input="Certification" validate="true">

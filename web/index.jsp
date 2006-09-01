@@ -12,18 +12,8 @@ function getHelpPageId() {
 @webpage_masthead_html@
 
     <div class="spacer">&nbsp;</div>
-    <logic:equal parameter="justLoggedIn" value="true">
-      <!-- user just logged in, let's let them know it worked and welcome them warmly to VegBank -->
-      <% if ( strWebUserId != "-1" ) { %> <!-- confirmed that they ARE logged in -->
-      <div class="message"> Welcome <bean:write name="usr_greetingBean" ignore="true" /> </div>
-      <% } %>
-    </logic:equal>
-    <logic:equal parameter="justLoggedOff" value="true">
-      <!-- user just logged off (out), let's let them know it worked  -->
-      <% if ( strWebUserId == "-1" ) { %> <!-- confirmed that they ARE logged out -->
-        <div class="message"> You are now logged out.  You can <a href="@general_link@login.jsp">Login again here</a>. </div>
-      <% } %>
-    </logic:equal>
+    <%@ include file="includes/display_user_messages.jsp" %>
+    
     <div id="content-3col-a">
     <fieldset id="tut_findplots">
     <legend>Find Plots</legend>
