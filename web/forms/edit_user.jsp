@@ -10,8 +10,8 @@
   * Authors: @author@
   *
   * '$Author: mlee $'
-  * '$Date: 2005-05-31 18:39:18 $'
-  * '$Revision: 1.9 $'
+  * '$Date: 2006-09-01 18:29:38 $'
+  * '$Revision: 1.10 $'
   *
   *
   -->
@@ -105,7 +105,7 @@ function getHelpPageId() {
 		
 	<tr> 
       <td colspan="2"><span class="sizesmall">Preferred Name (nickname): </span><br/>
-        <html:text name="upform" property="webuser.preferredname"  size="25" maxlength="30"/>
+        <html:text name="upform" property="webuser.preferredname"  size="25" maxlength="50"/>
         <!--html:text property="preferredname" name="webuser" size="25" maxlength="30"/-->
 		<span class="sizetiny"></span>
 	  </td>
