@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: berkley $'
- *	'$Date: 2006-08-09 16:56:58 $'
- *	'$Revision: 1.26 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-09-01 23:50:50 $'
+ *	'$Revision: 1.27 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,9 +32,9 @@ package org.vegbank.common.utility;
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
  * 		
- *		'$Author: berkley $'
- *     '$Date: 2006-08-09 16:56:58 $'
- *     '$Revision: 1.26 $'
+ *		'$Author: mlee $'
+ *     '$Date: 2006-09-01 23:50:50 $'
+ *     '$Revision: 1.27 $'
  */
 
 import java.sql.PreparedStatement;
@@ -370,7 +370,7 @@ public class UserDatabaseAccess
 		
 		log.debug("UserDatabaseAccess > Database date: "+localtime);
 		
-		sb.append("UPDATE usr SET ticket_count = ticket_count + 1 ");
+        sb.append("UPDATE usr SET ticket_count = ticket_count + 1, last_connect=now() ");
 		sb.append("WHERE email_address LIKE '"+emailAddress+"' ");
 					
 		//issue the query
