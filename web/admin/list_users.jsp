@@ -1,15 +1,15 @@
 
 
 <!-- 
-  *   '$Id: list_users.jsp,v 1.5 2006-06-15 20:10:06 berkley Exp $ '
+  *   '$Id: list_users.jsp,v 1.6 2006-09-01 21:12:17 mlee Exp $ '
   *     Purpose: web form to submit vegbank cerification request
   *   Copyright: 2000 Regents of the University of California and the
   *               National Center for Ecological Analysis and Synthesis
   *     Authors: @author@
   *
-  *    '$Author: berkley $'
-  *      '$Date: 2006-06-15 20:10:06 $'
-  *  '$Revision: 1.5 $'
+  *    '$Author: mlee $'
+  *      '$Date: 2006-09-01 21:12:17 $'
+  *  '$Revision: 1.6 $'
   *
   *
   -->
@@ -53,7 +53,7 @@
   
   <bean:define id="sortbyId" value="usr.usr_id"/>
   <bean:define id="sortbyName" value="party.surname"/>
-  <bean:define id="sortbyEmail" value="party.email"/>
+  <bean:define id="sortbyEmail" value="usr.email_address"/>
 	<bean:define id="sortbyPerm" value="usr.permission_type"/>
 	<bean:define id="sortbyOrg" value="party.organizationname"/>
 

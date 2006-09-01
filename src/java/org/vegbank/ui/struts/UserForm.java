@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: berkley $'
- *	'$Date: 2006-06-12 17:56:59 $'
- *	'$Revision: 1.2 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-09-01 21:12:17 $'
+ *	'$Revision: 1.3 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -161,7 +161,7 @@ public class UserForm extends ValidatorForm
 	public static String getSQL(String sortBy) {
 		StringBuffer sb = new StringBuffer(512);
     
-    sb.append("select usr.usr_id, party.email, party.surname, party.givenname, " +
+    sb.append("select usr.usr_id, usr.email_address, party.surname, party.givenname, " +
       "usr.permission_type, party.accessioncode, party.organizationname " + 
       "from usr, party where usr.party_id = party.party_id order by " + sortBy);
 		return sb.toString();
