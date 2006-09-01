@@ -66,7 +66,7 @@
             <br />
               <!-- alt search suffix used to add "_name_0" to this input -->
              <input type="text" name="xwhereParams<logic:present name='alternateSearchInputs'>_custom_0</logic:present>" size="30" value="<bean:write name='beansearchString' />"/>
-             
+             <input type="hidden" name="hop_params" value="xwhereParams<logic:present name='alternateSearchInputs'>_custom_0</logic:present>" />
              <html:submit value="search" />
              
              <!-- link to help about searching -->
