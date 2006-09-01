@@ -18,7 +18,21 @@
 
     <div id="permanav">
 
-    <span class="notstrong"><a href="@general_link@login.jsp">Login</a> | 
+    <span class="notstrong">
+    
+      <!--<logic:equal name="Boolean.false" value="true">--><!-- previous has to be commented for HTML pages -->
+         <span class="hidden"><!-- hide all this in html pages: -->
+      <!--</logic:equal>--><!-- previous has to be commented for HTML pages -->
+        <!-- if user is logged in, greet them -->
+        <% if  ( strWebUserId != "-1" ) { %>
+          <!-- you are logged in -->
+          Welcome <bean:write name="usr_greetingBean" ignore="true" /><br/>
+        <% } %>
+      <!--<logic:equal name="Boolean.false" value="true">--><!-- previous has to be commented for HTML pages -->
+         </span><!-- end hiding in HTML pages -->  
+      <!--</logic:equal>--><!-- previous has to be commented for HTML pages -->
+    
+    <a href="@general_link@login.jsp">Login</a> | 
     <a href="@general_link@datasets.html">Datasets</a> | <a href="@web_context@Logoff.do">Logout</a><br /></span>
     <select class="input-box" name="vegbankNav" onChange="window.location=this.value"><option value="#">Jump to...</option>
         <option value="@web_context@">Home</option>

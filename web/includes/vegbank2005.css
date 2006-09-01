@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.17 2005-07-16 04:55:54 mlee Exp $
+ * $Id: vegbank2005.css,v 1.18 2006-09-01 18:09:35 mlee Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -217,11 +217,11 @@ CEILING
     float: right;
     right: 60px;
     padding: 0;
-	text-align: center;
+	text-align: right;
 	font-size: 11px;
     font-weight: normal;
     color: #666;
-    line-height: 2em;
+    line-height: 1.4em;
 }
 
 #ceiling>#permanav {

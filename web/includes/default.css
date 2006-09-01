@@ -38,6 +38,16 @@ GENERAL CLASSES
   background-color: pink;
 }
 
+.message {
+  text-align: center;
+  background-color: #FFFFCC;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #CCCCCC;
+  padding: 4px;
+  margin: 4px;
+}
+
 .left {
   clear: left;
   margin: 0;

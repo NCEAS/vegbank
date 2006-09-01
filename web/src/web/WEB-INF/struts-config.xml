@@ -241,11 +241,11 @@
       <forward name="success" path="ListUsers.do" redirect="true" />
 		</action>
     <action path="/Logoff" type="org.vegbank.ui.struts.LogoffAction">
-			<forward name="success" path="/index.jsp" />
+			<forward name="success" path="/index.jsp?justLoggedOff=true" />
 		</action>
 		<action path="/Logon" type="org.vegbank.ui.struts.LogonAction" 
             name="LogonForm" validate="true" input="Logon">
-			<forward name="success" path="/index.jsp" redirect="true" />
+			<forward name="success" path="/index.jsp?justLoggedIn=true" redirect="true" />
 		</action>
 		<action path="/PleaseWait" type="org.vegbank.ui.struts.PleaseWaitAction" 
             scope="request" validate="false">
