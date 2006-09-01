@@ -17,15 +17,16 @@ import org.vegbank.common.model.WebUser;
 import org.vegbank.common.utility.LogUtility;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.UserDatabaseAccess;
+import org.vegbank.common.utility.Utility;
 
 /*
  * '$RCSfile: EmailPasswordAction.java,v $'
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: berkley $'
- *	'$Date: 2006-08-09 18:34:28 $'
- *	'$Revision: 1.4 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-09-01 23:39:47 $'
+ *	'$Revision: 1.5 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +51,8 @@ import org.vegbank.common.utility.UserDatabaseAccess;
 
 public class EmailPasswordAction extends Action
 {
-	
+    private static ResourceBundle vbResources = ResourceBundle.getBundle("vegbank");
+    
 	public ActionForward execute(
 		ActionMapping mapping,
 		ActionForm form,
@@ -72,6 +74,8 @@ public class EmailPasswordAction extends Action
 			UserDatabaseAccess uda = new UserDatabaseAccess();
 			WebUser user = uda.getUser(email);
 			
+           
+            
 			// Check if a user is found
 			if ( user == null ) 
 			{
@@ -82,6 +86,23 @@ public class EmailPasswordAction extends Action
 			}
 			else
 			{
+                
+        // call them by a name, if possible:
+        String userGreeting = (String) user.getPreferredname();
+        if (Utility.isStringNullOrEmpty(userGreeting)) {
+            // try given name
+            userGreeting = (String) user.getGivenname();
+        }
+        if (Utility.isStringNullOrEmpty(userGreeting)) {
+          // try surname
+          userGreeting = (String) user.getSurname();
+        }
+        if (Utility.isStringNullOrEmpty(userGreeting)) {
+           // provide default
+           userGreeting = "VegBank user";
+        }        
+        
+        //generate random number password
         Random randomGen = new Random(System.currentTimeMillis());
         int randomNum = randomGen.nextInt();
         if(randomNum < 0)
@@ -96,16 +117,16 @@ public class EmailPasswordAction extends Action
 				String mailHost = null;
 				String cc = "";
 				String body;
-				String from = "help@vegbank.org";
+                String from = vbResources.getString("admin.email.from");
 				String subject = "Reset VegBank Password";
 			
 				StringBuffer sb = new StringBuffer();
-				sb.append("Dear VegBank user,\n");
+                sb.append("Dear " + userGreeting + ",\n");
 				sb.append("Your password has been reset to: " + passwd + "\n");
         sb.append("Please login as soon as possible and change your password.\n\n");
 				sb.append("VegBank Support Team\n\n");
-				sb.append("Email: help@vegbank.org\n");
-				sb.append("Website: http://vegbank.org\n");
+                sb.append("Email: " + from  + "\n");
+                sb.append("Website: http://" + vbResources.getString("serverAddress") + "/vegbank/\n");
 				body = sb.toString();
 
 				ServletUtility.sendPlainTextEmail( mailHost, from, email, cc, subject, body);

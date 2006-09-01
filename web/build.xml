@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2006-08-31 04:01:37 $'
-* '$Revision: 1.187 $'
+* '$Date: 2006-09-01 23:39:47 $'
+* '$Revision: 1.188 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -75,7 +75,8 @@
 <filter token="machine_url" value="${machine_url}"/>
 <filter token="eighty_eighty" value="${eighty_eighty}"/>
 <filter token="googlemaps_apikey" value="${googlemaps_apikey}" />
-
+<filter token="systemEmail" value="${systemEmail}"/>
+ 
 <!-- set forceoverwrite to false if not already set -->
 <echo>FORCING OVERWRITE (debug, before condition): ${forceoverwrite}</echo>
 

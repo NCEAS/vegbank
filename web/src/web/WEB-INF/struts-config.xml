@@ -168,7 +168,7 @@
 		</action>
 		<action path="/EmailPassword" type="org.vegbank.ui.struts.EmailPasswordAction" 
             name="EmailPasswordForm" scope="request" validate="true" input="EmailPassword">
-			<forward name="success" path="/index.jsp" />
+			<forward name="success" path="/index.jsp?justEmailedPassword=true" />
 		</action>
 		<action path="/GenericDispatcher" 
             type="org.vegbank.ui.struts.GenericDispatcherAction" 
