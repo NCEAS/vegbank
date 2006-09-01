@@ -128,6 +128,7 @@
      <a href="@general_link@requirements.html">More info...</a>
    </p>
  </noscript>
+ 
 <vegbank:resubmitForm/><!-- this form is used to resumbit the current page, which is necessary if using posted params -->
 
 
@@ -135,3 +136,6 @@
   <input type="hidden" name="mainPage" />
   <input type="hidden" name="helpPage" />
 </form> <!-- this form is for getting help by posting mainPage and helpPage as encoded URLs -->
+
+<!-- write controls for highlighting, if defined -->
+ <bean:write name="hop_highlightcontrolBean" ignore="true" filter="false"/>
