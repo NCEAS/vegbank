@@ -122,7 +122,7 @@
 		<action path="/DisplayUploadPlotAction" parameter="form" 
             type="org.vegbank.ui.struts.UploadPlotAction" scope="request" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
-			<set-property property="reqRoles" value="reg" />
+			<set-property property="reqRoles" value="cert" />
             <forward name="form" path="/forms/plot-submit.jsp"/>
 		</action>
 		<action path="/DisplayAddStratumMethodAction" forward="/forms/AddStratumMethod.jsp">
