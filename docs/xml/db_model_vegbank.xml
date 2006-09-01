@@ -14255,7 +14255,7 @@ conditions may change between resampling events.
     </attribute>
     <attribute>
       <attID>1491</attID>
-      <attName>SOILPARENT_ID</attName> 
+      <attName>SOILPARENT_ID</attName>
       <attLabel>Soil Parent</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
@@ -17172,8 +17172,8 @@ conditions may change between resampling events.
       <attReferences>n/a</attReferences>
       <attListType>no</attListType>
       <attList/>
-      <attNotes>n/a</attNotes>
-      <attDefinition>Level of permission that the user has, corresponding to certification.</attDefinition>
+      <attNotes>Old list of permissions was 1-5 but this is no longer valid, though it is in the code (in comments) some places.</attNotes>
+      <attDefinition>Level of permission that the user has, corresponding to certification.  Permission is a composite of various values that are added together, with 1=registered, 2=certified, 4=professional, and 8=admin.  Functionally, users will only have permission values of 1 (reg),3 (reg+cert),7 (reg+cert+pro),15 (reg+cert+pro+dba).</attDefinition>
       <update>1.0.2</update>
     </attribute>
     <attribute>
