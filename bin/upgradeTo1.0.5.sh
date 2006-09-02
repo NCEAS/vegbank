@@ -58,6 +58,10 @@ echo "NOW RUNNING ANT to populate data dictionary..."
 echo "NOW RUNNING ANT to populate data dictionary... " >> 105change.log 2>&1
 ant populateDD                             >> 105change.log 2>&1
 
+echo "UPDATING PASSWORDS..."
+echo "UPDATING PASSWORDS" >> 105change.log 2>&1
+ant updateAllPasswords
+
 echo "vacuuming..."
 echo "vacuuming... " >> 105change.log 2>&1
 psql  -U vegbank -c "vacuum analyze;" $1  >> 105change.log 2>&1

@@ -1,10 +1,10 @@
 Installation instructions for Vegbank 
 Author: Chad Berkley
 Date Authored: 5/22/2006
-Updated: '$Date: 2006-08-25 18:35:18 $'
+Updated: '$Date: 2006-09-02 07:21:54 $'
 
-'$Author: berkley $'
-'$Revision: 1.11 $'
+'$Author: mlee $'
+'$Revision: 1.12 $'
 
 Pre-requisites:
 Java 1.4.2
@@ -153,7 +153,7 @@ user for the vegbank tablespace.  Note that if you are starting from a
 blank database, you must do these commands as the 'postgres' user with the
 postmaster running.
 create the database
-bash$ createdb vegbank
+bash$ createdb -E UNICODE vegbank
 create a user for the db
 note that depending on what postgres user system you are using, this may
 require you to create a system user account for 'vegbank' as well
@@ -178,34 +178,39 @@ bash$ psql -U vegbank vegbank < build/sql/create_extras.sql
 bash$ psql -U vegbank vegbank < build/sql/createIndices.sql
 bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
 bash$ psql -U vegbank vegbank < build/sql/vegbank_populate_configtables.sql
+bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
 
-If your version is less than the current version, you should run all files 
-titled like vegbank-changes-1.0.5.sql (where 1.0.5 is the newest version) 
-to update your version.  
+The create views is listed twice in case there are conflicts with config tables.
+Some of the above SQL may also be run already in the backup file.  
+But these files are such that running them multiple times shouldn't create errors.
 
-Also, if upgrading from a vegbank database from version 1.2 or before, you must
-update the password field in the database to use digested passwords.  To do this
-run 'ant updateAllPasswords'.
+
+
+IF YOUR VERSION IS LESS THAN THE CURRENT VERSION, you should run scripts
+in vegbank/bin titled like upgradeTo[version#].sh
+
+>>MAKE SURE build.properties is set properly for the database name you want<<
 
 To find out the version of your database, check in the table: dba_datamodelversion.
 All versions since 1.0.5 and their initial date should be listed here.
 
+Run all version numbers greater than the version of your database to the version
+you want.
+
 For example, if the backup version was 1.0.5, and the current version was 1.0.7, 
-you'd run vegbank-changes-1.0.6.sql then vegbank-changes-1.0.7.sql.  Views should be
-dropped before running these files, so the proper order would be:
+you'd :
+bash$ cd ~/vegbank
+bash$ upgradeTo1.0.6.sh
+bash$ upgradeTo1.0.7.sh
 
-bash$ psql -U vegbank vegbank < build/sql/drop_obsolete_views.sql
-bash$ psql -U vegbank vegbank < build/sql/drop_vegbank_views.sql
-bash$ psql -U vegbank vegbank < build/sql/drop_obsolete_views.sql
-bash$ psql -U vegbank vegbank < build/sql/drop_vegbank_views.sql
+At the time of this writing, only upgradeTo1.0.5.sh exists, and that should be run
+on any database backup from roughly August 2005 until September 2006 if the database
+doesn't identify itself as version 1.0.5
 
-bash$ psql -U vegbank vegbank < build/sql/vegbank-changes-1.0.6.sql
-bash$ psql -U vegbank vegbank < build/sql/vegbank-changes-1.0.7.sql
-bash$ psql -U vegbank vegbank < build/sql/create_vegbank_views.sql
-
-drop_obsolete_views.sql is run twice because it isn't known whether those views
-might depend on existing views in the database or vice-versa.  Changes may not 
-succeed if all views are not dropped.
+There will be errors in the SQL, because the script isn't sure what needs to be dropped,
+so it drops things or tries to create views that may fail.  It repeats the attempts 
+as needed to make it work.  The dbVerify target is run at the end of the upgrade scripts
+(it will fail for the first one if you are running more than one).
 
 
 Initializing a clean database installation (no data)
