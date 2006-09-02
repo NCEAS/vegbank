@@ -7,8 +7,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-25 18:33:02 $'
- *	'$Revision: 1.7 $'
+ *	'$Date: 2006-09-02 07:01:06 $'
+ *	'$Revision: 1.8 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,7 +79,10 @@ CREATE TABLE <xsl:value-of select="entityName"/>
       <xsl:with-param name="sequenceName" select="$sequenceName"/> 
     </xsl:apply-templates>
 );    
-    
+    <!-- populate version table if possible -->
+    <xsl:if test="entityName='dba_datamodelversion'">
+      INSERT INTO dba_datamodelversion (versionText) values ('<xsl:value-of select="/dataModel/version" />');
+    </xsl:if>
   
   </xsl:template>
 
