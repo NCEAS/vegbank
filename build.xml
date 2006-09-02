@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-09-02 19:08:49 $'
-  * '$Revision: 1.96 $'
+  * '$Date: 2006-09-02 19:10:15 $'
+  * '$Revision: 1.97 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -380,7 +380,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
   <target name="binbuild" depends="setFilters">
      <!-- backups: -->
     <mkdir dir="${buildDir}/bin"/>
-    <copy todir="${buildDir/bin}" filtering="yes" overwrite="yes">
+    <copy todir="${buildDir}/bin" filtering="yes" overwrite="yes">
       <fileset dir="bin">
        <include name="**/*"/>
       </fileset>
