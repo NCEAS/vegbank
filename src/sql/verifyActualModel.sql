@@ -44,7 +44,9 @@ SELECT 'tables require entry','aux_role', 'if i''m lowercase, i''m from database
 SELECT 'tables require entry','dba_confidentialitystatus', 'if i''m lowercase, i''m from database, else from model xml' FROM dba_confidentialitystatus group by 1 having count(1) > 0;
 SELECT 'tables require entry','dba_cookie', 'if i''m lowercase, i''m from database, else from model xml' FROM dba_cookie group by 1 having count(1) > 0;
 SELECT 'tables require entry','dba_cookielabels', 'if i''m lowercase, i''m from database, else from model xml' FROM dba_cookielabels group by 1 having count(1) > 0;
+SELECT 'tables require entry','dba_datamodelversion', 'if i''m lowercase, i''m from database, else from model xml' FROM dba_datamodelversion group by 1 having count(1) > 0;
 SELECT 'tables require entry','dba_fieldDescription', 'if i''m lowercase, i''m from database, else from model xml' FROM dba_fieldDescription group by 1 having count(1) > 0;
 SELECT 'tables require entry','dba_onerow', 'if i''m lowercase, i''m from database, else from model xml' FROM dba_onerow group by 1 having count(1) > 0;
 SELECT 'tables require entry','dba_tableDescription', 'if i''m lowercase, i''m from database, else from model xml' FROM dba_tableDescription group by 1 having count(1) > 0;
 SELECT 'tables require entry','usr', 'if i''m lowercase, i''m from database, else from model xml' FROM usr group by 1 having count(1) > 0;
+

@@ -20316,6 +20316,7 @@ conditions may change between resampling events.
     <entityDescription/>
     <module>extra</module>
     <entityCreatedVersion>1.0.5</entityCreatedVersion>
+    <entityRequirePopulation>true</entityRequirePopulation>
     <attribute>
       <attID>2518</attID>
       <attName>dba_datamodelversion_ID</attName>
