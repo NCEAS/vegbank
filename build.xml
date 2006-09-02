@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-08-30 17:45:16 $'
-  * '$Revision: 1.94 $'
+  * '$Date: 2006-09-02 19:05:35 $'
+  * '$Revision: 1.95 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -375,6 +375,8 @@ populateDD   populates the data dictionary tables based on docs/xml/db_model_veg
       </fileset>
     </copy>
   </target>
+  
+  <!--copy the bin files to the bin directory-->
   <target name="bin" depends="setFilters">
      <!-- backups: -->
         <mkdir dir="${backupDir}"/>
@@ -387,6 +389,7 @@ populateDD   populates the data dictionary tables based on docs/xml/db_model_veg
 	   </fileset>
         </copy>
   </target>
+  
   <!--set the classpath-->
   <target name="setclasspath">
     <path id="projectClassPath">
