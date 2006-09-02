@@ -76,9 +76,9 @@ insert into dba_datamodelversion (versionText) values ('1.0.5');
 -- so this is just for parties added through the XML loader, which should all be public.
 ALTER TABLE party ALTER COLUMN partypublic SET default true;
 
-create sequence project_project_id_seq;
-create sequence plot_plot_id_seq;
-create sequence namedPlace_namedPlace_ID_seq;
+--create sequence project_project_id_seq;
+--create sequence plot_plot_id_seq;
+--create sequence namedPlace_namedPlace_ID_seq;
 alter table usr alter column password type char(512);
 
 
@@ -87,31 +87,7 @@ UPDATE usr SET password_new = password;
 ALTER TABLE usr DROP COLUMN password;
 ALTER TABLE usr RENAME password_new TO password;
 
-drop table temptbl_std_commnames;
-CREATE TABLE temptbl_std_commnames
-(
-commconcept_id serial ,
-sciname varchar (255) ,
-translated varchar (255) ,
-code varchar (255) ,
-common varchar (255) ,
-
-PRIMARY KEY ( commconcept_id )
-);
-
-drop table temptbl_std_plantnames;
-CREATE TABLE temptbl_std_plantnames
-(
-plantconcept_id serial ,
-plantname varchar (255) ,
-sciname varchar (255) ,
-scinamenoauth varchar (255) ,
-code varchar (255) ,
-common varchar (255) ,
-
-PRIMARY KEY ( plantconcept_id )
-);
-
+drop table dba_tabledescription;
 CREATE TABLE dba_tableDescription
 (
 dba_tableDescription_ID serial ,
@@ -123,7 +99,7 @@ tableKeywords text ,
 
 PRIMARY KEY ( dba_tableDescription_ID )
 );
-
+drop table dba_fieldDescription;
 CREATE TABLE dba_fieldDescription
 (
 dba_fieldDescription_ID serial ,
@@ -142,6 +118,7 @@ fieldKeywords text ,
 
 PRIMARY KEY ( dba_fieldDescription_ID )
 );
+drop table dba_fieldlist;
 CREATE TABLE dba_fieldList
 (
 dba_fieldList_ID serial ,
