@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-09-02 19:05:35 $'
-  * '$Revision: 1.95 $'
+  * '$Date: 2006-09-02 19:08:49 $'
+  * '$Revision: 1.96 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -73,7 +73,9 @@ runxmlcache   caches the xml representation of each bean with accession numbers
 createdb      creates an empty vegbank database from the existing sql scripts.  
               the created database should be valid according to the newest 
               schema.
-populateDD   populates the data dictionary tables based on docs/xml/db_model_vegbank.xml
+populateDD    populates the data dictionary tables based on docs/xml/db_model_vegbank.xml
+binbuild      copy the bin files to build and update tokens
+bin           install the bin files into the /usr/vegbank/bin dir
 ============================================================================
 -->
 <project name="vegbank" default="war" basedir=".">
@@ -353,8 +355,6 @@ populateDD   populates the data dictionary tables based on docs/xml/db_model_veg
     <mkdir dir="${webStatusDir}"/>
     <mkdir dir="${binPath}"/>
     
-    
-    
     <!--copy the java src to the build/src dir-->
     <copy todir="${buildSrcDir}" filtering="yes">
       <fileset dir="${javaSrcDir}">
@@ -376,18 +376,29 @@ populateDD   populates the data dictionary tables based on docs/xml/db_model_veg
     </copy>
   </target>
   
-  <!--copy the bin files to the bin directory-->
-  <target name="bin" depends="setFilters">
+  <!--copy the bin files to the build/bin directory-->
+  <target name="binbuild" depends="setFilters">
      <!-- backups: -->
-        <mkdir dir="${backupDir}"/>
-        <mkdir dir="${backupDir}/oldarchive"/>
-        <mkdir dir="${backupDir}/latest"/>
-        <mkdir dir="${backupDir}/latest/to_move"/>
-        <copy todir="${binPath}" filtering="yes" overwrite="yes">
-	   <fileset dir="bin">
-	     <include name="**/*"/>
-	   </fileset>
-        </copy>
+    <mkdir dir="${buildDir}/bin"/>
+    <copy todir="${buildDir/bin}" filtering="yes" overwrite="yes">
+      <fileset dir="bin">
+       <include name="**/*"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <!--copy the bin files to the bin directory-->
+  <target name="bin" depends="binbuild">
+     <!-- backups: -->
+    <mkdir dir="${backupDir}"/>
+    <mkdir dir="${backupDir}/oldarchive"/>
+    <mkdir dir="${backupDir}/latest"/>
+    <mkdir dir="${backupDir}/latest/to_move"/>
+    <copy todir="${binPath}" filtering="yes" overwrite="yes">
+      <fileset dir="bin">
+       <include name="**/*"/>
+      </fileset>
+    </copy>
   </target>
   
   <!--set the classpath-->
