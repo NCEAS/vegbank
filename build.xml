@@ -5,8 +5,8 @@
   *    Release: @release@
   *
   * '$Author: berkley $'
-  * '$Date: 2006-09-02 19:10:15 $'
-  * '$Revision: 1.97 $'
+  * '$Date: 2006-09-04 19:06:15 $'
+  * '$Revision: 1.98 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -385,6 +385,10 @@ bin           install the bin files into the /usr/vegbank/bin dir
        <include name="**/*"/>
       </fileset>
     </copy>
+    <chmod dir="${buildDir}/bin" perm="777" includes="**/*.sh"/>
+    <chmod file="${buildDir}/bin/vbdump" perm="777"/>
+    <chmod file="${buildDir}/bin/runAccGen" perm="777"/>
+    <chmod file="${buildDir}/bin/runKwGen" perm="777"/>
   </target>
   
   <!--copy the bin files to the bin directory-->
