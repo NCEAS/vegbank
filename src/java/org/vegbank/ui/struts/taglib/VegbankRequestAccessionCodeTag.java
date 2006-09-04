@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-06-22 18:26:02 $'
- *	'$Revision: 1.2 $'
+ *	'$Date: 2006-09-04 19:35:34 $'
+ *	'$Revision: 1.3 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ import org.vegbank.common.utility.DatabaseUtility;
  *
  *
  * @author M. Lee
- * @version $Revision: 1.2 $ $Date: 2006-06-22 18:26:02 $
+ * @version $Revision: 1.3 $ $Date: 2006-09-04 19:35:34 $
  */
 
 public class VegbankRequestAccessionCodeTag extends VegbankTag {
@@ -120,6 +120,10 @@ public class VegbankRequestAccessionCodeTag extends VegbankTag {
 
               log.debug("asking for accession codes via " + sql.toString());
               log.debug("asking for accession codes how many times: " + reccount);
+              if (reccount > 3000 ) {
+                  reccount = 3000; //hardcode limit to request.  clients can repeat requests if needed.  But helps prevent hogging of resources.
+              }
+              
            DatabaseAccess da = new DatabaseAccess();
           for (int i=0; i< reccount; i++) {
                da.issueUpdate(DatabaseUtility.removeSemicolons(sql.toString()));
