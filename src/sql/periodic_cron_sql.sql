@@ -18,4 +18,5 @@ DELETE FROM userDataSet WHERE (age(datasetStop)>('40 days'::INTERVAL)) and datas
 
 
 -- tell the database to update indexes, etc., speeds things up a TON! (or a tonne!)
-VACUUM ANALYZE;
+-- DONE IN BACKUP SCRIPT:
+-- VACUUM ANALYZE;
