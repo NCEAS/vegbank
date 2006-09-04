@@ -1,31 +1,16 @@
 #!/bin/sh
 
-# ####this script backs up the database, then copies the backup file to the right place, 
-# moving older backups to the right place
-# also scp's copy to aldo, if that is enabled via ssh scp -- has to be configured- I don't know how, but PMark had it before
-# MLee 03-JUL-2006
+# this script backs up the database and rotates through 5 days worth of 
+# backups before deleting the oldest one.
 
 # strategy:
-# 1) backup database with pg_dump
-# 2) compress backup file
-# 3) create link to database backup
-# 4) move all files out of the "latest" dir and into the "tomove" subdir
-#    they would still be copied by NCEAS's script, but gets them out of the way to move later
-# 5) move the compressed backup file into "latest"
-# 6) move the "tomove" older files into the "oldarchive" dir that isn't backed up by NCEAS
+# 1) rotate the backup files
+# 2) backup database with pg_dump
+# 3) compress backup file
+# 4) vacuum the database
 
 # overall backup directory, set in build.properties
 BACKUP_DIR=@backupDir@
-
-# location of latest backups, which will be copied also by NCEAS backup routines
-BACKUP_LATEST_DIR=$BACKUP_DIR/latest
-
-# location within the latest dir that we can temporarily store files while we copy the new latest
-# then they will be removed:
-BACKUP_LATEST_TOMOVE_DIR=$BACKUP_LATEST_DIR/to_move
-
-# location of older archives
-BACKUP_OLDARCHIVE=$BACKUP_DIR/oldarchive
 
 # for naming the file
 TS=`date +%d%b%G`
@@ -35,46 +20,26 @@ BACKUP_FILE_PATH=$BACKUP_DIR/vegbank$TS.sql
 # compressed backup file name:
 BACKUP_FILE_PATH_ZIP=$BACKUP_FILE_PATH.bz2
 
-# link to the latest backup
-LATEST_DUMP=$BACKUP_DIR/vegbank_latest.sql.bz2
-
-# copy file that is scp'd to another machine (one name only for this so the versions don't proliferate there)
-STANDARD_BACKUP_NAME_ZIP=$BACKUP_DIR/copy_vegbank_latest.sql.bz2
-
 # command to backup
 PG_DUMP=@pgdumpPath@
-
-# SCP user to copy data from and to user's account on aldo:
-SCP_USER=vegbank
-# location on destination server to SCP to:
-REMOTE_DEST=$SCP_USER@aldo.vegbank.org:vbdumps
 
 # ###########################################
 # ########### START THE BACKUP
 # ###########################################
+
+# rotate: save 5 days of backups and delete the oldest one
+rm $BACKUP_DIR/5dayold.bz2
+mv $BACKUP_DIR/4dayold.bz2 $BACKUP_DIR/5dayold.bz2
+mv $BACKUP_DIR/3dayold.bz2 $BACKUP_DIR/4dayold.bz2
+mv $BACKUP_DIR/2dayold.bz2 $BACKUP_DIR/3dayold.bz2
+mv $BACKUP_DIR/1dayold.bz2 $BACKUP_DIR/2dayold.bz2
+mv $BACKUP_DIR/vegbank*.bz2 $BACKUP_DIR/1dayold.bz2
 
 # copy the database, using properties set in build.properties and filtered out here:
 $PG_DUMP -U @databaseUser@ --no-owner --no-privileges @databaseName@ > $BACKUP_FILE_PATH
 
 # compress
 bzip2 -f --best $BACKUP_FILE_PATH
-
-## handle the copy to remote computer:
-# first copy to standard name (so that copies don't proliferate on other machine)
-cp $BACKUP_FILE_PATH_ZIP $STANDARD_BACKUP_NAME_ZIP
-# su -c "scp $STANDARD_BACKUP_NAME_ZIP $REMOTE_DEST" $SCP_USER
-# get rid of temp file
-rm $STANDARD_BACKUP_NAME_ZIP
-
-## move the dump into the subdirectory that NCEAS will also archive:
-# first move anything in the latest subdir into the to_move sub-subdir
-mv $BACKUP_LATEST_DIR/*.* $BACKUP_LATEST_TOMOVE_DIR/
-
-# move the just created file into the latest backup dir:
-mv $BACKUP_FILE_PATH_ZIP $BACKUP_LATEST_DIR/
-
-# move the other dumps out of the to-move dir:
-mv $BACKUP_LATEST_TOMOVE_DIR/*.* $BACKUP_OLDARCHIVE/
 
 # perform a VACUUM ANALYZE after the backup operation
 # note for this to work your pg_hba.conf file must be setup
