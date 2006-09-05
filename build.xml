@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: berkley $'
-  * '$Date: 2006-09-04 19:06:15 $'
-  * '$Revision: 1.98 $'
+  * '$Author: mlee $'
+  * '$Date: 2006-09-05 21:05:50 $'
+  * '$Revision: 1.99 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -395,14 +395,16 @@ bin           install the bin files into the /usr/vegbank/bin dir
   <target name="bin" depends="binbuild">
      <!-- backups: -->
     <mkdir dir="${backupDir}"/>
-    <mkdir dir="${backupDir}/oldarchive"/>
-    <mkdir dir="${backupDir}/latest"/>
-    <mkdir dir="${backupDir}/latest/to_move"/>
+
     <copy todir="${binPath}" filtering="yes" overwrite="yes">
       <fileset dir="bin">
        <include name="**/*"/>
       </fileset>
     </copy>
+    <chmod dir="${binPath}" perm="777" includes="**/*.sh"/>
+    <chmod file="${binPath}/vbdump" perm="777"/>
+    <chmod file="${binPath}/runAccGen" perm="777"/>
+    <chmod file="${binPath}/runKwGen" perm="777"/>
   </target>
   
   <!--set the classpath-->
