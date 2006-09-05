@@ -40,8 +40,8 @@ import com.Ostermiller.util.LineEnds;
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-08-02 16:14:11 $'
- *	'$Revision: 1.9 $'
+ *	'$Date: 2006-09-05 23:00:02 $'
+ *	'$Revision: 1.10 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -169,7 +169,8 @@ public class DownloadAction extends Action
         System.out.println("getting xml");
 				// wrap in XML
 				String xml = XMLUtil.getVBXML(selectedPlots);
-				System.out.println("zipping file");
+        
+				System.out.println("zipping file with xml: " /*+ xml*/);
 				// Place into file for download
 				//this.initResponseForFileDownload( response, "vegbank_plots.xml", DOWNLOAD_CONTENT_TYPE);
 				//this.sendFileToBrowser(xml, response);

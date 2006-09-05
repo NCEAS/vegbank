@@ -7,9 +7,9 @@ package org.vegbank.common.utility;
  * 		figuring the the type of client browser
  *    etc.. 
  *
- *	'$Author: anderson $'
- *  '$Date: 2005-06-17 22:07:16 $'
- *  '$Revision: 1.1 $'
+ *	'$Author: berkley $'
+ *  '$Date: 2006-09-05 23:00:02 $'
+ *  '$Revision: 1.2 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,9 +63,13 @@ public class ZipUtility
             // the old way used ByteArrayInputStream which doesn't handle charset encoding well
             // so we're using the StringReader method below instead
             StringReader reader = new StringReader(fileContent);
-            int b;
-            while ((b=reader.read()) != -1) {
-                zipstream.write(b);
+            int numread;
+            char[] c = new char[1024];
+            numread = reader.read(c, 0, 1024);
+            while (numread != -1) {
+              String s = new String(c, 0, numread);
+              zipstream.write(s.getBytes());
+              numread = reader.read(c, 0, 1024);
             }
 
 			reader.close();	

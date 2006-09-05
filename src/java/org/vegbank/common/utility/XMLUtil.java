@@ -5,9 +5,9 @@ package org.vegbank.common.utility;
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: mlee $'
- *	'$Date: 2006-08-26 22:49:44 $'
- *	'$Revision: 1.15 $'
+ *	'$Author: berkley $'
+ *	'$Date: 2006-09-05 23:00:02 $'
+ *	'$Revision: 1.16 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,9 +71,9 @@ public class XMLUtil
         if(rs.next())
         {
           byte[] b = rs.getBytes(1);
-          xml = new String(b);
+          xml = new String(b, "UTF-8");
           rs.close();
-          System.out.println("got xml from cache");
+          System.out.println("got xml from cache: " /*+ xml*/);
         }
         else
         {
@@ -159,8 +159,8 @@ public class XMLUtil
         if(rs.next())
         {
           byte[] b = rs.getBytes(1);
-          xml = new String(b);
-          System.out.println("Got cached xml");
+          xml = new String(b, "UTF-8");
+          System.out.println("Got cached xml: " /*+ xml*/);
           rs.close();
         }
         else
