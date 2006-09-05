@@ -1,10 +1,10 @@
 Installation instructions for Vegbank 
 Author: Chad Berkley
 Date Authored: 5/22/2006
-Updated: '$Date: 2006-09-02 07:21:54 $'
+Updated: '$Date: 2006-09-05 18:25:59 $'
 
-'$Author: mlee $'
-'$Revision: 1.12 $'
+'$Author: berkley $'
+'$Revision: 1.13 $'
 
 Pre-requisites:
 Java 1.4.2
@@ -267,4 +267,18 @@ bash$ ant clean
 or to clean the build and clean the install use:
 bash$ ant full-clean
 
+=========================
+NON-STANDARD SERVER SETUP
+=========================
+Since vegbank gets installed into the /vegbank directory, your url will probably
+be something like http://vegbank.org/vegbank.  If you want the server name to
+redirect there (i.e. if the user types http://vegbank.org) you can add an 
+index.html file with a meta redirector to the web root.  The redirector should
+look something like:
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<meta http-equiv="Refresh" content="0; URL=/vegbank/index.jsp" />
+<body>
+</body>
+</html>
 
