@@ -1,5 +1,5 @@
 /*
- * $Id: vegbank2005.css,v 1.18 2006-09-01 18:09:35 mlee Exp $
+ * $Id: vegbank2005.css,v 1.19 2006-09-05 21:09:58 mlee Exp $
  *
  * Defines default values for html elements and
  * sets up a centered content area with this structure:
@@ -62,11 +62,15 @@ html>body #container {
 
 /* this is for the smaller pages, like popup help */
 #maincontent_small {
-	background-color: #fff;
+
+    float: left;
+    background-color: #fff;
+    border: 1px solid #999;
+    
     width: 95%;
     text-align: left;
-    padding: 2px;
-    margin: 2px;
+    padding: 0px;
+    margin: 4px;
 }
 
 #maincontent fieldset img {
