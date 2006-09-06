@@ -4660,9 +4660,9 @@ For more on VegBank's XML, please see http://vegbank.org/xml
         <xs:element ref="soilTaxon.soilCode" minOccurs="0" />
         <xs:element ref="soilTaxon.soilName" minOccurs="0" />
         <xs:element ref="soilTaxon.soilLevel" minOccurs="0" />
-        <xs:element ref="soilTaxon.SOILPARENT_ID" minOccurs="0" />
         <xs:element ref="soilTaxon.soilFramework" minOccurs="0" />
         <xs:element ref="soilTaxon.accessionCode" minOccurs="0" />
+        <xs:element ref="soilTaxon" minOccurs="0" maxOccurs="unbounded" />
         <xs:element ref="definedValue" minOccurs="0" maxOccurs="unbounded" />
       </xs:sequence>
     </xs:complexType>
@@ -4705,15 +4705,6 @@ For more on VegBank's XML, please see http://vegbank.org/xml
           <xs:attribute name="revision.REVISION_ID" type="xs:long" use="optional" />
         </xs:extension>
       </xs:simpleContent>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="soilTaxon.SOILPARENT_ID">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="soilTaxon" />
-      </xs:sequence>
-      <xs:attribute name="noteLink.NOTELINK_ID" type="xs:long" use="optional" />
-      <xs:attribute name="revision.REVISION_ID" type="xs:long" use="optional" />
     </xs:complexType>
   </xs:element>
   <xs:element name="soilTaxon.soilFramework">
