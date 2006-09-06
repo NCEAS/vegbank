@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: berkley $'
-  * '$Date: 2006-09-06 18:25:41 $'
-  * '$Revision: 1.100 $'
+  * '$Author: mlee $'
+  * '$Date: 2006-09-06 21:54:38 $'
+  * '$Revision: 1.101 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -220,6 +220,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <filter token="rmiserver" value="${rmiServer}"/>
     <filter token="uploadDir" value="${uploadPath}"/>
     <filter token="servlet_lib_dir" value="${webapps}/lib"/>
+    <filter token="webapps_dir" value="${webapps}" />
     <filter token="servlet_context" value="${contextDir}/"/>
     
     <!-- backup properties -->
