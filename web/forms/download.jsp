@@ -81,15 +81,15 @@ if (ok) {
 
               </li>  
 
-              <!--<li class="oddrow padded">
-                <input type="radio" value="vegbranch" name="formatType" disabled="disabled"/>
+              <li class="oddrow padded">
+                <input type="radio" value="vegbranch" name="formatType" />
                 <img src="@vegbranch_link@images/vegbranch_logo_med.jpg" alt="VegBranch format"/>
-                <strong>VegBranch Import</strong> - Coming soon!
+                <strong>VegBranch Import</strong> 
                    <blockquote> 
                      Use this format to transfer data from the vegbank.org web site into your local 
                      <a href="@vegbranch_link@vegbranch.html">VegBranch</a> database.
                    </blockquote>
-               </li>-->
+               </li>
 
               <li class="evenrow padded">
                 <input type="radio" value="xml" name="formatType"/>
