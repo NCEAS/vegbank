@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-09-06 16:58:31 $'
- *	'$Revision: 1.6 $'
+ *	'$Date: 2006-09-06 18:12:09 $'
+ *	'$Revision: 1.7 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,6 +144,15 @@ public class DenormUtility
           
       return count;
   }
+  
+  /**
+   * runs denorms on a table with a given denormtype
+   */
+  public static long updateAll(String table, String denormtype)
+    throws SQLException
+  {
+    return updateTable(table, denormtype, null);
+  }
 
   /**
    * Runs all denorms for one table.
@@ -152,6 +161,9 @@ public class DenormUtility
       return updateTable(table, null, null);
   }
 
+  /**
+   * updates a table with the type and where params provided.
+   */
   public static long updateTable(String table, String denormtype, String[] whereParams) 
           throws SQLException {
 
@@ -173,7 +185,7 @@ public class DenormUtility
   }
 
   /**
-   *
+   * init the denorm utility
    */
   private static void init() {
       tableDenorms = new Hashtable();
@@ -218,6 +230,19 @@ public class DenormUtility
 
       log.debug("INIT COMPLETE");
   }
+  
+  /**
+   * add all of the tables to the queue
+   */
+  public void queueAllTables()
+  {
+    Vector sort = stv.getSortedVector();
+    for(int i=0; i<sort.size(); i++)
+    {
+      SortedTableName stn = (SortedTableName)sort.elementAt(i);
+      queuedTables.addElement(stn.tableName);
+    }
+  }
    
   /**
    * add a table to the queue to be denormalized.  the 'queue' is a priority
@@ -230,9 +255,19 @@ public class DenormUtility
   
   /**
    * denorm the tables that are currently in the queue in the order specified
-   * in the sqlStore.properties file
+   * in the sqlStore.properties file.
    */
   public void executeQueuedDenorms()
+    throws SQLException
+  {
+    executeQueuedDenorms(null);
+  }
+  
+  /**
+   * denorm the tables that are currently in the queue in the order specified
+   * in the sqlStore.properties file.  use the specified type of denorm
+   */
+  public void executeQueuedDenorms(String type)
     throws SQLException
   {
     //get the order from stv of the tables that we've been requested to denorm
@@ -248,7 +283,14 @@ public class DenormUtility
         { //denorm it.  this should be in order.
           log.debug("Denorming queued table: " + stn);
           //System.out.println("Denorming sorted table " + stn.toString());
-          DenormUtility.updateTable(qTableName);
+          if(type == null)
+          {
+            DenormUtility.updateTable(qTableName);
+          }
+          else
+          {
+            DenormUtility.updateTable(qTableName, type, null);
+          }
           queuedTables.remove(j); //remove the table from the queue once it is run
         }
       }
@@ -338,34 +380,67 @@ public class DenormUtility
    */
   public static void main(String[] args)
   {
-    if(args.length != 1)
+    if(args.length != 1 && args.length != 2)
     {
       System.out.println("This utility denorms tables in vegbank.");
-      System.out.println("usage: DenormUtility [tableName]");
+      System.out.println("usage: DenormUtility [tableName] [denormType]");
       System.out.println("tableName can be the name of a table or " +
         "'all' which will denorm all tables.");
-      System.out.println("If you use 'all', the denorm process may take a while " +
-        "and you will get no feedback during the execution.");
+      System.out.println("denormType can be any of the denorm types listed " + 
+        "in the sqlStore.  Leave denormType null if you want all " + 
+        "denorms to run.");
+      System.out.println("If you use 'all' as the tableName, the denorm " +
+        "process may take a while and you will get no feedback during " +
+        "the execution.");
       System.exit(0);
+    }
+    
+    String table = null;
+    String type = null;
+    
+    if(args.length == 1)
+    {
+      table = args[0];
+    }
+    else if(args.length == 2)
+    {
+      table = args[0];
+      type = args[1];
     }
     
     try
     {
-      if(args[0].equals("all"))
+      if(table.equals("all") && type != null)
       {
-        System.out.println("Denorming all tables.");
-        long count = updateAll();
-        System.out.println(count + " tables denormalized successfully.");
-        System.exit(0);
+        System.out.println("denorming all tables with denorm type: " + type);
+        DenormUtility dutil = new DenormUtility();
+        dutil.queueAllTables();
+        dutil.executeQueuedDenorms(type);
+        System.out.println("updates made.");
       }
-      else
+      else if(table.equals("all") && type == null)
       {
-        String tableName = args[0];
-        System.out.println("Denorming table " + tableName);
-        updateTable(tableName);
-        System.out.println("Done updating table " + tableName);
-        System.exit(0);
+        System.out.println("Denorming all tables with default denorm type.");
+        DenormUtility dutil = new DenormUtility();
+        dutil.queueAllTables();
+        dutil.executeQueuedDenorms();
+        System.out.println("updates made.");
       }
+      else if(!table.equals("all") && type == null)
+      {
+        System.out.println("Denorming table " + table + " with no denorm type.");
+        long count = updateTable(table);
+        System.out.println("Done updating table " + table + ".  " + count + 
+          " updates made.");
+      }
+      else if(!table.equals("all") && type != null)
+      {
+        System.out.println("Denorming table " + table + " with type " + type);
+        long count = updateTable(table, type, null);
+        System.out.println("Done updating table " + table + ".  " + count + 
+          " updates made.");
+      }
+      
     }
     catch(SQLException sqle)
     {
@@ -373,5 +448,7 @@ public class DenormUtility
       sqle.printStackTrace();
       System.exit(1);
     }
+    
+    System.exit(0);
   }
 }
