@@ -84,6 +84,7 @@
       <attLabel>Reference</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
+      <attNullsInXML>no</attNullsInXML>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
@@ -4380,6 +4381,7 @@ change through time.</entitySummary>
       <attLabel>Community Concept</attLabel>
       <attModel>logical</attModel>
       <attNulls>yes</attNulls>
+      <attNullsInXML>no</attNullsInXML>
       <attType>Integer</attType>
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
