@@ -13,8 +13,8 @@ psql -U @databaseUser@ @databaseName@ < ~/vegbank/src/sql/periodic_cron_sql.sql
 # ant isn't working with cron, so we are just running these manually
 #ant -f ~/vegbank/web/build.xml cache
 
-wget -O @webapps_dir@/vegbank/cache/views/raw/raw_countdata.jsp           http://@machineURL@/vegbank/views/raw/raw_countdata.jsp
-wget -O @webapps_dir@/vegbank/cache/views/raw/raw_recentprojects.jsp      http://@machineURL@/vegbank/views/raw/raw_recentprojects.jsp
+wget -nv -O @webapps_dir@/vegbank/cache/views/raw/raw_countdata.jsp           http://@machineURL@/vegbank/views/raw/raw_countdata.jsp
+wget -nv -O @webapps_dir@/vegbank/cache/views/raw/raw_recentprojects.jsp      http://@machineURL@/vegbank/views/raw/raw_recentprojects.jsp
 
 echo DONE WITH MAINTENANCE AT:
 date
