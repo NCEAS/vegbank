@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: berkley $'
- *	'$Date: 2006-08-29 21:48:29 $'
- *	'$Revision: 1.5 $'
+ *	'$Date: 2006-09-06 16:58:31 $'
+ *	'$Revision: 1.6 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -330,6 +330,48 @@ public class DenormUtility
     public Vector getSortedVector()
     {
       return sort;
+    }
+  }
+  
+  /**
+   * main method to call from a utility script to denorm all of the tables
+   */
+  public static void main(String[] args)
+  {
+    if(args.length != 1)
+    {
+      System.out.println("This utility denorms tables in vegbank.");
+      System.out.println("usage: DenormUtility [tableName]");
+      System.out.println("tableName can be the name of a table or " +
+        "'all' which will denorm all tables.");
+      System.out.println("If you use 'all', the denorm process may take a while " +
+        "and you will get no feedback during the execution.");
+      System.exit(0);
+    }
+    
+    try
+    {
+      if(args[0].equals("all"))
+      {
+        System.out.println("Denorming all tables.");
+        long count = updateAll();
+        System.out.println(count + " tables denormalized successfully.");
+        System.exit(0);
+      }
+      else
+      {
+        String tableName = args[0];
+        System.out.println("Denorming table " + tableName);
+        updateTable(tableName);
+        System.out.println("Done updating table " + tableName);
+        System.exit(0);
+      }
+    }
+    catch(SQLException sqle)
+    {
+      System.out.println("Could not denorm: " + sqle.getMessage());
+      sqle.printStackTrace();
+      System.exit(1);
     }
   }
 }
