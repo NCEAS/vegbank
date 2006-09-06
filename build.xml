@@ -4,9 +4,9 @@
   *    Authors: @authors@
   *    Release: @release@
   *
-  * '$Author: mlee $'
-  * '$Date: 2006-09-05 21:05:50 $'
-  * '$Revision: 1.99 $'
+  * '$Author: berkley $'
+  * '$Date: 2006-09-06 18:25:41 $'
+  * '$Revision: 1.100 $'
   *
   *	Authors: Chad Berkley
   *	Copyright: 2002 Regents of the University of California and the
@@ -136,6 +136,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <property name="vegbankHome" value="${vegbank.home.dir}"/>
     <property name="dataPath" value="${vegbankHome}/data"/>
     <property name="binPath" value="${vegbankHome}/bin"/>
+    <property name="libPath" value="${vegbankHome}/lib"/>
     <property name="exportPath" value="${vegbankHome}/export"/>
     <property name="uploadPath" value="${vegbankHome}/upload"/>
     <property name="dataSchemaName" value="${vegbank.schema.data}"/>
@@ -542,6 +543,14 @@ bin           install the bin files into the /usr/vegbank/bin dir
   <target name="install" depends="war">
     
     <antcall target="bin" /> <!-- copy the bin files -->
+    <copy todir="${libPath}" filtering="no">
+      <fileset dir="lib">
+        <include name="**/*.jar"/>
+      </fileset>
+      <fileset dir="build">
+        <include name="vegbank.jar"/>
+      </fileset>
+    </copy>
     
     <copy todir="${webapps}" filtering="no">
       <fileset dir="${distDir}">
