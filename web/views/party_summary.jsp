@@ -41,7 +41,7 @@
 <logic:iterate name="party-BEANLIST" id="onerowofparty">
 <bean:define property="party_id" name="onerowofparty" id="party_pk"/>
 <tr class="@nextcolorclass@">
-<td class="largefield">
+<td class="smallfield">
 <a href="@get_link@detail/party/@subst_lt@bean:write name='onerowofparty' property='party_id' /@subst_gt@">
                             Details
                             </a>

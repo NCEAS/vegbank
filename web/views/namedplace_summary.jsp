@@ -49,7 +49,7 @@
                   </tr>
 <logic:iterate id="onerowofnamedplace" name="namedplace-BEANLIST">
 <tr class="@nextcolorclass@">
-<td class="largefield">
+<td class="smallfield">
 <a href="@get_link@detail/namedplace/@subst_lt@bean:write name='onerowofnamedplace' property='namedplace_id' /@subst_gt@">
                             Details
                             </a>

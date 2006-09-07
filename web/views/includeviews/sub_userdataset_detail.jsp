@@ -86,9 +86,9 @@ Items in this dataset:
    <%= rowIndex++ %>.&nbsp; 
   </td>
 </logic:equal>
-<td class="largefield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
+<td class="smallfield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
 <%@ include file="../autogen/userdatasetitem_summary_data.jsp" %>
-<td class="largefield">
+<td class="smallfield">
   <logic:equal name="onerowofuserdatasetitem" property="itemtable" value="observation">
     <!-- add some info about observations if this is an observation -->  
       <bean:define id="obs_pk" name="onerowofuserdatasetitem" property="itemrecord" />

@@ -1,4 +1,4 @@
-<td class="userdataset_datasetname"><logic:notEmpty property="datasetname" name="onerowofuserdataset"><span class="largefield">
+<td class="userdataset_datasetname"><logic:notEmpty property="datasetname" name="onerowofuserdataset"><span class="smallfield">
 <bean:write name="onerowofuserdataset" property="datasetname"/></span>
 </logic:notEmpty>
 <logic:empty property="datasetname" name="onerowofuserdataset">

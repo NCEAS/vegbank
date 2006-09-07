@@ -44,7 +44,7 @@
                   </tr>
 <logic:iterate id="onerowofstratummethod" name="stratummethod-BEANLIST">
 <tr class="@nextcolorclass@">
-<td class="largefield">
+<td class="smallfield">
 <a href="@get_link@detail/stratummethod/@subst_lt@bean:write name='onerowofstratummethod' property='stratummethod_id' /@subst_gt@">
                             Details
                             </a>

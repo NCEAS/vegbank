@@ -344,7 +344,7 @@
 <bean:define property="observation_id" name="onerowofplot" id="observation_pk"/>
 <tr class="@nextcolorclass@">
 
-  <td class="largefield"><a href="@get_link@comprehensive/observation/<bean:write name='onerowofplot' property='observation_id' />">
+  <td class="smallfield"><a href="@get_link@comprehensive/observation/<bean:write name='onerowofplot' property='observation_id' />">
     <bean:write name='onerowofplot' property='authorplotcode' /></a>
   </td>
   <td><!-- only show values that are applicable to fuzzing-->
@@ -401,7 +401,7 @@
     <input type="button" value="cancel embargo" onclick="if (confirm('Are you sure you want to end the embargo on this plot, making it visible to all VegBank users?  Press OK to continue.')) {adjustEmbargo(<bean:write name='onerowofplot' property='embargo_id'/>,false,true);gebid('embargostop_'+<bean:write name='onerowofplot' property='embargo_id'/>).innerHTML='CANCELLED<a href=#footnote>*</a>';showFootNote();}" />
     </logic:notEmpty>
   </td>
-  <td class="largefield">
+  <td class="smallfield">
     <!-- here if the name is longer than 40 chars and has no spaces or dashes, split into parts -->
                
                <logic:notEmpty name="onerowofplot" property="datasetname">

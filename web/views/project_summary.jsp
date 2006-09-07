@@ -49,7 +49,7 @@
 <logic:iterate id="onerowofproject" name="project-BEANLIST">
 <bean:define id="project_pk" name="onerowofproject" property="project_id" />
 <tr class="@nextcolorclass@">
-<td class="largefield">
+<td class="smallfield">
 <a href="@get_link@detail/project/@subst_lt@bean:write name='onerowofproject' property='project_id' /@subst_gt@">
                             Details
                             </a>
@@ -114,7 +114,7 @@
            </td>
           <!-- state/province list -->
           
-          <td class="largefield"> 
+          <td class="smallfield"> 
           <vegbank:get id="places" select="place_summ" beanName="map" perPage="-1" pager="false" 
            where="where_group_place_summ_project" wparam="project_pk"/>
 		   <logic:notEmpty name="places-BEANLIST">

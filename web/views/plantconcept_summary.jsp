@@ -121,7 +121,7 @@ function getHelpPageId() {
         <%@ include file="../includes/datacart_checkbox.jsp" %>
   </td>
 
-<td class="largefield"><a href='@get_link@detail/plantconcept/<bean:write name="onerow" property="plantconcept_id"/>'>details</a>
+<td class="smallfield"><a href='@get_link@detail/plantconcept/<bean:write name="onerow" property="plantconcept_id"/>'>details</a>
 <!-- add "select" button if certain params are present and notEmpty -->
    <logic:equal name="onerow" property="d_currentaccepted" value="f"><strong> NOT CURRENTLY ACCEPTED</strong></logic:equal>
    <logic:equal name="addSelectButton" value="yes">
@@ -132,9 +132,9 @@ function getHelpPageId() {
    
 
 </td>
-<td class="largefield"><bean:write name="onerow" property="plantname_id_transl"/>&nbsp;</td>
-<td class="largefield"><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
-<td class='largefield numeric'>
+<td class="smallfield"><bean:write name="onerow" property="plantname_id_transl"/>&nbsp;</td>
+<td class="smallfield"><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
+<td class='smallfield numeric'>
 <logic:notEqual name="onerow" property="d_obscount" value="0">
       <bean:define id="critAsTxt">
       With the plant: <bean:write name="onerow" property="plantname_id_transl"/> [<bean:write name="onerow" property="reference_id_transl"/>]
@@ -156,7 +156,7 @@ function getHelpPageId() {
 <logic:equal name="onerow" property="d_obscount" value="0">0</logic:equal>
 </td>
 <td class="largefield"><bean:write name="onerow" property="plantdescription"/>&nbsp;</td>
-<td class="largefield"><bean:write name="onerow" property="accessioncode"/>&nbsp;</td>
+<td class="smallfield"><bean:write name="onerow" property="accessioncode"/>&nbsp;</td>
 </tr>
 
 </logic:iterate>

@@ -50,16 +50,12 @@
 
   <vegbank:get id="dba_fielddescription" select="dba_fielddescription" beanName="map" 
     pager="false" perPage="-1" where="where_tablename" wparam="dba_tablename" />
-  <td class="largefield">
-    <logic:empty name="dba_fielddescription-BEANLIST">
-       --No fields--  
-    </logic:empty>
+  <td>
+    <logic:empty name="dba_fielddescription-BEANLIST">--No fields--</logic:empty>
     <logic:notEmpty name="dba_fielddescription-BEANLIST">
-      <logic:iterate id="onerowofdba_fielddescription" name="dba_fielddescription-BEANLIST">
-        <bean:define id="field_pk" name="onerowofdba_fielddescription" property="dba_fielddescription_id" />
-        <a href="@get_link@detail/dba_fielddescription/<bean:write name='field_pk' />"><span class="dba_fielddescription_fieldname"><bean:write name="onerowofdba_fielddescription" property="fieldname" /></span><span class="dba_fielddescription_fieldlabel"><bean:write name="onerowofdba_fielddescription" property="fieldlabel" /></span></a>
-        &nbsp;&nbsp;
-      </logic:iterate>
+    <!-- the following class is line break sensitive: -->
+      <span class="largefield"><logic:iterate id="onerowofdba_fielddescription" name="dba_fielddescription-BEANLIST"><bean:define id="field_pk" name="onerowofdba_fielddescription" property="dba_fielddescription_id" /><a href="@get_link@detail/dba_fielddescription/<bean:write name='field_pk' />"><span class="dba_fielddescription_fieldname"><bean:write name="onerowofdba_fielddescription" property="fieldname" /></span><span class="dba_fielddescription_fieldlabel"><bean:write name="onerowofdba_fielddescription" property="fieldlabel" /></span></a>&nbsp;&nbsp;</logic:iterate></span>
+      
 
     </logic:notEmpty>
   </td>

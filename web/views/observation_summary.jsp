@@ -196,7 +196,7 @@ Plot #<%= rowIndex++ %>
 
 
 <!-- plot data -->
-<td class="largefield">
+<td class="smallfield">
 <strong><bean:write name="onerowofobservation" property="authorobscode" /></strong>
 <br/>
 <i>
@@ -219,14 +219,14 @@ Plot #<%= rowIndex++ %>
       } 
 %>  
 </td>
-<td class='largefield numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
+<td class='smallfield numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
 <span class='<bean:write name="show_elev" ignore="true" />hidden'>E: <bean:write name="onerowofobservation" property="elevation" /><br/></span>
 <span class='<bean:write name="show_slope" ignore="true" />hidden'>S: <bean:write name="onerowofobservation" property="slopegradient" /><br/></span>
 <span class='<bean:write name="show_aspect" ignore="true" />hidden'>A: <bean:write name="onerowofobservation" property="slopeaspect" /></span>
 </td>
 
 
-<td class='largefield <bean:write name="show_rocktype" ignore="true" /><bean:write name="show_surficial" ignore="true" /><bean:write name="show_hydrologic" ignore="true" /><bean:write name="show_topo" ignore="true" /><bean:write name="show_landform" ignore="true" />hidden'>
+<td class='smallfield <bean:write name="show_rocktype" ignore="true" /><bean:write name="show_surficial" ignore="true" /><bean:write name="show_hydrologic" ignore="true" /><bean:write name="show_topo" ignore="true" /><bean:write name="show_landform" ignore="true" />hidden'>
 <span class='<bean:write name="show_rocktype" ignore="true" />hidden'>R: <bean:write name="onerowofobservation" property="rocktype" /><br/></span>
 <span class='<bean:write name="show_surficial" ignore="true" />hidden'>S: <bean:write name="onerowofobservation" property="surficialdeposits" /><br/></span>
 <span class='<bean:write name="show_hydrologic" ignore="true" />hidden'>H: <bean:write name="onerowofobservation" property="hydrologicregime" /><br/></span>
@@ -237,7 +237,7 @@ Plot #<%= rowIndex++ %>
  
  
  
-<td class='largefield numeric <bean:write name="show_datesampled" ignore="true" /><bean:write name="show_dateentered" ignore="true" /><bean:write name="show_area" ignore="true" />hidden'>
+<td class='smallfield numeric <bean:write name="show_datesampled" ignore="true" /><bean:write name="show_dateentered" ignore="true" /><bean:write name="show_area" ignore="true" />hidden'>
  <span title='<bean:write name="onerowofobservation" property="obsstartdate"/>' class='<bean:write name="show_datesampled" ignore="true" />hidden'>
    S: <dt:format pattern="MMM-yy">
        <dt:parse pattern="yyyy-MM-dd">
@@ -261,7 +261,7 @@ Plot #<%= rowIndex++ %>
 </td>
 
 <!-- methods -->
-<td nowrap="nowrap" class='largefield <bean:write name="show_covermeth" ignore="true" /><bean:write name="show_stratummeth" ignore="true" /><bean:write name="show_project" ignore="true" />hidden'>
+<td nowrap="nowrap" class='smallfield <bean:write name="show_covermeth" ignore="true" /><bean:write name="show_stratummeth" ignore="true" /><bean:write name="show_project" ignore="true" />hidden'>
    
    <!-- default values in case the translation is empty -->
    <bean:define id="cvr_trunc" value="[?]" />
@@ -310,7 +310,7 @@ Plot #<%= rowIndex++ %>
  </span>
 </td>
 <!-- plants in this plot -->
- <td class='largefield <bean:write name="show_plants" ignore="true" />hidden'>
+ <td class='smallfield <bean:write name="show_plants" ignore="true" />hidden'>
 <vegbank:get id="taxonobservation" select="taxonobservation_maxcover" 
   where="where_observation_pk" wparam="observation_pk" allowOrderBy="true" orderBy="xorderby_sort_maxcover_desc"
   pager="false" perPage="-1" beanName="map" />
@@ -329,50 +329,50 @@ Plot #<%= rowIndex++ %>
 		    <%  inttemp ++ ;  %>
 		        &raquo; <a href='@get_link@std/taxonobservation/<bean:write name="onerowoftaxonobservation" property="taxonobservation_id" />'>
          <!-- write all names, some of them will stay hidden -->
-         <span class="taxonobservation_authorplantname largefield">
+         <span class="taxonobservation_authorplantname smallfield">
                           <bean:write name='onerowoftaxonobservation' property='authorplantname' /> </span>
-         <span class="taxonobservation_int_origplantscifull largefield">
+         <span class="taxonobservation_int_origplantscifull smallfield">
                           <logic:empty name='onerowoftaxonobservation' property='int_origplantscifull' >
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
                           </logic:empty>
                           <bean:write name='onerowoftaxonobservation' property='int_origplantscifull' /> </span>
-         <span class="taxonobservation_int_origplantscinamenoauth largefield">
+         <span class="taxonobservation_int_origplantscinamenoauth smallfield">
                           <logic:empty name='onerowoftaxonobservation' property='int_origplantscinamenoauth' >
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
                           </logic:empty>
 
                           <bean:write name='onerowoftaxonobservation' property='int_origplantscinamenoauth' /> </span>
-         <span class="taxonobservation_int_origplantcode largefield">
+         <span class="taxonobservation_int_origplantcode smallfield">
                           <logic:empty name='onerowoftaxonobservation' property='int_origplantcode' >
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
                           </logic:empty>
 
                           <bean:write name='onerowoftaxonobservation' property='int_origplantcode' /> </span>
-         <span class="taxonobservation_int_origplantcommon largefield">
+         <span class="taxonobservation_int_origplantcommon smallfield">
                           <logic:empty name='onerowoftaxonobservation' property='int_origplantcommon' >
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
                           </logic:empty>
 
                           <bean:write name='onerowoftaxonobservation' property='int_origplantcommon' /> </span>
          
-         <span class="taxonobservation_int_currplantscifull largefield">
+         <span class="taxonobservation_int_currplantscifull smallfield">
                           <logic:empty name='onerowoftaxonobservation' property='int_currplantscifull' >
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
                           </logic:empty>
 
                           <bean:write name='onerowoftaxonobservation' property='int_currplantscifull' /> </span>
-         <span class="taxonobservation_int_currplantscinamenoauth largefield">
+         <span class="taxonobservation_int_currplantscinamenoauth smallfield">
                           <logic:empty name='onerowoftaxonobservation' property='int_currplantscinamenoauth' >
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
                           </logic:empty>
 
                           <bean:write name='onerowoftaxonobservation' property='int_currplantscinamenoauth' /> </span>
-         <span class="taxonobservation_int_currplantcode largefield">
+         <span class="taxonobservation_int_currplantcode smallfield">
                           <logic:empty name='onerowoftaxonobservation' property='int_currplantcode' >
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
                           </logic:empty>
                           <bean:write name='onerowoftaxonobservation' property='int_currplantcode' /> </span>
-         <span class="taxonobservation_int_currplantcommon largefield">
+         <span class="taxonobservation_int_currplantcommon smallfield">
                           <logic:empty name='onerowoftaxonobservation' property='int_currplantcommon' >
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
                           </logic:empty>
@@ -388,7 +388,7 @@ Plot #<%= rowIndex++ %>
     
   </logic:notEmpty><!-- concept -->
 </td>
-<td class='largefield <bean:write name="show_comms" ignore="true" />hidden'>
+<td class='smallfield <bean:write name="show_comms" ignore="true" />hidden'>
 <!-- community info -->
 <vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
   where="where_observation_pk" wparam="obsId" perPage="-1" pager="false"/>

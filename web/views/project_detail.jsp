@@ -86,7 +86,7 @@
           </tr>
           <!-- state/province list -->
           <tr  class='@nextcolorclass@'><td class="datalabel">Locations of Plots</td>
-          <td class="largefield"> 
+          <td class="smallfield"> 
           <vegbank:get id="places" select="place_summ" beanName="map" perPage="-1" pager="false" 
            where="where_group_place_summ_project" wparam="project_pk"/>
 		   <logic:notEmpty name="places-BEANLIST">

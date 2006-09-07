@@ -291,8 +291,7 @@
   <xsl:template name="writeOneFieldValue">
     <xsl:param name="currEnt"/>
     <xsl:param name="beanPropName"/>
-    <xsl:param name="ignore" />
-    <xsl:element name="bean:write">
+    <xsl:param name="ignore" /><xsl:element name="bean:write">
       <xsl:attribute name="name">onerowof<xsl:value-of select="translate($currEnt,$alphahigh,$alphalow)" /></xsl:attribute>
       <xsl:attribute name="property"><xsl:value-of select="$beanPropName" /></xsl:attribute>
       <xsl:if test="$ignore='true'"><xsl:attribute name="ignore">true</xsl:attribute></xsl:if>

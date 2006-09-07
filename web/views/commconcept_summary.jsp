@@ -119,7 +119,7 @@ function getHelpPageId() {
           <%@ include file="../includes/datacart_checkbox.jsp" %>
         </logic:notEmpty>  
       </td>
-<td class="largefield"><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a>
+<td class="smallfield"><bean:write name="onerow" property="commname_id_transl"/><br/><a href='@get_link@detail/commconcept/<bean:write name="onerow" property="commconcept_id"/>'>&raquo; more details</a>
   <br/>accession code: <bean:write name="onerow" property="accessioncode" />
   <logic:equal name="onerow" property="d_currentaccepted" value="f"><strong> NOT CURRENTLY ACCEPTED</strong></logic:equal>
   <!-- add "select" button if certain params are present and notEmpty -->
@@ -129,7 +129,7 @@ function getHelpPageId() {
   </logic:equal>
 </td>
 <td class="largefield"><a href='@get_link@std/reference/<bean:write name="onerow" property="reference_id"/>'><bean:write name="onerow" property="reference_id_transl"/></a>&nbsp;</td>
-<td class="numeric largefield">
+<td class="numeric smallfield">
 <bean:define id="concId" name="onerow" property="commconcept_id"/>
 <logic:equal name="onerow" property="d_obscount" value="0">0</logic:equal>
 <logic:notEqual name="onerow" property="d_obscount" value="0">

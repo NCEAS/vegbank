@@ -82,7 +82,7 @@
        <tr><!-- class="@nextcolorclass@"-->
          <td><%= rowOrder ++ %></td>
          <logic:notEqual name="onePlot" value="true"> 
-           <td class="largefield">
+           <td class="smallfield">
              <a href="@get_link@comprehensive/observation/<bean:write name='observation_pk' />"><bean:write name="onerowofstemcount" property="observation_id_transl" /></a></td>
          </logic:notEqual>
          <%@ include file="autogen/taxonobservation_summary_data.jsp" %>

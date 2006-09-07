@@ -28,7 +28,7 @@
                   <%@ include file="autogen/reference_summary_head.jsp" %></tr>
 <logic:iterate name="reference-BEANLIST" id="onerowofreference">
 <tr class="@nextcolorclass@">
-<td class="largefield">
+<td class="smallfield">
 <a href="@get_link@detail/reference/@subst_lt@bean:write name='onerowofreference' property='reference_id' /@subst_gt@">
                             Details
                             </a>

@@ -1,7 +1,7 @@
 
 
 <!-- show dataset items -->
-<TD class="largefield" rowspan="2" valign="top" nowrap="nowrap">
+<TD class="smallfield" rowspan="2" valign="top" nowrap="nowrap">
 <bean:define id="ud_id" name="onerowofuserdataset" property="userdataset_id" />
  
 <vegbank:get id="userdatasetitem" select="userdatasetitem_counts" beanName="map" 
