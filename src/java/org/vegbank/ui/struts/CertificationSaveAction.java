@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2004-06-10 02:54:57 $'
- *	'$Revision: 1.10 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-09-07 21:01:03 $'
+ *	'$Revision: 1.11 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ import org.vegbank.common.model.WebUser;
 public class CertificationSaveAction extends VegbankAction {
 
 	private static Log log = LogFactory.getLog(CertificationSaveAction.class);
-
+    private static ResourceBundle vbResources = ResourceBundle.getBundle("vegbank");
 
 	public ActionForward execute(
 			ActionMapping mapping,
@@ -137,7 +137,7 @@ public class CertificationSaveAction extends VegbankAction {
 
 		messageBody.append("Dear VegPanel Member:\n")
 			.append(" Please review the following certification application. \n")
-			.append(" http://vegbank.org/vegbank/ViewCertification.do?certId=")
+            .append(" http://"+ vbResources.getString("serverAddress") + "/vegbank/ViewCertification.do?certId=")
 			.append(form.getCertId())
 			.append("\n\n")
 			
