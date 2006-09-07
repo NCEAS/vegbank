@@ -1,0 +1,146 @@
+#
+# '$RCSfile: ERROR_CORRECTION,v $'
+# '$Author: berkley $'
+# '$Date: 2006-09-07 19:29:26 $'
+# '$Revision: 1.1 $'
+# '$Date: 2006-09-07 19:29:26 $'
+#
+
+When things go wrong with Vegbank: What to do when something doesn't work
+-------------------------------------------------------------------------
+
+Detecting and evaluating errors
+-------------------------------
+There are numerous strange errors that could be produced by vegbank.  These
+errors can be delivered in several ways.  One way is for the server to 
+notify the user directly via the web site.  This usually comes in the form
+of an error page and hopefully gives the user some clue as to what went 
+wrong.  
+
+Another way is that the server may recover from an error, but
+write a message to the log file.  The log file is located in the 
+/usr/vegbank/logs directory.  The most current one will be called vegbank.log.
+It is helpful to 'tail' the log with the following command:
+tail -f /usr/vegbank/logs/vegbank.log
+
+This command will show you in real time as entries are added to the log file.
+A good way to debug is to have the log tailing in one window, then perform
+the action that caused the error and watch what happens to the log file.  
+
+Another way the system can provide error information is via the tomcat log,
+which contains any messages sent to the servlet container itself.  This log
+is in /usr/local/devtools/jakarta-tomcat/logs and the most recent is called 
+catlina.out.  This log can also be tailed and watched for errors.
+
+Recovering from errors
+----------------------
+The most serious problems can occur when tomcat runs out of memory.  This 
+usually happens when a file in memory gets too big (such as when you're 
+downloading a ton of plots in an xml file).  Usually tomcat will recover
+itself, but if it doesn't and the vegbank webapp becomes unresponsive, tomcat
+will need to be restarted (see Restarting Vegbank Subsystems below).
+
+Memory issues can be debugged through the use of a few standard commands.  The
+command 'free' tells you how much free memory is left on the system.  The 
+output will look something like this:
+
+[berkley@vegbank vegbank]$ free
+             total       used       free     shared    buffers     cached
+Mem:       3035248    3019660      15588          0      99380     988428
+-/+ buffers/cache:    1931852    1103396
+Swap:      2048248    1447180     601068
+
+In this example, there is 15 MB (15588 KB) of free memory available.  If the
+free level is close to 0, usually tomcat will need to be restarted.  A way 
+to see if java is the culprit is to use the 'top' command:
+
+[berkley@vegbank vegbank]$ top
+11:59:49  up 671 days, 18:02,  7 users,  load average: 0.00, 0.06, 0.05
+205 processes: 204 sleeping, 1 running, 0 zombie, 0 stopped
+CPU states:  cpu    user    nice  system    irq  softirq  iowait    idle
+           total    0.0%    0.0%    0.4%   0.0%     0.0%    0.0%   99.5%
+           cpu00    0.0%    0.0%    0.0%   0.0%     0.0%    0.0%  100.0%
+           cpu01    0.0%    0.0%    0.9%   0.0%     0.0%    0.0%   99.0%
+           cpu02    0.0%    0.0%    0.9%   0.0%     0.0%    0.0%   99.0%
+           cpu03    0.0%    0.0%    0.0%   0.0%     0.0%    0.0%  100.0%
+Mem:  3035248k av, 3026796k used,    8452k free,       0k shrd,   99432k buff
+                   2235720k actv,  425716k in_d,   64072k in_c
+Swap: 2048248k av, 1447176k used,  601072k free                  988820k cached
+
+  PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME CPU COMMAND
+26850 tomcat    25   0 1585M 1.5G 26884 S     0.0 53.1   0:06   0 java
+26852 tomcat    15   0 1585M 1.5G 26884 S     0.0 53.1  67:15   3 java
+26853 tomcat    15   0 1585M 1.5G 26884 S     0.0 53.1   1:10   0 java
+
+Top will give you a running total of what processes are using which resources.
+You can sort by CPU usage (type 'P' while top is running) or memory usuage 
+(type 'M' while top is running). In this example, java is the number one memory
+user with 53.1% of the total system memory.  It is normal for there to be 
+many java processes running under the tomcat username.  If the system
+is locked up and you see that any one of the java processes is constantly
+using 100% of a CPU for an extended period of time, that process is usually 
+locked up and tomcat needs to be restarted.
+    
+Other not-so-serious errors should be handled by tomcat or vegbank and may
+do something inocuous such as terminate a users download.  If an error does
+not fix itself, restarting tomcat is usually the best way to deal with it.
+
+If there are any data issues, you may see that postgreSQL has somehow locked up
+or is stuck on a process.  Top will indicate this to you if you see the 
+process 'postmaster' hogging 100% of one or more CPUs for a prolonged period.
+This can be fixed by restarting postgres.
+
+Restarting Vegbank Subsystems
+-----------------------------
+TOMCAT
+1) su root
+2) cd /etc/init.d
+3) ./tomcat restart
+
+POSTGRES
+1) su root
+2) cd /etc/init.d
+3) ./postgresql restart
+
+APACHE (HTTPD)
+1) su root
+2) cd /etc/init.d
+3) ./httpd restart
+
+*Note that if you are bringing the system up and none of these systems are 
+running, the order you should bring them up in is 
+1) postgres
+2) tomcat
+3) apache
+
+Utilities
+---------
+There are several utilities located in the /usr/vegbank/bin directory.  The 
+main ones that deserve comment are:
+1) vbdump -- the backup script.  This is run from /etc/cron.daily every night.
+   It creates the backup files in /usr/vegbank/backup and rotates them as needed.
+   It also calls vacuum analyze on the database which clears out uneeded handles
+   and makes the DB run faster.
+2) runAccGen -- runs the accession code generator
+3) runKwGen -- creates keywords for the quick search
+4) runDenorms.sh -- runs the denormalization for the quick search
+5) daily_maintenance.sh -- runs every night at 3 AM from a conjob setup on the
+   vegbank users's crontab.  This updates the info on the home page (various
+   plot counts, etc) and also removes any loose leaf datasets that are 
+   no longer referenced.
+   
+There are also some utilities that are not in the bin directory, but rather
+in the ant build.xml file.  These targets include:
+1) generateDBSQL -- generate all of the SQL needed for the db in the 
+   vegbank/build/sql dir
+2) generateBEANS -- generate all of the beans from the data model and put
+   them in the build dir
+3) dbVerify -- checks that the database matches the currently checked in 
+   data model
+4) runxmlcache -- caches all beans in the database as xml.  this shouldn't
+   need to be run unless you're building a db from scratch
+5) createdb -- creates an empty vegbank database
+6) binbuild -- copies all of the bin files to build/bin and does token
+   substitution
+7) bin -- copies all of the bin files to /usr/vegbank/bin and does token
+   substitution
