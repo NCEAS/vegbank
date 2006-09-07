@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: anderson $'
- *	'$Date: 2005-08-15 22:04:28 $'
- *	'$Revision: 1.15 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-09-07 23:27:10 $'
+ *	'$Revision: 1.16 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,9 +34,12 @@ import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.VBModelBeanToDB;
 import org.vegbank.common.utility.AccessionGen;
 import org.vegbank.common.utility.DatabaseAccess;
+import org.vegbank.common.utility.Utility;
+import org.vegbank.common.Constants;
 import org.vegbank.common.model.Userdatasetitem;
 import org.vegbank.common.model.Userdataset;
 import org.vegbank.common.model.VBModelBean;
+
 
 
 /**
@@ -396,14 +399,63 @@ public class DatasetUtility
         }
         dsiBean.setUserdatasetitem_id(-1); // don't check for duplicates
         dsiBean.setItemtype(ac.getEntityName());
-        dsiBean.setItemaccessioncode(ac.toString());
+        // get accessioncode from the db.  The accessionCode passed here is "ideal" but could be something else in db
+        //dsiBean.setItemaccessioncode(ac.toString());
+        String accCode = getTableAccessionCodeFromPK(ac.getEntityName(),ac.getEntityId().longValue());
+        if (Utility.isStringNullOrEmpty(accCode)) {
+            log.debug("couldn't get table accession code, so using ideal code");
+            accCode = ac.toString();
+        }
+        dsiBean.setItemaccessioncode(accCode);
         dsiBean.setItemtable(ac.getEntityName());
         dsiBean.setItemrecord(ac.getEntityId().toString());
         dsiBean.setItemdatabase(ITEM_DB);
-        log.debug("creating a DSI: " + ac.toString() + ", itemtable: " + dsiBean.getItemtable());
+        log.debug("creating a DSI (ideal accCode): " + ac.toString() + ", itemtable: " + dsiBean.getItemtable() + " and using accCode:" + accCode);
         return dsiBean;
     }
 
+
+    /**
+     * Get the accessionCode of the row in the database that has the same PK given
+     * 
+     * @param tableName
+     * @param lngPK
+     * @return string -- AccessionCode  of the record
+     */
+    public static String getTableAccessionCodeFromPK( String tableName, long lngPK )
+    {
+        StringBuffer sb = new StringBuffer();
+        String accCode = "";
+        try 
+        {
+            sb.append(
+                "SELECT " + Constants.ACCESSIONCODENAME +" from "+
+        tableName+" where " + Utility.getPKNameFromTableName(tableName) + " = '" + 
+        lngPK + "'"
+            );
+            //if (conn == null || conn.isClosed()) {
+            //    log.debug("connection was null or closed, so opening a new one");
+            //    conn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
+            //}
+            DatabaseAccess daNew = new DatabaseAccess();
+            ResultSet rs = daNew.issueSelect(sb.toString());
+            
+            //Statement query = conn.createStatement();
+            //ResultSet rs = query.executeQuery(sb.toString());
+            while (rs.next()) 
+            {
+                accCode = rs.getString(1);
+            }
+            rs.close();
+        }
+        catch ( SQLException se ) 
+        { 
+           // this.filterSQLException(se, sb.toString());     
+           log.debug("ERROR in getting accessionCode from db: " + se.toString());
+        }
+        //log.debug("Query: '" + sb.toString() + "' got PK = " + PK);
+        return accCode;
+    }
 
 
     /**

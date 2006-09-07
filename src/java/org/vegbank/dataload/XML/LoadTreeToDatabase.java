@@ -3,9 +3,9 @@
  *	Authors: @author@
  *	Release: @release@
  *
- *	'$Author: berkley $'
- *	'$Date: 2006-08-29 21:48:29 $'
- *	'$Revision: 1.47 $'
+ *	'$Author: mlee $'
+ *	'$Date: 2006-09-07 23:27:10 $'
+ *	'$Revision: 1.48 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -377,7 +377,7 @@ public class LoadTreeToDatabase
 
              //set off a thread that caches the XML generated from the beans
             java.util.Timer xmlGenTimer = new java.util.Timer();
-            Iterator accCodes = this.addAllAccessionCodes().iterator();
+            Iterator accCodes = this.addAllAccessionCodes(true).iterator();
             RunXMLGenTimerTask task = new RunXMLGenTimerTask(System.currentTimeMillis());
             task.setAccessionCode(accCodes);
             xmlGenTimer.schedule(task, new Date(System.currentTimeMillis()));
@@ -838,21 +838,37 @@ public class LoadTreeToDatabase
         keys.add(new Long(PK));
 	}
 	
+    /**
+     * Add accessionCodes to all the rows added by this loading.
+     */
+    private List addAllAccessionCodes(boolean returnRealAccCodes) throws SQLException
+    {
+        List accessionCodes = null;
+        
+        if ( Utility.isLoadAccessionCodeOn() ) {
+            if (returnRealAccCodes) {
+                // get the actual codes, not the "ideal" codes as some may be in incoming stream
+                log.debug("Updating accession codes for given PKs");
+                accessionCodes = ag.updateSpecificRows(tableKeys, returnRealAccCodes);
+            } else {
+              log.debug("Updating accession codes for given PKs");
+              accessionCodes = ag.updateSpecificRows(tableKeys);
+            }
+        } else {
+            log.debug("Accession code updates DISABLED");
+            accessionCodes = new ArrayList();
+        }
+        return accessionCodes;
+    }
+
+
 	/**
 	 * Add accessionCodes to all the rows added by this loading.
 	 */
 	private List addAllAccessionCodes() throws SQLException
 	{
-		List accessionCodes = null;
 		
-		if ( Utility.isLoadAccessionCodeOn() ) {
-            log.debug("Updating accession codes for given PKs");
-			accessionCodes = ag.updateSpecificRows(tableKeys);
-		} else {
-            log.debug("Accession code updates DISABLED");
-			accessionCodes = new ArrayList();
-		}
-		return accessionCodes;
+        return addAllAccessionCodes(false);
 	}
 	
 	

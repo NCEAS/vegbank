@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-28 22:34:54 $'
- *	'$Revision: 1.24 $'
+ *	'$Date: 2006-09-07 23:27:10 $'
+ *	'$Revision: 1.25 $'
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,9 @@ import java.util.ResourceBundle;
 import java.util.ArrayList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.vegbank.common.Constants;
+import org.vegbank.common.utility.Utility;
+import org.vegbank.common.utility.DBConnectionPool;
 
 import org.vegbank.common.utility.CommandLineTools.StatusBarUtil;
 
@@ -294,10 +297,12 @@ public class AccessionGen {
 		this.overwriteExtant = overwriteExtant;
 
 		try {
+            boolean connWasOpenedHere = false; 
             if (conn == null) {
                 Class.forName("org.postgresql.Driver");
                 conn = new DBConnection();
                 conn.setConnections(DriverManager.getConnection(dbURL, "vegbank", "dta4all"));
+                connWasOpenedHere = true; //so I can close it later
             }
 
 			//countRecords();
@@ -309,13 +314,13 @@ public class AccessionGen {
 
 			if (!s.equals("y")) {
 				System.out.println("Thanks anyway.");
-				conn.close();
+                if (connWasOpenedHere == true) {  conn.close(); }
 				System.exit(0);
 			}
 
 			genCodes();
 
-			conn.close();
+            if (connWasOpenedHere == true) {  conn.close(); }
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -422,7 +427,7 @@ public class AccessionGen {
 				// format
 				tmpConfirm = formatConfirmCode(tmpConfirm);
 
-				updateRowAC(tmpId, baseAC, tmpConfirm, pstmt);
+				updateRowAC(tmpId, baseAC, tmpConfirm, pstmt,tableName, false);
 			}
 
 			// tidy up the end of the status bar
@@ -439,6 +444,20 @@ public class AccessionGen {
 	}
 
 
+    /**
+     * Utility that updates a discrete set of rows with AccessionCodes.
+     * It takes a HashMap of tableNames.
+     * Each tableName is associated with a List of primary keys for the
+     * specific rows to be updated with newly generated AccessionCodes.
+     *
+     * @param tablesAndKeys
+     * @return List of AccessionCodes for root entities
+     * @throws SQLException
+     */
+    public List updateSpecificRows(Map tablesAndKeys) throws SQLException
+    {
+      return updateSpecificRows(tablesAndKeys, false);
+    }
 
 	/**
 	 * Utility that updates a discrete set of rows with AccessionCodes.
@@ -447,10 +466,11 @@ public class AccessionGen {
 	 * specific rows to be updated with newly generated AccessionCodes.
 	 *
 	 * @param tablesAndKeys
+     * @param realAccCodes: true if getting real accessionCodes, false if getting "ideal" ones (or skipped, see above function)
 	 * @return List of AccessionCodes for root entities
 	 * @throws SQLException
 	 */
-	public List updateSpecificRows(Map tablesAndKeys) throws SQLException
+    public List updateSpecificRows(Map tablesAndKeys, boolean realAccCodes) throws SQLException
 	{
 
 		String tableName;
@@ -480,7 +500,7 @@ public class AccessionGen {
                      
                         String confirmCode = getConfirmation(tableName, key.toString());
                     
-                        String accessionCode = this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt);
+                        String accessionCode = this.updateRowAC(key.longValue(), baseAC, confirmCode, pstmt,tableName, realAccCodes);
                         log.debug("updated accessionCode: " + accessionCode);
                         accessionCodeList.add(accessionCode);
                     }
@@ -492,7 +512,7 @@ public class AccessionGen {
 		return accessionCodeList;
 	}
 
-	private String updateRowAC(long tmpId, String baseAC, String tmpConfirm, PreparedStatement pstmt) throws SQLException
+    private String updateRowAC(long tmpId, String baseAC, String tmpConfirm, PreparedStatement pstmt, String tableName, boolean realAccCodes) throws SQLException
 	{
         //log.debug("updateRowAC >> " + tmpId + ", " + baseAC + " , " + tmpConfirm + " :: " + pstmt.toString()); 
 		StringBuffer tmpAC;
@@ -506,8 +526,58 @@ public class AccessionGen {
 		pstmt.setLong(2, tmpId);
         //log.debug("prepared statement is now (just before execute):" + pstmt.toString());
 		pstmt.executeUpdate();
-		return tmpAC.toString();
+        String actualAC = tmpAC.toString(); //default
+        if (realAccCodes) {
+          // this may not be the accessionCode on the record, if the accessionCode was preassigned, so check to see what it IS:
+          actualAC = getTableAccessionCodeFromPK(tableName,tmpId);
+          log.debug("returning " + actualAC + " not " + tmpAC.toString());
+          if (Utility.isStringNullOrEmpty(actualAC)) {
+              //use the generated one
+              actualAC = tmpAC.toString();
+              log.debug("above line says that the actual AC is not yet populated and wasn't by our efforts here, using: " + tmpAC.toString() + " after all ");
+          } 
+        }
+        return actualAC;
 	}
+
+    /**
+     * Get the accessionCode of the row in the database that has the same PK given
+     * 
+     * @param tableName
+     * @param lngPK
+     * @return string -- AccessionCode  of the record
+     */
+    public String getTableAccessionCodeFromPK( String tableName, long lngPK )
+    {
+        StringBuffer sb = new StringBuffer();
+        String accCode = "";
+        try 
+        {
+            sb.append(
+                "SELECT " + Constants.ACCESSIONCODENAME +" from "+
+        tableName+" where " + Utility.getPKNameFromTableName(tableName) + " = '" + 
+        lngPK + "'"
+            );
+            if (conn == null || conn.isClosed()) {
+                log.debug("connection was null or closed, so opening a new one");
+                conn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
+            }
+            Statement query = conn.createStatement();
+            ResultSet rs = query.executeQuery(sb.toString());
+            while (rs.next()) 
+            {
+                accCode = rs.getString(1);
+            }
+            rs.close();
+        }
+        catch ( SQLException se ) 
+        { 
+           // this.filterSQLException(se, sb.toString());     
+           log.debug("ERROR in getting accessionCode from db: " + se.toString());
+        }
+        //log.debug("Query: '" + sb.toString() + "' got PK = " + PK);
+        return accCode;
+    }
 
 	private PreparedStatement getUpdatePreparedStatement(String tableName) throws SQLException
 	{
