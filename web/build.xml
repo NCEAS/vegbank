@@ -6,8 +6,8 @@
 *    Release: @release@
 *
 * '$Author: mlee $'
-* '$Date: 2006-09-01 23:39:47 $'
-* '$Revision: 1.188 $'
+* '$Date: 2006-09-11 22:28:46 $'
+* '$Revision: 1.189 $'
 *
 *	Authors: John Harris
 *	Copyright: 2002 Regents of the University of California and the
@@ -128,7 +128,7 @@
 <property name="static_xmlserver" value="${vegdocs_server}/xml"/>
 <property name="vegbranch_src" value="./vegbranch"/>
 <!-- large binary files location:   targets that read from large binaries separate -->
-<property name="lrg_binary_src" value="${apache.document.root}/noncvs"/>
+<!-- <property name="lrg_binary_src" value="${apache.document.root}/noncvs"/> -->
 <filter token="dist" value="dist"/>
 <filter token="hostname" value="${hostname}"/>
 <filter token="version" value="development"/>
@@ -225,7 +225,7 @@
     <mkdir dir="${manual_server}"/>
     <mkdir dir="${vegbranch_server}"/>
     <mkdir dir="${manual_src_temp}"/>
-    <mkdir dir="${lrg_binary_src}"/>
+    <!-- <mkdir dir="${lrg_binary_src}"/> -->
   </target>
   
   
@@ -815,7 +815,7 @@
   </target>
   
   
-  <target name="vegbranch-dist-demomedia" depends="vegbranch-init" description="dist demo media to server from noncvs large binary src">
+  <target name="vegbranch-dist-demomedia" depends="vegbranch-init" description="dist demo media to server from large binary src">
     <copy todir="${vegbranch_server}/docs/demo/media" filtering="no">
       <fileset dir="vegbranch/media">
         <include name="**/*.*"/>

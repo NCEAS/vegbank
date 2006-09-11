@@ -1,0 +1,594 @@
+<?xml version="1.0"?>
+<!--
+  *  '$RCSfile: build.new.xml,v $'
+  *    Authors: @authors@
+  *    Release: @release@
+  *
+  * '$Author: berkley $'
+  * '$Date: 2006-05-25 20:07:44 $'
+  * '$Revision: 1.16 $'
+  *
+  *	Authors: Chad Berkley
+  *	Copyright: 2002 Regents of the University of California and the
+  *							National Center for Ecological Analysis and Synthesis
+  *
+  *  See http://jakarta.apache.org for details on Ant
+  *
+-->
+
+<!--
+============================================================================
+Usage Tips
+**********
+This build file should be used with the build.properties file in the same
+directory.  It also requires the web/build.xml file for the web installation.
+A normal installation goes like this:
+
+Set the variables in build.properties then
+ant -f build.new.xml install
+***now start/restart tomcat/apache.  after tomcat and apache are started (or restarted)
+***note that if tomcat is already running and you have it set to reload when 
+***it finds a new war file, you shouldn't have to manually restart it.  Apache
+***only needs to be restarted if something major happens.  Usually as long as
+***tomcat restarts on it's own, you're ok to go to the next step.
+ant -f build.new.xml web-install
+
+Try your url (i.e. http://localhost/vegbank) in your browser.  If any of the 
+links don't work go back and fix the properties in your build.properties file.
+
+If you want to do a clean install (removing the build files and re-compiling) do 
+ant -f build.new.xml clean install
+or to completely flush your system of all vegbank related stuff and start
+completely from scratch do
+ant -f build.new.xml full-clean install
+
+Target List
+***********
+
+Target        Description
+******        ***********
+init          initialize variables and pull properties from build.properties
+setFilters    sets the text filters to automatically change the @x@ variables
+prepare       copy files to prepare for compilation
+setclasspath  set the classpath for compilation
+compile       compile all java classes
+jar           put all java classes into a jar file
+warPrepare    copy files needed to build the war file (for servlet 
+              initialization)
+war           create the war file
+install       install the war file to the servlet container
+web-install   install the static web files from the web/ directory (uses 
+              the web/build.xml file)
+clean         delete the build and dist dirs
+full-clean    delete the build, dist, vegbank.home, apache.document.root, 
+              and the servlet context
+generateDBSQL generate the SQL to create a blank database from the datamodel
+generateBeans generate the java beans needed for compilation
+dbVerify      verify that the database and the datamodel are the same.  create
+              the status documents for the admin status display
+
+============================================================================
+-->
+<project name="vegbank" default="war" basedir=".">
+  <!--set up the correct variables-->
+  <target name="init">
+    <!--** customize these properties after customizing build.properties **-->
+    <!--general props-->
+    <property file="build.properties"/>
+    <property name="name" value="vegbank"/>
+    <property name="version" value="1.0.2"/>
+    <property name="vegbankHome" value="${vegbank.home.dir}"/>
+    <property name="dataPath" value="${vegbankHome}/data"/>
+    <property name="exportPath" value="${vegbankHome}/export"/>
+    <property name="uploadPath" value="${vegbankHome}/upload"/>
+    <property name="dataSchemaName" value="vegbank-data-ver1.0.2usage.xsd"/>
+    <property name="modelSchemaName" value="db_model_vegbank_schema.xsd"/>
+    <!--servlet/web container props-->
+    <property name="tomcatVersion" value="5"/>
+    <property name="context" value="${name}"/>
+    <property name="webapps" value="${webapps.dir}"/>
+    <property name="contextDir" value="${webapps}/${name}"/>
+    <property name="webServerDir" value="${apache.document.root}"/>
+    <property name="host" value="${hostname}"/>
+    <property name="googleMapsAPIKey" value=""/>
+    <property name="serverUrl" value="http://${host}"/>
+    <property name="contextUrl" value="${serverUrl}/${context}"/>
+    <property name="vegdocs" value="/vegdocs"/>
+    <!--database props-->
+    <property name="databasePassword" value="${databaseUserPassword}"/>
+    <!--mail server props-->
+    <property name="mailServer" value="${mail_host}"/>
+    <property name="mailPort" value="${mail_port}"/>
+    <property name="listserv" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
+    <property name="listservArchive" value="http://mercury.nceas.ucsb.edu/vegbank/pipermail/"/>
+    <property name="listservUserOptions" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/options/"/>
+    <!--rmi server props-->
+    <property name="rmiServer" value="${rmiserver}"/>
+    
+    
+    <!--** do not edit below here unless you really know what you're doing **-->
+    <property name="databaseConnection" value="${databaseConnectString}"/>
+    <property name="buildDir" value="build"/>
+    <property name="srcDir" value="src"/>
+    <property name="classDir" value="classes"/>
+    <property name="docsDir" value="docs"/>
+    <property name="libDir" value="lib"/>
+    <property name="distDir" value="dist"/>
+    <property name="webDir" value="web"/>
+    <property name="cacheDir" value="cache"/>
+    <property name="helpDir" value="${webDir}/help"/>
+    <property name="buildStatusDir" value="${buildDir}/status"/>
+    <property name="webStatusDir" value="${webServerDir}/status"/>
+    <property name="sqlSrcDir" value="${srcDir}/sql"/>
+  </target>
+  
+  <!--set the inline copy filters.  do not edit these directly. If you want
+      to edit these, do it in the properties in init.                       -->
+  <target name="setFilters" depends="init">
+    <tstamp>
+      <format property="currentTime" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+    </tstamp>
+    <filter token="databaseType" value="${databaseType}"/>
+    <filter token="databaseUser" value="${databaseUser}"/>
+    <filter token="databaseUserPassword" value="${databasePassword}"/>
+    <filter token="databasePort" value="${databasePort}"/>
+    <filter token="hostname" value="${host}"/>
+    <filter token="databaseDriverType" value="${databaseDriverType}"/>
+    <filter token="databaseDriverClass" value="${databaseDriverClass}"/>
+    <filter token="databaseConnectString" value="${databaseConnection}"/>
+    <filter token="databaseName" value="${databaseName}"/>
+    <filter token="psqlPath" value="${psqlPath}"/>
+    <filter token="vegbankVersion" value="${version}"/>
+    <filter token="vegbank.data.dir" value="${dataPath}/"/>
+    <filter token="vegbank.export.dirname" value="${exportPath}/"/>
+    <filter token="vegbank.home.dir" value="${vegbankHome}/"/>
+    <filter token="vegbank.web.dir" value="${webServerDir}/"/>
+    <filter token="schemaLocation" value="${webServerDir}/vegdocs/xml/"/>
+    <filter token="vegbankSchemaName" value="${dataSchemaName}"/>
+    <!-- End filters created from build.${context}.properties -->
+    <!-- Copied these straight from the veg_plot build.xml, are they relevant ? -->
+    <!-- Servlet specific -->
+    <filter token="mailHost" value="${mailServer}"/>
+    <filter token="mailPort" value="${mailPort}"/>
+    <filter token="machineURL" value="${host}"/>
+    <filter token="serverAddress" value="${host}"/>
+    <filter token="systemEmail" value="${mailServer}"/> <!--not sure if this is the right value-->
+    <filter token="genericForm" value="${context}/forms/generic_form.html"/>
+    <filter token="genericTemplate" value="${context}/forms/tmp.html"/>
+    <filter token="rmiserver" value="${rmiServer}"/>
+    <filter token="uploadDir" value="${uploadPath}"/>
+    <filter token="servlet_lib_dir" value="${webapps}/lib"/>
+    <filter token="servlet_context" value="${contextDir}/"/>
+    <!--loadfiles for the web stuff-->
+    <property name="includesServer" value="web/includes"/>
+    
+    <!--load main filters files-->
+    <filter filtersfile="${includesServer}/filters.properties"/>
+    <filter filtersfile="${includesServer}/placeurl.properties"/>
+
+    <!-- get filters for data dictionary defns: -->
+    <property name="docsXmlDir" value="${docsDir}/xml" />
+    <property name="dbmodelxml" value="${docsXmlDir}/db_model_vegbank.xml" />
+    <property name="helpManualDir" value="${helpDir}/manual"/>
+    <style in="${dbmodelxml}" out="${includesServer}/dd_defns_tokens.properties" style="${docsXmlDir}/getDefnsForFields.xsl" force="true" />
+    <filter filtersfile="${includesServer}/dd_defns_tokens.properties" />    
+    <style in="${helpManualDir}/manual_src.xml" out="${helpManualDir}/manual_filters.properties" style="${helpManualDir}/manual2tokens.xsl" force="true"/>
+    <copy file="${helpManualDir}/manual_filters.properties" tofile="${includesServer}/manual_filters.properties" filtering="yes" overwrite="true"/>
+    <filter filtersfile="${includesServer}/manual_filters.properties"/>
+    <style out="${includesServer}/closedlist-tokens.properties" in="${dbmodelxml}" extension=".properties" style="${docsXmlDir}/closedList_forms_options.xsl" force="true"/>
+    <copy file="${includesServer}/closedlist-tokens.properties" tofile="${includesServer}/closedlist-tokens.properties" filtering="yes" overwrite="true"/>
+    <filter filtersfile="${includesServer}/closedlist-tokens.properties"/>
+    
+    <!--filters for the web pages-->
+    <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
+    <loadfile srcfile="${includesServer}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration" />
+    <loadfile srcfile="${includesServer}/webpage_footer_small.html" property="webpage_footer_small_html" />
+    <loadfile srcfile="${includesServer}/webpage_footer.html" property="webpage_footer_html" />
+    <loadfile srcfile="${includesServer}/webpage_masthead_small.html" property="webpage_masthead_small_html" />
+    <loadfile srcfile="${includesServer}/webpage_masthead.html" property="webpage_masthead_html" />
+    <loadfile srcfile="${includesServer}/webpage_head.html" property="webpage_head_html" />
+    <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
+    
+    <!--filters for the web install-->
+    <filter token="webpage_top_html" value="${webpage_top_html}" />
+    <filter token="webpage_head_html" value="${webpage_head_html}" />
+    <filter token="webpage_masthead_html" value="${webpage_masthead_html}" />
+    <filter token="webpage_masthead_small_html" value="${webpage_masthead_small_html}" />
+    <filter token="webpage_footer_html" value="${webpage_footer_html}" />
+    <filter token="webpage_footer_small_html" value="${webpage_footer_small_html}" />
+    <filter token="webpage_stylesheets_declaration" value="${webpage_stylesheets_declaration}" />
+    <filter token="webpage_stylesheets_declaration_html" value="${webpage_stylesheets_declaration}"/>
+    
+    <!--connection filters from the old build file-->
+    <filter token="machine_url" value="${serverUrl}"/>
+    <filter token="eighty_eighty" value="${eighty_eighty}"/>
+    <filter token="googlemaps_apikey" value="${googleMapsAPIKey}" />
+    <filter token="dist" value="dist"/>
+    <filter token="hostname" value="${host}"/>
+    <filter token="version" value="development"/>
+    <filter token="base_url" value=""/>
+    <filter token="server_address" value="${serverUrl}"/>
+    <filter token="web_context" value="${contextUrl}/"/>
+    <filter token="get_link" value="/get/"/>
+    <filter token="cite_link" value="/cite/"/>
+    <filter token="image_server" value="${contextUrl}/images/"/>
+    <filter token="minimumwidth" value="650"/>
+    <!-- this is the minimum value for width of header and footer -->
+    <!-- the following is a duplicate : -->
+    <filter token="images_link" value="${contextUrl}/images/"/>
+    <filter token="stylesheet" value=""/>
+    <!-- this is handled in default head token -->
+    <!-- NO PARAMS on next token -->
+    <filter token="plotquery_page" value="${contextUrl}/forms/plot-query.jsp"/>
+    <!-- params allowed and encouraged on next 2 tokens -->
+    <filter token="plotquery_page_simple" value="${contextUrl}/forms/plot-query.jsp?simplemode=true"/>
+    <filter token="plotquery_page_advanced" value="${contextUrl}/forms/plot-query.jsp"/>
+
+    <filter token="uploaddata_page" value="${contextUrl}/forms/uploadFile.html"/>
+    <filter token="browseplotspage" value="/browse" />
+    <filter token="general_link" value="${contextUrl}/general/"/>
+    <filter token="ajax_link" value="${contextUrl}/ajax/"/>
+    <filter token="forms_url" value="${contextUrl}/forms/"/>
+    <filter token="views_link" value="${contextUrl}/views/"/>
+    <filter token="cache_link" value="${contextUrl}/cache/"/>
+    <filter token="admin_url" value="${contextUrl}/admin/"/>
+    <!-- add second token for forms, which is similarly named as other links -->
+    <filter token="forms_link" value="${contextUrl}/forms/"/>
+    <filter token="dbdictionary_link" value="${vegdocs}/dbdictionary/"/>
+    <filter token="includes_link" value="${contextUrl}/includes/"/>
+    <filter token="pubs_link" value="${vegdocs}/pubs/"/>
+    <filter token="history_link" value="${vegdocs}/history/"/>
+    <filter token="news_link" value="${vegdocs}/news/"/>
+    <!-- add link for page name that links to help frame jsp -->
+    <filter token="jspHelpPage" value="${contextUrl}/forms/getHelp.jsp"/>
+    <!-- location and filename of xml index page -->
+    <filter token="design_link" value="${vegdocs}/design/"/>
+    <filter token="panel_link" value="${vegdocs}/panel/"/>
+    <filter token="workshop_link" value="${vegdocs}/workshop/"/>
+    <filter token="vegbranch_link" value="${vegdocs}/vegbranch/"/>
+    <filter token="vegbranch_demo_link" value="${vegdocs}/vegbranch/docs/demo/"/>
+    <filter token="searchplugins_link" value="${vegdocs}/searchplugins/"/>
+    <filter token="xml_link" value="${vegdocs}/xml/"/>
+    <filter token="NativeXMLIndexPage" value="${vegdocs}/xml/vegbank-xml-index.html"/>
+    <filter token="help_link" value="${vegdocs}/help/"/>
+    <filter token="help" value="${vegdocs}/help/"/>
+    <filter token="manual_link" value="${vegdocs}/help/manual/"/>
+    <!-- SERVLETS -->
+    <filter token="framework_servlet" value="${contextUrl}/servlet/framework"/>
+    <filter token="usermanagement_servlet" value="${contextUrl}/servlet/usermanagement"/>
+    <filter token="datarequestservlet" value="${contextUrl}/servlet/DataRequestServlet"/>
+    <filter token="datasubmitservlet" value="${contextUrl}/servlet/DataSubmitServlet"/>
+    <filter token="nestedquerybuilder" value="${contextUrl}/servlet/QueryBuilderServlet"/>
+    <filter token="authenticationservlet" value="${contextUrl}/servlet/authenticate"/>
+    <!-- listserv -->
+    <filter token="listservinfo_link" value="${listserv}"/>
+    <filter token="listservarchive_link" value="${listservArchive}"/>
+    <filter token="listservuser_link" value="${listservUserOptions}" />
+    <!-- Struts -->
+    <filter token="DisplayUploadPlotAction" value="${contextUrl}/DisplayUploadPlotAction.do"/>
+    <!--Other-->
+    <filter token="subst_lt" value="&lt;"/>
+    <filter token="subst_gt" value="&gt;"/>
+  </target>
+  
+  <!--copy files to the build directory and prepare for compilation-->
+  <target name="prepare" depends="setFilters">
+    <property name="buildSrcDir" value="${buildDir}/${srcDir}"/>
+    <property name="buildClassDir" value="${buildDir}/${classDir}"/>
+    <property name="buildLibDir" value="${buildDir}/lib"/>
+    <property name="javaSrcDir" value="${srcDir}/java"/>
+    <property name="includesDir" value="${webDir}/includes"/>
+    <mkdir dir="${buildSrcDir}"/>
+    <mkdir dir="${buildClassDir}"/>
+    <mkdir dir="${buildLibDir}"/>
+    <mkdir dir="${dataPath}"/>
+    <mkdir dir="${exportPath}"/>
+    <mkdir dir="${uploadPath}"/>
+    <mkdir dir="${apache.document.root}"/>
+    <mkdir dir="${buildStatusDir}"/>
+    <mkdir dir="${webStatusDir}"/>
+    
+    <!--copy the java src to the build/src dir-->
+    <copy todir="${buildSrcDir}" filtering="yes">
+      <fileset dir="${javaSrcDir}">
+        <exclude name="**/CVS*"/>
+        <exclude name="**/.#*"/>
+      </fileset>
+    </copy>
+    
+    <!--copy .properties files-->
+    <copy todir="${buildClassDir}" filtering="yes">
+      <fileset dir="${javaSrcDir}">
+        <include name="**/*.properties"/>
+      </fileset>
+    </copy>
+    <copy todir="${buildClassDir}" filtering="yes">
+      <fileset dir="${includesDir}">
+        <include name="**/*.properties"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <!--set the classpath-->
+  <target name="setclasspath">
+    <path id="projectClassPath">
+      <!-- Project jars -->
+      <pathelement location="./"/>
+      <pathelement location="${buildSrcDir}"/>
+      <pathelement location="./"/>
+      <fileset dir="lib/">
+        <include name="**/*.jar"/>
+      </fileset>
+    </path>
+    <property name="classpath" refid="projectClassPath"/>
+  </target>
+  
+  <!--compile all files in build/src to build/classes-->
+  <target name="compile" depends="setclasspath, prepare, generateBeans">
+    <echo>classpath: ${classpath}</echo>
+    <javac srcdir="${buildSrcDir}"
+           destdir="${buildClassDir}"
+           classpath="${classpath}"
+           debug="on"
+           source="1.4"/>
+  </target>
+  
+  <!--jar all classes in build/classes to vegbank.jar-->
+  <target name="jar" depends="compile">
+    <jar destfile="${buildDir}/${name}.jar" update="true">
+      <fileset dir="${buildClassDir}"/>
+    </jar>
+  </target>
+  
+  <!--get everything in the right place to build the war file-->
+  <target name="warPrepare" depends="jar">
+     <property name="buildWarDir" value="${buildDir}/war"/>
+     <property name="srcWebInfDir" value="web/src/web/WEB-INF"/>
+     <property name="warWebInfDir" value="${buildWarDir}/WEB-INF" />
+     <property name="warLib" value="${buildWarDir}/lib" />
+     <property name="warContext" value="${buildWarDir}/${context}" />
+     <property name="warContextCacheDir" value="${warContext}/${cacheDir}"/>
+     <property name="cacheRawDir" value="${warContextCacheDir}/views/raw/" />
+     <mkdir dir="${cacheRawDir}" />
+     <mkdir dir="${warLib}" />
+     <mkdir dir="${warWebInfDir}" />
+     <mkdir dir="${warContext}" />
+     <mkdir dir="${warContextCacheDir}"/>
+     <mkdir dir="${cacheRawDir}"/>
+
+     <!--copy the vegbank.jar file-->
+     <copy file="${buildDir}/${name}.jar" todir="${warLib}" filtering="no"/>
+     
+     <!--copy the other jar files-->
+     <copy todir="${warLib}" filtering="no">
+       <fileset dir="${libDir}">
+          <include name="**/*.jar"/>
+       </fileset>
+     </copy>
+     
+     <!--copy the WEB-INF support files-->
+     <copy todir="${warWebInfDir}" filtering="yes">
+       <fileset dir="${srcWebInfDir}">
+          <include name="**/*.tld"/>
+          <include name="**/*.xml"/>
+          <exclude name="**/web.xml"/>
+       </fileset>
+     </copy>
+     
+     <!--copy the web files-->
+     <copy todir="${warContext}" filtering="yes">
+       <fileset dir="${webDir}">
+         <include name="*.jsp"/>
+         <include name="*.html"/>
+       </fileset>
+     </copy>
+
+     <!--
+     <copy todir="${warContext}/email_templates" filtering="yes">
+       <fileset dir="${webDir}/email_templates"/>
+     </copy>
+     <copy todir="${warContext}/images" filtering="no">
+       <fileset dir="${webDir}/images"/>
+     </copy>
+     <copy todir="${warContext}/panel" filtering="yes">
+       <fileset dir="${webDir}/panel"/>
+     </copy>-->
+     <!--<copy todir="${apache.document.root}">
+       <fileset file="${webDir}/.htaccess"/>
+     </copy>-->
+     <copy todir="${warContext}/includes" filtering="yes">
+       <fileset dir="${webDir}/includes">
+         <include name="**/*.jsp"/>
+       </fileset>
+     </copy>
+     <copy todir="${warContext}/general" filtering="yes">
+       <fileset dir="${webDir}/general">
+         <include name="**/*.jsp"/>
+       </fileset>
+     </copy>
+     <copy todir="${warContext}/forms" filtering="yes">
+       <fileset dir="${webDir}/forms">
+         <include name="**/*.jsp"/>
+       </fileset>
+     </copy> 
+     <copy todir="${warContext}/ajax" filtering="yes">
+       <fileset dir="${webDir}/ajax"/>
+     </copy> 
+     <copy todir="${warContext}/admin" filtering="yes">
+       <fileset dir="${webDir}/admin"/>
+     </copy>
+     <copy todir="${warContext}/views" filtering="yes">
+       <fileset dir="${webDir}/views"/>
+     </copy>
+     <copy todir="${warContext}" filtering="yes">
+       <fileset dir="${buildSrcDir}">
+         <include name="velocity.properties"/>
+       </fileset>
+     </copy>
+     <copy todir="${warContext}/xsl" filtering="yes">
+       <fileset dir="${srcDir}/xsl">
+         <include name="**/*"/>
+       </fileset>
+     </copy>
+     <copy todir="${apache.document.root}/vegdocs/xml" filtering="yes">
+       <fileset dir="${buildDir}/lib">
+         <include name="*.xsd"/>
+       </fileset>
+     </copy>
+     <!--<copy todir="${warContext}/vegdocs/help" filtering="yes">
+       <fileset dir="${webDir}/help">
+         <include name="**/*"/>
+       </fileset>
+     </copy>-->
+     <copy todir="${cacheRawDir}" filtering="yes">
+       <fileset dir="${webDir}/views/raw">
+         <include name="raw_countdata.jsp"/>
+         <include name="raw_recentprojects.jsp"/>
+       </fileset>
+     </copy>
+   </target>
+
+  <!--war build directory to vegbank.war--> 
+  <target name="war" depends="warPrepare">
+     <mkdir dir="${distDir}" />
+     <war destfile="${distDir}/${context}.war"
+          webxml="${srcWebInfDir}/web.xml">
+       <fileset dir="${warContext}"/>
+       <lib dir="${warLib}"/>
+       <webinf dir="${warWebInfDir}"/>
+     </war>
+   </target>
+  
+  <!--install war file to target webapps dir-->
+  <target name="install" depends="war">
+    <copy todir="${webapps}" filtering="no">
+      <fileset dir="${distDir}">
+        <include name="${context}.war"/>
+      </fileset>
+    </copy>
+    <!--<ant antfile="build.xml" target="deploy-all" dir="${webDir}"/>-->
+  </target>
+  
+  <!--install the web files-->
+  <target name="web-install" depends="prepare">
+    <ant antfile="build.xml" target="deploy-all" dir="${webDir}"/>
+    <echo file="${buildStatusDir}/deploy-props.txt">       -----------------DEPLOY PROPS STATUS------------------------@subst_lt@br/@subst_gt@       Properties last deployed at time: ${currentTime} @subst_lt@br/@subst_gt@       Connection to database Name: ${databaseName} @subst_lt@br/@subst_gt@       Deployed from : ${basedir} @subst_lt@br/@subst_gt@       vegbank version: ${version} @subst_lt@br/@subst_gt@       ---------------------------------------------------------------------@subst_lt@br/@subst_gt@       </echo>
+    <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
+    <echo file="${buildStatusDir}/verify.readme">${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
+    <!-- check the model, but don't fail on errors! -->
+    <!--<antcall target="db_verify"/>-->
+    <!-- copy status files to the file to server -->
+    <copy todir="${webStatusDir}" filtering="yes" overwrite="yes">
+      <fileset dir="${buildStatusDir}" includes="*.*"/>
+    </copy>
+  </target>
+  
+  <!--clean the install back to a clean slate-->
+  <target name="clean" depends="init">
+    <delete dir="${buildDir}"/>
+    <delete dir="${distDir}"/>
+  </target>
+  
+  <!--deletes the build dir but also any contents of a previous installation-->
+  <target name="full-clean" depends="clean">
+    <delete>
+      <fileset dir="${vegbank.home.dir}">
+        <include name="**/*"/>
+        <exclude name="logs/"/>
+      </fileset>
+    </delete>
+    <delete>
+      <fileset dir="${apache.document.root}" includes="**/*.*"/>
+    </delete>
+    <!--<delete>
+      <fileset dir="${vegbank.web.dir}" includes="**/*.*"/>
+    </delete>-->
+    <delete file="${webapps}/${context}.war"/>
+    <delete dir="${webapps}/${context}"/>
+  </target>
+  
+  <!--target that generates the sql to build a blank database-->
+  <target name="generateDBSQL" depends="init">
+    <xslt in="${docsDir}/xml/db_model_vegbank.xml" out="${buildDir}/sql/vegbank.sql" style="${srcDir}/xsl/VegBankModel2SQL.xsl"/>
+  </target>
+  
+  <!--
+  **************************************************************************
+  Targets below this line are helper targets that get depended on by
+  other targets but should generally never be called by themselves.
+  **************************************************************************
+  -->
+  
+  <!--Michael's new method of checking the database to match model xml-->
+  <target name="dbVerify" depends="prepare">
+    <!-- set to not fail unless already set -->
+    <condition property="failOnModelDiff" value="false">
+      <not>
+        <isset property="failOnModelDiff"/>
+      </not>
+    </condition>
+    <!-- validate first -->
+    <echo>Validating model XML against schema: at ${docsDir}/xml/${vegbank.schema.model}</echo>
+    <xmlvalidate file="${docsDir}/xml/db_model_vegbank.xml" failonerror="true">
+      <attribute name="http://apache.org/xml/features/validation/schema" value="true"/>
+      <attribute name="http://xml.org/sax/features/namespaces" value="true"/>
+      <property name="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation" value="${docs.dir}/xml/${vegbank.schema.model}"/>
+    </xmlvalidate>
+    <!-- get ideal model output -->
+    <xslt in="${docsDir}/xml/db_model_vegbank.xml" out="${buildStatusDir}/logicalmodel.txt" style="${docsDir}/xml/checkModelAgainstDB.xsl" force="true"/>
+    <!-- get acutal model output -->
+    <echo>Checking model with databaseUser = ${databaseUser} for database = ${databaseName}</echo>
+    <exec dir="${sqlSrcDir}" executable="psql">
+      <arg line="-U ${databaseUser} ${databaseName} -f verifyActualModel.sql -o ${buildStatusDir}/actualmodel.txt -At "/>
+    </exec>
+    <!-- compare ideal logical model to acutal model -->
+    <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
+    <echo> If the next line does not have 'Diff results: 0', and the build failed, this is because ${verify_readme}  The diff file is located here:</echo>
+    <echo file="${build.status.dir}/verify.readme">${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
+    <echo>------</echo>
+    <echo>${buildStatusDir}/modeldiffs.txt</echo>
+    <echo>------</echo>
+    <exec dir="${buildStatusDir}" executable="diff" output="${buildStatusDir}/modeldiffs.txt" resultproperty="diffResult" failonerror="${failOnModelDiff}">
+      <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>
+    </exec>
+    <echo>Diff results: ${diffResult}</echo>
+  </target>
+  
+  <!-- ================================================================= -->
+  <!-- Generate model beans, XML Digester rules, XML schema and JSP from -->
+  <!-- the datamodel XML and generate utility                            -->
+  <!-- javabeans                                                         -->
+  <!-- ================================================================= -->
+  <target name="generateBeans" depends="prepare">  
+    <!-- DOES NOT PICKUP CORRECT XSLT PROCCESOR FOR ME -->
+    <property name="xslSrcDir" value="${srcDir}/xsl"/>
+    <property name="buildBeanSrcDir" value="${buildSrcDir}/org/vegbank/common/model"/>
+    <property name="buildModelUtilitySrcDir" value="${buildBeanSrcDir}/utility"/>
+    <property name="vegbankSchemaData" value="vegbank-data-ver1.0.2usage.xsd"/>
+    <property name="modelGeneratedFlag" value="${buildSrcDir}/generate_java_datamodel-HAS_BEEN_RUN_FLAG"/>
+    <path id="classpath.compilation">
+      <pathelement path="${buildClassDir}"/>
+      <pathelement path="${buildSrcDir}"/>
+      <!-- Pick up non java resources -->
+      <fileset dir="${libDir}">
+        <include name="**/*jar"/>
+      </fileset>
+    </path>
+
+    <echo>Generating the regular VBModelBeans ...  using ${xslSrcDir}/VegBankModel2Java.xsl building to ${buildBeanSrcDir}/</echo>
+    <java classname="org.apache.xalan.xslt.Process" fork="true">
+      <arg line="-IN ${docsDir}/xml/db_model_vegbank.xml -XSL ${xslSrcDir}/VegBankModel2Java.xsl -OUT ${modelGeneratedFlag} -PARAM outdir ${buildBeanSrcDir}/"/>
+      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+    </java>
+    <echo>Generate the Utility javabeans e.g. statelist from ${docsDir}/xml/utility into ... ${buildModelUtilitySrcDir}/ using ${xslSrcDir}/UtilityXMLToJavaBeans.xsl</echo>
+    <java classname="org.apache.xalan.xslt.Process" fork="true">
+      <arg line="-IN ${docsDir}/xml/utility/UtilityBeans.xml -XSL ${xslSrcDir}/UtilityXMLToJavaBeans.xsl -OUT ${modelGeneratedFlag} -PARAM outdir ${buildModelUtilitySrcDir}/"/>
+      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+    </java>
+    <echo>Generate the vegbank schema xsd file ... ${buildLibDir}/${vegbankSchemaData}</echo>
+    <java classname="org.apache.xalan.xslt.Process" fork="true">
+      <arg line="-IN ${docsDir}/xml/db_model_vegbank.xml -XSL ${docsDir}/xml/dbmodel-to-schema.xsl -OUT ${buildLibDir}/${vegbankSchemaData}"/>
+      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
+    </java>
+  </target>
+</project>

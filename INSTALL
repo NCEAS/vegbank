@@ -1,10 +1,10 @@
 Installation instructions for Vegbank 
 Author: Chad Berkley
 Date Authored: 5/22/2006
-Updated: '$Date: 2006-09-05 18:25:59 $'
+Updated: '$Date: 2006-09-11 23:07:32 $'
 
-'$Author: berkley $'
-'$Revision: 1.13 $'
+'$Author: mlee $'
+'$Revision: 1.14 $'
 
 Pre-requisites:
 Java 1.4.2
@@ -282,3 +282,17 @@ look something like:
 </body>
 </html>
 
+=========================
+CRON JOBS
+=========================
+Periodic maintanence must be performed on a production database, like backing up
+the database, vacuuming it, and running other scripts to remove old datasets,
+setup the cached homepage data, etc.
+
+There are 2 cron jobs that accomplish this.  The first is the database backup
+which is normally set in /etc/cron.daily, which runs /usr/vegbank/bin/vbdump
+
+The second is set in the vegbank user's crontab as follows:
+bash$ su vegbank
+bash$ crontab -e
+50 03 * * * sh /usr/vegbank/bin/daily_maintenance.sh >> /usr/vegbank/logs/maintenance.log
