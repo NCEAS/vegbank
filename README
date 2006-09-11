@@ -1,9 +1,9 @@
 #
 # '$RCSfile: README,v $'
-# '$Author: berkley $'
-# '$Date: 2006-05-31 16:45:02 $'
-# '$Revision: 1.17 $'
-# '$Date: 2006-05-31 16:45:02 $'
+# '$Author: mlee $'
+# '$Date: 2006-09-11 22:03:55 $'
+# '$Revision: 1.18 $'
+# '$Date: 2006-09-11 22:03:55 $'
 #
 
 VEGBANK: Vegatation Plots Database and Archival System
@@ -39,7 +39,6 @@ See INSTALL file in this directory.
 
 PROPERTIES FILES:
 ----------------
-./veg_plot/build.properties - edit for your environment 
 ./build.properties - edit for your environment
 
 DATABASE SETUP:
@@ -47,7 +46,8 @@ DATABASE SETUP:
 ** For more information, see the INSTALL file.
 
 Vegbank has a single database for Plots, Plant Taxonomy and Plant 
-Community. There is also a Framework database for shared resources like users.
+Community.  It also includes information about users of the VegBank system
+and their personal datasets.
 
 Initializing PostgresSQL:
 
@@ -68,28 +68,13 @@ In an account that has rights to the database ( e.g. postgres )
 # Build the databases
 Some of the sql is auto generated using an ant task.
 In the vegclass directory run:
-> ant db_rebuild_vegbank
-
-There are finer grained tasks also see ant -projecthelp
-
-# Create framework database
-> psql framework < ./veg_plot/sql/create_veguser_tables.sql
+> ant createdb
 
 # Edit the pg_hba.conf file so that connections may be made to the database 
 # add the following:
 local      all                                               trust
 host       all  127.0.0.1                 255.255.255.255    trust
 #host       all  ip of RMI server etc.    255.255.255.255    trust
-
-# GRASS GIS SETUP
-
-This is open source program that is used by vegbank to work with geographic
-position data.
-
-Right now it is only used for geocoordinate coversion, it is a large dependancy
-just for that.
-
-The programs homepage is "http://www3.baylor.edu/grass/"
 
 
 Major Known Bugs or Feature Requests (see http://bugzilla.ecoinformatics.org)

@@ -1,5 +1,5 @@
 Upon a fresh checkout the following files need to be customized for the new
 system to work correctly.
 
-./vegbank/veg_plot/build.properties
+./vegbank/build.properties
 

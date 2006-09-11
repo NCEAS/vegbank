@@ -61,12 +61,12 @@ This doc describes issues, problems, and workarounds that we encounter that may 
  Components needed for building and running vegbank
 
   Ant: http://ant.apache.org/ is used for building vegbank
-  Junit: http://www.junit.org is our testing framework
+n/a?:  Junit: http://www.junit.org is our testing framework
   Postgresql: http://www.postgresql.org/ is our current Database
   CVS: http://www.cvshome.org/ is the version control system
   Java: http://java.sun.com is the main development language
-  Grass: http://grass.itc.it/ is needed for some gis calculations we do
-  Torque: http://jakarta.apache.org/turbine/torque/index.html is used to
+n/a:  Grass: http://grass.itc.it/ is needed for some gis calculations we do
+n/a:  Torque: http://jakarta.apache.org/turbine/torque/index.html is used to
      generate sql create scripts and data-dictionary.
   Tomcat: http://jakarta.apache.org/tomcat/ is the servlet container used.
 
@@ -99,5 +99,6 @@ This doc describes issues, problems, and workarounds that we encounter that may 
 		Error in DBConnectionPool ${databaseDriverClass} 
 
   If you see this then vegbank was build without a build.properties file
-
+  (no longer possible, ant will require that build.properties set many properties)
+  
 ------------------------------------------------------------------------------------------------------------------------

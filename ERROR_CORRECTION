@@ -1,9 +1,9 @@
 #
 # '$RCSfile: ERROR_CORRECTION,v $'
-# '$Author: berkley $'
-# '$Date: 2006-09-07 19:29:26 $'
-# '$Revision: 1.1 $'
-# '$Date: 2006-09-07 19:29:26 $'
+# '$Author: mlee $'
+# '$Date: 2006-09-11 22:03:55 $'
+# '$Revision: 1.2 $'
+# '$Date: 2006-09-11 22:03:55 $'
 #
 
 When things go wrong with Vegbank: What to do when something doesn't work
@@ -90,22 +90,30 @@ or is stuck on a process.  Top will indicate this to you if you see the
 process 'postmaster' hogging 100% of one or more CPUs for a prolonged period.
 This can be fixed by restarting postgres.
 
+Processes can be killed (with caution) by typing kill [PID] where PID is the process ID
+listed above.  Sometimes Java or Postmaster may get stuck and need to be killed. 
+
 Restarting Vegbank Subsystems
 -----------------------------
 TOMCAT
 1) su root
 2) cd /etc/init.d
 3) ./tomcat restart
+-- you should restart tomcat if you see OutOfMemory Errors, or if stuff generally isn't working.
+-- if you can't see any data on VegBank, this may be a tomcat error, or also postgres.
+-- if the system is really slow, there could be a stuck process (might have to kill it, see above)
 
 POSTGRES
 1) su root
 2) cd /etc/init.d
 3) ./postgresql restart
+-- do this if you've already restarted tomcat and data still isn't viewable on VegBank
 
 APACHE (HTTPD)
 1) su root
 2) cd /etc/init.d
 3) ./httpd restart
+-- do this if the website doesn't display anything at all (rare)
 
 *Note that if you are bringing the system up and none of these systems are 
 running, the order you should bring them up in is 
@@ -144,3 +152,13 @@ in the ant build.xml file.  These targets include:
    substitution
 7) bin -- copies all of the bin files to /usr/vegbank/bin and does token
    substitution
+
+
+Misc examples of things having gone wrong (and hopefully how they were fixed):
+-------------------------------------------------------------------------------------------------------------
+
+10-Sep-2006: when you type in http://vegbank.org in a web browser
+  it states that vegbank.org refused the connection.  This was fixed by Colby and was because:
+    "Apache was not loading cause it could not find the directory that it was trying to write the error log file 
+     to for the vegbank.org virtual host. It was trying to write to /usr/www/vegbank/logs/error.log and the 
+     logs directory did not exist there. I created it and started apache. It all seems to be working now."
