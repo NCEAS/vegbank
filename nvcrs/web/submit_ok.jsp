@@ -1,1 +1,0 @@
-<center>Succsessfully submitted.</center>
