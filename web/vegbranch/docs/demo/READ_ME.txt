@@ -1,6 +1,6 @@
 READ_ME.txt
 
-This folder contains HTML files that reference a "media" folder that is not part of cvs.  This is where all the videos live, in the noncvs folder.
+This folder contains HTML files that reference a "media" folder.
 
 These demos created with Camtasia Studio.  Nifty Program.
 
