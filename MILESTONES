@@ -1,0 +1,14 @@
+VEGBANK BUG LIST MILESTONE DEFINITIONS
+Michael Lee 11-SEP-2006
+
+UnMilestoned -- has not yet been determined where it belongs, if anywhere (default)
+Model -- earlier milestone, circa 2002
+1.0.0beta1 - earlier milestone
+1.1.0 - VegBank release VEGBANK_1_1_0 in CVS, released 08-SEP-2006
+1.2.0 - Any minor improvements after Summer 2006 release
+2.0.0 - First half of the next major grant
+3.0.0 - Second half of next major grant
+DontKnowWhen - Not sure when or even if this should be done
+WishList - Minor wishes for things we'd like to do.  Ideally used to categorize bugs that could be done whenever,
+  especially nice if someone is looking for something to do somewhat quickly.
+Postpone - Generally used for bugs that were attempted, but failed and it's not certain if we can do this, or not known when and or how
