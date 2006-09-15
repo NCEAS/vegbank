@@ -1,0 +1,95 @@
+----------------------------------------------------------
+----------------------------------------------------------
+  ADMINISTRATIVE GUIDE FOR ADMINISTRATING VEGBANK
+----------------------------------------------------------
+----------------------------------------------------------
+
+If you are trying to troubleshoot, see ERROR_CORRECTION instead!
+
+This guide describes how various things in the system work that 
+require administrative intervention.
+
+
+----------------------------------------------------------
+1) CERTIFICATION
+----------------------------------------------------------
+Certification is the process by which users gain additional 
+privileges so that they may access higher functionality,
+e.g., loading plot data, interpreting a plant, interpreting a
+plot, loading plants and communities, adding notes, etc.
+
+**Certification Scheme*************
+A user's certification level is based on their usr.permission_level
+field value.  This is a numeric field that is a combination (sum) of
+the following levels:
+ 1: registered
+ 2: certified
+ 4: professional
+ 8: admin
+ 
+ A user with all permission levels will have a value of 15 (1+2+4+8)
+ 
+Currently, professional permission doesn't give you access to anything
+in particular.  That may be reserved for future function such as 
+marking two plots as synonyms.
+
+**Requesting Certification**********
+A registered user requests certification at:
+http://vegbank.org/vegbank/LoadCertification.do
+
+Once a user fills this out, it sends email to 
+panel@vegbank.org (see later documentation on email lists).
+
+The Panel should review the application and once a decision has been
+made, the link from the email should be followed that looks like this:
+ http://vegbank.org/vegbank/ViewCertification.do?certId=[someNumber]
+ (you must be logged in as an admin to do this)
+ 
+There is currently no mechanism to bug the panel list to respond to 
+the certification requests other than this email queue.  So it is
+IMPORTANT NOT TO FORGET ABOUT THESE FOLKS!
+
+Once a user has been certified, you can adjust their permissions by
+selecting "Admin Menu" from homepage (again, while logged in as admin)
+Then "View/Edit Users" which takes you here:
+http://vegbank.org/vegbank/ListUsers.do
+This lists all VegBank users and their permission levels.  Click the 
+permission level to adjust their permissions in a new form.
+
+NOTE THAT USERS SHOULD ALWAYS HAVE REGISTERED LEVEL.
+AND THAT PROFESSIONAL USERS DO NOT BY DEFAULT ALSO HAVE THE CERTIFIED
+LEVEL.
+
+
+
+
+----------------------------------------------------------
+2)  EMAIL LISTS
+----------------------------------------------------------
+
+There are a number of email lists associated with VegBank.
+These are all administered through ecoinformatics.org.
+
+help@vegbank.org : Users send email here when they need
+help with the website/system.  Gets sent to developers.  
+
+dba@vegbank.org : Users send email here when they need
+help with their data loads, requests for data, etc.
+Gets sent to developers.
+
+users@vegbank.org: The public users mailing list.  Users
+can post messages to this forum and admins/developers
+can respond, as can other users.
+
+vegbranch@vegbank.org: The public VegBranch mailing list. 
+Similar to users list, but covers topics about VegBranch
+instead of VegBank.
+
+panel@vegbank.org: The certification panel for VegBank 
+certification requests.
+
+vegbank-cvs : This is the cvs commit mailing list for 
+VegBank developers.
+
+I think there is one additional list, but I can't recall
+what it is now.
