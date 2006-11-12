@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-09-07 21:01:03 $'
- *	'$Revision: 1.11 $'
+ *	'$Date: 2006-11-12 20:08:16 $'
+ *	'$Revision: 1.12 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -146,6 +146,7 @@ public class CertificationSaveAction extends VegbankAction {
 			.append(" Phone Number:  "+form.getPhoneNumber()+" \n\n")
 			.append(" Current Cert Level:  "+form.getCurrentCertLevelName()+" \n")
 			.append(" Requested Cert Level:  "+form.getRequestedCertName()+" \n")
+            .append("   -- info on levels:  http://"+ vbResources.getString("serverAddress") + "/vegdocs/help/userlevel.html \n")
 			.append(" Highest Degree:  "+form.getHighestDegree()+" \n");
 
 		// degreeYear
