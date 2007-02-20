@@ -12,6 +12,9 @@
   addEvent(window, "unload", VbGUnload);
   addEvent(window, "load", VbGLoadAllMapsThisPageWrapper);
 
+var CON_MAX_ZOOM_LEVEL_ALLOWED = 14; //prevents zooming in too much!
+var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons in mapping.
+
  function VbGLoadAllMapsThisPageWrapper() {
        VbGLoadAllMapsThisPage();
   }
@@ -80,15 +83,28 @@
         var minLng = boundsnew.getSouthWest().lng();
         var maxLng = boundsnew.getNorthEast().lng();
         
+        //get distance the map covers:
+        var rangeLat = maxLat - minLat;
+        var rangeLng = maxLng - minLng;
+        if (rangeLat < 0.2 || rangeLng < 0.2 ) {
+            //scoot the min out a bit so that the markers show:
+            //alert(rangeLat + "," + rangeLng + " trigger 0.1! adjustment");
+            minLat = minLat - 0.1;
+            maxLat = maxLat + 0.1;
+            minLng = minLng - 0.1;
+            maxLng = maxLng + 0.1;
+        }
+        
+        //alert('rangeLat: ' + rangeLat + ', rangeLong: ' + rangeLng);
         // set center as same
         whereismap.setCenter(new GLatLng((minLat + maxLat) * 0.5,(minLng + maxLng) * 0.5), 1);
         //array of points
         var points = [];
         //add the points, in sequence
-        points.push(new GLatLng(minLat, minLng));
+        points.push(new GLatLng(minLat, minLng ));
         points.push(new GLatLng(minLat, maxLng));
         points.push(new GLatLng(maxLat, maxLng));
-        points.push(new GLatLng(maxLat, minLng));
+        points.push(new GLatLng(maxLat, minLng ));
         points.push(new GLatLng(minLat, minLng));
              //  GLog.write("about to add overview polyline:");
         //overlay the array of points
@@ -110,6 +126,11 @@
             //center it and zoom according to GLatLngBounds:
             map.setCenter(new GLatLng( MyCenterLat,MyCenterLong));
             map.setZoom(map.getBoundsZoomLevel(boundsObj));
+            //alert('map zoom at: ' + map.getZoom());
+            //make sure we aren't too far zoomed in
+            if (map.getZoom() > CON_MAX_ZOOM_LEVEL_ALLOWED) {
+                map.setZoom(CON_MAX_ZOOM_LEVEL_ALLOWED);
+            }
           //  map.zoomOut();
             //maybe save this for returning to it later?
               if (blnSaveZoom==true) {
@@ -177,8 +198,8 @@
                  VbGiconPrefix = "map_google_l_";
               }
              //make sure the group number doesn't exceed 9
-             while (number > 9) {
-                 number = number - 10;
+             while (number > CON_MAX_GOOGLE_ICONS) {
+                 number = number - CON_MAX_GOOGLE_ICONS - 1;
              }
              var icon = new GIcon(baseIcon,"@images_link@" + VbGiconPrefix +  number + ".png");
              // icon.image = "@images_link@" + VbGiconPrefix +  number + ".png";
@@ -238,8 +259,8 @@ function VbGProvideKeyIcon(blnColored,number,elementToWrite) {
            VbGiconPrefix = "map_google_l_";
        }
        //check number that it's between 0 and 9
-       while (number > 9) {
-         number = number - 10;
+       while (number > CON_MAX_GOOGLE_ICONS) {
+         number = number - CON_MAX_GOOGLE_ICONS - 1;
        }
        //write to the element:
        //"@images_link@" + VbGiconPrefix +  number + ".png"
@@ -483,31 +504,153 @@ function VbGMakeMapQueryClickable(map) {
 
   }
 
-  function VbGMapURL(url,mapDivId,minLat,maxLat,minLng,maxLng) {
+  function VbGMapXML(xmlstring,mapDivId,minLat,maxLat,minLng,maxLng, blnSetBoundsBasedOnPlots) {
       //try to get map set:
-      alert(url);
-      var map = VbGMapLoadByBounds(mapDivId,parseFloat(minLat),parseFloat(maxLat),parseFloat(minLng),parseFloat(maxLng)) ;
-      GDownloadUrl(url, function(data, responseCode) {
+      //alert(url);
+      //GDownloadUrl(url, function(data, responseCode) {
       //  alert('got some data:' + data);
-        var xml = GXml.parse(data);
-        var markers = xml.documentElement.getElementsByTagName("plot");
+      //  var xml = GXml.parse(data);
+        var xmlobject = (new DOMParser()).parseFromString(xmlstring, "text/xml"); //only works with Firefox, or at least it fails with IE
+        var markers = xmlobject.getElementsByTagName("plot");
         var markerNumber = 0;
         var markerConfirmNumber = 80;
-        alert('got ' + markers.length + ' plots');
+        //alert('got ' + markers.length + ' plots');
+        var plotMinLat ; //new variable to hold real min & maxes
+        var plotMaxLat ;
+        var plotMinLng ;
+        var plotMaxLng ;
+        var map;
+        if (blnSetBoundsBasedOnPlots == true) {
+        //dont know where this is (yet)
+           map = VbGMapLoadByBounds(mapDivId,parseFloat(markers[0].getAttribute("latitude"))-1,parseFloat(markers[0].getAttribute("latitude"))+1,parseFloat(markers[0].getAttribute("longitude"))-1,parseFloat(markers[0].getAttribute("longitude"))+1) ;
+        } else {
+           map = VbGMapLoadByBounds(mapDivId,parseFloat(minLat),parseFloat(maxLat),parseFloat(minLng),parseFloat(maxLng)) ; 
+        }
         for (var i = 0; i < markers.length; i++) {
           // var point = new GLatLng(parseFloat(markers[i].getAttribute("latitude")),
           //                        parseFloat(markers[i].getAttribute("longitude")));
           // map.addOverlay(new GMarker(point));
          if (markerNumber >= 0) {
-
-                 VbGCreateMarker(parseFloat(markers[i].getAttribute("latitude")),
-                                      parseFloat(markers[i].getAttribute("longitude")),
-                                      "html placeholder",
+             var thisPlotLat =  parseFloat(markers[i].getAttribute("latitude")); //new variables to hold plot lat/long
+             var thisPlotLng = parseFloat(markers[i].getAttribute("longitude"));
+             if (i == 0) {
+                //init:
+                plotMinLat = thisPlotLat;
+                plotMaxLat = thisPlotLat;
+                plotMinLng = thisPlotLng;
+                plotMaxLng = thisPlotLng;
+             } else {
+                //not the first time here
+                if (thisPlotLat < plotMinLat) {plotMinLat = thisPlotLat;}
+                if (thisPlotLat > plotMaxLat) {plotMaxLat = thisPlotLat;}
+                if (thisPlotLng < plotMinLng) {plotMinLng = thisPlotLng;}
+                if (thisPlotLng > plotMaxLng) {plotMaxLng = thisPlotLng;}
+             }
+                 VbGCreateMarker(thisPlotLat,
+                                      thisPlotLng,
+                                      markers[i].getAttribute("name"),
                                       1, true, map, markerNumber, markerConfirmNumber);
               // markers[i].getElementsByTagName("htmltoshow").toString()
               markerNumber ++;
             }
           }
-       });
+          if (blnSetBoundsBasedOnPlots == true) {
+              //reset map boundaries 
+              VbGFixZoomToBounds(map,plotMinLat,plotMaxLat,plotMinLng,plotMaxLng,true) 
+          }
+          
+       //}); //old GDownloadUrl, which failed b/c of permissions... weird.
+       return map;
    }
 
+  function VbGMapCSV(csvstring,mapDivId,minLat,maxLat,minLng,maxLng, blnSetBoundsBasedOnPlots, blnTryToMarkProjects) {
+      //try to get map set:
+      //alert(url);
+      //GDownloadUrl(url, function(data, responseCode) {
+      //  alert('got some data:' + data);
+      //  var xml = GXml.parse(data);
+        //var xmlobject = (new DOMParser()).parseFromString(xmlstring, "text/xml"); 
+        //first, replace the newlines with ; in the csv string:
+        // alert('start csv:' + csvstring);
+        var csvOneLine = csvstring.replace(/\n/g,";");
+        // alert('one line csv: ' + csvOneLine);
+        var markers = csvOneLine.split(";");
+        // alert('found ' + markers.length + ' plots');
+        var markerNumber = 0;
+        var markerConfirmNumber = -1; //default
+        var colorNumber = 0; //0-9
+        //alert('got ' + markers.length + ' plots');
+        var plotMinLat ; //new variable to hold real min & maxes
+        var plotMaxLat ;
+        var plotMinLng ;
+        var plotMaxLng ;
+        var map;
+
+        var thisPlotPrefix = "";
+        var lastPlotPrefix = "";
+        
+        for (var i = 0; i < markers.length; i++) {
+           //  alert('plot #' + i + ': ' + markers[i]);
+             var thisPlotCSV = markers[i].split(",");
+             var thisPlotName = thisPlotCSV[0];
+             // check prefix and toggle marker?
+             if (blnTryToMarkProjects == true) {
+                 //make all delimiters into a dash
+                 var tempPlotName = thisPlotName.replace(/ /,"-");
+                 tempPlotName = tempPlotName.replace(/_/,"-");
+                 if (tempPlotName.indexOf("-") >= 0) {
+                     thisPlotPrefix = tempPlotName.split("-")[0]; //get whatever is before the dash
+                     if (thisPlotPrefix != lastPlotPrefix) { //if this prefix not same as last, increase colorNumber
+                         colorNumber ++;
+                         // but not past the max number of icons we have
+                         if (colorNumber > CON_MAX_GOOGLE_ICONS) {
+                             colorNumber = colorNumber -  CON_MAX_GOOGLE_ICONS - 1;
+                         } //too high for color number
+                     } //new prefix
+                     lastPlotPrefix = thisPlotPrefix; //setup for next iteration
+                  } //has a "dash" - keep same if no dash (prevents unprefixed plots from being calico)
+             } //trying to mark plots by project
+             
+           //  alert('  name:' + thisPlotName);
+             var thisPlotLat =  parseFloat(thisPlotCSV[1]); //new variables to hold plot lat/long
+            // alert('  lat:' + thisPlotLat);
+             var thisPlotLng = parseFloat(thisPlotCSV[2]);
+           //  alert('  long:' + thisPlotLng);
+
+         if (markerNumber >= 0 && !isNaN(thisPlotLat) && !isNaN(thisPlotLng) ) { //wasn't yet cancelled, is valid
+             if (markerNumber == 0) {
+                //initial run through this:
+                plotMinLat = thisPlotLat;
+                plotMaxLat = thisPlotLat;
+                plotMinLng = thisPlotLng;
+                plotMaxLng = thisPlotLng;
+                if (blnSetBoundsBasedOnPlots == true ) {
+                  //dont know where this is (yet)
+                  map = VbGMapLoadByBounds(mapDivId,thisPlotLat-1,thisPlotLat+1,thisPlotLng-1,thisPlotLng+1) ;
+                } else {
+                  map = VbGMapLoadByBounds(mapDivId,parseFloat(minLat),parseFloat(maxLat),parseFloat(minLng),parseFloat(maxLng)) ; 
+                }
+                
+             } else {
+                //not the first time here
+                if (thisPlotLat < plotMinLat) {plotMinLat = thisPlotLat;}
+                if (thisPlotLat > plotMaxLat) {plotMaxLat = thisPlotLat;}
+                if (thisPlotLng < plotMinLng) {plotMinLng = thisPlotLng;}
+                if (thisPlotLng > plotMaxLng) {plotMaxLng = thisPlotLng;}
+             }
+              markerNumber = VbGCreateMarker(thisPlotLat,
+                                      thisPlotLng,
+                                      thisPlotName,
+                                      colorNumber, true, map, markerNumber, markerConfirmNumber);
+              // markers[i].getElementsByTagName("htmltoshow").toString()
+              //markerNumber ++;
+            }
+          } //end of for loop
+          if (map && blnSetBoundsBasedOnPlots == true) {
+              //reset map boundaries 
+              VbGFixZoomToBounds(map,plotMinLat,plotMaxLat,plotMinLng,plotMaxLng,true) 
+          }
+          
+       //}); //old GDownloadUrl, which failed b/c of permissions... weird.
+       return map;
+   }
