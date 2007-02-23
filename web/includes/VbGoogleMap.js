@@ -563,7 +563,7 @@ function VbGMakeMapQueryClickable(map) {
        return map;
    }
 
-  function VbGMapCSV(csvstring,mapDivId,minLat,maxLat,minLng,maxLng, blnSetBoundsBasedOnPlots, blnTryToMarkProjects) {
+  function VbGMapCSV(csvstring,mapDivId,minLat,maxLat,minLng,maxLng, blnSetBoundsBasedOnPlots, blnTryToMarkProjects, zoomMapId) {
       //try to get map set:
       //alert(url);
       //GDownloadUrl(url, function(data, responseCode) {
@@ -638,9 +638,16 @@ function VbGMakeMapQueryClickable(map) {
                 if (thisPlotLng < plotMinLng) {plotMinLng = thisPlotLng;}
                 if (thisPlotLng > plotMaxLng) {plotMaxLng = thisPlotLng;}
              }
+              //get URL to link to on TopoZone
+              var thisPlotNameLabel = "Plot Name: " + thisPlotName;
+              var thisPlotMapZoomLink = "http://www.topozone.com/map.asp?lat=" + thisPlotLat + "&lon=" + thisPlotLng + "&datum=NAD83&s=24&size=m&extra=" + thisPlotName;
+             //function to show the map on TopoZone next to our map
+              var thisPlotOnClick='VbGUpdateZoomMap("' + zoomMapId + '","' + thisPlotNameLabel + '","' + thisPlotMapZoomLink + '");return false;';
+              var thisPlotHTML =  thisPlotNameLabel + "<br/><a href='#' onclick='" + thisPlotOnClick + "'>show plot on topo map</a><br/>This will appear below this map.";
+             
               markerNumber = VbGCreateMarker(thisPlotLat,
                                       thisPlotLng,
-                                      thisPlotName,
+                                      thisPlotHTML,
                                       colorNumber, true, map, markerNumber, markerConfirmNumber);
               // markers[i].getElementsByTagName("htmltoshow").toString()
               //markerNumber ++;
@@ -653,4 +660,18 @@ function VbGMakeMapQueryClickable(map) {
           
        //}); //old GDownloadUrl, which failed b/c of permissions... weird.
        return map;
+   }
+   
+   function VbGUpdateZoomMap(ZoomId,plotName,url) {
+       var zoomMapDiv = document.getElementById(ZoomId);
+       zoomMapDiv.style.display = 'block';
+       var zoomMapIFrame = zoomMapDiv.getElementsByTagName("iframe")[0];
+       zoomMapIFrame.src = url;
+       document.getElementById('zoomInPlotName').innerHTML = plotName;
+       document.getElementById('zoomInMapLink').href= url;
+   }
+   
+   function VbGCloseZoomMap(ZoomId) {
+       var zoomMapDiv = document.getElementById(ZoomId);
+       zoomMapDiv.style.display = 'none';
    }

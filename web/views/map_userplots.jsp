@@ -50,7 +50,7 @@
       function VbGLoadAllMapsThisPage() {
         <logic:notMatch name="csvdata" value="<">
           <bean:define id="dataValidated" value="true" />
-          var bigmap = VbGMapCSV(document.getElementById("domCSVData").value,"map",35,36,-127,-126, true, true) ;
+          var bigmap = VbGMapCSV(document.getElementById("domCSVData").value,"map",35,36,-127,-126, true, true, "zoomInMap") ;
           if (bigmap == null) {
             //clean up this page a bit:
             hidebyid("googleMapPageContainer");
@@ -100,7 +100,17 @@
         You are mapping plots from this URL: 
         <bean:write name="bean_latlongfile" />
       </logic:notEmpty>
-     
+  
+  <div id="zoomInMap" class="hidden" style="clear:both;position:relative; width:600px;height:450px; overflow:hidden; border:medium double rgb(0,0,0); ">
+    <iframe style="position: absolute; left:-191px; top:-167px; width: 791px; height: 617px; border: 0px none ; margin: 0px; overflow: hidden; " frameborder="0" scrolling="no"></iframe>
+    <div style="position:absolute; left:0px; top:0px; width:100%; height:100%; z-index:10">
+      <span id="zoomInPlotName" style="position:absolute;bottom:0px; left:0px; background-color:#CCCCCC">no plot selected</span>
+      <a id="zoomInCloseLink" style="position:absolute;top:0px;right:0px;background-color:#CCCCCC" href="#" onclick="VbGCloseZoomMap('zoomInMap');return false;">close</a>
+      <a id="zoomInMapLink" style="position:absolute;bottom:0px; right:0px; background-color:#CCCCCC" target="_new" href="#">bigger&gt;</a>
+    </div>
+  </div>
+  
+<DIV style="width:700px" style="clear:both;"><!-- start a container for rest of page -->
    <!-- all this page does is iterate through the plots and generate js to map them -->
   <div style="float:right" id="whereismap_wrapper">
     Initial location of larger map outlined here: </br/>    
@@ -117,6 +127,7 @@
   <p>
   <strong>If you'd like to map new plots, please see the instructions below:</strong>
   </p>
+</DIV>
 </logic:present> <!-- data here -->
 
 
@@ -174,5 +185,6 @@ to use an external file due to URL length limitations.
  
 <% } %>
 </p>
+
     @webpage_footer_html@
 
