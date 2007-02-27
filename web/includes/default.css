@@ -167,13 +167,13 @@ body>.someclass {
 -----------------------------------------------------------------------------------------------------
 */
 
-a {text-decoration: underline; padding: 1px; }
+.lk,a {text-decoration: underline; padding: 1px; }
 
-a:link { color: #04d; }
+.lk, a:link { color: #04d; }
 a:visited { color: #660099; }
-a:hover { color: #fff; background-color: #04d; text-decoration: none; }
+.lk:hover, a:hover { color: #fff; background-color: #04d; text-decoration: none; }
 
-
+.lk {color:#112ABB;text-decoration:underline;cursor:pointer;cursor:hand;white-space:nowrap }
 
 a:Link.sortlink { color: #336600; text-decoration: underline ; }
 a:Visited.sortlink { color: #336600; text-decoration: underline ; }
@@ -242,6 +242,16 @@ a.whitetext:hover	{ color: #3399FF; text-decoration: none}
 .notstrong a:link { color: #666666;}
 .notstrong a:visited { color: #666666;}
 .notstrong a:hover { color: #FFFFFF;}
+
+
+/*
+-----------------------------------------------------------------------------------------------------
+                                        MAPPING
+-----------------------------------------------------------------------------------------------------
+*/
+
+.vbgmaplabel {font-size: 8pt; width:350px; white-space: normal;} 
+
 
 
 /*
