@@ -33,13 +33,12 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
          var map = new GMap2(document.getElementById(elementId));
          map.setCenter(new GLatLng(lat,lng), zoomLevel);
       //   // alert( 'ok so far');
-          map.setMapType(G_SATELLITE_MAP);
+          map.setMapType(G_HYBRID_MAP);
           //save this position:
-          map.savePosition();
-         map.addControl(new GSmallMapControl());
+         map.savePosition();
+         map.addControl(new GLargeMapControl());
          map.addControl(new GMapTypeControl());
          map.addControl(new GScaleControl());
-
          return map;
       }
 
@@ -62,7 +61,7 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
      if (GBrowserIsCompatible()) {
        //this function loads up a map, but based on max and min coordinates rather than center
        var ctrLat = ((minLat + maxLat) * 0.5);
-       var ctlLng = ((minLng + maxLng) * 0.5);
+       var ctrLng = ((minLng + maxLng) * 0.5);
        //map via center
       // var map = VbGMapLoadByCenter(elementId,ctrLat,ctlLng,3);
        map.setCenter(new GLatLng(ctrLat,ctrLng));
@@ -117,7 +116,7 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
 
         function VbGFixZoomToBounds(map,minLat,maxLat,minLng,maxLng,blnSaveZoom) {
             // new way of zooming to right level, using getBoundsZoomLevel:
-            //get center and center it still:
+            
               var MyCenterLat =   (maxLat + minLat)*0.5 ;
             //   GLog.write('center Lat:' + MyCenterLat);
               var MyCenterLong = (minLng + maxLng)*0.5 ;
@@ -131,11 +130,43 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
             if (map.getZoom() > CON_MAX_ZOOM_LEVEL_ALLOWED) {
                 map.setZoom(CON_MAX_ZOOM_LEVEL_ALLOWED);
             }
-          //  map.zoomOut();
+            //see how close we are in pixels to the edges:
+            
+             var topMarginDeg = map.getBounds().getNorthEast().lat()-maxLat;
+             var bottomMarginDeg = minLat - map.getBounds().getSouthWest().lat();
+             var leftMarginDeg = minLng - map.getBounds().getSouthWest().lng();
+             var rightMarginDeg = map.getBounds().getNorthEast().lng()-maxLng;
+            //get map size, in pixels and in Lat/Long
+              var mapSizePxX = map.getSize().width;
+              var mapSizePxY = map.getSize().height;
+            //  GLog.write('mapSize X:' + mapSizePxX);
+            //  GLog.write('mapSize Y:' + mapSizePxY);
+            //  GLog.write('new bounds Lng:' + map.getBounds().getNorthEast().lng() + ',' + map.getBounds().getSouthWest().lng());
+            //  GLog.write('new bounds Lat:' + map.getBounds().getNorthEast().lat() + ',' + map.getBounds().getSouthWest().lat());
+              
+              var mapSizeDegLng = (map.getBounds().getNorthEast().lng() - map.getBounds().getSouthWest().lng());
+              var mapSizeDegLat = (map.getBounds().getNorthEast().lat() - map.getBounds().getSouthWest().lat());
+            //  GLog.write('mapSize Lat:' + mapSizeDegLat);
+            //  GLog.write('mapSize Long:' + mapSizeDegLng);
+                         
+            //estimate of how much this is in pixels:
+             var topMarginPx = ((topMarginDeg / mapSizeDegLat) * mapSizePxY);
+             var bottomMarginPx = ((bottomMarginDeg / mapSizeDegLat) * mapSizePxY);
+             var leftMarginPx = ((leftMarginDeg / mapSizeDegLng) * mapSizePxX);
+             var rightMarginPx = ((rightMarginDeg / mapSizeDegLng) * mapSizePxX);
+             //report:
+            // GLog.write('top margin, Lat:' + topMarginDeg + ' , px:' + topMarginPx);
+            // GLog.write('bottom margin, Lat:' + bottomMarginDeg + ' , px:' + bottomMarginPx);
+            // GLog.write('left margin, Lat:' + leftMarginDeg + ' , px:' + leftMarginPx);
+            // GLog.write('right margin, Lat:' + rightMarginDeg + ' , px:' + rightMarginPx);
+             if ( (topMarginPx < 30) || (bottomMarginPx < 10 ) || (leftMarginPx < 40) || (rightMarginPx < 15) ) {
+            //     GLog.write('zooming out, b/c it was too close!');
+                 map.zoomOut();
+             }
             //maybe save this for returning to it later?
-              if (blnSaveZoom==true) {
+            if (blnSaveZoom==true) {
                 map.savePosition();
-       }
+            }
    }
 
 
@@ -639,11 +670,11 @@ function VbGMakeMapQueryClickable(map) {
                 if (thisPlotLng > plotMaxLng) {plotMaxLng = thisPlotLng;}
              }
               //get URL to link to on TopoZone
-              var thisPlotNameLabel = "Plot Name: " + thisPlotName;
+              var thisPlotNameLabel = "Plot: <strong>" + thisPlotName + "</strong>";
               var thisPlotMapZoomLink = "http://www.topozone.com/map.asp?lat=" + thisPlotLat + "&lon=" + thisPlotLng + "&datum=NAD83&s=24&size=m&extra=" + thisPlotName;
              //function to show the map on TopoZone next to our map
               var thisPlotOnClick='VbGUpdateZoomMap("' + zoomMapId + '","' + thisPlotNameLabel + '","' + thisPlotMapZoomLink + '");return false;';
-              var thisPlotHTML =  thisPlotNameLabel + "<br/><a href='#' onclick='" + thisPlotOnClick + "'>show plot on topo map</a><br/>This will appear below this map.";
+              var thisPlotHTML = "<div class='vbgmaplabel'>" + thisPlotNameLabel + "<br/>Show on TopoZone.com map <a href='#' onclick='" + thisPlotOnClick + "'>below</a> or in a <a target='_new' href='" + thisPlotMapZoomLink + "'>new window</a> </div>";
              
               markerNumber = VbGCreateMarker(thisPlotLat,
                                       thisPlotLng,
@@ -663,6 +694,7 @@ function VbGMakeMapQueryClickable(map) {
    }
    
    function VbGUpdateZoomMap(ZoomId,plotName,url) {
+       //updates the zoomed in map to something new
        var zoomMapDiv = document.getElementById(ZoomId);
        zoomMapDiv.style.display = 'block';
        var zoomMapIFrame = zoomMapDiv.getElementsByTagName("iframe")[0];
@@ -672,6 +704,8 @@ function VbGMakeMapQueryClickable(map) {
    }
    
    function VbGCloseZoomMap(ZoomId) {
+       //closes the zoomed in map.
        var zoomMapDiv = document.getElementById(ZoomId);
        zoomMapDiv.style.display = 'none';
    }
+   
