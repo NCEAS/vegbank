@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.26 2006-09-05 21:03:12 mlee Exp $
+# $Id: .htaccess,v 1.27 2007-09-05 19:47:08 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -109,8 +109,8 @@ RewriteRule ^browse-byplant$	   @views_link@topdata.jsp?perPage=20&getonly=4    
 RewriteRule ^browse-byproject$	   @views_link@topdata.jsp?perPage=20&getonly=3       [NC,QSA,L,R]
 
 
-RewriteRule ^nvcrs$        http://152.2.14.231/nvcrs/     [NC,QSA,L]
-RewriteRule ^nvcrs/(.*)$   http://152.2.14.231/nvcrs/$1   [NC,QSA,L]
+RewriteRule ^nvcrs$        http://herbarium.unc.edu:8080/nvcrs/     [NC,QSA,L]
+RewriteRule ^nvcrs/(.*)$   http://herbarium.unc.edu:8080/nvcrs/$1   [NC,QSA,L]
 
 
 RewriteRule ^requestPreassignedAccCode/(.*)/(.*)$ @views_link@getNewRequestID.jsp?tablename=$1&recordcount=$2  [NC,QSA,L]
