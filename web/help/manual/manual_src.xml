@@ -482,13 +482,13 @@ and annoate this data.  How this process works is described on the <a href="@gen
       VegBank offers several tools that are extensions of the website.  These are listed in the Tools Section <highlight id="tut_tools"/> of the homepage.  These tools
       are designed to interact with the VegBank website, but generally function outside it.
     </manualHTML>
-    <manualItem finish="true" refURL="http://152.2.14.231/nvcrs/" name="national-vegetation-classification" topic="Vegetation Classification">
+	<manualItem finish="true" refURL="/nvcrs/" name="national-vegetation-classification" topic="Vegetation Classification">
       <manualHTML>
         <p>
       National Vegetation Classification Revision System (NVCRS) is an online vegtation type revision system for ecologists to submit their proposals for changes to the National Vegetation Classification System, for peer-viewers to evaluate submitted proposals and for panel members to make the final decisions to accept or decline a revision proposal.  
      </p>
         <p>VegBank is partnering with the NVCRS to help make the National Vegetation Classification an open process by which anyone (not just one private organization) may contribute
-     to the definition of plant communities and the revision process.  Please follow the link <a href="http://152.2.14.231/nvcrs/">to the NVCRS</a> for more information or to sign up.</p>
+			to the definition of plant communities and the revision process.  Please follow the link <a href="/nvcrs/">to the NVCRS</a> for more information or to sign up.</p>
       </manualHTML>
     </manualItem>
     <manualItem finish="true" refURL="@vegbranch_link@vegbranch.html" name="vegbranch" topic="VegBranch">
