@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--  * '$RCSfile: manual2html.xsl,v $'  *  Authors: @author@  *  Release: @release@  *  *  '$Author: mlee $'  *  '$Date: 2005-07-27 17:38:01 $'  *  '$Revision: 1.16 $'  *   * This program is free software; you can redistribute it and/or modify  * it under the terms of the GNU General Public License as published by  * the Free Software Foundation; either version 2 of the License, or  * (at your option) any later version.  *  * This program is distributed in the hope that it will be useful,  * but WITHOUT ANY WARRANTY; without even the implied warranty of  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the  * GNU General Public License for more details.  *  * You should have received a copy of the GNU General Public License  * along with this program; if not, write to the Free Software  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  * -->
+<!--  * '$RCSfile: manual2html.xsl,v $'  *  Authors: @author@  *  Release: @release@  *  *  '$Author: mlee $'  *  '$Date: 2007-09-05 20:02:40 $'  *  '$Revision: 1.17 $'  *   * This program is free software; you can redistribute it and/or modify  * it under the terms of the GNU General Public License as published by  * the Free Software Foundation; either version 2 of the License, or  * (at your option) any later version.  *  * This program is distributed in the hope that it will be useful,  * but WITHOUT ANY WARRANTY; without even the implied warranty of  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the  * GNU General Public License for more details.  *  * You should have received a copy of the GNU General Public License  * along with this program; if not, write to the Free Software  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  * -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" xmlns:redirect="http://xml.apache.org/xalan/redirect" extension-element-prefixes="redirect">
   <xsl:param name="anchorOneFile"/>
   <!-- # if one file made and linking to other areas with # links -->
@@ -41,7 +41,7 @@
 <title>VegBank--tutorial</title>
 
   @webpage_masthead_small_html@    
-          <table width="100%" height="100%" cellpadding="0" cellspacing="1" border="0">
+          <table  height="100%" cellpadding="0" cellspacing="1" border="0">
         <tr>
           <td valign="top" align="center">
             <h1>VegBank Tutorial Menu</h1>
@@ -83,7 +83,7 @@
 <title>VegBank Tutorial -- <xsl:value-of select="@topic"/>
       </title>
 
-  @webpage_masthead_small_html@<table height="{$heightPerc}%" width="100%" cellpadding="1" cellspacing="0" border="0">
+  @webpage_masthead_small_html@<table height="{$heightPerc}%" cellpadding="1" cellspacing="0" border="0">
         <tr>
           <td valign="top">
             <p class="major_smaller">VegBank tutorial  <a class="tut_link" href="{$menu_url_basic}">(menu)</a> <a name="{@name}.html"/><!-- not sure what this is for -->
@@ -105,8 +105,8 @@
           </td>
         </tr>
         <tr>
-          <td valign="bottom">
-            <table width="100%">
+          <td valign="bottom" align="center">
+            <table>
               <tr>
                 <td>
                   <xsl:variable name="empty_url">
@@ -129,7 +129,7 @@
                       </xsl:with-param>
                     </xsl:call-template>
                   </xsl:variable>
-                  <table width="100%">
+                  <table>
                     <tr>
                       <td align="left" class="sizetiny">
                           <xsl:choose>
