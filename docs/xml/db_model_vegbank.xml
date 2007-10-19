@@ -15559,32 +15559,32 @@ conditions may change between resampling events.
       <attList>
         <attListItem>
           <attListValue>Author</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Ideally, the field workers who sampled to plot, but it could also be the person who compiled and submitted the plot to the database, or the person who published the plot.</attListValueDesc>
           <attListSortOrd>1</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Computer (automated)</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Automated taxonomic change following a taxonomic revision.</attListValueDesc>
           <attListSortOrd>2</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Correction</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>A new interpretation was made because the interpreter has reason to believe that another determination was incorrect or of different certainty than stated.</attListValueDesc>
           <attListSortOrd>4</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Finer resolution</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>The interpreter has reason to believe that determination can be made at a finer level of taxonomic resolution.</attListValueDesc>
           <attListSortOrd>6</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Simplification for analysis</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>This is for the case where one marks up a plot to reflect the interpretaions used in an analysis of multiple plots where the plots had to have a common taxonomy for comparison purposes.  These interpretations are of relatively limited value except for documenting the analysis conducted, and many times this is better done in the supplemental material attached to the paper than in the plot database.</attListValueDesc>
           <attListSortOrd>3</attListSortOrd>
         </attListItem>
         <attListItem>
           <attListValue>Taxonomic revision</attListValue>
-          <attListValueDesc/>
+          <attListValueDesc>Changes in interpretation made to reflect taxonomic changes.</attListValueDesc>
           <attListSortOrd>5</attListSortOrd>
         </attListItem>
       </attList>
