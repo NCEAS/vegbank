@@ -478,7 +478,7 @@ function VbGMakeMapQueryClickable(map) {
     if (document.getElementById("pointsClicked").innerHTML == "0") {
        // first time, draw point:
        VbGCreateMarker(point.lat(),point.lng(), "This the first point <br/>on the map that you drew. <br/>It is a placeholder point until <br/>you click another point.", 0, true, map, 1, 500);   
-       // make sure that the values aren't preloaded (ie with back button):
+       // make sure that the values are not preloaded (ie with back button):
        VbGClearMapForm();
     } else {
         //ok to mark map
@@ -647,7 +647,10 @@ function VbGMakeMapQueryClickable(map) {
             // alert('  lat:' + thisPlotLat);
              var thisPlotLng = parseFloat(thisPlotCSV[2]);
            //  alert('  long:' + thisPlotLng);
-
+             var thisExtraPlotDetail = "  "; //init
+			 if (thisPlotCSV.length > 3) {
+                 thisExtraPlotDetail = thisPlotCSV[3];
+			 }
          if (markerNumber >= 0 && !isNaN(thisPlotLat) && !isNaN(thisPlotLng) ) { //wasn't yet cancelled, is valid
              if (markerNumber == 0) {
                 //initial run through this:
@@ -674,7 +677,7 @@ function VbGMakeMapQueryClickable(map) {
               var thisPlotMapZoomLink = "http://www.topozone.com/map.asp?lat=" + thisPlotLat + "&lon=" + thisPlotLng + "&datum=NAD83&s=24&size=m&extra=" + thisPlotName;
              //function to show the map on TopoZone next to our map
               var thisPlotOnClick='VbGUpdateZoomMap("' + zoomMapId + '","' + thisPlotNameLabel + '","' + thisPlotMapZoomLink + '");return false;';
-              var thisPlotHTML = "<div class='vbgmaplabel'>" + thisPlotNameLabel + "<br/>Show on TopoZone.com map <a href='#' onclick='" + thisPlotOnClick + "'>below</a> or in a <a target='_new' href='" + thisPlotMapZoomLink + "'>new window</a> </div>";
+              var thisPlotHTML = "<div class='vbgmaplabel'>" + thisPlotNameLabel + "<br/>" + thisExtraPlotDetail + "<br/>Show on TopoZone.com map <a href='#' onclick='" + thisPlotOnClick + "'>below</a> or in a <a target='_new' href='" + thisPlotMapZoomLink + "'>new window</a> </div>";
              
               markerNumber = VbGCreateMarker(thisPlotLat,
                                       thisPlotLng,
