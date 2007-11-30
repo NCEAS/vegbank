@@ -6,12 +6,12 @@
         <!-- first defaults: -->
         <bean:define id="mapWidth">700</bean:define>
         <bean:define id="mapHeight">500</bean:define>
-        
+
         <bean:define id="sml_link_html">small</bean:define>
         <bean:define id="med_link_html"><span class="lk" onclick="postNewParam('mapSize','m');return false;">Medium</span></bean:define>
         <bean:define id="lrg_link_html"><span class="lk" onclick="postNewParam('mapSize','l');return false;">LARGE</span></bean:define>
         <bean:define id="cust_link_html"><span class="lk" onclick="showbyid('resizeMapCustom');return false;">custom...</span></bean:define>
-        
+
         <logic:present parameter="mapSize">
            <logic:equal parameter="mapSize" value="s">
               <bean:define id="mapWidth">700</bean:define>
@@ -19,7 +19,7 @@
               <!-- reset sml link: -->
               <bean:define id="sml_link_html">small</bean:define>
            </logic:equal>
-  
+
            <logic:equal parameter="mapSize" value="m">
               <bean:define id="mapWidth">950</bean:define>
               <bean:define id="mapHeight">650</bean:define>
@@ -27,7 +27,7 @@
               <bean:define id="med_link_html">Medium</bean:define>
               <bean:define id="sml_link_html"><span class="lk" onclick="postNewParam('mapSize','s');return false;">small</span></bean:define>
            </logic:equal>
-           
+
            <logic:equal parameter="mapSize" value="l">
               <bean:define id="mapWidth">1350</bean:define>
               <bean:define id="mapHeight">800</bean:define>
@@ -43,15 +43,15 @@
              <bean:define id="noHideCustBox">NO</bean:define><!--prevent hidden later -->
            </logic:equal>
       </logic:present>
-  
+
   <logic:greaterThan name="mapWidth" value="750">
     <!-- sets stylesheet to full width stylesheet since it wont fit in regular VegBank page -->
     <bean:define id="FullPageWidthSuffix" value="_100perc" />
   </logic:greaterThan>
   @webpage_head_html@
- 
- 
- 
+
+
+
 <TITLE>Map YOUR plots (a service from VegBank)</TITLE>
 
      <!-- style bit is for google maps -->
@@ -60,48 +60,65 @@
        behavior:url(#default#VML);
      }
     </style>
-  
+
    <!-- the following file allows configured icons -->
-   <%@ include file="includeviews/inlinestyles.jsp" %> 
- 
-       
+   <%@ include file="includeviews/inlinestyles.jsp" %>
+
+
      <!-- key is set in build.properties -->
     <script src="http://maps.google.com/maps?file=api&v=2&key=@googlemaps_apikey@" type="text/javascript"></script>
 
     <script src="@includes_link@VbGoogleMap.js" type="text/javascript"></script>
-  
+<!-- debugging: NOT ON PRODUCTION!! -->
+<script language="javascript" type="text/javascript" src="http://aldo.vegbank.org/vegbank/includes/firebug/firebug.js"></script>
 
   <!-- this script deals with some imported XML as text then parses it to deal with mapping -->
 
   <!-- there should be a parameter: xmllatlong passed, get it -->
-  
+
   <bean:define id="dataValidated" value="false" /> <!-- default -->
 
 
-  
+
   <logic:present parameter="latlongfile">
       <bean:parameter id="bean_latlongfile" name="latlongfile" />
      <!-- now get the file as a writable object -->
      <logic:notEmpty name="bean_latlongfile">
        <bean:define id="newBeanCSVLoc"><bean:write name="bean_latlongfile" /></bean:define>
        <bean:include id="csvdata" href="<%= newBeanCSVLoc %>"/>
-     </logic:notEmpty>  
-  </logic:present> 
+     </logic:notEmpty>
+  </logic:present>
   <logic:present parameter="csvraw">
       <logic:notPresent name="csvdata"> <!-- not already defined -->
         <bean:parameter id="csvdata" name="csvraw" value="none" />
       </logic:notPresent>
   </logic:present>
+  <bean:define id="bean_drawboundary">false</bean:define><!-- default -->
+      <logic:equal parameter="drawboundary" value="true"> <!-- this restricts values to true or false -->
+        <bean:define id="bean_drawboundary">true</bean:define><!-- set to true -->
+      </logic:equal>
+      <logic:equal parameter="drawboundary" value="on"> <!-- this restricts values to true or false -->
+        <bean:define id="bean_drawboundary">true</bean:define><!-- set to true -->
+      </logic:equal>
+  <bean:define id="bean_drawaccuracy">false</bean:define><!-- default -->
+      <logic:equal parameter="drawaccuracy" value="true"> <!-- this restricts values to true or false -->
+        <bean:define id="bean_drawaccuracy">true</bean:define><!-- set to true -->
+      </logic:equal>
+      <logic:equal parameter="drawaccuracy" value="on"> <!-- this restricts values to true or false -->
+        <bean:define id="bean_drawaccuracy">true</bean:define><!-- set to true -->
+      </logic:equal>
+
+  <!-- see about some options to automatically draw boundaries: -->
 
       <!-- dataValidated prevents someone from escaping the textarea and inserting random code into this -->
-    <logic:present name="csvdata">  
+    <logic:present name="csvdata">
       <script type="text/javascript">
      //declare map object:
      var bigmap;
       function VbGLoadAllMapsThisPage() {
-        <logic:notMatch name="csvdata" value="<">
+       <logic:notMatch name="csvdata" value="<">
           <bean:define id="dataValidated" value="true" />
-          bigmap = VbGMapCSV(document.getElementById("domCSVData").value,"map",35,36,-127,-126, true, true, "zoomInMap") ;
+          bigmap = VbGMapCSV(document.getElementById("domCSVData").value,"map",35,36,-127,-126, true, true, "zoomInMap", <bean:write name="bean_drawaccuracy" />, <bean:write name="bean_drawboundary" />) ;
           if (bigmap == null) {
             //clean up this page a bit:
             hidebyid("googleMapPageContainer");
@@ -111,14 +128,14 @@
             //got a map
             // alert('got a map ok');
             VbGMapLoadWhereIsMap("whereismap",bigmap);
-          }  
-        </logic:notMatch>  
+          }
+       </logic:notMatch>
        }
 
-     
-     
+
+
        </script>
-     
+
      <style id="hideGoogleControlsViaCSS" type="text/css"></style>
      <script type="text/javascript">
        function showHideGoogleControls() {
@@ -142,9 +159,9 @@
        }
      </script>
      </logic:present>
-     
- @webpage_masthead_html@ 
-  @possibly_center@  
+
+ @webpage_masthead_html@
+  @possibly_center@
 
 <!-- see if there is even data defined.  If not, this page is a menu-->
 <logic:notPresent name="csvdata">
@@ -158,7 +175,7 @@
 <DIV id="alternateBigPageWrapper">
 <logic:present name="csvdata"><!-- we have data -->
   <logic:notEqual name="dataValidated" value="false"> <!-- and it is valid -->
-  
+
     <div id="mapTitleLine">
       <div id="mapsizesetter" style="float:right;">
       Controls: <span class="lk" onclick="showHideGoogleControls();return false;">show/hide</span>. --
@@ -167,7 +184,7 @@
       | <span style="font-size:12pt"><bean:write name="lrg_link_html" filter="false" /> </span>
       | <bean:write name="cust_link_html" filter="false" />
       <span id="resizeMapCustom" class="<bean:write name='noHideCustBox' ignore='true' />hidden">
-      
+
       <form name="sizeToCustom" action="<%= request.getRequestURL() %>" method="post">
         <logic:notPresent parameter="latlongfile">
         <textarea class="hidden" name="csvraw" cols="60" rows="6"><bean:write name="csvdata" filter="false" ignore="true"/></textarea>
@@ -176,24 +193,24 @@
           <input type="hidden" name="latlongfile" size="80" value='<bean:write name="bean_latlongfile" ignore="true"/>' />
         </logic:present>
         <input type="hidden" name="mapSize" value="custom" />
-      width=<input name="mapSizeWidth" value="<bean:write name='mapWidth' />" type="text" size="4" maxlength="5" /> 
-      height=<input  name="mapSizeHeight" value="<bean:write name='mapHeight' />" type="text" size="4" maxlength="5"/> (in pixels) 
+      width=<input name="mapSizeWidth" value="<bean:write name='mapWidth' />" type="text" size="4" maxlength="5" />
+      height=<input  name="mapSizeHeight" value="<bean:write name='mapHeight' />" type="text" size="4" maxlength="5"/> (in pixels)
       <input type="submit" value="resize" onclick="formConvertToGetIfURLLengthOK('sizeToCustom');"/></form></span>
       </div>
       <h2>Map YOUR plots</h2>
-      
+
     </div>
     <!-- dont forget a place to put the google map: -->
     <div id="googleMapPageContainer" style="clear: both;"> <!-- style="width: 700px" -->
       <div id="map" style="width:<bean:write name='mapWidth' />px; height:<bean:write name='mapHeight' />px"></div>
-    </div> 
-  
+    </div>
+
     <bean:define id="dataValidated" value="true" /><!-- tell that this is ok -->
     <textarea id="domCSVData" class="hidden"><bean:write name="csvdata" filter="false" /></textarea>
 
 
 
-  
+
   <div id="zoomInMap" class="hidden" style="clear:both;position:relative; width:600px;height:450px; overflow:hidden; border:medium double rgb(0,0,0); ">
     <iframe style="position: absolute; left:-191px; top:-167px; width: 791px; height: 617px; border: 0px none ; margin: 0px; overflow: hidden; " frameborder="0" scrolling="no"></iframe>
     <div style="position:absolute; left:0px; top:0px; width:100%; height:100%; z-index:10">
@@ -202,29 +219,29 @@
       <a id="zoomInMapLink" style="position:absolute;bottom:0px; right:0px; background-color:#CCCCCC" target="_new" href="#">bigger&gt;</a>
     </div>
   </div>
-  
+
 <!--DIV style="width:700px" style="clear:both;"--><!-- start a container for rest of page -->
-   
+
   <div style="float:right" id="whereismap_wrapper">
-    Initial location of larger map outlined here: </br/>    
-    <div id="whereismap" style="width: 190px; height: 100px"></div>      
+    Initial location of larger map outlined here: </br/>
+    <div id="whereismap" style="width: 190px; height: 100px"></div>
   </div>
 
     <p>
      <logic:notEmpty name="bean_latlongfile">
-      You are mapping plots from this URL: 
+      You are mapping plots from this URL:
       <bean:write name="bean_latlongfile" /> <br/>
-     </logic:notEmpty> 
-    
+     </logic:notEmpty>
+
     <strong>Linking to this page</strong><br/>
-    You can map plots, then link to this page with your plots mapped.  If you have a large number of plots, you may have 
+    You can map plots, then link to this page with your plots mapped.  If you have a large number of plots, you may have
     to use an external file due to URL length limitations.
 
     <br/>
 
     <% if (Utility.isStringNullOrEmpty( request.getQueryString() )) { %>
      <strong> You are mapping too many plots to link via a URL.</strong>
-     <br/>You can still send someone the link to this page: 
+     <br/>You can still send someone the link to this page:
      <pre><a href="<%= request.getRequestURL() %>"><%= request.getRequestURL() %></a></pre>
      <br/> and instruct them to paste in the plot locations: <br/>
      <pre><bean:write name="csvdata" filter="false" ignore="true"/></pre>
@@ -241,9 +258,10 @@
 
   <logic:equal name="dataValidated" value="false">
      <bean:define id="csvdata">--invalid!--</bean:define>
-    INVALID REQUEST!  The data you tried to map was not a validly formatted.  See below for how to structure this information.
+    INVALID REQUEST!  The data you tried to map was not a validly formatted.  See below for how to structure this information.  You probably have the less than sign (&lt;)
+    in your data.  These must be removed or encoded as &amp;lt;
   </logic:equal>
-  
+
   <p>
   <strong>If you'd like to map new plots, please see the instructions below:</strong>
   </p>
@@ -252,29 +270,35 @@
 
 
 <p>
-<strong>Option 1: Paste your data</strong>
-<br/>
+<h4>Option 1: Enter your data</h4>
+
 <form name="pasteCSVData" action="<%= request.getRequestURL() %>" method="post"><!-- action is self -->
-  Paste your csv data here, in the format stated below. <br/>
+  Copy and paste your csv data here, in the format stated <a href="#format">below</a>. <br/>
   <textarea name="csvraw" cols="60" rows="6"><bean:write name="csvdata" filter="false" ignore="true"/></textarea> <br/>
-  <input type="submit" value="map pasted plots" onclick="formConvertToGetIfURLLengthOK('pasteCSVData');"/>
+  <input type="submit" value="map entered plots" onclick="formConvertToGetIfURLLengthOK('pasteCSVData');"/>
   <input type="button" value="clear data" onclick="if (confirm('Really clear data?')) {forms.pasteCSVData.csvraw.value = '';} "/>
+  <input type="checkbox" name="drawaccuracy" <logic:equal name="bean_drawaccuracy" value="true">checked="checked"</logic:equal> /> draw accuracy (columns 5-6)
+  <input type="checkbox" name="drawboundary" <logic:equal name="bean_drawboundary" value="true">checked="checked"</logic:equal> /> draw plot boundaries (columns 7-12)
 </form>
 
 <hr/>
 
-<strong>Option 2: Link to your (csv) data</strong>
-  Specify where your data file is (must be publicly accessible on the internet):
+<h4>Option 2: Link to your data</h4>
+  Specify the location your csv (comma-separated values) data file (this must be publicly accessible on the internet):
   <form name="linkToCSVData" action="<%= request.getRequestURL() %>" method="get">
     <input type="text" name="latlongfile" size="80" value='<bean:write name="bean_latlongfile" ignore="true"/>' /> <br/>
     <input type="submit" value="map plots from file" />
+    <input type="checkbox" name="drawaccuracy" <logic:equal name="bean_drawaccuracy" value="true">checked="checked"</logic:equal> /> draw accuracy (columns 5-6)
+    <input type="checkbox" name="drawboundary" <logic:equal name="bean_drawboundary" value="true">checked="checked"</logic:equal> /> draw plot boundaries (columns 7-12)
   </form>
-  
+
 
 </p>
-<p><strong>Format: </strong>
+<a name="format"></a>
+<h4>Basic format: </h4>
+<p>
 Plot Name can only contain numbers, letters, spaces, underscores (_) and dashes (-).
-The CSV data should be structured as Plot Name, Latitude, Longitude 
+The CSV data should be structured: Plot Name, Latitude, Longitude
 where coordinates are in decimal degrees in WGS84 datum.  There should <b>not</b> be a header line.
 An example:
 <bean:define id="exampleFile">
@@ -282,8 +306,38 @@ xxx,35.12356,-118.43534
 yyy,37.12356,-119.43534
 </bean:define>
   <pre><bean:write name="exampleFile" filter="true" /></pre>
-
 </p>
+
+<h3>Advanced format:</h3>
+<p>It is possible to map more complex data, which is the same basic format, but has a few more columns:
+<strong>Basic plot information</strong>
+	<br/>Column 1:<strong>Plot Name</strong> - name of plot
+	<br/>Column 2:<strong>Latitude</strong><a onclick="popupDD('/dd/plot/latitude'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	   - Latitude of plot, in decimal degrees, in WGS84 Datum
+	<br/>Column 3:<strong>Longitude</strong><a onclick="popupDD('/dd/plot/longitude'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	  - Longitude of plot, in decimal degrees, in WGS84 Datum
+	<br/>Column 4:Extra information (optional)- this information, if present, is included in information boxes that are shown when you click on a plot marker.
+	<br/>
+<strong>Accuracy, optional</strong>
+	<br/>Column 5:Degrees "fuzzed" <a onclick="popupDD('/dd/plot/confidentialitystatus'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	  - this indicates location uncertainty due to masking the exact plot location and an approximate location is given instead, offset by the number of degrees indicated
+	<br/>Column 6:location accuracy (m) <a onclick="popupDD('/dd/plot/locationaccuracy'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	  - this is the estimated error of the original coordinates, in meters
+	<br/>
+<strong>Plot Shape, optional</strong>
+	<br/>Column 7:Plot azimuth <a onclick="popupDD('/dd/plot/azimuth'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	  - the compass bearing of the main axis of the plot, in degrees
+	<br/>Column 8:Plot X Dimension - the X dimension of the plot, in meters (if rectangular plot)
+	<br/>Column 9:Plot Y Dimension - the Y dimension of the plot, in meters (if rectangular plot)
+
+	<br/>Column 10:GPS receiver location X - the plot geocoordinates may or may not be taken from the 0,0 point on a plot.  This records the X position of the GPS unit when calculating plot location.
+	<br/>Column 11:GPS receiver location Y - same as above, but Y position of GPS receiver
+	<br/>Column 12:dsgPolygon <a onclick="popupDD('/dd/plot/dsgpoly'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	  - for non-rectangular plots, a series of coordinates may be specified that define the plot bounds, e.g. (0,0)(10,0)(0,10)(0,0) - a right triangle.
+  </p>
+
+
+
 
 
 

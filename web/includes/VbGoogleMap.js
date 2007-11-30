@@ -14,6 +14,10 @@
 
 var CON_MAX_ZOOM_LEVEL_ALLOWED = 14; //prevents zooming in too much!
 var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons in mapping.
+var CON_VBGMAP_ACCURACY_COLOR = "#FF0000";
+var CON_VBGMAP_FUZZING_COLOR = "#0000FF";
+var CON_LAT_TO_METERS_DIVISOR = 111131.9718; // the number of meters per degree latitude
+
 
  function VbGLoadAllMapsThisPageWrapper() {
        VbGLoadAllMapsThisPage();
@@ -70,7 +74,7 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
        return map;
      } //compatible
    }
-   
+
    function VbGMapLoadWhereIsMap(elementId,refMap) {
        // this function loads a "where is" map, or key to where something is.
         var whereismap = new GMap2(document.getElementById(elementId));
@@ -81,7 +85,7 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
         var maxLat = boundsnew.getNorthEast().lat();
         var minLng = boundsnew.getSouthWest().lng();
         var maxLng = boundsnew.getNorthEast().lng();
-        
+
         //get distance the map covers:
         var rangeLat = maxLat - minLat;
         var rangeLng = maxLng - minLng;
@@ -93,7 +97,7 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
             minLng = minLng - 0.1;
             maxLng = maxLng + 0.1;
         }
-        
+
         //alert('rangeLat: ' + rangeLat + ', rangeLong: ' + rangeLng);
         // set center as same
         whereismap.setCenter(new GLatLng((minLat + maxLat) * 0.5,(minLng + maxLng) * 0.5), 1);
@@ -112,11 +116,11 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
         //disable dragging to stop people from accidentally moving it
         whereismap.disableDragging();
    }
-   
+
 
         function VbGFixZoomToBounds(map,minLat,maxLat,minLng,maxLng,blnSaveZoom) {
             // new way of zooming to right level, using getBoundsZoomLevel:
-            
+
               var MyCenterLat =   (maxLat + minLat)*0.5 ;
             //   GLog.write('center Lat:' + MyCenterLat);
               var MyCenterLong = (minLng + maxLng)*0.5 ;
@@ -131,7 +135,7 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
                 map.setZoom(CON_MAX_ZOOM_LEVEL_ALLOWED);
             }
             //see how close we are in pixels to the edges:
-            
+
              var topMarginDeg = map.getBounds().getNorthEast().lat()-maxLat;
              var bottomMarginDeg = minLat - map.getBounds().getSouthWest().lat();
              var leftMarginDeg = minLng - map.getBounds().getSouthWest().lng();
@@ -143,12 +147,12 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
             //  GLog.write('mapSize Y:' + mapSizePxY);
             //  GLog.write('new bounds Lng:' + map.getBounds().getNorthEast().lng() + ',' + map.getBounds().getSouthWest().lng());
             //  GLog.write('new bounds Lat:' + map.getBounds().getNorthEast().lat() + ',' + map.getBounds().getSouthWest().lat());
-              
+
               var mapSizeDegLng = (map.getBounds().getNorthEast().lng() - map.getBounds().getSouthWest().lng());
               var mapSizeDegLat = (map.getBounds().getNorthEast().lat() - map.getBounds().getSouthWest().lat());
             //  GLog.write('mapSize Lat:' + mapSizeDegLat);
             //  GLog.write('mapSize Long:' + mapSizeDegLng);
-                         
+
             //estimate of how much this is in pixels:
              var topMarginPx = ((topMarginDeg / mapSizeDegLat) * mapSizePxY);
              var bottomMarginPx = ((bottomMarginDeg / mapSizeDegLat) * mapSizePxY);
@@ -169,24 +173,34 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
             }
    }
 
-
+  var VbG_global_mapMainMap = null;
   // Creates a marker whose info window displays the given html (not number)
-   function VbGCreateMarker(lat,lng, html, number,  blnColored, map, markerNumber, markerConfirmNumber) {
+   function VbGCreateMarker(lat,lng, html, number,  blnColored, map, markerNumber, markerConfirmNumber,
+            degreesErr,metersErr, azimuth, plotX, plotY, GPSX, GPSY, dsgPoly , blnAutoDrawAcc, blnAutoDrawBounds) {
          //this creates marker with listener that responds to clicks:
          // lat and lng are floating point latitude and longitude in decimal degrees
          // html is html to display for the marker (ie plot identification)
-         // number is the group number to display: 0-9 
+         // number is the group number to display: 0-9
          // blnColored is true if using small colored icons, else larger lettered ones
          // markerNumber is a counter for the number of plots mapped
          // markerConfirmNumber is a threshhold past which the user gets a confirmation message to continue mapping.
          // if markerConfirmNumber is -1, then uses the default, supplied in this function, else uses what is set in page
-         
+        // GLog.write('init VbGCreateMarker(' + lat+ ',' + lng+ ',' +  'html' + ',' +  number+ ',' +   blnColored+ ',' +  '[map]'+ ',' +  markerNumber+ ',' +  markerConfirmNumber+ ',' +             degreesErr+ ',' + metersErr+ ',' +  azimuth+ ',' +  plotX+ ',' +  plotY+ ',' +  GPSX+ ',' +  GPSY+ ',' +  dsgPoly + ',' +  blnAutoDrawAcc+ ',' +  blnAutoDrawBounds + ')');
+        //save map globally if not set:
+        if (VbG_global_mapMainMap) {
+			//fine
+		} else {
+			// GLog.write("set main global map.  Should happen only once.");
+			VbG_global_mapMainMap = map;
+		}
+
+
          if ( markerConfirmNumber == -1 ) {
-            markerConfirmNumber = 100 ; //default value 
+            markerConfirmNumber = 100 ; //default value
          }
-         
+
          // // alert( 'writing new marker at ' + lat + ',  ' + lng);
-//          GLog.write('trying marking #' + markerNumber);
+         //GLog.write('trying marking #' + markerNumber);
          //deal with whether or not to continue this?
          var keepMapping = true ; //default
          if (markerNumber < 0) {
@@ -200,6 +214,7 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
                  if (!confirm(markerNumber + " plots have been mapped, continue mapping (browser may get slow if too many plots are mapped)?")) {
 //                   GLog.write('marking #' + markerNumber + 'cancelled');
                      markerNumber =  -2; //set to not map anything else, though js will still be iterated through
+                     keepMapping = false ; //map no more!
                     // keepMapping = false; // for now, continue mapping this one.
                  }
              }
@@ -238,12 +253,115 @@ var CON_MAX_GOOGLE_ICONS = 9; //highest numbered colored icon for google icons i
 
              // show plot info when clicked
 
-             GEvent.addListener(marker, "click", function() {
-               marker.openInfoWindowHtml(html);
+             //see if there is circular accuracy or shape to draw:
+             var strMarkAccText = "" ; //init : info for user
+             var strMarkAccKey  = "" ; //init : key to marking on map
+             var strMarkAccFcn = "" ; //init //function to do it
+             strUserFuzzAccuracyNote = "" ; //init
+             if (metersErr == -1) {metersErr=null}; //null flag
+
+             if (degreesErr || metersErr) {
+				 strUserFuzzAccuracyNote = "<br/>Location masked: "; //style='color:" + CON_VBGMAP_FUZZING_COLOR + "'
+				 if (degreesErr) {
+					 strUserFuzzAccuracyNote = strUserFuzzAccuracyNote + degreesErr ;
+				 } else {
+					 strUserFuzzAccuracyNote = strUserFuzzAccuracyNote + "unknown";
+				 }
+				 strUserFuzzAccuracyNote = strUserFuzzAccuracyNote + " degrees. Accuracy: "; //style='color:" + CON_VBGMAP_ACCURACY_COLOR + "'
+				 if (metersErr) {
+					 strUserFuzzAccuracyNote = strUserFuzzAccuracyNote + metersErr ;
+				 } else {
+					 strUserFuzzAccuracyNote = strUserFuzzAccuracyNote + "unknown";
+				 }
+				 strUserFuzzAccuracyNote = strUserFuzzAccuracyNote + " meters.";
+
+
+				 // GLog.write(degreesErr);
+				 // GLog.write((degreesErr == null));
+				 // GLog.write(isNaN(degreesErr));
+				 var nzDegreesErr = degreesErr;
+				 if (nzDegreesErr==null || isNaN(nzDegreesErr) || nzDegreesErr=="") { nzDegreesErr="null" };
+				 var nzMetersErr =  metersErr;
+				 if (nzMetersErr==null || isNaN(nzMetersErr) || nzMetersErr=="") { nzMetersErr="null" };
+				 strMarkAccFcn = 'VbGMarkCircularAccuracy(' + lat + ',' + lng + ',' + nzDegreesErr + ',' + nzMetersErr + ',VbG_global_mapMainMap)';
+				 strMarkAccText = "<span class='lk VbG_markAccuracy' onclick='" + strMarkAccFcn + "'>Mark uncertainty</span>";
+				 strMarkAccKey = "(<span style='color:" + CON_VBGMAP_FUZZING_COLOR + "'>masking</span> + <span style='color:" + CON_VBGMAP_ACCURACY_COLOR + "'>accuracy</span>)";
+			 } else {
+				  //no deg/m err info available, forget about it:
+				  strMarkAccFcn = "";
+				  strMarkAccText = "";
+				  strMarkAccKey = "";
+				 }// degreesErr or metersErr passed
+
+            //see if there is sufficient info to map plot boundaries:
+            var thisDrawBoundsJS = "";
+            var thisDrawBoundsCmd = "" ; //init
+            var thisDrawBoundsInfo = "Plot boundaries: " ; //init
+				  var GPSXY = "" ;
+				  if (GPSX && GPSY) {
+					GPSXandY =  GPSX + ',' + GPSY; // both present
+				  } else {
+					GPSXandY = "null,null"; //one of both missing, don't pass last parameters
+				  }
+             if (plotX>0 && plotY>0 && (azimuth)) {
+				  //has X, Y, and azimuth, allow it to be mapped:
+				  // GLog.write("mapping via X,Y,azi");
+				  thisDrawBoundsJS = 'VbGDrawPlotBounds(VbG_global_mapMainMap,' + lat + ',' + lng + ',' + azimuth + ',' + plotX + ',' + plotY + ',' + GPSXandY + ');';
+				  thisDrawBoundsInfo = thisDrawBoundsInfo + plotX + "m (X) by " + plotY + "m (Y).  X @ " + azimuth + " deg.";
+			  } else { //lacks X,Y or azimuth
+				  if (dsgPoly && azimuth) { //has dsgPoly and azi
+				      // GLog.write("instructing to map via dsgPoly:" + dsgPoly);
+					  thisDrawBoundsJS = 'VbGDrawPlotBounds(VbG_global_mapMainMap,' + lat + ',' + lng + ',' + azimuth + ',null,null,' + GPSXandY + ',"' + dsgPoly + '");';
+					  // GLog.write("this draw bounds JS:" + thisDrawBoundsJS);
+					  thisDrawBoundsInfo = thisDrawBoundsInfo + dsgPoly ;
+				  } else { //lacks something vital for drawing boundaries
+                     //nothing to do!
+                     // GLog.write("nothing to do");
+                     thisDrawBoundsInfo = "";
+				  }
+			  } //has X,Y and azimuth or not
+			  //same command to draw, different JS, perhaps, if dsgPoly or not
+              if (thisDrawBoundsJS != "") {
+				  thisDrawBoundsCmd = "<span class='lk drawPlotBounds' onclick='" + thisDrawBoundsJS + "'>Draw plot boundaries</span>";
+			  }
+             var strTotalHTML = html ; //init
+             //accuracy:
+             strTotalHTML = strTotalHTML + strUserFuzzAccuracyNote;
+             if (strMarkAccFcn != "") { //have accuracy info
+				 if ((blnAutoDrawAcc == true) && (strMarkAccFcn != "")) {
+					 //do it now:
+						 eval(strMarkAccFcn);
+						 strTotalHTML = strTotalHTML + " Marked as: " + strMarkAccKey;
+				 } else { //add chance to mark accuracy:
+					 strTotalHTML = strTotalHTML  + "<br/>" + strMarkAccText + " - can be marked as: " + strMarkAccKey;
+				 }
+		     } //something to mark accuracy with
+
+             if (thisDrawBoundsJS != "") {
+				 if ((blnAutoDrawBounds == true)) {
+					 //draw it now
+					 eval(thisDrawBoundsJS);
+					 //still show info:
+					 strTotalHTML = strTotalHTML + "<br/>" + thisDrawBoundsInfo;
+				 } else {
+					 //allow them to draw it later:
+					 // GLog.write("including command to draw bounds.");
+					 strTotalHTML = strTotalHTML + "<br/>" + thisDrawBoundsInfo + " " + thisDrawBoundsCmd ;
+				 } //auto draw or not
+			 } //have boundary info
+
+             GEvent.addListener(marker, "click", function(overlay, point) {
+               marker.openInfoWindowHtml("<div class='vbgmaplabel'>" + strTotalHTML + "</div>");
              });
+           //  GLog.write('adding listener for double click before overlaying on map');
+           //  GEvent.addListener(marker, "dblclick", function() {
+			// 		  alert('I am double clicked!');
+			// 		  VbGMarkLine(lat-0.5,lng-0.5,lat+0.5,lng+0.5,map,000000,1,1)
+			//				 });
+
 //            GLog.write('before adding marker:');
               map.addOverlay(marker);
-              markerNumber ++;
+               markerNumber ++;
      } //keepMapping true
 //       GLog.write('returning: ' + markerNumber);
          return markerNumber;
@@ -301,8 +419,8 @@ function VbGProvideKeyIcon(blnColored,number,elementToWrite) {
 
 function VbGDifferentiateMarker(blnColored,lat,lng,degreesErr,metersErr) {
     //differentiate marker via accuracy:
-    //this does the reverse of VbGMarkCircularAccuracy, which uses degrees, this uses meters.
-          
+    //this does the reverse of VbG MarkCircularAccuracy, which uses degrees, this uses meters.
+
           //if metersErr is -1 then the actual error isn't known
           var blnUnknownErr  = false ; //default
           if (metersErr == -1) {
@@ -322,7 +440,7 @@ function VbGDifferentiateMarker(blnColored,lat,lng,degreesErr,metersErr) {
            //combinePrev with degreesErr
            var totalLatErr = latToMErr + metersErr;
            var totalLngErr = longToMErr + metersErr;
-         
+
          var avgErr = (totalLatErr + totalLngErr) * 0.5;
       //   alert ("avgErr: " + avgErr);
          // split into 5 classes:
@@ -337,8 +455,8 @@ function VbGDifferentiateMarker(blnColored,lat,lng,degreesErr,metersErr) {
          } else if (avgErr <= 200) {
              errClass = 2;
          } else if (avgErr <= 1000) {
-             errClass = 3; 
-         } else {    
+             errClass = 3;
+         } else {
              errClass = 4;
          }
          //now, if errClass is good, but metersErr wasn't known, then we have to say unknown accuracy:
@@ -354,7 +472,7 @@ function VbGDifferentiateMarker(blnColored,lat,lng,degreesErr,metersErr) {
            switch(errClass) {
              case 1:
                  iconNum = 2;
-                 break    
+                 break
             case 2:
                  iconNum = 6;
                   break
@@ -366,7 +484,7 @@ function VbGDifferentiateMarker(blnColored,lat,lng,degreesErr,metersErr) {
                   break
             case 5:
                  iconNum = 4;
-                  break      
+                  break
            } // switch ends
          } else {
            //not colored, use letters
@@ -378,41 +496,50 @@ function VbGDifferentiateMarker(blnColored,lat,lng,degreesErr,metersErr) {
            } //is unknown
          } //not colored
     return iconNum;
-  }     
-  
-  
+  }
 
 
 
-   function VbGMarkCircularAccuracy(lat,lng,degreesErr,metersErr,map) {
+
+//try using global map:
+   function VbGMarkCircularAccuracy(lat,lng,degreesErr,metersErr,circMap) {
        // this marks a map with a cirular-ish (really polygon) circle marking the inaccuracy in a plot's location
        // lat and lng are latitude and longitude in decimal degrees
        // degreesErr is error margin in degrees
        // metersErr is meters error, additive to degreesErr
+       if (!circMap) {
+		    circMap = VbG_global_mapMainMap;
+		    // GLog.write("VbGMarkCircularAccuracy> using global var as no map was passed.");
+		}
+
+      // GLog.write("init circular accuracy using global map var instead: north lat:" + circMap.getBounds().getNorthEast().lat());
+      // GLog.write("test draw on map");
+      // VbGMarkLine(circMap.getBounds().getNorthEast().lat()-1,circMap.getBounds().getNorthEast().lng()-1,circMap.getBounds().getNorthEast().lat(),circMap.getBounds().getNorthEast().lng(),
+      //   circMap,000000,1,1)
 
        //first, it calculates the meters error by guessing where the points should go,
        // using 111.319718km = 1 deg Lat and 75km = 1 deg Long (varies depending on where you are)
        //calc the meters err as longitude:
        // alert( 'init VbGMarkCircularAccuracy');
-       var mErrToLat = (metersErr / 111131.9718);
-       // GLog.write("Long Err:" + mErrToLong);
+       var mErrToLat = (metersErr / CON_LAT_TO_METERS_DIVISOR);
+      //  GLog.write("Long Err:" + mErrToLong);
        //calc the meters err as latitude, adjusting for by latitude:
-       // alert( 'starting math cosine');
+      // GLog.write( 'starting math cosine');
        var LongAdjust = Math.cos((lat * Math.PI) / 180);
-       // alert( "Long Adjustment is: " + LongAdjust);
+      // GLog.write( "Long Adjustment is: " + LongAdjust);
        var mErrToLong = (mErrToLat / LongAdjust);
-       // alert( metersErr + " -> Lat:" + mErrToLat );
-       // alert( "--Long:" + mErrToLong);
+      // GLog.write( metersErr + " -> Lat:" + mErrToLat );
+      // GLog.write( "--Long:" + mErrToLong);
        //now see if Google agrees:
        var OriginPoint = new GLatLng(lat,lng);
-    //   VbGCreateMarker(lat,lng, "Origin", 1,  false, map);
+       // VbGCreateMarker(lat,lng, "Origin", 1,  false, circMap);
        var LatErrPoint = new GLatLng(lat + mErrToLat,lng);
-      // VbGCreateMarker(lat + mErrToLat,lng, "Origin", 2,  true, map);
+       // VbGCreateMarker(lat + mErrToLat,lng, "Origin", 2,  true, circMap);
        var LongErrPoint = new GLatLng(lat,lng + mErrToLong);
-      // VbGCreateMarker(lat,lng + mErrToLong, "Origin", 3,  true, map);
-       // alert( "orig error was:" + metersErr);
-//     GLog.write("Google thinks error (meters) Lat:" + OriginPoint.distanceFrom(LatErrPoint) );
-//     GLog.write("-g--Long:" + OriginPoint.distanceFrom(LongErrPoint));
+       // VbGCreateMarker(lat,lng + mErrToLong, "Origin", 3,  true, circMap);
+      // GLog.write( "orig error was:" + metersErr);
+    // GLog.write("Google thinks error (meters) Lat:" + OriginPoint.distanceFrom(LatErrPoint) );
+    // GLog.write("-g--Long:" + OriginPoint.distanceFrom(LongErrPoint));
 
        //combinePrev with degreesErr
        var TotalLatErr = degreesErr + mErrToLat;
@@ -430,17 +557,17 @@ function VbGDifferentiateMarker(blnColored,lat,lng,degreesErr,metersErr) {
        for ( var i = 0; i < quarterDivisions; i++ ) {
          LatPoints.push(TotalLatErr * Math.sin(i * (Math.PI * 2) / (quarterDivisions)));
          LongPoints.push(TotalLngErr * Math.cos(i * (Math.PI * 2) / (quarterDivisions)));
-       //  GLog.write("added point:");
-       //  GLog.write(LatPoints[i]);
-       //  GLog.write(LongPoints[i]);
-        // VbGCreateMarker(lat+LatPoints[i],lng+LongPoints[i],"this is " + i,i,true,map);
+    //     GLog.write("added point:");
+    //     GLog.write(LatPoints[i]);
+    //     GLog.write(LongPoints[i]);
+         // VbGCreateMarker(lat+LatPoints[i],lng+LongPoints[i],"this is " + i,i,true,circMap);
          points.push(new GLatLng(lat + LatPoints[i],lng + LongPoints[i]));
        }
        // alert( 'done with loop');
        // push the original location again:
        points.push(new GLatLng(lat + LatPoints[0],lng + LongPoints[0]));
        // alert( 'pushed some points');
-       map.addOverlay(new GPolyline(points,"#CCCCCC"));
+       circMap.addOverlay(new GPolyline(points,"#CCCCCC"));
        // alert( 'added overlay #1');
        // also draw from origin going out 45 degrees to show the 2 different error sources: fuzzing and uncertainty
        var newPoints = [];
@@ -454,10 +581,10 @@ function VbGDifferentiateMarker(blnColored,lat,lng,degreesErr,metersErr) {
        evenNewerPoints.push(new GLatLng(midLat,midLng));
        evenNewerPoints.push(new GLatLng(lat - (TotalLatErr) * Math.sin(Math.PI / 4),lng + (TotalLngErr) * Math.cos(Math.PI / 4)));
        //draw overlays of different color indicating src of error:
-       map.addOverlay(new GPolyline(newPoints,"#FF0000"));
-       map.addOverlay(new GPolyline(evenNewerPoints,"#0000FF"));
+       circMap.addOverlay(new GPolyline(newPoints,CON_VBGMAP_ACCURACY_COLOR)); // accuracy
+       circMap.addOverlay(new GPolyline(evenNewerPoints,CON_VBGMAP_FUZZING_COLOR)); //fuzzing
        // alert( 'done with circular adding function');
-       
+
    }
 
 function VbGMakeMapQueryClickable(map) {
@@ -471,13 +598,13 @@ function VbGMakeMapQueryClickable(map) {
           //clear the first point, or anything already there
     //    alert("clearing overlays");
           map.clearOverlays();
-      }    
-      
+      }
+
       //map these with the current Lat/Long
-    //alert(prevLat + " , " + prevLong + " --> " + point.lat() + " , " + point.lng());  
+    //alert(prevLat + " , " + prevLong + " --> " + point.lat() + " , " + point.lng());
     if (document.getElementById("pointsClicked").innerHTML == "0") {
        // first time, draw point:
-       VbGCreateMarker(point.lat(),point.lng(), "This the first point <br/>on the map that you drew. <br/>It is a placeholder point until <br/>you click another point.", 0, true, map, 1, 500);   
+       VbGCreateMarker(point.lat(),point.lng(), "This the first point <br/>on the map that you drew. <br/>It is a placeholder point until <br/>you click another point.", 0, true, map, 1, 500);
        // make sure that the values are not preloaded (ie with back button):
        VbGClearMapForm();
     } else {
@@ -487,13 +614,13 @@ function VbGMakeMapQueryClickable(map) {
     // increase the count #
     document.getElementById("pointsClicked").innerHTML = Number(document.getElementById("pointsClicked").innerHTML) + 1;
     // reflect last point in message text
-    document.getElementById("message").innerHTML =  "added point #" + document.getElementById("pointsClicked").innerHTML 
+    document.getElementById("message").innerHTML =  "added point #" + document.getElementById("pointsClicked").innerHTML
               + " (" + point.lat() + "," + point.lng() + ")" ;
     //set prevLat/prevLong for next point
      document.getElementById("previousLat").innerHTML = point.lat().toString();
      document.getElementById("previousLong").innerHTML = point.lng().toString();
      document.getElementById("allPoints").innerHTML = document.getElementById("allPoints").innerHTML + point.lat() + ',' + point.lng() + ';';
-    
+
      //check for min and max
      if (point.lat() < parseFloat(document.getElementById("minLat").value)) {
         // alert('set new min');
@@ -502,14 +629,14 @@ function VbGMakeMapQueryClickable(map) {
      if (point.lat() > parseFloat(document.getElementById("maxLat").value)) {
             document.getElementById("maxLat").value = point.lat().toString();
      }
-         // long -- 
+         // long --
      if (point.lng() < parseFloat(document.getElementById("minLng").value)) {
         document.getElementById("minLng").value = point.lng().toString();
      }
      if (point.lng() > parseFloat(document.getElementById("maxLng").value)) {
         document.getElementById("maxLng").value = point.lng().toString();
      }
-    
+
     });
 }
 
@@ -555,7 +682,7 @@ function VbGMakeMapQueryClickable(map) {
         //dont know where this is (yet)
            map = VbGMapLoadByBounds(mapDivId,parseFloat(markers[0].getAttribute("latitude"))-1,parseFloat(markers[0].getAttribute("latitude"))+1,parseFloat(markers[0].getAttribute("longitude"))-1,parseFloat(markers[0].getAttribute("longitude"))+1) ;
         } else {
-           map = VbGMapLoadByBounds(mapDivId,parseFloat(minLat),parseFloat(maxLat),parseFloat(minLng),parseFloat(maxLng)) ; 
+           map = VbGMapLoadByBounds(mapDivId,parseFloat(minLat),parseFloat(maxLat),parseFloat(minLng),parseFloat(maxLng)) ;
         }
         for (var i = 0; i < markers.length; i++) {
           // var point = new GLatLng(parseFloat(markers[i].getAttribute("latitude")),
@@ -577,30 +704,31 @@ function VbGMakeMapQueryClickable(map) {
                 if (thisPlotLng < plotMinLng) {plotMinLng = thisPlotLng;}
                 if (thisPlotLng > plotMaxLng) {plotMaxLng = thisPlotLng;}
              }
-                 VbGCreateMarker(thisPlotLat,
+                markerNumber = VbGCreateMarker(thisPlotLat,
                                       thisPlotLng,
                                       markers[i].getAttribute("name"),
                                       1, true, map, markerNumber, markerConfirmNumber);
               // markers[i].getElementsByTagName("htmltoshow").toString()
-              markerNumber ++;
+              //markerNumber ++;
             }
           }
           if (blnSetBoundsBasedOnPlots == true) {
-              //reset map boundaries 
-              VbGFixZoomToBounds(map,plotMinLat,plotMaxLat,plotMinLng,plotMaxLng,true) 
+              //reset map boundaries
+              // GLog.write("resetting plot bounds to be around all plots.");
+              VbGFixZoomToBounds(map,plotMinLat,plotMaxLat,plotMinLng,plotMaxLng,true)
           }
-          
+
        //}); //old GDownloadUrl, which failed b/c of permissions... weird.
        return map;
    }
 
-  function VbGMapCSV(csvstring,mapDivId,minLat,maxLat,minLng,maxLng, blnSetBoundsBasedOnPlots, blnTryToMarkProjects, zoomMapId) {
+  function VbGMapCSV(csvstring,mapDivId,minLat,maxLat,minLng,maxLng, blnSetBoundsBasedOnPlots, blnTryToMarkProjects, zoomMapId, blnAutoDrawAcc, blnAutoDrawBounds) {
       //try to get map set:
       //alert(url);
       //GDownloadUrl(url, function(data, responseCode) {
       //  alert('got some data:' + data);
       //  var xml = GXml.parse(data);
-        //var xmlobject = (new DOMParser()).parseFromString(xmlstring, "text/xml"); 
+        //var xmlobject = (new DOMParser()).parseFromString(xmlstring, "text/xml");
         //first, replace the newlines with ; in the csv string:
         // alert('start csv:' + csvstring);
         var csvOneLine = csvstring.replace(/\n/g,";");
@@ -619,7 +747,7 @@ function VbGMakeMapQueryClickable(map) {
 
         var thisPlotPrefix = "";
         var lastPlotPrefix = "";
-        
+
         for (var i = 0; i < markers.length; i++) {
            //  alert('plot #' + i + ': ' + markers[i]);
              var thisPlotCSV = markers[i].split(",");
@@ -641,16 +769,59 @@ function VbGMakeMapQueryClickable(map) {
                      lastPlotPrefix = thisPlotPrefix; //setup for next iteration
                   } //has a "dash" - keep same if no dash (prevents unprefixed plots from being calico)
              } //trying to mark plots by project
-             
+
            //  alert('  name:' + thisPlotName);
              var thisPlotLat =  parseFloat(thisPlotCSV[1]); //new variables to hold plot lat/long
             // alert('  lat:' + thisPlotLat);
              var thisPlotLng = parseFloat(thisPlotCSV[2]);
            //  alert('  long:' + thisPlotLng);
              var thisExtraPlotDetail = "  "; //init
+             var thisPlotAzimuth = null; //init;
+             var thisPlotX = 0; //init, for rectangular plots;
+             var thisPlotY = 0; //init;
+             var thisGPSX = 0; //init;
+             var thisGPSY = 0; //init;
+             var thisDsgPoly = ""; //init;
+             var thisFuzzingDeg = null;  //init
+             var thisAccuracyMeters = null; //init
+             // GLog.write("CSV length:" + thisPlotCSV.length);
 			 if (thisPlotCSV.length > 3) {
-                 thisExtraPlotDetail = thisPlotCSV[3];
-			 }
+                 thisExtraPlotDetail = thisPlotCSV[3]; //extra stuff just gets printed
+                 if (thisPlotCSV.length > 4) {
+					  //fuzzing:
+					  thisFuzzingDeg = thisPlotCSV[4];
+				 }
+				 if (thisPlotCSV.length > 5) {
+					 //accuracy
+					  thisAccuracyMeters = thisPlotCSV[5];
+				 }
+				 if (thisPlotCSV.length > 8) {
+					 //Azimuth:
+                    thisPlotAzimuth = thisPlotCSV[6];
+                    // plot dimensions
+					thisPlotX = thisPlotCSV[7];
+					thisPlotY = thisPlotCSV[8];
+					//location of the point relative to the plot axis:
+					if (thisPlotCSV.length > 10) {
+						thisGPSX = thisPlotCSV[9];
+						thisGPSY = thisPlotCSV[10];
+						if (thisPlotCSV.length > 11) {
+							//dsgPoly, MUST BE LAST FIELD!
+							var intDSGLoop = "";
+							for (intDSGLoop = 11; intDSGLoop < thisPlotCSV.length; intDSGLoop++) {
+								//collect DSG Poly point pairs as array
+                                thisDsgPoly = thisDsgPoly  + thisPlotCSV[intDSGLoop] + ",";
+                                // GLog.write("thisDsgPoly thus far: " + thisDsgPoly);
+							} //loop through last fields
+							//todo: there is an extra , at end of thisDSGPoly, oh well.
+							//remove any quotes and semicolons, which may be lurking.
+							thisDsgPoly = thisDsgPoly.replace(/"/g,""); //" // end quote;
+							thisDsgPoly = thisDsgPoly.replace(/;/g,""); // remove ;
+						} //there are DSG Poly fields
+					} //there are GPS X and Y
+				 } //there is azimuth, etc.
+			 } //there is extra stuff after lat/long
+
          if (markerNumber >= 0 && !isNaN(thisPlotLat) && !isNaN(thisPlotLng) ) { //wasn't yet cancelled, is valid
              if (markerNumber == 0) {
                 //initial run through this:
@@ -662,9 +833,9 @@ function VbGMakeMapQueryClickable(map) {
                   //dont know where this is (yet)
                   map = VbGMapLoadByBounds(mapDivId,thisPlotLat-1,thisPlotLat+1,thisPlotLng-1,thisPlotLng+1) ;
                 } else {
-                  map = VbGMapLoadByBounds(mapDivId,parseFloat(minLat),parseFloat(maxLat),parseFloat(minLng),parseFloat(maxLng)) ; 
+                  map = VbGMapLoadByBounds(mapDivId,parseFloat(minLat),parseFloat(maxLat),parseFloat(minLng),parseFloat(maxLng)) ;
                 }
-                
+
              } else {
                 //not the first time here
                 if (thisPlotLat < plotMinLat) {plotMinLat = thisPlotLat;}
@@ -673,29 +844,195 @@ function VbGMakeMapQueryClickable(map) {
                 if (thisPlotLng > plotMaxLng) {plotMaxLng = thisPlotLng;}
              }
               //get URL to link to on TopoZone
-              var thisPlotNameLabel = "Plot: <strong>" + thisPlotName + "</strong>";
-              var thisPlotMapZoomLink = "http://www.topozone.com/map.asp?lat=" + thisPlotLat + "&lon=" + thisPlotLng + "&datum=NAD83&s=24&size=m&extra=" + thisPlotName;
+              var thisPlotNameSafeInJS = thisPlotName.replace(/"/g,""); // end annoying single quote> "
+              var thisPlotNameLabel = "Plot: <strong>" + thisPlotNameSafeInJS + "</strong>";
+              var thisPlotMapZoomLink = "http://www.topozone.com/map.asp?lat=" + thisPlotLat + "&lon=" + thisPlotLng + "&datum=NAD83&s=24&size=m&extra=" + thisPlotNameSafeInJS;
              //function to show the map on TopoZone next to our map
               var thisPlotOnClick='VbGUpdateZoomMap("' + zoomMapId + '","' + thisPlotNameLabel + '","' + thisPlotMapZoomLink + '");return false;';
-              var thisPlotHTML = "<div class='vbgmaplabel'>" + thisPlotNameLabel + "<br/>" + thisExtraPlotDetail + "<br/>Show on TopoZone.com map <a href='#' onclick='" + thisPlotOnClick + "'>below</a> or in a <a target='_new' href='" + thisPlotMapZoomLink + "'>new window</a> </div>";
-             
-              markerNumber = VbGCreateMarker(thisPlotLat,
+              var thisPlotHTML =  thisPlotNameLabel + "<br/>" + thisExtraPlotDetail + "<br/>Show on TopoZone.com map <a href='#' onclick='" + thisPlotOnClick + "'>below</a> or in a <a target='_new' href='" + thisPlotMapZoomLink + "'>new window</a>";
+             // if (thisPlotX>0 && thisPlotY>0 && (thisPlotAzimuth)) {
+				  //has X, Y, and azimuth, allow it to be mapped:
+			//	  var thisDrawBounds = 'VbGDrawPlotBounds(VbG_global_mapMainMap,' + thisPlotLat + ',' + thisPlotLng + ',' + thisPlotAzimuth + ',' + thisPlotX + ',' + thisPlotY + ',' + thisGPSX + ',' + thisGPSY + ');';
+			//	  thisPlotHTML = thisPlotHTML + "<span class='lk drawPlotBounds' onclick='" + thisDrawBounds + "'>draw plot boundaries</span>";
+			 // }
+
+
+              markerNumber =  VbGCreateMarker(thisPlotLat,
                                       thisPlotLng,
                                       thisPlotHTML,
-                                      colorNumber, true, map, markerNumber, markerConfirmNumber);
+                                      colorNumber, true, map, markerNumber, markerConfirmNumber, thisFuzzingDeg, thisAccuracyMeters,
+                                      thisPlotAzimuth , thisPlotX , thisPlotY , thisGPSX , thisGPSY , thisDsgPoly,
+                                      blnAutoDrawAcc, blnAutoDrawBounds);
+              //if ( thisMarker ) {
+			//	  markerNumber ++;
+			  //} else {
+			//	  markerNumber = -2 ; //cancel!
+			  //}
+
+			  //now can add new listener to marker:
+			//  GLog.write("adding dbl click listener after overlay:"  + (thisPlotLat-0.5) + "," + (thisPlotLng-0.5) + "," + (thisPlotLat+0.5) + "," + (thisPlotLng+0.5));
+			//	GEvent.addListener(thisMarker, "dblclick", function() {
+			//				   alert('I am double clicked!');
+			//				   VbGMarkLine(thisPlotLat-0.5,thisPlotLng-0.5,thisPlotLat+0.5,thisPlotLng+0.5,map,000000,1,1)
+			//				 });
+				//              GLog.write('adding marker redundantly:');
+			//				  map.addOverlay(thisMarker);  //it's already there!
               // markers[i].getElementsByTagName("htmltoshow").toString()
               //markerNumber ++;
             }
           } //end of for loop
           if (map && blnSetBoundsBasedOnPlots == true) {
-              //reset map boundaries 
-              VbGFixZoomToBounds(map,plotMinLat,plotMaxLat,plotMinLng,plotMaxLng,true) 
+              //reset map boundaries
+              VbGFixZoomToBounds(map,plotMinLat,plotMaxLat,plotMinLng,plotMaxLng,true)
           }
-          
+
        //}); //old GDownloadUrl, which failed b/c of permissions... weird.
        return map;
    }
-   
+
+   function VbGDrawPlotLine(boundsmap,lat,lng,azimuth,X1,Y1,X2,Y2,GPSX,GPSY) {
+	   //function draws a line on boundsmap, using lat and lng as plot coordinates, offset by plot grid at azimuth angle,
+	   // line is from (X1,Y1) to (X2,Y2) offset by GPSX and GPSY if present
+	   if (GPSX && GPSY) {
+		   //fine!
+	   } else {
+		   //not fine one is missing, assume 0
+		   GPSX = 0;
+		   GPSY = 0;
+	   }
+
+	  // GLog.write("VbGDrawPlotLine> " + X1 + "," + Y1 + " -> " + X2 + "," + Y2);
+	  //adjust by GPS X and GPSY:
+	  var GPSAdjX1 = X1 - GPSX;
+	  var GPSAdjX2 = X2 - GPSX;
+	  var GPSAdjY1 = Y1 - GPSY;
+	  var GPSAdjY2 = Y2 - GPSY;
+	  // GLog.write("VbGDrawPlotLine> Adjust for GPS position: " + GPSAdjX1 + "," + GPSAdjY1 + " -> " + GPSAdjX2 + "," + GPSAdjY2);
+
+
+	  //first figure out the angle on the plot grid for each point:
+	  var alpha1 = Math.atan2(GPSAdjY1,GPSAdjX1);
+	 // if (GPSAdjX1 != 0) {
+	 //   alpha1 = Math.atan(GPSAdjY1/GPSAdjX1);  //angle for plot coordinates to point 1
+    //	} else {
+	//	if (GPSAdjY1 > 0) {
+	//	  alpha1 = Math.PI / 2; //if X is 0, then could be up or down
+	//		} else {
+	 //     alpha1 = -1 * (Math.PI / 2);
+	//		}
+    //	}
+	  var alpha2 = Math.atan2(GPSAdjY2,GPSAdjX2);
+
+	  //if (GPSAdjX2 != 0 ) {
+	  //  alpha2 = Math.atan(GPSAdjY2/GPSAdjX2);  //angle for plot coordinates to point 2
+		//} else {
+		//	if (GPSAdjY2 > 0) {
+		//	  alpha2 = Math.PI / 2; //if X is 0, then could be up or down
+		//		} else {
+		//	  alpha2 = -1 * (Math.PI / 2);
+		//		}
+		//}
+      // GLog.write("alpha1 (in deg): " + (alpha1 * 180) / Math.PI);
+      // GLog.write("alpha2 (in deg): " + (alpha2 * 180) / Math.PI);
+
+	  var Dist1 = Math.sqrt(Math.pow(GPSAdjX1,2) + Math.pow(GPSAdjY1,2)); //distance to point, on plot coordinates
+	  var Dist2 = Math.sqrt(Math.pow(GPSAdjX2,2) + Math.pow(GPSAdjY2,2)); //distance to point, on plot coordinates
+
+      // GLog.write("Dist1 (m): " + Dist1);
+      // GLog.write("Dist2 (m): " + Dist2);
+
+	  //this angle is modified by beta, the angle difference between N and plot 0 degress: (azimuth), plus 90, since N is at 90 in Cartesian:
+	  var beta = (azimuth * (Math.PI / 180));
+      // GLog.write("beta (in deg): " + (beta * 180) / Math.PI);
+      var gamma1 = ((alpha1 - beta) + (Math.PI / 2)); //geocoordinate angle to point1
+      var gamma2 = ((alpha2 - beta) + (Math.PI / 2)); //geocoordinate angle to point2
+      // GLog.write("gamma1 (in deg): " + (gamma1 * 180) / Math.PI);
+      // GLog.write("gamma2 (in deg): " + (gamma2 * 180) / Math.PI);
+	  //figure out where these locations should be on polar grid, in meters
+	  var AdjX1 = (Math.cos(gamma1) * Dist1 ) ;
+	  // GLog.write("Rotated X1: " + AdjX1);
+	  var AdjY1 = (Math.sin(gamma1) * Dist1 ) ;
+	  // GLog.write("Rotated Y1: " + AdjY1);
+
+	  //figure out where these locations should be on polar grid, in meters
+	  var AdjX2 = (Math.cos(gamma2) * Dist2 ) ;
+	  // GLog.write("Rotated X2: " + AdjX2);
+	  var AdjY2 = (Math.sin(gamma2) * Dist2 ) ;
+	  // GLog.write("Rotated Y2: " + AdjY2);
+
+       //adjust to Geocoordinates:
+     var LongAdjust = Math.cos((lat * Math.PI) / 180);
+     var LngX1 = lng + ((AdjX1 / CON_LAT_TO_METERS_DIVISOR) / LongAdjust);
+      // GLog.write("LngX1: " + LngX1);
+     var LatY1 = lat + ((AdjY1 / CON_LAT_TO_METERS_DIVISOR));
+      // GLog.write("LatY1: " + LatY1);
+     var LngX2 = lng + ((AdjX2 / CON_LAT_TO_METERS_DIVISOR) / LongAdjust);
+	  // GLog.write("LngX2: " + LngX2);
+	 var LatY2 = lat + ((AdjY2 / CON_LAT_TO_METERS_DIVISOR));
+	  // GLog.write("LatY2: " + LatY2);
+	 //draw it!
+     VbGMarkLine(LatY1,LngX1,LatY2,LngX2,boundsmap,000000,1,1);
+
+
+   }
+
+   function VbGDrawPlotBounds(boundsmap,lat,lng,azimuth,X,Y,GPSX,GPSY, dsgPoly) {
+	    //function draws boundaries of plot, given lat,long, azimth, X,Y,GPSX, and GPSY
+
+
+        if (!boundsmap) {
+			boundsmap = VbG_global_mapMainMap;
+		    // GLog.write("VbGDrawPlotBounds> using global var as no map was passed.");
+		}
+		if ((azimuth) && (X) && (Y)) {
+			//have azimuth, X and Y, go for it!
+			// farm this out to map single lines at a time, using plot dimensions:
+			VbGDrawPlotLine(boundsmap,lat,lng,azimuth,0,0,X,0,GPSX,GPSY);
+			VbGDrawPlotLine(boundsmap,lat,lng,azimuth,X,0,X,Y,GPSX,GPSY);
+			VbGDrawPlotLine(boundsmap,lat,lng,azimuth,X,Y,0,Y,GPSX,GPSY);
+			VbGDrawPlotLine(boundsmap,lat,lng,azimuth,0,Y,0,0,GPSX,GPSY);
+
+		} else {
+		   // non rectangular, use dsgpoly if passed:
+		   if ((azimuth) && (dsgPoly)) {
+			   //use azimuth and dsgPoly
+			   // GLog.write("VbGDrawPlotBounds> dsgPoly not implemented yet.");
+			   //dsgPoly is structured as (X1,Y1)(X2,Y2)(X3,Y3)...
+			   //so first split based on )
+			   var arrDsgPoints = dsgPoly.split(")");
+			   //now an array like [(X1,Y1][(X2,Y2][(X2,Y2]
+			   var blnLastPointDefined = false;
+			   var lastX = null;
+			   var lastY = null;
+			   for (var pt = 0; pt < arrDsgPoints.length; pt++) {
+				   //loop through points and map from one to next
+				   //get this point:
+				   var thisPoint = arrDsgPoints[pt];
+				   //strip first (
+				   if (thisPoint.indexOf("(") != -1  ) {
+					  thisPoint = thisPoint.substr(thisPoint.indexOf("(")+1);
+				   }
+				   var thisX = parseFloat(thisPoint.substring(0,thisPoint.indexOf(",")));
+				   var thisY = parseFloat(thisPoint.substring(thisPoint.indexOf(",")+1));
+				   // GLog.write("Magically doing a point: " + thisX + "," + thisY);
+				   if (!isNaN(thisX) && !isNaN(thisY)) {
+					   if (blnLastPointDefined == true) {
+						   //draw from this to last point:
+						   VbGDrawPlotLine(boundsmap,lat,lng,azimuth,lastX,lastY,thisX,thisY,GPSX,GPSY);
+					   } //last point exists
+					   //remember this point for next time:
+					   lastX = thisX;
+					   lastY = thisY;
+					   blnLastPointDefined = true;
+
+				   } //X and Y are OK
+
+			   } //end loop through points
+		   } //end dsgPoly instructions
+		} // X,Y, and azi or not
+
+   }
+
    function VbGUpdateZoomMap(ZoomId,plotName,url) {
        //updates the zoomed in map to something new
        var zoomMapDiv = document.getElementById(ZoomId);
@@ -705,10 +1042,10 @@ function VbGMakeMapQueryClickable(map) {
        document.getElementById('zoomInPlotName').innerHTML = plotName;
        document.getElementById('zoomInMapLink').href= url;
    }
-   
+
    function VbGCloseZoomMap(ZoomId) {
        //closes the zoomed in map.
        var zoomMapDiv = document.getElementById(ZoomId);
        zoomMapDiv.style.display = 'none';
    }
-   
+

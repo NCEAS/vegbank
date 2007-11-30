@@ -70,7 +70,7 @@
 
 <script type="text/javascript">
     //<![CDATA[
- 
+
  function vegbankGoogleMapLoad() {
 
     if (GBrowserIsCompatible()) {
@@ -78,9 +78,9 @@
           var countPlots = 0;
           var countPlotsToConfirm = -1; // look up constant
 
-       
+
        var map = VbGMapLoadByCenter("map",36.59370,-82.22100,13)
-       
+
          // go ahead and set default icon.
          <% String iconPrefix = "map_google_c_" ; %>
          // store user preference for later:
@@ -116,7 +116,7 @@
       <logic:equal parameter="mapicons" value="nocolors">
         blnColored = false;
       </logic:equal>
-      
+
       <logic:iterate id="onerowofobservation" name="plotobs-BEANLIST">
                 // figure out which number map icon to use
 
@@ -150,12 +150,20 @@
                       <br/>(Dataset: <bean:write name="onerowofobservation" property="datasetname"/>)
                      </logic:notEmpty>
                     </div>
+                    <bean:define id="jsazimuth"><bean:write name="onerowofobservation" property="azimuth" /><logic:empty name="onerowofobservation" property="azimuth">null</logic:empty></bean:define>
+                    <div class="hidden" id="obsid_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />_dsgpoly"><bean:write name="onerowofobservation" property="dsgpoly" /><logic:empty name="onerowofobservation" property="dsgpoly">null</logic:empty></div>
                 </bean:define>
-               
+               <bean:define id="curraccuracy"><bean:write name="onerowofobservation" property="locationaccuracy" /><logic:empty name="onerowofobservation" property="locationaccuracy">-1</logic:empty></bean:define>
+
              countPlots=  VbGCreateMarker(<bean:write name="onerowofobservation" property="latitude" />,
-                               <bean:write name="onerowofobservation" property="longitude" />, 
-                       document.getElementById("plot_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />").innerHTML, 
-                       <%= mapNum %>, blnColored, map, countPlots, countPlotsToConfirm);
+                               <bean:write name="onerowofobservation" property="longitude" />,
+                       document.getElementById("plot_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />").innerHTML,
+                       <%= mapNum %>, blnColored, map, countPlots, countPlotsToConfirm,
+                                   <bean:write name="onerowofobservation" property="degrees_fuzzed" />,<bean:write name="curraccuracy" />,
+								   <bean:write name="jsazimuth" />, null,null,null,null,
+								   gebid("obsid_<bean:write name='observation_pk'/>_<bean:write ignore='true' name='onerowofobservation' property='userdataset_id' />_dsgpoly").innerHTML,
+								   false, false
+                       ); //degreeserr,meterserr, azimuth, plotx, ploty, gpsx, gpsy, dsgpoly , blnautodrawacc, blnautodrawbounds
 
 
         //  check to see if lat and long set any boundaries for min max
@@ -177,13 +185,13 @@
 
       </logic:iterate>
      </logic:notEmpty>
-       
+
        //correct the location based on what was mapped.
        VbGFixZoomToBounds(map,<%= minLat %>,<%= maxLat %>,<%= minLong %>,<%= maxLong %>,true)
-       
+
        // add a "where is this stuff" map ; an overview of where the big map is.  Note the big maps bounds, not plot bounds
     VbGMapLoadWhereIsMap("whereismap",map)
-   
+
       } // end of browser is compatible if statement
 
    } // end of main function
@@ -198,7 +206,7 @@
   <!-- failed, report errors here -->
   <p>
    Sorry, but VegBank didn't access any datasets to map.
-   Please <a href="@forms_link@MapDatasets.jsp">try again</a>. 
+   Please <a href="@forms_link@MapDatasets.jsp">try again</a>.
 
    </p>
    <p>
@@ -236,7 +244,7 @@ and zoom in and out, but if you use the back button to get to this page, the map
   <p><a href="@forms_link@MapDatasets.jsp">Map other datasets</a> <span class="sizetiny">(Requires Login)</span></p>
 <!--
 
-FYI Debugging: 
+FYI Debugging:
 MIN LAT: <%= minLat %><br/>
 max LAT: <%= maxLat %><br/>
 MIN long: <%= minLong %><br/>
