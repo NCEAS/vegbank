@@ -70,7 +70,7 @@
 
     <script src="@includes_link@VbGoogleMap.js" type="text/javascript"></script>
 <!-- debugging: NOT ON PRODUCTION!! -->
-<script language="javascript" type="text/javascript" src="http://aldo.vegbank.org/vegbank/includes/firebug/firebug.js"></script>
+<!--script language="javascript" type="text/javascript" src="http://aldo.vegbank.org/vegbank/includes/firebug/firebug.js"--><!--/script-->
 
   <!-- this script deals with some imported XML as text then parses it to deal with mapping -->
 
