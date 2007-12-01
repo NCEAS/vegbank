@@ -751,7 +751,10 @@ function VbGMakeMapQueryClickable(map) {
         for (var i = 0; i < markers.length; i++) {
            //  alert('plot #' + i + ': ' + markers[i]);
              var thisPlotCSV = markers[i].split(",");
-             var thisPlotName = thisPlotCSV[0];
+             //alert("have another row... with columns: " + thisPlotCSV.length);
+           if (thisPlotCSV.length > 2) {
+			 var thisPlotName = thisPlotCSV[0];
+			 //alert("have another and has enough columns to map");
              // check prefix and toggle marker?
              if (blnTryToMarkProjects == true) {
                  //make all delimiters into a dash
@@ -879,7 +882,8 @@ function VbGMakeMapQueryClickable(map) {
 			//				  map.addOverlay(thisMarker);  //it's already there!
               // markers[i].getElementsByTagName("htmltoshow").toString()
               //markerNumber ++;
-            }
+            } //wasn't yet cancelled.
+	      } //end of if at least 3 items in CSV
           } //end of for loop
           if (map && blnSetBoundsBasedOnPlots == true) {
               //reset map boundaries

@@ -114,7 +114,7 @@
     <logic:present name="csvdata">
       <script type="text/javascript">
      //declare map object:
-     var bigmap;
+     var bigmap = null;
       function VbGLoadAllMapsThisPage() {
        <logic:notMatch name="csvdata" value="<">
           <bean:define id="dataValidated" value="true" />
@@ -309,30 +309,30 @@ yyy,37.12356,-119.43534
 </p>
 
 <h3>Advanced format:</h3>
-<p>It is possible to map more complex data, which is the same basic format, but has a few more columns:
+<p>It is possible to map more complex data, which is the same basic format, but has a few more columns:<br/>
 <strong>Basic plot information</strong>
 	<br/>Column 1:<strong>Plot Name</strong> - name of plot
-	<br/>Column 2:<strong>Latitude</strong><a onclick="popupDD('/dd/plot/latitude'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	<br/>Column 2:<strong>Latitude</strong><!--<a onclick="popupDD('/dd/plot/latitude'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a> -->
 	   - Latitude of plot, in decimal degrees, in WGS84 Datum
-	<br/>Column 3:<strong>Longitude</strong><a onclick="popupDD('/dd/plot/longitude'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	<br/>Column 3:<strong>Longitude</strong><!--<a onclick="popupDD('/dd/plot/longitude'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a> -->
 	  - Longitude of plot, in decimal degrees, in WGS84 Datum
 	<br/>Column 4:Extra information (optional)- this information, if present, is included in information boxes that are shown when you click on a plot marker.
 	<br/>
 <strong>Accuracy, optional</strong>
-	<br/>Column 5:Degrees "fuzzed" <a onclick="popupDD('/dd/plot/confidentialitystatus'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	<br/>Column 5:Degrees "masked" <!--<a onclick="popupDD('/dd/plot/confidentialitystatus'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>-->
 	  - this indicates location uncertainty due to masking the exact plot location and an approximate location is given instead, offset by the number of degrees indicated
-	<br/>Column 6:location accuracy (m) <a onclick="popupDD('/dd/plot/locationaccuracy'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	<br/>Column 6:location accuracy (m) <!--<a onclick="popupDD('/dd/plot/locationaccuracy'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>-->
 	  - this is the estimated error of the original coordinates, in meters
 	<br/>
 <strong>Plot Shape, optional</strong>
-	<br/>Column 7:Plot azimuth <a onclick="popupDD('/dd/plot/azimuth'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	<br/>Column 7:Plot azimuth <!--<a onclick="popupDD('/dd/plot/azimuth'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>-->
 	  - the compass bearing of the main axis of the plot, in degrees
 	<br/>Column 8:Plot X Dimension - the X dimension of the plot, in meters (if rectangular plot)
 	<br/>Column 9:Plot Y Dimension - the Y dimension of the plot, in meters (if rectangular plot)
 
 	<br/>Column 10:GPS receiver location X - the plot geocoordinates may or may not be taken from the 0,0 point on a plot.  This records the X position of the GPS unit when calculating plot location.
 	<br/>Column 11:GPS receiver location Y - same as above, but Y position of GPS receiver
-	<br/>Column 12:dsgPolygon <a onclick="popupDD('/dd/plot/dsgpoly'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>
+	<br/>Column 12:dsgPolygon <!--<a onclick="popupDD('/dd/plot/dsgpoly'); return false;" href="/dd/plot/latitude" class="image" target="_blank" title="Click here for definition of this field."><span class="ddlink"><img alt="?" src="/vegbank/images/question.gif" border="0"></span></a>-->
 	  - for non-rectangular plots, a series of coordinates may be specified that define the plot bounds, e.g. (0,0)(10,0)(0,10)(0,0) - a right triangle.
   </p>
 
