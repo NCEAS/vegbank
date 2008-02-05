@@ -260,7 +260,7 @@ var CON_LAT_TO_METERS_DIVISOR = 111131.9718; // the number of meters per degree 
              strUserFuzzAccuracyNote = "" ; //init
              if (metersErr == -1) {metersErr=null}; //null flag
 
-             if (degreesErr || metersErr) {
+             if (degreesErr || metersErr) { //only enters this if one of these isn't 0
 				 strUserFuzzAccuracyNote = "<br/>Location masked: "; //style='color:" + CON_VBGMAP_FUZZING_COLOR + "'
 				 if (degreesErr) {
 					 strUserFuzzAccuracyNote = strUserFuzzAccuracyNote + degreesErr ;
@@ -298,18 +298,18 @@ var CON_LAT_TO_METERS_DIVISOR = 111131.9718; // the number of meters per degree 
             var thisDrawBoundsCmd = "" ; //init
             var thisDrawBoundsInfo = "Plot boundaries: " ; //init
 				  var GPSXY = "" ;
-				  if (GPSX && GPSY) {
+				  if (isActualNumber(GPSX) && isActualNumber(GPSY)) {
 					GPSXandY =  GPSX + ',' + GPSY; // both present
 				  } else {
 					GPSXandY = "null,null"; //one of both missing, don't pass last parameters
 				  }
-             if (plotX>0 && plotY>0 && (azimuth)) {
+             if (isActualNumber(plotX) && isActualNumber(plotY) && isActualNumber(azimuth)) {
 				  //has X, Y, and azimuth, allow it to be mapped:
 				  // GLog.write("mapping via X,Y,azi");
 				  thisDrawBoundsJS = 'VbGDrawPlotBounds(VbG_global_mapMainMap,' + lat + ',' + lng + ',' + azimuth + ',' + plotX + ',' + plotY + ',' + GPSXandY + ');';
 				  thisDrawBoundsInfo = thisDrawBoundsInfo + plotX + "m (X) by " + plotY + "m (Y).  X @ " + azimuth + " deg.";
 			  } else { //lacks X,Y or azimuth
-				  if (dsgPoly && azimuth) { //has dsgPoly and azi
+				  if (dsgPoly && isActualNumber(azimuth)) { //has dsgPoly and azi
 				      // GLog.write("instructing to map via dsgPoly:" + dsgPoly);
 					  thisDrawBoundsJS = 'VbGDrawPlotBounds(VbG_global_mapMainMap,' + lat + ',' + lng + ',' + azimuth + ',null,null,' + GPSXandY + ',"' + dsgPoly + '");';
 					  // GLog.write("this draw bounds JS:" + thisDrawBoundsJS);
@@ -897,7 +897,7 @@ function VbGMakeMapQueryClickable(map) {
    function VbGDrawPlotLine(boundsmap,lat,lng,azimuth,X1,Y1,X2,Y2,GPSX,GPSY) {
 	   //function draws a line on boundsmap, using lat and lng as plot coordinates, offset by plot grid at azimuth angle,
 	   // line is from (X1,Y1) to (X2,Y2) offset by GPSX and GPSY if present
-	   if (GPSX && GPSY) {
+	   if (isActualNumber(GPSX) && isActualNumber(GPSY)) {
 		   //fine!
 	   } else {
 		   //not fine one is missing, assume 0
@@ -988,7 +988,7 @@ function VbGMakeMapQueryClickable(map) {
 			boundsmap = VbG_global_mapMainMap;
 		    // GLog.write("VbGDrawPlotBounds> using global var as no map was passed.");
 		}
-		if ((azimuth) && (X) && (Y)) {
+		if (isActualNumber(azimuth) && isActualNumber(X) && isActualNumber(Y)) {
 			//have azimuth, X and Y, go for it!
 			// farm this out to map single lines at a time, using plot dimensions:
 			VbGDrawPlotLine(boundsmap,lat,lng,azimuth,0,0,X,0,GPSX,GPSY);
@@ -998,7 +998,7 @@ function VbGMakeMapQueryClickable(map) {
 
 		} else {
 		   // non rectangular, use dsgpoly if passed:
-		   if ((azimuth) && (dsgPoly)) {
+		   if (isActualNumber(azimuth) && (dsgPoly)) {
 			   //use azimuth and dsgPoly
 			   // GLog.write("VbGDrawPlotBounds> dsgPoly not implemented yet.");
 			   //dsgPoly is structured as (X1,Y1)(X2,Y2)(X3,Y3)...
@@ -1052,4 +1052,13 @@ function VbGMakeMapQueryClickable(map) {
        var zoomMapDiv = document.getElementById(ZoomId);
        zoomMapDiv.style.display = 'none';
    }
+
+  function isActualNumber(number) {
+	  //returns true if the number is a number (not null, not empty) 0 is OK (that is a number)
+	  var blnRet = false; //init
+	  if (number!=null) {
+		blnRet = !isNaN(parseFloat(number));
+	  }
+	  return blnRet;
+  }
 
