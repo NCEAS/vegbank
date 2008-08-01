@@ -10,8 +10,8 @@
 *   Authors: @author@
 *
 *  '$Author: mlee $'
-*  '$Date: 2008-08-01 18:27:02 $'
-*  '$Revision: 1.20 $'
+*  '$Date: 2008-08-01 18:32:41 $'
+*  '$Revision: 1.21 $'
 *
 *
 * This program is free software; you can redistribute it and/or modify
@@ -83,7 +83,7 @@
 	  	<font color="#FF0000">*</font>
 	  	<span class="sizesmall">e-Mail Address (login name): </span>
 		<br/>
-                <span class="sizesmall">Please use all lowercase letters in your email address.</span>
+                <span class="sizesmall">Please use all lowercase letters.</span><br/>
 	  	<html:text property="usr.email_address" size="30"/>
       </TD>
     </TR>
