@@ -15,8 +15,8 @@
   *     Authors: @author@
   *
   *    '$Author: mlee $'
-  *      '$Date: 2005-05-31 18:39:18 $'
-  *  '$Revision: 1.9 $'
+  *      '$Date: 2008-08-01 18:29:15 $'
+  *  '$Revision: 1.10 $'
   *
   *
   -->
@@ -51,8 +51,8 @@ function getHelpPageId() {
 			
  <p class="instructions">Use this form to request your VegBank Password. 
  Please enter your email address and your password will be emailed to you immediately.</p>
-			   
-	
+				   
+		<p>Please note: some users have reported problems resetting their password if their email address was registered with UPPER CASE LETTERS.  If this may be the case, please see the <a href="@general_link@knownbugs.html">known bugs page</a> for the workaround.</p>
 	
 		
 <p>
