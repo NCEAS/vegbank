@@ -852,7 +852,9 @@ function VbGMakeMapQueryClickable(map) {
               var thisPlotMapZoomLink = "http://www.topozone.com/map.asp?lat=" + thisPlotLat + "&lon=" + thisPlotLng + "&datum=NAD83&s=24&size=m&extra=" + thisPlotNameSafeInJS;
              //function to show the map on TopoZone next to our map
               var thisPlotOnClick='VbGUpdateZoomMap("' + zoomMapId + '","' + thisPlotNameLabel + '","' + thisPlotMapZoomLink + '");return false;';
-              var thisPlotHTML =  thisPlotNameLabel + "<br/>" + thisExtraPlotDetail + "<br/>Show on TopoZone.com map <a href='#' onclick='" + thisPlotOnClick + "'>below</a> or in a <a target='_new' href='" + thisPlotMapZoomLink + "'>new window</a>";
+              var thisPlotHTML =  thisPlotNameLabel + "<br/>" + thisExtraPlotDetail + "<br/>Show on TopoZone.com map in a <a target='_new' href='" + thisPlotMapZoomLink + "'>new window</a>" ;
+			  
+			  // below no longer works: "<br/>Show on TopoZone.com map <a href='#' onclick='" + thisPlotOnClick + "'>below</a> or in a <a target='_new' href='" + thisPlotMapZoomLink + "'>new window</a>";
              // if (thisPlotX>0 && thisPlotY>0 && (thisPlotAzimuth)) {
 				  //has X, Y, and azimuth, allow it to be mapped:
 			//	  var thisDrawBounds = 'VbGDrawPlotBounds(VbG_global_mapMainMap,' + thisPlotLat + ',' + thisPlotLng + ',' + thisPlotAzimuth + ',' + thisPlotX + ',' + thisPlotY + ',' + thisGPSX + ',' + thisGPSY + ');';
