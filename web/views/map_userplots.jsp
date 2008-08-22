@@ -252,8 +252,8 @@
 
 
 
-  <div id="zoomInMap" class="hidden" style="clear:both;position:relative; width:600px;height:450px; overflow:hidden; border:medium double rgb(0,0,0); ">
-    <iframe style="position: absolute; left:-191px; top:-167px; width: 791px; height: 617px; border: 0px none ; margin: 0px; overflow: hidden; " frameborder="0" scrolling="no"></iframe>
+  <div id="zoomInMap" class="hidden" style="clear:both;position:relative; width:430px;height:310px; overflow:hidden; border:medium double rgb(0,0,0); ">
+    <iframe style="position: absolute; left:-115px; top:-312px; width: 545px; height: 624px; border: 0px none ; margin: 0px; overflow: hidden; " frameborder="0" scrolling="yes"></iframe>
     <div style="position:absolute; left:0px; top:0px; width:100%; height:100%; z-index:10">
       <span id="zoomInPlotName" style="position:absolute;bottom:0px; left:0px; background-color:#CCCCCC">no plot selected</span>
       <a id="zoomInCloseLink" style="position:absolute;top:0px;right:0px;background-color:#CCCCCC" href="#" onclick="VbGCloseZoomMap('zoomInMap');return false;">close</a>
