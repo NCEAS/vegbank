@@ -116,14 +116,55 @@
      //declare map object:
      var bigmap = null;
       function VbGLoadAllMapsThisPage() {
-       <logic:notMatch name="csvdata" value="<">
+       <logic:notMatch name="csvdata" value="<">  // this logic:notMatch tag is necessary to prevent closing of container element and arbitrary code being injected into page 
           <bean:define id="dataValidated" value="true" />
-          bigmap = VbGMapCSV(document.getElementById("domCSVData").value,"map",35,36,-127,-126, true, true, "zoomInMap", <bean:write name="bean_drawaccuracy" />, <bean:write name="bean_drawboundary" />) ;
-          if (bigmap == null) {
+          var csvData = document.getElementById("domCSVData").value;
+		  var newcsvData = csvData;
+
+        newcsvData = newcsvData.replace(/onabort=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onblur=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onchange=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onclick=/gi,"xxx");
+		newcsvData = newcsvData.replace(/ondblclick=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onerror=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onfocus=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onkeydown=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onkeypress=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onkeyup=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onload=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onmousedown=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onmousemove=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onmouseout=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onmouseover=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onmouseup=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onreset=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onresize=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onselect=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onsubmit=/gi,"xxx");
+		newcsvData = newcsvData.replace(/onunload=/gi,"xxx");
+		newcsvData = newcsvData.replace(/<script/gi,"<xxx"); // > end lt; for text-editor
+		newcsvData = newcsvData.replace(/\&lt;script/gi,"xxx");
+		newcsvData = newcsvData.replace(/javascript:/gi,"xxx");
+	  var blnMapPlots = true; //default
+	  if (csvData == newcsvData) {
+        //no problems in the data:
+		blnMapPlots = true;
+	  } else {
+        blnMapPlots = confirm('It seems that there is script-like text in your data, which could lead to scripts being executed.  Do you want to continue?  You should not continue if you do not trust the data source.');
+
+	  }
+	  if (blnMapPlots == true) {
+	   //nothing offensive, or user said OK
+		  bigmap = VbGMapCSV(document.getElementById("domCSVData").value,"map",35,36,-127,-126, true, true, "zoomInMap", <bean:write name="bean_drawaccuracy" />, <bean:write name="bean_drawboundary" />) ;
+		  } else {
+            //script-like stuff embedded!
+           bigmap = null;
+		  }	   
+		  if (bigmap == null) {
             //clean up this page a bit:
             hidebyid("googleMapPageContainer");
             hidebyid("whereismap_wrapper");
-            alert('no plots were mapped.  Please check that the file matches the correct format!');
+            alert('No plots were mapped.  Please check that the file matches the correct format!  It is also possible that script-like data was embedded in your data stream, and you chose not to map plots because of this.');
           } else {
             //got a map
             // alert('got a map ok');
@@ -239,32 +280,34 @@
 
     <br/>
 
-    <% if (Utility.isStringNullOrEmpty( request.getQueryString() )) { %>
-     <strong> You are mapping too many plots to link via a URL.</strong>
-     <br/>You can still send someone the link to this page:
-     <pre><a href="<%= request.getRequestURL() %>"><%= request.getRequestURL() %></a></pre>
-     <br/> and instruct them to paste in the plot locations: <br/>
-     <pre><bean:write name="csvdata" filter="false" ignore="true"/></pre>
-    <% } else { %>
 
-     <br/>
-     <strong>Link to this map with this URL:</strong> <br/>
-     <a href="<%= request.getRequestURL() %>?<%= request.getQueryString() %>"><%= request.getRequestURL() %>?<%= request.getQueryString() %></a>
+<% if (Utility.isStringNullOrEmpty( request.getQueryString() )) { %>
+ <strong> You are mapping too many plots to link via a URL.</strong>
+ <br/>You can still send someone the link to this page:
+ <pre><a href="<%= request.getRequestURL() %>"><%= request.getRequestURL() %></a></pre>
+ <br/> and instruct them to paste in the plot locations: <br/>
+ <pre><bean:write name="csvdata" filter="false" ignore="true"/></pre>
+<% } else { %>
 
-    <% } %>
-    </p>
+ <br/>
+ <strong>Link to this map with this URL:</strong> <br/>
+ <a href="<%= request.getRequestURL() %>?<%= request.getQueryString() %>"><%= request.getRequestURL() %>?<%= request.getQueryString() %></a>
 
-  </logic:notEqual> <!-- validated -->
+<% } %>
+</p>
 
-  <logic:equal name="dataValidated" value="false">
-     <bean:define id="csvdata">--invalid!--</bean:define>
-    INVALID REQUEST!  The data you tried to map was not a validly formatted.  See below for how to structure this information.  You probably have the less than sign (&lt;)
-    in your data.  These must be removed or encoded as &amp;lt;
-  </logic:equal>
 
-  <p>
-  <strong>If you'd like to map new plots, please see the instructions below:</strong>
-  </p>
+</logic:notEqual> <!-- validated -->
+
+<logic:equal name="dataValidated" value="false">
+ <bean:define id="csvdata">--invalid!--</bean:define>
+INVALID REQUEST!  The data you tried to map was not a validly formatted.  See below for how to structure this information.  You probably have the less than sign (&lt;)
+in your data.  These must be removed or encoded as &amp;lt;
+</logic:equal>
+
+<p>
+<strong>If you'd like to map new plots, please see the instructions below:</strong>
+</p>
 <!--/DIV-->
 </logic:present> <!-- data here -->
 
@@ -272,9 +315,10 @@
 <p>
 <h4>Option 1: Enter your data</h4>
 
-<form name="pasteCSVData" action="<%= request.getRequestURL() %>" method="post"><!-- action is self -->
-  Copy and paste your csv data here, in the format stated <a href="#format">below</a>. <br/>
-  <textarea name="csvraw" cols="60" rows="6"><bean:write name="csvdata" filter="false" ignore="true"/></textarea> <br/>
+  <form name="pasteCSVData" action="<%= request.getRequestURL() %>" method="post"><!-- action is self -->
+Copy and paste your csv data here, in the format stated <a href="#format">below</a>. <br/>
+  
+  <textarea name="csvraw" cols="60" rows="6"><logic:notEqual name="dataValidated" value="false"><bean:write name="csvdata" filter="true" ignore="true"/></logic:notEqual></textarea> <br/>
   <input type="submit" value="map entered plots" onclick="formConvertToGetIfURLLengthOK('pasteCSVData');"/>
   <input type="button" value="clear data" onclick="if (confirm('Really clear data?')) {forms.pasteCSVData.csvraw.value = '';} "/>
   <input type="checkbox" name="drawaccuracy" <logic:equal name="bean_drawaccuracy" value="true">checked="checked"</logic:equal> /> draw accuracy (columns 5-6)
