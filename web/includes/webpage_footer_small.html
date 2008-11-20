@@ -2,12 +2,29 @@
   
   </div> <!-- extra div-->
   <div id="footersmall">
-    &copy; 2006 Ecological Society of America
-      <!-- end footer -->
+	  &copy; <!-- display the year without having to update this file, if js enabled -->
+	        <script type="text/javascript">
+	           var cpToday=new Date();
+	           var cpYr=cpToday.getYear()+1900;
+			   document.write(cpYr);								  
+			</script>										
+			<noscript>2008<!-- js not enabled, give most recent date --></noscript> Ecological Society of America
+														  
+	  <!-- end footer -->
   </div>
   </div> <!-- maincontent small -->
   
   
-
+  <!-- Google Analytics Code: ga.js -->
+    <script type="text/javascript">
+	  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+	<script type="text/javascript">
+	  try {
+		 var pageTracker = _gat._getTracker("UA-6383333-1");
+		 pageTracker._trackPageview();
+	    } catch(err) {}</script>
+  <!-- end Google Analytics Code: ga.js -->
 </body>
 </html>
