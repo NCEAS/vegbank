@@ -1,7 +1,7 @@
 ###############################################
 # Convenient shortcuts to common site content.
 #       
-# $Id: .htaccess,v 1.27 2007-09-05 19:47:08 mlee Exp $
+# $Id: .htaccess,v 1.28 2009-04-29 20:30:25 mlee Exp $
 ###############################################
 
 RewriteEngine  on
@@ -108,6 +108,11 @@ RewriteRule ^browse-byparty$	   @views_link@topdata.jsp?perPage=20&getonly=2    
 RewriteRule ^browse-byplant$	   @views_link@topdata.jsp?perPage=20&getonly=4       [NC,QSA,L,R]
 RewriteRule ^browse-byproject$	   @views_link@topdata.jsp?perPage=20&getonly=3       [NC,QSA,L,R]
 
+
+## to search communities
+RewriteRule ^search/comm/(.*)$      @views_link@commconcept_summary.jsp?where=where_commconcept_mpq&criteriaAsText=+Community+Name++contains+ALL+words+of+$1&xwhereParams_commname_0=$1&xwhereParams_commname_1=cu.commname&matchType=all&xwhereKey_commname=xwhere_match&xwhereSearch_commname=true&xwhereMatchAny_commname=false&xwhereGlue=AND      [NC,QSA,L,R]
+
+RewriteRule ^search/plant/(.*)$     @views_link@plantconcept_summary.jsp?where=where_plantconcept_mpq&criteriaAsText=+Plant+Name++contains+ALL+words+of+$1&xwhereParams_plantname_0=$1&xwhereParams_plantname_1=pu.plantname&matchType=all&xwhereKey_plantname=xwhere_match&xwhereSearch_plantname=true&xwhereMatchAny_plantname=false&xwhereGlue=AND  [NC,QSA,L,R]
 
 RewriteRule ^nvcrs$        http://herbarium.unc.edu:8080/nvcrs/     [NC,QSA,L]
 RewriteRule ^nvcrs/(.*)$   http://herbarium.unc.edu:8080/nvcrs/$1   [NC,QSA,L]
