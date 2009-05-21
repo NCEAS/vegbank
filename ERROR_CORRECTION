@@ -1,9 +1,9 @@
 #
 # '$RCSfile: ERROR_CORRECTION,v $'
 # '$Author: mlee $'
-# '$Date: 2006-09-11 22:03:55 $'
-# '$Revision: 1.2 $'
-# '$Date: 2006-09-11 22:03:55 $'
+# '$Date: 2009-05-21 17:33:15 $'
+# '$Revision: 1.3 $'
+# '$Date: 2009-05-21 17:33:15 $'
 #
 
 When things go wrong with Vegbank: What to do when something doesn't work
@@ -130,8 +130,19 @@ main ones that deserve comment are:
    It also calls vacuum analyze on the database which clears out uneeded handles
    and makes the DB run faster.
 2) runAccGen -- runs the accession code generator
+   This may be necessary to run after plot data are loaded if the accession
+   code generation fails after plot load.  runDenorms.sh will also be necessary
+   example: /usr/vegbank/bin/runAccGen vegbank
+   (name of database) is the required parameter
 3) runKwGen -- creates keywords for the quick search
 4) runDenorms.sh -- runs the denormalization for the quick search
+   This many be necessary if plants aren't showing up for a plot.  This is due
+   to denormalized fields protecting plots by default until the plot is 
+   marked as not having an embargo.
+   Usage: runDenorms.sh [table to update | all] [type of update|all]
+   Example: /usr/vegbank/bin/runDenorms.sh observation
+   Example: /usr/vegbank/bin/runDenorms.sh all all
+   **this will take a while.**
 5) daily_maintenance.sh -- runs every night at 3 AM from a conjob setup on the
    vegbank users's crontab.  This updates the info on the home page (various
    plot counts, etc) and also removes any loose leaf datasets that are 
