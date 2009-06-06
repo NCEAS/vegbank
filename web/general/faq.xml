@@ -34,21 +34,33 @@ Other data, like plants and communities, come from VegBank's users, but rely hea
     <question>
       <qname>howsearch</qname>
       <qtxt>How do I find plots in VegBank?</qtxt>
-      <atxt>You can search for plots with two different forms in VegBank.  <br/>
+      <atxt>You can search for plots with two different pages in VegBank.  <br/>
         <br/> 1) <a href="@plotquery_page_simple@"> a very simple search</a>, where you can specify one or more of the following: plant found on the plot, community to which the plot is interpreted, state/province in which the plot is located.  <br/>
-        <br/> 2) <a href="@plotquery_page_advanced@"> a more complex query</a> with many options for searching, allowing multiple plants, places, and communities to be specified.  It also allows you to search by other fields, like elevation.</atxt>
+		<br/> 2) <a href="@plotquery_page_advanced@"> a more complex query</a> with many options for searching, allowing multiple plants, places, and communities to be specified.  It also allows you to search by other fields, like elevation.
+		<br/><br/>Once you have found plots (or communities or plots) of interest, they may be added to the datacart by clicking on the "plus" datacart icon (<img src="@images_link@cart_add_one.gif" alt="datacart plus icon" />) next to the item of interest.  You can perform <a href="#howdownload">various functions on the datacart</a> by clicking on the "download" link next to the datacart at the top of the screen.  
+	</atxt>
     </question>
     <question>
       <qname>howdownload</qname>
       <qtxt>How do I download VegBank data to my computer?</qtxt>
-      <atxt>Currently, you must use the plot query to start the download process.  You can access the plot query using the links at the top of any page in VegBank.  Once you have queried plots, you can select which plots you want to download, then download the data in several different file formats.  We are working on improving this functionality by allowing you to build <b>Datasets</b> while viewing any plot in VegBank.  A Dataset is a group of plots you are interested in.  Then, you will be able to download an entire dataset.  We also will improve the speed of downloads, which are now somewhat slow.  Try downloading fewer plots (around 150) at a time if you have problems with downloading.  We apologize for the inconvenience.</atxt>
+	  <atxt>Once you have added plots to the datacart, you can download them from the "download" link next to the datacart icon near the top of any page in VegBank.  Once you click that link, you will see a menu of options that you can perform with the data in your datacart, including downloading the data.
+		  <br/>For more information on adding plots to the datacart, please see the FAQ topic on <a href="#howsearch">how to search for plots</a>.
+		  <br/>If you are having problems downloading a large set of data, try downloading fewer plots at a time (around 250 or less).  We apologize for the inconvenience.</atxt>
     </question>
     <question>
       <qname>whyregister</qname>
       <qtxt>Why do I need to register?  Why do I need to log in?</qtxt>
-      <atxt>You don't need to register to use most of VegBank's features.  Registration is only required when you want to use features that apply to just one user.  For example, if you want to compile a dataset and have VegBank remember it when you come back, you'll need to register (this feature is coming soon).  If you want to add data to the archive, or to annotate data, you'll also need to register and be certified.</atxt>
-    </question>
-    <question>
+	  <atxt>You don't need to register to use most of VegBank's features.  Registration is only required if you want to VegBank remember one or more datasets or if you want to upload data to include in the VegBank archive (this also requires <a href="#whycertification">certification</a>).</atxt>  
+  </question>
+  <question>
+	  <qname>dataset</qname>
+	  <qtxt>What is a dataset?  What is the datacart?</qtxt>
+	  <atxt>A dataset is a set of items (plots, communities, or plants) that you are interested in.  The datacart is the current or active dataset to which you can add items when searching or viewing data.  You add items to the datacart by clicking the "add to datacart" icon: <img src="@images_link@cart_add_one.gif" alt="add to datacart icon" /> after searching for data or viewing data. <br/><br/>
+	  If you are not logged in, you have access to a single datacart.  If you have items in your datacart and then log in, those items are retained in your datacart.  If are logged in, you can have multiple datasets that are remembered the next time you log in.  You can then activate different datasets to become the current datacart, performing various functions on the datacart, such as viewing a constancy table, mapping plots, or querying for plots that match plants or communities in a dataset.  All the dataset and datacart functionality is available from the <a href="@general_link@datasets.html">DATASETS</a> link in the upper right of all pages in VegBank.
+    <br/><br/>To create a new datacart, you must log in, then you can click the <a href="@views_link@datacart_detail.jsp">download datacart</a> link at the top of the page and click the "create a new datacart" link under "Advanced Datacart Features."  This saves the current datacart in your list of datasets and creates a new empty datacart to which you can add new items.
+  </atxt>
+  </question>
+  <question>
       <qname>analysis</qname>
       <qtxt>What features does VegBank offer for analysis of plot data?</qtxt>
       <atxt>VegBank does not have analysis tools.  Other groups have done a good job making tools for analysis, and we encourage users to find data in VegBank, then export into a format of your choice, then work on analysis with a program like PC-Ord.</atxt>
