@@ -40,9 +40,10 @@ var CON_LAT_TO_METERS_DIVISOR = 111131.9718; // the number of meters per degree 
           map.setMapType(G_HYBRID_MAP);
           //save this position:
          map.savePosition();
-         map.addControl(new GLargeMapControl());
-         map.addControl(new GMapTypeControl());
-         map.addControl(new GScaleControl());
+         map.addControl(new GLargeMapControl3D());
+         map.addControl(new GHierarchicalMapTypeControl());
+         map.addMapType(G_PHYSICAL_MAP);
+		 map.addControl(new GScaleControl());
          return map;
       }
 
@@ -196,7 +197,7 @@ var CON_LAT_TO_METERS_DIVISOR = 111131.9718; // the number of meters per degree 
 
 
          if ( markerConfirmNumber == -1 ) {
-            markerConfirmNumber = 100 ; //default value
+            markerConfirmNumber = 250 ; //default value
          }
 
          // // alert( 'writing new marker at ' + lat + ',  ' + lng);
