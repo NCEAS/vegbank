@@ -112,7 +112,7 @@
 		<action path="/AddReference" type="org.vegbank.ui.struts.AddReferenceAction" 
             name="AddReferenceForm" scope="request" validate="true" input="AddReference">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
-			<set-property property="reqRoles" value="pro" />
+			<set-property property="reqRoles" value="cert" />
 		</action>
 		<action path="/AddStratumMethod" type="org.vegbank.ui.struts.AddStratumMethodAction" 
             name="AddStratumMethodForm" scope="request" validate="true" 
@@ -178,7 +178,7 @@
             type="org.vegbank.ui.struts.InterpretPlantAction" scope="request" 
             name="InterpretPlantForm" input="InterpretTaxonObservation" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
-			<set-property property="reqRoles" value="pro" />
+			<set-property property="reqRoles" value="cert" />
 			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" 
                redirect="false" />
 		</action>
@@ -188,7 +188,7 @@
             type="org.vegbank.ui.struts.InterpretCommAction" scope="session" 
             name="InterpretCommForm" input="InterpretCommObservation" validate="false">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
-			<set-property property="reqRoles" value="pro" />
+			<set-property property="reqRoles" value="cert" />
 			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
 			<forward name="success" path="/forms/success.html" redirect="true" />
 		</action>
@@ -265,14 +265,14 @@
             type="org.vegbank.ui.struts.InterpretPlantAction" name="InterpretPlantForm"  
             input="InterpretTaxonObservation" scope="request">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
-			<set-property property="reqRoles" value="pro" />
+			<set-property property="reqRoles" value="cert" />
 			<forward name="edit" path="/forms/TaxonInterpretationAnnotateData.jsp" redirect="false" />
 		</action>
 		<action path="/SaveCommInterpretation" validate="true" parameter="save" 
             type="org.vegbank.ui.struts.InterpretCommAction" name="InterpretCommForm"  
             input="InterpretCommObservation" scope="request">
 			<set-property property="authClass" value="org.vegbank.ui.struts.Authenticate" />
-			<set-property property="reqRoles" value="pro" />
+			<set-property property="reqRoles" value="cert" />
 			<forward name="edit" path="/forms/CommInterpretation.jsp" redirect="false" />
 		</action>
 		<action path="/UpdatePassword" type="org.vegbank.ui.struts.UserProfileAction" 
