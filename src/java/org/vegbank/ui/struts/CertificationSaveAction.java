@@ -4,8 +4,8 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-11-12 20:08:16 $'
- *	'$Revision: 1.12 $'
+ *	'$Date: 2010-06-02 15:18:15 $'
+ *	'$Revision: 1.13 $'
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,7 +137,10 @@ public class CertificationSaveAction extends VegbankAction {
 
 		messageBody.append("Dear VegPanel Member:\n")
 			.append(" Please review the following certification application. \n")
-            .append(" http://"+ vbResources.getString("serverAddress") + "/vegbank/ViewCertification.do?certId=")
+             .append(" Respond by email to the rest of the panel, voting yes or no or add other comments. \n")
+	         .append(" Once two panel members vote yes, the database administrator will approve the certification. \n")
+			.append(" All information about this request is on this email.  To approve the certification request, click here: \n")
+			 .append(" http://"+ vbResources.getString("serverAddress") + "/vegbank/ViewCertification.do?certId=")
 			.append(form.getCertId())
 			.append("\n\n")
 			
