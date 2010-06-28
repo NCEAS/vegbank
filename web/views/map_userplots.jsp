@@ -380,8 +380,12 @@ yyy,37.12356,-119.43534
 	  - for non-rectangular plots, a series of coordinates may be specified that define the plot bounds, e.g. (0,0)(10,0)(0,10)(0,0) - a right triangle.
   </p>
 
-
-
+<h3>Tools:</h3>
+</p>After mapping plots, the following box will contain <a href="http://code.google.com/apis/kml/documentation/">Google KML data</a> 
+for your mapped plots.  You can then save this information as a KML file to interact with your plots in Google Earth or <a href="http://maps.google.com/support/bin/answer.py?hl=en&answer=41136">Google Maps</a>:
+<br/>
+<textarea cols="60" rows="6" id="gkml" readonly="readonly"></textarea>
+</p>
 
 
 

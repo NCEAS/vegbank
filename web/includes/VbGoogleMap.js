@@ -749,6 +749,8 @@ function VbGMakeMapQueryClickable(map) {
         var thisPlotPrefix = "";
         var lastPlotPrefix = "";
 
+		var strGoogleKML = "";
+		
         for (var i = 0; i < markers.length; i++) {
            //  alert('plot #' + i + ': ' + markers[i]);
              // var thisPlotCSV = markers[i].split(",");
@@ -869,7 +871,11 @@ function VbGMakeMapQueryClickable(map) {
                                       colorNumber, true, map, markerNumber, markerConfirmNumber, thisFuzzingDeg, thisAccuracyMeters,
                                       thisPlotAzimuth , thisPlotX , thisPlotY , thisGPSX , thisGPSY , thisDsgPoly,
                                       blnAutoDrawAcc, blnAutoDrawBounds);
-              //if ( thisMarker ) {
+            //calculate KML:
+			  strGoogleKML = strGoogleKML + "\n" + "<Placemark><name>" + thisPlotName + " " + thisExtraPlotDetail  + "</name>" +
+				  "<Point><coordinates>" + thisPlotLng + "," + thisPlotLat + "</coordinates></Point></Placemark>" ;
+			  
+			  //if ( thisMarker ) {
 			//	  markerNumber ++;
 			  //} else {
 			//	  markerNumber = -2 ; //cancel!
@@ -894,6 +900,17 @@ function VbGMakeMapQueryClickable(map) {
           }
 
        //}); //old GDownloadUrl, which failed b/c of permissions... weird.
+       //write KML:
+		  strGoogleKML = '<?xml version="1.0" encoding="UTF-8"?>' +
+			  '<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">' +
+			  '<Document><name>My Plot Locations</name><description></description>' + strGoogleKML + '</Document></kml>';
+		try {
+
+          document.getElementById('gkml').value = strGoogleKML;
+		} catch (e) {
+           //forget about it!
+		}
+		  
        return map;
    }
 
