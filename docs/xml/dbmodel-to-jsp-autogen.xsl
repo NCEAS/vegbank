@@ -2,7 +2,10 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:vegbank="http://vegbank.org" xmlns:logic="http://vegbank.org" xmlns:bean="http://vegbank.org" xmlns:redirect="http://xml.apache.org/xalan/redirect" xmlns:jsp="http://vegbank.org" extension-element-prefixes="redirect">
   <!--  <xsl:import href="http://xsltsl.sourceforge.net/modules/stdlib.xsl"/> -->
   <!-- comment out extenstion-elemtn ... though this comment to run locally without xalan -->
-  <xsl:param name="pathToWrite"/>
+  <!--<xsl:param name="pathToWrite"/> -->
+  <xsl:param name="viewsBuildFile">was not specified 1234567890</xsl:param>
+  
+  <xsl:variable name="pathToWrite" select="substring($viewsBuildFile,1,number(string-length($viewsBuildFile)-9))" />
   <xsl:param name="quot">"</xsl:param>
   <xsl:param name="apos">'</xsl:param>
   <xsl:output method="html"/>
@@ -26,6 +29,7 @@
     </xsl:if>
   </xsl:template>
   <xsl:template name="doEnts">
+    
     <xsl:param name="view"/>
     <xsl:for-each select="/dataModel/entity">
       <xsl:variable name="countAttsInView" select="count(attribute/attForms/formShow[translate(@name,$alphahigh,$alphalow)=$view])"/>

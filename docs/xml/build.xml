@@ -66,7 +66,7 @@
  <echo>Data Dictionary NO LONGER WORKS THIS WAY!</echo>
   </target>
   <target name="dist-closedlist-tokenfile" depends="init">
-    <style out="${style_server}/closedlist-tokens.properties" in="${origData}" extension=".properties" style="closedList_forms_options.xsl" force="true"/>
+    <xslt out="${style_server}/closedlist-tokens.properties" in="${origData}" extension=".properties" style="closedList_forms_options.xsl" force="true"/>
   </target>
   <target name="dist-dataxml" depends="init">
     <mkdir dir="${static_xmlserver}"/>
@@ -89,12 +89,12 @@
     <!-- this is used to create a template jsp file for the views directory -->
     <property file="jsp-template.properties"/>
     <echo>Read jsp-template.properties</echo>
-    <style in="${dbmodelfile}" out="${jsptemp}" force="yes" style="${templatexsl}">
+    <xslt processor="xalan2" in="${dbmodelfile}" out="${jsptemp}" force="yes" style="${templatexsl}">
       <param name="view" expression="${view}"/>
       <param name="oneTbl" expression="${oneTbl}"/>
       <param name="detailAdd" expression="${detailAdd}"/>
       <param name="more" expression="${more}"/>
-    </style>
+    </xslt>
     <echo>wrote ${jsptemp}</echo>
   </target>
   <!-- VegBranch closed list update file creation: -->

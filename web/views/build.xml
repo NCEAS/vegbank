@@ -7,13 +7,33 @@
     <property name="xsl_to_views" value="${docsxmldir}dbmodel-to-jsp-autogen.xsl" /> <!-- xsl that generates the views -->
     <property name="temp_xml_name" value="${docsxmldir}uniqueformlist.xml" /><!-- the name of the xml file that is generated from xsl_to_unique -->
     <property name="db_model" value="${docsxmldir}db_model_vegbank.xml" /> <!-- name of xml file that defines our data model -->
-    <property name="views_autogen_dir" value="../../web/views/autogen/" /><!-- relative path from docsxmldir to views/autogen -->
+    <property name="views_autogen_dir" value="/home/lee/vegbank.old/web/views/autogen/" /><!-- relative path from docsxmldir to views/autogen -->
+    <echo>${ant.file}../../</echo>
   </target>
   <target name="writeviews" depends="init">
-    
-     <style in="${db_model}" out="${temp_xml_name}" style="${xsl_to_unique}" force="true" />
-     <style in="${db_model}" out="${docsxmldir}BOGUS_autogenviews" style="${xsl_to_views}" force="true" >
-       <param name="pathToWrite" expression="${views_autogen_dir}" />
-     </style>
-  </target>
+
+     <xslt in="${db_model}" out="${temp_xml_name}" style="${xsl_to_unique}" force="true" />
+     <echo>made it past the first step!</echo>
+     <xslt in="${db_model}" out="${docsxmldir}BOGUS_autogenviews" style="${xsl_to_views}" force="true" >
+       <!-- <param name="pathToWrite" expression="${views_autogen_dir}" />-->
+       <param name="viewsBuildFile" expression="${ant.file}" />
+     </xslt>
+     <echo>made it past the second step!</echo>
+     <echo>Replacing xmlns: that get thrown into jsps and cause errors:</echo>
+     <replace dir="${views_autogen_dir}" token='xmlns:jsp="http://vegbank.org"' value=" ">
+       <include name="**/*.jsp"/>
+     </replace>
+     <replace dir="${views_autogen_dir}" token='xmlns:bean="http://vegbank.org"' value=" ">
+       <include name="**/*.jsp"/>
+     </replace>
+     <replace dir="${views_autogen_dir}" token='xmlns:logic="http://vegbank.org"' value=" ">
+       <include name="**/*.jsp"/>
+     </replace>
+      <replace dir="${views_autogen_dir}" token='xmlns:vegbank="http://vegbank.org"' value=" ">
+       <include name="**/*.jsp"/>
+     </replace>
+  
+
+
+</target>
 </project>
