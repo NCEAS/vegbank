@@ -174,10 +174,11 @@ var CON_LAT_TO_METERS_DIVISOR = 111131.9718; // the number of meters per degree 
             }
    }
 
+  tryNewIcon = false; //variable to try new icon
   var VbG_global_mapMainMap = null;
   // Creates a marker whose info window displays the given html (not number)
    function VbGCreateMarker(lat,lng, html, number,  blnColored, map, markerNumber, markerConfirmNumber,
-            degreesErr,metersErr, azimuth, plotX, plotY, GPSX, GPSY, dsgPoly , blnAutoDrawAcc, blnAutoDrawBounds) {
+            degreesErr,metersErr, azimuth, plotX, plotY, GPSX, GPSY, dsgPoly , blnAutoDrawAcc, blnAutoDrawBounds, plotName) {
          //this creates marker with listener that responds to clicks:
          // lat and lng are floating point latitude and longitude in decimal degrees
          // html is html to display for the marker (ie plot identification)
@@ -187,7 +188,21 @@ var CON_LAT_TO_METERS_DIVISOR = 111131.9718; // the number of meters per degree 
          // markerConfirmNumber is a threshhold past which the user gets a confirmation message to continue mapping.
          // if markerConfirmNumber is -1, then uses the default, supplied in this function, else uses what is set in page
         // GLog.write('init VbGCreateMarker(' + lat+ ',' + lng+ ',' +  'html' + ',' +  number+ ',' +   blnColored+ ',' +  '[map]'+ ',' +  markerNumber+ ',' +  markerConfirmNumber+ ',' +             degreesErr+ ',' + metersErr+ ',' +  azimuth+ ',' +  plotX+ ',' +  plotY+ ',' +  GPSX+ ',' +  GPSY+ ',' +  dsgPoly + ',' +  blnAutoDrawAcc+ ',' +  blnAutoDrawBounds + ')');
-        //save map globally if not set:
+        //define colors for "new" icon method:
+	   var arrCols = new Array();
+		arrCols.push("FF0066");
+		arrCols.push("00CCFF");
+		arrCols.push("99FF00");
+		arrCols.push("FFCC00");
+		arrCols.push("999999");
+		arrCols.push("FF33FF");
+		arrCols.push("FFFF99");
+		arrCols.push("CC9900");
+		arrCols.push("FFFFFF");
+		arrCols.push("33FFFF");
+		
+		
+		//save map globally if not set:
         if (VbG_global_mapMainMap) {
 			//fine
 		} else {
@@ -230,10 +245,18 @@ var CON_LAT_TO_METERS_DIVISOR = 111131.9718; // the number of meters per degree 
              if (blnColored==true) {
                // default icons are colored
                  baseIcon.shadow = "@images_link@map_google_shadow_20.png";
-                 baseIcon.iconSize = new GSize(12, 20);
-                 baseIcon.shadowSize = new GSize(22, 20);
-                 baseIcon.iconAnchor = new GPoint(6, 20);
-                 baseIcon.infoWindowAnchor = new GPoint(5, 1);
+                    if (tryNewIcon == true) {
+                        baseIcon.iconSize = new GSize(20, 34);
+		                baseIcon.shadowSize = new GSize(37, 34);
+						baseIcon.iconAnchor = new GPoint(9, 34);
+						baseIcon.infoWindowAnchor = new GPoint(9, 2);						   
+					} else {
+				      baseIcon.iconSize = new GSize(12, 20);
+	   				  baseIcon.shadowSize = new GSize(22, 20);
+					  baseIcon.iconAnchor = new GPoint(6, 20);
+				     baseIcon.infoWindowAnchor = new GPoint(5, 1); 
+					}													
+				 
                  VbGiconPrefix = "map_google_c_";
               } else {
                  baseIcon.shadow = "@images_link@map_google_shadow_50.png";
@@ -248,7 +271,22 @@ var CON_LAT_TO_METERS_DIVISOR = 111131.9718; // the number of meters per degree 
              while (number > CON_MAX_GOOGLE_ICONS) {
                  number = number - CON_MAX_GOOGLE_ICONS - 1;
              }
-             var icon = new GIcon(baseIcon,"@images_link@" + VbGiconPrefix +  number + ".png");
+			 var strIconPath = "";
+			 if (tryNewIcon == true) {
+			   var plotLabel = "";
+			   try {
+                  if (plotName) {
+                    plotLabel = plotName.substr(plotName.length-2);
+				  }
+			   } catch(e) {
+                  plotLabel = "";
+			   }
+               strIconPath = "http://chart.apis.google.com/chart?chst=d_map_spin&chld=1|0|" + arrCols[number] + "|18|_|" + plotLabel;
+			 } else {
+			   strIconPath = "@images_link@" + VbGiconPrefix +  number + ".png";
+			 }  
+             var icon = new GIcon(baseIcon,strIconPath);
+			 
              // icon.image = "@images_link@" + VbGiconPrefix +  number + ".png";
              var marker = new GMarker(point, icon);
 
@@ -870,7 +908,7 @@ function VbGMakeMapQueryClickable(map) {
                                       thisPlotHTML,
                                       colorNumber, true, map, markerNumber, markerConfirmNumber, thisFuzzingDeg, thisAccuracyMeters,
                                       thisPlotAzimuth , thisPlotX , thisPlotY , thisGPSX , thisGPSY , thisDsgPoly,
-                                      blnAutoDrawAcc, blnAutoDrawBounds);
+                                      blnAutoDrawAcc, blnAutoDrawBounds, thisPlotName);
             //calculate KML:
 			  strGoogleKML = strGoogleKML + "\n" + "<Placemark><name>" + thisPlotName + " " + thisExtraPlotDetail  + "</name>" +
 				  "<Point><coordinates>" + thisPlotLng + "," + thisPlotLat + "</coordinates></Point></Placemark>" ;

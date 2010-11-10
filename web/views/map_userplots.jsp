@@ -21,8 +21,8 @@
            </logic:equal>
 
            <logic:equal parameter="mapSize" value="m">
-              <bean:define id="mapWidth">950</bean:define>
-              <bean:define id="mapHeight">650</bean:define>
+              <bean:define id="mapWidth">1020</bean:define>
+              <bean:define id="mapHeight">635</bean:define>
               <!-- reset med link: -->
               <bean:define id="med_link_html">Medium</bean:define>
               <bean:define id="sml_link_html"><span class="lk" onclick="postNewParam('mapSize','s');return false;">small</span></bean:define>
@@ -51,8 +51,7 @@
   @webpage_head_html@
 
 
-
-<TITLE>Map YOUR plots (a service from VegBank)</TITLE>
+<TITLE>Map your plots (a service from VegBank)</TITLE>
 
      <!-- style bit is for google maps -->
      <style type="text/css">
@@ -204,10 +203,15 @@
  @webpage_masthead_html@
   @possibly_center@
 
+   <script type="text/javascript">
+        tryNewIcon = true;
+   </script>
+		  
+  
 <!-- see if there is even data defined.  If not, this page is a menu-->
 <logic:notPresent name="csvdata">
   <!-- there is no data, just display menu -->
-<h2>Map YOUR plots</h2>
+<h2>Map your plots</h2>
 
   <p>This page will map your plots from a CSV file that is publicly accessible.  <strong>They are NOT plots in VegBank.  </strong>
   </p>
@@ -217,7 +221,7 @@
 <logic:present name="csvdata"><!-- we have data -->
   <logic:notEqual name="dataValidated" value="false"> <!-- and it is valid -->
 
-    <div id="mapTitleLine">
+    <div id="mapTitleLine" class="noprint">
       <div id="mapsizesetter" style="float:right;">
       Controls: <span class="lk" onclick="showHideGoogleControls();return false;">show/hide</span>. --
       Map size: <span style="font-size:8pt"> <bean:write name="sml_link_html" filter="false" /> </span>
@@ -263,17 +267,17 @@
 
 <!--DIV style="width:700px" style="clear:both;"--><!-- start a container for rest of page -->
 
-  <div style="float:right" id="whereismap_wrapper">
+  <div style="float:right" id="whereismap_wrapper" class="noprint">
     Initial location of larger map outlined here: </br/>
     <div id="whereismap" style="width: 190px; height: 100px"></div>
   </div>
 
-    <p>
-     <logic:notEmpty name="bean_latlongfile">
+    
+	<logic:notEmpty name="bean_latlongfile">
       You are mapping plots from this URL:
       <bean:write name="bean_latlongfile" /> <br/>
      </logic:notEmpty>
-
+ <p class="noprint">
     <strong>Linking to this page</strong><br/>
     You can map plots, then link to this page with your plots mapped.  If you have a large number of plots, you may have
     to use an external file due to URL length limitations.
@@ -305,14 +309,14 @@ INVALID REQUEST!  The data you tried to map was not a validly formatted.  See be
 in your data.  These must be removed or encoded as &amp;lt;
 </logic:equal>
 
-<p>
+<p class="noprint">
 <strong>If you'd like to map new plots, please see the instructions below:</strong>
 </p>
 <!--/DIV-->
 </logic:present> <!-- data here -->
 
 
-<p>
+<div class="noprint">
 <h4>Option 1: Enter your data</h4>
 
   <form name="pasteCSVData" action="<%= request.getRequestURL() %>" method="post"><!-- action is self -->
@@ -337,7 +341,7 @@ Copy and paste your csv data here, in the format stated <a href="#format">below<
   </form>
 
 
-</p>
+
 <a name="format"></a>
 <h4>Basic format: </h4>
 <p>
@@ -386,7 +390,7 @@ for your mapped plots.  You can then save this information as a KML file to inte
 <br/>
 <textarea cols="60" rows="6" id="gkml" readonly="readonly"></textarea>
 </p>
-
+</div><!-- no print div -->
 
 
 </DIV><!-- alternateBigPageWrapper -->
