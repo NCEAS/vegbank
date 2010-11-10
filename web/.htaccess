@@ -34,6 +34,7 @@ RewriteRule ^vegbranch-nps-version$      /vegdocs/vegbranch/docs/nps-plots.html 
 
 RewriteRule ^xml$            /vegdocs/xml/vegbank-xml-index.html  [NC,QSA,L,R]
 RewriteRule ^erd$            /vegdocs/design/erd/vegbank_erd.pdf  [NC,QSA,L,R]
+RewriteRule ^cite$           /vegbank/general/cite.html [NC,QSA,L,R]
 
 RewriteRule ^load-xml$            /vegbank/DisplayUploadPlotAction.do  [NC,QSA,L,R]
 RewriteRule ^load-xml/(.*)$            /vegbank/DisplayUploadPlotAction.do?localfile=$1  [NC,QSA,L,R]
