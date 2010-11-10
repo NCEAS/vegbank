@@ -173,3 +173,16 @@ Misc examples of things having gone wrong (and hopefully how they were fixed):
     "Apache was not loading cause it could not find the directory that it was trying to write the error log file 
      to for the vegbank.org virtual host. It was trying to write to /usr/www/vegbank/logs/error.log and the 
      logs directory did not exist there. I created it and started apache. It all seems to be working now."
+
+29-SEP-2009: we were getting an error on the overnight cron stating:
+/etc/cron.daily/vbdump:
+
+NOTICE:  number of page slots needed (226496) exceeds max_fsm_pages (35000)
+HINT:  Consider increasing the configuration parameter "max_fsm_pages" to a value over 226496.
+VACUUM
+
+This cron does two things: 1) backup the database and 2) vacuum the database.  I tried vacuuming the database manually and got the same error message.
+I went to:
+http://varlena.com/GeneralBits/Tidbits/perf.html#maxfsmp
+and discoved that you can try a "vacuum full" which I have done, and it may solve the problem.
+
