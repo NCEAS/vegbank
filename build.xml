@@ -563,7 +563,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
   
   <!--install the web files-->
   <target name="web-install" depends="dbVerify">
-    <ant antfile="build.xml" target="deploy-all" dir="${webDir}"/>
+    <ant antfile="build.xml" target="deploy-all" dir="${webDir}" inheritAll="false" />
     <echo file="${buildStatusDir}/deploy-props.txt">       -----------------DEPLOY PROPS STATUS------------------------@subst_lt@br/@subst_gt@       Properties last deployed at time: ${currentTime} @subst_lt@br/@subst_gt@       Connection to database Name: ${databaseName} @subst_lt@br/@subst_gt@       Deployed from : ${basedir} @subst_lt@br/@subst_gt@       vegbank version: ${version} @subst_lt@br/@subst_gt@       ---------------------------------------------------------------------@subst_lt@br/@subst_gt@       </echo>
     <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
     <echo file="${buildStatusDir}/verify.readme">${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
