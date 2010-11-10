@@ -17,20 +17,20 @@ function getHelpPageId() {
 
 
 
-  <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk" 
+  <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk"
     whereNonNumeric="where_observation_ac" beanName="map" pager="true"/>
 
 
-<logic:empty name="plotobs-BEAN">  
+<logic:empty name="plotobs-BEAN">
   <!-- define dummy variables : -->
    <bean:define id="onerowofobservation">-1</bean:define>
   <bean:define id="onerowofplot" >-1</bean:define>
   <bean:parameter name="wparam" id="beanwparam" value="-1" />
   <logic:redirect page="/views/observation_summary.jsp" paramId="wparam" paramName="beanwparam" />
-  
+
 </logic:empty>
 
-<logic:notEmpty name="plotobs-BEAN">  
+<logic:notEmpty name="plotobs-BEAN">
 <!-- NOPE logic:notEmpty name="plotobs-BEANLIST" NOPE--><!-- set up table -->
 <!-- NOPE logic:iterate id="onerowofobservation" name="BEANLIST" NOPE--><!-- iterate over all records in set : new table for each -->
   <bean:define id="onerowofobservation" name="plotobs-BEAN" />
@@ -44,11 +44,11 @@ function getHelpPageId() {
 
 
 <%@ include file="includeviews/inlinestyles.jsp" %>
-  @webpage_masthead_html@   @possibly_center@  
+  @webpage_masthead_html@   @possibly_center@
   <table class="noborders"><tr><td align="left">
-  
+
     <h2 align="center">Comprehensive View of a Plot</h2>
-  
+
 
 <!-- datacart item -->
   <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
@@ -71,79 +71,12 @@ function getHelpPageId() {
 <!-- start of plot & obs fields-->
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="2" style="clear: both; display: block;">
 <TR><TD width="55%" valign="top" id="tut_plotdetailleft"><!-- plot level info -->
-<div class="padded">
-<table width="100%" class="leftrightborders" cellpadding="2"><!--each field, only write when HAS contents-->
+  <!-- plot-level info removed to different view -->
+  <jsp:include page="observation_plotlevel.jsp">
+    <jsp:param name="wparam"  value="<%= observation_pk %>" />
+  </jsp:include>
 
-    <tr><th class="major" colspan="2">
-            <bean:write name="onerowofplot" property="authorplotcode"/>
-    </th></tr>
 
-  @mark_datacart_items@
-
-<tr class="@nextcolorclass@"><td colspan="2">&raquo; Citation URL: <a href='/cite/<bean:write name="onerowofplot" property="observationaccessioncode" />'>http://vegbank.org/cite/<bean:write name="onerowofplot" property="observationaccessioncode" /></a>
-<br/>&raquo; <a href="@general_link@cite.html">Citing info</a></td></tr>
-<tr><th>Plot ID Fields:</th><th>&nbsp;</th></tr>
-<bean:define id="hadData" value="false" /> 
-<%@ include file="autogen/plot_plotidlong_data.jsp" %>         
-<%@ include file="autogen/observation_plotidlong_data.jsp" %>
-<%@ include file="includeviews/sub_haddata.jsp" %>
-
-<!-- custom, show children if there are any -->
- <logic:greaterThan name="onerowofplot" property="countchildplots" value="0">
-   <tr class="@nextcolorclass@"><td class="datalabel">Has Sub Plots</td>
-     <td>
-       <a href="@get_link@summary/observation/<bean:write name='onerowofplot' property='plot_id' />?where=where_plot_childrenof">
-         <bean:write name="onerowofplot" property="countchildplots" /> plot(s)
-       </a>
-     </td>
-   </tr>
- </logic:greaterThan>
-<tr><th>Location Fields:</th>
-  <bean:define id="trunclat"><bean:write name='onerowofplot' property='latitude' /></bean:define>
-  <bean:define id="trunclong"><bean:write name='onerowofplot' property='longitude' /></bean:define>
-  <% if (trunclat.length() > 7 ) { trunclat = trunclat.substring(0,7); } %>
-  <% if (trunclong.length() > 7 ) { trunclong = trunclong.substring(0,7); } %>
-  <th>MAP:<a title="TopoZone provides a close up map of the plot's location (new window)" target="_new" href="http://www.topozone.com/map.asp?lat=<bean:write name='onerowofplot' property='latitude' />&lon=<bean:write name='onerowofplot' property='longitude' />&datum=nad83&u=5">TopoZone</a>
-  | <a title="MapQuest provides a more general map of the plot's location (new window)" target="_new" href="http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=<%= trunclat %>&longitude=<%= trunclong %>">MapQuest</a>
-  </th></tr>
-<bean:define id="hadData" value="false" /> 
-<%@ include file="autogen/plot_plotloclong_data.jsp" %>
-<%@ include file="autogen/observation_plotloclong_data.jsp" %>
-<%@ include file="includeviews/sub_place.jsp" %>
-<%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th>Layout Fields:</th><th>&nbsp;</th></tr>
-<bean:define id="hadData" value="false" /> 
-<%@ include file="autogen/plot_plotlayoutlong_data.jsp" %>
-<%@ include file="autogen/observation_plotlayoutlong_data.jsp" %>
-<%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th>Environment Fields:</th><th>&nbsp;</th></tr>
-<bean:define id="hadData" value="false" /> 
-<%@ include file="autogen/plot_plotenvlong_data.jsp" %>
-<%@ include file="autogen/observation_plotenvlong_data.jsp" %>
-<%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th>Methods Fields:</th><th>&nbsp;</th></tr>
-<bean:define id="hadData" value="false" /> 
-<%@ include file="autogen/plot_plotmethodlong_data.jsp" %>
-<%@ include file="autogen/observation_plotmethodlong_data.jsp" %>
-<%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th>Plot quality Fields:</th><th>&nbsp;</th></tr>
-<bean:define id="hadData" value="false" /> 
-<%@ include file="autogen/plot_plotqualitylong_data.jsp" %>
-<%@ include file="autogen/observation_plotqualitylong_data.jsp" %>
-<%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th>Overall Plot Vegetation Fields:</th><th>&nbsp;</th></tr>
-<bean:define id="hadData" value="false" /> 
-<%@ include file="autogen/plot_plotoverallveglong_data.jsp" %>
-<%@ include file="autogen/observation_plotoverallveglong_data.jsp" %>
-<%@ include file="includeviews/sub_haddata.jsp" %>
-<tr><th>Misc Fields:</th><th>&nbsp;</th></tr>
-<bean:define id="hadData" value="false" /> 
-<%@ include file="autogen/plot_plotmisclong_data.jsp" %>
-<%@ include file="autogen/observation_plotmisclong_data.jsp" %>
-<%@ include file="includeviews/sub_haddata.jsp" %>
-<!-- end of plot/obs fields -->
-</table>
-</div>
 </TD><TD valign="top" id="tut_plotdetailplants">
 <div class="padded">
 <!-- plants in this plot -->
@@ -153,7 +86,7 @@ function getHelpPageId() {
 
 <bean:parameter id="strataToShowBean" name="strata2Show" value="2" />
 <bean:define id="requestedPageURL"><%= "/views/raw/raw_taxonobservation.jsp?observation_pk=" + observation_pk  + "&strata2Show=" + strataToShowBean %><logic:present name="do_not_show_userdefined_data">&do_not_show_userdefined_data=true</logic:present></bean:define>
-<!-- page requesting :  <bean:write name="requestedPageURL" /> --> 
+<!-- page requesting :  <bean:write name="requestedPageURL" /> -->
 <bean:include id="taxonobs_page" page='<%= requestedPageURL %>' />
 <bean:write name="taxonobs_page" filter="false" />
 </div>
@@ -179,13 +112,13 @@ function getHelpPageId() {
 </logic:iterate>
 </logic:notEmpty>
 </table>
- 
+
 <!-- community info -->
 
 <bean:include id="commclass_page" page='<%= "/views/raw/raw_commclass.jsp?observation_pk=" + observation_pk  %>' />
 <bean:write name="commclass_page" filter="false" />
 
-<!--vegbank:get id="commclass" select="commclass" beanName="map" 
+<!--vegbank:get id="commclass" select="commclass" beanName="map"
     where="where_observation_pk" wparam="observation_pk" pager="false"/-->
 <!--%@ include file="includeviews/sub_commclass_summary.jsp" %-->
 
@@ -239,24 +172,24 @@ function getHelpPageId() {
      <br/><br/>
      <table class="thinlines">
      <tr><th colspan="3">User Defined Values</th></tr>
-     
+
      <bean:define id="userdefinedexist" value="false" /><!-- default value-->
      <bean:include id="defval_obs" page='<%= "/views/raw/raw_definedvalue_summary.jsp?wparam=observation" + Utility.PARAM_DELIM + observation_pk  %>' />
      <logic:notMatch name="defval_obs" value="@!NO_USER_DEFINED_VALUES!@">
        <bean:define id="userdefinedexist" value="true" /><!-- wrote some -->
        <bean:write name="defval_obs" filter="false" />
      </logic:notMatch>
-     
+
      <bean:include id="defval_plot" page='<%= "/views/raw/raw_definedvalue_summary.jsp?wparam=plot" + Utility.PARAM_DELIM + plot_pk  %>' />
      <logic:notMatch name="defval_plot" value="@!NO_USER_DEFINED_VALUES!@">
        <bean:define id="userdefinedexist" value="true" /><!-- wrote some -->
        <bean:write name="defval_plot" filter="false" />
      </logic:notMatch>
-     
+
      <logic:equal name="userdefinedexist" value="false"><!-- if I didn't write any -->
        <tr><td colspan="2">No User Defined Data for this plot</td></tr>
      </logic:equal>
-     
+
      </table>
 </logic:notPresent>
 <!--/logic:iterate NOPE-->
