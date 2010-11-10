@@ -1,16 +1,16 @@
 package org.vegbank.common.utility;
 
 /*
- * Utility class for java servltes for doing a range of utility 
+ * Utility class for java servltes for doing a range of utility
  * type functions including:
  * 		emailing
  * 		figuring the the type of client browser
- *    etc.. 
+ *    etc..
  *
  *	'$Author: anderson $'
  *  '$Date: 2005-08-15 23:26:11 $'
  *  '$Revision: 1.20 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -53,18 +53,18 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.*;
 
-public class ServletUtility 
+public class ServletUtility
 {
-	private static Log log = LogFactory.getLog(ServletUtility.class); 
-	private GetURL gurl = new GetURL();	
-	
-	static final int BUFFER = 2048; 
-	
+	private static Log log = LogFactory.getLog(ServletUtility.class);
+	private GetURL gurl = new GetURL();
+
+	static final int BUFFER = 2048;
+
 	/**
-	 * method that takes a Hashtable containing fileContent and desired fileName 
-	 * and an Outputstrean that represents the created  zip file plus the LineEnd 
+	 * method that takes a Hashtable containing fileContent and desired fileName
+	 * and an Outputstrean that represents the created  zip file plus the LineEnd
 	 * style desired if downloading file to different OS.
-	 * 
+	 *
 	 * See ( or use ) com.Ostermiller.util>LineEnds for the Constants for each system
 	 *
 	 * @param nameContent -- the Hashtable containing the filesContent (as String ) and the file names
@@ -82,16 +82,16 @@ public class ServletUtility
 		ZipOutputStream zipstream = new ZipOutputStream(outStream);
         //log.debug("using commons-compress code to setEncoding");
         //zipstream.setEncoding(encoding);
-		
+
 		Enumeration names = nameContent.keys();
 		while ( names.hasMoreElements() )
 		{
 			String fileName = (String) names.nextElement();
 			String fileContent = (String) nameContent.get(fileName);
-		
+
 			ZipEntry zipentry = new ZipEntry(fileName);
 			zipstream.putNextEntry(zipentry);
-			
+
 			ByteArrayInputStream origin;
 			try {
 				// Set up an input stream with the given character encoding
@@ -118,7 +118,7 @@ public class ServletUtility
 				//LineEnds.convert(origin, zipstream, LineEnds.STYLE_DOS);
 
 			} else {
-				
+
 				// handle as binary data
 				int c = origin.read();
 				while (c != -1) {
@@ -127,12 +127,12 @@ public class ServletUtility
 				}
 			}
 
-			origin.close();	
+			origin.close();
 		}
 		zipstream.flush();
 		zipstream.close();
 	}
-	
+
 	public static void deflateAndSend(Hashtable nameContent, OutputStream outStream, String encoding) throws IOException
 	{
 /*
@@ -161,7 +161,7 @@ public class ServletUtility
 
 	/**
 	 * Send a HTML email message.
-	 * 
+	 *
 	 * @param smtpServer
 	 * @param from
 	 * @param to
@@ -186,7 +186,7 @@ public class ServletUtility
 		log.debug("Sending message: " + subject);
 		Transport.send(msg);
 	}
-	
+
 	/**
 	 * Get the usrId from the session.
 	 *
@@ -199,14 +199,14 @@ public class ServletUtility
 		HttpSession session = request.getSession();
 		if ( session != null )
 		{
-			usrId = (Long) session.getAttribute(Constants.USER_KEY);	
+			usrId = (Long) session.getAttribute(Constants.USER_KEY);
 		}
 		return usrId;
 	}
 
 	/**
 	 * Send an email from a template.
-	 * 
+	 *
 	 * @param templateName
 	 * @param tagTable
 	 * @param from
@@ -217,9 +217,9 @@ public class ServletUtility
 	 * @throws AddressException
 	 * @throws MessagingException
 	 */
-	public static void sendEmailTemplate(String templateName, Map tagTable, 
+	public static void sendEmailTemplate(String templateName, Map tagTable,
 			String from, String to, String cc,
-			String subject, boolean plainText) 
+			String subject, boolean plainText)
 			throws AddressException, MessagingException
 	{
 		// load the email template
@@ -227,7 +227,7 @@ public class ServletUtility
 		velo.putAll(tagTable);
 
 		// set up the email header
-		String body = velo.processTemplate(); 
+		String body = velo.processTemplate();
 
 		if (to == null || to.equals("")) {
 			throw new AddressException("no email address given");
@@ -243,7 +243,7 @@ public class ServletUtility
 
 	/**
 	 * Send a plain text email.
-	 * 
+	 *
 	 * @param smtpServer
 	 * @param from
 	 * @param to
@@ -282,7 +282,7 @@ public class ServletUtility
 		{
 			smtpServer = Utility.SMTP_SERVER;
 		}
-		
+
 		Properties props =new Properties();
 		props.put("mail.smtp.host", smtpServer);
 
@@ -295,14 +295,14 @@ public class ServletUtility
 
 
 		Session session = Session.getDefaultInstance(props, null);
-		
+
 		//	-- Create a new message --
 		Message msg = new MimeMessage(session);
-		
+
 		// -- Set the FROM and TO fields --
 		msg.setFrom(new InternetAddress(from));
 		msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
-		
+
 		// -- Include CC recipients too --
 		if (cc != null)
 		{
@@ -311,30 +311,30 @@ public class ServletUtility
 
 		// -- Set the subject and body text --
 		msg.setSubject(subject);
-		
+
 		// -- Set some other header information --
 		msg.setSentDate(new Date());
-		
+
 		return msg;
 	}
-	
+
 	/**
-	 * method to stick the parameters from the client 
-	 * into a hashtable and then pass it back to the 
+	 * method to stick the parameters from the client
+	 * into a hashtable and then pass it back to the
 	 * calling method
 	 */
-	public static Hashtable parameterHash (HttpServletRequest request) 
+	public static Hashtable parameterHash (HttpServletRequest request)
 	{
 		Hashtable params = new Hashtable();
-		try 
+		try
 		{
-			Enumeration enum =request.getParameterNames();
+			Enumeration anenum =request.getParameterNames();
 			//log.debug("servletUtility 'parameterHash' contacted ");
- 			while (enum.hasMoreElements()) 
+ 			while (anenum.hasMoreElements())
 			{
-				String name = (String) enum.nextElement();
+				String name = (String) anenum.nextElement();
 				String values[] = request.getParameterValues(name);
-				if (values != null) 
+				if (values != null)
 				{
 					//for (int i=0; i<values.length; i++) {
 					if (values.length == 1) {
@@ -345,7 +345,7 @@ public class ServletUtility
 				}
  			}
 		}
-		catch( Exception e ) 
+		catch( Exception e )
 		{
 			log.debug(
 					"** failed in:  " + " first try - reading parameters " + e.getMessage()
@@ -360,20 +360,20 @@ public class ServletUtility
 	 * @param  inFile  a string representing the input file
 	 * @param  outFile a string representing the output, compressed, file
 	 */
-	public void flushFile(String inFile) 
+	public void flushFile(String inFile)
 	{
 		try
 		{
 			(new File(inFile)).delete();
-			//inFile.delete(); 
+			//inFile.delete();
 			//PrintWriter out  = new PrintWriter(new FileOutputStream(inFile, true));
 		}
-		catch(Exception e) 
+		catch(Exception e)
 		{
 			log.debug("failed: servletUtility.flushFile");
 		}
 	}
-	
+
 	/**
 	 *  Method to copy a file
 	 *
@@ -408,9 +408,9 @@ public class ServletUtility
 			log.debug("Exception: " + e.getMessage());
 		}
 	}
-	
+
 	/**
-	 * utility method to return the name of the browser type that 
+	 * utility method to return the name of the browser type that
 	 * a client is using given as input an http request
 	 * @param request -- the http request
 	 *
@@ -421,7 +421,7 @@ public class ServletUtility
 		 try
 		 {
 			 Enumeration headerNames = request.getHeaderNames();
-			 while(headerNames.hasMoreElements()) 
+			 while(headerNames.hasMoreElements())
 			{
 	      String headerName = (String)headerNames.nextElement();
 	      String value = request.getHeader(headerName);
@@ -438,28 +438,28 @@ public class ServletUtility
 					{
 						 s = "netscape";
 					}
-					else 
+					else
 					{
 						s = "unknown";
 					}
 				}
 	    }
-			log.debug("ServletUtility > browserType: " + s); 
+			log.debug("ServletUtility > browserType: " + s);
 		 }
-		 catch(Exception e) 
+		 catch(Exception e)
 		{
 			log.debug("Exception: " + e.getMessage() );
 		}
 		 return(s);
 	 }
-	 
+
 	/**
 	 *  Method to compress an inputstream using GZIP compression
 	 *
 	 * @param  inFile  a string representing the input file
 	 * @param  outFile a string representing the output, compressed, file
 	 */
-	
+
 	public static byte[] gzipCompress(byte[]  ba) throws IOException
 	{
 		ByteArrayOutputStream compressed = new ByteArrayOutputStream();
@@ -469,42 +469,42 @@ public class ServletUtility
 		gzout.close();
 		return compressed.toByteArray();
 	}
-	
-	
+
+
 	/**
-	 *  Method that takes as input a name of a file and writes the file contents 
+	 *  Method that takes as input a name of a file and writes the file contents
 	 *  to a vector and then makes the vector and number of vector elements access
-	 *  to the public 
+	 *  to the public
 	 *
 	 * @param fileName name of the file that whose contents should be written to a vector
 	 * @deprecated
 	 */
-	public Vector fileVectorizer(String fileName) 
+	public Vector fileVectorizer(String fileName)
 	{
 		Vector vector = new Vector();
-		try 
+		try
 		{
 			log.debug("ServletUtility > vectorizing file: " + fileName);
 			int vecElementCnt=0;
 			BufferedReader in = new BufferedReader(new FileReader(fileName));
 			String s;
-			while((s = in.readLine()) != null) 
+			while((s = in.readLine()) != null)
 			{
-				//log.debug(s);	
+				//log.debug(s);
 				vector.addElement(s);
 				vecElementCnt++;
 			}
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
-			log.debug("failed in servletUtility.fileVectorizer" + 
+			log.debug("failed in servletUtility.fileVectorizer" +
 			e.getMessage());
 		}
 		return vector;
 	}
-	 
+
 	/**
- 	 * method to copy a file and filter the tokens, this method uses the 
+ 	 * method to copy a file and filter the tokens, this method uses the
  	 * jakarta ant library 1.4.1 and above
  	 *
 	 * @param infile -- the file to be copied that contains the token
@@ -526,27 +526,27 @@ public class ServletUtility
 			result=false;
 		}
 		return(result);
-	}	
-	
-	
+	}
+
+
 	private void filterTokens ( Reader in, Writer out, Hashtable tokenVals)
-	{	
-		
+	{
+
 		ReplaceTokens rtReader = 	new ReplaceTokens( in);
-		Enumeration enum = tokenVals.keys();
-		while ( enum.hasMoreElements() )
+		Enumeration anenum = tokenVals.keys();
+		while ( anenum.hasMoreElements() )
 		{
-			String tokenName = (String) enum.nextElement();
+			String tokenName = (String) anenum.nextElement();
 			String value = (String) tokenVals.get(tokenName);
 			// do shit with this
 			ReplaceTokens.Token token = new ReplaceTokens.Token();
 			token.setKey(tokenName);
 			token.setValue(value);
-			
+
 			// Add token to Reader
 			rtReader.addConfiguredToken(token);
 		}
-		
+
 		BufferedReader br = new BufferedReader(rtReader);
 		String s = "";
 		try
@@ -559,15 +559,15 @@ public class ServletUtility
 		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
-		}		
-		
-		
+		}
+
+
 	}
 
-	 
-	 
+
+
 	 /**
- 	 * method to copy a file and filter the tokens, this method uses the 
+ 	 * method to copy a file and filter the tokens, this method uses the
  	 * jakarta ant library 1.4.1 and above
  	 *
 	 * @param infile -- the file to be copied that contains the token
@@ -590,7 +590,7 @@ public class ServletUtility
 			result=false;
 		}
 		return(result);
-	}		
+	}
 
 	/**
 	 * @param request
@@ -599,18 +599,18 @@ public class ServletUtility
 	public String printParameters(HttpServletRequest request)
 	{
 		StringBuffer sb = new StringBuffer();
-		 Enumeration enum = request.getParameterNames();
-		 
-		 while ( enum.hasMoreElements() )
+		 Enumeration anenum = request.getParameterNames();
+
+		 while ( anenum.hasMoreElements() )
 		 {
-		 	String parameterName = (String) enum.nextElement();
+		 	String parameterName = (String) anenum.nextElement();
 			sb.append( parameterName + " --> " + request.getParameter(parameterName) );
 			sb.append(",");
 		 }
-		
+
 		return sb.toString();
 	}
-	
+
 	/**
 	 * @param request
 	 * @return
@@ -618,15 +618,15 @@ public class ServletUtility
 	public String printAttributes(HttpServletRequest request)
 	{
 		StringBuffer sb = new StringBuffer();
-		 Enumeration enum = request.getAttributeNames();
-		 
-		 while ( enum.hasMoreElements() )
+		 Enumeration anenum = request.getAttributeNames();
+
+		 while ( anenum.hasMoreElements() )
 		 {
-			String attributeName = (String) enum.nextElement();
+			String attributeName = (String) anenum.nextElement();
 			sb.append( attributeName + " --> " + request.getAttribute(attributeName) );
 			sb.append(",");
 		 }
-		
+
 		return sb.toString();
 	}
 
@@ -672,10 +672,10 @@ public class ServletUtility
 	}
 
 	/**
-	 * Takes a File and  unzips it 
-	 * 
+	 * Takes a File and  unzips it
+	 *
 	 */
-	public static Collection unZip(FormFile inFile) throws Exception 
+	public static Collection unZip(FormFile inFile) throws Exception
 	{
 		Vector fileList = new Vector();
 		InputStream in = inFile.getInputStream();
@@ -686,7 +686,7 @@ public class ServletUtility
 		{
 			File outFile = new File(e.getName());
 			FileOutputStream out = new FileOutputStream(outFile);
-			
+
 			byte[] b = new byte[512];
 			int len = 0;
 			while ( ( len=zis.read(b) ) != -1)
@@ -696,9 +696,9 @@ public class ServletUtility
 			fileList.add( new FileWrapper(outFile) );
 		}
 		zis.close();
-		
+
 		return fileList;
 	}
 
-}	
+}
 

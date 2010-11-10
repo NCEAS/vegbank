@@ -1,8 +1,8 @@
 /*
  * '$RCSfile: DataUploadServlet.java,v $'
- * 
+ *
  * Purpose: Upload and save any file.
- * 
+ *
  * '$Author: anderson $'
  * '$Date: 2004-11-29 18:35:52 $'
  * '$Revision: 1.3 $'
@@ -20,13 +20,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
- * 
+ *
+ *
  * Servlet to handle file uploading / downloading to/from a browser using
  * multipart/form-data encription or any other client that uses this encoding
  * or an un-encoded data exchange.  The multipart encryption transfer uses the
  * code in the  book "Java Servlet Programming" by Hunter & Crawford and newer
- * versions of this code can be found at: 
+ * versions of this code can be found at:
  * http://www.servlets.com/resources/com.oreilly.servlet/
  * The code used for the non-encoded data-file-exchange was taken from the
  * Metacat project specifically the classes DataFileServer, and DataStreamTest
@@ -54,7 +54,7 @@ import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.mail.*;
 
 
-public class DataUploadServlet extends HttpServlet 
+public class DataUploadServlet extends HttpServlet
 {
 	private static Log log = LogFactory.getLog(DataUploadServlet.class);
 	private static ResourceBundle vegbankPropFile;
@@ -68,8 +68,8 @@ public class DataUploadServlet extends HttpServlet
 	private String referPage = "validate input data for interpolation: ";
 	private String referUrl = "/forms/validate.html";
 	private int fileMaxSize = 200000000;
-	
-	
+
+
 	/**
 	 * constructor method
 	 */
@@ -90,42 +90,42 @@ public class DataUploadServlet extends HttpServlet
 		checkUploadDir();
 
 	}
-	
-	
+
+
 	/** Handle "GET" method requests from HTTP clients */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
-  	throws IOException, ServletException 	
+  	throws IOException, ServletException
 		{
     	doPost(request, response);
 		}
 
 	/** Handle "POST" method requests from HTTP clients */
   public void doPost(HttpServletRequest req, HttpServletResponse res)
-  	throws ServletException, IOException 
+  	throws ServletException, IOException
 		{
 			res.setContentType("text/html");
 			PrintWriter out = res.getWriter();
-			try 
+			try
 			{
 				if (getRequestContentType(req).startsWith("multipart"))
 				{
-					try 
+					try
 					{
 						checkUploadDir();
 						log.debug("DataUploadServlet > client connected using multipart encoding");
-						//then get the user name and password -- this is where the upload 
+						//then get the user name and password -- this is where the upload
 						//file is defined
 				 		log.info("uploading a file to " + uploadDir);
 						multi=new MultipartRequest(req, uploadDir, fileMaxSize);
-						// get the un-encoded parameter names back from the 
+						// get the un-encoded parameter names back from the
 						// MultipartRequest class
-						Enumeration enum = multi.getParameterNames();
-						
+						Enumeration anenum = multi.getParameterNames();
+
 						//copy the request
 						HttpServletRequest reqCopy = req;
 						//do the exchange
 						out.println( handleExchangeRequest(reqCopy, res) );
-						
+
 					}
 					catch(Exception e)
 					{
@@ -139,13 +139,13 @@ public class DataUploadServlet extends HttpServlet
 				out.println(handleError("Problem while uploading file", e));
 			}
 		}
-		
-		
-	
-	
-	
-	/** 
-	 * merthod that passes back a string explaining the parameters that 
+
+
+
+
+
+	/**
+	 * merthod that passes back a string explaining the parameters that
 	 * amy / must be passed to this servlet
 	 */
 	private String getServletParameters()
@@ -157,7 +157,7 @@ public class DataUploadServlet extends HttpServlet
 		sb.append("</html>");
 		return(sb.toString() );
 	}
-	
+
 		/**
 		 * method that retuns the content request conetent type
 		 * if the request was made thru a browser using multipart
@@ -179,29 +179,29 @@ public class DataUploadServlet extends HttpServlet
 					 s = "null";
 				 }
 			 }
-			 catch (Exception e) 
+			 catch (Exception e)
 			 {
 				s = handleError("Problem while getting content type", e);
 			 }
 			 return(s);
 		 }
-		 
 
-		
+
+
 		/**
 		 * method that acts as the top level exchange request broker -- where
 		 * by the exchange type is determined and the exchange is carried out
-		 * this method will return a message regarding the summary of the 
+		 * this method will return a message regarding the summary of the
 		 * exchange results
 		 */
-		 private String handleExchangeRequest( HttpServletRequest req, 
+		 private String handleExchangeRequest( HttpServletRequest req,
 		 HttpServletResponse res)
 		 {
 			 //this is the response to be sent back to the browser
 			StringBuffer sb = new StringBuffer();
-    	try 
+    	try
 			{
-				Enumeration enum =req.getParameterNames();
+				Enumeration anenum =req.getParameterNames();
 				Hashtable params = new Hashtable();
 				log.debug("DataUploadServlet > Request Content Type: "+req.getContentType());
 
@@ -210,7 +210,7 @@ public class DataUploadServlet extends HttpServlet
 				// then check to see if the user wants to upload or download the file and handle
 				// it from there
 
-				if (req.getContentType().startsWith("multipart")) 
+				if (req.getContentType().startsWith("multipart"))
 				{
 					log.debug("DataUploadServlet > request type: multipart encoded");
 					String s = uploadMultipartDataFile(req, res);
@@ -222,7 +222,7 @@ public class DataUploadServlet extends HttpServlet
 			}
 			return( sb.toString() );
 		 }
-		
+
 
  	/**
  	 * This method handles the file upload for a file and associated parameters that
@@ -231,14 +231,14 @@ public class DataUploadServlet extends HttpServlet
  	 *
  	 * @param params - the Hashtable of parameters that should be included in the
  	 * 	query
- 	 * @param response - the response object linked to the client 
+ 	 * @param response - the response object linked to the client
  	 *
  	 */
-	private String uploadMultipartDataFile (HttpServletRequest request,  
-	HttpServletResponse response) 
+	private String uploadMultipartDataFile (HttpServletRequest request,
+	HttpServletResponse response)
 	{
 		StringBuffer sb = new StringBuffer();
-		try 
+		try
 		{
 			// Construct a MultipartRequest to help read the information.
 			// Pass in the request, a directory to saves files to, and the
@@ -246,16 +246,16 @@ public class DataUploadServlet extends HttpServlet
 			// Here we (rudely) write to the server root and impose 5 Meg limit.
 			//MultipartRequest multi=new MultipartRequest(request, uploadDir, 5 * 1024 * 1024);
 
-			
-      sb.append("<html>");  
-      sb.append("<body>");  
+
+      sb.append("<html>");
+      sb.append("<body>");
 			//get the un-encoded parameter names back from the MultipartRequest class
 			Enumeration params = multi.getParameterNames();
-      while (params.hasMoreElements()) 
+      while (params.hasMoreElements())
 			{
         String name = (String)params.nextElement();
         String value = multi.getParameter(name);
-				
+
         //do not produce the password to the screen
 				if ( ! name.toUpperCase().equals("PASSWORD") )
 				{
@@ -267,25 +267,25 @@ public class DataUploadServlet extends HttpServlet
 			//out.println("<H3>Files:</H3>");
 			//out.println("<PRE>");
 			Enumeration files = multi.getFileNames();
-			while (files.hasMoreElements()) 
+			while (files.hasMoreElements())
 			{
 				String name = (String)files.nextElement();
 				String filename = multi.getFilesystemName(name);
 				String type = multi.getContentType(name);
-				
+
 				//try to substitue the name
 				File f = multi.getFile(name);
-				
+
 				//sb.append("name: " + name +"<br>");
-				sb.append("file max size limit (in bytes): " + fileMaxSize  +" <br> \n");	
+				sb.append("file max size limit (in bytes): " + fileMaxSize  +" <br> \n");
 				sb.append("filename: " + filename +"<br> \n");
-				
-				
+
+
 				if ( f != null )
 				{
 					String fileSize = ""+f.length();
 					sb.append("file length: " + fileSize + " bytes <br> \n");
-					//see if we should copy the file or leave it with the 
+					//see if we should copy the file or leave it with the
 					//current name
 
 					/*
@@ -297,30 +297,30 @@ public class DataUploadServlet extends HttpServlet
 						util.flushFile(uploadDir+filename);
 					}
 					*/
-					
+
 				}
 				else
 				{
 					log.debug("DataUploadServlet > don't know what to do w/ request" );
 				}
-				
-				//get the referURL and referPage which can be passed as a parameter 
+
+				//get the referURL and referPage which can be passed as a parameter
 				//in the html form and if not the default instance variables ar used
 				Enumeration rparams = multi.getParameterNames();
 				Hashtable h = getURLRefereral( rparams );
-				
+
 				sb.append("<br> </br> \n");
 				sb.append("</PRE> \n");
 			}
 		}
- 		catch (Exception e) 
-		{ 
+ 		catch (Exception e)
+		{
 			sb.append(handleError("Problem while uploading file", e));
 		}
 		return(sb.toString());
 	}
 
-	
+
 	/**
 	 * method that looks to see if a referal is sent as a parameter to this
 	 * servelt and if it is it is used otherwise the instance variables are
@@ -338,7 +338,7 @@ public class DataUploadServlet extends HttpServlet
 				String page = null;
 				String url = null;
 				log.debug("DataUploadServlet > parameterd dump: " + params.toString() );
-				while (params.hasMoreElements()) 
+				while (params.hasMoreElements())
 				{
 					//log.debug("test");
       	  String name = (String)params.nextElement();
@@ -350,7 +350,7 @@ public class DataUploadServlet extends HttpServlet
 						page = value;
 					}
 					if ( name.equals("referUrl") )
-					{	
+					{
 						log.debug("DataUploadServlet > referUrl: "+ value);
 						url = value;
 					}
@@ -367,16 +367,16 @@ public class DataUploadServlet extends HttpServlet
 					h.put("referPage", referPage);
 					h.put("referUrl", referUrl);
 				}
-			
+
 			}
-			catch ( Exception e ) 
+			catch ( Exception e )
 			{
 				log.error("Exception: " , e);
 			}
 			return(h);
 	 }
-	 
-	 
+
+
 	/**
 	 *
 	 */
@@ -395,7 +395,7 @@ public class DataUploadServlet extends HttpServlet
 	private String handleError(String msg, Exception ex) {
 		log.error(msg, ex);
 		Utility.notifyAdmin(msg, ex.getMessage());
-		return "<br>ERROR: " + ex.getMessage() + 
+		return "<br>ERROR: " + ex.getMessage() +
 			"<br><br>Sorry!  The site admin has been notified.";
 	}
 }

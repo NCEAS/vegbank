@@ -949,8 +949,8 @@ public class Utility implements Constants
 	 *
 	 */
 	public static void notifyAdmin(String subject, String body) {
-		String adminFromEmail = vegbankPropFile.getString("admin.email.from");
-		String adminToEmail = vegbankPropFile.getString("admin.email.to");
+		String adminFromEmail = vegbankPropFile.getString("systemEmail");
+		String adminToEmail = vegbankPropFile.getString("systemEmail");
 		String server = vegbankPropFile.getString("machine_url");
 
 		if (isStringNullOrEmpty(adminFromEmail)) { adminFromEmail = "site@vegbank.org"; }

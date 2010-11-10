@@ -3,7 +3,7 @@ package org.vegbank.servlet.framework;
 /**
  * '$RCSfile: FrameworkServlet.java,v $'
  *
- * Purpose: 
+ * Purpose:
  *
  * '$Author: farrell $'
  * '$Date: 2003-10-27 19:49:02 $'
@@ -38,12 +38,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.Utility;
 
-public class FrameworkServlet extends HttpServlet 
+public class FrameworkServlet extends HttpServlet
 {
-	
+
 	//required classes
 	ServletUtility util = new ServletUtility();
-	
+
 	/**
 	 * constructor method
 	 */
@@ -51,39 +51,39 @@ public class FrameworkServlet extends HttpServlet
 	{
 		System.out.println("init: FrameworkServlet");
 	}
-	
+
 	/** Handle "POST" method requests from HTTP clients */
 	public void doPost(HttpServletRequest request,
 		HttpServletResponse response)
- 	 throws IOException, ServletException 	
+ 	 throws IOException, ServletException
 		{
 			doGet(request, response);
 		}
 
-		
-		
-	/** Handle "GET" method requests from HTTP clients */ 
-	public void doGet(HttpServletRequest request, 
+
+
+	/** Handle "GET" method requests from HTTP clients */
+	public void doGet(HttpServletRequest request,
 		HttpServletResponse response)
-		throws IOException, ServletException  
+		throws IOException, ServletException
 		{
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
-			try 
+			try
 			{
 			//enumeration is needed for those
-			//cases where there are multiple values 
+			//cases where there are multiple values
 			// for a given parameter
-				Enumeration enum =request.getParameterNames();
+				Enumeration anenum =request.getParameterNames();
 				Hashtable params = new Hashtable();
 				params = util.parameterHash(request);
-			
+
 				System.out.println("FrameworkServlet > IN PARAMETERS: " + params.toString() + "\n" );
-				
+
 				//figure out the action
 				String action = getAction( params );
 				if ( getPluginActionViable(action) == true)
-				{	 
+				{
 					System.out.println("FrameworkServlet > action requested: " + action  + " \n");
 					//now from the action get the approprite plugin
 					String pluginClassName = getPluginClass(action);
@@ -94,7 +94,7 @@ public class FrameworkServlet extends HttpServlet
 					else
 					{
 					 try
-    			 { 
+    			 {
 							//String className = "servlet.plugin.spatial.CoordinateTransform";
 							//create a generic object of the type specified in the config file.
 							Object pluginObj = Utility.createObject(pluginClassName);
@@ -109,17 +109,17 @@ public class FrameworkServlet extends HttpServlet
     			}
 					}
 				}
-			
+
 			}
-		catch( Exception e ) 
+		catch( Exception e )
 		{
 			System.out.println("** failed in: DataRequestServlet.main "
 			+" first try - reading parameters "
 			+e.getMessage());
 		}
 	}
-	
-	
+
+
 	/**
 	 * method that takes, as input the parameter 'action' and returns the
 	 * class name for the plugin
@@ -128,18 +128,18 @@ public class FrameworkServlet extends HttpServlet
 	 {
 		 String s = null;
 		 try
-		 {		 
+		 {
 		 	if ( actionParameter.equals("coordinateTransform") )
 		 	{
 		 		s="org.vegbank.servlet.plugin.CoordinateTransform";
 		 	}
-		 
+
 			//this will initiate the loading
 		 	else if ( actionParameter.equals("initPlotLoad") )
 		 	{
 		 		s="org.vegbank.servlet.plugin.db.PlotDBInsert";
 		 	}
-		 
+
 		 	//this will actually load the plots
 			 else if ( actionParameter.equals("loadTNCData") )
 		 	{
@@ -156,9 +156,9 @@ public class FrameworkServlet extends HttpServlet
 		 }
 		 return(s);
 	 }
-	 
-	
-	
+
+
+
 	/**
 	 * method that returns the desired action requested by the user
 	 *
@@ -172,9 +172,9 @@ public class FrameworkServlet extends HttpServlet
 		 return(s);
 	 }
 
-	 
+
 	/**
-	 * method that returns if the action requeste of this servlet has a 
+	 * method that returns if the action requeste of this servlet has a
 	 * corresponding plugin
 	 *
 	 * @param action - the action requested by the client
@@ -185,5 +185,5 @@ public class FrameworkServlet extends HttpServlet
 	 		// TODO: Implement this whatever it is ??
 		 return(true);
 	 }
-	 
+
 }

@@ -1,4 +1,4 @@
-/*	
+/*
  * '$RCSfile: LoadingErrors.java,v $'
  *	Authors: @author@
  *	Release: @release@
@@ -6,7 +6,7 @@
  *	'$Author: anderson $'
  *	'$Date: 2005-09-02 21:15:15 $'
  *	'$Revision: 1.5 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * 
+ *
  * @author farrell
  *
  * A Holdall for loading errors. Used for creating reports of a loading for end users.
@@ -44,24 +44,24 @@ public class LoadingErrors
 	private Vector validationErrors = new Vector();
 	private Vector databaseLoadingErrors = new Vector();
 	private String bgColor = "#CCCC99"; // a tan color
-	
+
 	private boolean hasErrors = false;
-	
+
 	public static final int RECTIFICATIONERROR = 0;
-	public static final int VALIDATIONERROR = 1;		
+	public static final int VALIDATIONERROR = 1;
 	public static final int DATABASELOADINGERROR = 2;
-			
+
 	/**
-	 * Add an error message of a type, the types are public availible static ints provided 
+	 * Add an error message of a type, the types are public availible static ints provided
 	 * by this class
-	 * 
+	 *
 	 * @param TYPE
 	 * @param message
 	 */
 	public void  addError( int TYPE, String message)
 	{
 		hasErrors = true;
-		
+
 		switch(TYPE)
 		{
 			case RECTIFICATIONERROR:
@@ -70,21 +70,21 @@ public class LoadingErrors
 			case VALIDATIONERROR:
 				validationErrors.add(message);
 				break;
-			case DATABASELOADINGERROR:	
+			case DATABASELOADINGERROR:
 				databaseLoadingErrors.add(message);
 				break;
 			default:
 				log.error("LoadingErrors: Invalid Error type");
 		}
 	}
-	
+
 	public StringBuffer getHTMLReport()
 	{
 		StringBuffer sb = new StringBuffer();
 		sb.append("<table size=\"100%\">");
 		// Title
 		sb.append( "<tr><td>" + getSummaryMessage(null) + "</td></tr>");
-		
+
 		// some formating
 		//sb.append();
 		// The subparts
@@ -100,13 +100,13 @@ public class LoadingErrors
 
 	public String getSummaryMessage( String identifier)
 	{
-		String message = null; 
+		String message = null;
 		String defaultIdentifier = "Dataset";
-		
+
 		if ( identifier != null )
 			defaultIdentifier = identifier;
-		
-		
+
+
 		// general message  -- loaded or not
 		if ( hasErrors )
 		{
@@ -124,7 +124,7 @@ public class LoadingErrors
 					message = defaultIdentifier + " Loaded into the database with rectification issues, this dataset will not become visible to all users until you fix these issues.";
 				}
 			}
-			else 
+			else
 			{
 				// There were errors
 				message = defaultIdentifier + " had errors.";
@@ -136,12 +136,12 @@ public class LoadingErrors
 		}
 		return message;
 	}
-	
+
 	private String getHeader( String title)
 	{
 		return "<tr bgcolor=\""+ bgColor +"\"><td>" + title + "</td></tr>";
 	}
-	
+
 	/**
 	 * @param separtor separator to use between errors, e.g. "/n", &gt;br&lt;
 	 * @return All the loading errors found
@@ -156,10 +156,10 @@ public class LoadingErrors
 		}
 		else
 		{
-			Enumeration enum = this.databaseLoadingErrors.elements();
-			while ( enum.hasMoreElements() )
+			Enumeration anenum = this.databaseLoadingErrors.elements();
+			while ( anenum.hasMoreElements() )
 			{
-				sb.append( enum.nextElement() +separtor);
+				sb.append( anenum.nextElement() +separtor);
 			}
 		}
 		return sb;
@@ -202,28 +202,28 @@ public class LoadingErrors
 		}
 		else
 		{
-			Enumeration enum = this.validationErrors.elements();
-			while ( enum.hasMoreElements() )
+			Enumeration anenum = this.validationErrors.elements();
+			while ( anenum.hasMoreElements() )
 			{
-				sb.append( enum.nextElement() +separtor);
+				sb.append( anenum.nextElement() +separtor);
 			}
 		}
 		return sb;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param identifier
 	 * @return A textual report of the processing
 	 */
 	public String getTextReport( String identifier )
 	{
 		StringBuffer sb = new StringBuffer();
-		
+
 		sb.append("-----------------------------------------------------------------------\n");
 		sb.append("REPORT:\n");
 		sb.append(this.getSummaryMessage(identifier) + "\n");
-		
+
 		if ( ! validationErrors.isEmpty() )
 		{
 			sb.append("-----------------------------------------------------------------------\n");
@@ -239,22 +239,22 @@ public class LoadingErrors
 			sb.append("-----------------------------------------------------------------------\n");
 			sb.append(this.getRectificationReport("\n"));
 		}
-		
+
 		if ( ! databaseLoadingErrors.isEmpty() )
 		{
-			sb.append("-----------------------------------------------------------------------\n");	
+			sb.append("-----------------------------------------------------------------------\n");
 			sb.append("\tDATABASE LOADING\n");
 			sb.append("-----------------------------------------------------------------------\n");
 			sb.append(this.getLoadReport("\n"));
 		}
-		
+
 		sb.append("-----------------------------------------------------------------------\n");
 		sb.append("-----------------------------------------------------------------------");
-	
+
 		return sb.toString();
 	}
-	
-	
+
+
 	/**
 	 * @return Did processing encounter any errors?
 	 */

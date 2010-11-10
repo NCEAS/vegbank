@@ -3,7 +3,7 @@ package org.vegbank.servlet.plugin;
 /**
  * '$RCSfile: SpatialViewerServlet.java,v $'
  *
- * Purpose: 
+ * Purpose:
  *
  * '$Author: farrell $'
  * '$Date: 2003-10-11 21:20:10 $'
@@ -42,25 +42,25 @@ import org.vegbank.common.utility.ServletUtility;
  * Servlet to
  *
  * <p>Valid parameters are:<br><br>
- * 
+ *
  * REQUIRED PARAMETERS
  * @param queryType -- includes: simple, compound and extended
- 
- * 
- * 
+
+ *
+ *
  * ADDITIONAL PARAMETERS
  * @param taxonName - name of a taxon occuring in a plot <br>
  *
- * 
- * 
+ *
+ *
  */
 
-public class SpatialViewerServlet extends HttpServlet 
+public class SpatialViewerServlet extends HttpServlet
 {
 	//required classes
 	ServletUtility util = new ServletUtility();
-	
-	
+
+
 	/**
 	 * constructor method
 	 */
@@ -68,43 +68,43 @@ public class SpatialViewerServlet extends HttpServlet
 	{
 		System.out.println("SpatialViewerServlet loaded...");
 	}
-	
+
 	/** Handle "POST" method requests from HTTP clients */
 	public void doPost(HttpServletRequest request,
 		HttpServletResponse response)
- 	 throws IOException, ServletException 	
+ 	 throws IOException, ServletException
 		{
 			doGet(request, response);
 		}
 
-		
-		
-	/** Handle "GET" method requests from HTTP clients */ 
-	public void doGet(HttpServletRequest request, 
+
+
+	/** Handle "GET" method requests from HTTP clients */
+	public void doGet(HttpServletRequest request,
 		HttpServletResponse response)
-		throws IOException, ServletException  
+		throws IOException, ServletException
 		{
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
-			try 
+			try
 			{
 			//enumeration is needed for those
-			//cases where there are multiple values 
+			//cases where there are multiple values
 			// for a given parameter
-				Enumeration enum =request.getParameterNames();
+				Enumeration anenum =request.getParameterNames();
 				Hashtable params = new Hashtable();
 				params = util.parameterHash(request);
-			
+
 				out.println("SpatialViewerServlet: IN PARAMETERS: " + params.toString() + "\n" );
-			
+
 			}
-		catch( Exception e ) 
+		catch( Exception e )
 		{
 			System.out.println("** failed in: DataRequestServlet.main "
 			+" first try - reading parameters "
 			+e.getMessage());
 		}
 	}
-	
-	 
+
+
 }

@@ -213,7 +213,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 						// there will be cases where there will be multiple parameters
 						// with the same name and they all need to be accessed so
 						// capture an ennumeration here
-						Enumeration enum = request.getParameterNames();
+						Enumeration anenum = request.getParameterNames();
 
 						//get the browser type
 						String browserType = su.getBrowserType(request);
@@ -245,7 +245,7 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 						else if ( submitDataType.trim().equals("vegPlot")  )
 						{
 							//out.println("DataSubmitServlet > action unknown!");
-							StringBuffer sb = handleVegPlotSubmittal(enum, request, response, userName, user);
+							StringBuffer sb = handleVegPlotSubmittal(anenum, request, response, userName, user);
 							out.println( sb.toString() );
 						}
 						else if ( submitDataType.trim().toUpperCase().equals("PLANTTAXA")  )
@@ -362,14 +362,14 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 	 * 6] emailing the client the receipt for the insertion of their data <br>
 	 * <br> <br>
 	 * @see DataSourceClient
-	 * @param enum -- the input parameters to the parent servlet
+	 * @param anenum -- the input parameters to the parent servlet
 	 * @param params -- a hashtable with the unique parameters sent to the servlet
 	 * @param request -- http request sent to the servlet
 	 * @param response -- http reponse sent to the servlet
 	 *
 	 */
 	 private StringBuffer handleVegPlotSubmittal(
-	 	Enumeration enum,
+	 	Enumeration anenum,
 	 	HttpServletRequest request,
 	 	HttpServletResponse response,
 	 	String user,
@@ -456,9 +456,9 @@ public class DataSubmitServlet extends HttpServlet implements Constants
 
 				DataSourceClient rmiClient = new DataSourceClient(rmiServer, ""+rmiServerPort);
 
-				while (enum.hasMoreElements())
+				while (anenum.hasMoreElements())
 				{
-					String name = (String) enum.nextElement();
+					String name = (String) anenum.nextElement();
 					if ( name.toUpperCase().equals("PLOTID") )
 					{
 						String values[] = request.getParameterValues(name);

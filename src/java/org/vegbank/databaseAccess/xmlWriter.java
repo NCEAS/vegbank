@@ -33,8 +33,8 @@ import java.util.Vector;
 
 
 /**
- * This class will write out an xml file containing the results from 
- * database queries.  These xml files will be consistent with either 
+ * This class will write out an xml file containing the results from
+ * database queries.  These xml files will be consistent with either
  * vegPlot.dtd, or the community dtd file or the plant taxonomy dtd file
  *
  * @author @author@
@@ -52,32 +52,32 @@ public class  xmlWriter
 	public String  writePlotSummary(Hashtable cumulativeSummaryResultHash)
 	{
 		String xmlResult = null;
-		try 
+		try
 		{
-	
+
 			// Who knows what this is up to ????  Black box
 			Hashtable multiPlotComprehensive =
 				doHashMunging(cumulativeSummaryResultHash);
 
 			//take the returned hash table and pass it to the xml writer class
 			//put a try here b/c this class has been sensitive
-			try 
+			try
 			{
 				PlotXmlWriter pxw = new PlotXmlWriter();
 				xmlResult = pxw.getMultiplePlotXMLString(multiPlotComprehensive);
 			}
-			catch (Exception e) 
+			catch (Exception e)
 			{
 				System.out.println("failed in xmlWriter.writePlotSummary "
-				+"(using a hash table as input ) -- trying to write xml output" + 
-				e.getMessage()); 
+				+"(using a hash table as input ) -- trying to write xml output" +
+				e.getMessage());
 				e.printStackTrace();
 			}
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			System.out.println("failed in xmlWriter.writePlotSummary "
-			+"(using a hash table as input )" + 
+			+"(using a hash table as input )" +
 			e.getMessage());
 		}
 		return xmlResult;
@@ -88,22 +88,22 @@ public class  xmlWriter
 	{
 		Hashtable singlePlotSummary = new Hashtable();
 		Hashtable multiPlotComprehensive = new Hashtable();
-		
-		
+
+
 		//get the number of plots stored in hash
 		System.out.println("xmlWriter > hash size: "+cumulativeSummaryResultHash.size());
-		
+
 		//write one plot at a time
-		for (int i=0; i< cumulativeSummaryResultHash.size(); i++) 
+		for (int i=0; i< cumulativeSummaryResultHash.size(); i++)
 		{
 			//get a single plot and stick into a temporary hash
 			String plotRecord = "plot"+i;
 			singlePlotSummary = (Hashtable)cumulativeSummaryResultHash.get(plotRecord);
-		
-			//pass this hash table containing a single plot to the method that will map the 
-			//elements that can be passed directly to the 'PlotXmlWriterClass'	
+
+			//pass this hash table containing a single plot to the method that will map the
+			//elements that can be passed directly to the 'PlotXmlWriterClass'
 			Hashtable singleFormatPlot = mapSummaryElements(singlePlotSummary);
-		
+
 			//take the single plot that is returned and put it in a hash with all the
 			//other plots in the result set
 			multiPlotComprehensive.put("plot"+i,singleFormatPlot);
@@ -113,10 +113,10 @@ public class  xmlWriter
 
 
 	/**
- 	 * Method to map the plot summary elements being passed 
- 	 * to this class in a hash table into the 'PlotDataMapper' 
- 	 * class which prepares the data for printing in the 
- 	 * 'PlotXmlWriter' class 
+ 	 * Method to map the plot summary elements being passed
+ 	 * to this class in a hash table into the 'PlotDataMapper'
+ 	 * class which prepares the data for printing in the
+ 	 * 'PlotXmlWriter' class
  	 *
  	 * @param singlePlotSummary - is a hash table that contains all the summary
  	 * elements for a given plot
@@ -151,9 +151,9 @@ public class  xmlWriter
 		String physionomicClass = "nullValue";
 		String authorObservationCode = "nullValue";
 
-		try 
+		try
 		{
-			//first get the elements  - then next map them using 
+			//first get the elements  - then next map them using
 			//the 'PlotDataMapper' class
 			if (singlePlotSummary.containsKey("PLOT_ID"))
 			{
@@ -207,14 +207,14 @@ public class  xmlWriter
 			if (singlePlotSummary.containsKey("AUTHOROBSCODE"))
 				authorObservationCode = (String)singlePlotSummary.get("AUTHOROBSCODE");
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			System.out.println("failed in xmlWriter.mapSummaryElements "
-			+" - extracting summary elements from hash table" + e.getMessage()); 
+			+" - extracting summary elements from hash table" + e.getMessage());
 			e.printStackTrace();
 		}
 
-		try 
+		try
 		{
 			//project info
 			pdm.plotElementMapper("national veg plots database entry", "projectName", "project");
@@ -243,7 +243,7 @@ public class  xmlWriter
 			pdm.plotElementMapper(percentLitter, "perLitter", "observation");
 			pdm.plotElementMapper(percentWood, "perWood", "observation");
 			pdm.plotElementMapper(leafType, "leafType", "observation");
-			pdm.plotElementMapper(physionomicClass, "phisioClass", "observation");	
+			pdm.plotElementMapper(physionomicClass, "phisioClass", "observation");
 
 			//strata info
 			pdm.plotElementMapper("t1", "stratumName", "observation");
@@ -259,13 +259,13 @@ public class  xmlWriter
 			//cycle thru the single plot and retrieve all the species info -- making the
 			// number of iterations = 900 is a hack to keep going and will be fixed
 
-			for (int i=0; i<900; i++) 
+			for (int i=0; i<900; i++)
 			{
 				String currentAuthorNameId = (String)singlePlotSummary.get("AUTHORNAMEID."+i);
 				String currentStratum = (String)singlePlotSummary.get("STRATUMTYPE."+i);
 				String currentPercentCover = (String)singlePlotSummary.get("PERCENTCOVER."+i);
 				//make sure that no nulls are being passed
-				if (currentAuthorNameId != null ) 
+				if (currentAuthorNameId != null )
 				{
 					pdm.plotElementMapper(currentAuthorNameId, "taxonName", "species");
 					pdm.plotElementMapper(currentStratum, "stratum", "species");
@@ -275,25 +275,25 @@ public class  xmlWriter
 
 
 			//now pass the categories to the consolidator -- to make a single plot
-			pdm.plotElementConsolidator(pdm.plotProjectParams, pdm.plotSiteParams, 
+			pdm.plotElementConsolidator(pdm.plotProjectParams, pdm.plotSiteParams,
 			pdm.plotObservationParams, pdm.plotCommunityParams,	pdm.plotSpeciesParams);
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			System.out.println("failed in xmlWriter.mapSummaryElements "
-			+" - passing elements to mapping class" + e.getMessage()); 
+			+" - passing elements to mapping class" + e.getMessage());
 			e.printStackTrace();
 		}
 		return pdm.comprehensivePlot;
 	}
 
-	
-	
+
+
 	/**
  	 * method to print the results set from a plant taxonomy query to an
 	 * xml file that can be easily transformed into an html or text file
 	 *
-	 * 	@param taxaResults -- a vector that contains the taxonomy results from the 
+	 * 	@param taxaResults -- a vector that contains the taxonomy results from the
 	 *		query
 	 *	@param outfile -- the path and file that the results will be printed to
 	 *	@param taxonName -- the name used for the query
@@ -301,34 +301,34 @@ public class  xmlWriter
 	 *	@param taxonNameLevel -- the level of the concept (eg, variety, species)
  	 */
 	public void writePlantTaxonomySummary(
-		Vector taxaResults, 
-		String outFile, 
-		String taxonName, 
-		String taxonNameType, 
+		Vector taxaResults,
+		String outFile,
+		String taxonName,
+		String taxonNameType,
 		String taxonNameLevel
 		)
 	{
-		try 
+		try
 		{
-			//set up the output query file called query.xml	using append mode 
+			//set up the output query file called query.xml	using append mode
 			PrintWriter out  = new PrintWriter(new FileOutputStream(outFile, false));
-			
+
 			String xmlString =
 				getPlantTaxonomySummary(
 					taxaResults,
 					taxonName,
 					taxonNameType,
 					taxonNameLevel);
-				
+
 			out.println( xmlString );
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
-			System.out.println("xmlWriter > Exception " + 
+			System.out.println("xmlWriter > Exception " +
 			e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 	}
 
 
@@ -339,77 +339,77 @@ public class  xmlWriter
 		String taxonNameLevel)
 	{
 		StringBuffer sb = new StringBuffer();
-		System.out.println("xmlWriter > number of plant instances: " + taxaResults.size() ); 
-		
+		System.out.println("xmlWriter > number of plant instances: " + taxaResults.size() );
+
 		// REPLACE THE WILDCARDS WITH THE APPROPRIATE TEXT IN THE QUERY TOKENS
 		if ( taxonNameType.trim().equals("%") )
 			taxonNameType = "ANY";
 		if ( taxonNameLevel.trim().equals("%") )
 			taxonNameLevel = "ALL";
-			
+
 		// WRITE THE HEADER
 		sb.append("<plantTaxa> \n");
-		// ADD THE QUERY ELEMENTS TO THE OUTPUT SO THAT THEY CAN BE USED 
+		// ADD THE QUERY ELEMENTS TO THE OUTPUT SO THAT THEY CAN BE USED
 		// BY THE STYLESHEET
 		sb.append("<query> \n");
 		sb.append("	<taxonName>"+taxonName+"</taxonName> \n");
 		sb.append(" <taxonNameType>"+taxonNameType+"</taxonNameType> \n");
 		sb.append("	<taxonNameLevel>"+taxonNameLevel+"</taxonNameLevel> \n");
 		sb.append("</query>");
-		
+
 		//iterate thru the results
-		for (int i=0;i<taxaResults.size(); i++) 
+		for (int i=0;i<taxaResults.size(); i++)
 		{
 			//the current hashtable used to store the plant instance attributes
 			Hashtable currentTaxonHash = (Hashtable)taxaResults.elementAt(i);
-			
+
 			sb.append("<taxon> \n");
 			sb.append("	<name> \n");
-			
+
 			this.hashTable2XML(sb, currentTaxonHash);
-		
+
 			sb.append("	</name> \n");
 			sb.append("</taxon> \n");
 		}
 		sb.append("</plantTaxa> \n");
-		
+
 		return sb.toString();
 	}
 
 	private void hashTable2XML ( StringBuffer sb, Hashtable hash)
 	{
 		//System.out.println("------> " + hash.toString() );
-		Enumeration enum = hash.keys();			
+		Enumeration anenum = hash.keys();
 
-		while ( enum.hasMoreElements() )
+		while ( anenum.hasMoreElements() )
 		{
-			String key = (String) enum.nextElement();
+			String key = (String) anenum.nextElement();
 			// append <key>value</key> for each key value
-			sb.append("<"+key+">" + hash.get(key) + "</"+key+">\n");			
+			sb.append("<"+key+">" + hash.get(key) + "</"+key+">\n");
 			//System.out.println("------> " + key +" and " + currentTaxonHash.get(key) );
-		}	
+		}
 	}
-			
-			
-			
+
+
+
 	/**
  	 * Method to print the summary information returned about one or a group of
  	 * vegetation communities.  Currently this method is to take as input a vector
  	 * containing the information and the output file and then print such data as
  	 * the name, nvc level, abiCode, and parentName of the returned community(s)
  	 *
- 	 * @param communitySummary - the vector that contains the information 
- 	 * @param outFile - the output file 
+ 	 * @param communitySummary - the vector that contains the information
+ 	 * @param outFile - the output file
  	 */
 	public void writeCommunitySummary(Vector communitySummary, String outFile)
 	{
-		try 
+		try
 		{
-			//set up the output query file called query.xml	using append mode 
+			//set up the output query file called query.xml	using append mode
 			PrintWriter out  = new PrintWriter(new FileOutputStream(outFile, false));
 
 			String xmlString = getCommunitySummaryXMLString(communitySummary);
-			
+
 			//print to the output file
 			out.println( xmlString );
 		}
@@ -424,8 +424,8 @@ public class  xmlWriter
 	public String getCommunitySummaryXMLString(Vector communitySummary)
 	{
 
-		StringBuffer printString = new StringBuffer(); 
-		
+		StringBuffer printString = new StringBuffer();
+
 		String commName="null";
 		String dateEntered="null";
 		String classLevel="null";
@@ -433,55 +433,55 @@ public class  xmlWriter
 		String conceptOriginDate="null";
 		String commConceptId = "null";
 		String partyConceptStatus="null";
-		
+
 		//header
 		printString.append("<?xml version=\"1.0\"?> \n");
 		//printString.append("<!DOCTYPE vegPlot SYSTEM \"vegCommunity.dtd\">     \n");
 		printString.append("<vegCommunity> \n");
-		
-		for (int i=0;i<communitySummary.size(); i++) 
+
+		for (int i=0;i<communitySummary.size(); i++)
 		{
-		
+
 			//tokenize each line of the vector
 			StringTokenizer t = new StringTokenizer(communitySummary.elementAt(i).toString().trim(), "|");
 			System.out.println("xmlWriter > number of community elements: " + t.countTokens() );
-			
-			commName=t.nextToken().trim();				
+
+			commName=t.nextToken().trim();
 			dateEntered=t.nextToken();
 			classLevel=t.nextToken();
 			commDesc =t.nextToken();
 			conceptOriginDate =t.nextToken();
 			commConceptId =t.nextToken();
 			partyConceptStatus =t.nextToken();
-		
-		
+
+
 			System.out.println("xmlWriter > commName: "+ commName);
-			
-		
+
+
 			//temporary fix to trim the description to 100 chars
-			if (commDesc.length() >100) 
+			if (commDesc.length() >100)
 			{
 				commDesc=commDesc.substring(1, 99);
 			}
-		
+
 			printString.append("<community> \n");
 			//printString.append("   <commSummaryId>"+commSummaryId+"</commSummaryId> \n");
 			printString.append("   <commName>"+commName+"</commName> \n");
 			printString.append("   <dateEntered>"+dateEntered+"</dateEntered> \n");
 			printString.append("   <classLevel>"+classLevel+"</classLevel> \n");
-			printString.append("   <commDesc>"+commDesc+"</commDesc> \n");	
+			printString.append("   <commDesc>"+commDesc+"</commDesc> \n");
 			printString.append("   <conceptOriginDate>"+conceptOriginDate+"</conceptOriginDate> \n");
 			printString.append("   <commConceptId>"+commConceptId+"</commConceptId> \n");
 			printString.append("   <partyConceptStatus>"+partyConceptStatus+"</partyConceptStatus> \n");
 			//the parent info
 			printString.append("   <parentComm> \n");
-		
+
 			printString.append("   </parentComm> \n");
 			printString.append("</community> \n");
 		}
 		//footer
 		printString.append("</vegCommunity>");
-		
+
 		return printString.toString();
 	}
 }
