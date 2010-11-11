@@ -5,7 +5,7 @@
   <!--<xsl:param name="pathToWrite"/> -->
   <xsl:param name="viewsBuildFile">was not specified 1234567890</xsl:param>
   
-  <xsl:variable name="pathToWrite" select="substring($viewsBuildFile,1,number(string-length($viewsBuildFile)-9))" />
+  <xsl:variable name="pathToWrite"><xsl:value-of select="substring($viewsBuildFile,1,number(string-length($viewsBuildFile)-9))" />/autogen/</xsl:variable>
   <xsl:param name="quot">"</xsl:param>
   <xsl:param name="apos">'</xsl:param>
   <xsl:output method="html"/>
