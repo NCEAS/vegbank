@@ -257,11 +257,14 @@
 
 
   <target name="index" depends="help" description="=&gt; target to dist. the index.html file">
-    <!-- doesnt copy on vegbankvm: <copy overwrite="${forceoverwrite}" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/> -->
+     <copy overwrite="${forceoverwrite}" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
+     <copy overwrite="${forceoverwrite}" tofile="${apache.document.root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
+
     <!-- add to second webpage at root/${webapp}/index.html -->
     <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
     <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.jsp"/>
     <copy overwrite="${forceoverwrite}" todir="${apache.document.root}/" filtering="yes" file="${basedir}/.htaccess"/>
+    
   </target>
 
 
@@ -464,9 +467,11 @@
   <target name="views" depends="tokenfiles" description="&gt; dist the views to server (outside chain, but included in forms)">
     <!-- first overwrite any autogen views with any custom ones-->
     <mkdir dir="${views}/custom"/>
+    <echo>copying custom files that replace autogen files to local autogen dir</echo>
     <copy overwrite="${forceoverwrite}" todir="${views}/autogen" filtering="no">
       <fileset dir="${views}/custom" includes="*jsp" excludes="**/CVS* "/>
     </copy>
+    <echo>copying views (including autogen and custom) to server</echo>
     <copy overwrite="${forceoverwrite}" todir="${views_server}" filtering="yes">
       <fileset dir="${views}" includes="**/*jsp **/*html" excludes="**/CVS* template_datacart.jsp"/>
     </copy>
