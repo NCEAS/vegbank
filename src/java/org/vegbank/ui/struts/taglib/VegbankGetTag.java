@@ -4,7 +4,7 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2005-06-01 09:41:12 $'
+ *	'$Date: 2005/06/01 09:41:12 $'
  *	'$Revision: 1.26 $'
  *
  * This program is free software; you can redistribute it and/or modify
@@ -59,7 +59,7 @@ import org.vegbank.common.utility.QueryParameters;
  * page context's servlet request object.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.26 $ $Date: 2005-06-01 09:41:12 $
+ * @version $Revision: 1.26 $ $Date: 2005/06/01 09:41:12 $
  */
 
 public class VegbankGetTag extends VegbankTag {
@@ -328,19 +328,22 @@ public class VegbankGetTag extends VegbankTag {
 			int i=0;
 			String[] wpArr;
 			if (arr == null) {
+				log.debug("arr was null!");
 				wpArr = new String[1];
 			} else {
 				// copy all wparams to wpArr
+				log.debug("arr was NOT null!");
 				wpArr = new String[arr.length+1];
 				for (i=0; i<arr.length; i++) {
 					wpArr[i] = arr[i];
+					log.debug("  " + i + " is " + arr[i]);
 				}
 			}
 
 			// add the xwhere clause in the last slot
 			wpArr[i] = getXwhereClause();
 
-			log.debug("added xwhere clause: " + wpArr[i]);
+			log.debug("added xwhere clause: " + i + " " + wpArr[i]);
 			return wpArr;
 		}
 

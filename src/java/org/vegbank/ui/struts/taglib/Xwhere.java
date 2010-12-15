@@ -4,7 +4,7 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-08-31 05:22:27 $'
+ *	'$Date: 2006/08/31 05:22:27 $'
  *	'$Revision: 1.13 $'
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@ import org.vegbank.common.utility.CompositeRequestParamUtil;
  *
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.13 $ $Date: 2006-08-31 05:22:27 $
+ * @version $Revision: 1.13 $ $Date: 2006/08/31 05:22:27 $
  */
 
 public class Xwhere {
@@ -243,7 +243,15 @@ public class Xwhere {
 					arr = getXwhereParams(keyName);
 
 					if (!Utility.isArrayNullOrEmpty(arr)) {
-						log.debug("adding string array for key: " + keyName);
+
+						StringBuffer sbm = new StringBuffer(arr.length*10);
+									for (int jm=0; jm<arr.length; jm++) {
+										// implode the array values
+										if (jm>0) { sbm.append("," + jm + ":"); }
+										sbm.append(arr[jm]);
+			                        }
+                        log.debug("adding string array for key: " + keyName + ":" + sbm.toString() );
+
 						xwpMap.put(keyName, arr);
 					} else {
 						log.debug("string array for " + keyName + " was empty");
@@ -291,7 +299,10 @@ public class Xwhere {
 		if (o.getClass().isArray()) {
 			String[] sarr = (String[])o;
 
-			if (Utility.isStringNullOrEmpty(sarr[0])) { return ""; }
+			if (Utility.isStringNullOrEmpty(sarr[0])) {
+				log.debug("first element in array was empty or null");
+				return "";
+				}
 
 			StringBuffer sb = new StringBuffer(sarr.length*10);
 			for (int j=0; j<sarr.length; j++) {
@@ -299,10 +310,12 @@ public class Xwhere {
 				if (j>0) { sb.append(","); }
 				sb.append(DatabaseUtility.makeSQLSafe(sarr[j], !xwSearch));
 			}
+			log.debug("setting first element to " + sb.toString() + " via array ");
 			strXwParams[0] = sb.toString();
 
 		} else {
 			if (Utility.isStringNullOrEmpty(o.toString())) { return ""; }
+			log.debug("setting first element to " + o.toString() + " via NOT array ");
 			strXwParams[0] = DatabaseUtility.makeSQLSafe(o.toString(), !xwSearch);
 		}
 

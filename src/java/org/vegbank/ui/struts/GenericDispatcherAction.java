@@ -187,7 +187,8 @@ public class GenericDispatcherAction extends Action
 
 					if (!viewFile.exists()) {
 						// no view, try the other one
-						if (view.equals("detail")) {
+				             log.debug("did not find file:" + fwdURL);    	
+                                        	if (view.equals("detail")) {
 							fwdURL = "/views/" + entity + "_summary.jsp";
 						} else {
 							fwdURL = "/views/" + entity + "_detail.jsp";
