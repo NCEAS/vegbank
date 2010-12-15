@@ -242,9 +242,9 @@ function setQueryText() {
   %>
     
      
-            thetaxon<%= alph.substring(i,i+1)  %> =  getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_taxon<%= alph.substring(i,i + 1) %>_2");
-            thetaxon<%= alph.substring(i,i+1)  %>covermin = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_taxon<%= alph.substring(i,i + 1) %>_0") ;
-            thetaxon<%= alph.substring(i,i+1)  %>covermax = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_taxon<%= alph.substring(i,i + 1) %>_1") ;
+            thetaxon<%= alph.substring(i,i+1)  %> =  getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_taxon<%= alph.substring(i,i + 1) %>_0");
+            thetaxon<%= alph.substring(i,i+1)  %>covermin = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_taxon<%= alph.substring(i,i + 1) %>_1") ;
+            thetaxon<%= alph.substring(i,i+1)  %>covermax = getValuesFromFIELD_ifexists("plotqueryform","xwhereParams_taxon<%= alph.substring(i,i + 1) %>_2") ;
               if ( thetaxon<%= alph.substring(i,i+1)  %> != "" &&  thetaxon<%= alph.substring(i,i+1)  %> != null )
                 {
                   text = text + strSep + " has a Plant Named " + thetaxon<%= alph.substring(i,i+1)  %> ;
@@ -1214,9 +1214,9 @@ function setQueryText() {
     <td class="<bean:write name='simpleHide' />"><span class="item"><%= i+1 %></span>
      <input type="hidden" name="xwhereKey_taxon<%= alph.substring(i,i + 1) %>" value="xwhere_taxacover" />
     </td>    
-    <td><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_2" %>' size="30"/></td>
-    <td class="<bean:write name='simpleHide' />"><input class='number' name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_0" %>' size="5"/></td>
+    <td><input name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_0" %>' size="30"/></td>
     <td class="<bean:write name='simpleHide' />"><input class='number' name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_1" %>' size="5"/></td>
+    <td class="<bean:write name='simpleHide' />"><input class='number' name='<%= "xwhereParams_taxon" + alph.substring(i,i + 1) + "_2" %>' size="5"/></td>
      <logic:equal name="simpleHide" value="hidden">
        <bean:define id="simpleHide_special" value="hidden" />     
      </logic:equal> <!-- show no more rows -->
