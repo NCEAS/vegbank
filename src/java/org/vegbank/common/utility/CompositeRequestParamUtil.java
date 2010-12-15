@@ -4,9 +4,9 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-05-05 20:22:31 $'
+ *	'$Date: 2005/05/05 20:22:31 $'
  *	'$Revision: 1.7 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -31,11 +31,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Tools for improving Java's boring handling of 
+ * Tools for improving Java's boring handling of
  * servlet request parameters.
  *
  * @author P. Mark Anderson
- * @version $Revision: 1.7 $ $Date: 2005-05-05 20:22:31 $
+ * @version $Revision: 1.7 $ $Date: 2005/05/05 20:22:31 $
  */
 
 public class CompositeRequestParamUtil {
@@ -131,10 +131,10 @@ public class CompositeRequestParamUtil {
 	/**
 	 * Creates a mapping of parent.child.grandchild request
 	 * parameters.  Children are accessed by calling get
-	 * on a parent map using the parent's name in upper case.  
+	 * on a parent map using the parent's name in upper case.
 	 * This will return either another Map, a String or
-	 * a String[].  
-	 * 
+	 * a String[].
+	 *
 	 * Map m = parseFromTop("parent.child.grandchild");
 	 * m = (Map)m.get("PARENT");
 	 * m = (Map)m.get("CHILD");
@@ -183,10 +183,10 @@ public class CompositeRequestParamUtil {
 	 * @param fullPath The entire key from beginning to end.
 	 * @param childKey The part of the entire key which contains
 	 *  the remaining portion after the current parent key.
-	 * @param siblings A HashMap instance that contains 
+	 * @param siblings A HashMap instance that contains
 	 *  the current child's siblings; i.e. values at the same lateral level
 	 *
-	 * @return 
+	 * @return
 	 */
 	private Map parseChildren(String fullPath, String childKey, Map siblings) {
 
@@ -209,7 +209,7 @@ public class CompositeRequestParamUtil {
 			}
 
 			log.debug("adding children to siblings of: " + thisKey);
-			insertValue(siblings, thisKey.toUpperCase(), 
+			insertValue(siblings, thisKey.toUpperCase(),
 					parseChildren(fullPath, childKey, childMap));
 
 		} else {
@@ -235,7 +235,7 @@ public class CompositeRequestParamUtil {
 			} else {
 				return paramValue;
 			}
-		} 
+		}
 
 		return "";
 	}
@@ -265,10 +265,10 @@ public class CompositeRequestParamUtil {
 		String parentKey = fullPath.substring(0, dotPos).toUpperCase();
 
 		Map oldParentMap = (Map)composParams.get(parentKey);
-		if (oldParentMap == null) { 
+		if (oldParentMap == null) {
 			log.debug(parentKey + " did not exist in top level yet");
 			oldParentMap = new HashMap();
-		} 
+		}
 
 		/*
 		String childKey = fullPath.substring(dotPos+1);
@@ -294,15 +294,21 @@ public class CompositeRequestParamUtil {
 	 */
 	public Object[] buildObjectArray(Map m) {
 		if (m == null) { return null; }
-		//log.debug("buildObjectArray: " + m.toString());
+		log.debug("buildObjectArray: " + m.toString());
 		ArrayList l = new ArrayList();
 
-		Arrays.sort(m.keySet().toArray());
-		Iterator keys = m.keySet().iterator();
+		Arrays.sort(m.keySet().toArray());  // this doesnt seem to do anything (MTL 15-DEC-2010)
+		log.debug("sorted? : " + m.keySet().toString());
+
+		//Iterator keys = m.keySet().iterator();
+                // new method for sorting keys.  this one works: MTL 15-DEC-2010
+                Vector v = new Vector(m.keySet());
+                Collections.sort(v);
+                Iterator keys = v.iterator();
 
 		while (keys.hasNext()) {
-			String keyName = (String)keys.next();
-			//log.debug("Testing numerocity of key: " + keyName);
+		    String keyName = (String)keys.next();
+			log.debug("Testing numerocity of key: " + keyName);
 			if (Utility.isNumeric(keyName)) {
 				Object o = null;
 				try {
@@ -317,8 +323,8 @@ public class CompositeRequestParamUtil {
 
 				} catch (Exception ex) {
 					// don't worry about non-string values
-					//log.debug("Could not use String value since type is: " +
-					//		o.getClass().getName());
+					log.debug("Could not use String value since type is: " +
+							o.getClass().getName());
 				}
 			}
 		}
@@ -329,6 +335,7 @@ public class CompositeRequestParamUtil {
 
 		//log.debug("about to return this array: " + l.toString());
 		//return (String[])l.toArray(new String[1]);
+		log.debug("Returning array: " + l.toString());
 		return l.toArray();
 	}
 
@@ -366,15 +373,15 @@ public class CompositeRequestParamUtil {
 					arr[iv.index] = (String)iv.value;
 
 				} catch (ClassCastException cce) {
-					log.warn("Value at " + iv.index + 
+					log.warn("Value at " + iv.index +
 							" is not a String; while getting " + canon);
 				}
 			} else {
-				log.error(iv.index + 
+				log.error(iv.index +
 						" is not an allowed index while getting " + canon);
 			}
 		}
-		
+
 		return arr;
 	}
 	*/
@@ -426,7 +433,7 @@ public class CompositeRequestParamUtil {
 				Object o = m.get(childKey);
 				log.error("Problem while getting child map named '" +
 						childKey + "' from parent map: " + m.toString() +
-						"\n\nCould not cast a " + o.getClass().getName() + 
+						"\n\nCould not cast a " + o.getClass().getName() +
 						" to a Map.  Its value was: " + o.toString() +
 						"\nCheck the '" + childKey + "' parameter for misconfiguration.\n\n");
 				m = null;
