@@ -1,0 +1,158 @@
+Michael Lee's notes on installing VegBank on a new server (vegbankVM)
+First, the current instance of VegBank was copied from to VegBankVM
+Then I tested functions, redeployed bits of the website, and addressed what failed.  
+This is a log of what happened.
+
+As of 12/21/2010, VegBankVM is up and running and is our production server!
+
+reinstalling VegBank on VegBankVM
+
+problems:
+
+   build.properties are all different on the new server
+     googlemaps_apikey needed a new key generated from google's webserver (http://code.google.com/apis/maps/signup.html)
+     
+     THESE were also changed from comments out values to new values:
+     apache.document.root=/usr/www/vegbank/htdocs
+     vegbank.export.dir=export
+     #webapps.dir=/usr/local/devtools/jakarta-tomcat/webapps
+     webapps.dir=/var/lib/tomcat6/webapps
+     #vegbank.web.dir=/usr/local/devtools/jakarta-tomcat/webapps/vegbank
+     vegbank.web.dir=/var/lib/tomcat6/webapps/vegbank
+     #tomcat=/usr/local/devtools/jakarta-tomcat
+     tomcat=/var/lib/tomcat6
+
+permissions:
+   When running the ant install and web-install, I ran into problems with not having permissions
+     to write to the files on the server.
+     
+     To fix this, I created a new linux user group (vegbank), and added the users (including tomcat) to this group
+     then I did a chgrp for any dirs that didn't deploy from ant
+     
+     Matt Jones helped me set the sticky bits for the directory to remain a vegbank group.
+     This still doesn't work perfectly, as the deployed vegbank directory doesn't have group write permissions by default.
+     This needs to be fixed by adding the rest of the vegbank website to the vegbank.war file and only distribute files through the .war file.
+          
+writeviews didn't cooperate from /web/views/build.xml, as it complained the a .jsp file didn't exist.
+  I switched force="true" to force="false" and ran ant as ant -v writeviews from web/views/, and it worked!
+  
+tokens are said to be recursive, ant version issue? : yes new ant 1.8 fixed this
+
+I had some problems with redirect:write not working as predicted.  Reworked some xsl files and commited to SVN.
+
+  The redirect:write is adding garbage to the jsps that are messing them up, they fail to compile
+  fixed this by adding an ant task called "replace" that looks for xmnls:[jsp|vegbank|logic|bean]="http://vegbank.org" and replaces when with " "
+  
+  tested various functions on the site:
+    vegbank_qa.xlsx
+    
+    particular fails: /get/std/[entity] is not always pulling up the correct view
+    taxonObservation and observation fail and get 404 errors, but work if you adjust the jsp name
+    
+    big problem: observation_comprehensive failing due to "LocalVariableTable has wrong length in class file"
+      but annoyingly this was not an issue on the old server
+    fixed this by splitting observation_comprehensive into two files.
+  
+    old server can allow download of 850+ plots.  New server does too, and fast, but at 1,050 plots, the download fails :(
+    Matt Jones increased the memory allowance of memory for tomcat: the memory was set to 128 MB for tomcat -- I increased it to 2048 MB.
+    Now downloads of over 10,000 plots are successful!
+      
+   
+   ONE TIME ISSUES RELATED TO CVS->SVN migration:
+   checked out new copy of SVN repo!
+      
+      but date format is different.  following command fixed:
+      find ./ -type f | xargs sed -i "s/\('\$Date: [0-9][0-9][0-9][0-9]\)\/\([0-9][0-9]\)\/\([0-9][0-9] [0-9][0-9]\:[0-9][0-9]\:[0-9][0-9] \$'$\)/\1-\2-\3/"
+   no, that didn't work!
+   
+   this did work:
+   grep -lr -e 'Date: ' * | xargs sed -i 's/\(''\$Date: [0-9][0-9][0-9][0-9]\)\/\([0-9][0-9]\)\/\([0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9] \$''\)/\1-\2-\3/' 
+  
+   trying to fix this:
+   
+   < # $Id: vegbank.properties,v 1.21 2006-09-01 23:39:47 mlee Exp $
+   ---
+   > # $Id: vegbank.properties,v 1.21 2006/09/01 23:39:47 mlee Exp $
+   
+   just a couple, so I did it manually!  
+   
+   
+   
+   
+   
+   Matt Jones phone call 11/11/2010:
+   
+   autogen-views script not part of deploy
+   (had to fix this anyway)
+   
+   1) stop tomcat
+   2) make changes to permissions in webapps dir
+   3) start tomcat
+   
+   partial reload due to war file not being able to write to vegbank dir
+   
+   fixed with umask 0002 in .bashrc
+   
+   fixed also with sticky bits:
+     as root, in webapps dir, ran:
+     chgrp vegbank .
+     chmod g+s .
+     (make the group sticky (the default for new files/folders)
+     
+     when tomcat creates the vegbank dir, it's not set as vegbank grp, so had to chgrp -R vegbank vegbank
+     
+     this fixed A LOT of the problems when we redeployed (so still a permissions issue)
+     
+     still having queries not run correctly.: 
+      ERROR taglib.VegbankGetTag: Problem running GenericCommand
+        java.lang.ClassCastException: [Ljava.lang.String; cannot be cast to java.lang.String
+            at org.vegbank.ui.struts.taglib.Xwhere.doSwap(Xwhere.java:311)
+            at org.vegbank.ui.struts.taglib.Xwhere.appendToClause(Xwhere.java:335)
+            at org.vegbank.ui.struts.taglib.Xwhere.buildXwhereClause(Xwhere.java:97)
+     (this resolved itself, apparently)
+
+
+## BEFORE TRANSER OF DNS ENTRY, I rebuilt the VegBankVM site using vegbank.org as the machine url and google maps API key in build.properties.
+
+
+
+  TRANSFER OF DATABASE FROM OLD VEGBANK TO NEW:
+ /usr/bin/pg_dump -U vegbank --no-owner --no-privileges vegbank > /usr/vegbank/backup/migrate_new_server_xfer_2010_12_21.sql
+
+now scp to new vegbank:
+scp /usr/vegbank/backup/migrate_new_server_xfer_2010_12_21.sql lee@vegbankvm.nceas.ucsb.edu:/usr/vegbank/backup/migrate_new_server_xfer_2010_12_21.sql
+
+ON NEW VEGBANK:
+become root and stop tomcat:
+su -
+cd /etc/init.d
+./tomcat6 stop
+
+#then become postgres:
+su postgres
+# drop vegbank database
+dropdb vegbank
+# create database:
+createdb -E UNICODE vegbank
+createuser vegbank
+#grant vegbank user permissions:
+psql
+grant all on database vegbank to vegbank;
+
+#restore data:
+su (yourself)
+cd /usr/vegbank/backup
+### this is super super slow: more than a day, thus far:
+## can't get that to work at all /usr/bin/pg_restore -x -O -C -U vegbank -f /usr/vegbank/backup/migrate_new_server_xfer_2010_12_21.sql 
+
+does work in minutes, too:
+cd /usr/vegbank/backup/
+psql -U vegbank vegbank < migrate_new_server_xfer_2010_12_21.sql > manualRestore_2010_12_21_real.log
+
+then do psql -U vegbank vegbank
+analyze;
+
+# now start tomcat:
+su -
+cd /etc/init.d
+./tomcat6 start
