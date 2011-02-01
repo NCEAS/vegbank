@@ -157,7 +157,7 @@ UPDATE commconcept set d_obsCount = (select count(1) FROM (select observation_ID
   GROUP BY  observation_ID) as foo) where d_obsCount is null;
   
 update project set d_obsCount=(select count(1) from view_notemb_observation as observation 
-      where observation.project_ID=project.project_ID) where d_obsCount is null;
+      where observation.project_ID=project.project_ID) ;
       
 update party set d_obsCount=(select countallcontrib 
    from view_browseparty_all_count where 
