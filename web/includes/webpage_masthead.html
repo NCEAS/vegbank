@@ -14,6 +14,10 @@
         src="@images_link@vegbank_caps170x40outline.jpg" /></a> 
         <!-- this is something to broadcast to everyone (on jsp pages), like the system is shutting down in 1 hour -->
         <jsp:include page="/includes/systemmessage.html" />
+        <bean:define id="thisisjsp"><!--yes it is--></bean:define>
+        <logic:empty name="thisisjsp">
+           <iframe style="border-width:0px; margin:0px; padding:0px;" marginHeight="0" marginWidth="0" scrolling="no" height="54px" width="262px" src="@includes_link@systemmessage.html"></iframe>
+        </logic:empty>
    </div>
 
     <div id="permanav">
