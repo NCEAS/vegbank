@@ -1,11 +1,11 @@
-To create the plots_northamerica_map.png file, 
-  open vegbank_blank_northam_map.psf in ArcSoftStudio 2000.
-  Then fill in on the bottom layer the colors of states and provinces that are appropriate.
-  The key is in HTML.
-  The bottom layer has states and provinces connected underneath the oceans to make the entire state/province color on a fill.
-  The color similarity should be somewhat weak, like 80-100 so that it colors all that you want it to.
-  
-  the maps are then resized 75% and one-third sizes (sharpen both lightly after resize) and copies saved as .png files in the /images/ dir.
-  
+north america plot maps are generated from cropped screenshots of:
+http://vegbank.org/vegbank/views/svg/regionmap.jsp?colorCount=6&zoom=0.27&colors=996633%2CCC9966%2Cffcc99%2Ccccc99%2C99ff66%2C339900&dbsummary=y&bgcolor=d0d0d0&x=50&y=30&largeCapture=y
+
+http://vegbank.org/vegbank/views/svg/regionmap.jsp?colorCount=6&zoom=0.12&colors=996633%2CCC9966%2Cffcc99%2Ccccc99%2C99ff66%2C339900&dbsummary=y&bgcolor=d0d0d0&x=150&y=130&smallCapture=y
+
+Use these URLs to get an image created for the VegBank front page and linked map,
+crop them inside the frames shown, and post them to vegbank/images/
+plots_northamerica_map_third.png (small)
+plots_northamerica_map_75perc.png (larger)
   Colors from:
   http://atlas.gc.ca/site/english/learningresources/carto_corner/sample_colour_progressions.gif/image_view
