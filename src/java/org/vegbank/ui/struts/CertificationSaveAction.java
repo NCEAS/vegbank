@@ -234,7 +234,7 @@ public class CertificationSaveAction extends VegbankAction {
 			.append(" \n\n\n");
 
 		String mailHost = "vegbank.org";
-		String from = "vegbank";
+		String from = "dba@vegbank.org";
 		String to = "panel@vegbank.org";
 		String cc = null;
 		String subject = "VegBank certification for " + form.getGivenName() + " " + form.getSurName();
