@@ -4,9 +4,9 @@
  *	Release: @release@
  *
  *	'$Author: anderson $'
- *	'$Date: 2005-07-27 22:24:35 $'
+ *	'$Date: 2005/07/27 22:24:35 $'
  *	'$Revision: 1.38 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 package org.vegbank.common.command;
 
 import java.io.*;
@@ -46,18 +46,18 @@ import org.vegbank.common.utility.QueryParameters;
 /**
  * Uses parameters passed in via the request to construct the SQL query,
  * process the ResultSet and populate a List of Beans ( name passed in a parameter).
- * This List is saved into the request as an attribute called BEANLIST, where it is 
+ * This List is saved into the request as an attribute called BEANLIST, where it is
  * availible for use by a JSP.  If the query returns only one result, an additional
  * attribute called BEAN is stored in the request, containing the only BEANLIST item.
- * 
- * @author anderson, farrell 
+ *
+ * @author anderson, farrell
  */
 
-public class GenericCommand 
+public class GenericCommand
 {
 
 	private static Log log = LogFactory.getLog(GenericCommand.class);
-	private static ResourceBundle sqlResources = 
+	private static ResourceBundle sqlResources =
 			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 
 	public static final int DEFAULT_PER_PAGE = 10;   // -1 is all results
@@ -67,7 +67,7 @@ public class GenericCommand
 	private static final String LAST_RESULTS_KEY = "LAST_RESULTS";
 	private QueryParameters queryParameters = null;
 
-	//// THIS WORKS 
+	//// THIS WORKS
 	// Caveat: Can't put (parens) in subqueries, or within other (parens)
 	// \S matches non-whitespace characters
 
@@ -111,16 +111,16 @@ public class GenericCommand
 
 	/**
 	 * Another way to execute a command.  It's easier to call this
-	 * from a JSP page directly rather than going through the 
+	 * from a JSP page directly rather than going through the
 	 * GenericDispatcherAction.
 	 */
 	public List execute(
-			HttpServletRequest request, 
-			String selectClauseKey, 
-			String whereClauseKey, 
-			String beanName, 
-			String orderBy, 
-			String whereParam) 
+			HttpServletRequest request,
+			String selectClauseKey,
+			String whereClauseKey,
+			String beanName,
+			String orderBy,
+			String whereParam)
 			throws Exception {
 
 		//log.debug("execute(req, select, where, bean, (String)where): " + whereParam);
@@ -136,7 +136,7 @@ public class GenericCommand
 	/**
 	 *
 	 */
-	public List execute(String selectClauseKey, String whereClauseKey, 
+	public List execute(String selectClauseKey, String whereClauseKey,
 				String beanName, String orderBy, String whereParam) throws Exception {
 
 		//log.debug("execute(select, where, bean, (Object)where)");
@@ -147,7 +147,7 @@ public class GenericCommand
 	/**
 	 *
 	 */
-	public List execute(String selectClauseKey, String whereClauseKey, 
+	public List execute(String selectClauseKey, String whereClauseKey,
 				String beanName, String orderBy, String[] whereParams ) throws Exception
 	{
 		//log.debug("execute(select, where, bean, (String[])where)");
@@ -157,12 +157,12 @@ public class GenericCommand
 
 	/**
 	 * Another way to execute a command.  It's easier to call this
-	 * from a JSP page directly rather than going through the 
+	 * from a JSP page directly rather than going through the
 	 * GenericDispatcherAction.
 	 */
 	public List execute(
 			HttpServletRequest request,
-			String selectClauseKey, 
+			String selectClauseKey,
 			String whereClauseKey,
 			String beanName,
 			String orderBy,
@@ -174,20 +174,20 @@ public class GenericCommand
 		String tmp;
 		String sqlFullQuery = initQuery(selectClauseKey, whereClauseKey, orderBy, whereParams);
             HttpSession session = request.getSession();
-
+            log.info("SQL Full Query: " + sqlFullQuery);
 
 
             ////////////////////////////////////////////////////
             // Count results
             ////////////////////////////////////////////////////
             int numItems = 0;
-            
-            // TODO: 
+
+            // TODO:
             // Only count results if they haven't already been counted
             if (getPager()) {
                 numItems = countResults(sqlFullQuery);
 
-                /* 
+                /*
                 tmp = getNumItems();
                 if (Utility.isStringNullOrEmpty(tmp)) {
                     // run a query
@@ -202,7 +202,7 @@ public class GenericCommand
                 if (request != null) {
                     //log.info("Count found " + numItems);
                     request.setAttribute("numItems", Integer.toString(numItems));
-                } 
+                }
             }
 
 
@@ -224,7 +224,7 @@ public class GenericCommand
                 } else {
                     pp = Float.parseFloat(tmp);
                 }
-            } 
+            }
 
             // page number
             tmp = getPageNumber();
@@ -236,11 +236,11 @@ public class GenericCommand
             }
 
             int numTotalPages = (int)Math.ceil((float)numItems / pp);
-            if (pn < 1) { 
-                pn = 1; 
-            } else if (pn * pp > numItems) { 
-                pn = numTotalPages; 
-            } 
+            if (pn < 1) {
+                pn = 1;
+            } else if (pn * pp > numItems) {
+                pn = numTotalPages;
+            }
             setPageNumber(Integer.toString(pn));
 
 
@@ -266,7 +266,7 @@ public class GenericCommand
                         log.debug("checking for last results key: " + sessionLoadName);
                         String loadFileName = (String)session.getAttribute(sessionLoadName);
                         log.debug("loading last results file: " + loadFileName);
-                        searchResultList = loadSearchResults(loadFileName); 
+                        searchResultList = loadSearchResults(loadFileName);
 
                         request.setAttribute(sessionLoadName, searchResultList);
                         skipQuery = true;
@@ -278,7 +278,7 @@ public class GenericCommand
             }
 
             if (((Boolean)queryParameters.get("showQuery")).booleanValue()) {
-                log.debug("showQuery ON:  setting getQuery to full SQL query"); 
+                log.debug("showQuery ON:  setting getQuery to full SQL query");
                 request.setAttribute("getQuery", sqlFullQuery);
                 skipQuery = true;
             }
@@ -290,11 +290,11 @@ public class GenericCommand
                 ////////////////////////////////////////////////////
                 sqlFullQuery += buildLimitClause();
 
-                //log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlFullQuery 
+                //log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlFullQuery
                 //       + "\n=======================================");
                 DatabaseAccess da = new DatabaseAccess();
                 ResultSet rs = da.issueSelect( sqlFullQuery );
-                
+
                 Vector propNames = getPropertyNames(sqlFullQuery);
                 searchResultList = getBeanList(beanName, rs, propNames);
                 da.closeStatement();
@@ -371,7 +371,7 @@ public class GenericCommand
 
 
 	/**
-	 * 
+	 *
 	 */
 	private int countResults(String sqlFullQuery) throws Exception {
 
@@ -384,16 +384,16 @@ public class GenericCommand
             cleanWhere = this.whereClauseFormatted;
         }
 
-		String sql = "SELECT COUNT(1) " + 
-				this.selectClauseWithSimpleAttribs.substring( 
+		String sql = "SELECT COUNT(1) " +
+				this.selectClauseWithSimpleAttribs.substring(
 						this.selectClauseWithSimpleAttribs.indexOf("from ")) + cleanWhere;
 */
 		String sql = "SELECT COUNT(1) FROM (" + sqlFullQuery + ") AS cnt";
-				
+
 		//log.info("::: COUNT QUERY:::\n\t" + sql + "\n=======================================");
 		DatabaseAccess da = new DatabaseAccess();
 		ResultSet rs = da.issueSelect( sql );
-		
+
 		String numItems = "";
 		if (rs.next()) {
 			numItems = rs.getString(1);
@@ -408,9 +408,9 @@ public class GenericCommand
 
 
 	/**
-	 * Uses parameters passed in via the request to construct a SQL Statement from a 
+	 * Uses parameters passed in via the request to construct a SQL Statement from a
 	 * properties file
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -419,12 +419,12 @@ public class GenericCommand
 		String whereClause = "";
 		String orderBy = "";
 		StringBuffer sql = new StringBuffer(1024);
-		
+
 		// SELECT
 		if (!Utility.isStringNullOrEmpty(selectClauseKey)) {
 			selectClause = sqlResources.getString(selectClauseKey).toLowerCase();
 			sql.append(selectClause);
-		}		
+		}
 
 		this.selectClauseWithSimpleAttribs = stripSQLAttribsFromSelect(selectClause);
 
@@ -440,7 +440,7 @@ public class GenericCommand
 				log.info("Using non-configured (dangerous) where: " + whereClause);
 			}
 			sql.append(buildFormattedWhereClause(whereClause, whereParams, selectClause));
-		} 
+		}
 
 		// ORDER BY
 		if (!Utility.isStringNullOrEmpty(orderByKey)) {
@@ -476,7 +476,7 @@ public class GenericCommand
                     sql.append(" ").append(sortDir);
                 }
             }
-		} 
+		}
 
 		return sql.toString();
 
@@ -568,7 +568,7 @@ public class GenericCommand
 				}
                 */
 
-				// MessageFormat allows the substitution of '{x}' with Strings from 
+				// MessageFormat allows the substitution of '{x}' with Strings from
 				// a String[] where x is the array index
 				format = new MessageFormat(whereClause);
 				whereClause = format.format(whereParams);
@@ -631,23 +631,23 @@ public class GenericCommand
 				.append(ipn * ipp);
 		}
 
-		
+
 		//log.debug(">>>>>>>>>>" + sqlLimitClause.toString());
 		return sqlLimitClause.toString();
 	}
-	
+
 	/**
 	 * Uses a ResultSet to populate a List of generated Beans.
 	 * Needs a list of the bean properties to populate in the same order
 	 * as the columns in the ResultSet.
-	 * 
+	 *
 	 * @param className
 	 * @param rs
 	 * @param propNames
 	 * @return
 	 * @throws Exception
 	 */
-	private List getBeanList( String className, ResultSet rs, Vector propNames) 
+	private List getBeanList( String className, ResultSet rs, Vector propNames)
 		throws Exception
 	{
 		List beanList = new ArrayList();
@@ -660,7 +660,7 @@ public class GenericCommand
 					String propName = (String) propNames.get(i);
 					String value = rs.getString(i+1);
 					log.debug("Mapping property " + propName + " = " + value);
-					map.put(propName, value);	
+					map.put(propName, value);
 				}
 		  		beanList.add(map);
 
@@ -671,32 +671,32 @@ public class GenericCommand
 					String propName = (String) propNames.get(i);
 					String value = rs.getString(i+1);
 					log.debug("Setting bean property " + propName + " = " + value);
-					BeanUtils.copyProperty(bean, propName, value);	
+					BeanUtils.copyProperty(bean, propName, value);
 				}
 		  		beanList.add(bean);
 			}
 		}
 		return beanList;
 	}
-	
+
 	/**
 	 * Use the SQL select query to get the names of the properties
 	 * of the bean we wish to populate with the values.  Removes
 	 * anything before the '.' if there is one, e.g. 'tobs.accessioncode'
 	 * becomes 'accessioncode'.
-	 * 
+	 *
 	 * <pre>
 	 * 	SELECT thisField, thatField, thatTable.inthat FROM xxxxx
 	 * 		=> thisField, thatField, thatTable.inthat
 	 * </pre>
-	 * 
+	 *
 	 * @param selectClause
 	 * @return
 	 */
 	private Vector getPropertyNames(String selectClause)
 	{
 		Vector results = new Vector();
-		
+
 		// parse selectClause to get all the fieldNames
 		if (Utility.isStringNullOrEmpty(this.selectClauseWithSimpleAttribs)) {
 			this.selectClauseWithSimpleAttribs = stripSQLAttribsFromSelect(selectClause);
@@ -704,12 +704,12 @@ public class GenericCommand
 
 		// extract only the comma-separated attribs
 		String attribList = this.selectClauseWithSimpleAttribs.substring(
-				this.selectClauseWithSimpleAttribs.indexOf("select ")+7, 
+				this.selectClauseWithSimpleAttribs.indexOf("select ")+7,
 				this.selectClauseWithSimpleAttribs.indexOf("from"));
 
 		StringTokenizer st = new StringTokenizer(attribList, ",");
 		int indexOfDot, indexOfComma, indexOfAs;
-		
+
 		// get the property names
 
 		while ( st.hasMoreTokens() )
@@ -726,7 +726,7 @@ public class GenericCommand
 			else
 			{
 				// Add this token with any trailing ',' removed
-				
+
 				// Check for a named field
 				//log.debug("property name:  '" + propertyName + "'");
 				indexOfAs = propertyName.indexOf(" as ");
@@ -752,7 +752,7 @@ public class GenericCommand
 					results.add(propertyName.substring(0, indexOfComma));
 				}
 			}
-		}	
+		}
 
 		//log.debug("---------------------------------");
 		//log.debug("attrib list: " + results.toString());
@@ -762,7 +762,7 @@ public class GenericCommand
 
 
     /**
-     * 
+     *
      */
 	private String stripSQLAttribsFromSelect(String selectClause) {
 
@@ -771,7 +771,7 @@ public class GenericCommand
 
 		//log.debug("-=-=-=-=-=-=-=-=-=-=-=-");
 		//log.debug("========== ORIGINAL QUERY: " + selectClause);
-		
+
 		m = subqueryPattern.matcher(selectClause);
 		selectClause = m.replaceAll("");
 		//log.debug("========== REGEX 1: " + subqueryPattern.pattern());
@@ -793,7 +793,7 @@ public class GenericCommand
 	}
 
     /**
-     * 
+     *
      */
 	private String stripSQLAttribs(String selectClause) {
 
@@ -818,7 +818,7 @@ public class GenericCommand
 
 
     /**
-     * 
+     *
      */
 	protected String pageNumber;
 
@@ -839,7 +839,7 @@ public class GenericCommand
     }
 
     /**
-     * 
+     *
      */
 	protected String perPage;
 
@@ -853,7 +853,7 @@ public class GenericCommand
 
 
     /**
-     * 
+     *
      */
 	protected String id;
 
@@ -867,7 +867,7 @@ public class GenericCommand
 
 
     /**
-     * 
+     *
      */
 	protected String numItems;
 
@@ -881,7 +881,7 @@ public class GenericCommand
 
 
     /**
-     * 
+     *
      */
 	protected boolean pager;
 
@@ -895,7 +895,7 @@ public class GenericCommand
 
 
     /**
-     * 
+     *
      */
 	/*
 	protected String whereSubquery;
@@ -915,7 +915,7 @@ public class GenericCommand
 	 * Easy way to set up a query.
      * First used with <vegbank:get>.
      * @see VegbankGetTag.
-	 */ 
+	 */
     public void setQueryParameters(QueryParameters qp) {
         queryParameters = qp;
     }
@@ -943,16 +943,16 @@ public class GenericCommand
 
 	/**
 	 * Just for testing.
-	 * 
+	 *
 	 * @param args
 	 */
 	public static void main(String[] args)
 	{
 		// For testing
 		GenericCommand gc = new GenericCommand();
-		Vector result = 
-			gc.getPropertyNames("SELECT thisField, thatField, thatTable.inthat FROM xxxxx"); 
-			
+		Vector result =
+			gc.getPropertyNames("SELECT thisField, thatField, thatTable.inthat FROM xxxxx");
+
 		log.debug(result);
 	}
 

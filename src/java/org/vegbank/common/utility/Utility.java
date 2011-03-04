@@ -86,7 +86,8 @@ public class Utility implements Constants
 	public static String VB_EMAIL_ADMIN_TO;
 	public static String VB_EMAIL_ADMIN_FROM;
 	public static String DATABASE_ACCESSION_KEY_PREASSIGN;
-	public static List DS_CANDIDATES;
+	public static String DATABASE_ACCESSION_ALT_KEY;
+        public static List DS_CANDIDATES;
 	public static String PARAM_DELIM = "__";
 	public static String DATACART_KEY = "datacart";   // found in session
 	public static String DATACART_COUNT_KEY = "datacart-count";   // found in session
@@ -132,7 +133,7 @@ public class Utility implements Constants
         // accessionCode properties for this database:
         // accessionPropFile = ResourceBundle.getBundle("accession");
         DATABASE_ACCESSION_KEY_PREASSIGN = vegbankPropFile.getString("database.accession.key.preassign");
-
+        DATABASE_ACCESSION_ALT_KEY = vegbankPropFile.getString("database.accession.alt.key");
 	} catch (Exception ex) {
 		log.error("There was a problem loading Utility properties", ex);
 	} }

@@ -4,7 +4,7 @@
  *	Release: @release@
  *
  *	'$Author: mlee $'
- *	'$Date: 2006-09-07 23:27:10 $'
+ *	'$Date: 2006/09/07 23:27:10 $'
  *	'$Revision: 1.48 $'
  *
  * This program is free software; you can redistribute it and/or modify
@@ -152,6 +152,7 @@ public class LoadTreeToDatabase
 		    throws SQLException
 	{
     System.out.println("BEGIN XML LOADING PROCESS (insertVegbankPackage)");
+    log.debug("BEGIN XML LOADING PROCESS (insertVegbankPackage)");
     Timer t1 = new Timer("inserting vegbank package");
 		this.vegbankPackage = vbPkg;
 		this.xmlFileName = xmlFileName;
@@ -192,10 +193,12 @@ public class LoadTreeToDatabase
 		commit = true;
 		this.initDB();
         dlog.append("preparing data...");
+        log.debug("preparing data...");
     timer.stop();
 
 		// insert commConcepts
     timer = new Timer("inserting commConcepts");
+            log.debug("inserting commConcepts");
 		Enumeration commConcepts =  getChildTables(vegbankPackage, "commConcept");
 		while ( commConcepts.hasMoreElements() )
 		{
@@ -206,6 +209,7 @@ public class LoadTreeToDatabase
 
         // insert coverMethods
    timer = new Timer("inserting coverMethods");
+            log.debug("inserting coverMethods");
         Enumeration coverMethods =  getChildTables(vegbankPackage, "coverMethod");
         while ( coverMethods.hasMoreElements() )
         {
@@ -219,6 +223,7 @@ public class LoadTreeToDatabase
 
         // insert observations
     timer = new Timer("inserting observations");
+            log.debug("inserting observations");
         Enumeration observations = getChildTables(vegbankPackage, "observation");
         while (observations.hasMoreElements())
         {
@@ -229,6 +234,7 @@ public class LoadTreeToDatabase
 
         // insert Parties
     timer = new Timer("inserting parties");
+            log.debug("inserting parties");
         Enumeration parties = getChildTables(vegbankPackage, "party");
         while (parties.hasMoreElements())
         {
@@ -239,6 +245,7 @@ public class LoadTreeToDatabase
 
         // insert plantConcepts
     timer = new Timer("inserting plantConcepts");
+            log.debug("inserting plantConcepts");
         Enumeration plantConcepts =  getChildTables(vegbankPackage, "plantConcept");
         while ( plantConcepts.hasMoreElements() )
         {
@@ -249,6 +256,7 @@ public class LoadTreeToDatabase
 
         // insert projects
     timer = new Timer("inserting projects");
+            log.debug("inserting projects");
         Enumeration projects =  getChildTables(vegbankPackage, "project");
         while ( projects.hasMoreElements() )
         {
@@ -259,6 +267,7 @@ public class LoadTreeToDatabase
 
 		// insert references
     timer = new Timer("inserting references");
+            log.debug("inserting references");
 		Enumeration references =
 			getChildTables(vegbankPackage, "reference");
 		while (references.hasMoreElements())
@@ -270,6 +279,7 @@ public class LoadTreeToDatabase
 
         // insert stratumMethods
     timer = new Timer("inserting stratumMethods");
+            log.debug("inserting stratumMethods");
         Enumeration stratumMethods =  getChildTables(vegbankPackage, "stratumMethod");
         while ( stratumMethods.hasMoreElements() )
         {
@@ -371,6 +381,7 @@ public class LoadTreeToDatabase
             try {
                 // KEYWORD GENERATION
                 timer = new Timer("generate keywords");
+            log.debug("generate keywords");
                 java.util.Timer keywordsTimer = new java.util.Timer();
 				dlog.append("generate keywords... start on a schedule");
                 keywordsTimer.schedule(
@@ -638,7 +649,7 @@ public class LoadTreeToDatabase
 		while( tables.hasMoreElements()  )
 		{
 			Hashtable table = (Hashtable) tables.nextElement();
-			//log.debug(tableName + " : " + table);
+			log.debug(tableName + " : " + table);
 			addForeignKey(table, fKName, fKValue);
 			insertTable(tableName, table);
 		}
@@ -683,8 +694,8 @@ public class LoadTreeToDatabase
 		// TODO: Make configurable and add user perms.
 		if ( ! this.isAllowedToLoad(fieldValueHash) )
 		{
-			//log.debug("*** User is not allowed to load " +
-      //  fieldValueHash.get(TABLENAME));
+			log.debug("*** User is not allowed to load " +
+        fieldValueHash.get(TABLENAME));
 			return PK; // Even if empty
 		}
 
@@ -755,8 +766,8 @@ public class LoadTreeToDatabase
                         PK = this.getNextId(tableName);
 
 						inputPKTracker.setAssignedPK(tableName, stringValue.toString(), PK);
-						//log.debug("No record added for xmlPK :" + stringValue.toString()
-						//		+ " for table " + tableName + " adding PK now: " + PK);
+						log.debug("No record added for xmlPK :" + stringValue.toString()
+								+ " for table " + tableName + " adding PK now: " + PK);
 					}
 				}
 			}
@@ -765,7 +776,7 @@ public class LoadTreeToDatabase
             if (PK == 0) {
 
                 PK = this.getNextId(tableName);
-                log.debug("No PK was previously found! so I got " + PK);
+                log.debug("No PK for " + tableName + " was previously found! so I got new PK # " + PK);
             }
 
 			fieldNames.add( Utility.getPKNameFromTableName(tableName) );
@@ -775,7 +786,7 @@ public class LoadTreeToDatabase
 			sb.append(" (" + Utility.arrayToCommaSeparatedString( fieldNames.toArray() ) + ")" );
 			sb.append(" VALUES (" + Utility.arrayToCommaSeparatedString( fieldValues.toArray() ) +")" );
 
-			//log.info("Running SQL: " + sb.toString());
+			log.debug("Running SQL: " + sb.toString());
 			if (tableName.equals("plot")) {
 				log.info("loaded table: " +tableName + " with PK of " + PK);
 			}
@@ -807,7 +818,7 @@ public class LoadTreeToDatabase
 
 		this.storeTableNameAndPK(tableName, PK);
 
-		//log.debug("Returning with PK :" + PK + " for table " + tableName);
+		log.debug("Returning with PK :" + PK + " for table " + tableName);
 		return PK;
 	}
 
@@ -830,7 +841,7 @@ public class LoadTreeToDatabase
                 //log.debug("There was no accession code");
                 fieldValueHash.remove(Constants.ACCESSIONCODENAME);
             } else {
-                //log.debug("There was an accession code and it happens to be: " + accessionCode);
+                log.debug("There was an accession code and it happens to be: " + accessionCode);
                 boolean skipRemoval = false;
                 if (accessionCode.startsWith(Utility.DATABASE_ACCESSION_KEY_PREASSIGN + ".")) {
                    // only bother to check this if the prefix is right, this saves lots of time, as vegbranch temp codes are never checked
@@ -839,6 +850,12 @@ public class LoadTreeToDatabase
                    //if (skipRemoval) {
                    //    log.debug(accessionCode + " was indeed preassigned.");
                    //}
+                }
+                log.debug("checking to see if accession Code starts with " + Utility.DATABASE_ACCESSION_ALT_KEY);
+                if (accessionCode.startsWith(Utility.DATABASE_ACCESSION_ALT_KEY)) {
+                  // lsids also accepted  
+                   skipRemoval = true;
+                   log.debug("accepting alternate accession code prefix for accessionCode " + accessionCode);
                 }
                 if (!skipRemoval) {
                   //log.debug("removing accessionCode " + accessionCode + " from the record.");
@@ -2716,6 +2733,7 @@ public class LoadTreeToDatabase
       System.out.println("*************running denorms");
       DenormUtility denormUtil = new DenormUtility();
       Timer t = new Timer("denormalizing tables");
+            log.debug("denormalizing tables");
         try
         {
             Iterator tit = tableKeys.keySet().iterator();
@@ -2770,6 +2788,7 @@ public class LoadTreeToDatabase
         {
           //System.out.println("==========Running in Keyword Thread=============");
           Timer t = new Timer("runKeywords thread");
+            log.debug("runKeywords thread");
           try {
               // KEYWORD GENERATION
               timer = new Timer("generate keywords");
