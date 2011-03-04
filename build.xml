@@ -196,6 +196,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <filter token="databaseConnectString" value="${databaseConnection}"/>
     <filter token="databaseName" value="${databaseName}"/>
     <filter token="database.accession.key.preassign" value="${database.accession.key.preassign}" />
+    <filter token="database.accession.alt.key" value="${database.accession.alt.key}" />
     <filter token="vegbank.accession.prefix" value="${vegbank.accession.prefix}" />
     <filter token="psqlPath" value="${psqlPath}"/>
     <filter token="vegbankVersion" value="${version}"/>
