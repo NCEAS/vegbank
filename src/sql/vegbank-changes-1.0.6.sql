@@ -35,7 +35,7 @@ INSERT INTO  dba_datacache (cache_key, data1) values ('DB_STAT_CC_NVC_ON_PLOTS',
 
 -- add denorm table for date_added to project:
 ALTER TABLE project ADD COLUMN d_lastPlotAddedDate timestamp with time zone;
-UPDATE project set d_lastPlotAddedDate = (select max(dateentered) from observation where observation.project_ID=project.project_ID);
+UPDATE project set d_lastPlotAddedDate = (select max(dateentered) from view_notemb_observation as observation where observation.project_ID=project.project_ID);
 
 -- increase size of accession codes so that we can support LSIDs, which may be longer than native VegBank AccessionCodes
 
