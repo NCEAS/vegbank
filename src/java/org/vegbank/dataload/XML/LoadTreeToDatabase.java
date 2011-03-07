@@ -152,7 +152,7 @@ public class LoadTreeToDatabase
 		    throws SQLException
 	{
     System.out.println("BEGIN XML LOADING PROCESS (insertVegbankPackage)");
-    log.debug("BEGIN XML LOADING PROCESS (insertVegbankPackage)");
+    log.debug("=============BEGIN XML LOADING PROCESS (insertVegbankPackage)");
     Timer t1 = new Timer("inserting vegbank package");
 		this.vegbankPackage = vbPkg;
 		this.xmlFileName = xmlFileName;
@@ -198,7 +198,7 @@ public class LoadTreeToDatabase
 
 		// insert commConcepts
     timer = new Timer("inserting commConcepts");
-            log.debug("inserting commConcepts");
+            log.debug("=====inserting commConcepts");
 		Enumeration commConcepts =  getChildTables(vegbankPackage, "commConcept");
 		while ( commConcepts.hasMoreElements() )
 		{
@@ -209,7 +209,7 @@ public class LoadTreeToDatabase
 
         // insert coverMethods
    timer = new Timer("inserting coverMethods");
-            log.debug("inserting coverMethods");
+            log.debug("=====inserting coverMethods");
         Enumeration coverMethods =  getChildTables(vegbankPackage, "coverMethod");
         while ( coverMethods.hasMoreElements() )
         {
@@ -223,7 +223,7 @@ public class LoadTreeToDatabase
 
         // insert observations
     timer = new Timer("inserting observations");
-            log.debug("inserting observations");
+            log.debug("=====inserting observations");
         Enumeration observations = getChildTables(vegbankPackage, "observation");
         while (observations.hasMoreElements())
         {
@@ -234,7 +234,7 @@ public class LoadTreeToDatabase
 
         // insert Parties
     timer = new Timer("inserting parties");
-            log.debug("inserting parties");
+            log.debug("=====inserting parties");
         Enumeration parties = getChildTables(vegbankPackage, "party");
         while (parties.hasMoreElements())
         {
@@ -245,7 +245,7 @@ public class LoadTreeToDatabase
 
         // insert plantConcepts
     timer = new Timer("inserting plantConcepts");
-            log.debug("inserting plantConcepts");
+            log.debug("=====inserting plantConcepts");
         Enumeration plantConcepts =  getChildTables(vegbankPackage, "plantConcept");
         while ( plantConcepts.hasMoreElements() )
         {
@@ -267,7 +267,7 @@ public class LoadTreeToDatabase
 
 		// insert references
     timer = new Timer("inserting references");
-            log.debug("inserting references");
+            log.debug("=====inserting references");
 		Enumeration references =
 			getChildTables(vegbankPackage, "reference");
 		while (references.hasMoreElements())
@@ -279,7 +279,7 @@ public class LoadTreeToDatabase
 
         // insert stratumMethods
     timer = new Timer("inserting stratumMethods");
-            log.debug("inserting stratumMethods");
+            log.debug("=====inserting stratumMethods");
         Enumeration stratumMethods =  getChildTables(vegbankPackage, "stratumMethod");
         while ( stratumMethods.hasMoreElements() )
         {
@@ -300,7 +300,7 @@ public class LoadTreeToDatabase
             //////////////////////////////////////////////////////////////////
             // COMMIT
             //////////////////////////////////////////////////////////////////
-			log.debug("committing xml data to DB");
+			log.debug("=====committing xml data to DB");
 			dlog.append("committing xml data to DB");
       timer = new Timer("committing data to db");
 			writeConn.commit();
@@ -313,14 +313,14 @@ public class LoadTreeToDatabase
                 dlog.append("===================== DATASET CREATION");
 				dsAC = createDataset();
                 if (dsAC != null) {
-                    log.debug("done creating dataset");
+                    log.debug("=====done creating dataset");
                     // dlog.addTag  //this didn't work, so using dlog.append instead
 						dlog.append("datasetURL: http://" + vbResources.getString("serverAddress") +
                             "/get/std/userdataset/" + dsAC.toString());
 
                 } else {
                     dlog.append("!!! empty dataset");
-                    log.error("empty dataset");
+                    log.error("=====empty dataset");
                 }
                 timer.stop();
             } catch (Exception ex) {
@@ -379,45 +379,7 @@ public class LoadTreeToDatabase
             }
 
 
-            try {
-                // KEYWORD GENERATION
-                timer = new Timer("generate keywords");
-            log.debug("generate keywords");
-                java.util.Timer keywordsTimer = new java.util.Timer();
-				dlog.append("generate keywords... start on a schedule");
-                keywordsTimer.schedule(
-                  new RunKeywordsTimerTask(System.currentTimeMillis()),
-                  new Date(System.currentTimeMillis()));
-                /*log.debug("====================== KEYWORD GEN");
-                dlog.append("====================== KEYWORD GEN");
-                KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
-                Iterator tit = tableKeys.keySet().iterator();
-                int i = 0;
-                while (tit.hasNext()) {
-                    String tableName = ((String)tit.next()).toLowerCase();
-                    kwGen.updatePartialEntityByTable(tableName);
-                }*/
-                timer.stop();
-            } /*catch (SQLException kwex) {
-                log.error("problem inserting new keywords", kwex);
-                errors.addError(LoadingErrors.DATABASELOADINGERROR,
-                        "Problem generating keywords: " + kwex.toString());
-                timer.stop();
-            } */catch (Exception ex) {
-                log.error("===== Some lame problem inserting new keywords", ex);
-                errors.addError(LoadingErrors.DATABASELOADINGERROR,
-                        "Problem generating keywords: " + ex.toString());
-				dlog.append("generate keywords error: "  + ex.toString());
-                timer.stop();
-            }
-                //log.error("\n\nREMEMBER TO GEN KEYWORDS!\n\n");
 
-             //set off a thread that caches the XML generated from the beans
-            java.util.Timer xmlGenTimer = new java.util.Timer();
-            Iterator accCodes = this.addAllAccessionCodes(true).iterator();
-            RunXMLGenTimerTask task = new RunXMLGenTimerTask(System.currentTimeMillis());
-            task.setAccessionCode(accCodes);
-            xmlGenTimer.schedule(task, new Date(System.currentTimeMillis()));
 
             // this is still considered a successful load, despite potential errors
             receiptTpl = DataloadLog.TPL_SUCCESS;
@@ -459,6 +421,51 @@ public class LoadTreeToDatabase
         } catch (IOException ioex) {
             log.error("problem writing dataload log to dataload.log: ", ioex);
         }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////
+        // start keyword generation - this process sometimes hangs or loses the connection, so do it last
+        /////////////////////////////////////////////////////////////////////////////////////////////////
+          try {
+		                // KEYWORD GENERATION
+		                timer = new Timer("generate keywords");
+		                log.debug("==========generate keywords");
+		                java.util.Timer keywordsTimer = new java.util.Timer();
+						dlog.append("generate keywords... start on a schedule");
+		                keywordsTimer.schedule(
+		                  new RunKeywordsTimerTask(System.currentTimeMillis()),
+		                  new Date(System.currentTimeMillis()));
+		                /*log.debug("====================== KEYWORD GEN");
+		                dlog.append("====================== KEYWORD GEN");
+		                KeywordGen kwGen = new KeywordGen(writeConn.getConnections());
+		                Iterator tit = tableKeys.keySet().iterator();
+		                int i = 0;
+		                while (tit.hasNext()) {
+		                    String tableName = ((String)tit.next()).toLowerCase();
+		                    kwGen.updatePartialEntityByTable(tableName);
+		                }*/
+		                timer.stop();
+		            } /*catch (SQLException kwex) {
+		                log.error("problem inserting new keywords", kwex);
+		                errors.addError(LoadingErrors.DATABASELOADINGERROR,
+		                        "Problem generating keywords: " + kwex.toString());
+		                timer.stop();
+		            } */catch (Exception ex) {
+		                log.error("===== Some lame problem inserting new keywords", ex);
+		                errors.addError(LoadingErrors.DATABASELOADINGERROR,
+		                        "Problem generating keywords: " + ex.toString());
+						dlog.append("generate keywords error: "  + ex.toString());
+		                timer.stop();
+		            }
+		                //log.error("\n\nREMEMBER TO GEN KEYWORDS!\n\n");
+
+		             //set off a thread that caches the XML generated from the beans
+		            java.util.Timer xmlGenTimer = new java.util.Timer();
+		            Iterator accCodes = this.addAllAccessionCodes(true).iterator();
+		            RunXMLGenTimerTask task = new RunXMLGenTimerTask(System.currentTimeMillis());
+		            task.setAccessionCode(accCodes);
+            xmlGenTimer.schedule(task, new Date(System.currentTimeMillis()));
+
 
     t1.stop();
 	}
@@ -1772,6 +1779,7 @@ public class LoadTreeToDatabase
 
 		// Insert the observation
 		log.debug("start observation itself");
+		log.debug("===== adding observation to database");
 		observationId = insertTable("observation", observationHash);
         log.debug("/end observation itself");
 
