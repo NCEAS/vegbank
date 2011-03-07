@@ -54,3 +54,25 @@ DROP VIEW  view_keywProjPlaces ;
 DROP VIEW view_kwhelper_projcontrib;
 DROP VIEW view_kwhelper_refparty;
 DROP VIEW view_kwhelper_refjournal;
+
+
+
+ DROP VIEW view_all_commnames_code;
+ DROP VIEW view_all_commnames_sciname;
+ DROP VIEW view_all_commnames_translated;
+ DROP VIEW view_all_commnames_common;
+
+ DROP VIEW view_std_commnames_code;
+ DROP VIEW view_std_commnames_sciname;
+ DROP VIEW view_std_commnames_translated;
+ DROP VIEW view_std_commnames_common;
+
+drop view view_all_plantnames_code;
+drop view view_all_plantnames_common       ;
+drop view view_all_plantnames_sciname      ;
+drop view view_all_plantnames_scinamenoauth;
+drop view view_std_plantnames_code         ;
+drop view view_std_plantnames_common       ;
+drop view view_std_plantnames_sciname      ;
+drop view view_std_plantnames_scinamenoauth;
+
