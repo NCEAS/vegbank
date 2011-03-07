@@ -6,7 +6,7 @@
  *	'$Author: anderson $'
  *	'$Date: 2005-08-10 00:01:51 $'
  *	'$Revision: 1.21 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,14 +19,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package org.vegbank.ui.struts;
 
 import java.io.*;
 import java.util.Collection;
 import java.util.ResourceBundle;
-import java.util.Vector; 
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,7 +62,7 @@ public class UploadPlotAction extends VegbankAction
 	private static Log log = LogFactory.getLog(UploadPlotAction.class);
 	private static ResourceBundle rb = ResourceBundle.getBundle("vegbank");
 	private String saveDir = "";
-	
+
 
 	public ActionForward execute(
 		ActionMapping mapping,
@@ -97,12 +97,12 @@ public class UploadPlotAction extends VegbankAction
 
 		VegbankActionMapping vbMapping = (VegbankActionMapping)mapping;
 		String param = vbMapping.getParameter();
-		if (param != null && param.equals("form")) { 
+		if (param != null && param.equals("form")) {
 		    // just load the form
 		    log.debug("forwarding to form...");
 		    return mapping.findForward("form");
 		}
-	
+
 		log.debug("processing XML upload");
 		dbLoad = true;
 		archiveType = theForm.getArchiveType();
@@ -140,7 +140,7 @@ public class UploadPlotAction extends VegbankAction
 				log.debug("user's save dir: " + this.saveDir);
 				fetcher.setSaveDir(this.saveDir);
 
-				file = new FileWrapper( 
+				file = new FileWrapper(
 						fetcher.saveRemoteFile(fileURL, null, "GET"));
 
 			} catch (Exception ex) {
@@ -154,8 +154,8 @@ public class UploadPlotAction extends VegbankAction
 				return (mapping.getInputForward());
 			}
 		}
-		
-		
+
+
 		/////////////////////////////////////////////////
 		// PREPARE THE FILE
 		/////////////////////////////////////////////////
@@ -164,7 +164,7 @@ public class UploadPlotAction extends VegbankAction
 		if ( extension.equalsIgnoreCase("ZIP") ) {
 				try {
 					// Need to Unzip
-					 files = ServletUtility.unZip(file);
+					 files = ServletUtility.unZipToPath(file,getSaveDir() + "/tmp");
 
 				} catch (Exception e) {
 					errors.add(
@@ -193,7 +193,7 @@ public class UploadPlotAction extends VegbankAction
 		if (files.size() == 1) {
 			FileWrapper thisFile = (FileWrapper) files.iterator().next();
 			extension = this.getFileExtension(thisFile.getFileName());
-			
+
 			if ( extension.equalsIgnoreCase("XML") ) {
 				try {
 					savedFileName = this.saveFile(thisFile);
@@ -206,18 +206,23 @@ public class UploadPlotAction extends VegbankAction
 
 			} else {
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.action.failed",
-							"Vegbank can only load an .xml file or a zipped .xml file" ));
+							"VegBank can only load an .xml file or a zipped .xml file" ));
 				log.info("Attempt to load a file with extension " + extension + " failed");
 			}
 		} else {
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.action.failed",
-					"Vegbank can only handle one file at a time (even if zipped archive)"));
-			log.debug(files.size() + " where uploaded at once by user");	
-		} 
+			if (files.size() > 1) {
+		    	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.action.failed",
+					"VegBank can only handle one file at a time (even if zipped archive)"));
+		    } else {
+			    	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.action.failed",
+					"VegBank failed to unzip your file correctly."));
+		    }
+			log.debug(files.size() + " where uploaded at once by user");
+		}
 
 		log.debug("saved file path: " + savedFileName);
 
-	
+
 		/////////////////////////////////////////////////
 		// PARSE THE FILE
 		/////////////////////////////////////////////////
@@ -227,7 +232,7 @@ public class UploadPlotAction extends VegbankAction
 					log.info("VEGBANK_XML_FORMAT format uploaded: " + savedFileName);
 					worker = this.uploadVegbankXML(request, savedFileName, validate, dbLoad, rectify, user);
 					break;
-		
+
 				default:
 					log.info("Unknown format uploaded");
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -282,7 +287,7 @@ public class UploadPlotAction extends VegbankAction
 		//return mapping.findForward("PleaseWait");
 		return mapping.findForward("summary");
 	}
-	
+
 	/**
 	 * @param string
 	 * @return
@@ -296,7 +301,7 @@ public class UploadPlotAction extends VegbankAction
 
 	/**
 	 * @param savedFileName
-	 * @return worker thread 
+	 * @return worker thread
 	 */
 	private VegbankXMLUploadThread uploadVegbankXML(HttpServletRequest request, String savedFileName,
 			boolean validate, boolean dbLoad, boolean rectify, WebUser webUser) throws Exception
@@ -310,12 +315,12 @@ public class UploadPlotAction extends VegbankAction
 
 	/**
 	 * Just save the freaking file.
-	 * 
+	 *
 	 * @param FormFile -- the uploaded file
 	 * @return String -- the fileName used for saving
 	 */
 	private String saveFile(FileWrapper file) throws Exception {
-		
+
 		String fileNameAndPath = getSaveDir();
 
 		try {
@@ -333,8 +338,8 @@ public class UploadPlotAction extends VegbankAction
 		//write the file to the file specified
 		log.debug("file content-type: " + file.getContentType());
 		InputStream stream;
-		
-		// 11/2/2004: ORIGINAL WAY 
+
+		// 11/2/2004: ORIGINAL WAY
 		stream = file.getInputStream();
 		//
 
@@ -347,7 +352,7 @@ public class UploadPlotAction extends VegbankAction
 		OutputStream bos = new FileOutputStream(fileNameAndPath);
 		int bytesRead = 0;
 		byte[] buffer = new byte[8192];
-		
+
 		while ((bytesRead = stream.read(buffer, 0, 8192)) != -1) {
 			bos.write(buffer, 0, bytesRead);
 		}
@@ -361,8 +366,8 @@ public class UploadPlotAction extends VegbankAction
 	}
 
 	/**
-	 * Save file to filesystem using a unique name aquired from the the framework 
-	 * 
+	 * Save file to filesystem using a unique name aquired from the the framework
+	 *
 	 * @param FormFile -- the uploaded file
 	 * @return String -- the fileName used for saving
 	 */
@@ -371,7 +376,7 @@ public class UploadPlotAction extends VegbankAction
 	{
 		// Need to get a InputStream
 		InputStream stream = file.getInputStream();
-		
+
 		DataFileDB filedb = new DataFileDB();
 		int fileName = filedb.getNewAccessionId();
 		String fileNameAndPath = getSaveDir() + Integer.toString(fileName);
@@ -394,11 +399,11 @@ public class UploadPlotAction extends VegbankAction
 		/*
 		filedb.registerDocument(
 			fileName,
-			file.getFileSize(),  
+			file.getFileSize(),
 			file.getFileName(),
 			uploadPath);
 		*/
-			
+
 		return fileNameAndPath;
 	}
 
