@@ -344,7 +344,7 @@ public class LoadTreeToDatabase
 				dlog.append("====================== ACCESSION GEN end");
                 timer.stop();
             } catch (Exception ex) {
-                log.error("Problem while generating accession codes", ex);
+                log.error("==== Problem while generating accession codes", ex);
 				dlog.append( "Problem generating accession codes: " + ex.toString());
                 errors.addError(LoadingErrors.DATABASELOADINGERROR,
                         "Problem generating accession codes: " + ex.toString());
@@ -368,9 +368,10 @@ public class LoadTreeToDatabase
 
                 ////writeConn.commit();
 				 dlog.append("Running denormalizations ... finish");
+				 log.debug("====================== DENORMS end OK");
                 timer.stop();
             } catch (Exception ex) {
-                log.error("Problem while running denormalizations", ex);
+                log.error("===== Problem while running denormalizations", ex);
                 errors.addError(LoadingErrors.DATABASELOADINGERROR,
                         "Problem while running denormalizations: " + ex.toString());
 				 dlog.append("Running denormalizations ... ERROR!" + ex.toString());
@@ -403,7 +404,7 @@ public class LoadTreeToDatabase
                         "Problem generating keywords: " + kwex.toString());
                 timer.stop();
             } */catch (Exception ex) {
-                log.error("Some lame problem inserting new keywords", ex);
+                log.error("===== Some lame problem inserting new keywords", ex);
                 errors.addError(LoadingErrors.DATABASELOADINGERROR,
                         "Problem generating keywords: " + ex.toString());
 				dlog.append("generate keywords error: "  + ex.toString());
@@ -422,7 +423,7 @@ public class LoadTreeToDatabase
             receiptTpl = DataloadLog.TPL_SUCCESS;
             subject = vbResources.getString("dataload.subject.success");
 
-            System.out.println("DONE WITH XML LOADING PROCEDURE (insertVegbankPackage)");
+            System.out.println("============= DONE WITH XML LOADING PROCEDURE (insertVegbankPackage)");
 		} else {
             //////////////////////////////////////////////////////////////////
             // ROLLBACK
@@ -506,7 +507,7 @@ public class LoadTreeToDatabase
 		}
 		catch ( SQLException se )
 		{
-			this.filterSQLException(se, sb.toString());
+			this.filterSQLException(se, sb.toString(), tableName);
 		}
 		//log.debug("Query: '" + sb.toString() + "' got PK = " + PK);
 		return PK;
@@ -545,12 +546,26 @@ public class LoadTreeToDatabase
         return preAssignFound;
     }
 
-	/**
+
+/**
 	 * @param se
 	 */
 	private void filterSQLException(SQLException se, String sql)
 	{
+			filterSQLException(se,sql,"unknown table");
+	}
+
+
+	/**
+	 * @param se
+	 */
+	private void filterSQLException(SQLException se, String sql, String tableName)
+	{
 			if ( se.getMessage().startsWith("ERROR:  current transaction is aborted") )
+			{
+				// Filter out errors like this, doing nothing
+			}
+			if ( se.getMessage().startsWith("ERROR: current transaction is aborted") )
 			{
 				// Filter out errors like this, doing nothing
 			}
@@ -561,10 +576,10 @@ public class LoadTreeToDatabase
 			else
 			{
 
-				log.error("problematic sql: '" + sql + "'");
+				log.error("problematic sql for table " + tableName + ": '" + sql + "'");
 				log.error(se);
 				commit = false;
-				errors.addError(LoadingErrors.DATABASELOADINGERROR, se.getMessage());
+				errors.addError(LoadingErrors.DATABASELOADINGERROR, se.getMessage() + " for table " + tableName);
 			}
 	}
 
@@ -628,7 +643,7 @@ public class LoadTreeToDatabase
 		}
 		catch (SQLException se)
 		{
-			this.filterSQLException(se, sb.toString());
+			this.filterSQLException(se, sb.toString(),tableName);
 		}
 		return (PK);
 	}
@@ -803,7 +818,7 @@ public class LoadTreeToDatabase
 		{
       log.error("sql exception while inserting: " + se.toString() +
        "\n:::" + sb.toString());
-			this.filterSQLException(se, sb.toString());
+			this.filterSQLException(se, sb.toString(),tableName);
 		}
 
         if (!tableName.equalsIgnoreCase("userdefined") &&
@@ -853,7 +868,7 @@ public class LoadTreeToDatabase
                 }
                 log.debug("checking to see if accession Code starts with " + Utility.DATABASE_ACCESSION_ALT_KEY);
                 if (accessionCode.startsWith(Utility.DATABASE_ACCESSION_ALT_KEY)) {
-                  // lsids also accepted  
+                  // lsids also accepted
                    skipRemoval = true;
                    log.debug("accepting alternate accession code prefix for accessionCode " + accessionCode);
                 }
@@ -1245,7 +1260,7 @@ public class LoadTreeToDatabase
 		}
 		catch ( SQLException se )
 		{
-			this.filterSQLException(se, sb.toString());
+			this.filterSQLException(se, sb.toString(),tableName);
 		}
 
 		if (rows == 0)
@@ -1299,7 +1314,7 @@ public class LoadTreeToDatabase
 				PK = rs.getInt(1);
 			}
 		} catch ( SQLException se ) {
-			this.filterSQLException(se, strQuery);
+			this.filterSQLException(se, strQuery, tableName);
 		}
 
 		if (PK == 0) {
@@ -1703,56 +1718,78 @@ public class LoadTreeToDatabase
 
 		Hashtable plot = getFKChildTable(observationHash, Observation.PLOT_ID, "plot");
 		long plotId = insertPlot(plot);
-
+        log.debug("done with insert plot " + plotId + ". moving on to other part of observation");
 		// Continue loading as normal
 
 		Hashtable previousObs = getFKChildTable(observationHash,
       Observation.PREVIOUSOBS_ID, "observation");
 
+        log.debug("dealing with possible previous obs");
+        if (previousObs == null) {
+			log.debug("there is no previous obs, this is generally the case");
+		} else {
+			log.debug("there IS a previous obs, this is unusual, but should still work");
+		}
+
 		long previousObsId = 0;
 		if (previousObs != null)
 		{
 			previousObsId = insertObservation(previousObs);
+			log.debug("done dealing with previous obs, which existed");
 		}
 
+        log.debug("adding foreign key to hashtable");
 		addForeignKey(observationHash, Observation.PREVIOUSOBS_ID, previousObsId);
 		addForeignKey(observationHash, Observation.PLOT_ID, plotId);
 		addForeignKey(observationHash, Observation.PROJECT_ID, projectId);
+        log.debug("DONE adding foreign key to hashtable");
 
 		// CoverMethod
+		log.debug("start cover method");
 		Hashtable coverMethod = getFKChildTable(observationHash,
       Observation.COVERMETHOD_ID, "coverMethod");
 		long coverMethodId = insertTable("coverMethod", coverMethod);
         this.insertTables("coverIndex",  getChildTables(coverMethod, "coverIndex"),
       Observation.COVERMETHOD_ID, coverMethodId);
 		addForeignKey(observationHash, Observation.COVERMETHOD_ID, coverMethodId);
+        log.debug("/end cover method");
 
 		// StratumMethod
+		log.debug("start stratum method");
 		Hashtable stratumMethod = getFKChildTable(observationHash,
       Observation.STRATUMMETHOD_ID, "stratumMethod");
 		long stratumMethodId = insertStratumMethod(stratumMethod);
 		addForeignKey(observationHash, Observation.STRATUMMETHOD_ID, stratumMethodId);
+        log.debug("/end stratum method");
 
 		// SoilTaxon
+		log.debug("start soilTaxon");
 		Hashtable soilTaxon = getFKChildTable(observationHash,
       Observation.SOILTAXON_ID, "soilTaxon");
 		long soilTaxonId = insertTable("soilTaxon", soilTaxon);
 		addForeignKey(observationHash, Observation.SOILTAXON_ID, soilTaxonId);
+        log.debug("/end soilTaxon");
 
 		// Insert the observation
+		log.debug("start observation itself");
 		observationId = insertTable("observation", observationHash);
+        log.debug("/end observation itself");
 
 		// TODO: insert graphic, observationSynonym
 		//this.insertTables("graphic",  getChildTables(observationHash, "graphic"),
     //  "observation_id", observationId);
 
 		// Add disturbanceObs
+		log.debug("start disturbance obs");
 		this.insertTables("disturbanceObs",  getChildTables(observationHash,
       "disturbanceObs"), Disturbanceobs.OBSERVATION_ID, observationId);
+        log.debug("/end disturbance obs");
 
 		// Add SoilObs
+		log.debug("start soilobs");
 		this.insertTables("soilObs",  getChildTables(observationHash, "soilObs"),
       Soilobs.OBSERVATION_ID, observationId);
+        log.debug("/end soilobs");
 
 		// Add observation contributors
 		Enumeration ocs = this.getChildTables( observationHash, "observationContributor");
@@ -2730,7 +2767,7 @@ public class LoadTreeToDatabase
 
 
     private synchronized void runDenorms() {
-      System.out.println("*************running denorms");
+      System.out.println("========= running denorms");
       DenormUtility denormUtil = new DenormUtility();
       Timer t = new Timer("denormalizing tables");
             log.debug("denormalizing tables");
