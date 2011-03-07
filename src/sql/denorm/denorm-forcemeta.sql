@@ -15,6 +15,10 @@ UPDATE commconcept set d_obsCount = (select count(1) FROM (select observation_ID
 update project set d_obsCount=(select count(1) from view_notemb_observation as observation 
       where observation.project_ID=project.project_ID);
 
+UPDATE project set d_lastPlotAddedDate = (select max(dateentered) from view_notemb_observation as observation 
+    where observation.project_ID=project.project_ID and observation.dateentered is not null);
+
+
 update party set d_obsCount=(select countallcontrib 
     from view_browseparty_all_count where view_browseparty_all_count.party_ID=party.party_ID);
 
