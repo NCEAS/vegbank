@@ -1,9 +1,10 @@
 -- VIEWS must be dropped before running this!
 
 --create the table for the data cache.
+drop table dba_dataCache;
 create table dba_dataCache (
   DBA_DATACACHE_ID serial,
-  cache_key varchar(200),
+  cache_key varchar(200) NOT NULL,
   data1 varchar(255),
   data2 varchar(255),
   data3 varchar(255),
@@ -172,9 +173,4 @@ ALTER TABLE party ADD COLUMN accessionCode2 varchar(255);
    UPDATE party set AccessionCode2 = accessionCode;
    alter table party drop column accessionCode;
    alter table party rename column accessionCode2 TO accessionCode;
-  
-ALTER TABLE  ADD COLUMN accessionCode2 varchar(255);
-   UPDATE  set AccessionCode2 = accessionCode;
-   alter table  drop column accessionCode;
-   alter table  rename column accessionCode2 TO accessionCode;
-  
+ 
