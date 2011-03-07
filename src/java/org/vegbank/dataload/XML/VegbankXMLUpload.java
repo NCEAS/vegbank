@@ -151,7 +151,11 @@ public class VegbankXMLUpload
 		{	
 			xr.setErrorHandler( errorHandler );
 		    log.debug("about to parse XML");
-			xr.parse( this.getInputSource(xmlFile) );
+		     try {    
+                	xr.parse( this.getInputSource(xmlFile) );
+                     }  catch(Exception vbex) {
+                        log.error("FATAL: problem parsing xml: " + xmlFile + ": " + vbex.getMessage());
+                      }
 		    log.debug("done parsing XML");
 		}
 		
