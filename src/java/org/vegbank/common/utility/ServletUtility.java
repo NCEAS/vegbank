@@ -677,16 +677,20 @@ public class ServletUtility
 	 */
 	public static Collection unZip(FormFile inFile) throws Exception
 	{
+		log.debug("starting to unzip");
 		Vector fileList = new Vector();
 		InputStream in = inFile.getInputStream();
+		log.debug("have input stream");
 		ZipInputStream zis = new ZipInputStream(in);
+		log.debug("have zip input stream");
 		java.util.zip.ZipEntry e;
 		// Loop over every ZipEntry in ZIP file
 		while( ( e = zis.getNextEntry()) != null)
 		{
 			File outFile = new File(e.getName());
+			log.debug("have outfile" + outFile.getAbsolutePath());
 			FileOutputStream out = new FileOutputStream(outFile);
-
+            log.debug("have outputStream");
 			byte[] b = new byte[512];
 			int len = 0;
 			while ( ( len=zis.read(b) ) != -1)
@@ -694,9 +698,57 @@ public class ServletUtility
 				out.write(b,0,len);
 			}
 			fileList.add( new FileWrapper(outFile) );
+			log.debug("added filelist");
 		}
 		zis.close();
+        log.debug("closed and done with unzip");
+		return fileList;
+	}
 
+
+
+	/**
+	 * Takes a File and  unzips it to a location
+	 *
+	 */
+	public static Collection unZipToPath(FormFile inFile, String fileUnzipPath) throws Exception
+	{
+		log.debug("starting to unzip");
+		Vector fileList = new Vector();
+		InputStream in = inFile.getInputStream();
+		log.debug("have input stream");
+		ZipInputStream zis = new ZipInputStream(in);
+		log.debug("have zip input stream");
+		java.util.zip.ZipEntry e;
+
+		try {
+				// make the upload dirs if not there
+				File udir = new File(fileUnzipPath);
+				if (!udir.exists()) {
+					udir.mkdirs();
+				}
+			} catch (Exception ex) {
+				log.error("problem making unzip dirs", ex);
+		}
+
+		// Loop over every ZipEntry in ZIP file
+		while( ( e = zis.getNextEntry()) != null)
+		{
+			File outFile = new File(fileUnzipPath,e.getName());
+			log.debug("have outfile" + outFile.getAbsolutePath());
+			FileOutputStream out = new FileOutputStream(outFile);
+            log.debug("have outputStream");
+			byte[] b = new byte[512];
+			int len = 0;
+			while ( ( len=zis.read(b) ) != -1)
+			{
+				out.write(b,0,len);
+			}
+			fileList.add( new FileWrapper(outFile) );
+			log.debug("added filelist");
+		}
+		zis.close();
+        log.debug("closed and done with unzip");
 		return fileList;
 	}
 
