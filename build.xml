@@ -485,19 +485,25 @@ bin           install the bin files into the /usr/vegbank/bin dir
      </copy>
      <copy todir="${warContext}/includes" filtering="yes">
        <fileset dir="${webDir}/includes">
-         <include name="**/*.jsp"/>
+         <include name="**/*"/>
        </fileset>
      </copy>
      <copy todir="${warContext}/general" filtering="yes">
        <fileset dir="${webDir}/general">
-         <include name="**/*.jsp"/>
+         <include name="**/*"/>
        </fileset>
      </copy>
      <copy todir="${warContext}/forms" filtering="yes">
        <fileset dir="${webDir}/forms">
-         <include name="**/*.jsp"/>
+         <include name="**/*"/>
        </fileset>
      </copy>
+     <copy todir="${warContext}/images" filtering="no">
+       <fileset dir="${webDir}/images">
+         <include name="**/*"/>
+       </fileset>
+     </copy>
+
      <copy todir="${warContext}/ajax" filtering="yes">
        <fileset dir="${webDir}/ajax"/>
      </copy>
