@@ -25,15 +25,15 @@ CREATE UNIQUE INDEX dba_datacache_key ON dba_dataCache (cache_key);
 
 --populate this table
 
-INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.PLOTS',22345'Plots:',1);
-INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.CLASS_PLOTS',15669'--Classified Plots:',2);
-INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.CLASS_PLOTS_NVC',5166'----to NVC communities:',3);
-INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.PLANT_CONCEPTS',91984'Plant Concepts:',4);
-INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.PC_USDA',43753'--accepted by USDA:',5);
-INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.PC_USDA_ON_PLOTS',7217'----and on plots:',6);
-INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.COMMUNITY_CONCEPTS',15128'Community Concepts:',7);
-INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.CC_NVC',8390'--in the NVC:',8);
-INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.CC_NVC_ON_PLOTS',896'----and on plots:',9);
+INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.PLOTS',22345,'Plots',1);
+INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.CLASS_PLOTS',15669,'--Classified Plots',2);
+INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.CLASS_PLOTS_NVC',5166,'----to NVC communities',3);
+INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.PLANT_CONCEPTS',91984,'Plant Concepts',4);
+INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.PC_USDA',43753,'--accepted by USDA',5);
+INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.PC_USDA_ON_PLOTS',7217,'----and on plots',6);
+INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.COMMUNITY_CONCEPTS',15128,'Community Concepts',7);
+INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.CC_NVC',8390,'--in the NVC',8);
+INSERT INTO  dba_datacache (cache_key, data1, cache_label, cache_order) values ('DB_STAT.CC_NVC_ON_PLOTS',896,'----and on plots',9);
 
 -- add denorm table for date_added to project:
 ALTER TABLE project ADD COLUMN d_lastPlotAddedDate timestamp with time zone;
