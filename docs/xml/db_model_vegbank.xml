@@ -21135,6 +21135,36 @@ conditions may change between resampling events.
       <update>1.0.6</update>
     </attribute>
     <attribute>
+      <attID>3030</attID>
+      <attName>cache_label</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>varchar (200)</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>label for data row</attDefinition>
+      <update>1.0.6</update>
+    </attribute>
+    <attribute>
+      <attID>3031</attID>
+      <attName>cache_order</attName>
+      <attModel>implementation</attModel>
+      <attNulls>yes</attNulls>
+      <attType>Float</attType>
+      <attKey>n/a</attKey>
+      <attRelType type="n/a" name="n/a"/>
+      <attReferences>n/a</attReferences>
+      <attListType>no</attListType>
+      <attList/>
+      <attNotes>n/a</attNotes>
+      <attDefinition>order in which to list rows</attDefinition>
+      <update>1.0.6</update>
+    </attribute>
+    <attribute>
       <attID>3021</attID>
       <attName>data1</attName>
       <attModel>implementation</attModel>
@@ -21270,7 +21300,7 @@ conditions may change between resampling events.
       <update>1.0.6</update>
     </attribute>
     <attribute>
-      <attID>30210</attID>
+      <attID>3040</attID>
       <attName>data10</attName>
       <attModel>implementation</attModel>
       <attNulls>yes</attNulls>
