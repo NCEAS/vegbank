@@ -27,16 +27,16 @@ A normal installation goes like this:
 Set the variables in build.properties then
 ant install
 ***now start/restart tomcat/apache.  after tomcat and apache are started (or restarted)
-***note that if tomcat is already running and you have it set to reload when 
+***note that if tomcat is already running and you have it set to reload when
 ***it finds a new war file, you shouldn't have to manually restart it.  Apache
 ***only needs to be restarted if something major happens.  Usually as long as
 ***tomcat restarts on it's own, you're ok to go to the next step.
 ant web-install
 
-Try your url (i.e. http://localhost/vegbank) in your browser.  If any of the 
+Try your url (i.e. http://localhost/vegbank) in your browser.  If any of the
 links don't work go back and fix the properties in your build.properties file.
 
-If you want to do a clean install (removing the build files and re-compiling) do 
+If you want to do a clean install (removing the build files and re-compiling) do
 ant clean install
 or to completely flush your system of all vegbank related stuff and start
 completely from scratch do
@@ -53,25 +53,25 @@ prepare       copy files to prepare for compilation
 setclasspath  set the classpath for compilation
 compile       compile all java classes
 jar           put all java classes into a jar file
-warPrepare    copy files needed to build the war file (for servlet 
+warPrepare    copy files needed to build the war file (for servlet
               initialization)
 war           create the war file
 install       install the war file to the servlet container
-web-install   install the static web files from the web/ directory (uses 
+web-install   install the static web files from the web/ directory (uses
               the web/build.xml file)
 clean         delete the build and dist dirs
-full-clean    delete the build, dist, vegbank.home, apache.document.root, 
+full-clean    delete the build, dist, vegbank.home, apache.document.root,
               and the servlet context
 generateDBSQL generate the SQL to create a blank database from the datamodel
 generateBeans generate the java beans needed for compilation
 dbVerify      verify that the database and the datamodel are the same.  create
               the status documents for the admin status display
 runxmlcache   caches the xml representation of each bean with accession numbers
-              in the observation, plantconcept, commconcept, project and 
+              in the observation, plantconcept, commconcept, project and
               party tables.  This is needed to upgrade the database to use
               xml caching for xml downloads.
-createdb      creates an empty vegbank database from the existing sql scripts.  
-              the created database should be valid according to the newest 
+createdb      creates an empty vegbank database from the existing sql scripts.
+              the created database should be valid according to the newest
               schema.
 populateDD    populates the data dictionary tables based on docs/xml/db_model_vegbank.xml
 binbuild      copy the bin files to build and update tokens
@@ -125,12 +125,12 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <fail unless="vegbank.home.dir" message="'vegbank.home.dir' is required in build.properties" />
     <fail unless="vegbank.schema.data" message="'vegbank.schema.data' is required in build.properties" />
     <fail unless="vegbank.schema.exportdata" message="'vegbank.schema.exportdata' is required in build.properties" />
-    
+
     <fail unless="vegbank.schema.model" message="'vegbank.schema.model' is required in build.properties" />
     <fail unless="vegbank.web.dir" message="'vegbank.web.dir' is required in build.properties" />
     <fail unless="webapps.dir" message="'webapps.dir' is required in build.properties" />
     <!-- END OF REQD PROPS -->
-    
+
     <property name="name" value="vegbank"/>
     <property name="version" value="1.0.5"/>
     <property name="vegbankHome" value="${vegbank.home.dir}"/>
@@ -162,8 +162,8 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <property name="listservUserOptions" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/options/"/>
     <!--rmi server props-->
     <property name="rmiServer" value="${rmiserver}"/>
-    
-    
+
+
     <!--** do not edit below here unless you really know what you're doing **-->
     <property name="databaseConnection" value="${databaseConnectString}"/>
     <property name="buildDir" value="build"/>
@@ -179,7 +179,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <property name="webStatusDir" value="${webServerDir}/status"/>
     <property name="sqlSrcDir" value="${srcDir}/sql"/>
   </target>
-  
+
   <!--set the inline copy filters.  do not edit these directly. If you want
       to edit these, do it in the properties in init.                       -->
   <target name="setFilters" depends="init">
@@ -215,7 +215,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <filter token="mailPort" value="${mailPort}"/>
     <filter token="machineURL" value="${host}"/>
     <filter token="serverAddress" value="${host}"/>
-    <filter token="systemEmail" value="${systemEmail}"/> 
+    <filter token="systemEmail" value="${systemEmail}"/>
     <filter token="genericForm" value="${context}/forms/generic_form.html"/>
     <filter token="genericTemplate" value="${context}/forms/tmp.html"/>
     <filter token="rmiserver" value="${rmiServer}"/>
@@ -223,14 +223,14 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <filter token="servlet_lib_dir" value="${webapps}/lib"/>
     <filter token="webapps_dir" value="${webapps}" />
     <filter token="servlet_context" value="${contextDir}/"/>
-    
+
     <!-- backup properties -->
     <filter token="pgdumpPath" value="${pgdumpPath}"/>
     <filter token="backupDir" value="${backupDir}"/>
-    
+
     <!--loadfiles for the web stuff-->
     <property name="includesServer" value="web/includes"/>
-    
+
     <!--load main filters files-->
     <filter filtersfile="${includesServer}/filters.properties"/>
     <filter filtersfile="${includesServer}/placeurl.properties"/>
@@ -240,14 +240,14 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <property name="dbmodelxml" value="${docsXmlDir}/db_model_vegbank.xml" />
     <property name="helpManualDir" value="${helpDir}/manual"/>
     <style in="${dbmodelxml}" out="${includesServer}/dd_defns_tokens.properties" style="${docsXmlDir}/getDefnsForFields.xsl" force="true" />
-    <filter filtersfile="${includesServer}/dd_defns_tokens.properties" />    
+    <filter filtersfile="${includesServer}/dd_defns_tokens.properties" />
     <style in="${helpManualDir}/manual_src.xml" out="${helpManualDir}/manual_filters.properties" style="${helpManualDir}/manual2tokens.xsl" force="true"/>
     <copy file="${helpManualDir}/manual_filters.properties" tofile="${includesServer}/manual_filters.properties" filtering="yes" overwrite="true"/>
     <filter filtersfile="${includesServer}/manual_filters.properties"/>
     <style out="${includesServer}/closedlist-tokens.properties" in="${dbmodelxml}" extension=".properties" style="${docsXmlDir}/closedList_forms_options.xsl" force="true"/>
     <copy file="${includesServer}/closedlist-tokens.properties" tofile="${includesServer}/closedlist-tokens.properties" filtering="yes" overwrite="true"/>
     <filter filtersfile="${includesServer}/closedlist-tokens.properties"/>
-    
+
     <!--filters for the web pages-->
     <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
     <loadfile srcfile="${includesServer}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration" />
@@ -257,7 +257,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <loadfile srcfile="${includesServer}/webpage_masthead.html" property="webpage_masthead_html" />
     <loadfile srcfile="${includesServer}/webpage_head.html" property="webpage_head_html" />
     <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
-    
+
     <!--filters for the web install-->
     <filter token="webpage_top_html" value="${webpage_top_html}" />
     <filter token="webpage_head_html" value="${webpage_head_html}" />
@@ -267,7 +267,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <filter token="webpage_footer_small_html" value="${webpage_footer_small_html}" />
     <filter token="webpage_stylesheets_declaration" value="${webpage_stylesheets_declaration}" />
     <filter token="webpage_stylesheets_declaration_html" value="${webpage_stylesheets_declaration}"/>
-    
+
     <!--connection filters from the old build file-->
     <filter token="machine_url" value="${serverUrl}"/>
     <filter token="eighty_eighty" value="${eighty_eighty}"/>
@@ -299,7 +299,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <filter token="ajax_link" value="${contextUrl}/ajax/"/>
     <filter token="forms_url" value="${contextUrl}/forms/"/>
     <filter token="views_link" value="${contextUrl}/views/"/>
-    <filter token="cache_link" value="${contextUrl}/cache/"/>
+    <!--<filter token="cache_link" value="${contextUrl}/cache/"/>-->
     <filter token="admin_url" value="${contextUrl}/admin/"/>
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="${contextUrl}/forms/"/>
@@ -339,7 +339,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <filter token="subst_lt" value="&lt;"/>
     <filter token="subst_gt" value="&gt;"/>
   </target>
-  
+
   <!--copy files to the build directory and prepare for compilation-->
   <target name="prepare" depends="setFilters">
     <property name="buildSrcDir" value="${buildDir}/${srcDir}"/>
@@ -357,7 +357,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <mkdir dir="${buildStatusDir}"/>
     <mkdir dir="${webStatusDir}"/>
     <mkdir dir="${binPath}"/>
-    
+
     <!--copy the java src to the build/src dir-->
     <copy todir="${buildSrcDir}" filtering="yes">
       <fileset dir="${javaSrcDir}">
@@ -365,7 +365,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
         <exclude name="**/.#*"/>
       </fileset>
     </copy>
-    
+
     <!--copy .properties files-->
     <copy todir="${buildClassDir}" filtering="yes">
       <fileset dir="${javaSrcDir}">
@@ -378,7 +378,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
       </fileset>
     </copy>
   </target>
-  
+
   <!--copy the bin files to the build/bin directory-->
   <target name="binbuild" depends="setFilters">
      <!-- backups: -->
@@ -393,7 +393,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <chmod file="${buildDir}/bin/runAccGen" perm="777"/>
     <chmod file="${buildDir}/bin/runKwGen" perm="777"/>
   </target>
-  
+
   <!--copy the bin files to the bin directory-->
   <target name="bin" depends="binbuild">
      <!-- backups: -->
@@ -409,7 +409,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <chmod file="${binPath}/runAccGen" perm="777"/>
     <chmod file="${binPath}/runKwGen" perm="777"/>
   </target>
-  
+
   <!--set the classpath-->
   <target name="setclasspath">
     <path id="projectClassPath">
@@ -423,7 +423,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     </path>
     <property name="classpath" refid="projectClassPath"/>
   </target>
-  
+
   <!--compile all files in build/src to build/classes-->
   <target name="compile" depends="setclasspath, prepare, generateBeans">
     <echo>classpath: ${classpath}</echo>
@@ -433,14 +433,14 @@ bin           install the bin files into the /usr/vegbank/bin dir
            debug="on"
            source="1.4"/>
   </target>
-  
+
   <!--jar all classes in build/classes to vegbank.jar-->
   <target name="jar" depends="compile">
     <jar destfile="${buildDir}/${name}.jar" update="true">
       <fileset dir="${buildClassDir}"/>
     </jar>
   </target>
-  
+
   <!--get everything in the right place to build the war file-->
   <target name="warPrepare" depends="jar">
      <property name="buildWarDir" value="${buildDir}/war"/>
@@ -459,14 +459,14 @@ bin           install the bin files into the /usr/vegbank/bin dir
 
      <!--copy the vegbank.jar file-->
      <copy file="${buildDir}/${name}.jar" todir="${warLib}" filtering="no"/>
-     
+
      <!--copy the other jar files-->
      <copy todir="${warLib}" filtering="no">
        <fileset dir="${libDir}">
           <include name="**/*.jar"/>
        </fileset>
      </copy>
-     
+
      <!--copy the WEB-INF support files-->
      <copy todir="${warWebInfDir}" filtering="yes">
        <fileset dir="${srcWebInfDir}">
@@ -475,7 +475,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
           <exclude name="**/web.xml"/>
        </fileset>
      </copy>
-     
+
      <!--copy the web files-->
      <copy todir="${warContext}" filtering="yes">
        <fileset dir="${webDir}">
@@ -497,10 +497,10 @@ bin           install the bin files into the /usr/vegbank/bin dir
        <fileset dir="${webDir}/forms">
          <include name="**/*.jsp"/>
        </fileset>
-     </copy> 
+     </copy>
      <copy todir="${warContext}/ajax" filtering="yes">
        <fileset dir="${webDir}/ajax"/>
-     </copy> 
+     </copy>
      <copy todir="${warContext}/admin" filtering="yes">
        <fileset dir="${webDir}/admin"/>
      </copy>
@@ -522,15 +522,15 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <include name="*.xsd"/>
        </fileset>
      </copy>
-     <copy todir="${cacheRawDir}" filtering="yes">
+     <!--<copy todir="${cacheRawDir}" filtering="yes">
        <fileset dir="${webDir}/views/raw">
          <include name="raw_countdata.jsp"/>
          <include name="raw_recentprojects.jsp"/>
        </fileset>
-     </copy>
+     </copy>-->
    </target>
 
-  <!--war build directory to vegbank.war--> 
+  <!--war build directory to vegbank.war-->
   <target name="war" depends="warPrepare">
      <mkdir dir="${distDir}" />
      <war destfile="${distDir}/${context}.war"
@@ -540,10 +540,10 @@ bin           install the bin files into the /usr/vegbank/bin dir
        <webinf dir="${warWebInfDir}"/>
      </war>
    </target>
-  
+
   <!--install war file to target webapps dir-->
   <target name="install" depends="war">
-    
+
     <antcall target="bin" /> <!-- copy the bin files -->
     <copy todir="${libPath}" filtering="no">
       <fileset dir="lib">
@@ -553,7 +553,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
         <include name="vegbank.jar"/>
       </fileset>
     </copy>
-    
+
     <copy todir="${webapps}" filtering="no">
       <fileset dir="${distDir}">
         <include name="${context}.war"/>
@@ -561,7 +561,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     </copy>
     <!--<ant antfile="build.xml" target="deploy-all" dir="${webDir}"/>-->
   </target>
-  
+
   <!--install the web files-->
   <target name="web-install" depends="dbVerify">
     <ant antfile="build.xml" target="deploy-all" dir="${webDir}" inheritAll="false" />
@@ -575,13 +575,13 @@ bin           install the bin files into the /usr/vegbank/bin dir
       <fileset dir="${buildStatusDir}" includes="*.*"/>
     </copy>
   </target>
-  
+
   <!--clean the install back to a clean slate-->
   <target name="clean" depends="init">
     <delete dir="${buildDir}"/>
     <delete dir="${distDir}"/>
   </target>
-  
+
   <!--deletes the build dir but also any contents of a previous installation-->
   <target name="full-clean" depends="clean">
     <delete>
@@ -599,31 +599,31 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <delete file="${webapps}/${context}.war"/>
     <delete dir="${webapps}/${context}"/>
   </target>
-  
+
   <!--target that generates the sql to build a blank database-->
   <target name="generateDBSQL" depends="setFilters">
      <!-- generate the database creating SQL, and SQL to populate some of it -->
       <property name="jdbc-jar" value="lib/postgresql-8.1-405.jdbc2.jar"/>
-    <xslt in="${docsDir}/xml/db_model_vegbank.xml" 
-      out="${buildDir}/sql/vegbank.sql" 
+    <xslt in="${docsDir}/xml/db_model_vegbank.xml"
+      out="${buildDir}/sql/vegbank.sql"
       style="${srcDir}/xsl/VegBankModel2SQL.xsl"/>
      <!-- generate the sql for populating the data dictionary within the database -->
-     <xslt in="${docsDir}/xml/db_model_vegbank.xml" 
-      out="${buildDir}/sql/populate-datadictionary.sql" 
+     <xslt in="${docsDir}/xml/db_model_vegbank.xml"
+      out="${buildDir}/sql/populate-datadictionary.sql"
       style="${docsDir}/xml/dbmodel-to-ddtables.xsl" force="true"/>
-      
+
     <copy todir="${buildDir}/sql" filtering="yes" overwrite="yes">
       <fileset dir="${srcDir}/sql" includes="**/*.*"/>
     </copy>
   </target>
-  
+
   <!--
   **************************************************************************
   Targets below this line are helper targets that get depended on by
   other targets but should generally never be called by themselves.
   **************************************************************************
   -->
-  
+
   <!--Michael's new method of checking the database to match model xml-->
   <target name="dbVerify" depends="prepare">
     <!-- set to not fail unless already set -->
@@ -641,13 +641,13 @@ bin           install the bin files into the /usr/vegbank/bin dir
              file="${docsDir}/xml/db_model_vegbank.xml">
       <!--<attribute name="http://apache.org/xml/features/validation/schema" value="true"/>-->
       <attribute name="http://xml.org/sax/features/namespaces" value="true"/>
-      <property name="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation" 
+      <property name="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation"
                 value="${docs.dir}/xml/${vegbank.schema.model}"/>
     </xmlvalidate>
     <!-- get ideal model output -->
-    <xslt in="${docsDir}/xml/db_model_vegbank.xml" 
-      out="${buildStatusDir}/logicalmodel.txt" 
-      style="${docsDir}/xml/checkModelAgainstDB.xsl" 
+    <xslt in="${docsDir}/xml/db_model_vegbank.xml"
+      out="${buildStatusDir}/logicalmodel.txt"
+      style="${docsDir}/xml/checkModelAgainstDB.xsl"
       force="true"/>
     <!-- get acutal model output -->
     <echo>Checking model with databaseUser '${databaseUser}' for database '${databaseName}'</echo>
@@ -655,15 +655,15 @@ bin           install the bin files into the /usr/vegbank/bin dir
       <arg line="-U ${databaseUser} ${databaseName} -f ${sqlSrcDir}/verifyActualModel.sql -o ${buildStatusDir}/actualmodel.txt -At "/>
     </exec>
     <!-- compare ideal logical model to acutal model -->
-    <property name="verify_readme" 
+    <property name="verify_readme"
       value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
-    <echo> If the next line does not have 'Diff results: 0', and the build 
+    <echo> If the next line does not have 'Diff results: 0', and the build
       failed, this is because ${verify_readme}  The diff file is located here:</echo>
-    <echo file="${buildStatusDir}/verify.readme">${verify_readme}  The Diff file is 
+    <echo file="${buildStatusDir}/verify.readme">${verify_readme}  The Diff file is
       displayed on screen unless there are no differences.</echo>
     <echo>${buildStatusDir}/modeldiffs.txt</echo>
-    <exec dir="${buildStatusDir}" executable="diff" 
-      output="${buildStatusDir}/modeldiffs.txt" resultproperty="diffResult" 
+    <exec dir="${buildStatusDir}" executable="diff"
+      output="${buildStatusDir}/modeldiffs.txt" resultproperty="diffResult"
       failonerror="${failOnModelDiff}">
       <arg line=" -ibwB ./logicalmodel.txt ./actualmodel.txt  "/>
     </exec>
@@ -674,15 +674,15 @@ bin           install the bin files into the /usr/vegbank/bin dir
     </condition>
         <echo>${verifyMessage}</echo>
         <echo>${verifyMessage}</echo>
-        <echo>${verifyMessage}</echo>    
+        <echo>${verifyMessage}</echo>
   </target>
-  
+
   <!-- ================================================================= -->
   <!-- Generate model beans, XML Digester rules, XML schema and JSP from -->
   <!-- the datamodel XML and generate utility                            -->
   <!-- javabeans                                                         -->
   <!-- ================================================================= -->
-  <target name="generateBeans" depends="prepare">  
+  <target name="generateBeans" depends="prepare">
     <!-- DOES NOT PICKUP CORRECT XSLT PROCCESOR FOR ME -->
     <property name="xslSrcDir" value="${srcDir}/xsl"/>
     <property name="buildBeanSrcDir" value="${buildSrcDir}/org/vegbank/common/model"/>
@@ -714,10 +714,10 @@ bin           install the bin files into the /usr/vegbank/bin dir
       <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
   </target>
-  
+
   <!--
     Runs the xml utility to cache xml to the database.  this is only needed
-    as a bootstrap for older databases that don't contain any cached xml.  
+    as a bootstrap for older databases that don't contain any cached xml.
     new insertions automatically cache the xml for those plots inserted.
   -->
   <target name="runxmlcache" depends="jar">
@@ -729,7 +729,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
       <jvmarg value="-Xmx1024m"/>
     </java>
   </target>
-  
+
   <!--creates an empty vegbank database from the existing sql scripts.  the
       created database should be valid according to the newest schema
   -->
@@ -746,7 +746,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql>
-    
+
     <echo>************** Creating Aggregrates ****************</echo>
     <sql driver="${databaseDriverClass}"
           url="${databaseConnectString}"
@@ -758,7 +758,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql>
-    
+
     <echo>************** Creating Extras ****************</echo>
     <sql driver="${databaseDriverClass}"
           url="${databaseConnectString}"
@@ -770,7 +770,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql>
-          
+
     <echo>************** Creating Indices ****************</echo>
     <sql driver="${databaseDriverClass}"
           url="${databaseConnectString}"
@@ -783,7 +783,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql>
-          
+
     <echo>**************  views ****************</echo>
     <echo>            ::::::: drop views first :::::::::                   </echo>
     <sql driver="${databaseDriverClass}"
@@ -809,7 +809,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql>
-          
+
     <echo>************** populating config tables ****************</echo>
     <sql driver="${databaseDriverClass}"
           url="${databaseConnectString}"
@@ -822,7 +822,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql>
-    
+
     <echo>************** populating and creating temporary tables ****************</echo>
     <sql driver="${databaseDriverClass}"
           url="${databaseConnectString}"
@@ -847,7 +847,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql>
-          
+
  <!--  THIS IS ONLY NEEDED FOR OLD DATABASE UPGRADES, but this is creating a fresh db: <echo>************** applying vegbank-changes for version ${version} ****************</echo>
     <sql driver="${databaseDriverClass}"
           url="${databaseConnectString}"
@@ -860,7 +860,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql> -->
-    
+
     <echo>************** creating admin user ****************</echo>
     <sql driver="${databaseDriverClass}"
           url="${databaseConnectString}"
@@ -873,22 +873,22 @@ bin           install the bin files into the /usr/vegbank/bin dir
          <pathelement location="${jdbc-jar}"/>
       </classpath>
     </sql>
-    
+
     <echo>************** populate data dictionary ****************</echo>
     <antcall target="populateDD" />
-    
+
     <echo>************** now verifying that database is correct ****************</echo>
     <antcall target="dbVerify" />
-    
+
     <echo>***************************************************************</echo>
-    <echo>Your database is now created.  Please login as the user 
+    <echo>Your database is now created.  Please login as the user
           'admin@vegbank.org' with password 'vbadmin' and change the password
           ASAP.  This user is the super user and will allow you to create other
           accounts.</echo>
     <echo>***************************************************************</echo>
   </target>
-  
-  <!-- populates the data dictionary tables by getting db_model_vegbank.xml 
+
+  <!-- populates the data dictionary tables by getting db_model_vegbank.xml
        styled into SQL -->
   <target name="populateDD" depends="generateDBSQL">
         <sql driver="${databaseDriverClass}"
@@ -903,14 +903,14 @@ bin           install the bin files into the /usr/vegbank/bin dir
       </classpath>
     </sql>
   </target>
-  
+
   <!-- this target resets the admin password to the default -->
   <target name="seedAdminPassword" depends="jar">
     <java classname="org.vegbank.common.utility.UserDatabaseAccess" fork="true" classpath="${classpath}:build/vegbank.jar">
       <arg line="seedAdmin"/>
     </java>
   </target>
-  
+
   <!-- this target updates all of the passwords in the usr table to use an MD5
        digest instead of clear text-->
   <target name="updateAllPasswords" depends="jar">

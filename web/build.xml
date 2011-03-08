@@ -136,8 +136,8 @@
 <property name="tomcat.home.dir" value="${tomcat}"/>
     <property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
     <property name="views_server" value="${tomcat.home.dir}/webapps/${webapp}/views"/>
-    <property name="cache_server" value="${tomcat.home.dir}/webapps/${webapp}/cache"/>
-    <property name="cache_temp" value="./cache.temp"/>
+    <!--<property name="cache_server" value="${tomcat.home.dir}/webapps/${webapp}/cache"/>-->
+    <!--<property name="cache_temp" value="./cache.temp"/>-->
     <property name="admin_server" value="${tomcat.home.dir}/webapps/${webapp}/admin"/>
     <property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
     <property name="general_server" value="${tomcat.home.dir}/webapps/${webapp}/general/"/>
@@ -182,7 +182,7 @@
         <filter token="ajax_link" value="/${web.context_uri}/ajax/"/>
     <filter token="forms_url" value="/${web.context_uri}/forms/"/>
     <filter token="views_link" value="/${web.context_uri}/views/"/>
-    <filter token="cache_link" value="/${web.context_uri}/cache/"/>
+    <!--<filter token="cache_link" value="/${web.context_uri}/cache/"/>-->
     <filter token="admin_url" value="/${web.context_uri}/admin/"/>
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="/${web.context_uri}/forms/"/>
@@ -264,7 +264,7 @@
     <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
     <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.jsp"/>
     <copy overwrite="${forceoverwrite}" todir="${apache.document.root}/" filtering="yes" file="${basedir}/.htaccess"/>
-    
+
   </target>
 
 
@@ -479,21 +479,24 @@
   </target>
 
 
-  <target name="cache" depends="init" description="&gt; temporary means of getting views (data independent) cached">
-    <property name="cache_raw" value="${cache_server}/views/raw/" />
+  <target name="cache" depends="init" description="&gt; (OBSOLETE) temporary means of getting views (data independent) cached">
+    <echo>cache is OBSOLETE</echo>
+    <!--<property name="cache_raw" value="${cache_server}/views/raw/" />
     <mkdir dir="${cache_raw}" />
-    <mkdir dir="${cache_temp}" />
+    <mkdir dir="${cache_temp}" />-->
     <!--<get src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_countdata.jsp" dest="${cache_raw}raw_countdata.jsp"/>
     <get src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_recentprojects.jsp" dest="${cache_raw}raw_recentprojects.jsp"/>  -->
-
+     <!--
     <get ignoreerrors="true" src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_countdata.jsp" dest="${cache_temp}/raw_countdata.jsp"/>
     <get ignoreerrors="true" src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_recentprojects.jsp" dest="${cache_temp}/raw_recentprojects.jsp"/>
+    -->
    <!-- copy to server -->
-   <copy  overwrite="${forceoverwrite}" todir="${cache_raw}" filtering="yes">
+   <!-- <copy  overwrite="${forceoverwrite}" todir="${cache_raw}" filtering="yes">
      <fileset dir="${cache_temp}" includes="**/*jsp" excludes="**/CVS*">
      <contains text="&lt;td" casesensitive="no"/>
      </fileset>
    </copy>
+   -->
 
 
   </target>
@@ -904,7 +907,7 @@
     <!-- doesn't work, different project? : <antcall target="setoverwrite" inheritAll="true"/> -->
     <property name="forceoverwrite" value="true" />
     <antcall target="deploy-all-doesit" />
-    <antcall target="cache" /><!-- has to be after views, etc. -->
+    <!--<antcall target="cache" />--><!-- has to be after views, etc. -->
   </target>
 
 
