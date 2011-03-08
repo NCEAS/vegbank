@@ -13,12 +13,12 @@ function getHelpPageId() {
 
     <div class="spacer">&nbsp;</div>
     <%@ include file="includes/display_user_messages.jsp" %>
-    
+
     <div id="content-3col-a">
     <fieldset id="tut_findplots">
     <legend>Find Plots</legend>
     <ul>
-    
+
     <li><a href="@browseplotspage@">Browse plots</a></li>
     <li><a href="@plotquery_page_simple@">Simple search</a></li>
     <li><a href="@views_link@plot-query-bymap.jsp">Search with a map</a></li>
@@ -30,8 +30,9 @@ function getHelpPageId() {
     <br />
     <fieldset id="tut_recentlyaddedplots">
       <legend>Recently Added Plots</legend>
-      <bean:include id="recentprojects" page="/cache/views/raw/raw_recentprojects.jsp" />
-      <bean:write name="recentprojects" filter="false" />
+      <!--bean:include id="recentprojects_new" href="@machine_url@@views_link@raw/raw_recentprojects.jsp?blah=true" /-->
+      <!--bean:write name="recentprojects_new" filter="false" /-->
+      <%@ include file="views/includeviews/sub_recentprojects.jsp" %>
     </fieldset>
     </div>
 
@@ -73,24 +74,25 @@ function getHelpPageId() {
     </fieldset>
      <br/>
     <fieldset id="tut_datainvegbank">
-      <legend>Data in VegBank</legend> 
+      <legend>Data in VegBank</legend>
       <ul><li>
-      <bean:include id="countdata" page="/cache/views/raw/raw_countdata.jsp" />
-      <bean:write name="countdata" filter="false" />
+      <!--bean:include id="countdata" page="/cache/views/raw/raw_countdata.jsp" /-->
+      <!--bean:write name="countdata" filter="false" /-->
+      <%@ include file="views/includeviews/sub_countdata_cache.jsp" %>
       </li></ul>
     </fieldset>
-     
-     
+
+
     </div>
 
 
 
     <div id="content-3col-c">
-    
+
      <%@ include file="includes/news.html" %>
         <br />
-    
-    
+
+
         <fieldset id="tut_myaccount">
         <legend>My VegBank Account</legend>
         <ul>
@@ -99,8 +101,8 @@ function getHelpPageId() {
         </ul>
         </fieldset>
         <br />
-   
-        
+
+
     <fieldset id="tut_learnabout">
     <legend>Learn About VegBank</legend>
     <ul>
@@ -138,11 +140,11 @@ function getHelpPageId() {
     </ul>
     </fieldset>
 
-    
-  
-    <% 
+
+
+    <%
       Boolean isAdmin = (Boolean)(request.getSession().getAttribute("isAdmin"));
-    
+
       if (isAdmin != null) {
         if (isAdmin.booleanValue()) {
     %>
@@ -156,11 +158,11 @@ function getHelpPageId() {
         <li>Check <a href="@forms_link@businessrules.jsp">Business Rules</a></li>
         </ul>
         </fieldset>
-    
-    <% 
+
+    <%
         }
-      } 
-%>  
+      }
+%>
  </div>
 
 
