@@ -4,7 +4,7 @@
   <!-- comment out extenstion-elemtn ... though this comment to run locally without xalan -->
   <!--<xsl:param name="pathToWrite"/> -->
   <xsl:param name="viewsBuildFile">was not specified 1234567890</xsl:param>
-  
+
   <xsl:variable name="pathToWrite"><xsl:value-of select="substring($viewsBuildFile,1,number(string-length($viewsBuildFile)-9))" />/autogen/</xsl:variable>
   <xsl:param name="quot">"</xsl:param>
   <xsl:param name="apos">'</xsl:param>
@@ -29,7 +29,7 @@
     </xsl:if>
   </xsl:template>
   <xsl:template name="doEnts">
-    
+
     <xsl:param name="view"/>
     <xsl:for-each select="/dataModel/entity">
       <xsl:variable name="countAttsInView" select="count(attribute/attForms/formShow[translate(@name,$alphahigh,$alphalow)=$view])"/>
@@ -55,7 +55,7 @@
                           <xsl:attribute name="id">thisfield</xsl:attribute>
                           <xsl:attribute name="value"><xsl:value-of select="translate(../../attName,$alphahigh,$alphalow)" /><xsl:if test="string-length(../../attFKTranslationSQL)&gt;0">_transl</xsl:if></xsl:attribute>
                         </xsl:element>
-                      
+
                         <bean:define id="fieldlabel"><xsl:value-of  select="../../attLabel"/></bean:define>
                       @subst_lt@%@ include file="/includes/orderbythisfield.jsp"  %@subst_gt@
                   </xsl:when>
@@ -71,7 +71,7 @@
                   </xsl:call-template>
                   </xsl:otherwise>
                 </xsl:choose>
-                
+
               </xsl:for-each>
             </redirect:write>
             <xsl:comment>END WRITE FILE: <xsl:value-of select="$currEnt"/>_<xsl:value-of select="$view"/>_head.jsp</xsl:comment>
@@ -174,14 +174,14 @@
     <!--    <xsl:comment>WRITE FIELD: <xsl:value-of select="$currFld"/> and att is: <xsl:value-of select="$currentAtt/attName"/>
     </xsl:comment>-->
           <!-- this is what gets written on cell -->
-          <xsl:variable name="currFldMaybeTransl"><xsl:value-of select="$currFld"/><xsl:if test="string-length($currentAtt/attFKTranslationSQL)&gt;0">_transl</xsl:if><xsl:if test="$currentAtt/attType='Date'">_datetrunc</xsl:if></xsl:variable>    
+          <xsl:variable name="currFldMaybeTransl"><xsl:value-of select="$currFld"/><xsl:if test="string-length($currentAtt/attFKTranslationSQL)&gt;0">_transl</xsl:if><xsl:if test="$currentAtt/attType='Date'">_datetrunc</xsl:if></xsl:variable>
              <xsl:element name="{$container}"><xsl:if test="$altField!='true'"><xsl:attribute name="class"><xsl:value-of select="translate(concat($currEnt,'_',$currFld),$alphahigh,$alphalow)" /></xsl:attribute></xsl:if>
 <logic:notEmpty name="onerowof{$currEnt}" property="{$currFldMaybeTransl}"><xsl:element name="span"><xsl:choose>
             <xsl:when test="string-length(@useClass)=0">
               <!-- no specific class for this data -->
               <!-- fill in different class for long text fields: -->
               <xsl:if test="$currentAtt/attType='text' or (contains($currentAtt/attType,'varchar (') and string-length($currentAtt/attType)&gt;12)">
-                <xsl:attribute name="class">largefield</xsl:attribute>
+                <xsl:attribute name="class">largefield<xsl:if test="(contains($currFld, 'description')=false) and (contains($currFld, 'narrative')=false)">_compresswhitespace</xsl:if></xsl:attribute>
               </xsl:if>
               <xsl:if test="$currentAtt/attType='Date'"><!-- write exact date in a title att -->
                 <xsl:attribute name="title"><xsl:text disable-output-escaping="yes">&lt;</xsl:text>bean:write name='onerowof<xsl:value-of select="$currEnt"/>' property='<xsl:value-of select="$currFld"/>' /<xsl:text disable-output-escaping="yes">&gt;</xsl:text></xsl:attribute>
@@ -251,17 +251,17 @@
          <xsl:if test="$currentAtt/attType='Date'">
            @subst_lt@/dt:parse@subst_gt@
            @subst_lt@/dt:format@subst_gt@
-         </xsl:if>      
+         </xsl:if>
         <xsl:if test="string-length($currentAtt/attFormsHTMLpost)&gt;0">
           <!-- insert extra stuff -->
-          <!--logic:notEqual parameter="textoutput" value="true"-->          
+          <!--logic:notEqual parameter="textoutput" value="true"-->
              <xsl:value-of select="$currentAtt/attFormsHTMLpost"/>
           <!--/logic:notEqual-->
         </xsl:if>
-        
+
         </xsl:element>
         <!--</span>-->
-      
+
       </logic:notEmpty>
         <!-- add something to view if alternate field is specified and field is null -->
         <!-- alternate field if null? -->
@@ -276,12 +276,12 @@
                   <xsl:with-param name="container">span</xsl:with-param><!-- p or td -->
                   <xsl:with-param name="view" select="$view" /><!-- name of this view -->
                   <xsl:with-param name="linkToPK" select="$linkToPK" /><!-- if true, then encapsulate in <a></a> -->
-                  <xsl:with-param name="writeSuffix" select="$currentAtt/attAltIfNull/@addSuffixTxt" /><!-- write something after the field value -->              
+                  <xsl:with-param name="writeSuffix" select="$currentAtt/attAltIfNull/@addSuffixTxt" /><!-- write something after the field value -->
                   <xsl:with-param name="altField">true</xsl:with-param><!-- true if writing an alternate field -->
                </xsl:call-template>
            </logic:empty>
-         </xsl:if>  
-      
+         </xsl:if>
+
         <xsl:if test="$container!='span'">
       <logic:empty name="onerowof{$currEnt}" property="{$currFld}">
         <!-- only extra bit if empty and container is not p-->
@@ -323,14 +323,14 @@
         <xsl:value-of select="$currFld"/>
       </xsl:otherwise>
     </xsl:choose>
-     
+
      <xsl:text> </xsl:text><xsl:choose>
       <xsl:when test="$noDDLink='true'"><!-- no data dictionary link, as per db_model specs --></xsl:when>
       <xsl:otherwise>
     <a title="Click here for definition of this field." target="_blank" class="image" href="/dd/{$currEnt}/{$currFld}" onclick="popupDD('/dd/{$currEnt}/{$currFld}'); return false;"><span class="ddlink">
       <img src="@images_link@question.gif" alt="?" border="0"/>
     </span></a></xsl:otherwise></xsl:choose>
-    
+
     <xsl:value-of select="$suffix" />
     </xsl:element>
 
