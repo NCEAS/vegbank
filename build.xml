@@ -229,34 +229,27 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <filter token="backupDir" value="${backupDir}"/>
 
     <!--loadfiles for the web stuff-->
-    <property name="includesServer" value="web/includes"/>
+    <property name="web.temp.dir" value="web/temp"/>
+    <ant antfile="build.xml" target="tokenfiles" dir="${webDir}" inheritAll="false" />
 
     <!--load main filters files-->
-    <filter filtersfile="${includesServer}/filters.properties"/>
-    <filter filtersfile="${includesServer}/placeurl.properties"/>
+    <filter filtersfile="${web.temp.dir}/filters.properties"/>
+    <filter filtersfile="${web.temp.dir}/placeurl.properties"/>
 
     <!-- get filters for data dictionary defns: -->
-    <property name="docsXmlDir" value="${docsDir}/xml" />
-    <property name="dbmodelxml" value="${docsXmlDir}/db_model_vegbank.xml" />
-    <property name="helpManualDir" value="${helpDir}/manual"/>
-    <style in="${dbmodelxml}" out="${includesServer}/dd_defns_tokens.properties" style="${docsXmlDir}/getDefnsForFields.xsl" force="true" />
-    <filter filtersfile="${includesServer}/dd_defns_tokens.properties" />
-    <style in="${helpManualDir}/manual_src.xml" out="${helpManualDir}/manual_filters.properties" style="${helpManualDir}/manual2tokens.xsl" force="true"/>
-    <copy file="${helpManualDir}/manual_filters.properties" tofile="${includesServer}/manual_filters.properties" filtering="yes" overwrite="true"/>
-    <filter filtersfile="${includesServer}/manual_filters.properties"/>
-    <style out="${includesServer}/closedlist-tokens.properties" in="${dbmodelxml}" extension=".properties" style="${docsXmlDir}/closedList_forms_options.xsl" force="true"/>
-    <copy file="${includesServer}/closedlist-tokens.properties" tofile="${includesServer}/closedlist-tokens.properties" filtering="yes" overwrite="true"/>
-    <filter filtersfile="${includesServer}/closedlist-tokens.properties"/>
+    <filter filtersfile="${web.temp.dir}/dd_defns_tokens.properties" />
+    <filter filtersfile="${web.temp.dir}/manual_filters.properties"/>
+    <filter filtersfile="${web.temp.dir}/closedlist-tokens.properties"/>
 
     <!--filters for the web pages-->
-    <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
-    <loadfile srcfile="${includesServer}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration" />
-    <loadfile srcfile="${includesServer}/webpage_footer_small.html" property="webpage_footer_small_html" />
-    <loadfile srcfile="${includesServer}/webpage_footer.html" property="webpage_footer_html" />
-    <loadfile srcfile="${includesServer}/webpage_masthead_small.html" property="webpage_masthead_small_html" />
-    <loadfile srcfile="${includesServer}/webpage_masthead.html" property="webpage_masthead_html" />
-    <loadfile srcfile="${includesServer}/webpage_head.html" property="webpage_head_html" />
-    <loadfile srcfile="${includesServer}/webpage_top.html" property="webpage_top_html" />
+    <loadfile srcfile="${web.temp.dir}/webpage_top.html" property="webpage_top_html" />
+    <loadfile srcfile="${web.temp.dir}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration" />
+    <loadfile srcfile="${web.temp.dir}/webpage_footer_small.html" property="webpage_footer_small_html" />
+    <loadfile srcfile="${web.temp.dir}/webpage_footer.html" property="webpage_footer_html" />
+    <loadfile srcfile="${web.temp.dir}/webpage_masthead_small.html" property="webpage_masthead_small_html" />
+    <loadfile srcfile="${web.temp.dir}/webpage_masthead.html" property="webpage_masthead_html" />
+    <loadfile srcfile="${web.temp.dir}/webpage_head.html" property="webpage_head_html" />
+    <loadfile srcfile="${web.temp.dir}/webpage_top.html" property="webpage_top_html" />
 
     <!--filters for the web install-->
     <filter token="webpage_top_html" value="${webpage_top_html}" />
@@ -303,7 +296,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <filter token="admin_url" value="${contextUrl}/admin/"/>
     <!-- add second token for forms, which is similarly named as other links -->
     <filter token="forms_link" value="${contextUrl}/forms/"/>
-    <filter token="dbdictionary_link" value="${vegdocs}/dbdictionary/"/>
+
     <filter token="includes_link" value="${contextUrl}/includes/"/>
     <filter token="pubs_link" value="${vegdocs}/pubs/"/>
     <filter token="history_link" value="${vegdocs}/history/"/>
@@ -570,15 +563,18 @@ bin           install the bin files into the /usr/vegbank/bin dir
 
   <!--install the web files-->
   <target name="web-install" depends="dbVerify">
-    <ant antfile="build.xml" target="deploy-all" dir="${webDir}" inheritAll="false" />
+    <ant antfile="build.xml" target="deploy-full-from-main-dir" dir="${webDir}" inheritAll="false" />
+    <antcall target="web-install-status" />
+  </target>
+  <target name="web-install-status" depends="dbVerify">
     <echo file="${buildStatusDir}/deploy-props.txt">       -----------------DEPLOY PROPS STATUS------------------------@subst_lt@br/@subst_gt@       Properties last deployed at time: ${currentTime} @subst_lt@br/@subst_gt@       Connection to database Name: ${databaseName} @subst_lt@br/@subst_gt@       Deployed from : ${basedir} @subst_lt@br/@subst_gt@       vegbank version: ${version} @subst_lt@br/@subst_gt@       ---------------------------------------------------------------------@subst_lt@br/@subst_gt@       </echo>
-    <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
-    <echo file="${buildStatusDir}/verify.readme">${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
-    <!-- check the model, but don't fail on errors! -->
-    <!--<antcall target="db_verify"/>-->
-    <!-- copy status files to the file to server -->
-    <copy todir="${webStatusDir}" filtering="yes" overwrite="yes">
-      <fileset dir="${buildStatusDir}" includes="*.*"/>
+	    <property name="verify_readme" value="    differences are checked for between the actual database model (as implemented in postgresql) and the model specified in docs/xml/db_model_vegbank.xml.      The diff file will show fields different or missing from one of the model xml file and the actual database.  The database fields are followed by 'dil' and the model fields by the same, but with one of the letters capitalized, symbolizing that it is either a Denormalized field, Implementation field or Logical field.  "/>
+	    <echo file="${buildStatusDir}/verify.readme">${verify_readme}  The Diff file is displayed on screen unless there are no differences.</echo>
+	    <!-- check the model, but don't fail on errors! -->
+	    <!--<antcall target="db_verify"/>-->
+	    <!-- copy status files to the file to server -->
+	    <copy todir="${webStatusDir}" filtering="yes" overwrite="yes">
+	      <fileset dir="${buildStatusDir}" includes="*.*"/>
     </copy>
   </target>
 
