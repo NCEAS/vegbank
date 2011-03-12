@@ -76,7 +76,7 @@
   </xsl:template>
   <xsl:template name="runManualItem">
     <xsl:variable name="aFile" select="concat($directory,@name,'.html')"/>
-    <redirect:write select="$aFile">
+    <redirect:write file="$aFile">
       @webpage_top_html@
   
   @webpage_head_html@
