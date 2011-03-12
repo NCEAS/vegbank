@@ -226,8 +226,8 @@
 		<mkdir dir="${vegdocs_server}"/>
 		<mkdir dir="${help_server}"/>
 		<mkdir dir="${manual_server}"/>
-		<mkdir dir="${vegbranch_server}"/>
-		<mkdir dir="${manual_src_temp}"/>-->
+		<mkdir dir="${vegbranch_server}"/>-->
+		<mkdir dir="${manual_src_temp}"/>
 		<mkdir dir="${temp.dir}"/>
 		<!-- <mkdir dir="${lrg_binary_src}"/> -->
 	</target>
