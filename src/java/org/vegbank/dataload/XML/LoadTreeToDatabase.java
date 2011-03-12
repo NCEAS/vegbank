@@ -188,6 +188,9 @@ public class LoadTreeToDatabase
             return;
         }
 
+  //main section for load tree to database:
+  try {
+
     timer = new Timer("initing db");
 		//this boolean determines if the dataset should be commited or rolled-back
 		commit = true;
@@ -288,9 +291,21 @@ public class LoadTreeToDatabase
         }
     timer.stop();
 
+   //end try main section of load tree to database
+   } catch (Exception ex) {
+	    log.error("problem in loading main section of xml to database.  NOT commiting data.", ex);
+	   	dlog.append("Error attempting to load data to VegBank: " + ex.toString());
+	    errors.addError(LoadingErrors.DATABASELOADINGERROR,
+               "Error attempting to load your data to VegBank: " + ex.toString());
+         commit = false; //do NOT load
+   }
+
 
 
         dlog.append("finished preparing data");
+
+
+
 
 		//log.info("commit new data?: " + commit);
 
@@ -426,7 +441,9 @@ public class LoadTreeToDatabase
         /////////////////////////////////////////////////////////////////////////////////////////////////
         // start keyword generation - this process sometimes hangs or loses the connection, so do it last
         /////////////////////////////////////////////////////////////////////////////////////////////////
+        if (commit == true) {
           try {
+
 		                // KEYWORD GENERATION
 		                timer = new Timer("generate keywords");
 		                log.debug("==========generate keywords");
@@ -465,9 +482,10 @@ public class LoadTreeToDatabase
 		            RunXMLGenTimerTask task = new RunXMLGenTimerTask(System.currentTimeMillis());
 		            task.setAccessionCode(accCodes);
             xmlGenTimer.schedule(task, new Date(System.currentTimeMillis()));
+        t1.stop();
+       } // only run keyword gen if load is being committed
 
 
-    t1.stop();
 	}
 
 	private void initDB() throws SQLException
