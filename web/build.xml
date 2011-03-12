@@ -18,592 +18,486 @@
 *  See http://jakarta.apache.org for details on Ant
 *
 * usage: ant forms, images
+*
+* MAJOR UPDATE, Michael Lee March 2011
+* This file will now serve two purposes.  First, it creates content that will be deployed to the website through the normal build process, in the main vegbank directory, the install and web-install targets.
+* Second, it will also deploy files to the website outside the normal build process for the purpose of testing.  For the second purpose, just call ant views, ant forms, ant includes, etc.  for the first, use ant deploy
+
 -->
+
 <project name="vegbank_web" default="init" basedir=".">
-  <target name="init" description="=&gt; sets variables and displays targets">
-    <tstamp/>
-    <!-- LET THE USER KNOW THE TARGETS -->
-    <echo message="############ ${ant.project.name} ##############"/>
-    <echo>
+	<target name="init" description="=&gt; sets variables and displays targets">
+		<tstamp/>
+		<!-- LET THE USER KNOW THE TARGETS -->
+		<echo message="############ ${ant.project.name} ##############"/>
+		<echo>
 	Targets:  {init} {hdrftr} includes, news, panel, history, pubs, forms, general, design,
-	 dictionary
+
 	</echo>
-    <!--
+		<!--
 		* Below are the basic propoerties and tokens for
 		* building the vegbank web site
 	-->
-    <condition property="webapp" value="vegbank">
-      <not>
-        <isset property="webapp"/>
-      </not>
-    </condition>
-    <echo>init webapp '${webapp}'</echo>
-    <!-- Get the main build.properties -->
-    <condition property="build.props.name" value="">
-      <!-- If webapp is 'vegbank', use blank -->
-      <or>
-        <equals arg1="${webapp}" arg2="vegbank"/>
-        <not>
-          <isset property="webapp"/>
-        </not>
-      </or>
-    </condition>
-    <condition property="build.props.name" value=".${webapp}">
-      <!-- If webapp is not 'vegbank' -->
-      <and>
-        <isset property="webapp"/>
-        <not>
-          <equals arg1="${webapp}" arg2="vegbank"/>
-        </not>
-      </and>
-    </condition>
-    <echo>(web/) Loading main props file: ../build${build.props.name}.properties</echo>
-<property file="../build.properties"/>
-<condition property="machine_url" value="">
-<not>
-<isset property="machine_url"/>
-</not>
-</condition>
-<condition property="eighty_eighty" value="">
-<not>
-<isset property="eighty_eighty"/>
-</not>
-</condition>
 
-
-
-<filter token="machine_url" value="${machine_url}"/>
-<filter token="eighty_eighty" value="${eighty_eighty}"/>
-<filter token="googlemaps_apikey" value="${googlemaps_apikey}" />
-<filter token="systemEmail" value="${systemEmail}"/>
-
-<!-- set forceoverwrite to false if not already set -->
-<echo>FORCING OVERWRITE (debug, before condition): ${forceoverwrite}</echo>
-
-<condition property="forceoverwrite" value="false">
-<not>
-<isset property="forceoverwrite"/>
-</not>
-</condition>
-<echo>FORCING OVERWRITE: ${forceoverwrite}</echo>
-<echo>BASE URL:  ${machine_url}(${eighty_eighty})
+		<condition property="webapp" value="vegbank">
+			<not>
+				<isset property="webapp"/>
+			</not>
+		</condition>
+		<echo>init webapp '${webapp}'</echo>
+		<!-- Get the main build.properties -->
+		<condition property="build.props.name" value="">
+			<!-- If webapp is 'vegbank', use blank -->
+			<or>
+				<equals arg1="${webapp}" arg2="vegbank"/>
+				<not>
+					<isset property="webapp"/>
+				</not>
+			</or>
+		</condition>
+		<condition property="build.props.name" value=".${webapp}">
+			<!-- If webapp is not 'vegbank' -->
+			<and>
+				<isset property="webapp"/>
+				<not>
+					<equals arg1="${webapp}" arg2="vegbank"/>
+				</not>
+			</and>
+		</condition>
+		<echo>(web/) Loading main props file: ../build${build.props.name}.properties</echo>
+		<property file="../build.properties"/>
+		<condition property="machine_url" value="">
+			<not>
+				<isset property="machine_url"/>
+			</not>
+		</condition>
+		<condition property="eighty_eighty" value="">
+			<not>
+				<isset property="eighty_eighty"/>
+			</not>
+		</condition>
+		<filter token="machine_url" value="${machine_url}"/>
+		<filter token="eighty_eighty" value="${eighty_eighty}"/>
+		<filter token="googlemaps_apikey" value="${googlemaps_apikey}"/>
+		<filter token="systemEmail" value="${systemEmail}"/>
+		<!-- set forceoverwrite to false if not already set -->
+		<echo>FORCING OVERWRITE (debug, before condition): ${forceoverwrite}</echo>
+		<condition property="forceoverwrite" value="false">
+			<not>
+				<isset property="forceoverwrite"/>
+			</not>
+		</condition>
+		<echo>FORCING OVERWRITE: ${forceoverwrite}</echo>
+		<echo>BASE URL:  ${machine_url}(${eighty_eighty})
 </echo>
-<!-- set the apache doc root -->
-<condition property="apache.document.root" value="/usr/www/${webapp}/htdocs">
-<not>
-<isset property="apache.document.root"/>
-</not>
-</condition>
-<!-- The webapp that contains copy, images and other
+		<!-- set the apache doc root -->
+		<condition property="apache.document.root" value="/usr/www/${webapp}/htdocs">
+			<not>
+				<isset property="apache.document.root"/>
+			</not>
+		</condition>
+		<!-- The webapp that contains copy, images and other
 	resources is defined by web.context_uri and
 	makes the first part of the URI. -->
-<property name="web.context_uri" value="vegbank"/>
-<property name="forms" value="./forms"/>
-<property name="views" value="./views"/>
-<property name="admin_src" value="./admin"/>
-<property name="email_templates_src" value="./email_templates"/>
-<property name="general_src" value="./general"/>
-<property name="ajax_src" value="./ajax"/>
-<property name="design_src" value="./design"/>
-<property name="docs_xml_dir" value="../docs/xml/" />
-<property name="dbmodelxml" value="${docs_xml_dir}db_model_vegbank.xml" />
-<property name="dictionary_src" value="${docs_xml_dir}build/"/>
-<property name="news_src" value="./news"/>
-<property name="help_src" value="./help"/>
-<property name="manual_src" value="./help/manual"/>
-<property name="manual_src_temp" value="./help/manual/build"/>
-<property name="src.dir" value="./src"/>
-<property name="web.src.dir" value="${src.dir}/web"/>
-<property name="xsl.src.dir" value="${web.src.dir}/xsl"/>
-<property name="panel_src" value="./panel"/>
-<property name="history_src" value="./history"/>
-<property name="plot" value="./plot"/>
-<property name="pubs_src" value="./pubs"/>
-<property name="includes_src" value="./includes"/>
-<property name="image_src" value="./images"/>
-<property name="hostname" value="vegbank"/>
-<property name="workshop_src" value="./workshop"/>
-<property name="vegdocs.dir" value="/vegdocs"/>
-<property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
-<property name="static_xmlserver" value="${vegdocs_server}/xml"/>
-<property name="vegbranch_src" value="./vegbranch"/>
-<!-- large binary files location:   targets that read from large binaries separate -->
-<!-- <property name="lrg_binary_src" value="${apache.document.root}/noncvs"/> -->
-<filter token="dist" value="dist"/>
-<filter token="hostname" value="${hostname}"/>
-<filter token="version" value="development"/>
-<!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
-<property name="tomcat.home.dir" value="${tomcat}"/>
-    <property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
-    <property name="views_server" value="${tomcat.home.dir}/webapps/${webapp}/views"/>
-    <!--<property name="cache_server" value="${tomcat.home.dir}/webapps/${webapp}/cache"/>-->
-    <!--<property name="cache_temp" value="./cache.temp"/>-->
-    <property name="admin_server" value="${tomcat.home.dir}/webapps/${webapp}/admin"/>
-    <property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
-    <property name="general_server" value="${tomcat.home.dir}/webapps/${webapp}/general/"/>
-        <property name="ajax_server" value="${tomcat.home.dir}/webapps/${webapp}/ajax/"/>
-    <property name="design_server" value="${vegdocs_server}/design/"/>
-    <property name="dictionary_server" value="${vegdocs_server}/dbdictionary/"/>
-    <property name="news_server" value="${vegdocs_server}/news/"/>
-    <property name="email_templates_server" value="${tomcat.home.dir}/webapps/${webapp}/email_templates/"/>
-    <property name="panel_server" value="${vegdocs_server}/panel/"/>
-    <property name="history_server" value="${vegdocs_server}/history/"/>
-    <property name="pubs_server" value="${vegdocs_server}/pubs/"/>
-    <property name="includes_server" value="${tomcat.home.dir}/webapps/${webapp}/includes/"/>
-    <property name="vegbank_server" value="${tomcat.home.dir}/webapps/${webapp}/"/>
-    <property name="workshop_server" value="${vegdocs_server}/workshop/"/>
-    <property name="help_server" value="${vegdocs_server}/help/"/>
-    <property name="manual_server" value="${vegdocs_server}/help/manual/"/>
-    <property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
-    <property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/${webapp}/WEB-INF/lib"/>
-    <property name="vegbranch_server" value="${vegdocs_server}/vegbranch/"/>
-    <!-- WEB SERVER LOCATIONS -->
-    <filter token="base_url" value=""/>
-    <filter token="server_address" value="${machine_url}${eighty_eighty}"/>
-    <filter token="web_context" value="/${web.context_uri}/"/>
-    <filter token="get_link" value="/get/"/>
-    <filter token="cite_link" value="/cite/"/>
-    <filter token="image_server" value="/${web.context_uri}/images/"/>
-    <filter token="minimumwidth" value="650"/>
-    <!-- this is the minimum value for width of header and footer -->
-    <!-- the following is a duplicate : -->
-    <filter token="images_link" value="/${web.context_uri}/images/"/>
-    <filter token="stylesheet" value=""/>
-    <!-- this is handled in default head token -->
-      <!-- NO PARAMS on next token -->
-    <filter token="plotquery_page" value="/${web.context_uri}/forms/plot-query.jsp"/>
-     <!-- params allowed and encouraged on next 2 tokens -->
-    <filter token="plotquery_page_simple" value="/${web.context_uri}/forms/plot-query.jsp?simplemode=true"/>
-    <filter token="plotquery_page_advanced" value="/${web.context_uri}/forms/plot-query.jsp"/>
+		<property name="web.context_uri" value="vegbank"/>
+		<property name="forms" value="./forms"/>
+		<property name="views" value="./views"/>
+		<property name="admin_src" value="./admin"/>
+		<property name="email_templates_src" value="./email_templates"/>
+		<property name="general_src" value="./general"/>
+		<property name="ajax_src" value="./ajax"/>
+		<property name="design_src" value="./design"/>
+		<property name="docs_xml_dir" value="../docs/xml/"/>
+		<property name="dbmodelxml" value="${docs_xml_dir}db_model_vegbank.xml"/>
 
-    <filter token="uploaddata_page" value="/${web.context_uri}/forms/uploadFile.html"/>
-    <filter token="browseplotspage" value="/browse" />
-    <filter token="general_link" value="/${web.context_uri}/general/"/>
-        <filter token="ajax_link" value="/${web.context_uri}/ajax/"/>
-    <filter token="forms_url" value="/${web.context_uri}/forms/"/>
-    <filter token="views_link" value="/${web.context_uri}/views/"/>
-    <!--<filter token="cache_link" value="/${web.context_uri}/cache/"/>-->
-    <filter token="admin_url" value="/${web.context_uri}/admin/"/>
-    <!-- add second token for forms, which is similarly named as other links -->
-    <filter token="forms_link" value="/${web.context_uri}/forms/"/>
-    <filter token="dbdictionary_link" value="${vegdocs.dir}/dbdictionary/"/>
-    <filter token="includes_link" value="/${web.context_uri}/includes/"/>
-    <filter token="pubs_link" value="${vegdocs.dir}/pubs/"/>
-    <filter token="history_link" value="${vegdocs.dir}/history/"/>
-    <filter token="news_link" value="${vegdocs.dir}/news/"/>
-    <!-- add link for page name that links to help frame jsp -->
-    <filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
-    <!-- location and filename of xml index page -->
-    <filter token="design_link" value="${vegdocs.dir}/design/"/>
-    <filter token="panel_link" value="${vegdocs.dir}/panel/"/>
-    <filter token="workshop_link" value="${vegdocs.dir}/workshop/"/>
-    <filter token="vegbranch_link" value="${vegdocs.dir}/vegbranch/"/>
-    <filter token="vegbranch_demo_link" value="${vegdocs.dir}/vegbranch/docs/demo/"/>
-    <filter token="searchplugins_link" value="${vegdocs.dir}/searchplugins/"/>
-    <filter token="xml_link" value="${vegdocs.dir}/xml/"/>
-    <filter token="NativeXMLIndexPage" value="${vegdocs.dir}/xml/vegbank-xml-index.html"/>
-    <filter token="help_link" value="${vegdocs.dir}/help/"/>
-    <filter token="help" value="${vegdocs.dir}/help/"/>
-    <filter token="manual_link" value="${vegdocs.dir}/help/manual/"/>
-    <!-- SERVLETS -->
-    <filter token="framework_servlet" value="/${web.context_uri}/servlet/framework"/>
-    <filter token="usermanagement_servlet" value="/${web.context_uri}/servlet/usermanagement"/>
-    <filter token="datarequestservlet" value="/${web.context_uri}/servlet/DataRequestServlet"/>
-    <filter token="datasubmitservlet" value="/${web.context_uri}/servlet/DataSubmitServlet"/>
-    <filter token="nestedquerybuilder" value="/${web.context_uri}/servlet/QueryBuilderServlet"/>
-    <filter token="authenticationservlet" value="/${web.context_uri}/servlet/authenticate"/>
-   <!-- listserv -->
-    <filter token="listservinfo_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
-    <filter token="listservarchive_link" value="http://mercury.nceas.ucsb.edu/vegbank/pipermail/"/>
-    <filter token="listservuser_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/options/" />
-    <!-- Struts -->
-    <filter token="DisplayUploadPlotAction" value="/${web.context_uri}/DisplayUploadPlotAction.do"/>
-    <!-- FIXME: Should be in a prepare target -->
-    <mkdir dir="${tomcat.home.dir}/webapps/${webapp}/"/>
-    <mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
-    <mkdir dir="${vegdocs_server}"/>
-    <mkdir dir="${help_server}"/>
-    <mkdir dir="${manual_server}"/>
-    <mkdir dir="${vegbranch_server}"/>
-    <mkdir dir="${manual_src_temp}"/>
-    <!-- <mkdir dir="${lrg_binary_src}"/> -->
-  </target>
+		<property name="news_src" value="./news"/>
+		<property name="help_src" value="./help"/>
+		<property name="manual_src" value="./help/manual"/>
+		<property name="manual_src_temp" value="./help/manual/build"/>
+		<property name="src.dir" value="./src"/>
+		<property name="temp.dir" value="./temp"/>
+		<property name="web.src.dir" value="${src.dir}/web"/>
+		<property name="xsl.src.dir" value="${web.src.dir}/xsl"/>
+		<property name="panel_src" value="./panel"/>
+		<property name="history_src" value="./history"/>
+		<property name="plot" value="./plot"/>
+		<property name="pubs_src" value="./pubs"/>
+		<property name="includes_src" value="./includes"/>
+		<property name="image_src" value="./images"/>
+		<property name="hostname" value="vegbank"/>
+		<property name="workshop_src" value="./workshop"/>
+		<property name="vegdocs.dir" value="/vegdocs"/>
+		<property name="vegdocs_server" value="${apache.document.root}/vegdocs"/>
+		<property name="static_xmlserver" value="${vegdocs_server}/xml"/>
+		<property name="vegbranch_src" value="./vegbranch"/>
+		<!-- large binary files location:   targets that read from large binaries separate -->
+		<!-- <property name="lrg_binary_src" value="${apache.document.root}/noncvs"/> -->
+		<filter token="dist" value="dist"/>
+		<filter token="hostname" value="${hostname}"/>
+		<filter token="version" value="development"/>
+		<!-- CURRENTLY THESE PARAMETERS ARE SET FOR DISTRIBUT DEVELOPEMENT / PRODUC. SERVER	-->
+		<property name="tomcat.home.dir" value="${tomcat}"/>
+		<property name="forms_server" value="${tomcat.home.dir}/webapps/${webapp}/forms"/>
+		<property name="views_server" value="${tomcat.home.dir}/webapps/${webapp}/views"/>
+		<!--<property name="cache_server" value="${tomcat.home.dir}/webapps/${webapp}/cache"/>-->
+		<!--<property name="cache_temp" value="./cache.temp"/>-->
+		<property name="admin_server" value="${tomcat.home.dir}/webapps/${webapp}/admin"/>
+		<property name="image_server" value="${tomcat.home.dir}/webapps/${webapp}/images"/>
+		<property name="general_server" value="${tomcat.home.dir}/webapps/${webapp}/general/"/>
+		<property name="ajax_server" value="${tomcat.home.dir}/webapps/${webapp}/ajax/"/>
+		<property name="design_server" value="${vegdocs_server}/design/"/>
 
+		<!--<property name="news_server" value="${vegdocs_server}/news/"/>-->
+		<property name="email_templates_server" value="${tomcat.home.dir}/webapps/${webapp}/email_templates/"/>
+		<property name="panel_server" value="${vegdocs_server}/panel/"/>
+		<property name="history_server" value="${vegdocs_server}/history/"/>
+		<property name="pubs_server" value="${vegdocs_server}/pubs/"/>
+		<property name="includes_server" value="${tomcat.home.dir}/webapps/${webapp}/includes/"/>
+		<property name="vegbank_server" value="${tomcat.home.dir}/webapps/${webapp}/"/>
+		<property name="workshop_server" value="${vegdocs_server}/workshop/"/>
+		<property name="help_server" value="${vegdocs_server}/help/"/>
+		<property name="manual_server" value="${vegdocs_server}/help/manual/"/>
+		<property name="server_root" value="${tomcat.home.dir}/webapps/ROOT/"/>
+		<property name="vegbank.lib.dir" value="${tomcat.home.dir}/webapps/${webapp}/WEB-INF/lib"/>
+		<property name="vegbranch_server" value="${vegdocs_server}/vegbranch/"/>
+		<!-- WEB SERVER LOCATIONS -->
+		<filter token="base_url" value=""/>
+		<filter token="server_address" value="${machine_url}${eighty_eighty}"/>
+		<filter token="web_context" value="/${web.context_uri}/"/>
+		<filter token="get_link" value="/get/"/>
+		<filter token="cite_link" value="/cite/"/>
+		<filter token="image_server" value="/${web.context_uri}/images/"/>
+		<filter token="minimumwidth" value="650"/>
+		<!-- this is the minimum value for width of header and footer -->
+		<!-- the following is a duplicate : -->
+		<filter token="images_link" value="/${web.context_uri}/images/"/>
+		<filter token="stylesheet" value=""/>
+		<!-- this is handled in default head token -->
+		<!-- NO PARAMS on next token -->
+		<filter token="plotquery_page" value="/${web.context_uri}/forms/plot-query.jsp"/>
+		<!-- params allowed and encouraged on next 2 tokens -->
+		<filter token="plotquery_page_simple" value="/${web.context_uri}/forms/plot-query.jsp?simplemode=true"/>
+		<filter token="plotquery_page_advanced" value="/${web.context_uri}/forms/plot-query.jsp"/>
+		<filter token="uploaddata_page" value="/${web.context_uri}/forms/uploadFile.html"/>
+		<filter token="browseplotspage" value="/browse"/>
+		<filter token="general_link" value="/${web.context_uri}/general/"/>
+		<filter token="ajax_link" value="/${web.context_uri}/ajax/"/>
+		<filter token="forms_url" value="/${web.context_uri}/forms/"/>
+		<filter token="views_link" value="/${web.context_uri}/views/"/>
+		<!--<filter token="cache_link" value="/${web.context_uri}/cache/"/>-->
+		<filter token="admin_url" value="/${web.context_uri}/admin/"/>
+		<!-- add second token for forms, which is similarly named as other links -->
+		<filter token="forms_link" value="/${web.context_uri}/forms/"/>
 
-  <!-- filter out the tokens in the properties file that provides replacement strings for header and footer tokens in html-->
-  <!-- this copy stays local on the machine that it is on - not needed on webserver -->
-  <target name="hdrftr" depends="tokenfiles" description="=&gt; deprecated.">
-    <!-- set the properties file that replaces tokens with closed list values in picklists -->
-    <!--
-	<filter filtersfile="${includes_server}/closedlist-tokens.properties"/>
-	-->
-    <!-- set the properties file as a filtersfile to distribute headers and footers -->
-    <!--
-    <filter filtersfile="${includes_server}/filters_detokened.properties"/>
+		<filter token="includes_link" value="/${web.context_uri}/includes/"/>
+		<filter token="pubs_link" value="${vegdocs.dir}/pubs/"/>
+		<filter token="history_link" value="${vegdocs.dir}/history/"/>
+		<filter token="news_link" value="${vegdocs.dir}/news/"/>
+		<!-- add link for page name that links to help frame jsp -->
+		<filter token="jspHelpPage" value="/${web.context_uri}/forms/getHelp.jsp"/>
+		<!-- location and filename of xml index page -->
+		<filter token="design_link" value="${vegdocs.dir}/design/"/>
+		<filter token="panel_link" value="${vegdocs.dir}/panel/"/>
+		<filter token="workshop_link" value="${vegdocs.dir}/workshop/"/>
+		<filter token="vegbranch_link" value="${vegdocs.dir}/vegbranch/"/>
+		<filter token="vegbranch_demo_link" value="${vegdocs.dir}/vegbranch/docs/demo/"/>
+		<filter token="searchplugins_link" value="${vegdocs.dir}/searchplugins/"/>
+		<filter token="xml_link" value="${vegdocs.dir}/xml/"/>
+		<filter token="NativeXMLIndexPage" value="${vegdocs.dir}/xml/vegbank-xml-index.html"/>
+		<filter token="help_link" value="${vegdocs.dir}/help/"/>
+		<filter token="help" value="${vegdocs.dir}/help/"/>
+		<filter token="manual_link" value="${vegdocs.dir}/help/manual/"/>
+		<!-- SERVLETS -->
+		<filter token="framework_servlet" value="/${web.context_uri}/servlet/framework"/>
+		<filter token="usermanagement_servlet" value="/${web.context_uri}/servlet/usermanagement"/>
+		<filter token="datarequestservlet" value="/${web.context_uri}/servlet/DataRequestServlet"/>
+		<filter token="datasubmitservlet" value="/${web.context_uri}/servlet/DataSubmitServlet"/>
+		<filter token="nestedquerybuilder" value="/${web.context_uri}/servlet/QueryBuilderServlet"/>
+		<filter token="authenticationservlet" value="/${web.context_uri}/servlet/authenticate"/>
+		<!-- listserv -->
+		<filter token="listservinfo_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
+		<filter token="listservarchive_link" value="http://mercury.nceas.ucsb.edu/vegbank/pipermail/"/>
+		<filter token="listservuser_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/options/"/>
+		<!-- Struts -->
+		<filter token="DisplayUploadPlotAction" value="/${web.context_uri}/DisplayUploadPlotAction.do"/>
+		<!-- FIXME: DONE? Mar 8 2011 MTL.  Should be in a prepare target -->
+		<!--mkdir dir="${tomcat.home.dir}/webapps/${webapp}/"/>
+		<mkdir dir="${tomcat.home.dir}/webapps/downloads/"/>
+		<mkdir dir="${vegdocs_server}"/>
+		<mkdir dir="${help_server}"/>
+		<mkdir dir="${manual_server}"/>
+		<mkdir dir="${vegbranch_server}"/>
+		<mkdir dir="${manual_src_temp}"/>-->
+		<mkdir dir="${temp.dir}"/>
+		<!-- <mkdir dir="${lrg_binary_src}"/> -->
+	</target>
 
-    <filter filtersfile="${includes_server}/manual_filters.properties"/>
-	-->
-  </target>
+	<!-- DISTRIBUTES THE INCLUDES (STYLESHEETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
+	<target name="includes" depends="tokenfiles, nonstdbuildwarn" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
+		<copy overwrite="${forceoverwrite}" todir="${includes_server}" filtering="true">
+			<!-- <fileset dir="${includes_src}" includes="**.css **/*jsp **.js"/> -->
+			<!-- Why not just copy all? -->
+			<fileset dir="${includes_src}" includes="**.* **/*jsp"/>
+		</copy>
+	</target>
+	<target name="index-static" depends="tokenfiles" description="=&gt; static index files to apache">
+	  	<copy overwrite="${forceoverwrite}" tofile="${apache.document.root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
+		<copy overwrite="${forceoverwrite}" todir="${apache.document.root}/" filtering="yes" file="${basedir}/.htaccess"/>
+	</target>
 
-
-  <!-- DISTRIBUTES THE INCLUDES (STYLESHEETS, JSCRIPT  ETC..) INTO THE WEBSERVER-->
-  <target name="includes" depends="hdrftr" description="=&gt; distributes stylesheet to includes dir (other includes set in hdrfr)">
-    <copy overwrite="${forceoverwrite}" todir="${includes_server}" filtering="true">
-      <!-- <fileset dir="${includes_src}" includes="**.css **/*jsp **.js"/> -->
-      <!-- Why not just copy all? -->
-      <fileset dir="${includes_src}" includes="**.* **/*jsp"/>
-    </copy>
-  </target>
-
-
-  <target name="index" depends="help" description="=&gt; target to dist. the index.html file">
-     <copy overwrite="${forceoverwrite}" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
-     <copy overwrite="${forceoverwrite}" tofile="${apache.document.root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
-
-    <!-- add to second webpage at root/${webapp}/index.html -->
-    <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
-    <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.jsp"/>
-    <copy overwrite="${forceoverwrite}" todir="${apache.document.root}/" filtering="yes" file="${basedir}/.htaccess"/>
-
-  </target>
-
-
-  <!-- DISTRIBUTE THE IMAGES -->
-  <target name="images" depends="index" description="=&gt; dist. the images to server">
-    <copy overwrite="${forceoverwrite}" todir="${image_server}" filtering="no">
-      <fileset dir="${image_src}">
-        <include name="**"/>
-        <exclude name="*.psf"/>
-        <exclude name="*.readme"/>
-      </fileset>
-    </copy>
-  </target>
-
-
-  <!--
+	<target name="index" depends="tokenfiles, nonstdbuildwarn" description="=&gt; target to dist. the index.html file">
+		<copy overwrite="${forceoverwrite}" tofile="${server_root}/index.html" filtering="yes" file="${basedir}/index-redirect.html"/>
+		<!-- add to second webpage at root/${webapp}/index.html -->
+		<copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.html"/>
+		<copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes" file="${basedir}/index.jsp"/>
+	</target>
+	<!-- DISTRIBUTE THE IMAGES -->
+	<target name="images" depends="tokenfiles, nonstdbuildwarn" description="=&gt; dist. the images to server">
+		<copy overwrite="${forceoverwrite}" todir="${image_server}" filtering="no">
+			<fileset dir="${image_src}">
+				<include name="**"/>
+				<exclude name="*.psf"/>
+				<exclude name="*.readme"/>
+			</fileset>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO BUILD THE ADMIN PAGES AND DIST
 	-->
-  <target name="admin" depends="forms" description="=&gt; dist the admin pages to server">
-    <copy overwrite="${forceoverwrite}" todir="${admin_server}" filtering="yes">
-      <fileset dir="${admin_src}"/>
-    </copy>
-  </target>
-
-
-  <!--
+	<target name="admin" depends="tokenfiles, nonstdbuildwarn" description="=&gt; dist the admin pages to server">
+		<copy overwrite="${forceoverwrite}" todir="${admin_server}" filtering="yes">
+			<fileset dir="${admin_src}"/>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 	-->
-  <target name="stuff" depends="email_templates" description="=&gt; dist other static content">
-    <!-- no more news: Nov17,2004 MTL : could be added back if we wanted to : <copy overwrite="${forceoverwrite}" todir="${news_server}" filtering="yes">
+	<target name="stuff" depends="tokenfiles" description="=&gt; dist other static content">
+		<!-- no more news: Nov17,2004 MTL : could be added back if we wanted to : <copy overwrite="${forceoverwrite}" todir="${news_server}" filtering="yes">
       <fileset dir="${news_src}"/>
     </copy> -->
-    <copy overwrite="${forceoverwrite}" todir="${apache.document.root}/upload" filtering="yes">
-      <fileset dir="upload"/>
-    </copy>
-  </target>
-
-
-  <target name="searchplugins" depends="stuff" description="=&gt; dist search plugin info to website">
-    <mkdir dir="${vegdocs_server}/searchplugins"/>
-    <copy overwrite="${forceoverwrite}" todir="${vegdocs_server}/searchplugins" filtering="yes">
-      <fileset dir="searchplugins">
-        <include name="*.html"/>
-      </fileset>
-    </copy>
-    <copy overwrite="${forceoverwrite}" todir="${vegdocs_server}/searchplugins" filtering="no">
-      <fileset dir="searchplugins">
-        <exclude name="*.html"/>
-        <!-- everything else dist without filtering -->
-      </fileset>
-    </copy>
-  </target>
-
-
-  <!--
+		<copy overwrite="${forceoverwrite}" todir="${apache.document.root}/upload" filtering="yes">
+			<fileset dir="upload"/>
+		</copy>
+	</target>
+	<target name="searchplugins" depends="tokenfiles" description="=&gt; dist search plugin info to website">
+		<mkdir dir="${vegdocs_server}/searchplugins"/>
+		<copy overwrite="${forceoverwrite}" todir="${vegdocs_server}/searchplugins" filtering="yes">
+			<fileset dir="searchplugins">
+				<include name="*.html"/>
+			</fileset>
+		</copy>
+		<copy overwrite="${forceoverwrite}" todir="${vegdocs_server}/searchplugins" filtering="no">
+			<fileset dir="searchplugins">
+				<exclude name="*.html"/>
+				<!-- everything else dist without filtering -->
+			</fileset>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
 	-->
-  <target name="panel" depends="robot" description="=&gt; dist the panel pages to server">
-    <copy overwrite="${forceoverwrite}" todir="${panel_server}" filtering="yes">
-      <fileset dir="${panel_src}">
-        <include name="*.html"/>
-      </fileset>
-    </copy>
-    <copy overwrite="${forceoverwrite}" todir="${panel_server}" filtering="no">
-      <fileset dir="panel/data" includes="**/*"/>
-      <!--  <fileset dir="${lrg_binary_src}/panel" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf  NVC_guidelines_v4.pdf  TDWG2003_Peet.pdf TDWG2003_Peet.ppt"/> -->
-    </copy>
-  </target>
-
-
-  <target name="help" depends="includes" description="=&gt; dist the help pages to server">
-    <copy overwrite="${forceoverwrite}" todir="${help_server}" filtering="yes">
-      <fileset dir="${help_src}">
-        <include name="*.html"/>
-        <exclude name="template.html"/>
-        <!-- don't copy the template file -->
-      </fileset>
-    </copy>
-  </target>
-
-
-  <target name="manual" depends="init" description="=&gt; build and dist the manual pages to server">
-    <antcall target="manual-sub-clean"/>
-    <antcall target="manual-sub-build"/>
-    <antcall target="manual-sub-dist"/>
-    <!--  <antcall target="tokenfiles"/>
+	<target name="panel" depends="tokenfiles" description="=&gt; dist the panel pages to server">
+		<copy overwrite="${forceoverwrite}" todir="${panel_server}" filtering="yes">
+			<fileset dir="${panel_src}">
+				<include name="*.html"/>
+			</fileset>
+		</copy>
+		<copy overwrite="${forceoverwrite}" todir="${panel_server}" filtering="no">
+			<fileset dir="panel/data" includes="**/*"/>
+			<!--  <fileset dir="${lrg_binary_src}/panel" includes="mou.pdf   standards_v1.pdf   vision.pdf   standards_v1.zip  esa_guidelines_v2.pdf esa_guidelines_v2.zip  NVC_guidelines_v3.pdf  NVC_guidelines_v4.pdf  TDWG2003_Peet.pdf TDWG2003_Peet.ppt"/> -->
+		</copy>
+	</target>
+	<target name="help" depends="tokenfiles" description="=&gt; dist the help pages to server">
+		<copy overwrite="${forceoverwrite}" todir="${help_server}" filtering="yes">
+			<fileset dir="${help_src}">
+				<include name="*.html"/>
+				<exclude name="template.html"/>
+				<!-- don't copy the template file -->
+			</fileset>
+		</copy>
+	</target>
+	<target name="manual" depends="tokenfiles" description="=&gt; build and dist the manual pages to server">
+		<antcall target="manual-sub-clean"/>
+		<antcall target="manual-sub-build"/>
+		<antcall target="manual-sub-dist"/>
+		<!--  <antcall target="tokenfiles"/>
     <antcall target="hdrftr"/> -->
-  </target>
-
-
-  <target name="manual-sub-build" depends="hdrftr">
-    <echo>starting to style...</echo>
-    <xslt in="${manual_src}/manual_src.xml" out="${manual_src_temp}/BOGUS.htm" style="${manual_src}/manual2html.xsl" force="${forceoverwrite}">
-      <param name="directory" expression="./"/>
-    </xslt>
-  </target>
-
-
-  <target name="manual-sub-clean" depends="hdrftr">
-    <delete>
-      <fileset dir="${manual_src_temp}">
-        <include name="*.htm*"/>
-      </fileset>
-    </delete>
-  </target>
-
-
-  <target name="manual-sub-dist" depends="hdrftr">
-    <copy overwrite="${forceoverwrite}" todir="${manual_server}" filtering="yes">
-      <fileset dir="${manual_src_temp}">
-        <include name="*.html"/>
-      </fileset>
-    </copy>
-  </target>
-
-
-  <!--
+	</target>
+	<target name="manual-sub-build" depends="tokenfiles">
+		<echo>starting to style...</echo>
+		<xslt in="${manual_src}/manual_src.xml" out="${manual_src_temp}/BOGUS.htm" style="${manual_src}/manual2html.xsl" force="${forceoverwrite}">
+			<param name="directory" expression="./"/>
+		</xslt>
+	</target>
+	<target name="manual-sub-clean" depends="tokenfiles">
+		<delete>
+			<fileset dir="${manual_src_temp}">
+				<include name="*.htm*"/>
+			</fileset>
+		</delete>
+	</target>
+	<target name="manual-sub-dist" depends="tokenfiles">
+		<copy overwrite="${forceoverwrite}" todir="${manual_server}" filtering="yes">
+			<fileset dir="${manual_src_temp}">
+				<include name="*.html"/>
+			</fileset>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
   -->
-  <target name="history" depends="panel" description="=&gt; dist the history pages to server ">
-    <style basedir="${history_src}" destdir="${history_src}" style="${history_src}/normalhtml.xsl" force="${forceoverwrite}" includes=" development.xml"/>
-    <copy overwrite="${forceoverwrite}" todir="${history_server}" filtering="yes">
-      <fileset dir="${history_src}">
-        <exclude name="**/**.gif"/>
-      </fileset>
-    </copy>
-    <copy overwrite="${forceoverwrite}" todir="${history_server}" filtering="no">
-      <fileset dir="${history_src}">
-        <exclude name="**/**.html"/>
-      </fileset>
-    </copy>
-  </target>
-
-
-  <!--
+	<target name="history" depends="tokenfiles" description="=&gt; dist the history pages to server ">
+		<xslt basedir="${history_src}" destdir="${history_src}" style="${history_src}/normalhtml.xsl" force="${forceoverwrite}" includes=" development.xml"/>
+		<copy overwrite="${forceoverwrite}" todir="${history_server}" filtering="yes">
+			<fileset dir="${history_src}">
+				<exclude name="**/**.gif"/>
+			</fileset>
+		</copy>
+		<copy overwrite="${forceoverwrite}" todir="${history_server}" filtering="no">
+			<fileset dir="${history_src}">
+				<exclude name="**/**.html"/>
+			</fileset>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO BUILD THE NEWS HTML DOCUMENTATION AND DISTRIBUTE IT TO THE
 	* WEB SERVER
   -->
-  <!-- dist workshop files to server : NEW as of 02-MAY-2003, not sure how these files were dist to server before.  -->
-  <target name="workshop" depends="history" description="=&gt; dist the workshop pages to server ">
-    <copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="yes">
-      <fileset dir="${workshop_src}">
-        <include name="**/*.html"/>
-        <exclude name="**/CVS*"/>
-      </fileset>
-    </copy>
-    <copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="no">
-      <fileset dir="${workshop_src}">
-        <exclude name="**/*.html"/>
-        <exclude name="**/CVS*"/>
-      </fileset>
-    </copy>
-    <copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="no">
-      <fileset dir="workshop" includes="**/*"/>
-      <!--  <fileset dir="${lrg_binary_src}" includes="  VegBank_NVC.pdf  VegBank_NVC.ppt  VegBank_tutorial_model.pdf  VegBank_tutorial_model.ppt VegBank_tutorial_why.pdf  VegBank_tutorial_why.ppt whittaker.pdf plot_form.pdf data_entry.xls  arizona_plants.xls  arizona_nvc.xls "/> -->
-    </copy>
-  </target>
-
-
-  <target name="pubs" depends="workshop" description="=&gt; dist the pubs pages to server">
-   <copy overwrite="${forceoverwrite}" todir="${pubs_server}" filtering="no">
-	     <fileset dir="pubs" includes="**/*"/>
-	 </copy>
-	<copy overwrite="${forceoverwrite}" todir="${pubs_server}" filtering="yes">
-      <!-- dist html and htm too -->
-      <fileset dir="${pubs_src}">
-        <include name="**/*.htm*"/>
-      </fileset>
-    </copy>
-
-  </target>
-
-
-  <!--
+	<!-- dist workshop files to server : NEW as of 02-MAY-2003, not sure how these files were dist to server before.  -->
+	<target name="workshop" depends="tokenfiles" description="=&gt; dist the workshop pages to server ">
+		<copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="yes">
+			<fileset dir="${workshop_src}">
+				<include name="**/*.html"/>
+				<exclude name="**/CVS*"/>
+			</fileset>
+		</copy>
+		<copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="no">
+			<fileset dir="${workshop_src}">
+				<exclude name="**/*.html"/>
+				<exclude name="**/CVS*"/>
+			</fileset>
+		</copy>
+		<copy overwrite="${forceoverwrite}" todir="${workshop_server}" filtering="no">
+			<fileset dir="workshop" includes="**/*"/>
+			<!--  <fileset dir="${lrg_binary_src}" includes="  VegBank_NVC.pdf  VegBank_NVC.ppt  VegBank_tutorial_model.pdf  VegBank_tutorial_model.ppt VegBank_tutorial_why.pdf  VegBank_tutorial_why.ppt whittaker.pdf plot_form.pdf data_entry.xls  arizona_plants.xls  arizona_nvc.xls "/> -->
+		</copy>
+	</target>
+	<target name="pubs" depends="tokenfiles" description="=&gt; dist the pubs pages to server">
+		<copy overwrite="${forceoverwrite}" todir="${pubs_server}" filtering="no">
+			<fileset dir="pubs" includes="**/*"/>
+		</copy>
+		<copy overwrite="${forceoverwrite}" todir="${pubs_server}" filtering="yes">
+			<!-- dist html and htm too -->
+			<fileset dir="${pubs_src}">
+				<include name="**/*.htm*"/>
+			</fileset>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO PUT THE FORMS FOR INTERACTING WITH THE
 	* SERVLETS IN THE APPROPRIATE LOCATION
   -->
-  <target name="forms" depends="images" description="=&gt; dist the forms to server ">
-    <!-- style business rules to create .jsp -->
-    <style in="${forms}/businessrules.xml" style="${forms}/businessrules.xsl" out="${forms}/businessrules.jsp" force="${forceoverwrite}"/>
-    <copy overwrite="${forceoverwrite}" todir="${forms_server}" filtering="yes">
-      <fileset dir="${forms}" includes="**/*jsp **/*html" excludes="**/CVS* *.xsl *.xsd businessrules.xml "/>
-    </copy>
-    <copy overwrite="${forceoverwrite}" todir="${forms_server}" filtering="yes">
-      <fileset dir="${forms}" includes="**/*.csv" excludes="**/*jsp **/*html **/CVS* *.xsl *.xsd businessrules.xml "/>
-    </copy>
-
-    <antcall target="views"/>
-  </target>
-
-
-  <target name="views-autogen" depends="init" description="&gt; create files from db_model.xml, using another build.xml file">
-    <ant dir="${views}" target="writeviews" inheritAll="false"/>
-  </target>
-
-
-  <target name="views" depends="tokenfiles" description="&gt; dist the views to server (outside chain, but included in forms)">
-    <!-- first overwrite any autogen views with any custom ones-->
-    <mkdir dir="${views}/custom"/>
-    <echo>copying custom files that replace autogen files to local autogen dir</echo>
-    <copy overwrite="${forceoverwrite}" todir="${views}/autogen" filtering="no">
-      <fileset dir="${views}/custom" includes="*jsp" excludes="**/CVS* "/>
-    </copy>
-    <echo>copying views (including autogen and custom) to server</echo>
-    <copy overwrite="${forceoverwrite}" todir="${views_server}" filtering="yes">
-      <fileset dir="${views}" includes="**/*jsp **/*html" excludes="**/CVS* template_datacart.jsp"/>
-    </copy>
-
-  </target>
-
-
-  <target name="cache" depends="init" description="&gt; (OBSOLETE) temporary means of getting views (data independent) cached">
-    <echo>cache is OBSOLETE</echo>
-    <!--<property name="cache_raw" value="${cache_server}/views/raw/" />
-    <mkdir dir="${cache_raw}" />
-    <mkdir dir="${cache_temp}" />-->
-    <!--<get src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_countdata.jsp" dest="${cache_raw}raw_countdata.jsp"/>
-    <get src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_recentprojects.jsp" dest="${cache_raw}raw_recentprojects.jsp"/>  -->
-     <!--
-    <get ignoreerrors="true" src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_countdata.jsp" dest="${cache_temp}/raw_countdata.jsp"/>
-    <get ignoreerrors="true" src="${machine_url}${eighty_eighty}/vegbank/views/raw/raw_recentprojects.jsp" dest="${cache_temp}/raw_recentprojects.jsp"/>
-    -->
-   <!-- copy to server -->
-   <!-- <copy  overwrite="${forceoverwrite}" todir="${cache_raw}" filtering="yes">
-     <fileset dir="${cache_temp}" includes="**/*jsp" excludes="**/CVS*">
-     <contains text="&lt;td" casesensitive="no"/>
-     </fileset>
-   </copy>
-   -->
-
-
-  </target>
-
-
-  <!--
+	<target name="forms" depends="tokenfiles, nonstdbuildwarn" description="=&gt; dist the forms to server ">
+		<!-- style business rules to create .jsp -->
+		<xslt in="${forms}/businessrules.xml" style="${forms}/businessrules.xsl" out="${forms}/businessrules.jsp" force="${forceoverwrite}"/>
+		<copy overwrite="${forceoverwrite}" todir="${forms_server}" filtering="yes">
+			<fileset dir="${forms}" includes="**/*jsp **/*html" excludes="**/CVS* *.xsl *.xsd businessrules.xml "/>
+		</copy>
+		<copy overwrite="${forceoverwrite}" todir="${forms_server}" filtering="yes">
+			<fileset dir="${forms}" includes="**/*.csv" excludes="**/*jsp **/*html **/CVS* *.xsl *.xsd businessrules.xml "/>
+		</copy>
+		<antcall target="views"/>
+	</target>
+	<target name="views-autogen" depends="tokenfiles" description="&gt; create files from db_model.xml, using another build.xml file">
+		<ant dir="${views}" target="writeviews" inheritAll="false"/>
+	</target>
+	<target name="views" depends="tokenfiles, nonstdbuildwarn" description="&gt; dist the views to server (outside chain, but included in forms)">
+		<!-- first overwrite any autogen views with any custom ones-->
+		<mkdir dir="${views}/custom"/>
+		<echo>copying custom files that replace autogen files to local autogen dir</echo>
+		<copy overwrite="${forceoverwrite}" todir="${views}/autogen" filtering="no">
+			<fileset dir="${views}/custom" includes="*jsp" excludes="**/CVS* "/>
+		</copy>
+		<echo>copying views (including autogen and custom) to server</echo>
+		<copy overwrite="${forceoverwrite}" todir="${views_server}" filtering="yes">
+			<fileset dir="${views}" includes="**/*js **/*svg **/*css **/*jsp **/*html" excludes="**/CVS* template_datacart.jsp"/>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO PUT THE GENERAL HTML DOCS INTO THE CORRECT PLACE
   -->
-  <target name="general" depends="admin" description="=&gt; dist the general dir to server">
-    <!-- style must be run before copy to get the faq.html document -->
-    <style in="${general_src}/faq.xml" out="${general_src}/faq.html" style="${general_src}/faq.xsl"/>
-    <copy overwrite="${forceoverwrite}" todir="${general_server}" filtering="yes">
-      <fileset dir="${general_src}" includes="**.html *jsp" excludes="**/CVS*  *.xml *.xsl"/>
-    </copy>
-    <antcall target="ajax" />
-  </target>
-
-
-  <target name="ajax" depends="tokenfiles" description="=&gt; dist the ajax dir to server">
-    <!-- style must be run before copy to get the faq.html document -->
-    <copy overwrite="${forceoverwrite}" todir="${ajax_server}" filtering="yes">
-      <fileset dir="${ajax_src}" includes="*.jsp" excludes="**/CVS*"/>
-    </copy>
-  </target>
-
-  <!--
+	<target name="general" depends="tokenfiles, nonstdbuildwarn" description="=&gt; dist the general dir to server">
+		<!-- style must be run before copy to get the faq.html document -->
+		<xslt in="${general_src}/faq.xml" out="${general_src}/faq.html" style="${general_src}/faq.xsl"/>
+		<copy overwrite="${forceoverwrite}" todir="${general_server}" filtering="yes">
+			<fileset dir="${general_src}" includes="**.html *jsp" excludes="**/CVS*  *.xml *.xsl"/>
+		</copy>
+		<antcall target="ajax"/>
+	</target>
+	<target name="ajax" depends="tokenfiles, nonstdbuildwarn" description="=&gt; dist the ajax dir to server">
+		<!-- style must be run before copy to get the faq.html document -->
+		<copy overwrite="${forceoverwrite}" todir="${ajax_server}" filtering="yes">
+			<fileset dir="${ajax_src}" includes="*.jsp" excludes="**/CVS*"/>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO PUT THE DESIGN HTML DOCS INTO THE CORRECT PLACE
   -->
-  <target name="design" depends="pubs" description="=&gt; dist the design (info) files to server">
-    <copy overwrite="${forceoverwrite}" todir="${design_server}" filtering="yes">
-      <fileset dir="${design_src}">
-        <include name="**/**.html"/>
-      </fileset>
-    </copy>
-    <!-- non-html files -->
-    <copy overwrite="${forceoverwrite}" todir="${design_server}" filtering="no">
-      <fileset dir="${design_src}">
-        <exclude name="**/**.html"/>
-      </fileset>
-    </copy>
-  </target>
-
-
-  <!--
+	<target name="design" depends="tokenfiles" description="=&gt; dist the design (info) files to server">
+		<copy overwrite="${forceoverwrite}" todir="${design_server}" filtering="yes">
+			<fileset dir="${design_src}">
+				<include name="**/**.html"/>
+			</fileset>
+		</copy>
+		<!-- non-html files -->
+		<copy overwrite="${forceoverwrite}" todir="${design_server}" filtering="no">
+			<fileset dir="${design_src}">
+				<exclude name="**/**.html"/>
+			</fileset>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
   -->
-  <target name="xsl" depends="general" description="=&gt; dist the xsl dir to server">
-    <copy overwrite="${forceoverwrite}" todir="${vegbank.lib.dir}" filtering="yes">
-      <fileset dir="${xsl.src.dir}"/>
-    </copy>
-  </target>
-
-
-  <!--
+	<target name="xsl" depends="tokenfiles, nonstdbuildwarn" description="=&gt; dist the xsl dir to server">
+		<copy overwrite="${forceoverwrite}" todir="${vegbank.lib.dir}" filtering="yes">
+			<fileset dir="${xsl.src.dir}"/>
+		</copy>
+	</target>
+	<!--
 	* TARGET TO PUT XSL FILES INTO CORRECT PLACE
   -->
-  <target name="web" depends="xsl" description="==> Distribute Web Files ">
-  <echo>url: ${web.src.dir}/WEB-INF/struts-config.xml</echo>
-    <!--<xmlvalidate file="${web.src.dir}/WEB-INF/struts-config.xml" failonerror="true">
+	<target name="web" depends="tokenfiles, nonstdbuildwarn" description="==> Distribute Web Files ">
+		<echo>url: ${web.src.dir}/WEB-INF/struts-config.xml</echo>
+		<!--<xmlvalidate file="${web.src.dir}/WEB-INF/struts-config.xml" failonerror="true">
       <dtd publicId="-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" location="http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd"/>
     </xmlvalidate>-->
-    <copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes">
-      <fileset dir="${web.src.dir}"/>
-    </copy>
-  </target>
+		<copy overwrite="${forceoverwrite}" todir="${vegbank_server}" filtering="yes">
+			<fileset dir="${web.src.dir}"/>
+		</copy>
+	</target>
+	<target name="robot" depends="tokenfiles" description="==&gt; Distribute robots.txt">
+		<copy overwrite="${forceoverwrite}" todir="${apache.document.root}" file="./robots.txt"/>
+	</target>
 
-
-  <target name="robot" depends="web" description="==&gt; Distribute robots.txt">
-    <copy overwrite="${forceoverwrite}" todir="${apache.document.root}" file="./robots.txt"/>
-  </target>
-
-
-  <!--
-	* TARGET TO PUT THE DICTIONARY HTML DOCS INTO THE CORRECT PLACE
-  -->
-  <target name="dictionary" depends="init" description="=&gt; Dist. the new data dictionary to server (calls other ant target) ">
-    <!-- calls ant to run a different ant target which creates the vegbank dictionary based on logical fields only -->
-    <echo>Dictionary is now based on database population, not many html files.  This is done in the main build.xml in the /vegbank dir.</echo>
-  </target>
-
-
-  <target name="dist-dictionary" depends="tokenfiles,getContextName">
-      <copy todir="${dictionary_server}" filtering="yes">
-      <fileset dir="${dictionary_src}">
-        <include name="dd*.html"/>
-      </fileset>
-    </copy>
-  </target>
-
-
-  <target name="dataxml" depends="tokenfiles" description="=&gt; Dist. the documentation files and xml files in ${docs_xml_dir}dataxml to server ">
-     <copy todir="${static_xmlserver}" flatten="true" filtering="yes" overwrite="${forceoverwrite}">
-      <fileset dir="./dataxml">
-        <include name="*.html"/>
-      </fileset>
-    </copy>
-    <!-- copy xml files too -->
-    <ant dir="${docs_xml_dir}" target="dist-dataxml"/>
-  </target>
-
-
-  <target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
-    <!-- pattern for this target: (optional: style xml to get tokens), copy from includes to includes_server, set filtersfile on server copy, post filtering -->
-    <!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
-    <!-- load header and footer from file -->
-
-    <!--
+	<target name="dataxml" depends="tokenfiles" description="=&gt; Dist. the documentation files and xml files in ${docs_xml_dir}dataxml to server ">
+		<copy todir="${static_xmlserver}" flatten="true" filtering="yes" overwrite="${forceoverwrite}">
+			<fileset dir="./dataxml">
+				<include name="*.html"/>
+			</fileset>
+		</copy>
+		<!-- copy xml files too -->
+		<ant dir="${docs_xml_dir}" target="dist-dataxml"/>
+	</target>
+	<target name="tokenfiles" depends="init" description="=&gt; dist the properties files to the includes dir to give access to pages to tokens">
+		<!-- pattern for this target: (optional: style xml to get tokens), copy from includes to includes_server, set filtersfile on server copy, post filtering -->
+		<!-- distributes the properties that are used in filtering tokens, header and footers as well as closed list options -->
+		<!-- load header and footer from file -->
+		<!--
         @webpage_top_html@
         @stdvegbankget_jspdeclarations@
         @webpage_head_html@
@@ -613,377 +507,282 @@
         ...page content...
         @webpage_footer_html@
     -->
-   <!-- =========== -->
-   <!--
-   <loadfile srcfile="${includes_src}/header.html" property="vegbank_header_html_help" />
-   <filter token="vegbank_header_html_help" value="${vegbank_header_html_help}" />
-
-   <loadfile srcfile="${includes_src}/header.html" property="vegbank_header_html_front" />
-   <filter token="vegbank_header_html_front" value="${vegbank_header_html_front}" />
-
-   <loadfile srcfile="${includes_src}/footer.html" property="vegbank_footer_html_tworow" />
-   <filter token="vegbank_footer_html_tworow" value="${vegbank_footer_html_tworow}" />
-
-   <loadfile srcfile="${includes_src}/footer.html" property="vegbank_footer_html_help" />
-   <filter token="vegbank_footer_html_help" value="${vegbank_footer_html_help}" />
-   -->
-
-   <!-- dist relavent includes to server and filter tokens while doing so -->
-   <copy todir="${includes_server}" filtering="yes" overwrite="${forceoverwrite}">
-     <fileset dir="${includes_src}">
-       <include name="*.properties" />
-     </fileset>
-   </copy>
-
-    <!--<copy file="${includes_src}/filters.properties" tofile="${includes_server}/filters_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>-->
-    <filter filtersfile="${includes_server}/filters.properties"/>
-    <!--<copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>-->
-    <filter filtersfile="${includes_server}/placeurl.properties"/>
-
-    <style in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="${forceoverwrite}"/>
-    <copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${includes_server}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>
-    <filter filtersfile="${includes_server}/vegbranchdemo_filters_detokened.properties"/>
-
-        <!-- get filters for data dictionary defns: -->
-   <style in="${docs_xml_dir}db_model_vegbank.xml" out="${includes_server}/dd_defns_tokens.properties" style="${docs_xml_dir}getDefnsForFields.xsl" force="${forceoverwrite}" />
-    <filter filtersfile="${includes_server}/dd_defns_tokens.properties" />
-
-
-    <style in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="${forceoverwrite}"/>
-    <copy file="${manual_src}/manual_filters.properties" tofile="${includes_server}/manual_filters.properties" filtering="yes" overwrite="${forceoverwrite}"/>
-    <filter filtersfile="${includes_server}/manual_filters.properties"/>
-    <ant dir="${basedir}/${docs_xml_dir}" target="dist-closedlist-tokenfile"/>
-    <copy file="${includes_src}/closedlist-tokens.properties" tofile="${includes_server}/closedlist-tokens.properties" filtering="yes" overwrite="${forceoverwrite}"/>
-    <filter filtersfile="${includes_server}/closedlist-tokens.properties"/>
-   <copy todir="${includes_server}" filtering="yes" overwrite="${forceoverwrite}">
-     <fileset dir="${includes_src}">
-       <include name="webpage_*.html" />
-     </fileset>
-   </copy>
-
-
-   <loadfile srcfile="${includes_server}/webpage_top.html" property="webpage_top_html" />
-   <filter token="webpage_top_html" value="${webpage_top_html}" />
-
-   <loadfile srcfile="${includes_server}/webpage_head.html" property="webpage_head_html" />
-   <filter token="webpage_head_html" value="${webpage_head_html}" />
-
-   <loadfile srcfile="${includes_server}/webpage_masthead.html" property="webpage_masthead_html" />
-   <filter token="webpage_masthead_html" value="${webpage_masthead_html}" />
-
-   <loadfile srcfile="${includes_server}/webpage_masthead_small.html" property="webpage_masthead_small_html" />
-   <filter token="webpage_masthead_small_html" value="${webpage_masthead_small_html}" />
-
-   <loadfile srcfile="${includes_server}/webpage_footer.html" property="webpage_footer_html" />
-   <filter token="webpage_footer_html" value="${webpage_footer_html}" />
-
-   <loadfile srcfile="${includes_server}/webpage_footer_small.html" property="webpage_footer_small_html" />
-   <filter token="webpage_footer_small_html" value="${webpage_footer_small_html}" />
-
-
-
-   <loadfile srcfile="${includes_server}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration" />
-   <filter token="webpage_stylesheets_declaration" value="${webpage_stylesheets_declaration}" />
-   <filter token="webpage_stylesheets_declaration_html" value="${webpage_stylesheets_declaration}" />   <!-- duplicate token that makes more sense according to others -->
-
-  </target>
-
-
-  <target name="email_templates" depends="design" description="=&gt; dist email templates">
-    <copy overwrite="${forceoverwrite}" todir="${email_templates_server}" filtering="yes">
-      <fileset dir="${email_templates_src}"/>
-    </copy>
-  </target>
-
-
-  <!-- ________________________ VEGBRANCH TARGETS _____________________________________ -->
-  <target name="vegbranch-init" depends="hdrftr">
-    <echo>Targets:  {init} vegbranch-clean-all | vegbranch-dist-all | vegbranch-dist-client | vegbranch-dist-examples |
+		<!-- dist relavent includes to server and filter tokens while doing so -->
+		<copy todir="${temp.dir}" filtering="yes" overwrite="${forceoverwrite}">
+			<fileset dir="${includes_src}">
+				<include name="*.properties"/>
+			</fileset>
+		</copy>
+		<!--<copy file="${includes_src}/filters.properties" tofile="${includes_server}/filters_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>-->
+		<filter filtersfile="${temp.dir}/filters.properties"/>
+		<!--<copy file="${includes_src}/placeurl.properties" tofile="${includes_server}/placeurl_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>-->
+		<filter filtersfile="${temp.dir}/placeurl.properties"/>
+		<xslt in="${vegbranch_src}/docs/demo/demomap.xml" out="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" style="${vegbranch_src}/docs/demo/maptofilters.xsl" force="${forceoverwrite}"/>
+		<copy file="${vegbranch_src}/docs/demo/vegbranchdemo_filters.properties" tofile="${temp.dir}/vegbranchdemo_filters_detokened.properties" filtering="yes" overwrite="${forceoverwrite}"/>
+		<filter filtersfile="${temp.dir}/vegbranchdemo_filters_detokened.properties"/>
+		<!-- get filters for data dictionary defns: -->
+		<xslt in="${docs_xml_dir}db_model_vegbank.xml" out="${temp.dir}/dd_defns_tokens.properties" style="${docs_xml_dir}getDefnsForFields.xsl" force="${forceoverwrite}"/>
+		<filter filtersfile="${temp.dir}/dd_defns_tokens.properties"/>
+		<xslt in="${manual_src}/manual_src.xml" out="${manual_src}/manual_filters.properties" style="${manual_src}/manual2tokens.xsl" force="${forceoverwrite}"/>
+		<copy file="${manual_src}/manual_filters.properties" tofile="${temp.dir}/manual_filters.properties" filtering="yes" overwrite="${forceoverwrite}"/>
+		<filter filtersfile="${temp.dir}/manual_filters.properties"/>
+		<ant dir="${basedir}/${docs_xml_dir}" target="dist-closedlist-tokenfile"/>
+		<copy file="${includes_src}/closedlist-tokens.properties" tofile="${temp.dir}/closedlist-tokens.properties" filtering="yes" overwrite="${forceoverwrite}"/>
+		<filter filtersfile="${temp.dir}/closedlist-tokens.properties"/>
+		<copy todir="${temp.dir}" filtering="yes" overwrite="${forceoverwrite}">
+			<fileset dir="${includes_src}">
+				<include name="webpage_*.html"/>
+			</fileset>
+		</copy>
+		<loadfile srcfile="${temp.dir}/webpage_top.html" property="webpage_top_html"/>
+		<filter token="webpage_top_html" value="${webpage_top_html}"/>
+		<loadfile srcfile="${temp.dir}/webpage_head.html" property="webpage_head_html"/>
+		<filter token="webpage_head_html" value="${webpage_head_html}"/>
+		<loadfile srcfile="${temp.dir}/webpage_masthead.html" property="webpage_masthead_html"/>
+		<filter token="webpage_masthead_html" value="${webpage_masthead_html}"/>
+		<loadfile srcfile="${temp.dir}/webpage_masthead_small.html" property="webpage_masthead_small_html"/>
+		<filter token="webpage_masthead_small_html" value="${webpage_masthead_small_html}"/>
+		<loadfile srcfile="${temp.dir}/webpage_footer.html" property="webpage_footer_html"/>
+		<filter token="webpage_footer_html" value="${webpage_footer_html}"/>
+		<loadfile srcfile="${temp.dir}/webpage_footer_small.html" property="webpage_footer_small_html"/>
+		<filter token="webpage_footer_small_html" value="${webpage_footer_small_html}"/>
+		<loadfile srcfile="${temp.dir}/webpage_stylesheets_declaration.html" property="webpage_stylesheets_declaration"/>
+		<filter token="webpage_stylesheets_declaration" value="${webpage_stylesheets_declaration}"/>
+		<filter token="webpage_stylesheets_declaration_html" value="${webpage_stylesheets_declaration}"/>
+		<!-- duplicate token that makes more sense according to others -->
+	</target>
+	<target name="email_templates" depends="tokenfiles, nonstdbuildwarn" description="=&gt; dist email templates">
+		<copy overwrite="${forceoverwrite}" todir="${email_templates_server}" filtering="yes">
+			<fileset dir="${email_templates_src}"/>
+		</copy>
+	</target>
+	<!-- ________________________ VEGBRANCH TARGETS _____________________________________ -->
+	<target name="vegbranch-init" depends="tokenfiles">
+		<echo>Targets:  {init} vegbranch-clean-all | vegbranch-dist-all | vegbranch-dist-client | vegbranch-dist-examples |
       vegbranch-dist-docs | vegbranch-dist-images | vegbranch-dist-docs-loadtbls (before vegbranch-dist-docs)</echo>
-    <!-- RELEVANT DIRECTORIES -->
-    <property name="vegbr_dir" value="${vegbranch_src}"/>
-    <filter filtersfile="${vegbr_dir}/vegbranch.properties"/>
-    <!-- get version  -->
-    <!-- RELEVANT FILES TO COPY / DELETE -->
-    <!-- client files: -->
-    <property name="vegbr_client_include" value="vegbank-module*.zip  vegbranch-v*.zip   vegbranch_normalizer.zip  vegbranch-nps-plots-converter.zip vbr_usda_stateranges.zip "/>
-    <!-- docs files: -->
-    <property name="vegbr_docs_include" value=" **/*.html **/*.csv"/>
-    <!-- images files: -->
-    <property name="vegbr_img_include" value="*.jpg *.gif *.png"/>
-    <property name="vegbr_examples_include" value=" vegbranch-sample-csv*.zip   normalizer_examples.zip"/>
-    <property name="vegbr_htmlfile" value="vegbranch.html vbr*.html"/>
-    <!-- include these as html files in root of vegbranhc dir -->
-    <!--tokens particular to vegbranch html files.-->
-    <filter token="vbr_imageserver" value="${vegdocs.dir}/vegbranch/images/"/>
-    <filter token="vbr_examplesserver" value="${vegdocs.dir}/vegbranch/examples/"/>
-    <filter token="vbr_clientserver" value="${vegdocs.dir}/vegbranch/client/"/>
-    <!-- make certain that dir structure is there -->
-    <mkdir dir="${vegbranch_server}"/>
-    <mkdir dir="${vegbranch_server}/images"/>
-    <mkdir dir="${vegbranch_server}/docs"/>
-    <mkdir dir="${vegbranch_server}/client"/>
-    <mkdir dir="${vegbranch_server}/examples"/>
-    <mkdir dir="${vegbranch_server}/help"/>
-  </target>
-
-
-  <target name="vegbranch-clean-all" depends="vegbranch-init" description="remove all vegbranch files from SERVER">
-    <delete>
-      <!-- del client -->
-      <fileset dir="${vegbranch_server}/client" includes="*.*"/>
-    </delete>
-    <delete>
-      <!-- del images  -->
-      <fileset dir="${vegbranch_server}/images" includes="*.*"/>
-    </delete>
-    <delete>
-      <!-- del docs -->
-      <fileset dir="${vegbranch_server}/docs" includes="*.*"/>
-    </delete>
-    <delete>
-      <!-- del examples  -->
-      <fileset dir="${vegbranch_server}/examples" includes="*.*"/>
-    </delete>
-    <delete>
-      <!-- del index  -->
-      <fileset dir="${vegbranch_server}" includes="*.*"/>
-    </delete>
-  </target>
-
-
-  <target name="vegbranch-dist-client" depends="vegbranch-init" description="dist vegbranch client to server">
-    <!-- <copy file vegbranch database tofile="${vegbranch_server}/file" /> -->
-    <copy todir="${vegbranch_server}/client" filtering="no">
-      <fileset dir="vegbranch" includes="${vegbr_client_include}"/>
-    </copy>
-  </target>
-
-
-  <!-- images -->
-  <target name="vegbranch-dist-updatelists" depends="vegbranch-init" description="dist vegbranch update closed/open lists file">
-    <ant dir="${docs_xml_dir}" target="vegbranch-update-lists"/>
-    <copy todir="${vegbranch_server}" filtering="no" overwrite="${forceoverwrite}">
-      <fileset dir="${vegbranch_src}">
-        <include name="current-closed-list.zip"/>
-      </fileset>
-    </copy>
-  </target>
-
-
-  <target name="vegbranch-dist-images" depends="vegbranch-init" description="dist vegbranch images to server">
-    <copy todir="${vegbranch_server}/images" filtering="no">
-      <fileset dir="${vegbr_dir}/images" includes="${vegbr_img_include}"/>
-    </copy>
-  </target>
-
-
-  <!-- docs -->
-  <target name="vegbranch-dist-docs" depends="vegbranch-init" description="dist vegbranch docs to server">
-    <copy todir="${vegbranch_server}/docs" filtering="yes" overwrite="${forceoverwrite}">
-      <fileset dir="${vegbr_dir}/docs" includes="${vegbr_docs_include}"/>
-    </copy>
-    <copy todir="${vegbranch_server}" filtering="yes" overwrite="${forceoverwrite}">
-      <fileset dir="${vegbr_dir}" includes="${vegbr_htmlfile}"/>
-    </copy>
-  </target>
-
-
-  <!-- dist the loading table documentation, similar to data dictionary -->
-  <target name="vegbranch-dist-docs-loadtbls" depends="vegbranch-init" description="not needed any longer">
-    <!-- <ant antfile="loadbuild.xml" dir="./vegbranch/docs/loadtbls/" target="dist-loaddoc"/> -->
-    <!--<style in="${vegbr_dir}/docs/loadtbls/loadmodule_doc.xml" out="${vegbr_dir}/docs/loadtbls/BOGUS.txt" style="${vegbr_dir}/docs/loadtbls/loadmod_docAll.xsl" force="${forceoverwrite}"/> -->
-  </target>
-
-
-  <target name="vegbranch-clean-locfiles" depends="vegbranch-init" description="clean local html files from vegbranch dir">
-    <delete>
-      <!-- deletes files like Z_USER_D_CoverData~1_noframes.html (these files temporarily live here, and are copied over to server by the main vegbranch ant function -->
-      <fileset dir="${vegbr_dir}/docs/loadtbls" includes="*_*_*_*~*.html"/>
-    </delete>
-  </target>
-
-
-  <!-- examples -->
-  <target name="vegbranch-dist-examples" depends="vegbranch-init" description="dist vegbranch binary examples to server ">
-    <copy todir="${vegbranch_server}/examples" filtering="no">
-      <fileset dir="vegbranch" includes="${vegbr_examples_include}"/>
-    </copy>
-  </target>
-
-
-  <target name="vegbranch-dist-help" depends="vegbranch-init" description="dist help files and screenshots to server">
-    <style in="${vegbr_dir}/help/branchhelp.xml" style="${vegbr_dir}/help/branch2html.xsl" out="${vegbr_dir}/help/BOGUS_vbr_hlp"/>
-    <!-- copy files to server -->
-    <copy todir="${vegbranch_server}/help" filtering="yes">
-      <fileset dir="${vegbr_dir}/help">
-        <exclude name="BOGUS*"/>
-        <exclude name="*.xsl"/>
-        <exclude name="*.xml"/>
-        <exclude name="*/custom/*"/>
-      </fileset>
-    </copy>
-    <copy todir="${vegbranch_server}/help" filtering="yes" overwrite="${forceoverwrite}">
-      <fileset dir="${vegbr_dir}/help/custom">
-        <include name="**/*.html"/>
-      </fileset>
-    </copy>
-    <!-- copy screenshots -->
-    <copy todir="${vegbranch_server}/help" filtering="no">
-      <fileset dir="vegbranch/help">
-        <include name="**/*.png"/>
-        <include name="**/*.jpg"/>
-      </fileset>
-    </copy>
-  </target>
-
-
-  <target name="vegbranch-dist-demomedia" depends="vegbranch-init" description="dist demo media to server from large binary src">
-    <copy todir="${vegbranch_server}/docs/demo/media" filtering="no">
-      <fileset dir="vegbranch/media">
-        <include name="**/*.*"/>
-      </fileset>
-    </copy>
-  </target>
-
-
-  <target name="vegbranch-dist-all" depends="vegbranch-init" description="dist all vegbranch files to server">
-    <antcall target="vegbranch-dist-client"/>
-    <antcall target="vegbranch-dist-images"/>
-    <antcall target="vegbranch-dist-examples"/>
-    <antcall target="vegbranch-dist-docs-loadtbls"/>
-    <antcall target="vegbranch-dist-docs"/>
-    <antcall target="vegbranch-dist-help"/>
-    <antcall target="vegbranch-dist-demomedia"/>
-    <antcall target="vegbranch-dist-updatelists"/>
-  </target>
-
-
-  <!-- ________________________ end of VEGBRANCH TARGETS _____________________________________ -->
-
-
-  <!--
+		<!-- RELEVANT DIRECTORIES -->
+		<property name="vegbr_dir" value="${vegbranch_src}"/>
+		<filter filtersfile="${vegbr_dir}/vegbranch.properties"/>
+		<!-- get version  -->
+		<!-- RELEVANT FILES TO COPY / DELETE -->
+		<!-- client files: -->
+		<property name="vegbr_client_include" value="vegbank-module*.zip  vegbranch-v*.zip   vegbranch_normalizer.zip  vegbranch-nps-plots-converter.zip vbr_usda_stateranges.zip "/>
+		<!-- docs files: -->
+		<property name="vegbr_docs_include" value=" **/*.html **/*.csv"/>
+		<!-- images files: -->
+		<property name="vegbr_img_include" value="*.jpg *.gif *.png"/>
+		<property name="vegbr_examples_include" value=" vegbranch-sample-csv*.zip   normalizer_examples.zip"/>
+		<property name="vegbr_htmlfile" value="vegbranch.html vbr*.html"/>
+		<!-- include these as html files in root of vegbranhc dir -->
+		<!--tokens particular to vegbranch html files.-->
+		<filter token="vbr_imageserver" value="${vegdocs.dir}/vegbranch/images/"/>
+		<filter token="vbr_examplesserver" value="${vegdocs.dir}/vegbranch/examples/"/>
+		<filter token="vbr_clientserver" value="${vegdocs.dir}/vegbranch/client/"/>
+		<!-- make certain that dir structure is there -->
+		<mkdir dir="${vegbranch_server}"/>
+		<mkdir dir="${vegbranch_server}/images"/>
+		<mkdir dir="${vegbranch_server}/docs"/>
+		<mkdir dir="${vegbranch_server}/client"/>
+		<mkdir dir="${vegbranch_server}/examples"/>
+		<mkdir dir="${vegbranch_server}/help"/>
+	</target>
+	<target name="vegbranch-clean-all" depends="vegbranch-init" description="remove all vegbranch files from SERVER">
+		<delete>
+			<!-- del client -->
+			<fileset dir="${vegbranch_server}/client" includes="*.*"/>
+		</delete>
+		<delete>
+			<!-- del images  -->
+			<fileset dir="${vegbranch_server}/images" includes="*.*"/>
+		</delete>
+		<delete>
+			<!-- del docs -->
+			<fileset dir="${vegbranch_server}/docs" includes="*.*"/>
+		</delete>
+		<delete>
+			<!-- del examples  -->
+			<fileset dir="${vegbranch_server}/examples" includes="*.*"/>
+		</delete>
+		<delete>
+			<!-- del index  -->
+			<fileset dir="${vegbranch_server}" includes="*.*"/>
+		</delete>
+	</target>
+	<target name="vegbranch-dist-client" depends="vegbranch-init" description="dist vegbranch client to server">
+		<!-- <copy file vegbranch database tofile="${vegbranch_server}/file" /> -->
+		<copy todir="${vegbranch_server}/client" filtering="no">
+			<fileset dir="vegbranch" includes="${vegbr_client_include}"/>
+		</copy>
+	</target>
+	<!-- images -->
+	<target name="vegbranch-dist-updatelists" depends="vegbranch-init" description="dist vegbranch update closed/open lists file">
+		<ant dir="${docs_xml_dir}" target="vegbranch-update-lists"/>
+		<copy todir="${vegbranch_server}" filtering="no" overwrite="${forceoverwrite}">
+			<fileset dir="${vegbranch_src}">
+				<include name="current-closed-list.zip"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name="vegbranch-dist-images" depends="vegbranch-init" description="dist vegbranch images to server">
+		<copy todir="${vegbranch_server}/images" filtering="no">
+			<fileset dir="${vegbr_dir}/images" includes="${vegbr_img_include}"/>
+		</copy>
+	</target>
+	<!-- docs -->
+	<target name="vegbranch-dist-docs" depends="vegbranch-init" description="dist vegbranch docs to server">
+		<copy todir="${vegbranch_server}/docs" filtering="yes" overwrite="${forceoverwrite}">
+			<fileset dir="${vegbr_dir}/docs" includes="${vegbr_docs_include}"/>
+		</copy>
+		<copy todir="${vegbranch_server}" filtering="yes" overwrite="${forceoverwrite}">
+			<fileset dir="${vegbr_dir}" includes="${vegbr_htmlfile}"/>
+		</copy>
+	</target>
+	<!-- dist the loading table documentation, similar to data dictionary -->
+	<target name="vegbranch-dist-docs-loadtbls" depends="vegbranch-init" description="not needed any longer">
+		<!-- <ant antfile="loadbuild.xml" dir="./vegbranch/docs/loadtbls/" target="dist-loaddoc"/> -->
+		<!--<xslt in="${vegbr_dir}/docs/loadtbls/loadmodule_doc.xml" out="${vegbr_dir}/docs/loadtbls/BOGUS.txt" style="${vegbr_dir}/docs/loadtbls/loadmod_docAll.xsl" force="${forceoverwrite}"/> -->
+	</target>
+	<target name="vegbranch-clean-locfiles" depends="vegbranch-init" description="clean local html files from vegbranch dir">
+		<delete>
+			<!-- deletes files like Z_USER_D_CoverData~1_noframes.html (these files temporarily live here, and are copied over to server by the main vegbranch ant function -->
+			<fileset dir="${vegbr_dir}/docs/loadtbls" includes="*_*_*_*~*.html"/>
+		</delete>
+	</target>
+	<!-- examples -->
+	<target name="vegbranch-dist-examples" depends="vegbranch-init" description="dist vegbranch binary examples to server ">
+		<copy todir="${vegbranch_server}/examples" filtering="no">
+			<fileset dir="vegbranch" includes="${vegbr_examples_include}"/>
+		</copy>
+	</target>
+	<target name="vegbranch-dist-help" depends="vegbranch-init" description="dist help files and screenshots to server">
+		<!--- still needed, but doesn't work on vegbank vm <xslt in="${vegbr_dir}/help/branchhelp.xml" style="${vegbr_dir}/help/branch2html.xsl" out="${vegbr_dir}/help/BOGUS_vbr_hlp"/>
+    -->
+		<echo>NOT styling VegBranch help, as this doesn't work right now, but it should be brought back!</echo>
+		<!-- copy files to server -->
+		<copy todir="${vegbranch_server}/help" filtering="yes">
+			<fileset dir="${vegbr_dir}/help">
+				<exclude name="BOGUS*"/>
+				<exclude name="*.xsl"/>
+				<exclude name="*.xml"/>
+				<exclude name="*/custom/*"/>
+			</fileset>
+		</copy>
+		<copy todir="${vegbranch_server}/help" filtering="yes" overwrite="${forceoverwrite}">
+			<fileset dir="${vegbr_dir}/help/custom">
+				<include name="**/*.html"/>
+			</fileset>
+		</copy>
+		<!-- copy screenshots -->
+		<copy todir="${vegbranch_server}/help" filtering="no">
+			<fileset dir="vegbranch/help">
+				<include name="**/*.png"/>
+				<include name="**/*.jpg"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name="vegbranch-dist-demomedia" depends="vegbranch-init" description="dist demo media to server from large binary src">
+		<copy todir="${vegbranch_server}/docs/demo/media" filtering="no">
+			<fileset dir="vegbranch/media">
+				<include name="**/*.*"/>
+			</fileset>
+		</copy>
+	</target>
+	<target name="vegbranch-dist-all" depends="vegbranch-init" description="dist all vegbranch files to server">
+		<antcall target="vegbranch-dist-client"/>
+		<antcall target="vegbranch-dist-images"/>
+		<antcall target="vegbranch-dist-examples"/>
+		<antcall target="vegbranch-dist-docs-loadtbls"/>
+		<antcall target="vegbranch-dist-docs"/>
+		<antcall target="vegbranch-dist-help"/>
+		<antcall target="vegbranch-dist-demomedia"/>
+		<antcall target="vegbranch-dist-updatelists"/>
+	</target>
+	<!-- ________________________ end of VEGBRANCH TARGETS _____________________________________ -->
+	<!--
 	* TARGET TO DISTRIBUTE ALL HTML, IMAGES, JAVASCRIPT AND CSS
 	INTO THE CORRECT PLACE
   -->
-  <target name="deploy" depends="searchplugins" description="=&gt; All files that dynamic code depends on">
-    <!-- Deployment uses a dependency chain:
-		init
-		tokenfiles
-		hdrftr
-		includes
-		help
-		index
-		images
-		forms
-		admin
-		general
-		xsl
-		web
-		robot
-		panel
-		history
-		workshop
-		pubs
-		design
-		email_templates
-		searchplugins
-		stuff   {news, upload}
+   <target name="deploy" depends="deploy-dev" >
+     <!-- this is just for backwards compatibility -->
+   </target>
 
+	<target name="deploy-dev" depends="tokenfiles" description="=&gt; (development testing) All files that dynamic code depends on">
+	  <!-- this is used for development, to test edits without installing a new war file -->
+		<antcall  target="includes"  />
+		<antcall  target="index"  />
+		<antcall  target="images"  />
+		<antcall  target="admin"  />
+		<antcall  target="forms"  />
+		<antcall  target="views"  />
+		<antcall  target="general"  />
+		<antcall  target="ajax"  />
+		<antcall  target="web"  />
+		<antcall  target="email_templates"  />
+        <antcall  target="xsl"  />
 
-    MAKE SURE DEPLOY DEPENDS ON LAST ITEM!
-	 -->
-  </target>
+	</target>
 
+    <target name="deploy-static" depends="tokenfiles" description="&gt;&gt;&gt; DEPLOYS ALL STATIC FILES">
+		<property name="forceoverwrite" value="true"/>
+         <antcall  target="panel"  />
+		 <antcall  target="help"  />
+		 <antcall  target="manual"  />
+		 <antcall  target="history"  />
+		 <antcall  target="workshop"  />
+		 <antcall  target="pubs"  />
+		 <antcall  target="design"  />
 
-  <target name="setoverwrite" description="=&gt; sets overwrite to true, could also do same with commandLine&gt; ant -Dforceoverwrite=true" >
+		 <antcall  target="robot"  />
+		 <antcall  target="dataxml"  />
+		 <antcall  target="vegbranch-dist-all"  />
+		 <antcall  target="stuff"  />
+         <antcall  target="searchplugins"  />
+         <antcall  target="index-static" />
+    </target>
 
-      <property name="forceoverwrite" value="true" /> <!-- this should always be true if deploying all -->
-      <echo>SETTING FORCE OVERWRITE VARIABLE: ${forceoverwrite}</echo>
-  </target>
+	<target name="deploy-all" depends="tokenfiles"  description="=&gt; all in deploy plus slow rarely updated stuff">
+		<!-- doesn't work, different project? : <antcall target="setoverwrite" inheritAll="true"/> -->
+		<property name="forceoverwrite" value="true"/>
+         <antcall target="deploy-static"  />
+         <antcall  target="views-autogen"  />
+         <antcall target="deploy-dev"  />
+	</target>
+    <target name="deploy-full-from-main-dir" depends="tokenfiles, setoverwrite" description="&gt;&gt;&gt; deploy static files to server, and create anything else needed">
+      <property name="forceoverwrite" value="true"/>
+      <antcall  target="views-autogen"  />
+      <antcall  target="deploy-static"  />
+    </target>
 
-
-  <target name="deploy-all" description="=&gt; all in deploy plus slow rarely updated stuff">
-    <!-- doesn't work, different project? : <antcall target="setoverwrite" inheritAll="true"/> -->
-    <property name="forceoverwrite" value="true" />
-    <antcall target="deploy-all-doesit" />
-    <!--<antcall target="cache" />--><!-- has to be after views, etc. -->
-  </target>
-
-
-  <target name="deploy-all-doesit"
-    depends="views-autogen, deploy, dictionary, manual, vegbranch-dist-all, dataxml"
-    description="internal target, use deploy-all instead"/>
-
-
-  <!--<target name="deploy-vegtest" description="=&gt; (vegtest) All files that dynamic code depends on">
-    <property name="webapp" value="vegtest"/>
-    <antcall target="deploy"/>
-  </target>
-
-
-  <target name="deploy-vegtest-all" description="=&gt; (vegtest) All files that dynamic code depends on">
-    <property name="webapp" value="vegtest"/>
-    <antcall target="deploy-all"/>
-  </target>
-
-
-  <target name="dist-vegtest" description="=&gt; (vegtest) Distribute all web files">
-    <property name="webapp" value="vegtest"/>
-    <antcall target="dist"/>
-  </target>--> <!-- vegtest is no more -->
-
-
-  <!-- FIXME [Fixed:(MTL)dictionary], images target expects files not in cvs -->
-  <target name="getContextName">
-    <!-- no more prompt -->
-
-    <!--<input message="Please enter the context you are acting on (e.g. vegbank, vegtest ) : " addproperty="webapp"/>
-    <condition property="noContextName">
-      <equals arg1="" arg2="${webapp}"/>
-    </condition>
-    <condition property="invalidContextName">
-      <and>
-        <not>
-          <equals arg1="vegbank" arg2="${webapp}"/>
-        </not>
-        <not>
-          <equals arg1="vegtest" arg2="${webapp}"/>
-        </not>
-      </and>
-    </condition> -->
-    <property name="webapp" value="vegbank" />
-    <!--    <fail if="noContextName">
-*******************************************************************************
-ERROR: You did not enter a context name.
-*******************************************************************************
-    </fail>
-    <fail if="invalidContextName">
-*******************************************************************************
-ERROR: An invalid context name entered: '${webapp}'
-	Only vegbank and vegtest contexts currently supported.
-*******************************************************************************
-    </fail>-->
-  </target>
-
-
-  <!-- these help tab completion work easier: -->
-  <target name="admin/" depends="admin" />
-  <target name="ajax/" depends="ajax" />
-  <target name="dataxml/" depends="dataxml" />
-  <target name="design/" depends="design" />
-  <target name="email_templates/" depends="email_templates" />
-  <target name="forms/" depends="forms" />
-  <target name="general/" depends="general" />
-  <target name="help/" depends="help" />
-  <target name="history/" depends="history" />
-  <target name="images/" depends="images" />
-  <target name="includes/" depends="includes" />
-  <target name="panel/" depends="panel" />
-  <target name="pubs/" depends="pubs" />
-  <target name="searchplugins/" depends="searchplugins" />
-  <target name="vegbranch/" depends="vegbranch-dist-docs" />
-  <target name="views/" depends="views" />
-  <target name="workshop/" depends="workshop" />
-
+    <!-- helper targets -->
+	<target name="setoverwrite" description="=&gt; sets overwrite to true, could also do same with commandLine&gt; ant -Dforceoverwrite=true">
+		<property name="forceoverwrite" value="true"/>
+		<!-- this should always be true if deploying all -->
+		<echo>SETTING FORCE OVERWRITE VARIABLE: ${forceoverwrite}</echo>
+	</target>
+	<!-- these help tab completion work easier: -->
+	<target name="admin/" depends="admin"/>
+	<target name="ajax/" depends="ajax"/>
+	<target name="dataxml/" depends="dataxml"/>
+	<target name="design/" depends="design"/>
+	<target name="email_templates/" depends="email_templates"/>
+	<target name="forms/" depends="forms"/>
+	<target name="general/" depends="general"/>
+	<target name="help/" depends="help"/>
+	<target name="history/" depends="history"/>
+	<target name="images/" depends="images"/>
+	<target name="includes/" depends="includes"/>
+	<target name="panel/" depends="panel"/>
+	<target name="pubs/" depends="pubs"/>
+	<target name="searchplugins/" depends="searchplugins"/>
+	<target name="vegbranch/" depends="vegbranch-dist-docs"/>
+	<target name="views/" depends="views"/>
+	<target name="workshop/" depends="workshop"/>
+	<target name="nonstdbuildwarn">
+	  <echo>NON STANDARD DEVLOPMENT BUILD TO TOMCAT HOME</echo>
+	  <echo>NON STANDARD DEVLOPMENT BUILD TO TOMCAT HOME</echo>
+	  <echo>NON STANDARD DEVLOPMENT BUILD TO TOMCAT HOME</echo>
+	  <echo>NON STANDARD DEVLOPMENT BUILD TO TOMCAT HOME</echo>
+	  <echo>NON STANDARD DEVLOPMENT BUILD TO TOMCAT HOME</echo>
+	  <echo>NON STANDARD DEVLOPMENT BUILD TO TOMCAT HOME</echo>
+	</target>
 </project>
