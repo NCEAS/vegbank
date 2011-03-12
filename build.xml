@@ -231,7 +231,9 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <!--loadfiles for the web stuff-->
     <property name="web.temp.dir" value="web/temp"/>
     <ant antfile="build.xml" target="tokenfiles" dir="${webDir}" inheritAll="false" />
-
+    
+    <ant antfile="build.xml" target="views-autogen"  dir="${webDir}" inheritAll="false" />
+    
     <!--load main filters files-->
     <filter filtersfile="${web.temp.dir}/filters.properties"/>
     <filter filtersfile="${web.temp.dir}/placeurl.properties"/>
@@ -504,7 +506,9 @@ bin           install the bin files into the /usr/vegbank/bin dir
        <fileset dir="${webDir}/admin"/>
      </copy>
      <copy todir="${warContext}/views" filtering="yes">
-       <fileset dir="${webDir}/views"/>
+       <fileset dir="${webDir}/views">
+         <include name="**/*"/>
+       </fileset>
      </copy>
      <copy todir="${warContext}" filtering="yes">
        <fileset dir="${buildSrcDir}">
