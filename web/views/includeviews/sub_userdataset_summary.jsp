@@ -3,10 +3,10 @@
   <vegbank:pager />
 </logic:notPresent>
  <logic:empty name="userdataset-BEANLIST">
-   <p>Sorry, no Datasets found! 
-      <% if ( strWebUserId == "-1" ) {  %>  
-        You are not logged in. 
-        <a href="@general_link@login.jsp">Login Here.</a> 
+   <p>Sorry, no Datasets found!
+      <% if ( strWebUserId == "-1" ) {  %>
+        You are not logged in.
+        <a href="@general_link@login.jsp">Login Here.</a>
       <% } %>
    </p>
  </logic:empty>
@@ -19,7 +19,9 @@
 <% } %>
 <!--%@ include file="../autogen/userdataset_summary_head.jsp" %-->
 <%@ include file="../custom/userdataset_summary_head.jsp" %>
+<th title="This column displays the number of items in your datacart and provides links to the item." nowrap="nowrap">
 <%@ include file="../custom/userdatasetitem_quicksummary_head.jsp" %>
+</th>
 </tr>
 
 <logic:iterate id="onerowofuserdataset" name="userdataset-BEANLIST"><!-- iterate over all records in set : new table for each -->
@@ -42,13 +44,14 @@
              <a title="Delete this dataset" href="#" onclick="removeDatasetRow(this.parentNode);return false;" class="nobg"><img src="@image_server@grey_x.gif"></a>
         </logic:notEqual>
       </logic:notEqual><!-- dont edit load datasets -->
-     
+
           </td>
    <% } %>
 <!--%@ include file="../autogen/userdataset_summary_data.jsp" %-->
 <%@ include file="../custom/userdataset_summary_data.jsp" %>
+<TD class="smallfield" rowspan="2" valign="top" nowrap="nowrap">
 <%@ include file="../custom/userdatasetitem_quicksummary_data.jsp" %>
-
+</TD>
 
 </tr>
 <logic:empty name="onerowofuserdataset" property="datasetdescription">

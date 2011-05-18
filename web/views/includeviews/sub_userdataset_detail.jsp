@@ -1,12 +1,12 @@
 <!-- this is a sub form that should be included in another .jsp that gets the datasets needed.  This form displays the contents of the dataset -->
 <!-- note: most often, you'll need to see just one dataset at a time in this form.  If so, pager will apply to DATASETITEMS.  Else, pager still applies to dataset -->
 
- 
+
  <logic:empty name="userdataset-BEANLIST">
-   <p>Sorry, no Datasets found! 
-      <% if ( strWebUserId == "-1" ) {  %>  
-        You are not logged in. 
-        <a href="@general_link@login.jsp">Login Here.</a> 
+   <p>Sorry, no Datasets found!
+      <% if ( strWebUserId == "-1" ) {  %>
+        You are not logged in.
+        <a href="@general_link@login.jsp">Login Here.</a>
       <% } %>
    </p>
  </logic:empty>
@@ -22,11 +22,17 @@
 
 <%@ include file="../autogen/userdataset_detail_data.jsp" %>
 
+
+<tr class="@nextcolorclass@"><td class="datalabel">Items in this dataset:</td>
+<td class="smallfield"><%@ include file="../custom/userdatasetitem_quicksummary_data.jsp" %></td>
+</tr>
+
+
 <!-- show dataset items -->
 <TR><TD colspan="2">
-Items in this dataset:
+
 <bean:define id="ud_id" name="onerowofuserdataset" property="userdataset_id" />
- 
+
  <!-- ALLWAYS paginate, but reset perPage and pageNumber if "not" paginating" -->
  <!-- pagination is opposite of last pagination, which should be still defined, even if not, still will be paginated here: -->
  <!--bean:define id="paginateSub" value="true" /-->
@@ -34,7 +40,7 @@ Items in this dataset:
    <!--bean:define id="paginateSub" value="false" /-->
  <!--/logic:equal-->
  <!-- check to see if perPage is defined, if so, capture it, else set it.  Need to know this to know when to add link to all userDatasetItems if NOT paginating here. -->
- 
+
    <!-- going through all this to get beanPerPage set as string -->
    <bean:parameter id="beanPerPage" name="perPage" value="10" />
    <logic:empty name="beanPerPage">
@@ -51,8 +57,8 @@ Items in this dataset:
         <!-- resetting perPage to 10 -->
         <bean:define id="beanPerPage" value="10" />
    </logic:equal>
- 
-<vegbank:get id="userdatasetitem" select="userdatasetitem" beanName="map" 
+
+<vegbank:get id="userdatasetitem" select="userdatasetitem" beanName="map"
   where="where_userdataset_pk" wparam="ud_id" pager="true" perPage="<%= beanPerPage %>" pageNumber="<%= beanPageNumber %>" />
    <logic:empty name="userdatasetitem-BEANLIST">
       Nothing is in the dataset.
@@ -64,7 +70,7 @@ Items in this dataset:
 <tr>
   <logic:equal name="thisisdatacart" value="true">
     <th>Drop</th>
-  </logic:equal>  
+  </logic:equal>
 <th>Item</th>
 <%@ include file="../autogen/userdatasetitem_summary_head.jsp" %>
 <th>More Info</th>
@@ -83,14 +89,14 @@ Items in this dataset:
 <logic:equal name="thisisdatacart" value="true">
   <td>
    <%@ include file="/includes/datacart_checkbox.jsp" %>
-   <%= rowIndex++ %>.&nbsp; 
+   <%= rowIndex++ %>.&nbsp;
   </td>
 </logic:equal>
 <td class="smallfield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
 <%@ include file="../autogen/userdatasetitem_summary_data.jsp" %>
 <td class="smallfield">
   <logic:equal name="onerowofuserdatasetitem" property="itemtable" value="observation">
-    <!-- add some info about observations if this is an observation -->  
+    <!-- add some info about observations if this is an observation -->
       <bean:define id="obs_pk" name="onerowofuserdatasetitem" property="itemrecord" />
       <!--bean:write name="obs_pk" /-->
       <vegbank:get id="obs" select="plotandobservation" beanName="map"
@@ -101,6 +107,9 @@ Items in this dataset:
   </logic:equal>
 &nbsp; </td>
 </tr>
+
+
+
   <!-- this defines specific variables to use in datacart -->
   <logic:equal name="onerowofuserdataset" property="datasettype" value="datacart">
     <logic:equal name="onerowofuserdatasetitem" property="itemtable" value="plantconcept">

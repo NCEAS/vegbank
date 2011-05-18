@@ -1,1 +1,1 @@
-<th title="This column displays the number of items in your datacart and provides links to the item." nowrap="nowrap">ITEMS</th>
+ITEMS
