@@ -45,12 +45,22 @@
 	   </tr>
 	 </logic:greaterThan>
 	<tr><th>Location Fields:</th>
-	  <bean:define id="trunclat"><bean:write name='onerowofplot' property='latitude' /></bean:define>
-	  <bean:define id="trunclong"><bean:write name='onerowofplot' property='longitude' /></bean:define>
-	  <% if (trunclat.length() > 7 ) { trunclat = trunclat.substring(0,7); } %>
-	  <% if (trunclong.length() > 7 ) { trunclong = trunclong.substring(0,7); } %>
-	  <th>MAP:<a title="TopoZone provides a close up map of the plot's location (new window)" target="_new" href="http://www.topozone.com/map.asp?lat=<bean:write name='onerowofplot' property='latitude' />&lon=<bean:write name='onerowofplot' property='longitude' />&datum=nad83&u=5">TopoZone</a>
-	  | <a title="MapQuest provides a more general map of the plot's location (new window)" target="_new" href="http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=<%= trunclat %>&longitude=<%= trunclong %>">MapQuest</a>
+	  <th>MAP:
+	  <logic:notEmpty name='onerowofplot' property='latitude'>
+	    <logic:notEmpty name='onerowofplot' property='longitude'>
+			  <bean:define id="trunclat"><bean:write name='onerowofplot' property='latitude' /></bean:define>
+			  <bean:define id="trunclong"><bean:write name='onerowofplot' property='longitude' /></bean:define>
+			  <% if (trunclat.length() > 7 ) { trunclat = trunclat.substring(0,7); } %>
+			  <% if (trunclong.length() > 7 ) { trunclong = trunclong.substring(0,7); } %>
+			  <a title="Google maps (new window)" target="_new" href="http://maps.google.com/maps?q=<bean:write name='onerowofplot' property='latitude' />,<bean:write name='onerowofplot' property='longitude' />+(plot+<bean:write name='onerowofplot' property='authorplotcode' />)">Google</a>
+			  | <a title="Yahoo maps (new window)" target="_new" href="http://maps.yahoo.com/#mvt=m&lat=<bean:write name='onerowofplot' property='latitude' />&lon=<bean:write name='onerowofplot' property='longitude' />">Yahoo</a>
+			  | <a title="TopoZone provides a close up map of the plot's location (new window)" target="_new" href="http://www.topozone.com/map.asp?lat=<bean:write name='onerowofplot' property='latitude' />&lon=<bean:write name='onerowofplot' property='longitude' />&datum=nad83&u=5">TopoZone</a>
+			  | <a title="MapQuest provides a more general map of the plot's location (new window)" target="_new" href="http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=<%= trunclat %>&longitude=<%= trunclong %>">MapQuest</a>
+    	  </logic:notEmpty>
+	  </logic:notEmpty>
+	  <logic:empty name='onerowofplot' property='latitude'>
+	    n/a
+	  </logic:empty>
 	  </th></tr>
 	<bean:define id="hadData" value="false" />
 	<%@ include file="autogen/plot_plotloclong_data.jsp" %>
