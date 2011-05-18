@@ -45,6 +45,10 @@ update plantUsage SET party_ID = (select plantstatus.party_ID from plantStatus
 where plantStatus.plantStatus_ID=plantUsage.plantStatus_ID) where 
 plantStatus_ID is not null ;
 
+# this is needed so that grabbing county description works 
+  UPDATE plot set stateProvice = null;
+  
+
      UPDATE plot set stateProvince = 
        (SELECT 
           (
@@ -55,7 +59,15 @@ plantStatus_ID is not null ;
        )
      ;
      
-     
+# get state province from county description in namedplace , if state is not already specified (from above)     
+update plot set stateprovince = 
+   (SELECT   
+     (SELECT np2.placeDescription FROM namedplace as np2 WHERE 
+        np2.namedPlace_Id= min(np1.namedPlace_ID)    
+     ) FROM namedPlace as np1 , place where np1.NAMEDPLACE_ID=place.NAMEDPLACE_ID 
+     and np1.placeSystem='county' and place.plot_ID=plot.plot_ID      
+   )    WHERE stateprovince is null;
+
 
 
 update taxonImportance set stratumHeight=(select stratumHeight from stratum 

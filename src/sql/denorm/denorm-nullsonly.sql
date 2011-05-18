@@ -33,6 +33,10 @@ is null;
     )
   WHERE country is null;
 
+
+
+
+
 update stratum set stratumMethod_ID = (select stratumType.stratumMethod_ID 
 from stratumType where stratumType.stratumType_ID = stratum.stratumType_ID) 
 WHERE stratumMethod_ID is null and stratumType_ID is not null;
@@ -60,6 +64,16 @@ is not null and party_ID is null;
      WHERE stateProvince is null;
      
      
+update plot set stateprovince = 
+   (SELECT   
+     (SELECT np2.placeDescription FROM namedplace as np2 WHERE 
+        np2.namedPlace_Id= min(np1.namedPlace_ID)    
+     ) FROM namedPlace as np1 , place where np1.NAMEDPLACE_ID=place.NAMEDPLACE_ID 
+     and np1.placeSystem='county' and place.plot_ID=plot.plot_ID      
+   )    WHERE stateprovince is null;
+
+
+
      
 update taxonImportance set stratumHeight=(select stratumHeight from stratum 
 where taxonImportance.stratum_ID=stratum.stratum_ID) where 
