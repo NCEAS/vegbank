@@ -45,7 +45,7 @@ update plantUsage SET party_ID = (select plantstatus.party_ID from plantStatus
 where plantStatus.plantStatus_ID=plantUsage.plantStatus_ID) where 
 plantStatus_ID is not null ;
 
-# this is needed so that grabbing county description works 
+--  this is needed so that grabbing county description works 
   UPDATE plot set stateProvice = null;
   
 
@@ -59,7 +59,7 @@ plantStatus_ID is not null ;
        )
      ;
      
-# get state province from county description in namedplace , if state is not already specified (from above)     
+-- get state province from county description in namedplace , if state is not already specified (from above)     
 update plot set stateprovince = 
    (SELECT   
      (SELECT np2.placeDescription FROM namedplace as np2 WHERE 
