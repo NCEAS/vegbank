@@ -9,3 +9,11 @@ plots_northamerica_map_third.png (small)
 plots_northamerica_map_75perc.png (larger)
   Colors from:
   http://atlas.gc.ca/site/english/learningresources/carto_corner/sample_colour_progressions.gif/image_view
+
+
+
+If this does not produce the correct number of plots per state, check the place population between plots and states.
+
+Also, run the denorm-forcemeta.sql in vegbank/src/sql/denorm.
+
+this updates the namedplaec denormalized field counting plots .
