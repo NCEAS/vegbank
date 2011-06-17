@@ -4,9 +4,9 @@
   @ajax_js_include@
   @datacart_js_include@
 
-  
+
    <%
-     int inttemp=0 ; 
+     int inttemp=0 ;
      String howManyPlantsComplex="3"; // this many plants if complex query
      String howManyPlantsDefault="5"; // this many plants if default query (overrides above)
     %>
@@ -50,12 +50,12 @@ function getHelpPageId() {
   <bean:define id="show_comms" value="show" />
   <bean:define id="show_statecountry" value="show" />
   <% howManyPlantsComplex =  howManyPlantsDefault ; %>
-  
-  
+
+
 </logic:equal>
 
 
- @possibly_center@  
+ @possibly_center@
   <h2>VegBank Plots</h2>
   <p>You can also <a href="#" onclick='resubmitWithNewPage("@views_link@observation_googlemap.jsp")'>map these plots</a>.</p>
   <!-- call sub file to get observations (this code is reused)-->
@@ -63,7 +63,7 @@ function getHelpPageId() {
 
 <vegbank:pager />
 <div style="clear:both; display: block;">
-                                                                                                                                                                                                  
+
    <table class="noborder">
     <tr>
     <!-- add all results -->
@@ -75,7 +75,7 @@ function getHelpPageId() {
         <a href="javascript:addAllResults('observation');"
             title="add all results to datacart">add all query results</a> to datacart,&nbsp;&nbsp;
     </td>
-                                                                                                                                                                                                  
+
     <!-- add page -->
     <td>
         <a href="javascript:addAllOnPage()" title="add all on page to datacart" class="nobg"><img src="/vegbank/images/cart_add_one.gif" border="0" /></a>
@@ -83,7 +83,7 @@ function getHelpPageId() {
     <td>
         <a href="javascript:addAllOnPage()" title="add all on page">add plots on page</a> to datacart,&nbsp;&nbsp;
     </td>
-                                                                                                                                                                                                  
+
     <!-- drop page -->
     <td>
         <a href="javascript:dropAllOnPage()" title="drop all on page from datacart" class="nobg"><img src="/vegbank/images/cart_drop_one.gif" border="0" /></a>
@@ -92,7 +92,7 @@ function getHelpPageId() {
         <a href="javascript:dropAllOnPage()" title="drop all on page">drop plots on page</a> from datacart
     </td>
     </tr>
-                                                                                                                                                                                                  
+
   </table>
 </div>
 
@@ -100,8 +100,8 @@ function getHelpPageId() {
 <%@ include file="../includes/setup_rowindex.jsp" %>
 
 <logic:empty name="plotobs-BEANLIST">
-             <p>   Sorry, no plots are available.  
-                If you were searching for plots based on text, try adding wildcards (%) to 
+             <p>   Sorry, no plots are available.
+                If you were searching for plots based on text, try adding wildcards (%) to
                 <a href="javascript:history.back()">your search</a>. </p>
           </logic:empty>
 <logic:notEmpty name="plotobs-BEANLIST"><!-- set up table -->
@@ -119,7 +119,7 @@ function getHelpPageId() {
 <th valign="bottom" align="center">
   <table class="horizborders">
     <tr><td class="horizborders">Author Code</td></tr>
-    <!-- the following is a bit of a hack.  The class will be hidden, unless show_statecountry is something, in 
+    <!-- the following is a bit of a hack.  The class will be hidden, unless show_statecountry is something, in
     this case "show", and the class "showhidden" isn't anything, so displays normally.  MTL May 6, 2005 -->
     <tr class='horizborders'>
       <td>Plot Location</td></tr>
@@ -160,7 +160,7 @@ function getHelpPageId() {
 
 <th valign="bottom" align="center" class='<bean:write name="show_plants" ignore="true" />hidden' nowrap="nowrap">
   <table class="horizborders">
-    
+
     <tr><td>Plants Found on Plot</td></tr>
     <tr><td>
     <bean:define id="showTaxonNameDivID" value="observationsummarytableid" />
@@ -188,10 +188,18 @@ function getHelpPageId() {
 
 <tr class='@nextcolorclass@' align="left">
 <td align="center"><!-- that td cannot have a class, it gets overwritten -->
-<bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
 Plot #<%= rowIndex++ %>
-<br/>
-<%@ include file="../includes/datacart_checkbox.jsp" %>
+	<br/>
+<logic:notEmpty name="onerowofobservation" property="observationaccessioncode">
+	<bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
+	<%@ include file="../includes/datacart_checkbox.jsp" %>
+</logic:notEmpty>
+<logic:empty name="onerowofobservation" property="observationaccessioncode">
+  <bean:define id="delta_ac">unknown</bean:define>
+  datacart n/a
+</logic:empty>
+
+
 </td>
 
 
@@ -206,18 +214,18 @@ Plot #<%= rowIndex++ %>
 <br/>
  <span class="sizenormal" nowrap="nowrap">&raquo; <a href='@get_link@comprehensive/observation/<bean:write name="onerowofobservation" property="observation_id" />'>Details...</a></span>
  <!--if the isAdmin att is set, add the 'delete plot' link-->
- <% 
+ <%
       Boolean isAdmin = (Boolean)(request.getSession().getAttribute("isAdmin"));
-    
+
       if (isAdmin != null) {
         if (isAdmin.booleanValue()) {
     %>
       <br/>
     <span class="sizenormal" nowrap="nowrap">&raquo; <a href='@web_context@DropPlotConfirm.do?plotIdList=<bean:write name="onerowofplot" property="plot_id" />'>Delete</a></span>
-    <% 
+    <%
         }
-      } 
-%>  
+      }
+%>
 </td>
 <td class='smallfield numeric <bean:write name="show_elev" ignore="true" /><bean:write name="show_slope" ignore="true" /><bean:write name="show_aspect" ignore="true" />hidden'>
 <span class='<bean:write name="show_elev" ignore="true" />hidden'>E: <bean:write name="onerowofobservation" property="elevation" /><br/></span>
@@ -234,40 +242,40 @@ Plot #<%= rowIndex++ %>
 <span class='<bean:write name="show_landform" ignore="true" />hidden'>L: <bean:write name="onerowofobservation" property="landform" /></span>
 </td>
 
- 
- 
- 
+
+
+
 <td class='smallfield numeric <bean:write name="show_datesampled" ignore="true" /><bean:write name="show_dateentered" ignore="true" /><bean:write name="show_area" ignore="true" />hidden'>
  <span title='<bean:write name="onerowofobservation" property="obsstartdate"/>' class='<bean:write name="show_datesampled" ignore="true" />hidden'>
    S: <dt:format pattern="MMM-yy">
        <dt:parse pattern="yyyy-MM-dd">
            <bean:write name="onerowofobservation" property="obsstartdate_datetrunc"/>
        </dt:parse>
-   </dt:format> 
-   <br/> 
+   </dt:format>
+   <br/>
  </span>
- 
+
  <span title='<bean:write name="onerowofobservation" property="observationdateentered"/>' class='<bean:write name="show_dateentered" ignore="true" />hidden'>
   E:  <dt:format pattern="MMM-yy">
           <dt:parse pattern="yyyy-MM-dd">
               <bean:write name="onerowofobservation" property="observationdateentered_datetrunc"/>
           </dt:parse>
-      </dt:format> 
+      </dt:format>
    <br/>
  </span>
- <span class='<bean:write name="show_area" ignore="true" />hidden'>   
+ <span class='<bean:write name="show_area" ignore="true" />hidden'>
    Sz: <bean:write name="onerowofobservation" property="area" />
- </span>  
+ </span>
 </td>
 
 <!-- methods -->
 <td nowrap="nowrap" class='smallfield <bean:write name="show_covermeth" ignore="true" /><bean:write name="show_stratummeth" ignore="true" /><bean:write name="show_project" ignore="true" />hidden'>
-   
+
    <!-- default values in case the translation is empty -->
    <bean:define id="cvr_trunc" value="[?]" />
    <bean:define id="str_trunc" value="[?]" />
    <bean:define id="prj_trunc" value="[?]" />
-   
+
    <!-- PLEASE trim strings to < 25 chars -->
    <logic:notEmpty name="onerowofobservation" property="covermethod_id_transl">
     <bean:define id="cvr_trunc"><bean:write name="onerowofobservation" property="covermethod_id_transl" /></bean:define>
@@ -276,13 +284,13 @@ Plot #<%= rowIndex++ %>
    <logic:notEmpty name="onerowofobservation" property="stratummethod_id_transl">
     <bean:define id="str_trunc"><bean:write name="onerowofobservation" property="stratummethod_id_transl" /></bean:define>
     <% if ( str_trunc.length() > 25 ) { str_trunc = str_trunc.substring(0,22) + "..." ; } %>
-   </logic:notEmpty> 
+   </logic:notEmpty>
    <logic:notEmpty name="onerowofobservation" property="project_id_transl">
     <bean:define id="prj_trunc"><bean:write name="onerowofobservation" property="project_id_transl" /></bean:define>
     <% if ( prj_trunc.length() > 25 ) { prj_trunc = prj_trunc.substring(0,22) + "..." ; } %>
-   </logic:notEmpty> 
-    
- <span class='<bean:write name="show_covermeth" ignore="true" />hidden'>   Cvr: 
+   </logic:notEmpty>
+
+ <span class='<bean:write name="show_covermeth" ignore="true" />hidden'>   Cvr:
  <logic:notEmpty name="onerowofobservation" property="covermethod_id">
    <a href='@get_link@std/covermethod/<bean:write name="onerowofobservation" property="covermethod_id" />'><%= cvr_trunc %></a>
  </logic:notEmpty>
@@ -290,42 +298,42 @@ Plot #<%= rowIndex++ %>
   [none]
  </logic:empty>
  <br/></span>
- <span class='<bean:write name="show_stratummeth" ignore="true" />hidden'>   Str: 
+ <span class='<bean:write name="show_stratummeth" ignore="true" />hidden'>   Str:
  <logic:notEmpty name="onerowofobservation" property="stratummethod_id">
    <a href='@get_link@std/stratummethod/<bean:write name="onerowofobservation" property="stratummethod_id" />'><%= str_trunc %></a>
  </logic:notEmpty>
  <logic:empty name="onerowofobservation" property="stratummethod_id">
    [none]
  </logic:empty>
- 
+
  <br/></span>
- <span class='<bean:write name="show_project" ignore="true" />hidden'>   Prj: 
+ <span class='<bean:write name="show_project" ignore="true" />hidden'>   Prj:
  <logic:notEmpty name="onerowofobservation" property="project_id">
    <a href='@get_link@std/project/<bean:write name="onerowofobservation" property="project_id"  ignore="true"/>'><%= prj_trunc %></a>
  </logic:notEmpty>
  <logic:empty name="onerowofobservation" property="project_id">
     [none]
   </logic:empty>
- 
+
  </span>
 </td>
 <!-- plants in this plot -->
  <td class='smallfield <bean:write name="show_plants" ignore="true" />hidden'>
-<vegbank:get id="taxonobservation" select="taxonobservation_maxcover" 
+<vegbank:get id="taxonobservation" select="taxonobservation_maxcover"
   where="where_observation_pk" wparam="observation_pk" allowOrderBy="true" orderBy="xorderby_sort_maxcover_desc"
   pager="false" perPage="-1" beanName="map" />
   <logic:empty name="taxonobservation-BEANLIST">
    No data
   </logic:empty>
   <logic:notEmpty name="taxonobservation-BEANLIST">
-    
-     
+
+
          <% inttemp = 0 ;%>
-       
+
          <!-- iterate over all records in set : new table for each -->
          <logic:iterate length="<%= howManyPlantsComplex %>" id="onerowoftaxonobservation" name="taxonobservation-BEANLIST">
 		   <% if (inttemp!=0) { %> <br /> <% }  %>
-		   
+
 		    <%  inttemp ++ ;  %>
 		        &raquo; <a href='@get_link@std/taxonobservation/<bean:write name="onerowoftaxonobservation" property="taxonobservation_id" />'>
          <!-- write all names, some of them will stay hidden -->
@@ -354,7 +362,7 @@ Plot #<%= rowIndex++ %>
                           </logic:empty>
 
                           <bean:write name='onerowoftaxonobservation' property='int_origplantcommon' /> </span>
-         
+
          <span class="taxonobservation_int_currplantscifull smallfield">
                           <logic:empty name='onerowoftaxonobservation' property='int_currplantscifull' >
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
@@ -377,36 +385,36 @@ Plot #<%= rowIndex++ %>
                              <bean:write name='onerowoftaxonobservation' property='authorplantname' />**
                           </logic:empty>
                           <bean:write name='onerowoftaxonobservation' property='int_currplantcommon' /> </span>
-         
+
 
 				</a>
 					<logic:notEmpty name="onerowoftaxonobservation" property="maxcover">
 					  (<bean:write name="onerowoftaxonobservation" property="maxcover" />%)
 					</logic:notEmpty>
          </logic:iterate><!-- tax obs -->
-      
-    
+
+
   </logic:notEmpty><!-- concept -->
 </td>
 <td class='smallfield <bean:write name="show_comms" ignore="true" />hidden'>
 <!-- community info -->
-<vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map" 
+<vegbank:get id="comminterpretation" select="comminterpretation_withobs" beanName="map"
   where="where_observation_pk" wparam="obsId" perPage="-1" pager="false"/>
   <logic:empty name="comminterpretation-BEANLIST">
     No data
   </logic:empty>
   <logic:notEmpty name="comminterpretation-BEANLIST">
-    
-      
+
+
         <logic:iterate length="3" id="onerowofcomminterpretation" name="comminterpretation-BEANLIST"><!-- iterate over all records in set : new table for each -->
           <logic:notEmpty name="onerowofcomminterpretation" property="commconcept_id">
-            
+
             &raquo; <a href='@get_link@std/commclass/<bean:write name="onerowofcomminterpretation" property="commclass_id" />'><bean:write name="onerowofcomminterpretation" property="commconcept_id_transl" /></a>
-            
+
           <br/></logic:notEmpty><!-- concept -->
         </logic:iterate>
-      
-   
+
+
   </logic:notEmpty>
  </td>
 </tr>

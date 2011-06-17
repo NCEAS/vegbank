@@ -51,6 +51,8 @@ function getHelpPageId() {
 
 
 <!-- datacart item -->
+
+  <logic:notEmpty name="onerowofobservation" property="observationaccessioncode">
   <bean:define id="delta_ac" name="onerowofobservation" property="observationaccessioncode" />
   <% rowClass = ""; %>
 <div style="display: block; float: left; width: 55%; text-align: left;">
@@ -58,6 +60,12 @@ function getHelpPageId() {
        <%@ include file="../includes/datacart_checkbox.jsp" %> click to update datacart
     </form>
 </div>
+
+  </logic:notEmpty> <!-- accession code -->
+
+<logic:empty name="onerowofobservation" property="observationaccessioncode">
+  <bean:define id="delta_ac">unknown</bean:define>
+</logic:empty>
 
 <div style="display: block; float: right; width: 45%; text-align: center;" id="tut_showhidefieldinfo">
    <strong>Configure View</strong> <br/>
