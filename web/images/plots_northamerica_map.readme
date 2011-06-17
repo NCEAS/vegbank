@@ -1,6 +1,8 @@
 north america plot maps are generated from cropped screenshots of:
+75perc:
 http://vegbank.org/vegbank/views/svg/regionmap.jsp?colorCount=6&zoom=0.27&colors=996633%2CCC9966%2Cffcc99%2Ccccc99%2C99ff66%2C339900&dbsummary=y&bgcolor=d0d0d0&x=50&y=30&largeCapture=y
 
+third:
 http://vegbank.org/vegbank/views/svg/regionmap.jsp?colorCount=6&zoom=0.12&colors=996633%2CCC9966%2Cffcc99%2Ccccc99%2C99ff66%2C339900&dbsummary=y&bgcolor=d0d0d0&x=150&y=130&smallCapture=y
 
 Use these URLs to get an image created for the VegBank front page and linked map,
