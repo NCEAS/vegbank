@@ -16,4 +16,4 @@ If this does not produce the correct number of plots per state, check the place 
 
 Also, run the denorm-forcemeta.sql in vegbank/src/sql/denorm.
 
-this updates the namedplaec denormalized field counting plots .
+this updates the namedplace denormalized field counting plots.
