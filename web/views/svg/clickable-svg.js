@@ -152,8 +152,8 @@ function svg_adjust(O){
 		handleMonochrome(); //handles whether monochrome or not and css
 	}
 	var currClassNum = 0; //init
-	var class = O.getAttribute("class");
-	if (class != null) {
+	var strClass = O.getAttribute("class");
+	if (strClass != null) {
 		currClassNum = Number(O.getAttribute("class").substr(3));
 	}
 	//alert(getMaxColors());
