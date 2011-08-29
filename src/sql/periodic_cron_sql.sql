@@ -33,8 +33,9 @@ UPDATE dba_datacache SET data1 = (SELECT COUNT(1) AS count_plantconcept FROM pla
 UPDATE dba_datacache SET data1 = (SELECT COUNT(1) AS count_plantconcept FROM plantconcept where plantconcept_id in (select plantconcept_ID from plantstatus,party where plantstatus.party_Id=party.party_id AND lower(party.accessioncode)='vb.py.511.usdanrcsplants2' AND plantStatus.plantconceptstatus='accepted' 
                 AND plantstatus.stopdate is null)) WHERE cache_key='DB_STAT.PC_USDA';
 
+-- dont require current acceptance for plants on plots (add back AND plantstatus.stopdate is null to get it back:
 UPDATE dba_datacache SET data1 = (SELECT COUNT(1) AS count_plantconcept FROM plantconcept where plantconcept_id in (select plantconcept_ID from plantstatus,party where plantstatus.party_Id=party.party_id AND lower(party.accessioncode)='vb.py.511.usdanrcsplants2' AND plantStatus.plantconceptstatus='accepted' 
-                AND plantstatus.stopdate is null) AND d_obsCount>=1) WHERE cache_key='DB_STAT.PC_USDA_ON_PLOTS';
+                                         ) AND d_obsCount>=1) WHERE cache_key='DB_STAT.PC_USDA_ON_PLOTS';
 
 UPDATE dba_datacache SET data1 = (SELECT COUNT(1) AS count_commconcept FROM commconcept) WHERE cache_key='DB_STAT.COMMUNITY_CONCEPTS';
 
