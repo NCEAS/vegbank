@@ -389,6 +389,8 @@ CREATE VIEW view_dbafielddesc_notimpl AS
         fieldnotes, 
         fielddefinition,
         fieldkeywords
-        FROM  dba_fielddescription  WHERE lower(fieldmodel) <> 'implementation';
+        FROM  dba_fielddescription  
+        WHERE lower(fieldmodel) <> 'implementation' and lower(fieldmodel) <> 'denorm' 
+        ORDER BY dba_fielddescription_id ;
         
         
