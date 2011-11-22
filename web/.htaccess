@@ -104,6 +104,9 @@ RewriteRule ^vegdocs/dbdictionary/dd-index.html$  @datadictionary-index@        
 ## for deep links FROM natureserve
 RewriteRule ^natureserve/(.*)$   @get_link@std/observation/$1?where=where_observation_nsuid   [NC,QSA,L]
 
+RewriteRule ^metadata$	 	           @views_link@observation_rdf_menu.jsp       [NC,QSA,L,R]
+RewriteRule ^metadata/since/(.*)$	   @views_link@observation_rdf_menu.jsp?where=where_obs_dateentered_gteq&wparam=$1&criteriaAsText=Plots+added+since+$1       [NC,QSA,L,R]
+
 
 ## for browsing data
 RewriteRule ^browse$	 	   @views_link@topdata.jsp?perPage=5&getonly=0       [NC,QSA,L,R]
