@@ -20,7 +20,7 @@
 <!--@ webpage_masthead_html @-->
 
 <vegbank:get id="plotobs" select="plotandobservation" whereNumeric="where_observation_pk"
-    whereNonNumeric="where_observation_ac" beanName="map" pager="false" xwhereEnable="true"
+    whereNonNumeric="where_observation_ac" beanName="map" pager="true" xwhereEnable="true"
     perPage="1000"
     allowOrderBy="false" />  <!-- save="plot-search-results" /-->
 
