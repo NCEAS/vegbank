@@ -174,7 +174,7 @@ public class GenericCommand
 		String tmp;
 		String sqlFullQuery = initQuery(selectClauseKey, whereClauseKey, orderBy, whereParams);
             HttpSession session = request.getSession();
-            log.info("SQL Full Query: " + sqlFullQuery);
+            // log.info("SQL Full Query: " + sqlFullQuery);
 
 
             ////////////////////////////////////////////////////
@@ -290,8 +290,8 @@ public class GenericCommand
                 ////////////////////////////////////////////////////
                 sqlFullQuery += buildLimitClause();
 
-                //log.info("--------- " + selectClauseKey + " QUERY::: \n\t" + sqlFullQuery
-                //       + "\n=======================================");
+                log.info("--------- generic command for session:" + request.getSession().getId() + "> " + selectClauseKey + " QUERY::: \n\t" + request.getSession().getId() + ">" + sqlFullQuery
+                       + "===================");
                 DatabaseAccess da = new DatabaseAccess();
                 ResultSet rs = da.issueSelect( sqlFullQuery );
 
