@@ -561,7 +561,8 @@ function buildMapLink() {
    //load all other params:
    var f = gebid(spf);
    for (var fc = 0;fc<f.elements.length;fc++) {
-	  if (f.elements[fc].value != "") {
+	  if ( (f.elements[fc].value != "") && (isNaN(parseFloat(f.elements[fc].name)))) {
+		//numeric parameters are ignored by second clause above, as these are handled above
 		strParams = strParams + "&" + f.elements[fc].name + "=" + Url.encode(f.elements[fc].value);
 	  }
    }
