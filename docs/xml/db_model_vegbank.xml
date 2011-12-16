@@ -6804,6 +6804,10 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN plotvalidationlevel = 1 THEN '(1) Occurrence Plot: Sufficient for determining type occurrence'
+            WHEN plotvalidationlevel = 2 THEN '(2) Classification Plot: Sufficient for inclusion in a classification revision'
+            WHEN plotvalidationlevel = 3 THEN '(3) Classification Plot: Fully compliant with recommendations'
+         ELSE 'Unknown' END)</attFKTranslationSQL>
       <attListType>closed</attListType>
       <attList>
         <attListItem>
@@ -10347,6 +10351,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(SELECT confidentialityText FROM dba_confidentialitystatus where plot.confidentialitystatus=dba_confidentialitystatus.confidentialitystatus)</attFKTranslationSQL>
       <attListType>closed</attListType>
       <attList>
         <attListItem>
