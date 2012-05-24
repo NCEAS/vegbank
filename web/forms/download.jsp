@@ -1,7 +1,7 @@
 @webpage_top_html@
   @stdvegbankget_jspdeclarations@
   @webpage_head_html@
- 
+
   <title>
    Dataset Download
   </title>
@@ -13,56 +13,56 @@ function getHelpPageId() {
 
 </script>
 
-<style> 
+<style>
 li { padding: 6px; }
-</style> 
+</style>
 
 <!-- VegBank Header -->
   @webpage_masthead_html@
-  
-        <h1>Dataset Download</h1> 
 
-<%  	
-String datasetId = (String)request.getParameter("dsId"); 
+        <h1>Dataset Download</h1>
+
+<%
+String datasetId = (String)request.getParameter("dsId");
 boolean ok = true;
 if (Utility.isStringNullOrEmpty(datasetId)) {
     // error: must be given dataset ID
     ok = false;
-%>  
+%>
     <ul><li class="error">ERROR: dataset ID must be given</li></ul>
 
 <%
 }
-%>  
+%>
 
 
   <logic:messagesPresent message="false">
     <ul>
       <html:messages id="error" message="false">
         <li><bean:write name="error"/></li>
-      </html:messages> 
+      </html:messages>
     </ul>
   </logic:messagesPresent>
 
 
-<%  	
+<%
 if (ok) {
-%>  
+%>
 
 
 <html:form action="/Download">
  		<input type="hidden" name="dsId" value="<%= datasetId %>"/>
 
-      
+
 <bean:define id="formatType" value="flat" />
-    
-   <p class="instructions"> 
+
+   <p class="instructions">
       Please choose a download file data format, then click the download button.</p>
 			<ul class="compact">
               <li class="evenrow padded"> <input type="radio" value="flat" name="formatType" checked="checked" /><img src="@images_link@csv_icon.gif" alt="csv format" />
               <strong>Comma-Separated Values - Plots only</strong> - <a target="_blank" href="@forms_link@examples/download_csv_explanation.jsp">More Information</a>
 
-                  <blockquote> 
+                  <blockquote>
                     CSV files are generic spreadsheet files that can be imported into virtually any spreadsheet or database
                     program, such as Microsoft Excel, Works, Access, Lotus 1-2-3 and many others.
 
@@ -79,51 +79,50 @@ if (ok) {
                     Make empty values <strong>null</strong> (e.g. "98GK44",null,null,"Wetlands")
                 </p>
 
-              </li>  
+              </li>
 
               <li class="oddrow padded">
-                <input type="radio" value="vegbranch" name="formatType" />
+                <!--input type="radio"  value="vegbranch" name="formatType" /-->
                 <img src="@vegbranch_link@images/vegbranch_logo_med.jpg" alt="VegBranch format"/>
-                <strong>VegBranch Import</strong> 
-                   <blockquote> 
-                     Use this format to transfer data from the vegbank.org web site into your local 
-                     <a href="@vegbranch_link@vegbranch.html">VegBranch</a> database.
+                <strong>VegBranch Import</strong>
+                   <blockquote>
+                     Use this format to transfer data from the vegbank.org web site into your local
+                     <a href="@vegbranch_link@vegbranch.html">VegBranch</a> database. [Currently disabled for technical reasons]
                    </blockquote>
                </li>
 
               <li class="evenrow padded">
-                <input type="radio" value="xml" name="formatType"/>
+                <!--input type="radio"  value="xml" name="formatType"/-->
                 <img src="@images_link@xml_icon.gif" alt="XML format" />
                 <strong>XML</strong> - Download plots in the same format used to upload to Vegbank.
                 <blockquote>XML documents are for advanced users.  VegBank's XML format
-                   describes plots, plants, communities and other entities found in our database.  
-                   Please see <a href="@NativeXMLIndexPage@">our XML index</a> for more sample XML 
-                   files and schema files.
+                   describes plots, plants, communities and other entities found in our database.
+                   Please see <a href="@NativeXMLIndexPage@">our XML index</a> for more sample XML
+                   files and schema files. [Currently disabled for technical reasons]
                 </blockquote>
               </li>
               </ul>
                 <input type="hidden" name="dataType" value="all" />
-        
-		
+
+
         <!-- download action -->
-        <p class="instructions">Please note that all downloads will be "zipped" in a .zip file archive.  To 
-        "unzip" the downloaded file, you'll need what most
-        computers have: a decompression program like <a href="http://www.winzip.com">WinZip</a> 
-        (Windows XP has its own decompression utility built in). </p>
-        
-        
+        <p class="instructions">Please note that all downloads will be "zipped" in a .zip file archive.  To
+        "unzip" the downloaded file, you'll need an unzipping program, which is built into most modern systems.
+         </p>
+
+
         <input name="actionDownload" type="image" value="download" border="0" src="@image_server@btn_download.gif" />
 
         <p>&nbsp; </p>
-      
-   
-  </html:form>
-     
-<%  	
-}
-%>  
 
- 
+
+  </html:form>
+
+<%
+}
+%>
+
+
 @webpage_footer_html@
 
 
