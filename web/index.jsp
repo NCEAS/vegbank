@@ -134,7 +134,7 @@ function getHelpPageId() {
     <legend>Tools</legend>
     <ul>
     <li><a href="/nvcrs/">Vegetation Classification</a></li>
-    <li><a href="@searchplugins_link@install-search.html">Firefox toolbar</a></li>
+    <li><a href="@views_link@map_userplots.jsp">Map your own plots</a></li>
     <li><a href="@vegbranch_link@vegbranch.html">VegBranch client database</a></li>
     <li><a href="@vegbranch_link@docs/normalizer/normalizer.html">Data matrix normalizer</a></li>
     </ul>

@@ -213,7 +213,7 @@
   <!-- there is no data, just display menu -->
 <h2>Map your plots</h2>
 
-  <p>This page will map your plots from a CSV file that is publicly accessible.  <strong>They are NOT plots in VegBank.  </strong>
+  <p>This page uses VegBank's mapping capabilities to map your plots from a CSV file that is publicly accessible or from comma-separated values that you enter into the box below.  <strong>These are NOT plots in VegBank.  </strong>
   </p>
 </logic:notPresent>
 
