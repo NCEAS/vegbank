@@ -122,8 +122,8 @@ RewriteRule ^search/comm/(.*)$      @views_link@commconcept_summary.jsp?where=wh
 
 RewriteRule ^search/plant/(.*)$     @views_link@plantconcept_summary.jsp?where=where_plantconcept_mpq&criteriaAsText=+Plant+Name++contains+ALL+words+of+$1&xwhereParams_plantname_0=$1&xwhereParams_plantname_1=pu.plantname&matchType=all&xwhereKey_plantname=xwhere_match&xwhereSearch_plantname=true&xwhereMatchAny_plantname=false&xwhereGlue=AND  [NC,QSA,L,R]
 
-RewriteRule ^nvcrs$        http://herbarium.unc.edu:8080/nvcrs/     [NC,QSA,L]
-RewriteRule ^nvcrs/(.*)$   http://herbarium.unc.edu:8080/nvcrs/$1   [NC,QSA,L]
+RewriteRule ^nvcrs$        http://tango.zo.ncsu.edu:8080/nvcrs/     [NC,QSA,L]
+RewriteRule ^nvcrs/(.*)$   http://tango.zo.ncsu.edu:8080/nvcrs/$1   [NC,QSA,L]
 
 
 RewriteRule ^requestPreassignedAccCode/(.*)/(.*)$ @views_link@getNewRequestID.jsp?tablename=$1&recordcount=$2  [NC,QSA,L]
