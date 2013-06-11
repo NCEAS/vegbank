@@ -9361,6 +9361,23 @@ conditions may change between resampling events.
       <update>1.0.2</update>
       <updateSQLFile>addTop5SppToObs_denormFlds.sql</updateSQLFile>
     </attribute>
+    <attribute>
+          <attID>2309</attID>
+          <attName>hasObservationSynonym</attName>
+          <attLabel>Has Synonym Observation</attLabel>
+          <attModel>denorm</attModel>
+          <attNulls>yes</attNulls>
+          <attType>Boolean</attType>
+          <attKey>n/a</attKey>
+          <attRelType type="n/a" name="n/a"/>
+          <attReferences>n/a</attReferences>
+          <attListType>no</attListType>
+          <attList/>
+          <attNotes>n/a</attNotes>
+          <attDefinition>Denormalized field to show if there is an observation synonym in the observationSynonym table for this observation.</attDefinition>
+          <update>1.0.7</update>
+          <updateSQLFile>addObsSynDenorm.sql</updateSQLFile>
+    </attribute>
   </entity>
   <entity>
     <entityName>observationContributor</entityName>
