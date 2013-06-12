@@ -80,6 +80,11 @@ function getHelpPageId() {
 <TABLE width="100%" border="0" cellpadding="2" cellspacing="2" style="clear: both; display: block;">
 <TR><TD width="55%" valign="top" id="tut_plotdetailleft"><!-- plot level info -->
   <!-- plot-level info removed to different view -->
+  <logic:equal name="onerowofobservation" property="hasobservationsynonym" value="t">
+      <h3>THIS PLOT HAS BEEN <a href="@views_link@observation_summary.jsp?where=where_observationsynonym_synonym&criteriaAsText=that+are+updated+version(s)+of+a+plot&wparam=<bean:write name='observation_pk' />">UPDATED WITH A NEWER PLOT</a>.</h3>
+  </logic:equal>
+  
+  
   <jsp:include page="observation_plotlevel.jsp">
     <jsp:param name="wparam"  value="<%= observation_pk %>" />
   </jsp:include>
