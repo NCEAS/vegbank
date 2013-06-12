@@ -46,7 +46,7 @@ where plantStatus.plantStatus_ID=plantUsage.plantStatus_ID) where
 plantStatus_ID is not null ;
 
 --  this is needed so that grabbing county description works 
-  UPDATE plot set stateProvice = null;
+  UPDATE plot set stateProvince = null;
   
 
      UPDATE plot set stateProvince = 
@@ -346,3 +346,9 @@ UPDATE observation SET interp_bestfit_ci_ID =
     view_taxonobs_withmaxcover AS tob WHERE  
     tob.observation_ID=observation.observation_ID order by maxcover DESC 
     limit 1 OFFSET 0) ;
+
+
+UPDATE observation SET hasobservationsynonym = null WHERE hasobservationsynonym  IS NOT NULL;
+UPDATE observation SET hasobservationsynonym = true WHERE observation_Id IN (SELECT synonymObservation_ID FROM observationSynonym) AND hasObservationSynonym IS NULL;
+
+
