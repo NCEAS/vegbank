@@ -42,7 +42,7 @@ import com.Ostermiller.util.LineEnds;
  *	'$Author: berkley $'
  *	'$Date: 2006-09-05 23:00:02 $'
  *	'$Revision: 1.10 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -55,7 +55,7 @@ import com.Ostermiller.util.LineEnds;
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 /**
  * @author farrell
@@ -65,19 +65,19 @@ import com.Ostermiller.util.LineEnds;
 public class DownloadAction extends Action
 {
 	private static Log log = LogFactory.getLog(DownloadAction.class);
-	private static ResourceBundle sqlStore = 
+	private static ResourceBundle sqlStore =
 			ResourceBundle.getBundle("org.vegbank.common.SQLStore");
 
 	// Supported FormatTypes
 	private static final String XML_FORMAT_TYPE = "xml";
 	private static final String FLAT_FORMAT_TYPE = "flat";
 	private static final String VEGBRANCH_FORMAT_TYPE = "vegbranch";
-	
+
 	// Supported dataTypes
 	private static final String ALL_DATA_TYPE = "all";
 	private static final String SPECIES_DATA_TYPE = "species";
 	private static final String ENVIRONMENTAL_DATA_TYPE = "environmental";
-	
+
 	// Response content Types
 	private static final String ZIP_CONTENT_TYPE = "application/x-zip";
 	private static final String DOWNLOAD_CONTENT_TYPE = "application/x-zip";
@@ -94,7 +94,7 @@ public class DownloadAction extends Action
 	private static ResourceBundle res = ResourceBundle.getBundle("vegbank");
 	private static final String VEGBRANCH_XSL_PATH = res.getString("vegbank2vegbranch_xsl");
 
-	
+
 	public ActionForward execute(
 		ActionMapping mapping,
 		ActionForm form,
@@ -103,21 +103,21 @@ public class DownloadAction extends Action
 	{
 		ActionErrors errors = new ActionErrors();
 		String fwd = null; // Do not go forward if successfull, download file
-		
+
 		// Get the form
 		DynaActionForm thisForm = (DynaActionForm) form;
-		
+
     //System.out.println("thisForm: " + thisForm.toString());
 		Long dsId = (Long)thisForm.get("dsId");
 		String formatType = (String)thisForm.get("formatType");
 		String dataType = (String)thisForm.get("dataType");
 		String[] selectedPlots = (String[])thisForm.get("selectedPlots");
         String s = request.getParameter("blank_empties");
-        boolean blankEmpties = (Utility.isStringNullOrEmpty(s)) ? 
+        boolean blankEmpties = (Utility.isStringNullOrEmpty(s)) ?
                 true: Boolean.valueOf(s).booleanValue();
-		
+
 		log.debug("dsId = " + dsId + ", formatType = " + formatType);
-		
+
 		try
 		{
       try
@@ -128,7 +128,7 @@ public class DownloadAction extends Action
         conn = DBConnectionPool.getInstance().getDBConnection("Need " +
           "connection for inserting dataset");
         conn.setAutoCommit(false);
-        
+
         //this sql gets the user selected items from the dataset
         String sql = "select itemaccessioncode from userdatasetitem " +
           "where userdataset_id = " + dsId;
@@ -136,7 +136,7 @@ public class DownloadAction extends Action
         ResultSet rs = query.executeQuery(sql);
         String accCode;
         Vector plotIds = new Vector();
-        while (rs.next()) 
+        while (rs.next())
         { //add the accession numbers to a vector
            accCode = rs.getString(1);
            plotIds.addElement(accCode);
@@ -159,17 +159,17 @@ public class DownloadAction extends Action
           new ActionMessage("errors.action.failed", sqle.getMessage() ));
         return mapping.findForward("failure");
       }
-      
+
 			// Handle the format type
 			if ( formatType.equalsIgnoreCase( XML_FORMAT_TYPE) )
-			{ 
+			{
         System.out.println("getting plot observations");
 				// Store the returned ModelBean Trees
 				//Collection plotObservations = this.getPlotObservations(selectedPlots);
         System.out.println("getting xml");
 				// wrap in XML
 				String xml = XMLUtil.getVBXML(selectedPlots);
-        
+
 				System.out.println("zipping file with xml: " /*+ xml*/);
 				// Place into file for download
 				//this.initResponseForFileDownload( response, "vegbank_plots.xml", DOWNLOAD_CONTENT_TYPE);
@@ -179,14 +179,14 @@ public class DownloadAction extends Action
 				// ZIP the XML doc
 				/////////////////
 				this.initResponseForFileDownload(response, "vegbank_plots_xml.zip", ZIP_CONTENT_TYPE);
-				
+
 				Hashtable nameContent = new Hashtable();
 				nameContent.put("vb_plot_observation.xml", xml);
 				OutputStream responseOutputStream = response.getOutputStream();
 				responseOutputStream.flush();
-				
-				// TODO: Get the OS of user if possible and return a native file	
-				// For now use DOS style, cause those idiots would freak with anything else ;)					
+
+				// TODO: Get the OS of user if possible and return a native file
+				// For now use DOS style, cause those idiots would freak with anything else ;)
                 ZipUtility.zipTextFiles(nameContent, responseOutputStream);
 				/////////////////
 			} else if ( formatType.equalsIgnoreCase( FLAT_FORMAT_TYPE ) ) {
@@ -197,6 +197,7 @@ public class DownloadAction extends Action
         String taxaSQL = sqlStore.getString("csv_taxonimportance");
         String envSQL = sqlStore.getString("csv_plotandobservation");
         String where = sqlStore.getString("where_inuserdataset_pk_obs");
+        String stemSQL = sqlStore.getString("csv_stemcount");
         String[] sqlParams = new String[1];
         sqlParams[0] = dsId.toString();
         Hashtable nameContent = new Hashtable();
@@ -208,13 +209,16 @@ public class DownloadAction extends Action
             // TAXA
             nameContent.put("plot_taxa.csv", getCSVResults(taxaSQL, where, sqlParams, nulls));
 
+            // STEMS
+            nameContent.put("stems.csv", getCSVResults(stemSQL, where, sqlParams, nulls));
+
             // ENV
             nameContent.put("plot_env.csv", getCSVResults(envSQL, where, sqlParams, nulls));
 
 
             this.initResponseForFileDownload(response, "vegbank_export_csv.zip", ZIP_CONTENT_TYPE);
             OutputStream responseOutputStream = response.getOutputStream();
-            
+
             ZipUtility.zipTextFiles(nameContent, responseOutputStream);
             //ZipUtility.zipTextFiles(nameContent, responseOutputStream, LineEnds.STYLE_DOS);
 
@@ -231,7 +235,7 @@ public class DownloadAction extends Action
 			} else if ( formatType.equalsIgnoreCase( VEGBRANCH_FORMAT_TYPE) ) {
 				// Store the returned ModelBean Trees
 				Collection plotObservations = this.getPlotObservations(selectedPlots);
-		
+
 				// wrap in XML
 				String xml = XMLUtil.getVBXML(plotObservations);
 
@@ -262,21 +266,21 @@ public class DownloadAction extends Action
 				}
 				*/
 
-				
+
 				boolean doZip = true;
 				if (doZip) {
 					/////////////////
 					// ZIP the XML doc
 					/////////////////
 					this.initResponseForFileDownload(response, "vegbranch_import.zip", VEGBRANCH_ZIP_CONTENT_TYPE);
-					
+
 					Hashtable nameContent = new Hashtable();
 					nameContent.put("vegbranch_import.csv", vegbranchCSV);
 					OutputStream responseOutputStream = response.getOutputStream();
 					responseOutputStream.flush();
-					
-					// TODO: Get the OS of user if possible and return a native file	
-					// For now use DOS style, cause those idiots would freak with anything else ;)					
+
+					// TODO: Get the OS of user if possible and return a native file
+					// For now use DOS style, cause those idiots would freak with anything else ;)
 					log.debug("Zipping VegbranchImport.zip");
                     ZipUtility.zipTextFiles(nameContent, responseOutputStream);
 					/////////////////
@@ -306,19 +310,19 @@ public class DownloadAction extends Action
 				Globals.ERROR_KEY,
 				new ActionMessage("errors.action.failed", e.getMessage() ));
 		}
-		
+
 		if ( ! errors.isEmpty() )
 		{
 			saveErrors(request, errors);
-			// Need to put selectedPlots into the request 
-			//TODO: use the form bean instead 
+			// Need to put selectedPlots into the request
+			//TODO: use the form bean instead
 			request.setAttribute("selectedPlots", selectedPlots);
-			return (mapping.getInputForward());	
+			return (mapping.getInputForward());
 		}
-		
+
 		return mapping.findForward(fwd);
 	}
-	
+
 	/**
 	 * @param selectedPlots
 	 * @return
@@ -327,7 +331,7 @@ public class DownloadAction extends Action
 	{
 		Collection plotObsersevations = new ArrayList();
 		DBModelBeanReader dbmbReader = new DBModelBeanReader();
-		
+
 		// Get the plots
 		for ( int i = 0; i < selectedPlots.length ; i++ )
 		{
@@ -337,13 +341,13 @@ public class DownloadAction extends Action
 		dbmbReader.releaseConnection();
 		return plotObsersevations;
 	}
-	
-	private void initResponseForFileDownload(HttpServletResponse response, String downloadFileName , String contentType) 
+
+	private void initResponseForFileDownload(HttpServletResponse response, String downloadFileName , String contentType)
 	{
 		response.setContentType(contentType);
-		response.setHeader("Content-Disposition","attachment; filename="+downloadFileName+";"); 
+		response.setHeader("Content-Disposition","attachment; filename="+downloadFileName+";");
 	}
-	
+
 	private void sendFileToBrowser(String fileContents, HttpServletResponse response ) throws IOException
 	{
 		//log.debug(fileContents);
@@ -406,7 +410,7 @@ public class DownloadAction extends Action
     /**
      *
      */
-    private String getCSVResults(String sqlSelect, String sqlWhere, String[] sqlParams, String nulls) 
+    private String getCSVResults(String sqlSelect, String sqlWhere, String[] sqlParams, String nulls)
             throws IOException {
         String psqlPath = Utility.dbPropFile.getString("psqlPath");
         String dbUser = Utility.dbPropFile.getString("user");
@@ -420,9 +424,9 @@ public class DownloadAction extends Action
         inputFilePathTaxa = Utility.writeTempFile(new StringReader(sqlQuery));
         //outputFilePath = buildOutputFilePath() + "vegbank_export.csv";
 
-        String cmd = psqlPath + " -U " + dbUser + " -d " + dbName + 
+        String cmd = psqlPath + " -U " + dbUser + " -d " + dbName +
                 " -f " + inputFilePathTaxa +
-                " --pset null=" + nulls + 
+                " --pset null=" + nulls +
                 //" -o " + outputFilePath +
                 " -n -A -F , " +
                 " -P footer=false";
