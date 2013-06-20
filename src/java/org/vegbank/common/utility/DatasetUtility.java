@@ -6,7 +6,7 @@
  *	'$Author: mlee $'
  *	'$Date: 2006-09-07 23:27:10 $'
  *	'$Revision: 1.16 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 package org.vegbank.common.utility;
 
 import java.io.*;
@@ -44,12 +44,12 @@ import org.vegbank.common.model.VBModelBean;
 
 /**
  * Creates and manages datasets.
- * 
+ *
  * @author anderson
  */
 public class DatasetUtility
 {
-	
+
 	public static final String TPL_SUCCESS = "dataload-success.vm";
 	public static final String TPL_FAILURE = "dataload-failure.vm";
 	public static final String TPL_ADMIN = "dataload-log.vm";
@@ -92,7 +92,7 @@ public class DatasetUtility
 
     private void initBeanInserter() {
         try {
-            if (bean2db == null) { 
+            if (bean2db == null) {
                 this.bean2db = new VBModelBeanToDB();
             }
 
@@ -113,8 +113,8 @@ public class DatasetUtility
      * the items in this new dataset
      * @return new Userdataset instance
      */
-    public Userdataset createDataset(List beanList, String dsName, 
-            String dsDescription, String dsType, String dsSharing, Long usrId) 
+    public Userdataset createDataset(List beanList, String dsName,
+            String dsDescription, String dsType, String dsSharing, Long usrId)
             throws SQLException{
 
         if (Utility.isStringNullOrEmpty(dsSharing)) {
@@ -148,12 +148,12 @@ public class DatasetUtility
      * the items in this new dataset
      * @return accession code of new dataset or null
      */
-    public AccessionCode insertDataset(List beanList, String dsName, 
-            String dsDescription, String dsType, String dsSharing, Long usrId) 
+    public AccessionCode insertDataset(List beanList, String dsName,
+            String dsDescription, String dsType, String dsSharing, Long usrId)
             throws SQLException{
 
         log.debug("creating dataset - name:" + dsName + ", type:" + dsType + ", usr:" + usrId);
-        Userdataset dsBean = createDataset(beanList, dsName, dsDescription, 
+        Userdataset dsBean = createDataset(beanList, dsName, dsDescription,
                 dsType, dsSharing, usrId);
 
         return insertDataset(dsBean);
@@ -189,8 +189,8 @@ public class DatasetUtility
                 log.debug("inserting dsi: " + key);
                 insertItem(dsi);
             }
-            
-            
+
+
             // PMA: why is this here?
             ///////////insertItem(null);
         }
@@ -199,7 +199,7 @@ public class DatasetUtility
         if (dropKeySet.size() > 0) {
             log.debug("dropping...");
             deleteItems(dsId, new ArrayList(dropKeySet));
-        } 
+        }
 
         // clean up
         newItemsToAdd = new HashMap();
@@ -264,7 +264,7 @@ public class DatasetUtility
      * @param dsId the userdataset_id
      * @param itemAC an itemaccessioncodes as a String
      */
-    public void deleteItem(Long dsId, String itemAC) 
+    public void deleteItem(Long dsId, String itemAC)
             throws SQLException {
 
         if (Utility.isStringNullOrEmpty(itemAC)) { return; }
@@ -290,7 +290,7 @@ public class DatasetUtility
      * @param dsId the userdataset_id
      * @param itemACs a List of itemaccessioncodes as Strings
      */
-    public void deleteItems(Long dsId, List itemACs) 
+    public void deleteItems(Long dsId, List itemACs)
             throws SQLException {
 
         log.debug("deleteItems");
@@ -401,14 +401,18 @@ public class DatasetUtility
         dsiBean.setItemtype(ac.getEntityName());
         // get accessioncode from the db.  The accessionCode passed here is "ideal" but could be something else in db
         //dsiBean.setItemaccessioncode(ac.toString());
-        String accCode = getTableAccessionCodeFromPK(ac.getEntityName(),ac.getEntityId().longValue());
+        String accCode = ac.toString() ; //MTL 2013-06-20, use the accessioncode passed, as it could be lsid.  Not sure about this orginal usage:;getTableAccessionCodeFromPK(ac.getEntityName(),ac.getEntityId().longValue());
         if (Utility.isStringNullOrEmpty(accCode)) {
             log.debug("couldn't get table accession code, so using ideal code");
             accCode = ac.toString();
         }
         dsiBean.setItemaccessioncode(accCode);
         dsiBean.setItemtable(ac.getEntityName());
-        dsiBean.setItemrecord(ac.getEntityId().toString());
+        Long pkId = ac.getEntityId();
+        if (pkId == null) {
+	        pkId= getTablePKFromAccessionCode(ac.getEntityName(),accCode); //the PK will be null if lsid accessioncodes, so have to look it up manually in new function
+		}
+        dsiBean.setItemrecord(pkId.toString());
         dsiBean.setItemdatabase(ITEM_DB);
         log.debug("creating a DSI (ideal accCode): " + ac.toString() + ", itemtable: " + dsiBean.getItemtable() + " and using accCode:" + accCode);
         return dsiBean;
@@ -416,8 +420,55 @@ public class DatasetUtility
 
 
     /**
+     * Get the primary key of the row in the database that has the accessioncode given
+     *
+     * @param tableName
+     * @param accessionCode
+     * @return Long -- primary key  of the record
+     */
+   public static Long getTablePKFromAccessionCode( String tableName, String accessionCode )
+    {
+        StringBuffer sb = new StringBuffer();
+        Long lngPK = null;
+        try
+        {
+            sb.append(
+                "SELECT " + Utility.getPKNameFromTableName(tableName) +" from "+
+        tableName+" where " + Constants.ACCESSIONCODENAME + " = '" +
+        accessionCode + "'"
+            );
+            //if (conn == null || conn.isClosed()) {
+            //    log.debug("connection was null or closed, so opening a new one");
+            //    conn=DBConnectionPool.getInstance().getDBConnection("Need connection for inserting dataset");
+            //}
+            // log.debug("trying to getting PK from db: " + sb.toString());
+            DatabaseAccess daNew = new DatabaseAccess();
+            ResultSet rs = daNew.issueSelect(sb.toString());
+
+            //Statement query = conn.createStatement();
+            //ResultSet rs = query.executeQuery(sb.toString());
+            while (rs.next())
+            {
+                lngPK = new Long(rs.getString(1));
+               // log.debug("have PK from db: " + lngPK);
+            }
+            rs.close();
+        }
+        catch ( SQLException se )
+        {
+           // this.filterSQLException(se, sb.toString());
+           log.debug("ERROR in getting PK from db: " + se.toString());
+        }
+        //log.debug("Query: '" + sb.toString() + "' got PK = " + PK);
+        return lngPK;
+    }
+
+
+
+
+    /**
      * Get the accessionCode of the row in the database that has the same PK given
-     * 
+     *
      * @param tableName
      * @param lngPK
      * @return string -- AccessionCode  of the record
@@ -426,11 +477,11 @@ public class DatasetUtility
     {
         StringBuffer sb = new StringBuffer();
         String accCode = "";
-        try 
+        try
         {
             sb.append(
                 "SELECT " + Constants.ACCESSIONCODENAME +" from "+
-        tableName+" where " + Utility.getPKNameFromTableName(tableName) + " = '" + 
+        tableName+" where " + Utility.getPKNameFromTableName(tableName) + " = '" +
         lngPK + "'"
             );
             //if (conn == null || conn.isClosed()) {
@@ -439,18 +490,18 @@ public class DatasetUtility
             //}
             DatabaseAccess daNew = new DatabaseAccess();
             ResultSet rs = daNew.issueSelect(sb.toString());
-            
+
             //Statement query = conn.createStatement();
             //ResultSet rs = query.executeQuery(sb.toString());
-            while (rs.next()) 
+            while (rs.next())
             {
                 accCode = rs.getString(1);
             }
             rs.close();
         }
-        catch ( SQLException se ) 
-        { 
-           // this.filterSQLException(se, sb.toString());     
+        catch ( SQLException se )
+        {
+           // this.filterSQLException(se, sb.toString());
            log.debug("ERROR in getting accessionCode from db: " + se.toString());
         }
         //log.debug("Query: '" + sb.toString() + "' got PK = " + PK);
@@ -472,7 +523,7 @@ public class DatasetUtility
                 if (!Utility.isStringNullOrEmpty(ac)) {
                     addItem(new AccessionCode(ac));
                 }
-            } catch (Exception ex) { 
+            } catch (Exception ex) {
                 log.error("Problem adding dataset item: " + ac, ex);
             }
         }
@@ -512,7 +563,7 @@ public class DatasetUtility
      * that all results can be added. Query must contain
      *  pk
      *  AC
-     *  
+     *
      * @param query SQL to run
      * @param acField the name of the field containing the AC to add
      */
@@ -520,12 +571,12 @@ public class DatasetUtility
 
         try {
             Long dsId = getOrCreateCurrentDataset();
-            String insert = 
-                "INSERT INTO userdatasetitem (userdataset_id,itemtype,itemdatabase,itemtable,itemrecord,itemaccessioncode) " + 
-                "SELECT '" + curDataset.getUserdataset_id() + "','" + itemType + "','" + Utility.DATABASE_NAME + "','" + itemTable + 
+            String insert =
+                "INSERT INTO userdatasetitem (userdataset_id,itemtype,itemdatabase,itemtable,itemrecord,itemaccessioncode) " +
+                "SELECT '" + curDataset.getUserdataset_id() + "','" + itemType + "','" + Utility.DATABASE_NAME + "','" + itemTable +
                 "', " + pkField + ", " +  acField + " FROM (" + DatabaseUtility.removeSemicolons(query) +
                 ") AS findadd_selection WHERE findadd_selection." + acField + " NOT IN " +
-                "(SELECT udi.itemaccessioncode FROM userdatasetitem udi WHERE userdataset_id='" + 
+                "(SELECT udi.itemaccessioncode FROM userdatasetitem udi WHERE userdataset_id='" +
                 curDataset.getUserdataset_id() + "')";
 
             //log.debug("inserting items with query: " + insert);
@@ -539,7 +590,7 @@ public class DatasetUtility
 
     /**
      * Gets the usrId owner of a dataset.
-     * @return Long usrId which could be null, 
+     * @return Long usrId which could be null,
      *   or Long with value -1 if no dataset found.
      *
      */
@@ -608,7 +659,7 @@ public class DatasetUtility
     public void dropItem(String tableName, Long PK, String ac) throws SQLException {
 
         Userdatasetitem dsiBean = new Userdatasetitem();
-        dsiBean.setUserdataset_id(curDataset.getUserdataset_id()); 
+        dsiBean.setUserdataset_id(curDataset.getUserdataset_id());
         dsiBean.setItemtype(tableName);
         dsiBean.setItemaccessioncode(ac);
 
@@ -706,7 +757,7 @@ public class DatasetUtility
     }
 
     /**
-     * 
+     *
      */
     private Userdataset retrieveDatasetFromDB(String query) {
         ResultSet rs = null;
@@ -730,7 +781,7 @@ public class DatasetUtility
 
 
     /**
-     * Returns the current datacart using the dataset_id 
+     * Returns the current datacart using the dataset_id
      * found in the session, or null.
      */
     public Userdataset getDatacart(HttpSession session) {
@@ -738,7 +789,7 @@ public class DatasetUtility
         if (did == null || did.longValue() == 0) {
             return null;
         }
-        
+
         log.debug("getting datacart from session: " + did);
         return getDataset(did);
     }
@@ -756,7 +807,7 @@ public class DatasetUtility
             ds = getDatasetByName(dsName, ANON_USR_ID);
 
             if (ds == null) {
-                ds = createDataset(null, dsName, DATACART_DESC, 
+                ds = createDataset(null, dsName, DATACART_DESC,
                         TYPE_DATACART, SHARING_PRIVATE, ANON_USR_ID);
             }
         } catch (SQLException ex) {
@@ -776,17 +827,17 @@ public class DatasetUtility
     public Userdataset getOrCreateDatacart(Long usrId) {
         Userdataset ds = null;
         try {
-            if (usrId != null) { 
+            if (usrId != null) {
                 // a real user can only have one datacart
                 ds = getDatacartByUser(usrId);
             }
 
             if (ds == null) {
                 log.debug("+ + + creating new empty datacart + + + usr_id: " + usrId);
-                ds = createDataset(null, DEF_DS_NAME, "", 
+                ds = createDataset(null, DEF_DS_NAME, "",
                         TYPE_DATACART, SHARING_PRIVATE, usrId);
                 AccessionCode dsAC = insertDataset(ds);
-                if (dsAC != null) { 
+                if (dsAC != null) {
                     log.debug("inserted new dataset as datacart: " + dsAC.toString());
                     ds.setUserdataset_id(dsAC.getEntityId().longValue());
                 }
@@ -895,8 +946,8 @@ public class DatasetUtility
             if (l == 0) { return 0; }
             dsId = new Long(l);
         }
-        if (dsId == null) { 
-            return 0; 
+        if (dsId == null) {
+            return 0;
         }
 
         try {
@@ -972,12 +1023,12 @@ public class DatasetUtility
         } else {
             // make sure user owns this dataset
             Long lUsrId = getOwnerId(dsId);
-            if (lUsrId == null) { 
+            if (lUsrId == null) {
                 log.error("setDatacart: no owner for dsId = " + dsId); return 0;
             }
 
             if (lUsrId.longValue() != usrId) {
-                log.warn("setDatacart: DS owner does not match given usrId = " + usrId); return 0; 
+                log.warn("setDatacart: DS owner does not match given usrId = " + usrId); return 0;
             }
 
             // bump user's old datacart
@@ -1035,9 +1086,9 @@ public class DatasetUtility
 
 
     /**
-     * 
+     *
      */
-    private void updateDatasetType(long dsId, String newType) 
+    private void updateDatasetType(long dsId, String newType)
             throws SQLException {
         if (Utility.isStringNullOrEmpty(newType)) {
             log.error("Given dataset type is empty");
@@ -1063,7 +1114,7 @@ public class DatasetUtility
 
 
     /**
-     * 
+     *
      */
     public void setOwner(long usrId, long dsId)
             throws SQLException {
