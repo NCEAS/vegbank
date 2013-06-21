@@ -196,8 +196,11 @@ public class DownloadAction extends Action
         // redir to that file
         String taxaSQL = sqlStore.getString("csv_taxonimportance");
         String envSQL = sqlStore.getString("csv_plotandobservation");
-        String where = sqlStore.getString("where_inuserdataset_pk_obs");
         String stemSQL = sqlStore.getString("csv_stemcount");
+        String obsContribSQL = sqlStore.getString("csv_observationcontributor");
+        String commInterpSQL = sqlStore.getString("csv_comminterpretation");
+        String where = sqlStore.getString("where_inuserdataset_pk_obs");
+
         String[] sqlParams = new String[1];
         sqlParams[0] = dsId.toString();
         Hashtable nameContent = new Hashtable();
@@ -206,14 +209,22 @@ public class DownloadAction extends Action
 
         try {
 
+
+            // ENV
+            nameContent.put("plot_env.csv", getCSVResults(envSQL, where, sqlParams, nulls));
+
             // TAXA
             nameContent.put("plot_taxa.csv", getCSVResults(taxaSQL, where, sqlParams, nulls));
 
             // STEMS
             nameContent.put("stems.csv", getCSVResults(stemSQL, where, sqlParams, nulls));
 
-            // ENV
-            nameContent.put("plot_env.csv", getCSVResults(envSQL, where, sqlParams, nulls));
+            // OBSERVATION CONTRIBUTOR
+            nameContent.put("observation_contributor.csv", getCSVResults(obsContribSQL, where, sqlParams, nulls));
+
+            // COMM INTERPRETATION
+            nameContent.put("plot_community.csv", getCSVResults(commInterpSQL, where, sqlParams, nulls));
+
 
 
             this.initResponseForFileDownload(response, "vegbank_export_csv.zip", ZIP_CONTENT_TYPE);
