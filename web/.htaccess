@@ -61,7 +61,9 @@ RewriteCond %{REQUEST_URI}  ^/get/(.*)/(.*)
 RewriteRule ^get/(.*)/(.*)      @server_address@/vegbank/GenericDispatcher.do?command=Dispatch&view=$1&entity=$2   [NC,QSA,L]
 
 
-#allow lsid citation, in format:  urn:lsid:(domain):(element):(unique ID)
+#allow lsid citation, in format:  urn:lsid:(domain):(element):(unique ID), observation records get a different link
+RewriteRule ^cite/(urn\:lsid\:)([a-z_0-9\.\-]+\:)(observation)(\:.*)$   /get/comprehensive/$3/$1$2$3$4     [NC,QSA,L]
+
 RewriteRule ^cite/(urn\:lsid\:)([a-z_0-9\.\-]+\:)([^\:]+)(\:.*)$        /get/std/$3/$1$2$3$4    [NC,QSA,L]
 
 
