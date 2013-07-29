@@ -199,6 +199,7 @@ public class DownloadAction extends Action
         String stemSQL = sqlStore.getString("csv_stemcount");
         String obsContribSQL = sqlStore.getString("csv_observationcontributor");
         String commInterpSQL = sqlStore.getString("csv_comminterpretation");
+        String stratumSQL = sqlStore.getString("csv_stratum");
         String where = sqlStore.getString("where_inuserdataset_pk_obs");
 
         String[] sqlParams = new String[1];
@@ -215,6 +216,9 @@ public class DownloadAction extends Action
 
             // TAXA
             nameContent.put("plot_taxa.csv", getCSVResults(taxaSQL, where, sqlParams, nulls));
+
+            // STRATA
+            nameContent.put("strata.csv", getCSVResults(stratumSQL, where, sqlParams, nulls));
 
             // STEMS
             nameContent.put("stems.csv", getCSVResults(stemSQL, where, sqlParams, nulls));
