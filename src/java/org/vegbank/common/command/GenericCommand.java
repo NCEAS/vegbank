@@ -79,6 +79,8 @@ public class GenericCommand
 	//private static Pattern subqueryPattern = Pattern.compile("\\S*\\(.*?\\) as ");
 
 	//// MLEE
+	private static Pattern groupbyPattern = Pattern.compile("(.* )(group by )");
+
 	//private static Pattern subqueryPattern = Pattern.compile("\\S*\\([^)]*\\) as ");
 
 	private static Pattern attribAsPattern = Pattern.compile("\\S* +as ");
@@ -418,14 +420,16 @@ public class GenericCommand
 		String selectClause = "";
 		String whereClause = "";
 		String orderBy = "";
+		String whereFormatted = "";
 		StringBuffer sql = new StringBuffer(1024);
 
 		// SELECT
 		if (!Utility.isStringNullOrEmpty(selectClauseKey)) {
 			selectClause = sqlResources.getString(selectClauseKey).toLowerCase();
-			sql.append(selectClause);
+			//sql.append(selectClause);  //MTL: don't do this yet as we may have to adjust where the WHERE statement goes if there is a group by in the statement
 		}
 
+        // MTL: this appears to remove " AS [fieldalias]" and subqueries, which is necessary for determining if we should add "WHERE" or "AND" to the query
 		this.selectClauseWithSimpleAttribs = stripSQLAttribsFromSelect(selectClause);
 
 
@@ -439,7 +443,23 @@ public class GenericCommand
 				// just use the given where clause
 				log.info("Using non-configured (dangerous) where: " + whereClause);
 			}
-			sql.append(buildFormattedWhereClause(whereClause, whereParams, selectClause));
+			// sql.append(buildFormattedWhereClause(whereClause, whereParams, selectClause));
+			whereFormatted = buildFormattedWhereClause(whereClause, whereParams, selectClause);
+			if (this.selectClauseWithSimpleAttribs.indexOf(" group by ") == -1) {
+				//just append as there is no group by:
+				sql.append(selectClause);
+				sql.append(whereFormatted);
+			} else {
+				//have group by in the simplified statement, append WHERE to the place before this in the larger statement
+				Matcher m;
+
+				m = groupbyPattern.matcher(selectClause);
+				sql.append(m.replaceFirst("$1" + " " + whereFormatted + " " + "$2"));
+				log.debug("inserted WHERE before GROUP BY: " + sql.toString());
+			}
+
+	    } else {  //no where, append select to sql
+		  sql.append(selectClause);
 		}
 
 		// ORDER BY
