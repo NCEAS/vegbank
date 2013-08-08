@@ -391,6 +391,8 @@ function interpParams() {
 		   if ((capfontsize.length>0)) {
 			   capEl.style.fontSize = capfontsize;
 		   }
+   } else {
+	 hideCaption();
    }
    // deal with color captions/labels
    var blnShowColorLegend = false;
