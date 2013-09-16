@@ -116,6 +116,13 @@ Plant Interpretation means that you say which plant concept you think a particul
 Notes are comments that you might have on a particular field value.  These can be added to any field in the database, and are useful if you have some insight into an error or incomplete piece of data.  For example, you could add a note to the elevation value of a plot saying that you do not think the elevation was as high as is claimed.
 </atxt>
     </question>
+    
+    <question>
+          <qname>cite</qname>
+          <qtxt>How do I cite VegBank</qtxt>
+          <atxt>You may cite VegBank, as a whole or one or more elements, with the instructions on the <a href="@general_link@cite.html">citation page</a>.  That page also shows how to cite a description of VegBank.</atxt>
+    </question>
+    
     <question>
       <qname>accessioncode</qname>
       <qtxt>What is an Accession Code?</qtxt>
