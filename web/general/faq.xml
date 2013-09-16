@@ -119,7 +119,7 @@ Notes are comments that you might have on a particular field value.  These can b
     
     <question>
           <qname>cite</qname>
-          <qtxt>How do I cite VegBank</qtxt>
+          <qtxt>How do I cite VegBank?</qtxt>
           <atxt>You may cite VegBank, as a whole or one or more elements, with the instructions on the <a href="@general_link@cite.html">citation page</a>.  That page also shows how to cite a description of VegBank.</atxt>
     </question>
     
