@@ -1,5 +1,5 @@
 @webpage_top_html@
-  
+
   @webpage_head_html@
 
 <TITLE>Cite or Link to VegBank</TITLE>
@@ -10,32 +10,44 @@ function getHelpPageId() {
 
 </script>
   @webpage_masthead_html@
- 
+
 
   <h2>Cite or Link to VegBank</h2>  <h4>Why Cite or Link?</h4>
-  <p>One of VegBank's strengths is that its data is <strong>permanently archived</strong>.  
-  This means that you can cite a plot in VegBank and others will be able to 
+  <p>One of VegBank's strengths is that its data is <strong>permanently archived</strong>.
+  This means that you can cite a plot in VegBank and others will be able to
   follow your citation hyperlink to see the same data you saw at the time of citation.
   </p>
   <h4>How do I cite?</h4>
-  <p>To cite VegBank data, first find the <strong>Accession Code</strong>
-  of the plot (or other data) to which you want to link.  An Accession Code is a unique
-  identifier of VegBank data found on the detailed views of plots (and other data).  </p>
-  
+ <p>To cite a description of VegBank, please use the following citation:</p>
+  <blockquote>
+Peet, R.K., M.T. Lee, M.D. Jennings, & D. Faber-Langendoen. 2012. VegBank – a permanent, open-access archive for vegetation-plot data. Biodiversity and Ecology 4: 233-241.
+  </blockquote>
+
+  <p>To cite the VegBank database as a whole or a single entity in the database, use the following citation: </p>
+
+  <blockquote>
+  Peet, R.K., M.T. Lee, M.D. Jennings, D. Faber-Langendoen (eds). 2013.
+  VegBank: The vegetation plot archive of the Ecological Society of America. http://vegbank.org; searched on [Day, Month, Year].
+  </blockquote>
+
+
+  <p>The URL (web address) may be modified to cite a specific item in VegBank (such as a plot or plant concept).  To do this, find its <strong>Accession Code</strong> (the unique identifier for VegBank data)
+  which can be found on the detailed views of plots (and other data).  </p>
+
   <p>Once you know the Accession Code, use the following pattern to create a URL (web address): </p>
   <blockquote>http://vegbank.org/cite/[AccessionCode]</blockquote>
   <p>[AccessionCode] is the Accession Code of the plot or other data to cite.</p>
-  
-  <h4>Example</h4>
+
+  <h4>Examples</h4>
   <p>Cite <a href="@cite_link@VB.Ob.3736.GRSM125">this plot</a>
   with the following URL: <strong>http://vegbank.org/cite/VB.Ob.3736.GRSM125</strong> </p>
     <p>Cite <a href="@cite_link@VB.CC.5728.CEGL003906">this community</a>
     with the following URL: <strong>http://vegbank.org/cite/VB.CC.5728.CEGL003906</strong> </p>
-  
+
   <p>Cite <a href="@cite_link@VB.PC.54588.SPOROBOLUSAIROI">this plant</a>
     with the following URL: <strong>http://vegbank.org/cite/VB.PC.54588.SPOROBOLUSAIROI</strong> </p>
-  
-  <p>Any VegBank data that has an Accession Code can be cited in this manner.</p>
+
+  <p>Any item in VegBank that has an Accession Code may be cited in this manner.</p>
   <h4>Future Development</h4>
   <p>
   We plan to add the date and time in which something was viewed on VegBank to the Accession Code.  VegBank
@@ -46,8 +58,8 @@ function getHelpPageId() {
   in a journal article, and you want to see the data they used.  If changes have taken place
   since that person saw the data, you will not be seeing the data they used without this functionality.
   </p>
-  
-  
+
+
 @webpage_footer_html@
 
 
