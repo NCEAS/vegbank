@@ -157,9 +157,9 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <!--mail server props-->
     <property name="mailServer" value="${mail_host}"/>
     <property name="mailPort" value="${mail_port}"/>
-    <property name="listserv" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
-    <property name="listservArchive" value="http://mercury.nceas.ucsb.edu/vegbank/pipermail/"/>
-    <property name="listservUserOptions" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/options/"/>
+    <property name="listserv" value="http://lists.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
+    <property name="listservArchive" value="http://lists.nceas.ucsb.edu/vegbank/pipermail/"/>
+    <property name="listservUserOptions" value="http://lists.nceas.ucsb.edu/vegbank/mailman/options/"/>
     <!--rmi server props-->
     <property name="rmiServer" value="${rmiserver}"/>
 

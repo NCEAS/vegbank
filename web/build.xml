@@ -215,9 +215,9 @@
 		<filter token="nestedquerybuilder" value="/${web.context_uri}/servlet/QueryBuilderServlet"/>
 		<filter token="authenticationservlet" value="/${web.context_uri}/servlet/authenticate"/>
 		<!-- listserv -->
-		<filter token="listservinfo_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
-		<filter token="listservarchive_link" value="http://mercury.nceas.ucsb.edu/vegbank/pipermail/"/>
-		<filter token="listservuser_link" value="http://mercury.nceas.ucsb.edu/vegbank/mailman/options/"/>
+		<filter token="listservinfo_link" value="http://lists.nceas.ucsb.edu/vegbank/mailman/listinfo/"/>
+		<filter token="listservarchive_link" value="http://lists.nceas.ucsb.edu/vegbank/pipermail/"/>
+		<filter token="listservuser_link" value="http://lists.nceas.ucsb.edu/vegbank/mailman/options/"/>
 		<!-- Struts -->
 		<filter token="DisplayUploadPlotAction" value="/${web.context_uri}/DisplayUploadPlotAction.do"/>
 		<!-- FIXME: DONE? Mar 8 2011 MTL.  Should be in a prepare target -->
