@@ -289,6 +289,7 @@ function setQueryText() {
 
 <!-- If nothing is set to be shown, then show some things anyway. -->
 <bean:define id="hasshowparams" value="false" />
+
 <logic:present parameter="show_statecountry"><bean:define id="show_statecountry" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_elev"><bean:define id="show_elev" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_latlong"><bean:define id="show_latlong" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
@@ -302,6 +303,7 @@ function setQueryText() {
 <logic:present parameter="show_datesampled"><bean:define id="show_datesampled" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_dateentered"><bean:define id="show_dateentered" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_area"><bean:define id="show_area" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
+<logic:present parameter="show_plotvalidationlevel"><bean:define id="show_plotvalidationlevel" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_covermeth"><bean:define id="show_covermeth" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_stratummeth"><bean:define id="show_stratummeth" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
 <logic:present parameter="show_plotcode"><bean:define id="show_plotcode" value="on" /><bean:define id="hasshowparams" value="true" /></logic:present>
@@ -314,6 +316,7 @@ function setQueryText() {
   <bean:define id="show_plants" value="on" />
   <bean:define id="show_comms" value="on" />
   <bean:define id="show_statecountry" value="on" />
+  <bean:define id="show_plotvalidationlevel" value="on" />
 </logic:equal>
 
  
@@ -400,7 +403,9 @@ function setQueryText() {
 	  <logic:present name="show_datesampled"><input type="checkbox" name="show_datesampled" checked="checked" />Date Sampled<br/></logic:present>
 	  <logic:present name="show_dateentered"><input type="checkbox" name="show_dateentered" checked="checked" />Date Entered<br/></logic:present>
 	  <logic:present name="show_area"><input type="checkbox" name="show_area" checked="checked" />Plot Size<br/></logic:present>
+	  <logic:present name="show_plotvalidationlevel"><input type="checkbox" name="show_plotvalidationlevel" checked="checked" />Plot Quality<br/></logic:present>
 	  <logic:present name="show_covermeth"><input type="checkbox" name="show_covermeth" checked="checked" />Cover Method<br/></logic:present>
+	  
 	  <logic:present name="show_stratummeth"><input type="checkbox" name="show_stratummeth" checked="checked" />Stratum Method<br/></logic:present>
             <logic:present name="show_plotcode"><input type="checkbox" name="show_plotcode" checked="checked" />Author's Plot Code<br/></logic:present>
 	  <logic:present name="show_project"><input type="checkbox" name="show_project" checked="checked" />Project<br/></logic:present>
@@ -423,6 +428,9 @@ function setQueryText() {
 	  <logic:notPresent name="show_datesampled"><input type="checkbox" name="show_datesampled"  />Date Sampled<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_dateentered"><input type="checkbox" name="show_dateentered"  />Date Entered<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_area"><input type="checkbox" name="show_area"  />Plot Size<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  
+	  <logic:notPresent name="show_plotvalidationlevel"><input type="checkbox" name="show_plotvalidationlevel"  />Plot Quality<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
+	  
 	  <logic:notPresent name="show_covermeth"><input type="checkbox" name="show_covermeth"  />Cover Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
 	  <logic:notPresent name="show_stratummeth"><input type="checkbox" name="show_stratummeth"  />Stratum Method<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
             <logic:notPresent name="show_plotcode"><input type="checkbox" name="show_plotcode" />Author's Plot Code<br/><% intAdditionalWritten = 2 ; %></logic:notPresent>
@@ -498,6 +506,8 @@ function setQueryText() {
 		  <logic:present name="show_datesampled"><input type="hidden" name="show_datesampled" value="on" /></logic:present>
 		  <logic:present name="show_dateentered"><input type="hidden" name="show_dateentered" value="on" /></logic:present>
 		  <logic:present name="show_area"><input type="hidden" name="show_area" value="on" /></logic:present>
+		  
+		  <logic:present name="show_plotvalidationlevel"><input type="hidden" name="ow_plotvalidationlevel" value="on" /></logic:present>
 		  <logic:present name="show_covermeth"><input type="hidden" name="show_covermeth" value="on" /></logic:present>
 		  <logic:present name="show_stratummeth"><input type="hidden" name="show_stratummeth" value="on" /></logic:present>
                       <logic:present name="show_plotcode"><input type="hidden" name="show_plotcode" value="on" /></logic:present>
@@ -1046,6 +1056,7 @@ function setQueryText() {
 	
 	
 	  <bean:define id="hideCurr" value="show" />
+	               <logic:notPresent name="show_plotvalidationlevel">
 	  	        <logic:notPresent name="show_covermeth">
 	  		<logic:notPresent name="show_stratummeth">
 	  		  <logic:notPresent name="show_project">
@@ -1055,7 +1066,7 @@ function setQueryText() {
 	  		  </logic:notPresent>
 	  		</logic:notPresent>
 	  	        </logic:notPresent> 
-	  	    
+	  	    </logic:notPresent> 
 	    <DIV id="groupDEF" class='<bean:write name="hideCurr" />'>
 	<!-- sampling methodology : MORE -->
 	
@@ -1066,6 +1077,28 @@ function setQueryText() {
 	
     
    <!-- new: don't just hide, remove if not selected: -->
+   
+   
+   
+   
+      <logic:present name="show_plotvalidationlevel">
+   	<p>Plot Quality:<br/>
+                   <input type="hidden" name="xwhereKey_plotvalidationlevel" value="xwhere_in" />
+                   <input type="hidden" name="xwhereParams_plotvalidationlevel_1" value="plotvalidationlevel" />
+                   <select name="xwhereParams_plotvalidationlevel_0" size="4" multiple="multiple">
+           
+   		        <option value="" selected>--ANY--</option>
+                                
+                    <option value='1'>(1) sufficient for determining type occurrence</option>
+                    <option value='2'>(2) sufficient for inclusion in a classification revision</option>
+                    <option value='3'>(3) sufficient for classification and meets best practices</option>
+                 
+   		      </select>
+   	    </p>
+      <!-- new: don't just hide, remove if not selected: -->
+   </logic:present><!-- name="show_plotvalidationlevel"-->
+   
+   
    <logic:present name="show_covermeth">
 	<p>Cover Method Name:<br/>
                 <input type="hidden" name="xwhereKey_covermethod" value="xwhere_in" />
