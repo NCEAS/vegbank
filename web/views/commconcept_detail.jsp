@@ -240,7 +240,14 @@ function getHelpPageId() {
 	  href="http://www.natureserve.org/explorer/servlet/NatureServe?searchCommunityUid=<bean:write name='usagebean' property='commname_id_transl' />"
 	  title="An authoritative source for information on the plants, animals, and ecological communities of the United States and Canada. 	      NatureServe Explorer is a product of NatureServe and its network of natural heritage member programs.">NatureServe 
 	  Explorer<img border="0" src="@image_server@natureserveexplorer.png" alt="NatureServe Explorer logo" /></a>
-	             </logic:equal>     
+	             </logic:equal>  
+	             <logic:equal name="statusbean" property="commconceptstatus" value="Provisional">
+		     	               <a target="_new" 
+		     	  href="http://www.natureserve.org/explorer/servlet/NatureServe?searchCommunityUid=<bean:write name='usagebean' property='commname_id_transl' />"
+		     	  title="An authoritative source for information on the plants, animals, and ecological communities of the United States and Canada. 	      NatureServe Explorer is a product of NatureServe and its network of natural heritage member programs.">NatureServe 
+		     	  Explorer<img border="0" src="@image_server@natureserveexplorer.png" alt="NatureServe Explorer logo" /></a>
+	             </logic:equal> 
+	             
 	          </logic:equal>  
       </logic:equal>
       
