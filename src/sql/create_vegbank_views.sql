@@ -48,6 +48,8 @@ CREATE VIEW view_emb_embargo_complete AS
  CREATE VIEW view_notEmb_commInterpretation AS SELECT * FROM commInterpretation where emb_commInterpretation<6;
  CREATE VIEW view_notEmb_disturbanceObs AS SELECT * FROM disturbanceObs where emb_disturbanceObs<6;
  CREATE VIEW view_notEmb_observation AS SELECT * FROM observation where emb_observation<6;
+ CREATE VIEW view_notEmb_observationContributor AS SELECT observationContributor.* FROM observationContributor inner join observation on observationContributor.observation_ID=observation.observation_ID where observation.emb_observation<6;
+ 
  CREATE VIEW view_notEmb_plot AS SELECT * FROM plot where emb_plot<6;
  CREATE VIEW view_notEmb_soilObs AS SELECT * FROM soilObs where emb_soilObs<6;
  CREATE VIEW view_notEmb_stemCount AS SELECT * FROM stemCount where emb_stemCount<6;
@@ -56,6 +58,26 @@ CREATE VIEW view_emb_embargo_complete AS
  CREATE VIEW view_notEmb_taxonImportance AS SELECT * FROM taxonImportance where emb_taxonImportance<6;
  CREATE VIEW view_notEmb_taxonInterpretation AS SELECT * FROM taxonInterpretation where emb_taxonInterpretation<6;
  CREATE VIEW view_notEmb_taxonObservation AS SELECT * FROM taxonObservation where emb_taxonObservation<6;
+
+ CREATE VIEW view_export_classContributor AS SELECT * FROM view_notemb_classContributor;
+ CREATE VIEW view_export_commClass AS SELECT * FROM view_notemb_commClass;
+ CREATE VIEW view_export_commInterpretation AS SELECT * FROM view_notemb_commInterpretation;
+ CREATE VIEW view_export_disturbanceObs AS SELECT * FROM view_notemb_disturbanceObs;
+ 
+ CREATE VIEW view_export_observation AS SELECT * FROM view_notemb_observation;
+ CREATE VIEW view_export_observationcontributor AS SELECT * FROM view_notemb_observationcontributor;
+ -- PLOT requires shifting field names to remove some fields for confidential plots
+ 
+ CREATE VIEW view_export_plot_pre AS SELECT plot_id, authorplotcode, reference_id, parent_id, locationaccuracy, confidentialitystatus, latitude, longitude, CASE WHEN confidentialitystatus>0 THEN null ELSE authorlocation END as authorlocation_emb, CASE WHEN confidentialitystatus>0 THEN null ELSE locationnarrative END as locationnarrative_emb, azimuth, dsgpoly, shape, area, standsize, placementmethod, permanence, layoutnarrative, elevation, elevationaccuracy, elevationrange, slopeaspect, minslopeaspect, maxslopeaspect, slopegradient, minslopegradient, maxslopegradient, topoposition, landform, surficialdeposits, rocktype, stateprovince, country, submitter_surname, submitter_givenname, submitter_email, notespublic, notesmgt, revisions, dateentered, emb_plot, plotrationalenarrative, accessioncode FROM view_notemb_plot;
+ CREATE VIEW view_export_plot AS SELECT plot_id, authorplotcode, reference_id, parent_id, locationaccuracy, confidentialitystatus, latitude, longitude, authorlocation_emb as authorlocation, locationnarrative_emb as locationnarrative, azimuth, dsgpoly, shape, area, standsize, placementmethod, permanence, layoutnarrative, elevation, elevationaccuracy, elevationrange, slopeaspect, minslopeaspect, maxslopeaspect, slopegradient, minslopegradient, maxslopegradient, topoposition, landform, surficialdeposits, rocktype, stateprovince, country, submitter_surname, submitter_givenname, submitter_email, notespublic, notesmgt, revisions, dateentered, emb_plot, plotrationalenarrative, accessioncode  FROM view_export_plot_pre;
+ 
+ CREATE VIEW view_export_soilObs AS SELECT * FROM view_notemb_soilObs;
+ CREATE VIEW view_export_stemCount AS SELECT * FROM view_notemb_stemCount;
+ CREATE VIEW view_export_stemLocation AS SELECT * FROM view_notemb_stemLocation;
+ CREATE VIEW view_export_taxonAlt AS SELECT * FROM view_notemb_taxonAlt;
+ CREATE VIEW view_export_taxonImportance AS SELECT * FROM view_notemb_taxonImportance;
+ CREATE VIEW view_export_taxonInterpretation AS SELECT * FROM view_notemb_taxonInterpretation;
+ CREATE VIEW view_export_taxonObservation AS SELECT * FROM view_notemb_taxonObservation;
 
 ------------------
 -- END EMBARGO VIEWS 
