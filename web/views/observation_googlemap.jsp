@@ -80,8 +80,8 @@
            <%@ include file="includeviews/sub_plotmappingdata.jsp" %>
          </div>
          <!-- define javascript call for this plot: -->
-          <bean:define id="currlat"><bean:write name="onerowofobservation" property="latitude" /></bean:define>
-          <bean:define id="currlong"><bean:write name="onerowofobservation" property="longitude" /></bean:define>
+          <bean:define id="currlat"><bean:write name="onerowofobservation" property="latitude" /><logic:empty name="onerowofobservation" property="latitude">0</logic:empty></bean:define>
+          <bean:define id="currlong"><bean:write name="onerowofobservation" property="longitude" /><logic:empty name="onerowofobservation" property="longitude">0</logic:empty></bean:define>
           <bean:define id="curraccuracy"><bean:write name="onerowofobservation" property="locationaccuracy" /><logic:empty name="onerowofobservation" property="locationaccuracy">-1</logic:empty></bean:define>
           <bean:define id="jsazimuth"><bean:write name="onerowofobservation" property="azimuth" /><logic:empty name="onerowofobservation" property="azimuth">null</logic:empty></bean:define>
           <div class="hidden" id="obsid_<bean:write name='obsId' />_dsgpoly"><bean:write name="onerowofobservation" property="dsgpoly" /><logic:empty name="onerowofobservation" property="dsgpoly">null</logic:empty></div>
