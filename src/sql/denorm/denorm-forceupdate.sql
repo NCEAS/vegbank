@@ -208,7 +208,7 @@ UPDATE taxonobservation set int_origPlantCommon =
 
 UPDATE taxonobservation set int_currPlantConcept_ID = 
 (select min(plantconcept_ID) from taxoninterpretation 
-     WHERE originalinterpretation=true AND taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) 
+     WHERE currentinterpretation=true AND taxonobservation.taxonobservation_id = taxoninterpretation.taxonobservation_id) 
    ;
 
 UPDATE taxonobservation set int_currPlantScifull = 

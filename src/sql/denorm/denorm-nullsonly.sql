@@ -230,7 +230,7 @@ UPDATE taxonobservation set int_origPlantCommon = (select common from
 
 UPDATE taxonobservation set int_currPlantConcept_ID = 
    (select min(plantconcept_ID) from taxoninterpretation 
-     WHERE originalinterpretation=true AND taxonobservation.taxonobservation_id = 
+     WHERE currentinterpretation=true AND taxonobservation.taxonobservation_id = 
      taxoninterpretation.taxonobservation_id) 
    WHERE int_currPlantConcept_ID is null ;
 
