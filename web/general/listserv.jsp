@@ -44,29 +44,21 @@
   % -->
 
 
-<!-- <p>Now I'd show: <%= strPg %> </p> -->
-<p class="psmall">The following iframe shows the VegBank listserv information.  Anyone may read the list archives.
-   Remember that passwords and emails for the listservs are maintained separately from the normal VegBank login email and password. 
+
+<p class="psmall">Below are links to the VegBank listservs.  Anyone may read the list archives.
+  The lists are now managed on Google Groups. 
    See <a href="@general_link@contact.html">the contact page</a> for more information about lists.
-   If your browser doesn't support iframes, <a href='<bean:write name="beanPage" />'>you may view the page here</a>.
+   
    </p>
    	
-   <p><strong>Menu of lists:</strong> (Tip: Log in to VegBank before clicking the edit links below.) <br/>
-      --<strong>VegBank Users:</strong> <a href="@general_link@listserv.jsp?list=users&toget=info">info</a>, 
-   <a href="@general_link@listserv.jsp?list=users&toget=archive">read</a>,  
-   <a href="@general_link@listserv.jsp?list=users&toget=edit">edit options</a> (login to VegBank required)
+   <p><strong>Menu of lists:</strong>  <br/>
+      --<strong><a href="https://groups.google.com/a/vegbank.org/d/forum/users">VegBank Users</a></strong> 
    <br/>
-                     --<strong>VegBranch:</strong> 
-  <a href="@general_link@listserv.jsp?list=vegbranch&toget=info">info</a>, 
-  <a href="@general_link@listserv.jsp?list=vegbranch&toget=archive">read</a>, 
-  <a href="@general_link@listserv.jsp?list=vegbranch&toget=edit">edit options</a> (login to VegBank required)
+                     --<strong><a href="https://groups.google.com/a/vegbank.org/d/forum/vegbranch">VegBranch</a></strong> 
+ 
                      </p>
    <p></p>
-     
-     
-                  
-   <iframe width="695" height="540" src='<bean:write name="beanPage" />' >
-   </iframe><!-- closing element is needed as separate from start for iframe -->
+      
    
    
    
