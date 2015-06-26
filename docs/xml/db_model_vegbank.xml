@@ -4193,6 +4193,7 @@
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
+      <attFKTranslationSQL>(select shortName from reference where reference.reference_ID=commclass.classpublication_id)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the reference table</attNotes>
@@ -4528,12 +4529,14 @@
       <attKey>FK</attKey>
       <attRelType type="normal" name="n/a"/>
       <attReferences>reference.reference_ID</attReferences>
+      <attFKTranslationSQL>(select shortName from reference where reference.reference_ID=comminterpretation.commAuthority_ID)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>Foreign key into the reference table</attNotes>
       <attDefinition>Link to the reference from which information on the community concept was obtained during the classification event. (A case could be made for this being moved to reference.)</attDefinition>
       <attForms>
         <formShow name="Detail">493</formShow>
+        <formShow name="Summary">490.5</formShow>
         <formShow name="csvvegbranch">146</formShow>
       </attForms>
       <update>1.0.0</update>
