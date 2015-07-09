@@ -191,7 +191,7 @@ public class Utility implements Constants
 			return null;
 
 		// List of characters to escape
-		char[] specialChar = {'\'', '$', '^'};
+		char[] specialChar = {'\''} ;  //, '$', '^'};  MTL July 9, 2015: $ and ^ and loading with \ in front of them when this is here.
 
 		for (int i = 0; i < specialChar.length ; i++)
 		{
@@ -205,7 +205,7 @@ public class Utility implements Constants
 				for ( int ii = 0; ii < s.length(); ii++ )
 				{
 					if ( (c=s.charAt(ii)) == currentChar  )
-						hold.append ("\\" + currentChar );
+						hold.append ("'" + currentChar );  // MTL July 9, 2015: only escaping ' with another ' now, \ doesn't work
 					else
 						hold.append(c);
 				}
