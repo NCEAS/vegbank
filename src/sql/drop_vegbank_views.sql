@@ -1,3 +1,28 @@
+drop view view_busRule_plotsizeshape;
+DROP view view_busRule_duplStratumType;
+DROP view view_busRule_duplcovercode;
+
+drop view view_emb_embargo_complete;
+drop view view_emb_embargo_currentfullonly;
+
+
+drop view view_export_classcontributor;
+drop view view_export_commclass;
+drop view view_export_comminterpretation;
+drop view view_export_disturbanceobs;
+drop view view_export_observation;
+drop view view_export_observationcontributor;
+drop view view_export_plot;
+drop view view_export_plot_pre;
+drop view view_export_soilobs;
+drop view view_export_stemcount;
+drop view view_export_stemlocation;
+drop view view_export_taxonalt;
+drop view view_export_taxonimportance;
+drop view view_export_taxoninterpretation;
+drop view view_export_taxonobservation;
+
+
 DROP VIEW view_dbafielddesc_notimpl;
 DROP VIEW view_plotall_withembargo;
 
@@ -41,6 +66,7 @@ DROP VIEW view_notemb_taxonImportance;
 DROP VIEW view_notemb_taxonInterpretation;
 DROP VIEW view_notemb_taxonObservation;
 DROP VIEW view_notemb_observation;
+DROP VIEW view_notemb_observationcontributor;
 DROP VIEW view_notemb_plot;
 
 
