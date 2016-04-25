@@ -12979,7 +12979,7 @@ conditions may change between resampling events.
       <attID>1332</attID>
       <attName>stateProvince</attName>
       <attLabel>State or Province</attLabel>
-      <attModel>denorm</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (55)</attType>
       <attKey>n/a</attKey>
@@ -13001,7 +13001,7 @@ conditions may change between resampling events.
       <attID>1335</attID>
       <attName>country</attName>
       <attLabel>Country</attLabel>
-      <attModel>denorm</attModel>
+      <attModel>logical</attModel>
       <attNulls>yes</attNulls>
       <attType>varchar (100)</attType>
       <attKey>n/a</attKey>
