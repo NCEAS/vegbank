@@ -15,7 +15,7 @@
 --PRIMARY KEY ( PLANTCONCEPT_ID )
 --);
 
-delete from temptbl_std_commnames;
+delete from temptbl_std_plantnames;
 
 INSERT INTO temptbl_std_plantnames (plantConcept_ID, sciname, scinamenoauth,code,common, plantname) 
   SELECT plantConcept_ID, 
