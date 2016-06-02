@@ -79,6 +79,134 @@
 	<%@ include file="includeviews/sub_haddata.jsp" %>
 	<tr><th>Methods Fields:</th><th>&nbsp;</th></tr>
 	<bean:define id="hadData" value="false" />
+<!-- customize dates with less than "exact" accuracy -->
+
+<logic:notEmpty name="onerowofobservation" property="obsstartdate">
+<tr class="@nextcolorclass@">
+<td class="observation_obsstartdate datalabel" title="The date of the observation, or the first day if the observation spanned more than one day.">Observation Start Date <a title="Click here for definition of this field." target="_blank" class="image" href="/dd/observation/obsstartdate" onclick="popupDD('/dd/observation/obsstartdate'); return false;"><span class="ddlink"><img src="@images_link@question.gif" alt="?" border="0"></span></a></td><td class="observation_obsstartdate">
+<logic:notEmpty name="onerowofobservation" property="obsstartdate_datetrunc">
+<span title="<bean:write name='onerowofobservation' property='obsstartdate' />">
+
+
+
+<logic:equal name="onerowofobservation" property="dateaccuracy" value="One year">
+    @subst_lt@dt:format pattern="yyyy"@subst_gt@
+  	  @subst_lt@dt:parse pattern="yyyy-MM-dd"@subst_gt@
+  	<bean:write name="onerowofobservation" property="obsstartdate_datetrunc"></bean:write>
+  	   @subst_lt@/dt:parse@subst_gt@
+	   @subst_lt@/dt:format@subst_gt@
+</logic:equal>
+
+<!-- have to next notEquals so we get things to print only once -->
+<logic:notEqual name="onerowofobservation" property="dateaccuracy" value="One year">
+    <logic:equal name="onerowofobservation" property="dateaccuracy" value="Three years">
+        @subst_lt@dt:format pattern="yyyy"@subst_gt@
+      	  @subst_lt@dt:parse pattern="yyyy-MM-dd"@subst_gt@
+      	<bean:write name="onerowofobservation" property="obsstartdate_datetrunc"></bean:write>
+      	   @subst_lt@/dt:parse@subst_gt@
+    	   @subst_lt@/dt:format@subst_gt@  
+    </logic:equal>
+    <logic:notEqual name="onerowofobservation" property="dateaccuracy" value="Three years">
+          <logic:equal name="onerowofobservation" property="dateaccuracy" value="Ten years">
+	          @subst_lt@dt:format pattern="yyyy"@subst_gt@
+	        	  @subst_lt@dt:parse pattern="yyyy-MM-dd"@subst_gt@
+	        	<bean:write name="onerowofobservation" property="obsstartdate_datetrunc"></bean:write>
+	        	   @subst_lt@/dt:parse@subst_gt@
+	      	   @subst_lt@/dt:format@subst_gt@  
+          </logic:equal>
+          <logic:notEqual name="onerowofobservation" property="dateaccuracy" value="Ten years">
+          @subst_lt@dt:format pattern="dd-MMM-yyyy"@subst_gt@
+  	  @subst_lt@dt:parse pattern="yyyy-MM-dd"@subst_gt@
+  	<bean:write name="onerowofobservation" property="obsstartdate_datetrunc"></bean:write>
+  	   @subst_lt@/dt:parse@subst_gt@
+	   @subst_lt@/dt:format@subst_gt@
+	   </logic:notEqual> <!-- not 10 years -->
+    </logic:notEqual> <!-- not 3 years -->  
+</logic:notEqual> <!-- not 1 year -->
+<logic:notEmpty name="onerowofobservation" property="dateaccuracy">
+<logic:notEqual name="onerowofobservation" property="dateaccuracy" value="Exact">
+   &plusmn; <bean:write name="onerowofobservation" property="dateaccuracy"/>	
+</logic:notEqual>	
+</logic:notEmpty>
+	 </span>
+</logic:notEmpty>
+<logic:empty name="onerowofobservation" property="obsstartdate">
+<logic:notEqual parameter="textoutput" value="true">&nbsp;</logic:notEqual>
+</logic:empty>
+</td>
+</tr>
+<bean:define id="hadData" value="true"></bean:define>
+</logic:notEmpty><logic:notEmpty name="onerowofobservation" property="obsenddate">
+<tr class="@nextcolorclass@">
+<td class="observation_obsenddate datalabel" title="If the observation event spanned more than a single day, this is the last day on which observations were made.">Observation End Date <a title="Click here for definition of this field." target="_blank" class="image" href="/dd/observation/obsenddate" onclick="popupDD('/dd/observation/obsenddate'); return false;"><span class="ddlink"><img src="@images_link@question.gif" alt="?" border="0"></span></a></td><td class="observation_obsenddate">
+<logic:notEmpty name="onerowofobservation" property="obsenddate_datetrunc">
+<span title="<bean:write name='onerowofobservation' property='obsenddate' />">
+	  <logic:equal name="onerowofobservation" property="dateaccuracy" value="One year">
+	      @subst_lt@dt:format pattern="yyyy"@subst_gt@
+	    	  @subst_lt@dt:parse pattern="yyyy-MM-dd"@subst_gt@
+	    	<bean:write name="onerowofobservation" property="obsenddate_datetrunc"></bean:write>
+	    	   @subst_lt@/dt:parse@subst_gt@
+	  	   @subst_lt@/dt:format@subst_gt@
+	  </logic:equal>
+	  
+	  <!-- have to next notEquals so we get things to print only once -->
+	  <logic:notEqual name="onerowofobservation" property="dateaccuracy" value="One year">
+	      <logic:equal name="onerowofobservation" property="dateaccuracy" value="Three years">
+	          @subst_lt@dt:format pattern="yyyy"@subst_gt@
+	        	  @subst_lt@dt:parse pattern="yyyy-MM-dd"@subst_gt@
+	        	<bean:write name="onerowofobservation" property="obsenddate_datetrunc"></bean:write>
+	        	   @subst_lt@/dt:parse@subst_gt@
+	      	   @subst_lt@/dt:format@subst_gt@  
+	      </logic:equal>
+	      <logic:notEqual name="onerowofobservation" property="dateaccuracy" value="Three years">
+	            <logic:equal name="onerowofobservation" property="dateaccuracy" value="Ten years">
+	  	          @subst_lt@dt:format pattern="yyyy"@subst_gt@
+	  	        	  @subst_lt@dt:parse pattern="yyyy-MM-dd"@subst_gt@
+	  	        	<bean:write name="onerowofobservation" property="obsenddate_datetrunc"></bean:write>
+	  	        	   @subst_lt@/dt:parse@subst_gt@
+	  	      	   @subst_lt@/dt:format@subst_gt@  
+	            </logic:equal>
+	            <logic:notEqual name="onerowofobservation" property="dateaccuracy" value="Ten years">
+	            @subst_lt@dt:format pattern="dd-MMM-yyyy"@subst_gt@
+	    	  @subst_lt@dt:parse pattern="yyyy-MM-dd"@subst_gt@
+	    	<bean:write name="onerowofobservation" property="obsenddate_datetrunc"></bean:write>
+	    	   @subst_lt@/dt:parse@subst_gt@
+	  	   @subst_lt@/dt:format@subst_gt@
+	  	   </logic:notEqual> <!-- not 10 years -->
+	      </logic:notEqual> <!-- not 3 years -->  
+	  </logic:notEqual> <!-- not 1 year -->
+	  <logic:notEmpty name="onerowofobservation" property="dateaccuracy">
+	  <logic:notEqual name="onerowofobservation" property="dateaccuracy" value="Exact">
+	     &plusmn; <bean:write name="onerowofobservation" property="dateaccuracy" />	
+          </logic:notEqual>
+          </logic:notEmpty>	  
+	 </span>
+</logic:notEmpty>
+<logic:empty name="onerowofobservation" property="obsenddate">
+<logic:notEqual parameter="textoutput" value="true">&nbsp;</logic:notEqual>
+</logic:empty>
+</td>
+</tr>
+<bean:define id="hadData" value="true"></bean:define>
+</logic:notEmpty>
+
+<logic:notEmpty name="onerowofobservation" property="dateaccuracy">
+<tr class="@nextcolorclass@">
+<td class="observation_dateaccuracy datalabel" title="Estimated accuracy of the observation date.">Date Accuracy <a title="Click here for definition of this field." target="_blank" class="image" href="/dd/observation/dateaccuracy" onclick="popupDD('/dd/observation/dateaccuracy'); return false;"><span class="ddlink"><img src="@images_link@question.gif" alt="?" border="0"></span></a></td><td class="observation_dateaccuracy">
+<logic:notEmpty name="onerowofobservation" property="dateaccuracy">
+<span>
+<bean:write name="onerowofobservation" property="dateaccuracy"></bean:write>
+</span>
+</logic:notEmpty>
+<logic:empty name="onerowofobservation" property="dateaccuracy">
+<logic:notEqual parameter="textoutput" value="true">&nbsp;</logic:notEqual>
+</logic:empty>
+</td>
+</tr>
+<bean:define id="hadData" value="true"></bean:define>
+</logic:notEmpty>
+
+	
 	<%@ include file="autogen/plot_plotmethodlong_data.jsp" %>
 	<%@ include file="autogen/observation_plotmethodlong_data.jsp" %>
 	<%@ include file="includeviews/sub_haddata.jsp" %>
