@@ -6361,7 +6361,7 @@ conditions may change between resampling events.
       <attDefinition>The date of the observation, or the first day if the observation spanned more than one day.</attDefinition>
       <attForms>
         <formShow name="plotMethodShort">642</formShow>
-        <formShow name="plotMethodLong">643</formShow>
+        <!--<formShow name="plotMethodLong">643</formShow>-->
         <formShow name="csvvegbranch">198</formShow>
         <formShow name="summarycsv">198</formShow>
       </attForms>
@@ -6382,7 +6382,7 @@ conditions may change between resampling events.
       <attNotes>n/a</attNotes>
       <attDefinition>If the observation event spanned more than a single day, this is the last day on which observations were made.</attDefinition>
       <attForms>
-        <formShow name="plotMethodLong">646</formShow>
+        <!--<formShow name="plotMethodLong">646</formShow>-->
         <formShow name="csvvegbranch">199</formShow>
       </attForms>
       <update>1.0.0</update>
@@ -6443,7 +6443,7 @@ conditions may change between resampling events.
       <attNotes>closed list</attNotes>
       <attDefinition>Estimated accuracy of the observation date.</attDefinition>
       <attForms>
-        <formShow name="plotMethodLong">649</formShow>
+        <!--<formShow name="plotMethodLong">649</formShow>-->
         <formShow name="csvvegbranch">200</formShow>
       </attForms>
       <update>1.0.0</update>
