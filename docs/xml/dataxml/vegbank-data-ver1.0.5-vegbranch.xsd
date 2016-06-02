@@ -3841,6 +3841,8 @@ For more on VegBank's XML, please see http://vegbank.org/xml
         <xs:element ref="plot.notesPublic" minOccurs="0" />
         <xs:element ref="plot.notesMgt" minOccurs="0" />
         <xs:element ref="plot.revisions" minOccurs="0" />
+        <xs:element ref="plot.stateProvince" minOccurs="0" />
+        <xs:element ref="plot.country" minOccurs="0" />
         <xs:element ref="embargo" minOccurs="0" maxOccurs="unbounded" />
         <xs:element ref="place" minOccurs="0" maxOccurs="unbounded" />
         <xs:element ref="definedValue" minOccurs="0" maxOccurs="unbounded" />
@@ -4055,6 +4057,29 @@ For more on VegBank's XML, please see http://vegbank.org/xml
       </xs:simpleContent>
     </xs:complexType>
   </xs:element>
+  
+   <xs:element name="plot.stateProvince">
+      <xs:complexType>
+        <xs:simpleContent>
+          <xs:extension base="xs:string">
+            <xs:attribute name="noteLink.NOTELINK_ID" type="xs:long" use="optional" />
+            <xs:attribute name="revision.REVISION_ID" type="xs:long" use="optional" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+  </xs:element>
+  
+   <xs:element name="plot.country">
+      <xs:complexType>
+        <xs:simpleContent>
+          <xs:extension base="xs:string">
+            <xs:attribute name="noteLink.NOTELINK_ID" type="xs:long" use="optional" />
+            <xs:attribute name="revision.REVISION_ID" type="xs:long" use="optional" />
+          </xs:extension>
+        </xs:simpleContent>
+      </xs:complexType>
+  </xs:element>
+  
   <xs:element name="plot.area">
     <xs:complexType>
       <xs:simpleContent>
