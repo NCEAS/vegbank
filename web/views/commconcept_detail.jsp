@@ -190,6 +190,7 @@ function getHelpPageId() {
  <li>
   <span class="datalabelsmall">This Community's Level:</span>
   <bean:write name="statusbean" property="commlevel" />
+
  </li></logic:notEmpty><!-- has level-->
 
  <li>
@@ -234,16 +235,21 @@ function getHelpPageId() {
       <logic:equal name="thispartyacccode" value="VB.Py.512.NATURESERVE">
 	          <!-- only link if party is NatureServe -->
 	          <logic:equal name="usagebean" property="classsystem" value="UID">
+	             <bean:define id="nsServletTarget">searchCommunityUid</bean:define>
+	             <logic:equal name="statusbean" property="commlevel" value="ecological system">
+	               <!-- systems have a different search -->
+	               <bean:define id="nsServletTarget">searchSystemUid</bean:define>
+	             </logic:equal>
 	             <!-- and this is a UID -->  <!-- and is accepted -->
 	             <logic:equal name="statusbean" property="commconceptstatus" value="accepted">
 	               <a target="_new" 
-	  href="http://www.natureserve.org/explorer/servlet/NatureServe?searchCommunityUid=<bean:write name='usagebean' property='commname_id_transl' />"
-	  title="An authoritative source for information on the plants, animals, and ecological communities of the United States and Canada. 	      NatureServe Explorer is a product of NatureServe and its network of natural heritage member programs.">NatureServe 
+	  href="http://www.natureserve.org/explorer/servlet/NatureServe?<bean:write name='nsServletTarget'/>=<bean:write name='usagebean' property='commname_id_transl' />"
+	  title="An authoritative source for information on the plants, animals, and ecological communities of the United States and Canada. NatureServe Explorer is a product of NatureServe and its network of natural heritage member programs.">NatureServe 
 	  Explorer<img border="0" src="@image_server@natureserveexplorer.png" alt="NatureServe Explorer logo" /></a>
 	             </logic:equal>  
 	             <logic:equal name="statusbean" property="commconceptstatus" value="Provisional">
 		     	               <a target="_new" 
-		     	  href="http://www.natureserve.org/explorer/servlet/NatureServe?searchCommunityUid=<bean:write name='usagebean' property='commname_id_transl' />"
+		     	  href="http://www.natureserve.org/explorer/servlet/NatureServe?<bean:write name='nsServletTarget'/>=<bean:write name='usagebean' property='commname_id_transl' />"
 		     	  title="An authoritative source for information on the plants, animals, and ecological communities of the United States and Canada. 	      NatureServe Explorer is a product of NatureServe and its network of natural heritage member programs.">NatureServe 
 		     	  Explorer<img border="0" src="@image_server@natureserveexplorer.png" alt="NatureServe Explorer logo" /></a>
 	             </logic:equal> 
