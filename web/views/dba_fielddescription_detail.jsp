@@ -49,7 +49,7 @@
       <%@ include file="autogen/dba_fielddescription_detail_data.jsp" %>
       <bean:define id="tblDotFld"><bean:write name="onerowofdba_fielddescription" property="tablename" />.<bean:write name="onerowofdba_fielddescription" property="fieldname" /></bean:define>
       <!-- get list -->
-      <vegbank:get id="dba_fieldlist" select="dba_fieldlist" beanName="map" pager="false" where="where_dd_tabledotfield" 
+      <vegbank:get id="dba_fieldlist" select="dba_fieldlist" beanName="map" pager="false" where="where_dd_tabledotfield"  orderBy="orderby_listvaluesortorder" allowOrderBy="true"  
          wparam="tblDotFld" perPage="-1" />
       <!-- ignore empties! -->
       <logic:notEmpty name="dba_fieldlist-BEANLIST">
