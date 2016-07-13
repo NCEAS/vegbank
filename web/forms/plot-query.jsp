@@ -1331,7 +1331,27 @@ function setQueryText() {
         </DIV>
    <!-- new: don't just hide, remove if not selected: -->
    </logic:present><!-- name="show_comms"-->
-	    <!-- SUBMIT THE FORM -->
+	 
+
+   
+	<p>Include obsolete plots:<br/>
+	<span class="instructions">Sometimes plots are replaced with newer versions.  Select "Current and obsolete plots" to include old versions of plots in your search results.</span></p>
+                <input type="hidden" name="xwhereKey_hasobssyn" value="xwhere_nullfalse_hasobssyn" />
+                <input type="hidden" name="xwhereParams_hasobssyn_0" value="nothingignoreme" />
+                <input type="hidden" name="xwhereParams_hasobssyn_1" value="hasobservationsynonym" /> <!-- this sets the value to itself, so all plots - nulls are included in the xwhere statement always -->
+                <select name="xwhereParams_hasobssyn_2" size="2" >
+        
+		        <option value="'false'" selected>Only current plots</option>
+		        <option value="hasobservationsynonym">Current and obsolete plots</option>
+                       
+              
+		      </select>
+	    </p>
+   <!-- new: don't just hide, remove if not selected: -->
+   
+	      <!-- SUBMIT THE FORM --> 
+	    
+	    
           <h3  class="<bean:write name='simpleHide' />">Search VegBank Plots</h3>
 		      <input type="submit" value="search"/>&nbsp;&nbsp;
 		      <html:reset value="reset"/>
