@@ -10963,6 +10963,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN slopeaspect = -1 THEN '(n/a, flat)' WHEN slopeaspect = -2 THEN '(n/a, too irregular to determine)' ELSE slopeaspect::text END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>optional list that converts</attNotes>
@@ -11028,6 +11029,7 @@ conditions may change between resampling events.
       <attKey>n/a</attKey>
       <attRelType type="n/a" name="n/a"/>
       <attReferences>n/a</attReferences>
+      <attFKTranslationSQL>(CASE WHEN slopegradient = -1 THEN '(n/a, too irregular to determine)' ELSE slopegradient::text END)</attFKTranslationSQL>
       <attListType>no</attListType>
       <attList/>
       <attNotes>optional list that converts</attNotes>
