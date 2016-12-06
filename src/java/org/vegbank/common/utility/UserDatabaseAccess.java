@@ -6,7 +6,7 @@
  *	'$Author: mlee $'
  *	'$Date: 2006-09-01 23:50:50 $'
  *	'$Revision: 1.27 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -25,13 +25,13 @@
 package org.vegbank.common.utility;
 
 /**
- * 
- *    Purpose: Work with the user tables 
- * 
+ *
+ *    Purpose: Work with the user tables
+ *
  *    Copyright: 2000 Regents of the University of California and the
  *             National Center for Ecological Analysis and Synthesis
  *    Authors: John Harris
- * 		
+ *
  *		'$Author: mlee $'
  *     '$Date: 2006-09-01 23:50:50 $'
  *     '$Revision: 1.27 $'
@@ -56,8 +56,8 @@ import org.vegbank.ui.struts.UserForm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class UserDatabaseAccess 
-{	
+public class UserDatabaseAccess
+{
 	private static Log log = LogFactory.getLog(UserDatabaseAccess.class);
 
 
@@ -73,16 +73,16 @@ public class UserDatabaseAccess
 			 WebUser user = this.getUser(email);
 			 level = user.getPermissiontype();
 		 }
-		 catch (Exception e) 
+		 catch (Exception e)
 		 {
 			log.error("Exception: " + e.getMessage());
 			e.printStackTrace();
 		 }
 		 return level;
 	 }
-	
+
 	/**
-	 * method that returns true if the input user alraedy has an entry in the 
+	 * method that returns true if the input user alraedy has an entry in the
 	 * certification table
 	 * @param  usrId -- the usr_id of the user
 	 */
@@ -95,13 +95,13 @@ public class UserDatabaseAccess
 		Statement query = conn.createStatement();
 		sb.append("SELECT usercertification_id FROM usercertification ");
 		sb.append("where usr_id=" + usrId);
-		
+
 		//issue the query
 		query.executeQuery(sb.toString());
 		ResultSet rs = query.getResultSet();
-		
+
 		int resultCnt = 0;
-		if (rs.next() ) 
+		if (rs.next() )
 		{
 			s = rs.getLong(1);
             rs.close();
@@ -112,7 +112,7 @@ public class UserDatabaseAccess
 		DBConnectionPool.returnDBConnection(conn);
 		return(false);
 	 }
-   
+
   /**
    * delete the user with the given usrId
    */
@@ -134,19 +134,19 @@ public class UserDatabaseAccess
     stmt.close();
     conn.commit();
   }
-	 
+
 	/**
 	 * method that inserts the certification info to the user database.
-	 * 
+	 *
 	 * @param form
 	 * @return new certId
 	 *
 	 */
-	public long insertUserCertificationInfo(CertificationForm form) 
+	public long insertUserCertificationInfo(CertificationForm form)
 			throws SQLException {
 
 		StringBuffer sqlInsert = new StringBuffer();
-		
+
 		log.debug("UserDatabaseAccess > inserting user cert info");
 		DBConnection conn = getConnection();
 
@@ -162,58 +162,66 @@ public class UserDatabaseAccess
 			.append(" esa_sponsor_name_b,  esa_sponsor_email_b, ")
 			.append(" peer_review, addl_stmt, usr_id, certificationstatus) ")
 			.append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
-		log.debug("UserDatabaseAccess > inserting user cert info");
-		
+		// log.debug("UserDatabaseAccess > inserting user cert info with " + sqlInsert.toString());
+
 		// create the statement
 		PreparedStatement pstmt = conn.prepareStatement( sqlInsert.toString() );
-		
+
+       // pstmt.setEscapeProcessing(true); //SQL safing is not working?
+
 		pstmt.setLong(1, form.getCurrentCertLevel());
 		pstmt.setLong(2, form.getRequestedCert());
-		pstmt.setString(3, form.getHighestDegree());
-		pstmt.setString(4, form.getDegreeYear());
-		pstmt.setString(5, form.getDegreeInst());
-		pstmt.setString(6, form.getCurrentOrg());
-		pstmt.setString(7, form.getCurrentPos());
-		pstmt.setString(8, form.getEsaMember());
-		pstmt.setString(9, form.getProfExp());
-		pstmt.setString(10, form.getRelevantPubs());
-		pstmt.setString(11, form.getVegSamplingExp());
-		pstmt.setString(12, form.getVegAnalysisExp());
-		pstmt.setString(13, form.getUsnvcExp());
-		pstmt.setString(14, form.getVbExp());
-		pstmt.setString(15, form.getToolsExp());
-		pstmt.setString(16, form.getVbIntention());
-		pstmt.setString(17, form.getExpRegionA());
-		pstmt.setString(18, form.getExpRegionAVeg());
-		pstmt.setString(19, form.getExpRegionAFlor());
-		pstmt.setString(20, form.getExpRegionANVC());
-		pstmt.setString(21, form.getExpRegionB());
-		pstmt.setString(22, form.getExpRegionBVeg());
-		pstmt.setString(23, form.getExpRegionBFlor());
-		pstmt.setString(24, form.getExpRegionBNVC());
-		pstmt.setString(25, form.getExpRegionC());
-		pstmt.setString(26, form.getExpRegionCVeg());
-		pstmt.setString(27, form.getExpRegionCFlor());
-		pstmt.setString(28, form.getExpRegionCNVC());
-		pstmt.setString(29, form.getEsaSponsorNameA());
-		pstmt.setString(30, form.getEsaSponsorEmailA());
-		pstmt.setString(31, form.getEsaSponsorNameB());
-		pstmt.setString(32, form.getEsaSponsorEmailB());
-		pstmt.setString(33, form.getPeerReview());
-		pstmt.setString(34, form.getAddlStmt());
+		pstmt.setString(3, Utility.encodeForDBToTickMark(form.getHighestDegree()));
+		pstmt.setString(4, Utility.encodeForDBToTickMark(form.getDegreeYear()));
+		pstmt.setString(5, Utility.encodeForDBToTickMark(form.getDegreeInst()));
+		pstmt.setString(6, Utility.encodeForDBToTickMark(form.getCurrentOrg()));
+		pstmt.setString(7, Utility.encodeForDBToTickMark(form.getCurrentPos()));
+		pstmt.setString(8, Utility.encodeForDBToTickMark(form.getEsaMember()));
+		pstmt.setString(9, Utility.encodeForDBToTickMark(form.getProfExp()));
+		pstmt.setString(10,Utility.encodeForDBToTickMark(form.getRelevantPubs()));
+		pstmt.setString(11, Utility.encodeForDBToTickMark(form.getVegSamplingExp()));
+		pstmt.setString(12, Utility.encodeForDBToTickMark(form.getVegAnalysisExp()));
+		pstmt.setString(13, Utility.encodeForDBToTickMark(form.getUsnvcExp()));
+		pstmt.setString(14, Utility.encodeForDBToTickMark(form.getVbExp()));
+		pstmt.setString(15, Utility.encodeForDBToTickMark(form.getToolsExp()));
+
+		pstmt.setString(16, Utility.encodeForDBToTickMark(form.getVbIntention()));
+		pstmt.setString(17, Utility.encodeForDBToTickMark(form.getExpRegionA()));
+		pstmt.setString(18, Utility.encodeForDBToTickMark(form.getExpRegionAVeg()));
+		pstmt.setString(19, Utility.encodeForDBToTickMark(form.getExpRegionAFlor()));
+		pstmt.setString(20, Utility.encodeForDBToTickMark(form.getExpRegionANVC()));
+		pstmt.setString(21, Utility.encodeForDBToTickMark(form.getExpRegionB()));
+		pstmt.setString(22, Utility.encodeForDBToTickMark(form.getExpRegionBVeg()));
+		pstmt.setString(23, Utility.encodeForDBToTickMark(form.getExpRegionBFlor()));
+		pstmt.setString(24, Utility.encodeForDBToTickMark(form.getExpRegionBNVC()));
+		pstmt.setString(25, Utility.encodeForDBToTickMark(form.getExpRegionC()));
+		pstmt.setString(26, Utility.encodeForDBToTickMark(form.getExpRegionCVeg()));
+		pstmt.setString(27, Utility.encodeForDBToTickMark(form.getExpRegionCFlor()));
+		pstmt.setString(28, Utility.encodeForDBToTickMark(form.getExpRegionCNVC()));
+		pstmt.setString(29, Utility.encodeForDBToTickMark(form.getEsaSponsorNameA()));
+		pstmt.setString(30, Utility.encodeForDBToTickMark(form.getEsaSponsorEmailA()));
+		pstmt.setString(31, Utility.encodeForDBToTickMark(form.getEsaSponsorNameB()));
+		pstmt.setString(32, Utility.encodeForDBToTickMark(form.getEsaSponsorEmailB()));
+		pstmt.setString(33, Utility.encodeForDBToTickMark(form.getPeerReview()));
+		pstmt.setString(34, Utility.encodeForDBToTickMark(form.getAddlStmt()));
 		pstmt.setLong(35, form.getUsrId());
-		pstmt.setString(36, form.getCertificationstatus());
-		
+		pstmt.setString(36, Utility.encodeForDBToTickMark(form.getCertificationstatus()));
+
+
 		// execute the insert
-		
-		log.debug("UserDatabaseAccess: saving cert. app");
+
+
+
+		log.info("UserDatabaseAccess: saving cert. app");
 		Statement idStmt = conn.createStatement();
+
 
 		// insert
 		pstmt.execute();
 
 		// get new ID
 		idStmt.executeQuery("SELECT MAX(usercertification_id) FROM usercertification WHERE usr_id="+form.getUsrId());
+
 
 		ResultSet rs = idStmt.getResultSet();
 		long certId = 0;
@@ -230,9 +238,9 @@ public class UserDatabaseAccess
 		DBConnectionPool.returnDBConnection(conn);
 		return certId;
 	 }
-	 
+
  /**
-  * method that retrives a users id from the database and 
+  * method that retrives a users id from the database and
 	* returns the value
 	* @param email -- the email address of the user
 	*/
@@ -240,14 +248,14 @@ public class UserDatabaseAccess
 			throws SQLException {
 		log.debug("UDA.getUserId(): getting usr_id for: " + emailAddress);
 		int usrId = 0;
-		
+
 		//get the connections etc
 		DBConnection conn = getConnection();
 		Statement query = conn.createStatement();
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT usr_id FROM usr WHERE LOWER(email_address) LIKE '" +
 				emailAddress.toLowerCase()+"' ");
-		
+
 		//issue the query
 		query.executeQuery(sb.toString());
 		ResultSet rs = query.getResultSet();
@@ -260,10 +268,10 @@ public class UserDatabaseAccess
 		DBConnectionPool.returnDBConnection(conn);
 		return(usrId);
 	}
-  
+
   /**
 	 * method to get the password from the database based on an email address
-	 * 
+	 *
 	 * @param emailAddress
 	 * @deprecated Use getUser and get password from that object
 	 */
@@ -271,7 +279,7 @@ public class UserDatabaseAccess
 	{
 		log.debug("UserDatabaseAccess > looking up the password for user: " + emailAddress);
 		String s = null;
-		try 
+		try
 		{
 			//get the connections etc
 			DBConnection conn = getConnection();
@@ -279,11 +287,11 @@ public class UserDatabaseAccess
 			StringBuffer sb = new StringBuffer();
 			sb.append("select password from USER_INFO ");
 			sb.append("where upper(EMAIL_ADDRESS) like '"+emailAddress.toUpperCase()+"' ");
-			
+
 			//issue the query
 			query.executeQuery(sb.toString());
 			ResultSet rs = query.getResultSet();
-			while (rs.next()) 
+			while (rs.next())
 			{
      			s = rs.getString(1);
     		}
@@ -291,16 +299,16 @@ public class UserDatabaseAccess
             query.close();
 			DBConnectionPool.returnDBConnection(conn);
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			log.error("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return(s);
 	}
- 
+
 	/**
-	 * This method updates, umm - what was it?  Hmmm.  
+	 * This method updates, umm - what was it?  Hmmm.
 	 * Oh yeah the user's password.
 	 * @param password new password
 	 * @param emailAddress of the user
@@ -314,8 +322,8 @@ public class UserDatabaseAccess
 			DBConnection conn = getConnection();
 			Statement query = conn.createStatement();
       //store the digest string
-			query.execute("UPDATE usr set password='" + digest + 
-					"' WHERE email_address='" + emailAddress + "' ");	
+			query.execute("UPDATE usr set password='" + digest +
+					"' WHERE email_address='" + emailAddress + "' ");
             query.close();
 			DBConnectionPool.returnDBConnection(conn);
 		}
@@ -331,7 +339,7 @@ public class UserDatabaseAccess
       gse.printStackTrace();
     }
 	}
-  
+
   /**
    * return the digest of a username and a password
    */
@@ -350,9 +358,9 @@ public class UserDatabaseAccess
     }
     return s;
   }
- 
+
 	/**
-	 * method to update the ticket count of a user -- 
+	 * method to update the ticket count of a user --
 	 * something that is done every time the user logs
 	 * into the system
 	 * @param emailAddress
@@ -363,25 +371,25 @@ public class UserDatabaseAccess
 		DBConnection conn = getConnection();
 		Statement query = conn.createStatement ();
 		StringBuffer sb = new StringBuffer();
-		
+
 //		java.util.SimpleDateFormat formatter = new java.util.SimpleDateFormat("yy-MM-dd HH:mm:ss");
 		java.util.Date localtime = new java.util.Date();
 //		String dateString = formatter.format(localtime);
-		
+
 		log.debug("UserDatabaseAccess > Database date: "+localtime);
-		
+
         sb.append("UPDATE usr SET ticket_count = ticket_count + 1, last_connect=now() ");
 		sb.append("WHERE email_address LIKE '"+emailAddress+"' ");
-					
+
 		//issue the query
 		query.executeUpdate(sb.toString());
         query.close();
 		DBConnectionPool.returnDBConnection(conn);
 	}
- 
+
 
 	/**
-	 * utility method to provide this class a connection to the 
+	 * utility method to provide this class a connection to the
 	 * database.
 	 */
 	private DBConnection getConnection() throws SQLException
@@ -404,11 +412,11 @@ public class UserDatabaseAccess
 */
 		return conn;
 	}
-	
+
 	/**
 	 * Private method to return the user info for a user in the user database.  The
 	 * user data will be returned as a WebUser bean.
-	 * 
+	 *
 	 * @param uniqueClause - part of SQL WHERE that gets user
 	 * @return WebUser or null if none found
 	 */
@@ -416,7 +424,7 @@ public class UserDatabaseAccess
 	 {
 		//get the connections etc
 		DBConnection conn = getConnection();
-		 
+
 		 Statement query = conn.createStatement();
 		 StringBuffer sb = new StringBuffer();
 		sb.append("SELECT email_address, password, surname, givenname, preferred_name,");
@@ -432,18 +440,18 @@ public class UserDatabaseAccess
 		sb.append(" FROM usr NATURAL JOIN (party LEFT JOIN  ");
 		sb.append(" ( telephone NATURAL JOIN address ) USING (party_id) )");
 		sb.append(" WHERE ( currentflag = true  OR currentflag IS NULL ) AND ");
-		sb.append(" ( lower(phonetype) = '" + Telephone.PHONETYPE_WORK.toLowerCase()); 
+		sb.append(" ( lower(phonetype) = '" + Telephone.PHONETYPE_WORK.toLowerCase());
 		sb.append("' OR phonetype IS NULL ) AND " + uniqueClause);
 		*/
-	
+
 		//log.debug("UDA.getAllUserData(): " + sb.toString() );
-		
+
 		 //issue the query
 		 ResultSet results = query.executeQuery(sb.toString());
-		
+
 		//get the results -- assumming 0 or 1 rows returned
 		WebUser userBean = null;
-		if (results.next()) 
+		if (results.next())
 		{
 			// build the WebUser
 			userBean = new WebUser();
@@ -453,35 +461,35 @@ public class UserDatabaseAccess
 			userBean.setGivenname( results.getString(4) );
 			userBean.setPreferredname( results.getString(5) );
 			userBean.setPermissiontype( results.getLong(6) );
-			userBean.setOrganizationname( results.getString(7) ); 
-			userBean.setTicketcount( results.getInt(8) ); 
-			userBean.setAddress( results.getString(9) ); 
-			userBean.setCity( results.getString(10) ); 
-			userBean.setState( results.getString(11) ); 
-			userBean.setCountry( results.getString(12) ); 
+			userBean.setOrganizationname( results.getString(7) );
+			userBean.setTicketcount( results.getInt(8) );
+			userBean.setAddress( results.getString(9) );
+			userBean.setCity( results.getString(10) );
+			userBean.setState( results.getString(11) );
+			userBean.setCountry( results.getString(12) );
 			userBean.setPostalcode( results.getString(13) );
 			userBean.setUserid( results.getInt(14) );
-			userBean.setPartyid( results.getInt(15) );		
-			userBean.setAddressid( results.getInt(16) );		
+			userBean.setPartyid( results.getInt(15) );
+			userBean.setAddressid( results.getInt(16) );
 
 		}
-		
+
 		conn.close();
         results.close();
         query.close();
 		DBConnectionPool.returnDBConnection(conn);
 		return userBean;
 	 }
-	 
+
 
 	/**
 	 * Updates a certification application's status and comment.
-	 * 
+	 *
 	 * @param usercertification_id
 	 * @param status
 	 * @param comment
 	 */
-	 public void updateCertificationStatus(long usercertification_id, String status, String comment) 
+	 public void updateCertificationStatus(long usercertification_id, String status, String comment)
 		 	throws SQLException
 	 {
 		DBConnection conn = getConnection();
@@ -507,11 +515,11 @@ public class UserDatabaseAccess
 
 	/**
 	 * Returns List of all header CertificationForms in the system.
-	 * 
-	 * @param sortBy 
+	 *
+	 * @param sortBy
 	 * @return List of partially complete CertificationForms
 	 */
-	 public List getAllCertificationAppHeaders(String sortBy) 
+	 public List getAllCertificationAppHeaders(String sortBy)
 		 	throws java.sql.SQLException
 	 {
 	 	return getAllCertificationApps(sortBy, true);
@@ -520,8 +528,8 @@ public class UserDatabaseAccess
 
 	/**
 	 * Returns List of all CertificationForms in the system.
-	 * 
-	 * @param sortBy 
+	 *
+	 * @param sortBy
 	 * @return List of CertificationForms
 	 */
 	 public List getAllCertificationApps(String sortBy)
@@ -533,7 +541,7 @@ public class UserDatabaseAccess
 	 /**
 	  * The private method that actually gets the cert. apps.
 	  *
-	  * @param sortBy 
+	  * @param sortBy
 	  * @return List of CertificationForms
 	  */
 	 private List getAllCertificationApps(String sortBy, boolean headersOnly)
@@ -548,13 +556,13 @@ public class UserDatabaseAccess
 		if (sortBy.indexOf(' ') != -1) {
 			sortBy = "usercertification_id";
 		}
-		 
+
 		Statement query = conn.createStatement();
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT ");
 		sb.append(CertificationForm.getDBFieldNames(headersOnly));
 		sb.append(" FROM usercertification ORDER BY " + sortBy);
-	
+
 		//issue the query
 		ResultSet results = query.executeQuery(sb.toString());
 
@@ -571,31 +579,31 @@ public class UserDatabaseAccess
 
 		return allApps;
 	 }
-		
+
 	/**
 	 * Private method to return the user info for a user in the user database.  The
 	 * user data will be returned as a WebUser bean.
-	 * 
+	 *
 	 * @param usercertification_id
 	 * @return CertificationForm or null if none found
 	 */
-	 public CertificationForm getCertificationApp(long usercertification_id) 
+	 public CertificationForm getCertificationApp(long usercertification_id)
 		 	throws SQLException
 	 {
 		//get the connections etc
 		DBConnection conn = getConnection();
-		 
+
 		Statement query = conn.createStatement();
 		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT ")
 			.append(CertificationForm.getDBFieldNames(false))
 			.append(" FROM usercertification ")
 			.append(" WHERE usercertification_id = ").append(usercertification_id);
-	
+
 		 //issue the query
 		//log.debug("UDA.getCert: QUERY: " + sb.toString());
 		ResultSet results = query.executeQuery(sb.toString());
-		
+
 		//get the results -- assumming 0 or 1 rows returned
 		CertificationForm certForm = new CertificationForm();
 		if (results.next()) {
@@ -618,7 +626,7 @@ public class UserDatabaseAccess
 
 		return certForm;
 	 }
-   
+
    /**
     * get the user list info
     */
@@ -628,36 +636,36 @@ public class UserDatabaseAccess
       List allUsrList = new ArrayList();
       DBConnection conn = getConnection();
       UserForm usrForm = new UserForm();
-      
+
       if(Utility.isStringNullOrEmpty(sortBy))
       {
         sortBy = "usr_id";
       }
-       
+
       Statement query = conn.createStatement();
       String sql = usrForm.getSQL(sortBy);
-      
+
       //issue the query
       ResultSet results = query.executeQuery(sql);
-      
+
       while (results.next()) {
         usrForm = new UserForm();
         usrForm.initFromResultSet(results);
-      
+
         // fill in the blanks
         //fillInCertUserInfo(tmpCertForm);
         allUsrList.add(usrForm);
       }
       results.close();
       query.close();
-      
+
       return allUsrList;
    }
 
 	 /**
 	  *
 	  */
-	 private void fillInCertUserInfo(CertificationForm certForm) 
+	 private void fillInCertUserInfo(CertificationForm certForm)
 		 	throws SQLException
 	{
 		WebUser user = getUser(certForm.getUsrId());
@@ -674,11 +682,11 @@ public class UserDatabaseAccess
 			certForm.setPhoneNumber( user.getDayphone() );
 		}
 	 }
-	 
+
 	/**
 	 * method to return the user info for a user in the user database.  The
 	 * user data will be returned as a WebUser bean.
-	 * 
+	 *
 	 * @param usrId -- the usr.usr_id of the user
 	 * @return WebUser or null if none found
 	 */
@@ -686,11 +694,11 @@ public class UserDatabaseAccess
 	 {
 		return getAllUserData(" usr_id=" + usrId);
 	 }
-	 
+
 	/**
 	 * method to return the user info for a user in the user database.  The
 	 * user data will be returned as a WebUser bean.
-	 * 
+	 *
 	 * @param usrId -- the usr.usr_id of the user
 	 * @return WebUser or null if none found
 	 */
@@ -698,11 +706,11 @@ public class UserDatabaseAccess
 	 {
 		return getUser(usrId.longValue());
 	 }
-	 
+
 	/**
 	 * method to return the user info for a user in the user database.  The
 	 * user data will be returned as a WebUser bean.
-	 * 
+	 *
 	 * @param user -- the email address of the user
 	 * @return WebUser or null if none found
 	 */
@@ -711,9 +719,9 @@ public class UserDatabaseAccess
 		log.debug("UDA.getUser: email_address= " + emailAddress);
 		return getAllUserData(" LOWER(email_address)='" + emailAddress.toLowerCase() + "'");
 	 }
-	 
+
 	/**
-	 * Updates the user info database. 
+	 * Updates the user info database.
 	 *
 	 */
 	public boolean updateUserInfo(WebUser webuser)
@@ -731,7 +739,7 @@ public class UserDatabaseAccess
 
 			conn.setAutoCommit(false);
 			webuser.setSQLSafe(true);
-			
+
 
 			// check for extant address
 			String currentFlagSQL = "";
@@ -740,7 +748,7 @@ public class UserDatabaseAccess
 				doAddressUpdate = false;
 				// double check the db
 				rs = stmt.executeQuery(
-						"SELECT address_id from address where party_id = " + 
+						"SELECT address_id from address where party_id = " +
 						webuser.getPartyid() );
 				if (rs.next()) {
 					// found a record, so there was a problem building the webuser
@@ -769,7 +777,7 @@ public class UserDatabaseAccess
                 rs.close();
                 stmt.close();
 
-			} 
+			}
 
 			if (doAddressUpdate) {
 				// update address as normal
@@ -801,11 +809,11 @@ public class UserDatabaseAccess
 			sb.append("WHERE party_id='" + webuser.getPartyid() + "' ");
 			log.debug("UDA.updateUserInfo: party: " + sb.toString());
 			stmt.executeUpdate(sb.toString());
-			
-			
+
+
 			stmt.close();
 			conn.commit();
-			
+
 			log.debug("Updated Profile");
 		}
 		catch (Exception e)
@@ -815,37 +823,37 @@ public class UserDatabaseAccess
 			e.printStackTrace();
 			try { if (conn != null)  conn.rollback(); }
 			catch (SQLException sex) { log.error("Exception: " + e.getMessage()); }
-			
+
 			return false;
 		}
 		DBConnectionPool.returnDBConnection(conn);
 		return true;
 	}
-	
+
 	public boolean isEmailUnique(String emailAddress) throws SQLException
 	{
 		boolean result = true;
 		// Get connection, query
 		DBConnection conn = this.getConnection();
 		Statement query = conn.createStatement();
-		
+
 		// Create query
 		ResultSet rs = query.executeQuery("SELECT usr_id from usr where email_address = '" + emailAddress + "'");
-		
+
 		// If any results returned then email address is not unique
 		if (rs.next()) {
 			result = false;
 		}
         rs.close();
         query.close();
-		
+
 		DBConnectionPool.returnDBConnection(conn);
 		return result;
 	}
 
 	/**
 	 * Set sum of permissions.
-	 * 
+	 *
 	 * @param usrId -- the usr.usr_id of the user
 	 * @param sum -- the sum of roles
 	 */
@@ -857,7 +865,7 @@ public class UserDatabaseAccess
 
 			DBConnection conn = getConnection();
 			Statement stmt = conn.createStatement();
-            String sql = "UPDATE usr SET permission_type=" + sum + 
+            String sql = "UPDATE usr SET permission_type=" + sum +
                                 " WHERE usr_id=" + usrId;
             stmt.executeUpdate(sql);
             // if this is not 1, then should make the PARTY associated with this public:
@@ -868,9 +876,9 @@ public class UserDatabaseAccess
 			stmt.close();
 			DBConnectionPool.returnDBConnection(conn);
 		}
-	 
+
 	/**
-	 * 
+	 *
 	 * @param usrId -- the usr.usr_id of the user
 	 * @return sum of permissions
 	 */
@@ -880,7 +888,7 @@ public class UserDatabaseAccess
 		Statement query = conn.createStatement();
 		query.executeQuery("SELECT permission_type FROM usr WHERE usr_id=" + usrId);
 		ResultSet rs = query.getResultSet();
-		
+
 		long sum = 0;
 		if (rs.next() ) {
 			sum = rs.getLong(1);
@@ -891,7 +899,7 @@ public class UserDatabaseAccess
 		DBConnectionPool.returnDBConnection(conn);
 		return sum;
 	 }
-	 
+
 	/**
    * this method seeds the admin account with the default password.
    */
@@ -903,7 +911,7 @@ public class UserDatabaseAccess
     udb.updatePassword("vbadmin", "admin@vegbank.org");
     System.out.println("admin account seeded with default password.");
   }
-  
+
   /**
    * this method converts all passwords in the database to MD5 digests
    * from clear text.
@@ -923,18 +931,18 @@ public class UserDatabaseAccess
       updatePassword(pass, email);
     }
   }
-   
+
 	/**
-	 * main method for testing 
+	 * main method for testing
 	 */
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
     System.out.println("Usage:");
-    System.out.println("UserDatabaseAccess seedAdmin --seeds the " + 
+    System.out.println("UserDatabaseAccess seedAdmin --seeds the " +
       "admin account with the default password");
     System.out.println("UserDatabaseAccess convertPasswords --converts " +
       "existing clear text passwords to the new digest MD5 format.");
-    
+
     try
     {
       UserDatabaseAccess uda = new UserDatabaseAccess();
@@ -952,7 +960,7 @@ public class UserDatabaseAccess
       System.out.println("Error: " + e.getMessage());
       e.printStackTrace();
     }
-    
+
     System.exit(0);
 	}
 
