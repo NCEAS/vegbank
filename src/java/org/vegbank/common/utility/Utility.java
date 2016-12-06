@@ -20,6 +20,7 @@ import org.vegbank.common.model.Plantstatus;
 import org.vegbank.common.model.VBModelBean;
 import org.vegbank.common.utility.mail.*;
 import org.vegbank.common.Constants;
+import org.vegbank.common.utility.AccessionCode;
 
 /*
  * '$RCSfile: Utility.java,v $'
@@ -196,7 +197,7 @@ public class Utility implements Constants
 		for (int i = 0; i < specialChar.length ; i++)
 		{
 			char currentChar = specialChar[i];
-			//System.out.println("----->" + currentChar);
+			// log.info("----->" + s);
 
 			if ( s.indexOf ( currentChar) != -1 )
 			{
@@ -212,7 +213,39 @@ public class Utility implements Constants
 				s = hold.toString();
 			}
 		}
-		//System.out.println("---->" + origString + " VS. " + s );
+		// log.info("-NEW-> " + s );
+		return s;
+	}
+
+public static String encodeForDBToTickMark(String s)
+	{
+		// Handle nulls
+		if ( s == null)
+			return null;
+
+		// List of characters to escape
+		char[] specialChar = {'\''} ;  //, '$', '^'};  MTL July 9, 2015: $ and ^ and loading with \ in front of them when this is here.
+
+		for (int i = 0; i < specialChar.length ; i++)
+		{
+			char currentChar = specialChar[i];
+			//log.info("----->" + s);
+
+			if ( s.indexOf ( currentChar) != -1 )
+			{
+				StringBuffer hold = new StringBuffer();
+				char c;
+				for ( int ii = 0; ii < s.length(); ii++ )
+				{
+					if ( (c=s.charAt(ii)) == currentChar  )
+						hold.append ("`" );  // MTL July 9, 2015: only escaping ' with another ' now, \ doesn't work
+					else
+						hold.append(c);
+				}
+				s = hold.toString();
+			}
+		}
+		//log.info("-NEW-> " + s );
 		return s;
 	}
 
@@ -775,6 +808,37 @@ public class Utility implements Constants
 			parsedAC.put("KEYVALUE", m.group(3) );
 			parsedAC.put("CONFIMATIONCODE", m.group(4) );
 		}
+		if (parsedAC.get(DBCODE) == null ) {
+			// try lsid type of accession code:
+			//urn:lsid:vegbank.org/ecoObs:commConcept:337y-{92B471DE-6664-4843-91AA-FE48FF48FD55}
+			Pattern lsidpattern = Pattern.compile("urn:lsid:([^:]+):([^:]+):([^:]+):");
+			Matcher lsidm = lsidpattern.matcher(accessionCode);
+			parsedAC.put("DBCODE", "VB" ); //guess
+			String longCode =  m.group(1) ;
+			 if (longCode.compareToIgnoreCase( "observation" ) == 0) { parsedAC.put("ENTITYCODE", "Ob"); }
+			 if (longCode.compareToIgnoreCase( "Plot" ) == 0) { parsedAC.put("ENTITYCODE", "Pl"); }
+			 if (longCode.compareToIgnoreCase( "plantconcept" ) == 0) { parsedAC.put("ENTITYCODE", "PC"); }
+			 if (longCode.compareToIgnoreCase( "commconcept" ) == 0) { parsedAC.put("ENTITYCODE", "CC"); }
+			 if (longCode.compareToIgnoreCase( "party" ) == 0) { parsedAC.put("ENTITYCODE", "Py"); }
+			 if (longCode.compareToIgnoreCase( "reference" ) == 0) { parsedAC.put("ENTITYCODE", "Rf"); }
+			 if (longCode.compareToIgnoreCase( "referencejournal" ) == 0) { parsedAC.put("ENTITYCODE", "RJ"); }
+			 if (longCode.compareToIgnoreCase( "stratummethod" ) == 0) { parsedAC.put("ENTITYCODE", "SM"); }
+			 if (longCode.compareToIgnoreCase( "covermethod" ) == 0) { parsedAC.put("ENTITYCODE", "CM"); }
+			 if (longCode.compareToIgnoreCase( "namedplace" ) == 0) { parsedAC.put("ENTITYCODE", "NP"); }
+			 if (longCode.compareToIgnoreCase( "project" ) == 0) { parsedAC.put("ENTITYCODE", "Pj"); }
+			 if (longCode.compareToIgnoreCase( "soiltaxon" ) == 0) { parsedAC.put("ENTITYCODE", "ST"); }
+			 if (longCode.compareToIgnoreCase( "userdefined" ) == 0) { parsedAC.put("ENTITYCODE", "UD"); }
+			 if (longCode.compareToIgnoreCase( "taxonobservation" ) == 0) { parsedAC.put("ENTITYCODE", "TO"); }
+			 if (longCode.compareToIgnoreCase( "commclass" ) == 0) { parsedAC.put("ENTITYCODE", "Cl"); }
+			 if (longCode.compareToIgnoreCase( "referenceparty" ) == 0) { parsedAC.put("ENTITYCODE", "RP"); }
+			 if (longCode.compareToIgnoreCase( "aux_role" ) == 0) { parsedAC.put("ENTITYCODE", "AR"); }
+			 if (longCode.compareToIgnoreCase( "userdataset" ) == 0) { parsedAC.put("ENTITYCODE", "DS"); }
+			 if (longCode.compareToIgnoreCase( "taxoninterpretation" ) == 0) { parsedAC.put("ENTITYCODE", "TI"); }
+			 if (longCode.compareToIgnoreCase( "plantconcept" ) == 0) { parsedAC.put("ENTITYCODE", "PS"); }
+ 			 if (longCode.compareToIgnoreCase( "commconcept" ) == 0) { parsedAC.put("ENTITYCODE", "CS"); }
+			parsedAC.put("KEYVALUE", m.group(2) );
+			parsedAC.put("CONFIMATIONCODE", m.group(3) );
+		}
 		log.debug("Parsed an AccessionCode: DBCode > '" + parsedAC.get(DBCODE) + "' ENTITYCODE > '" + parsedAC.get(ENTITYCODE) + "' KEYVALUE > '" + parsedAC.get(KEYVALUE) + "' CONFIMATIONCODE > '" + parsedAC.get(CONFIMATIONCODE) + "'"  );
 		return parsedAC;
 	}
@@ -797,6 +861,7 @@ public class Utility implements Constants
 
 		return result;
 	}
+
 
 	/**
 	 * Create and write a temp file in the system tmp dir (/tmp).
