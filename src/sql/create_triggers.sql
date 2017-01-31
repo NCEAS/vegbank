@@ -1,21 +1,45 @@
+drop trigger udi_aux_role_acccode_trig ON userdatasetitem;
+drop trigger udi_commclass_acccode_trig ON userdatasetitem;
 drop trigger udi_commconcept_acccode_trig ON userdatasetitem;
-drop function upd_commconceptAccCodeUDI();
+drop trigger udi_covermethod_acccode_trig ON userdatasetitem;
+drop trigger udi_namedplace_acccode_trig ON userdatasetitem;
+drop trigger udi_observation_acccode_trig ON userdatasetitem;
+drop trigger udi_party_acccode_trig ON userdatasetitem;
+drop trigger udi_plantconcept_acccode_trig ON userdatasetitem;
+drop trigger udi_plot_acccode_trig ON userdatasetitem;
+drop trigger udi_project_acccode_trig ON userdatasetitem;
+drop trigger udi_reference_acccode_trig ON userdatasetitem;
+drop trigger udi_referencejournal_acccode_trig ON userdatasetitem;
+drop trigger udi_referenceparty_acccode_trig ON userdatasetitem;
+drop trigger udi_soiltaxon_acccode_trig ON userdatasetitem;
+drop trigger udi_stratummethod_acccode_trig ON userdatasetitem;
+drop trigger udi_taxoninterpretation_acccode_trig ON userdatasetitem;
+drop trigger udi_taxonobservation_acccode_trig ON userdatasetitem;
+drop trigger udi_userdefined_acccode_trig ON userdatasetitem;
 
-CREATE FUNCTION upd_commconceptAccCodeUDI() RETURNS trigger AS $commconceptacccodeudi$
-BEGIN
-UPDATE userDatasetItem SET itemAccessionCode=(select accessionCode from commConcept where userDatasetItem.itemRecord=commConcept.commConcept_ID) where itemTable ilike 'commConcept' and itemRecord in (select commconcept_Id from commconcept where accessioncode is not null);
-RETURN NULL;
-END;
-$commconceptacccodeudi$
-LANGUAGE plpgsql;
+drop function upd_aux_roleAccCodeUDI() cascade ;
+drop function upd_commclassAccCodeUDI() cascade ;
+drop function upd_commconceptAccCodeUDI() cascade ;
+drop function upd_covermethodAccCodeUDI() cascade ;
+drop function upd_namedplaceAccCodeUDI() cascade ;
+drop function upd_observationAccCodeUDI() cascade ;
+drop function upd_partyAccCodeUDI() cascade ;
+drop function upd_plantconceptAccCodeUDI() cascade ;
+drop function upd_plotAccCodeUDI() cascade ;
+drop function upd_projectAccCodeUDI() cascade ;
+drop function upd_referenceAccCodeUDI() cascade ;
+drop function upd_referencejournalAccCodeUDI() cascade ;
+drop function upd_referencepartyAccCodeUDI() cascade ;
+drop function upd_soiltaxonAccCodeUDI() cascade ;
+drop function upd_stratummethodAccCodeUDI() cascade ;
+drop function upd_taxoninterpretationAccCodeUDI() cascade ;
+drop function upd_taxonobservationAccCodeUDI() cascade ;
+drop function upd_userdefinedAccCodeUDI() cascade ;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
-FOR EACH STATEMENT EXECUTE PROCEDURE upd_commConceptAccCodeUDI();
 
--- this tested and works successfully on manually added UDI 2016-05-11 by Michael Lee
 
 drop trigger udi_observation_acccode_trig ON userdatasetitem;
-drop function upd_observationAccCodeUDI();
+drop function upd_observationAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_observationAccCodeUDI() RETURNS trigger AS $observationacccodeudi$
 BEGIN
@@ -25,14 +49,14 @@ END;
 $observationacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_observation_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_observationAccCodeUDI();
 
 
 
 
 drop trigger udi_plot_acccode_trig ON userdatasetitem;
-drop function upd_plotAccCodeUDI();
+drop function upd_plotAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_plotAccCodeUDI() RETURNS trigger AS $plotacccodeudi$
 BEGIN
@@ -42,31 +66,14 @@ END;
 $plotacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_plot_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_plotAccCodeUDI();
 
 
 
 
-drop trigger udi_plantconcept_acccode_trig ON userdatasetitem;
-drop function upd_plantconceptAccCodeUDI();
-
-CREATE FUNCTION upd_plantconceptAccCodeUDI() RETURNS trigger AS $plantconceptacccodeudi$
-BEGIN
-UPDATE userDatasetItem SET itemAccessionCode=(select accessionCode from plantconcept where userDatasetItem.itemRecord=plantconcept.plantconcept_ID) where itemTable ilike 'plantconcept' and itemRecord in (select plantconcept_Id from plantconcept where accessioncode is not null);
-RETURN NULL;
-END;
-$plantconceptacccodeudi$
-LANGUAGE plpgsql;
-
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
-FOR EACH STATEMENT EXECUTE PROCEDURE upd_plantconceptAccCodeUDI();
-
-
-
-
 drop trigger udi_commconcept_acccode_trig ON userdatasetitem;
-drop function upd_commconceptAccCodeUDI();
+drop function upd_commconceptAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_commconceptAccCodeUDI() RETURNS trigger AS $commconceptacccodeudi$
 BEGIN
@@ -76,14 +83,14 @@ END;
 $commconceptacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_commconcept_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_commconceptAccCodeUDI();
 
 
 
 
 drop trigger udi_party_acccode_trig ON userdatasetitem;
-drop function upd_partyAccCodeUDI();
+drop function upd_partyAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_partyAccCodeUDI() RETURNS trigger AS $partyacccodeudi$
 BEGIN
@@ -93,14 +100,14 @@ END;
 $partyacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_party_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_partyAccCodeUDI();
 
 
 
 
 drop trigger udi_reference_acccode_trig ON userdatasetitem;
-drop function upd_referenceAccCodeUDI();
+drop function upd_referenceAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_referenceAccCodeUDI() RETURNS trigger AS $referenceacccodeudi$
 BEGIN
@@ -110,14 +117,14 @@ END;
 $referenceacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_reference_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_referenceAccCodeUDI();
 
 
 
 
 drop trigger udi_referencejournal_acccode_trig ON userdatasetitem;
-drop function upd_referencejournalAccCodeUDI();
+drop function upd_referencejournalAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_referencejournalAccCodeUDI() RETURNS trigger AS $referencejournalacccodeudi$
 BEGIN
@@ -127,14 +134,14 @@ END;
 $referencejournalacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_referencejournal_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_referencejournalAccCodeUDI();
 
 
 
 
 drop trigger udi_stratummethod_acccode_trig ON userdatasetitem;
-drop function upd_stratummethodAccCodeUDI();
+drop function upd_stratummethodAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_stratummethodAccCodeUDI() RETURNS trigger AS $stratummethodacccodeudi$
 BEGIN
@@ -144,14 +151,14 @@ END;
 $stratummethodacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_stratummethod_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_stratummethodAccCodeUDI();
 
 
 
 
 drop trigger udi_covermethod_acccode_trig ON userdatasetitem;
-drop function upd_covermethodAccCodeUDI();
+drop function upd_covermethodAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_covermethodAccCodeUDI() RETURNS trigger AS $covermethodacccodeudi$
 BEGIN
@@ -161,14 +168,14 @@ END;
 $covermethodacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_covermethod_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_covermethodAccCodeUDI();
 
 
 
 
 drop trigger udi_namedplace_acccode_trig ON userdatasetitem;
-drop function upd_namedplaceAccCodeUDI();
+drop function upd_namedplaceAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_namedplaceAccCodeUDI() RETURNS trigger AS $namedplaceacccodeudi$
 BEGIN
@@ -178,14 +185,14 @@ END;
 $namedplaceacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_namedplace_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_namedplaceAccCodeUDI();
 
 
 
 
 drop trigger udi_project_acccode_trig ON userdatasetitem;
-drop function upd_projectAccCodeUDI();
+drop function upd_projectAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_projectAccCodeUDI() RETURNS trigger AS $projectacccodeudi$
 BEGIN
@@ -195,14 +202,14 @@ END;
 $projectacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_project_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_projectAccCodeUDI();
 
 
 
 
 drop trigger udi_soiltaxon_acccode_trig ON userdatasetitem;
-drop function upd_soiltaxonAccCodeUDI();
+drop function upd_soiltaxonAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_soiltaxonAccCodeUDI() RETURNS trigger AS $soiltaxonacccodeudi$
 BEGIN
@@ -212,14 +219,14 @@ END;
 $soiltaxonacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_soiltaxon_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_soiltaxonAccCodeUDI();
 
 
 
 
 drop trigger udi_userdefined_acccode_trig ON userdatasetitem;
-drop function upd_userdefinedAccCodeUDI();
+drop function upd_userdefinedAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_userdefinedAccCodeUDI() RETURNS trigger AS $userdefinedacccodeudi$
 BEGIN
@@ -229,14 +236,14 @@ END;
 $userdefinedacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_userdefined_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_userdefinedAccCodeUDI();
 
 
 
 
 drop trigger udi_taxonobservation_acccode_trig ON userdatasetitem;
-drop function upd_taxonobservationAccCodeUDI();
+drop function upd_taxonobservationAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_taxonobservationAccCodeUDI() RETURNS trigger AS $taxonobservationacccodeudi$
 BEGIN
@@ -246,14 +253,14 @@ END;
 $taxonobservationacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_taxonobservation_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_taxonobservationAccCodeUDI();
 
 
 
 
 drop trigger udi_commclass_acccode_trig ON userdatasetitem;
-drop function upd_commclassAccCodeUDI();
+drop function upd_commclassAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_commclassAccCodeUDI() RETURNS trigger AS $commclassacccodeudi$
 BEGIN
@@ -263,14 +270,14 @@ END;
 $commclassacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_commclass_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_commclassAccCodeUDI();
 
 
 
 
 drop trigger udi_referenceparty_acccode_trig ON userdatasetitem;
-drop function upd_referencepartyAccCodeUDI();
+drop function upd_referencepartyAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_referencepartyAccCodeUDI() RETURNS trigger AS $referencepartyacccodeudi$
 BEGIN
@@ -280,14 +287,14 @@ END;
 $referencepartyacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_referenceparty_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_referencepartyAccCodeUDI();
 
 
 
 
 drop trigger udi_aux_role_acccode_trig ON userdatasetitem;
-drop function upd_aux_roleAccCodeUDI();
+drop function upd_aux_roleAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_aux_roleAccCodeUDI() RETURNS trigger AS $aux_roleacccodeudi$
 BEGIN
@@ -297,14 +304,14 @@ END;
 $aux_roleacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_aux_role_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_aux_roleAccCodeUDI();
 
 
 
 
 drop trigger udi_taxoninterpretation_acccode_trig ON userdatasetitem;
-drop function upd_taxoninterpretationAccCodeUDI();
+drop function upd_taxoninterpretationAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_taxoninterpretationAccCodeUDI() RETURNS trigger AS $taxoninterpretationacccodeudi$
 BEGIN
@@ -314,14 +321,14 @@ END;
 $taxoninterpretationacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_taxoninterpretation_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_taxoninterpretationAccCodeUDI();
 
 
 
 
 drop trigger udi_plantconcept_acccode_trig ON userdatasetitem;
-drop function upd_plantconceptAccCodeUDI();
+drop function upd_plantconceptAccCodeUDI() cascade ;
 
 CREATE FUNCTION upd_plantconceptAccCodeUDI() RETURNS trigger AS $plantconceptacccodeudi$
 BEGIN
@@ -331,7 +338,7 @@ END;
 $plantconceptacccodeudi$
 LANGUAGE plpgsql;
 
-create trigger udi_commconc_acccode_trig AFTER INSERT ON userdatasetitem
+create trigger udi_plantconcept_acccode_trig AFTER INSERT ON userdatasetitem
 FOR EACH STATEMENT EXECUTE PROCEDURE upd_plantconceptAccCodeUDI();
 
 
