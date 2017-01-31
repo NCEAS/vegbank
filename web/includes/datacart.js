@@ -465,12 +465,13 @@ function editDatasetRow(col) {
     var editCols = edit_row.getElementsByTagName("td");
     // form -> td, td -> input
     var nameInput = gebid("name_input");
+    var sharingInput = gebid("sharing_input");
     // form -> td, td, td -> textarea
     var descTextarea = gebid("desc_textarea");
 
     // populate the name field
-    var staticNameCol = findSibling(col, "td", 20);
-    var dsName = staticNameCol.firstChild.innerHTML;
+    var staticNameEl = gebid(dsId + "-name"); // findSibling(col, "td", 20);
+    var dsName = staticNameEl.innerHTML;
     if (dsName && dsName[0] == "\n") {
 	            dsName = dsName.substring(1);
        }
@@ -485,9 +486,9 @@ function editDatasetRow(col) {
     hide(staticRow);
 
     // populate the description
-    var descRow = gebid(dsId + "-desc");
-    if (descRow) {
-        var dsDesc = descRow.getElementsByTagName("td")[0].innerHTML;
+    var descEl = gebid(dsId + "-description");
+    if (descEl) {
+        var dsDesc = descEl.innerHTML;
         if (dsDesc && dsDesc[0] == "\n") {
             dsDesc = dsDesc.substring(1);
         }
@@ -496,7 +497,22 @@ function editDatasetRow(col) {
         }
         dsDesc = UnHTMLSafe(dsDesc);
         descTextarea.value = dsDesc;
-        hide(descRow);
+        //hide(descRow);
+    }
+
+     // populate the sharing
+	    var sharingEl = gebid(dsId + "-sharing");
+	    if (sharingEl) {
+	        var dsSharing = sharingEl.innerHTML;
+	        if (dsSharing && dsSharing[0] == "\n") {
+	            dsSharing = dsSharing.substring(1);
+	        }
+	       // if (dsSharing == "no description") {
+	       //     dsSharing = "";
+	       // }
+	        dsSharing = UnHTMLSafe(dsSharing);
+	        sharingInput.value = dsSharing;
+	        //hide(descRow);
     }
 
     // show the edit row
@@ -528,11 +544,11 @@ function cancelDatasetEdit(col) {
     //staticRow.style.background = "#ff0";
 
     // show the static description row if there
-    var descRow = gebid(dsId + "-desc");
-    if (descRow) {
-        descRow.style.display = "";
+  //  var descRow = gebid(dsId + "-desc");
+  //  if (descRow) {
+  //      descRow.style.display = "";
         //descRow.style.background = "#00F";
-    }
+  //  }
 
     dc_editedCol = null;
 }
@@ -669,24 +685,29 @@ function putAjaxResponseOnPage(response) {
 /**
  * Uses AJaX and <vegbank:update> to update the dataset header.
  */
+
+
+
 function saveDatasetEdit(col) {
     setEditRowBusy(true);
 	var ajax = initAjax();
 
     var fnWhenDone = function(oXML) {
-        //alert("pong");
+        //alert('pong');  //todo: actually deal with response, as it might have failed!
         setEditRowBusy(false);
         cancelDatasetEdit(dc_editedCol);
     };
 
     var nameInput = gebid("name_input");
     var descTextarea = gebid("desc_textarea");
+    var datasetSharing = gebid("sharing_input");
     var staticRow = gebid("edit_row_tpl").previousSibling;
     while (staticRow.nodeName.toLowerCase() != "tr") {
         staticRow = staticRow.previousSibling;
     }
     var dsId = staticRow.getAttribute("id");
     var dsName = nameInput.value;
+    var dsSharing =  datasetSharing.value;
     //debug  alert('>' + dsName + '<');
     // needs utils.js:
     dsName = trim_cr(dsName);
@@ -697,20 +718,27 @@ function saveDatasetEdit(col) {
     var params = "";
     params += "fieldNames=datasetname";
     params += "&fieldValues=" + encodeURIComponent(dsName);
+    params += "&fieldNames=datasetsharing";
+    params += "&fieldValues=" + encodeURIComponent(dsSharing);
     params += "&fieldNames=datasetdescription"
     params += "&fieldValues="+encodeURIComponent(dsDesc);
     params += "&recordId="+encodeURIComponent(dsId);
     var url = "@ajax_link@update_userdataset.ajax.jsp";
 
+
+
     var staticCols = staticRow.getElementsByTagName("td");
     staticCols[1].firstChild.innerHTML = HTMLSafe(dsName);
-    var descRow = gebid(dsId + "-desc");
-    if (descRow) {
-        if (dsDesc == null || dsDesc == "") {
-            dsDesc = "no description";
-        }
-        descRow.getElementsByTagName("td")[0].innerHTML = HTMLSafe(dsDesc);
+
+    // populate the description
+       var descEl = gebid(dsId + "-description");
+       if (descEl) {
+            descEl.innerHTML = HTMLSafe(dsDesc);
     }
+      var sharingEl = gebid(dsId + "-sharing");
+	    if (sharingEl) {
+			sharingEl.innerHTML = HTMLSafe(dsSharing);
+		}
 
     //alert(url + "?" + params);
     ajax.connect(url, "POST", params, fnWhenDone);
