@@ -180,8 +180,12 @@ public class LoadTreeToDatabase
 		    errors.addError(LoadingErrors.DATABASELOADINGERROR, vbex.getMessage());
             dlog.append(errors.getTextReport("XML dataload"));
 
+
             try {
-                dlog.saveFormatted("dataload.log", DataloadLog.TPL_LOG);
+            //send user failure message:
+               log.debug("sending message to user that FATAL: problem initializing VBModelBeanToDB");
+               dlog.send("Data load failed in VegBank", null, Utility.VB_EMAIL_ADMIN_FROM, "An unexpected error occurred in your load: " + vbex.getMessage());
+               dlog.saveFormatted("dataload.log", DataloadLog.TPL_LOG);
             } catch(Exception ioex) {
                 log.error("Can't even write dataload.log", ioex);
             }
@@ -228,6 +232,8 @@ public class LoadTreeToDatabase
     timer = new Timer("inserting observations");
             log.debug("=====inserting observations");
         Enumeration observations = getChildTables(vegbankPackage, "observation");
+
+
         while (observations.hasMoreElements())
         {
             Hashtable observation = (Hashtable) observations.nextElement();
@@ -295,6 +301,7 @@ public class LoadTreeToDatabase
    } catch (Exception ex) {
 	    log.error("problem in loading main section of xml to database.  NOT commiting data.", ex);
 	   	dlog.append("Error attempting to load data to VegBank: " + ex.toString());
+	    dlog.addTag("Error",ex.toString());
 	    errors.addError(LoadingErrors.DATABASELOADINGERROR,
                "Error attempting to load your data to VegBank: " + ex.toString());
          commit = false; //do NOT load
@@ -324,9 +331,13 @@ public class LoadTreeToDatabase
             try {
                 // DATASET CREATION
                 timer = new Timer("creating dataset");
-                log.debug("====================== DATASET CREATION");
+                log.debug("====================== DATASET creation");
                 dlog.append("===================== DATASET CREATION");
 				dsAC = createDataset();
+				// these will go in the email to the user
+				dlog.addTag("dataset accession code", dsAC.toString() + "\n");
+				dlog.addTag("link to loaded data", "http://" + vbResources.getString("serverAddress") +
+                            "/get/std/userdataset/" + dsAC.toString() + "\n");
                 if (dsAC != null) {
                     log.debug("=====done creating dataset");
                     // dlog.addTag  //this didn't work, so using dlog.append instead
@@ -410,7 +421,7 @@ public class LoadTreeToDatabase
             subject = vbResources.getString("dataload.subject.failure");
 		}
 
-        dlog.addTag("fileName", xmlFileName);
+        dlog.addTag("fileName", xmlFileName + "\n");
 
         try {
             if (errors.hasErrors()) {
@@ -912,12 +923,14 @@ public class LoadTreeToDatabase
 	 */
 	private void storeTableNameAndPK(String tableName, long PK)
 	{
+		log.debug("storing table/PK that will be used in dataset creation " + tableName + ";" + PK);
         Vector keys = (Vector) tableKeys.get(tableName.toLowerCase());
         if ( keys == null ) {
             keys = new Vector();
-            tableKeys.put(tableName, keys);
+            tableKeys.put(tableName.toLowerCase(), keys);
         }
         keys.add(new Long(PK));
+        log.debug("storing vector now contains " + keys.toArray().length + " items");
 	}
 
     /**
@@ -2758,7 +2771,7 @@ public class LoadTreeToDatabase
                 while (kit.hasNext()) {
                     try {
                         Long itemId = (Long)kit.next();
-                        //log.debug("adding DSI: " + itemId.toString());
+                        log.debug("adding dataset item: " + itemId.toString());
                         dsiBean = createDatasetItem(tableName, itemId.longValue());
                         dsiBeanList.add(dsiBean);
 
