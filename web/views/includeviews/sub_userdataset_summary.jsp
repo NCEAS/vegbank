@@ -15,7 +15,7 @@
 <table class="thinlines" cellpadding="1"><!--each field, only write when HAS contents-->
 <tr>
 <% if ( strWebUserId != "-1" ) {  %>  <!-- dont show for anon users, who can't edit or activate ds -->
-<th>Manage Datasets</th>
+<th>Manage Datasets</th><th>More</th>
 <% } %>
 <!--%@ include file="../autogen/userdataset_summary_head.jsp" %-->
 <%@ include file="../custom/userdataset_summary_head.jsp" %>
@@ -30,7 +30,7 @@
 
 <tr class="@nextcolorclass@" id="<bean:write name="onerowofuserdataset" property="userdataset_id" />">
   <% if ( strWebUserId != "-1" ) {  %> <!-- dont show for anon users, who can't edit or activate ds -->
-     <td align="center" class="control_tab_link" rowspan="2" valign="top">
+     <td align="center" class="control_tab_link" valign="top">
       <logic:equal name="onerowofuserdataset" property="datasettype" value="normal">
              <form method="post" action="@views_link@datacart_detail.jsp"><input type="hidden" name="delta" value="set" />
              <input type="hidden" name="deltaItems" value="<bean:write name='onerowofuserdataset' property='userdataset_id' />" />
@@ -46,22 +46,15 @@
       </logic:notEqual><!-- dont edit load datasets -->
 
           </td>
+          <td><a href='@get_link@detail/userdataset/<bean:write name="onerowofuserdataset" property="userdataset_id" />'>details</a></td>
+          
    <% } %>
 <!--%@ include file="../autogen/userdataset_summary_data.jsp" %-->
 <%@ include file="../custom/userdataset_summary_data.jsp" %>
-<TD class="smallfield" rowspan="2" valign="top" nowrap="nowrap">
+<TD class="smallfield" valign="top" nowrap="nowrap">
 <%@ include file="../custom/userdatasetitem_quicksummary_data.jsp" %>
 </TD>
 
-</tr>
-<logic:empty name="onerowofuserdataset" property="datasetdescription">
-    <bean:define id="dsDesc" value="no description"/>
-</logic:empty>
-<logic:notEmpty name="onerowofuserdataset" property="datasetdescription">
-    <bean:define id="dsDesc" name="onerowofuserdataset" property="datasetdescription"/>
-</logic:notEmpty>
-<tr class="<%= rowClass %>" id="<bean:write name="onerowofuserdataset" property="userdataset_id" />-desc">
-<td colspan="3" class="special_note"><bean:write name="dsDesc" /></td>
 </tr>
 
 </logic:iterate>
@@ -70,7 +63,7 @@
 
 
 <!-- BEGIN EDIT FORM TEMPLATE -->
-<table id="hidden_table" class="hidden"><tr id="edit_row_tpl" valign="top" style="background-color: #CAAFB1; border: 4px solid #f00;"><form onsubmit="saveCurrentRecord();return false;"><td class="control_tab" nowrap="nowrap"><a href="#" onclick="saveDatasetEdit(this.parentNode);return false;">save</a> | <a href="#" onclick="cancelDatasetEdit(this.parentNode);return false;">cancel</a><br/><img src="@images_link@i.gif" border="0" width="24" height="22" id="edit_row_busy_icon" class="busyicon"/></td><td><input id="name_input" name="dsname" size="27" style="font-size=9pt"></td><td colspan="3" align="center"><textarea id="desc_textarea" name="dsdesc" rows="3" cols="32" style="font-size:8pt;">Enter description</textarea></td></form></tr><tr id="hidden_table_row"><td></td></tr></table>
+<table id="hidden_table" class="hidden"><tr id="edit_row_tpl" valign="top" style="background-color: #CAAFB1; border: 4px solid #f00;"><form onsubmit="saveCurrentRecord();return false;"><td class="control_tab" nowrap="nowrap"><a href="#" onclick="saveDatasetEdit(this.parentNode);return false;">save</a> | <a href="#" onclick="cancelDatasetEdit(this.parentNode);return false;">cancel</a><br/><img src="@images_link@i.gif" border="0" width="24" height="22" id="edit_row_busy_icon" class="busyicon"/></td><td><input id="name_input" name="dsname" size="27" style="font-size=9pt"><br/><select id="sharing_input" name="dssharing"><option value="private">private</option><option value="public">public</option></select></td><td colspan="3" align="center"><textarea id="desc_textarea" name="dsdesc" rows="3" cols="32" style="font-size:8pt;">Enter description</textarea></td></form></tr><tr id="hidden_table_row"><td></td></tr></table>
 <!-- END EDIT FORM TEMPLATE -->
 
 
