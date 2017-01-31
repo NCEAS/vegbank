@@ -6,7 +6,7 @@
  *	'$Author: berkley $'
  *	'$Date: 2006-08-29 21:48:29 $'
  *	'$Revision: 1.16 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -62,11 +62,11 @@ public class KeywordGen {
 	public KeywordGen() {
 		init();
 	}
-	
+
 	/**
 	 * Hit some problems using this class regarding the connection
 	 * not being initialized.
-	 * Allowing it to be passed in via the constructor if need be. * 
+	 * Allowing it to be passed in via the constructor if need be. *
 	 */
 	public KeywordGen(Connection dbconn) {
 		init();
@@ -77,7 +77,7 @@ public class KeywordGen {
             log.error("Unable to set autocommit to false in kwgen init", s99);
         }
 	}
-	
+
 
 	/**
 	 * Read the props file.
@@ -133,13 +133,13 @@ public class KeywordGen {
 	//////////////////////////////////////////////////////////
 	public void run(String dbName, String dbHost, boolean updateMismatch) {
     timer = new org.vegbank.common.utility.Timer("Time for keyword generation run thread");
-    
+
 		String dbURL = "jdbc:postgresql://"+dbHost+"/"+dbName;
 		//System.out.println("connect string: " + dbURL);
 
 		try {
 			Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection(dbURL, dbName, "dta4all");          
+            conn = DriverManager.getConnection(dbURL, dbName, "dta4all");
 
 			String s = prompt("\nAre you sure you want to update keywords in " +
 					dbName + " on " + dbHost + " [y|n] > ");
@@ -214,7 +214,7 @@ public class KeywordGen {
 
 
 	/**
-	 * Inserts a record in the keywords table for each record in given entity. 
+	 * Inserts a record in the keywords table for each record in given entity.
 	 *
 	 * @return true if inserts were all successful
 	 */
@@ -229,7 +229,7 @@ public class KeywordGen {
 
 
 	/**
-	 * Inserts a record in the extra keywords table for each record in given entity. 
+	 * Inserts a record in the extra keywords table for each record in given entity.
 	 *
      * @param updateMismatch find only records missing from the keywords table
 	 * @return temp table name if inserts were all successful, else null
@@ -245,7 +245,7 @@ public class KeywordGen {
      * @param doDelete is the inverse of updateMismatch
 	 * @return temp table name if inserts were all successful, else null if error
      */
-	private String insertExtraKeywords(String entityName, boolean isUpdate, boolean doDelete) 
+	private String insertExtraKeywords(String entityName, boolean isUpdate, boolean doDelete)
             throws SQLException {
 		String entityQuery, extraName;
 		entityName = entityName.toLowerCase();
@@ -265,9 +265,9 @@ public class KeywordGen {
             countPerTable = countPerTable + 1;
             entityQuery = getExtraEntityQuery(entityName, extraName, !doDelete);
 
-			if (entityQuery == null) { 
+			if (entityQuery == null) {
 				log.error("ERROR: query missing for extras." + entityName + "." + extraName);
-				return null; 
+				return null;
 			}
 
 			log.info("## Inserting extras: " + extraName);
@@ -277,7 +277,7 @@ public class KeywordGen {
                 log.error("MULTI mode not implemented!");
 			} else {
 				/////// SINGLE
-                
+
 				tmpTableName = buildKeywordTable(EXTRA_TEMP_TABLE_PREFIX + countPerTable + "_", entityQuery, entityName, isUpdate, doDelete, true);
                 // go ahead and append that one:
                 if (!tmpTableName.equals("") && BUILD_MODE == SINGLE) {
@@ -331,7 +331,7 @@ public class KeywordGen {
 	 * Given a keyword query for one entity, this method populate the
 	 * given keyword table (main or extra).
 	 */
-	private String buildKeywordTable(String kwTable, String entityQuery, 
+	private String buildKeywordTable(String kwTable, String entityQuery,
 			String entityName, boolean isUpdate, boolean doDelete, boolean useTempTable) throws SQLException {
 
 
@@ -380,7 +380,7 @@ public class KeywordGen {
         ///////////////////////////////
 
 
-		
+
 		PreparedStatement pstmt;
 		if (isUpdate) {
 		 	pstmt = getUpdatePreparedStatement();
@@ -388,20 +388,20 @@ public class KeywordGen {
             if (useTempTable) {
                 // create empty temp table, include name of entity to keep this entity's stuff applied to only this entity (this table doesn't get dropped)
                 // and also add the name of the extra (the bit after the extra.entity.)
-                
+
                 kwTable = kwTable + Thread.currentThread().hashCode() + entityName;
                 log.debug("creating TEMP TABLE " + kwTable);
                 String sqlTempTbl = "SELECT * INTO TEMP TABLE " + kwTable + " FROM keywords WHERE true=false";
                 try {
                     stmt.executeUpdate(sqlTempTbl);
                 } catch (SQLException s2) {
-                    
-                    // this is not an error if there is more than one extra statement on this table.  
+
+                    // this is not an error if there is more than one extra statement on this table.
                     // In that case, this table already exists, and the fact that the previous sql didn't work is not significant
                     // If the temp table REALLY doesn't exist,
                     // then another error will be thrown later.  (ML)
                     //  log.error("Unable to create temp table " + kwTable , s2);
-                   
+
                 }
             }
 		 	pstmt = getInsertPreparedStatement(kwTable);
@@ -454,7 +454,7 @@ public class KeywordGen {
 
 				if (tmpValue != null && !tmpValue.equals("null")) {
 
-					
+
 					if (BUILD_MODE == MULTI) {
 						// insert a new row for each keyword
 						try {
@@ -471,7 +471,7 @@ public class KeywordGen {
 					}
 				}
 			}
-		
+
             if (isUpdate) {
                 // collect all keywords for same tmpId
                 sbTmpKw = (StringBuffer)kwIdMap.get(tmpId);
@@ -493,7 +493,7 @@ public class KeywordGen {
                 }
             }
 
-		} // end while all results 
+		} // end while all results
         log.debug(" ++++++++++ DONE +++++++++++");
 
 		if (isUpdate) {
@@ -531,11 +531,16 @@ public class KeywordGen {
 	/**
 	 *
 	 */
-	private void insertRow(PreparedStatement pstmt, long tableId, 
+	private void insertRow(PreparedStatement pstmt, long tableId,
 			String entity, String keywords) throws SQLException {
 		pstmt.setLong(1, tableId);
 		pstmt.setString(2, entity);
-		pstmt.setString(3, keywords);
+		if (keywords.indexOf("'") == -1 ) {
+			pstmt.setString(3, keywords);
+		} else { // omit single quotes from keyword table, as this is throwing errors in generating keywords, not escaping correctly (java wants backslash escape, postgresql wants double single quote)
+	    	pstmt.setString(3, keywords.replaceAll("\'", ""));
+
+	    }
 		log.debug("insertRow: " + pstmt.toString());
 		pstmt.executeUpdate();
 	}
@@ -544,7 +549,7 @@ public class KeywordGen {
 	/**
 	 *
 	 */
-	private void updateRow(PreparedStatement pstmt, long tableId, String entityName, String keywords) 
+	private void updateRow(PreparedStatement pstmt, long tableId, String entityName, String keywords)
 			throws SQLException {
 		pstmt.setString(1, keywords);
 		pstmt.setLong(2, tableId);
@@ -637,7 +642,7 @@ public class KeywordGen {
         if (from.toLowerCase().indexOf(" where ") == -1) {
             tmp += " WHERE ";
         } else {
-            tmp += " AND "; 
+            tmp += " AND ";
         }
 
         return tmp + getMismatchWhere(entityName);
@@ -656,7 +661,7 @@ public class KeywordGen {
             StringBuffer sb = new StringBuffer(128);
             String glue;
 
-            if (q.indexOf(" where ") == -1) { glue = " where "; } 
+            if (q.indexOf(" where ") == -1) { glue = " where "; }
             else { glue = " and "; }
 
             // find stuff that goes after WHERE
@@ -669,7 +674,7 @@ public class KeywordGen {
                 // just tack that baby on the end
                 sb.append(q).append(glue).append(getMismatchWhere(entityName));
             } else {
-                // append it carefully 
+                // append it carefully
                 sb.append(q.substring(0,pos))
                     .append(glue).append(getMismatchWhere(entityName))
                     .append(" ").append(q.substring(pos));
@@ -685,7 +690,7 @@ public class KeywordGen {
 
     /**
      * This is used to get the where clause which builds
-     * the temp table that holds just IDs 
+     * the temp table that holds just IDs
      * of records that don't have keywords yet.
      * Caveat: Does not start with WHERE or AND.
      */
@@ -704,7 +709,7 @@ public class KeywordGen {
 
 
     /**
-     * Produces a where clause that limits PK by those 
+     * Produces a where clause that limits PK by those
      * found in the mismatch temp table.
      * Caveat: Does not start with WHERE or AND.
      */
@@ -748,7 +753,7 @@ public class KeywordGen {
 
 
 	/**
-	 * Given a DB table name, return the entity name 
+	 * Given a DB table name, return the entity name
      * used in the keywords table.
 	 */
 	public String getTableEntity(String tableName) {
@@ -799,7 +804,7 @@ public class KeywordGen {
         if (sql.toLowerCase().indexOf(" where ") == -1) {
             return " WHERE ";
         } else {
-            return " AND "; 
+            return " AND ";
         }
     }
 
@@ -825,19 +830,19 @@ public class KeywordGen {
             .append(entityName)
             .append("')");
 
-        
+
         try {
 		    Statement stmt = conn.createStatement();
-            try { 
+            try {
                 // see if the tmp table already exists
                 ResultSet rs = stmt.executeQuery("SELECT schemaname FROM pg_tables WHERE tablename='" + mmTempTableName + "'");
                 if (rs.next()) {
                     log.debug("Dropping temp table: " + mmTempTableName);
-                    stmt.executeUpdate("DROP TABLE " + mmTempTableName); 
+                    stmt.executeUpdate("DROP TABLE " + mmTempTableName);
                 }
                 rs.close();
 
-            } catch (Exception ex) { 
+            } catch (Exception ex) {
                 log.debug("Couldn't drop temp table " + mmTempTableName + ": " + ex.toString());
 		        stmt = conn.createStatement();
             }
@@ -850,7 +855,7 @@ public class KeywordGen {
             log.error("Unable to create mismatch temp table", s2);
         }
     }
-            
+
     /**
      *
      */
@@ -878,7 +883,7 @@ public class KeywordGen {
 		if (args.length < 1) {
 			kwg.usage("Database name is required to run.");
 			System.exit(0);
-		} 
+		}
 
 		if (args.length < 2) { // host
 			dbHost = "localhost";
