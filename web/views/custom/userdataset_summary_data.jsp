@@ -1,5 +1,5 @@
-<td class="userdataset_datasetname"><logic:notEmpty property="datasetname" name="onerowofuserdataset"><span class="smallfield">
-<bean:write name="onerowofuserdataset" property="datasetname"/></span>
+<td class="userdataset_datasetname" ><logic:notEmpty property="datasetname" name="onerowofuserdataset"><span id="<bean:write name='onerowofuserdataset' property='userdataset_id'/>-name" class="smallfield">
+<bean:write name="onerowofuserdataset" property="datasetname"/></span><br/><span id="<bean:write name='onerowofuserdataset' property='userdataset_id'/>-description" class="smallfield"><bean:write name="onerowofuserdataset" property="datasetdescription"/></span>
 </logic:notEmpty>
 <logic:empty property="datasetname" name="onerowofuserdataset">
 <logic:notEqual value="true" parameter="textoutput">&nbsp;</logic:notEqual>
@@ -13,6 +13,12 @@
          </span>
 </logic:notEmpty>
 <logic:empty property="datasetstart" name="onerowofuserdataset">
+<logic:notEqual value="true" parameter="textoutput">&nbsp;</logic:notEqual>
+</logic:empty></td><td class="userdataset_datasettype">
+<logic:notEmpty property="datasetsharing" name="onerowofuserdataset"><span id="<bean:write name='onerowofuserdataset' property='userdataset_id'/>-sharing">
+<bean:write name="onerowofuserdataset" property="datasetsharing"/></span>
+</logic:notEmpty>
+<logic:empty property="datasetsharing" name="onerowofuserdataset">
 <logic:notEqual value="true" parameter="textoutput">&nbsp;</logic:notEqual>
 </logic:empty></td><td class="userdataset_datasettype">
 <logic:notEmpty property="datasettype" name="onerowofuserdataset"><span>
