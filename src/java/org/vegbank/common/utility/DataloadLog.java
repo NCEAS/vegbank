@@ -6,7 +6,7 @@
  *	'$Author: anderson $'
  *	'$Date: 2005-02-11 00:28:27 $'
  *	'$Revision: 1.1 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 package org.vegbank.common.utility;
 
 import java.io.*;
@@ -37,12 +37,12 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Creates and manages a dataload log.
- * 
+ *
  * @author anderson
  */
 public class DataloadLog
 {
-	
+
 	public static final String TPL_SUCCESS = "dataload-success.vm";
 	public static final String TPL_FAILURE = "dataload-failure.vm";
 	public static final String TPL_ADMIN = "dataload-log.vm";
@@ -69,7 +69,7 @@ public class DataloadLog
             // no dir specified so use data dir
             saveDir = Utility.VB_DATA_DIR;
 
-        } else if (!saveDir.startsWith(File.separator) && 
+        } else if (!saveDir.startsWith(File.separator) &&
                 !saveDir.startsWith(Utility.VB_DATA_DIR)) {
             // prepend the data dir
             fileSavePath = Utility.VB_DATA_DIR + saveDir;
@@ -165,7 +165,7 @@ public class DataloadLog
         Object o = defCountMap.get(itemKey);
         if (o == null) {
             return 0;
-        } 
+        }
 
         return ((Integer)o).intValue();
     }
@@ -185,7 +185,7 @@ public class DataloadLog
         Object o = m.get(itemKey);
         if (o == null) {
             return 0;
-        } 
+        }
 
         return ((Integer)o).intValue();
     }
@@ -251,7 +251,7 @@ public class DataloadLog
 		VelocityParser velo = new VelocityParser(templateName);
 		velo.putAll(getTemplateTags());
 
-		return velo.processTemplate(); 
+		return velo.processTemplate();
     }
 
 
@@ -281,11 +281,38 @@ public class DataloadLog
         return tagTable;
     }
 
+    private String getTemplateTagsSB() {
+        String body;
+		StringBuffer sb = new StringBuffer();
+
+        String key;
+        Iterator kit = countMaps.entrySet().iterator();
+        while (kit.hasNext()) {
+            Map.Entry pair = (Map.Entry)kit.next();
+            sb.append(pair.getKey() + " records added to VegBank: " + pair.getValue() + "\n" );
+            sb.append(System.getProperty("line.separator"));
+            //addTag(key, countMaps.get(key));
+        }
+
+      //  sb.append("end of countMaps, now on to tagTable.");
+      //  sb.append(System.getProperty("line.separator"));
+        kit = tagTable.entrySet().iterator();
+        while (kit.hasNext()) {
+
+           Map.Entry pair = (Map.Entry)kit.next();
+            sb.append(pair.getKey() + "= " + pair.getValue()  );
+           // addTag(key, transcripts.get(key));
+        }
+        body = sb.toString();
+        return body;
+    }
+
+
 
     /**
      * send formatted log via email
      */
-    public void send(String subject, String to, String from, String templateName) 
+    public void send(String subject, String to, String from, String templateName)
 			throws AddressException, MessagingException {
 
         if (Utility.isStringNullOrEmpty(to)) {
@@ -293,8 +320,37 @@ public class DataloadLog
             to = this.userEmail;
         }
 
-		ServletUtility.sendEmailTemplate(templateName,
-				getTemplateTags(), from, to, null, subject, true);
+		// templates do not work any longer: ServletUtility.sendEmailTemplate(templateName,
+	   //			getTemplateTags(), from, to, null, subject, true);
+
+	   	// Send the email
+	   				String mailHost = null;
+
+	   				String body;
+
+
+
+	   				StringBuffer sb = new StringBuffer();
+
+                    if (templateName.equals("dataload-failure.vm")) {
+						sb.append("Your data load has unfortunately not succeeded. ");
+
+
+					} else if (templateName.equals("dataload-success.vm")) {
+						sb.append("Thank you for loading data to VegBank.  Your data have been added successfully. \n");
+					} else {
+						 //any data can be passed here
+				         sb.append(templateName);
+					}
+                    sb.append(getTemplateTagsSB());
+
+                   sb.append("\n\n--The VegBank Team \n dba@vegbank.org \n");
+
+	   				body = sb.toString();
+
+				ServletUtility.sendPlainTextEmail( mailHost, from, to, "dba@vegbank.org", subject, body);
+
+
     }
 
 
@@ -303,7 +359,7 @@ public class DataloadLog
      * @param fileName to write the log to
      * @param templateName to use as a template
      */
-    public void saveFormatted(String fileName, String templateName) 
+    public void saveFormatted(String fileName, String templateName)
             throws IOException {
         log.debug("saving formatted template " + templateName + " to " + fileSavePath + fileName);
         Utility.saveFile(new StringReader(this.getFormatted(templateName)),
@@ -313,7 +369,7 @@ public class DataloadLog
 
     /**
      * Serialize this log to the disk.
-     * 
+     *
      * @param fileName
      * @throws IOException
      */
@@ -322,11 +378,11 @@ public class DataloadLog
         ObjectOutputStream objectOut = new ObjectOutputStream (fileOut);
         objectOut.writeObject(this);
     }
-    
+
 
     /**
      * Retrieves a log from disk.
-     * 
+     *
      * @param fileName
      * @return the DataloadLog requested
      * @throws IOException
@@ -337,10 +393,10 @@ public class DataloadLog
         ObjectInputStream logIn = new ObjectInputStream(fileIn);
         return (DataloadLog)logIn.readObject();
     }
-    
+
 
     /**
-     * 
+     *
      */
     public void setUserEmail(String e) {
         userEmail = e;
@@ -348,7 +404,7 @@ public class DataloadLog
 
 
     /**
-     * 
+     *
      */
     public String getUserEmail() {
         return userEmail;
