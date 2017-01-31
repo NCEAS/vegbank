@@ -416,3 +416,11 @@ CREATE VIEW view_dbafielddesc_notimpl AS
         ORDER BY dba_fielddescription_id ;
         
         
+create view stratumtype_x_stratummethod AS select stratumType.*, stratumMethod.accessionCode as sm_accCode from stratumType inner join stratummethod on stratumType.stratummethod_id=stratummethod.stratummethod_id;
+
+create view stratumtype_x_observation AS SELECT stratum.stratum_id,
+    stratum.stratumname,
+    observation.accessioncode
+   FROM observation
+     JOIN stratum ON observation.observation_id = stratum.observation_id;
+        
