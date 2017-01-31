@@ -8,7 +8,7 @@ package org.vegbank.dataload.XML;
  *	'$Author: berkley $'
  *	'$Date: 2006-06-02 21:15:15 $'
  *	'$Revision: 1.10 $'
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -21,7 +21,7 @@ package org.vegbank.dataload.XML;
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 import java.io.File;
@@ -34,6 +34,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.DataloadLog;
+import org.vegbank.common.utility.ServletUtility;
 import org.vegbank.common.utility.ConditionalContentHandlerController;
 import org.vegbank.common.model.WebUser;
 import org.vegbank.plots.datasource.NativeXMLReader;
@@ -46,36 +47,36 @@ import org.xml.sax.XMLReader;
  * @author farrell
  *
  * Reads a Vegbank format XML file and
- * Validate and/or Retify and/or Load into the database. 
- * 
+ * Validate and/or Retify and/or Load into the database.
+ *
  * A report is generated capturing the results of each action called for.
- * 
+ *
  */
-public class VegbankXMLUpload 
+public class VegbankXMLUpload
 {
 	private static Log log = LogFactory.getLog(VegbankXMLUpload.class);
 
 	private XMLReader xr = null;
 	private NativeXMLReader nr = null;
-	
+
 	private SAXValidationErrorHandler errorHandler = null;
 	private SAX2DBContentHandler contentHandler = null;
 	private File xmlFile = null;
-	
+
 	private boolean validate = true;
 	// TODO: use this variable as expected
-	private boolean rectify = true;	
+	private boolean rectify = true;
 	private boolean load = true;
 	private WebUser webUser = null;
-	
+
 	// Errors reported
 	private LoadingErrors errors = null;
-	
+
 	// AccessionCodes of loaded root entities
 	private List accessionCodes = null;
   private org.vegbank.common.utility.Timer timer;
 
-	
+
  	/**
  	 * <p>Use the defaults when contructing this object</p>
  	 * @throws Exception
@@ -87,7 +88,7 @@ public class VegbankXMLUpload
 
 	/**
 	 * <p>Set all the available options using this constructor</code>
-	 * 
+	 *
 	 * @param validate
 	 * @param rectify
 	 * @param load
@@ -99,8 +100,8 @@ public class VegbankXMLUpload
 		this.setRectify(rectify);
 		this.setValidate(validate);
 		xr = this.getXMLReader();
-	} 
-	
+	}
+
 	/**
 	 * @return
 	 * @throws Exception
@@ -117,12 +118,12 @@ public class VegbankXMLUpload
 
 	/**
 	 * <p>Set the XML file</p>
-	 * 
+	 *
 	 * @param xmlFileName
 	 * @throws IOException
 	 * @throws SAXException
 	 */
-	public void processXMLFile( String xmlFileName, 
+	public void processXMLFile( String xmlFileName,
 			ConditionalContentHandlerController controller)
             throws IOException, SAXException
 	{
@@ -139,26 +140,39 @@ public class VegbankXMLUpload
         dlog.setUserEmail(webUser.getEmail());
 
 		errorHandler = new SAXValidationErrorHandler(errors);
-		contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load, 
+		contentHandler = new SAX2DBContentHandler(errors, accessionCodes, load,
                 xmlFileNameNoPath, webUser.getUseridLong(), dlog);
 		contentHandler.setController(controller);
 		log.debug("set ConditionalContentHandlerController");
 
 		log.debug("Loading file " + xmlFileName);
 		xmlFile = new File(xmlFileName);
-		
+
 		if ( validate )
-		{	
+		{
 			xr.setErrorHandler( errorHandler );
 		    log.debug("about to parse XML");
-		     try {    
+		     try {
                 	xr.parse( this.getInputSource(xmlFile) );
                      }  catch(Exception vbex) {
                         log.error("FATAL: problem parsing xml: " + xmlFile + ": " + vbex.getMessage());
+                        // send user message
+
+                        StringBuffer sb = new StringBuffer();
+                        sb.append("Hi! \n Thanks for trying to load your data to VegBank.  ");
+                        sb.append(" Unfortunately your XML file failed to load because the file was invalid.  Please contact us if you need assistance!  \n -- The VegBank Team  \n Details: \n \n ");
+                        sb.append(vbex.getMessage());
+
+                        try {
+                          ServletUtility.sendPlainTextEmail(null,"dba@vegbank.org",webUser.getEmail(),"dba@vegbank.org","XML failed to load - XML was invalid",sb.toString());
+					    } catch(Exception emailEx) {
+							log.error("Can't send user email about error " + emailEx.getMessage());
+						}
+
                       }
 		    log.debug("done parsing XML");
 		}
-		
+
 		log.debug("checking if valid...");
 		if ( errorHandler.isValid() ) {
 			log.info( xmlFileName + " is a valid vegbank XML package");
@@ -167,8 +181,8 @@ public class VegbankXMLUpload
 			//{
 				log.debug("Loading XML to DB");
 				xr.setContentHandler( contentHandler );
-				xr.parse( this.getInputSource(xmlFile));	
-			//} 
+				xr.parse( this.getInputSource(xmlFile));
+			//}
 
 // TODO: give these to contentHandler
         //dlog.addTag("fileName", xxx);
@@ -186,7 +200,7 @@ public class VegbankXMLUpload
 		log.debug("Done processing XML file");
     timer.stop();
 	}
-	
+
 	private InputSource getInputSource( File pFile) throws FileNotFoundException
 	{
 		FileInputStream mFileInputStream = new FileInputStream( pFile );
@@ -195,17 +209,17 @@ public class VegbankXMLUpload
 
 	/**
 	 * Returns the errors that were encountered upon loading
-	 * 
+	 *
 	 * @return
 	 */
 	public LoadingErrors getErrors()
 	{
 		return errors;
 	}
-	
+
 	/**
-	 * Provide a command line interface 
-	 * 
+	 * Provide a command line interface
+	 *
 	 * @param args
 	 * @throws Exception
 	 */
@@ -214,15 +228,15 @@ public class VegbankXMLUpload
 		String fileName = null;
 		String userEmail = null;
 		VegbankXMLUpload vbUpload = new VegbankXMLUpload();
-		
+
 		System.out.println("Vegbank XML Parser version 1.0.2");
 		System.out.println("Usage: java org.vegbank.plots.datasource  [-L] [-V] [-R] XMLFile");
 		System.out.println("\t -V Turn off validation");
-		System.out.println("\t -L Turn off loading");	
-		System.out.println("\t -R Turn off rectification");	
+		System.out.println("\t -L Turn off loading");
+		System.out.println("\t -R Turn off rectification");
 		System.out.println("\t All are on by default");
 		System.out.println("-----------------------------------------------------------------------");
-		
+
 		int argNumber = args.length;
 		for ( int i=0 ; i<argNumber; i++)
 		{
@@ -253,16 +267,16 @@ public class VegbankXMLUpload
 				System.out.println("You entered and invalid option");
 			}
 		}
-		
+
 		if ( fileName == null) {
 			System.out.println("Please enter XMLFile to process");
 		} else if (userEmail == null) {
 			System.out.println("Please enter a user's email address");
 		} else {
 			vbUpload.processXMLFile(fileName, null);
-			
+
 			vbUpload.getErrors().getTextReport(null);
-		
+
 			System.exit(0);
 		}
 	}
@@ -271,7 +285,7 @@ public class VegbankXMLUpload
 	 * <p>
 	 * Sets Loading into database on and off
 	 * </p>
-	 * 
+	 *
 	 * @param b
 	 */
 	public void setLoad(boolean b)
@@ -283,7 +297,7 @@ public class VegbankXMLUpload
 	 * <p>
 	 * Sets the user doing the loading.
 	 * </p>
-	 * 
+	 *
 	 * @param w
 	 */
 	public void setUser(WebUser w)
@@ -295,7 +309,7 @@ public class VegbankXMLUpload
 	 * <p>
 	 * Sets Rectification on and off
 	 * </p>
-	 * 
+	 *
 	 * @param b
 	 */
 	public void setRectify(boolean b)
@@ -307,7 +321,7 @@ public class VegbankXMLUpload
 	 * <p>
 	 * Sets validation on and off
 	 * </p>
-	 * 
+	 *
 	 * @param b
 	 * @throws Exception
 	 */
@@ -315,14 +329,14 @@ public class VegbankXMLUpload
 	{
 		validate = b;
 	}
-	
+
 	/**
 	 * @return AccessionCodes of the root entities loaded into the database
 	 */
 	public List getAccessionCodesLoaded()
 	{
 		List topLevelAccessionCodes = new Vector();
-		// Need to filter out non top level elements		
+		// Need to filter out non top level elements
 		Iterator iter = accessionCodes.iterator();
 		while (iter.hasNext())
 		{
@@ -335,7 +349,7 @@ public class VegbankXMLUpload
 			}
 
 		}
-		
+
 		return topLevelAccessionCodes;
 	}
 
