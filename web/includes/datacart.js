@@ -727,8 +727,14 @@ function saveDatasetEdit(col) {
 
 
 
-    var staticCols = staticRow.getElementsByTagName("td");
-    staticCols[1].firstChild.innerHTML = HTMLSafe(dsName);
+   // var staticCols = staticRow.getElementsByTagName("td");
+   // staticCols[1].firstChild.innerHTML = HTMLSafe(dsName);
+
+    var nameEl = gebid(dsId + "-name");
+       if (nameEl) {
+            nameEl.innerHTML = HTMLSafe(dsName);
+    }
+
 
     // populate the description
        var descEl = gebid(dsId + "-description");
