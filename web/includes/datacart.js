@@ -737,7 +737,7 @@ function saveDatasetEdit(col) {
 	         if (dsAccCode.indexOf('.UNNAMEDDATASET') != -1) {
 				 //create random chars
 				 console.log("and its an unnameddataset situation");
-				 var newAccCode = dsAccCode.substring(0,dsAccCode.indexOf('.UNNAMEDDATASET')) + '.' + getRandomChars(20);
+				 var newAccCode = dsAccCode.substring(0,dsAccCode.indexOf('.UNNAMEDDATASET')) + '.' + getRandomChars(6);
 				 acccodeparams = "&fieldNames=accessioncode" + "&fieldValues="+encodeURIComponent(newAccCode);
 				 console.log('new params' + acccodeparams);
 				 // update in page too:
