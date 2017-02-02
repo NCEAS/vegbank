@@ -16,7 +16,7 @@
 <logic:notEqual value="true" parameter="textoutput">&nbsp;</logic:notEqual>
 </logic:empty></td><td class="userdataset_datasettype">
 <logic:notEmpty property="datasetsharing" name="onerowofuserdataset"><span id="<bean:write name='onerowofuserdataset' property='userdataset_id'/>-sharing">
-<bean:write name="onerowofuserdataset" property="datasetsharing"/></span>
+<bean:write name="onerowofuserdataset" property="datasetsharing"/></span><span style="display:none" id="<bean:write name='onerowofuserdataset' property='userdataset_id'/>-accessioncode"><bean:write name='onerowofuserdataset' property='accessioncode'/></span>
 </logic:notEmpty>
 <logic:empty property="datasetsharing" name="onerowofuserdataset">
 <logic:notEqual value="true" parameter="textoutput">&nbsp;</logic:notEqual>
