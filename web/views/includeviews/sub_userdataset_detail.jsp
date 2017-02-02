@@ -22,8 +22,12 @@
 
 <%@ include file="../autogen/userdataset_detail_data.jsp" %>
 
+<logic:equal name="onerowofuserdataset" property="datasetsharing"  value="public">
+<tr class="@nextcolorclass@"><td class="datalabel">Public Link</td><td><a href='/cite/<bean:write name="onerowofuserdataset" property="accessioncode" />'>@machine_url@/cite/<bean:write name="onerowofuserdataset" property="accessioncode" /></a>
 
-<tr class="@nextcolorclass@"><td class="datalabel">Items in this dataset:</td>
+</tr>
+</logic:equal>
+<tr class="@nextcolorclass@"><td class="datalabel">Items in this Dataset:</td>
 <td class="smallfield"><%@ include file="../custom/userdatasetitem_quicksummary_data.jsp" %></td>
 </tr>
 
