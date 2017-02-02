@@ -715,6 +715,39 @@ function saveDatasetEdit(col) {
 
     var dsDesc = descTextarea.value;
     dsDesc = trim_cr(dsDesc);
+
+     var sharingEl = gebid(dsId + "-sharing");
+
+    var acccodeparams = "";
+    console.log("seeing if public");
+    if (dsSharing == 'public') {
+      // and it wasnt public before:
+      console.log("verily it is public");
+      if (sharingEl) {
+		  console.log("have a sharing el value>" + sharingEl.innerHTML  + "<");
+        if (sharingEl.innerHTML.indexOf('private') != -1) {
+			console.log("verily current value is private");
+          var accCodeEl = gebid(dsId + "-accessioncode");
+          if (accCodeEl) {
+
+	         //see if ends with .UNNAMEDDATASET and if so fix it
+	         dsAccCode = accCodeEl.innerHTML;
+	         dsAccCode=trim_cr(dsAccCode);
+	         console.log("have accCode, zwar " + dsAccCode);
+	         if (dsAccCode.indexOf('.UNNAMEDDATASET') != -1) {
+				 //create random chars
+				 console.log("and its an unnameddataset situation");
+				 var newAccCode = dsAccCode.substring(0,dsAccCode.indexOf('.UNNAMEDDATASET')) + '.' + getRandomChars(20);
+				 acccodeparams = "&fieldNames=accessioncode" + "&fieldValues="+encodeURIComponent(newAccCode);
+				 console.log('new params' + acccodeparams);
+				 // update in page too:
+				      accCodeEl.innerHTML = HTMLSafe(newAccCode);
+			 }
+          }
+	    }
+	  }
+    }
+
     var params = "";
     params += "fieldNames=datasetname";
     params += "&fieldValues=" + encodeURIComponent(dsName);
@@ -723,9 +756,10 @@ function saveDatasetEdit(col) {
     params += "&fieldNames=datasetdescription"
     params += "&fieldValues="+encodeURIComponent(dsDesc);
     params += "&recordId="+encodeURIComponent(dsId);
+    params += acccodeparams;
     var url = "@ajax_link@update_userdataset.ajax.jsp";
 
-
+    console.log('final params '  + params);
 
    // var staticCols = staticRow.getElementsByTagName("td");
    // staticCols[1].firstChild.innerHTML = HTMLSafe(dsName);
@@ -741,7 +775,7 @@ function saveDatasetEdit(col) {
        if (descEl) {
             descEl.innerHTML = HTMLSafe(dsDesc);
     }
-      var sharingEl = gebid(dsId + "-sharing");
+
 	    if (sharingEl) {
 			sharingEl.innerHTML = HTMLSafe(dsSharing);
 		}
@@ -751,6 +785,16 @@ function saveDatasetEdit(col) {
 
 }
 
+  function getRandomChars(lngHowMany) {
+        var strRet = "";
+        var min = 65;
+        var max = 65+25;
+        for (var i=1;i<=lngHowMany;i++) {
+    		strRet += String.fromCharCode(Math.random() * (max - min) + min);
+    	}
+    	//alert(strRet);
+    	return strRet;
+      }
 function saveCurrentRecord() {
     saveDatasetEdit(dc_editedCol);
     return false;
