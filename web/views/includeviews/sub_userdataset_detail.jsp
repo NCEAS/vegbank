@@ -96,7 +96,9 @@
    <%= rowIndex++ %>.&nbsp;
   </td>
 </logic:equal>
-<td class="smallfield"><a href='/cite/<bean:write name="onerowofuserdatasetitem" property="itemaccessioncode"/>'>link</a></td>
+<!-- dont cite these as sometimes accession code isn't correct, instead use pk and item type -->
+<bean:define id="tableToView"><bean:write name="onerowofuserdatasetitem" property="itemtable"/></bean:define><!-- writing bean makes it a string so we can use toLowerCase() below -->
+<td class="smallfield"><a href='@get_link@std/<%= tableToView.toLowerCase() %>/<bean:write name="onerowofuserdatasetitem" property="itemrecord"/>'>link</a></td>
 <%@ include file="../autogen/userdatasetitem_summary_data.jsp" %>
 <td class="smallfield">
   <logic:equal name="onerowofuserdatasetitem" property="itemtable" value="observation">
