@@ -15,10 +15,11 @@
 
 
 <bean:define id="mode" value="id" /> <!-- default value of id --> 
-  
+
+
 
 <!-- paginateMain default assigned here, and is used in case of single ID being passed -->
-<bean:define id="paginateMain" value="false" /> 
+<bean:define id="paginateMain" value="true" /> 
 <bean:define id="perPageDos" value="10" />
 
 <!-- the actual wparam here, if any -->
@@ -51,6 +52,8 @@
   <bean:define id="urlwparam"><bean:write name="wparam" /></bean:define>
 </logic:present>
 
+
+
 <logic:notEqual name="urlwparam" value="defaultErrorShouldBeOverwritten">
   <!-- there WAS a wparam: <bean:write name="urlwparam" /> -->
   <!-- test to see if wparam has a period in it, if so is ac -->
@@ -73,6 +76,22 @@
      <bean:define id="mode" value="mydswithtable" />
      <bean:define id="paginateMain" value="true" />
      <bean:define id="perPageDos" value="10" />     
+   </logic:equal>
+   
+   <!-- list of acceptible where's is here: -->
+      <logic:equal name="urlwhere" value="where_userdataset_search">
+        <!-- this one is ok -->
+        <logic:notEqual name="urlwparam" value="">
+           <!--  wparam is not empty so OK to run search -->
+		<bean:define id="mode" value="search" />
+		<bean:define id="paginateMain" value="true" />
+		<bean:define id="perPageDos" value="10" />     
+        </logic:notEqual>
+        <logic:equal  name="urlwparam" value="">
+          <bean:define id="mode" value="all" />  <!-- default to mode of all -->  
+          <bean:define id="paginateMain" value="true" />
+	  <bean:define id="perPageDos" value="10" />  
+        </logic:equal>  
    </logic:equal>
    
 </logic:notEqual>
@@ -105,6 +124,15 @@ String paramDelim = Utility.PARAM_DELIM ;
   allowOrderBy="true" orderBy="xorderby_datasetname" />
      <!-- where="where usr_id={0} -->
 </logic:equal>
+
+<logic:equal name="mode" value="search">
+  <!-- show all of a user's datasets, and search it  -->
+  <vegbank:get id="userdataset" select="userdataset_countobs" beanName="map" 
+  where="where_usrpk_search" wparam="<%= strWebUserId + paramDelim + urlwparam %>" pager="<%= paginateMain %>" perPage="<%= perPageDos %>" 
+  allowOrderBy="true" orderBy="xorderby_datasetname" />
+     <!-- where="where usr_id={0} -->
+</logic:equal>
+
 
 <logic:equal name="mode" value="mydswithtable">
   <!-- show all of a user's datasets -->
