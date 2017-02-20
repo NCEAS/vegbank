@@ -22,6 +22,49 @@
 <br/>  
 <h1>View Your VegBank Datasets - Summary</h1>
 <br/>
+<!-- offer search box -->
+
+
+<form action="@views_link@userdataset_summary.jsp" method="get">
+    <table cellpadding="0" cellspacing="0" border="0" bgcolor="#DDDDDD">
+    <tr>
+        <td><img src="@image_server@uplt3.gif"/></td>
+        <td></td>
+        <td><img src="@image_server@uprt3.gif"/></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>    <input type="hidden" name="where" value="where_userdataset_search" />
+            <span class="greytext">
+            &nbsp; Search your datasets (name or description):
+            </span>
+            <br />
+              <logic:present parameter="wparam">    
+                <bean:parameter id="beanwparam" name="wparam" value="" />
+                <input type="text" name="wparam" value="<bean:write name='beanwparam' />" />
+              </logic:present>
+              <logic:notPresent parameter="wparam">
+                <input type="text" name="wparam" />
+              </logic:notPresent>
+             
+             <html:submit value="search" />
+             
+             <!-- link to help about searching -->
+             <a href="@help-for-searching-href@"><img height="14" width="14" border="0" src="@image_server@question.gif" /></a>
+       
+        </td>
+        </tr>
+        
+    <tr>
+        <td><img src="@image_server@lwlt3.gif"/></td>
+        <td></td>
+        <td><img src="@image_server@lwrt3.gif"/></td>
+    </tr>
+    
+    </table>
+</form>
+
+
   <!-- do the right get -->
  <%@ include file="includeviews/sub_getuserdatasets.jsp" %>
 
