@@ -18,6 +18,7 @@ function getHelpPageId() {
 
 <logic:messagesPresent message="false">
 <h3><font color="red">Please Try Again</font></h3>
+<h4>Note that some errors may be caused by accented or non-ASCII characters.  Please use A-Z, a-z, 0-9, spaces as well as &apos; ", <strong>but no</strong> smart quotes, em- or en-dashes, etc.</h4>
 	<ul>
 	<html:messages id="error" message="false">
 		<li><bean:write name="error"/></li>
