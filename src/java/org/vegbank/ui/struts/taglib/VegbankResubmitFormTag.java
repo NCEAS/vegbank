@@ -33,6 +33,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts.util.MessageResources;
 
+import org.owasp.encoder.Encode;
+
 import org.vegbank.common.utility.Utility;
 import org.vegbank.common.utility.ServletUtility;
 
@@ -89,7 +91,7 @@ public class VegbankResubmitFormTag extends VegbankTag {
                     str = (String)paramValue;
                     outputHTML.append("<textarea name='")
                             .append(key).append("'>")
-                            .append(str)
+                            .append(Encode.forHtml(str))
                             .append("</textarea>");
 
                 } else if (paramValue instanceof String[]) {
