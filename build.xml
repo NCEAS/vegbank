@@ -426,7 +426,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
            destdir="${buildClassDir}"
            classpath="${classpath}"
            debug="on"
-           source="1.8"/>
+           source="11"/>
   </target>
 
   <!--jar all classes in build/classes to vegbank.jar-->
