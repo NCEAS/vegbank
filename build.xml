@@ -705,19 +705,16 @@ bin           install the bin files into the /usr/vegbank/bin dir
     </path>
 
     <echo>Generating the regular VBModelBeans ...  using ${xslSrcDir}/VegBankModel2Java.xsl building to ${buildBeanSrcDir}/</echo>
-    <java classname="org.apache.xalan.xslt.Process" fork="true">
+    <java classname="org.apache.xalan.xslt.Process" fork="true" classpath="lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar">
       <arg line="-IN ${docsDir}/xml/db_model_vegbank.xml -XSL ${xslSrcDir}/VegBankModel2Java.xsl -OUT ${modelGeneratedFlag} -PARAM outdir ${buildBeanSrcDir}/"/>
-      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
     <echo>Generate the Utility javabeans e.g. statelist from ${docsDir}/xml/utility into ... ${buildModelUtilitySrcDir}/ using ${xslSrcDir}/UtilityXMLToJavaBeans.xsl</echo>
-    <java classname="org.apache.xalan.xslt.Process" fork="true">
+    <java classname="org.apache.xalan.xslt.Process" fork="true" classpath="lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar">
       <arg line="-IN ${docsDir}/xml/utility/UtilityBeans.xml -XSL ${xslSrcDir}/UtilityXMLToJavaBeans.xsl -OUT ${modelGeneratedFlag} -PARAM outdir ${buildModelUtilitySrcDir}/"/>
-      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
     <echo>Generate the vegbank schema xsd file ... ${buildLibDir}/${vegbankSchemaData}</echo>
-    <java classname="org.apache.xalan.xslt.Process" fork="true">
+    <java classname="org.apache.xalan.xslt.Process" fork="true" classpath="lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar">
       <arg line="-IN ${docsDir}/xml/db_model_vegbank.xml -XSL ${docsDir}/xml/dbmodel-to-schema.xsl -OUT ${buildLibDir}/${vegbankSchemaData}"/>
-      <jvmarg value="-Xbootclasspath/p:lib/xalan.jar:lib/xercesImpl.jar:lib/xml-apis.jar"/>
     </java>
   </target>
 
