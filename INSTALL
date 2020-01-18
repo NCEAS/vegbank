@@ -1,10 +1,65 @@
 Installation instructions for Vegbank 
 Author: Chad Berkley
 Date Authored: 5/22/2006
-Updated: '$Date: 2006-09-11 23:07:32 $'
+Updated: '$Date: 2020-01-17 17:58:00 PT $'
 
 '$Author: mlee $'
 '$Revision: 1.14 $'
+
+======
+NOTICE
+======
+
+Note: This installation document is for older deployments of Vegbank and is 
+left here for posterity. The installation process is mostly the same but has
+become much simpler in modern times. See UPGRADE_NEW_SERVER.txt for more
+relevant details about installing Vegbank on Ubuntu 18.04. The reason this
+document wasn't updated is because, when we upgraded the VM running 
+Vegbank in 2020 (See REINSTALL_NEW_SERVER.txt for the first upgrade in 2010),
+we performed a clone of the old VM and therefore didn't do a fresh install
+upon which to base installation instructions off of.
+
+As of 2020, Vegbank has been tested and works on:
+
+- Ubuntu 18.04
+- Java 11.0.5
+- Ant 1.10.5
+- PostgreSQL 10.10
+- Tomcat 9.0.16
+- mod_jk 1.2.43
+- Apache 2.4.29
+
+And the installation is really a fairly standard Apache/Tomcat deployment of a 
+Java Servlet application.
+
+The gist of installing on an Ubuntu 18.04 system is:
+
+- Install above packages
+- Turn AJP connector on in Tomcat's server.xml
+- Set up Postgres' pg_hba.conf as below
+- Create /usr/vegbank and /usr/www/vegbank
+- Set up a vegbank group, adding tomcat and any users you want to it
+- Be sure to always set vegbank:tomcat permission on /usr/vegbank
+- Load the database from a dump / do a fresh install as below
+- Deploy application with:
+  - sudo ant install
+  - cd web
+  - sudo ant generate
+  - cd ..
+  - mkdir web/vegbranch/media
+  - sudo ant web-install
+  - sudo chown -R tomcat:vegbank /usr/vegbank
+
+The rest of this document and the other text files at the root of this repo.
+
+- REINSTALL_NEW_SERVER.txt: Michael Lee's upgrade to Ubuntu 14.04
+- UPGRADE_NEW_SERVER.txt: Bryce Mecum's upgrade to Ubuntu 18.04
+
+are likely also useful for anyone wanting to install Vegbank on their own.
+
+=======
+OLD INSTALL DIRECTIONS
+=======
 
 Pre-requisites:
 Java 1.4.2

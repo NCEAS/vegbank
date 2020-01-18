@@ -1,0 +1,99 @@
+Bryce Mecum's <mecum@nceas.ucsb.edu> notes on upgrading the new server (vegbankvm) to patch security vulnerabilities (old Java, XSS) and upgrade core dependencies to supported (AKA secure) versions. This document follows after `REINSTALL_NEW_SERVER.txt`, where Michael Lee first set up vegbank on vegbankvm.nceas.ucsb.edu.
+
+Summary
+-------
+
+Note: There is a tag, `beforeupgrade` (https://github.com/NCEAS/vegbank/releases/tag/beforeupgrade) that marks the codebase prior to this upgrade.
+
+Prior to the upgrade, vegbankvm was running:
+
+- Ubuntu 14.04 (EOL'd)
+- Java 6 (EOL'd)
+- Tomcat 6 (EOL'd)
+- PostgreSQL 9.3 (EOL'd)
+
+which is a security risk.
+
+UCSB IT noticed the old Java, which is a security issue, and also noticed that the application was vulnerable to an XSS attack where URL query parameters were injected into a page raw. We decided to ugprade Vegbank to mitigate these issues. The first issue, running Java 6, was solved by testing and deploying the application on Java 11 which, at the time, is the latest LTS release of Java. Other components of the application such as PostgreSQL and Tomcat were also upgraded, along with the underlying operating system (Ubuntu 14.04 to 18.04) to ensure the application wasn't vulnerable to issues due to old versions of those packages. The second issue, the XSS injection vulnerability, was solved by bringing in the OWASP Java Encoder (https://owasp.org/www-project-java-encoder/) which allowed the vulnerable code path to be patched.
+
+The upgrade process was split into two parts: (1) Patching the codebase and (2) Upgrading the underlying VM.
+
+Patching
+--------
+
+The patching process was performed as follows:
+
+I first got Vegbank running and debugging locally under Java 8 just as a test and got things working to where I was comfortable destroying and redeploying Vegbank. I verified the application performed equivalently under Java 8. I then moved to Java 11 which also worked nicely.
+
+I did find that both the vegbank.org and my local deployment exhibited very slow page load times in certain circumstances and narrowed it down to the `GZipFilter.java` Servlet filter. Because none of the page payloads are that big anyway and the poor performance was unacceptable, I disabled the GZipFilter (in web.xml, commit `0c69dbafececfbdfd1b361f1d0c7931b7b5c9918`) and the performance issues went away. Note: We might investigate enabling GZip compression again but I'd rather it not be done in the application layer and, instead, by the web server.
+
+To fix the XSS vulnerability, I added the OWASP Encoder library and patched the affected code site, see commit `38bd23e4bd202450213d24403d1d5a878f2eb95c`.
+
+I ended up using a newer version of `ant`, which broke the `generateBeans` task due to a deprecation. See commit `e0f877cdbbde767c5034cb47e63242d326018e20`.
+
+build.xml and build.properties were also updated to match new settings (JRE path, Tomcat paths).
+
+Upgrading
+---------
+
+The upgrade process was performed as follows:
+
+- Nick Outin made a clone of `vegbankvm.nceas.ucsb.edu` to the host `vegbank.nceas.ucsb.edu` and the upgrade was performed on `vegbank` so vegbank.org stayed up during the upgrade
+- The Submit Data page was take offline via an Apache RewriteRule which redirected the page to a static HTML page with a downtime notice
+
+- Ubuntu 14.04 was upgraded to 16.06
+  - Changed mirror in `/etc/apt/sources.list` from NCEAS' mirror to kernel.org's
+  - `sudo apt-get update`
+  - `sudo apt-get upgrade`
+  - `sudo do-release-upgrade`
+    - Accept a rewrite of `sources.list`
+    - Accept all upstream changes to config files
+    - Allow reboot
+  - Have Nick Outin deploy all appropriate config files via Ansible
+  
+- Ubuntu 16.04 was upgraded to 18.04
+  - Changed mirror in `/etc/apt/sources.list` from NCEAS' mirror to kernel.org's
+    - `sudo apt-get update`
+    - `sudo apt-get upgrade`
+    - `sudo do-release-upgrade`
+      - Accept a rewrite of `sources.list`
+      - Accept all upstream changes to config files
+      - Allow reboot
+    - Have Nick Outin deploy all appropriate config files via Ansible
+  - We ran into some strange DNS issues which Nick was able to track down to Ubuntu 18's default usage of netplan.io for DNS. The fix to get DNS working again was to redeploy the netplan.io config.
+  
+Once the cloned VM was upgraded to 18.04, I upgraded the relevant packages that weren't automatically upgraded when upgrading the OS to 18.04 (Java).
+
+  - `sudo apt-get install default-jre` (11)
+  - `sudo apt-get remove openjdk*` (Note the `*`)
+
+- Reconfigured the vegbank group to include the `tomcat` and `mecum` users.
+- Updated the apache config, `/etc/apache2/sites-available/vegbankvm.nceas.ucsb.edu.conf`, to point at both vegbank.org, www.vegbank.org, and vegbank.nceas.ucsb.edu
+- Updated `/etc/libapache2-mod-jk/workers.properties` to set `workers.tomcat_home=/usr/share/tomcat9`
+
+- Upgraded PostgreSQL from 9.3 to 10
+  - Changed `/etc/postgresql/10/main/pg_hba.conf` to match old configuration which involves a `local all all trust` directive to trust all local socket connections by default. Note: This was required due to how vegbank was designed and is an area for future improvement due to lower security.
+  - Migrated the 9.3 cluster to the 10 cluster following the Ubuntu/Debian guide that lives at /usr/share/doc/postgresql-common/README.Debian.gz (Thanks Nick!).
+  - Verified row counts in all tables matched between the clone and the live site (they did).
+
+- Set up Tomcat9 / AJP
+  - Uncomment AJP `<Connector>` in `server.xml`
+  
+- Deployed the patched codebase on `vegbank.nceas.ucsb.edu` (the clone)
+  - Backed up /usr/vegbank and /usr/www/vegbank just in case
+  - Cloned the patched codebase from GitHub
+  - Temporarily changed the deploy hostname from vegabnk.org to vegbank.nceas.ucsb.edu in build.properties
+  - sudo ant install
+  - cd web
+    - sudo ant general (This makes sure faq.html gets build, not sure why it doesn't normally)
+  - cd .. (to vegbank source root)
+  - mkdir `web/vegbranch/media` (fixes breakage in `web-install` task, not sure why)
+  - sudo ant web-install
+  - sudo chown -R vegbank:tomcat /usr/vegbank
+
+- I then tested the application was performing correctly (search, download, login, all links worked, etc.).
+- Then Nick Outin changed DNS for vegbank.org from host `vegabnkvm` (old) to `vegbank` (the clone).
+- I repeated the tests above.
+
+  
+  
