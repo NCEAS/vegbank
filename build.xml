@@ -132,7 +132,7 @@ bin           install the bin files into the /usr/vegbank/bin dir
     <!-- END OF REQD PROPS -->
 
     <property name="name" value="vegbank"/>
-    <property name="version" value="1.0.5"/>
+    <property name="version" value="1.2.0"/>
     <property name="vegbankHome" value="${vegbank.home.dir}"/>
     <property name="dataPath" value="${vegbankHome}/data"/>
     <property name="binPath" value="${vegbankHome}/bin"/>
