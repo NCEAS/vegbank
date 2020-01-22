@@ -78,7 +78,18 @@ Once the cloned VM was upgraded to 18.04, I upgraded the relevant packages that 
 
 - Set up Tomcat9 / AJP
   - Uncomment AJP `<Connector>` in `server.xml`
-  
+  - Modify `web.xml`:
+    - Add the following XML to the `<servlet>` definition with the name `jsp`:
+
+      ```
+      <init-param>
+        <param-name>mappedfile</param-name>
+        <param-value>false</param-value>
+      </init-param>
+      ```
+
+      This works around a limit that the JVM apparently imposes on compiled classes (which JSP are) by generating the JSP or compiled JSP in a different manner.
+
 - Deployed the patched codebase on `vegbank.nceas.ucsb.edu` (the clone)
   - Backed up /usr/vegbank and /usr/www/vegbank just in case
   - Cloned the patched codebase from GitHub
