@@ -47,11 +47,30 @@ public class DatabaseAccess
 	
 	/**
 	 * Runs select against the database
+	 * 
+	 * Kept in for backward compatibility at older call sites that don't call the
+	 * full method signature (String, int, int). ResultSet.CONCUR_READ_ONLY, and 
+	 * ResultSet.TYPE_FORWARD_ONLY are the default flags.
 	 *
-	 * @param inputStatement
+	 * @param inputStatement The statement to run
 	 * @return ResutSet
 	 */
 	public ResultSet issueSelect(String inputStatement) throws SQLException 
+	{
+		return issueSelect(inputStatement, ResultSet.CONCUR_READ_ONLY, ResultSet.TYPE_FORWARD_ONLY);
+	} //end method
+	
+	/**
+	 * Runs select against the database
+	 *
+	 * @param inputStatement The statement to run
+	 * @param resultSetType The result set type, i.e., read only
+	 * @param resultSetConcurrency The result set concurrency, i.e., scrollable
+	 * @return ResutSet
+	 */
+	public ResultSet issueSelect(String inputStatement, 
+		int resultSetType, 
+		int resultSetConcurrency) throws SQLException 
 	{
 		DBConnection dbConn = null;//DBConnection
 		int serialNumber = -1;//DBConnection serial number
@@ -64,7 +83,7 @@ public class DatabaseAccess
 			
 			log.debug(":*: " + inputStatement);
 			
-			query = dbConn.createStatement();
+			query = dbConn.createStatement(resultSetType, resultSetConcurrency);
 			results = query.executeQuery(inputStatement);
 		} finally {
 			//Return dbconnection too pool
@@ -73,8 +92,7 @@ public class DatabaseAccess
 			DBConnectionPool.returnDBConnection(dbConn);
 		}
 		return results;
-	} //end method
-	
+	}
 	
 	/**
 	 * Runs select against the database

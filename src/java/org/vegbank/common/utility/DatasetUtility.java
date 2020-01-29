@@ -765,7 +765,9 @@ public class DatasetUtility
         Userdataset ds = null;
 
         try {
-            rs = da.issueSelect(DatabaseUtility.removeSemicolons(query.toString()));
+            rs = da.issueSelect(DatabaseUtility.removeSemicolons(query.toString()), 
+                ResultSet.CONCUR_READ_ONLY, 
+                ResultSet.TYPE_SCROLL_INSENSITIVE);
             meta = rs.getMetaData();
             ds = (Userdataset)Utility.buildBean(meta, rs, "Userdataset");
             da.closeStatement();

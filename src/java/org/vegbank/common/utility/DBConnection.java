@@ -374,6 +374,22 @@ public class DBConnection
 	{
 		return conn.createStatement();
 	} //prepareStatement
+	
+	/**
+	 * Create a statement with a non-default resultSetType and resultSetConcurency set.
+	 * 
+	 * Useful for creating a `TYPE_SCROLL_INSENSITIVE` query in order to make result
+	 * sets scrollable.
+	 * 
+	 * @param resultSetType The result set type, i.e., read only
+	 * @param resultSetConcurrency The result set concurrency, i.e., scrollable
+	 * @return The Statement
+	 * @throws SQLException
+	 */
+	public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException
+	{
+		return conn.createStatement(resultSetType, resultSetConcurrency);
+	} //prepareStatement
 
 	/**
 	 * Method to make a commit command
