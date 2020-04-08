@@ -50,7 +50,7 @@ The upgrade process was performed as follows:
     - Accept all upstream changes to config files
     - Allow reboot
   - Have Nick Outin deploy all appropriate config files via Ansible
-  
+
 - Ubuntu 16.04 was upgraded to 18.04
   - Changed mirror in `/etc/apt/sources.list` from NCEAS' mirror to kernel.org's
     - `sudo apt-get update`
@@ -61,7 +61,7 @@ The upgrade process was performed as follows:
       - Allow reboot
     - Have Nick Outin deploy all appropriate config files via Ansible
   - We ran into some strange DNS issues which Nick was able to track down to Ubuntu 18's default usage of netplan.io for DNS. The fix to get DNS working again was to redeploy the netplan.io config.
-  
+
 Once the cloned VM was upgraded to 18.04, I upgraded the relevant packages that weren't automatically upgraded when upgrading the OS to 18.04 (Java).
 
   - `sudo apt-get install default-jre` (11)
@@ -106,5 +106,16 @@ Once the cloned VM was upgraded to 18.04, I upgraded the relevant packages that 
 - Then Nick Outin changed DNS for vegbank.org from host `vegabnkvm` (old) to `vegbank` (the clone).
 - I repeated the tests above.
 
-  
-  
+
+CRON Jobs
+---------
+
+The upgraded Vegbank host runs two cron jobs.
+Each is installed into `/etc/cron.daily`:
+
+- `vgbackup`, which backs up vegbank on a rolling window
+- `vgperiodic`, which cleans up datasets (download cart items) and updates caches for the front page
+
+At the time of the initial upgrade, `vgperiodic` wasn't set up but `vgbackup` was.
+Michael Lee got in touch with Bryce Mecum to coordinate on setting this back up as it was likely never installed on the host period to the upgrade.
+Bryce copied the released version of the `periodic_cron_sql.sql` file into `/usr/vegbank/sql` with `tomcat:vegbank` permissions and wrote a quick script at `/etc/cron.daily/vgperiodic` to run the SQL via `psql`.
