@@ -96,23 +96,17 @@ listed above.  Sometimes Java or Postmaster may get stuck and need to be killed.
 Restarting Vegbank Subsystems
 -----------------------------
 TOMCAT
-1) su root
-2) cd /etc/init.d
-3) ./tomcat restart
+1) sudo systemctl restart tomcat9
 -- you should restart tomcat if you see OutOfMemory Errors, or if stuff generally isn't working.
 -- if you can't see any data on VegBank, this may be a tomcat error, or also postgres.
 -- if the system is really slow, there could be a stuck process (might have to kill it, see above)
 
 POSTGRES
-1) su root
-2) cd /etc/init.d
-3) ./postgresql restart
+1) sudo systemctl restart postgresql@10-main.service
 -- do this if you've already restarted tomcat and data still isn't viewable on VegBank
 
 APACHE (HTTPD)
-1) su root
-2) cd /etc/init.d
-3) ./httpd restart
+1) sudo systemctl restart apache2
 -- do this if the website doesn't display anything at all (rare)
 
 *Note that if you are bringing the system up and none of these systems are 
