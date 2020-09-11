@@ -93,7 +93,7 @@ Once the cloned VM was upgraded to 18.04, I upgraded the relevant packages that 
 - Deployed the patched codebase on `vegbank.nceas.ucsb.edu` (the clone)
   - Backed up /usr/vegbank and /usr/www/vegbank just in case
   - Cloned the patched codebase from GitHub
-  - Temporarily changed the deploy hostname from vegabnk.org to vegbank.nceas.ucsb.edu in build.properties
+  - Temporarily changed the deploy hostname from vegbank.org to vegbank.nceas.ucsb.edu in build.properties
   - sudo ant install
   - cd web
     - sudo ant general (This makes sure faq.html gets build, not sure why it doesn't normally)
