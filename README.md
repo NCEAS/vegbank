@@ -1,28 +1,27 @@
-#
-# '$RCSfile: README,v $'
-# '$Author: mlee $'
-# '$Date: 2006-09-11 22:03:55 $'
-# '$Revision: 1.18 $'
-# '$Date: 2006-09-11 22:03:55 $'
-#
+# VEGBANK: Vegatation Plots Database and Archival System
 
-VEGBANK: Vegatation Plots Database and Archival System
-------------------------------
+[![Project Status: Moved to https://github.com/NCEAS/vegbank2 – The project has been moved to a new location, and the version at that location should be considered authoritative.](https://www.repostatus.org/badges/latest/moved.svg)](https://www.repostatus.org/#moved) to [https://github.com/NCEAS/vegbank2](https://github.com/NCEAS/vegbank2)
 
-Version: @version@
+**Project Status**: Moved to https://github.com/NCEAS/vegbank2 – The project has been moved to [https://github.com/NCEAS/vegbank2](https://github.com/NCEAS/vegbank2), and the version at that location should be considered authoritative.
 
-Send feedback and bugs to: vegbank-dev@ecoinformatics.org
-                           http://bugzilla.ecoinformatics.org
+**The remainder of this README is for historical reference from the first phase of Vegbank development.**
 
-Contributors: Robert K. Peet
-              Michael D. Jennings
-              Dennis Grossman
-              Marilyn D. Walker
-              Mark Anderson (anderson@nceas.ucsb.edu) 
-              Gabriel Farrell (farrell@nceas.ucsb.edu)
-              John Harris (harris@nceas.ucsb.edu)
-              Micheal Lee (mikelee@email.unc.edu)
-              Chad Berkley (berkley@nceas.ucsb.edu)
+- Version: 1.2.1
+
+- Send feedback and bugs to: vegbank-dev@ecoinformatics.org
+                             http://bugzilla.ecoinformatics.org
+
+- Contributors: 
+    - Robert K. Peet
+    - Michael D. Jennings
+    - Dennis Grossman
+    - Marilyn D. Walker
+    - Mark Anderson (anderson@nceas.ucsb.edu) 
+    - Gabriel Farrell (farrell@nceas.ucsb.edu)
+    - John Harris (harris@nceas.ucsb.edu)
+    - Micheal Lee (mikelee@email.unc.edu)
+    - Chad Berkley (berkley@nceas.ucsb.edu)
+    - Matthew B. Jones (jones@nceas.ucsb.edu)
               
 VegBank is the vegetation plot database of the Ecological Society of America's 
 Panel on Vegetation Classification. VegBank consists of three modules that 
@@ -32,18 +31,18 @@ and (3) all plant taxa recognized by ITIS/USDA as well as all other plant taxa
 recorded in plot records. Vegetation records, community types and plant taxa may 
 be submitted to VegBank and may be subsequently searched, viewed, annotated, revised, interpreted, downloaded, and cited.
 
-Installation
-------------
+## Installation
+
 See INSTALL file in this directory.
 
 
-PROPERTIES FILES:
-----------------
+## PROPERTIES FILES:
+
 ./build.properties - edit for your environment
 
-DATABASE SETUP:
----------------
-** For more information, see the INSTALL file.
+## DATABASE SETUP:
+
+**For more information, see the INSTALL file and Deployment.md**
 
 Vegbank has a single database for Plots, Plant Taxonomy and Plant 
 Community.  It also includes information about users of the VegBank system
@@ -53,6 +52,7 @@ Initializing PostgresSQL:
 
 Install PostgresSQL on the system ... 
 
+```
 # Associate a file with the database ( e.g /home/username/pgdata )
 initdb [databasefile]
 
@@ -75,18 +75,18 @@ In the vegclass directory run:
 local      all                                               trust
 host       all  127.0.0.1                 255.255.255.255    trust
 #host       all  ip of RMI server etc.    255.255.255.255    trust
+```
 
+## Major Known Bugs or Feature Requests (see http://bugzilla.ecoinformatics.org)
 
-Major Known Bugs or Feature Requests (see http://bugzilla.ecoinformatics.org)
------------------------------------------------------------------------------
 If you discover a bug
 please report it, either by email (above) or by using our bug tracking
 system (http://bugzilla.ecoinformatics.org). There is a list of currently
 unimplemented features in Bugzilla that we are working on for the next
 release.
 
-Legalese
---------
+## Legalese
+
 This software is copyrighted by The Regents of the University of California
 and the National Center for Ecological Analysis and Synthesis
 and licensed under the GNU GPL; see the 'LICENSE' file for
